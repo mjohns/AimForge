@@ -2,8 +2,8 @@
 
 #include <SDL.h>
 #include <SDL_vulkan.h>
-#include <stdio.h>   // printf, fprintf
-#include <stdlib.h>  // abort
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <memory>
 
@@ -64,13 +64,10 @@ int Application::Initialize() {
 
   // Create window with Vulkan graphics context
   SDL_WindowFlags window_flags =
-      (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-  _sdl_window = SDL_CreateWindow("Dear ImGui SDL2+Vulkan example",
-                                 SDL_WINDOWPOS_CENTERED,
-                                 SDL_WINDOWPOS_CENTERED,
-                                 1280,
-                                 720,
-                                 window_flags);
+      (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_FULLSCREEN_DESKTOP |
+                        SDL_WINDOW_ALLOW_HIGHDPI);
+  _sdl_window = SDL_CreateWindow(
+      "AimTrainer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, window_flags);
   if (_sdl_window == nullptr) {
     printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
     return -1;
