@@ -1,6 +1,6 @@
 set(NAME "aim")
 
-add_executable(${NAME} main.cc application.cc "util.h")
+add_executable(${NAME} main.cc application.cc model.cc camera.cc)
 
 find_package(Vulkan REQUIRED)
 

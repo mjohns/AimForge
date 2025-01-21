@@ -7,6 +7,7 @@
 
 #include "backends/imgui_impl_vulkan.h"
 #include "util.h"
+#include "model.h"
 
 namespace aim {
 
@@ -21,6 +22,10 @@ class Application {
 
   SDL_Window* GetSdlWindow() {
     return _sdl_window;
+  }
+
+  ScreenInfo GetScreenInfo() {
+    return ScreenInfo(_window_width, _window_height);
   }
 
   Application(const Application&) = delete;
