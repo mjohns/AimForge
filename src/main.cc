@@ -1,9 +1,9 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <SDL3_mixer/SDL_mixer.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
@@ -18,6 +18,8 @@
 #include "camera.h"
 #include "imgui.h"
 #include "model.h"
+#include "sound.h"
+#include "time_util.h"
 #include "util.h"
 
 glm::vec3 GetRandomTargetPosition(
@@ -66,11 +68,19 @@ int main(int, char**) {
   };
 
   // TODO: needs to be cleaned up and paths / where to store things resolved.
-  Mix_Music* music = Mix_LoadMUS("C:/Users/micha/src/aim-trainer/sounds/blop1.ogg");
+  auto hit_sound = Sound::Load("blop1.ogg");
+
+  Stopwatch stopwatch;
+  stopwatch.Start();
+
+  float fps = 0.0;
+  uint64_t last_frame_time = stopwatch.GetElapsedMicros();
 
   // Main loop
+  uint64_t frame_count = 0;
   bool done = false;
   while (!done) {
+    frame_count++;
     // Poll and handle events (inputs, window resize, etc.)
     // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui
     // wants to use your inputs.
@@ -146,7 +156,9 @@ int main(int, char**) {
           glm::vec2 crosshair_pos = ToVec2(screen.center);
           if (glm::length(circle_pos - crosshair_pos) <= screen_radius) {
             target.position = GetRandomTargetPosition(min_x, max_x, min_y, max_y, z, rd);
-			Mix_PlayMusic(music, 1);
+            if (hit_sound) {
+              hit_sound->Play();
+            }
           }
         }
       }
@@ -160,6 +172,7 @@ int main(int, char**) {
       draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
     }
 
+    ImGui::Text("fps: %d", (int)fps);
     ImGui::End();
 
     // Rendering
@@ -170,6 +183,14 @@ int main(int, char**) {
     if (!is_minimized) {
       app->FrameRender(clear_color, draw_data);
     }
+
+    uint64_t now_micros = stopwatch.GetElapsedMicros();
+    uint64_t frame_duration_micros = now_micros - last_frame_time;
+    if (frame_count % 500 == 0) {
+      fps = 1000000.0 / frame_duration_micros;
+    }
+
+    last_frame_time = now_micros;
   }
 
   return 0;
