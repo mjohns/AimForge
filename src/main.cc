@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <SDL3_mixer/SDL_mixer.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <glm/trigonometric.hpp>
 #include <random>
 
 #include "application.h"
@@ -30,7 +31,6 @@ glm::vec3 GetRandomTargetPosition(
   return glm::vec3((float)rx, (float)ry, z);
 }
 
-// Main code
 int main(int, char**) {
   using namespace aim;
   auto app = Application::Create();
@@ -64,6 +64,9 @@ int main(int, char**) {
       {GetRandomTargetPosition(min_x, max_x, min_y, max_y, z, rd)},
       {GetRandomTargetPosition(min_x, max_x, min_y, max_y, z, rd)},
   };
+
+  // TODO: needs to be cleaned up and paths / where to store things resolved.
+  Mix_Music* music = Mix_LoadMUS("C:/Users/micha/src/aim-trainer/sounds/blop1.ogg");
 
   // Main loop
   bool done = false;
@@ -126,7 +129,7 @@ int main(int, char**) {
     auto right = camera.GetRight();
     for (Target& target : targets) {
       if (!target.hidden) {
-		  ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
+        ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
         // Draw circle
         float world_radius = 2.0f;  // Adjust radius as needed
 
@@ -143,6 +146,7 @@ int main(int, char**) {
           glm::vec2 crosshair_pos = ToVec2(screen.center);
           if (glm::length(circle_pos - crosshair_pos) <= screen_radius) {
             target.position = GetRandomTargetPosition(min_x, max_x, min_y, max_y, z, rd);
+			Mix_PlayMusic(music, 1);
           }
         }
       }

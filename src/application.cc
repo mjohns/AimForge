@@ -1,8 +1,9 @@
 #include "application.h"
 
-#include <fmt/core.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
+#include <SDL3_mixer/SDL_mixer.h>
+#include <fmt/core.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -38,27 +39,45 @@ Application::Application() {
 Application::~Application() {
   auto err = vkDeviceWaitIdle(_device);
   check_vk_result(err);
+
   ImGui_ImplVulkan_Shutdown();
   ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
+
+  ImGui_ImplVulkanH_DestroyWindow(_instance, _device, &_main_window_data, _allocator);
 
   vkDestroyDescriptorPool(_device, _descriptor_pool, _allocator);
   vkDestroyDevice(_device, _allocator);
   vkDestroyInstance(_instance, _allocator);
 
-  ImGui_ImplVulkanH_DestroyWindow(_instance, _device, &_main_window_data, _allocator);
-
   if (_sdl_window) {
     SDL_DestroyWindow(_sdl_window);
   }
+  Mix_CloseAudio();
+  Mix_Quit();
+
   SDL_Quit();
 }
 
 int Application::Initialize() {
   // Setup SDL
-  if (!SDL_Init(SDL_INIT_VIDEO)) {
+  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
     printf("Error: SDL_Init(): %s\n", SDL_GetError());
     return -1;
+  }
+
+  if (Mix_Init(MIX_INIT_OGG) == 0) {
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_mixer OGG init failed");
+    return -1;
+  }
+
+  SDL_AudioSpec spec;
+  spec.freq = MIX_DEFAULT_FREQUENCY;
+  spec.format = MIX_DEFAULT_FORMAT;
+  spec.channels = MIX_DEFAULT_CHANNELS;
+  if (!Mix_OpenAudio(0, &spec)) {
+    SDL_Log("Couldn't open audio: %s\n", SDL_GetError());
+    return 1;
   }
 
   // Create window with Vulkan graphics context

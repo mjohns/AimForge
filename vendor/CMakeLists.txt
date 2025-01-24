@@ -57,4 +57,4 @@ add_subdirectory(imgui-setup)
 # Populate
 
 
-FetchContent_MakeAvailable(fmt imgui SDL3 spdlog glm)
+FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm)
