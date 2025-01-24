@@ -45,7 +45,7 @@ glm::mat4 Camera::GetLookAt() {
   // Also re-calculate the Right and Up vector
   glm::vec3 right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
   glm::vec3 up = glm::normalize(glm::cross(right, front));
-  return glm::lookAt(glm::vec3(0, 0, 0), front, up);
+  return glm::lookAt(_position, front, up);
 }
 
 glm::vec3 Camera::GetRight() {
@@ -66,7 +66,11 @@ void Camera::Update(int xrel, int yrel, float radians_per_pixel) {
   _yaw = glm::clamp(_yaw, kMinYaw, kMaxYaw);
 }
 
-Camera::Camera(float pitch, float yaw) : _pitch(pitch), _yaw(yaw) {
+Camera::Camera(float pitch, float yaw, glm::vec3 position)
+    : _pitch(pitch), _yaw(yaw), _position(position) {
+}
+
+Camera::Camera(float pitch, float yaw) : _pitch(pitch), _yaw(yaw), _position(glm::vec3(0, 0, 0)) {
 }
 
 }  // namespace aim
