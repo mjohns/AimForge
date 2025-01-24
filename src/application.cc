@@ -1,13 +1,14 @@
 #include "application.h"
 
-#include <SDL.h>
-#include <SDL_vulkan.h>
+#include <fmt/core.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_vulkan.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <memory>
 
-#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdl3.h"
 #include "backends/imgui_impl_vulkan.h"
 #include "imgui.h"
 #include "util.h"
@@ -38,7 +39,7 @@ Application::~Application() {
   auto err = vkDeviceWaitIdle(_device);
   check_vk_result(err);
   ImGui_ImplVulkan_Shutdown();
-  ImGui_ImplSDL2_Shutdown();
+  ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
 
   vkDestroyDescriptorPool(_device, _descriptor_pool, _allocator);
@@ -55,19 +56,15 @@ Application::~Application() {
 
 int Application::Initialize() {
   // Setup SDL
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
-    printf("Error: %s\n", SDL_GetError());
+  if (!SDL_Init(SDL_INIT_VIDEO)) {
+    printf("Error: SDL_Init(): %s\n", SDL_GetError());
     return -1;
   }
 
-  SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
-
   // Create window with Vulkan graphics context
   SDL_WindowFlags window_flags =
-      (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_FULLSCREEN_DESKTOP |
-                        SDL_WINDOW_ALLOW_HIGHDPI);
-  _sdl_window = SDL_CreateWindow(
-      "AimTrainer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, window_flags);
+      (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+  _sdl_window = SDL_CreateWindow("AimTrainer", 0, 0, window_flags);
   if (_sdl_window == nullptr) {
     printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
     return -1;
@@ -76,16 +73,17 @@ int Application::Initialize() {
   SDL_GetWindowSize(_sdl_window, &_window_width, &_window_height);
 
   ImVector<const char*> extensions;
-  uint32_t extensions_count = 0;
-  SDL_Vulkan_GetInstanceExtensions(_sdl_window, &extensions_count, nullptr);
-  extensions.resize(extensions_count);
-  SDL_Vulkan_GetInstanceExtensions(_sdl_window, &extensions_count, extensions.Data);
+  {
+    uint32_t sdl_extensions_count = 0;
+    const char* const* sdl_extensions = SDL_Vulkan_GetInstanceExtensions(&sdl_extensions_count);
+    for (uint32_t n = 0; n < sdl_extensions_count; n++) extensions.push_back(sdl_extensions[n]);
+  }
   SetupVulkan(extensions);
 
   // Create Window Surface
   VkSurfaceKHR surface;
   VkResult err;
-  if (SDL_Vulkan_CreateSurface(_sdl_window, _instance, &surface) == 0) {
+  if (SDL_Vulkan_CreateSurface(_sdl_window, _instance, _allocator, &surface) == 0) {
     printf("Failed to create Vulkan surface.\n");
     return 1;
   }
@@ -107,7 +105,7 @@ int Application::Initialize() {
   // ImGui::StyleColorsLight();
 
   // Setup Platform/Renderer backends
-  ImGui_ImplSDL2_InitForVulkan(_sdl_window);
+  ImGui_ImplSDL3_InitForVulkan(_sdl_window);
   ImGui_ImplVulkan_InitInfo init_info = {};
   init_info.Instance = _instance;
   init_info.PhysicalDevice = _physical_device;
