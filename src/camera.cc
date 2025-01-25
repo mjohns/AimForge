@@ -35,39 +35,34 @@ float CmPer360ToRadiansPerPixel(float cmPer360, float dpi) {
   return radiansPerPixel;
 }
 
-glm::mat4 Camera::GetLookAt() {
-  glm::vec3 front;
-  front.x = (float)(cos(_yaw) * cos(_pitch));
-  front.y = (float)sin(_pitch);
-  front.z = (float)(sin(_yaw) * cos(_pitch));
-  front = glm::normalize(front);
+LookAtInfo Camera::GetLookAt() {
+  // sin(0) = 0, cos(0) = 1, sin(90) = 1, cos(90) = 0
+  // with pitch 0 = (x, 0, x)
+  LookAtInfo info;
+  info.front.x = cos(_pitch) * sin(_yaw);
+  info.front.y = cos(_pitch) * cos(_yaw);
+  info.front.z = sin(_pitch);
+  info.front = glm::normalize(info.front);
+  info.right = glm::normalize(glm::cross(info.front, glm::vec3(0.0f, 0.0f, 1.0f)));
+  info.up = glm::normalize(glm::cross(info.right, info.front));
 
-  // Also re-calculate the Right and Up vector
-  glm::vec3 right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
-  glm::vec3 up = glm::normalize(glm::cross(right, front));
-  return glm::lookAt(_position, front, up);
+  info.transform = glm::lookAt(_position, _position + info.front, info.up);
+  return info;
 }
 
-glm::vec3 Camera::GetRight() {
-  glm::vec3 front;
-  front.x = (float)(cos(_yaw) * cos(_pitch));
-  front.y = (float)sin(_pitch);
-  front.z = (float)(sin(_yaw) * cos(_pitch));
-  front = glm::normalize(front);
-
-  return glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
-}
-
-void Camera::Update(int xrel, int yrel, float radians_per_pixel) {
-  _yaw += radians_per_pixel * xrel;
-  _pitch += radians_per_pixel * yrel;
-
+void Camera::Update(int xrel, int yrel, float radians_per_dot) {
+  _yaw += radians_per_dot * xrel;
+  _pitch -= radians_per_dot * yrel;
   _pitch = glm::clamp(_pitch, kMinPitch, kMaxPitch);
-  _yaw = glm::clamp(_yaw, kMinYaw, kMaxYaw);
+  // TODO: clamp yaw?
+
 }
 
 Camera::Camera(float pitch, float yaw, glm::vec3 position)
     : _pitch(pitch), _yaw(yaw), _position(position) {
+}
+
+Camera::Camera(glm::vec3 position) : _pitch(0), _yaw(0), _position(position) {
 }
 
 Camera::Camera(float pitch, float yaw) : _pitch(pitch), _yaw(yaw), _position(glm::vec3(0, 0, 0)) {
