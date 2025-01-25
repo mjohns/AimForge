@@ -1,0 +1,8 @@
+file_identifier "AIMR";
+
+table Replay {
+  name:string;
+  health:int;
+}
+
+root_type Replay;
