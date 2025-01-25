@@ -9,6 +9,10 @@ class Stopwatch {
   void Start();
   void Stop();
 
+  bool IsRunning() {
+    return _running;
+  }
+
   std::chrono::steady_clock::duration GetElapsed();
   uint64_t GetElapsedMicros();
   float GetElapsedSeconds();

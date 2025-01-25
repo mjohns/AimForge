@@ -63,7 +63,7 @@ void Room::Draw(ImDrawList* draw_list, const glm::mat4& transform, const ScreenI
   draw_list->AddPolyline(points, 4, IM_COL32(238, 232, 213, 255), true, 5.f);
 }
 
-Scenario::Scenario() : _camera(Camera(glm::vec3(0, -500.0f, 0))) {
+Scenario::Scenario() : _camera(Camera(glm::vec3(0, -100.0f, 0))) {
   std::random_device rd;
   _random_generator = std::mt19937(rd());
 }
@@ -74,22 +74,23 @@ void Scenario::Run(Application* app) {
       glm::radians(103.0f), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
 
-  std::uniform_real_distribution<float> distribution_x(-500.0f, 500.0f);
-  std::uniform_real_distribution<float> distribution_z(-120.0f, 120.0f);
+  std::uniform_real_distribution<float> distribution_x(-100.0f, 100.0f);
+  std::uniform_real_distribution<float> distribution_z(-40.0f, 40.0f);
   auto get_new_position = [&]() {
     double rx = distribution_x(_random_generator);
     double rz = distribution_z(_random_generator);
     return glm::vec3(rx, 0.0f, rz);
   };
   for (int i = 0; i < 4; ++i) {
-    _targets.push_back(Target(get_new_position(), 10));
+    _targets.push_back(Target(get_new_position(), 2));
   }
+  _targets.push_back(Target({0, 0, 0} , 1));
 
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
   // TODO: needs to be cleaned up and paths / where to store things resolved.
   auto hit_sound = Sound::Load("blop1.ogg");
-  float radians_per_dot = CmPer360ToRadiansPerPixel(50, 1600);
+  float radians_per_dot = CmPer360ToRadiansPerDot(45, 1600);
 
   Stopwatch stopwatch;
   stopwatch.Start();
@@ -233,8 +234,8 @@ void Scenario::Run(Application* app) {
     }
 
     float elapsed_seconds = stopwatch.GetElapsedSeconds();
-    ImGui::Text("Time: %.1f", elapsed_seconds);
-    // ImGui::Text("fps: %d", (int)fps);
+    ImGui::Text("time: %.1f", elapsed_seconds);
+    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
     // Rendering
