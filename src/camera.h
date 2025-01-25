@@ -5,8 +5,8 @@
 
 namespace aim {
 
-// Convert cm/360 to radians per pixel
-float CmPer360ToRadiansPerPixel(float cm_per_360, float dpi);
+// Convert cm/360 to radians per dot reported by mouse at the given dpi.
+float CmPer360ToRadiansPerDot(float cm_per_360, float dpi);
 
 struct LookAtInfo {
   glm::vec3 front;

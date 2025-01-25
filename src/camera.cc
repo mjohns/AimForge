@@ -20,24 +20,15 @@ constexpr float k90DegreesInRadians = glm::radians(90.0f);
 
 }  // namespace
 
-// Convert cm/360 to radians per pixel
-float CmPer360ToRadiansPerPixel(float cmPer360, float dpi) {
-  // 1. Convert DPI (dots per inch) to dots per cm
-  float dotsPerCm = dpi / 2.54f;  // 1 inch = 2.54 cm
-
-  // 2. Calculate how many pixels for full 360 rotation
-  float pixelsPer360 = cmPer360 * dotsPerCm;
-
-  // 3. Convert to radians per pixel
-  // 360 degrees = 2π radians
-  float radiansPerPixel = glm::two_pi<float>() / pixelsPer360;
-
-  return radiansPerPixel;
+float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
+  float dots_per_cm = dpi / 2.54f;  // 1 inch = 2.54 cm
+  float dots_per_360 = cm_per_360 * dots_per_cm;
+  // Convert to radians.
+  return glm::two_pi<float>() / dots_per_360;
 }
 
 LookAtInfo Camera::GetLookAt() {
   // sin(0) = 0, cos(0) = 1, sin(90) = 1, cos(90) = 0
-  // with pitch 0 = (x, 0, x)
   LookAtInfo info;
   info.front.x = cos(_pitch) * sin(_yaw);
   info.front.y = cos(_pitch) * cos(_yaw);
