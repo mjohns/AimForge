@@ -1,5 +1,5 @@
-#include <SDL.h>
-#include <SDL_vulkan.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_vulkan.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,7 +12,7 @@
 #include <random>
 
 #include "application.h"
-#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdl3.h"
 #include "backends/imgui_impl_vulkan.h"
 #include "camera.h"
 #include "imgui.h"
@@ -45,7 +45,7 @@ int main(int, char**) {
 
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-  SDL_SetRelativeMouseMode(SDL_TRUE);
+  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
 
   Camera camera(0, glm::radians(90.0f));
   float radians_per_pixel = CmPer360ToRadiansPerPixel(50, 1600);
@@ -79,16 +79,12 @@ int main(int, char**) {
     SDL_Event event;
     bool has_click = false;
     while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL2_ProcessEvent(&event);
-      if (event.type == SDL_QUIT) done = true;
-      if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
-          event.window.windowID == SDL_GetWindowID(app->GetSdlWindow())) {
-        done = true;
-      }
-      if (event.type == SDL_MOUSEMOTION) {
+      ImGui_ImplSDL3_ProcessEvent(&event);
+      if (event.type == SDL_EVENT_QUIT) done = true;
+      if (event.type == SDL_EVENT_MOUSE_MOTION) {
         camera.Update(event.motion.xrel, event.motion.yrel, radians_per_pixel);
       }
-      if (event.type == SDL_MOUSEBUTTONDOWN) {
+      if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         has_click = true;
       }
     }
@@ -101,7 +97,7 @@ int main(int, char**) {
 
     // Start the Dear ImGui frame
     ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
+    ImGui_ImplSDL3_NewFrame();
     ImGui::NewFrame();
 
     // Get the drawing list and calculate center position

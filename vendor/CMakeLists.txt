@@ -3,12 +3,6 @@ include(FetchContent)
 # Dependencies
 
 FetchContent_Declare(
-  doctest
-  GIT_REPOSITORY "https://github.com/onqtam/doctest.git"
-  GIT_TAG v2.4.11
-)
-
-FetchContent_Declare(
   fmt
   GIT_REPOSITORY "https://github.com/fmtlib/fmt.git"
   GIT_TAG 11.0.2
@@ -27,15 +21,15 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-  SDL2
+  SDL3
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
-  GIT_TAG release-2.30.11
+  GIT_TAG release-3.2.0
 )
 
 FetchContent_Declare(
-  SDL2_mixer
+  SDL_mixer
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL_mixer.git"
-  GIT_TAG release-2.8.0
+  GIT_TAG 269c637263b8c63b053d72b4dde4129b944d6e57
 )
 
 FetchContent_Declare(
@@ -55,19 +49,12 @@ FetchContent_Declare(
 # For SDL2 to be able to override options
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-set(DOCTEST_NO_INSTALL ON)
 set(FMT_INSTALL OFF)
 set(SPDLOG_FMT_EXTERNAL ON)
-
-set(SDL2MIXER_VENDORED ON)
-set(SDL2MIXER_OPUS OFF)
-set(SDL2MIXER_VORBIS_VORBISFILE ON)
 
 add_subdirectory(imgui-setup)
 
 # Populate
 
 
-FetchContent_MakeAvailable(fmt imgui SDL2 spdlog glm)
-
-
+FetchContent_MakeAvailable(fmt imgui SDL3 spdlog glm)
