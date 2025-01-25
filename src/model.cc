@@ -120,6 +120,12 @@ void Scenario::Run(Application* app) {
       if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         has_click = true;
       }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+          SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_D) {
+            draw_reference_square = !draw_reference_square;
+        }
+      }
     }
     if (SDL_GetWindowFlags(app->GetSdlWindow()) & SDL_WINDOW_MINIMIZED) {
       // TODO: Pause the run.
@@ -221,7 +227,6 @@ void Scenario::Run(Application* app) {
 
     {
       // crosshair
-      // Draw circle
       float radius = 3.0f;
       ImU32 circle_color = IM_COL32(0, 0, 0, 255);
       draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
