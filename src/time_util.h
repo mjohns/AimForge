@@ -11,6 +11,7 @@ class Stopwatch {
 
   std::chrono::steady_clock::duration GetElapsed();
   uint64_t GetElapsedMicros();
+  float GetElapsedSeconds();
 
  private:
   bool _running = false;

@@ -23,6 +23,10 @@ class Camera {
   Camera(glm::vec3 position);
 
   LookAtInfo GetLookAt();
+  const glm::vec3& GetPosition() const {
+    return _position;
+  }
+
   void Update(int xrel, int yrel, float radians_per_dot);
 
  private:
