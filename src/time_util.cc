@@ -35,4 +35,10 @@ uint64_t Stopwatch::GetElapsedMicros() {
   return std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
 }
 
+float Stopwatch::GetElapsedSeconds() {
+  auto elapsed = GetElapsed();
+  auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+  return millis / 1000.0f;
+}
+
 }  // namespace aim
