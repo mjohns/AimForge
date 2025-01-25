@@ -2,26 +2,17 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
+#include <random>
 
 #include "imgui.h"
+#include "application.h"
 #include "camera.h"
 
 namespace aim {
 
-struct ScreenInfo {
-  ScreenInfo(int screen_width, int screen_height)
-      : width(screen_width),
-        height(screen_height),
-        center(ImVec2(screen_width * 0.5, screen_height * 0.5)) {
-  }
-
-  int width;
-  int height;
-  ImVec2 center;
-};
-
 struct Target {
   glm::vec3 position;
+  float radius = 1.0f;
   bool hidden = false;
 };
 
@@ -33,6 +24,18 @@ struct Room {
   float camera_height_percent = 0.5;
 
   void Draw(ImDrawList* draw_list, const glm::mat4& transform, const ScreenInfo& screen);
+};
+
+class Scenario {
+ public:
+  Scenario();
+
+  void Run(Application* app);
+ private:
+  Camera _camera;
+  std::vector<Target> _targets;
+
+  std::mt19937 _random_generator;
 };
 
 
