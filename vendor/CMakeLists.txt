@@ -44,6 +44,12 @@ FetchContent_Declare(
   GIT_TAG 1.0.1
 )
 
+FetchContent_Declare(
+  FlatBuffers
+  GIT_REPOSITORY https://github.com/google/flatbuffers.git
+  GIT_TAG v25.1.24
+)
+
 # Settings
 
 # For SDL2 to be able to override options
@@ -54,7 +60,4 @@ set(SPDLOG_FMT_EXTERNAL ON)
 
 add_subdirectory(imgui-setup)
 
-# Populate
-
-
-FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm)
+FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm FlatBuffers)
