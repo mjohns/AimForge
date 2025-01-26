@@ -38,6 +38,7 @@ class TargetManager {
   std::unordered_map<uint16_t, Target>& GetTargetMap() {
     return _target_map;
   }
+
  private:
   uint16_t _target_id_counter = 0;
   std::unordered_map<uint16_t, Target> _target_map;

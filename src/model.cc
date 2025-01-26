@@ -1,10 +1,6 @@
 #include "model.h"
 
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_vulkan.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 #include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,7 +11,6 @@
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 #include <random>
 
 #include "application.h"
