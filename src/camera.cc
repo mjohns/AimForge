@@ -34,6 +34,11 @@ float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
   return glm::two_pi<float>() / dots_per_360;
 }
 
+glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov) {
+  return glm::perspective(
+      glm::radians(fov), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
+}
+
 LookAtInfo Camera::GetLookAt() {
   // sin(0) = 0, cos(0) = 1, sin(90) = 1, cos(90) = 0
   LookAtInfo info;

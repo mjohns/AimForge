@@ -2,6 +2,7 @@
 
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
+#include "application.h"
 
 namespace aim {
 
@@ -16,6 +17,8 @@ struct LookAtInfo {
 };
 
 LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front);
+
+glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov = 103.0f);
 
 class Camera {
  public:

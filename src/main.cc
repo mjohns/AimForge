@@ -2,9 +2,16 @@
 #include "model.h"
 
 int main(int, char**) {
-  auto app = aim::Application::Create();
+  using namespace aim;
+  auto app = Application::Create();
 
-  aim::Scenario s;
+  StaticWallParams params;
+  params.num_targets = 3;
+  params.height = 50;
+  params.width = 100;
+
+  std::unique_ptr<ScenarioDef> def = std::make_unique<StaticWallScenarioDef>(params);
+  aim::Scenario s(def.get());
   s.Run(app.get());
 
   return 0;
