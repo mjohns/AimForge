@@ -18,6 +18,13 @@ constexpr float kMinYaw = -1 * glm::radians(10.0f);
 
 constexpr float k90DegreesInRadians = glm::radians(90.0f);
 
+void FillInLookAt(const glm::vec3& position, LookAtInfo* info) {
+  info->front = glm::normalize(info->front);
+  info->right = glm::normalize(glm::cross(info->front, glm::vec3(0.0f, 0.0f, 1.0f)));
+  info->up = glm::normalize(glm::cross(info->right, info->front));
+  info->transform = glm::lookAt(position, position + info->front, info->up);
+}
+
 }  // namespace
 
 float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
@@ -33,11 +40,15 @@ LookAtInfo Camera::GetLookAt() {
   info.front.x = cos(_pitch) * sin(_yaw);
   info.front.y = cos(_pitch) * cos(_yaw);
   info.front.z = sin(_pitch);
-  info.front = glm::normalize(info.front);
-  info.right = glm::normalize(glm::cross(info.front, glm::vec3(0.0f, 0.0f, 1.0f)));
-  info.up = glm::normalize(glm::cross(info.right, info.front));
 
-  info.transform = glm::lookAt(_position, _position + info.front, info.up);
+  FillInLookAt(_position, &info);
+  return info;
+}
+
+LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front) {
+  LookAtInfo info;
+  info.front = front;
+  FillInLookAt(position, &info);
   return info;
 }
 
@@ -46,7 +57,6 @@ void Camera::Update(int xrel, int yrel, float radians_per_dot) {
   _pitch -= radians_per_dot * yrel;
   _pitch = glm::clamp(_pitch, kMinPitch, kMaxPitch);
   // TODO: clamp yaw?
-
 }
 
 Camera::Camera(float pitch, float yaw, glm::vec3 position)

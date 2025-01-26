@@ -15,6 +15,8 @@ struct LookAtInfo {
   glm::mat4 transform;
 };
 
+LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front);
+
 class Camera {
  public:
   Camera(float pitch, float yaw);

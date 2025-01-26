@@ -11,6 +11,7 @@
 namespace aim {
 
 struct Target {
+  uint16_t id;
   glm::vec3 position;
   float radius = 1.0f;
   bool hidden = false;

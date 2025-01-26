@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <memory>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/intersect.hpp>
 #include <glm/mat4x4.hpp>
@@ -20,13 +21,49 @@
 #include "backends/imgui_impl_sdl3.h"
 #include "backends/imgui_impl_vulkan.h"
 #include "camera.h"
+#include "flatbuffers/flatbuffers.h"
 #include "imgui.h"
-#include "model.h"
+#include "replay_generated.h"
 #include "sound.h"
 #include "time_util.h"
 #include "util.h"
 
 namespace aim {
+namespace {
+
+struct ReplayFrame {
+  std::vector<AddTargetEventT*> add_target_events;
+  std::vector<HitTargetEventT*> hit_target_events;
+  std::vector<MissTargetEventT*> miss_target_events;
+  StoredVec3 look_at;
+};
+
+std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
+  std::vector<ReplayFrame> replay_frames;
+  for (int frame_number = 0; frame_number < replay.look_at_vectors.size(); ++frame_number) {
+    ReplayFrame frame;
+    frame.look_at = replay.look_at_vectors[frame_number];
+    for (auto& event : replay.hit_target_events) {
+      if (event->frame_number == frame_number) {
+        frame.hit_target_events.push_back(event.get());
+      }
+    }
+    for (auto& event : replay.add_target_events) {
+      if (event->frame_number == frame_number) {
+        frame.add_target_events.push_back(event.get());
+      }
+    }
+    for (auto& event : replay.miss_target_events) {
+      if (event->frame_number == frame_number) {
+        frame.miss_target_events.push_back(event.get());
+      }
+    }
+    replay_frames.push_back(frame);
+  }
+  return replay_frames;
+}
+
+}  // namespace
 
 ImVec2 GetScreenPosition(const glm::vec3& target,
                          const glm::mat4& transform,
@@ -68,6 +105,123 @@ Scenario::Scenario() : _camera(Camera(glm::vec3(0, -100.0f, 0))) {
   _random_generator = std::mt19937(rd());
 }
 
+void PlayReplay(const StaticReplayT& replay, Application* app) {
+  ScreenInfo screen = app->GetScreenInfo();
+  glm::mat4 projection = glm::perspective(
+      glm::radians(103.0f), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
+
+  auto stored_camera_position = replay.camera_position.get();
+  glm::vec3 camera_position = ToVec3(*stored_camera_position);
+
+  auto hit_sound = Sound::Load("blop1.ogg");
+
+  std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
+  uint32_t replay_frame_number = 1000;
+
+  float replay_seconds_per_frame = 1 / (float)replay.frames_per_second;
+  uint64_t replay_micros_per_frame = replay_seconds_per_frame * 1000000;
+
+  Stopwatch stopwatch;
+  stopwatch.Start();
+
+  uint64_t last_frame_start_time_micros = stopwatch.GetElapsedMicros();
+  uint64_t frame_start_time_micros = stopwatch.GetElapsedMicros();
+
+  std::unordered_map<uint16_t, Target> target_map;
+
+  while (true) {
+    last_frame_start_time_micros = frame_start_time_micros;
+    frame_start_time_micros = stopwatch.GetElapsedMicros();
+
+    uint32_t previous_replay_frame_number = replay_frame_number;
+    replay_frame_number = frame_start_time_micros / replay_micros_per_frame;
+    if (replay_frame_number >= replay_frames.size()) {
+      return;
+    }
+
+    bool has_new_frame_number = previous_replay_frame_number != replay_frame_number;
+    if (!has_new_frame_number) {
+      continue;
+    }
+
+    auto& replay_frame = replay_frames[replay_frame_number];
+    LookAtInfo look_at = GetLookAt(camera_position, ToVec3(replay_frame.look_at));
+    auto transform = projection * look_at.transform;
+
+    if (replay_frame.hit_target_events.size() > 0) {
+      if (hit_sound) {
+        hit_sound->Play();
+      }
+    }
+    // Play miss sound.
+    for (HitTargetEventT* event : replay_frame.hit_target_events) {
+      target_map.erase(event->target_id);
+    }
+    for (AddTargetEventT* event : replay_frame.add_target_events) {
+      Target t;
+      t.id = event->target_id;
+      t.radius = event->radius;
+      t.position = ToVec3(*event->position);
+      target_map[t.id] = t;
+    }
+
+    app->MaybeRebuildSwapChain();
+
+    // Start the Dear ImGui frame
+    ImGui_ImplVulkan_NewFrame();
+    ImGui_ImplSDL3_NewFrame();
+    ImGui::NewFrame();
+
+    // Get the drawing list and calculate center position
+    // Create fullscreen window
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(ImVec2((float)screen.width, (float)screen.height));
+    ImGui::Begin("Fullscreen",
+                 nullptr,
+                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+                     ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
+                     ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
+
+    auto right = look_at.right;
+    for (const auto& [key, target] : target_map) {
+      ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
+      // Draw circle
+
+      glm::vec3 out_target = target.position + (right * target.radius);
+      ImVec2 radius_pos = GetScreenPosition(out_target, transform, screen);
+
+      float screen_radius = glm::length(ToVec2(screen_pos) - ToVec2(radius_pos));
+
+      ImU32 circle_color = IM_COL32(255, 255, 255, 255);  // White color
+      draw_list->AddCircleFilled(screen_pos, screen_radius, circle_color, 0);
+    }
+
+    {
+      // crosshair
+      float radius = 3.0f;
+      ImU32 circle_color = IM_COL32(0, 0, 0, 255);
+      draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
+    }
+
+    float elapsed_seconds = stopwatch.GetElapsedSeconds();
+    ImGui::Text("time: %.1f", elapsed_seconds);
+    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::End();
+
+    // Rendering
+    ImGui::Render();
+    ImDrawData* draw_data = ImGui::GetDrawData();
+    const bool is_minimized =
+        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+    if (!is_minimized) {
+      ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
+      app->FrameRender(clear_color, draw_data);
+    }
+  }
+}
+
 void Scenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = glm::perspective(
@@ -81,10 +235,31 @@ void Scenario::Run(Application* app) {
     double rz = distribution_z(_random_generator);
     return glm::vec3(rx, 0.0f, rz);
   };
+
+  uint32_t replay_frame_number = 0;
+
+  StaticReplayT replay;
+  uint16_t replay_frames_per_second = 240;
+  replay.frames_per_second = replay_frames_per_second;
+  replay.camera_position = ToStoredVec3Ptr(_camera.GetPosition());
+
+  float replay_seconds_per_frame = 1 / (float)replay_frames_per_second;
+  uint64_t replay_micros_per_frame = replay_seconds_per_frame * 1000000;
+
+  uint16_t target_counter = 1;
+
   for (int i = 0; i < 4; ++i) {
-    _targets.push_back(Target(get_new_position(), 2));
+    Target target(target_counter++, get_new_position(), 2);
+    _targets.push_back(target);
+
+    // Add replay event
+    auto add_target = std::make_unique<AddTargetEventT>();
+    add_target->target_id = target.id;
+    add_target->frame_number = replay_frame_number;
+    add_target->position = ToStoredVec3Ptr(target.position);
+    add_target->radius = target.radius;
+    replay.add_target_events.push_back(std::move(add_target));
   }
-  _targets.push_back(Target({0, 0, 0} , 1));
 
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -102,11 +277,23 @@ void Scenario::Run(Application* app) {
   uint64_t frame_count = 0;
   bool draw_reference_square = false;
 
-  while (true) {
+  LookAtInfo look_at;
+
+  bool stop_scenario = false;
+  while (!stop_scenario) {
     frame_count++;
 
     last_frame_start_time_micros = frame_start_time_micros;
     frame_start_time_micros = stopwatch.GetElapsedMicros();
+
+    uint32_t previous_replay_frame_number = replay_frame_number;
+    replay_frame_number = frame_start_time_micros / replay_micros_per_frame;
+    bool has_new_frame_number = previous_replay_frame_number != replay_frame_number;
+
+    if (has_new_frame_number) {
+      // Store the look at vector before the mouse updates for the old frame.
+      replay.look_at_vectors.push_back(ToStoredVec3(look_at.front));
+    }
 
     SDL_Event event;
     bool has_click = false;
@@ -122,9 +309,12 @@ void Scenario::Run(Application* app) {
         has_click = true;
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
-          SDL_Keycode keycode = event.key.key;
+        SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_D) {
-            draw_reference_square = !draw_reference_square;
+          draw_reference_square = !draw_reference_square;
+        }
+        if (keycode == SDLK_S) {
+          stop_scenario = true;
         }
       }
     }
@@ -137,7 +327,7 @@ void Scenario::Run(Application* app) {
     // Update state
     bool force_render = frame_count == 1;
 
-    LookAtInfo look_at = _camera.GetLookAt();
+    look_at = _camera.GetLookAt();
     auto transform = projection * look_at.transform;
 
     for (Target& target : _targets) {
@@ -154,11 +344,31 @@ void Scenario::Run(Application* app) {
                                               intersection_point,
                                               intersection_normal);
         if (is_hit) {
+          auto hit_target_id = target.id;
           target.position = get_new_position();
+          target.id = target_counter++;
           force_render = true;
           if (hit_sound) {
             hit_sound->Play();
           }
+
+          // Add replay events
+          auto add_target = std::make_unique<AddTargetEventT>();
+          add_target->target_id = target.id;
+          add_target->frame_number = replay_frame_number;
+          add_target->position = ToStoredVec3Ptr(target.position);
+          add_target->radius = target.radius;
+          replay.add_target_events.push_back(std::move(add_target));
+
+          auto hit_target = std::make_unique<HitTargetEventT>();
+          hit_target->target_id = hit_target_id;
+          hit_target->frame_number = replay_frame_number;
+          replay.hit_target_events.push_back(std::move(hit_target));
+        } else {
+          // miss_sound->Play();
+          auto miss_target = std::make_unique<MissTargetEventT>();
+          miss_target->frame_number = replay_frame_number;
+          replay.miss_target_events.push_back(std::move(miss_target));
         }
       }
     }
@@ -247,6 +457,8 @@ void Scenario::Run(Application* app) {
       app->FrameRender(clear_color, draw_data);
     }
   }
+
+  PlayReplay(replay, app);
 }
 
 // Poll and handle events (inputs, window resize, etc.)
