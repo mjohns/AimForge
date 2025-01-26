@@ -289,6 +289,15 @@ void Application::SetupVulkanWindow(VkSurfaceKHR surface) {
                                          kMinImageCount);
 }
 
+void Application::Render(ImVec4 clear_color) {
+  ImGui::Render();
+  ImDrawData* draw_data = ImGui::GetDrawData();
+  const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+  if (!is_minimized) {
+    this->FrameRender(clear_color, draw_data);
+  }
+}
+
 void Application::FrameRender(ImVec4 clear_color, ImDrawData* draw_data) {
   ImGui_ImplVulkanH_Window* wd = &_main_window_data;
 
@@ -405,6 +414,27 @@ void Application::MaybeRebuildSwapChain() {
     _main_window_data.FrameIndex = 0;
     _swap_chain_rebuild = false;
   }
+}
+ImDrawList* Application::StartFullscreenImguiFrame() {
+  this->MaybeRebuildSwapChain();
+
+  // Start the Dear ImGui frame
+  ImGui_ImplVulkan_NewFrame();
+  ImGui_ImplSDL3_NewFrame();
+  ImGui::NewFrame();
+
+  // Get the drawing list and calculate center position
+  // Create fullscreen window
+  ImGui::SetNextWindowPos(ImVec2(0, 0));
+  ImGui::SetNextWindowSize(ImVec2((float)_window_width, (float)_window_height));
+  ImGui::Begin("Fullscreen",
+               nullptr,
+               ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+                   ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
+                   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
+  ImDrawList* draw_list = ImGui::GetWindowDrawList();
+  draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
+  return draw_list;
 }
 
 std::unique_ptr<Application> Application::Create() {

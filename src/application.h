@@ -29,7 +29,8 @@ class Application {
   static std::unique_ptr<Application> Create();
 
   void MaybeRebuildSwapChain();
-  void FrameRender(ImVec4 clear_color, ImDrawData* draw_data);
+  ImDrawList* StartFullscreenImguiFrame();
+  void Render(ImVec4 clear_color);
 
   SDL_Window* GetSdlWindow() {
     return _sdl_window;
@@ -51,6 +52,7 @@ class Application {
   void FramePresent();
   void SetupVulkan(ImVector<const char*> instance_extensions);
   void SetupVulkanWindow(VkSurfaceKHR surface);
+  void FrameRender(ImVec4 clear_color, ImDrawData* draw_data);
 
   // Vulkan
   VkAllocationCallbacks* _allocator = nullptr;
