@@ -1,12 +1,12 @@
 #include "model.h"
 
-#include <fstream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 #include <SDL3_mixer/SDL_mixer.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -66,6 +66,19 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
 
 }  // namespace
 
+Target TargetManager::AddTarget(Target t) {
+  if (t.id == 0) {
+    auto new_id = ++_target_id_counter;
+    t.id = new_id;
+  }
+  _target_map[t.id] = t;
+  return t;
+}
+
+void TargetManager::RemoveTarget(uint16_t target_id) {
+  _target_map.erase(target_id);
+}
+
 ImVec2 GetScreenPosition(const glm::vec3& target,
                          const glm::mat4& transform,
                          const ScreenInfo& screen) {
@@ -101,15 +114,45 @@ void Room::Draw(ImDrawList* draw_list, const glm::mat4& transform, const ScreenI
   draw_list->AddPolyline(points, 4, IM_COL32(238, 232, 213, 255), true, 5.f);
 }
 
-Scenario::Scenario() : _camera(Camera(glm::vec3(0, -100.0f, 0))) {
+Camera StaticWallScenarioDef::GetInitialCamera() {
+  return Camera(glm::vec3(0, -100.0f, 0));
+}
+
+StaticWallScenarioDef::StaticWallScenarioDef(StaticWallParams params) : _params(params) {
   std::random_device rd;
   _random_generator = std::mt19937(rd());
+
+  float padding = params.target_radius * 1.5;
+  float max_x = params.width * 0.5f - padding;
+  float max_z = params.height * 0.5f - padding;
+
+  _distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
+  _distribution_z = std::uniform_real_distribution<float>(-1 * max_z, max_z);
 }
+
+Target StaticWallScenarioDef::GetNewTarget() {
+  Target t;
+  t.position.x = _distribution_x(_random_generator);
+  t.position.y = 0;
+  t.position.z = _distribution_z(_random_generator);
+  t.radius = _params.target_radius;
+  return t;
+}
+
+std::vector<Target> StaticWallScenarioDef::GetInitialTargets() {
+  std::vector<Target> targets;
+  targets.reserve(_params.num_targets);
+  for (int i = 0; i < _params.num_targets; ++i) {
+    targets.push_back(this->GetNewTarget());
+  }
+  return targets;
+}
+
+Scenario::Scenario(ScenarioDef* def) : _camera(def->GetInitialCamera()), _def(def) {}
 
 void PlayReplay(const StaticReplayT& replay, Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
-  glm::mat4 projection = glm::perspective(
-      glm::radians(103.0f), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
+  glm::mat4 projection = GetPerspectiveTransformation(screen);
 
   auto stored_camera_position = replay.camera_position.get();
   glm::vec3 camera_position = ToVec3(*stored_camera_position);
@@ -128,7 +171,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   uint64_t last_frame_start_time_micros = stopwatch.GetElapsedMicros();
   uint64_t frame_start_time_micros = stopwatch.GetElapsedMicros();
 
-  std::unordered_map<uint16_t, Target> target_map;
+  TargetManager target_manager;
 
   while (true) {
     last_frame_start_time_micros = frame_start_time_micros;
@@ -156,14 +199,14 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     }
     // Play miss sound.
     for (HitTargetEventT* event : replay_frame.hit_target_events) {
-      target_map.erase(event->target_id);
+      target_manager.RemoveTarget(event->target_id);
     }
     for (AddTargetEventT* event : replay_frame.add_target_events) {
       Target t;
       t.id = event->target_id;
       t.radius = event->radius;
       t.position = ToVec3(*event->position);
-      target_map[t.id] = t;
+      target_manager.AddTarget(t);
     }
 
     app->MaybeRebuildSwapChain();
@@ -186,7 +229,8 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
 
     auto right = look_at.right;
-    for (const auto& [key, target] : target_map) {
+    for (const auto& target_pair : target_manager.GetTargetMap()) {
+      auto& target = target_pair.second;
       ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
       // Draw circle
 
@@ -225,17 +269,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 
 void Scenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
-  glm::mat4 projection = glm::perspective(
-      glm::radians(103.0f), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
-  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
-
-  std::uniform_real_distribution<float> distribution_x(-100.0f, 100.0f);
-  std::uniform_real_distribution<float> distribution_z(-40.0f, 40.0f);
-  auto get_new_position = [&]() {
-    double rx = distribution_x(_random_generator);
-    double rz = distribution_z(_random_generator);
-    return glm::vec3(rx, 0.0f, rz);
-  };
+  glm::mat4 projection = GetPerspectiveTransformation(screen);
 
   uint32_t replay_frame_number = 0;
 
@@ -249,9 +283,8 @@ void Scenario::Run(Application* app) {
 
   uint16_t target_counter = 1;
 
-  for (int i = 0; i < 4; ++i) {
-    Target target(target_counter++, get_new_position(), 2);
-    _targets.push_back(target);
+  for (const Target& target_to_add : _def->GetInitialTargets()) {
+    Target target = _target_manager.AddTarget(target_to_add);
 
     // Add replay event
     auto add_target = std::make_unique<AddTargetEventT>();
@@ -279,6 +312,8 @@ void Scenario::Run(Application* app) {
   bool draw_reference_square = false;
 
   LookAtInfo look_at;
+
+  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
 
   bool stop_scenario = false;
   while (!stop_scenario) {
@@ -331,7 +366,9 @@ void Scenario::Run(Application* app) {
     look_at = _camera.GetLookAt();
     auto transform = projection * look_at.transform;
 
-    for (Target& target : _targets) {
+    std::vector<uint16_t> hit_target_ids;
+    for (const auto& target_pair : _target_manager.GetTargetMap()) {
+      auto& target = target_pair.second;
       if (target.hidden) {
         continue;
       }
@@ -345,32 +382,36 @@ void Scenario::Run(Application* app) {
                                               intersection_point,
                                               intersection_normal);
         if (is_hit) {
-          auto hit_target_id = target.id;
-          target.position = get_new_position();
-          target.id = target_counter++;
+          hit_target_ids.push_back(target.id);
           force_render = true;
-          if (hit_sound) {
-            hit_sound->Play();
-          }
-
-          // Add replay events
-          auto add_target = std::make_unique<AddTargetEventT>();
-          add_target->target_id = target.id;
-          add_target->frame_number = replay_frame_number;
-          add_target->position = ToStoredVec3Ptr(target.position);
-          add_target->radius = target.radius;
-          replay.add_target_events.push_back(std::move(add_target));
-
-          auto hit_target = std::make_unique<HitTargetEventT>();
-          hit_target->target_id = hit_target_id;
-          hit_target->frame_number = replay_frame_number;
-          replay.hit_target_events.push_back(std::move(hit_target));
         } else {
           // miss_sound->Play();
           auto miss_target = std::make_unique<MissTargetEventT>();
           miss_target->frame_number = replay_frame_number;
           replay.miss_target_events.push_back(std::move(miss_target));
         }
+      }
+    }
+    if (hit_target_ids.size() > 0) {
+      if (hit_sound) {
+        hit_sound->Play();
+      }
+      for (auto hit_target_id : hit_target_ids) {
+        _target_manager.RemoveTarget(hit_target_id);
+        Target new_target = _target_manager.AddTarget(_def->GetNewTarget());
+
+        // Add replay events
+        auto add_target = std::make_unique<AddTargetEventT>();
+        add_target->target_id = new_target.id;
+        add_target->frame_number = replay_frame_number;
+        add_target->position = ToStoredVec3Ptr(new_target.position);
+        add_target->radius = new_target.radius;
+        replay.add_target_events.push_back(std::move(add_target));
+
+        auto hit_target = std::make_unique<HitTargetEventT>();
+        hit_target->target_id = hit_target_id;
+        hit_target->frame_number = replay_frame_number;
+        replay.hit_target_events.push_back(std::move(hit_target));
       }
     }
 
@@ -422,7 +463,8 @@ void Scenario::Run(Application* app) {
     }
 
     auto right = look_at.right;
-    for (Target& target : _targets) {
+    for (const auto& target_pair : _target_manager.GetTargetMap()) {
+      auto& target = target_pair.second;
       if (!target.hidden) {
         ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
         // Draw circle
@@ -466,7 +508,7 @@ void Scenario::Run(Application* app) {
   flatbuffers::FlatBufferBuilder fbb;
   fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
 
-   std::ofstream outfile("C:/Users/micha/replay1.bin", std::ios::binary);
+  std::ofstream outfile("C:/Users/micha/replay1.bin", std::ios::binary);
   outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
   outfile.close();
 }

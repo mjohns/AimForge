@@ -4,5 +4,5 @@ ExperimentalAutoDetectBinPacking: false
 BinPackParameters: false
 BinPackArguments: false
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortFunctionsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
 ColumnLimit: 100
