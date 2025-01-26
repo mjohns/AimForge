@@ -204,24 +204,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
       target_manager.AddTarget(t);
     }
 
-    app->MaybeRebuildSwapChain();
-
-    // Start the Dear ImGui frame
-    ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplSDL3_NewFrame();
-    ImGui::NewFrame();
-
-    // Get the drawing list and calculate center position
-    // Create fullscreen window
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2((float)screen.width, (float)screen.height));
-    ImGui::Begin("Fullscreen",
-                 nullptr,
-                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
-                     ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
-                     ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
+    ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     auto right = look_at.right;
     for (const auto& target_pair : target_manager.GetTargetMap()) {
@@ -250,15 +233,8 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    // Rendering
-    ImGui::Render();
-    ImDrawData* draw_data = ImGui::GetDrawData();
-    const bool is_minimized =
-        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-    if (!is_minimized) {
-      ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
-      app->FrameRender(clear_color, draw_data);
-    }
+    ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
+    app->Render(clear_color);
   }
 }
 
@@ -416,24 +392,7 @@ void Scenario::Run(Application* app) {
       continue;
     }
 
-    app->MaybeRebuildSwapChain();
-
-    // Start the Dear ImGui frame
-    ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplSDL3_NewFrame();
-    ImGui::NewFrame();
-
-    // Get the drawing list and calculate center position
-    // Create fullscreen window
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2((float)screen.width, (float)screen.height));
-    ImGui::Begin("Fullscreen",
-                 nullptr,
-                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
-                     ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
-                     ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
+    ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     if (draw_reference_square) {
       {
@@ -486,14 +445,7 @@ void Scenario::Run(Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    // Rendering
-    ImGui::Render();
-    ImDrawData* draw_data = ImGui::GetDrawData();
-    const bool is_minimized =
-        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-    if (!is_minimized) {
-      app->FrameRender(clear_color, draw_data);
-    }
+    app->Render(clear_color);
   }
 
   PlayReplay(replay, app);
