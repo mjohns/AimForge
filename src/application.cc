@@ -33,8 +33,7 @@ static bool IsExtensionAvailable(const ImVector<VkExtensionProperties>& properti
 
 }  // namespace
 
-Application::Application() {
-}
+Application::Application() {}
 
 Application::~Application() {
   auto err = vkDeviceWaitIdle(_device);

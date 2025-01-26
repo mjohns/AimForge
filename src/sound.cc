@@ -16,8 +16,7 @@ std::unique_ptr<Sound> Sound::Load(std::string sound_name) {
   return std::unique_ptr<Sound>(new Sound(music));
 }
 
-Sound::Sound(Mix_Music* music) : _music(music) {
-}
+Sound::Sound(Mix_Music* music) : _music(music) {}
 
 Sound::~Sound() {
   if (_music != nullptr) {
