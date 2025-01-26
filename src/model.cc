@@ -1,5 +1,6 @@
 #include "model.h"
 
+#include <fstream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 #include <SDL3_mixer/SDL_mixer.h>
@@ -239,7 +240,7 @@ void Scenario::Run(Application* app) {
   uint32_t replay_frame_number = 0;
 
   StaticReplayT replay;
-  uint16_t replay_frames_per_second = 240;
+  uint16_t replay_frames_per_second = 120;
   replay.frames_per_second = replay_frames_per_second;
   replay.camera_position = ToStoredVec3Ptr(_camera.GetPosition());
 
@@ -459,6 +460,15 @@ void Scenario::Run(Application* app) {
   }
 
   PlayReplay(replay, app);
+
+  ReplayFileT replay_file;
+  replay_file.replay.Set(replay);
+  flatbuffers::FlatBufferBuilder fbb;
+  fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
+
+   std::ofstream outfile("C:/Users/micha/replay1.bin", std::ios::binary);
+  outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
+  outfile.close();
 }
 
 // Poll and handle events (inputs, window resize, etc.)
