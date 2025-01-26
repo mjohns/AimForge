@@ -289,7 +289,7 @@ void Application::SetupVulkanWindow(VkSurfaceKHR surface) {
                                          kMinImageCount);
 }
 
-void Application::Render(ImVec4 clear_color) {
+void Application::RenderImgui(ImVec4 clear_color) {
   ImGui::Render();
   ImDrawData* draw_data = ImGui::GetDrawData();
   const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);

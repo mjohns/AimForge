@@ -30,7 +30,7 @@ class Application {
 
   void MaybeRebuildSwapChain();
   ImDrawList* StartFullscreenImguiFrame();
-  void Render(ImVec4 clear_color);
+  void RenderImgui(ImVec4 clear_color);
 
   SDL_Window* GetSdlWindow() {
     return _sdl_window;

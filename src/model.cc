@@ -59,6 +59,13 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
   return replay_frames;
 }
 
+Sounds GetDefaultSounds() {
+  Sounds s;
+  s.shoot = Sound::Load("shoot.ogg");
+  s.kill = Sound::Load("kill_confirmed.ogg");
+  return s;
+}
+
 }  // namespace
 
 Target TargetManager::AddTarget(Target t) {
@@ -152,7 +159,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   auto stored_camera_position = replay.camera_position.get();
   glm::vec3 camera_position = ToVec3(*stored_camera_position);
 
-  auto hit_sound = Sound::Load("blop1.ogg");
+  Sounds sounds = GetDefaultSounds();
 
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
   uint32_t replay_frame_number = 1000;
@@ -187,9 +194,15 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     LookAtInfo look_at = GetLookAt(camera_position, ToVec3(replay_frame.look_at));
     auto transform = projection * look_at.transform;
 
-    if (replay_frame.hit_target_events.size() > 0) {
-      if (hit_sound) {
-        hit_sound->Play();
+    bool has_hit = replay_frame.hit_target_events.size() > 0;
+    bool has_miss = replay_frame.miss_target_events.size() > 0;
+    if (has_hit) {
+      if (sounds.kill) {
+        sounds.kill->Play();
+      }
+    } else if (has_miss) {
+      if (sounds.shoot) {
+        sounds.shoot->Play();
       }
     }
     // Play miss sound.
@@ -234,13 +247,14 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     ImGui::End();
 
     ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
-    app->Render(clear_color);
+    app->RenderImgui(clear_color);
   }
 }
 
 void Scenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
+  Sounds sounds = GetDefaultSounds();
 
   uint32_t replay_frame_number = 0;
 
@@ -268,8 +282,6 @@ void Scenario::Run(Application* app) {
 
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-  // TODO: needs to be cleaned up and paths / where to store things resolved.
-  auto hit_sound = Sound::Load("blop1.ogg");
   float radians_per_dot = CmPer360ToRadiansPerDot(45, 1600);
 
   Stopwatch stopwatch;
@@ -356,33 +368,38 @@ void Scenario::Run(Application* app) {
           hit_target_ids.push_back(target.id);
           force_render = true;
         } else {
-          // miss_sound->Play();
           auto miss_target = std::make_unique<MissTargetEventT>();
           miss_target->frame_number = replay_frame_number;
           replay.miss_target_events.push_back(std::move(miss_target));
         }
       }
     }
-    if (hit_target_ids.size() > 0) {
-      if (hit_sound) {
-        hit_sound->Play();
-      }
-      for (auto hit_target_id : hit_target_ids) {
-        _target_manager.RemoveTarget(hit_target_id);
-        Target new_target = _target_manager.AddTarget(_def->GetNewTarget());
+    if (has_click) {
+      if (hit_target_ids.size() > 0) {
+        if (sounds.kill) {
+          sounds.kill->Play();
+        }
+        for (auto hit_target_id : hit_target_ids) {
+          _target_manager.RemoveTarget(hit_target_id);
+          Target new_target = _target_manager.AddTarget(_def->GetNewTarget());
 
-        // Add replay events
-        auto add_target = std::make_unique<AddTargetEventT>();
-        add_target->target_id = new_target.id;
-        add_target->frame_number = replay_frame_number;
-        add_target->position = ToStoredVec3Ptr(new_target.position);
-        add_target->radius = new_target.radius;
-        replay.add_target_events.push_back(std::move(add_target));
+          // Add replay events
+          auto add_target = std::make_unique<AddTargetEventT>();
+          add_target->target_id = new_target.id;
+          add_target->frame_number = replay_frame_number;
+          add_target->position = ToStoredVec3Ptr(new_target.position);
+          add_target->radius = new_target.radius;
+          replay.add_target_events.push_back(std::move(add_target));
 
-        auto hit_target = std::make_unique<HitTargetEventT>();
-        hit_target->target_id = hit_target_id;
-        hit_target->frame_number = replay_frame_number;
-        replay.hit_target_events.push_back(std::move(hit_target));
+          auto hit_target = std::make_unique<HitTargetEventT>();
+          hit_target->target_id = hit_target_id;
+          hit_target->frame_number = replay_frame_number;
+          replay.hit_target_events.push_back(std::move(hit_target));
+        }
+      } else {
+        if (sounds.shoot) {
+          sounds.shoot->Play();
+        }
       }
     }
 
@@ -445,7 +462,7 @@ void Scenario::Run(Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    app->Render(clear_color);
+    app->RenderImgui(clear_color);
   }
 
   PlayReplay(replay, app);
