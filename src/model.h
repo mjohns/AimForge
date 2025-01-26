@@ -8,6 +8,7 @@
 #include "application.h"
 #include "camera.h"
 #include "imgui.h"
+#include "sound.h"
 
 namespace aim {
 
@@ -74,6 +75,11 @@ class StaticWallScenarioDef : public ScenarioDef {
   std::mt19937 _random_generator;
   std::uniform_real_distribution<float> _distribution_x;
   std::uniform_real_distribution<float> _distribution_z;
+};
+
+struct Sounds {
+  std::unique_ptr<Sound> shoot;
+  std::unique_ptr<Sound> kill;
 };
 
 class Scenario {
