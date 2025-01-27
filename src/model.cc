@@ -433,13 +433,13 @@ void Scenario::Run(Application* app) {
       }
     }
 
-    auto right = look_at.right;
     for (const auto& target_pair : _target_manager.GetTargetMap()) {
       auto& target = target_pair.second;
       if (!target.hidden) {
         ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
         // Draw circle
 
+        auto right = GetNormalizedRight(target.position - _camera.GetPosition());
         glm::vec3 out_target = target.position + (right * target.radius);
         ImVec2 radius_pos = GetScreenPosition(out_target, transform, screen);
 

@@ -18,6 +18,8 @@ struct LookAtInfo {
 
 LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front);
 
+glm::vec3 GetNormalizedRight(const glm::vec3& v);
+
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov = 103.0f);
 
 class Camera {

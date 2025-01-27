@@ -20,7 +20,7 @@ constexpr float k90DegreesInRadians = glm::radians(90.0f);
 
 void FillInLookAt(const glm::vec3& position, LookAtInfo* info) {
   info->front = glm::normalize(info->front);
-  info->right = glm::normalize(glm::cross(info->front, glm::vec3(0.0f, 0.0f, 1.0f)));
+  info->right = GetNormalizedRight(info->front);
   info->up = glm::normalize(glm::cross(info->right, info->front));
   info->transform = glm::lookAt(position, position + info->front, info->up);
 }
@@ -37,6 +37,10 @@ float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov) {
   return glm::perspective(
       glm::radians(fov), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
+}
+
+glm::vec3 GetNormalizedRight(const glm::vec3& v) {
+  return glm::normalize(glm::cross(v, glm::vec3(0.0f, 0.0f, 1.0f)));
 }
 
 LookAtInfo Camera::GetLookAt() {
@@ -65,13 +69,10 @@ void Camera::Update(int xrel, int yrel, float radians_per_dot) {
 }
 
 Camera::Camera(float pitch, float yaw, glm::vec3 position)
-    : _pitch(pitch), _yaw(yaw), _position(position) {
-}
+    : _pitch(pitch), _yaw(yaw), _position(position) {}
 
-Camera::Camera(glm::vec3 position) : _pitch(0), _yaw(0), _position(position) {
-}
+Camera::Camera(glm::vec3 position) : _pitch(0), _yaw(0), _position(position) {}
 
-Camera::Camera(float pitch, float yaw) : _pitch(pitch), _yaw(yaw), _position(glm::vec3(0, 0, 0)) {
-}
+Camera::Camera(float pitch, float yaw) : _pitch(pitch), _yaw(yaw), _position(glm::vec3(0, 0, 0)) {}
 
 }  // namespace aim
