@@ -9,12 +9,6 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-  glad
-  GIT_REPOSITORY "https://github.com/krieselreihe/glad.git"
-  GIT_TAG v1.0.0
-)
-
-FetchContent_Declare(
   imgui
   GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
   GIT_TAG 4c2e7bb03557dd28f0a6b6809c3466485cc4c3df 
@@ -59,5 +53,6 @@ set(FMT_INSTALL OFF)
 set(SPDLOG_FMT_EXTERNAL ON)
 
 add_subdirectory(imgui-setup)
+add_subdirectory(glad)
 
 FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm FlatBuffers)

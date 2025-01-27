@@ -9,14 +9,14 @@ add_executable(
     time_util.cc
     sound.cc)
 
-find_package(Vulkan REQUIRED)
+find_package(OpenGL REQUIRED)
 
 target_link_libraries(${NAME}
   PUBLIC fmt
          SDL3::SDL3
          SDL3_mixer::SDL3_mixer
          imgui
-         FlatBuffers
-         Vulkan::Vulkan)
+         ${OPENGL_LIBRARIES}
+         FlatBuffers)
 
-target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${glm_SOURCE_DIR})

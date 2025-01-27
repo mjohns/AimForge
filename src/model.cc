@@ -15,7 +15,6 @@
 
 #include "application.h"
 #include "backends/imgui_impl_sdl3.h"
-#include "backends/imgui_impl_vulkan.h"
 #include "camera.h"
 #include "flatbuffers/flatbuffers.h"
 #include "imgui.h"

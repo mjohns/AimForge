@@ -1,11 +1,10 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_vulkan.h>
+#include <SDL3/SDL_opengl.h>
 
 #include <memory>
 
-#include "backends/imgui_impl_vulkan.h"
 #include "imgui.h"
 #include "util.h"
 
@@ -28,7 +27,6 @@ class Application {
 
   static std::unique_ptr<Application> Create();
 
-  void MaybeRebuildSwapChain();
   ImDrawList* StartFullscreenImguiFrame();
   void RenderImgui(ImVec4 clear_color);
 
@@ -49,23 +47,9 @@ class Application {
   Application();
 
   int Initialize();
-  void FramePresent();
-  void SetupVulkan(ImVector<const char*> instance_extensions);
-  void SetupVulkanWindow(VkSurfaceKHR surface);
   void FrameRender(ImVec4 clear_color, ImDrawData* draw_data);
 
-  // Vulkan
-  VkAllocationCallbacks* _allocator = nullptr;
-  VkInstance _instance = VK_NULL_HANDLE;
-  VkPhysicalDevice _physical_device = VK_NULL_HANDLE;
-  VkDevice _device = VK_NULL_HANDLE;
-  uint32_t _queue_family = (uint32_t)-1;
-  VkQueue _queue = VK_NULL_HANDLE;
-  VkPipelineCache _pipeline_cache = VK_NULL_HANDLE;
-  VkDescriptorPool _descriptor_pool = VK_NULL_HANDLE;
-  ImGui_ImplVulkanH_Window _main_window_data;
-  bool _swap_chain_rebuild = false;
-
+  SDL_GLContext _gl_context;
   SDL_Window* _sdl_window = nullptr;
 
   int _window_width = -1;
