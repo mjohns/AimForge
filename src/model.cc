@@ -66,6 +66,29 @@ Sounds GetDefaultSounds() {
   return s;
 }
 
+void DrawTargets(TargetManager* target_manager,
+                 ImU32 color,
+                 const glm::mat4& transform,
+                 const ScreenInfo& screen,
+                 const glm::vec3& camera_position,
+                 ImDrawList* draw_list) {
+  for (const auto& target_pair : target_manager->GetTargetMap()) {
+    auto& target = target_pair.second;
+    if (!target.hidden) {
+      ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
+      // Draw circle
+
+      auto right = GetNormalizedRight(target.position - camera_position);
+      glm::vec3 out_target = target.position + (right * target.radius);
+      ImVec2 radius_pos = GetScreenPosition(out_target, transform, screen);
+
+      float screen_radius = glm::length(ToVec2(screen_pos) - ToVec2(radius_pos));
+
+      draw_list->AddCircleFilled(screen_pos, screen_radius, color, 0);
+    }
+  }
+}
+
 }  // namespace
 
 Target TargetManager::AddTarget(Target t) {
@@ -197,6 +220,9 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     bool has_hit = replay_frame.hit_target_events.size() > 0;
     bool has_miss = replay_frame.miss_target_events.size() > 0;
     if (has_hit) {
+      if (sounds.shoot) {
+        sounds.shoot->Play();
+      }
       if (sounds.kill) {
         sounds.kill->Play();
       }
@@ -219,20 +245,8 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    auto right = look_at.right;
-    for (const auto& target_pair : target_manager.GetTargetMap()) {
-      auto& target = target_pair.second;
-      ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
-      // Draw circle
-
-      glm::vec3 out_target = target.position + (right * target.radius);
-      ImVec2 radius_pos = GetScreenPosition(out_target, transform, screen);
-
-      float screen_radius = glm::length(ToVec2(screen_pos) - ToVec2(radius_pos));
-
-      ImU32 circle_color = IM_COL32(255, 255, 255, 255);  // White color
-      draw_list->AddCircleFilled(screen_pos, screen_radius, circle_color, 0);
-    }
+    ImU32 circle_color = IM_COL32(255, 255, 255, 255);  // White color
+    DrawTargets(&target_manager, circle_color, transform, screen, camera_position, draw_list);
 
     {
       // crosshair
@@ -375,6 +389,9 @@ void Scenario::Run(Application* app) {
       }
     }
     if (has_click) {
+        if (sounds.shoot) {
+          sounds.shoot->Play();
+        }
       if (hit_target_ids.size() > 0) {
         if (sounds.kill) {
           sounds.kill->Play();
@@ -395,10 +412,6 @@ void Scenario::Run(Application* app) {
           hit_target->target_id = hit_target_id;
           hit_target->frame_number = replay_frame_number;
           replay.hit_target_events.push_back(std::move(hit_target));
-        }
-      } else {
-        if (sounds.shoot) {
-          sounds.shoot->Play();
         }
       }
     }
@@ -433,22 +446,9 @@ void Scenario::Run(Application* app) {
       }
     }
 
-    for (const auto& target_pair : _target_manager.GetTargetMap()) {
-      auto& target = target_pair.second;
-      if (!target.hidden) {
-        ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
-        // Draw circle
-
-        auto right = GetNormalizedRight(target.position - _camera.GetPosition());
-        glm::vec3 out_target = target.position + (right * target.radius);
-        ImVec2 radius_pos = GetScreenPosition(out_target, transform, screen);
-
-        float screen_radius = glm::length(ToVec2(screen_pos) - ToVec2(radius_pos));
-
-        ImU32 circle_color = IM_COL32(255, 255, 255, 255);  // White color
-        draw_list->AddCircleFilled(screen_pos, screen_radius, circle_color, 0);
-      }
-    }
+    ImU32 circle_color = IM_COL32(255, 255, 255, 255);
+    DrawTargets(
+        &_target_manager, circle_color, transform, screen, _camera.GetPosition(), draw_list);
 
     {
       // crosshair
