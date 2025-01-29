@@ -11,14 +11,11 @@
 
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_sdl3.h"
+#include "glad_loader.h"
 #include "imgui.h"
 #include "util.h"
 
 namespace aim {
-namespace {
-constexpr uint32_t kMinImageCount = 2;
-
-}  // namespace
 
 Application::Application() {}
 
@@ -62,6 +59,8 @@ int Application::Initialize() {
   }
 
   // GL 3.0 + GLSL 130
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+
   const char* glsl_version = "#version 130";
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -72,6 +71,10 @@ int Application::Initialize() {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+  // Simple anti aliasing.
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
 
   SDL_WindowFlags window_flags =
       (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
@@ -89,8 +92,11 @@ int Application::Initialize() {
   SDL_GetWindowSize(_sdl_window, &_window_width, &_window_height);
 
   SDL_GL_MakeCurrent(_sdl_window, _gl_context);
+  LoadGlad();
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_ShowWindow(_sdl_window);
+
+  glEnable(GL_DEPTH_TEST);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -111,24 +117,25 @@ int Application::Initialize() {
   return 0;
 }
 
-void Application::RenderImgui(ImVec4 clear_color) {
+bool Application::StartRender(ImVec4 clear_color) {
   ImGui::Render();
   ImDrawData* draw_data = ImGui::GetDrawData();
   const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-  if (!is_minimized) {
-    this->FrameRender(clear_color, draw_data);
+  if (is_minimized) {
+    return false;
   }
-}
 
-void Application::FrameRender(ImVec4 clear_color, ImDrawData* draw_data) {
-  ImGui::Render();
   ImGuiIO& io = ImGui::GetIO();
   glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
   glClearColor(clear_color.x * clear_color.w,
                clear_color.y * clear_color.w,
                clear_color.z * clear_color.w,
                clear_color.w);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  return true;
+}
+
+void Application::FinishRender() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   SDL_GL_SwapWindow(_sdl_window);
 }

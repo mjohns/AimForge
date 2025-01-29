@@ -28,7 +28,8 @@ class Application {
   static std::unique_ptr<Application> Create();
 
   ImDrawList* StartFullscreenImguiFrame();
-  void RenderImgui(ImVec4 clear_color);
+  bool StartRender(ImVec4 clear_color);
+  void FinishRender();
 
   SDL_Window* GetSdlWindow() {
     return _sdl_window;
