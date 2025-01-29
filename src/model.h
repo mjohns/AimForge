@@ -19,16 +19,6 @@ struct Target {
   bool hidden = false;
 };
 
-struct Room {
-  float wall_height = 0.0;
-  float wall_width = 0.0;
-  float wall_distance = 100.0;
-  // Percentage of the wall_height up from the floor to place the camera.
-  float camera_height_percent = 0.5;
-
-  void Draw(ImDrawList* draw_list, const glm::mat4& transform, const ScreenInfo& screen);
-};
-
 class TargetManager {
  public:
   TargetManager() {}

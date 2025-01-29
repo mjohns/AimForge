@@ -7,7 +7,10 @@ add_executable(
     model.cc
     camera.cc
     time_util.cc
-    sound.cc)
+    shader.cc
+    sound.cc
+    room.cc
+    glad_loader.cc)
 
 find_package(OpenGL REQUIRED)
 
@@ -16,6 +19,7 @@ target_link_libraries(${NAME}
          SDL3::SDL3
          SDL3_mixer::SDL3_mixer
          imgui
+         glad
          ${OPENGL_LIBRARIES}
          FlatBuffers)
 

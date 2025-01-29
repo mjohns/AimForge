@@ -19,6 +19,8 @@
 #include "flatbuffers/flatbuffers.h"
 #include "imgui.h"
 #include "replay_generated.h"
+#include "room.h"
+#include "shader.h"
 #include "sound.h"
 #include "time_util.h"
 #include "util.h"
@@ -118,24 +120,6 @@ ImVec2 GetScreenPosition(const glm::vec3& target,
   float screen_y = (1.0f - ndc_space.y) * 0.5f * screen.height;
 
   return ImVec2(screen_x, screen_y);
-}
-
-void Room::Draw(ImDrawList* draw_list, const glm::mat4& transform, const ScreenInfo& screen) {
-  float max_x = wall_width * 0.5;
-  float min_x = -1 * max_x;
-
-  float max_y = wall_height * camera_height_percent;
-  float min_y = max_y - wall_height;
-
-  float wall_z = wall_distance * -1.0f;
-
-  auto top_left = GetScreenPosition({min_x, max_y, wall_z}, transform, screen);
-  auto top_right = GetScreenPosition({max_x, max_y, wall_z}, transform, screen);
-  auto bottom_left = GetScreenPosition({min_x, min_y, wall_z}, transform, screen);
-  auto bottom_right = GetScreenPosition({max_x, min_y, wall_z}, transform, screen);
-
-  ImVec2 points[] = {top_left, top_right, bottom_right, bottom_left};
-  draw_list->AddPolyline(points, 4, IM_COL32(238, 232, 213, 255), true, 5.f);
 }
 
 Camera StaticWallScenarioDef::GetInitialCamera() {
@@ -260,7 +244,9 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     ImGui::End();
 
     ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
-    app->RenderImgui(clear_color);
+    if (app->StartRender(clear_color)) {
+      app->FinishRender();
+    }
   }
 }
 
@@ -310,6 +296,12 @@ void Scenario::Run(Application* app) {
   LookAtInfo look_at;
 
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
+
+  RoomParams room_params;
+  room_params.wall_height = 50;
+  room_params.wall_width = 100;
+  Room room(room_params);
+  room.SetProjection(projection);
 
   bool stop_scenario = false;
   while (!stop_scenario) {
@@ -388,9 +380,9 @@ void Scenario::Run(Application* app) {
       }
     }
     if (has_click) {
-        if (sounds.shoot) {
-          sounds.shoot->Play();
-        }
+      if (sounds.shoot) {
+        sounds.shoot->Play();
+      }
       if (hit_target_ids.size() > 0) {
         if (sounds.kill) {
           sounds.kill->Play();
@@ -461,7 +453,10 @@ void Scenario::Run(Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    app->RenderImgui(clear_color);
+    if (app->StartRender(clear_color)) {
+      room.Draw(look_at.transform);
+      app->FinishRender();
+    }
   }
 
   PlayReplay(replay, app);
