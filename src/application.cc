@@ -97,6 +97,7 @@ int Application::Initialize() {
   SDL_ShowWindow(_sdl_window);
 
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);  
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
