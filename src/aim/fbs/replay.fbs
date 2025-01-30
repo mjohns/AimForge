@@ -25,6 +25,8 @@ table MissTargetEvent {
 }
 
 table StaticReplay {
+  wall_width: float;
+  wall_height: float;
   frames_per_second: uint16;
   camera_position: StoredVec3;
   add_target_events: [AddTargetEvent];

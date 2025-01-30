@@ -23,9 +23,9 @@
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/fbs/replay_generated.h"
+#include "aim/graphics/room.h"
 #include "aim/graphics/shader.h"
 #include "aim/graphics/sphere.h"
-#include "aim/graphics/room.h"
 
 namespace aim {
 namespace {
@@ -69,26 +69,30 @@ Sounds GetDefaultSounds() {
   return s;
 }
 
-void DrawTargets(TargetManager* target_manager,
-                 ImU32 color,
-                 const glm::mat4& transform,
-                 const ScreenInfo& screen,
-                 const glm::vec3& camera_position,
-                 ImDrawList* draw_list) {
-  for (const Target& target : target_manager->GetTargets()) {
-    if (!target.hidden) {
-      ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
-      // Draw circle
-
-      auto right = GetNormalizedRight(target.position - camera_position);
-      glm::vec3 out_target = target.position + (right * target.radius);
-      ImVec2 radius_pos = GetScreenPosition(out_target, transform, screen);
-
-      float screen_radius = glm::length(ToVec2(screen_pos) - ToVec2(radius_pos));
-
-      draw_list->AddCircleFilled(screen_pos, screen_radius, color, 0);
+void DrawFrame(Application* app,
+               TargetManager* target_manager,
+               SphereRenderer* sphere_renderer,
+               Room* room,
+               const glm::mat4& view_transform) {
+  ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
+  if (app->StartRender(clear_color)) {
+    room->Draw(view_transform);
+    std::vector<Sphere> target_spheres;
+    for (const Target& target : target_manager->GetTargets()) {
+      if (!target.hidden) {
+        sphere_renderer->Draw(view_transform, {{target.position, target.radius}});
+      }
     }
+    app->FinishRender();
   }
+}
+
+void DrawCrosshair(const ScreenInfo& screen, ImDrawList* draw_list) {
+  float radius = 3.0f;
+  ImU32 circle_color = IM_COL32(254, 138, 24, 255);
+  draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
+  ImU32 outline_color = IM_COL32(0, 0, 0, 255);
+  draw_list->AddCircle(screen.center, radius, outline_color, 0);
 }
 
 }  // namespace
@@ -200,6 +204,15 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   float replay_seconds_per_frame = 1 / (float)replay.frames_per_second;
   uint64_t replay_micros_per_frame = replay_seconds_per_frame * 1000000;
 
+  RoomParams room_params;
+  room_params.wall_height = replay.wall_height;
+  room_params.wall_width = replay.wall_width;
+  Room room(room_params);
+  room.SetProjection(projection);
+
+  SphereRenderer sphere_renderer;
+  sphere_renderer.SetProjection(projection);
+
   Stopwatch stopwatch;
   stopwatch.Start();
 
@@ -209,6 +222,14 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   TargetManager target_manager;
 
   while (true) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      ImGui_ImplSDL3_ProcessEvent(&event);
+      if (event.type == SDL_EVENT_QUIT) {
+        return;
+      }
+    }
+
     last_frame_start_time_micros = frame_start_time_micros;
     frame_start_time_micros = stopwatch.GetElapsedMicros();
 
@@ -255,32 +276,18 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    ImU32 circle_color = IM_COL32(255, 255, 255, 255);  // White color
-    DrawTargets(&target_manager, circle_color, transform, screen, camera_position, draw_list);
-
-    {
-      // crosshair
-      float radius = 3.0f;
-      ImU32 circle_color = IM_COL32(254, 138, 24, 255);
-      draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
-      ImU32 outline_color = IM_COL32(0, 0, 0, 255);
-      draw_list->AddCircle(screen.center, radius, outline_color, 0);
-    }
+    DrawCrosshair(screen, draw_list);
 
     float elapsed_seconds = stopwatch.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
-    if (app->StartRender(clear_color)) {
-      app->FinishRender();
-    }
+    DrawFrame(app, &target_manager, &sphere_renderer, &room, look_at.transform);
   }
 }
 
 void Scenario::Run(Application* app) {
-  SphereRenderer sphere_renderer;
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   Sounds sounds = GetDefaultSounds();
@@ -321,7 +328,6 @@ void Scenario::Run(Application* app) {
   uint64_t last_render_time_micros = 0;
 
   uint64_t frame_count = 0;
-  bool draw_reference_square = false;
 
   LookAtInfo look_at;
 
@@ -329,6 +335,10 @@ void Scenario::Run(Application* app) {
 
   Room room = _def->GetRoom();
   room.SetProjection(projection);
+  replay.wall_width = room.GetWidth();
+  replay.wall_height = room.GetHeight();
+
+  SphereRenderer sphere_renderer;
   sphere_renderer.SetProjection(projection);
 
   bool stop_scenario = false;
@@ -362,9 +372,6 @@ void Scenario::Run(Application* app) {
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_D) {
-          draw_reference_square = !draw_reference_square;
-        }
         if (keycode == SDLK_S) {
           stop_scenario = true;
         }
@@ -441,54 +448,14 @@ void Scenario::Run(Application* app) {
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    if (draw_reference_square) {
-      {
-        auto top_left = GetScreenPosition({-100, 0, 100}, transform, screen);
-        auto top_right = GetScreenPosition({100, 0, 100}, transform, screen);
-        auto bottom_right = GetScreenPosition({100, 0, -100}, transform, screen);
-        auto bottom_left = GetScreenPosition({-100, 0, -100}, transform, screen);
-
-        ImVec2 points[] = {top_left, top_right, bottom_right, bottom_left};
-        draw_list->AddPolyline(points, 4, IM_COL32(238, 232, 213, 255), true, 5.f);
-      }
-      {
-        auto top_left = GetScreenPosition({-150, 0, 150}, transform, screen);
-        auto top_right = GetScreenPosition({150, 0, 150}, transform, screen);
-        auto bottom_right = GetScreenPosition({150, 0, -150}, transform, screen);
-        auto bottom_left = GetScreenPosition({-150, 0, -150}, transform, screen);
-
-        ImVec2 points[] = {top_left, top_right, bottom_right, bottom_left};
-        draw_list->AddLine(top_left, top_right, IM_COL32(238, 0, 0, 255), 4);
-        draw_list->AddLine(top_right, bottom_right, IM_COL32(0, 238, 0, 255), 4);
-      }
-    }
-
-    ImU32 circle_color = IM_COL32(255, 255, 255, 255);
-
-    {
-      // crosshair
-      float radius = 3.0f;
-      ImU32 circle_color = IM_COL32(254, 138, 24, 255);
-      draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
-      ImU32 outline_color = IM_COL32(0, 0, 0, 255);
-      draw_list->AddCircle(screen.center, radius, outline_color, 0);
-    }
+    DrawCrosshair(screen, draw_list);
 
     float elapsed_seconds = stopwatch.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    if (app->StartRender(clear_color)) {
-      room.Draw(look_at.transform);
-      std::vector<Sphere> target_spheres;
-      for (const Target& target : _target_manager.GetTargets()) {
-        if (!target.hidden) {
-          sphere_renderer.Draw(look_at.transform, {{target.position, target.radius}});
-        }
-      }
-      app->FinishRender();
-    }
+    DrawFrame(app, &_target_manager, &sphere_renderer, &room, look_at.transform);
   }
 
   PlayReplay(replay, app);

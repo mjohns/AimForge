@@ -18,6 +18,14 @@ struct Room {
   void SetProjection(const glm::mat4& projection);
   void Draw(const glm::mat4& view);
 
+  float GetWidth() {
+    return _params.wall_width;
+  }
+
+  float GetHeight() {
+    return _params.wall_height;
+  }
+
  private:
   RoomParams _params;
   unsigned int _vbo;
