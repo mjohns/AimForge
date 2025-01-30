@@ -1,8 +1,9 @@
 ﻿#pragma once
 
-#include "glm/vec3.hpp"
-#include "glm/mat4x4.hpp"
-#include "application.h"
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+
+#include "aim/application.h"
 
 namespace aim {
 
@@ -38,9 +39,8 @@ class Camera {
 
  private:
   glm::vec3 _position;
-  float _pitch;	
+  float _pitch;
   float _yaw;
-
 };
-	
+
 }  // namespace aim

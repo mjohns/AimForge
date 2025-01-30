@@ -1,15 +1,16 @@
 #pragma once
 
+#include <imgui.h>
+
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <random>
 #include <vector>
 
-#include "application.h"
-#include "camera.h"
-#include "imgui.h"
-#include "room.h"
-#include "sound.h"
+#include "aim/application.h"
+#include "aim/camera.h"
+#include "aim/room.h"
+#include "aim/sound.h"
 
 namespace aim {
 

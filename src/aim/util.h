@@ -1,14 +1,15 @@
 #pragma once
 
+#include <flatbuffers/flatbuffers.h>
+#include <imgui.h>
+
 #include <expected>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <memory>
 #include <string>
 
-#include "flatbuffers/flatbuffers.h"
-#include "imgui.h"
-#include "replay_generated.h"
+#include "aim/replay_generated.h"
 
 namespace aim {
 

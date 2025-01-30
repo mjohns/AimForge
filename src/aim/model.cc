@@ -6,6 +6,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 #define GLM_ENABLE_EXPERIMENTAL
+#include <backends/imgui_impl_sdl3.h>
+#include <flatbuffers/flatbuffers.h>
+#include <imgui.h>
+
 #include <glm/gtx/intersect.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
@@ -13,18 +17,15 @@
 #include <glm/vec3.hpp>
 #include <random>
 
-#include "application.h"
-#include "backends/imgui_impl_sdl3.h"
-#include "camera.h"
-#include "flatbuffers/flatbuffers.h"
-#include "imgui.h"
-#include "replay_generated.h"
-#include "room.h"
-#include "shader.h"
-#include "sound.h"
-#include "sphere.h"
-#include "time_util.h"
-#include "util.h"
+#include "aim/application.h"
+#include "aim/camera.h"
+#include "aim/sphere.h"
+#include "aim/replay_generated.h"
+#include "aim/room.h"
+#include "aim/shader.h"
+#include "aim/sound.h"
+#include "aim/time_util.h"
+#include "aim/util.h"
 
 namespace aim {
 namespace {

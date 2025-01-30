@@ -1,7 +1,7 @@
-#include "glad_loader.h";
+#include "glad_loader.h"
 
-#include "glad/glad.h"
 #include <SDL3/SDL_video.h>
+#include <glad/glad.h>
 
 namespace aim {
 

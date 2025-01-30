@@ -1,9 +1,9 @@
 #include "room.h"
 
+#include <glad/glad.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
-
-#include "glad/glad.h"
 
 namespace aim {
 namespace {

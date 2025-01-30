@@ -1,10 +1,10 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <vector>
 
-#include "glm/vec3.hpp"
-#include "shader.h";
+#include "aim/shader.h";
 
 namespace aim {
 
