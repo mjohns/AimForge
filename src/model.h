@@ -8,6 +8,7 @@
 #include "application.h"
 #include "camera.h"
 #include "imgui.h"
+#include "room.h"
 #include "sound.h"
 
 namespace aim {
@@ -25,14 +26,15 @@ class TargetManager {
 
   Target AddTarget(Target t);
   void RemoveTarget(uint16_t target_id);
+  Target ReplaceTarget(uint16_t target_id_to_replace, Target new_target);
 
-  std::unordered_map<uint16_t, Target>& GetTargetMap() {
-    return _target_map;
+  const std::vector<Target>& GetTargets() {
+    return _targets;
   }
 
  private:
   uint16_t _target_id_counter = 0;
-  std::unordered_map<uint16_t, Target> _target_map;
+  std::vector<Target> _targets;
 };
 
 class ScenarioDef {
@@ -44,6 +46,7 @@ class ScenarioDef {
   virtual std::vector<Target> GetInitialTargets() = 0;
   // Maybe OnHit is better?
   virtual Target GetNewTarget() = 0;
+  virtual Room GetRoom() = 0;
 };
 
 struct StaticWallParams {
@@ -59,6 +62,13 @@ class StaticWallScenarioDef : public ScenarioDef {
   Camera GetInitialCamera() override;
   std::vector<Target> GetInitialTargets() override;
   Target GetNewTarget() override;
+
+  Room GetRoom() override {
+    RoomParams p;
+    p.wall_height = _params.height;
+    p.wall_width = _params.width;
+    return Room(p);
+  }
 
  private:
   StaticWallParams _params;

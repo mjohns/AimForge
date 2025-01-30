@@ -22,6 +22,7 @@
 #include "room.h"
 #include "shader.h"
 #include "sound.h"
+#include "sphere.h"
 #include "time_util.h"
 #include "util.h"
 
@@ -73,8 +74,7 @@ void DrawTargets(TargetManager* target_manager,
                  const ScreenInfo& screen,
                  const glm::vec3& camera_position,
                  ImDrawList* draw_list) {
-  for (const auto& target_pair : target_manager->GetTargetMap()) {
-    auto& target = target_pair.second;
+  for (const Target& target : target_manager->GetTargets()) {
     if (!target.hidden) {
       ImVec2 screen_pos = GetScreenPosition(target.position, transform, screen);
       // Draw circle
@@ -97,12 +97,38 @@ Target TargetManager::AddTarget(Target t) {
     auto new_id = ++_target_id_counter;
     t.id = new_id;
   }
-  _target_map[t.id] = t;
+
+  // Try to overwrite a hidden target.
+  for (int i = 0; i < _targets.size(); ++i) {
+    if (_targets[i].hidden) {
+      _targets[i] = t;
+      return t;
+    }
+  }
+  _targets.push_back(t);
   return t;
 }
 
 void TargetManager::RemoveTarget(uint16_t target_id) {
-  _target_map.erase(target_id);
+  for (Target& t : _targets) {
+    if (t.id == target_id) {
+      t.hidden = true;
+    }
+  }
+}
+
+Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_target) {
+  if (new_target.id == 0) {
+    auto new_id = ++_target_id_counter;
+    new_target.id = new_id;
+  }
+  for (int i = 0; i < _targets.size(); ++i) {
+    if (_targets[i].id == target_id_to_replace) {
+      _targets[i] = new_target;
+    }
+  }
+  // TODO: error if target did not exist?
+  return new_target;
 }
 
 ImVec2 GetScreenPosition(const glm::vec3& target,
@@ -251,6 +277,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 }
 
 void Scenario::Run(Application* app) {
+  SphereRenderer sphere_renderer;
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   Sounds sounds = GetDefaultSounds();
@@ -297,11 +324,9 @@ void Scenario::Run(Application* app) {
 
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
 
-  RoomParams room_params;
-  room_params.wall_height = 50;
-  room_params.wall_width = 100;
-  Room room(room_params);
+  Room room = _def->GetRoom();
   room.SetProjection(projection);
+  sphere_renderer.SetProjection(projection);
 
   bool stop_scenario = false;
   while (!stop_scenario) {
@@ -355,8 +380,7 @@ void Scenario::Run(Application* app) {
     auto transform = projection * look_at.transform;
 
     std::vector<uint16_t> hit_target_ids;
-    for (const auto& target_pair : _target_manager.GetTargetMap()) {
-      auto& target = target_pair.second;
+    for (const Target& target : _target_manager.GetTargets()) {
       if (target.hidden) {
         continue;
       }
@@ -388,8 +412,7 @@ void Scenario::Run(Application* app) {
           sounds.kill->Play();
         }
         for (auto hit_target_id : hit_target_ids) {
-          _target_manager.RemoveTarget(hit_target_id);
-          Target new_target = _target_manager.AddTarget(_def->GetNewTarget());
+          Target new_target = _target_manager.ReplaceTarget(hit_target_id, _def->GetNewTarget());
 
           // Add replay events
           auto add_target = std::make_unique<AddTargetEventT>();
@@ -438,8 +461,10 @@ void Scenario::Run(Application* app) {
     }
 
     ImU32 circle_color = IM_COL32(255, 255, 255, 255);
+    /*
     DrawTargets(
         &_target_manager, circle_color, transform, screen, _camera.GetPosition(), draw_list);
+        */
 
     {
       // crosshair
@@ -455,6 +480,7 @@ void Scenario::Run(Application* app) {
 
     if (app->StartRender(clear_color)) {
       room.Draw(look_at.transform);
+      sphere_renderer.Draw(look_at.transform, {{glm::vec3(10, -10, 40), 5}});
       app->FinishRender();
     }
   }

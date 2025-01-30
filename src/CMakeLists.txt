@@ -10,7 +10,8 @@ add_executable(
     shader.cc
     sound.cc
     room.cc
-    glad_loader.cc)
+    glad_loader.cc
+    sphere.cc)
 
 find_package(OpenGL REQUIRED)
 
