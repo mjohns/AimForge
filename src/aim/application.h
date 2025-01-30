@@ -2,11 +2,11 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
+#include <imgui.h>
 
 #include <memory>
 
-#include <imgui.h>
-#include "aim/util.h"
+#include "aim/common/util.h"
 
 namespace aim {
 

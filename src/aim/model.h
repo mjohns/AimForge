@@ -9,8 +9,8 @@
 
 #include "aim/application.h"
 #include "aim/camera.h"
-#include "aim/room.h"
-#include "aim/sound.h"
+#include "aim/graphics/room.h"
+#include "aim/audio/sound.h"
 
 namespace aim {
 

@@ -2,7 +2,7 @@
 
 #include <glm/mat4x4.hpp>
 
-#include "aim/shader.h"
+#include "aim/graphics/shader.h"
 
 namespace aim {
 

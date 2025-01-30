@@ -6,12 +6,12 @@ add_library(
     application.cc
     model.cc
     camera.cc
-    time_util.cc
-    shader.cc
-    sound.cc
-    room.cc
-    glad_loader.cc
-    sphere.cc)
+    common/time_util.cc
+    graphics/shader.cc
+    audio/sound.cc
+    graphics/room.cc
+    graphics/glad_loader.cc
+    graphics/sphere.cc)
 
 find_package(OpenGL REQUIRED)
 
