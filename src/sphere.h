@@ -23,6 +23,8 @@ class SphereRenderer {
  private:
   unsigned int _vbo;
   unsigned int _vao;
+  unsigned int _instance_vbo;
+  unsigned int _instance_vao;
   unsigned int _num_vertices;
   Shader _shader;
 };
