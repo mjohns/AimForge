@@ -480,7 +480,12 @@ void Scenario::Run(Application* app) {
 
     if (app->StartRender(clear_color)) {
       room.Draw(look_at.transform);
-      sphere_renderer.Draw(look_at.transform, {{glm::vec3(10, -10, 40), 5}});
+      std::vector<Sphere> target_spheres;
+      for (const Target& target : _target_manager.GetTargets()) {
+        if (!target.hidden) {
+          sphere_renderer.Draw(look_at.transform, {{target.position, target.radius}});
+        }
+      }
       app->FinishRender();
     }
   }
