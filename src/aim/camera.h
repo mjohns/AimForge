@@ -35,7 +35,22 @@ class Camera {
     return _position;
   }
 
+  float GetPitch() {
+    return _pitch;
+  }
+
+  float GetYaw() {
+    return _yaw;
+  }
+
   void Update(int xrel, int yrel, float radians_per_dot);
+
+  void UpdatePitch(float pitch) {
+    _pitch = pitch;
+  }
+  void UpdateYaw(float yaw) {
+    _yaw = yaw;
+  }
 
  private:
   glm::vec3 _position;

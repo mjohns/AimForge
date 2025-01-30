@@ -8,6 +8,11 @@ struct StoredVec3 {
   z: float;
 }
 
+struct PitchYaw {
+  pitch: float;
+  yaw: float;
+}
+
 table AddTargetEvent {
   target_id: uint16;
   frame_number: uint32;
@@ -32,7 +37,7 @@ table StaticReplay {
   add_target_events: [AddTargetEvent];
   hit_target_events: [HitTargetEvent];
   miss_target_events: [MissTargetEvent];
-  look_at_vectors: [StoredVec3];
+  pitch_yaw_pairs: [PitchYaw];
 }
 
 union Replay {
