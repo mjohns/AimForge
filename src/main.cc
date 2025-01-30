@@ -7,8 +7,8 @@ int main(int, char**) {
 
   StaticWallParams params;
   params.num_targets = 3;
-  params.height = 70;
-  params.width = 110;
+  params.height = 150;
+  params.width = 170;
   params.target_radius = 1.5;
 
   std::unique_ptr<ScenarioDef> def = std::make_unique<StaticWallScenarioDef>(params);

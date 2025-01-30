@@ -168,7 +168,7 @@ StaticWallScenarioDef::StaticWallScenarioDef(StaticWallParams params) : _params(
 Target StaticWallScenarioDef::GetNewTarget() {
   Target t;
   t.position.x = _distribution_x(_random_generator);
-  t.position.y = 0;
+  t.position.y = -1 * (_params.target_radius + 0.2);
   t.position.z = _distribution_z(_random_generator);
   t.radius = _params.target_radius;
   return t;
