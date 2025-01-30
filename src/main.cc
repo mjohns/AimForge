@@ -1,5 +1,5 @@
-#include "application.h"
-#include "model.h"
+#include "aim/application.h"
+#include "aim/model.h"
 
 int main(int, char**) {
   using namespace aim;

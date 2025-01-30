@@ -1,19 +1,19 @@
-#include "application.h"
+#include "aim/application.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
 #include <SDL3_mixer/SDL_mixer.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_sdl3.h>
 #include <fmt/core.h>
+#include <imgui.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <memory>
 
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_sdl3.h"
-#include "glad_loader.h"
-#include "imgui.h"
-#include "util.h"
+#include "aim/glad_loader.h"
+#include "aim/util.h"
 
 namespace aim {
 
@@ -97,7 +97,7 @@ int Application::Initialize() {
   SDL_ShowWindow(_sdl_window);
 
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);  
+  glEnable(GL_CULL_FACE);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
