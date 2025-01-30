@@ -20,6 +20,7 @@
 #include "aim/application.h"
 #include "aim/audio/sound.h"
 #include "aim/camera.h"
+#include "aim/common/scope_guard.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/fbs/replay_generated.h"
@@ -74,7 +75,7 @@ void DrawFrame(Application* app,
                SphereRenderer* sphere_renderer,
                Room* room,
                const glm::mat4& view_transform) {
-  ImVec4 clear_color = ImVec4(0.45f, 0.25f, 0.60f, 1.00f);
+  ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
   if (app->StartRender(clear_color)) {
     room->Draw(view_transform);
     std::vector<Sphere> target_spheres;
@@ -94,6 +95,74 @@ void DrawCrosshair(const ScreenInfo& screen, ImDrawList* draw_list) {
   ImU32 outline_color = IM_COL32(0, 0, 0, 255);
   draw_list->AddCircle(screen.center, radius, outline_color, 0);
 }
+
+class ScenarioTimer {
+ public:
+  explicit ScenarioTimer(uint16_t replay_fps) : _replay_fps(replay_fps) {
+    float replay_seconds_per_frame = 1 / (float)replay_fps;
+    _replay_micros_per_frame = replay_seconds_per_frame * 1000000;
+
+    // Initialize to non zero number so first frame is considered a new frame.
+    _replay_frame_number = 1000;
+
+    _frame_stopwatch.Start();
+    _run_stopwatch.Start();
+
+    _previous_frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+    _frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+  }
+
+  float GetElapsedSeconds() {
+    return _run_stopwatch.GetElapsedSeconds();
+  }
+
+  void OnStartFrame() {
+    uint64_t new_replay_frame_number = _run_stopwatch.GetElapsedMicros() / _replay_micros_per_frame;
+    _is_new_replay_frame = new_replay_frame_number != _replay_frame_number;
+    _replay_frame_number = new_replay_frame_number;
+
+    _previous_frame_start_time_micros = _frame_start_time_micros;
+    _frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+  }
+
+  void OnStartRender() {
+    _render_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+  }
+
+  void OnEndRender() {
+    _render_end_time_micros = _frame_stopwatch.GetElapsedMicros();
+  }
+
+  uint64_t GetReplayFrameNumber() {
+    return _replay_frame_number;
+  }
+
+  bool IsNewReplayFrame() {
+    return _is_new_replay_frame;
+  }
+
+  uint64_t LastFrameRenderedMicrosAgo() {
+    return _frame_stopwatch.GetElapsedMicros() - _render_end_time_micros;
+  }
+
+ private:
+  // Stopwatch tracking render time. Can be reset each time scenario resumes.
+  Stopwatch _frame_stopwatch;
+  // Stopwatch mapping to the time the user would see in the UI.
+  Stopwatch _run_stopwatch;
+
+  uint16_t _replay_fps;
+  uint64_t _replay_micros_per_frame;
+
+  uint64_t _previous_frame_start_time_micros;
+  uint64_t _frame_start_time_micros;
+
+  uint64_t _replay_frame_number;
+  bool _is_new_replay_frame;
+
+  uint64_t _render_start_time_micros = 0;
+  uint64_t _render_end_time_micros = 0;
+};
 
 }  // namespace
 
@@ -199,10 +268,6 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   Sounds sounds = GetDefaultSounds();
 
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
-  uint32_t replay_frame_number = 1000;
-
-  float replay_seconds_per_frame = 1 / (float)replay.frames_per_second;
-  uint64_t replay_micros_per_frame = replay_seconds_per_frame * 1000000;
 
   RoomParams room_params;
   room_params.wall_height = replay.wall_height;
@@ -213,15 +278,10 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   SphereRenderer sphere_renderer;
   sphere_renderer.SetProjection(projection);
 
-  Stopwatch stopwatch;
-  stopwatch.Start();
-
-  uint64_t last_frame_start_time_micros = stopwatch.GetElapsedMicros();
-  uint64_t frame_start_time_micros = stopwatch.GetElapsedMicros();
-
   TargetManager target_manager;
   Camera camera(camera_position);
 
+  ScenarioTimer timer(replay.frames_per_second);
   while (true) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -230,20 +290,19 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
         return;
       }
     }
+    timer.OnStartFrame();
 
-    last_frame_start_time_micros = frame_start_time_micros;
-    frame_start_time_micros = stopwatch.GetElapsedMicros();
-
-    uint32_t previous_replay_frame_number = replay_frame_number;
-    replay_frame_number = frame_start_time_micros / replay_micros_per_frame;
+    uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     if (replay_frame_number >= replay_frames.size()) {
       return;
     }
 
-    bool has_new_frame_number = previous_replay_frame_number != replay_frame_number;
-    if (!has_new_frame_number) {
+    if (!timer.IsNewReplayFrame()) {
       continue;
     }
+
+    timer.OnStartRender();
+    auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
     auto& replay_frame = replay_frames[replay_frame_number];
     camera.UpdatePitch(replay_frame.pitch_yaw.pitch());
@@ -281,7 +340,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 
     DrawCrosshair(screen, draw_list);
 
-    float elapsed_seconds = stopwatch.GetElapsedSeconds();
+    float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
@@ -295,17 +354,10 @@ void Scenario::Run(Application* app) {
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   Sounds sounds = GetDefaultSounds();
 
-  uint32_t replay_frame_number = 0;
-
   StaticReplayT replay;
-  uint16_t replay_frames_per_second = 120;
+  uint16_t replay_frames_per_second = 100;
   replay.frames_per_second = replay_frames_per_second;
   replay.camera_position = ToStoredVec3Ptr(_camera.GetPosition());
-
-  float replay_seconds_per_frame = 1 / (float)replay_frames_per_second;
-  uint64_t replay_micros_per_frame = replay_seconds_per_frame * 1000000;
-
-  uint16_t target_counter = 1;
 
   for (const Target& target_to_add : _def->GetInitialTargets()) {
     Target target = _target_manager.AddTarget(target_to_add);
@@ -313,24 +365,13 @@ void Scenario::Run(Application* app) {
     // Add replay event
     auto add_target = std::make_unique<AddTargetEventT>();
     add_target->target_id = target.id;
-    add_target->frame_number = replay_frame_number;
+    add_target->frame_number = 0;
     add_target->position = ToStoredVec3Ptr(target.position);
     add_target->radius = target.radius;
     replay.add_target_events.push_back(std::move(add_target));
   }
 
-  ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
   float radians_per_dot = CmPer360ToRadiansPerDot(45, 1600);
-
-  Stopwatch stopwatch;
-  stopwatch.Start();
-
-  uint64_t last_frame_start_time_micros = stopwatch.GetElapsedMicros();
-  uint64_t frame_start_time_micros = stopwatch.GetElapsedMicros();
-  uint64_t last_render_time_micros = 0;
-
-  uint64_t frame_count = 0;
 
   LookAtInfo look_at;
 
@@ -344,18 +385,12 @@ void Scenario::Run(Application* app) {
   SphereRenderer sphere_renderer;
   sphere_renderer.SetProjection(projection);
 
+  ScenarioTimer timer(replay_frames_per_second);
   bool stop_scenario = false;
   while (!stop_scenario) {
-    frame_count++;
+    timer.OnStartFrame();
 
-    last_frame_start_time_micros = frame_start_time_micros;
-    frame_start_time_micros = stopwatch.GetElapsedMicros();
-
-    uint32_t previous_replay_frame_number = replay_frame_number;
-    replay_frame_number = frame_start_time_micros / replay_micros_per_frame;
-    bool has_new_frame_number = previous_replay_frame_number != replay_frame_number;
-
-    if (has_new_frame_number) {
+    if (timer.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
       replay.pitch_yaw_pairs.push_back(PitchYaw(_camera.GetPitch(), _camera.GetYaw()));
     }
@@ -390,7 +425,8 @@ void Scenario::Run(Application* app) {
     */
 
     // Update state
-    bool force_render = frame_count == 1;
+
+    bool force_render = false;
 
     look_at = _camera.GetLookAt();
     auto transform = projection * look_at.transform;
@@ -414,7 +450,7 @@ void Scenario::Run(Application* app) {
           force_render = true;
         } else {
           auto miss_target = std::make_unique<MissTargetEventT>();
-          miss_target->frame_number = replay_frame_number;
+          miss_target->frame_number = timer.GetReplayFrameNumber();
           replay.miss_target_events.push_back(std::move(miss_target));
         }
       }
@@ -433,30 +469,33 @@ void Scenario::Run(Application* app) {
           // Add replay events
           auto add_target = std::make_unique<AddTargetEventT>();
           add_target->target_id = new_target.id;
-          add_target->frame_number = replay_frame_number;
+          add_target->frame_number = timer.GetReplayFrameNumber();
           add_target->position = ToStoredVec3Ptr(new_target.position);
           add_target->radius = new_target.radius;
           replay.add_target_events.push_back(std::move(add_target));
 
           auto hit_target = std::make_unique<HitTargetEventT>();
           hit_target->target_id = hit_target_id;
-          hit_target->frame_number = replay_frame_number;
+          hit_target->frame_number = timer.GetReplayFrameNumber();
           replay.hit_target_events.push_back(std::move(hit_target));
         }
       }
     }
 
-    // Maybe Render
-    bool do_render = force_render || frame_count % 3 == 0;
+    // Render if forced or if the last render was over ~1ms ago.
+    bool do_render = force_render || timer.LastFrameRenderedMicrosAgo() > 900;
     if (!do_render) {
       continue;
     }
+
+    timer.OnStartRender();
+    auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     DrawCrosshair(screen, draw_list);
 
-    float elapsed_seconds = stopwatch.GetElapsedSeconds();
+    float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();

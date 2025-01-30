@@ -11,7 +11,7 @@ add_library(
     audio/sound.cc
     graphics/room.cc
     graphics/glad_loader.cc
-    graphics/sphere.cc)
+    graphics/sphere.cc "common/scope_guard.h")
 
 find_package(OpenGL REQUIRED)
 
