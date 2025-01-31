@@ -11,6 +11,12 @@ struct StaticScenarioParams {
   float room_width;
   float room_height;
   float target_radius = 2;
+  float duration_seconds = 20;
+};
+
+struct RunStats {
+  int targets_hit = 0;
+  int shots_taken = 0;
 };
 
 class StaticScenario {

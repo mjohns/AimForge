@@ -270,6 +270,8 @@ Target GetNewTarget(const RoomParams& room_params,
   Target t;
   t.position.x = pos.x;
   t.position.z = pos.y;
+  // Make sure the target does not clip throug wall
+  t.position.y = -1 * (params.target_radius + 0.5);
   t.radius = params.target_radius;
   return t;
 }
@@ -321,6 +323,8 @@ void StaticScenario::Run(Application* app) {
   SphereRenderer sphere_renderer;
   sphere_renderer.SetProjection(projection);
 
+  RunStats stats;
+
   // Main loop
   ScenarioTimer timer(replay_frames_per_second);
   bool stop_scenario = false;
@@ -330,6 +334,11 @@ void StaticScenario::Run(Application* app) {
     if (timer.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
       replay.pitch_yaw_pairs.push_back(PitchYaw(_camera.GetPitch(), _camera.GetYaw()));
+    }
+
+    if (timer.GetElapsedSeconds() >= _params.duration_seconds) {
+      stop_scenario = true;
+      continue;
     }
 
     SDL_Event event;
@@ -356,7 +365,6 @@ void StaticScenario::Run(Application* app) {
     // Update state
 
     bool force_render = false;
-
     look_at = _camera.GetLookAt();
 
     if (has_click) {
