@@ -6,12 +6,13 @@ add_library(
     application.cc
     model.cc
     camera.cc
+    target.cc
     common/time_util.cc
     graphics/shader.cc
     audio/sound.cc
     graphics/room.cc
     graphics/glad_loader.cc
-    graphics/sphere.cc "common/scope_guard.h")
+    graphics/sphere.cc)
 
 find_package(OpenGL REQUIRED)
 

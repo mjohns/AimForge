@@ -9,34 +9,11 @@
 
 #include "aim/application.h"
 #include "aim/camera.h"
+#include "aim/target.h"
 #include "aim/graphics/room.h"
 #include "aim/audio/sound.h"
 
 namespace aim {
-
-struct Target {
-  uint16_t id = 0;
-  glm::vec3 position{};
-  float radius = 1.0f;
-  bool hidden = false;
-};
-
-class TargetManager {
- public:
-  TargetManager() {}
-
-  Target AddTarget(Target t);
-  void RemoveTarget(uint16_t target_id);
-  Target ReplaceTarget(uint16_t target_id_to_replace, Target new_target);
-
-  const std::vector<Target>& GetTargets() {
-    return _targets;
-  }
-
- private:
-  uint16_t _target_id_counter = 0;
-  std::vector<Target> _targets;
-};
 
 class ScenarioDef {
  public:
