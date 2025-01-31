@@ -12,6 +12,7 @@ add_library(
     audio/sound.cc
     graphics/shader.cc
     graphics/room.cc
+    graphics/crosshair.cc
     graphics/glad_loader.cc
     graphics/sphere.cc)
 

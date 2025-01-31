@@ -18,9 +18,12 @@
 #include "aim/common/scope_guard.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
+#include "aim/graphics/crosshair.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/fbs/common_generated.h"
 #include "aim/fbs/replay_generated.h"
+#include "aim/fbs/settings_generated.h"
 #include "aim/graphics/room.h"
 #include "aim/graphics/shader.h"
 #include "aim/graphics/sphere.h"
@@ -28,6 +31,18 @@
 
 namespace aim {
 namespace {
+
+CrosshairT GetDefaultCrosshair() {
+  auto dot = std::make_unique<DotCrosshairT>();
+  dot->dot_color = ToStoredRgbPtr(254, 138, 24);
+  dot->outline_color = ToStoredRgbPtr(0, 0, 0);
+  dot->draw_outline = true;
+  dot->dot_size = 3;
+
+  CrosshairT crosshair;
+  crosshair.dot = std::move(dot);
+  return crosshair;
+}
 
 struct ReplayFrame {
   std::vector<AddTargetEventT*> add_target_events;
@@ -79,14 +94,6 @@ void DrawFrame(Application* app,
   }
 }
 
-void DrawCrosshair(const ScreenInfo& screen, ImDrawList* draw_list) {
-  float radius = 3.0f;
-  ImU32 circle_color = IM_COL32(254, 138, 24, 255);
-  draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
-  ImU32 outline_color = IM_COL32(0, 0, 0, 255);
-  draw_list->AddCircle(screen.center, radius, outline_color, 0);
-}
-
 void PlayReplay(const StaticReplayT& replay, Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
@@ -109,6 +116,8 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 
   TargetManager target_manager;
   Camera camera(camera_position);
+
+  auto crosshair = GetDefaultCrosshair();
 
   ScenarioTimer timer(replay.frames_per_second);
   while (true) {
@@ -167,7 +176,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    DrawCrosshair(screen, draw_list);
+    DrawCrosshair(crosshair, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -177,7 +186,6 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     DrawFrame(app, &target_manager, &sphere_renderer, &room, look_at.transform);
   }
 }
-
 
 }  // namespace
 
@@ -244,6 +252,8 @@ void Scenario::Run(Application* app) {
   LookAtInfo look_at;
 
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
+
+  auto crosshair = GetDefaultCrosshair();
 
   Room room = _def->GetRoom();
   room.SetProjection(projection);
@@ -340,7 +350,7 @@ void Scenario::Run(Application* app) {
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    DrawCrosshair(screen, draw_list);
+    DrawCrosshair(crosshair, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);

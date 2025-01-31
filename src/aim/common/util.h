@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-#include "aim/fbs/replay_generated.h"
+#include "aim/fbs/common_generated.h"
 
 namespace aim {
 
@@ -39,6 +39,19 @@ static StoredVec3 ToStoredVec3(const T& v) {
 template <typename T>
 static std::unique_ptr<StoredVec3> ToStoredVec3Ptr(const T& v) {
   return std::make_unique<StoredVec3>(v.x, v.y, v.z);
+}
+
+template <typename T>
+static StoredRgb ToStoredRgb(const T& c) {
+  return StoredRgb(c.r, c.g, c.b);
+}
+
+static std::unique_ptr<StoredRgb> ToStoredRgbPtr(uint8_t r, uint8_t g, uint8_t b) {
+  return std::make_unique<StoredRgb>(r, g, b);
+}
+
+static ImU32 ToImCol32(const StoredRgb& c, uint8_t alpha = 255) {
+  return IM_COL32(c.r(), c.g(), c.b(), alpha);
 }
 
 }  // namespace aim

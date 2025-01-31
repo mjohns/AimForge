@@ -13,9 +13,9 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
               FLATBUFFERS_VERSION_REVISION == 24,
              "Non-compatible flatbuffers version included");
 
-namespace aim {
+#include "common_generated.h"
 
-struct StoredVec3;
+namespace aim {
 
 struct PitchYaw;
 
@@ -127,35 +127,6 @@ struct ReplayUnion {
 
 bool VerifyReplay(::flatbuffers::Verifier &verifier, const void *obj, Replay type);
 bool VerifyReplayVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<uint8_t> *types);
-
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) StoredVec3 FLATBUFFERS_FINAL_CLASS {
- private:
-  float x_;
-  float y_;
-  float z_;
-
- public:
-  StoredVec3()
-      : x_(0),
-        y_(0),
-        z_(0) {
-  }
-  StoredVec3(float _x, float _y, float _z)
-      : x_(::flatbuffers::EndianScalar(_x)),
-        y_(::flatbuffers::EndianScalar(_y)),
-        z_(::flatbuffers::EndianScalar(_z)) {
-  }
-  float x() const {
-    return ::flatbuffers::EndianScalar(x_);
-  }
-  float y() const {
-    return ::flatbuffers::EndianScalar(y_);
-  }
-  float z() const {
-    return ::flatbuffers::EndianScalar(z_);
-  }
-};
-FLATBUFFERS_STRUCT_END(StoredVec3, 12);
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) PitchYaw FLATBUFFERS_FINAL_CLASS {
  private:

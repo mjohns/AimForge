@@ -1,0 +1,14 @@
+include "common.fbs";
+
+namespace aim;
+
+table Crosshair {
+  dot: DotCrosshair;
+}
+
+table DotCrosshair {
+  dot_size: float;
+  draw_outline: bool;
+  dot_color: StoredRgb;
+  outline_color: StoredRgb;
+}
