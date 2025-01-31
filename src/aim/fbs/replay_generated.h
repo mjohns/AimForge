@@ -361,6 +361,8 @@ inline ::flatbuffers::Offset<MissTargetEvent> CreateMissTargetEvent(
 
 struct StaticReplayT : public ::flatbuffers::NativeTable {
   typedef StaticReplay TableType;
+  float wall_width = 0.0f;
+  float wall_height = 0.0f;
   uint16_t frames_per_second = 0;
   std::unique_ptr<aim::StoredVec3> camera_position{};
   std::vector<std::unique_ptr<aim::AddTargetEventT>> add_target_events{};
@@ -377,13 +379,21 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef StaticReplayT NativeTableType;
   typedef StaticReplayBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_FRAMES_PER_SECOND = 4,
-    VT_CAMERA_POSITION = 6,
-    VT_ADD_TARGET_EVENTS = 8,
-    VT_HIT_TARGET_EVENTS = 10,
-    VT_MISS_TARGET_EVENTS = 12,
-    VT_LOOK_AT_VECTORS = 14
+    VT_WALL_WIDTH = 4,
+    VT_WALL_HEIGHT = 6,
+    VT_FRAMES_PER_SECOND = 8,
+    VT_CAMERA_POSITION = 10,
+    VT_ADD_TARGET_EVENTS = 12,
+    VT_HIT_TARGET_EVENTS = 14,
+    VT_MISS_TARGET_EVENTS = 16,
+    VT_LOOK_AT_VECTORS = 18
   };
+  float wall_width() const {
+    return GetField<float>(VT_WALL_WIDTH, 0.0f);
+  }
+  float wall_height() const {
+    return GetField<float>(VT_WALL_HEIGHT, 0.0f);
+  }
   uint16_t frames_per_second() const {
     return GetField<uint16_t>(VT_FRAMES_PER_SECOND, 0);
   }
@@ -404,6 +414,8 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyField<float>(verifier, VT_WALL_WIDTH, 4) &&
+           VerifyField<float>(verifier, VT_WALL_HEIGHT, 4) &&
            VerifyField<uint16_t>(verifier, VT_FRAMES_PER_SECOND, 2) &&
            VerifyField<aim::StoredVec3>(verifier, VT_CAMERA_POSITION, 4) &&
            VerifyOffset(verifier, VT_ADD_TARGET_EVENTS) &&
@@ -428,6 +440,12 @@ struct StaticReplayBuilder {
   typedef StaticReplay Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_wall_width(float wall_width) {
+    fbb_.AddElement<float>(StaticReplay::VT_WALL_WIDTH, wall_width, 0.0f);
+  }
+  void add_wall_height(float wall_height) {
+    fbb_.AddElement<float>(StaticReplay::VT_WALL_HEIGHT, wall_height, 0.0f);
+  }
   void add_frames_per_second(uint16_t frames_per_second) {
     fbb_.AddElement<uint16_t>(StaticReplay::VT_FRAMES_PER_SECOND, frames_per_second, 0);
   }
@@ -459,6 +477,8 @@ struct StaticReplayBuilder {
 
 inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    float wall_width = 0.0f,
+    float wall_height = 0.0f,
     uint16_t frames_per_second = 0,
     const aim::StoredVec3 *camera_position = nullptr,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::AddTargetEvent>>> add_target_events = 0,
@@ -471,12 +491,16 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(
   builder_.add_hit_target_events(hit_target_events);
   builder_.add_add_target_events(add_target_events);
   builder_.add_camera_position(camera_position);
+  builder_.add_wall_height(wall_height);
+  builder_.add_wall_width(wall_width);
   builder_.add_frames_per_second(frames_per_second);
   return builder_.Finish();
 }
 
 inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplayDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    float wall_width = 0.0f,
+    float wall_height = 0.0f,
     uint16_t frames_per_second = 0,
     const aim::StoredVec3 *camera_position = nullptr,
     const std::vector<::flatbuffers::Offset<aim::AddTargetEvent>> *add_target_events = nullptr,
@@ -489,6 +513,8 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplayDirect(
   auto look_at_vectors__ = look_at_vectors ? _fbb.CreateVectorOfStructs<aim::StoredVec3>(*look_at_vectors) : 0;
   return aim::CreateStaticReplay(
       _fbb,
+      wall_width,
+      wall_height,
       frames_per_second,
       camera_position,
       add_target_events__,
@@ -676,7 +702,9 @@ inline ::flatbuffers::Offset<MissTargetEvent> CreateMissTargetEvent(::flatbuffer
 }
 
 inline StaticReplayT::StaticReplayT(const StaticReplayT &o)
-      : frames_per_second(o.frames_per_second),
+      : wall_width(o.wall_width),
+        wall_height(o.wall_height),
+        frames_per_second(o.frames_per_second),
         camera_position((o.camera_position) ? new aim::StoredVec3(*o.camera_position) : nullptr),
         look_at_vectors(o.look_at_vectors) {
   add_target_events.reserve(o.add_target_events.size());
@@ -688,6 +716,8 @@ inline StaticReplayT::StaticReplayT(const StaticReplayT &o)
 }
 
 inline StaticReplayT &StaticReplayT::operator=(StaticReplayT o) FLATBUFFERS_NOEXCEPT {
+  std::swap(wall_width, o.wall_width);
+  std::swap(wall_height, o.wall_height);
   std::swap(frames_per_second, o.frames_per_second);
   std::swap(camera_position, o.camera_position);
   std::swap(add_target_events, o.add_target_events);
@@ -706,6 +736,8 @@ inline StaticReplayT *StaticReplay::UnPack(const ::flatbuffers::resolver_functio
 inline void StaticReplay::UnPackTo(StaticReplayT *_o, const ::flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
+  { auto _e = wall_width(); _o->wall_width = _e; }
+  { auto _e = wall_height(); _o->wall_height = _e; }
   { auto _e = frames_per_second(); _o->frames_per_second = _e; }
   { auto _e = camera_position(); if (_e) _o->camera_position = std::unique_ptr<aim::StoredVec3>(new aim::StoredVec3(*_e)); }
   { auto _e = add_target_events(); if (_e) { _o->add_target_events.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->add_target_events[_i]) { _e->Get(_i)->UnPackTo(_o->add_target_events[_i].get(), _resolver); } else { _o->add_target_events[_i] = std::unique_ptr<aim::AddTargetEventT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->add_target_events.resize(0); } }
@@ -722,6 +754,8 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::Fla
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { ::flatbuffers::FlatBufferBuilder *__fbb; const StaticReplayT* __o; const ::flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _wall_width = _o->wall_width;
+  auto _wall_height = _o->wall_height;
   auto _frames_per_second = _o->frames_per_second;
   auto _camera_position = _o->camera_position ? _o->camera_position.get() : nullptr;
   auto _add_target_events = _o->add_target_events.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::AddTargetEvent>> (_o->add_target_events.size(), [](size_t i, _VectorArgs *__va) { return CreateAddTargetEvent(*__va->__fbb, __va->__o->add_target_events[i].get(), __va->__rehasher); }, &_va ) : 0;
@@ -730,6 +764,8 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::Fla
   auto _look_at_vectors = _o->look_at_vectors.size() ? _fbb.CreateVectorOfStructs(_o->look_at_vectors) : 0;
   return aim::CreateStaticReplay(
       _fbb,
+      _wall_width,
+      _wall_height,
       _frames_per_second,
       _camera_position,
       _add_target_events,
