@@ -36,7 +36,7 @@ float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
 
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov) {
   return glm::perspective(
-      glm::radians(fov), (float)screen.width / (float)screen.height, 50.0f, 2000.0f);
+      glm::radians(fov), (float)screen.width / (float)screen.height, 0.1f, 2000.0f);
 }
 
 glm::vec3 GetNormalizedRight(const glm::vec3& v) {

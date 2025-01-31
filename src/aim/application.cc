@@ -12,8 +12,8 @@
 
 #include <memory>
 
-#include "aim/glad_loader.h"
-#include "aim/util.h"
+#include "aim/graphics/glad_loader.h"
+#include "aim/common/util.h"
 
 namespace aim {
 

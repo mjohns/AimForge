@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-#include "aim/replay_generated.h"
+#include "aim/fbs/replay_generated.h"
 
 namespace aim {
 

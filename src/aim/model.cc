@@ -18,14 +18,14 @@
 #include <random>
 
 #include "aim/application.h"
+#include "aim/audio/sound.h"
 #include "aim/camera.h"
-#include "aim/sphere.h"
-#include "aim/replay_generated.h"
-#include "aim/room.h"
-#include "aim/shader.h"
-#include "aim/sound.h"
-#include "aim/time_util.h"
-#include "aim/util.h"
+#include "aim/common/time_util.h"
+#include "aim/common/util.h"
+#include "aim/fbs/replay_generated.h"
+#include "aim/graphics/shader.h"
+#include "aim/graphics/sphere.h"
+#include "aim/graphics/room.h"
 
 namespace aim {
 namespace {
@@ -261,8 +261,10 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     {
       // crosshair
       float radius = 3.0f;
-      ImU32 circle_color = IM_COL32(0, 0, 0, 255);
+      ImU32 circle_color = IM_COL32(254, 138, 24, 255);
       draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
+      ImU32 outline_color = IM_COL32(0, 0, 0, 255);
+      draw_list->AddCircle(screen.center, radius, outline_color, 0);
     }
 
     float elapsed_seconds = stopwatch.GetElapsedSeconds();
@@ -462,16 +464,14 @@ void Scenario::Run(Application* app) {
     }
 
     ImU32 circle_color = IM_COL32(255, 255, 255, 255);
-    /*
-    DrawTargets(
-        &_target_manager, circle_color, transform, screen, _camera.GetPosition(), draw_list);
-        */
 
     {
       // crosshair
       float radius = 3.0f;
-      ImU32 circle_color = IM_COL32(0, 0, 0, 255);
+      ImU32 circle_color = IM_COL32(254, 138, 24, 255);
       draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
+      ImU32 outline_color = IM_COL32(0, 0, 0, 255);
+      draw_list->AddCircle(screen.center, radius, outline_color, 0);
     }
 
     float elapsed_seconds = stopwatch.GetElapsedSeconds();

@@ -1,10 +1,10 @@
 #include "sphere.h"
 
+#include <glad/glad.h>
+
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
-
-#include "glad/glad.h"
 
 namespace aim {
 namespace {
@@ -157,7 +157,7 @@ void SphereRenderer::Draw(const glm::mat4& view, const std::vector<Sphere>& sphe
   _shader.Use();
   _shader.SetMat4("view", view);
 
-  glm::vec3 color(0.9, 0.2, 0.9);
+  glm::vec3 color(0);
   _shader.SetVec3("quad_color", color);
 
   for (const auto& sphere : spheres) {
