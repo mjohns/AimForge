@@ -1,5 +1,5 @@
 #include "aim/core/application.h"
-#include "aim/scenario/model.h"
+#include "aim/scenario/static_scenario.h"
 
 int main(int, char**) {
   using namespace aim;

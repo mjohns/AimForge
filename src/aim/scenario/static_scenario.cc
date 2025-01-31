@@ -1,4 +1,4 @@
-#include "model.h"
+#include "static_scenario.h"
 
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_sdl3.h>
@@ -86,44 +86,6 @@ void DrawCrosshair(const ScreenInfo& screen, ImDrawList* draw_list) {
   ImU32 outline_color = IM_COL32(0, 0, 0, 255);
   draw_list->AddCircle(screen.center, radius, outline_color, 0);
 }
-
-}  // namespace
-
-Camera StaticWallScenarioDef::GetInitialCamera() {
-  return Camera(glm::vec3(0, -100.0f, 0));
-}
-
-StaticWallScenarioDef::StaticWallScenarioDef(StaticWallParams params) : _params(params) {
-  std::random_device rd;
-  _random_generator = std::mt19937(rd());
-
-  float padding = params.target_radius * 1.5;
-  float max_x = params.width * 0.5f - padding;
-  float max_z = params.height * 0.5f - padding;
-
-  _distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
-  _distribution_z = std::uniform_real_distribution<float>(-1 * max_z, max_z);
-}
-
-Target StaticWallScenarioDef::GetNewTarget() {
-  Target t;
-  t.position.x = _distribution_x(_random_generator);
-  t.position.y = -1 * (_params.target_radius + 0.2);
-  t.position.z = _distribution_z(_random_generator);
-  t.radius = _params.target_radius;
-  return t;
-}
-
-std::vector<Target> StaticWallScenarioDef::GetInitialTargets() {
-  std::vector<Target> targets;
-  targets.reserve(_params.num_targets);
-  for (int i = 0; i < _params.num_targets; ++i) {
-    targets.push_back(this->GetNewTarget());
-  }
-  return targets;
-}
-
-Scenario::Scenario(ScenarioDef* def) : _camera(def->GetInitialCamera()), _def(def) {}
 
 void PlayReplay(const StaticReplayT& replay, Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
@@ -215,6 +177,45 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     DrawFrame(app, &target_manager, &sphere_renderer, &room, look_at.transform);
   }
 }
+
+
+}  // namespace
+
+Camera StaticWallScenarioDef::GetInitialCamera() {
+  return Camera(glm::vec3(0, -100.0f, 0));
+}
+
+StaticWallScenarioDef::StaticWallScenarioDef(StaticWallParams params) : _params(params) {
+  std::random_device rd;
+  _random_generator = std::mt19937(rd());
+
+  float padding = params.target_radius * 1.5;
+  float max_x = params.width * 0.5f - padding;
+  float max_z = params.height * 0.5f - padding;
+
+  _distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
+  _distribution_z = std::uniform_real_distribution<float>(-1 * max_z, max_z);
+}
+
+Target StaticWallScenarioDef::GetNewTarget() {
+  Target t;
+  t.position.x = _distribution_x(_random_generator);
+  t.position.y = -1 * (_params.target_radius + 0.2);
+  t.position.z = _distribution_z(_random_generator);
+  t.radius = _params.target_radius;
+  return t;
+}
+
+std::vector<Target> StaticWallScenarioDef::GetInitialTargets() {
+  std::vector<Target> targets;
+  targets.reserve(_params.num_targets);
+  for (int i = 0; i < _params.num_targets; ++i) {
+    targets.push_back(this->GetNewTarget());
+  }
+  return targets;
+}
+
+Scenario::Scenario(ScenarioDef* def) : _camera(def->GetInitialCamera()), _def(def) {}
 
 void Scenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
