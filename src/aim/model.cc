@@ -1,20 +1,17 @@
 #include "model.h"
 
 #include <SDL3/SDL.h>
-
-#include <fstream>
-#include <glm/gtc/matrix_transform.hpp>
-#include <memory>
-#define GLM_ENABLE_EXPERIMENTAL
 #include <backends/imgui_impl_sdl3.h>
 #include <flatbuffers/flatbuffers.h>
 #include <imgui.h>
 
-#include <glm/gtx/intersect.hpp>
+#include <fstream>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <memory>
 #include <random>
 
 #include "aim/application.h"
@@ -164,47 +161,6 @@ class ScenarioTimer {
   uint64_t _render_end_time_micros = 0;
 };
 
-}  // namespace
-
-Target TargetManager::AddTarget(Target t) {
-  if (t.id == 0) {
-    auto new_id = ++_target_id_counter;
-    t.id = new_id;
-  }
-
-  // Try to overwrite a hidden target.
-  for (int i = 0; i < _targets.size(); ++i) {
-    if (_targets[i].hidden) {
-      _targets[i] = t;
-      return t;
-    }
-  }
-  _targets.push_back(t);
-  return t;
-}
-
-void TargetManager::RemoveTarget(uint16_t target_id) {
-  for (Target& t : _targets) {
-    if (t.id == target_id) {
-      t.hidden = true;
-    }
-  }
-}
-
-Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_target) {
-  if (new_target.id == 0) {
-    auto new_id = ++_target_id_counter;
-    new_target.id = new_id;
-  }
-  for (int i = 0; i < _targets.size(); ++i) {
-    if (_targets[i].id == target_id_to_replace) {
-      _targets[i] = new_target;
-    }
-  }
-  // TODO: error if target did not exist?
-  return new_target;
-}
-
 ImVec2 GetScreenPosition(const glm::vec3& target,
                          const glm::mat4& transform,
                          const ScreenInfo& screen) {
@@ -221,6 +177,8 @@ ImVec2 GetScreenPosition(const glm::vec3& target,
 
   return ImVec2(screen_x, screen_y);
 }
+
+}  // namespace
 
 Camera StaticWallScenarioDef::GetInitialCamera() {
   return Camera(glm::vec3(0, -100.0f, 0));
@@ -431,54 +389,33 @@ void Scenario::Run(Application* app) {
     look_at = _camera.GetLookAt();
     auto transform = projection * look_at.transform;
 
-    std::vector<uint16_t> hit_target_ids;
-    for (const Target& target : _target_manager.GetTargets()) {
-      if (target.hidden) {
-        continue;
-      }
-      if (has_click) {
-        glm::vec3 intersection_point;
-        glm::vec3 intersection_normal;
-        bool is_hit = glm::intersectRaySphere(_camera.GetPosition(),
-                                              look_at.front,
-                                              target.position,
-                                              target.radius,
-                                              intersection_point,
-                                              intersection_normal);
-        if (is_hit) {
-          hit_target_ids.push_back(target.id);
-          force_render = true;
-        } else {
-          auto miss_target = std::make_unique<MissTargetEventT>();
-          miss_target->frame_number = timer.GetReplayFrameNumber();
-          replay.miss_target_events.push_back(std::move(miss_target));
-        }
-      }
-    }
     if (has_click) {
-      if (sounds.shoot) {
+      auto maybe_hit_target_id = _target_manager.GetNearestHitTarget(_camera, look_at.front);
+      if (maybe_hit_target_id.has_value()) {
+        sounds.kill->Play();
+        force_render = true;
+
+        auto hit_target_id = *maybe_hit_target_id;
+        Target new_target = _target_manager.ReplaceTarget(hit_target_id, _def->GetNewTarget());
+
+        // Add replay events
+        auto add_target = std::make_unique<AddTargetEventT>();
+        add_target->target_id = new_target.id;
+        add_target->frame_number = timer.GetReplayFrameNumber();
+        add_target->position = ToStoredVec3Ptr(new_target.position);
+        add_target->radius = new_target.radius;
+        replay.add_target_events.push_back(std::move(add_target));
+
+        auto hit_target = std::make_unique<HitTargetEventT>();
+        hit_target->target_id = hit_target_id;
+        hit_target->frame_number = timer.GetReplayFrameNumber();
+        replay.hit_target_events.push_back(std::move(hit_target));
+      } else {
+        // Missed shot
         sounds.shoot->Play();
-      }
-      if (hit_target_ids.size() > 0) {
-        if (sounds.kill) {
-          sounds.kill->Play();
-        }
-        for (auto hit_target_id : hit_target_ids) {
-          Target new_target = _target_manager.ReplaceTarget(hit_target_id, _def->GetNewTarget());
-
-          // Add replay events
-          auto add_target = std::make_unique<AddTargetEventT>();
-          add_target->target_id = new_target.id;
-          add_target->frame_number = timer.GetReplayFrameNumber();
-          add_target->position = ToStoredVec3Ptr(new_target.position);
-          add_target->radius = new_target.radius;
-          replay.add_target_events.push_back(std::move(add_target));
-
-          auto hit_target = std::make_unique<HitTargetEventT>();
-          hit_target->target_id = hit_target_id;
-          hit_target->frame_number = timer.GetReplayFrameNumber();
-          replay.hit_target_events.push_back(std::move(hit_target));
-        }
+        auto miss_target = std::make_unique<MissTargetEventT>();
+        miss_target->frame_number = timer.GetReplayFrameNumber();
+        replay.miss_target_events.push_back(std::move(miss_target));
       }
     }
 
