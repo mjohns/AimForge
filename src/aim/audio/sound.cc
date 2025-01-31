@@ -28,4 +28,11 @@ void Sound::Play() {
   Mix_PlayMusic(_music, 1);
 }
 
+Sounds GetDefaultSounds() {
+  Sounds s;
+  s.shoot = Sound::Load("shoot.ogg");
+  s.kill = Sound::Load("kill_confirmed.ogg");
+  return s;
+}
+
 }  // namespace aim

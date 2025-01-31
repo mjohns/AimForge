@@ -14,17 +14,17 @@
 #include <memory>
 #include <random>
 
-#include "aim/application.h"
 #include "aim/audio/sound.h"
-#include "aim/camera.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
+#include "aim/core/application.h"
+#include "aim/core/camera.h"
 #include "aim/fbs/replay_generated.h"
 #include "aim/graphics/room.h"
 #include "aim/graphics/shader.h"
 #include "aim/graphics/sphere.h"
-#include "aim/scenario_timer.h"
+#include "aim/scenario/scenario_timer.h"
 
 namespace aim {
 namespace {
@@ -61,13 +61,6 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
   return replay_frames;
 }
 
-Sounds GetDefaultSounds() {
-  Sounds s;
-  s.shoot = Sound::Load("shoot.ogg");
-  s.kill = Sound::Load("kill_confirmed.ogg");
-  return s;
-}
-
 void DrawFrame(Application* app,
                TargetManager* target_manager,
                SphereRenderer* sphere_renderer,
@@ -92,23 +85,6 @@ void DrawCrosshair(const ScreenInfo& screen, ImDrawList* draw_list) {
   draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
   ImU32 outline_color = IM_COL32(0, 0, 0, 255);
   draw_list->AddCircle(screen.center, radius, outline_color, 0);
-}
-
-ImVec2 GetScreenPosition(const glm::vec3& target,
-                         const glm::mat4& transform,
-                         const ScreenInfo& screen) {
-  glm::vec4 position = {target.x, target.y, target.z, 1.0};
-  glm::vec4 clip_space = transform * position;
-
-  // Perform perspective division
-  glm::vec3 ndc_space = glm::vec3(clip_space) / clip_space.w;
-
-  // Convert NDC space (-1 to 1) to screen space (0 to
-  // width/height)
-  float screen_x = (ndc_space.x + 1.0f) * 0.5f * screen.width;
-  float screen_y = (1.0f - ndc_space.y) * 0.5f * screen.height;
-
-  return ImVec2(screen_x, screen_y);
 }
 
 }  // namespace
