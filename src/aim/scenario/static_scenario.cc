@@ -5,9 +5,8 @@
 #include <flatbuffers/flatbuffers.h>
 #include <imgui.h>
 
+#include <format>
 #include <fstream>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/mat2x2.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
@@ -99,7 +98,7 @@ void DrawFrame(Application* app,
   }
 }
 
-void PlayReplay(const StaticReplayT& replay, Application* app) {
+void PlayReplay(const StaticReplayT& replay, Application* app, const std::string& score_string) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
@@ -185,6 +184,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("score: %s", score_string.c_str());
     ImGui::End();
 
     DrawFrame(app, &target_manager, &sphere_renderer, &room, look_at.transform);
@@ -214,11 +214,9 @@ glm::vec2 GetRandomPositionInCircle(float max_radius, Application* app) {
   double cos_angle = cos(rotate_radians);
   double sin_angle = sin(rotate_radians);
 
-  float old_y = radius;
-
-  float new_x = -1 * old_y * sin_angle;
-  float new_y = old_y * cos_angle;
-  return glm::vec2(new_x, new_y);
+  float x = -1 * radius * sin_angle;
+  float y = radius * cos_angle;
+  return glm::vec2(x, y);
 }
 
 // Returns an x/z pair where to place the target on the back wall.
@@ -368,8 +366,10 @@ void StaticScenario::Run(Application* app) {
     look_at = _camera.GetLookAt();
 
     if (has_click) {
+      stats.shots_taken++;
       auto maybe_hit_target_id = _target_manager.GetNearestHitTarget(_camera, look_at.front);
       if (maybe_hit_target_id.has_value()) {
+        stats.targets_hit++;
         sounds.kill->Play();
         force_render = true;
 
@@ -418,8 +418,14 @@ void StaticScenario::Run(Application* app) {
     DrawFrame(app, &_target_manager, &sphere_renderer, &room, look_at.transform);
   }
 
+  float hit_percent = stats.targets_hit / (float)stats.shots_taken;
+  float score = stats.targets_hit * 10 * sqrt(hit_percent) * 2;
+
+  std::string score_string = std::format(
+      "{}/{} ({:.1f}%) = {:.2f}", stats.targets_hit, stats.shots_taken, hit_percent * 100, score);
+
   // Replay
-  PlayReplay(replay, app);
+  PlayReplay(replay, app, score_string);
 
   ReplayFileT replay_file;
   replay_file.replay.Set(replay);
