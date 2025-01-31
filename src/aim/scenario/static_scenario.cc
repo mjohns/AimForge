@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/mat2x2.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
@@ -203,19 +204,38 @@ bool AreNoneWithinDistance(const glm::vec2& p, float min_distance, TargetManager
   return true;
 }
 
+glm::vec2 GetRandomPositionInCircle(float max_radius, Application* app) {
+  auto dist_radius = std::uniform_real_distribution<float>(0, max_radius);
+  auto dist_degrees = std::uniform_real_distribution<float>(0.01, 360);
+
+  float radius = dist_radius(*app->GetRandomGenerator());
+  float rotate_radians = glm::radians(dist_degrees(*app->GetRandomGenerator()));
+
+  double cos_angle = cos(rotate_radians);
+  double sin_angle = sin(rotate_radians);
+
+  float old_y = radius;
+
+  float new_x = -1 * old_y * sin_angle;
+  float new_y = old_y * cos_angle;
+  return glm::vec2(new_x, new_y);
+}
+
 // Returns an x/z pair where to place the target on the back wall.
 glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
                                TargetManager* target_manager,
                                Application* app) {
   // Allow placing within the middle x% of the specified dimension
-  float x_percent = 0.8;
-  float y_percent = 0.65;
+  float x_percent = 0.7;
+  float y_percent = 0.6;
 
   float max_x = 0.5 * room_params.wall_width * x_percent;
   float max_y = 0.5 * room_params.wall_height * y_percent;
 
   auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
   auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
+
+  auto dist_circle = std::uniform_real_distribution<float>(0, 1);
 
   float min_distance = 20;
 
@@ -224,9 +244,17 @@ glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
   while (true) {
     ++attempt_number;
 
-    float x = distribution_x(*app->GetRandomGenerator());
-    float y = distribution_y(*app->GetRandomGenerator());
-    glm::vec2 pos(x, y);
+    glm::vec2 pos;
+
+    // Place the target within the smaller center circle area with a higher probability.
+    float use_circle_roll = dist_circle(*app->GetRandomGenerator());
+    if (use_circle_roll < 0.7) {
+      pos = GetRandomPositionInCircle(max_y, app);
+    } else {
+      pos.x = distribution_x(*app->GetRandomGenerator());
+      pos.y = distribution_y(*app->GetRandomGenerator());
+    }
+
     if (attempt_number >= max_attempts ||
         AreNoneWithinDistance(pos, min_distance, target_manager)) {
       return pos;
