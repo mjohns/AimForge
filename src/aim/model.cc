@@ -34,14 +34,14 @@ struct ReplayFrame {
   std::vector<AddTargetEventT*> add_target_events;
   std::vector<HitTargetEventT*> hit_target_events;
   std::vector<MissTargetEventT*> miss_target_events;
-  StoredVec3 look_at;
+  PitchYaw pitch_yaw;
 };
 
 std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
   std::vector<ReplayFrame> replay_frames;
-  for (int frame_number = 0; frame_number < replay.look_at_vectors.size(); ++frame_number) {
+  for (int frame_number = 0; frame_number < replay.pitch_yaw_pairs.size(); ++frame_number) {
     ReplayFrame frame;
-    frame.look_at = replay.look_at_vectors[frame_number];
+    frame.pitch_yaw = replay.pitch_yaw_pairs[frame_number];
     for (auto& event : replay.hit_target_events) {
       if (event->frame_number == frame_number) {
         frame.hit_target_events.push_back(event.get());
@@ -220,6 +220,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   uint64_t frame_start_time_micros = stopwatch.GetElapsedMicros();
 
   TargetManager target_manager;
+  Camera camera(camera_position);
 
   while (true) {
     SDL_Event event;
@@ -245,7 +246,9 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     }
 
     auto& replay_frame = replay_frames[replay_frame_number];
-    LookAtInfo look_at = GetLookAt(camera_position, ToVec3(replay_frame.look_at));
+    camera.UpdatePitch(replay_frame.pitch_yaw.pitch());
+    camera.UpdateYaw(replay_frame.pitch_yaw.yaw());
+    LookAtInfo look_at = camera.GetLookAt();
     auto transform = projection * look_at.transform;
 
     bool has_hit = replay_frame.hit_target_events.size() > 0;
@@ -354,7 +357,7 @@ void Scenario::Run(Application* app) {
 
     if (has_new_frame_number) {
       // Store the look at vector before the mouse updates for the old frame.
-      replay.look_at_vectors.push_back(ToStoredVec3(look_at.front));
+      replay.pitch_yaw_pairs.push_back(PitchYaw(_camera.GetPitch(), _camera.GetYaw()));
     }
 
     SDL_Event event;
@@ -377,11 +380,14 @@ void Scenario::Run(Application* app) {
         }
       }
     }
-    if (SDL_GetWindowFlags(app->GetSdlWindow()) & SDL_WINDOW_MINIMIZED) {
+    /*
+    //if (SDL_GetWindowFlags(app->GetSdlWindow()) & SDL_WINDOW_MINIMIZED) {
+    if (!(SDL_GetWindowFlags(app->GetSdlWindow()) & SDL_WINDOW_INPUT_FOCUS)) {
       // TODO: Pause the run.
       SDL_Delay(100);
       continue;
     }
+    */
 
     // Update state
     bool force_render = frame_count == 1;
