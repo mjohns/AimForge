@@ -5,14 +5,13 @@ int main(int, char**) {
   using namespace aim;
   auto app = Application::Create();
 
-  StaticWallParams params;
+  StaticScenarioParams params;
   params.num_targets = 3;
-  params.height = 150;
-  params.width = 170;
+  params.room_height = 150;
+  params.room_width = 170;
   params.target_radius = 1.5;
 
-  std::unique_ptr<ScenarioDef> def = std::make_unique<StaticWallScenarioDef>(params);
-  aim::Scenario s(def.get());
+  aim::StaticScenario s(params);
   s.Run(app.get());
 
   return 0;

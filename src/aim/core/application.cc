@@ -17,7 +17,10 @@
 
 namespace aim {
 
-Application::Application() {}
+Application::Application() {
+  std::random_device rd;
+  _random_generator = std::mt19937(rd());
+}
 
 Application::~Application() {
   ImGui_ImplOpenGL3_Shutdown();
