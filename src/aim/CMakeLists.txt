@@ -7,6 +7,7 @@ add_library(
     model.cc
     camera.cc
     target.cc
+    scenario_timer.cc
     common/time_util.cc
     graphics/shader.cc
     audio/sound.cc
