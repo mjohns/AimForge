@@ -1,12 +1,8 @@
+include "common.fbs";
+
 file_identifier "RPLY";
 
 namespace aim;
-
-struct StoredVec3 {
-  x: float;
-  y: float;
-  z: float;
-}
 
 struct PitchYaw {
   pitch: float;

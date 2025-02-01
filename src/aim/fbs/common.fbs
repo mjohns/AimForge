@@ -1,0 +1,18 @@
+namespace aim;
+
+struct StoredVec3 {
+  x: float;
+  y: float;
+  z: float;
+}
+
+struct StoredVec2 {
+  x: float;
+  y: float;
+}
+
+struct StoredRgb {
+  r: uint8;
+  g: uint8;
+  b: uint8;
+}

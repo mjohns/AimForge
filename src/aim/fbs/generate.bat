@@ -1,1 +1,1 @@
-flatc --cpp --gen-object-api replay.fbs scenario_def.fbs
+flatc --cpp --gen-object-api replay.fbs scenario_def.fbs settings.fbs common.fbs
