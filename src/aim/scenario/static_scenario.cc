@@ -18,12 +18,12 @@
 #include "aim/common/scope_guard.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
-#include "aim/graphics/crosshair.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/fbs/common_generated.h"
 #include "aim/fbs/replay_generated.h"
 #include "aim/fbs/settings_generated.h"
+#include "aim/graphics/crosshair.h"
 #include "aim/graphics/room.h"
 #include "aim/graphics/shader.h"
 #include "aim/graphics/sphere.h"
@@ -31,6 +31,10 @@
 
 namespace aim {
 namespace {
+
+Camera GetInitialCamera(const StaticScenarioParams& params) {
+  return Camera(glm::vec3(0, -100.0f, 0));
+}
 
 CrosshairT GetDefaultCrosshair() {
   auto dot = std::make_unique<DotCrosshairT>();
@@ -146,7 +150,6 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
     camera.UpdatePitch(replay_frame.pitch_yaw.pitch());
     camera.UpdateYaw(replay_frame.pitch_yaw.yaw());
     LookAtInfo look_at = camera.GetLookAt();
-    auto transform = projection * look_at.transform;
 
     bool has_hit = replay_frame.hit_target_events.size() > 0;
     bool has_miss = replay_frame.miss_target_events.size() > 0;
@@ -187,56 +190,86 @@ void PlayReplay(const StaticReplayT& replay, Application* app) {
   }
 }
 
-}  // namespace
-
-Camera StaticWallScenarioDef::GetInitialCamera() {
-  return Camera(glm::vec3(0, -100.0f, 0));
+bool AreNoneWithinDistance(const glm::vec2& p, float min_distance, TargetManager* target_manager) {
+  for (auto& target : target_manager->GetTargets()) {
+    if (!target.hidden) {
+      glm::vec2 target_position(target.position.x, target.position.z);
+      float distance = glm::length(p - target_position);
+      if (distance < min_distance) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
-StaticWallScenarioDef::StaticWallScenarioDef(StaticWallParams params) : _params(params) {
-  std::random_device rd;
-  _random_generator = std::mt19937(rd());
+// Returns an x/z pair where to place the target on the back wall.
+glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
+                               TargetManager* target_manager,
+                               Application* app) {
+  // Allow placing within the middle x% of the specified dimension
+  float x_percent = 0.8;
+  float y_percent = 0.65;
 
-  float padding = params.target_radius * 1.5;
-  float max_x = params.width * 0.5f - padding;
-  float max_z = params.height * 0.5f - padding;
+  float max_x = 0.5 * room_params.wall_width * x_percent;
+  float max_y = 0.5 * room_params.wall_height * y_percent;
 
-  _distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
-  _distribution_z = std::uniform_real_distribution<float>(-1 * max_z, max_z);
+  auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
+  auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
+
+  float min_distance = 20;
+
+  int max_attempts = 30;
+  int attempt_number = 0;
+  while (true) {
+    ++attempt_number;
+
+    float x = distribution_x(*app->GetRandomGenerator());
+    float y = distribution_y(*app->GetRandomGenerator());
+    glm::vec2 pos(x, y);
+    if (attempt_number >= max_attempts ||
+        AreNoneWithinDistance(pos, min_distance, target_manager)) {
+      return pos;
+    }
+  }
 }
 
-Target StaticWallScenarioDef::GetNewTarget() {
+Target GetNewTarget(const RoomParams& room_params,
+                    const StaticScenarioParams& params,
+                    TargetManager* target_manager,
+                    Application* app) {
+  glm::vec2 pos = GetNewTargetPosition(room_params, target_manager, app);
   Target t;
-  t.position.x = _distribution_x(_random_generator);
-  t.position.y = -1 * (_params.target_radius + 0.2);
-  t.position.z = _distribution_z(_random_generator);
-  t.radius = _params.target_radius;
+  t.position.x = pos.x;
+  t.position.z = pos.y;
+  t.radius = params.target_radius;
   return t;
 }
 
-std::vector<Target> StaticWallScenarioDef::GetInitialTargets() {
-  std::vector<Target> targets;
-  targets.reserve(_params.num_targets);
-  for (int i = 0; i < _params.num_targets; ++i) {
-    targets.push_back(this->GetNewTarget());
-  }
-  return targets;
-}
+}  // namespace
 
-Scenario::Scenario(ScenarioDef* def) : _camera(def->GetInitialCamera()), _def(def) {}
+StaticScenario::StaticScenario(StaticScenarioParams params)
+    : _camera(GetInitialCamera(params)), _params(params) {}
 
-void Scenario::Run(Application* app) {
+void StaticScenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   Sounds sounds = GetDefaultSounds();
+  float radians_per_dot = CmPer360ToRadiansPerDot(45, 1600);
+  auto crosshair = GetDefaultCrosshair();
+
+  RoomParams room_params;
+  room_params.wall_height = _params.room_height;
+  room_params.wall_width = _params.room_width;
 
   StaticReplayT replay;
   uint16_t replay_frames_per_second = 100;
   replay.frames_per_second = replay_frames_per_second;
   replay.camera_position = ToStoredVec3Ptr(_camera.GetPosition());
 
-  for (const Target& target_to_add : _def->GetInitialTargets()) {
-    Target target = _target_manager.AddTarget(target_to_add);
+  for (int i = 0; i < _params.num_targets; ++i) {
+    Target target =
+        _target_manager.AddTarget(GetNewTarget(room_params, _params, &_target_manager, app));
 
     // Add replay event
     auto add_target = std::make_unique<AddTargetEventT>();
@@ -247,15 +280,12 @@ void Scenario::Run(Application* app) {
     replay.add_target_events.push_back(std::move(add_target));
   }
 
-  float radians_per_dot = CmPer360ToRadiansPerDot(45, 1600);
-
   LookAtInfo look_at;
 
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
 
-  auto crosshair = GetDefaultCrosshair();
-
-  Room room = _def->GetRoom();
+  // Room
+  Room room(room_params);
   room.SetProjection(projection);
   replay.wall_width = room.GetWidth();
   replay.wall_height = room.GetHeight();
@@ -263,6 +293,7 @@ void Scenario::Run(Application* app) {
   SphereRenderer sphere_renderer;
   sphere_renderer.SetProjection(projection);
 
+  // Main loop
   ScenarioTimer timer(replay_frames_per_second);
   bool stop_scenario = false;
   while (!stop_scenario) {
@@ -293,21 +324,12 @@ void Scenario::Run(Application* app) {
         }
       }
     }
-    /*
-    //if (SDL_GetWindowFlags(app->GetSdlWindow()) & SDL_WINDOW_MINIMIZED) {
-    if (!(SDL_GetWindowFlags(app->GetSdlWindow()) & SDL_WINDOW_INPUT_FOCUS)) {
-      // TODO: Pause the run.
-      SDL_Delay(100);
-      continue;
-    }
-    */
 
     // Update state
 
     bool force_render = false;
 
     look_at = _camera.GetLookAt();
-    auto transform = projection * look_at.transform;
 
     if (has_click) {
       auto maybe_hit_target_id = _target_manager.GetNearestHitTarget(_camera, look_at.front);
@@ -316,7 +338,8 @@ void Scenario::Run(Application* app) {
         force_render = true;
 
         auto hit_target_id = *maybe_hit_target_id;
-        Target new_target = _target_manager.ReplaceTarget(hit_target_id, _def->GetNewTarget());
+        Target new_target = _target_manager.ReplaceTarget(
+            hit_target_id, GetNewTarget(room_params, _params, &_target_manager, app));
 
         // Add replay events
         auto add_target = std::make_unique<AddTargetEventT>();
@@ -349,7 +372,6 @@ void Scenario::Run(Application* app) {
     auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
-
     DrawCrosshair(crosshair, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
@@ -360,6 +382,7 @@ void Scenario::Run(Application* app) {
     DrawFrame(app, &_target_manager, &sphere_renderer, &room, look_at.transform);
   }
 
+  // Replay
   PlayReplay(replay, app);
 
   ReplayFileT replay_file;
@@ -371,14 +394,5 @@ void Scenario::Run(Application* app) {
   outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
   outfile.close();
 }
-
-// Poll and handle events (inputs, window resize, etc.)
-// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui
-// wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main
-// application, or clear/overwrite your copy of the mouse data.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main
-// application, or clear/overwrite your copy of the keyboard data. Generally you may always pass
-// all inputs to dear imgui, and hide them from your application based on those two flags.
 
 }  // namespace aim

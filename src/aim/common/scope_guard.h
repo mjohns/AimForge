@@ -12,8 +12,14 @@ class ScopeGuard {
 
   explicit ScopeGuard(std::function<void()>&& fn) : _fn(std::move(fn)) {}
 
+  void Cancel() {
+    _fn = {};
+  }
+
   ~ScopeGuard() {
-    _fn();
+    if (_fn) {
+		_fn();
+    }
   }
 
  private:

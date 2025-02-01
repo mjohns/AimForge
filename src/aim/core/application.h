@@ -5,9 +5,10 @@
 #include <imgui.h>
 
 #include <memory>
+#include <random>
 
-#include "aim/common/util.h"
 #include "aim/common/simple_types.h"
+#include "aim/common/util.h"
 
 namespace aim {
 
@@ -29,6 +30,10 @@ class Application {
     return ScreenInfo(_window_width, _window_height);
   }
 
+  std::mt19937* GetRandomGenerator() {
+    return &_random_generator;
+  }
+
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -38,13 +43,14 @@ class Application {
   Application();
 
   int Initialize();
-  void FrameRender(ImVec4 clear_color, ImDrawData* draw_data);
 
   SDL_GLContext _gl_context;
   SDL_Window* _sdl_window = nullptr;
 
   int _window_width = -1;
   int _window_height = -1;
+
+  std::mt19937 _random_generator;
 };
 
 }  // namespace aim
