@@ -12,15 +12,19 @@ constexpr int kMetronomeChannel = 3;
 SoundManager::SoundManager() {
   std::string kill_sound_name = "kill_confirmed.ogg";
   std::string shoot_sound_name = "shoot.ogg";
+  std::string metronome_sound_name = "short_bass.wav";
 
   auto kill_sound = Sound::Load(kill_sound_name);
   auto shoot_sound = Sound::Load(shoot_sound_name);
+  auto metronome_sound = Sound::Load(metronome_sound_name);
 
   _kill_sound = kill_sound.get();
   _shoot_sound = shoot_sound.get();
+  _metronome_sound = metronome_sound.get();
 
   _sound_cache[kill_sound_name] = std::move(kill_sound);
   _sound_cache[shoot_sound_name] = std::move(shoot_sound);
+  _sound_cache[metronome_sound_name] = std::move(metronome_sound);
 }
 
 SoundManager& SoundManager::PlayKillSound() {
@@ -33,6 +37,13 @@ SoundManager& SoundManager::PlayKillSound() {
 SoundManager& SoundManager::PlayShootSound() {
   if (_shoot_sound != nullptr) {
     _shoot_sound->Play(kShootChannel);
+  }
+  return *this;
+}
+
+SoundManager& SoundManager::PlayMetronomeSound() {
+  if (_metronome_sound != nullptr) {
+    _metronome_sound->Play(kMetronomeChannel);
   }
   return *this;
 }

@@ -12,6 +12,13 @@ class ScopeGuard {
 
   explicit ScopeGuard(std::function<void()>&& fn) : _fn(std::move(fn)) {}
 
+  void InvokeEarly() {
+    if (_fn) {
+      _fn();
+      _fn = {};
+    }
+  }
+
   void Cancel() {
     _fn = {};
   }
