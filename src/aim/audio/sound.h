@@ -24,4 +24,11 @@ class Sound {
   Mix_Music* _music;
 };
 
+struct Sounds {
+  std::unique_ptr<Sound> shoot;
+  std::unique_ptr<Sound> kill;
+};
+
+Sounds GetDefaultSounds();
+
 }  // namespace aim

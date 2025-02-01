@@ -1,0 +1,1 @@
+flatc --cpp --gen-object-api replay.fbs scenario_def.fbs

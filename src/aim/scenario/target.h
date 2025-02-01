@@ -4,7 +4,7 @@
 #include <optional>
 #include <vector>
 
-#include "aim/camera/h"
+#include "aim/core/camera.h"
 
 namespace aim {
 

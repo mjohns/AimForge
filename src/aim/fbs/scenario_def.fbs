@@ -1,0 +1,29 @@
+file_identifier "SCNR";
+
+namespace aim;
+
+table RoomDef {
+  width: float;
+  height: float;
+  // Optional. Defaults to 0.5 (z = height * 0.5)
+  camera_height_percent: float;
+  // Optional. Distance of the camera from the wall where the targets are placed.
+  camera_distance: float;
+}
+
+table SimpleStaticScenarioDef {
+  room: RoomDef;
+  num_targets: uint16;
+  target_radius: float;
+}
+
+union ScenarioDefType {
+  simple_static: SimpleStaticScenarioDef,
+}
+
+table ScenarioDef {
+  display_name: string;
+  // Representation used in file names and stat files.
+  id: string;
+  scenario_type: ScenarioDefType;
+}

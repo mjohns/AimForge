@@ -4,7 +4,7 @@
 #include <glm/vec3.hpp>
 #include <vector>
 
-#include "aim/graphics/shader.h";
+#include "aim/graphics/shader.h"
 
 namespace aim {
 

@@ -1,6 +1,8 @@
 #pragma once
 
-#incude "aim/common/time_util.h"
+#include <cstdint>
+
+#include "aim/common/time_util.h"
 
 namespace aim {
 
@@ -45,4 +47,4 @@ class ScenarioTimer {
   uint64_t _render_end_time_micros = 0;
 };
 
-} // namespace aim
+}  // namespace aim

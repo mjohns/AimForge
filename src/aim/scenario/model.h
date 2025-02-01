@@ -7,9 +7,9 @@
 #include <random>
 #include <vector>
 
-#include "aim/application.h"
-#include "aim/camera.h"
-#include "aim/target.h"
+#include "aim/core/application.h"
+#include "aim/core/camera.h"
+#include "aim/scenario/target.h"
 #include "aim/graphics/room.h"
 #include "aim/audio/sound.h"
 
@@ -55,11 +55,6 @@ class StaticWallScenarioDef : public ScenarioDef {
   std::uniform_real_distribution<float> _distribution_z;
 };
 
-struct Sounds {
-  std::unique_ptr<Sound> shoot;
-  std::unique_ptr<Sound> kill;
-};
-
 class Scenario {
  public:
   Scenario(ScenarioDef* def);
@@ -70,9 +65,5 @@ class Scenario {
   TargetManager _target_manager;
   ScenarioDef* _def;
 };
-
-ImVec2 GetScreenPosition(const glm::vec3& target,
-                         const glm::mat4& transform,
-                         const ScreenInfo& screen);
 
 }  // namespace aim

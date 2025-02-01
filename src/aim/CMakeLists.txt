@@ -3,14 +3,14 @@ set(NAME "aim")
 add_library(
     ${NAME}
     STATIC
-    application.cc
-    model.cc
-    camera.cc
-    target.cc
-    scenario_timer.cc
+    core/application.cc
+    core/camera.cc
+    scenario/model.cc
+    scenario/target.cc
+    scenario/scenario_timer.cc
     common/time_util.cc
-    graphics/shader.cc
     audio/sound.cc
+    graphics/shader.cc
     graphics/room.cc
     graphics/glad_loader.cc
     graphics/sphere.cc)
