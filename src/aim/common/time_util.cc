@@ -41,4 +41,31 @@ float Stopwatch::GetElapsedSeconds() {
   return millis / 1000.0f;
 }
 
+TimedInvoker::TimedInvoker(TimedInvokerParams params, std::function<void()> fn)
+    : _params(params), _fn(std::move(fn)) {}
+
+void TimedInvoker::MaybeInvoke(uint64_t now_micros) {
+  if (!_initialized) {
+    if (_params.initial_delay_micros == 0) {
+      this->Invoke(now_micros);
+    } else {
+      _last_invoke_time_micros =
+          now_micros + _params.initial_delay_micros - _params.interval_micros;
+    }
+    _initialized = true;
+    return;
+  }
+
+  if (_last_invoke_time_micros + _params.interval_micros <= now_micros) {
+    this->Invoke(now_micros);
+  }
+}
+
+void TimedInvoker::Invoke(uint64_t now_micros) {
+  _last_invoke_time_micros = now_micros;
+  if (_fn) {
+    _fn();
+  }
+}
+
 }  // namespace aim

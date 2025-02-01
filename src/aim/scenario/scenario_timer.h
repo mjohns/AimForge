@@ -18,6 +18,10 @@ class ScenarioTimer {
     return _run_stopwatch.GetElapsedSeconds();
   }
 
+  uint64_t GetElapsedMicros() {
+    return _run_stopwatch.GetElapsedMicros();
+  }
+
   uint64_t GetReplayFrameNumber() {
     return _replay_frame_number;
   }

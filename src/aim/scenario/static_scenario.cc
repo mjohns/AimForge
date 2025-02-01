@@ -321,6 +321,14 @@ void StaticScenario::Run(Application* app) {
 
   RunStats stats;
 
+  // Set up metronome
+  float target_number_of_hits_per_60 = 130;
+  float seconds_per_target = _params.duration_seconds /
+                             (target_number_of_hits_per_60 * (_params.duration_seconds / 60.0f));
+  TimedInvokerParams metronome_params;
+  metronome_params.interval_micros = seconds_per_target * 1000000;
+  TimedInvoker metronome(metronome_params, [&] { app->GetSoundManager()->PlayMetronomeSound(); });
+
   // Main loop
   ScenarioTimer timer(replay_frames_per_second);
   bool stop_scenario = false;
@@ -360,6 +368,7 @@ void StaticScenario::Run(Application* app) {
 
     // Update state
 
+    metronome.MaybeInvoke(timer.GetElapsedMicros());
     bool force_render = false;
     look_at = _camera.GetLookAt();
 
