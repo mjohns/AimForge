@@ -24,6 +24,7 @@
 #include "aim/graphics/room.h"
 #include "aim/graphics/shader.h"
 #include "aim/graphics/sphere.h"
+#include "aim/scenario_timer.h"
 
 namespace aim {
 namespace {
@@ -92,74 +93,6 @@ void DrawCrosshair(const ScreenInfo& screen, ImDrawList* draw_list) {
   ImU32 outline_color = IM_COL32(0, 0, 0, 255);
   draw_list->AddCircle(screen.center, radius, outline_color, 0);
 }
-
-class ScenarioTimer {
- public:
-  explicit ScenarioTimer(uint16_t replay_fps) : _replay_fps(replay_fps) {
-    float replay_seconds_per_frame = 1 / (float)replay_fps;
-    _replay_micros_per_frame = replay_seconds_per_frame * 1000000;
-
-    // Initialize to non zero number so first frame is considered a new frame.
-    _replay_frame_number = 1000;
-
-    _frame_stopwatch.Start();
-    _run_stopwatch.Start();
-
-    _previous_frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
-    _frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
-  }
-
-  float GetElapsedSeconds() {
-    return _run_stopwatch.GetElapsedSeconds();
-  }
-
-  void OnStartFrame() {
-    uint64_t new_replay_frame_number = _run_stopwatch.GetElapsedMicros() / _replay_micros_per_frame;
-    _is_new_replay_frame = new_replay_frame_number != _replay_frame_number;
-    _replay_frame_number = new_replay_frame_number;
-
-    _previous_frame_start_time_micros = _frame_start_time_micros;
-    _frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
-  }
-
-  void OnStartRender() {
-    _render_start_time_micros = _frame_stopwatch.GetElapsedMicros();
-  }
-
-  void OnEndRender() {
-    _render_end_time_micros = _frame_stopwatch.GetElapsedMicros();
-  }
-
-  uint64_t GetReplayFrameNumber() {
-    return _replay_frame_number;
-  }
-
-  bool IsNewReplayFrame() {
-    return _is_new_replay_frame;
-  }
-
-  uint64_t LastFrameRenderedMicrosAgo() {
-    return _frame_stopwatch.GetElapsedMicros() - _render_end_time_micros;
-  }
-
- private:
-  // Stopwatch tracking render time. Can be reset each time scenario resumes.
-  Stopwatch _frame_stopwatch;
-  // Stopwatch mapping to the time the user would see in the UI.
-  Stopwatch _run_stopwatch;
-
-  uint16_t _replay_fps;
-  uint64_t _replay_micros_per_frame;
-
-  uint64_t _previous_frame_start_time_micros;
-  uint64_t _frame_start_time_micros;
-
-  uint64_t _replay_frame_number;
-  bool _is_new_replay_frame;
-
-  uint64_t _render_start_time_micros = 0;
-  uint64_t _render_end_time_micros = 0;
-};
 
 ImVec2 GetScreenPosition(const glm::vec3& target,
                          const glm::mat4& transform,

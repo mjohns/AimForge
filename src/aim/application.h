@@ -7,19 +7,9 @@
 #include <memory>
 
 #include "aim/common/util.h"
+#include "aim/common/simple_types.h"
 
 namespace aim {
-
-struct ScreenInfo {
-  ScreenInfo(int screen_width, int screen_height)
-      : width(screen_width),
-        height(screen_height),
-        center(ImVec2(screen_width * 0.5, screen_height * 0.5)) {}
-
-  int width;
-  int height;
-  ImVec2 center;
-};
 
 class Application {
  public:
