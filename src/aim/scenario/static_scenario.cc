@@ -290,7 +290,7 @@ void StaticScenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   Sounds sounds = GetDefaultSounds();
-  float radians_per_dot = CmPer360ToRadiansPerDot(45, 1600);
+  float radians_per_dot = CmPer360ToRadiansPerDot(_params.cm_per_360, app->GetMouseDpi());
   auto crosshair = GetDefaultCrosshair();
 
   RoomParams room_params;
@@ -427,7 +427,8 @@ void StaticScenario::Run(Application* app) {
   }
 
   float hit_percent = stats.targets_hit / (float)stats.shots_taken;
-  float score = stats.targets_hit * 10 * sqrt(hit_percent);
+  float duration_modifier = 60.0f / _params.duration_seconds;
+  float score = stats.targets_hit * 10 * sqrt(hit_percent) * duration_modifier;
 
   std::string score_string = std::format(
       "{}/{} ({:.1f}%) = {:.2f}", stats.targets_hit, stats.shots_taken, hit_percent * 100, score);

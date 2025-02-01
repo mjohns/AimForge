@@ -12,6 +12,7 @@ struct StaticScenarioParams {
   float room_height;
   float target_radius = 2;
   float duration_seconds = 60;
+  float cm_per_360 = 45;
 };
 
 struct RunStats {

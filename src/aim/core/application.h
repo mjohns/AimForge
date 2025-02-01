@@ -26,6 +26,10 @@ class Application {
     return _sdl_window;
   }
 
+  int GetMouseDpi() {
+    return 1600;
+  }
+
   ScreenInfo GetScreenInfo() {
     return ScreenInfo(_window_width, _window_height);
   }
