@@ -9,30 +9,23 @@ const std::string kSoundBasePath = "C:/Users/micha/src/aim-trainer/sounds/";
 
 std::unique_ptr<Sound> Sound::Load(std::string sound_name) {
   std::string path = kSoundBasePath + sound_name;
-  Mix_Music* music = Mix_LoadMUS(path.c_str());
-  if (music == nullptr) {
+  Mix_Chunk* chunk = Mix_LoadWAV(path.c_str());
+  if (chunk == nullptr) {
     return {};
   }
-  return std::unique_ptr<Sound>(new Sound(music));
+  return std::unique_ptr<Sound>(new Sound(chunk));
 }
 
-Sound::Sound(Mix_Music* music) : _music(music) {}
+Sound::Sound(Mix_Chunk* chunk) : _chunk(chunk) {}
 
 Sound::~Sound() {
-  if (_music != nullptr) {
-    Mix_FreeMusic(_music);
+  if (_chunk != nullptr) {
+    Mix_FreeChunk(_chunk);
   }
 }
 
-void Sound::Play() {
-  Mix_PlayMusic(_music, 1);
-}
-
-Sounds GetDefaultSounds() {
-  Sounds s;
-  s.shoot = Sound::Load("shoot.ogg");
-  s.kill = Sound::Load("kill_confirmed.ogg");
-  return s;
+void Sound::Play(int channel) {
+  Mix_PlayChannel(channel, _chunk, 0);
 }
 
 }  // namespace aim

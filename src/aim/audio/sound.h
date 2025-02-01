@@ -12,7 +12,7 @@ class Sound {
   static std::unique_ptr<Sound> Load(std::string sound_name);
   ~Sound();
 
-  void Play();
+  void Play(int channel);
 
   Sound(const Sound&) = delete;
   Sound(Sound&&) = default;
@@ -20,15 +20,8 @@ class Sound {
   Sound& operator=(Sound&& other) = delete;
 
  private:
-  Sound(Mix_Music* music);
-  Mix_Music* _music;
+  Sound(Mix_Chunk* chunk);
+  Mix_Chunk* _chunk;
 };
-
-struct Sounds {
-  std::unique_ptr<Sound> shoot;
-  std::unique_ptr<Sound> kill;
-};
-
-Sounds GetDefaultSounds();
 
 }  // namespace aim
