@@ -9,6 +9,7 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
+#include "aim/audio/sound_manager.h"
 
 namespace aim {
 
@@ -38,6 +39,10 @@ class Application {
     return &_random_generator;
   }
 
+  SoundManager* GetSoundManager() {
+    return _sound_manager.get();
+  }
+
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -55,6 +60,8 @@ class Application {
   int _window_height = -1;
 
   std::mt19937 _random_generator;
+
+  std::unique_ptr<SoundManager> _sound_manager;
 };
 
 }  // namespace aim

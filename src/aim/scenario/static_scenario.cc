@@ -105,8 +105,6 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
   auto stored_camera_position = replay.camera_position.get();
   glm::vec3 camera_position = ToVec3(*stored_camera_position);
 
-  Sounds sounds = GetDefaultSounds();
-
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
 
   RoomParams room_params;
@@ -160,16 +158,9 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
     bool has_hit = replay_frame.hit_target_events.size() > 0;
     bool has_miss = replay_frame.miss_target_events.size() > 0;
     if (has_hit) {
-      if (sounds.shoot) {
-        sounds.shoot->Play();
-      }
-      if (sounds.kill) {
-        sounds.kill->Play();
-      }
+      app->GetSoundManager()->PlayKillSound().PlayShootSound();
     } else if (has_miss) {
-      if (sounds.shoot) {
-        sounds.shoot->Play();
-      }
+      app->GetSoundManager()->PlayShootSound();
     }
     // Play miss sound.
     for (HitTargetEventT* event : replay_frame.hit_target_events) {
@@ -289,7 +280,6 @@ StaticScenario::StaticScenario(StaticScenarioParams params)
 void StaticScenario::Run(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
-  Sounds sounds = GetDefaultSounds();
   float radians_per_dot = CmPer360ToRadiansPerDot(_params.cm_per_360, app->GetMouseDpi());
   auto crosshair = GetDefaultCrosshair();
 
@@ -376,9 +366,10 @@ void StaticScenario::Run(Application* app) {
     if (has_click) {
       stats.shots_taken++;
       auto maybe_hit_target_id = _target_manager.GetNearestHitTarget(_camera, look_at.front);
+      app->GetSoundManager()->PlayShootSound();
       if (maybe_hit_target_id.has_value()) {
         stats.targets_hit++;
-        sounds.kill->Play();
+        app->GetSoundManager()->PlayKillSound();
         force_render = true;
 
         auto hit_target_id = *maybe_hit_target_id;
@@ -399,7 +390,6 @@ void StaticScenario::Run(Application* app) {
         replay.hit_target_events.push_back(std::move(hit_target));
       } else {
         // Missed shot
-        sounds.shoot->Play();
         auto miss_target = std::make_unique<MissTargetEventT>();
         miss_target->frame_number = timer.GetReplayFrameNumber();
         replay.miss_target_events.push_back(std::move(miss_target));

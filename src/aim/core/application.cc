@@ -59,6 +59,7 @@ int Application::Initialize() {
     SDL_Log("Couldn't open audio: %s\n", SDL_GetError());
     return 1;
   }
+  _sound_manager = std::make_unique<SoundManager>();
 
   // GL 3.0 + GLSL 130
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
