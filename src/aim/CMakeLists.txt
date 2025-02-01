@@ -1,26 +1,14 @@
 set(NAME "aim")
 
-add_library(
-    ${NAME}
-    STATIC
-    core/application.cc
-    core/camera.cc
-    scenario/static_scenario.cc
-    scenario/target.cc
-    scenario/scenario_timer.cc
-    common/time_util.cc
-    audio/sound.cc
-    graphics/shader.cc
-    graphics/room.cc
-    graphics/crosshair.cc
-    graphics/glad_loader.cc
-    graphics/sphere.cc)
+file(GLOB_RECURSE SRCS *.cc)
+file(GLOB_RECURSE HDRS *.h)
+
+add_library(${NAME} STATIC ${SRCS} ${HRDS})
 
 find_package(OpenGL REQUIRED)
 
 target_link_libraries(${NAME}
-  PUBLIC fmt
-         SDL3::SDL3
+  PUBLIC SDL3::SDL3
          SDL3_mixer::SDL3_mixer
          imgui
          glad

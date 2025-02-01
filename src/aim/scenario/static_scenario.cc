@@ -310,6 +310,7 @@ void StaticScenario::Run(Application* app) {
 
   LookAtInfo look_at;
 
+  SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
 
   // Room
@@ -399,7 +400,7 @@ void StaticScenario::Run(Application* app) {
     }
 
     // Render if forced or if the last render was over ~1ms ago.
-    bool do_render = force_render || timer.LastFrameRenderedMicrosAgo() > 900;
+    bool do_render = force_render || timer.LastFrameRenderedMicrosAgo() > 1200;
     if (!do_render) {
       continue;
     }

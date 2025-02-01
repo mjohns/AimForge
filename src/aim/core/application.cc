@@ -5,7 +5,6 @@
 #include <SDL3_mixer/SDL_mixer.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl3.h>
-#include <fmt/core.h>
 #include <imgui.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -96,7 +95,6 @@ int Application::Initialize() {
 
   SDL_GL_MakeCurrent(_sdl_window, _gl_context);
   LoadGlad();
-  SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_ShowWindow(_sdl_window);
 
   glEnable(GL_DEPTH_TEST);
