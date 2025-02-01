@@ -5,7 +5,7 @@ add_library(
     STATIC
     core/application.cc
     core/camera.cc
-    scenario/model.cc
+    scenario/static_scenario.cc
     scenario/target.cc
     scenario/scenario_timer.cc
     common/time_util.cc
