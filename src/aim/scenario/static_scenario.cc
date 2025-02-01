@@ -419,7 +419,7 @@ void StaticScenario::Run(Application* app) {
   }
 
   float hit_percent = stats.targets_hit / (float)stats.shots_taken;
-  float score = stats.targets_hit * 10 * sqrt(hit_percent) * 2;
+  float score = stats.targets_hit * 10 * sqrt(hit_percent);
 
   std::string score_string = std::format(
       "{}/{} ({:.1f}%) = {:.2f}", stats.targets_hit, stats.shots_taken, hit_percent * 100, score);
