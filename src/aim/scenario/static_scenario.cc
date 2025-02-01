@@ -98,7 +98,7 @@ void DrawFrame(Application* app,
   }
 }
 
-void PlayReplay(const StaticReplayT& replay, Application* app, const std::string& score_string) {
+bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string& score_string) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
@@ -129,14 +129,20 @@ void PlayReplay(const StaticReplayT& replay, Application* app, const std::string
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return;
+        return true;
+      }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_ESCAPE) {
+          return false;
+        }
       }
     }
     timer.OnStartFrame();
 
     uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     if (replay_frame_number >= replay_frames.size()) {
-      return;
+      return false;
     }
 
     if (!timer.IsNewReplayFrame()) {
@@ -189,6 +195,7 @@ void PlayReplay(const StaticReplayT& replay, Application* app, const std::string
 
     DrawFrame(app, &target_manager, &sphere_renderer, &room, look_at.transform);
   }
+  return false;
 }
 
 bool AreNoneWithinDistance(const glm::vec2& p, float min_distance, TargetManager* target_manager) {
@@ -425,17 +432,61 @@ void StaticScenario::Run(Application* app) {
   std::string score_string = std::format(
       "{}/{} ({:.1f}%) = {:.2f}", stats.targets_hit, stats.shots_taken, hit_percent * 100, score);
 
-  // Replay
-  PlayReplay(replay, app, score_string);
+  // Show results page
+  SDL_GL_SetSwapInterval(1);  // Enable vsync
+  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
+  bool view_replay = false;
+  while (true) {
+    if (view_replay) {
+      SDL_GL_SetSwapInterval(0);
+      bool need_quit = PlayReplay(replay, app, score_string);
+      if (need_quit) {
+        return;
+      }
+      SDL_GL_SetSwapInterval(1);
+      view_replay = false;
+      continue;
+    }
 
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      ImGui_ImplSDL3_ProcessEvent(&event);
+      if (event.type == SDL_EVENT_QUIT) {
+        return;
+      }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_ESCAPE) {
+          return;
+        }
+      }
+    }
+
+    ImDrawList* draw_list = app->StartFullscreenImguiFrame();
+
+    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("score: %s", score_string.c_str());
+    ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
+    if (ImGui::Button("View replay", sz)) {
+      view_replay = true;
+    }
+    ImGui::End();
+
+    ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
+    if (app->StartRender(clear_color)) {
+      app->FinishRender();
+    }
+  }
+
+  /*
   ReplayFileT replay_file;
   replay_file.replay.Set(replay);
   flatbuffers::FlatBufferBuilder fbb;
   fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
-
   std::ofstream outfile("C:/Users/micha/replay1.bin", std::ios::binary);
   outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
   outfile.close();
+  */
 }
 
 }  // namespace aim
