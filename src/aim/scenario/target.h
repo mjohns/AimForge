@@ -23,6 +23,10 @@ class TargetManager {
   void RemoveTarget(uint16_t target_id);
   Target ReplaceTarget(uint16_t target_id_to_replace, Target new_target);
 
+  void Clear() {
+    _targets.clear();
+  }
+
   const std::vector<Target>& GetTargets() {
     return _targets;
   }
