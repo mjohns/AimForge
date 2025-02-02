@@ -26,6 +26,9 @@ class StaticScenario {
   void Run(Application* app);
 
  private:
+  // Returns whether to restart.
+  bool RunInternal(Application* app);
+
   Camera _camera;
   TargetManager _target_manager;
   StaticScenarioParams _params;

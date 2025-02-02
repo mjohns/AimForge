@@ -278,6 +278,17 @@ StaticScenario::StaticScenario(StaticScenarioParams params)
     : _camera(GetInitialCamera(params)), _params(params) {}
 
 void StaticScenario::Run(Application* app) {
+  while (true) {
+    _target_manager.Clear();
+    bool restart = this->RunInternal(app);
+    if (!restart) {
+      return;
+    }
+
+  }
+}
+
+bool StaticScenario::RunInternal(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   float radians_per_dot = CmPer360ToRadiansPerDot(_params.cm_per_360, app->GetMouseDpi());
@@ -322,7 +333,7 @@ void StaticScenario::Run(Application* app) {
   RunStats stats;
 
   // Set up metronome
-  float target_number_of_hits_per_60 = 130;
+  float target_number_of_hits_per_60 = 127;
   float seconds_per_target = _params.duration_seconds /
                              (target_number_of_hits_per_60 * (_params.duration_seconds / 60.0f));
   TimedInvokerParams metronome_params;
@@ -350,7 +361,7 @@ void StaticScenario::Run(Application* app) {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return;
+        return false;
       }
       if (event.type == SDL_EVENT_MOUSE_MOTION) {
         _camera.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
@@ -362,6 +373,9 @@ void StaticScenario::Run(Application* app) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_S) {
           stop_scenario = true;
+        }
+        if (keycode == SDLK_R) {
+          return true;
         }
       }
     }
@@ -441,7 +455,7 @@ void StaticScenario::Run(Application* app) {
       SDL_GL_SetSwapInterval(0);
       bool need_quit = PlayReplay(replay, app, score_string);
       if (need_quit) {
-        return;
+        return false;
       }
       SDL_GL_SetSwapInterval(1);
       view_replay = false;
@@ -452,12 +466,15 @@ void StaticScenario::Run(Application* app) {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return;
+        return false;
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-          return;
+          return false;
+        }
+        if (keycode == SDLK_R) {
+          return true;
         }
       }
     }
@@ -476,7 +493,9 @@ void StaticScenario::Run(Application* app) {
     if (app->StartRender(clear_color)) {
       app->FinishRender();
     }
+
   }
+  return false;
 
   /*
   ReplayFileT replay_file;
