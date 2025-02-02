@@ -10,6 +10,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/audio/sound_manager.h"
+#include "aim/database/stats_db.h"
 
 namespace aim {
 
@@ -43,6 +44,10 @@ class Application {
     return _sound_manager.get();
   }
 
+  StatsDb* GetStatsDb() {
+    return _stats_db.get();
+  }
+
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -62,6 +67,7 @@ class Application {
   std::mt19937 _random_generator;
 
   std::unique_ptr<SoundManager> _sound_manager;
+  std::unique_ptr<StatsDb> _stats_db;
 };
 
 }  // namespace aim

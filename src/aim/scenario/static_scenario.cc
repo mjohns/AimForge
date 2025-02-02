@@ -333,7 +333,7 @@ bool StaticScenario::RunInternal(Application* app) {
   RunStats stats;
 
   // Set up metronome
-  float target_number_of_hits_per_60 = 127;
+  float target_number_of_hits_per_60 = 130;
   float seconds_per_target = _params.duration_seconds /
                              (target_number_of_hits_per_60 * (_params.duration_seconds / 60.0f));
   TimedInvokerParams metronome_params;
@@ -445,6 +445,13 @@ bool StaticScenario::RunInternal(Application* app) {
 
   std::string score_string = std::format(
       "{}/{} ({:.1f}%) = {:.2f}", stats.targets_hit, stats.shots_taken, hit_percent * 100, score);
+
+  StatsRow stats_row;
+  stats_row.num_hits = stats.targets_hit;
+  stats_row.num_kills = stats.targets_hit;
+  stats_row.num_shots = stats.shots_taken;
+  stats_row.score = score;
+  app->GetStatsDb()->AddStats("1w3ts_intermediate_s5", &stats_row);
 
   // Show results page
   SDL_GL_SetSwapInterval(1);  // Enable vsync

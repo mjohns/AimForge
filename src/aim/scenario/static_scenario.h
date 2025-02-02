@@ -13,6 +13,7 @@ struct StaticScenarioParams {
   float target_radius = 2;
   float duration_seconds = 60;
   float cm_per_360 = 45;
+  std::string scenario_id;
 };
 
 struct RunStats {
