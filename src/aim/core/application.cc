@@ -46,6 +46,8 @@ int Application::Initialize() {
     return -1;
   }
 
+  _stats_db = std::make_unique<StatsDb>();
+
   if (Mix_Init(MIX_INIT_OGG) == 0) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_mixer OGG init failed");
     return -1;

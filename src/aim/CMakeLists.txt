@@ -12,6 +12,7 @@ target_link_libraries(${NAME}
          SDL3_mixer::SDL3_mixer
          imgui
          glad
+         sqlite3
          ${OPENGL_LIBRARIES}
          FlatBuffers)
 

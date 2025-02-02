@@ -1,9 +1,12 @@
 #pragma once
 
-#include <chrono>
 #include <functional>
+#include <string>
+#include <chrono>
 
 namespace aim {
+
+std::string GetNowString();
 
 class Stopwatch {
  public:
@@ -26,7 +29,7 @@ class Stopwatch {
 
 // Class to invoke a function at a given rate.
 struct TimedInvokerParams {
-    // Default to playing once every second.
+  // Default to playing once every second.
   uint64_t interval_micros = 1000000;
   uint64_t initial_delay_micros = 0;
 };
@@ -36,7 +39,7 @@ class TimedInvoker {
   TimedInvoker(TimedInvokerParams params, std::function<void()> fn);
   void MaybeInvoke(uint64_t now_micros);
 
-private:
+ private:
   void Invoke(uint64_t now_micros);
 
   bool _initialized = false;

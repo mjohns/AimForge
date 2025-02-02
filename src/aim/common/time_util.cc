@@ -1,8 +1,15 @@
 #include "time_util.h"
 
 #include <chrono>
+#include <format>
+#include <chrono>
 
 namespace aim {
+
+std::string GetNowString() {
+  auto now = std::chrono::system_clock::now();
+  return std::format("{:%FT%TZ}", now);
+}
 
 void Stopwatch::Start() {
   if (_running) {
