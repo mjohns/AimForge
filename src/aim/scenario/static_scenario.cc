@@ -31,7 +31,6 @@
 
 namespace aim {
 namespace {
-const char* kScenarioId = "1w3ts_intermediate_s5";
 
 Camera GetInitialCamera(const StaticScenarioParams& params) {
   return Camera(glm::vec3(0, -100.0f, 0));
@@ -330,7 +329,8 @@ bool StaticScenario::RunInternal(Application* app) {
   SphereRenderer sphere_renderer;
   sphere_renderer.SetProjection(projection);
 
-  RunStats stats;
+  int targets_hit = 0;
+  int shots_taken = 0;
 
   // Set up metronome
   float target_number_of_hits_per_60 = 130;
@@ -387,11 +387,11 @@ bool StaticScenario::RunInternal(Application* app) {
     look_at = camera_.GetLookAt();
 
     if (has_click) {
-      stats.shots_taken++;
+      shots_taken++;
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at.front);
       app->GetSoundManager()->PlayShootSound();
       if (maybe_hit_target_id.has_value()) {
-        stats.targets_hit++;
+        targets_hit++;
         app->GetSoundManager()->PlayKillSound();
         force_render = true;
 
@@ -439,21 +439,21 @@ bool StaticScenario::RunInternal(Application* app) {
     DrawFrame(app, &target_manager_, &sphere_renderer, &room, look_at.transform);
   }
 
-  float hit_percent = stats.targets_hit / (float)stats.shots_taken;
+  float hit_percent = targets_hit / (float)shots_taken;
   float duration_modifier = 60.0f / params_.duration_seconds;
-  float score = stats.targets_hit * 10 * sqrt(hit_percent) * duration_modifier;
+  float score = targets_hit * 10 * sqrt(hit_percent) * duration_modifier;
 
-  std::string score_string = std::format(
-      "{}/{} ({:.1f}%) = {:.2f}", stats.targets_hit, stats.shots_taken, hit_percent * 100, score);
+  std::string score_string =
+      std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
 
   StatsRow stats_row;
-  stats_row.num_hits = stats.targets_hit;
-  stats_row.num_kills = stats.targets_hit;
-  stats_row.num_shots = stats.shots_taken;
+  stats_row.num_hits = targets_hit;
+  stats_row.num_kills = targets_hit;
+  stats_row.num_shots = shots_taken;
   stats_row.score = score;
-  app->GetStatsDb()->AddStats(kScenarioId, &stats_row);
+  app->GetStatsDb()->AddStats(params_.scenario_id, &stats_row);
 
-  auto all_stats = app->GetStatsDb()->GetStats(kScenarioId);
+  auto all_stats = app->GetStatsDb()->GetStats(params_.scenario_id);
   auto high_score_stats =
       std::max_element(all_stats.begin(), all_stats.end(), [&](auto& lhs, auto& rhs) {
         return lhs.score < rhs.score;
@@ -503,6 +503,18 @@ bool StaticScenario::RunInternal(Application* app) {
     if (ImGui::Button("View replay", sz)) {
       view_replay = true;
     }
+    if (ImGui::Button("Save replay", sz)) {
+      ReplayFileT replay_file;
+      replay_file.replay.Set(replay);
+      flatbuffers::FlatBufferBuilder fbb;
+      fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
+      std::ofstream outfile(std::format("C:/Users/micha/AimTrainer/replay_{}_{}.bin",
+                                        params_.scenario_id,
+                                        stats_row.stats_id),
+                            std::ios::binary);
+      outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
+      outfile.close();
+    }
     ImGui::End();
 
     ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
@@ -513,14 +525,7 @@ bool StaticScenario::RunInternal(Application* app) {
   return false;
 
   /*
-  ReplayFileT replay_file;
-  replay_file.replay.Set(replay);
-  flatbuffers::FlatBufferBuilder fbb;
-  fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
-  std::ofstream outfile("C:/Users/micha/replay1.bin", std::ios::binary);
-  outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
-  outfile.close();
-  */
+   */
 }
 
 }  // namespace aim

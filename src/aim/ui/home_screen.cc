@@ -69,6 +69,7 @@ void HomeScreen::Run(Application* app) {
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("Start 1w3ts", sz)) {
       StaticScenarioParams params;
+      params.scenario_id = "1w3ts_intermediate_s5";
       params.num_targets = 3;
       params.room_height = 150;
       params.room_width = 170;
