@@ -10,27 +10,27 @@ class ScopeGuard {
     return ScopeGuard(std::move(fn));
   }
 
-  explicit ScopeGuard(std::function<void()>&& fn) : _fn(std::move(fn)) {}
+  explicit ScopeGuard(std::function<void()>&& fn) : fn_(std::move(fn)) {}
 
   void InvokeEarly() {
-    if (_fn) {
-      _fn();
-      _fn = {};
+    if (fn_) {
+      fn_();
+      fn_ = {};
     }
   }
 
   void Cancel() {
-    _fn = {};
+    fn_ = {};
   }
 
   ~ScopeGuard() {
-    if (_fn) {
-		_fn();
+    if (fn_) {
+		fn_();
     }
   }
 
  private:
-  std::function<void()> _fn;
+  std::function<void()> fn_;
 };
 
 }  // namespace aim

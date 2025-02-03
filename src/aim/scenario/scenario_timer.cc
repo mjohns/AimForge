@@ -2,39 +2,39 @@
 
 namespace aim {
 
-ScenarioTimer::ScenarioTimer(uint16_t replay_fps) : _replay_fps(replay_fps) {
+ScenarioTimer::ScenarioTimer(uint16_t replay_fps) : replay_fps_(replay_fps) {
   float replay_seconds_per_frame = 1 / (float)replay_fps;
-  _replay_micros_per_frame = replay_seconds_per_frame * 1000000;
+  replay_micros_per_frame_ = replay_seconds_per_frame * 1000000;
 
   // Initialize to non zero number so first frame is considered a new frame.
-  _replay_frame_number = 1000;
+  replay_frame_number_ = 1000;
 
-  _frame_stopwatch.Start();
-  _run_stopwatch.Start();
+  frame_stopwatch_.Start();
+  run_stopwatch_.Start();
 
-  _previous_frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
-  _frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+  previous_frame_start_time_micros_ = frame_stopwatch_.GetElapsedMicros();
+  frame_start_time_micros_ = frame_stopwatch_.GetElapsedMicros();
 }
 
 void ScenarioTimer::OnStartFrame() {
-  uint64_t new_replay_frame_number = _run_stopwatch.GetElapsedMicros() / _replay_micros_per_frame;
-  _is_new_replay_frame = new_replay_frame_number != _replay_frame_number;
-  _replay_frame_number = new_replay_frame_number;
+  uint64_t new_replay_frame_number = run_stopwatch_.GetElapsedMicros() / replay_micros_per_frame_;
+  is_new_replay_frame_ = new_replay_frame_number != replay_frame_number_;
+  replay_frame_number_ = new_replay_frame_number;
 
-  _previous_frame_start_time_micros = _frame_start_time_micros;
-  _frame_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+  previous_frame_start_time_micros_ = frame_start_time_micros_;
+  frame_start_time_micros_ = frame_stopwatch_.GetElapsedMicros();
 }
 
 void ScenarioTimer::OnStartRender() {
-  _render_start_time_micros = _frame_stopwatch.GetElapsedMicros();
+  render_start_time_micros_ = frame_stopwatch_.GetElapsedMicros();
 }
 
 void ScenarioTimer::OnEndRender() {
-  _render_end_time_micros = _frame_stopwatch.GetElapsedMicros();
+  render_end_time_micros_ = frame_stopwatch_.GetElapsedMicros();
 }
 
 uint64_t ScenarioTimer::LastFrameRenderedMicrosAgo() {
-  return _frame_stopwatch.GetElapsedMicros() - _render_end_time_micros;
+  return frame_stopwatch_.GetElapsedMicros() - render_end_time_micros_;
 }
 
 }  // namespace aim

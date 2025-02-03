@@ -18,32 +18,32 @@ SoundManager::SoundManager() {
   auto shoot_sound = Sound::Load(shoot_sound_name);
   auto metronome_sound = Sound::Load(metronome_sound_name);
 
-  _kill_sound = kill_sound.get();
-  _shoot_sound = shoot_sound.get();
-  _metronome_sound = metronome_sound.get();
+  kill_sound_ = kill_sound.get();
+  shoot_sound_ = shoot_sound.get();
+  metronome_sound_ = metronome_sound.get();
 
-  _sound_cache[kill_sound_name] = std::move(kill_sound);
-  _sound_cache[shoot_sound_name] = std::move(shoot_sound);
-  _sound_cache[metronome_sound_name] = std::move(metronome_sound);
+  sound_cache_[kill_sound_name] = std::move(kill_sound);
+  sound_cache_[shoot_sound_name] = std::move(shoot_sound);
+  sound_cache_[metronome_sound_name] = std::move(metronome_sound);
 }
 
 SoundManager& SoundManager::PlayKillSound() {
-  if (_kill_sound != nullptr) {
-    _kill_sound->Play(kKillChannel);
+  if (kill_sound_ != nullptr) {
+    kill_sound_->Play(kKillChannel);
   }
   return *this;
 }
 
 SoundManager& SoundManager::PlayShootSound() {
-  if (_shoot_sound != nullptr) {
-    _shoot_sound->Play(kShootChannel);
+  if (shoot_sound_ != nullptr) {
+    shoot_sound_->Play(kShootChannel);
   }
   return *this;
 }
 
 SoundManager& SoundManager::PlayMetronomeSound() {
-  if (_metronome_sound != nullptr) {
-    _metronome_sound->Play(kMetronomeChannel);
+  if (metronome_sound_ != nullptr) {
+    metronome_sound_->Play(kMetronomeChannel);
   }
   return *this;
 }

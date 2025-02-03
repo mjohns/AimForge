@@ -12,29 +12,29 @@ std::string GetNowString() {
 }
 
 void Stopwatch::Start() {
-  if (_running) {
+  if (running_) {
     return;
   }
-  _running = true;
-  _start_time = std::chrono::steady_clock::now();
+  running_ = true;
+  start_time_ = std::chrono::steady_clock::now();
 }
 
 void Stopwatch::Stop() {
-  if (!_running) {
+  if (!running_) {
     return;
   }
-  _running = false;
+  running_ = false;
   auto now = std::chrono::steady_clock::now();
-  _previously_elapsed_duration += now - _start_time;
+  previously_elapsed_duration_ += now - start_time_;
 }
 
 std::chrono::steady_clock::duration Stopwatch::GetElapsed() {
-  if (!_running) {
-    return _previously_elapsed_duration;
+  if (!running_) {
+    return previously_elapsed_duration_;
   }
   auto now = std::chrono::steady_clock::now();
-  auto elapsed = now - _start_time;
-  return elapsed + _previously_elapsed_duration;
+  auto elapsed = now - start_time_;
+  return elapsed + previously_elapsed_duration_;
 }
 
 uint64_t Stopwatch::GetElapsedMicros() {
@@ -49,29 +49,29 @@ float Stopwatch::GetElapsedSeconds() {
 }
 
 TimedInvoker::TimedInvoker(TimedInvokerParams params, std::function<void()> fn)
-    : _params(params), _fn(std::move(fn)) {}
+    : params_(params), fn_(std::move(fn)) {}
 
 void TimedInvoker::MaybeInvoke(uint64_t now_micros) {
-  if (!_initialized) {
-    if (_params.initial_delay_micros == 0) {
+  if (!initialized_) {
+    if (params_.initial_delay_micros == 0) {
       this->Invoke(now_micros);
     } else {
-      _last_invoke_time_micros =
-          now_micros + _params.initial_delay_micros - _params.interval_micros;
+      last_invoke_time_micros_ =
+          now_micros + params_.initial_delay_micros - params_.interval_micros;
     }
-    _initialized = true;
+    initialized_ = true;
     return;
   }
 
-  if (_last_invoke_time_micros + _params.interval_micros <= now_micros) {
+  if (last_invoke_time_micros_ + params_.interval_micros <= now_micros) {
     this->Invoke(now_micros);
   }
 }
 
 void TimedInvoker::Invoke(uint64_t now_micros) {
-  _last_invoke_time_micros = now_micros;
-  if (_fn) {
-    _fn();
+  last_invoke_time_micros_ = now_micros;
+  if (fn_) {
+    fn_();
   }
 }
 

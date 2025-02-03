@@ -14,7 +14,7 @@ class Stopwatch {
   void Stop();
 
   bool IsRunning() {
-    return _running;
+    return running_;
   }
 
   std::chrono::steady_clock::duration GetElapsed();
@@ -22,9 +22,9 @@ class Stopwatch {
   float GetElapsedSeconds();
 
  private:
-  bool _running = false;
-  std::chrono::steady_clock::time_point _start_time;
-  std::chrono::steady_clock::duration _previously_elapsed_duration{0};
+  bool running_ = false;
+  std::chrono::steady_clock::time_point start_time_;
+  std::chrono::steady_clock::duration previously_elapsed_duration_{0};
 };
 
 // Class to invoke a function at a given rate.
@@ -42,10 +42,10 @@ class TimedInvoker {
  private:
   void Invoke(uint64_t now_micros);
 
-  bool _initialized = false;
-  TimedInvokerParams _params;
-  uint64_t _last_invoke_time_micros = 0;
-  std::function<void()> _fn;
+  bool initialized_ = false;
+  TimedInvokerParams params_;
+  uint64_t last_invoke_time_micros_ = 0;
+  std::function<void()> fn_;
 };
 
 }  // namespace aim

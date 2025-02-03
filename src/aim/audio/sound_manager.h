@@ -15,10 +15,10 @@ class SoundManager {
   SoundManager& PlayMetronomeSound();
 
  private:
-  Sound* _kill_sound = nullptr;
-  Sound* _shoot_sound = nullptr;
-  Sound* _metronome_sound = nullptr;
-  std::unordered_map<std::string, std::unique_ptr<Sound>> _sound_cache;
+  Sound* kill_sound_ = nullptr;
+  Sound* shoot_sound_ = nullptr;
+  Sound* metronome_sound_ = nullptr;
+  std::unordered_map<std::string, std::unique_ptr<Sound>> sound_cache_;
 };
 
 }  // namespace aim
