@@ -7,18 +7,13 @@
 namespace aim {
 
 struct StaticScenarioParams {
+  std::string scenario_id;
   int num_targets = 1;
   float room_width;
   float room_height;
   float target_radius = 2;
   float duration_seconds = 60;
   float cm_per_360 = 45;
-  std::string scenario_id;
-};
-
-struct RunStats {
-  int targets_hit = 0;
-  int shots_taken = 0;
 };
 
 class StaticScenario {

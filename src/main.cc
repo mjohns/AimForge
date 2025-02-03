@@ -8,6 +8,5 @@ int main(int, char**) {
   HomeScreen home_screen;
   home_screen.Run(app.get());
 
-
   return 0;
 }
