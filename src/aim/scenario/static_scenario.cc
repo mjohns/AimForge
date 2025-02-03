@@ -380,6 +380,9 @@ bool StaticScenario::RunInternal(Application* app) {
         if (keycode == SDLK_R) {
           return true;
         }
+        if (keycode == SDLK_ESCAPE) {
+          return false;
+        }
       }
     }
 
