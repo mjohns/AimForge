@@ -202,8 +202,8 @@ bool AreNoneWithinDistance(const glm::vec2& p, float min_distance, TargetManager
   return true;
 }
 
-glm::vec2 GetRandomPositionInCircle(float max_radius, Application* app) {
-  auto dist_radius = std::uniform_real_distribution<float>(0, max_radius);
+glm::vec2 GetRandomPositionInCircle(float max_radius_x, float max_radius_y, Application* app) {
+  auto dist_radius = std::uniform_real_distribution<float>(0, max_radius_x);
   auto dist_degrees = std::uniform_real_distribution<float>(0.01, 360);
 
   float radius = dist_radius(*app->GetRandomGenerator());
@@ -213,46 +213,45 @@ glm::vec2 GetRandomPositionInCircle(float max_radius, Application* app) {
   double sin_angle = sin(rotate_radians);
 
   float x = -1 * radius * sin_angle;
-  float y = radius * cos_angle;
+  float y_scale = max_radius_y / max_radius_x;
+  float y = radius * cos_angle * y_scale;
   return glm::vec2(x, y);
 }
 
 // Returns an x/z pair where to place the target on the back wall.
 glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
+                               const TargetPlacementParams& placement_params,
                                TargetManager* target_manager,
                                Application* app) {
-  // Allow placing within the middle x% of the specified dimension
-  float x_percent = 0.7;
-  float y_percent = 0.6;
-
-  float max_x = 0.5 * room_params.wall_width * x_percent;
-  float max_y = 0.5 * room_params.wall_height * y_percent;
-
-  auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
-  auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
-
-  auto dist_circle = std::uniform_real_distribution<float>(0, 1);
-
-  float min_distance = 20;
+  auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
+  std::function<glm::vec2()> get_candidate_pos = [=] { return glm::vec2(0, 0); };
+  for (const TargetRegion& region : placement_params.regions) {
+    float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
+    if (region.percent_chance >= region_chance_roll) {
+      get_candidate_pos = [&] {
+        if (region.x_circle_percent > 0) {
+          return GetRandomPositionInCircle(0.5 * room_params.wall_width * region.x_circle_percent,
+                                           0.5 * room_params.wall_height * region.y_circle_percent,
+                                           app);
+        }
+        float max_x = 0.5 * room_params.wall_width * region.x_percent;
+        float max_y = 0.5 * room_params.wall_height * region.y_percent;
+        auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
+        auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
+        return glm::vec2(distribution_x(*app->GetRandomGenerator()),
+                         distribution_y(*app->GetRandomGenerator()));
+      };
+      break;
+    }
+  }
 
   int max_attempts = 30;
   int attempt_number = 0;
   while (true) {
     ++attempt_number;
-
-    glm::vec2 pos;
-
-    // Place the target within the smaller center circle area with a higher probability.
-    float use_circle_roll = dist_circle(*app->GetRandomGenerator());
-    if (use_circle_roll < 0.7) {
-      pos = GetRandomPositionInCircle(max_y, app);
-    } else {
-      pos.x = distribution_x(*app->GetRandomGenerator());
-      pos.y = distribution_y(*app->GetRandomGenerator());
-    }
-
+    glm::vec2 pos = get_candidate_pos();
     if (attempt_number >= max_attempts ||
-        AreNoneWithinDistance(pos, min_distance, target_manager)) {
+        AreNoneWithinDistance(pos, placement_params.min_distance, target_manager)) {
       return pos;
     }
   }
@@ -262,7 +261,7 @@ Target GetNewTarget(const RoomParams& room_params,
                     const StaticScenarioParams& params,
                     TargetManager* target_manager,
                     Application* app) {
-  glm::vec2 pos = GetNewTargetPosition(room_params, target_manager, app);
+  glm::vec2 pos = GetNewTargetPosition(room_params, params.target_placement, target_manager, app);
   Target t;
   t.position.x = pos.x;
   t.position.z = pos.y;
@@ -333,7 +332,7 @@ bool StaticScenario::RunInternal(Application* app) {
   int shots_taken = 0;
 
   // Set up metronome
-  float target_number_of_hits_per_60 = 130;
+  float target_number_of_hits_per_60 = 131;
   float seconds_per_target = params_.duration_seconds /
                              (target_number_of_hits_per_60 * (params_.duration_seconds / 60.0f));
   TimedInvokerParams metronome_params;
@@ -447,11 +446,14 @@ bool StaticScenario::RunInternal(Application* app) {
       std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
 
   StatsRow stats_row;
+  stats_row.cm_per_360 = params_.cm_per_360;
   stats_row.num_hits = targets_hit;
   stats_row.num_kills = targets_hit;
   stats_row.num_shots = shots_taken;
   stats_row.score = score;
-  app->GetStatsDb()->AddStats(params_.scenario_id, &stats_row);
+  if (stats_row.score > 0) {
+    app->GetStatsDb()->AddStats(params_.scenario_id, &stats_row);
+  }
 
   auto all_stats = app->GetStatsDb()->GetStats(params_.scenario_id);
   auto high_score_stats =
