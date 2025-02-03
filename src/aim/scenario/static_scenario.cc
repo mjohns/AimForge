@@ -19,8 +19,8 @@
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
-#include "aim/core/metronome.h"
 #include "aim/core/camera.h"
+#include "aim/core/metronome.h"
 #include "aim/fbs/common_generated.h"
 #include "aim/fbs/replay_generated.h"
 #include "aim/fbs/settings_generated.h"
@@ -32,6 +32,7 @@
 
 namespace aim {
 namespace {
+constexpr uint64_t kPokeBallKillTimeMillis = 50;
 
 Camera GetInitialCamera(const StaticScenarioParams& params) {
   return Camera(glm::vec3(0, -100.0f, 0));
@@ -159,7 +160,11 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
     bool has_hit = replay_frame.hit_target_events.size() > 0;
     bool has_miss = replay_frame.miss_target_events.size() > 0;
     if (has_hit) {
-      app->GetSoundManager()->PlayKillSound().PlayShootSound();
+      if (replay.is_poke_ball) {
+        app->GetSoundManager()->PlayKillSound();
+      } else {
+        app->GetSoundManager()->PlayKillSound().PlayShootSound();
+      }
     } else if (has_miss) {
       app->GetSoundManager()->PlayShootSound();
     }
@@ -298,6 +303,7 @@ bool StaticScenario::RunInternal(Application* app) {
   room_params.wall_width = params_.room_width;
 
   StaticReplayT replay;
+  replay.is_poke_ball = params_.is_poke_ball;
   uint16_t replay_frames_per_second = 100;
   replay.frames_per_second = replay_frames_per_second;
   replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
@@ -331,6 +337,9 @@ bool StaticScenario::RunInternal(Application* app) {
 
   int targets_hit = 0;
   int shots_taken = 0;
+
+  std::optional<uint16_t> current_poke_target_id;
+  uint64_t current_poke_start_time_micros = 0;
 
   Metronome metronome(params_.metronome_bpm, app);
 
@@ -380,36 +389,86 @@ bool StaticScenario::RunInternal(Application* app) {
     bool force_render = false;
     look_at = camera_.GetLookAt();
 
-    if (has_click) {
-      shots_taken++;
+    if (params_.is_poke_ball) {
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at.front);
-      app->GetSoundManager()->PlayShootSound();
       if (maybe_hit_target_id.has_value()) {
-        targets_hit++;
-        app->GetSoundManager()->PlayKillSound();
-        force_render = true;
+        uint16_t hit_target_id = *maybe_hit_target_id;
+        bool is_hitting_current_target =
+            current_poke_target_id.has_value() && *current_poke_target_id == hit_target_id;
+        if (is_hitting_current_target) {
+          // Still targeting the correct target.
+          // Has enough time elapsed to kill target?
+          uint64_t now_micros = timer.GetElapsedMicros();
+          uint64_t age_micros = now_micros - current_poke_start_time_micros;
+          uint64_t min_age_micros = kPokeBallKillTimeMillis * 1000;
+          if (age_micros >= min_age_micros) {
+            targets_hit++;
+            shots_taken++;
+            app->GetSoundManager()->PlayKillSound();
+            force_render = true;
 
-        auto hit_target_id = *maybe_hit_target_id;
-        Target new_target = target_manager_.ReplaceTarget(
-            hit_target_id, GetNewTarget(room_params, params_, &target_manager_, app));
+            auto hit_target_id = *maybe_hit_target_id;
+            Target new_target = target_manager_.ReplaceTarget(
+                hit_target_id, GetNewTarget(room_params, params_, &target_manager_, app));
 
-        // Add replay events
-        auto add_target = std::make_unique<AddTargetEventT>();
-        add_target->target_id = new_target.id;
-        add_target->frame_number = timer.GetReplayFrameNumber();
-        add_target->position = ToStoredVec3Ptr(new_target.position);
-        add_target->radius = new_target.radius;
-        replay.add_target_events.push_back(std::move(add_target));
+            // Add replay events
+            auto add_target = std::make_unique<AddTargetEventT>();
+            add_target->target_id = new_target.id;
+            add_target->frame_number = timer.GetReplayFrameNumber();
+            add_target->position = ToStoredVec3Ptr(new_target.position);
+            add_target->radius = new_target.radius;
+            replay.add_target_events.push_back(std::move(add_target));
 
-        auto hit_target = std::make_unique<HitTargetEventT>();
-        hit_target->target_id = hit_target_id;
-        hit_target->frame_number = timer.GetReplayFrameNumber();
-        replay.hit_target_events.push_back(std::move(hit_target));
+            auto hit_target = std::make_unique<HitTargetEventT>();
+            hit_target->target_id = hit_target_id;
+            hit_target->frame_number = timer.GetReplayFrameNumber();
+            replay.hit_target_events.push_back(std::move(hit_target));
+
+            current_poke_target_id = {};
+            current_poke_start_time_micros = 0;
+          }
+        } else {
+          // Starting time on new target.
+          current_poke_target_id = hit_target_id;
+          current_poke_start_time_micros = timer.GetElapsedMicros();
+        }
       } else {
-        // Missed shot
-        auto miss_target = std::make_unique<MissTargetEventT>();
-        miss_target->frame_number = timer.GetReplayFrameNumber();
-        replay.miss_target_events.push_back(std::move(miss_target));
+        // No current target. Clear.
+        current_poke_target_id = {};
+        current_poke_start_time_micros = 0;
+      }
+    } else {
+      if (has_click) {
+        shots_taken++;
+        auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at.front);
+        app->GetSoundManager()->PlayShootSound();
+        if (maybe_hit_target_id.has_value()) {
+          targets_hit++;
+          app->GetSoundManager()->PlayKillSound();
+          force_render = true;
+
+          auto hit_target_id = *maybe_hit_target_id;
+          Target new_target = target_manager_.ReplaceTarget(
+              hit_target_id, GetNewTarget(room_params, params_, &target_manager_, app));
+
+          // Add replay events
+          auto add_target = std::make_unique<AddTargetEventT>();
+          add_target->target_id = new_target.id;
+          add_target->frame_number = timer.GetReplayFrameNumber();
+          add_target->position = ToStoredVec3Ptr(new_target.position);
+          add_target->radius = new_target.radius;
+          replay.add_target_events.push_back(std::move(add_target));
+
+          auto hit_target = std::make_unique<HitTargetEventT>();
+          hit_target->target_id = hit_target_id;
+          hit_target->frame_number = timer.GetReplayFrameNumber();
+          replay.hit_target_events.push_back(std::move(hit_target));
+        } else {
+          // Missed shot
+          auto miss_target = std::make_unique<MissTargetEventT>();
+          miss_target->frame_number = timer.GetReplayFrameNumber();
+          replay.miss_target_events.push_back(std::move(miss_target));
+        }
       }
     }
 

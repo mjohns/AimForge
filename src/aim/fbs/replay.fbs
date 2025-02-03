@@ -29,6 +29,7 @@ table StaticReplay {
   wall_width: float;
   wall_height: float;
   frames_per_second: uint16;
+  is_poke_ball: bool;
   camera_position: StoredVec3;
   add_target_events: [AddTargetEvent];
   hit_target_events: [HitTargetEvent];
