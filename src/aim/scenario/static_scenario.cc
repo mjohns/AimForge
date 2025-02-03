@@ -31,6 +31,7 @@
 
 namespace aim {
 namespace {
+const char* kScenarioId = "1w3ts_intermediate_s5";
 
 Camera GetInitialCamera(const StaticScenarioParams& params) {
   return Camera(glm::vec3(0, -100.0f, 0));
@@ -284,7 +285,6 @@ void StaticScenario::Run(Application* app) {
     if (!restart) {
       return;
     }
-
   }
 }
 
@@ -451,7 +451,14 @@ bool StaticScenario::RunInternal(Application* app) {
   stats_row.num_kills = stats.targets_hit;
   stats_row.num_shots = stats.shots_taken;
   stats_row.score = score;
-  app->GetStatsDb()->AddStats("1w3ts_intermediate_s5", &stats_row);
+  app->GetStatsDb()->AddStats(kScenarioId, &stats_row);
+
+  auto all_stats = app->GetStatsDb()->GetStats(kScenarioId);
+  auto high_score_stats =
+      std::max_element(all_stats.begin(), all_stats.end(), [&](auto& lhs, auto& rhs) {
+        return lhs.score < rhs.score;
+      });
+  double high_score = high_score_stats->score;
 
   // Show results page
   SDL_GL_SetSwapInterval(1);  // Enable vsync
@@ -489,6 +496,8 @@ bool StaticScenario::RunInternal(Application* app) {
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("high_score: %.2f", high_score);
+    ImGui::Text("total_runs: %d", all_stats.size());
     ImGui::Text("score: %s", score_string.c_str());
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("View replay", sz)) {
@@ -500,7 +509,6 @@ bool StaticScenario::RunInternal(Application* app) {
     if (app->StartRender(clear_color)) {
       app->FinishRender();
     }
-
   }
   return false;
 
