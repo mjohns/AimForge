@@ -18,7 +18,7 @@ namespace aim {
 
 Application::Application() {
   std::random_device rd;
-  _random_generator = std::mt19937(rd());
+  random_generator_ = std::mt19937(rd());
 }
 
 Application::~Application() {
@@ -26,11 +26,11 @@ Application::~Application() {
   ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
 
-  if (_gl_context != nullptr) {
-    SDL_GL_DestroyContext(_gl_context);
+  if (gl_context_ != nullptr) {
+    SDL_GL_DestroyContext(gl_context_);
   }
-  if (_sdl_window != nullptr) {
-    SDL_DestroyWindow(_sdl_window);
+  if (sdl_window_ != nullptr) {
+    SDL_DestroyWindow(sdl_window_);
   }
 
   Mix_CloseAudio();
@@ -46,7 +46,7 @@ int Application::Initialize() {
     return -1;
   }
 
-  _stats_db = std::make_unique<StatsDb>();
+  stats_db_ = std::make_unique<StatsDb>();
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_mixer OGG init failed");
@@ -61,7 +61,7 @@ int Application::Initialize() {
     SDL_Log("Couldn't open audio: %s\n", SDL_GetError());
     return 1;
   }
-  _sound_manager = std::make_unique<SoundManager>();
+  sound_manager_ = std::make_unique<SoundManager>();
 
   // GL 3.0 + GLSL 130
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
@@ -83,22 +83,22 @@ int Application::Initialize() {
 
   SDL_WindowFlags window_flags =
       (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-  _sdl_window = SDL_CreateWindow("AimTrainer", 0, 0, window_flags);
-  if (_sdl_window == nullptr) {
+  sdl_window_ = SDL_CreateWindow("AimTrainer", 0, 0, window_flags);
+  if (sdl_window_ == nullptr) {
     printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
     return -1;
   }
-  _gl_context = SDL_GL_CreateContext(_sdl_window);
-  if (_gl_context == nullptr) {
+  gl_context_ = SDL_GL_CreateContext(sdl_window_);
+  if (gl_context_ == nullptr) {
     printf("Error: SDL_GL_CreateContext(): %s\n", SDL_GetError());
     return -1;
   }
 
-  SDL_GetWindowSize(_sdl_window, &_window_width, &_window_height);
+  SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
 
-  SDL_GL_MakeCurrent(_sdl_window, _gl_context);
+  SDL_GL_MakeCurrent(sdl_window_, gl_context_);
   LoadGlad();
-  SDL_ShowWindow(_sdl_window);
+  SDL_ShowWindow(sdl_window_);
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -116,7 +116,7 @@ int Application::Initialize() {
   // ImGui::StyleColorsLight();
 
   // Setup Platform/Renderer backends
-  ImGui_ImplSDL3_InitForOpenGL(_sdl_window, _gl_context);
+  ImGui_ImplSDL3_InitForOpenGL(sdl_window_, gl_context_);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
   return 0;
@@ -142,7 +142,7 @@ bool Application::StartRender(ImVec4 clear_color) {
 
 void Application::FinishRender() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-  SDL_GL_SwapWindow(_sdl_window);
+  SDL_GL_SwapWindow(sdl_window_);
 }
 
 ImDrawList* Application::StartFullscreenImguiFrame() {
@@ -154,7 +154,7 @@ ImDrawList* Application::StartFullscreenImguiFrame() {
   // Get the drawing list and calculate center position
   // Create fullscreen window
   ImGui::SetNextWindowPos(ImVec2(0, 0));
-  ImGui::SetNextWindowSize(ImVec2((float)_window_width, (float)_window_height));
+  ImGui::SetNextWindowSize(ImVec2((float)window_width_, (float)window_height_));
   ImGui::Begin("Fullscreen",
                nullptr,
                ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |

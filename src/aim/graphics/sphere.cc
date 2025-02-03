@@ -132,16 +132,16 @@ std::vector<float> GenerateSphereVertices(int num_subdivisions) {
 
 }  // namespace
 
-SphereRenderer::SphereRenderer() : _shader(Shader(vertex_shader, fragment_shader)) {
+SphereRenderer::SphereRenderer() : shader_(Shader(vertex_shader, fragment_shader)) {
   std::vector<float> vertices = GenerateSphereVertices(3);
-  _num_vertices = vertices.size() / 3;
+  num_vertices_ = vertices.size() / 3;
 
-  glGenVertexArrays(1, &_vao);
-  glGenBuffers(1, &_vbo);
+  glGenVertexArrays(1, &vao_);
+  glGenBuffers(1, &vbo_);
 
-  glBindVertexArray(_vao);
+  glBindVertexArray(vao_);
 
-  glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_);
   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
   // position attribute
@@ -150,24 +150,24 @@ SphereRenderer::SphereRenderer() : _shader(Shader(vertex_shader, fragment_shader
 }
 
 void SphereRenderer::SetProjection(const glm::mat4& projection) {
-  _shader.Use();
-  _shader.SetMat4("projection", projection);
+  shader_.Use();
+  shader_.SetMat4("projection", projection);
 }
 void SphereRenderer::Draw(const glm::mat4& view, const std::vector<Sphere>& spheres) {
-  _shader.Use();
-  _shader.SetMat4("view", view);
+  shader_.Use();
+  shader_.SetMat4("view", view);
 
   glm::vec3 color(0);
-  _shader.SetVec3("quad_color", color);
+  shader_.SetVec3("quad_color", color);
 
   for (const auto& sphere : spheres) {
     glm::mat4 model(1.f);
     model = glm::translate(model, sphere.position);
     model = glm::scale(model, glm::vec3(sphere.radius));
-    _shader.SetMat4("model", model);
+    shader_.SetMat4("model", model);
 
-    glBindVertexArray(_vao);
-    glDrawArrays(GL_TRIANGLES, 0, _num_vertices);
+    glBindVertexArray(vao_);
+    glDrawArrays(GL_TRIANGLES, 0, num_vertices_);
   }
 }
 

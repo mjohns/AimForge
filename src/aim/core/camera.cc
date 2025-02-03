@@ -46,11 +46,11 @@ glm::vec3 GetNormalizedRight(const glm::vec3& v) {
 LookAtInfo Camera::GetLookAt() {
   // sin(0) = 0, cos(0) = 1, sin(90) = 1, cos(90) = 0
   LookAtInfo info;
-  info.front.x = cos(_pitch) * sin(_yaw);
-  info.front.y = cos(_pitch) * cos(_yaw);
-  info.front.z = sin(_pitch);
+  info.front.x = cos(pitch_) * sin(yaw_);
+  info.front.y = cos(pitch_) * cos(yaw_);
+  info.front.z = sin(pitch_);
 
-  FillInLookAt(_position, &info);
+  FillInLookAt(position_, &info);
   return info;
 }
 
@@ -62,17 +62,17 @@ LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front) {
 }
 
 void Camera::Update(int xrel, int yrel, float radians_per_dot) {
-  _yaw += radians_per_dot * xrel;
-  _pitch -= radians_per_dot * yrel;
-  _pitch = glm::clamp(_pitch, kMinPitch, kMaxPitch);
+  yaw_ += radians_per_dot * xrel;
+  pitch_ -= radians_per_dot * yrel;
+  pitch_ = glm::clamp(pitch_, kMinPitch, kMaxPitch);
   // TODO: clamp yaw?
 }
 
 Camera::Camera(float pitch, float yaw, glm::vec3 position)
-    : _pitch(pitch), _yaw(yaw), _position(position) {}
+    : pitch_(pitch), yaw_(yaw), position_(position) {}
 
-Camera::Camera(glm::vec3 position) : _pitch(0), _yaw(0), _position(position) {}
+Camera::Camera(glm::vec3 position) : pitch_(0), yaw_(0), position_(position) {}
 
-Camera::Camera(float pitch, float yaw) : _pitch(pitch), _yaw(yaw), _position(glm::vec3(0, 0, 0)) {}
+Camera::Camera(float pitch, float yaw) : pitch_(pitch), yaw_(yaw), position_(glm::vec3(0, 0, 0)) {}
 
 }  // namespace aim

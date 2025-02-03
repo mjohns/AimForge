@@ -30,9 +30,9 @@ class StaticScenario {
   // Returns whether to restart.
   bool RunInternal(Application* app);
 
-  Camera _camera;
-  TargetManager _target_manager;
-  StaticScenarioParams _params;
+  Camera camera_;
+  TargetManager target_manager_;
+  StaticScenarioParams params_;
 };
 
 }  // namespace aim

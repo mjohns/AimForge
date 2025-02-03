@@ -21,12 +21,10 @@ class SphereRenderer {
   void Draw(const glm::mat4& view, const std::vector<Sphere>& spheres);
 
  private:
-  unsigned int _vbo;
-  unsigned int _vao;
-  unsigned int _instance_vbo;
-  unsigned int _instance_vao;
-  unsigned int _num_vertices;
-  Shader _shader;
+  unsigned int vbo_;
+  unsigned int vao_;
+  unsigned int num_vertices_;
+  Shader shader_;
 };
 
 }  // namespace aim

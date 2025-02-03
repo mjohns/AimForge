@@ -32,30 +32,30 @@ class Camera {
 
   LookAtInfo GetLookAt();
   const glm::vec3& GetPosition() const {
-    return _position;
+    return position_;
   }
 
   float GetPitch() {
-    return _pitch;
+    return pitch_;
   }
 
   float GetYaw() {
-    return _yaw;
+    return yaw_;
   }
 
   void Update(int xrel, int yrel, float radians_per_dot);
 
   void UpdatePitch(float pitch) {
-    _pitch = pitch;
+    pitch_ = pitch;
   }
   void UpdateYaw(float yaw) {
-    _yaw = yaw;
+    yaw_ = yaw;
   }
 
  private:
-  glm::vec3 _position;
-  float _pitch;
-  float _yaw;
+  glm::vec3 position_;
+  float pitch_;
+  float yaw_;
 };
 
 }  // namespace aim

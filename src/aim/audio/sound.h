@@ -21,7 +21,7 @@ class Sound {
 
  private:
   Sound(Mix_Chunk* chunk);
-  Mix_Chunk* _chunk;
+  Mix_Chunk* chunk_;
 };
 
 }  // namespace aim

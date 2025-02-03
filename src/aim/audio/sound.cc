@@ -16,16 +16,16 @@ std::unique_ptr<Sound> Sound::Load(std::string sound_name) {
   return std::unique_ptr<Sound>(new Sound(chunk));
 }
 
-Sound::Sound(Mix_Chunk* chunk) : _chunk(chunk) {}
+Sound::Sound(Mix_Chunk* chunk) : chunk_(chunk) {}
 
 Sound::~Sound() {
-  if (_chunk != nullptr) {
-    Mix_FreeChunk(_chunk);
+  if (chunk_ != nullptr) {
+    Mix_FreeChunk(chunk_);
   }
 }
 
 void Sound::Play(int channel) {
-  Mix_PlayChannel(channel, _chunk, 0);
+  Mix_PlayChannel(channel, chunk_, 0);
 }
 
 }  // namespace aim

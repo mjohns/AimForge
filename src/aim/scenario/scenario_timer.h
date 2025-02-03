@@ -15,40 +15,40 @@ class ScenarioTimer {
   void OnEndRender();
 
   float GetElapsedSeconds() {
-    return _run_stopwatch.GetElapsedSeconds();
+    return run_stopwatch_.GetElapsedSeconds();
   }
 
   uint64_t GetElapsedMicros() {
-    return _run_stopwatch.GetElapsedMicros();
+    return run_stopwatch_.GetElapsedMicros();
   }
 
   uint64_t GetReplayFrameNumber() {
-    return _replay_frame_number;
+    return replay_frame_number_;
   }
 
   bool IsNewReplayFrame() {
-    return _is_new_replay_frame;
+    return is_new_replay_frame_;
   }
 
   uint64_t LastFrameRenderedMicrosAgo();
 
  private:
   // Stopwatch tracking render time. Can be reset each time scenario resumes.
-  Stopwatch _frame_stopwatch;
+  Stopwatch frame_stopwatch_;
   // Stopwatch mapping to the time the user would see in the UI.
-  Stopwatch _run_stopwatch;
+  Stopwatch run_stopwatch_;
 
-  uint16_t _replay_fps;
-  uint64_t _replay_micros_per_frame;
+  uint16_t replay_fps_;
+  uint64_t replay_micros_per_frame_;
 
-  uint64_t _previous_frame_start_time_micros;
-  uint64_t _frame_start_time_micros;
+  uint64_t previous_frame_start_time_micros_;
+  uint64_t frame_start_time_micros_;
 
-  uint64_t _replay_frame_number;
-  bool _is_new_replay_frame;
+  uint64_t replay_frame_number_;
+  bool is_new_replay_frame_;
 
-  uint64_t _render_start_time_micros = 0;
-  uint64_t _render_end_time_micros = 0;
+  uint64_t render_start_time_micros_ = 0;
+  uint64_t render_end_time_micros_ = 0;
 };
 
 }  // namespace aim

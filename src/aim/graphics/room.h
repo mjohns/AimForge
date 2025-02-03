@@ -19,18 +19,18 @@ struct Room {
   void Draw(const glm::mat4& view);
 
   float GetWidth() {
-    return _params.wall_width;
+    return params_.wall_width;
   }
 
   float GetHeight() {
-    return _params.wall_height;
+    return params_.wall_height;
   }
 
  private:
-  RoomParams _params;
-  unsigned int _vbo;
-  unsigned int _vao;
-  Shader _shader;
+  RoomParams params_;
+  unsigned int vbo_;
+  unsigned int vao_;
+  Shader shader_;
 };
 
 }  // namespace aim

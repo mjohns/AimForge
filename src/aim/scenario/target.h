@@ -24,18 +24,18 @@ class TargetManager {
   Target ReplaceTarget(uint16_t target_id_to_replace, Target new_target);
 
   void Clear() {
-    _targets.clear();
+    targets_.clear();
   }
 
   const std::vector<Target>& GetTargets() {
-    return _targets;
+    return targets_;
   }
 
   std::optional<uint16_t> GetNearestHitTarget(const Camera& camera, const glm::vec3& look_at);
 
  private:
-  uint16_t _target_id_counter = 0;
-  std::vector<Target> _targets;
+  uint16_t target_id_counter_ = 0;
+  std::vector<Target> targets_;
 };
 
 }  // namespace aim

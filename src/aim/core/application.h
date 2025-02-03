@@ -25,7 +25,7 @@ class Application {
   void FinishRender();
 
   SDL_Window* GetSdlWindow() {
-    return _sdl_window;
+    return sdl_window_;
   }
 
   int GetMouseDpi() {
@@ -33,19 +33,19 @@ class Application {
   }
 
   ScreenInfo GetScreenInfo() {
-    return ScreenInfo(_window_width, _window_height);
+    return ScreenInfo(window_width_, window_height_);
   }
 
   std::mt19937* GetRandomGenerator() {
-    return &_random_generator;
+    return &random_generator_;
   }
 
   SoundManager* GetSoundManager() {
-    return _sound_manager.get();
+    return sound_manager_.get();
   }
 
   StatsDb* GetStatsDb() {
-    return _stats_db.get();
+    return stats_db_.get();
   }
 
   Application(const Application&) = delete;
@@ -58,16 +58,16 @@ class Application {
 
   int Initialize();
 
-  SDL_GLContext _gl_context;
-  SDL_Window* _sdl_window = nullptr;
+  SDL_GLContext gl_context_;
+  SDL_Window* sdl_window_ = nullptr;
 
-  int _window_width = -1;
-  int _window_height = -1;
+  int window_width_ = -1;
+  int window_height_ = -1;
 
-  std::mt19937 _random_generator;
+  std::mt19937 random_generator_;
 
-  std::unique_ptr<SoundManager> _sound_manager;
-  std::unique_ptr<StatsDb> _stats_db;
+  std::unique_ptr<SoundManager> sound_manager_;
+  std::unique_ptr<StatsDb> stats_db_;
 };
 
 }  // namespace aim

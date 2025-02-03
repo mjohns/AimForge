@@ -9,23 +9,23 @@ namespace aim {
 
 Target TargetManager::AddTarget(Target t) {
   if (t.id == 0) {
-    auto new_id = ++_target_id_counter;
+    auto new_id = ++target_id_counter_;
     t.id = new_id;
   }
 
   // Try to overwrite a hidden target.
-  for (int i = 0; i < _targets.size(); ++i) {
-    if (_targets[i].hidden) {
-      _targets[i] = t;
+  for (int i = 0; i < targets_.size(); ++i) {
+    if (targets_[i].hidden) {
+      targets_[i] = t;
       return t;
     }
   }
-  _targets.push_back(t);
+  targets_.push_back(t);
   return t;
 }
 
 void TargetManager::RemoveTarget(uint16_t target_id) {
-  for (Target& t : _targets) {
+  for (Target& t : targets_) {
     if (t.id == target_id) {
       t.hidden = true;
     }
@@ -34,12 +34,12 @@ void TargetManager::RemoveTarget(uint16_t target_id) {
 
 Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_target) {
   if (new_target.id == 0) {
-    auto new_id = ++_target_id_counter;
+    auto new_id = ++target_id_counter_;
     new_target.id = new_id;
   }
-  for (int i = 0; i < _targets.size(); ++i) {
-    if (_targets[i].id == target_id_to_replace) {
-      _targets[i] = new_target;
+  for (int i = 0; i < targets_.size(); ++i) {
+    if (targets_[i].id == target_id_to_replace) {
+      targets_[i] = new_target;
     }
   }
   // TODO: error if target did not exist?
@@ -50,7 +50,7 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
   std::optional<uint16_t> closest_hit_target_id;
   float closest_hit_distance = 0.0f;
 
-  for (auto& target : _targets) {
+  for (auto& target : targets_) {
     if (target.hidden) {
       continue;
     }

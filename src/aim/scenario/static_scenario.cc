@@ -276,11 +276,11 @@ Target GetNewTarget(const RoomParams& room_params,
 }  // namespace
 
 StaticScenario::StaticScenario(StaticScenarioParams params)
-    : _camera(GetInitialCamera(params)), _params(params) {}
+    : camera_(GetInitialCamera(params)), params_(params) {}
 
 void StaticScenario::Run(Application* app) {
   while (true) {
-    _target_manager.Clear();
+    target_manager_.Clear();
     bool restart = this->RunInternal(app);
     if (!restart) {
       return;
@@ -291,21 +291,21 @@ void StaticScenario::Run(Application* app) {
 bool StaticScenario::RunInternal(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
-  float radians_per_dot = CmPer360ToRadiansPerDot(_params.cm_per_360, app->GetMouseDpi());
+  float radians_per_dot = CmPer360ToRadiansPerDot(params_.cm_per_360, app->GetMouseDpi());
   auto crosshair = GetDefaultCrosshair();
 
   RoomParams room_params;
-  room_params.wall_height = _params.room_height;
-  room_params.wall_width = _params.room_width;
+  room_params.wall_height = params_.room_height;
+  room_params.wall_width = params_.room_width;
 
   StaticReplayT replay;
   uint16_t replay_frames_per_second = 100;
   replay.frames_per_second = replay_frames_per_second;
-  replay.camera_position = ToStoredVec3Ptr(_camera.GetPosition());
+  replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
 
-  for (int i = 0; i < _params.num_targets; ++i) {
+  for (int i = 0; i < params_.num_targets; ++i) {
     Target target =
-        _target_manager.AddTarget(GetNewTarget(room_params, _params, &_target_manager, app));
+        target_manager_.AddTarget(GetNewTarget(room_params, params_, &target_manager_, app));
 
     // Add replay event
     auto add_target = std::make_unique<AddTargetEventT>();
@@ -334,8 +334,8 @@ bool StaticScenario::RunInternal(Application* app) {
 
   // Set up metronome
   float target_number_of_hits_per_60 = 130;
-  float seconds_per_target = _params.duration_seconds /
-                             (target_number_of_hits_per_60 * (_params.duration_seconds / 60.0f));
+  float seconds_per_target = params_.duration_seconds /
+                             (target_number_of_hits_per_60 * (params_.duration_seconds / 60.0f));
   TimedInvokerParams metronome_params;
   metronome_params.interval_micros = seconds_per_target * 1000000;
   TimedInvoker metronome(metronome_params, [&] { app->GetSoundManager()->PlayMetronomeSound(); });
@@ -348,10 +348,10 @@ bool StaticScenario::RunInternal(Application* app) {
 
     if (timer.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
-      replay.pitch_yaw_pairs.push_back(PitchYaw(_camera.GetPitch(), _camera.GetYaw()));
+      replay.pitch_yaw_pairs.push_back(PitchYaw(camera_.GetPitch(), camera_.GetYaw()));
     }
 
-    if (timer.GetElapsedSeconds() >= _params.duration_seconds) {
+    if (timer.GetElapsedSeconds() >= params_.duration_seconds) {
       stop_scenario = true;
       continue;
     }
@@ -364,7 +364,7 @@ bool StaticScenario::RunInternal(Application* app) {
         return false;
       }
       if (event.type == SDL_EVENT_MOUSE_MOTION) {
-        _camera.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
+        camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
       }
       if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         has_click = true;
@@ -384,11 +384,11 @@ bool StaticScenario::RunInternal(Application* app) {
 
     metronome.MaybeInvoke(timer.GetElapsedMicros());
     bool force_render = false;
-    look_at = _camera.GetLookAt();
+    look_at = camera_.GetLookAt();
 
     if (has_click) {
       stats.shots_taken++;
-      auto maybe_hit_target_id = _target_manager.GetNearestHitTarget(_camera, look_at.front);
+      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at.front);
       app->GetSoundManager()->PlayShootSound();
       if (maybe_hit_target_id.has_value()) {
         stats.targets_hit++;
@@ -396,8 +396,8 @@ bool StaticScenario::RunInternal(Application* app) {
         force_render = true;
 
         auto hit_target_id = *maybe_hit_target_id;
-        Target new_target = _target_manager.ReplaceTarget(
-            hit_target_id, GetNewTarget(room_params, _params, &_target_manager, app));
+        Target new_target = target_manager_.ReplaceTarget(
+            hit_target_id, GetNewTarget(room_params, params_, &target_manager_, app));
 
         // Add replay events
         auto add_target = std::make_unique<AddTargetEventT>();
@@ -436,11 +436,11 @@ bool StaticScenario::RunInternal(Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    DrawFrame(app, &_target_manager, &sphere_renderer, &room, look_at.transform);
+    DrawFrame(app, &target_manager_, &sphere_renderer, &room, look_at.transform);
   }
 
   float hit_percent = stats.targets_hit / (float)stats.shots_taken;
-  float duration_modifier = 60.0f / _params.duration_seconds;
+  float duration_modifier = 60.0f / params_.duration_seconds;
   float score = stats.targets_hit * 10 * sqrt(hit_percent) * duration_modifier;
 
   std::string score_string = std::format(
