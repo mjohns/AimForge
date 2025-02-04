@@ -50,6 +50,13 @@ CrosshairT GetDefaultCrosshair() {
   return crosshair;
 }
 
+std::string MakeScoreString(int targets_hit, int shots_taken, float score, float duration_seconds) {
+  float hit_percent = targets_hit / (float)shots_taken;
+  std::string score_string =
+      std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
+  return score_string;
+}
+
 struct ReplayFrame {
   std::vector<AddTargetEventT*> add_target_events;
   std::vector<HitTargetEventT*> hit_target_events;
@@ -498,9 +505,8 @@ bool StaticScenario::RunInternal(Application* app) {
   float hit_percent = targets_hit / (float)shots_taken;
   float duration_modifier = 60.0f / params_.duration_seconds;
   float score = targets_hit * 10 * sqrt(hit_percent) * duration_modifier;
-
   std::string score_string =
-      std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
+      MakeScoreString(targets_hit, shots_taken, score, params_.duration_seconds);
 
   StatsRow stats_row;
   stats_row.cm_per_360 = params_.cm_per_360;
@@ -517,7 +523,10 @@ bool StaticScenario::RunInternal(Application* app) {
       std::max_element(all_stats.begin(), all_stats.end(), [&](auto& lhs, auto& rhs) {
         return lhs.score < rhs.score;
       });
-  double high_score = high_score_stats->score;
+  std::string high_score_string = MakeScoreString(high_score_stats->num_kills,
+                                                  high_score_stats->num_shots,
+                                                  high_score_stats->score,
+                                                  params_.duration_seconds);
 
   // Show results page
   SDL_GL_SetSwapInterval(1);  // Enable vsync
@@ -555,7 +564,7 @@ bool StaticScenario::RunInternal(Application* app) {
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::Text("high_score: %.2f", high_score);
+    ImGui::Text("high_score: %s", high_score_string.c_str());
     ImGui::Text("total_runs: %d", all_stats.size());
     ImGui::Text("score: %s", score_string.c_str());
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
