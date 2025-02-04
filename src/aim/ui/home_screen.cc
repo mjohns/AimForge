@@ -86,6 +86,13 @@ void HomeScreen::Run(Application* app) {
     }
 
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
+    if (ImGui::Button("Start Nicky EZ PZ", sz)) {
+      StaticScenarioParams params = base_1w_params;
+      params.scenario_id = "nick_ez_pz";
+      params.num_targets = 7;
+      params.target_radius = 3;
+      scenario_to_start = params;
+    }
     if (ImGui::Button("Start 1w3ts", sz)) {
       StaticScenarioParams params = base_1w_params;
       params.scenario_id = "1w3ts_intermediate_s5";

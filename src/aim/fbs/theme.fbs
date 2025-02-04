@@ -1,0 +1,18 @@
+include "common.fbs";
+
+namespace aim;
+
+table Theme {
+  name: string;
+  simple_room: SimpleRoomTheme;
+  target_color: StoredRgb;
+}
+
+table SimpleRoomTheme {
+  wall_color: StoredRgb;
+  floor_color: StoredRgb;
+  side_color: StoredRgb;
+  ceiling_color: StoredRgb;
+}
+
+root_type Theme;
