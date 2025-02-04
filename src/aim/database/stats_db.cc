@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS Stats (
     StatsId INTEGER PRIMARY KEY AUTOINCREMENT,
     Timestamp TEXT,
     Score REAL,
+    CmPer360 REAL,
     NumHits INTEGER,
     NumKills INTEGER,
     NumShots INTEGER
@@ -30,8 +31,9 @@ INSERT INTO Stats (
     NumHits,
     NumShots,
     NumKills,
+    CmPer360,
     Score)
-  VALUES (NULL, ?, ?, ?, ?, ?, ?);
+  VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);
 )AIMS";
 
 const char* kGetRecentStatsSql = R"AIMS(
@@ -41,6 +43,7 @@ SELECT
   NumHits,
   NumShots,
   NumKills,
+  CmPer360,
   Score
 FROM Stats ORDER BY ScenarioId DESC LIMIT 2000;
 )AIMS";
@@ -98,7 +101,8 @@ std::vector<StatsRow> StatsDb::GetStats(const std::string& scenario_id) {
     stats.num_hits = sqlite3_column_int64(stmt, 2);
     stats.num_shots = sqlite3_column_int64(stmt, 3);
     stats.num_kills = sqlite3_column_int64(stmt, 4);
-    stats.score = sqlite3_column_double(stmt, 5);
+    stats.cm_per_360 = sqlite3_column_double(stmt, 5);
+    stats.score = sqlite3_column_double(stmt, 6);
 
     all_stats.push_back(stats);
   }
@@ -124,7 +128,8 @@ void StatsDb::AddStats(const std::string& scenario_id, StatsRow* row) {
   sqlite3_bind_int(stmt, 3, row->num_hits);
   sqlite3_bind_int(stmt, 4, row->num_shots);
   sqlite3_bind_int(stmt, 5, row->num_kills);
-  sqlite3_bind_double(stmt, 6, row->score);
+  sqlite3_bind_double(stmt, 6, row->cm_per_360);
+  sqlite3_bind_double(stmt, 7, row->score);
 
   rc = sqlite3_step(stmt);
   sqlite3_finalize(stmt);
