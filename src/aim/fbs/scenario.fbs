@@ -1,0 +1,15 @@
+file_identifier "SCNR";
+
+namespace aim;
+
+table Scenario {
+  display_name: string;
+  // Representation used in file names and stat files.
+  id: string;
+}
+
+table ScenarioFile {
+  scenario: Scenario;
+}
+ 
+root_type ScenarioFile;

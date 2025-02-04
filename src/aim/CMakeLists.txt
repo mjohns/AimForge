@@ -11,6 +11,7 @@ target_link_libraries(${NAME}
   PUBLIC SDL3::SDL3
          SDL3_mixer::SDL3_mixer
          imgui
+         implot
          glad
          sqlite3
          ${OPENGL_LIBRARIES}

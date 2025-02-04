@@ -12,3 +12,17 @@ table DotCrosshair {
   dot_color: StoredRgb;
   outline_color: StoredRgb;
 }
+
+table Settings {
+  name: string;
+  crosshair: Crosshair;
+  cm_per_360: float;
+  dpi: float;
+  theme_name: string;
+}
+
+table FullSettings {
+  settings: [Settings];
+}
+
+root_type FullSettings;

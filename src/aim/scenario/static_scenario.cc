@@ -4,6 +4,7 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <flatbuffers/flatbuffers.h>
 #include <imgui.h>
+#include <implot.h>
 
 #include <format>
 #include <fstream>
@@ -583,6 +584,17 @@ bool StaticScenario::RunInternal(Application* app) {
       outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
       outfile.close();
     }
+    if (ImPlot::BeginPlot("Scores")) {
+      auto score_getter = [](int plot_index, void* data) {
+        StatsRow* stats = (StatsRow*)data;
+        ImPlotPoint p;
+        p.x = plot_index + 1;
+        p.y = stats[plot_index].score;
+        return p;
+      };
+      ImPlot::PlotLineG("score", score_getter, all_stats.data(), all_stats.size());
+      ImPlot::EndPlot();
+    }
     ImGui::End();
 
     ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
@@ -591,9 +603,6 @@ bool StaticScenario::RunInternal(Application* app) {
     }
   }
   return false;
-
-  /*
-   */
 }
 
 }  // namespace aim

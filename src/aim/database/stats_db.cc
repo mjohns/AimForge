@@ -47,7 +47,7 @@ SELECT
   Score
 FROM Stats
 WHERE ScenarioId = ?
-ORDER BY StatsId DESC LIMIT 2000;
+ORDER BY StatsId ASC LIMIT 5000;
 )AIMS";
 
 bool ExecuteQuery(sqlite3* db, const char* sql) {

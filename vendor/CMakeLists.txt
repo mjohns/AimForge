@@ -55,5 +55,6 @@ set(SPDLOG_FMT_EXTERNAL ON)
 add_subdirectory(imgui-setup)
 add_subdirectory(glad)
 add_subdirectory(sqlite3)
+add_subdirectory(implot)
 
 FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm FlatBuffers)
