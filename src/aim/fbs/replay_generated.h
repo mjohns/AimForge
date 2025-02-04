@@ -360,6 +360,7 @@ struct StaticReplayT : public ::flatbuffers::NativeTable {
   float wall_width = 0.0f;
   float wall_height = 0.0f;
   uint16_t frames_per_second = 0;
+  bool is_poke_ball = false;
   std::unique_ptr<aim::StoredVec3> camera_position{};
   std::vector<std::unique_ptr<aim::AddTargetEventT>> add_target_events{};
   std::vector<std::unique_ptr<aim::HitTargetEventT>> hit_target_events{};
@@ -378,11 +379,12 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     VT_WALL_WIDTH = 4,
     VT_WALL_HEIGHT = 6,
     VT_FRAMES_PER_SECOND = 8,
-    VT_CAMERA_POSITION = 10,
-    VT_ADD_TARGET_EVENTS = 12,
-    VT_HIT_TARGET_EVENTS = 14,
-    VT_MISS_TARGET_EVENTS = 16,
-    VT_PITCH_YAW_PAIRS = 18
+    VT_IS_POKE_BALL = 10,
+    VT_CAMERA_POSITION = 12,
+    VT_ADD_TARGET_EVENTS = 14,
+    VT_HIT_TARGET_EVENTS = 16,
+    VT_MISS_TARGET_EVENTS = 18,
+    VT_PITCH_YAW_PAIRS = 20
   };
   float wall_width() const {
     return GetField<float>(VT_WALL_WIDTH, 0.0f);
@@ -392,6 +394,9 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   uint16_t frames_per_second() const {
     return GetField<uint16_t>(VT_FRAMES_PER_SECOND, 0);
+  }
+  bool is_poke_ball() const {
+    return GetField<uint8_t>(VT_IS_POKE_BALL, 0) != 0;
   }
   const aim::StoredVec3 *camera_position() const {
     return GetStruct<const aim::StoredVec3 *>(VT_CAMERA_POSITION);
@@ -413,6 +418,7 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<float>(verifier, VT_WALL_WIDTH, 4) &&
            VerifyField<float>(verifier, VT_WALL_HEIGHT, 4) &&
            VerifyField<uint16_t>(verifier, VT_FRAMES_PER_SECOND, 2) &&
+           VerifyField<uint8_t>(verifier, VT_IS_POKE_BALL, 1) &&
            VerifyField<aim::StoredVec3>(verifier, VT_CAMERA_POSITION, 4) &&
            VerifyOffset(verifier, VT_ADD_TARGET_EVENTS) &&
            verifier.VerifyVector(add_target_events()) &&
@@ -445,6 +451,9 @@ struct StaticReplayBuilder {
   void add_frames_per_second(uint16_t frames_per_second) {
     fbb_.AddElement<uint16_t>(StaticReplay::VT_FRAMES_PER_SECOND, frames_per_second, 0);
   }
+  void add_is_poke_ball(bool is_poke_ball) {
+    fbb_.AddElement<uint8_t>(StaticReplay::VT_IS_POKE_BALL, static_cast<uint8_t>(is_poke_ball), 0);
+  }
   void add_camera_position(const aim::StoredVec3 *camera_position) {
     fbb_.AddStruct(StaticReplay::VT_CAMERA_POSITION, camera_position);
   }
@@ -476,6 +485,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(
     float wall_width = 0.0f,
     float wall_height = 0.0f,
     uint16_t frames_per_second = 0,
+    bool is_poke_ball = false,
     const aim::StoredVec3 *camera_position = nullptr,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::AddTargetEvent>>> add_target_events = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::HitTargetEvent>>> hit_target_events = 0,
@@ -490,6 +500,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(
   builder_.add_wall_height(wall_height);
   builder_.add_wall_width(wall_width);
   builder_.add_frames_per_second(frames_per_second);
+  builder_.add_is_poke_ball(is_poke_ball);
   return builder_.Finish();
 }
 
@@ -498,6 +509,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplayDirect(
     float wall_width = 0.0f,
     float wall_height = 0.0f,
     uint16_t frames_per_second = 0,
+    bool is_poke_ball = false,
     const aim::StoredVec3 *camera_position = nullptr,
     const std::vector<::flatbuffers::Offset<aim::AddTargetEvent>> *add_target_events = nullptr,
     const std::vector<::flatbuffers::Offset<aim::HitTargetEvent>> *hit_target_events = nullptr,
@@ -512,6 +524,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplayDirect(
       wall_width,
       wall_height,
       frames_per_second,
+      is_poke_ball,
       camera_position,
       add_target_events__,
       hit_target_events__,
@@ -701,6 +714,7 @@ inline StaticReplayT::StaticReplayT(const StaticReplayT &o)
       : wall_width(o.wall_width),
         wall_height(o.wall_height),
         frames_per_second(o.frames_per_second),
+        is_poke_ball(o.is_poke_ball),
         camera_position((o.camera_position) ? new aim::StoredVec3(*o.camera_position) : nullptr),
         pitch_yaw_pairs(o.pitch_yaw_pairs) {
   add_target_events.reserve(o.add_target_events.size());
@@ -715,6 +729,7 @@ inline StaticReplayT &StaticReplayT::operator=(StaticReplayT o) FLATBUFFERS_NOEX
   std::swap(wall_width, o.wall_width);
   std::swap(wall_height, o.wall_height);
   std::swap(frames_per_second, o.frames_per_second);
+  std::swap(is_poke_ball, o.is_poke_ball);
   std::swap(camera_position, o.camera_position);
   std::swap(add_target_events, o.add_target_events);
   std::swap(hit_target_events, o.hit_target_events);
@@ -735,6 +750,7 @@ inline void StaticReplay::UnPackTo(StaticReplayT *_o, const ::flatbuffers::resol
   { auto _e = wall_width(); _o->wall_width = _e; }
   { auto _e = wall_height(); _o->wall_height = _e; }
   { auto _e = frames_per_second(); _o->frames_per_second = _e; }
+  { auto _e = is_poke_ball(); _o->is_poke_ball = _e; }
   { auto _e = camera_position(); if (_e) _o->camera_position = std::unique_ptr<aim::StoredVec3>(new aim::StoredVec3(*_e)); }
   { auto _e = add_target_events(); if (_e) { _o->add_target_events.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->add_target_events[_i]) { _e->Get(_i)->UnPackTo(_o->add_target_events[_i].get(), _resolver); } else { _o->add_target_events[_i] = std::unique_ptr<aim::AddTargetEventT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->add_target_events.resize(0); } }
   { auto _e = hit_target_events(); if (_e) { _o->hit_target_events.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->hit_target_events[_i]) { _e->Get(_i)->UnPackTo(_o->hit_target_events[_i].get(), _resolver); } else { _o->hit_target_events[_i] = std::unique_ptr<aim::HitTargetEventT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->hit_target_events.resize(0); } }
@@ -753,6 +769,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::Fla
   auto _wall_width = _o->wall_width;
   auto _wall_height = _o->wall_height;
   auto _frames_per_second = _o->frames_per_second;
+  auto _is_poke_ball = _o->is_poke_ball;
   auto _camera_position = _o->camera_position ? _o->camera_position.get() : nullptr;
   auto _add_target_events = _o->add_target_events.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::AddTargetEvent>> (_o->add_target_events.size(), [](size_t i, _VectorArgs *__va) { return CreateAddTargetEvent(*__va->__fbb, __va->__o->add_target_events[i].get(), __va->__rehasher); }, &_va ) : 0;
   auto _hit_target_events = _o->hit_target_events.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::HitTargetEvent>> (_o->hit_target_events.size(), [](size_t i, _VectorArgs *__va) { return CreateHitTargetEvent(*__va->__fbb, __va->__o->hit_target_events[i].get(), __va->__rehasher); }, &_va ) : 0;
@@ -763,6 +780,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::Fla
       _wall_width,
       _wall_height,
       _frames_per_second,
+      _is_poke_ball,
       _camera_position,
       _add_target_events,
       _hit_target_events,

@@ -45,7 +45,9 @@ SELECT
   NumKills,
   CmPer360,
   Score
-FROM Stats ORDER BY ScenarioId DESC LIMIT 2000;
+FROM Stats
+WHERE ScenarioId = ?
+ORDER BY StatsId DESC LIMIT 2000;
 )AIMS";
 
 bool ExecuteQuery(sqlite3* db, const char* sql) {
@@ -92,6 +94,7 @@ std::vector<StatsRow> StatsDb::GetStats(const std::string& scenario_id) {
     fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db_));
     return {};
   }
+  BindString(stmt, 1, scenario_id);
 
   std::vector<StatsRow> all_stats;
   while (sqlite3_step(stmt) == SQLITE_ROW) {

@@ -92,6 +92,32 @@ void HomeScreen::Run(Application* app) {
 
       scenario_to_start = params;
     }
+    if (ImGui::Button("Start 1w3ts poke", sz)) {
+      StaticScenarioParams params;
+      params.scenario_id = "1w3ts_intermediate_s5_poke";
+      params.num_targets = 3;
+      params.room_height = 150;
+      params.room_width = 170;
+      params.target_radius = 1.5;
+      params.duration_seconds = duration_seconds;
+      params.metronome_bpm = 130;
+      params.cm_per_360 = cm_per_360;
+      params.is_poke_ball = true;
+
+      params.target_placement.min_distance = 20;
+      TargetRegion circle_region;
+      circle_region.percent_chance = 0.3;
+      circle_region.x_circle_percent = 0.6;
+      circle_region.y_circle_percent = 0.35;
+      params.target_placement.regions.push_back(circle_region);
+
+      TargetRegion square_region;
+      square_region.x_percent = 0.7;
+      square_region.y_percent = 0.6;
+      params.target_placement.regions.push_back(square_region);
+
+      scenario_to_start = params;
+    }
     if (ImGui::Button("Start raw control", sz)) {
       StaticScenarioParams params;
       params.scenario_id = "raw_control";
@@ -100,7 +126,7 @@ void HomeScreen::Run(Application* app) {
       params.room_width = 170;
       params.target_radius = 0.95;
       params.duration_seconds = duration_seconds;
-      params.metronome_bpm = 180;
+      // params.metronome_bpm = 180;
       params.cm_per_360 = cm_per_360;
 
       params.target_placement.min_distance = 3;
