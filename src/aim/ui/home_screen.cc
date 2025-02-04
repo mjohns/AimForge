@@ -75,6 +75,7 @@ void HomeScreen::Run(Application* app) {
       params.room_width = 170;
       params.target_radius = 1.5;
       params.duration_seconds = duration_seconds;
+      params.metronome_bpm = 130;
       params.cm_per_360 = cm_per_360;
 
       params.target_placement.min_distance = 20;
@@ -99,6 +100,7 @@ void HomeScreen::Run(Application* app) {
       params.room_width = 170;
       params.target_radius = 0.95;
       params.duration_seconds = duration_seconds;
+      params.metronome_bpm = 180;
       params.cm_per_360 = cm_per_360;
 
       params.target_placement.min_distance = 3;

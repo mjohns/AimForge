@@ -19,6 +19,7 @@
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
+#include "aim/core/metronome.h"
 #include "aim/core/camera.h"
 #include "aim/fbs/common_generated.h"
 #include "aim/fbs/replay_generated.h"
@@ -331,13 +332,7 @@ bool StaticScenario::RunInternal(Application* app) {
   int targets_hit = 0;
   int shots_taken = 0;
 
-  // Set up metronome
-  float target_number_of_hits_per_60 = 131;
-  float seconds_per_target = params_.duration_seconds /
-                             (target_number_of_hits_per_60 * (params_.duration_seconds / 60.0f));
-  TimedInvokerParams metronome_params;
-  metronome_params.interval_micros = seconds_per_target * 1000000;
-  TimedInvoker metronome(metronome_params, [&] { app->GetSoundManager()->PlayMetronomeSound(); });
+  Metronome metronome(params_.metronome_bpm, app);
 
   // Main loop
   ScenarioTimer timer(replay_frames_per_second);
@@ -381,7 +376,7 @@ bool StaticScenario::RunInternal(Application* app) {
 
     // Update state
 
-    metronome.MaybeInvoke(timer.GetElapsedMicros());
+    metronome.DoTick(timer.GetElapsedMicros());
     bool force_render = false;
     look_at = camera_.GetLookAt();
 
