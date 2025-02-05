@@ -6,6 +6,7 @@
 #include <imgui.h>
 #include <implot.h>
 
+#include <algorithm>
 #include <format>
 #include <fstream>
 #include <glm/mat4x4.hpp>
@@ -56,6 +57,36 @@ std::string MakeScoreString(int targets_hit, int shots_taken, float score, float
   std::string score_string =
       std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
   return score_string;
+}
+
+std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
+  int found_max_index = -1;
+  float max_score = 0;
+  for (int i = 0; i < std::min(max_index, all_stats.size()); ++i) {
+    auto& stats = all_stats[i];
+    if (stats.score >= max_score) {
+      found_max_index = i;
+      max_score = stats.score;
+    }
+  }
+  if (found_max_index > 0) {
+    return all_stats[found_max_index];
+  }
+  return {};
+}
+
+std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats) {
+  float max_score = 0;
+  std::vector<float> result;
+  result.reserve(all_stats.size());
+  for (int i = 0; i < all_stats.size(); ++i) {
+    auto& stats = all_stats[i];
+    if (stats.score >= max_score) {
+      max_score = stats.score;
+    }
+    result.push_back(max_score);
+  }
+  return result;
 }
 
 struct ReplayFrame {
@@ -520,14 +551,20 @@ bool StaticScenario::RunInternal(Application* app) {
   }
 
   auto all_stats = app->GetStatsDb()->GetStats(params_.scenario_id);
-  auto high_score_stats =
-      std::max_element(all_stats.begin(), all_stats.end(), [&](auto& lhs, auto& rhs) {
-        return lhs.score < rhs.score;
-      });
-  std::string high_score_string = MakeScoreString(high_score_stats->num_kills,
-                                                  high_score_stats->num_shots,
-                                                  high_score_stats->score,
-                                                  params_.duration_seconds);
+  auto maybe_high_score_stats = GetHighScore(all_stats, all_stats.size());
+  auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
+
+  std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
+
+  std::string previous_high_score_string;
+  float previous_high_score = 0;
+  if (maybe_previous_high_score_stats) {
+    previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
+                                                 maybe_previous_high_score_stats->num_shots,
+                                                 maybe_previous_high_score_stats->score,
+                                                 params_.duration_seconds);
+    previous_high_score = maybe_previous_high_score_stats->score;
+  }
 
   // Show results page
   SDL_GL_SetSwapInterval(1);  // Enable vsync
@@ -565,7 +602,7 @@ bool StaticScenario::RunInternal(Application* app) {
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::Text("high_score: %s", high_score_string.c_str());
+    ImGui::Text("high_score: %s", previous_high_score_string.c_str());
     ImGui::Text("total_runs: %d", all_stats.size());
     ImGui::Text("score: %s", score_string.c_str());
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
@@ -588,11 +625,14 @@ bool StaticScenario::RunInternal(Application* app) {
       auto score_getter = [](int plot_index, void* data) {
         StatsRow* stats = (StatsRow*)data;
         ImPlotPoint p;
-        p.x = plot_index + 1;
+        p.x = plot_index;
         p.y = stats[plot_index].score;
         return p;
       };
       ImPlot::PlotLineG("score", score_getter, all_stats.data(), all_stats.size());
+      if (maybe_previous_high_score_stats) {
+        ImPlot::PlotLine("high score", high_scores_over_time.data(), high_scores_over_time.size());
+      }
       ImPlot::EndPlot();
     }
     ImGui::End();
