@@ -7,9 +7,9 @@
 #include <memory>
 #include <random>
 
+#include "aim/audio/sound_manager.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
-#include "aim/audio/sound_manager.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
 
@@ -22,7 +22,7 @@ class Application {
   static std::unique_ptr<Application> Create();
 
   ImDrawList* StartFullscreenImguiFrame();
-  bool StartRender(ImVec4 clear_color);
+  bool StartRender(ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
   void FinishRender();
 
   SDL_Window* GetSdlWindow() {

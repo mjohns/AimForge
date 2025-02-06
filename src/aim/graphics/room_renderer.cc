@@ -1,4 +1,4 @@
-#include "room.h"
+#include "room_renderer.h"
 
 #include <glad/glad.h>
 
@@ -37,7 +37,7 @@ constexpr float kHalfMaxDistance = 1000.0f;
 
 }  // namespace
 
-Room::Room(RoomParams params) : params_(params), shader_(Shader(vertex_shader, fragment_shader)) {
+RoomRenderer::RoomRenderer() : shader_(Shader(vertex_shader, fragment_shader)) {
   // clang-format off
   float wall_vertices[] = {
       0.5f, 0.0f, -0.5f,
@@ -63,12 +63,12 @@ Room::Room(RoomParams params) : params_(params), shader_(Shader(vertex_shader, f
   glEnableVertexAttribArray(0);
 }
 
-void Room::SetProjection(const glm::mat4& projection) {
+void RoomRenderer::SetProjection(const glm::mat4& projection) {
   shader_.Use();
   shader_.SetMat4("projection", projection);
 }
 
-void Room::Draw(const glm::mat4& view) {
+void RoomRenderer::Draw(float height, float width, const glm::mat4& view) {
   shader_.Use();
   shader_.SetMat4("view", view);
 
@@ -82,7 +82,7 @@ void Room::Draw(const glm::mat4& view) {
     shader_.SetVec3("quad_color", wall_color);
 
     glm::mat4 model(1.f);
-    model = glm::scale(model, glm::vec3(params_.wall_width, 1.0f, params_.wall_height));
+    model = glm::scale(model, glm::vec3(width, 1.0f, height));
     shader_.SetMat4("model", model);
     glBindVertexArray(vao_);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -93,9 +93,9 @@ void Room::Draw(const glm::mat4& view) {
     shader_.SetVec3("quad_color", floor_color);
 
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, -0.5 * params_.wall_height));
+    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, -0.5 * height));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
-    model = glm::scale(model, glm::vec3(params_.wall_width, 1.0f, kMaxDistance));
+    model = glm::scale(model, glm::vec3(width, 1.0f, kMaxDistance));
     shader_.SetMat4("model", model);
 
     glBindVertexArray(vao_);
@@ -107,9 +107,9 @@ void Room::Draw(const glm::mat4& view) {
     shader_.SetVec3("quad_color", side_color);
 
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(-0.5 * params_.wall_width, -0.5 * kMaxDistance, 0));
+    model = glm::translate(model, glm::vec3(-0.5 * width, -0.5 * kMaxDistance, 0));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
-    model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, params_.wall_height));
+    model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
     shader_.SetMat4("model", model);
 
     glBindVertexArray(vao_);
@@ -121,9 +121,9 @@ void Room::Draw(const glm::mat4& view) {
     shader_.SetVec3("quad_color", side_color);
 
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(0.5 * params_.wall_width, -0.5 * kMaxDistance, 0));
+    model = glm::translate(model, glm::vec3(0.5 * width, -0.5 * kMaxDistance, 0));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0, 0, 1));
-    model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, params_.wall_height));
+    model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
     shader_.SetMat4("model", model);
 
     glBindVertexArray(vao_);
@@ -135,9 +135,9 @@ void Room::Draw(const glm::mat4& view) {
     shader_.SetVec3("quad_color", top_color);
 
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0.5 * params_.wall_height));
+    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0.5 * height));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
-    model = glm::scale(model, glm::vec3(params_.wall_width, 1.0f, kMaxDistance));
+    model = glm::scale(model, glm::vec3(width, 1.0f, kMaxDistance));
     shader_.SetMat4("model", model);
 
     glBindVertexArray(vao_);
