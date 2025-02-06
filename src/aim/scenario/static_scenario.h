@@ -2,7 +2,7 @@
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
-#include "aim/scenario/target.h"
+#include "aim/core/target.h"
 
 namespace aim {
 

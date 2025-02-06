@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "sphere_renderer.h"
 
 #include <glad/glad.h>
 

@@ -11,6 +11,7 @@
 #include "aim/common/util.h"
 #include "aim/audio/sound_manager.h"
 #include "aim/database/stats_db.h"
+#include "aim/graphics/renderer.h"
 
 namespace aim {
 
@@ -48,6 +49,10 @@ class Application {
     return stats_db_.get();
   }
 
+  Renderer* GetRenderer() {
+    return renderer_.get();
+  }
+
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -68,6 +73,7 @@ class Application {
 
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsDb> stats_db_;
+  std::unique_ptr<Renderer> renderer_;
 };
 
 }  // namespace aim
