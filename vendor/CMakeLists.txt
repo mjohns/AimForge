@@ -44,7 +44,6 @@ FetchContent_Declare(
   GIT_TAG v25.1.24
 )
 
-
 # Settings
 
 # For SDL2 to be able to override options

@@ -27,7 +27,6 @@
 #include "aim/fbs/replay_generated.h"
 #include "aim/fbs/settings_generated.h"
 #include "aim/graphics/crosshair.h"
-#include "aim/graphics/room.h"
 #include "aim/scenario/scenario_timer.h"
 
 namespace aim {
@@ -126,18 +125,6 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
   return replay_frames;
 }
 
-void DrawFrame(Application* app,
-               TargetManager* target_manager,
-               Room* room,
-               const glm::mat4& view_transform) {
-  ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
-  if (app->StartRender(clear_color)) {
-    room->Draw(view_transform);
-    app->GetRenderer()->DrawTargets(target_manager->GetTargets(), view_transform);
-    app->FinishRender();
-  }
-}
-
 bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string& score_string) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
@@ -146,12 +133,6 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
   glm::vec3 camera_position = ToVec3(*stored_camera_position);
 
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
-
-  RoomParams room_params;
-  room_params.wall_height = replay.wall_height;
-  room_params.wall_width = replay.wall_width;
-  Room room(room_params);
-  room.SetProjection(projection);
 
   app->GetRenderer()->SetProjection(projection);
 
@@ -230,7 +211,11 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
     ImGui::Text("score: %s", score_string.c_str());
     ImGui::End();
 
-    DrawFrame(app, &target_manager, &room, look_at.transform);
+    if (app->StartRender()) {
+      app->GetRenderer()->DrawSimpleStaticRoom(
+          replay.wall_height, replay.wall_width, target_manager.GetTargets(), look_at.transform);
+      app->FinishRender();
+    }
   }
   return false;
 }
@@ -265,7 +250,7 @@ glm::vec2 GetRandomPositionInCircle(float max_radius_x, float max_radius_y, Appl
 }
 
 // Returns an x/z pair where to place the target on the back wall.
-glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
+glm::vec2 GetNewTargetPosition(const StaticScenarioParams& params,
                                const TargetPlacementParams& placement_params,
                                TargetManager* target_manager,
                                Application* app) {
@@ -276,12 +261,12 @@ glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
     if (region.percent_chance >= region_chance_roll) {
       get_candidate_pos = [&] {
         if (region.x_circle_percent > 0) {
-          return GetRandomPositionInCircle(0.5 * room_params.wall_width * region.x_circle_percent,
-                                           0.5 * room_params.wall_height * region.y_circle_percent,
+          return GetRandomPositionInCircle(0.5 * params.room_width * region.x_circle_percent,
+                                           0.5 * params.room_height * region.y_circle_percent,
                                            app);
         }
-        float max_x = 0.5 * room_params.wall_width * region.x_percent;
-        float max_y = 0.5 * room_params.wall_height * region.y_percent;
+        float max_x = 0.5 * params.room_width * region.x_percent;
+        float max_y = 0.5 * params.room_height * region.y_percent;
         auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
         auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
         return glm::vec2(distribution_x(*app->GetRandomGenerator()),
@@ -303,11 +288,10 @@ glm::vec2 GetNewTargetPosition(const RoomParams& room_params,
   }
 }
 
-Target GetNewTarget(const RoomParams& room_params,
-                    const StaticScenarioParams& params,
+Target GetNewTarget(const StaticScenarioParams& params,
                     TargetManager* target_manager,
                     Application* app) {
-  glm::vec2 pos = GetNewTargetPosition(room_params, params.target_placement, target_manager, app);
+  glm::vec2 pos = GetNewTargetPosition(params, params.target_placement, target_manager, app);
   Target t;
   t.position.x = pos.x;
   t.position.z = pos.y;
@@ -338,10 +322,6 @@ bool StaticScenario::RunInternal(Application* app) {
   float radians_per_dot = CmPer360ToRadiansPerDot(params_.cm_per_360, app->GetMouseDpi());
   auto crosshair = GetDefaultCrosshair();
 
-  RoomParams room_params;
-  room_params.wall_height = params_.room_height;
-  room_params.wall_width = params_.room_width;
-
   StaticReplayT replay;
   replay.is_poke_ball = params_.is_poke_ball;
   uint16_t replay_frames_per_second = 150;
@@ -349,8 +329,7 @@ bool StaticScenario::RunInternal(Application* app) {
   replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
 
   for (int i = 0; i < params_.num_targets; ++i) {
-    Target target =
-        target_manager_.AddTarget(GetNewTarget(room_params, params_, &target_manager_, app));
+    Target target = target_manager_.AddTarget(GetNewTarget(params_, &target_manager_, app));
 
     // Add replay event
     auto add_target = std::make_unique<AddTargetEventT>();
@@ -365,12 +344,6 @@ bool StaticScenario::RunInternal(Application* app) {
 
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), true);
-
-  // Room
-  Room room(room_params);
-  room.SetProjection(projection);
-  replay.wall_width = room.GetWidth();
-  replay.wall_height = room.GetHeight();
 
   app->GetRenderer()->SetProjection(projection);
 
@@ -451,7 +424,7 @@ bool StaticScenario::RunInternal(Application* app) {
 
             auto hit_target_id = *maybe_hit_target_id;
             Target new_target = target_manager_.ReplaceTarget(
-                hit_target_id, GetNewTarget(room_params, params_, &target_manager_, app));
+                hit_target_id, GetNewTarget(params_, &target_manager_, app));
 
             // Add replay events
             auto add_target = std::make_unique<AddTargetEventT>();
@@ -491,7 +464,7 @@ bool StaticScenario::RunInternal(Application* app) {
 
           auto hit_target_id = *maybe_hit_target_id;
           Target new_target = target_manager_.ReplaceTarget(
-              hit_target_id, GetNewTarget(room_params, params_, &target_manager_, app));
+              hit_target_id, GetNewTarget(params_, &target_manager_, app));
 
           // Add replay events
           auto add_target = std::make_unique<AddTargetEventT>();
@@ -515,7 +488,7 @@ bool StaticScenario::RunInternal(Application* app) {
                 target_manager_.GetNearestTargetOnStaticWall(camera_, look_at.front);
             if (target_id_to_remove.has_value()) {
               Target new_target = target_manager_.ReplaceTarget(
-                  *target_id_to_remove, GetNewTarget(room_params, params_, &target_manager_, app));
+                  *target_id_to_remove, GetNewTarget(params_, &target_manager_, app));
 
               auto add_target = std::make_unique<AddTargetEventT>();
               add_target->target_id = new_target.id;
@@ -551,7 +524,11 @@ bool StaticScenario::RunInternal(Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    DrawFrame(app, &target_manager_, &room, look_at.transform);
+    if (app->StartRender()) {
+      app->GetRenderer()->DrawSimpleStaticRoom(
+          params_.room_height, params_.room_width, target_manager_.GetTargets(), look_at.transform);
+      app->FinishRender();
+    }
   }
 
   float hit_percent = targets_hit / (float)shots_taken;
