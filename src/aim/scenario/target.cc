@@ -73,4 +73,29 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
   return closest_hit_target_id;
 }
 
+std::optional<uint16_t> TargetManager::GetNearestTargetOnStaticWall(const Camera& camera,
+                                                                    const glm::vec3& look_at) {
+  if (targets_.size() == 0 || look_at.y == 0) {
+    return {};
+  }
+  // For static wall scenarios all targets will be at the same y value.
+  float y = targets_[0].position.y;
+  float t = (y - camera.GetPosition().y) / look_at.y;
+  if (t <= 0) {
+    return {};
+  }
+
+  glm::vec3 intersection_point = camera.GetPosition() + (look_at * t);
+  float closest_distance = 100000;
+  std::optional<uint16_t> closest_target_id;
+  for (auto& target : targets_) {
+    float distance = glm::length(target.position - intersection_point);
+    if (distance < closest_distance) {
+      closest_target_id = target.id;
+      closest_distance = distance;
+    }
+  }
+  return closest_target_id;
+}
+
 }  // namespace aim

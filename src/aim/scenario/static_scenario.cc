@@ -93,9 +93,11 @@ struct ReplayFrame {
   std::vector<AddTargetEventT*> add_target_events;
   std::vector<HitTargetEventT*> hit_target_events;
   std::vector<MissTargetEventT*> miss_target_events;
+  std::vector<RemoveTargetEventT*> remove_target_events;
   PitchYaw pitch_yaw;
 };
 
+// Collect all info necessary to render one frame into a single struct.
 std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
   std::vector<ReplayFrame> replay_frames;
   for (int frame_number = 0; frame_number < replay.pitch_yaw_pairs.size(); ++frame_number) {
@@ -114,6 +116,11 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
     for (auto& event : replay.miss_target_events) {
       if (event->frame_number == frame_number) {
         frame.miss_target_events.push_back(event.get());
+      }
+    }
+    for (auto& event : replay.remove_target_events) {
+      if (event->frame_number == frame_number) {
+        frame.remove_target_events.push_back(event.get());
       }
     }
     replay_frames.push_back(frame);
@@ -209,6 +216,9 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
     }
     // Play miss sound.
     for (HitTargetEventT* event : replay_frame.hit_target_events) {
+      target_manager.RemoveTarget(event->target_id);
+    }
+    for (RemoveTargetEventT* event : replay_frame.remove_target_events) {
       target_manager.RemoveTarget(event->target_id);
     }
     for (AddTargetEventT* event : replay_frame.add_target_events) {
@@ -510,6 +520,26 @@ bool StaticScenario::RunInternal(Application* app) {
           auto miss_target = std::make_unique<MissTargetEventT>();
           miss_target->frame_number = timer.GetReplayFrameNumber();
           replay.miss_target_events.push_back(std::move(miss_target));
+          if (params_.remove_closest_target_on_miss) {
+            std::optional<uint16_t> target_id_to_remove =
+                target_manager_.GetNearestTargetOnStaticWall(camera_, look_at.front);
+            if (target_id_to_remove.has_value()) {
+              Target new_target = target_manager_.ReplaceTarget(
+                  *target_id_to_remove, GetNewTarget(room_params, params_, &target_manager_, app));
+
+              auto add_target = std::make_unique<AddTargetEventT>();
+              add_target->target_id = new_target.id;
+              add_target->frame_number = timer.GetReplayFrameNumber();
+              add_target->position = ToStoredVec3Ptr(new_target.position);
+              add_target->radius = new_target.radius;
+              replay.add_target_events.push_back(std::move(add_target));
+
+              auto remove_target = std::make_unique<RemoveTargetEventT>();
+              remove_target->target_id = *target_id_to_remove;
+              remove_target->frame_number = timer.GetReplayFrameNumber();
+              replay.remove_target_events.push_back(std::move(remove_target));
+            }
+          }
         }
       }
     }
