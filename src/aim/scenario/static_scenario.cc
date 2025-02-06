@@ -343,7 +343,7 @@ bool StaticScenario::RunInternal(Application* app) {
 
   StaticReplayT replay;
   replay.is_poke_ball = params_.is_poke_ball;
-  uint16_t replay_frames_per_second = 100;
+  uint16_t replay_frames_per_second = 150;
   replay.frames_per_second = replay_frames_per_second;
   replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
 
@@ -556,14 +556,21 @@ bool StaticScenario::RunInternal(Application* app) {
 
   std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
 
+  // TODO: Define type for this autoclosing context
+  auto* implot_ctx = ImPlot::CreateContext();
+  auto implot_context_guard = ScopeGuard::Create([=] { ImPlot::DestroyContext(implot_ctx); });
+
   std::string previous_high_score_string;
   float previous_high_score = 0;
+  float percent_diff = 0;
   if (maybe_previous_high_score_stats) {
     previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
                                                  maybe_previous_high_score_stats->num_shots,
                                                  maybe_previous_high_score_stats->score,
                                                  params_.duration_seconds);
     previous_high_score = maybe_previous_high_score_stats->score;
+    float percent = previous_high_score / score;
+    percent_diff = (1.0 - percent) * 100;
   }
 
   // Show results page
@@ -605,6 +612,7 @@ bool StaticScenario::RunInternal(Application* app) {
     ImGui::Text("high_score: %s", previous_high_score_string.c_str());
     ImGui::Text("total_runs: %d", all_stats.size());
     ImGui::Text("score: %s", score_string.c_str());
+    ImGui::Text("percent diff: %.1f%%", percent_diff);
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("View replay", sz)) {
       view_replay = true;
@@ -621,19 +629,23 @@ bool StaticScenario::RunInternal(Application* app) {
       outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
       outfile.close();
     }
-    if (ImPlot::BeginPlot("Scores")) {
-      auto score_getter = [](int plot_index, void* data) {
-        StatsRow* stats = (StatsRow*)data;
-        ImPlotPoint p;
-        p.x = plot_index;
-        p.y = stats[plot_index].score;
-        return p;
-      };
-      ImPlot::PlotLineG("score", score_getter, all_stats.data(), all_stats.size());
-      if (maybe_previous_high_score_stats) {
-        ImPlot::PlotLine("high score", high_scores_over_time.data(), high_scores_over_time.size());
+    if (all_stats.size() > 1) {
+      if (ImPlot::BeginPlot("Scores")) {
+        // ImPlot::SetupAxis(ImAxis_X1, "Run Number", ImPlotAxisFlags_LockMax);
+        auto score_getter = [](int plot_index, void* data) {
+          StatsRow* stats = (StatsRow*)data;
+          ImPlotPoint p;
+          p.x = plot_index;
+          p.y = stats[plot_index].score;
+          return p;
+        };
+        ImPlot::PlotLineG("score", score_getter, all_stats.data(), all_stats.size());
+        if (maybe_previous_high_score_stats) {
+          ImPlot::PlotLine(
+              "high score", high_scores_over_time.data(), high_scores_over_time.size());
+        }
+        ImPlot::EndPlot();
       }
-      ImPlot::EndPlot();
     }
     ImGui::End();
 

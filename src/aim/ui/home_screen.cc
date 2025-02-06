@@ -100,6 +100,14 @@ void HomeScreen::Run(Application* app) {
       params.metronome_bpm = 130;
       scenario_to_start = params;
     }
+    if (ImGui::Button("Start 1w3ts hard", sz)) {
+      StaticScenarioParams params = base_1w_params;
+      params.scenario_id = "1w3ts_intermediate_s5_hard";
+      params.num_targets = 3;
+      params.metronome_bpm = 125;
+      params.target_radius = 0.9;
+      scenario_to_start = params;
+    }
     if (ImGui::Button("Start 1w1ts", sz)) {
       StaticScenarioParams params = base_1w_params;
       params.scenario_id = "1w1ts_intermediate_s5";
