@@ -28,8 +28,6 @@
 #include "aim/fbs/settings_generated.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/room.h"
-#include "aim/graphics/shader.h"
-#include "aim/graphics/sphere.h"
 #include "aim/scenario/scenario_timer.h"
 
 namespace aim {
@@ -130,18 +128,12 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
 
 void DrawFrame(Application* app,
                TargetManager* target_manager,
-               SphereRenderer* sphere_renderer,
                Room* room,
                const glm::mat4& view_transform) {
   ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
   if (app->StartRender(clear_color)) {
     room->Draw(view_transform);
-    std::vector<Sphere> target_spheres;
-    for (const Target& target : target_manager->GetTargets()) {
-      if (!target.hidden) {
-        sphere_renderer->Draw(view_transform, {{target.position, target.radius}});
-      }
-    }
+    app->GetRenderer()->DrawTargets(target_manager->GetTargets(), view_transform);
     app->FinishRender();
   }
 }
@@ -161,8 +153,7 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
   Room room(room_params);
   room.SetProjection(projection);
 
-  SphereRenderer sphere_renderer;
-  sphere_renderer.SetProjection(projection);
+  app->GetRenderer()->SetProjection(projection);
 
   TargetManager target_manager;
   Camera camera(camera_position);
@@ -239,7 +230,7 @@ bool PlayReplay(const StaticReplayT& replay, Application* app, const std::string
     ImGui::Text("score: %s", score_string.c_str());
     ImGui::End();
 
-    DrawFrame(app, &target_manager, &sphere_renderer, &room, look_at.transform);
+    DrawFrame(app, &target_manager, &room, look_at.transform);
   }
   return false;
 }
@@ -381,8 +372,7 @@ bool StaticScenario::RunInternal(Application* app) {
   replay.wall_width = room.GetWidth();
   replay.wall_height = room.GetHeight();
 
-  SphereRenderer sphere_renderer;
-  sphere_renderer.SetProjection(projection);
+  app->GetRenderer()->SetProjection(projection);
 
   int targets_hit = 0;
   int shots_taken = 0;
@@ -561,7 +551,7 @@ bool StaticScenario::RunInternal(Application* app) {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    DrawFrame(app, &target_manager_, &sphere_renderer, &room, look_at.transform);
+    DrawFrame(app, &target_manager_, &room, look_at.transform);
   }
 
   float hit_percent = targets_hit / (float)shots_taken;

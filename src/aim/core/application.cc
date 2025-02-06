@@ -104,6 +104,8 @@ int Application::Initialize() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 
+  renderer_ = std::make_unique<Renderer>();
+
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
