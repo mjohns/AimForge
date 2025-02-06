@@ -25,6 +25,11 @@ table MissTargetEvent {
   frame_number: uint32;
 }
 
+table RemoveTargetEvent {
+  target_id: uint16;
+  frame_number: uint32;
+}
+
 table StaticReplay {
   wall_width: float;
   wall_height: float;
@@ -35,6 +40,7 @@ table StaticReplay {
   hit_target_events: [HitTargetEvent];
   miss_target_events: [MissTargetEvent];
   pitch_yaw_pairs: [PitchYaw];
+  remove_target_events: [RemoveTargetEvent];
 }
 
 union Replay {

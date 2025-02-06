@@ -32,6 +32,7 @@ class TargetManager {
   }
 
   std::optional<uint16_t> GetNearestHitTarget(const Camera& camera, const glm::vec3& look_at);
+  std::optional<uint16_t> GetNearestTargetOnStaticWall(const Camera& camera, const glm::vec3& look_at);
 
  private:
   uint16_t target_id_counter_ = 0;

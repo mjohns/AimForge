@@ -38,6 +38,7 @@ struct StaticScenarioParams {
   float metronome_bpm = -1;
   bool is_poke_ball = false;
   TargetPlacementParams target_placement;
+  bool remove_closest_target_on_miss = false;
 };
 
 class StaticScenario {

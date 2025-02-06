@@ -31,6 +31,10 @@ struct MissTargetEvent;
 struct MissTargetEventBuilder;
 struct MissTargetEventT;
 
+struct RemoveTargetEvent;
+struct RemoveTargetEventBuilder;
+struct RemoveTargetEventT;
+
 struct StaticReplay;
 struct StaticReplayBuilder;
 struct StaticReplayT;
@@ -355,6 +359,69 @@ inline ::flatbuffers::Offset<MissTargetEvent> CreateMissTargetEvent(
 
 ::flatbuffers::Offset<MissTargetEvent> CreateMissTargetEvent(::flatbuffers::FlatBufferBuilder &_fbb, const MissTargetEventT *_o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
+struct RemoveTargetEventT : public ::flatbuffers::NativeTable {
+  typedef RemoveTargetEvent TableType;
+  uint16_t target_id = 0;
+  uint32_t frame_number = 0;
+};
+
+struct RemoveTargetEvent FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef RemoveTargetEventT NativeTableType;
+  typedef RemoveTargetEventBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TARGET_ID = 4,
+    VT_FRAME_NUMBER = 6
+  };
+  uint16_t target_id() const {
+    return GetField<uint16_t>(VT_TARGET_ID, 0);
+  }
+  uint32_t frame_number() const {
+    return GetField<uint32_t>(VT_FRAME_NUMBER, 0);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint16_t>(verifier, VT_TARGET_ID, 2) &&
+           VerifyField<uint32_t>(verifier, VT_FRAME_NUMBER, 4) &&
+           verifier.EndTable();
+  }
+  RemoveTargetEventT *UnPack(const ::flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(RemoveTargetEventT *_o, const ::flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static ::flatbuffers::Offset<RemoveTargetEvent> Pack(::flatbuffers::FlatBufferBuilder &_fbb, const RemoveTargetEventT* _o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
+};
+
+struct RemoveTargetEventBuilder {
+  typedef RemoveTargetEvent Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_target_id(uint16_t target_id) {
+    fbb_.AddElement<uint16_t>(RemoveTargetEvent::VT_TARGET_ID, target_id, 0);
+  }
+  void add_frame_number(uint32_t frame_number) {
+    fbb_.AddElement<uint32_t>(RemoveTargetEvent::VT_FRAME_NUMBER, frame_number, 0);
+  }
+  explicit RemoveTargetEventBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<RemoveTargetEvent> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<RemoveTargetEvent>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<RemoveTargetEvent> CreateRemoveTargetEvent(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint16_t target_id = 0,
+    uint32_t frame_number = 0) {
+  RemoveTargetEventBuilder builder_(_fbb);
+  builder_.add_frame_number(frame_number);
+  builder_.add_target_id(target_id);
+  return builder_.Finish();
+}
+
+::flatbuffers::Offset<RemoveTargetEvent> CreateRemoveTargetEvent(::flatbuffers::FlatBufferBuilder &_fbb, const RemoveTargetEventT *_o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
+
 struct StaticReplayT : public ::flatbuffers::NativeTable {
   typedef StaticReplay TableType;
   float wall_width = 0.0f;
@@ -366,6 +433,7 @@ struct StaticReplayT : public ::flatbuffers::NativeTable {
   std::vector<std::unique_ptr<aim::HitTargetEventT>> hit_target_events{};
   std::vector<std::unique_ptr<aim::MissTargetEventT>> miss_target_events{};
   std::vector<aim::PitchYaw> pitch_yaw_pairs{};
+  std::vector<std::unique_ptr<aim::RemoveTargetEventT>> remove_target_events{};
   StaticReplayT() = default;
   StaticReplayT(const StaticReplayT &o);
   StaticReplayT(StaticReplayT&&) FLATBUFFERS_NOEXCEPT = default;
@@ -384,7 +452,8 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     VT_ADD_TARGET_EVENTS = 14,
     VT_HIT_TARGET_EVENTS = 16,
     VT_MISS_TARGET_EVENTS = 18,
-    VT_PITCH_YAW_PAIRS = 20
+    VT_PITCH_YAW_PAIRS = 20,
+    VT_REMOVE_TARGET_EVENTS = 22
   };
   float wall_width() const {
     return GetField<float>(VT_WALL_WIDTH, 0.0f);
@@ -413,6 +482,9 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::Vector<const aim::PitchYaw *> *pitch_yaw_pairs() const {
     return GetPointer<const ::flatbuffers::Vector<const aim::PitchYaw *> *>(VT_PITCH_YAW_PAIRS);
   }
+  const ::flatbuffers::Vector<::flatbuffers::Offset<aim::RemoveTargetEvent>> *remove_target_events() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<aim::RemoveTargetEvent>> *>(VT_REMOVE_TARGET_EVENTS);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<float>(verifier, VT_WALL_WIDTH, 4) &&
@@ -431,6 +503,9 @@ struct StaticReplay FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            verifier.VerifyVectorOfTables(miss_target_events()) &&
            VerifyOffset(verifier, VT_PITCH_YAW_PAIRS) &&
            verifier.VerifyVector(pitch_yaw_pairs()) &&
+           VerifyOffset(verifier, VT_REMOVE_TARGET_EVENTS) &&
+           verifier.VerifyVector(remove_target_events()) &&
+           verifier.VerifyVectorOfTables(remove_target_events()) &&
            verifier.EndTable();
   }
   StaticReplayT *UnPack(const ::flatbuffers::resolver_function_t *_resolver = nullptr) const;
@@ -469,6 +544,9 @@ struct StaticReplayBuilder {
   void add_pitch_yaw_pairs(::flatbuffers::Offset<::flatbuffers::Vector<const aim::PitchYaw *>> pitch_yaw_pairs) {
     fbb_.AddOffset(StaticReplay::VT_PITCH_YAW_PAIRS, pitch_yaw_pairs);
   }
+  void add_remove_target_events(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::RemoveTargetEvent>>> remove_target_events) {
+    fbb_.AddOffset(StaticReplay::VT_REMOVE_TARGET_EVENTS, remove_target_events);
+  }
   explicit StaticReplayBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -490,8 +568,10 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::AddTargetEvent>>> add_target_events = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::HitTargetEvent>>> hit_target_events = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::MissTargetEvent>>> miss_target_events = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<const aim::PitchYaw *>> pitch_yaw_pairs = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<const aim::PitchYaw *>> pitch_yaw_pairs = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::RemoveTargetEvent>>> remove_target_events = 0) {
   StaticReplayBuilder builder_(_fbb);
+  builder_.add_remove_target_events(remove_target_events);
   builder_.add_pitch_yaw_pairs(pitch_yaw_pairs);
   builder_.add_miss_target_events(miss_target_events);
   builder_.add_hit_target_events(hit_target_events);
@@ -514,11 +594,13 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplayDirect(
     const std::vector<::flatbuffers::Offset<aim::AddTargetEvent>> *add_target_events = nullptr,
     const std::vector<::flatbuffers::Offset<aim::HitTargetEvent>> *hit_target_events = nullptr,
     const std::vector<::flatbuffers::Offset<aim::MissTargetEvent>> *miss_target_events = nullptr,
-    const std::vector<aim::PitchYaw> *pitch_yaw_pairs = nullptr) {
+    const std::vector<aim::PitchYaw> *pitch_yaw_pairs = nullptr,
+    const std::vector<::flatbuffers::Offset<aim::RemoveTargetEvent>> *remove_target_events = nullptr) {
   auto add_target_events__ = add_target_events ? _fbb.CreateVector<::flatbuffers::Offset<aim::AddTargetEvent>>(*add_target_events) : 0;
   auto hit_target_events__ = hit_target_events ? _fbb.CreateVector<::flatbuffers::Offset<aim::HitTargetEvent>>(*hit_target_events) : 0;
   auto miss_target_events__ = miss_target_events ? _fbb.CreateVector<::flatbuffers::Offset<aim::MissTargetEvent>>(*miss_target_events) : 0;
   auto pitch_yaw_pairs__ = pitch_yaw_pairs ? _fbb.CreateVectorOfStructs<aim::PitchYaw>(*pitch_yaw_pairs) : 0;
+  auto remove_target_events__ = remove_target_events ? _fbb.CreateVector<::flatbuffers::Offset<aim::RemoveTargetEvent>>(*remove_target_events) : 0;
   return aim::CreateStaticReplay(
       _fbb,
       wall_width,
@@ -529,7 +611,8 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplayDirect(
       add_target_events__,
       hit_target_events__,
       miss_target_events__,
-      pitch_yaw_pairs__);
+      pitch_yaw_pairs__,
+      remove_target_events__);
 }
 
 ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::FlatBufferBuilder &_fbb, const StaticReplayT *_o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
@@ -710,6 +793,35 @@ inline ::flatbuffers::Offset<MissTargetEvent> CreateMissTargetEvent(::flatbuffer
       _frame_number);
 }
 
+inline RemoveTargetEventT *RemoveTargetEvent::UnPack(const ::flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = std::unique_ptr<RemoveTargetEventT>(new RemoveTargetEventT());
+  UnPackTo(_o.get(), _resolver);
+  return _o.release();
+}
+
+inline void RemoveTargetEvent::UnPackTo(RemoveTargetEventT *_o, const ::flatbuffers::resolver_function_t *_resolver) const {
+  (void)_o;
+  (void)_resolver;
+  { auto _e = target_id(); _o->target_id = _e; }
+  { auto _e = frame_number(); _o->frame_number = _e; }
+}
+
+inline ::flatbuffers::Offset<RemoveTargetEvent> RemoveTargetEvent::Pack(::flatbuffers::FlatBufferBuilder &_fbb, const RemoveTargetEventT* _o, const ::flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateRemoveTargetEvent(_fbb, _o, _rehasher);
+}
+
+inline ::flatbuffers::Offset<RemoveTargetEvent> CreateRemoveTargetEvent(::flatbuffers::FlatBufferBuilder &_fbb, const RemoveTargetEventT *_o, const ::flatbuffers::rehasher_function_t *_rehasher) {
+  (void)_rehasher;
+  (void)_o;
+  struct _VectorArgs { ::flatbuffers::FlatBufferBuilder *__fbb; const RemoveTargetEventT* __o; const ::flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _target_id = _o->target_id;
+  auto _frame_number = _o->frame_number;
+  return aim::CreateRemoveTargetEvent(
+      _fbb,
+      _target_id,
+      _frame_number);
+}
+
 inline StaticReplayT::StaticReplayT(const StaticReplayT &o)
       : wall_width(o.wall_width),
         wall_height(o.wall_height),
@@ -723,6 +835,8 @@ inline StaticReplayT::StaticReplayT(const StaticReplayT &o)
   for (const auto &hit_target_events_ : o.hit_target_events) { hit_target_events.emplace_back((hit_target_events_) ? new aim::HitTargetEventT(*hit_target_events_) : nullptr); }
   miss_target_events.reserve(o.miss_target_events.size());
   for (const auto &miss_target_events_ : o.miss_target_events) { miss_target_events.emplace_back((miss_target_events_) ? new aim::MissTargetEventT(*miss_target_events_) : nullptr); }
+  remove_target_events.reserve(o.remove_target_events.size());
+  for (const auto &remove_target_events_ : o.remove_target_events) { remove_target_events.emplace_back((remove_target_events_) ? new aim::RemoveTargetEventT(*remove_target_events_) : nullptr); }
 }
 
 inline StaticReplayT &StaticReplayT::operator=(StaticReplayT o) FLATBUFFERS_NOEXCEPT {
@@ -735,6 +849,7 @@ inline StaticReplayT &StaticReplayT::operator=(StaticReplayT o) FLATBUFFERS_NOEX
   std::swap(hit_target_events, o.hit_target_events);
   std::swap(miss_target_events, o.miss_target_events);
   std::swap(pitch_yaw_pairs, o.pitch_yaw_pairs);
+  std::swap(remove_target_events, o.remove_target_events);
   return *this;
 }
 
@@ -756,6 +871,7 @@ inline void StaticReplay::UnPackTo(StaticReplayT *_o, const ::flatbuffers::resol
   { auto _e = hit_target_events(); if (_e) { _o->hit_target_events.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->hit_target_events[_i]) { _e->Get(_i)->UnPackTo(_o->hit_target_events[_i].get(), _resolver); } else { _o->hit_target_events[_i] = std::unique_ptr<aim::HitTargetEventT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->hit_target_events.resize(0); } }
   { auto _e = miss_target_events(); if (_e) { _o->miss_target_events.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->miss_target_events[_i]) { _e->Get(_i)->UnPackTo(_o->miss_target_events[_i].get(), _resolver); } else { _o->miss_target_events[_i] = std::unique_ptr<aim::MissTargetEventT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->miss_target_events.resize(0); } }
   { auto _e = pitch_yaw_pairs(); if (_e) { _o->pitch_yaw_pairs.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { _o->pitch_yaw_pairs[_i] = *_e->Get(_i); } } else { _o->pitch_yaw_pairs.resize(0); } }
+  { auto _e = remove_target_events(); if (_e) { _o->remove_target_events.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->remove_target_events[_i]) { _e->Get(_i)->UnPackTo(_o->remove_target_events[_i].get(), _resolver); } else { _o->remove_target_events[_i] = std::unique_ptr<aim::RemoveTargetEventT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->remove_target_events.resize(0); } }
 }
 
 inline ::flatbuffers::Offset<StaticReplay> StaticReplay::Pack(::flatbuffers::FlatBufferBuilder &_fbb, const StaticReplayT* _o, const ::flatbuffers::rehasher_function_t *_rehasher) {
@@ -775,6 +891,7 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::Fla
   auto _hit_target_events = _o->hit_target_events.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::HitTargetEvent>> (_o->hit_target_events.size(), [](size_t i, _VectorArgs *__va) { return CreateHitTargetEvent(*__va->__fbb, __va->__o->hit_target_events[i].get(), __va->__rehasher); }, &_va ) : 0;
   auto _miss_target_events = _o->miss_target_events.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::MissTargetEvent>> (_o->miss_target_events.size(), [](size_t i, _VectorArgs *__va) { return CreateMissTargetEvent(*__va->__fbb, __va->__o->miss_target_events[i].get(), __va->__rehasher); }, &_va ) : 0;
   auto _pitch_yaw_pairs = _o->pitch_yaw_pairs.size() ? _fbb.CreateVectorOfStructs(_o->pitch_yaw_pairs) : 0;
+  auto _remove_target_events = _o->remove_target_events.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::RemoveTargetEvent>> (_o->remove_target_events.size(), [](size_t i, _VectorArgs *__va) { return CreateRemoveTargetEvent(*__va->__fbb, __va->__o->remove_target_events[i].get(), __va->__rehasher); }, &_va ) : 0;
   return aim::CreateStaticReplay(
       _fbb,
       _wall_width,
@@ -785,7 +902,8 @@ inline ::flatbuffers::Offset<StaticReplay> CreateStaticReplay(::flatbuffers::Fla
       _add_target_events,
       _hit_target_events,
       _miss_target_events,
-      _pitch_yaw_pairs);
+      _pitch_yaw_pairs,
+      _remove_target_events);
 }
 
 inline ReplayFileT *ReplayFile::UnPack(const ::flatbuffers::resolver_function_t *_resolver) const {

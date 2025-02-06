@@ -112,6 +112,7 @@ void HomeScreen::Run(Application* app) {
       StaticScenarioParams params = base_1w_params;
       params.scenario_id = "1w1ts_intermediate_s5";
       params.num_targets = 1;
+      params.remove_closest_target_on_miss = true;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start 1w3ts poke", sz)) {

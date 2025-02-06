@@ -29,6 +29,10 @@ struct Settings;
 struct SettingsBuilder;
 struct SettingsT;
 
+struct FullSettings;
+struct FullSettingsBuilder;
+struct FullSettingsT;
+
 struct CrosshairT : public ::flatbuffers::NativeTable {
   typedef Crosshair TableType;
   std::unique_ptr<aim::DotCrosshairT> dot{};
@@ -177,8 +181,10 @@ inline ::flatbuffers::Offset<DotCrosshair> CreateDotCrosshair(
 
 struct SettingsT : public ::flatbuffers::NativeTable {
   typedef Settings TableType;
+  std::string name{};
   std::unique_ptr<aim::CrosshairT> crosshair{};
   float cm_per_360 = 0.0f;
+  float dpi = 0.0f;
   std::string theme_name{};
   SettingsT() = default;
   SettingsT(const SettingsT &o);
@@ -190,24 +196,35 @@ struct Settings FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SettingsT NativeTableType;
   typedef SettingsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_CROSSHAIR = 4,
-    VT_CM_PER_360 = 6,
-    VT_THEME_NAME = 8
+    VT_NAME = 4,
+    VT_CROSSHAIR = 6,
+    VT_CM_PER_360 = 8,
+    VT_DPI = 10,
+    VT_THEME_NAME = 12
   };
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
+  }
   const aim::Crosshair *crosshair() const {
     return GetPointer<const aim::Crosshair *>(VT_CROSSHAIR);
   }
   float cm_per_360() const {
     return GetField<float>(VT_CM_PER_360, 0.0f);
   }
+  float dpi() const {
+    return GetField<float>(VT_DPI, 0.0f);
+  }
   const ::flatbuffers::String *theme_name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_THEME_NAME);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.VerifyString(name()) &&
            VerifyOffset(verifier, VT_CROSSHAIR) &&
            verifier.VerifyTable(crosshair()) &&
            VerifyField<float>(verifier, VT_CM_PER_360, 4) &&
+           VerifyField<float>(verifier, VT_DPI, 4) &&
            VerifyOffset(verifier, VT_THEME_NAME) &&
            verifier.VerifyString(theme_name()) &&
            verifier.EndTable();
@@ -221,11 +238,17 @@ struct SettingsBuilder {
   typedef Settings Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
+    fbb_.AddOffset(Settings::VT_NAME, name);
+  }
   void add_crosshair(::flatbuffers::Offset<aim::Crosshair> crosshair) {
     fbb_.AddOffset(Settings::VT_CROSSHAIR, crosshair);
   }
   void add_cm_per_360(float cm_per_360) {
     fbb_.AddElement<float>(Settings::VT_CM_PER_360, cm_per_360, 0.0f);
+  }
+  void add_dpi(float dpi) {
+    fbb_.AddElement<float>(Settings::VT_DPI, dpi, 0.0f);
   }
   void add_theme_name(::flatbuffers::Offset<::flatbuffers::String> theme_name) {
     fbb_.AddOffset(Settings::VT_THEME_NAME, theme_name);
@@ -243,30 +266,106 @@ struct SettingsBuilder {
 
 inline ::flatbuffers::Offset<Settings> CreateSettings(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     ::flatbuffers::Offset<aim::Crosshair> crosshair = 0,
     float cm_per_360 = 0.0f,
+    float dpi = 0.0f,
     ::flatbuffers::Offset<::flatbuffers::String> theme_name = 0) {
   SettingsBuilder builder_(_fbb);
   builder_.add_theme_name(theme_name);
+  builder_.add_dpi(dpi);
   builder_.add_cm_per_360(cm_per_360);
   builder_.add_crosshair(crosshair);
+  builder_.add_name(name);
   return builder_.Finish();
 }
 
 inline ::flatbuffers::Offset<Settings> CreateSettingsDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *name = nullptr,
     ::flatbuffers::Offset<aim::Crosshair> crosshair = 0,
     float cm_per_360 = 0.0f,
+    float dpi = 0.0f,
     const char *theme_name = nullptr) {
+  auto name__ = name ? _fbb.CreateString(name) : 0;
   auto theme_name__ = theme_name ? _fbb.CreateString(theme_name) : 0;
   return aim::CreateSettings(
       _fbb,
+      name__,
       crosshair,
       cm_per_360,
+      dpi,
       theme_name__);
 }
 
 ::flatbuffers::Offset<Settings> CreateSettings(::flatbuffers::FlatBufferBuilder &_fbb, const SettingsT *_o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
+
+struct FullSettingsT : public ::flatbuffers::NativeTable {
+  typedef FullSettings TableType;
+  std::vector<std::unique_ptr<aim::SettingsT>> settings{};
+  FullSettingsT() = default;
+  FullSettingsT(const FullSettingsT &o);
+  FullSettingsT(FullSettingsT&&) FLATBUFFERS_NOEXCEPT = default;
+  FullSettingsT &operator=(FullSettingsT o) FLATBUFFERS_NOEXCEPT;
+};
+
+struct FullSettings FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef FullSettingsT NativeTableType;
+  typedef FullSettingsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_SETTINGS = 4
+  };
+  const ::flatbuffers::Vector<::flatbuffers::Offset<aim::Settings>> *settings() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<aim::Settings>> *>(VT_SETTINGS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_SETTINGS) &&
+           verifier.VerifyVector(settings()) &&
+           verifier.VerifyVectorOfTables(settings()) &&
+           verifier.EndTable();
+  }
+  FullSettingsT *UnPack(const ::flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(FullSettingsT *_o, const ::flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static ::flatbuffers::Offset<FullSettings> Pack(::flatbuffers::FlatBufferBuilder &_fbb, const FullSettingsT* _o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
+};
+
+struct FullSettingsBuilder {
+  typedef FullSettings Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_settings(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::Settings>>> settings) {
+    fbb_.AddOffset(FullSettings::VT_SETTINGS, settings);
+  }
+  explicit FullSettingsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<FullSettings> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<FullSettings>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<FullSettings> CreateFullSettings(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<aim::Settings>>> settings = 0) {
+  FullSettingsBuilder builder_(_fbb);
+  builder_.add_settings(settings);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<FullSettings> CreateFullSettingsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<::flatbuffers::Offset<aim::Settings>> *settings = nullptr) {
+  auto settings__ = settings ? _fbb.CreateVector<::flatbuffers::Offset<aim::Settings>>(*settings) : 0;
+  return aim::CreateFullSettings(
+      _fbb,
+      settings__);
+}
+
+::flatbuffers::Offset<FullSettings> CreateFullSettings(::flatbuffers::FlatBufferBuilder &_fbb, const FullSettingsT *_o, const ::flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
 inline CrosshairT::CrosshairT(const CrosshairT &o)
       : dot((o.dot) ? new aim::DotCrosshairT(*o.dot) : nullptr) {
@@ -354,14 +453,18 @@ inline ::flatbuffers::Offset<DotCrosshair> CreateDotCrosshair(::flatbuffers::Fla
 }
 
 inline SettingsT::SettingsT(const SettingsT &o)
-      : crosshair((o.crosshair) ? new aim::CrosshairT(*o.crosshair) : nullptr),
+      : name(o.name),
+        crosshair((o.crosshair) ? new aim::CrosshairT(*o.crosshair) : nullptr),
         cm_per_360(o.cm_per_360),
+        dpi(o.dpi),
         theme_name(o.theme_name) {
 }
 
 inline SettingsT &SettingsT::operator=(SettingsT o) FLATBUFFERS_NOEXCEPT {
+  std::swap(name, o.name);
   std::swap(crosshair, o.crosshair);
   std::swap(cm_per_360, o.cm_per_360);
+  std::swap(dpi, o.dpi);
   std::swap(theme_name, o.theme_name);
   return *this;
 }
@@ -375,8 +478,10 @@ inline SettingsT *Settings::UnPack(const ::flatbuffers::resolver_function_t *_re
 inline void Settings::UnPackTo(SettingsT *_o, const ::flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
+  { auto _e = name(); if (_e) _o->name = _e->str(); }
   { auto _e = crosshair(); if (_e) { if(_o->crosshair) { _e->UnPackTo(_o->crosshair.get(), _resolver); } else { _o->crosshair = std::unique_ptr<aim::CrosshairT>(_e->UnPack(_resolver)); } } else if (_o->crosshair) { _o->crosshair.reset(); } }
   { auto _e = cm_per_360(); _o->cm_per_360 = _e; }
+  { auto _e = dpi(); _o->dpi = _e; }
   { auto _e = theme_name(); if (_e) _o->theme_name = _e->str(); }
 }
 
@@ -388,56 +493,96 @@ inline ::flatbuffers::Offset<Settings> CreateSettings(::flatbuffers::FlatBufferB
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { ::flatbuffers::FlatBufferBuilder *__fbb; const SettingsT* __o; const ::flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _name = _o->name.empty() ? 0 : _fbb.CreateString(_o->name);
   auto _crosshair = _o->crosshair ? CreateCrosshair(_fbb, _o->crosshair.get(), _rehasher) : 0;
   auto _cm_per_360 = _o->cm_per_360;
+  auto _dpi = _o->dpi;
   auto _theme_name = _o->theme_name.empty() ? 0 : _fbb.CreateString(_o->theme_name);
   return aim::CreateSettings(
       _fbb,
+      _name,
       _crosshair,
       _cm_per_360,
+      _dpi,
       _theme_name);
 }
 
-inline const aim::Settings *GetSettings(const void *buf) {
-  return ::flatbuffers::GetRoot<aim::Settings>(buf);
+inline FullSettingsT::FullSettingsT(const FullSettingsT &o) {
+  settings.reserve(o.settings.size());
+  for (const auto &settings_ : o.settings) { settings.emplace_back((settings_) ? new aim::SettingsT(*settings_) : nullptr); }
 }
 
-inline const aim::Settings *GetSizePrefixedSettings(const void *buf) {
-  return ::flatbuffers::GetSizePrefixedRoot<aim::Settings>(buf);
+inline FullSettingsT &FullSettingsT::operator=(FullSettingsT o) FLATBUFFERS_NOEXCEPT {
+  std::swap(settings, o.settings);
+  return *this;
 }
 
-inline bool VerifySettingsBuffer(
+inline FullSettingsT *FullSettings::UnPack(const ::flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = std::unique_ptr<FullSettingsT>(new FullSettingsT());
+  UnPackTo(_o.get(), _resolver);
+  return _o.release();
+}
+
+inline void FullSettings::UnPackTo(FullSettingsT *_o, const ::flatbuffers::resolver_function_t *_resolver) const {
+  (void)_o;
+  (void)_resolver;
+  { auto _e = settings(); if (_e) { _o->settings.resize(_e->size()); for (::flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { if(_o->settings[_i]) { _e->Get(_i)->UnPackTo(_o->settings[_i].get(), _resolver); } else { _o->settings[_i] = std::unique_ptr<aim::SettingsT>(_e->Get(_i)->UnPack(_resolver)); } } } else { _o->settings.resize(0); } }
+}
+
+inline ::flatbuffers::Offset<FullSettings> FullSettings::Pack(::flatbuffers::FlatBufferBuilder &_fbb, const FullSettingsT* _o, const ::flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateFullSettings(_fbb, _o, _rehasher);
+}
+
+inline ::flatbuffers::Offset<FullSettings> CreateFullSettings(::flatbuffers::FlatBufferBuilder &_fbb, const FullSettingsT *_o, const ::flatbuffers::rehasher_function_t *_rehasher) {
+  (void)_rehasher;
+  (void)_o;
+  struct _VectorArgs { ::flatbuffers::FlatBufferBuilder *__fbb; const FullSettingsT* __o; const ::flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _settings = _o->settings.size() ? _fbb.CreateVector<::flatbuffers::Offset<aim::Settings>> (_o->settings.size(), [](size_t i, _VectorArgs *__va) { return CreateSettings(*__va->__fbb, __va->__o->settings[i].get(), __va->__rehasher); }, &_va ) : 0;
+  return aim::CreateFullSettings(
+      _fbb,
+      _settings);
+}
+
+inline const aim::FullSettings *GetFullSettings(const void *buf) {
+  return ::flatbuffers::GetRoot<aim::FullSettings>(buf);
+}
+
+inline const aim::FullSettings *GetSizePrefixedFullSettings(const void *buf) {
+  return ::flatbuffers::GetSizePrefixedRoot<aim::FullSettings>(buf);
+}
+
+inline bool VerifyFullSettingsBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifyBuffer<aim::Settings>(nullptr);
+  return verifier.VerifyBuffer<aim::FullSettings>(nullptr);
 }
 
-inline bool VerifySizePrefixedSettingsBuffer(
+inline bool VerifySizePrefixedFullSettingsBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifySizePrefixedBuffer<aim::Settings>(nullptr);
+  return verifier.VerifySizePrefixedBuffer<aim::FullSettings>(nullptr);
 }
 
-inline void FinishSettingsBuffer(
+inline void FinishFullSettingsBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<aim::Settings> root) {
+    ::flatbuffers::Offset<aim::FullSettings> root) {
   fbb.Finish(root);
 }
 
-inline void FinishSizePrefixedSettingsBuffer(
+inline void FinishSizePrefixedFullSettingsBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<aim::Settings> root) {
+    ::flatbuffers::Offset<aim::FullSettings> root) {
   fbb.FinishSizePrefixed(root);
 }
 
-inline std::unique_ptr<aim::SettingsT> UnPackSettings(
+inline std::unique_ptr<aim::FullSettingsT> UnPackFullSettings(
     const void *buf,
     const ::flatbuffers::resolver_function_t *res = nullptr) {
-  return std::unique_ptr<aim::SettingsT>(GetSettings(buf)->UnPack(res));
+  return std::unique_ptr<aim::FullSettingsT>(GetFullSettings(buf)->UnPack(res));
 }
 
-inline std::unique_ptr<aim::SettingsT> UnPackSizePrefixedSettings(
+inline std::unique_ptr<aim::FullSettingsT> UnPackSizePrefixedFullSettings(
     const void *buf,
     const ::flatbuffers::resolver_function_t *res = nullptr) {
-  return std::unique_ptr<aim::SettingsT>(GetSizePrefixedSettings(buf)->UnPack(res));
+  return std::unique_ptr<aim::FullSettingsT>(GetSizePrefixedFullSettings(buf)->UnPack(res));
 }
 
 }  // namespace aim
