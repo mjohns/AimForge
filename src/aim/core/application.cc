@@ -12,8 +12,8 @@
 
 #include <memory>
 
-#include "aim/graphics/glad_loader.h"
 #include "aim/common/util.h"
+#include "aim/graphics/glad_loader.h"
 
 namespace aim {
 
@@ -46,8 +46,10 @@ int Application::Initialize() {
     printf("Error: SDL_Init(): %s\n", SDL_GetError());
     return -1;
   }
-
-  stats_db_ = std::make_unique<StatsDb>();
+  file_system_ = std::make_unique<FileSystem>();
+  stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
+  settings_manager_ =
+      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.bin"));
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_mixer OGG init failed");
@@ -109,7 +111,7 @@ int Application::Initialize() {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
- // ImPlot::CreateContext();
+  // ImPlot::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
   (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls

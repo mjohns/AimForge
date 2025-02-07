@@ -38,18 +38,6 @@ Camera GetInitialCamera(const StaticScenarioParams& params) {
   return Camera(glm::vec3(0, -100.0f, 0));
 }
 
-CrosshairT GetDefaultCrosshair() {
-  auto dot = std::make_unique<DotCrosshairT>();
-  dot->dot_color = ToStoredRgbPtr(254, 138, 24);
-  dot->outline_color = ToStoredRgbPtr(0, 0, 0);
-  dot->draw_outline = true;
-  dot->dot_size = 3;
-
-  CrosshairT crosshair;
-  crosshair.dot = std::move(dot);
-  return crosshair;
-}
-
 std::string MakeScoreString(int targets_hit, int shots_taken, float score, float duration_seconds) {
   float hit_percent = targets_hit / (float)shots_taken;
   std::string score_string =
@@ -186,8 +174,10 @@ void StaticScenario::Run(Application* app) {
 bool StaticScenario::RunInternal(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
-  float radians_per_dot = CmPer360ToRadiansPerDot(params_.cm_per_360, app->GetMouseDpi());
-  auto crosshair = GetDefaultCrosshair();
+  float dpi = app->GetSettingsManager()->GetSettings().dpi;
+  ScenarioSettingsT scenario_settings =
+      app->GetSettingsManager()->GetScenarioSettings(params_.scenario_id);
+  float radians_per_dot = CmPer360ToRadiansPerDot(scenario_settings.cm_per_360, dpi);
 
   StaticReplayT replay;
   replay.wall_height = params_.room_height;
@@ -386,7 +376,7 @@ bool StaticScenario::RunInternal(Application* app) {
     auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
-    DrawCrosshair(crosshair, screen, draw_list);
+    DrawCrosshair(*scenario_settings.crosshair, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -447,7 +437,7 @@ bool StaticScenario::RunInternal(Application* app) {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
-      bool need_quit = replay_viewer.PlayReplay(replay, crosshair, app);
+      bool need_quit = replay_viewer.PlayReplay(replay, *scenario_settings.crosshair, app);
       if (need_quit) {
         return false;
       }

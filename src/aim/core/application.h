@@ -9,6 +9,8 @@
 
 #include "aim/audio/sound_manager.h"
 #include "aim/common/simple_types.h"
+#include "aim/core/file_system.h"
+#include "aim/core/settings_manager.h"
 #include "aim/common/util.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
@@ -29,10 +31,6 @@ class Application {
     return sdl_window_;
   }
 
-  int GetMouseDpi() {
-    return 1600;
-  }
-
   ScreenInfo GetScreenInfo() {
     return ScreenInfo(window_width_, window_height_);
   }
@@ -51,6 +49,14 @@ class Application {
 
   Renderer* GetRenderer() {
     return renderer_.get();
+  }
+
+  FileSystem* GetFileSystem() {
+    return file_system_.get();
+  }
+
+  SettingsManager* GetSettingsManager() {
+    return settings_manager_.get();
   }
 
   Application(const Application&) = delete;
@@ -74,6 +80,8 @@ class Application {
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsDb> stats_db_;
   std::unique_ptr<Renderer> renderer_;
+  std::unique_ptr<FileSystem> file_system_;
+  std::unique_ptr<SettingsManager> settings_manager_;
 };
 
 }  // namespace aim

@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <filesystem>
 
 namespace aim {
 
@@ -19,7 +20,7 @@ struct StatsRow {
 
 class StatsDb {
  public:
-  StatsDb();
+  explicit StatsDb(const std::filesystem::path& db_path);
   ~StatsDb();
 
   void AddStats(const std::string& scenario_id, StatsRow* row);
