@@ -1,14 +1,26 @@
 #include "settings_screen.h"
 
 #include <backends/imgui_impl_sdl3.h>
+#include <misc/cpp/imgui_stdlib.h>
+
+#include <format>
+
+#include "aim/common/util.h"
+#include "aim/core/settings_manager.h"
 
 namespace aim {
-namespace {
-}  // namespace
+namespace {}  // namespace
 
 void SettingsScreen::Run(Application* app) {
   SDL_GL_SetSwapInterval(1);  // Enable vsync
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
+
+  SettingsManager* mgr = app->GetSettingsManager();
+  SettingsT* current_settings = mgr->GetMutableCurrentSettings();
+
+  std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360);
+  cm_per_360.reserve(20);
+
   while (true) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -16,11 +28,25 @@ void SettingsScreen::Run(Application* app) {
       if (event.type == SDL_EVENT_QUIT) {
         return;
       }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_ESCAPE) {
+          float new_cm_per_360 = ParseFloat(cm_per_360);
+          if (new_cm_per_360 > 0) {
+            current_settings->cm_per_360 = new_cm_per_360;
+            mgr->MarkDirty();
+          }
+          mgr->MaybeFlushToDisk();
+          return;
+        }
+      }
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
-
-    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Columns(2, "SettingsColumns", false);  // 2 columns, no borders
+    ImGui::Text("CM/360");
+    ImGui::NextColumn();
+    ImGui::InputText("##CM_PER_360", &cm_per_360, ImGuiInputTextFlags_CharsDecimal);
     ImGui::End();
 
     if (app->StartRender()) {

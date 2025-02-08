@@ -5,6 +5,7 @@
 #include <format>
 
 #include "aim/scenario/static_scenario.h"
+#include "aim/ui/settings_screen.h"
 
 namespace aim {
 namespace {}  // namespace
@@ -15,7 +16,7 @@ void HomeScreen::Run(Application* app) {
   std::optional<StaticScenarioParams> scenario_to_start;
   bool stop_scenario = false;
   int duration_seconds = 60;
-  int cm_per_360 = app->GetSettingsManager()->GetCurrentSettings().cm_per_360;
+  bool open_settings = false;
   while (!stop_scenario) {
     if (needs_reset) {
       SDL_GL_SetSwapInterval(1);  // Enable vsync
@@ -27,6 +28,12 @@ void HomeScreen::Run(Application* app) {
       s.Run(app);
       scenario_to_start = {};
       needs_reset = true;
+      continue;
+    }
+    if (open_settings) {
+      SettingsScreen settings_screen;
+      settings_screen.Run(app);
+      open_settings = false;
       continue;
     }
 
@@ -54,6 +61,12 @@ void HomeScreen::Run(Application* app) {
       if (event.type == SDL_EVENT_QUIT) {
         return;
       }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_ESCAPE) {
+          return;
+        }
+      }
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
@@ -74,19 +87,10 @@ void HomeScreen::Run(Application* app) {
       duration_seconds = 10;
     }
 
-    ImGui::Text("cm/360:");
-    std::vector<int> sens_options = {30, 35, 40, 45, 50, 55, 60, 65, 70};
-    for (int sens : sens_options) {
-      std::string label = std::format("{}", sens);
-      ImGui::SameLine();
-      if (ImGui::RadioButton(label.c_str(), cm_per_360 == sens)) {
-        cm_per_360 = sens;
-        app->GetSettingsManager()->GetMutableCurrentSettings()->cm_per_360 = cm_per_360;
-        app->GetSettingsManager()->FlushToDisk();
-      }
-    }
-
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
+    if (ImGui::Button("Settings", sz)) {
+      open_settings = true;
+    }
     if (ImGui::Button("Start Nicky EZ PZ", sz)) {
       StaticScenarioParams params = base_1w_params;
       params.scenario_id = "nick_ez_pz";
