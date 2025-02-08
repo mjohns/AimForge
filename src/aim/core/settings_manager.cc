@@ -61,7 +61,14 @@ SettingsManager::SettingsManager(const std::filesystem::path& settings_path)
     }
   } else {
     // Create initial settings.
-    WriteSettings(GetDefaultFullSettings());
+    full_settings_ = GetDefaultFullSettings();
+    FlushToDisk();
+  }
+}
+
+SettingsManager::~SettingsManager() {
+  if (needs_save_) {
+    FlushToDisk();
   }
 }
 
@@ -74,23 +81,44 @@ FullSettingsT SettingsManager::GetFullSettings() {
   return full_settings_;
 }
 
+FullSettingsT* SettingsManager::GetMutableFullSettings() {
+  return &full_settings_;
+}
+
 SettingsT SettingsManager::GetCurrentSettings() {
-  for (auto& settings : full_settings_.settings_list) {
-    if (settings->name == full_settings_.current_settings ||
-        full_settings_.current_settings.size() == 0) {
-      return *settings;
-    }
+  SettingsT* existing_settings = GetMutableCurrentSettings();
+  if (existing_settings != nullptr) {
+    return *existing_settings;
   }
   SettingsT settings = GetDefaultSettings();
   settings.name = full_settings_.current_settings;
   return settings;
 }
 
-void SettingsManager::WriteSettings(const FullSettingsT& settings) {
-  full_settings_ = settings;
+SettingsT* SettingsManager::GetMutableCurrentSettings() {
+  for (auto& settings : full_settings_.settings_list) {
+    if (settings->name == full_settings_.current_settings ||
+        full_settings_.current_settings.size() == 0) {
+      return settings.get();
+    }
+  }
+  return nullptr;
+}
+
+void SettingsManager::MarkDirty() {
+  needs_save_ = true;
+}
+
+void SettingsManager::MaybeFlushToDisk() {
+  if (needs_save_) {
+    FlushToDisk();
+  }
+}
+void SettingsManager::FlushToDisk() {
+  needs_save_ = false;
 
   flatbuffers::FlatBufferBuilder fbb;
-  fbb.Finish(FullSettings::Pack(fbb, &settings));
+  fbb.Finish(FullSettings::Pack(fbb, &full_settings_));
   std::ofstream outfile(settings_path_, std::ios::binary);
   outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
   outfile.close();

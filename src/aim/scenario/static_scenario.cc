@@ -396,7 +396,7 @@ bool StaticScenario::RunInternal(Application* app) {
       MakeScoreString(targets_hit, shots_taken, score, params_.duration_seconds);
 
   StatsRow stats_row;
-  stats_row.cm_per_360 = params_.cm_per_360;
+  stats_row.cm_per_360 = settings.cm_per_360;
   stats_row.num_hits = targets_hit;
   stats_row.num_kills = targets_hit;
   stats_row.num_shots = shots_taken;
