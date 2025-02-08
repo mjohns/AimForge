@@ -67,9 +67,10 @@ void BindString(sqlite3_stmt* stmt, int index, const std::string& value) {
 
 }  // namespace
 
-StatsDb::StatsDb() {
+StatsDb::StatsDb(const std::filesystem::path& db_path) {
   char* err_msg = 0;
-  int rc = sqlite3_open("C:/Users/micha/AimTrainer/stats.db", &db_);
+  std::string db_path_str = db_path.string();
+  int rc = sqlite3_open(db_path_str.c_str(), &db_);
 
   if (rc != SQLITE_OK) {
     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db_));

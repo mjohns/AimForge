@@ -106,6 +106,7 @@ void HomeScreen::Run(Application* app) {
       params.num_targets = 3;
       params.metronome_bpm = 125;
       params.target_radius = 0.9;
+      params.remove_closest_target_on_miss = true;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start 1w1ts", sz)) {
@@ -144,8 +145,7 @@ void HomeScreen::Run(Application* app) {
     }
     ImGui::End();
 
-    ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
-    if (app->StartRender(clear_color)) {
+    if (app->StartRender()) {
       app->FinishRender();
     }
   }

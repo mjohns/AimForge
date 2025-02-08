@@ -13,16 +13,18 @@ table DotCrosshair {
   outline_color: StoredRgb;
 }
 
-table Settings {
+// Settings that you can configure per scenario.
+table ScenarioSettings {
+  // Empty name indicates the default settings.
   name: string;
   crosshair: Crosshair;
   cm_per_360: float;
-  dpi: float;
   theme_name: string;
 }
 
-table FullSettings {
-  settings: [Settings];
+table Settings {
+  dpi: float;
+  scenario_settings: [ScenarioSettings];
 }
 
-root_type FullSettings;
+root_type Settings;
