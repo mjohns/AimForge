@@ -174,10 +174,9 @@ void StaticScenario::Run(Application* app) {
 bool StaticScenario::RunInternal(Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
-  float dpi = app->GetSettingsManager()->GetSettings().dpi;
-  ScenarioSettingsT scenario_settings =
-      app->GetSettingsManager()->GetScenarioSettings(params_.scenario_id);
-  float radians_per_dot = CmPer360ToRadiansPerDot(scenario_settings.cm_per_360, dpi);
+  float dpi = app->GetSettingsManager()->GetDpi();
+  SettingsT settings = app->GetSettingsManager()->GetCurrentSettings();
+  float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360, dpi);
 
   StaticReplayT replay;
   replay.wall_height = params_.room_height;
@@ -376,7 +375,7 @@ bool StaticScenario::RunInternal(Application* app) {
     auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
-    DrawCrosshair(*scenario_settings.crosshair, screen, draw_list);
+    DrawCrosshair(*settings.crosshair, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -437,7 +436,7 @@ bool StaticScenario::RunInternal(Application* app) {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
-      bool need_quit = replay_viewer.PlayReplay(replay, *scenario_settings.crosshair, app);
+      bool need_quit = replay_viewer.PlayReplay(replay, *settings.crosshair, app);
       if (need_quit) {
         return false;
       }

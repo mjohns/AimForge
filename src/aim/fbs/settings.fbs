@@ -1,5 +1,7 @@
 include "common.fbs";
 
+file_identifier "SETG";
+
 namespace aim;
 
 table Crosshair {
@@ -13,18 +15,24 @@ table DotCrosshair {
   outline_color: StoredRgb;
 }
 
-// Settings that you can configure per scenario.
-table ScenarioSettings {
-  // Empty name indicates the default settings.
+// Settings that can be easily swapped per scenario.
+table Settings {
   name: string;
   crosshair: Crosshair;
   cm_per_360: float;
   theme_name: string;
 }
 
-table Settings {
+// Settings that would rarely be changed.
+table SystemSettings {
   dpi: float;
-  scenario_settings: [ScenarioSettings];
 }
 
-root_type Settings;
+table FullSettings {
+  system_settings: SystemSettings;
+  current_settings: string;
+  settings_list: [Settings];
+
+}
+
+root_type FullSettings;

@@ -9,6 +9,7 @@
 
 namespace aim {
 namespace {
+constexpr const float kDefaultDpi = 1600;
 
 CrosshairT GetDefaultCrosshair() {
   auto dot = std::make_unique<DotCrosshairT>();
@@ -24,14 +25,19 @@ CrosshairT GetDefaultCrosshair() {
 
 SettingsT GetDefaultSettings() {
   SettingsT settings;
-  settings.dpi = 1600;
-
-  auto scenario_settings = std::make_unique<ScenarioSettingsT>();
-  scenario_settings->cm_per_360 = 45;
-  scenario_settings->crosshair = std::make_unique<CrosshairT>(GetDefaultCrosshair());
-
-  settings.scenario_settings.push_back(std::move(scenario_settings));
+  settings.name = "default";
+  settings.cm_per_360 = 45;
+  settings.crosshair = std::make_unique<CrosshairT>(GetDefaultCrosshair());
   return settings;
+}
+
+FullSettingsT GetDefaultFullSettings() {
+  FullSettingsT full_settings;
+  full_settings.system_settings = std::make_unique<SystemSettingsT>();
+  auto settings = std::make_unique<SettingsT>(GetDefaultSettings());
+  full_settings.current_settings = settings->name;
+  full_settings.settings_list.push_back(std::move(settings));
+  return full_settings;
 }
 
 }  // namespace
@@ -50,36 +56,41 @@ SettingsManager::SettingsManager(const std::filesystem::path& settings_path)
       }
       file.close();
 
-      const Settings* root = aim::GetSettings(buffer.data());
-      root->UnPackTo(&settings_);
+      const FullSettings* root = aim::GetFullSettings(buffer.data());
+      root->UnPackTo(&full_settings_);
     }
   } else {
     // Create initial settings.
-    WriteSettings(GetDefaultSettings());
+    WriteSettings(GetDefaultFullSettings());
   }
 }
 
-const SettingsT& SettingsManager::GetSettings() {
-    // TODO: make sure settings have reasonable defaults.
-  return settings_;
+float SettingsManager::GetDpi() {
+  float dpi = full_settings_.system_settings->dpi;
+  return dpi > 0 ? dpi : kDefaultDpi;
 }
 
-ScenarioSettingsT SettingsManager::GetScenarioSettings(const std::string& scenario_id) {
-  ScenarioSettingsT* default_settings = nullptr;
-  for (auto& scenario_settings : settings_.scenario_settings) {
-    if (scenario_settings->name.size() == 0) {
-      default_settings = scenario_settings.get();
+FullSettingsT SettingsManager::GetFullSettings() {
+  return full_settings_;
+}
+
+SettingsT SettingsManager::GetCurrentSettings() {
+  for (auto& settings : full_settings_.settings_list) {
+    if (settings->name == full_settings_.current_settings ||
+        full_settings_.current_settings.size() == 0) {
+      return *settings;
     }
-    // Which settings for this scenario?
   }
-  return default_settings != nullptr ? *default_settings : ScenarioSettingsT();
+  SettingsT settings = GetDefaultSettings();
+  settings.name = full_settings_.current_settings;
+  return settings;
 }
 
-void SettingsManager::WriteSettings(const SettingsT& settings) {
-  settings_ = settings;
+void SettingsManager::WriteSettings(const FullSettingsT& settings) {
+  full_settings_ = settings;
 
   flatbuffers::FlatBufferBuilder fbb;
-  fbb.Finish(Settings::Pack(fbb, &settings));
+  fbb.Finish(FullSettings::Pack(fbb, &settings));
   std::ofstream outfile(settings_path_, std::ios::binary);
   outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
   outfile.close();
