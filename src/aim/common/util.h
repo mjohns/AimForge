@@ -4,7 +4,6 @@
 #include <imgui.h>
 #include <stdlib.h>
 
-#include <expected>
 #include <format>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -14,10 +13,6 @@
 #include "aim/fbs/common_generated.h"
 
 namespace aim {
-
-// The value or an error.
-template <typename T>
-using Result = std::expected<T, std::string>;
 
 template <typename T>
 static ImVec2 ToImVec2(const T& v) {
