@@ -9,12 +9,18 @@ namespace aim {
 class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path);
+  ~SettingsManager();
 
   FullSettingsT GetFullSettings();
+  FullSettingsT* GetMutableFullSettings();
   float GetDpi();
   SettingsT GetCurrentSettings();
+  SettingsT* GetMutableCurrentSettings();
 
-  void WriteSettings(const FullSettingsT& settings);
+  void MarkDirty();
+  void FlushToDisk();
+  // Only flush to disk if marked dirty.
+  void MaybeFlushToDisk();
 
   SettingsManager(const SettingsManager&) = delete;
   SettingsManager(SettingsManager&&) = default;
@@ -24,6 +30,7 @@ class SettingsManager {
  private:
   std::filesystem::path settings_path_;
   FullSettingsT full_settings_;
+  bool needs_save_ = false;
 };
 
 }  // namespace aim

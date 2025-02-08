@@ -15,7 +15,7 @@ void HomeScreen::Run(Application* app) {
   std::optional<StaticScenarioParams> scenario_to_start;
   bool stop_scenario = false;
   int duration_seconds = 60;
-  int cm_per_360 = 45;
+  int cm_per_360 = app->GetSettingsManager()->GetCurrentSettings().cm_per_360;
   while (!stop_scenario) {
     if (needs_reset) {
       SDL_GL_SetSwapInterval(1);  // Enable vsync
@@ -35,7 +35,6 @@ void HomeScreen::Run(Application* app) {
     base_1w_params.room_width = 170;
     base_1w_params.target_radius = 1.5;
     base_1w_params.duration_seconds = duration_seconds;
-    base_1w_params.cm_per_360 = cm_per_360;
 
     base_1w_params.target_placement.min_distance = 20;
     TargetRegion circle_region;
@@ -82,6 +81,8 @@ void HomeScreen::Run(Application* app) {
       ImGui::SameLine();
       if (ImGui::RadioButton(label.c_str(), cm_per_360 == sens)) {
         cm_per_360 = sens;
+        app->GetSettingsManager()->GetMutableCurrentSettings()->cm_per_360 = cm_per_360;
+        app->GetSettingsManager()->FlushToDisk();
       }
     }
 
@@ -133,7 +134,6 @@ void HomeScreen::Run(Application* app) {
       params.target_radius = 0.95;
       params.duration_seconds = duration_seconds;
       // params.metronome_bpm = 180;
-      params.cm_per_360 = cm_per_360;
 
       params.target_placement.min_distance = 3;
       TargetRegion circle_region;
