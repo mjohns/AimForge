@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+
 #include "aim/fbs/settings_generated.h"
 
 namespace aim {
@@ -9,9 +10,11 @@ class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path);
 
-  const SettingsT& GetSettings();
-  ScenarioSettingsT GetScenarioSettings(const std::string& scenario_id);
-  void WriteSettings(const SettingsT& settings);
+  FullSettingsT GetFullSettings();
+  float GetDpi();
+  SettingsT GetCurrentSettings();
+
+  void WriteSettings(const FullSettingsT& settings);
 
   SettingsManager(const SettingsManager&) = delete;
   SettingsManager(SettingsManager&&) = default;
@@ -20,7 +23,7 @@ class SettingsManager {
 
  private:
   std::filesystem::path settings_path_;
-  SettingsT settings_;
+  FullSettingsT full_settings_;
 };
 
 }  // namespace aim
