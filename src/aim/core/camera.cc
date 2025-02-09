@@ -68,6 +68,8 @@ void Camera::Update(int xrel, int yrel, float radians_per_dot) {
   // TODO: clamp yaw?
 }
 
+Camera::Camera() : pitch_(0), yaw_(0), position_(0) {}
+
 Camera::Camera(float pitch, float yaw, glm::vec3 position)
     : pitch_(pitch), yaw_(yaw), position_(position) {}
 

@@ -25,6 +25,7 @@ glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov = 103
 
 class Camera {
  public:
+  Camera();
   Camera(float pitch, float yaw);
   Camera(float pitch, float yaw, glm::vec3 position);
   // Defaults to looking (0, 1, 0)
