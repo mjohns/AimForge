@@ -11,7 +11,7 @@
 namespace aim {
 namespace {}  // namespace
 
-void SettingsScreen::Run(Application* app) {
+NavigationEvent SettingsScreen::Run(Application* app) {
   SDL_GL_SetSwapInterval(1);  // Enable vsync
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
 
@@ -26,7 +26,7 @@ void SettingsScreen::Run(Application* app) {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return;
+        return NavigationEvent::Exit();
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
@@ -37,7 +37,7 @@ void SettingsScreen::Run(Application* app) {
             mgr->MarkDirty();
           }
           mgr->MaybeFlushToDisk();
-          return;
+          return NavigationEvent::GoBack();
         }
       }
     }
@@ -53,6 +53,8 @@ void SettingsScreen::Run(Application* app) {
       app->FinishRender();
     }
   }
+
+  return NavigationEvent::GoBack();
 }
 
 }  // namespace aim

@@ -64,7 +64,7 @@ StatsScreen::StatsScreen(std::string scenario_id,
       stats_(stats),
       app_(app) {}
 
-bool StatsScreen::Run() {
+NavigationEvent StatsScreen::Run() {
   ScreenInfo screen = app_->GetScreenInfo();
   SettingsT settings = app_->GetSettingsManager()->GetCurrentSettings();
 
@@ -100,9 +100,9 @@ bool StatsScreen::Run() {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
-      bool need_quit = replay_viewer.PlayReplay(*replay_, *settings.crosshair, app_);
-      if (need_quit) {
-        return false;
+      auto nav_event = replay_viewer.PlayReplay(*replay_, *settings.crosshair, app_);
+      if (!nav_event.IsGoBack()) {
+        return nav_event;
       }
       SDL_GL_SetSwapInterval(1);
       view_replay = false;
@@ -113,22 +113,21 @@ bool StatsScreen::Run() {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return false;
+        return NavigationEvent::Exit();
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-          return false;
+          return NavigationEvent::GoBack();
         }
         if (keycode == SDLK_R) {
-          return true;
+          return NavigationEvent::RestartLastScenario();
         }
       }
     }
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
 
-    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::Text("high_score: %s", previous_high_score_string.c_str());
     ImGui::Text("total_runs: %d", all_stats.size());
     ImGui::Text("score: %s", score_string.c_str());
@@ -172,7 +171,7 @@ bool StatsScreen::Run() {
       app_->FinishRender();
     }
   }
-  return false;
+  return NavigationEvent::GoBack();
 }
 
 }  // namespace aim

@@ -51,9 +51,9 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
 
 }  // namespace
 
-bool ReplayViewer::PlayReplay(const StaticReplayT& replay,
-                              const CrosshairT& crosshair,
-                              Application* app) {
+NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
+                                         const CrosshairT& crosshair,
+                                         Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
@@ -73,12 +73,12 @@ bool ReplayViewer::PlayReplay(const StaticReplayT& replay,
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return true;
+        return NavigationEvent::Exit();
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-          return false;
+          return NavigationEvent::GoBack();
         }
       }
     }
@@ -86,7 +86,7 @@ bool ReplayViewer::PlayReplay(const StaticReplayT& replay,
 
     uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     if (replay_frame_number >= replay_frames.size()) {
-      return false;
+      return NavigationEvent::GoBack();
     }
 
     if (!timer.IsNewReplayFrame()) {
@@ -142,7 +142,7 @@ bool ReplayViewer::PlayReplay(const StaticReplayT& replay,
       app->FinishRender();
     }
   }
-  return false;
+  return NavigationEvent::GoBack();
 }
 
 }  // namespace aim

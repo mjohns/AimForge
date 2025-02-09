@@ -130,17 +130,17 @@ StaticScenario::StaticScenario(const StaticScenarioParams& params, Application* 
       metronome_(params.metronome_bpm, app),
       timer_(replay_frames_per_second_) {}
 
-void StaticScenario::RunScenario(const StaticScenarioParams& params, Application* app) {
+NavigationEvent StaticScenario::RunScenario(const StaticScenarioParams& params, Application* app) {
   while (true) {
     StaticScenario scenario(params, app);
-    bool restart = scenario.Run();
-    if (!restart) {
-      return;
+    NavigationEvent nav_event = scenario.Run();
+    if (nav_event.type != NavigationEventType::RESTART_LAST_SCENARIO) {
+      return nav_event;
     }
   }
 }
 
-bool StaticScenario::Run() {
+NavigationEvent StaticScenario::Run() {
   ScreenInfo screen = app_->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   float dpi = app_->GetSettingsManager()->GetDpi();
@@ -195,7 +195,7 @@ bool StaticScenario::Run() {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return false;
+        return NavigationEvent::Exit();
       }
       if (event.type == SDL_EVENT_MOUSE_MOTION) {
         camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
@@ -205,14 +205,11 @@ bool StaticScenario::Run() {
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_S) {
-          stop_scenario = true;
-        }
         if (keycode == SDLK_R) {
-          return true;
+          return NavigationEvent::RestartLastScenario();
         }
         if (keycode == SDLK_ESCAPE) {
-          return false;
+          return NavigationEvent::GoBack();
         }
       }
     }
@@ -351,7 +348,7 @@ bool StaticScenario::Run() {
   }
 
   if (stats_.shots_taken == 0) {
-    return false;
+    return NavigationEvent::GoHome();
   }
 
   stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
