@@ -1,8 +1,13 @@
 #pragma once
 
+#include <optional>
+
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/metronome.h"
 #include "aim/core/target.h"
+#include "aim/fbs/replay_generated.h"
+#include "aim/scenario/scenario_timer.h"
 
 namespace aim {
 
@@ -29,7 +34,7 @@ struct TargetPlacementParams {
 
 struct StaticScenarioParams {
   std::string scenario_id;
-  int num_targets = 1;
+  i32 num_targets = 1;
   float room_width;
   float room_height;
   float target_radius = 2;
@@ -40,18 +45,34 @@ struct StaticScenarioParams {
   bool remove_closest_target_on_miss = false;
 };
 
+struct StaticScenarioStats {
+  int targets_hit = 0;
+  int shots_taken = 0;
+};
+
+struct StaticScenarioRunData {};
+
 class StaticScenario {
  public:
-  explicit StaticScenario(StaticScenarioParams params);
-  void Run(Application* app);
+  explicit StaticScenario(const StaticScenarioParams& params, Application* app);
+
+  static void RunScenario(const StaticScenarioParams& params, Application* app);
 
  private:
   // Returns whether to restart.
-  bool RunInternal(Application* app);
+  bool Run();
 
-  Camera camera_;
-  TargetManager target_manager_;
   StaticScenarioParams params_;
+  Application* app_;
+  StaticScenarioStats stats_;
+  std::unique_ptr<StaticReplayT> replay_;
+  TargetManager target_manager_;
+  Camera camera_;
+  std::optional<u16> current_poke_target_id_;
+  u64 current_poke_start_time_micros_ = 0;
+  u16 replay_frames_per_second_ = 180;
+  Metronome metronome_;
+  ScenarioTimer timer_;
 };
 
 }  // namespace aim

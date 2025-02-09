@@ -24,8 +24,7 @@ void HomeScreen::Run(Application* app) {
       needs_reset = false;
     }
     if (scenario_to_start) {
-      aim::StaticScenario s(*scenario_to_start);
-      s.Run(app);
+      aim::StaticScenario::RunScenario(*scenario_to_start, app);
       scenario_to_start = {};
       needs_reset = true;
       continue;
