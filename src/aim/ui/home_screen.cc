@@ -24,14 +24,20 @@ void HomeScreen::Run(Application* app) {
       needs_reset = false;
     }
     if (scenario_to_start) {
-      aim::StaticScenario::RunScenario(*scenario_to_start, app);
+      auto nav_event = aim::StaticScenario::RunScenario(*scenario_to_start, app);
+      if (nav_event.IsExit()) {
+        return;
+      }
       scenario_to_start = {};
       needs_reset = true;
       continue;
     }
     if (open_settings) {
       SettingsScreen settings_screen;
-      settings_screen.Run(app);
+      auto nav_event = settings_screen.Run(app);
+      if (nav_event.IsExit()) {
+        return;
+      }
       open_settings = false;
       continue;
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "aim/core/application.h"
+#include "aim/core/navigation_event.h"
 #include "aim/fbs/replay_generated.h"
 #include "aim/scenario/static_scenario.h"
 
@@ -14,8 +15,7 @@ class StatsScreen {
               const StaticScenarioStats& stats,
               Application* app);
 
-  // Returns whether the scenario should restart.
-  bool Run();
+  NavigationEvent Run();
 
  private:
   std::string scenario_id_;

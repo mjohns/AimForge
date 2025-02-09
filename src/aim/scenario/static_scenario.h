@@ -3,6 +3,7 @@
 #include <optional>
 
 #include "aim/core/application.h"
+#include "aim/core/navigation_event.h"
 #include "aim/core/camera.h"
 #include "aim/core/metronome.h"
 #include "aim/core/target.h"
@@ -56,11 +57,11 @@ class StaticScenario {
  public:
   explicit StaticScenario(const StaticScenarioParams& params, Application* app);
 
-  static void RunScenario(const StaticScenarioParams& params, Application* app);
+  static NavigationEvent RunScenario(const StaticScenarioParams& params, Application* app);
 
  private:
   // Returns whether to restart.
-  bool Run();
+  NavigationEvent Run();
 
   StaticScenarioParams params_;
   Application* app_;
