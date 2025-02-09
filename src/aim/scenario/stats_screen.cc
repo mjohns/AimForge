@@ -1,0 +1,178 @@
+#include "stats_screen.h"
+
+#include <backends/imgui_impl_sdl3.h>
+#include <imgui.h>
+#include <implot.h>
+
+#include <fstream>
+#include <optional>
+
+#include "aim/common/scope_guard.h"
+#include "aim/scenario/replay_viewer.h"
+#include "aim/scenario/static_scenario.h"
+
+namespace aim {
+namespace {
+
+std::string MakeScoreString(int targets_hit, int shots_taken, float score) {
+  float hit_percent = targets_hit / (float)shots_taken;
+  std::string score_string =
+      std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
+  return score_string;
+}
+
+std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
+  int found_max_index = -1;
+  float max_score = 0;
+  for (int i = 0; i < std::min(max_index, all_stats.size()); ++i) {
+    auto& stats = all_stats[i];
+    if (stats.score >= max_score) {
+      found_max_index = i;
+      max_score = stats.score;
+    }
+  }
+  if (found_max_index > 0) {
+    return all_stats[found_max_index];
+  }
+  return {};
+}
+
+std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats) {
+  float max_score = 0;
+  std::vector<float> result;
+  result.reserve(all_stats.size());
+  for (int i = 0; i < all_stats.size(); ++i) {
+    auto& stats = all_stats[i];
+    if (stats.score >= max_score) {
+      max_score = stats.score;
+    }
+    result.push_back(max_score);
+  }
+  return result;
+}
+
+}  // namespace
+
+StatsScreen::StatsScreen(std::string scenario_id,
+                         i64 stats_id,
+                         std::unique_ptr<StaticReplayT> replay,
+                         const StaticScenarioStats& stats,
+                         Application* app)
+    : scenario_id_(std::move(scenario_id)),
+      stats_id_(stats_id),
+      replay_(std::move(replay)),
+      stats_(stats),
+      app_(app) {}
+
+bool StatsScreen::Run() {
+  ScreenInfo screen = app_->GetScreenInfo();
+  SettingsT settings = app_->GetSettingsManager()->GetCurrentSettings();
+
+  std::string score_string = MakeScoreString(stats_.targets_hit, stats_.shots_taken, stats_.score);
+
+  auto all_stats = app_->GetStatsDb()->GetStats(scenario_id_);
+  auto maybe_high_score_stats = GetHighScore(all_stats, all_stats.size());
+  auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
+
+  std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
+
+  // TODO: Define type for this autoclosing context
+  auto* implot_ctx = ImPlot::CreateContext();
+  auto implot_context_guard = ScopeGuard::Create([=] { ImPlot::DestroyContext(implot_ctx); });
+
+  std::string previous_high_score_string;
+  float previous_high_score = 0;
+  float percent_diff = 0;
+  if (maybe_previous_high_score_stats) {
+    previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
+                                                 maybe_previous_high_score_stats->num_shots,
+                                                 maybe_previous_high_score_stats->score);
+    previous_high_score = maybe_previous_high_score_stats->score;
+    float percent = previous_high_score / stats_.score;
+    percent_diff = (1.0 - percent) * 100;
+  }
+
+  // Show results page
+  SDL_GL_SetSwapInterval(1);  // Enable vsync
+  SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), false);
+  bool view_replay = false;
+  while (true) {
+    if (view_replay) {
+      SDL_GL_SetSwapInterval(0);
+      ReplayViewer replay_viewer;
+      bool need_quit = replay_viewer.PlayReplay(*replay_, *settings.crosshair, app_);
+      if (need_quit) {
+        return false;
+      }
+      SDL_GL_SetSwapInterval(1);
+      view_replay = false;
+      continue;
+    }
+
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      ImGui_ImplSDL3_ProcessEvent(&event);
+      if (event.type == SDL_EVENT_QUIT) {
+        return false;
+      }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_ESCAPE) {
+          return false;
+        }
+        if (keycode == SDLK_R) {
+          return true;
+        }
+      }
+    }
+
+    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
+
+    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("high_score: %s", previous_high_score_string.c_str());
+    ImGui::Text("total_runs: %d", all_stats.size());
+    ImGui::Text("score: %s", score_string.c_str());
+    ImGui::Text("percent diff: %.1f%%", percent_diff);
+    ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
+    if (ImGui::Button("View replay", sz)) {
+      view_replay = true;
+    }
+    if (ImGui::Button("Save replay", sz)) {
+      ReplayFileT replay_file;
+      replay_file.replay.Set(*replay_);
+      flatbuffers::FlatBufferBuilder fbb;
+      fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
+      std::string file_name = std::format("replay_{}_{}.bin", scenario_id_, stats_id_);
+      std::ofstream outfile(app_->GetFileSystem()->GetUserDataPath(file_name), std::ios::binary);
+      outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
+      outfile.close();
+    }
+    if (all_stats.size() > 1) {
+      if (ImPlot::BeginPlot("Scores")) {
+        // ImPlot::SetupAxis(ImAxis_X1, "Run Number", ImPlotAxisFlags_LockMax);
+        auto score_getter = [](int plot_index, void* data) {
+          StatsRow* stats = (StatsRow*)data;
+          ImPlotPoint p;
+          p.x = plot_index;
+          p.y = stats[plot_index].score;
+          return p;
+        };
+        ImPlot::PlotLineG("score", score_getter, all_stats.data(), all_stats.size());
+        if (maybe_previous_high_score_stats) {
+          ImPlot::PlotLine(
+              "high score", high_scores_over_time.data(), high_scores_over_time.size());
+        }
+        ImPlot::EndPlot();
+      }
+    }
+    ImGui::End();
+
+    ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
+    if (app_->StartRender(clear_color)) {
+      app_->FinishRender();
+    }
+  }
+  return false;
+}
+
+}  // namespace aim

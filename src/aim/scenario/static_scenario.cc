@@ -29,6 +29,7 @@
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_timer.h"
+#include "aim/scenario/stats_screen.h"
 
 namespace aim {
 namespace {
@@ -36,43 +37,6 @@ constexpr u64 kPokeBallKillTimeMillis = 50;
 
 Camera GetInitialCamera(const StaticScenarioParams& params) {
   return Camera(glm::vec3(0, -100.0f, 0));
-}
-
-std::string MakeScoreString(int targets_hit, int shots_taken, float score, float duration_seconds) {
-  float hit_percent = targets_hit / (float)shots_taken;
-  std::string score_string =
-      std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
-  return score_string;
-}
-
-std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
-  int found_max_index = -1;
-  float max_score = 0;
-  for (int i = 0; i < std::min(max_index, all_stats.size()); ++i) {
-    auto& stats = all_stats[i];
-    if (stats.score >= max_score) {
-      found_max_index = i;
-      max_score = stats.score;
-    }
-  }
-  if (found_max_index > 0) {
-    return all_stats[found_max_index];
-  }
-  return {};
-}
-
-std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats) {
-  float max_score = 0;
-  std::vector<float> result;
-  result.reserve(all_stats.size());
-  for (int i = 0; i < all_stats.size(); ++i) {
-    auto& stats = all_stats[i];
-    if (stats.score >= max_score) {
-      max_score = stats.score;
-    }
-    result.push_back(max_score);
-  }
-  return result;
 }
 
 bool AreNoneWithinDistance(const glm::vec2& p, float min_distance, TargetManager* target_manager) {
@@ -386,130 +350,25 @@ bool StaticScenario::Run() {
     }
   }
 
-  int targets_hit = stats_.targets_hit;
-  int shots_taken = stats_.shots_taken;
-  float hit_percent = targets_hit / (float)shots_taken;
+  if (stats_.shots_taken == 0) {
+    return false;
+  }
+
+  stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
   float duration_modifier = 60.0f / params_.duration_seconds;
-  float score = targets_hit * 10 * sqrt(hit_percent) * duration_modifier;
-  std::string score_string =
-      MakeScoreString(targets_hit, shots_taken, score, params_.duration_seconds);
+  stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
 
   StatsRow stats_row;
   stats_row.cm_per_360 = settings.cm_per_360;
-  stats_row.num_hits = targets_hit;
-  stats_row.num_kills = targets_hit;
-  stats_row.num_shots = shots_taken;
-  stats_row.score = score;
-  if (stats_row.score > 0) {
-    app_->GetStatsDb()->AddStats(params_.scenario_id, &stats_row);
-  }
+  stats_row.num_hits = stats_.targets_hit;
+  stats_row.num_kills = stats_.targets_hit;
+  stats_row.num_shots = stats_.shots_taken;
+  stats_row.score = stats_.score;
+  app_->GetStatsDb()->AddStats(params_.scenario_id, &stats_row);
 
-  auto all_stats = app_->GetStatsDb()->GetStats(params_.scenario_id);
-  auto maybe_high_score_stats = GetHighScore(all_stats, all_stats.size());
-  auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
-
-  std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
-
-  // TODO: Define type for this autoclosing context
-  auto* implot_ctx = ImPlot::CreateContext();
-  auto implot_context_guard = ScopeGuard::Create([=] { ImPlot::DestroyContext(implot_ctx); });
-
-  std::string previous_high_score_string;
-  float previous_high_score = 0;
-  float percent_diff = 0;
-  if (maybe_previous_high_score_stats) {
-    previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
-                                                 maybe_previous_high_score_stats->num_shots,
-                                                 maybe_previous_high_score_stats->score,
-                                                 params_.duration_seconds);
-    previous_high_score = maybe_previous_high_score_stats->score;
-    float percent = previous_high_score / score;
-    percent_diff = (1.0 - percent) * 100;
-  }
-
-  // Show results page
-  SDL_GL_SetSwapInterval(1);  // Enable vsync
-  SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), false);
-  bool view_replay = false;
-  while (true) {
-    if (view_replay) {
-      SDL_GL_SetSwapInterval(0);
-      ReplayViewer replay_viewer;
-      bool need_quit = replay_viewer.PlayReplay(replay, *settings.crosshair, app_);
-      if (need_quit) {
-        return false;
-      }
-      SDL_GL_SetSwapInterval(1);
-      view_replay = false;
-      continue;
-    }
-
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL3_ProcessEvent(&event);
-      if (event.type == SDL_EVENT_QUIT) {
-        return false;
-      }
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_ESCAPE) {
-          return false;
-        }
-        if (keycode == SDLK_R) {
-          return true;
-        }
-      }
-    }
-
-    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-
-    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::Text("high_score: %s", previous_high_score_string.c_str());
-    ImGui::Text("total_runs: %d", all_stats.size());
-    ImGui::Text("score: %s", score_string.c_str());
-    ImGui::Text("percent diff: %.1f%%", percent_diff);
-    ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
-    if (ImGui::Button("View replay", sz)) {
-      view_replay = true;
-    }
-    if (ImGui::Button("Save replay", sz)) {
-      ReplayFileT replay_file;
-      replay_file.replay.Set(replay);
-      flatbuffers::FlatBufferBuilder fbb;
-      fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
-      std::ofstream outfile(std::format("C:/Users/micha/AimTrainer/replay_{}_{}.bin",
-                                        params_.scenario_id,
-                                        stats_row.stats_id),
-                            std::ios::binary);
-      outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
-      outfile.close();
-    }
-    if (all_stats.size() > 1) {
-      if (ImPlot::BeginPlot("Scores")) {
-        // ImPlot::SetupAxis(ImAxis_X1, "Run Number", ImPlotAxisFlags_LockMax);
-        auto score_getter = [](int plot_index, void* data) {
-          StatsRow* stats = (StatsRow*)data;
-          ImPlotPoint p;
-          p.x = plot_index;
-          p.y = stats[plot_index].score;
-          return p;
-        };
-        ImPlot::PlotLineG("score", score_getter, all_stats.data(), all_stats.size());
-        if (maybe_previous_high_score_stats) {
-          ImPlot::PlotLine(
-              "high score", high_scores_over_time.data(), high_scores_over_time.size());
-        }
-        ImPlot::EndPlot();
-      }
-    }
-    ImGui::End();
-
-    ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
-    if (app_->StartRender(clear_color)) {
-      app_->FinishRender();
-    }
-  }
-  return false;
+  StatsScreen stats_screen(
+      params_.scenario_id, stats_row.stats_id, std::move(replay_), stats_, app_);
+  return stats_screen.Run();
 }
 
 }  // namespace aim

@@ -48,9 +48,9 @@ struct StaticScenarioParams {
 struct StaticScenarioStats {
   int targets_hit = 0;
   int shots_taken = 0;
+  float hit_percent;
+  float score;
 };
-
-struct StaticScenarioRunData {};
 
 class StaticScenario {
  public:
