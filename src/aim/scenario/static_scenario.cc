@@ -30,6 +30,7 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
+#include "aim/ui/settings_screen.h"
 
 namespace aim {
 namespace {
@@ -175,17 +176,35 @@ NavigationEvent StaticScenario::Run() {
   app_->GetRenderer()->SetProjection(projection);
 
   // Main loop
-  ScenarioTimer& timer = timer_;
   bool stop_scenario = false;
+  bool show_settings = false;
   while (!stop_scenario) {
-    timer.OnStartFrame();
+    if (show_settings) {
+      // Need to pause.
+      timer_.Pause();
+      SettingsScreen settings_screen;
+      auto nav_event = settings_screen.Run(app_);
+      if (nav_event.IsNotDone()) {
+        return nav_event;
+      }
+      show_settings = false;
 
-    if (timer.IsNewReplayFrame()) {
+      // Need to refresh everything based on settings change
+      settings = app_->GetSettingsManager()->GetCurrentSettings();
+      radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360, dpi);
+      timer_.Resume();
+      SDL_GL_SetSwapInterval(0);  // Disable vsync
+      SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
+    }
+
+    timer_.OnStartFrame();
+
+    if (timer_.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
       replay.pitch_yaw_pairs.push_back(PitchYaw(camera_.GetPitch(), camera_.GetYaw()));
     }
 
-    if (timer.GetElapsedSeconds() >= params_.duration_seconds) {
+    if (timer_.GetElapsedSeconds() >= params_.duration_seconds) {
       stop_scenario = true;
       continue;
     }
@@ -209,14 +228,14 @@ NavigationEvent StaticScenario::Run() {
           return NavigationEvent::RestartLastScenario();
         }
         if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::Done();
+          show_settings = true;
         }
       }
     }
 
     // Update state
 
-    metronome_.DoTick(timer.GetElapsedMicros());
+    metronome_.DoTick(timer_.GetElapsedMicros());
     bool force_render = false;
     look_at = camera_.GetLookAt();
 
@@ -229,7 +248,7 @@ NavigationEvent StaticScenario::Run() {
         if (is_hitting_current_target) {
           // Still targeting the correct target.
           // Has enough time elapsed to kill target?
-          u64 now_micros = timer.GetElapsedMicros();
+          u64 now_micros = timer_.GetElapsedMicros();
           u64 age_micros = now_micros - current_poke_start_time_micros_;
           u64 min_age_micros = kPokeBallKillTimeMillis * 1000;
           if (age_micros >= min_age_micros) {
@@ -245,14 +264,14 @@ NavigationEvent StaticScenario::Run() {
             // Add replay events
             auto add_target = std::make_unique<AddTargetEventT>();
             add_target->target_id = new_target.id;
-            add_target->frame_number = timer.GetReplayFrameNumber();
+            add_target->frame_number = timer_.GetReplayFrameNumber();
             add_target->position = ToStoredVec3Ptr(new_target.position);
             add_target->radius = new_target.radius;
             replay.add_target_events.push_back(std::move(add_target));
 
             auto hit_target = std::make_unique<HitTargetEventT>();
             hit_target->target_id = hit_target_id;
-            hit_target->frame_number = timer.GetReplayFrameNumber();
+            hit_target->frame_number = timer_.GetReplayFrameNumber();
             replay.hit_target_events.push_back(std::move(hit_target));
 
             current_poke_target_id_ = {};
@@ -261,7 +280,7 @@ NavigationEvent StaticScenario::Run() {
         } else {
           // Starting time on new target.
           current_poke_target_id_ = hit_target_id;
-          current_poke_start_time_micros_ = timer.GetElapsedMicros();
+          current_poke_start_time_micros_ = timer_.GetElapsedMicros();
         }
       } else {
         // No current target. Clear.
@@ -285,19 +304,19 @@ NavigationEvent StaticScenario::Run() {
           // Add replay events
           auto add_target = std::make_unique<AddTargetEventT>();
           add_target->target_id = new_target.id;
-          add_target->frame_number = timer.GetReplayFrameNumber();
+          add_target->frame_number = timer_.GetReplayFrameNumber();
           add_target->position = ToStoredVec3Ptr(new_target.position);
           add_target->radius = new_target.radius;
           replay.add_target_events.push_back(std::move(add_target));
 
           auto hit_target = std::make_unique<HitTargetEventT>();
           hit_target->target_id = hit_target_id;
-          hit_target->frame_number = timer.GetReplayFrameNumber();
+          hit_target->frame_number = timer_.GetReplayFrameNumber();
           replay.hit_target_events.push_back(std::move(hit_target));
         } else {
           // Missed shot
           auto miss_target = std::make_unique<MissTargetEventT>();
-          miss_target->frame_number = timer.GetReplayFrameNumber();
+          miss_target->frame_number = timer_.GetReplayFrameNumber();
           replay.miss_target_events.push_back(std::move(miss_target));
           if (params_.remove_closest_target_on_miss) {
             std::optional<u16> target_id_to_remove =
@@ -308,14 +327,14 @@ NavigationEvent StaticScenario::Run() {
 
               auto add_target = std::make_unique<AddTargetEventT>();
               add_target->target_id = new_target.id;
-              add_target->frame_number = timer.GetReplayFrameNumber();
+              add_target->frame_number = timer_.GetReplayFrameNumber();
               add_target->position = ToStoredVec3Ptr(new_target.position);
               add_target->radius = new_target.radius;
               replay.add_target_events.push_back(std::move(add_target));
 
               auto remove_target = std::make_unique<RemoveTargetEventT>();
               remove_target->target_id = *target_id_to_remove;
-              remove_target->frame_number = timer.GetReplayFrameNumber();
+              remove_target->frame_number = timer_.GetReplayFrameNumber();
               replay.remove_target_events.push_back(std::move(remove_target));
             }
           }
@@ -324,18 +343,18 @@ NavigationEvent StaticScenario::Run() {
     }
 
     // Render if forced or if the last render was over ~1ms ago.
-    bool do_render = force_render || timer.LastFrameRenderedMicrosAgo() > 1200;
+    bool do_render = force_render || timer_.LastFrameRenderedMicrosAgo() > 1200;
     if (!do_render) {
       continue;
     }
 
-    timer.OnStartRender();
-    auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
+    timer_.OnStartRender();
+    auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
     DrawCrosshair(*settings.crosshair, screen, draw_list);
 
-    float elapsed_seconds = timer.GetElapsedSeconds();
+    float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();

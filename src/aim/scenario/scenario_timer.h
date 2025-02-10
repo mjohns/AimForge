@@ -14,6 +14,14 @@ class ScenarioTimer {
   void OnStartRender();
   void OnEndRender();
 
+  void Pause() {
+    run_stopwatch_.Stop();
+  }
+
+  void Resume() {
+    run_stopwatch_.Start();
+  }
+
   float GetElapsedSeconds() {
     return run_stopwatch_.GetElapsedSeconds();
   }

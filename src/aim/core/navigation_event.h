@@ -34,6 +34,10 @@ struct NavigationEvent {
     return type == NavigationEventType::DONE;
   }
 
+  bool IsNotDone() {
+    return type != NavigationEventType::DONE;
+  }
+
   bool IsExit() {
     return type == NavigationEventType::EXIT;
   }
