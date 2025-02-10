@@ -3,9 +3,9 @@
 #include <optional>
 
 #include "aim/core/application.h"
-#include "aim/core/navigation_event.h"
 #include "aim/core/camera.h"
 #include "aim/core/metronome.h"
+#include "aim/core/navigation_event.h"
 #include "aim/core/target.h"
 #include "aim/fbs/replay_generated.h"
 #include "aim/scenario/scenario_timer.h"
@@ -33,17 +33,27 @@ struct TargetPlacementParams {
   float min_distance = 20;
 };
 
+enum class ScenarioType {
+  STATIC,
+};
+
 struct StaticScenarioParams {
-  std::string scenario_id;
   i32 num_targets = 1;
   float room_width;
   float room_height;
   float target_radius = 2;
-  float duration_seconds = 60;
-  float metronome_bpm = -1;
   bool is_poke_ball = false;
   TargetPlacementParams target_placement;
   bool remove_closest_target_on_miss = false;
+};
+
+struct ScenarioParams {
+  std::string scenario_id;
+  float duration_seconds = 60;
+  float metronome_bpm = -1;
+  u16 replay_fps = 150;
+  ScenarioType type;
+  StaticScenarioParams static_params;
 };
 
 struct StaticScenarioStats {
@@ -53,27 +63,37 @@ struct StaticScenarioStats {
   float score;
 };
 
-class StaticScenario {
+struct UpdateStateData {
+  bool has_click = false;
+  // Set to true to force rendering.
+  bool force_render = false;
+};
+
+NavigationEvent RunStaticScenario(const ScenarioParams& params, Application* app);
+
+class Scenario {
  public:
-  explicit StaticScenario(const StaticScenarioParams& params, Application* app);
+  Scenario(const ScenarioParams& params, Application* app);
+  virtual ~Scenario() {}
 
-  static NavigationEvent RunScenario(const StaticScenarioParams& params, Application* app);
-
- private:
-  // Returns whether to restart.
   NavigationEvent Run();
 
-  StaticScenarioParams params_;
+ protected:
+  virtual void Initialize() {}
+  virtual void OnBeforeEventHandling() {}
+  virtual void OnEvent(const SDL_Event& event) {}
+  virtual void UpdateState(UpdateStateData* data) {}
+  virtual void Render() = 0;
+
+  ScenarioParams params_;
   Application* app_;
   StaticScenarioStats stats_;
-  std::unique_ptr<StaticReplayT> replay_;
-  TargetManager target_manager_;
-  Camera camera_;
-  std::optional<u16> current_poke_target_id_;
-  u64 current_poke_start_time_micros_ = 0;
-  u16 replay_frames_per_second_ = 180;
   Metronome metronome_;
   ScenarioTimer timer_;
+  Camera camera_;
+  LookAtInfo look_at_;
+  // TODO: Make this replay non static specific.
+  std::unique_ptr<StaticReplayT> replay_;
 };
 
 }  // namespace aim
