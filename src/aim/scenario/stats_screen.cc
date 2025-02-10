@@ -101,7 +101,7 @@ NavigationEvent StatsScreen::Run() {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
       auto nav_event = replay_viewer.PlayReplay(*replay_, *settings.crosshair, app_);
-      if (!nav_event.IsGoBack()) {
+      if (!nav_event.IsDone()) {
         return nav_event;
       }
       SDL_GL_SetSwapInterval(1);
@@ -118,7 +118,7 @@ NavigationEvent StatsScreen::Run() {
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::GoBack();
+          return NavigationEvent::Done();
         }
         if (keycode == SDLK_R) {
           return NavigationEvent::RestartLastScenario();
@@ -171,7 +171,7 @@ NavigationEvent StatsScreen::Run() {
       app_->FinishRender();
     }
   }
-  return NavigationEvent::GoBack();
+  return NavigationEvent::Done();
 }
 
 }  // namespace aim
