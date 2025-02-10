@@ -39,6 +39,12 @@ NavigationEvent SettingsScreen::Run(Application* app) {
           mgr->MaybeFlushToDisk();
           return NavigationEvent::Done();
         }
+        if (keycode == SDLK_H) {
+          return NavigationEvent::GoHome();
+        }
+        if (keycode == SDLK_R) {
+          return NavigationEvent::RestartLastScenario();
+        }
       }
     }
 
