@@ -78,7 +78,7 @@ NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::GoBack();
+          return NavigationEvent::Done();
         }
       }
     }
@@ -86,7 +86,7 @@ NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
 
     uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     if (replay_frame_number >= replay_frames.size()) {
-      return NavigationEvent::GoBack();
+      return NavigationEvent::Done();
     }
 
     if (!timer.IsNewReplayFrame()) {
@@ -142,7 +142,7 @@ NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
       app->FinishRender();
     }
   }
-  return NavigationEvent::GoBack();
+  return NavigationEvent::Done();
 }
 
 }  // namespace aim

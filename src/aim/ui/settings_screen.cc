@@ -37,7 +37,7 @@ NavigationEvent SettingsScreen::Run(Application* app) {
             mgr->MarkDirty();
           }
           mgr->MaybeFlushToDisk();
-          return NavigationEvent::GoBack();
+          return NavigationEvent::Done();
         }
       }
     }
@@ -54,7 +54,7 @@ NavigationEvent SettingsScreen::Run(Application* app) {
     }
   }
 
-  return NavigationEvent::GoBack();
+  return NavigationEvent::Done();
 }
 
 }  // namespace aim

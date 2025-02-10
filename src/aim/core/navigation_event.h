@@ -6,7 +6,7 @@ enum class NavigationEventType {
   GO_HOME,
   EXIT,
   RESTART_LAST_SCENARIO,
-  GO_BACK,
+  DONE,
 };
 
 struct NavigationEvent {
@@ -16,8 +16,8 @@ struct NavigationEvent {
   static NavigationEvent Exit() {
     return Create(NavigationEventType::EXIT);
   }
-  static NavigationEvent GoBack() {
-    return Create(NavigationEventType::GO_BACK);
+  static NavigationEvent Done() {
+    return Create(NavigationEventType::DONE);
   }
   static NavigationEvent GoHome() {
     return Create(NavigationEventType::GO_HOME);
@@ -30,15 +30,15 @@ struct NavigationEvent {
     return type == NavigationEventType::GO_HOME || type == NavigationEventType::EXIT;
   }
 
-  bool IsGoBack() {
-    return type == NavigationEventType::GO_BACK;
+  bool IsDone() {
+    return type == NavigationEventType::DONE;
   }
 
   bool IsExit() {
     return type == NavigationEventType::EXIT;
   }
 
-  NavigationEventType type = NavigationEventType::GO_BACK;
+  NavigationEventType type = NavigationEventType::DONE;
 };
 
 }  // namespace aim

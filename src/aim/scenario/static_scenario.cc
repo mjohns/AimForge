@@ -209,7 +209,7 @@ NavigationEvent StaticScenario::Run() {
           return NavigationEvent::RestartLastScenario();
         }
         if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::GoBack();
+          return NavigationEvent::Done();
         }
       }
     }
