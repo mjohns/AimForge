@@ -2,15 +2,15 @@
 
 #include "aim/core/application.h"
 #include "aim/core/navigation_event.h"
-#include "aim/fbs/replay_generated.h"
-#include "aim/fbs/settings_generated.h"
+#include "aim/proto/replay.pb.h"
+#include "aim/proto/settings.pb.h"
 
 namespace aim {
 
 class ReplayViewer {
  public:
-  NavigationEvent PlayReplay(const StaticReplayT& replay,
-                             const CrosshairT& crosshair,
+  NavigationEvent PlayReplay(const Replay& replay,
+                             const Crosshair& crosshair,
                              Application* app);
 };
 

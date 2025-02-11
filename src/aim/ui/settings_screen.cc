@@ -16,9 +16,9 @@ NavigationEvent SettingsScreen::Run(Application* app) {
   SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
 
   SettingsManager* mgr = app->GetSettingsManager();
-  SettingsT* current_settings = mgr->GetMutableCurrentSettings();
+  Settings* current_settings = mgr->GetMutableCurrentSettings();
 
-  std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360);
+  std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
   cm_per_360.reserve(20);
   const ScreenInfo& screen = app->GetScreenInfo();
 
@@ -34,7 +34,7 @@ NavigationEvent SettingsScreen::Run(Application* app) {
         if (keycode == SDLK_ESCAPE) {
           float new_cm_per_360 = ParseFloat(cm_per_360);
           if (new_cm_per_360 > 0) {
-            current_settings->cm_per_360 = new_cm_per_360;
+            current_settings->set_cm_per_360(new_cm_per_360);
             mgr->MarkDirty();
           }
           mgr->MaybeFlushToDisk();

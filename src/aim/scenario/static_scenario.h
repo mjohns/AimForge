@@ -7,7 +7,7 @@
 #include "aim/core/metronome.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/target.h"
-#include "aim/fbs/replay_generated.h"
+#include "aim/proto/replay.pb.h"
 #include "aim/scenario/scenario_timer.h"
 
 namespace aim {
@@ -92,8 +92,7 @@ class Scenario {
   ScenarioTimer timer_;
   Camera camera_;
   LookAtInfo look_at_;
-  // TODO: Make this replay non static specific.
-  std::unique_ptr<StaticReplayT> replay_;
+  std::unique_ptr<Replay> replay_;
 };
 
 }  // namespace aim

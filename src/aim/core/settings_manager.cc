@@ -1,42 +1,41 @@
 #include "settings_manager.h"
 
-#include <flatbuffers/idl.h>
-#include <flatbuffers/util.h>
-
 #include <fstream>
 
 #include "aim/common/util.h"
+#include "aim/proto/settings.pb.h"
 
 namespace aim {
 namespace {
 constexpr const float kDefaultDpi = 1600;
 
-CrosshairT GetDefaultCrosshair() {
-  auto dot = std::make_unique<DotCrosshairT>();
-  dot->dot_color = ToStoredRgbPtr(254, 138, 24);
-  dot->outline_color = ToStoredRgbPtr(0, 0, 0);
-  dot->draw_outline = true;
-  dot->dot_size = 3;
-
-  CrosshairT crosshair;
-  crosshair.dot = std::move(dot);
+Crosshair GetDefaultCrosshair() {
+  /*
+  #include <google/protobuf/util/json_util.h>
+  std::string json;
+  google::protobuf::util::MessageToJsonString(s, &json);
+  */
+  Crosshair crosshair;
+  crosshair.set_size(3);
+  *crosshair.mutable_color() = ToStoredRgb(254, 138, 24);
+  crosshair.mutable_dot()->set_draw_outline(true);
+  *(crosshair.mutable_dot()->mutable_outline_color()) = ToStoredRgb(0, 0, 0);
   return crosshair;
 }
 
-SettingsT GetDefaultSettings() {
-  SettingsT settings;
-  settings.name = "default";
-  settings.cm_per_360 = 45;
-  settings.crosshair = std::make_unique<CrosshairT>(GetDefaultCrosshair());
+Settings GetDefaultSettings() {
+  Settings settings;
+  settings.set_name("default");
+  settings.set_cm_per_360(45);
+  *settings.mutable_crosshair() = GetDefaultCrosshair();
   return settings;
 }
 
-FullSettingsT GetDefaultFullSettings() {
-  FullSettingsT full_settings;
-  full_settings.system_settings = std::make_unique<SystemSettingsT>();
-  auto settings = std::make_unique<SettingsT>(GetDefaultSettings());
-  full_settings.current_settings = settings->name;
-  full_settings.settings_list.push_back(std::move(settings));
+FullSettings GetDefaultFullSettings() {
+  FullSettings full_settings;
+  Settings default_settings = GetDefaultSettings();
+  *full_settings.add_saved_settings() = default_settings;
+  full_settings.set_current_settings(default_settings.name());
   return full_settings;
 }
 
@@ -44,21 +43,10 @@ FullSettingsT GetDefaultFullSettings() {
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path)
     : settings_path_(settings_path) {
-  std::ifstream file(settings_path, std::ios::binary | std::ios::ate);
-  if (std::filesystem::exists(settings_path)) {
-    if (file.is_open()) {
-      std::streamsize size = file.tellg();  // Get file size
-      file.seekg(0, std::ios::beg);         // Go back to beginning
-
-      std::vector<char> buffer(size);    // Create a buffer to hold the data
-      if (size > 0) {                    // Check if the file is not empty
-        file.read(buffer.data(), size);  // Read the data
-      }
-      file.close();
-
-      const FullSettings* root = aim::GetFullSettings(buffer.data());
-      root->UnPackTo(&full_settings_);
-    }
+  std::ifstream file(settings_path, std::ios::binary);
+  if (std::filesystem::exists(settings_path) && file.is_open()) {
+    full_settings_.ParseFromIstream(&file);
+    file.close();
   } else {
     // Create initial settings.
     full_settings_ = GetDefaultFullSettings();
@@ -73,33 +61,34 @@ SettingsManager::~SettingsManager() {
 }
 
 float SettingsManager::GetDpi() {
-  float dpi = full_settings_.system_settings->dpi;
+  float dpi = full_settings_.system_settings().dpi();
   return dpi > 0 ? dpi : kDefaultDpi;
 }
 
-FullSettingsT SettingsManager::GetFullSettings() {
+FullSettings SettingsManager::GetFullSettings() {
   return full_settings_;
 }
 
-FullSettingsT* SettingsManager::GetMutableFullSettings() {
+FullSettings* SettingsManager::GetMutableFullSettings() {
   return &full_settings_;
 }
 
-SettingsT SettingsManager::GetCurrentSettings() {
-  SettingsT* existing_settings = GetMutableCurrentSettings();
+Settings SettingsManager::GetCurrentSettings() {
+  Settings* existing_settings = GetMutableCurrentSettings();
   if (existing_settings != nullptr) {
     return *existing_settings;
   }
-  SettingsT settings = GetDefaultSettings();
-  settings.name = full_settings_.current_settings;
+  Settings settings = GetDefaultSettings();
+  settings.set_name(full_settings_.current_settings());
   return settings;
 }
 
-SettingsT* SettingsManager::GetMutableCurrentSettings() {
-  for (auto& settings : full_settings_.settings_list) {
-    if (settings->name == full_settings_.current_settings ||
-        full_settings_.current_settings.size() == 0) {
-      return settings.get();
+Settings* SettingsManager::GetMutableCurrentSettings() {
+  for (int i = 0; i < full_settings_.saved_settings_size(); ++i) {
+    Settings* settings = full_settings_.mutable_saved_settings(i);
+    if (settings->name() == full_settings_.current_settings() ||
+        full_settings_.current_settings().size() == 0) {
+      return settings;
     }
   }
   return nullptr;
@@ -117,10 +106,8 @@ void SettingsManager::MaybeFlushToDisk() {
 void SettingsManager::FlushToDisk() {
   needs_save_ = false;
 
-  flatbuffers::FlatBufferBuilder fbb;
-  fbb.Finish(FullSettings::Pack(fbb, &full_settings_));
   std::ofstream outfile(settings_path_, std::ios::binary);
-  outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
+  full_settings_.SerializeToOstream(&outfile);
   outfile.close();
 }
 

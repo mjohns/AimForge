@@ -2,7 +2,6 @@
 
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_sdl3.h>
-#include <flatbuffers/flatbuffers.h>
 #include <imgui.h>
 #include <implot.h>
 
@@ -23,10 +22,10 @@
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/metronome.h"
-#include "aim/fbs/common_generated.h"
-#include "aim/fbs/replay_generated.h"
-#include "aim/fbs/settings_generated.h"
 #include "aim/graphics/crosshair.h"
+#include "aim/proto/common.pb.h"
+#include "aim/proto/replay.pb.h"
+#include "aim/proto/settings.pb.h"
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
@@ -125,11 +124,41 @@ class StaticScenario : public Scenario {
  public:
   explicit StaticScenario(const ScenarioParams& params, Application* app) : Scenario(params, app) {}
 
+ private:
+  void AddNewTargetEvent(const Target& target, i32 explicit_frame_number = -1) {
+    auto add_event = replay_->add_events();
+    add_event->set_frame_number(explicit_frame_number >= 0 ? explicit_frame_number
+                                                           : timer_.GetReplayFrameNumber());
+    auto add_target = add_event->mutable_add_static_target();
+    add_target->set_target_id(target.id);
+    *(add_target->mutable_position()) = ToStoredVec3(target.position);
+    add_target->set_radius(target.radius);
+  }
+
+  void AddKillTargetEvent(u16 target_id) {
+    auto event = replay_->add_events();
+    event->set_frame_number(timer_.GetReplayFrameNumber());
+    event->mutable_kill_target()->set_target_id(target_id);
+  }
+
+  void AddRemoveTargetEvent(u16 target_id) {
+    auto event = replay_->add_events();
+    event->set_frame_number(timer_.GetReplayFrameNumber());
+    event->mutable_remove_target()->set_target_id(target_id);
+  }
+
+  void AddShotMissedEvent() {
+    auto event = replay_->add_events();
+    event->set_frame_number(timer_.GetReplayFrameNumber());
+    *event->mutable_shot_missed() = ShotMissedEvent();
+  }
+
  protected:
   virtual void OnBeforeEventHandling() {
     if (timer_.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
-      replay_->pitch_yaw_pairs.push_back(PitchYaw(camera_.GetPitch(), camera_.GetYaw()));
+      replay_->add_pitch_yaws(camera_.GetPitch());
+      replay_->add_pitch_yaws(camera_.GetYaw());
     }
   }
 
@@ -141,23 +170,15 @@ class StaticScenario : public Scenario {
   }
 
   void Initialize() override {
-    StaticReplayT& replay = *(replay_);
-    replay.wall_height = params_.static_params.room_height;
-    replay.wall_width = params_.static_params.room_width;
-    replay.is_poke_ball = params_.static_params.is_poke_ball;
-    replay.frames_per_second = params_.replay_fps;
-    replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
+    replay_->mutable_room()->mutable_simple_room()->set_height(params_.static_params.room_height);
+    replay_->mutable_room()->mutable_simple_room()->set_width(params_.static_params.room_width);
+    replay_->set_is_poke_ball(params_.static_params.is_poke_ball);
+    replay_->set_replay_fps(params_.replay_fps);
+    *(replay_->mutable_camera_position()) = ToStoredVec3(camera_.GetPosition());
 
     for (int i = 0; i < params_.static_params.num_targets; ++i) {
       Target target = target_manager_.AddTarget(GetNewTarget(params_, &target_manager_, app_));
-
-      // Add replay event
-      auto add_target = std::make_unique<AddTargetEventT>();
-      add_target->target_id = target.id;
-      add_target->frame_number = 0;
-      add_target->position = ToStoredVec3Ptr(target.position);
-      add_target->radius = target.radius;
-      replay.add_target_events.push_back(std::move(add_target));
+      AddNewTargetEvent(target, 0);
     }
   }
 
@@ -185,17 +206,8 @@ class StaticScenario : public Scenario {
                 hit_target_id, GetNewTarget(params_, &target_manager_, app_));
 
             // Add replay events
-            auto add_target = std::make_unique<AddTargetEventT>();
-            add_target->target_id = new_target.id;
-            add_target->frame_number = timer_.GetReplayFrameNumber();
-            add_target->position = ToStoredVec3Ptr(new_target.position);
-            add_target->radius = new_target.radius;
-            replay_->add_target_events.push_back(std::move(add_target));
-
-            auto hit_target = std::make_unique<HitTargetEventT>();
-            hit_target->target_id = hit_target_id;
-            hit_target->frame_number = timer_.GetReplayFrameNumber();
-            replay_->hit_target_events.push_back(std::move(hit_target));
+            AddNewTargetEvent(new_target);
+            AddKillTargetEvent(hit_target_id);
 
             current_poke_target_id_ = {};
             current_poke_start_time_micros_ = 0;
@@ -225,40 +237,20 @@ class StaticScenario : public Scenario {
               hit_target_id, GetNewTarget(params_, &target_manager_, app_));
 
           // Add replay events
-          auto add_target = std::make_unique<AddTargetEventT>();
-          add_target->target_id = new_target.id;
-          add_target->frame_number = timer_.GetReplayFrameNumber();
-          add_target->position = ToStoredVec3Ptr(new_target.position);
-          add_target->radius = new_target.radius;
-          replay_->add_target_events.push_back(std::move(add_target));
+          AddNewTargetEvent(new_target);
+          AddKillTargetEvent(hit_target_id);
 
-          auto hit_target = std::make_unique<HitTargetEventT>();
-          hit_target->target_id = hit_target_id;
-          hit_target->frame_number = timer_.GetReplayFrameNumber();
-          replay_->hit_target_events.push_back(std::move(hit_target));
         } else {
           // Missed shot
-          auto miss_target = std::make_unique<MissTargetEventT>();
-          miss_target->frame_number = timer_.GetReplayFrameNumber();
-          replay_->miss_target_events.push_back(std::move(miss_target));
+          AddShotMissedEvent();
           if (params_.static_params.remove_closest_target_on_miss) {
             std::optional<u16> target_id_to_remove =
                 target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);
             if (target_id_to_remove.has_value()) {
               Target new_target = target_manager_.ReplaceTarget(
                   *target_id_to_remove, GetNewTarget(params_, &target_manager_, app_));
-
-              auto add_target = std::make_unique<AddTargetEventT>();
-              add_target->target_id = new_target.id;
-              add_target->frame_number = timer_.GetReplayFrameNumber();
-              add_target->position = ToStoredVec3Ptr(new_target.position);
-              add_target->radius = new_target.radius;
-              replay_->add_target_events.push_back(std::move(add_target));
-
-              auto remove_target = std::make_unique<RemoveTargetEventT>();
-              remove_target->target_id = *target_id_to_remove;
-              remove_target->frame_number = timer_.GetReplayFrameNumber();
-              replay_->remove_target_events.push_back(std::move(remove_target));
+              AddNewTargetEvent(new_target);
+              AddRemoveTargetEvent(*target_id_to_remove);
             }
           }
         }
@@ -279,7 +271,7 @@ Scenario::Scenario(const ScenarioParams& params, Application* app)
       metronome_(params.metronome_bpm, app),
       timer_(params.replay_fps),
       camera_(GetInitialCamera()),
-      replay_(std::make_unique<StaticReplayT>()) {}
+      replay_(std::make_unique<Replay>()) {}
 
 NavigationEvent RunStaticScenario(const ScenarioParams& params, Application* app) {
   while (true) {
@@ -295,8 +287,8 @@ NavigationEvent Scenario::Run() {
   ScreenInfo screen = app_->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   float dpi = app_->GetSettingsManager()->GetDpi();
-  SettingsT settings = app_->GetSettingsManager()->GetCurrentSettings();
-  float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360, dpi);
+  Settings settings = app_->GetSettingsManager()->GetCurrentSettings();
+  float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
 
   Initialize();
 
@@ -321,7 +313,7 @@ NavigationEvent Scenario::Run() {
 
       // Need to refresh everything based on settings change
       settings = app_->GetSettingsManager()->GetCurrentSettings();
-      radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360, dpi);
+      radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
       SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
@@ -379,7 +371,7 @@ NavigationEvent Scenario::Run() {
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(*settings.crosshair, screen, draw_list);
+    DrawCrosshair(settings.crosshair(), screen, draw_list);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -405,7 +397,7 @@ NavigationEvent Scenario::Run() {
   stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
 
   StatsRow stats_row;
-  stats_row.cm_per_360 = settings.cm_per_360;
+  stats_row.cm_per_360 = settings.cm_per_360();
   stats_row.num_hits = stats_.targets_hit;
   stats_row.num_kills = stats_.targets_hit;
   stats_row.num_shots = stats_.shots_taken;

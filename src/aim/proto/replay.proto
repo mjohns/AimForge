@@ -1,0 +1,42 @@
+edition = "2023";
+
+import "common.proto";
+import "scenario.proto";
+
+package aim;
+
+message KillTargetEvent {
+  int32 target_id = 1;
+}
+
+message RemoveTargetEvent {
+  int32 target_id = 1;
+}
+
+message ShotMissedEvent {
+}
+
+message AddStaticTargetEvent {
+  int32 target_id = 1;
+  StoredVec3 position = 2;
+  float radius = 3;
+}
+
+message ReplayEvent {
+  int32 frame_number = 1;
+  oneof type {
+    KillTargetEvent kill_target = 2;
+    RemoveTargetEvent remove_target = 3;
+    AddStaticTargetEvent add_static_target = 4;
+    ShotMissedEvent shot_missed = 5;
+  }
+}
+
+message Replay {
+  Room room = 1;
+  int32 replay_fps = 2;
+  StoredVec3 camera_position = 3;
+  repeated float pitch_yaws = 4;
+  repeated ReplayEvent events = 5;
+  bool is_poke_ball = 6;
+}

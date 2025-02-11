@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include "aim/fbs/settings_generated.h"
+#include "aim/proto/settings.pb.h"
 
 namespace aim {
 
@@ -11,11 +11,11 @@ class SettingsManager {
   explicit SettingsManager(const std::filesystem::path& settings_path);
   ~SettingsManager();
 
-  FullSettingsT GetFullSettings();
-  FullSettingsT* GetMutableFullSettings();
+  FullSettings GetFullSettings();
+  FullSettings* GetMutableFullSettings();
   float GetDpi();
-  SettingsT GetCurrentSettings();
-  SettingsT* GetMutableCurrentSettings();
+  Settings GetCurrentSettings();
+  Settings* GetMutableCurrentSettings();
 
   void MarkDirty();
   void FlushToDisk();
@@ -29,7 +29,7 @@ class SettingsManager {
 
  private:
   std::filesystem::path settings_path_;
-  FullSettingsT full_settings_;
+  FullSettings full_settings_;
   bool needs_save_ = false;
 };
 

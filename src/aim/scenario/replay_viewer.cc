@@ -11,37 +11,22 @@ namespace aim {
 namespace {
 
 struct ReplayFrame {
-  std::vector<AddTargetEventT*> add_target_events;
-  std::vector<HitTargetEventT*> hit_target_events;
-  std::vector<MissTargetEventT*> miss_target_events;
-  std::vector<RemoveTargetEventT*> remove_target_events;
-  PitchYaw pitch_yaw;
+  std::vector<ReplayEvent> events;
+  float pitch;
+  float yaw;
 };
 
 // Collect all info necessary to render one frame into a single struct.
-std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
+std::vector<ReplayFrame> GetReplayFrames(const Replay& replay) {
   std::vector<ReplayFrame> replay_frames;
-  for (int frame_number = 0; frame_number < replay.pitch_yaw_pairs.size(); ++frame_number) {
+  for (int frame_number = 0; frame_number < replay.pitch_yaws_size() / 2; ++frame_number) {
+    int i = frame_number * 2;
     ReplayFrame frame;
-    frame.pitch_yaw = replay.pitch_yaw_pairs[frame_number];
-    for (auto& event : replay.hit_target_events) {
-      if (event->frame_number == frame_number) {
-        frame.hit_target_events.push_back(event.get());
-      }
-    }
-    for (auto& event : replay.add_target_events) {
-      if (event->frame_number == frame_number) {
-        frame.add_target_events.push_back(event.get());
-      }
-    }
-    for (auto& event : replay.miss_target_events) {
-      if (event->frame_number == frame_number) {
-        frame.miss_target_events.push_back(event.get());
-      }
-    }
-    for (auto& event : replay.remove_target_events) {
-      if (event->frame_number == frame_number) {
-        frame.remove_target_events.push_back(event.get());
+    frame.pitch = replay.pitch_yaws(i);
+    frame.yaw = replay.pitch_yaws(i + 1);
+    for (auto& event : replay.events()) {
+      if (event.frame_number() == frame_number) {
+        frame.events.push_back(event);
       }
     }
     replay_frames.push_back(frame);
@@ -51,14 +36,13 @@ std::vector<ReplayFrame> GetReplayFrames(const StaticReplayT& replay) {
 
 }  // namespace
 
-NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
-                                         const CrosshairT& crosshair,
+NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
+                                         const Crosshair& crosshair,
                                          Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
-  auto stored_camera_position = replay.camera_position.get();
-  glm::vec3 camera_position = ToVec3(*stored_camera_position);
+  glm::vec3 camera_position = ToVec3(replay.camera_position());
 
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
 
@@ -67,7 +51,7 @@ NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
   TargetManager target_manager;
   Camera camera(camera_position);
 
-  ScenarioTimer timer(replay.frames_per_second);
+  ScenarioTimer timer(replay.replay_fps());
   while (true) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -97,34 +81,40 @@ NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
     auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
     auto& replay_frame = replay_frames[replay_frame_number];
-    camera.UpdatePitch(replay_frame.pitch_yaw.pitch());
-    camera.UpdateYaw(replay_frame.pitch_yaw.yaw());
+    camera.UpdatePitch(replay_frame.pitch);
+    camera.UpdateYaw(replay_frame.yaw);
     LookAtInfo look_at = camera.GetLookAt();
 
-    bool has_hit = replay_frame.hit_target_events.size() > 0;
-    bool has_miss = replay_frame.miss_target_events.size() > 0;
-    if (has_hit) {
-      if (replay.is_poke_ball) {
+    bool has_kill = false;
+    bool has_miss = false;
+    for (auto& event : replay_frame.events) {
+      if (event.has_kill_target()) {
+        target_manager.RemoveTarget(event.kill_target().target_id());
+        has_kill = true;
+      }
+      if (event.has_remove_target()) {
+        target_manager.RemoveTarget(event.remove_target().target_id());
+      }
+      if (event.has_shot_missed()) {
+        has_miss = true;
+      }
+      if (event.has_add_static_target()) {
+        Target t;
+        t.id = event.add_static_target().target_id();
+        t.radius = event.add_static_target().radius();
+        t.position = ToVec3(event.add_static_target().position());
+        target_manager.AddTarget(t);
+      }
+    }
+
+    if (has_kill) {
+      if (replay.is_poke_ball()) {
         app->GetSoundManager()->PlayKillSound();
       } else {
         app->GetSoundManager()->PlayKillSound().PlayShootSound();
       }
     } else if (has_miss) {
       app->GetSoundManager()->PlayShootSound();
-    }
-    // Play miss sound.
-    for (HitTargetEventT* event : replay_frame.hit_target_events) {
-      target_manager.RemoveTarget(event->target_id);
-    }
-    for (RemoveTargetEventT* event : replay_frame.remove_target_events) {
-      target_manager.RemoveTarget(event->target_id);
-    }
-    for (AddTargetEventT* event : replay_frame.add_target_events) {
-      Target t;
-      t.id = event->target_id;
-      t.radius = event->radius;
-      t.position = ToVec3(*event->position);
-      target_manager.AddTarget(t);
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
@@ -137,8 +127,12 @@ NavigationEvent ReplayViewer::PlayReplay(const StaticReplayT& replay,
     ImGui::End();
 
     if (app->StartRender()) {
-      app->GetRenderer()->DrawSimpleStaticRoom(
-          replay.wall_height, replay.wall_width, target_manager.GetTargets(), look_at.transform);
+      if (replay.room().has_simple_room()) {
+        app->GetRenderer()->DrawSimpleStaticRoom(replay.room().simple_room().height(),
+                                                 replay.room().simple_room().width(),
+                                                 target_manager.GetTargets(),
+                                                 look_at.transform);
+      }
       app->FinishRender();
     }
   }
