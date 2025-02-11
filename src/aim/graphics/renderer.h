@@ -3,6 +3,7 @@
 #include "aim/core/target.h"
 #include "aim/graphics/room_renderer.h"
 #include "aim/graphics/sphere_renderer.h"
+#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
@@ -13,8 +14,7 @@ class Renderer {
 
   void DrawTargets(const std::vector<Target>& targets, const glm::mat4& view);
   void DrawRoom(float height, float width, const glm::mat4& view);
-  void DrawSimpleStaticRoom(float height,
-                            float width,
+  void DrawSimpleStaticRoom(const SimpleRoom& room,
                             const std::vector<Target>& targets,
                             const glm::mat4& view);
 

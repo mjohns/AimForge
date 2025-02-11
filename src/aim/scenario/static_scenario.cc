@@ -34,6 +34,7 @@
 namespace aim {
 namespace {
 constexpr u64 kPokeBallKillTimeMillis = 50;
+constexpr const u16 kReplayFps = 240;
 
 Camera GetInitialCamera() {
   return Camera(glm::vec3(0, -100.0f, 0));
@@ -68,25 +69,41 @@ glm::vec2 GetRandomPositionInCircle(float max_radius_x, float max_radius_y, Appl
   return glm::vec2(x, y);
 }
 
+float GetRegionLength(const Room& room, const RegionLength& length) {
+  if (length.has_absolute_value()) {
+    return length.absolute_value();
+  }
+  if (length.has_x_percent_value()) {
+    return room.simple_room().width() * length.x_percent_value();
+  }
+  if (length.has_y_percent_value()) {
+    return room.simple_room().height() * length.y_percent_value();
+  }
+  return 0;
+}
+
 // Returns an x/z pair where to place the target on the back wall.
-glm::vec2 GetNewTargetPosition(const ScenarioParams& params,
-                               const TargetPlacementParams& placement_params,
+glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
                                TargetManager* target_manager,
                                Application* app) {
   auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
   std::function<glm::vec2()> get_candidate_pos = [=] { return glm::vec2(0, 0); };
-  float height = params.static_params.room_height;
-  float width = params.static_params.room_width;
-  for (const TargetRegion& region : placement_params.regions) {
+  float height = def.room().simple_room().height();
+  float width = def.room().simple_room().width();
+  for (const TargetRegion& region : def.static_def().target_placement_strategy().regions()) {
     float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
-    if (region.percent_chance >= region_chance_roll) {
+    float percent_chance = region.has_percent_chance() ? region.percent_chance() : 1;
+    if (percent_chance >= region_chance_roll) {
       get_candidate_pos = [&] {
-        if (region.x_circle_percent > 0) {
+        // TODO: Use offset position
+        if (region.has_oval()) {
           return GetRandomPositionInCircle(
-              0.5 * width * region.x_circle_percent, 0.5 * height * region.y_circle_percent, app);
+              0.5 * GetRegionLength(def.room(), region.oval().x_diamter()),
+              0.5 * GetRegionLength(def.room(), region.oval().y_diamter()),
+              app);
         }
-        float max_x = 0.5 * width * region.x_percent;
-        float max_y = 0.5 * height * region.y_percent;
+        float max_x = 0.5 * GetRegionLength(def.room(), region.rectangle().x_length());
+        float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
         auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
         auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
         return glm::vec2(distribution_x(*app->GetRandomGenerator()),
@@ -102,27 +119,28 @@ glm::vec2 GetNewTargetPosition(const ScenarioParams& params,
     ++attempt_number;
     glm::vec2 pos = get_candidate_pos();
     if (attempt_number >= max_attempts ||
-        AreNoneWithinDistance(pos, placement_params.min_distance, target_manager)) {
+        AreNoneWithinDistance(
+            pos, def.static_def().target_placement_strategy().min_distance(), target_manager)) {
       return pos;
     }
   }
 }
 
-Target GetNewTarget(const ScenarioParams& params, TargetManager* target_manager, Application* app) {
-  glm::vec2 pos =
-      GetNewTargetPosition(params, params.static_params.target_placement, target_manager, app);
+Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Application* app) {
+  glm::vec2 pos = GetNewTargetPosition(def, target_manager, app);
   Target t;
   t.position.x = pos.x;
   t.position.z = pos.y;
+
+  t.radius = def.static_def().target_radius();
   // Make sure the target does not clip throug wall
-  t.position.y = -1 * (params.static_params.target_radius + 0.5);
-  t.radius = params.static_params.target_radius;
+  t.position.y = -1 * (t.radius + 0.5);
   return t;
 }
 
 class StaticScenario : public Scenario {
  public:
-  explicit StaticScenario(const ScenarioParams& params, Application* app) : Scenario(params, app) {}
+  explicit StaticScenario(const ScenarioDef& def, Application* app) : Scenario(def, app) {}
 
  private:
   void AddNewTargetEvent(const Target& target, i32 explicit_frame_number = -1) {
@@ -163,27 +181,24 @@ class StaticScenario : public Scenario {
   }
 
   void Render() override {
-    app_->GetRenderer()->DrawSimpleStaticRoom(params_.static_params.room_height,
-                                              params_.static_params.room_width,
-                                              target_manager_.GetTargets(),
-                                              look_at_.transform);
+    app_->GetRenderer()->DrawSimpleStaticRoom(
+        def_.room().simple_room(), target_manager_.GetTargets(), look_at_.transform);
   }
 
   void Initialize() override {
-    replay_->mutable_room()->mutable_simple_room()->set_height(params_.static_params.room_height);
-    replay_->mutable_room()->mutable_simple_room()->set_width(params_.static_params.room_width);
-    replay_->set_is_poke_ball(params_.static_params.is_poke_ball);
-    replay_->set_replay_fps(params_.replay_fps);
+    *replay_->mutable_room() = def_.room();
+    replay_->set_is_poke_ball(def_.static_def().is_poke_ball());
+    replay_->set_replay_fps(kReplayFps);
     *(replay_->mutable_camera_position()) = ToStoredVec3(camera_.GetPosition());
 
-    for (int i = 0; i < params_.static_params.num_targets; ++i) {
-      Target target = target_manager_.AddTarget(GetNewTarget(params_, &target_manager_, app_));
+    for (int i = 0; i < def_.static_def().num_targets(); ++i) {
+      Target target = target_manager_.AddTarget(GetNewTarget(def_, &target_manager_, app_));
       AddNewTargetEvent(target, 0);
     }
   }
 
   void UpdateState(UpdateStateData* data) override {
-    if (params_.static_params.is_poke_ball) {
+    if (def_.static_def().is_poke_ball()) {
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       if (maybe_hit_target_id.has_value()) {
         u16 hit_target_id = *maybe_hit_target_id;
@@ -203,7 +218,7 @@ class StaticScenario : public Scenario {
 
             auto hit_target_id = *maybe_hit_target_id;
             Target new_target = target_manager_.ReplaceTarget(
-                hit_target_id, GetNewTarget(params_, &target_manager_, app_));
+                hit_target_id, GetNewTarget(def_, &target_manager_, app_));
 
             // Add replay events
             AddNewTargetEvent(new_target);
@@ -234,7 +249,7 @@ class StaticScenario : public Scenario {
 
           auto hit_target_id = *maybe_hit_target_id;
           Target new_target = target_manager_.ReplaceTarget(
-              hit_target_id, GetNewTarget(params_, &target_manager_, app_));
+              hit_target_id, GetNewTarget(def_, &target_manager_, app_));
 
           // Add replay events
           AddNewTargetEvent(new_target);
@@ -243,12 +258,12 @@ class StaticScenario : public Scenario {
         } else {
           // Missed shot
           AddShotMissedEvent();
-          if (params_.static_params.remove_closest_target_on_miss) {
+          if (def_.static_def().remove_closest_target_on_miss()) {
             std::optional<u16> target_id_to_remove =
                 target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);
             if (target_id_to_remove.has_value()) {
               Target new_target = target_manager_.ReplaceTarget(
-                  *target_id_to_remove, GetNewTarget(params_, &target_manager_, app_));
+                  *target_id_to_remove, GetNewTarget(def_, &target_manager_, app_));
               AddNewTargetEvent(new_target);
               AddRemoveTargetEvent(*target_id_to_remove);
             }
@@ -265,17 +280,17 @@ class StaticScenario : public Scenario {
 
 }  // namespace
 
-Scenario::Scenario(const ScenarioParams& params, Application* app)
-    : params_(params),
+Scenario::Scenario(const ScenarioDef& def, Application* app)
+    : def_(def),
       app_(app),
-      metronome_(params.metronome_bpm, app),
-      timer_(params.replay_fps),
+      metronome_(0, app),
+      timer_(kReplayFps),
       camera_(GetInitialCamera()),
       replay_(std::make_unique<Replay>()) {}
 
-NavigationEvent RunStaticScenario(const ScenarioParams& params, Application* app) {
+NavigationEvent RunStaticScenario(const ScenarioDef& def, Application* app) {
   while (true) {
-    StaticScenario scenario(params, app);
+    StaticScenario scenario(def, app);
     NavigationEvent nav_event = scenario.Run();
     if (nav_event.type != NavigationEventType::RESTART_LAST_SCENARIO) {
       return nav_event;
@@ -323,7 +338,7 @@ NavigationEvent Scenario::Run() {
 
     OnBeforeEventHandling();
 
-    if (timer_.GetElapsedSeconds() >= params_.duration_seconds) {
+    if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
       stop_scenario = true;
       continue;
     }
@@ -393,7 +408,7 @@ NavigationEvent Scenario::Run() {
   }
 
   stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
-  float duration_modifier = 60.0f / params_.duration_seconds;
+  float duration_modifier = 60.0f / def_.duration_seconds();
   stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
 
   StatsRow stats_row;
@@ -402,10 +417,10 @@ NavigationEvent Scenario::Run() {
   stats_row.num_kills = stats_.targets_hit;
   stats_row.num_shots = stats_.shots_taken;
   stats_row.score = stats_.score;
-  app_->GetStatsDb()->AddStats(params_.scenario_id, &stats_row);
+  app_->GetStatsDb()->AddStats(def_.scenario_id(), &stats_row);
 
   StatsScreen stats_screen(
-      params_.scenario_id, stats_row.stats_id, std::move(replay_), stats_, app_);
+      def_.scenario_id(), stats_row.stats_id, std::move(replay_), stats_, app_);
   return stats_screen.Run();
 }
 

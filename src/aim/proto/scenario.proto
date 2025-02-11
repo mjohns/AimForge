@@ -1,5 +1,7 @@
 edition = "2023";
 
+import "common.proto";
+
 package aim;
 
 // Room defined by dimensions of the back wall the user is facing.
@@ -12,4 +14,59 @@ message Room {
 	oneof type {
 		SimpleRoom simple_room = 1;
 	}
+}
+
+message RegionLength {
+	oneof type {
+		// Length is a percent of relevant dimension (x,y) on the wall.
+	  float x_percent_value = 1;
+	  float y_percent_value = 2;
+		float absolute_value = 3;
+	}
+}
+
+message TargetRegion {
+	// The percent chance the target will be placed in this region. 0-1
+	// First matching region will be chosen. Defaults to 1.
+	float percent_chance = 1;
+	// (0, 0) is the center of the wall.
+	StoredVec2 region_offset = 2;
+
+	oneof type {
+		RectangleTargetRegion rectangle = 3;
+		OvalTargetRegion oval = 4;
+	}
+}
+
+message RectangleTargetRegion {
+	RegionLength x_length = 1;
+	RegionLength y_length = 2;
+}
+
+message OvalTargetRegion {
+	RegionLength x_diamter = 1;
+	RegionLength y_diamter = 2;
+}
+
+message TargetPlacementStrategy {
+	repeated TargetRegion regions = 1;
+	float min_distance = 2;
+}
+
+message ScenarioDef {
+	string scenario_id = 1;
+	float duration_seconds = 2;
+	Room room = 3;
+
+	oneof type {
+		StaticScenarioDef static_def = 4;
+	}
+}
+
+message StaticScenarioDef {
+  int32 num_targets = 1;
+	float target_radius = 2;
+	bool is_poke_ball = 3;
+	bool remove_closest_target_on_miss = 4;
+	TargetPlacementStrategy target_placement_strategy = 5;
 }
