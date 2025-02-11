@@ -36,7 +36,7 @@ namespace aim {
 namespace {
 constexpr u64 kPokeBallKillTimeMillis = 50;
 
-Camera GetInitialCamera(const StaticScenarioParams& params) {
+Camera GetInitialCamera() {
   return Camera(glm::vec3(0, -100.0f, 0));
 }
 
@@ -70,23 +70,24 @@ glm::vec2 GetRandomPositionInCircle(float max_radius_x, float max_radius_y, Appl
 }
 
 // Returns an x/z pair where to place the target on the back wall.
-glm::vec2 GetNewTargetPosition(const StaticScenarioParams& params,
+glm::vec2 GetNewTargetPosition(const ScenarioParams& params,
                                const TargetPlacementParams& placement_params,
                                TargetManager* target_manager,
                                Application* app) {
   auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
   std::function<glm::vec2()> get_candidate_pos = [=] { return glm::vec2(0, 0); };
+  float height = params.static_params.room_height;
+  float width = params.static_params.room_width;
   for (const TargetRegion& region : placement_params.regions) {
     float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
     if (region.percent_chance >= region_chance_roll) {
       get_candidate_pos = [&] {
         if (region.x_circle_percent > 0) {
-          return GetRandomPositionInCircle(0.5 * params.room_width * region.x_circle_percent,
-                                           0.5 * params.room_height * region.y_circle_percent,
-                                           app);
+          return GetRandomPositionInCircle(
+              0.5 * width * region.x_circle_percent, 0.5 * height * region.y_circle_percent, app);
         }
-        float max_x = 0.5 * params.room_width * region.x_percent;
-        float max_y = 0.5 * params.room_height * region.y_percent;
+        float max_x = 0.5 * width * region.x_percent;
+        float max_y = 0.5 * height * region.y_percent;
         auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
         auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
         return glm::vec2(distribution_x(*app->GetRandomGenerator()),
@@ -108,30 +109,179 @@ glm::vec2 GetNewTargetPosition(const StaticScenarioParams& params,
   }
 }
 
-Target GetNewTarget(const StaticScenarioParams& params,
-                    TargetManager* target_manager,
-                    Application* app) {
-  glm::vec2 pos = GetNewTargetPosition(params, params.target_placement, target_manager, app);
+Target GetNewTarget(const ScenarioParams& params, TargetManager* target_manager, Application* app) {
+  glm::vec2 pos =
+      GetNewTargetPosition(params, params.static_params.target_placement, target_manager, app);
   Target t;
   t.position.x = pos.x;
   t.position.z = pos.y;
   // Make sure the target does not clip throug wall
-  t.position.y = -1 * (params.target_radius + 0.5);
-  t.radius = params.target_radius;
+  t.position.y = -1 * (params.static_params.target_radius + 0.5);
+  t.radius = params.static_params.target_radius;
   return t;
 }
 
+class StaticScenario : public Scenario {
+ public:
+  explicit StaticScenario(const ScenarioParams& params, Application* app) : Scenario(params, app) {}
+
+ protected:
+  virtual void OnBeforeEventHandling() {
+    if (timer_.IsNewReplayFrame()) {
+      // Store the look at vector before the mouse updates for the old frame.
+      replay_->pitch_yaw_pairs.push_back(PitchYaw(camera_.GetPitch(), camera_.GetYaw()));
+    }
+  }
+
+  void Render() override {
+    app_->GetRenderer()->DrawSimpleStaticRoom(params_.static_params.room_height,
+                                              params_.static_params.room_width,
+                                              target_manager_.GetTargets(),
+                                              look_at_.transform);
+  }
+
+  void Initialize() override {
+    StaticReplayT& replay = *(replay_);
+    replay.wall_height = params_.static_params.room_height;
+    replay.wall_width = params_.static_params.room_width;
+    replay.is_poke_ball = params_.static_params.is_poke_ball;
+    replay.frames_per_second = params_.replay_fps;
+    replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
+
+    for (int i = 0; i < params_.static_params.num_targets; ++i) {
+      Target target = target_manager_.AddTarget(GetNewTarget(params_, &target_manager_, app_));
+
+      // Add replay event
+      auto add_target = std::make_unique<AddTargetEventT>();
+      add_target->target_id = target.id;
+      add_target->frame_number = 0;
+      add_target->position = ToStoredVec3Ptr(target.position);
+      add_target->radius = target.radius;
+      replay.add_target_events.push_back(std::move(add_target));
+    }
+  }
+
+  void UpdateState(UpdateStateData* data) override {
+    if (params_.static_params.is_poke_ball) {
+      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+      if (maybe_hit_target_id.has_value()) {
+        u16 hit_target_id = *maybe_hit_target_id;
+        bool is_hitting_current_target =
+            current_poke_target_id_.has_value() && *(current_poke_target_id_) == hit_target_id;
+        if (is_hitting_current_target) {
+          // Still targeting the correct target.
+          // Has enough time elapsed to kill target?
+          u64 now_micros = timer_.GetElapsedMicros();
+          u64 age_micros = now_micros - current_poke_start_time_micros_;
+          u64 min_age_micros = kPokeBallKillTimeMillis * 1000;
+          if (age_micros >= min_age_micros) {
+            stats_.targets_hit++;
+            stats_.shots_taken++;
+            app_->GetSoundManager()->PlayKillSound();
+            data->force_render = true;
+
+            auto hit_target_id = *maybe_hit_target_id;
+            Target new_target = target_manager_.ReplaceTarget(
+                hit_target_id, GetNewTarget(params_, &target_manager_, app_));
+
+            // Add replay events
+            auto add_target = std::make_unique<AddTargetEventT>();
+            add_target->target_id = new_target.id;
+            add_target->frame_number = timer_.GetReplayFrameNumber();
+            add_target->position = ToStoredVec3Ptr(new_target.position);
+            add_target->radius = new_target.radius;
+            replay_->add_target_events.push_back(std::move(add_target));
+
+            auto hit_target = std::make_unique<HitTargetEventT>();
+            hit_target->target_id = hit_target_id;
+            hit_target->frame_number = timer_.GetReplayFrameNumber();
+            replay_->hit_target_events.push_back(std::move(hit_target));
+
+            current_poke_target_id_ = {};
+            current_poke_start_time_micros_ = 0;
+          }
+        } else {
+          // Starting time on new target.
+          current_poke_target_id_ = hit_target_id;
+          current_poke_start_time_micros_ = timer_.GetElapsedMicros();
+        }
+      } else {
+        // No current target. Clear.
+        current_poke_target_id_ = {};
+        current_poke_start_time_micros_ = 0;
+      }
+    } else {
+      if (data->has_click) {
+        stats_.shots_taken++;
+        auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+        app_->GetSoundManager()->PlayShootSound();
+        if (maybe_hit_target_id.has_value()) {
+          stats_.targets_hit++;
+          app_->GetSoundManager()->PlayKillSound();
+          data->force_render = true;
+
+          auto hit_target_id = *maybe_hit_target_id;
+          Target new_target = target_manager_.ReplaceTarget(
+              hit_target_id, GetNewTarget(params_, &target_manager_, app_));
+
+          // Add replay events
+          auto add_target = std::make_unique<AddTargetEventT>();
+          add_target->target_id = new_target.id;
+          add_target->frame_number = timer_.GetReplayFrameNumber();
+          add_target->position = ToStoredVec3Ptr(new_target.position);
+          add_target->radius = new_target.radius;
+          replay_->add_target_events.push_back(std::move(add_target));
+
+          auto hit_target = std::make_unique<HitTargetEventT>();
+          hit_target->target_id = hit_target_id;
+          hit_target->frame_number = timer_.GetReplayFrameNumber();
+          replay_->hit_target_events.push_back(std::move(hit_target));
+        } else {
+          // Missed shot
+          auto miss_target = std::make_unique<MissTargetEventT>();
+          miss_target->frame_number = timer_.GetReplayFrameNumber();
+          replay_->miss_target_events.push_back(std::move(miss_target));
+          if (params_.static_params.remove_closest_target_on_miss) {
+            std::optional<u16> target_id_to_remove =
+                target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);
+            if (target_id_to_remove.has_value()) {
+              Target new_target = target_manager_.ReplaceTarget(
+                  *target_id_to_remove, GetNewTarget(params_, &target_manager_, app_));
+
+              auto add_target = std::make_unique<AddTargetEventT>();
+              add_target->target_id = new_target.id;
+              add_target->frame_number = timer_.GetReplayFrameNumber();
+              add_target->position = ToStoredVec3Ptr(new_target.position);
+              add_target->radius = new_target.radius;
+              replay_->add_target_events.push_back(std::move(add_target));
+
+              auto remove_target = std::make_unique<RemoveTargetEventT>();
+              remove_target->target_id = *target_id_to_remove;
+              remove_target->frame_number = timer_.GetReplayFrameNumber();
+              replay_->remove_target_events.push_back(std::move(remove_target));
+            }
+          }
+        }
+      }
+    }
+  }
+
+  TargetManager target_manager_;
+  std::optional<u16> current_poke_target_id_;
+  u64 current_poke_start_time_micros_ = 0;
+};
+
 }  // namespace
 
-StaticScenario::StaticScenario(const StaticScenarioParams& params, Application* app)
+Scenario::Scenario(const ScenarioParams& params, Application* app)
     : params_(params),
       app_(app),
-      replay_(std::make_unique<StaticReplayT>()),
-      camera_(GetInitialCamera(params)),
       metronome_(params.metronome_bpm, app),
-      timer_(replay_frames_per_second_) {}
+      timer_(params.replay_fps),
+      camera_(GetInitialCamera()),
+      replay_(std::make_unique<StaticReplayT>()) {}
 
-NavigationEvent StaticScenario::RunScenario(const StaticScenarioParams& params, Application* app) {
+NavigationEvent RunStaticScenario(const ScenarioParams& params, Application* app) {
   while (true) {
     StaticScenario scenario(params, app);
     NavigationEvent nav_event = scenario.Run();
@@ -141,43 +291,23 @@ NavigationEvent StaticScenario::RunScenario(const StaticScenarioParams& params, 
   }
 }
 
-NavigationEvent StaticScenario::Run() {
+NavigationEvent Scenario::Run() {
   ScreenInfo screen = app_->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   float dpi = app_->GetSettingsManager()->GetDpi();
   SettingsT settings = app_->GetSettingsManager()->GetCurrentSettings();
   float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360, dpi);
 
-  StaticReplayT& replay = *(replay_);
-  replay.wall_height = params_.room_height;
-  replay.wall_width = params_.room_width;
-  replay.is_poke_ball = params_.is_poke_ball;
-  u16 replay_frames_per_second = 150;
-  replay.frames_per_second = replay_frames_per_second;
-  replay.camera_position = ToStoredVec3Ptr(camera_.GetPosition());
-
-  for (int i = 0; i < params_.num_targets; ++i) {
-    Target target = target_manager_.AddTarget(GetNewTarget(params_, &target_manager_, app_));
-
-    // Add replay event
-    auto add_target = std::make_unique<AddTargetEventT>();
-    add_target->target_id = target.id;
-    add_target->frame_number = 0;
-    add_target->position = ToStoredVec3Ptr(target.position);
-    add_target->radius = target.radius;
-    replay.add_target_events.push_back(std::move(add_target));
-  }
-
-  LookAtInfo look_at;
+  Initialize();
 
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
-
   app_->GetRenderer()->SetProjection(projection);
 
   // Main loop
   bool stop_scenario = false;
   bool show_settings = false;
+  u64 num_state_updates = 0;
   while (!stop_scenario) {
     if (show_settings) {
       // Need to pause.
@@ -199,10 +329,7 @@ NavigationEvent StaticScenario::Run() {
 
     timer_.OnStartFrame();
 
-    if (timer_.IsNewReplayFrame()) {
-      // Store the look at vector before the mouse updates for the old frame.
-      replay.pitch_yaw_pairs.push_back(PitchYaw(camera_.GetPitch(), camera_.GetYaw()));
-    }
+    OnBeforeEventHandling();
 
     if (timer_.GetElapsedSeconds() >= params_.duration_seconds) {
       stop_scenario = true;
@@ -210,7 +337,7 @@ NavigationEvent StaticScenario::Run() {
     }
 
     SDL_Event event;
-    bool has_click = false;
+    UpdateStateData update_data;
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
@@ -220,7 +347,7 @@ NavigationEvent StaticScenario::Run() {
         camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
       }
       if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        has_click = true;
+        update_data.has_click = true;
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
@@ -231,119 +358,19 @@ NavigationEvent StaticScenario::Run() {
           show_settings = true;
         }
       }
+      OnEvent(event);
     }
 
     // Update state
 
     metronome_.DoTick(timer_.GetElapsedMicros());
-    bool force_render = false;
-    look_at = camera_.GetLookAt();
+    look_at_ = camera_.GetLookAt();
 
-    if (params_.is_poke_ball) {
-      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at.front);
-      if (maybe_hit_target_id.has_value()) {
-        u16 hit_target_id = *maybe_hit_target_id;
-        bool is_hitting_current_target =
-            current_poke_target_id_.has_value() && *(current_poke_target_id_) == hit_target_id;
-        if (is_hitting_current_target) {
-          // Still targeting the correct target.
-          // Has enough time elapsed to kill target?
-          u64 now_micros = timer_.GetElapsedMicros();
-          u64 age_micros = now_micros - current_poke_start_time_micros_;
-          u64 min_age_micros = kPokeBallKillTimeMillis * 1000;
-          if (age_micros >= min_age_micros) {
-            stats_.targets_hit++;
-            stats_.shots_taken++;
-            app_->GetSoundManager()->PlayKillSound();
-            force_render = true;
-
-            auto hit_target_id = *maybe_hit_target_id;
-            Target new_target = target_manager_.ReplaceTarget(
-                hit_target_id, GetNewTarget(params_, &target_manager_, app_));
-
-            // Add replay events
-            auto add_target = std::make_unique<AddTargetEventT>();
-            add_target->target_id = new_target.id;
-            add_target->frame_number = timer_.GetReplayFrameNumber();
-            add_target->position = ToStoredVec3Ptr(new_target.position);
-            add_target->radius = new_target.radius;
-            replay.add_target_events.push_back(std::move(add_target));
-
-            auto hit_target = std::make_unique<HitTargetEventT>();
-            hit_target->target_id = hit_target_id;
-            hit_target->frame_number = timer_.GetReplayFrameNumber();
-            replay.hit_target_events.push_back(std::move(hit_target));
-
-            current_poke_target_id_ = {};
-            current_poke_start_time_micros_ = 0;
-          }
-        } else {
-          // Starting time on new target.
-          current_poke_target_id_ = hit_target_id;
-          current_poke_start_time_micros_ = timer_.GetElapsedMicros();
-        }
-      } else {
-        // No current target. Clear.
-        current_poke_target_id_ = {};
-        current_poke_start_time_micros_ = 0;
-      }
-    } else {
-      if (has_click) {
-        stats_.shots_taken++;
-        auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at.front);
-        app_->GetSoundManager()->PlayShootSound();
-        if (maybe_hit_target_id.has_value()) {
-          stats_.targets_hit++;
-          app_->GetSoundManager()->PlayKillSound();
-          force_render = true;
-
-          auto hit_target_id = *maybe_hit_target_id;
-          Target new_target = target_manager_.ReplaceTarget(
-              hit_target_id, GetNewTarget(params_, &target_manager_, app_));
-
-          // Add replay events
-          auto add_target = std::make_unique<AddTargetEventT>();
-          add_target->target_id = new_target.id;
-          add_target->frame_number = timer_.GetReplayFrameNumber();
-          add_target->position = ToStoredVec3Ptr(new_target.position);
-          add_target->radius = new_target.radius;
-          replay.add_target_events.push_back(std::move(add_target));
-
-          auto hit_target = std::make_unique<HitTargetEventT>();
-          hit_target->target_id = hit_target_id;
-          hit_target->frame_number = timer_.GetReplayFrameNumber();
-          replay.hit_target_events.push_back(std::move(hit_target));
-        } else {
-          // Missed shot
-          auto miss_target = std::make_unique<MissTargetEventT>();
-          miss_target->frame_number = timer_.GetReplayFrameNumber();
-          replay.miss_target_events.push_back(std::move(miss_target));
-          if (params_.remove_closest_target_on_miss) {
-            std::optional<u16> target_id_to_remove =
-                target_manager_.GetNearestTargetOnStaticWall(camera_, look_at.front);
-            if (target_id_to_remove.has_value()) {
-              Target new_target = target_manager_.ReplaceTarget(
-                  *target_id_to_remove, GetNewTarget(params_, &target_manager_, app_));
-
-              auto add_target = std::make_unique<AddTargetEventT>();
-              add_target->target_id = new_target.id;
-              add_target->frame_number = timer_.GetReplayFrameNumber();
-              add_target->position = ToStoredVec3Ptr(new_target.position);
-              add_target->radius = new_target.radius;
-              replay.add_target_events.push_back(std::move(add_target));
-
-              auto remove_target = std::make_unique<RemoveTargetEventT>();
-              remove_target->target_id = *target_id_to_remove;
-              remove_target->frame_number = timer_.GetReplayFrameNumber();
-              replay.remove_target_events.push_back(std::move(remove_target));
-            }
-          }
-        }
-      }
-    }
+    UpdateState(&update_data);
+    num_state_updates++;
 
     // Render if forced or if the last render was over ~1ms ago.
-    bool do_render = force_render || timer_.LastFrameRenderedMicrosAgo() > 1200;
+    bool do_render = update_data.force_render || timer_.LastFrameRenderedMicrosAgo() > 1200;
     if (!do_render) {
       continue;
     }
@@ -357,11 +384,14 @@ NavigationEvent StaticScenario::Run() {
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+
+    // ~ Around 450k
+    // ImGui::Text("ups: %.1f", num_state_updates / elapsed_seconds);
+
     ImGui::End();
 
     if (app_->StartRender()) {
-      app_->GetRenderer()->DrawSimpleStaticRoom(
-          params_.room_height, params_.room_width, target_manager_.GetTargets(), look_at.transform);
+      Render();
       app_->FinishRender();
     }
   }

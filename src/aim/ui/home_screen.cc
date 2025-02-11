@@ -13,7 +13,7 @@ namespace {}  // namespace
 void HomeScreen::Run(Application* app) {
   bool needs_reset = true;
 
-  std::optional<StaticScenarioParams> scenario_to_start;
+  std::optional<ScenarioParams> scenario_to_start;
   bool stop_scenario = false;
   int duration_seconds = 60;
   bool open_settings = false;
@@ -24,7 +24,7 @@ void HomeScreen::Run(Application* app) {
       needs_reset = false;
     }
     if (scenario_to_start) {
-      auto nav_event = aim::StaticScenario::RunScenario(*scenario_to_start, app);
+      auto nav_event = aim::RunStaticScenario(*scenario_to_start, app);
       if (nav_event.IsExit()) {
         return;
       }
@@ -42,23 +42,23 @@ void HomeScreen::Run(Application* app) {
       continue;
     }
 
-    StaticScenarioParams base_1w_params;
-    base_1w_params.room_height = 150;
-    base_1w_params.room_width = 170;
-    base_1w_params.target_radius = 1.5;
+    ScenarioParams base_1w_params;
+    base_1w_params.static_params.room_height = 150;
+    base_1w_params.static_params.room_width = 170;
+    base_1w_params.static_params.target_radius = 1.5;
     base_1w_params.duration_seconds = duration_seconds;
 
-    base_1w_params.target_placement.min_distance = 20;
+    base_1w_params.static_params.target_placement.min_distance = 20;
     TargetRegion circle_region;
     circle_region.percent_chance = 0.3;
     circle_region.x_circle_percent = 0.6;
     circle_region.y_circle_percent = 0.35;
-    base_1w_params.target_placement.regions.push_back(circle_region);
+    base_1w_params.static_params.target_placement.regions.push_back(circle_region);
 
     TargetRegion square_region;
     square_region.x_percent = 0.7;
     square_region.y_percent = 0.6;
-    base_1w_params.target_placement.regions.push_back(square_region);
+    base_1w_params.static_params.target_placement.regions.push_back(square_region);
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -97,58 +97,58 @@ void HomeScreen::Run(Application* app) {
       open_settings = true;
     }
     if (ImGui::Button("Start Nicky EZ PZ", sz)) {
-      StaticScenarioParams params = base_1w_params;
+      ScenarioParams params = base_1w_params;
       params.scenario_id = "nick_ez_pz";
-      params.num_targets = 7;
-      params.target_radius = 3;
+      params.static_params.num_targets = 7;
+      params.static_params.target_radius = 3;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start 1w3ts", sz)) {
-      StaticScenarioParams params = base_1w_params;
+      ScenarioParams params = base_1w_params;
       params.scenario_id = "1w3ts_intermediate_s5";
-      params.num_targets = 3;
-      params.metronome_bpm = 130;
+      params.static_params.num_targets = 3;
+      params.metronome_bpm = 133;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start 1w3ts hard", sz)) {
-      StaticScenarioParams params = base_1w_params;
+      ScenarioParams params = base_1w_params;
       params.scenario_id = "1w3ts_intermediate_s5_hard";
-      params.num_targets = 3;
+      params.static_params.num_targets = 3;
       params.metronome_bpm = 125;
-      params.target_radius = 0.9;
-      params.remove_closest_target_on_miss = true;
+      params.static_params.target_radius = 0.9;
+      params.static_params.remove_closest_target_on_miss = true;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start 1w1ts", sz)) {
-      StaticScenarioParams params = base_1w_params;
+      ScenarioParams params = base_1w_params;
       params.scenario_id = "1w1ts_intermediate_s5";
-      params.num_targets = 1;
-      params.remove_closest_target_on_miss = true;
+      params.static_params.num_targets = 1;
+      params.static_params.remove_closest_target_on_miss = true;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start 1w3ts poke", sz)) {
-      StaticScenarioParams params = base_1w_params;
+      ScenarioParams params = base_1w_params;
       params.scenario_id = "1w3ts_intermediate_s5_poke";
-      params.num_targets = 3;
+      params.static_params.num_targets = 3;
       params.metronome_bpm = 130;
-      params.is_poke_ball = true;
+      params.static_params.is_poke_ball = true;
       scenario_to_start = params;
     }
     if (ImGui::Button("Start raw control", sz)) {
-      StaticScenarioParams params;
+      ScenarioParams params;
       params.scenario_id = "raw_control";
-      params.num_targets = 3;
-      params.room_height = 150;
-      params.room_width = 170;
-      params.target_radius = 0.95;
+      params.static_params.num_targets = 3;
+      params.static_params.room_height = 150;
+      params.static_params.room_width = 170;
+      params.static_params.target_radius = 0.95;
       params.duration_seconds = duration_seconds;
       // params.metronome_bpm = 180;
 
-      params.target_placement.min_distance = 3;
+      params.static_params.target_placement.min_distance = 3;
       TargetRegion circle_region;
       circle_region.x_circle_percent = 0.08;
       circle_region.y_circle_percent = 0.08;
-      params.target_placement.regions.push_back(circle_region);
+      params.static_params.target_placement.regions.push_back(circle_region);
 
       scenario_to_start = params;
     }

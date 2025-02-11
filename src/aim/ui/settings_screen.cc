@@ -20,6 +20,7 @@ NavigationEvent SettingsScreen::Run(Application* app) {
 
   std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360);
   cm_per_360.reserve(20);
+  const ScreenInfo& screen = app->GetScreenInfo();
 
   while (true) {
     SDL_Event event;
@@ -49,10 +50,25 @@ NavigationEvent SettingsScreen::Run(Application* app) {
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
+
+    float width = screen.width * 0.5;
+    float height = screen.height * 0.9;
+
+    float x_start = (screen.width - width) * 0.5;
+    float y_start = (screen.height - height) * 0.5;
+
+    // ImGui::SetCursorPos(ImVec2(x_start, y_start));
+
+    ImGui::Spacing();
+    ImGui::Indent(x_start);
+
     ImGui::Columns(2, "SettingsColumns", false);  // 2 columns, no borders
     ImGui::Text("CM/360");
+
+    ImGui::SetCursorPosX(screen.width * 0.5);
     ImGui::NextColumn();
     ImGui::InputText("##CM_PER_360", &cm_per_360, ImGuiInputTextFlags_CharsDecimal);
+
     ImGui::End();
 
     if (app->StartRender()) {
