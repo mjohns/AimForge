@@ -56,7 +56,7 @@ std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats)
 StatsScreen::StatsScreen(std::string scenario_id,
                          i64 stats_id,
                          std::unique_ptr<Replay> replay,
-                         const StaticScenarioStats& stats,
+                         const ScenarioStats& stats,
                          Application* app)
     : scenario_id_(std::move(scenario_id)),
       stats_id_(stats_id),
