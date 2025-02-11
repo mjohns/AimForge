@@ -3,7 +3,7 @@
 #include "aim/core/application.h"
 #include "aim/core/navigation_event.h"
 #include "aim/proto/replay.pb.h"
-#include "aim/scenario/static_scenario.h"
+#include "aim/scenario/scenario.h"
 
 namespace aim {
 
@@ -12,7 +12,7 @@ class StatsScreen {
   StatsScreen(std::string scenario_id,
               i64 stats_id,
               std::unique_ptr<Replay> replay,
-              const StaticScenarioStats& stats,
+              const ScenarioStats& stats,
               Application* app);
 
   NavigationEvent Run();
@@ -21,7 +21,7 @@ class StatsScreen {
   std::string scenario_id_;
   i64 stats_id_;
   std::unique_ptr<Replay> replay_;
-  StaticScenarioStats stats_;
+  ScenarioStats stats_;
   Application* app_;
 };
 

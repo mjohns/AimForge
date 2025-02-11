@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "aim/common/time_util.h"
+#include "aim/common/simple_types.h"
 
 namespace aim {
 
@@ -26,11 +27,11 @@ class ScenarioTimer {
     return run_stopwatch_.GetElapsedSeconds();
   }
 
-  uint64_t GetElapsedMicros() {
+  u64 GetElapsedMicros() {
     return run_stopwatch_.GetElapsedMicros();
   }
 
-  uint64_t GetReplayFrameNumber() {
+  u64 GetReplayFrameNumber() {
     return replay_frame_number_;
   }
 
@@ -38,7 +39,11 @@ class ScenarioTimer {
     return is_new_replay_frame_;
   }
 
-  uint64_t LastFrameRenderedMicrosAgo();
+  u16 GetReplayFps() {
+    return replay_fps_;
+  }
+
+  u64 LastFrameRenderedMicrosAgo();
 
  private:
   // Stopwatch tracking render time. Can be reset each time scenario resumes.
@@ -46,17 +51,17 @@ class ScenarioTimer {
   // Stopwatch mapping to the time the user would see in the UI.
   Stopwatch run_stopwatch_;
 
-  uint16_t replay_fps_;
-  uint64_t replay_micros_per_frame_;
+  u16 replay_fps_;
+  u64 replay_micros_per_frame_;
 
-  uint64_t previous_frame_start_time_micros_;
-  uint64_t frame_start_time_micros_;
+  u64 previous_frame_start_time_micros_;
+  u64 frame_start_time_micros_;
 
-  uint64_t replay_frame_number_;
+  u64 replay_frame_number_;
   bool is_new_replay_frame_;
 
-  uint64_t render_start_time_micros_ = 0;
-  uint64_t render_end_time_micros_ = 0;
+  u64 render_start_time_micros_ = 0;
+  u64 render_end_time_micros_ = 0;
 };
 
 }  // namespace aim
