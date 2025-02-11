@@ -1,6 +1,5 @@
 #pragma once
 
-#include <flatbuffers/flatbuffers.h>
 #include <imgui.h>
 #include <stdlib.h>
 
@@ -10,7 +9,8 @@
 #include <memory>
 #include <string>
 
-#include "aim/fbs/common_generated.h"
+#include "aim/common/simple_types.h"
+#include "aim/proto/common.pb.h"
 
 namespace aim {
 
@@ -30,21 +30,24 @@ static glm::vec3 ToVec3(const StoredVec3& v) {
 
 template <typename T>
 static StoredVec3 ToStoredVec3(const T& v) {
-  return StoredVec3(v.x, v.y, v.z);
-}
-
-template <typename T>
-static std::unique_ptr<StoredVec3> ToStoredVec3Ptr(const T& v) {
-  return std::make_unique<StoredVec3>(v.x, v.y, v.z);
+  StoredVec3 result;
+  result.set_x(v.x);
+  result.set_y(v.y);
+  result.set_z(v.z);
+  return result;
 }
 
 template <typename T>
 static StoredRgb ToStoredRgb(const T& c) {
-  return StoredRgb(c.r, c.g, c.b);
+  return ToStoredRgb(c.r, c.g, c.b);
 }
 
-static std::unique_ptr<StoredRgb> ToStoredRgbPtr(uint8_t r, uint8_t g, uint8_t b) {
-  return std::make_unique<StoredRgb>(r, g, b);
+static StoredRgb ToStoredRgb(i32 r, i32 g, i32 b) {
+  StoredRgb result;
+  result.set_r(r);
+  result.set_g(g);
+  result.set_b(b);
+  return result;
 }
 
 static ImU32 ToImCol32(const StoredRgb& c, uint8_t alpha = 255) {

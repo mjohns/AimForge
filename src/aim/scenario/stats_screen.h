@@ -2,7 +2,7 @@
 
 #include "aim/core/application.h"
 #include "aim/core/navigation_event.h"
-#include "aim/fbs/replay_generated.h"
+#include "aim/proto/replay.pb.h"
 #include "aim/scenario/static_scenario.h"
 
 namespace aim {
@@ -11,7 +11,7 @@ class StatsScreen {
  public:
   StatsScreen(std::string scenario_id,
               i64 stats_id,
-              std::unique_ptr<StaticReplayT> replay,
+              std::unique_ptr<Replay> replay,
               const StaticScenarioStats& stats,
               Application* app);
 
@@ -20,7 +20,7 @@ class StatsScreen {
  private:
   std::string scenario_id_;
   i64 stats_id_;
-  std::unique_ptr<StaticReplayT> replay_;
+  std::unique_ptr<Replay> replay_;
   StaticScenarioStats stats_;
   Application* app_;
 };

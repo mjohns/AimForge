@@ -44,6 +44,12 @@ FetchContent_Declare(
   GIT_TAG v25.1.24
 )
 
+FetchContent_Declare(protobuf
+  protobuf
+  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+  GIT_TAG        v29.3
+)
+
 # Settings
 
 # For SDL2 to be able to override options
@@ -51,11 +57,12 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 set(FMT_INSTALL OFF)
 set(SPDLOG_FMT_EXTERNAL ON)
+set(protobuf_BUILD_TESTS OFF)
 
 add_subdirectory(imgui-setup)
 add_subdirectory(glad)
 add_subdirectory(sqlite3)
 add_subdirectory(implot)
 
-FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm FlatBuffers)
+FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm FlatBuffers protobuf)
 

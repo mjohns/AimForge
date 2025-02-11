@@ -1,0 +1,15 @@
+edition = "2023";
+
+package aim;
+
+// Room defined by dimensions of the back wall the user is facing.
+message SimpleRoom {
+  float height = 1;
+  float width = 2;
+}
+
+message Room {
+	oneof type {
+		SimpleRoom simple_room = 1;
+	}
+}

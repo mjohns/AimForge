@@ -55,7 +55,7 @@ std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats)
 
 StatsScreen::StatsScreen(std::string scenario_id,
                          i64 stats_id,
-                         std::unique_ptr<StaticReplayT> replay,
+                         std::unique_ptr<Replay> replay,
                          const StaticScenarioStats& stats,
                          Application* app)
     : scenario_id_(std::move(scenario_id)),
@@ -66,7 +66,7 @@ StatsScreen::StatsScreen(std::string scenario_id,
 
 NavigationEvent StatsScreen::Run() {
   ScreenInfo screen = app_->GetScreenInfo();
-  SettingsT settings = app_->GetSettingsManager()->GetCurrentSettings();
+  Settings settings = app_->GetSettingsManager()->GetCurrentSettings();
 
   std::string score_string = MakeScoreString(stats_.targets_hit, stats_.shots_taken, stats_.score);
 
@@ -100,7 +100,7 @@ NavigationEvent StatsScreen::Run() {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
-      auto nav_event = replay_viewer.PlayReplay(*replay_, *settings.crosshair, app_);
+      auto nav_event = replay_viewer.PlayReplay(*replay_, settings.crosshair(), app_);
       if (!nav_event.IsDone()) {
         return nav_event;
       }
@@ -137,13 +137,9 @@ NavigationEvent StatsScreen::Run() {
       view_replay = true;
     }
     if (ImGui::Button("Save replay", sz)) {
-      ReplayFileT replay_file;
-      replay_file.replay.Set(*replay_);
-      flatbuffers::FlatBufferBuilder fbb;
-      fbb.Finish(ReplayFile::Pack(fbb, &replay_file));
       std::string file_name = std::format("replay_{}_{}.bin", scenario_id_, stats_id_);
       std::ofstream outfile(app_->GetFileSystem()->GetUserDataPath(file_name), std::ios::binary);
-      outfile.write(reinterpret_cast<const char*>(fbb.GetBufferPointer()), fbb.GetSize());
+      replay_->SerializeToOstream(&outfile);
       outfile.close();
     }
     if (all_stats.size() > 1) {
