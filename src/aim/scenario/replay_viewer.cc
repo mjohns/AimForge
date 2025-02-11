@@ -128,10 +128,8 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
 
     if (app->StartRender()) {
       if (replay.room().has_simple_room()) {
-        app->GetRenderer()->DrawSimpleStaticRoom(replay.room().simple_room().height(),
-                                                 replay.room().simple_room().width(),
-                                                 target_manager.GetTargets(),
-                                                 look_at.transform);
+        app->GetRenderer()->DrawSimpleStaticRoom(
+            replay.room().simple_room(), target_manager.GetTargets(), look_at.transform);
       }
       app->FinishRender();
     }

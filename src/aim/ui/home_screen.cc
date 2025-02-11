@@ -4,6 +4,7 @@
 
 #include <format>
 
+#include "aim/proto/scenario.pb.h"
 #include "aim/scenario/static_scenario.h"
 #include "aim/ui/settings_screen.h"
 
@@ -13,7 +14,7 @@ namespace {}  // namespace
 void HomeScreen::Run(Application* app) {
   bool needs_reset = true;
 
-  std::optional<ScenarioParams> scenario_to_start;
+  std::optional<ScenarioDef> scenario_to_start;
   bool stop_scenario = false;
   int duration_seconds = 60;
   bool open_settings = false;
@@ -42,23 +43,27 @@ void HomeScreen::Run(Application* app) {
       continue;
     }
 
-    ScenarioParams base_1w_params;
-    base_1w_params.static_params.room_height = 150;
-    base_1w_params.static_params.room_width = 170;
-    base_1w_params.static_params.target_radius = 1.5;
-    base_1w_params.duration_seconds = duration_seconds;
+    ScenarioDef base_1w_def;
+    {
+      base_1w_def.set_duration_seconds(duration_seconds);
+      base_1w_def.mutable_room()->mutable_simple_room()->set_height(150);
+      base_1w_def.mutable_room()->mutable_simple_room()->set_width(170);
+      StaticScenarioDef* static_def = base_1w_def.mutable_static_def();
+      static_def->set_target_radius(1.5);
 
-    base_1w_params.static_params.target_placement.min_distance = 20;
-    TargetRegion circle_region;
-    circle_region.percent_chance = 0.3;
-    circle_region.x_circle_percent = 0.6;
-    circle_region.y_circle_percent = 0.35;
-    base_1w_params.static_params.target_placement.regions.push_back(circle_region);
+      TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
+      strat->set_min_distance(20);
 
-    TargetRegion square_region;
-    square_region.x_percent = 0.7;
-    square_region.y_percent = 0.6;
-    base_1w_params.static_params.target_placement.regions.push_back(square_region);
+      TargetRegion* circle_region = strat->add_regions();
+      circle_region->set_percent_chance(0.3);
+      circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.6);
+      circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.35);
+
+      TargetRegion* square_region = strat->add_regions();
+      square_region->set_percent_chance(1);
+      square_region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.7);
+      square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.6);
+    }
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -97,60 +102,56 @@ void HomeScreen::Run(Application* app) {
       open_settings = true;
     }
     if (ImGui::Button("Start Nicky EZ PZ", sz)) {
-      ScenarioParams params = base_1w_params;
-      params.scenario_id = "nick_ez_pz";
-      params.static_params.num_targets = 7;
-      params.static_params.target_radius = 3;
-      scenario_to_start = params;
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("nick_ez_pz");
+      def.mutable_static_def()->set_num_targets(7);
+      def.mutable_static_def()->set_target_radius(3);
+      scenario_to_start = def;
     }
     if (ImGui::Button("Start 1w3ts", sz)) {
-      ScenarioParams params = base_1w_params;
-      params.scenario_id = "1w3ts_intermediate_s5";
-      params.static_params.num_targets = 3;
-      params.metronome_bpm = 133;
-      scenario_to_start = params;
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w3ts_intermediate_s5");
+      def.mutable_static_def()->set_num_targets(3);
+      scenario_to_start = def;
     }
     if (ImGui::Button("Start 1w3ts hard", sz)) {
-      ScenarioParams params = base_1w_params;
-      params.scenario_id = "1w3ts_intermediate_s5_hard";
-      params.static_params.num_targets = 3;
-      params.metronome_bpm = 125;
-      params.static_params.target_radius = 0.9;
-      params.static_params.remove_closest_target_on_miss = true;
-      scenario_to_start = params;
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w3ts_intermediate_s5_hard");
+      def.mutable_static_def()->set_num_targets(3);
+      def.mutable_static_def()->set_target_radius(0.9);
+      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+      scenario_to_start = def;
     }
     if (ImGui::Button("Start 1w1ts", sz)) {
-      ScenarioParams params = base_1w_params;
-      params.scenario_id = "1w1ts_intermediate_s5";
-      params.static_params.num_targets = 1;
-      params.static_params.remove_closest_target_on_miss = true;
-      scenario_to_start = params;
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w1ts_intermediate_s5");
+      def.mutable_static_def()->set_num_targets(1);
+      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+      scenario_to_start = def;
     }
     if (ImGui::Button("Start 1w3ts poke", sz)) {
-      ScenarioParams params = base_1w_params;
-      params.scenario_id = "1w3ts_intermediate_s5_poke";
-      params.static_params.num_targets = 3;
-      params.metronome_bpm = 130;
-      params.static_params.is_poke_ball = true;
-      scenario_to_start = params;
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w1ts_intermediate_s5_poke");
+      def.mutable_static_def()->set_num_targets(3);
+      def.mutable_static_def()->set_is_poke_ball(true);
+      scenario_to_start = def;
     }
     if (ImGui::Button("Start raw control", sz)) {
-      ScenarioParams params;
-      params.scenario_id = "raw_control";
-      params.static_params.num_targets = 3;
-      params.static_params.room_height = 150;
-      params.static_params.room_width = 170;
-      params.static_params.target_radius = 0.95;
-      params.duration_seconds = duration_seconds;
-      // params.metronome_bpm = 180;
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("raw_control");
+      def.clear_static_def();
+      StaticScenarioDef* static_def = def.mutable_static_def();
+      static_def->set_target_radius(0.95);
+      static_def->set_num_targets(3);
 
-      params.static_params.target_placement.min_distance = 3;
-      TargetRegion circle_region;
-      circle_region.x_circle_percent = 0.08;
-      circle_region.y_circle_percent = 0.08;
-      params.static_params.target_placement.regions.push_back(circle_region);
+      TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
+      strat->set_min_distance(3);
 
-      scenario_to_start = params;
+      TargetRegion* circle_region = strat->add_regions();
+      circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.08);
+      circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.08);
+
+      scenario_to_start = def;
     }
     ImGui::End();
 

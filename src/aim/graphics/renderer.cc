@@ -19,11 +19,10 @@ void Renderer::DrawRoom(float height, float width, const glm::mat4& view) {
   room_renderer_.Draw(height, width, view);
 }
 
-void Renderer::DrawSimpleStaticRoom(float height,
-                                    float width,
+void Renderer::DrawSimpleStaticRoom(const SimpleRoom& room,
                                     const std::vector<Target>& targets,
                                     const glm::mat4& view) {
-  this->DrawRoom(height, width, view);
+  this->DrawRoom(room.height(), room.width(), view);
   this->DrawTargets(targets, view);
 }
 
