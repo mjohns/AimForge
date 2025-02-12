@@ -7,7 +7,6 @@ package aim;
 message DotCrosshair {
   bool draw_outline = 1;
   StoredRgb outline_color = 2;
-
 }
 
 message Crosshair {
