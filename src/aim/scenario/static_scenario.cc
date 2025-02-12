@@ -74,40 +74,57 @@ float GetRegionLength(const Room& room, const RegionLength& length) {
   return 0;
 }
 
+std::optional<TargetRegion> GetRegionToUse(const ScenarioDef& def,
+                                           TargetManager* target_manager,
+                                           Application* app) {
+  const TargetPlacementStrategy& strategy = def.static_def().target_placement_strategy();
+  if (strategy.regions_size() == 0) {
+    return {};
+  }
+  if (strategy.alternate_regions()) {
+    int i = target_manager->GetTargetIdCounter() % strategy.regions_size();
+    return strategy.regions(i);
+  }
+
+  auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
+  for (const TargetRegion& region : strategy.regions()) {
+    float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
+    float percent_chance = region.has_percent_chance() ? region.percent_chance() : 1;
+    if (percent_chance >= region_chance_roll) {
+      return region;
+    }
+  }
+
+  return {};
+}
+
 // Returns an x/z pair where to place the target on the back wall.
 glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
                                TargetManager* target_manager,
                                Application* app) {
-  auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
-  std::function<glm::vec2()> get_candidate_pos = [=] { return glm::vec2(0, 0); };
+  auto maybe_region = GetRegionToUse(def, target_manager, app);
+  if (!maybe_region.has_value()) {
+    return glm::vec2(0);
+  }
+
+  const TargetRegion& region = *maybe_region;
   float height = def.room().simple_room().height();
   float width = def.room().simple_room().width();
-  float x_offset = 0;
-  float y_offset = 0;
-  for (const TargetRegion& region : def.static_def().target_placement_strategy().regions()) {
-    float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
-    float percent_chance = region.has_percent_chance() ? region.percent_chance() : 1;
-    if (percent_chance >= region_chance_roll) {
-      x_offset = GetRegionLength(def.room(), region.x_offset());
-      y_offset = GetRegionLength(def.room(), region.y_offset());
-      get_candidate_pos = [&] {
-        // TODO: Use offset position
-        if (region.has_oval()) {
-          return GetRandomPositionInCircle(
-              0.5 * GetRegionLength(def.room(), region.oval().x_diamter()),
-              0.5 * GetRegionLength(def.room(), region.oval().y_diamter()),
-              app);
-        }
-        float max_x = 0.5 * GetRegionLength(def.room(), region.rectangle().x_length());
-        float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
-        auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
-        auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
-        return glm::vec2(distribution_x(*app->GetRandomGenerator()),
-                         distribution_y(*app->GetRandomGenerator()));
-      };
-      break;
+  float x_offset = GetRegionLength(def.room(), region.x_offset());
+  float y_offset = GetRegionLength(def.room(), region.y_offset());
+  auto get_candidate_pos = [&] {
+    if (region.has_oval()) {
+      return GetRandomPositionInCircle(0.5 * GetRegionLength(def.room(), region.oval().x_diamter()),
+                                       0.5 * GetRegionLength(def.room(), region.oval().y_diamter()),
+                                       app);
     }
-  }
+    float max_x = 0.5 * GetRegionLength(def.room(), region.rectangle().x_length());
+    float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
+    auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
+    auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
+    return glm::vec2(distribution_x(*app->GetRandomGenerator()),
+                     distribution_y(*app->GetRandomGenerator()));
+  };
 
   int max_attempts = 30;
   int attempt_number = 0;

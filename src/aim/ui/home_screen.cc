@@ -132,6 +132,27 @@ void HomeScreen::Run(Application* app) {
       def.mutable_static_def()->set_remove_closest_target_on_miss(true);
       scenario_to_start = def;
     }
+    if (ImGui::Button("Start 1w1ts vertical alternate", sz)) {
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w1ts_intermediate_s5_vertical_alternate");
+      def.mutable_static_def()->set_num_targets(1);
+      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+      TargetPlacementStrategy* strat =
+          def.mutable_static_def()->mutable_target_placement_strategy();
+      strat->clear_regions();
+      strat->set_alternate_regions(true);
+
+      TargetRegion* top = strat->add_regions();
+      top->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);
+      top->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.1);
+      top->mutable_y_offset()->set_y_percent_value(0.2);
+
+      TargetRegion* bottom = strat->add_regions();
+      bottom->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);
+      bottom->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.1);
+      bottom->mutable_y_offset()->set_y_percent_value(-0.2);
+      scenario_to_start = def;
+    }
     if (ImGui::Button("Start 1w3ts poke", sz)) {
       ScenarioDef def = base_1w_def;
       def.set_scenario_id("1w1ts_intermediate_s5_poke");

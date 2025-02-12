@@ -189,7 +189,8 @@ inline constexpr TargetPlacementStrategy::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         regions_{},
-        min_distance_{0} {}
+        min_distance_{0},
+        alternate_regions_{false} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR TargetPlacementStrategy::TargetPlacementStrategy(::_pbi::ConstantInitialized)
@@ -366,8 +367,10 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.regions_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.min_distance_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.alternate_regions_),
         ~0u,
         0,
+        1,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -415,9 +418,9 @@ static const ::_pbi::MigrationSchema
         {34, 48, -1, sizeof(::aim::TargetRegion)},
         {53, 63, -1, sizeof(::aim::RectangleTargetRegion)},
         {65, 75, -1, sizeof(::aim::OvalTargetRegion)},
-        {77, 87, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {89, 103, -1, sizeof(::aim::ScenarioDef)},
-        {108, 121, -1, sizeof(::aim::StaticScenarioDef)},
+        {77, 88, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {91, 105, -1, sizeof(::aim::ScenarioDef)},
+        {110, 123, -1, sizeof(::aim::StaticScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -448,18 +451,19 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ength\030\002 \001(\0132\021.aim.RegionLength\"^\n\020OvalTa"
     "rgetRegion\022$\n\tx_diamter\030\001 \001(\0132\021.aim.Regi"
     "onLength\022$\n\ty_diamter\030\002 \001(\0132\021.aim.Region"
-    "Length\"S\n\027TargetPlacementStrategy\022\"\n\007reg"
+    "Length\"n\n\027TargetPlacementStrategy\022\"\n\007reg"
     "ions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014min_dis"
-    "tance\030\002 \001(\002\"\265\001\n\013ScenarioDef\022\023\n\013scenario_"
-    "id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004ro"
-    "om\030\003 \001(\0132\t.aim.Room\022(\n\017camera_position\030\004"
-    " \001(\0132\017.aim.StoredVec3\022,\n\nstatic_def\030\005 \001("
-    "\0132\026.aim.StaticScenarioDefH\000B\006\n\004type\"\275\001\n\021"
-    "StaticScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025"
-    "\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 "
-    "\001(\010\022%\n\035remove_closest_target_on_miss\030\004 \001"
-    "(\010\022\?\n\031target_placement_strategy\030\005 \001(\0132\034."
-    "aim.TargetPlacementStrategyb\010editionsp\350\007"
+    "tance\030\002 \001(\002\022\031\n\021alternate_regions\030\003 \001(\010\"\265"
+    "\001\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020d"
+    "uration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.ai"
+    "m.Room\022(\n\017camera_position\030\004 \001(\0132\017.aim.St"
+    "oredVec3\022,\n\nstatic_def\030\005 \001(\0132\026.aim.Stati"
+    "cScenarioDefH\000B\006\n\004type\"\275\001\n\021StaticScenari"
+    "oDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n\rtarget_radi"
+    "us\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 \001(\010\022%\n\035remove"
+    "_closest_target_on_miss\030\004 \001(\010\022\?\n\031target_"
+    "placement_strategy\030\005 \001(\0132\034.aim.TargetPla"
+    "cementStrategyb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -469,7 +473,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1120,
+    1147,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -2473,7 +2477,13 @@ TargetPlacementStrategy::TargetPlacementStrategy(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  _impl_.min_distance_ = from._impl_.min_distance_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, min_distance_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, min_distance_),
+           offsetof(Impl_, alternate_regions_) -
+               offsetof(Impl_, min_distance_) +
+               sizeof(Impl_::alternate_regions_));
 
   // @@protoc_insertion_point(copy_constructor:aim.TargetPlacementStrategy)
 }
@@ -2485,7 +2495,12 @@ inline PROTOBUF_NDEBUG_INLINE TargetPlacementStrategy::Impl_::Impl_(
 
 inline void TargetPlacementStrategy::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.min_distance_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, min_distance_),
+           0,
+           offsetof(Impl_, alternate_regions_) -
+               offsetof(Impl_, min_distance_) +
+               sizeof(Impl_::alternate_regions_));
 }
 TargetPlacementStrategy::~TargetPlacementStrategy() {
   // @@protoc_insertion_point(destructor:aim.TargetPlacementStrategy)
@@ -2546,15 +2561,15 @@ const ::google::protobuf::internal::ClassData* TargetPlacementStrategy::GetClass
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 0, 2> TargetPlacementStrategy::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> TargetPlacementStrategy::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    3,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -2564,12 +2579,16 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> TargetPlacementStrategy::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // float min_distance = 2;
-    {::_pbi::TcParser::FastF32S1,
-     {21, 0, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // repeated .aim.TargetRegion regions = 1;
     {::_pbi::TcParser::FastMtR1,
      {10, 63, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.regions_)}},
+    // float min_distance = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 0, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)}},
+    // bool alternate_regions = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(TargetPlacementStrategy, _impl_.alternate_regions_), 1>(),
+     {24, 1, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -2579,6 +2598,9 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> TargetPlacementStrategy::_table_ = {
     // float min_distance = 2;
     {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // bool alternate_regions = 3;
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetRegion>()},
   }}, {{
@@ -2593,7 +2615,12 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
   (void) cached_has_bits;
 
   _impl_.regions_.Clear();
-  _impl_.min_distance_ = 0;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.min_distance_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.alternate_regions_) -
+        reinterpret_cast<char*>(&_impl_.min_distance_)) + sizeof(_impl_.alternate_regions_));
+  }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -2632,6 +2659,13 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
                 2, this_._internal_min_distance(), target);
           }
 
+          // bool alternate_regions = 3;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                3, this_._internal_alternate_regions(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -2665,11 +2699,15 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
               }
             }
           }
-           {
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
             // float min_distance = 2;
-            cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
+            }
+            // bool alternate_regions = 3;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 2;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -2687,8 +2725,13 @@ void TargetPlacementStrategy::MergeImpl(::google::protobuf::MessageLite& to_msg,
   _this->_internal_mutable_regions()->MergeFrom(
       from._internal_regions());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    _this->_impl_.min_distance_ = from._impl_.min_distance_;
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.min_distance_ = from._impl_.min_distance_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.alternate_regions_ = from._impl_.alternate_regions_;
+    }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
@@ -2707,7 +2750,12 @@ void TargetPlacementStrategy::InternalSwap(TargetPlacementStrategy* PROTOBUF_RES
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.regions_.InternalSwap(&other->_impl_.regions_);
-        swap(_impl_.min_distance_, other->_impl_.min_distance_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_)
+      + sizeof(TargetPlacementStrategy::_impl_.alternate_regions_)
+      - PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)>(
+          reinterpret_cast<char*>(&_impl_.min_distance_),
+          reinterpret_cast<char*>(&other->_impl_.min_distance_));
 }
 
 ::google::protobuf::Metadata TargetPlacementStrategy::GetMetadata() const {

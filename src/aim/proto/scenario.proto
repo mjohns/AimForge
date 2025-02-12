@@ -53,6 +53,9 @@ message OvalTargetRegion {
 message TargetPlacementStrategy {
   repeated TargetRegion regions = 1;
   float min_distance = 2;
+  // Pick from then next region for each new target. region.percent_chance
+  // is ignored if this is set.
+  bool alternate_regions = 3;
 }
 
 message ScenarioDef {
