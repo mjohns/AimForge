@@ -162,7 +162,7 @@ void HomeScreen::Run(Application* app) {
     }
     if (ImGui::Button("Start 1w3ts poke", sz)) {
       ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w1ts_intermediate_s5_poke");
+      def.set_scenario_id("1w3ts_intermediate_s5_poke");
       def.mutable_static_def()->set_num_targets(3);
       def.mutable_static_def()->set_is_poke_ball(true);
       scenario_to_start = def;
