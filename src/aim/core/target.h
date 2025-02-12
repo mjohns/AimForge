@@ -4,12 +4,13 @@
 #include <optional>
 #include <vector>
 
+#include "aim/common/simple_types.h"
 #include "aim/core/camera.h"
 
 namespace aim {
 
 struct Target {
-  uint16_t id = 0;
+  u16 id = 0;
   glm::vec3 position{};
   float radius = 1.0f;
   bool hidden = false;
@@ -20,8 +21,8 @@ class TargetManager {
   TargetManager() {}
 
   Target AddTarget(Target t);
-  void RemoveTarget(uint16_t target_id);
-  Target ReplaceTarget(uint16_t target_id_to_replace, Target new_target);
+  void RemoveTarget(u16 target_id);
+  Target ReplaceTarget(u16 target_id_to_replace, Target new_target);
 
   void Clear() {
     targets_.clear();
@@ -31,11 +32,15 @@ class TargetManager {
     return targets_;
   }
 
-  std::optional<uint16_t> GetNearestHitTarget(const Camera& camera, const glm::vec3& look_at);
-  std::optional<uint16_t> GetNearestTargetOnStaticWall(const Camera& camera, const glm::vec3& look_at);
+  u16 GetTargetIdCounter() {
+    return target_id_counter_;
+  }
+
+  std::optional<u16> GetNearestHitTarget(const Camera& camera, const glm::vec3& look_at);
+  std::optional<u16> GetNearestTargetOnStaticWall(const Camera& camera, const glm::vec3& look_at);
 
  private:
-  uint16_t target_id_counter_ = 0;
+  u16 target_id_counter_ = 0;
   std::vector<Target> targets_;
 };
 

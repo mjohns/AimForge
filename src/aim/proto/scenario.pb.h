@@ -1604,6 +1604,7 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   enum : int {
     kRegionsFieldNumber = 1,
     kMinDistanceFieldNumber = 2,
+    kAlternateRegionsFieldNumber = 3,
   };
   // repeated .aim.TargetRegion regions = 1;
   int regions_size() const;
@@ -1633,12 +1634,23 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   void _internal_set_min_distance(float value);
 
   public:
+  // bool alternate_regions = 3;
+  bool has_alternate_regions() const;
+  void clear_alternate_regions() ;
+  bool alternate_regions() const;
+  void set_alternate_regions(bool value);
+
+  private:
+  bool _internal_alternate_regions() const;
+  void _internal_set_alternate_regions(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetPlacementStrategy)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
+      2, 3, 1,
       0, 2>
       _table_;
 
@@ -1660,6 +1672,7 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::TargetRegion > regions_;
     float min_distance_;
+    bool alternate_regions_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3332,6 +3345,34 @@ inline float TargetPlacementStrategy::_internal_min_distance() const {
 inline void TargetPlacementStrategy::_internal_set_min_distance(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.min_distance_ = value;
+}
+
+// bool alternate_regions = 3;
+inline bool TargetPlacementStrategy::has_alternate_regions() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void TargetPlacementStrategy::clear_alternate_regions() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.alternate_regions_ = false;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline bool TargetPlacementStrategy::alternate_regions() const {
+  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.alternate_regions)
+  return _internal_alternate_regions();
+}
+inline void TargetPlacementStrategy::set_alternate_regions(bool value) {
+  _internal_set_alternate_regions(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.alternate_regions)
+}
+inline bool TargetPlacementStrategy::_internal_alternate_regions() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.alternate_regions_;
+}
+inline void TargetPlacementStrategy::_internal_set_alternate_regions(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.alternate_regions_ = value;
 }
 
 // -------------------------------------------------------------------
