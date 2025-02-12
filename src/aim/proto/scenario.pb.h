@@ -1228,8 +1228,8 @@ class TargetRegion final : public ::google::protobuf::Message
     return *internal_default_instance();
   }
   enum TypeCase {
-    kRectangle = 3,
-    kOval = 4,
+    kRectangle = 4,
+    kOval = 5,
     TYPE_NOT_SET = 0,
   };
   static inline const TargetRegion* internal_default_instance() {
@@ -1323,24 +1323,40 @@ class TargetRegion final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kRegionOffsetFieldNumber = 2,
+    kXOffsetFieldNumber = 2,
+    kYOffsetFieldNumber = 3,
     kPercentChanceFieldNumber = 1,
-    kRectangleFieldNumber = 3,
-    kOvalFieldNumber = 4,
+    kRectangleFieldNumber = 4,
+    kOvalFieldNumber = 5,
   };
-  // .aim.StoredVec2 region_offset = 2;
-  bool has_region_offset() const;
-  void clear_region_offset() ;
-  const ::aim::StoredVec2& region_offset() const;
-  PROTOBUF_NODISCARD ::aim::StoredVec2* release_region_offset();
-  ::aim::StoredVec2* mutable_region_offset();
-  void set_allocated_region_offset(::aim::StoredVec2* value);
-  void unsafe_arena_set_allocated_region_offset(::aim::StoredVec2* value);
-  ::aim::StoredVec2* unsafe_arena_release_region_offset();
+  // .aim.RegionLength x_offset = 2;
+  bool has_x_offset() const;
+  void clear_x_offset() ;
+  const ::aim::RegionLength& x_offset() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_x_offset();
+  ::aim::RegionLength* mutable_x_offset();
+  void set_allocated_x_offset(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_x_offset(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_x_offset();
 
   private:
-  const ::aim::StoredVec2& _internal_region_offset() const;
-  ::aim::StoredVec2* _internal_mutable_region_offset();
+  const ::aim::RegionLength& _internal_x_offset() const;
+  ::aim::RegionLength* _internal_mutable_x_offset();
+
+  public:
+  // .aim.RegionLength y_offset = 3;
+  bool has_y_offset() const;
+  void clear_y_offset() ;
+  const ::aim::RegionLength& y_offset() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_y_offset();
+  ::aim::RegionLength* mutable_y_offset();
+  void set_allocated_y_offset(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_y_offset(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_y_offset();
+
+  private:
+  const ::aim::RegionLength& _internal_y_offset() const;
+  ::aim::RegionLength* _internal_mutable_y_offset();
 
   public:
   // float percent_chance = 1;
@@ -1354,7 +1370,7 @@ class TargetRegion final : public ::google::protobuf::Message
   void _internal_set_percent_chance(float value);
 
   public:
-  // .aim.RectangleTargetRegion rectangle = 3;
+  // .aim.RectangleTargetRegion rectangle = 4;
   bool has_rectangle() const;
   private:
   bool _internal_has_rectangle() const;
@@ -1373,7 +1389,7 @@ class TargetRegion final : public ::google::protobuf::Message
   ::aim::RectangleTargetRegion* _internal_mutable_rectangle();
 
   public:
-  // .aim.OvalTargetRegion oval = 4;
+  // .aim.OvalTargetRegion oval = 5;
   bool has_oval() const;
   private:
   bool _internal_has_oval() const;
@@ -1403,7 +1419,7 @@ class TargetRegion final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 4, 3,
+      2, 5, 4,
       0, 2>
       _table_;
 
@@ -1423,7 +1439,8 @@ class TargetRegion final : public ::google::protobuf::Message
                           const TargetRegion& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::StoredVec2* region_offset_;
+    ::aim::RegionLength* x_offset_;
+    ::aim::RegionLength* y_offset_;
     float percent_chance_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
@@ -2459,13 +2476,13 @@ inline RegionLength::TypeCase RegionLength::type_case() const {
 
 // float percent_chance = 1;
 inline bool TargetRegion::has_percent_chance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void TargetRegion::clear_percent_chance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.percent_chance_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline float TargetRegion::percent_chance() const {
   // @@protoc_insertion_point(field_get:aim.TargetRegion.percent_chance)
@@ -2473,7 +2490,7 @@ inline float TargetRegion::percent_chance() const {
 }
 inline void TargetRegion::set_percent_chance(float value) {
   _internal_set_percent_chance(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.TargetRegion.percent_chance)
 }
 inline float TargetRegion::_internal_percent_chance() const {
@@ -2485,40 +2502,45 @@ inline void TargetRegion::_internal_set_percent_chance(float value) {
   _impl_.percent_chance_ = value;
 }
 
-// .aim.StoredVec2 region_offset = 2;
-inline bool TargetRegion::has_region_offset() const {
+// .aim.RegionLength x_offset = 2;
+inline bool TargetRegion::has_x_offset() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.region_offset_ != nullptr);
+  PROTOBUF_ASSUME(!value || _impl_.x_offset_ != nullptr);
   return value;
 }
-inline const ::aim::StoredVec2& TargetRegion::_internal_region_offset() const {
+inline void TargetRegion::clear_x_offset() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.x_offset_ != nullptr) _impl_.x_offset_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::RegionLength& TargetRegion::_internal_x_offset() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::StoredVec2* p = _impl_.region_offset_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec2&>(::aim::_StoredVec2_default_instance_);
+  const ::aim::RegionLength* p = _impl_.x_offset_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
 }
-inline const ::aim::StoredVec2& TargetRegion::region_offset() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TargetRegion.region_offset)
-  return _internal_region_offset();
+inline const ::aim::RegionLength& TargetRegion::x_offset() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.x_offset)
+  return _internal_x_offset();
 }
-inline void TargetRegion::unsafe_arena_set_allocated_region_offset(::aim::StoredVec2* value) {
+inline void TargetRegion::unsafe_arena_set_allocated_x_offset(::aim::RegionLength* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.region_offset_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.x_offset_);
   }
-  _impl_.region_offset_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  _impl_.x_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.region_offset)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.x_offset)
 }
-inline ::aim::StoredVec2* TargetRegion::release_region_offset() {
+inline ::aim::RegionLength* TargetRegion::release_x_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredVec2* released = _impl_.region_offset_;
-  _impl_.region_offset_ = nullptr;
+  ::aim::RegionLength* released = _impl_.x_offset_;
+  _impl_.x_offset_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
     auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
     released = ::google::protobuf::internal::DuplicateIfNonNull(released);
@@ -2532,38 +2554,38 @@ inline ::aim::StoredVec2* TargetRegion::release_region_offset() {
   }
   return released;
 }
-inline ::aim::StoredVec2* TargetRegion::unsafe_arena_release_region_offset() {
+inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_x_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.TargetRegion.region_offset)
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.x_offset)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredVec2* temp = _impl_.region_offset_;
-  _impl_.region_offset_ = nullptr;
+  ::aim::RegionLength* temp = _impl_.x_offset_;
+  _impl_.x_offset_ = nullptr;
   return temp;
 }
-inline ::aim::StoredVec2* TargetRegion::_internal_mutable_region_offset() {
+inline ::aim::RegionLength* TargetRegion::_internal_mutable_x_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.region_offset_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec2>(GetArena());
-    _impl_.region_offset_ = reinterpret_cast<::aim::StoredVec2*>(p);
+  if (_impl_.x_offset_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.x_offset_ = reinterpret_cast<::aim::RegionLength*>(p);
   }
-  return _impl_.region_offset_;
+  return _impl_.x_offset_;
 }
-inline ::aim::StoredVec2* TargetRegion::mutable_region_offset() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::RegionLength* TargetRegion::mutable_x_offset() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000001u;
-  ::aim::StoredVec2* _msg = _internal_mutable_region_offset();
-  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.region_offset)
+  ::aim::RegionLength* _msg = _internal_mutable_x_offset();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.x_offset)
   return _msg;
 }
-inline void TargetRegion::set_allocated_region_offset(::aim::StoredVec2* value) {
+inline void TargetRegion::set_allocated_x_offset(::aim::RegionLength* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.region_offset_);
+    delete (_impl_.x_offset_);
   }
 
   if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
@@ -2572,11 +2594,107 @@ inline void TargetRegion::set_allocated_region_offset(::aim::StoredVec2* value) 
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
 
-  _impl_.region_offset_ = reinterpret_cast<::aim::StoredVec2*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.region_offset)
+  _impl_.x_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.x_offset)
 }
 
-// .aim.RectangleTargetRegion rectangle = 3;
+// .aim.RegionLength y_offset = 3;
+inline bool TargetRegion::has_y_offset() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.y_offset_ != nullptr);
+  return value;
+}
+inline void TargetRegion::clear_y_offset() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.y_offset_ != nullptr) _impl_.y_offset_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::RegionLength& TargetRegion::_internal_y_offset() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.y_offset_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& TargetRegion::y_offset() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.y_offset)
+  return _internal_y_offset();
+}
+inline void TargetRegion::unsafe_arena_set_allocated_y_offset(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.y_offset_);
+  }
+  _impl_.y_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.y_offset)
+}
+inline ::aim::RegionLength* TargetRegion::release_y_offset() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.y_offset_;
+  _impl_.y_offset_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_y_offset() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.y_offset)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.y_offset_;
+  _impl_.y_offset_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* TargetRegion::_internal_mutable_y_offset() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.y_offset_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.y_offset_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.y_offset_;
+}
+inline ::aim::RegionLength* TargetRegion::mutable_y_offset() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_y_offset();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.y_offset)
+  return _msg;
+}
+inline void TargetRegion::set_allocated_y_offset(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.y_offset_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.y_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.y_offset)
+}
+
+// .aim.RectangleTargetRegion rectangle = 4;
 inline bool TargetRegion::has_rectangle() const {
   return type_case() == kRectangle;
 }
@@ -2655,7 +2773,7 @@ inline ::aim::RectangleTargetRegion* TargetRegion::mutable_rectangle() ABSL_ATTR
   return _msg;
 }
 
-// .aim.OvalTargetRegion oval = 4;
+// .aim.OvalTargetRegion oval = 5;
 inline bool TargetRegion::has_oval() const {
   return type_case() == kOval;
 }
