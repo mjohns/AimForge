@@ -196,8 +196,8 @@ class StaticScenario : public Scenario {
   }
 
   void Render() override {
-    app_->GetRenderer()->DrawSimpleStaticRoom(
-        def_.room().simple_room(), target_manager_.GetTargets(), look_at_.transform);
+    app_->GetRenderer()->DrawScenario(
+        def_.room(), target_manager_.GetTargets(), look_at_.transform);
   }
 
   void Initialize() override {

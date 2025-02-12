@@ -153,6 +153,7 @@ void SphereRenderer::SetProjection(const glm::mat4& projection) {
   shader_.Use();
   shader_.SetMat4("projection", projection);
 }
+
 void SphereRenderer::Draw(const glm::mat4& view, const std::vector<Sphere>& spheres) {
   shader_.Use();
   shader_.SetMat4("view", view);

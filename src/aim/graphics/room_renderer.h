@@ -3,6 +3,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "aim/graphics/shader.h"
+#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
@@ -11,11 +12,19 @@ struct RoomRenderer {
   RoomRenderer();
 
   void SetProjection(const glm::mat4& projection);
-  void Draw(float height, float width, const glm::mat4& view);
+  void Draw(const Room& room, const glm::mat4& view);
 
  private:
-  unsigned int vbo_;
-  unsigned int vao_;
+  void DrawSimpleRoom(const SimpleRoom& room, const glm::mat4& view);
+  void DrawCircularRoom(const CircularRoom& room, const glm::mat4& view);
+
+  unsigned int quad_vbo_;
+  unsigned int quad_vao_;
+
+  unsigned int circular_wall_vbo_;
+  unsigned int circular_wall_vao_;
+  unsigned int circular_wall_num_vertices_;
+
   Shader shader_;
 };
 

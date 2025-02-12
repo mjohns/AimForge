@@ -78,6 +78,32 @@ struct RegionLengthDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RegionLengthDefaultTypeInternal _RegionLength_default_instance_;
 
+inline constexpr CircularRoom::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        height_{0},
+        radius_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR CircularRoom::CircularRoom(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct CircularRoomDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CircularRoomDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CircularRoomDefaultTypeInternal() {}
+  union {
+    CircularRoom _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
+
 inline constexpr Room::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : type_{},
@@ -292,6 +318,18 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::SimpleRoom, _impl_.width_),
         0,
         1,
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.height_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.radius_),
+        0,
+        1,
         ~0u,  // no _has_bits_
         PROTOBUF_FIELD_OFFSET(::aim::Room, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -300,6 +338,7 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
+        ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.type_),
         ~0u,  // no _has_bits_
@@ -413,17 +452,19 @@ const ::uint32_t
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::SimpleRoom)},
-        {12, -1, -1, sizeof(::aim::Room)},
-        {22, -1, -1, sizeof(::aim::RegionLength)},
-        {34, 48, -1, sizeof(::aim::TargetRegion)},
-        {53, 63, -1, sizeof(::aim::RectangleTargetRegion)},
-        {65, 75, -1, sizeof(::aim::OvalTargetRegion)},
-        {77, 88, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {91, 105, -1, sizeof(::aim::ScenarioDef)},
-        {110, 123, -1, sizeof(::aim::StaticScenarioDef)},
+        {12, 22, -1, sizeof(::aim::CircularRoom)},
+        {24, -1, -1, sizeof(::aim::Room)},
+        {35, -1, -1, sizeof(::aim::RegionLength)},
+        {47, 61, -1, sizeof(::aim::TargetRegion)},
+        {66, 76, -1, sizeof(::aim::RectangleTargetRegion)},
+        {78, 88, -1, sizeof(::aim::OvalTargetRegion)},
+        {90, 101, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {104, 118, -1, sizeof(::aim::ScenarioDef)},
+        {123, 136, -1, sizeof(::aim::StaticScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
+    &::aim::_CircularRoom_default_instance_._instance,
     &::aim::_Room_default_instance_._instance,
     &::aim::_RegionLength_default_instance_._instance,
     &::aim::_TargetRegion_default_instance_._instance,
@@ -437,33 +478,35 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     protodesc_cold) = {
     "\n\016scenario.proto\022\003aim\032\014common.proto\"+\n\nS"
     "impleRoom\022\016\n\006height\030\001 \001(\002\022\r\n\005width\030\002 \001(\002"
-    "\"6\n\004Room\022&\n\013simple_room\030\001 \001(\0132\017.aim.Simp"
-    "leRoomH\000B\006\n\004type\"f\n\014RegionLength\022\031\n\017x_pe"
-    "rcent_value\030\001 \001(\002H\000\022\031\n\017y_percent_value\030\002"
-    " \001(\002H\000\022\030\n\016absolute_value\030\003 \001(\002H\000B\006\n\004type"
-    "\"\320\001\n\014TargetRegion\022\026\n\016percent_chance\030\001 \001("
-    "\002\022#\n\010x_offset\030\002 \001(\0132\021.aim.RegionLength\022#"
-    "\n\010y_offset\030\003 \001(\0132\021.aim.RegionLength\022/\n\tr"
-    "ectangle\030\004 \001(\0132\032.aim.RectangleTargetRegi"
-    "onH\000\022%\n\004oval\030\005 \001(\0132\025.aim.OvalTargetRegio"
-    "nH\000B\006\n\004type\"a\n\025RectangleTargetRegion\022#\n\010"
-    "x_length\030\001 \001(\0132\021.aim.RegionLength\022#\n\010y_l"
-    "ength\030\002 \001(\0132\021.aim.RegionLength\"^\n\020OvalTa"
-    "rgetRegion\022$\n\tx_diamter\030\001 \001(\0132\021.aim.Regi"
-    "onLength\022$\n\ty_diamter\030\002 \001(\0132\021.aim.Region"
-    "Length\"n\n\027TargetPlacementStrategy\022\"\n\007reg"
-    "ions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014min_dis"
-    "tance\030\002 \001(\002\022\031\n\021alternate_regions\030\003 \001(\010\"\265"
-    "\001\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020d"
-    "uration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.ai"
-    "m.Room\022(\n\017camera_position\030\004 \001(\0132\017.aim.St"
-    "oredVec3\022,\n\nstatic_def\030\005 \001(\0132\026.aim.Stati"
-    "cScenarioDefH\000B\006\n\004type\"\275\001\n\021StaticScenari"
-    "oDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n\rtarget_radi"
-    "us\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 \001(\010\022%\n\035remove"
-    "_closest_target_on_miss\030\004 \001(\010\022\?\n\031target_"
-    "placement_strategy\030\005 \001(\0132\034.aim.TargetPla"
-    "cementStrategyb\010editionsp\350\007"
+    "\".\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
+    "us\030\002 \001(\002\"b\n\004Room\022&\n\013simple_room\030\001 \001(\0132\017."
+    "aim.SimpleRoomH\000\022*\n\rcircular_room\030\002 \001(\0132"
+    "\021.aim.CircularRoomH\000B\006\n\004type\"f\n\014RegionLe"
+    "ngth\022\031\n\017x_percent_value\030\001 \001(\002H\000\022\031\n\017y_per"
+    "cent_value\030\002 \001(\002H\000\022\030\n\016absolute_value\030\003 \001"
+    "(\002H\000B\006\n\004type\"\320\001\n\014TargetRegion\022\026\n\016percent"
+    "_chance\030\001 \001(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim.Re"
+    "gionLength\022#\n\010y_offset\030\003 \001(\0132\021.aim.Regio"
+    "nLength\022/\n\trectangle\030\004 \001(\0132\032.aim.Rectang"
+    "leTargetRegionH\000\022%\n\004oval\030\005 \001(\0132\025.aim.Ova"
+    "lTargetRegionH\000B\006\n\004type\"a\n\025RectangleTarg"
+    "etRegion\022#\n\010x_length\030\001 \001(\0132\021.aim.RegionL"
+    "ength\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionLeng"
+    "th\"^\n\020OvalTargetRegion\022$\n\tx_diamter\030\001 \001("
+    "\0132\021.aim.RegionLength\022$\n\ty_diamter\030\002 \001(\0132"
+    "\021.aim.RegionLength\"n\n\027TargetPlacementStr"
+    "ategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRegio"
+    "n\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_reg"
+    "ions\030\003 \001(\010\"\265\001\n\013ScenarioDef\022\023\n\013scenario_i"
+    "d\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004roo"
+    "m\030\003 \001(\0132\t.aim.Room\022(\n\017camera_position\030\004 "
+    "\001(\0132\017.aim.StoredVec3\022,\n\nstatic_def\030\005 \001(\013"
+    "2\026.aim.StaticScenarioDefH\000B\006\n\004type\"\275\001\n\021S"
+    "taticScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n"
+    "\rtarget_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 \001"
+    "(\010\022%\n\035remove_closest_target_on_miss\030\004 \001("
+    "\010\022\?\n\031target_placement_strategy\030\005 \001(\0132\034.a"
+    "im.TargetPlacementStrategyb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -473,13 +516,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1147,
+    1239,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    9,
+    10,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -743,6 +786,260 @@ void SimpleRoom::InternalSwap(SimpleRoom* PROTOBUF_RESTRICT other) {
 }
 // ===================================================================
 
+class CircularRoom::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<CircularRoom>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_._has_bits_);
+};
+
+CircularRoom::CircularRoom(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.CircularRoom)
+}
+CircularRoom::CircularRoom(
+    ::google::protobuf::Arena* arena, const CircularRoom& from)
+    : CircularRoom(arena) {
+  MergeFrom(from);
+}
+inline PROTOBUF_NDEBUG_INLINE CircularRoom::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void CircularRoom::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, height_),
+           0,
+           offsetof(Impl_, radius_) -
+               offsetof(Impl_, height_) +
+               sizeof(Impl_::radius_));
+}
+CircularRoom::~CircularRoom() {
+  // @@protoc_insertion_point(destructor:aim.CircularRoom)
+  SharedDtor(*this);
+}
+inline void CircularRoom::SharedDtor(MessageLite& self) {
+  CircularRoom& this_ = static_cast<CircularRoom&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* CircularRoom::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) CircularRoom(arena);
+}
+constexpr auto CircularRoom::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(CircularRoom),
+                                            alignof(CircularRoom));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull CircularRoom::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_CircularRoom_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &CircularRoom::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<CircularRoom>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &CircularRoom::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<CircularRoom>(), &CircularRoom::ByteSizeLong,
+            &CircularRoom::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_._cached_size_),
+        false,
+    },
+    &CircularRoom::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* CircularRoom::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 0, 2> CircularRoom::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::CircularRoom>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // float radius = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_)}},
+    // float height = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.height_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // float height = 1;
+    {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.height_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float radius = 2;
+    {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+PROTOBUF_NOINLINE void CircularRoom::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.CircularRoom)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.height_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.radius_) -
+        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.radius_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* CircularRoom::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const CircularRoom& this_ = static_cast<const CircularRoom&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* CircularRoom::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const CircularRoom& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.CircularRoom)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // float height = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_height(), target);
+          }
+
+          // float radius = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_radius(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.CircularRoom)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t CircularRoom::ByteSizeLong(const MessageLite& base) {
+          const CircularRoom& this_ = static_cast<const CircularRoom&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t CircularRoom::ByteSizeLong() const {
+          const CircularRoom& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.CircularRoom)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
+            // float height = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 5;
+            }
+            // float radius = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void CircularRoom::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<CircularRoom*>(&to_msg);
+  auto& from = static_cast<const CircularRoom&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.CircularRoom)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.height_ = from._impl_.height_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.radius_ = from._impl_.radius_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CircularRoom::CopyFrom(const CircularRoom& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.CircularRoom)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void CircularRoom::InternalSwap(CircularRoom* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_)
+      + sizeof(CircularRoom::_impl_.radius_)
+      - PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.height_)>(
+          reinterpret_cast<char*>(&_impl_.height_),
+          reinterpret_cast<char*>(&other->_impl_.height_));
+}
+
+::google::protobuf::Metadata CircularRoom::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
 class Room::_Internal {
  public:
   static constexpr ::int32_t kOneofCaseOffset =
@@ -761,6 +1058,19 @@ void Room::set_allocated_simple_room(::aim::SimpleRoom* simple_room) {
     _impl_.type_.simple_room_ = simple_room;
   }
   // @@protoc_insertion_point(field_set_allocated:aim.Room.simple_room)
+}
+void Room::set_allocated_circular_room(::aim::CircularRoom* circular_room) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (circular_room) {
+    ::google::protobuf::Arena* submessage_arena = circular_room->GetArena();
+    if (message_arena != submessage_arena) {
+      circular_room = ::google::protobuf::internal::GetOwnedMessage(message_arena, circular_room, submessage_arena);
+    }
+    set_has_circular_room();
+    _impl_.type_.circular_room_ = circular_room;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.Room.circular_room)
 }
 Room::Room(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
@@ -796,6 +1106,9 @@ Room::Room(
       break;
       case kSimpleRoom:
         _impl_.type_.simple_room_ = ::google::protobuf::Message::CopyConstruct<::aim::SimpleRoom>(arena, *from._impl_.type_.simple_room_);
+        break;
+      case kCircularRoom:
+        _impl_.type_.circular_room_ = ::google::protobuf::Message::CopyConstruct<::aim::CircularRoom>(arena, *from._impl_.type_.circular_room_);
         break;
   }
 
@@ -834,6 +1147,14 @@ void Room::clear_type() {
         delete _impl_.type_.simple_room_;
       } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
         ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.simple_room_);
+      }
+      break;
+    }
+    case kCircularRoom: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.circular_room_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.circular_room_);
       }
       break;
     }
@@ -881,16 +1202,16 @@ const ::google::protobuf::internal::ClassData* Room::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 1, 0, 2> Room::_table_ = {
+const ::_pbi::TcParseTable<0, 2, 2, 0, 2> Room::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    2, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
-    1,  // num_aux_entries
+    2,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -906,8 +1227,12 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> Room::_table_ = {
     // .aim.SimpleRoom simple_room = 1;
     {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.simple_room_), _Internal::kOneofCaseOffset + 0, 0,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.CircularRoom circular_room = 2;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.circular_room_), _Internal::kOneofCaseOffset + 0, 1,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::SimpleRoom>()},
+    {::_pbi::TcParser::GetTable<::aim::CircularRoom>()},
   }}, {{
   }},
 };
@@ -938,13 +1263,22 @@ PROTOBUF_NOINLINE void Room::Clear() {
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
-          // .aim.SimpleRoom simple_room = 1;
-          if (this_.type_case() == kSimpleRoom) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                1, *this_._impl_.type_.simple_room_, this_._impl_.type_.simple_room_->GetCachedSize(), target,
-                stream);
+          switch (this_.type_case()) {
+            case kSimpleRoom: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  1, *this_._impl_.type_.simple_room_, this_._impl_.type_.simple_room_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            case kCircularRoom: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  2, *this_._impl_.type_.circular_room_, this_._impl_.type_.circular_room_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            default:
+              break;
           }
-
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -973,6 +1307,12 @@ PROTOBUF_NOINLINE void Room::Clear() {
             case kSimpleRoom: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.simple_room_);
+              break;
+            }
+            // .aim.CircularRoom circular_room = 2;
+            case kCircularRoom: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.circular_room_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -1009,6 +1349,15 @@ void Room::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::pr
               ::google::protobuf::Message::CopyConstruct<::aim::SimpleRoom>(arena, *from._impl_.type_.simple_room_);
         } else {
           _this->_impl_.type_.simple_room_->MergeFrom(from._internal_simple_room());
+        }
+        break;
+      }
+      case kCircularRoom: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.circular_room_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::CircularRoom>(arena, *from._impl_.type_.circular_room_);
+        } else {
+          _this->_impl_.type_.circular_room_->MergeFrom(from._internal_circular_room());
         }
         break;
       }

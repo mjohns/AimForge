@@ -10,9 +10,15 @@ message SimpleRoom {
   float width = 2;
 }
 
+message CircularRoom {
+  float height = 1;
+  float radius = 2;
+}
+
 message Room {
   oneof type {
     SimpleRoom simple_room = 1;
+    CircularRoom circular_room = 2;
   }
 }
 
