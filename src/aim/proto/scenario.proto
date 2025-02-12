@@ -57,9 +57,10 @@ message ScenarioDef {
 	string scenario_id = 1;
 	float duration_seconds = 2;
 	Room room = 3;
+	StoredVec3 camera_position = 4;
 
 	oneof type {
-		StaticScenarioDef static_def = 4;
+		StaticScenarioDef static_def = 5;
 	}
 }
 

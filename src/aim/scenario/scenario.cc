@@ -35,10 +35,6 @@ namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
 
-Camera GetInitialCamera() {
-  return Camera(glm::vec3(0, -100.0f, 0));
-}
-
 }  // namespace
 
 Scenario::Scenario(const ScenarioDef& def, Application* app)
@@ -46,7 +42,7 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
       app_(app),
       metronome_(0, app),
       timer_(kReplayFps),
-      camera_(GetInitialCamera()),
+      camera_(Camera(ToVec3(def.camera_position()))),
       replay_(std::make_unique<Replay>()) {}
 
 NavigationEvent Scenario::Run() {

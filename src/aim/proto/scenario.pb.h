@@ -1954,7 +1954,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     return *internal_default_instance();
   }
   enum TypeCase {
-    kStaticDef = 4,
+    kStaticDef = 5,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -2050,8 +2050,9 @@ class ScenarioDef final : public ::google::protobuf::Message
   enum : int {
     kScenarioIdFieldNumber = 1,
     kRoomFieldNumber = 3,
+    kCameraPositionFieldNumber = 4,
     kDurationSecondsFieldNumber = 2,
-    kStaticDefFieldNumber = 4,
+    kStaticDefFieldNumber = 5,
   };
   // string scenario_id = 1;
   bool has_scenario_id() const;
@@ -2085,6 +2086,21 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::Room* _internal_mutable_room();
 
   public:
+  // .aim.StoredVec3 camera_position = 4;
+  bool has_camera_position() const;
+  void clear_camera_position() ;
+  const ::aim::StoredVec3& camera_position() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec3* release_camera_position();
+  ::aim::StoredVec3* mutable_camera_position();
+  void set_allocated_camera_position(::aim::StoredVec3* value);
+  void unsafe_arena_set_allocated_camera_position(::aim::StoredVec3* value);
+  ::aim::StoredVec3* unsafe_arena_release_camera_position();
+
+  private:
+  const ::aim::StoredVec3& _internal_camera_position() const;
+  ::aim::StoredVec3* _internal_mutable_camera_position();
+
+  public:
   // float duration_seconds = 2;
   bool has_duration_seconds() const;
   void clear_duration_seconds() ;
@@ -2096,7 +2112,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   void _internal_set_duration_seconds(float value);
 
   public:
-  // .aim.StaticScenarioDef static_def = 4;
+  // .aim.StaticScenarioDef static_def = 5;
   bool has_static_def() const;
   private:
   bool _internal_has_static_def() const;
@@ -2125,7 +2141,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 2,
+      2, 5, 3,
       35, 2>
       _table_;
 
@@ -2147,6 +2163,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr scenario_id_;
     ::aim::Room* room_;
+    ::aim::StoredVec3* camera_position_;
     float duration_seconds_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
@@ -3274,13 +3291,13 @@ inline void ScenarioDef::set_allocated_scenario_id(std::string* value) {
 
 // float duration_seconds = 2;
 inline bool ScenarioDef::has_duration_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void ScenarioDef::clear_duration_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.duration_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float ScenarioDef::duration_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.duration_seconds)
@@ -3288,7 +3305,7 @@ inline float ScenarioDef::duration_seconds() const {
 }
 inline void ScenarioDef::set_duration_seconds(float value) {
   _internal_set_duration_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.duration_seconds)
 }
 inline float ScenarioDef::_internal_duration_seconds() const {
@@ -3396,7 +3413,98 @@ inline void ScenarioDef::set_allocated_room(::aim::Room* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.room)
 }
 
-// .aim.StaticScenarioDef static_def = 4;
+// .aim.StoredVec3 camera_position = 4;
+inline bool ScenarioDef::has_camera_position() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.camera_position_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec3& ScenarioDef::_internal_camera_position() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec3* p = _impl_.camera_position_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
+}
+inline const ::aim::StoredVec3& ScenarioDef::camera_position() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.camera_position)
+  return _internal_camera_position();
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_camera_position(::aim::StoredVec3* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_position_);
+  }
+  _impl_.camera_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.camera_position)
+}
+inline ::aim::StoredVec3* ScenarioDef::release_camera_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::StoredVec3* released = _impl_.camera_position_;
+  _impl_.camera_position_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec3* ScenarioDef::unsafe_arena_release_camera_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.camera_position)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::StoredVec3* temp = _impl_.camera_position_;
+  _impl_.camera_position_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec3* ScenarioDef::_internal_mutable_camera_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.camera_position_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
+    _impl_.camera_position_ = reinterpret_cast<::aim::StoredVec3*>(p);
+  }
+  return _impl_.camera_position_;
+}
+inline ::aim::StoredVec3* ScenarioDef::mutable_camera_position() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::StoredVec3* _msg = _internal_mutable_camera_position();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.camera_position)
+  return _msg;
+}
+inline void ScenarioDef::set_allocated_camera_position(::aim::StoredVec3* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_position_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.camera_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.camera_position)
+}
+
+// .aim.StaticScenarioDef static_def = 5;
 inline bool ScenarioDef::has_static_def() const {
   return type_case() == kStaticDef;
 }
