@@ -37,6 +37,14 @@ static StoredVec3 ToStoredVec3(const T& v) {
   return result;
 }
 
+static StoredVec3 ToStoredVec3(float x, float y , float z) {
+  StoredVec3 result;
+  result.set_x(x);
+  result.set_y(y);
+  result.set_z(z);
+  return result;
+}
+
 template <typename T>
 static StoredRgb ToStoredRgb(const T& c) {
   return ToStoredRgb(c.r, c.g, c.b);
