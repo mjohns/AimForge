@@ -64,7 +64,12 @@ int Application::Initialize() {
     SDL_Log("Couldn't open audio: %s\n", SDL_GetError());
     return 1;
   }
-  sound_manager_ = std::make_unique<SoundManager>();
+  // Prefer sounds in the user sounds folder.
+  std::vector<std::filesystem::path> sound_dirs = {
+      file_system_->GetUserDataPath("assets/sounds"),
+      file_system_->GetBasePath("assets/sounds"),
+  };
+  sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
 
   // GL 3.0 + GLSL 130
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);

@@ -10,6 +10,7 @@ public:
 	FileSystem();
 
 	std::filesystem::path GetUserDataPath(const std::filesystem::path& file_name);
+	std::filesystem::path GetBasePath(const std::filesystem::path& file_name);
 
 private:
 	std::filesystem::path pref_dir_;

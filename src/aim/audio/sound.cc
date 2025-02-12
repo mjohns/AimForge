@@ -3,13 +3,12 @@
 #include <string>
 
 namespace aim {
-namespace {
-const std::string kSoundBasePath = "C:/Users/micha/src/aim-trainer/sounds/";
-}  // namespace
 
-std::unique_ptr<Sound> Sound::Load(std::string sound_name) {
-  std::string path = kSoundBasePath + sound_name;
-  Mix_Chunk* chunk = Mix_LoadWAV(path.c_str());
+std::unique_ptr<Sound> Sound::Load(const std::filesystem::path& sound_path) {
+  if (!std::filesystem::exists(sound_path)) {
+    return {};
+  }
+  Mix_Chunk* chunk = Mix_LoadWAV(sound_path.string().c_str());
   if (chunk == nullptr) {
     return {};
   }
