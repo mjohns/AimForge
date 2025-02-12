@@ -13,8 +13,7 @@ message RemoveTargetEvent {
   int32 target_id = 1;
 }
 
-message ShotMissedEvent {
-}
+message ShotMissedEvent {}
 
 message AddStaticTargetEvent {
   int32 target_id = 1;

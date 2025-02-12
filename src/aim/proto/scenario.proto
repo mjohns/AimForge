@@ -11,65 +11,65 @@ message SimpleRoom {
 }
 
 message Room {
-	oneof type {
-		SimpleRoom simple_room = 1;
-	}
+  oneof type {
+    SimpleRoom simple_room = 1;
+  }
 }
 
 message RegionLength {
-	oneof type {
-		// Length is a percent of relevant dimension (x,y) on the wall.
-	  float x_percent_value = 1;
-	  float y_percent_value = 2;
-		float absolute_value = 3;
-	}
+  oneof type {
+    // Length is a percent of relevant dimension (x,y) on the wall.
+    float x_percent_value = 1;
+    float y_percent_value = 2;
+    float absolute_value = 3;
+  }
 }
 
 message TargetRegion {
-	// The percent chance the target will be placed in this region. 0-1
-	// First matching region will be chosen. Defaults to 1.
-	float percent_chance = 1;
+  // The percent chance the target will be placed in this region. 0-1
+  // First matching region will be chosen. Defaults to 1.
+  float percent_chance = 1;
 
-	// (0, 0) is the center of the wall.
-	RegionLength x_offset = 2;
-	RegionLength y_offset = 3;
+  // (0, 0) is the center of the wall.
+  RegionLength x_offset = 2;
+  RegionLength y_offset = 3;
 
-	oneof type {
-		RectangleTargetRegion rectangle = 4;
-		OvalTargetRegion oval = 5;
-	}
+  oneof type {
+    RectangleTargetRegion rectangle = 4;
+    OvalTargetRegion oval = 5;
+  }
 }
 
 message RectangleTargetRegion {
-	RegionLength x_length = 1;
-	RegionLength y_length = 2;
+  RegionLength x_length = 1;
+  RegionLength y_length = 2;
 }
 
 message OvalTargetRegion {
-	RegionLength x_diamter = 1;
-	RegionLength y_diamter = 2;
+  RegionLength x_diamter = 1;
+  RegionLength y_diamter = 2;
 }
 
 message TargetPlacementStrategy {
-	repeated TargetRegion regions = 1;
-	float min_distance = 2;
+  repeated TargetRegion regions = 1;
+  float min_distance = 2;
 }
 
 message ScenarioDef {
-	string scenario_id = 1;
-	float duration_seconds = 2;
-	Room room = 3;
-	StoredVec3 camera_position = 4;
+  string scenario_id = 1;
+  float duration_seconds = 2;
+  Room room = 3;
+  StoredVec3 camera_position = 4;
 
-	oneof type {
-		StaticScenarioDef static_def = 5;
-	}
+  oneof type {
+    StaticScenarioDef static_def = 5;
+  }
 }
 
 message StaticScenarioDef {
   int32 num_targets = 1;
-	float target_radius = 2;
-	bool is_poke_ball = 3;
-	bool remove_closest_target_on_miss = 4;
-	TargetPlacementStrategy target_placement_strategy = 5;
+  float target_radius = 2;
+  bool is_poke_ball = 3;
+  bool remove_closest_target_on_miss = 4;
+  TargetPlacementStrategy target_placement_strategy = 5;
 }
