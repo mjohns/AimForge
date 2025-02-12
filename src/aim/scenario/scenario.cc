@@ -3,19 +3,15 @@
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
-#include <implot.h>
 
 #include <algorithm>
 #include <format>
 #include <fstream>
 #include <glm/mat4x4.hpp>
-#include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <memory>
-#include <random>
 
-#include "aim/audio/sound.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
@@ -26,7 +22,6 @@
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
-#include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
 #include "aim/ui/settings_screen.h"
