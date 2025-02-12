@@ -29,12 +29,14 @@ message TargetRegion {
 	// The percent chance the target will be placed in this region. 0-1
 	// First matching region will be chosen. Defaults to 1.
 	float percent_chance = 1;
+
 	// (0, 0) is the center of the wall.
-	StoredVec2 region_offset = 2;
+	RegionLength x_offset = 2;
+	RegionLength y_offset = 3;
 
 	oneof type {
-		RectangleTargetRegion rectangle = 3;
-		OvalTargetRegion oval = 4;
+		RectangleTargetRegion rectangle = 4;
+		OvalTargetRegion oval = 5;
 	}
 }
 

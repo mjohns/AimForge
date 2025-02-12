@@ -86,10 +86,14 @@ glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
   std::function<glm::vec2()> get_candidate_pos = [=] { return glm::vec2(0, 0); };
   float height = def.room().simple_room().height();
   float width = def.room().simple_room().width();
+  float x_offset = 0;
+  float y_offset = 0;
   for (const TargetRegion& region : def.static_def().target_placement_strategy().regions()) {
     float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
     float percent_chance = region.has_percent_chance() ? region.percent_chance() : 1;
     if (percent_chance >= region_chance_roll) {
+      x_offset = GetRegionLength(def.room(), region.x_offset());
+      y_offset = GetRegionLength(def.room(), region.y_offset());
       get_candidate_pos = [&] {
         // TODO: Use offset position
         if (region.has_oval()) {
@@ -114,6 +118,8 @@ glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
   while (true) {
     ++attempt_number;
     glm::vec2 pos = get_candidate_pos();
+    pos.x += x_offset;
+    pos.y += y_offset;
     if (attempt_number >= max_attempts ||
         AreNoneWithinDistance(
             pos, def.static_def().target_placement_strategy().min_distance(), target_manager)) {
