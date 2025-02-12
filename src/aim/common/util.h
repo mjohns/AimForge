@@ -37,7 +37,7 @@ static StoredVec3 ToStoredVec3(const T& v) {
   return result;
 }
 
-static StoredVec3 ToStoredVec3(float x, float y , float z) {
+static StoredVec3 ToStoredVec3(float x, float y, float z) {
   StoredVec3 result;
   result.set_x(x);
   result.set_y(y);

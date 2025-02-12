@@ -1,9 +1,7 @@
 #include "static_scenario.h"
 
 #include <SDL3/SDL.h>
-#include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
-#include <implot.h>
 
 #include <algorithm>
 #include <format>
@@ -26,10 +24,8 @@
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
-#include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_timer.h"
-#include "aim/scenario/stats_screen.h"
 #include "aim/ui/settings_screen.h"
 
 namespace aim {
