@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <absl/status/status.h>
 
 #include "aim/proto/settings.pb.h"
 
@@ -10,6 +11,8 @@ class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path);
   ~SettingsManager();
+
+  absl::Status Initialize();
 
   FullSettings GetFullSettings();
   FullSettings* GetMutableFullSettings();

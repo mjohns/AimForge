@@ -2,20 +2,32 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
+#include <absl/log/log.h>
+#include <absl/log/log_sink.h>
 #include <imgui.h>
+#include <spdlog/spdlog.h>
 
 #include <memory>
 #include <random>
 
 #include "aim/audio/sound_manager.h"
 #include "aim/common/simple_types.h"
+#include "aim/common/util.h"
 #include "aim/core/file_system.h"
 #include "aim/core/settings_manager.h"
-#include "aim/common/util.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
 
 namespace aim {
+
+class AimAbslLogSink : public absl::LogSink {
+ public:
+  AimAbslLogSink(std::shared_ptr<spdlog::logger> logger) : logger_(std::move(logger)) {}
+  void Send(const absl::LogEntry& entry) override;
+
+ private:
+  std::shared_ptr<spdlog::logger> logger_;
+};
 
 class Application {
  public:
@@ -59,6 +71,10 @@ class Application {
     return settings_manager_.get();
   }
 
+  spdlog::logger* logger() {
+    return logger_.get();
+  };
+
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -82,6 +98,8 @@ class Application {
   std::unique_ptr<Renderer> renderer_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<SettingsManager> settings_manager_;
+  std::shared_ptr<spdlog::logger> logger_;
+  std::unique_ptr<AimAbslLogSink> absl_log_sink_;
 };
 
 }  // namespace aim

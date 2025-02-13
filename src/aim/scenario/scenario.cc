@@ -63,6 +63,7 @@ NavigationEvent Scenario::Run() {
       timer_.Pause();
       SettingsScreen settings_screen;
       auto nav_event = settings_screen.Run(app_);
+      app_->logger()->flush();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }

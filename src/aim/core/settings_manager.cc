@@ -1,7 +1,13 @@
 #include "settings_manager.h"
 
+#include <absl/status/status.h>
+#include <google/protobuf/json/json.h>
+#include <google/protobuf/util/json_util.h>
+
 #include <fstream>
 
+#include "aim/common/file_util.h"
+#include "aim/common/json.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
 
@@ -10,11 +16,6 @@ namespace {
 constexpr const float kDefaultDpi = 1600;
 
 Crosshair GetDefaultCrosshair() {
-  /*
-  #include <google/protobuf/util/json_util.h>
-  std::string json;
-  google::protobuf::util::MessageToJsonString(s, &json);
-  */
   Crosshair crosshair;
   crosshair.set_size(3);
   *crosshair.mutable_color() = ToStoredRgb(254, 138, 24);
@@ -42,22 +43,27 @@ FullSettings GetDefaultFullSettings() {
 }  // namespace
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path)
-    : settings_path_(settings_path) {
-  std::ifstream file(settings_path, std::ios::binary);
-  if (std::filesystem::exists(settings_path) && file.is_open()) {
-    full_settings_.ParseFromIstream(&file);
-    file.close();
-  } else {
-    // Create initial settings.
-    full_settings_ = GetDefaultFullSettings();
-    FlushToDisk();
-  }
-}
+    : settings_path_(settings_path) {}
 
 SettingsManager::~SettingsManager() {
   if (needs_save_) {
     FlushToDisk();
   }
+}
+
+absl::Status SettingsManager::Initialize() {
+  auto maybe_content = ReadFileContentAsString(settings_path_);
+  if (maybe_content.has_value()) {
+    google::protobuf::json::ParseOptions opts;
+    opts.ignore_unknown_fields = true;
+    opts.case_insensitive_enum_parsing = true;
+    std::string json = *maybe_content;
+    return google::protobuf::util::JsonStringToMessage(json, &full_settings_, opts);
+  }
+
+  // Write initial settings to file.
+  full_settings_ = GetDefaultFullSettings();
+  FlushToDisk();
 }
 
 float SettingsManager::GetDpi() {
@@ -106,9 +112,21 @@ void SettingsManager::MaybeFlushToDisk() {
 void SettingsManager::FlushToDisk() {
   needs_save_ = false;
 
-  std::ofstream outfile(settings_path_, std::ios::binary);
-  full_settings_.SerializeToOstream(&outfile);
-  outfile.close();
+  // TODO: handle failure.
+  std::string json_string;
+  google::protobuf::json::PrintOptions opts;
+  opts.add_whitespace = true;
+  auto status = google::protobuf::util::MessageToJsonString(full_settings_, &json_string, opts);
+  // if (!status.ok())
+  int indent = 2;
+  nlohmann::json json_data = nlohmann::json::parse(json_string);
+  std::string formatted_json = json_data.dump(indent, ' ', true);
+
+  std::ofstream outfile(settings_path_);
+  if (outfile.is_open()) {
+    outfile << formatted_json << std::endl;
+    outfile.close();
+  }
 }
 
 }  // namespace aim
