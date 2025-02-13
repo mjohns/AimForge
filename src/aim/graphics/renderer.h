@@ -12,11 +12,7 @@ class Renderer {
   Renderer() {}
   void SetProjection(const glm::mat4& projection);
 
-  void DrawTargets(const std::vector<Target>& targets, const glm::mat4& view);
-  void DrawRoom(float height, float width, const glm::mat4& view);
-  void DrawSimpleStaticRoom(const SimpleRoom& room,
-                            const std::vector<Target>& targets,
-                            const glm::mat4& view);
+  void DrawScenario(const Room& room, const std::vector<Target>& targets, const glm::mat4& view);
 
   Renderer(const Renderer&) = delete;
   Renderer(Renderer&&) = default;

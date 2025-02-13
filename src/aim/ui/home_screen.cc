@@ -43,11 +43,18 @@ void HomeScreen::Run(Application* app) {
       continue;
     }
 
+    Room default_wall; 
+    default_wall.mutable_simple_room()->set_height(150);
+    default_wall.mutable_simple_room()->set_width(170);
+
+    Room circular_wall; 
+    circular_wall.mutable_circular_room()->set_height(150);
+    circular_wall.mutable_circular_room()->set_radius(100);
+
     ScenarioDef base_static_def;
     base_static_def.set_duration_seconds(duration_seconds);
     *base_static_def.mutable_camera_position() = ToStoredVec3(0, -100.0f, 0);
-    base_static_def.mutable_room()->mutable_simple_room()->set_height(150);
-    base_static_def.mutable_room()->mutable_simple_room()->set_width(170);
+    *base_static_def.mutable_room() = default_wall;
 
     ScenarioDef base_1w_def = base_static_def;
     {

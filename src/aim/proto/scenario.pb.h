@@ -53,6 +53,9 @@ struct TableStruct_scenario_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_scenario_2eproto;
 namespace aim {
+class CircularRoom;
+struct CircularRoomDefaultTypeInternal;
+extern CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
 class OvalTargetRegion;
 struct OvalTargetRegionDefaultTypeInternal;
 extern OvalTargetRegionDefaultTypeInternal _OvalTargetRegion_default_instance_;
@@ -363,7 +366,7 @@ class RegionLength final : public ::google::protobuf::Message
     return reinterpret_cast<const RegionLength*>(
         &_RegionLength_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 3;
   friend void swap(RegionLength& a, RegionLength& b) { a.Swap(&b); }
   inline void Swap(RegionLength* other) {
     if (other == this) return;
@@ -533,6 +536,211 @@ class RegionLength final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class CircularRoom final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.CircularRoom) */ {
+ public:
+  inline CircularRoom() : CircularRoom(nullptr) {}
+  ~CircularRoom() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CircularRoom* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CircularRoom));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CircularRoom(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline CircularRoom(const CircularRoom& from) : CircularRoom(nullptr, from) {}
+  inline CircularRoom(CircularRoom&& from) noexcept
+      : CircularRoom(nullptr, std::move(from)) {}
+  inline CircularRoom& operator=(const CircularRoom& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CircularRoom& operator=(CircularRoom&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CircularRoom& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CircularRoom* internal_default_instance() {
+    return reinterpret_cast<const CircularRoom*>(
+        &_CircularRoom_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 1;
+  friend void swap(CircularRoom& a, CircularRoom& b) { a.Swap(&b); }
+  inline void Swap(CircularRoom* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CircularRoom* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CircularRoom* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CircularRoom>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CircularRoom& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CircularRoom& from) { CircularRoom::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CircularRoom* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.CircularRoom"; }
+
+ protected:
+  explicit CircularRoom(::google::protobuf::Arena* arena);
+  CircularRoom(::google::protobuf::Arena* arena, const CircularRoom& from);
+  CircularRoom(::google::protobuf::Arena* arena, CircularRoom&& from) noexcept
+      : CircularRoom(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kHeightFieldNumber = 1,
+    kRadiusFieldNumber = 2,
+  };
+  // float height = 1;
+  bool has_height() const;
+  void clear_height() ;
+  float height() const;
+  void set_height(float value);
+
+  private:
+  float _internal_height() const;
+  void _internal_set_height(float value);
+
+  public:
+  // float radius = 2;
+  bool has_radius() const;
+  void clear_radius() ;
+  float radius() const;
+  void set_radius(float value);
+
+  private:
+  float _internal_radius() const;
+  void _internal_set_radius(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.CircularRoom)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      1, 2, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const CircularRoom& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    float height_;
+    float radius_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Room final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.Room) */ {
  public:
@@ -590,13 +798,14 @@ class Room final : public ::google::protobuf::Message
   }
   enum TypeCase {
     kSimpleRoom = 1,
+    kCircularRoom = 2,
     TYPE_NOT_SET = 0,
   };
   static inline const Room* internal_default_instance() {
     return reinterpret_cast<const Room*>(
         &_Room_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 2;
   friend void swap(Room& a, Room& b) { a.Swap(&b); }
   inline void Swap(Room* other) {
     if (other == this) return;
@@ -684,6 +893,7 @@ class Room final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kSimpleRoomFieldNumber = 1,
+    kCircularRoomFieldNumber = 2,
   };
   // .aim.SimpleRoom simple_room = 1;
   bool has_simple_room() const;
@@ -704,17 +914,37 @@ class Room final : public ::google::protobuf::Message
   ::aim::SimpleRoom* _internal_mutable_simple_room();
 
   public:
+  // .aim.CircularRoom circular_room = 2;
+  bool has_circular_room() const;
+  private:
+  bool _internal_has_circular_room() const;
+
+  public:
+  void clear_circular_room() ;
+  const ::aim::CircularRoom& circular_room() const;
+  PROTOBUF_NODISCARD ::aim::CircularRoom* release_circular_room();
+  ::aim::CircularRoom* mutable_circular_room();
+  void set_allocated_circular_room(::aim::CircularRoom* value);
+  void unsafe_arena_set_allocated_circular_room(::aim::CircularRoom* value);
+  ::aim::CircularRoom* unsafe_arena_release_circular_room();
+
+  private:
+  const ::aim::CircularRoom& _internal_circular_room() const;
+  ::aim::CircularRoom* _internal_mutable_circular_room();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.Room)
  private:
   class _Internal;
   void set_has_simple_room();
+  void set_has_circular_room();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 1, 1,
+      0, 2, 2,
       0, 2>
       _table_;
 
@@ -736,6 +966,7 @@ class Room final : public ::google::protobuf::Message
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       ::aim::SimpleRoom* simple_room_;
+      ::aim::CircularRoom* circular_room_;
     } type_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint32_t _oneof_case_[1];
@@ -805,7 +1036,7 @@ class RectangleTargetRegion final : public ::google::protobuf::Message
     return reinterpret_cast<const RectangleTargetRegion*>(
         &_RectangleTargetRegion_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(RectangleTargetRegion& a, RectangleTargetRegion& b) { a.Swap(&b); }
   inline void Swap(RectangleTargetRegion* other) {
     if (other == this) return;
@@ -1018,7 +1249,7 @@ class OvalTargetRegion final : public ::google::protobuf::Message
     return reinterpret_cast<const OvalTargetRegion*>(
         &_OvalTargetRegion_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 6;
   friend void swap(OvalTargetRegion& a, OvalTargetRegion& b) { a.Swap(&b); }
   inline void Swap(OvalTargetRegion* other) {
     if (other == this) return;
@@ -1236,7 +1467,7 @@ class TargetRegion final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetRegion*>(
         &_TargetRegion_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(TargetRegion& a, TargetRegion& b) { a.Swap(&b); }
   inline void Swap(TargetRegion* other) {
     if (other == this) return;
@@ -1515,7 +1746,7 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetPlacementStrategy*>(
         &_TargetPlacementStrategy_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 7;
   friend void swap(TargetPlacementStrategy& a, TargetPlacementStrategy& b) { a.Swap(&b); }
   inline void Swap(TargetPlacementStrategy* other) {
     if (other == this) return;
@@ -1739,7 +1970,7 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const StaticScenarioDef*>(
         &_StaticScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(StaticScenarioDef& a, StaticScenarioDef& b) { a.Swap(&b); }
   inline void Swap(StaticScenarioDef* other) {
     if (other == this) return;
@@ -1991,7 +2222,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const ScenarioDef*>(
         &_ScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 7;
+  static constexpr int kIndexInFileMessages = 8;
   friend void swap(ScenarioDef& a, ScenarioDef& b) { a.Swap(&b); }
   inline void Swap(ScenarioDef* other) {
     if (other == this) return;
@@ -2281,6 +2512,66 @@ inline void SimpleRoom::_internal_set_width(float value) {
 
 // -------------------------------------------------------------------
 
+// CircularRoom
+
+// float height = 1;
+inline bool CircularRoom::has_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void CircularRoom::clear_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline float CircularRoom::height() const {
+  // @@protoc_insertion_point(field_get:aim.CircularRoom.height)
+  return _internal_height();
+}
+inline void CircularRoom::set_height(float value) {
+  _internal_set_height(value);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_set:aim.CircularRoom.height)
+}
+inline float CircularRoom::_internal_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.height_;
+}
+inline void CircularRoom::_internal_set_height(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = value;
+}
+
+// float radius = 2;
+inline bool CircularRoom::has_radius() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void CircularRoom::clear_radius() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.radius_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float CircularRoom::radius() const {
+  // @@protoc_insertion_point(field_get:aim.CircularRoom.radius)
+  return _internal_radius();
+}
+inline void CircularRoom::set_radius(float value) {
+  _internal_set_radius(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.CircularRoom.radius)
+}
+inline float CircularRoom::_internal_radius() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.radius_;
+}
+inline void CircularRoom::_internal_set_radius(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.radius_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // Room
 
 // .aim.SimpleRoom simple_room = 1;
@@ -2359,6 +2650,85 @@ inline ::aim::SimpleRoom* Room::_internal_mutable_simple_room() {
 inline ::aim::SimpleRoom* Room::mutable_simple_room() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::aim::SimpleRoom* _msg = _internal_mutable_simple_room();
   // @@protoc_insertion_point(field_mutable:aim.Room.simple_room)
+  return _msg;
+}
+
+// .aim.CircularRoom circular_room = 2;
+inline bool Room::has_circular_room() const {
+  return type_case() == kCircularRoom;
+}
+inline bool Room::_internal_has_circular_room() const {
+  return type_case() == kCircularRoom;
+}
+inline void Room::set_has_circular_room() {
+  _impl_._oneof_case_[0] = kCircularRoom;
+}
+inline void Room::clear_circular_room() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kCircularRoom) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.circular_room_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.circular_room_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::CircularRoom* Room::release_circular_room() {
+  // @@protoc_insertion_point(field_release:aim.Room.circular_room)
+  if (type_case() == kCircularRoom) {
+    clear_has_type();
+    auto* temp = _impl_.type_.circular_room_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.circular_room_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::CircularRoom& Room::_internal_circular_room() const {
+  return type_case() == kCircularRoom ? *_impl_.type_.circular_room_ : reinterpret_cast<::aim::CircularRoom&>(::aim::_CircularRoom_default_instance_);
+}
+inline const ::aim::CircularRoom& Room::circular_room() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Room.circular_room)
+  return _internal_circular_room();
+}
+inline ::aim::CircularRoom* Room::unsafe_arena_release_circular_room() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.Room.circular_room)
+  if (type_case() == kCircularRoom) {
+    clear_has_type();
+    auto* temp = _impl_.type_.circular_room_;
+    _impl_.type_.circular_room_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Room::unsafe_arena_set_allocated_circular_room(::aim::CircularRoom* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_circular_room();
+    _impl_.type_.circular_room_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Room.circular_room)
+}
+inline ::aim::CircularRoom* Room::_internal_mutable_circular_room() {
+  if (type_case() != kCircularRoom) {
+    clear_type();
+    set_has_circular_room();
+    _impl_.type_.circular_room_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::CircularRoom>(GetArena());
+  }
+  return _impl_.type_.circular_room_;
+}
+inline ::aim::CircularRoom* Room::mutable_circular_room() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::CircularRoom* _msg = _internal_mutable_circular_room();
+  // @@protoc_insertion_point(field_mutable:aim.Room.circular_room)
   return _msg;
 }
 
