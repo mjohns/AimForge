@@ -4,12 +4,13 @@
 
 #include <memory>
 #include <string>
+#include <filesystem>
 
 namespace aim {
 
 class Sound {
  public:
-  static std::unique_ptr<Sound> Load(std::string sound_name);
+  static std::unique_ptr<Sound> Load(const std::filesystem::path& sound_path);
   ~Sound();
 
   void Play(int channel);

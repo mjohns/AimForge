@@ -58,6 +58,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 set(FMT_INSTALL OFF)
 set(SPDLOG_FMT_EXTERNAL ON)
 set(protobuf_BUILD_TESTS OFF)
+set(ABSL_PROPAGATE_CXX_STD ON)
 
 add_subdirectory(imgui-setup)
 add_subdirectory(glad)

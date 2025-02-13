@@ -7,16 +7,29 @@ constexpr int kKillChannel = 1;
 constexpr int kShootChannel = 2;
 constexpr int kMetronomeChannel = 3;
 
+std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound_dirs,
+                                 const std::string& name) {
+  for (const std::filesystem::path& dir : sound_dirs) {
+    auto loaded_sound = Sound::Load(dir / name);
+    if (loaded_sound) {
+      return std::move(loaded_sound);
+    }
+  }
+
+  return {};
+}
+
 }  // namespace
 
-SoundManager::SoundManager() {
+SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
+    : sound_dirs_(sound_dirs) {
   std::string kill_sound_name = "kill_confirmed.ogg";
   std::string shoot_sound_name = "shoot.ogg";
   std::string metronome_sound_name = "short_bass.wav";
 
-  auto kill_sound = Sound::Load(kill_sound_name);
-  auto shoot_sound = Sound::Load(shoot_sound_name);
-  auto metronome_sound = Sound::Load(metronome_sound_name);
+  auto kill_sound = LoadSound(sound_dirs_, kill_sound_name);
+  auto shoot_sound = LoadSound(sound_dirs_, shoot_sound_name);
+  auto metronome_sound = LoadSound(sound_dirs, metronome_sound_name);
 
   kill_sound_ = kill_sound.get();
   shoot_sound_ = shoot_sound.get();
