@@ -97,7 +97,9 @@ NavigationEvent Scenario::Run() {
         camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
       }
       if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        update_data.has_click = true;
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          update_data.has_click = true;
+        }
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
