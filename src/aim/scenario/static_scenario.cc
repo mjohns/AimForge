@@ -300,6 +300,7 @@ NavigationEvent RunStaticScenario(const ScenarioDef& def, Application* app) {
     StaticScenario scenario(def, app);
     NavigationEvent nav_event = scenario.Run();
     if (nav_event.type != NavigationEventType::RESTART_LAST_SCENARIO) {
+      app->logger()->flush();
       return nav_event;
     }
   }

@@ -3,19 +3,37 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
 #include <SDL3_mixer/SDL_mixer.h>
+#include <absl/log/log.h>
+#include <absl/log/log_sink.h>
+#include <absl/log/log_sink_registry.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
 #include <implot.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/spdlog.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <memory>
 
+#include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/graphics/glad_loader.h"
 
 namespace aim {
+
+void AimAbslLogSink::Send(const absl::LogEntry& entry) {
+  auto message = entry.text_message();
+  absl::LogSeverity severity = entry.log_severity();
+  if (severity > absl::LogSeverity::kWarning) {
+    logger_->error(message);
+  } else if (severity == absl::LogSeverity::kWarning) {
+    logger_->warn(message);
+  } else {
+    logger_->info(message);
+  }
+}
 
 Application::Application() {
   std::random_device rd;
@@ -23,6 +41,13 @@ Application::Application() {
 }
 
 Application::~Application() {
+  if (logger_) {
+    logger_->flush();
+  }
+  if (absl_log_sink_) {
+    absl::RemoveLogSink(absl_log_sink_.get());
+  }
+
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
@@ -41,18 +66,36 @@ Application::~Application() {
 }
 
 int Application::Initialize() {
+  Stopwatch stopwatch;
+  stopwatch.Start();
+
   // Setup SDL
   if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
     printf("Error: SDL_Init(): %s\n", SDL_GetError());
     return -1;
   }
   file_system_ = std::make_unique<FileSystem>();
+  {
+    auto max_size = 1048576 * 10;
+    auto max_files = 4;
+    logger_ = spdlog::rotating_logger_mt(
+        "aim", file_system_->GetUserDataPath("logs/log_file.txt").string(), max_size, max_files);
+    logger_->flush_on(spdlog::level::warn);
+
+    absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);
+    absl::AddLogSink(absl_log_sink_.get());
+  }
   stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
   settings_manager_ =
-      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.bin"));
+      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"));
+  auto settings_status = settings_manager_->Initialize();
+  if (!settings_status.ok()) {
+    logger_->error("Loading settings failed: {}", settings_status.message());
+    return -1;
+  }
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_mixer OGG init failed");
+    logger_->error("SDL_mixer OGG init failed: {}", SDL_GetError());
     return -1;
   }
 
@@ -61,7 +104,7 @@ int Application::Initialize() {
   spec.format = MIX_DEFAULT_FORMAT;
   spec.channels = MIX_DEFAULT_CHANNELS;
   if (!Mix_OpenAudio(0, &spec)) {
-    SDL_Log("Couldn't open audio: %s\n", SDL_GetError());
+    logger_->error("Couldn't open audio: {}", SDL_GetError());
     return 1;
   }
   // Prefer sounds in the user sounds folder.
@@ -93,12 +136,12 @@ int Application::Initialize() {
       (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   sdl_window_ = SDL_CreateWindow("AimTrainer", 0, 0, window_flags);
   if (sdl_window_ == nullptr) {
-    printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
+    logger_->error("SDL_CreateWindow(): {}", SDL_GetError());
     return -1;
   }
   gl_context_ = SDL_GL_CreateContext(sdl_window_);
   if (gl_context_ == nullptr) {
-    printf("Error: SDL_GL_CreateContext(): %s\n", SDL_GetError());
+    logger_->error("SDL_GL_CreateContext(): {}", SDL_GetError());
     return -1;
   }
 
@@ -130,6 +173,7 @@ int Application::Initialize() {
   ImGui_ImplSDL3_InitForOpenGL(sdl_window_, gl_context_);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
+  logger_->info("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   return 0;
 }
 
@@ -182,6 +226,7 @@ std::unique_ptr<Application> Application::Create() {
   if (rc != 0) {
     exit(rc);
   }
+  application->logger()->flush();
   return application;
 }
 
