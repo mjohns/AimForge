@@ -43,11 +43,11 @@ void HomeScreen::Run(Application* app) {
       continue;
     }
 
-    Room default_wall; 
+    Room default_wall;
     default_wall.mutable_simple_room()->set_height(150);
     default_wall.mutable_simple_room()->set_width(170);
 
-    Room circular_wall; 
+    Room circular_wall;
     circular_wall.mutable_circular_room()->set_height(150);
     circular_wall.mutable_circular_room()->set_radius(100);
 

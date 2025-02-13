@@ -25,7 +25,7 @@ class ScopeGuard {
 
   ~ScopeGuard() {
     if (fn_) {
-		fn_();
+      fn_();
     }
   }
 

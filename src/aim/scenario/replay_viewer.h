@@ -9,9 +9,7 @@ namespace aim {
 
 class ReplayViewer {
  public:
-  NavigationEvent PlayReplay(const Replay& replay,
-                             const Crosshair& crosshair,
-                             Application* app);
+  NavigationEvent PlayReplay(const Replay& replay, const Crosshair& crosshair, Application* app);
 };
 
 }  // namespace aim

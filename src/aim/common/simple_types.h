@@ -1,6 +1,7 @@
 #pragma once
 
 #include <imgui.h>
+
 #include <cstdint>
 
 namespace aim {
@@ -29,4 +30,4 @@ struct ScreenInfo {
   ImVec2 center;
 };
 
-} // namespace aim
+}  // namespace aim

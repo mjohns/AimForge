@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-#include "aim/common/time_util.h"
 #include "aim/common/simple_types.h"
+#include "aim/common/time_util.h"
 
 namespace aim {
 

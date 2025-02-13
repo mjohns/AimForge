@@ -1,7 +1,7 @@
 #include "file_util.h"
 
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 
 namespace aim {
 
@@ -30,4 +30,4 @@ bool WriteStringToFile(const std::filesystem::path& path, const std::string& con
   return false;
 }
 
-} // namespace aim
+}  // namespace aim
