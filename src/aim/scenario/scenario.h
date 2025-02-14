@@ -8,8 +8,8 @@
 #include "aim/core/navigation_event.h"
 #include "aim/core/target.h"
 #include "aim/proto/replay.pb.h"
-#include "aim/scenario/scenario_timer.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/scenario/scenario_timer.h"
 
 namespace aim {
 

@@ -64,6 +64,7 @@ absl::Status SettingsManager::Initialize() {
   // Write initial settings to file.
   full_settings_ = GetDefaultFullSettings();
   FlushToDisk();
+  return absl::OkStatus();
 }
 
 float SettingsManager::GetDpi() {
