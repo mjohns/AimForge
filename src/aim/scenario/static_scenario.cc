@@ -204,7 +204,6 @@ class StaticScenario : public Scenario {
     *replay_->mutable_room() = def_.room();
     replay_->set_is_poke_ball(def_.static_def().is_poke_ball());
     replay_->set_replay_fps(timer_.GetReplayFps());
-    *(replay_->mutable_camera_position()) = ToStoredVec3(camera_.GetPosition());
 
     for (int i = 0; i < def_.static_def().num_targets(); ++i) {
       Target target = target_manager_.AddTarget(GetNewTarget(def_, &target_manager_, app_));

@@ -1279,14 +1279,13 @@ class Replay final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kPitchYawsFieldNumber = 4,
-    kEventsFieldNumber = 5,
+    kPitchYawsFieldNumber = 3,
+    kEventsFieldNumber = 4,
     kRoomFieldNumber = 1,
-    kCameraPositionFieldNumber = 3,
     kReplayFpsFieldNumber = 2,
-    kIsPokeBallFieldNumber = 6,
+    kIsPokeBallFieldNumber = 5,
   };
-  // repeated float pitch_yaws = 4;
+  // repeated float pitch_yaws = 3;
   int pitch_yaws_size() const;
   private:
   int _internal_pitch_yaws_size() const;
@@ -1304,7 +1303,7 @@ class Replay final : public ::google::protobuf::Message
   ::google::protobuf::RepeatedField<float>* _internal_mutable_pitch_yaws();
 
   public:
-  // repeated .aim.ReplayEvent events = 5;
+  // repeated .aim.ReplayEvent events = 4;
   int events_size() const;
   private:
   int _internal_events_size() const;
@@ -1336,21 +1335,6 @@ class Replay final : public ::google::protobuf::Message
   ::aim::Room* _internal_mutable_room();
 
   public:
-  // .aim.StoredVec3 camera_position = 3;
-  bool has_camera_position() const;
-  void clear_camera_position() ;
-  const ::aim::StoredVec3& camera_position() const;
-  PROTOBUF_NODISCARD ::aim::StoredVec3* release_camera_position();
-  ::aim::StoredVec3* mutable_camera_position();
-  void set_allocated_camera_position(::aim::StoredVec3* value);
-  void unsafe_arena_set_allocated_camera_position(::aim::StoredVec3* value);
-  ::aim::StoredVec3* unsafe_arena_release_camera_position();
-
-  private:
-  const ::aim::StoredVec3& _internal_camera_position() const;
-  ::aim::StoredVec3* _internal_mutable_camera_position();
-
-  public:
   // int32 replay_fps = 2;
   bool has_replay_fps() const;
   void clear_replay_fps() ;
@@ -1362,7 +1346,7 @@ class Replay final : public ::google::protobuf::Message
   void _internal_set_replay_fps(::int32_t value);
 
   public:
-  // bool is_poke_ball = 6;
+  // bool is_poke_ball = 5;
   bool has_is_poke_ball() const;
   void clear_is_poke_ball() ;
   bool is_poke_ball() const;
@@ -1378,7 +1362,7 @@ class Replay final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 3,
+      3, 5, 2,
       0, 2>
       _table_;
 
@@ -1401,7 +1385,6 @@ class Replay final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<float> pitch_yaws_;
     ::google::protobuf::RepeatedPtrField< ::aim::ReplayEvent > events_;
     ::aim::Room* room_;
-    ::aim::StoredVec3* camera_position_;
     ::int32_t replay_fps_;
     bool is_poke_ball_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -2095,13 +2078,13 @@ inline void Replay::set_allocated_room(::aim::Room* value) {
 
 // int32 replay_fps = 2;
 inline bool Replay::has_replay_fps() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline void Replay::clear_replay_fps() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.replay_fps_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline ::int32_t Replay::replay_fps() const {
   // @@protoc_insertion_point(field_get:aim.Replay.replay_fps)
@@ -2109,7 +2092,7 @@ inline ::int32_t Replay::replay_fps() const {
 }
 inline void Replay::set_replay_fps(::int32_t value) {
   _internal_set_replay_fps(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   // @@protoc_insertion_point(field_set:aim.Replay.replay_fps)
 }
 inline ::int32_t Replay::_internal_replay_fps() const {
@@ -2121,98 +2104,7 @@ inline void Replay::_internal_set_replay_fps(::int32_t value) {
   _impl_.replay_fps_ = value;
 }
 
-// .aim.StoredVec3 camera_position = 3;
-inline bool Replay::has_camera_position() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.camera_position_ != nullptr);
-  return value;
-}
-inline const ::aim::StoredVec3& Replay::_internal_camera_position() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::StoredVec3* p = _impl_.camera_position_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
-}
-inline const ::aim::StoredVec3& Replay::camera_position() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Replay.camera_position)
-  return _internal_camera_position();
-}
-inline void Replay::unsafe_arena_set_allocated_camera_position(::aim::StoredVec3* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_position_);
-  }
-  _impl_.camera_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Replay.camera_position)
-}
-inline ::aim::StoredVec3* Replay::release_camera_position() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::StoredVec3* released = _impl_.camera_position_;
-  _impl_.camera_position_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::StoredVec3* Replay::unsafe_arena_release_camera_position() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.Replay.camera_position)
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::StoredVec3* temp = _impl_.camera_position_;
-  _impl_.camera_position_ = nullptr;
-  return temp;
-}
-inline ::aim::StoredVec3* Replay::_internal_mutable_camera_position() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.camera_position_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
-    _impl_.camera_position_ = reinterpret_cast<::aim::StoredVec3*>(p);
-  }
-  return _impl_.camera_position_;
-}
-inline ::aim::StoredVec3* Replay::mutable_camera_position() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  ::aim::StoredVec3* _msg = _internal_mutable_camera_position();
-  // @@protoc_insertion_point(field_mutable:aim.Replay.camera_position)
-  return _msg;
-}
-inline void Replay::set_allocated_camera_position(::aim::StoredVec3* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_position_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-
-  _impl_.camera_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.Replay.camera_position)
-}
-
-// repeated float pitch_yaws = 4;
+// repeated float pitch_yaws = 3;
 inline int Replay::_internal_pitch_yaws_size() const {
   return _internal_pitch_yaws().size();
 }
@@ -2257,7 +2149,7 @@ inline ::google::protobuf::RepeatedField<float>* Replay::_internal_mutable_pitch
   return &_impl_.pitch_yaws_;
 }
 
-// repeated .aim.ReplayEvent events = 5;
+// repeated .aim.ReplayEvent events = 4;
 inline int Replay::_internal_events_size() const {
   return _internal_events().size();
 }
@@ -2306,15 +2198,15 @@ Replay::_internal_mutable_events() {
   return &_impl_.events_;
 }
 
-// bool is_poke_ball = 6;
+// bool is_poke_ball = 5;
 inline bool Replay::has_is_poke_ball() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void Replay::clear_is_poke_ball() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.is_poke_ball_ = false;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline bool Replay::is_poke_ball() const {
   // @@protoc_insertion_point(field_get:aim.Replay.is_poke_ball)
@@ -2322,7 +2214,7 @@ inline bool Replay::is_poke_ball() const {
 }
 inline void Replay::set_is_poke_ball(bool value) {
   _internal_set_is_poke_ball(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.Replay.is_poke_ball)
 }
 inline bool Replay::_internal_is_poke_ball() const {

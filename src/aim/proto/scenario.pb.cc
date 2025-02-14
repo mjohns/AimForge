@@ -106,8 +106,11 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 
 inline constexpr Room::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : type_{},
-        _cached_size_{0},
+      : _cached_size_{0},
+        camera_position_{nullptr},
+        start_pitch_{0},
+        start_yaw_{0},
+        type_{},
         _oneof_case_{} {}
 
 template <typename>
@@ -274,7 +277,6 @@ inline constexpr ScenarioDef::Impl_::Impl_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
         room_{nullptr},
-        camera_position_{nullptr},
         duration_seconds_{0},
         type_{},
         _oneof_case_{} {}
@@ -330,7 +332,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.radius_),
         0,
         1,
-        ~0u,  // no _has_bits_
+        PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::Room, _internal_metadata_),
         ~0u,  // no _extensions_
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_._oneof_case_[0]),
@@ -338,9 +340,17 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.camera_position_),
+        PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.start_pitch_),
+        PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.start_yaw_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.type_),
+        0,
+        1,
+        2,
+        ~0u,
+        ~0u,
         ~0u,  // no _has_bits_
         PROTOBUF_FIELD_OFFSET(::aim::RegionLength, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -421,13 +431,11 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.scenario_id_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.duration_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.room_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.camera_position_),
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
-        3,
-        1,
         2,
+        1,
         ~0u,
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _internal_metadata_),
@@ -453,14 +461,14 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::SimpleRoom)},
         {12, 22, -1, sizeof(::aim::CircularRoom)},
-        {24, -1, -1, sizeof(::aim::Room)},
-        {35, -1, -1, sizeof(::aim::RegionLength)},
-        {47, 61, -1, sizeof(::aim::TargetRegion)},
-        {66, 76, -1, sizeof(::aim::RectangleTargetRegion)},
-        {78, 88, -1, sizeof(::aim::OvalTargetRegion)},
-        {90, 101, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {104, 118, -1, sizeof(::aim::ScenarioDef)},
-        {123, 136, -1, sizeof(::aim::StaticScenarioDef)},
+        {24, 38, -1, sizeof(::aim::Room)},
+        {43, -1, -1, sizeof(::aim::RegionLength)},
+        {55, 69, -1, sizeof(::aim::TargetRegion)},
+        {74, 84, -1, sizeof(::aim::RectangleTargetRegion)},
+        {86, 96, -1, sizeof(::aim::OvalTargetRegion)},
+        {98, 109, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {112, 125, -1, sizeof(::aim::ScenarioDef)},
+        {129, 142, -1, sizeof(::aim::StaticScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -479,34 +487,35 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\n\016scenario.proto\022\003aim\032\014common.proto\"+\n\nS"
     "impleRoom\022\016\n\006height\030\001 \001(\002\022\r\n\005width\030\002 \001(\002"
     "\".\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
-    "us\030\002 \001(\002\"b\n\004Room\022&\n\013simple_room\030\001 \001(\0132\017."
-    "aim.SimpleRoomH\000\022*\n\rcircular_room\030\002 \001(\0132"
-    "\021.aim.CircularRoomH\000B\006\n\004type\"f\n\014RegionLe"
-    "ngth\022\031\n\017x_percent_value\030\001 \001(\002H\000\022\031\n\017y_per"
-    "cent_value\030\002 \001(\002H\000\022\030\n\016absolute_value\030\003 \001"
-    "(\002H\000B\006\n\004type\"\320\001\n\014TargetRegion\022\026\n\016percent"
-    "_chance\030\001 \001(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim.Re"
-    "gionLength\022#\n\010y_offset\030\003 \001(\0132\021.aim.Regio"
-    "nLength\022/\n\trectangle\030\004 \001(\0132\032.aim.Rectang"
-    "leTargetRegionH\000\022%\n\004oval\030\005 \001(\0132\025.aim.Ova"
-    "lTargetRegionH\000B\006\n\004type\"a\n\025RectangleTarg"
-    "etRegion\022#\n\010x_length\030\001 \001(\0132\021.aim.RegionL"
-    "ength\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionLeng"
-    "th\"^\n\020OvalTargetRegion\022$\n\tx_diamter\030\001 \001("
-    "\0132\021.aim.RegionLength\022$\n\ty_diamter\030\002 \001(\0132"
-    "\021.aim.RegionLength\"n\n\027TargetPlacementStr"
-    "ategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRegio"
-    "n\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_reg"
-    "ions\030\003 \001(\010\"\265\001\n\013ScenarioDef\022\023\n\013scenario_i"
-    "d\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004roo"
-    "m\030\003 \001(\0132\t.aim.Room\022(\n\017camera_position\030\004 "
-    "\001(\0132\017.aim.StoredVec3\022,\n\nstatic_def\030\005 \001(\013"
-    "2\026.aim.StaticScenarioDefH\000B\006\n\004type\"\275\001\n\021S"
-    "taticScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n"
-    "\rtarget_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 \001"
-    "(\010\022%\n\035remove_closest_target_on_miss\030\004 \001("
-    "\010\022\?\n\031target_placement_strategy\030\005 \001(\0132\034.a"
-    "im.TargetPlacementStrategyb\010editionsp\350\007"
+    "us\030\002 \001(\002\"\264\001\n\004Room\022(\n\017camera_position\030\001 \001"
+    "(\0132\017.aim.StoredVec3\022\023\n\013start_pitch\030\002 \001(\002"
+    "\022\021\n\tstart_yaw\030\003 \001(\002\022&\n\013simple_room\030\004 \001(\013"
+    "2\017.aim.SimpleRoomH\000\022*\n\rcircular_room\030\005 \001"
+    "(\0132\021.aim.CircularRoomH\000B\006\n\004type\"f\n\014Regio"
+    "nLength\022\031\n\017x_percent_value\030\001 \001(\002H\000\022\031\n\017y_"
+    "percent_value\030\002 \001(\002H\000\022\030\n\016absolute_value\030"
+    "\003 \001(\002H\000B\006\n\004type\"\320\001\n\014TargetRegion\022\026\n\016perc"
+    "ent_chance\030\001 \001(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim"
+    ".RegionLength\022#\n\010y_offset\030\003 \001(\0132\021.aim.Re"
+    "gionLength\022/\n\trectangle\030\004 \001(\0132\032.aim.Rect"
+    "angleTargetRegionH\000\022%\n\004oval\030\005 \001(\0132\025.aim."
+    "OvalTargetRegionH\000B\006\n\004type\"a\n\025RectangleT"
+    "argetRegion\022#\n\010x_length\030\001 \001(\0132\021.aim.Regi"
+    "onLength\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionL"
+    "ength\"^\n\020OvalTargetRegion\022$\n\tx_diamter\030\001"
+    " \001(\0132\021.aim.RegionLength\022$\n\ty_diamter\030\002 \001"
+    "(\0132\021.aim.RegionLength\"n\n\027TargetPlacement"
+    "Strategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRe"
+    "gion\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_"
+    "regions\030\003 \001(\010\"\213\001\n\013ScenarioDef\022\023\n\013scenari"
+    "o_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004"
+    "room\030\003 \001(\0132\t.aim.Room\022,\n\nstatic_def\030\005 \001("
+    "\0132\026.aim.StaticScenarioDefH\000B\006\n\004type\"\275\001\n\021"
+    "StaticScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025"
+    "\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 "
+    "\001(\010\022%\n\035remove_closest_target_on_miss\030\004 \001"
+    "(\010\022\?\n\031target_placement_strategy\030\005 \001(\0132\034."
+    "aim.TargetPlacementStrategyb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -516,7 +525,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1239,
+    1280,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -1042,10 +1051,19 @@ void CircularRoom::InternalSwap(CircularRoom* PROTOBUF_RESTRICT other) {
 
 class Room::_Internal {
  public:
+  using HasBits =
+      decltype(std::declval<Room>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(Room, _impl_._has_bits_);
   static constexpr ::int32_t kOneofCaseOffset =
       PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_._oneof_case_);
 };
 
+void Room::clear_camera_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.camera_position_ != nullptr) _impl_.camera_position_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
 void Room::set_allocated_simple_room(::aim::SimpleRoom* simple_room) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
@@ -1084,8 +1102,9 @@ Room::Room(::google::protobuf::Arena* arena)
 inline PROTOBUF_NDEBUG_INLINE Room::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::aim::Room& from_msg)
-      : type_{},
+      : _has_bits_{from._has_bits_},
         _cached_size_{0},
+        type_{},
         _oneof_case_{from._oneof_case_[0]} {}
 
 Room::Room(
@@ -1101,6 +1120,17 @@ Room::Room(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.camera_position_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
+                              arena, *from._impl_.camera_position_)
+                        : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, start_pitch_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, start_pitch_),
+           offsetof(Impl_, start_yaw_) -
+               offsetof(Impl_, start_pitch_) +
+               sizeof(Impl_::start_yaw_));
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -1117,12 +1147,18 @@ Room::Room(
 inline PROTOBUF_NDEBUG_INLINE Room::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : type_{},
-        _cached_size_{0},
+      : _cached_size_{0},
+        type_{},
         _oneof_case_{} {}
 
 inline void Room::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, camera_position_),
+           0,
+           offsetof(Impl_, start_yaw_) -
+               offsetof(Impl_, camera_position_) +
+               sizeof(Impl_::start_yaw_));
 }
 Room::~Room() {
   // @@protoc_insertion_point(destructor:aim.Room)
@@ -1132,6 +1168,7 @@ inline void Room::SharedDtor(MessageLite& self) {
   Room& this_ = static_cast<Room&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
+  delete this_._impl_.camera_position_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -1202,16 +1239,16 @@ const ::google::protobuf::internal::ClassData* Room::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 2, 2, 0, 2> Room::_table_ = {
+const ::_pbi::TcParseTable<2, 5, 3, 0, 2> Room::_table_ = {
   {
-    0,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(Room, _impl_._has_bits_),
     0, // no _extensions_
-    2, 0,  // max_field_number, fast_idx_mask
+    5, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
-    2,  // num_aux_entries
+    5,  // num_field_entries
+    3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1221,16 +1258,35 @@ const ::_pbi::TcParseTable<0, 2, 2, 0, 2> Room::_table_ = {
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
+    // .aim.StoredVec3 camera_position = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_position_)}},
+    // float start_pitch = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.start_pitch_)}},
+    // float start_yaw = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // .aim.SimpleRoom simple_room = 1;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.simple_room_), _Internal::kOneofCaseOffset + 0, 0,
+    // .aim.StoredVec3 camera_position = 1;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_position_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float start_pitch = 2;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.start_pitch_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float start_yaw = 3;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.SimpleRoom simple_room = 4;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.simple_room_), _Internal::kOneofCaseOffset + 0, 1,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.CircularRoom circular_room = 2;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.circular_room_), _Internal::kOneofCaseOffset + 0, 1,
+    // .aim.CircularRoom circular_room = 5;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.circular_room_), _Internal::kOneofCaseOffset + 0, 2,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
+    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
     {::_pbi::TcParser::GetTable<::aim::SimpleRoom>()},
     {::_pbi::TcParser::GetTable<::aim::CircularRoom>()},
   }}, {{
@@ -1244,7 +1300,18 @@ PROTOBUF_NOINLINE void Room::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.camera_position_ != nullptr);
+    _impl_.camera_position_->Clear();
+  }
+  if (cached_has_bits & 0x00000006u) {
+    ::memset(&_impl_.start_pitch_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.start_yaw_) -
+        reinterpret_cast<char*>(&_impl_.start_pitch_)) + sizeof(_impl_.start_yaw_));
+  }
   clear_type();
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -1263,16 +1330,38 @@ PROTOBUF_NOINLINE void Room::Clear() {
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // .aim.StoredVec3 camera_position = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                1, *this_._impl_.camera_position_, this_._impl_.camera_position_->GetCachedSize(), target,
+                stream);
+          }
+
+          // float start_pitch = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_start_pitch(), target);
+          }
+
+          // float start_yaw = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_start_yaw(), target);
+          }
+
           switch (this_.type_case()) {
             case kSimpleRoom: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  1, *this_._impl_.type_.simple_room_, this_._impl_.type_.simple_room_->GetCachedSize(), target,
+                  4, *this_._impl_.type_.simple_room_, this_._impl_.type_.simple_room_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kCircularRoom: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  2, *this_._impl_.type_.circular_room_, this_._impl_.type_.circular_room_->GetCachedSize(), target,
+                  5, *this_._impl_.type_.circular_room_, this_._impl_.type_.circular_room_->GetCachedSize(), target,
                   stream);
               break;
             }
@@ -1302,14 +1391,31 @@ PROTOBUF_NOINLINE void Room::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000007u) {
+            // .aim.StoredVec3 camera_position = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.camera_position_);
+            }
+            // float start_pitch = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // float start_yaw = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+          }
           switch (this_.type_case()) {
-            // .aim.SimpleRoom simple_room = 1;
+            // .aim.SimpleRoom simple_room = 4;
             case kSimpleRoom: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.simple_room_);
               break;
             }
-            // .aim.CircularRoom circular_room = 2;
+            // .aim.CircularRoom circular_room = 5;
             case kCircularRoom: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.circular_room_);
@@ -1332,6 +1438,25 @@ void Room::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::pr
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(from._impl_.camera_position_ != nullptr);
+      if (_this->_impl_.camera_position_ == nullptr) {
+        _this->_impl_.camera_position_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.camera_position_);
+      } else {
+        _this->_impl_.camera_position_->MergeFrom(*from._impl_.camera_position_);
+      }
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.start_pitch_ = from._impl_.start_pitch_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.start_yaw_ = from._impl_.start_yaw_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
   if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
     const uint32_t oneof_to_case = _this->_impl_._oneof_case_[0];
     const bool oneof_needs_init = oneof_to_case != oneof_from_case;
@@ -1379,6 +1504,13 @@ void Room::CopyFrom(const Room& from) {
 void Room::InternalSwap(Room* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_)
+      + sizeof(Room::_impl_.start_yaw_)
+      - PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_position_)>(
+          reinterpret_cast<char*>(&_impl_.camera_position_),
+          reinterpret_cast<char*>(&other->_impl_.camera_position_));
   swap(_impl_.type_, other->_impl_.type_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
@@ -3122,11 +3254,6 @@ class ScenarioDef::_Internal {
       PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._oneof_case_);
 };
 
-void ScenarioDef::clear_camera_position() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.camera_position_ != nullptr) _impl_.camera_position_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
 void ScenarioDef::set_allocated_static_def(::aim::StaticScenarioDef* static_def) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
@@ -3175,9 +3302,6 @@ ScenarioDef::ScenarioDef(
   _impl_.room_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::Room>(
                               arena, *from._impl_.room_)
                         : nullptr;
-  _impl_.camera_position_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
-                              arena, *from._impl_.camera_position_)
-                        : nullptr;
   _impl_.duration_seconds_ = from._impl_.duration_seconds_;
   switch (type_case()) {
     case TYPE_NOT_SET:
@@ -3216,7 +3340,6 @@ inline void ScenarioDef::SharedDtor(MessageLite& self) {
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.scenario_id_.Destroy();
   delete this_._impl_.room_;
-  delete this_._impl_.camera_position_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -3279,16 +3402,16 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 2, 35, 2> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
     5, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967272,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
-    3,  // num_aux_entries
+    4,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -3297,15 +3420,13 @@ const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::ScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .aim.StoredVec3 camera_position = 4;
-    {::_pbi::TcParser::FastMtS1,
-     {34, 2, 1, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.camera_position_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // string scenario_id = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_)}},
     // float duration_seconds = 2;
     {::_pbi::TcParser::FastF32S1,
-     {21, 3, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)}},
+     {21, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)}},
     // .aim.Room room = 3;
     {::_pbi::TcParser::FastMtS1,
      {26, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)}},
@@ -3316,20 +3437,16 @@ const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // float duration_seconds = 2;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 3, 0,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.Room room = 3;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.StoredVec3 camera_position = 4;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.camera_position_), _Internal::kHasBitsOffset + 2, 1,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.StaticScenarioDef static_def = 5;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 2,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 1,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
-    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
     {::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>()},
   }}, {{
     "\17\13\0\0\0\0\0\0"
@@ -3346,17 +3463,13 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       _impl_.scenario_id_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000002u) {
       ABSL_DCHECK(_impl_.room_ != nullptr);
       _impl_.room_->Clear();
-    }
-    if (cached_has_bits & 0x00000004u) {
-      ABSL_DCHECK(_impl_.camera_position_ != nullptr);
-      _impl_.camera_position_->Clear();
     }
   }
   _impl_.duration_seconds_ = 0;
@@ -3390,7 +3503,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
           }
 
           // float duration_seconds = 2;
-          if (cached_has_bits & 0x00000008u) {
+          if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 2, this_._internal_duration_seconds(), target);
@@ -3400,13 +3513,6 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
           if (cached_has_bits & 0x00000002u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 3, *this_._impl_.room_, this_._impl_.room_->GetCachedSize(), target,
-                stream);
-          }
-
-          // .aim.StoredVec3 camera_position = 4;
-          if (cached_has_bits & 0x00000004u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                4, *this_._impl_.camera_position_, this_._impl_.camera_position_->GetCachedSize(), target,
                 stream);
           }
 
@@ -3442,7 +3548,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000000fu) {
+          if (cached_has_bits & 0x00000007u) {
             // string scenario_id = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -3453,13 +3559,8 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.room_);
             }
-            // .aim.StoredVec3 camera_position = 4;
-            if (cached_has_bits & 0x00000004u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.camera_position_);
-            }
             // float duration_seconds = 2;
-            if (cached_has_bits & 0x00000008u) {
+            if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
           }
@@ -3488,7 +3589,7 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_set_scenario_id(from._internal_scenario_id());
     }
@@ -3502,15 +3603,6 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
       }
     }
     if (cached_has_bits & 0x00000004u) {
-      ABSL_DCHECK(from._impl_.camera_position_ != nullptr);
-      if (_this->_impl_.camera_position_ == nullptr) {
-        _this->_impl_.camera_position_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.camera_position_);
-      } else {
-        _this->_impl_.camera_position_->MergeFrom(*from._impl_.camera_position_);
-      }
-    }
-    if (cached_has_bits & 0x00000008u) {
       _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
     }
   }
