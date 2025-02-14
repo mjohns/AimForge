@@ -51,4 +51,6 @@ class Scenario {
   Theme theme_;
 };
 
+NavigationEvent RunScenario(const ScenarioDef& def, Application* app);
+
 }  // namespace aim

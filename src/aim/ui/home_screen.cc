@@ -5,7 +5,7 @@
 #include <format>
 
 #include "aim/proto/scenario.pb.h"
-#include "aim/scenario/static_scenario.h"
+#include "aim/scenario/scenario.h"
 #include "aim/ui/settings_screen.h"
 
 namespace aim {
@@ -25,7 +25,7 @@ void HomeScreen::Run(Application* app) {
       needs_reset = false;
     }
     if (scenario_to_start) {
-      auto nav_event = aim::RunStaticScenario(*scenario_to_start, app);
+      auto nav_event = aim::RunScenario(*scenario_to_start, app);
       if (nav_event.IsExit()) {
         return;
       }

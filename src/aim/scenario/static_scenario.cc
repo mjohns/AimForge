@@ -3,9 +3,6 @@
 #include <SDL3/SDL.h>
 #include <imgui.h>
 
-#include <algorithm>
-#include <format>
-#include <fstream>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
@@ -13,20 +10,14 @@
 #include <memory>
 #include <random>
 
-#include "aim/audio/sound.h"
-#include "aim/common/scope_guard.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
-#include "aim/core/metronome.h"
-#include "aim/graphics/crosshair.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario.h"
-#include "aim/scenario/scenario_timer.h"
-#include "aim/ui/settings_screen.h"
 
 namespace aim {
 namespace {
@@ -167,6 +158,8 @@ glm::vec3 GetNewTargetPosition(const ScenarioDef& def,
     }
 
     if (def.room().has_simple_room()) {
+      // This distance check is done on the 2d wall where the coordinate system has z in the actual
+      // room mapped to y.
       if (AreNoneWithinDistanceOnWall(candidate_pos,
                                       def.static_def().target_placement_strategy().min_distance(),
                                       target_manager)) {
@@ -334,15 +327,8 @@ class StaticScenario : public Scenario {
 
 }  // namespace
 
-NavigationEvent RunStaticScenario(const ScenarioDef& def, Application* app) {
-  while (true) {
-    StaticScenario scenario(def, app);
-    NavigationEvent nav_event = scenario.Run();
-    if (nav_event.type != NavigationEventType::RESTART_LAST_SCENARIO) {
-      app->logger()->flush();
-      return nav_event;
-    }
-  }
+std::unique_ptr<Scenario> CreateStaticScenario(const ScenarioDef& def, Application* app) {
+  return std::make_unique<StaticScenario>(def, app);
 }
 
 }  // namespace aim
