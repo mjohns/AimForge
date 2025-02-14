@@ -24,6 +24,15 @@ Target TargetManager::AddTarget(Target t) {
   return t;
 }
 
+Target* TargetManager::GetMutableTarget(u16 target_id) {
+  for (Target& t : targets_) {
+    if (t.id == target_id) {
+      return &t;
+    }
+  }
+  return nullptr;
+}
+
 void TargetManager::RemoveTarget(uint16_t target_id) {
   for (Target& t : targets_) {
     if (t.id == target_id) {

@@ -73,6 +73,7 @@ NavigationEvent Scenario::Run() {
   // Main loop
   bool stop_scenario = false;
   bool show_settings = false;
+  bool is_click_held = false;
   u64 num_state_updates = 0;
   while (!stop_scenario) {
     if (show_settings) {
@@ -90,6 +91,7 @@ NavigationEvent Scenario::Run() {
       settings = app_->GetSettingsManager()->GetCurrentSettings();
       radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
       theme_ = app_->GetSettingsManager()->GetCurrentTheme();
+      is_click_held = false;
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
       SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
@@ -121,6 +123,13 @@ NavigationEvent Scenario::Run() {
       if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
           update_data.has_click = true;
+          is_click_held = true;
+        }
+      }
+      if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          update_data.has_click_up = true;
+          is_click_held = false;
         }
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
@@ -140,6 +149,7 @@ NavigationEvent Scenario::Run() {
     metronome_.DoTick(timer_.GetElapsedMicros());
     look_at_ = camera_.GetLookAt();
 
+    update_data.is_click_held = is_click_held;
     UpdateState(&update_data);
     num_state_updates++;
 
@@ -160,7 +170,7 @@ NavigationEvent Scenario::Run() {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
 
     // ~ Around 450k
-    // ImGui::Text("ups: %.1f", num_state_updates / elapsed_seconds);
+    ImGui::Text("ups: %.1f", num_state_updates / elapsed_seconds);
 
     ImGui::End();
 
