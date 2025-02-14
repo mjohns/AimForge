@@ -115,10 +115,19 @@ void HomeScreen::Run(Application* app) {
     if (ImGui::Button("Start Centering", sz)) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("centering_test");
-      def.mutable_centering_def()->set_target_width(2);
-      def.mutable_centering_def()->set_start_to_end_time_seconds(3);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-50, -3, 0);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(50, -3, 0);
+      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
+      scenario_to_start = def;
+    }
+    if (ImGui::Button("Start Vertical Centering", sz)) {
+      ScenarioDef def = base_static_def;
+      def.set_scenario_id("vertical_centering_test");
+      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 40);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -40);
       scenario_to_start = def;
     }
     if (ImGui::Button("Start Circle", sz)) {
