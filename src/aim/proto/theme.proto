@@ -1,4 +1,25 @@
-
 edition = "2023";
 
+import "common.proto";
+
 package aim;
+
+message CrosshairTheme {
+  StoredColor color = 1;
+  StoredColor outline_color = 2;
+}
+
+message WallAppearance {
+  StoredColor color = 1;
+}
+
+message Theme {
+  string name = 1;
+  WallAppearance roof_appearance = 2;
+  WallAppearance side_appearance = 3;
+  WallAppearance front_appearance = 4;
+  WallAppearance floor_appearance = 5;
+
+  CrosshairTheme crosshair = 6;
+  StoredColor target_color = 7;
+}

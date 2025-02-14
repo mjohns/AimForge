@@ -14,6 +14,12 @@ using i32 = int32_t;
 using i64 = int64_t;
 using i16 = int16_t;
 
+struct Rgb {
+  int r = 0;
+  int g = 0;
+  int b = 0;
+};
+
 struct Wall {
   float height;
   float width;

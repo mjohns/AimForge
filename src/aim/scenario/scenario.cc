@@ -39,7 +39,9 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
       timer_(kReplayFps),
       camera_(Camera(
           def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
-      replay_(std::make_unique<Replay>()) {}
+      replay_(std::make_unique<Replay>()) {
+  theme_ = app->GetSettingsManager()->GetCurrentTheme();
+}
 
 NavigationEvent Scenario::Run() {
   ScreenInfo screen = app_->GetScreenInfo();
@@ -73,6 +75,7 @@ NavigationEvent Scenario::Run() {
       // Need to refresh everything based on settings change
       settings = app_->GetSettingsManager()->GetCurrentSettings();
       radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
+      theme_ = app_->GetSettingsManager()->GetCurrentTheme();
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
       SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
@@ -132,7 +135,7 @@ NavigationEvent Scenario::Run() {
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(settings.crosshair(), screen, draw_list);
+    DrawCrosshair(settings.crosshair(), theme_, screen, draw_list);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -143,7 +146,7 @@ NavigationEvent Scenario::Run() {
 
     ImGui::End();
 
-    if (app_->StartRender()) {
+    if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
       Render();
       app_->FinishRender();
     }

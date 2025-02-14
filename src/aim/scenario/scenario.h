@@ -48,6 +48,7 @@ class Scenario {
   Camera camera_;
   LookAtInfo look_at_;
   std::unique_ptr<Replay> replay_;
+  Theme theme_;
 };
 
 }  // namespace aim

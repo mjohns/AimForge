@@ -100,7 +100,8 @@ NavigationEvent StatsScreen::Run() {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
-      auto nav_event = replay_viewer.PlayReplay(*replay_, settings.crosshair(), app_);
+      auto nav_event = replay_viewer.PlayReplay(
+          *replay_, app_->GetSettingsManager()->GetCurrentTheme(), settings.crosshair(), app_);
       if (!nav_event.IsDone()) {
         return nav_event;
       }
