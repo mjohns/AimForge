@@ -35,10 +35,8 @@ class Scenario {
 
  protected:
   virtual void Initialize() {}
-  virtual void OnBeforeEventHandling() {}
   virtual void OnEvent(const SDL_Event& event) {}
-  virtual void UpdateState(UpdateStateData* data) {}
-  virtual void Render() = 0;
+  virtual void UpdateState(UpdateStateData* data) = 0;
 
   ScenarioDef def_;
   Application* app_;
@@ -46,11 +44,15 @@ class Scenario {
   Metronome metronome_;
   ScenarioTimer timer_;
   Camera camera_;
+  TargetManager target_manager_;
   LookAtInfo look_at_;
   std::unique_ptr<Replay> replay_;
   Theme theme_;
 };
 
 NavigationEvent RunScenario(const ScenarioDef& def, Application* app);
+
+std::unique_ptr<Scenario> CreateCenteringScenario(const ScenarioDef& def, Application* app);
+std::unique_ptr<Scenario> CreateStaticScenario(const ScenarioDef& def, Application* app);
 
 }  // namespace aim

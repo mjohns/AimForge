@@ -1,5 +1,3 @@
-#include "static_scenario.h"
-
 #include <SDL3/SDL.h>
 #include <imgui.h>
 
@@ -220,23 +218,8 @@ class StaticScenario : public Scenario {
   }
 
  protected:
-  virtual void OnBeforeEventHandling() {
-    if (timer_.IsNewReplayFrame()) {
-      // Store the look at vector before the mouse updates for the old frame.
-      replay_->add_pitch_yaws(camera_.GetPitch());
-      replay_->add_pitch_yaws(camera_.GetYaw());
-    }
-  }
-
-  void Render() override {
-    app_->GetRenderer()->DrawScenario(
-        def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
-  }
-
   void Initialize() override {
-    *replay_->mutable_room() = def_.room();
     replay_->set_is_poke_ball(def_.static_def().is_poke_ball());
-    replay_->set_replay_fps(timer_.GetReplayFps());
 
     for (int i = 0; i < def_.static_def().num_targets(); ++i) {
       Target target = target_manager_.AddTarget(GetNewTarget(def_, &target_manager_, app_));
@@ -320,7 +303,6 @@ class StaticScenario : public Scenario {
     }
   }
 
-  TargetManager target_manager_;
   std::optional<u16> current_poke_target_id_;
   u64 current_poke_start_time_micros_ = 0;
 };
