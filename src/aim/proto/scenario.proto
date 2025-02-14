@@ -25,6 +25,7 @@ message Room {
   }
 }
 
+// For circular rooms x is effectively in degrees.
 message RegionLength {
   oneof type {
     // Length is a percent of relevant dimension (x,y) on the wall.

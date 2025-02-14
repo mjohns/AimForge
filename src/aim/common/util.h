@@ -1,10 +1,11 @@
 #pragma once
 
+#include <absl/strings/ascii.h>
 #include <imgui.h>
 #include <stdlib.h>
 
 #include <format>
-#include <absl/strings/ascii.h>
+#include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -166,6 +167,16 @@ static std::string MaybeIntToString(float value, int decimal_places = 1) {
 
 static float ParseFloat(const std::string& text) {
   return strtod(text.c_str(), nullptr);
+}
+
+static glm::vec2 RotateRadians(const glm::vec2& v, float radians) {
+  const float cos_theta = cos(radians);
+  const float sin_theta = sin(radians);
+  return glm::vec2(v.x * cos_theta - v.y * sin_theta, v.x * sin_theta + v.y * cos_theta);
+}
+
+static glm::vec2 RotateDegrees(const glm::vec2& v, float degrees) {
+  return RotateRadians(v, glm::radians<float>(degrees));
 }
 
 }  // namespace aim

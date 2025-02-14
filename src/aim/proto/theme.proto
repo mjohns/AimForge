@@ -15,6 +15,7 @@ message WallAppearance {
 
 message Theme {
   string name = 1;
+
   WallAppearance roof_appearance = 2;
   WallAppearance side_appearance = 3;
   WallAppearance front_appearance = 4;
