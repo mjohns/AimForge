@@ -24,8 +24,6 @@
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
-#include "aim/scenario/static_scenario.h"
-#include "aim/scenario/centering_scenario.h"
 #include "aim/ui/settings_screen.h"
 
 namespace aim {
@@ -64,6 +62,8 @@ NavigationEvent Scenario::Run() {
   Settings settings = app_->GetSettingsManager()->GetCurrentSettings();
   float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
 
+  *replay_->mutable_room() = def_.room();
+  replay_->set_replay_fps(timer_.GetReplayFps());
   Initialize();
 
   SDL_GL_SetSwapInterval(0);  // Disable vsync
@@ -97,7 +97,11 @@ NavigationEvent Scenario::Run() {
 
     timer_.OnStartFrame();
 
-    OnBeforeEventHandling();
+    if (timer_.IsNewReplayFrame()) {
+      // Store the look at vector before the mouse updates for the old frame.
+      replay_->add_pitch_yaws(camera_.GetPitch());
+      replay_->add_pitch_yaws(camera_.GetYaw());
+    }
 
     if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
       stop_scenario = true;
@@ -161,7 +165,8 @@ NavigationEvent Scenario::Run() {
     ImGui::End();
 
     if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
-      Render();
+      app_->GetRenderer()->DrawScenario(
+          def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
       app_->FinishRender();
     }
   }

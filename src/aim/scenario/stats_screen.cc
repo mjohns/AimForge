@@ -9,7 +9,7 @@
 
 #include "aim/common/scope_guard.h"
 #include "aim/scenario/replay_viewer.h"
-#include "aim/scenario/static_scenario.h"
+#include "aim/scenario/scenario.h"
 
 namespace aim {
 namespace {
