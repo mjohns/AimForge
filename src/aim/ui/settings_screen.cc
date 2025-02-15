@@ -146,6 +146,8 @@ NavigationEvent QuickSettingsScreen::Run(Application* app) {
 
     // ImGui::SetCursorPos(ImVec2(x_start, y_start));
 
+    for (int i = 10; i <= 80; ++i) {
+    }
     for (auto& sens : sens_list) {
       ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
       if (ImGui::Button(sens.c_str(), sz)) {

@@ -153,6 +153,7 @@ NavigationEvent Scenario::Run() {
         }
         if (keycode == SDLK_ESCAPE) {
           show_settings = true;
+          is_quick_settings = false;
         }
       }
       OnEvent(event);

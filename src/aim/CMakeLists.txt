@@ -17,6 +17,7 @@ target_link_libraries(${NAME}
          sqlite3
          protobuf::libprotobuf
          spdlog
+         glm
          ${OPENGL_LIBRARIES})
 
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/.. ${glm_SOURCE_DIR})
