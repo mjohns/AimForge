@@ -79,6 +79,7 @@ NavigationEvent Scenario::Run() {
     if (show_settings) {
       // Need to pause.
       timer_.Pause();
+      OnPause();
       SettingsScreen settings_screen;
       auto nav_event = settings_screen.Run(app_);
       app_->logger()->flush();
@@ -95,6 +96,7 @@ NavigationEvent Scenario::Run() {
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
       SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
+      OnResume();
     }
 
     timer_.OnStartFrame();

@@ -117,9 +117,7 @@ class CenteringScenario : public Scenario {
       }
       tracking_sound_->DoTick(maybe_hit_target_id.has_value());
     } else {
-      shot_stopwatch_.Stop();
-      hit_stopwatch_.Stop();
-      tracking_sound_ = {};
+      TrackingHoldDone();
     }
 
     float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
@@ -142,12 +140,24 @@ class CenteringScenario : public Scenario {
     target_->position = start_ + (start_to_end_ * multiplier);
   }
 
+  void OnPause() override {
+    TrackingHoldDone();
+  }
+
   void OnScenarioDone() override {
+    TrackingHoldDone();
     stats_.targets_hit = hit_stopwatch_.GetElapsedSeconds() * 10;
     stats_.shots_taken = shot_stopwatch_.GetElapsedSeconds() * 10;
   }
 
  private:
+  void TrackingHoldDone() {
+      shot_stopwatch_.Stop();
+      hit_stopwatch_.Stop();
+      tracking_sound_ = {};
+  }
+
+
   Target* target_ = nullptr;
   glm::vec3 start_;
   glm::vec3 end_;
