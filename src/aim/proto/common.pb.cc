@@ -105,6 +105,37 @@ struct StoredRgbDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StoredRgbDefaultTypeInternal _StoredRgb_default_instance_;
+
+inline constexpr StoredColor::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        hex_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        r_{0},
+        g_{0},
+        b_{0},
+        alpha_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR StoredColor::StoredColor(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct StoredColorDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR StoredColorDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~StoredColorDefaultTypeInternal() {}
+  union {
+    StoredColor _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StoredColorDefaultTypeInternal _StoredColor_default_instance_;
 }  // namespace aim
 static constexpr const ::_pb::EnumDescriptor**
     file_level_enum_descriptors_common_2eproto = nullptr;
@@ -153,6 +184,24 @@ const ::uint32_t
         0,
         1,
         2,
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _impl_.r_),
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _impl_.g_),
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _impl_.b_),
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _impl_.hex_),
+        PROTOBUF_FIELD_OFFSET(::aim::StoredColor, _impl_.alpha_),
+        1,
+        2,
+        3,
+        0,
+        4,
 };
 
 static const ::_pbi::MigrationSchema
@@ -160,31 +209,34 @@ static const ::_pbi::MigrationSchema
         {0, 11, -1, sizeof(::aim::StoredVec3)},
         {14, 24, -1, sizeof(::aim::StoredVec2)},
         {26, 37, -1, sizeof(::aim::StoredRgb)},
+        {40, 53, -1, sizeof(::aim::StoredColor)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_StoredVec3_default_instance_._instance,
     &::aim::_StoredVec2_default_instance_._instance,
     &::aim::_StoredRgb_default_instance_._instance,
+    &::aim::_StoredColor_default_instance_._instance,
 };
 const char descriptor_table_protodef_common_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
     "\n\014common.proto\022\003aim\"-\n\nStoredVec3\022\t\n\001x\030\001"
     " \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\"\"\n\nStoredVec2"
     "\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\",\n\tStoredRgb\022\t\n\001r"
-    "\030\001 \001(\005\022\t\n\001g\030\002 \001(\005\022\t\n\001b\030\003 \001(\005b\010editionsp\350"
-    "\007"
+    "\030\001 \001(\005\022\t\n\001g\030\002 \001(\005\022\t\n\001b\030\003 \001(\005\"J\n\013StoredCo"
+    "lor\022\t\n\001r\030\001 \001(\005\022\t\n\001g\030\002 \001(\005\022\t\n\001b\030\003 \001(\005\022\013\n\003"
+    "hex\030\004 \001(\t\022\r\n\005alpha\030\005 \001(\002b\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_common_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_common_2eproto = {
     false,
     false,
-    161,
+    237,
     descriptor_table_protodef_common_2eproto,
     "common.proto",
     &descriptor_table_common_2eproto_once,
     nullptr,
     0,
-    3,
+    4,
     schemas,
     file_default_instances,
     TableStruct_common_2eproto::offsets,
@@ -997,6 +1049,364 @@ void StoredRgb::InternalSwap(StoredRgb* PROTOBUF_RESTRICT other) {
 }
 
 ::google::protobuf::Metadata StoredRgb::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class StoredColor::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<StoredColor>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(StoredColor, _impl_._has_bits_);
+};
+
+StoredColor::StoredColor(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.StoredColor)
+}
+inline PROTOBUF_NDEBUG_INLINE StoredColor::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::StoredColor& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        hex_(arena, from.hex_) {}
+
+StoredColor::StoredColor(
+    ::google::protobuf::Arena* arena,
+    const StoredColor& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  StoredColor* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, r_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, r_),
+           offsetof(Impl_, alpha_) -
+               offsetof(Impl_, r_) +
+               sizeof(Impl_::alpha_));
+
+  // @@protoc_insertion_point(copy_constructor:aim.StoredColor)
+}
+inline PROTOBUF_NDEBUG_INLINE StoredColor::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        hex_(arena) {}
+
+inline void StoredColor::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, r_),
+           0,
+           offsetof(Impl_, alpha_) -
+               offsetof(Impl_, r_) +
+               sizeof(Impl_::alpha_));
+}
+StoredColor::~StoredColor() {
+  // @@protoc_insertion_point(destructor:aim.StoredColor)
+  SharedDtor(*this);
+}
+inline void StoredColor::SharedDtor(MessageLite& self) {
+  StoredColor& this_ = static_cast<StoredColor&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.hex_.Destroy();
+  this_._impl_.~Impl_();
+}
+
+inline void* StoredColor::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) StoredColor(arena);
+}
+constexpr auto StoredColor::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(StoredColor),
+                                            alignof(StoredColor));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull StoredColor::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_StoredColor_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &StoredColor::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<StoredColor>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &StoredColor::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<StoredColor>(), &StoredColor::ByteSizeLong,
+            &StoredColor::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(StoredColor, _impl_._cached_size_),
+        false,
+    },
+    &StoredColor::kDescriptorMethods,
+    &descriptor_table_common_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* StoredColor::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 5, 0, 27, 2> StoredColor::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(StoredColor, _impl_._has_bits_),
+    0, // no _extensions_
+    5, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967264,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    5,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::StoredColor>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // int32 r = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(StoredColor, _impl_.r_), 1>(),
+     {8, 1, 0, PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.r_)}},
+    // int32 g = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(StoredColor, _impl_.g_), 2>(),
+     {16, 2, 0, PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.g_)}},
+    // int32 b = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(StoredColor, _impl_.b_), 3>(),
+     {24, 3, 0, PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.b_)}},
+    // string hex = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 0, 0, PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.hex_)}},
+    // float alpha = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 4, 0, PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.alpha_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // int32 r = 1;
+    {PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.r_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // int32 g = 2;
+    {PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.g_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // int32 b = 3;
+    {PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.b_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // string hex = 4;
+    {PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.hex_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // float alpha = 5;
+    {PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.alpha_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+    "\17\0\0\0\3\0\0\0"
+    "aim.StoredColor"
+    "hex"
+  }},
+};
+
+PROTOBUF_NOINLINE void StoredColor::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.StoredColor)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    _impl_.hex_.ClearNonDefaultToEmpty();
+  }
+  if (cached_has_bits & 0x0000001eu) {
+    ::memset(&_impl_.r_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.alpha_) -
+        reinterpret_cast<char*>(&_impl_.r_)) + sizeof(_impl_.alpha_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* StoredColor::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const StoredColor& this_ = static_cast<const StoredColor&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* StoredColor::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const StoredColor& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.StoredColor)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // int32 r = 1;
+          if (cached_has_bits & 0x00000002u) {
+            target = ::google::protobuf::internal::WireFormatLite::
+                WriteInt32ToArrayWithField<1>(
+                    stream, this_._internal_r(), target);
+          }
+
+          // int32 g = 2;
+          if (cached_has_bits & 0x00000004u) {
+            target = ::google::protobuf::internal::WireFormatLite::
+                WriteInt32ToArrayWithField<2>(
+                    stream, this_._internal_g(), target);
+          }
+
+          // int32 b = 3;
+          if (cached_has_bits & 0x00000008u) {
+            target = ::google::protobuf::internal::WireFormatLite::
+                WriteInt32ToArrayWithField<3>(
+                    stream, this_._internal_b(), target);
+          }
+
+          // string hex = 4;
+          if (cached_has_bits & 0x00000001u) {
+            const std::string& _s = this_._internal_hex();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.StoredColor.hex");
+            target = stream->WriteStringMaybeAliased(4, _s, target);
+          }
+
+          // float alpha = 5;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_alpha(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.StoredColor)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t StoredColor::ByteSizeLong(const MessageLite& base) {
+          const StoredColor& this_ = static_cast<const StoredColor&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t StoredColor::ByteSizeLong() const {
+          const StoredColor& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.StoredColor)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x0000001fu) {
+            // string hex = 4;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_hex());
+            }
+            // int32 r = 1;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                  this_._internal_r());
+            }
+            // int32 g = 2;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                  this_._internal_g());
+            }
+            // int32 b = 3;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                  this_._internal_b());
+            }
+            // float alpha = 5;
+            if (cached_has_bits & 0x00000010u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void StoredColor::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<StoredColor*>(&to_msg);
+  auto& from = static_cast<const StoredColor&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.StoredColor)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_set_hex(from._internal_hex());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.r_ = from._impl_.r_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.g_ = from._impl_.g_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.b_ = from._impl_.b_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _this->_impl_.alpha_ = from._impl_.alpha_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void StoredColor::CopyFrom(const StoredColor& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.StoredColor)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void StoredColor::InternalSwap(StoredColor* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.hex_, &other->_impl_.hex_, arena);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.alpha_)
+      + sizeof(StoredColor::_impl_.alpha_)
+      - PROTOBUF_FIELD_OFFSET(StoredColor, _impl_.r_)>(
+          reinterpret_cast<char*>(&_impl_.r_),
+          reinterpret_cast<char*>(&other->_impl_.r_));
+}
+
+::google::protobuf::Metadata StoredColor::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)

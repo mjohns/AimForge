@@ -37,6 +37,7 @@ std::vector<ReplayFrame> GetReplayFrames(const Replay& replay) {
 }  // namespace
 
 NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
+                                         const Theme& theme,
                                          const Crosshair& crosshair,
                                          Application* app) {
   ScreenInfo screen = app->GetScreenInfo();
@@ -119,16 +120,16 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    DrawCrosshair(crosshair, screen, draw_list);
+    DrawCrosshair(crosshair, theme, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    if (app->StartRender()) {
+    if (app->StartRender(ImVec4(0, 0, 0, 1))) {
       app->GetRenderer()->DrawScenario(
-          replay.room(), target_manager.GetTargets(), look_at.transform);
+          replay.room(), theme, target_manager.GetTargets(), look_at.transform);
       app->FinishRender();
     }
   }

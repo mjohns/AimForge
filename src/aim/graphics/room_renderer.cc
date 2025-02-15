@@ -6,6 +6,8 @@
 #include <glm/mat4x4.hpp>
 
 #include "aim/common/simple_types.h"
+#include "aim/common/util.h"
+#include "aim/proto/theme.pb.h"
 
 namespace aim {
 namespace {
@@ -138,22 +140,24 @@ void RoomRenderer::SetProjection(const glm::mat4& projection) {
   shader_.SetMat4("projection", projection);
 }
 
-void RoomRenderer::Draw(const Room& room, const glm::mat4& view) {
+void RoomRenderer::Draw(const Room& room, const Theme& theme, const glm::mat4& view) {
   if (room.has_simple_room()) {
-    DrawSimpleRoom(room.simple_room(), view);
+    DrawSimpleRoom(room.simple_room(), theme, view);
   }
   if (room.has_circular_room()) {
-    DrawCircularRoom(room.circular_room(), view);
+    DrawCircularRoom(room.circular_room(), theme, view);
   }
 }
 
-void RoomRenderer::DrawCircularRoom(const CircularRoom& room, const glm::mat4& view) {
+void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
+                                    const Theme& theme,
+                                    const glm::mat4& view) {
   shader_.Use();
   shader_.SetMat4("view", view);
 
-  glm::vec3 wall_color(0.9);
-  glm::vec3 floor_color(0.4);
-  glm::vec3 top_color(0.6);
+  glm::vec3 wall_color(ToVec4(theme.front_appearance().color()));
+  glm::vec3 floor_color(ToVec4(theme.floor_appearance().color()));
+  glm::vec3 top_color(ToVec4(theme.roof_appearance().color()));
 
   float quad_scale = room.radius() * 2.5;
   float height = room.height();
@@ -196,17 +200,19 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room, const glm::mat4& v
   }
 }
 
-void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room, const glm::mat4& view) {
+void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
+                                  const Theme& theme,
+                                  const glm::mat4& view) {
   shader_.Use();
   shader_.SetMat4("view", view);
 
   i32 height = room.height();
   i32 width = room.width();
 
-  glm::vec3 wall_color(0.7);
-  glm::vec3 floor_color(0.6);
-  glm::vec3 top_color(0.6);
-  glm::vec3 side_color(0.65);
+  glm::vec3 wall_color(ToVec4(theme.front_appearance().color()));
+  glm::vec3 floor_color(ToVec4(theme.floor_appearance().color()));
+  glm::vec3 top_color(ToVec4(theme.roof_appearance().color()));
+  glm::vec3 side_color(ToVec4(theme.side_appearance().color()));
 
   {
     // Back wall

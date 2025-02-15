@@ -5,6 +5,7 @@
 #include <filesystem>
 
 #include "aim/proto/settings.pb.h"
+#include "aim/proto/theme.pb.h"
 
 namespace aim {
 
@@ -20,6 +21,9 @@ class SettingsManager {
   float GetDpi();
   Settings GetCurrentSettings();
   Settings* GetMutableCurrentSettings();
+
+  Theme GetTheme(const std::string& theme_name);
+  Theme GetCurrentTheme();
 
   void MarkDirty();
   void FlushToDisk();

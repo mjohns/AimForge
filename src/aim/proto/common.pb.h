@@ -52,6 +52,9 @@ struct TableStruct_common_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_common_2eproto;
 namespace aim {
+class StoredColor;
+struct StoredColorDefaultTypeInternal;
+extern StoredColorDefaultTypeInternal _StoredColor_default_instance_;
 class StoredRgb;
 struct StoredRgbDefaultTypeInternal;
 extern StoredRgbDefaultTypeInternal _StoredRgb_default_instance_;
@@ -713,6 +716,256 @@ class StoredRgb final : public ::google::protobuf::Message
   union { Impl_ _impl_; };
   friend struct ::TableStruct_common_2eproto;
 };
+// -------------------------------------------------------------------
+
+class StoredColor final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.StoredColor) */ {
+ public:
+  inline StoredColor() : StoredColor(nullptr) {}
+  ~StoredColor() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(StoredColor* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(StoredColor));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR StoredColor(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline StoredColor(const StoredColor& from) : StoredColor(nullptr, from) {}
+  inline StoredColor(StoredColor&& from) noexcept
+      : StoredColor(nullptr, std::move(from)) {}
+  inline StoredColor& operator=(const StoredColor& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline StoredColor& operator=(StoredColor&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const StoredColor& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const StoredColor* internal_default_instance() {
+    return reinterpret_cast<const StoredColor*>(
+        &_StoredColor_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(StoredColor& a, StoredColor& b) { a.Swap(&b); }
+  inline void Swap(StoredColor* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(StoredColor* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  StoredColor* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<StoredColor>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const StoredColor& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const StoredColor& from) { StoredColor::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(StoredColor* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.StoredColor"; }
+
+ protected:
+  explicit StoredColor(::google::protobuf::Arena* arena);
+  StoredColor(::google::protobuf::Arena* arena, const StoredColor& from);
+  StoredColor(::google::protobuf::Arena* arena, StoredColor&& from) noexcept
+      : StoredColor(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kHexFieldNumber = 4,
+    kRFieldNumber = 1,
+    kGFieldNumber = 2,
+    kBFieldNumber = 3,
+    kAlphaFieldNumber = 5,
+  };
+  // string hex = 4;
+  bool has_hex() const;
+  void clear_hex() ;
+  const std::string& hex() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_hex(Arg_&& arg, Args_... args);
+  std::string* mutable_hex();
+  PROTOBUF_NODISCARD std::string* release_hex();
+  void set_allocated_hex(std::string* value);
+
+  private:
+  const std::string& _internal_hex() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_hex(
+      const std::string& value);
+  std::string* _internal_mutable_hex();
+
+  public:
+  // int32 r = 1;
+  bool has_r() const;
+  void clear_r() ;
+  ::int32_t r() const;
+  void set_r(::int32_t value);
+
+  private:
+  ::int32_t _internal_r() const;
+  void _internal_set_r(::int32_t value);
+
+  public:
+  // int32 g = 2;
+  bool has_g() const;
+  void clear_g() ;
+  ::int32_t g() const;
+  void set_g(::int32_t value);
+
+  private:
+  ::int32_t _internal_g() const;
+  void _internal_set_g(::int32_t value);
+
+  public:
+  // int32 b = 3;
+  bool has_b() const;
+  void clear_b() ;
+  ::int32_t b() const;
+  void set_b(::int32_t value);
+
+  private:
+  ::int32_t _internal_b() const;
+  void _internal_set_b(::int32_t value);
+
+  public:
+  // float alpha = 5;
+  bool has_alpha() const;
+  void clear_alpha() ;
+  float alpha() const;
+  void set_alpha(float value);
+
+  private:
+  float _internal_alpha() const;
+  void _internal_set_alpha(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.StoredColor)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 5, 0,
+      27, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const StoredColor& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr hex_;
+    ::int32_t r_;
+    ::int32_t g_;
+    ::int32_t b_;
+    float alpha_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_common_2eproto;
+};
 
 // ===================================================================
 
@@ -960,6 +1213,191 @@ inline ::int32_t StoredRgb::_internal_b() const {
 inline void StoredRgb::_internal_set_b(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.b_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// StoredColor
+
+// int32 r = 1;
+inline bool StoredColor::has_r() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void StoredColor::clear_r() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.r_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline ::int32_t StoredColor::r() const {
+  // @@protoc_insertion_point(field_get:aim.StoredColor.r)
+  return _internal_r();
+}
+inline void StoredColor::set_r(::int32_t value) {
+  _internal_set_r(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.StoredColor.r)
+}
+inline ::int32_t StoredColor::_internal_r() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.r_;
+}
+inline void StoredColor::_internal_set_r(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.r_ = value;
+}
+
+// int32 g = 2;
+inline bool StoredColor::has_g() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void StoredColor::clear_g() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.g_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline ::int32_t StoredColor::g() const {
+  // @@protoc_insertion_point(field_get:aim.StoredColor.g)
+  return _internal_g();
+}
+inline void StoredColor::set_g(::int32_t value) {
+  _internal_set_g(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.StoredColor.g)
+}
+inline ::int32_t StoredColor::_internal_g() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.g_;
+}
+inline void StoredColor::_internal_set_g(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.g_ = value;
+}
+
+// int32 b = 3;
+inline bool StoredColor::has_b() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void StoredColor::clear_b() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.b_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline ::int32_t StoredColor::b() const {
+  // @@protoc_insertion_point(field_get:aim.StoredColor.b)
+  return _internal_b();
+}
+inline void StoredColor::set_b(::int32_t value) {
+  _internal_set_b(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.StoredColor.b)
+}
+inline ::int32_t StoredColor::_internal_b() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.b_;
+}
+inline void StoredColor::_internal_set_b(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.b_ = value;
+}
+
+// string hex = 4;
+inline bool StoredColor::has_hex() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void StoredColor::clear_hex() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.hex_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& StoredColor::hex() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.StoredColor.hex)
+  return _internal_hex();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void StoredColor::set_hex(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.hex_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.StoredColor.hex)
+}
+inline std::string* StoredColor::mutable_hex() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_hex();
+  // @@protoc_insertion_point(field_mutable:aim.StoredColor.hex)
+  return _s;
+}
+inline const std::string& StoredColor::_internal_hex() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.hex_.Get();
+}
+inline void StoredColor::_internal_set_hex(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.hex_.Set(value, GetArena());
+}
+inline std::string* StoredColor::_internal_mutable_hex() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.hex_.Mutable( GetArena());
+}
+inline std::string* StoredColor::release_hex() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.StoredColor.hex)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.hex_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.hex_.Set("", GetArena());
+  }
+  return released;
+}
+inline void StoredColor::set_allocated_hex(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.hex_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.hex_.IsDefault()) {
+    _impl_.hex_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.StoredColor.hex)
+}
+
+// float alpha = 5;
+inline bool StoredColor::has_alpha() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void StoredColor::clear_alpha() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.alpha_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float StoredColor::alpha() const {
+  // @@protoc_insertion_point(field_get:aim.StoredColor.alpha)
+  return _internal_alpha();
+}
+inline void StoredColor::set_alpha(float value) {
+  _internal_set_alpha(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.StoredColor.alpha)
+}
+inline float StoredColor::_internal_alpha() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.alpha_;
+}
+inline void StoredColor::_internal_set_alpha(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.alpha_ = value;
 }
 
 #ifdef __GNUC__

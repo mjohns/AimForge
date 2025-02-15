@@ -18,3 +18,12 @@ message StoredRgb {
   int32 g = 2;
   int32 b = 3;
 }
+
+message StoredColor {
+  // Specify r,g,b or hex
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  string hex = 4;
+  float alpha = 5;
+}

@@ -197,7 +197,7 @@ class StaticScenario : public Scenario {
 
   void Render() override {
     app_->GetRenderer()->DrawScenario(
-        def_.room(), target_manager_.GetTargets(), look_at_.transform);
+        def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
   }
 
   void Initialize() override {

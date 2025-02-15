@@ -4,6 +4,7 @@
 
 #include "aim/graphics/shader.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/proto/theme.pb.h"
 
 namespace aim {
 
@@ -12,11 +13,11 @@ struct RoomRenderer {
   RoomRenderer();
 
   void SetProjection(const glm::mat4& projection);
-  void Draw(const Room& room, const glm::mat4& view);
+  void Draw(const Room& room, const Theme& theme, const glm::mat4& view);
 
  private:
-  void DrawSimpleRoom(const SimpleRoom& room, const glm::mat4& view);
-  void DrawCircularRoom(const CircularRoom& room, const glm::mat4& view);
+  void DrawSimpleRoom(const SimpleRoom& room, const Theme& theme, const glm::mat4& view);
+  void DrawCircularRoom(const CircularRoom& room, const Theme& theme, const glm::mat4& view);
 
   unsigned int quad_vbo_;
   unsigned int quad_vao_;

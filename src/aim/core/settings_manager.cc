@@ -10,10 +10,60 @@
 #include "aim/common/json.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
+#include "aim/proto/theme.pb.h"
 
 namespace aim {
 namespace {
 constexpr const float kDefaultDpi = 1600;
+
+Theme GetDefaultTheme() {
+  Theme t;
+  t.set_name("default");
+  *(t.mutable_crosshair()->mutable_color()) = ToStoredColor("#FFAC1C");
+  *(t.mutable_crosshair()->mutable_outline_color()) = ToStoredColor("#000000");
+
+  *t.mutable_front_appearance()->mutable_color() = ToStoredColor(0.7);
+  *t.mutable_floor_appearance()->mutable_color() = ToStoredColor(0.6);
+  *t.mutable_roof_appearance()->mutable_color() = ToStoredColor(0.6);
+  *t.mutable_side_appearance()->mutable_color() = ToStoredColor(0.65);
+
+  *t.mutable_target_color() = ToStoredColor(0);
+  return t;
+}
+
+Theme GetSolarizedLightTheme() {
+  Theme t;
+  t.set_name("solarized_light");
+  auto base03 = ToStoredColor("#002b36");
+  auto base02 = ToStoredColor("#073642");
+  auto base01 = ToStoredColor("#586e75");
+  auto base00 = ToStoredColor("#657b83");
+  auto base0 = ToStoredColor("#839496");
+  auto base1 = ToStoredColor("#93a1a1");
+  auto base2 = ToStoredColor("#eee8d5");
+  auto base3 = ToStoredColor("#FDF6E3");
+  auto yellow = ToStoredColor("#b58900");
+  auto orange = ToStoredColor("#cb4b16");
+  auto red = ToStoredColor("#dc322f");
+  auto magenta = ToStoredColor("#d33682");
+  auto violet = ToStoredColor("#6c71c4");
+  auto blue = ToStoredColor("#268bd2");
+  auto cyan = ToStoredColor("#2aa198");
+  auto green = ToStoredColor("#859900");
+
+  *(t.mutable_crosshair()->mutable_color()) = ToStoredColor("#abdbe3");
+  *(t.mutable_crosshair()->mutable_outline_color()) = blue;
+
+  *t.mutable_front_appearance()->mutable_color() = base3;
+  *t.mutable_side_appearance()->mutable_color() = base2;
+
+  *t.mutable_floor_appearance()->mutable_color() = ToStoredColor("#d9d3bf");
+  *t.mutable_roof_appearance()->mutable_color() = ToStoredColor("#d9d3bf");
+
+  *t.mutable_target_color() = base03;
+
+  return t;
+}
 
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
@@ -65,6 +115,19 @@ absl::Status SettingsManager::Initialize() {
   full_settings_ = GetDefaultFullSettings();
   FlushToDisk();
   return absl::OkStatus();
+}
+
+Theme SettingsManager::GetTheme(const std::string& theme_name) {
+  if (theme_name == "solarized_light") {
+    return GetSolarizedLightTheme();
+  }
+  return GetDefaultTheme();
+}
+
+Theme SettingsManager::GetCurrentTheme() {
+  // Settings* settings = GetMutableCurrentSettings();
+  // return GetDefaultTheme();
+  return GetSolarizedLightTheme();
 }
 
 float SettingsManager::GetDpi() {
