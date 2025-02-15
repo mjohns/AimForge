@@ -108,6 +108,8 @@ void HomeScreen::Run(Application* app) {
       duration_seconds = 10;
     }
 
+    float default_centering_speed = 40;
+
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("Settings", sz)) {
       open_settings = true;
@@ -116,7 +118,7 @@ void HomeScreen::Run(Application* app) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("centering_test");
       def.mutable_centering_def()->set_target_width(1.5);
-      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      def.mutable_centering_def()->set_speed(default_centering_speed);
       *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
       *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
       scenario_to_start = def;
@@ -125,7 +127,7 @@ void HomeScreen::Run(Application* app) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("vertical_centering_test");
       def.mutable_centering_def()->set_target_width(1.5);
-      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      def.mutable_centering_def()->set_speed(default_centering_speed);
       *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 40);
       *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -40);
       scenario_to_start = def;
@@ -134,7 +136,7 @@ void HomeScreen::Run(Application* app) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("diagonal_centering_test_1");
       def.mutable_centering_def()->set_target_width(1.5);
-      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      def.mutable_centering_def()->set_speed(default_centering_speed);
       *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-30, -3, -30);
       *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(30, -3, 30);
       scenario_to_start = def;
@@ -143,7 +145,7 @@ void HomeScreen::Run(Application* app) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("diagonal_centering_test_2");
       def.mutable_centering_def()->set_target_width(1.5);
-      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      def.mutable_centering_def()->set_speed(default_centering_speed);
       *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-30, -3, 30);
       *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(30, -3, -30);
       scenario_to_start = def;
