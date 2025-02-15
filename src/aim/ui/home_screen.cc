@@ -118,10 +118,17 @@ void HomeScreen::Run(Application* app) {
       def.mutable_static_def()->set_target_radius(3);
       scenario_to_start = def;
     }
-    if (ImGui::Button("Start 1w3ts", sz)) {
+    if (ImGui::Button("Start 1w3ts intermediate", sz)) {
       ScenarioDef def = base_1w_def;
       def.set_scenario_id("1w3ts_intermediate_s5");
       def.mutable_static_def()->set_num_targets(3);
+      scenario_to_start = def;
+    }
+    if (ImGui::Button("Start 1w2ts advanced", sz)) {
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w2ts_advanced_s5");
+      def.mutable_static_def()->set_num_targets(2);
+      def.mutable_static_def()->set_target_radius(1.18);
       scenario_to_start = def;
     }
     if (ImGui::Button("Start 1w3ts hard", sz)) {
