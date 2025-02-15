@@ -67,12 +67,12 @@ void HomeScreen::Run(Application* app) {
       TargetRegion* circle_region = strat->add_regions();
       circle_region->set_percent_chance(0.3);
       circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.6);
-      circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.35);
+      circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.32);
 
       TargetRegion* square_region = strat->add_regions();
       square_region->set_percent_chance(1);
-      square_region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.7);
-      square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.6);
+      square_region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.65);
+      square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
     }
 
     SDL_Event event;
