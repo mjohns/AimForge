@@ -125,9 +125,11 @@ Theme SettingsManager::GetTheme(const std::string& theme_name) {
 }
 
 Theme SettingsManager::GetCurrentTheme() {
-  // Settings* settings = GetMutableCurrentSettings();
-  // return GetDefaultTheme();
-  return GetSolarizedLightTheme();
+  Settings* settings = GetMutableCurrentSettings();
+  if (settings == nullptr) {
+    return GetDefaultTheme();
+  }
+  return GetTheme(settings->theme_name());
 }
 
 float SettingsManager::GetDpi() {

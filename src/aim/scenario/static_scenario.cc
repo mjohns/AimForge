@@ -32,11 +32,25 @@ namespace aim {
 namespace {
 constexpr u64 kPokeBallKillTimeMillis = 50;
 
-bool AreNoneWithinDistance(const glm::vec2& p, float min_distance, TargetManager* target_manager) {
+bool AreNoneWithinDistanceOnWall(const glm::vec2& p,
+                                 float min_distance,
+                                 TargetManager* target_manager) {
   for (auto& target : target_manager->GetTargets()) {
     if (!target.hidden) {
       glm::vec2 target_position(target.position.x, target.position.z);
       float distance = glm::length(p - target_position);
+      if (distance < min_distance) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+bool AreNoneWithinDistance(const glm::vec3& p, float min_distance, TargetManager* target_manager) {
+  for (auto& target : target_manager->GetTargets()) {
+    if (!target.hidden) {
+      float distance = glm::length(p - target.position);
       if (distance < min_distance) {
         return false;
       }
@@ -66,10 +80,13 @@ float GetRegionLength(const Room& room, const RegionLength& length) {
     return length.absolute_value();
   }
   if (length.has_x_percent_value()) {
-    return room.simple_room().width() * length.x_percent_value();
+    float width = room.has_circular_room() ? 360 : room.simple_room().width();
+    return width * length.x_percent_value();
   }
   if (length.has_y_percent_value()) {
-    return room.simple_room().height() * length.y_percent_value();
+    float height =
+        room.has_circular_room() ? room.circular_room().height() : room.simple_room().height();
+    return height * length.y_percent_value();
   }
   return 0;
 }
@@ -98,58 +115,81 @@ std::optional<TargetRegion> GetRegionToUse(const ScenarioDef& def,
   return {};
 }
 
-// Returns an x/z pair where to place the target on the back wall.
-glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
-                               TargetManager* target_manager,
-                               Application* app) {
+// Returns an x/z pair where to place the target on the back wall. For circular rooms x is degrees
+// to rotate.
+glm::vec2 GetNewCandidateTargetPosition(const ScenarioDef& def,
+                                        TargetManager* target_manager,
+                                        Application* app) {
   auto maybe_region = GetRegionToUse(def, target_manager, app);
   if (!maybe_region.has_value()) {
+    app->logger()->warn("Unable to find target region for scenario {}", def.scenario_id());
     return glm::vec2(0);
   }
 
   const TargetRegion& region = *maybe_region;
-  float height = def.room().simple_room().height();
-  float width = def.room().simple_room().width();
   float x_offset = GetRegionLength(def.room(), region.x_offset());
   float y_offset = GetRegionLength(def.room(), region.y_offset());
-  auto get_candidate_pos = [&] {
-    if (region.has_oval()) {
-      return GetRandomPositionInCircle(0.5 * GetRegionLength(def.room(), region.oval().x_diamter()),
-                                       0.5 * GetRegionLength(def.room(), region.oval().y_diamter()),
-                                       app);
-    }
-    float max_x = 0.5 * GetRegionLength(def.room(), region.rectangle().x_length());
-    float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
-    auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
-    auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
-    return glm::vec2(distribution_x(*app->GetRandomGenerator()),
-                     distribution_y(*app->GetRandomGenerator()));
-  };
 
-  int max_attempts = 30;
-  int attempt_number = 0;
-  while (true) {
-    ++attempt_number;
-    glm::vec2 pos = get_candidate_pos();
-    pos.x += x_offset;
-    pos.y += y_offset;
-    if (attempt_number >= max_attempts ||
-        AreNoneWithinDistance(
-            pos, def.static_def().target_placement_strategy().min_distance(), target_manager)) {
-      return pos;
+  if (region.has_oval()) {
+    return GetRandomPositionInCircle(
+        x_offset + 0.5 * GetRegionLength(def.room(), region.oval().x_diamter()),
+        y_offset + 0.5 * GetRegionLength(def.room(), region.oval().y_diamter()),
+        app);
+  }
+  float max_x = 0.5 * GetRegionLength(def.room(), region.rectangle().x_length());
+  float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
+  auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
+  auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
+  return glm::vec2(x_offset + distribution_x(*app->GetRandomGenerator()),
+                   y_offset + distribution_y(*app->GetRandomGenerator()));
+}
+
+glm::vec3 GetNewTargetPosition(const ScenarioDef& def,
+                               TargetManager* target_manager,
+                               Application* app) {
+  for (int i = 0; i < 30; ++i) {
+    glm::vec2 candidate_pos = GetNewCandidateTargetPosition(def, target_manager, app);
+
+    if (def.room().has_circular_room()) {
+      glm::vec3 pos;
+      pos.z = candidate_pos.y;
+
+      float radius = def.room().circular_room().radius() - (0.7 * def.static_def().target_radius());
+      glm::vec2 to_rotate(0, radius);
+      glm::vec2 rotated = RotateDegrees(to_rotate, -1 * candidate_pos.x);
+
+      pos.x = rotated.x;
+      pos.y = rotated.y;
+      if (AreNoneWithinDistance(
+              pos, def.static_def().target_placement_strategy().min_distance(), target_manager)) {
+        return pos;
+      }
+    }
+
+    if (def.room().has_simple_room()) {
+      if (AreNoneWithinDistanceOnWall(candidate_pos,
+                                      def.static_def().target_placement_strategy().min_distance(),
+                                      target_manager)) {
+        glm::vec3 pos;
+        pos.x = candidate_pos.x;
+        pos.z = candidate_pos.y;
+        float radius = def.static_def().target_radius();
+        // Make sure the target does not clip throug wall
+        pos.y = -1 * (radius + 0.5);
+        return pos;
+      }
     }
   }
+
+  app->logger()->warn("Unable to place target in scenario {}", def.scenario_id());
+  return glm::vec3();
 }
 
 Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Application* app) {
-  glm::vec2 pos = GetNewTargetPosition(def, target_manager, app);
+  glm::vec3 pos = GetNewTargetPosition(def, target_manager, app);
   Target t;
-  t.position.x = pos.x;
-  t.position.z = pos.y;
-
+  t.position = pos;
   t.radius = def.static_def().target_radius();
-  // Make sure the target does not clip throug wall
-  t.position.y = -1 * (t.radius + 0.5);
   return t;
 }
 

@@ -49,9 +49,9 @@ void HomeScreen::Run(Application* app) {
     *default_wall.mutable_camera_position() = ToStoredVec3(0, -100.0f, 0);
 
     Room circular_wall;
-    circular_wall.mutable_circular_room()->set_height(150);
-    circular_wall.mutable_circular_room()->set_radius(100);
-    *circular_wall.mutable_camera_position() = ToStoredVec3(0, -100.0f, 0);
+    circular_wall.mutable_circular_room()->set_height(100);
+    circular_wall.mutable_circular_room()->set_radius(150);
+    *circular_wall.mutable_camera_position() = ToStoredVec3(0, 50, 0);
 
     ScenarioDef base_static_def;
     base_static_def.set_duration_seconds(duration_seconds);
@@ -111,6 +111,23 @@ void HomeScreen::Run(Application* app) {
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("Settings", sz)) {
       open_settings = true;
+    }
+    if (ImGui::Button("Start Circle", sz)) {
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("circle_test");
+      *def.mutable_room() = circular_wall;
+      def.mutable_static_def()->set_num_targets(5);
+      def.mutable_static_def()->set_target_radius(2.5);
+
+      TargetPlacementStrategy* strat =
+          def.mutable_static_def()->mutable_target_placement_strategy();
+      strat->clear_regions();
+
+      TargetRegion* region = strat->add_regions();
+      region->mutable_rectangle()->mutable_x_length()->set_absolute_value(35);
+      region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.5);
+
+      scenario_to_start = def;
     }
     if (ImGui::Button("Start Nicky EZ PZ", sz)) {
       ScenarioDef def = base_1w_def;
