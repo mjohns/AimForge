@@ -25,5 +25,4 @@ message StoredColor {
   int32 g = 2;
   int32 b = 3;
   string hex = 4;
-  float alpha = 5;
 }

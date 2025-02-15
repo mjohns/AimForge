@@ -154,12 +154,13 @@ void SphereRenderer::SetProjection(const glm::mat4& projection) {
   shader_.SetMat4("projection", projection);
 }
 
-void SphereRenderer::Draw(const glm::mat4& view, const glm::vec4& color, const std::vector<Sphere>& spheres) {
+void SphereRenderer::Draw(const glm::mat4& view,
+                          const glm::vec3& color,
+                          const std::vector<Sphere>& spheres) {
   shader_.Use();
   shader_.SetMat4("view", view);
 
-  glm::vec3 color3 = color;
-  shader_.SetVec3("quad_color", color3);
+  shader_.SetVec3("quad_color", color);
 
   for (const auto& sphere : spheres) {
     glm::mat4 model(1.f);
