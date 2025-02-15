@@ -205,8 +205,9 @@ void HomeScreen::Run(Application* app) {
     if (ImGui::Button("Start 1w1ts vertical alternate", sz)) {
       ScenarioDef def = base_1w_def;
       def.set_scenario_id("1w1ts_intermediate_s5_vertical_alternate");
-      def.mutable_static_def()->set_num_targets(1);
+      def.mutable_static_def()->set_num_targets(2);
       def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+      def.mutable_static_def()->set_newest_target_is_ghost(true);
       TargetPlacementStrategy* strat =
           def.mutable_static_def()->mutable_target_placement_strategy();
       strat->clear_regions();
