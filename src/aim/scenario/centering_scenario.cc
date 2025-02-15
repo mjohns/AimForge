@@ -74,8 +74,18 @@ class CenteringScenario : public Scenario {
   void Initialize() override {
     Target target;
     target.radius = def_.centering_def().target_width();
-    target.position =
-        ToVec3(def_.centering_def().start_position()) + (start_to_end_ * initial_distance_offset_);
+
+    Target start_target = target;
+    start_target.position = start_;
+    start_target.is_ghost = true;
+
+    Target end_target = start_target;
+    end_target.position = end_;
+    target_manager_.AddTarget(start_target);
+    target_manager_.AddTarget(end_target);
+
+
+    target.position = start_ + (start_to_end_ * initial_distance_offset_);
 
     // Look a little in front of the starting position
     glm::vec3 initial_look_at =

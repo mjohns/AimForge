@@ -23,4 +23,5 @@ message Theme {
 
   CrosshairTheme crosshair = 6;
   StoredColor target_color = 7;
+  StoredColor ghost_target_color = 8;
 }

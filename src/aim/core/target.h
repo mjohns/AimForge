@@ -14,6 +14,15 @@ struct Target {
   glm::vec3 position{};
   float radius = 1.0f;
   bool hidden = false;
+  bool is_ghost = false;
+
+  bool CanHit() const {
+    return !hidden && !is_ghost;
+  }
+
+  bool ShouldDraw() const {
+    return !hidden;
+  }
 };
 
 class TargetManager {

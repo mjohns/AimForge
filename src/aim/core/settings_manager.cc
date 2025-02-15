@@ -28,6 +28,7 @@ Theme GetDefaultTheme() {
   *t.mutable_side_appearance()->mutable_color() = ToStoredColor(0.65);
 
   *t.mutable_target_color() = ToStoredColor(0);
+  *t.mutable_ghost_target_color() = ToStoredColor(0.65);
   return t;
 }
 
@@ -61,6 +62,7 @@ Theme GetSolarizedLightTheme() {
   *t.mutable_roof_appearance()->mutable_color() = ToStoredColor("#d9d3bf");
 
   *t.mutable_target_color() = base03;
+  *t.mutable_ghost_target_color() = base01;
 
   return t;
 }

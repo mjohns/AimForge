@@ -637,6 +637,7 @@ class Theme final : public ::google::protobuf::Message
     kFloorAppearanceFieldNumber = 5,
     kCrosshairFieldNumber = 6,
     kTargetColorFieldNumber = 7,
+    kGhostTargetColorFieldNumber = 8,
   };
   // string name = 1;
   bool has_name() const;
@@ -745,13 +746,28 @@ class Theme final : public ::google::protobuf::Message
   ::aim::StoredColor* _internal_mutable_target_color();
 
   public:
+  // .aim.StoredColor ghost_target_color = 8;
+  bool has_ghost_target_color() const;
+  void clear_ghost_target_color() ;
+  const ::aim::StoredColor& ghost_target_color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_ghost_target_color();
+  ::aim::StoredColor* mutable_ghost_target_color();
+  void set_allocated_ghost_target_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_ghost_target_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_ghost_target_color();
+
+  private:
+  const ::aim::StoredColor& _internal_ghost_target_color() const;
+  ::aim::StoredColor* _internal_mutable_ghost_target_color();
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Theme)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 7, 6,
-      22, 2>
+      3, 8, 7,
+      30, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -777,6 +793,7 @@ class Theme final : public ::google::protobuf::Message
     ::aim::WallAppearance* floor_appearance_;
     ::aim::CrosshairTheme* crosshair_;
     ::aim::StoredColor* target_color_;
+    ::aim::StoredColor* ghost_target_color_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1718,6 +1735,97 @@ inline void Theme::set_allocated_target_color(::aim::StoredColor* value) {
 
   _impl_.target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Theme.target_color)
+}
+
+// .aim.StoredColor ghost_target_color = 8;
+inline bool Theme::has_ghost_target_color() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.ghost_target_color_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredColor& Theme::_internal_ghost_target_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredColor* p = _impl_.ghost_target_color_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& Theme::ghost_target_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Theme.ghost_target_color)
+  return _internal_ghost_target_color();
+}
+inline void Theme::unsafe_arena_set_allocated_ghost_target_color(::aim::StoredColor* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.ghost_target_color_);
+  }
+  _impl_.ghost_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000080u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000080u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.ghost_target_color)
+}
+inline ::aim::StoredColor* Theme::release_ghost_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000080u;
+  ::aim::StoredColor* released = _impl_.ghost_target_color_;
+  _impl_.ghost_target_color_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredColor* Theme::unsafe_arena_release_ghost_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Theme.ghost_target_color)
+
+  _impl_._has_bits_[0] &= ~0x00000080u;
+  ::aim::StoredColor* temp = _impl_.ghost_target_color_;
+  _impl_.ghost_target_color_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredColor* Theme::_internal_mutable_ghost_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.ghost_target_color_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
+    _impl_.ghost_target_color_ = reinterpret_cast<::aim::StoredColor*>(p);
+  }
+  return _impl_.ghost_target_color_;
+}
+inline ::aim::StoredColor* Theme::mutable_ghost_target_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000080u;
+  ::aim::StoredColor* _msg = _internal_mutable_ghost_target_color();
+  // @@protoc_insertion_point(field_mutable:aim.Theme.ghost_target_color)
+  return _msg;
+}
+inline void Theme::set_allocated_ghost_target_color(::aim::StoredColor* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.ghost_target_color_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000080u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000080u;
+  }
+
+  _impl_.ghost_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Theme.ghost_target_color)
 }
 
 #ifdef __GNUC__

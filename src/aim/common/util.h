@@ -118,7 +118,7 @@ static Rgb HexToRgb(std::string hex) {
 }
 
 static ImU32 ToImCol32(const StoredColor& c) {
-  int a = c.has_alpha() ? kMaxRgbValue * c.alpha() : kMaxRgbValue;
+  int a = kMaxRgbValue;
   if (c.has_hex()) {
     auto v = HexToRgb(c.hex());
     return IM_COL32(v.r, v.g, v.b, a);
@@ -127,9 +127,7 @@ static ImU32 ToImCol32(const StoredColor& c) {
   return IM_COL32(c.r(), c.g(), c.b(), a);
 }
 
-static glm::vec4 ToVec4(const StoredColor& c) {
-  float a = c.has_alpha() ? c.alpha() : 1.0;
-
+static glm::vec3 ToVec3(const StoredColor& c) {
   int r = c.r();
   int g = c.g();
   int b = c.b();
@@ -140,7 +138,7 @@ static glm::vec4 ToVec4(const StoredColor& c) {
     b = v.b;
   }
 
-  return glm::vec4((float)r / kMaxRgbValue, (float)g / kMaxRgbValue, (float)b / kMaxRgbValue, a);
+  return glm::vec3((float)r / kMaxRgbValue, (float)g / kMaxRgbValue, (float)b / kMaxRgbValue);
 }
 
 static bool IsInt(float value) {

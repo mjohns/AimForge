@@ -60,7 +60,7 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
   float closest_hit_distance = 0.0f;
 
   for (auto& target : targets_) {
-    if (target.hidden) {
+    if (!target.CanHit()) {
       continue;
     }
     glm::vec3 intersection_point;
