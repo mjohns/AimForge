@@ -20,7 +20,7 @@
 namespace aim {
 namespace {
 
-constexpr const float kStartMovingDelaySeconds = 1;
+constexpr const float kStartMovingDelaySeconds = 0.2;
 
 TimedInvokerParams GetInvokerParams() {
   TimedInvokerParams params;
@@ -62,6 +62,7 @@ class CenteringScenario : public Scenario {
         end_(ToVec3(def.centering_def().end_position())) {
     start_to_end_ = glm::normalize(end_ - start_);
     distance_ = glm::length(start_ - end_);
+    initial_distance_offset_ = distance_ * 0.45;
     float time_seconds = def.centering_def().start_to_end_time_seconds();
     if (time_seconds <= 0) {
       time_seconds = 2;
@@ -73,7 +74,14 @@ class CenteringScenario : public Scenario {
   void Initialize() override {
     Target target;
     target.radius = def_.centering_def().target_width();
-    target.position = ToVec3(def_.centering_def().start_position());
+    target.position =
+        ToVec3(def_.centering_def().start_position()) + (start_to_end_ * initial_distance_offset_);
+
+    // Look a little in front of the starting position
+    glm::vec3 initial_look_at =
+        (target.position + (start_to_end_ * (0.07f * distance_))) - camera_.GetPosition();
+    PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
+    camera_.UpdatePitchYaw(pitch_yaw);
 
     target = target_manager_.AddTarget(target);
     target_ = target_manager_.GetMutableTarget(target.id);
@@ -105,7 +113,7 @@ class CenteringScenario : public Scenario {
     }
 
     float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
-    float travel_distance = travel_time_seconds * distance_per_second_;
+    float travel_distance = travel_time_seconds * distance_per_second_ + initial_distance_offset_;
 
     int num_times_across = travel_distance / distance_;
 
@@ -135,6 +143,7 @@ class CenteringScenario : public Scenario {
   glm::vec3 end_;
   glm::vec3 start_to_end_;
   float distance_;
+  float initial_distance_offset_;
   float distance_per_second_;
   Stopwatch hit_stopwatch_;
   Stopwatch shot_stopwatch_;

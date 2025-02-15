@@ -34,6 +34,14 @@ float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
   return glm::two_pi<float>() / dots_per_360;
 }
 
+PitchYaw GetPitchYawFromLookAt(const glm::vec3& front) {
+  auto v = glm::normalize(front);
+  PitchYaw result;
+  result.pitch = asin(v.z);
+  result.yaw = atan2(v.x, v.y);
+  return result;
+}
+
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov) {
   return glm::perspective(
       glm::radians(fov), (float)screen.width / (float)screen.height, 0.1f, 2000.0f);
