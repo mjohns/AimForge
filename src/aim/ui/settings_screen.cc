@@ -139,25 +139,34 @@ NavigationEvent QuickSettingsScreen::Run(Application* app) {
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
     float width = screen.width * 0.5;
-    float height = screen.height * 0.9;
+    float center_gap = 10;
 
     float x_start = (screen.width - width) * 0.5;
-    float y_start = (screen.height - height) * 0.5;
 
     // ImGui::SetCursorPos(ImVec2(x_start, y_start));
+    ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
 
-    for (int i = 10; i <= 80; ++i) {
-    }
-    for (auto& sens : sens_list) {
-      ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
-      if (ImGui::Button(sens.c_str(), sz)) {
-        cm_per_360 = sens;
+    ImVec2 button_sz = ImVec2((width - center_gap) / 2.0 , 40);
+    ImGui::Indent(x_start);
+    for (int i = 20; i <= 70; i += 10) {
+      std::string sens1 = std::format("{}", i);
+      std::string sens2 = std::format("{}", i + 5);
+      if (ImGui::Button(sens1.c_str(), button_sz)) {
+        cm_per_360 = sens1;
+      }
+      ImGui::SameLine();
+    // ImGui::SetCursorPos(ImVec2(x_start, y_start));
+      if (ImGui::Button(sens2.c_str(), button_sz)) {
+        cm_per_360 = sens2;
       }
     }
 
+    // ImGui::SetCursorPos(ImVec2(x_start, y_start));
+
     ImGui::Spacing();
-    ImGui::Indent(x_start);
+    ImGui::PushItemWidth(button_sz.x);
     ImGui::InputText("##CM_PER_360", &cm_per_360, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::PopItemWidth();
 
     ImGui::End();
 
