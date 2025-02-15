@@ -24,6 +24,7 @@ set(SOUND_FILES
   "shoot.ogg"
   "bass_drum.ogg"
   "short_bass.wav"
+  "body_shot.ogg"
 )
 
 set (SOUND_OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/sounds")
