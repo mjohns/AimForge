@@ -42,14 +42,14 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
   ScreenInfo screen = app->GetScreenInfo();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
-  glm::vec3 camera_position = ToVec3(replay.camera_position());
-
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
 
   app->GetRenderer()->SetProjection(projection);
 
   TargetManager target_manager;
-  Camera camera(camera_position);
+  Camera camera(replay.room().start_pitch(),
+                replay.room().start_yaw(),
+                ToVec3(replay.room().camera_position()));
 
   ScenarioTimer timer(replay.replay_fps());
   while (true) {

@@ -37,7 +37,8 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
       app_(app),
       metronome_(0, app),
       timer_(kReplayFps),
-      camera_(Camera(ToVec3(def.camera_position()))),
+      camera_(Camera(
+          def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
       replay_(std::make_unique<Replay>()) {}
 
 NavigationEvent Scenario::Run() {

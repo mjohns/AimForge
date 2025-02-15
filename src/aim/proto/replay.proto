@@ -34,8 +34,7 @@ message ReplayEvent {
 message Replay {
   Room room = 1;
   int32 replay_fps = 2;
-  StoredVec3 camera_position = 3;
-  repeated float pitch_yaws = 4;
-  repeated ReplayEvent events = 5;
-  bool is_poke_ball = 6;
+  repeated float pitch_yaws = 3;
+  repeated ReplayEvent events = 4;
+  bool is_poke_ball = 5;
 }

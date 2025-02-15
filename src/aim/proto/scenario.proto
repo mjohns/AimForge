@@ -16,9 +16,12 @@ message CircularRoom {
 }
 
 message Room {
+  StoredVec3 camera_position = 1;
+  float start_pitch = 2;
+  float start_yaw = 3;
   oneof type {
-    SimpleRoom simple_room = 1;
-    CircularRoom circular_room = 2;
+    SimpleRoom simple_room = 4;
+    CircularRoom circular_room = 5;
   }
 }
 
@@ -68,7 +71,6 @@ message ScenarioDef {
   string scenario_id = 1;
   float duration_seconds = 2;
   Room room = 3;
-  StoredVec3 camera_position = 4;
 
   oneof type {
     StaticScenarioDef static_def = 5;
