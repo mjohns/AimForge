@@ -181,6 +181,8 @@ NavigationEvent Scenario::Run() {
     }
   }
 
+  OnScenarioDone();
+
   if (stats_.shots_taken == 0) {
     return NavigationEvent::GoHome();
   }

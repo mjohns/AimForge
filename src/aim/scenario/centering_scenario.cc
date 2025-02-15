@@ -54,6 +54,19 @@ class CenteringScenario : public Scenario {
       return;
     }
 
+    auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+    if (data->is_click_held) {
+      shot_stopwatch_.Start();
+      if (maybe_hit_target_id.has_value()) {
+        hit_stopwatch_.Start();
+      } else {
+        hit_stopwatch_.Stop();
+      }
+    } else {
+      shot_stopwatch_.Stop();
+      hit_stopwatch_.Stop();
+    }
+
     float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
     float travel_distance = travel_time_seconds * distance_per_second_;
 
@@ -63,15 +76,20 @@ class CenteringScenario : public Scenario {
 
     float multiplier;
     if (num_times_across % 2 == 0) {
-        // Example: first time across.
-        // Going from start to end.
+      // Example: first time across.
+      // Going from start to end.
       multiplier = distance_across;
     } else {
-        // Going from end to start.
+      // Going from end to start.
       multiplier = distance_ - distance_across;
     }
 
     target_->position = start_ + (start_to_end_ * multiplier);
+  }
+
+  void OnScenarioDone() override {
+    stats_.targets_hit = hit_stopwatch_.GetElapsedSeconds() * 10;
+    stats_.shots_taken = shot_stopwatch_.GetElapsedSeconds() * 10;
   }
 
  private:
@@ -81,6 +99,8 @@ class CenteringScenario : public Scenario {
   glm::vec3 start_to_end_;
   float distance_;
   float distance_per_second_;
+  Stopwatch hit_stopwatch_;
+  Stopwatch shot_stopwatch_;
 };
 
 }  // namespace

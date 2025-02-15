@@ -39,6 +39,7 @@ class Scenario {
   virtual void Initialize() {}
   virtual void OnEvent(const SDL_Event& event) {}
   virtual void UpdateState(UpdateStateData* data) = 0;
+  virtual void OnScenarioDone() {}
 
   ScenarioDef def_;
   Application* app_;
