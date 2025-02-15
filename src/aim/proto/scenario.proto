@@ -85,6 +85,11 @@ message StaticScenarioDef {
   bool is_poke_ball = 3;
   bool remove_closest_target_on_miss = 4;
   TargetPlacementStrategy target_placement_strategy = 5;
+  // The most recently placed target will not be clickable and will be
+  // displayed with a separate color as determined by theme. This is
+  // useful for forced pathing so you know where the target will be
+  // but have to click in the correct order.
+  bool newest_target_is_ghost = 6;
 }
 
 message CenteringScenarioDef {

@@ -41,6 +41,12 @@ void TargetManager::RemoveTarget(uint16_t target_id) {
   }
 }
 
+void TargetManager::MarkAllAsNonGhost() {
+  for (Target& t : targets_) {
+    t.is_ghost = false;
+  }
+}
+
 Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_target) {
   if (new_target.id == 0) {
     auto new_id = ++target_id_counter_;
@@ -98,10 +104,12 @@ std::optional<uint16_t> TargetManager::GetNearestTargetOnStaticWall(const Camera
   float closest_distance = 100000;
   std::optional<uint16_t> closest_target_id;
   for (auto& target : targets_) {
-    float distance = glm::length(target.position - intersection_point);
-    if (distance < closest_distance) {
-      closest_target_id = target.id;
-      closest_distance = distance;
+    if (target.CanHit()) {
+      float distance = glm::length(target.position - intersection_point);
+      if (distance < closest_distance) {
+        closest_target_id = target.id;
+        closest_distance = distance;
+      }
     }
   }
   return closest_target_id;

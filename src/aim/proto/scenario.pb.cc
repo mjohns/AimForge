@@ -278,7 +278,8 @@ inline constexpr StaticScenarioDef::Impl_::Impl_(
         num_targets_{0},
         target_radius_{0},
         is_poke_ball_{false},
-        remove_closest_target_on_miss_{false} {}
+        remove_closest_target_on_miss_{false},
+        newest_target_is_ghost_{false} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR StaticScenarioDef::StaticScenarioDef(::_pbi::ConstantInitialized)
@@ -482,11 +483,13 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.is_poke_ball_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.remove_closest_target_on_miss_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.target_placement_strategy_),
+        PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.newest_target_is_ghost_),
         1,
         2,
         3,
         4,
         0,
+        5,
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -520,8 +523,8 @@ static const ::_pbi::MigrationSchema
         {86, 96, -1, sizeof(::aim::OvalTargetRegion)},
         {98, 109, -1, sizeof(::aim::TargetPlacementStrategy)},
         {112, 126, -1, sizeof(::aim::ScenarioDef)},
-        {131, 144, -1, sizeof(::aim::StaticScenarioDef)},
-        {149, 163, -1, sizeof(::aim::CenteringScenarioDef)},
+        {131, 145, -1, sizeof(::aim::StaticScenarioDef)},
+        {151, 165, -1, sizeof(::aim::CenteringScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -566,17 +569,17 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "room\030\003 \001(\0132\t.aim.Room\022,\n\nstatic_def\030\005 \001("
     "\0132\026.aim.StaticScenarioDefH\000\0222\n\rcentering"
     "_def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000B"
-    "\006\n\004type\"\275\001\n\021StaticScenarioDef\022\023\n\013num_tar"
+    "\006\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013num_tar"
     "gets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_"
     "poke_ball\030\003 \001(\010\022%\n\035remove_closest_target"
     "_on_miss\030\004 \001(\010\022\?\n\031target_placement_strat"
-    "egy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\""
-    "\276\001\n\024CenteringScenarioDef\022\024\n\014target_width"
-    "\030\001 \001(\002\022\025\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003"
-    " \001(\002\022\'\n\016start_position\030\004 \001(\0132\017.aim.Store"
-    "dVec3\022%\n\014end_position\030\005 \001(\0132\017.aim.Stored"
-    "Vec3\022\032\n\022show_start_and_end\030\006 \001(\010b\010editio"
-    "nsp\350\007"
+    "egy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\022"
+    "\036\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n\024Cent"
+    "eringScenarioDef\022\024\n\014target_width\030\001 \001(\002\022\025"
+    "\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016"
+    "start_position\030\004 \001(\0132\017.aim.StoredVec3\022%\n"
+    "\014end_position\030\005 \001(\0132\017.aim.StoredVec3\022\032\n\022"
+    "show_start_and_end\030\006 \001(\010b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -586,7 +589,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1525,
+    1557,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -3821,9 +3824,9 @@ StaticScenarioDef::StaticScenarioDef(
                offsetof(Impl_, num_targets_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, num_targets_),
-           offsetof(Impl_, remove_closest_target_on_miss_) -
+           offsetof(Impl_, newest_target_is_ghost_) -
                offsetof(Impl_, num_targets_) +
-               sizeof(Impl_::remove_closest_target_on_miss_));
+               sizeof(Impl_::newest_target_is_ghost_));
 
   // @@protoc_insertion_point(copy_constructor:aim.StaticScenarioDef)
 }
@@ -3837,9 +3840,9 @@ inline void StaticScenarioDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, target_placement_strategy_),
            0,
-           offsetof(Impl_, remove_closest_target_on_miss_) -
+           offsetof(Impl_, newest_target_is_ghost_) -
                offsetof(Impl_, target_placement_strategy_) +
-               sizeof(Impl_::remove_closest_target_on_miss_));
+               sizeof(Impl_::newest_target_is_ghost_));
 }
 StaticScenarioDef::~StaticScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.StaticScenarioDef)
@@ -3889,15 +3892,15 @@ const ::google::protobuf::internal::ClassData* StaticScenarioDef::GetClassData()
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 5, 1, 0, 2> StaticScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<3, 6, 1, 0, 2> StaticScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    5, 56,  // max_field_number, fast_idx_mask
+    6, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967232,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    6,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -3923,7 +3926,9 @@ const ::_pbi::TcParseTable<3, 5, 1, 0, 2> StaticScenarioDef::_table_ = {
     // .aim.TargetPlacementStrategy target_placement_strategy = 5;
     {::_pbi::TcParser::FastMtS1,
      {42, 0, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // bool newest_target_is_ghost = 6;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.newest_target_is_ghost_), 5>(),
+     {48, 5, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_)}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
@@ -3943,6 +3948,9 @@ const ::_pbi::TcParseTable<3, 5, 1, 0, 2> StaticScenarioDef::_table_ = {
     // .aim.TargetPlacementStrategy target_placement_strategy = 5;
     {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool newest_target_is_ghost = 6;
+    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_), _Internal::kHasBitsOffset + 5, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
   }}, {{
@@ -3961,10 +3969,10 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
     ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
     _impl_.target_placement_strategy_->Clear();
   }
-  if (cached_has_bits & 0x0000001eu) {
+  if (cached_has_bits & 0x0000003eu) {
     ::memset(&_impl_.num_targets_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.remove_closest_target_on_miss_) -
-        reinterpret_cast<char*>(&_impl_.num_targets_)) + sizeof(_impl_.remove_closest_target_on_miss_));
+        reinterpret_cast<char*>(&_impl_.newest_target_is_ghost_) -
+        reinterpret_cast<char*>(&_impl_.num_targets_)) + sizeof(_impl_.newest_target_is_ghost_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -4021,6 +4029,13 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
                 stream);
           }
 
+          // bool newest_target_is_ghost = 6;
+          if (cached_has_bits & 0x00000020u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                6, this_._internal_newest_target_is_ghost(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -4046,7 +4061,7 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000001fu) {
+          if (cached_has_bits & 0x0000003fu) {
             // .aim.TargetPlacementStrategy target_placement_strategy = 5;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
@@ -4069,6 +4084,10 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
             if (cached_has_bits & 0x00000010u) {
               total_size += 2;
             }
+            // bool newest_target_is_ghost = 6;
+            if (cached_has_bits & 0x00000020u) {
+              total_size += 2;
+            }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
                                                      &this_._impl_._cached_size_);
@@ -4084,7 +4103,7 @@ void StaticScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
       if (_this->_impl_.target_placement_strategy_ == nullptr) {
@@ -4106,6 +4125,9 @@ void StaticScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
     if (cached_has_bits & 0x00000010u) {
       _this->_impl_.remove_closest_target_on_miss_ = from._impl_.remove_closest_target_on_miss_;
     }
+    if (cached_has_bits & 0x00000020u) {
+      _this->_impl_.newest_target_is_ghost_ = from._impl_.newest_target_is_ghost_;
+    }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
@@ -4124,8 +4146,8 @@ void StaticScenarioDef::InternalSwap(StaticScenarioDef* PROTOBUF_RESTRICT other)
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.remove_closest_target_on_miss_)
-      + sizeof(StaticScenarioDef::_impl_.remove_closest_target_on_miss_)
+      PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_)
+      + sizeof(StaticScenarioDef::_impl_.newest_target_is_ghost_)
       - PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)>(
           reinterpret_cast<char*>(&_impl_.target_placement_strategy_),
           reinterpret_cast<char*>(&other->_impl_.target_placement_strategy_));

@@ -34,6 +34,8 @@ class TargetManager {
   Target ReplaceTarget(u16 target_id_to_replace, Target new_target);
   Target* GetMutableTarget(u16 target_id);
 
+  void MarkAllAsNonGhost();
+
   void Clear() {
     targets_.clear();
   }

@@ -221,8 +221,13 @@ class StaticScenario : public Scenario {
   void Initialize() override {
     replay_->set_is_poke_ball(def_.static_def().is_poke_ball());
 
-    for (int i = 0; i < def_.static_def().num_targets(); ++i) {
-      Target target = target_manager_.AddTarget(GetNewTarget(def_, &target_manager_, app_));
+    int num_targets = def_.static_def().num_targets();
+    for (int i = 0; i < num_targets; ++i) {
+      Target target = GetNewTarget(def_, &target_manager_, app_);
+      if (def_.static_def().newest_target_is_ghost() && i == (num_targets - 1)) {
+        target.is_ghost = true;
+      }
+      target = target_manager_.AddTarget(target);
       AddNewTargetEvent(target, 0);
     }
   }
@@ -247,11 +252,7 @@ class StaticScenario : public Scenario {
             data->force_render = true;
 
             auto hit_target_id = *maybe_hit_target_id;
-            Target new_target = target_manager_.ReplaceTarget(
-                hit_target_id, GetNewTarget(def_, &target_manager_, app_));
-
-            // Add replay events
-            AddNewTargetEvent(new_target);
+            AddNewTargetDuringRun(hit_target_id);
             AddKillTargetEvent(hit_target_id);
 
             current_poke_target_id_ = {};
@@ -278,11 +279,7 @@ class StaticScenario : public Scenario {
           data->force_render = true;
 
           auto hit_target_id = *maybe_hit_target_id;
-          Target new_target = target_manager_.ReplaceTarget(
-              hit_target_id, GetNewTarget(def_, &target_manager_, app_));
-
-          // Add replay events
-          AddNewTargetEvent(new_target);
+          AddNewTargetDuringRun(hit_target_id);
           AddKillTargetEvent(hit_target_id);
 
         } else {
@@ -292,15 +289,24 @@ class StaticScenario : public Scenario {
             std::optional<u16> target_id_to_remove =
                 target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);
             if (target_id_to_remove.has_value()) {
-              Target new_target = target_manager_.ReplaceTarget(
-                  *target_id_to_remove, GetNewTarget(def_, &target_manager_, app_));
-              AddNewTargetEvent(new_target);
+              AddNewTargetDuringRun(*target_id_to_remove);
               AddRemoveTargetEvent(*target_id_to_remove);
             }
           }
         }
       }
     }
+  }
+
+ private:
+  void AddNewTargetDuringRun(u16 old_target_id) {
+    Target target = GetNewTarget(def_, &target_manager_, app_);
+    if (def_.static_def().newest_target_is_ghost()) {
+      target_manager_.MarkAllAsNonGhost();
+      target.is_ghost = true;
+    }
+    target = target_manager_.ReplaceTarget(old_target_id, target);
+    AddNewTargetEvent(target);
   }
 
   std::optional<u16> current_poke_target_id_;
