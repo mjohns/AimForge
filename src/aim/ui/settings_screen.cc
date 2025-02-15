@@ -79,4 +79,92 @@ NavigationEvent SettingsScreen::Run(Application* app) {
   return NavigationEvent::Done();
 }
 
+NavigationEvent QuickSettingsScreen::Run(Application* app) {
+  SDL_GL_SetSwapInterval(1);  // Enable vsync
+  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
+
+  SettingsManager* mgr = app->GetSettingsManager();
+  Settings* current_settings = mgr->GetMutableCurrentSettings();
+
+  std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
+  cm_per_360.reserve(20);
+  const ScreenInfo& screen = app->GetScreenInfo();
+
+  const std::string original_cm_per_360 = cm_per_360;
+
+  std::vector<std::string> sens_list = {
+      "15",
+      "20",
+      "25",
+      "30",
+      "35",
+      "40",
+      "45",
+      "50",
+      "55",
+      "60",
+      "65",
+      "70",
+  };
+
+  while (true) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      ImGui_ImplSDL3_ProcessEvent(&event);
+      if (event.type == SDL_EVENT_QUIT) {
+        return NavigationEvent::Exit();
+      }
+      if (event.type == SDL_EVENT_MOUSE_WHEEL) {
+        if (event.wheel.y != 0) {
+            float cm_per_360_val = ParseFloat(cm_per_360);
+          cm_per_360 = std::format("{}", cm_per_360_val + event.wheel.y);
+        }
+      }
+      if (event.type == SDL_EVENT_KEY_UP) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_S) {
+          if (original_cm_per_360 != cm_per_360) {
+            float new_cm_per_360 = ParseFloat(cm_per_360);
+            if (new_cm_per_360 > 0) {
+              current_settings->set_cm_per_360(new_cm_per_360);
+              mgr->MarkDirty();
+            }
+          }
+          mgr->MaybeFlushToDisk();
+          return NavigationEvent::Done();
+        }
+      }
+    }
+
+    ImDrawList* draw_list = app->StartFullscreenImguiFrame();
+
+    float width = screen.width * 0.5;
+    float height = screen.height * 0.9;
+
+    float x_start = (screen.width - width) * 0.5;
+    float y_start = (screen.height - height) * 0.5;
+
+    // ImGui::SetCursorPos(ImVec2(x_start, y_start));
+
+    for (auto& sens : sens_list) {
+      ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
+      if (ImGui::Button(sens.c_str(), sz)) {
+        cm_per_360 = sens;
+      }
+    }
+
+    ImGui::Spacing();
+    ImGui::Indent(x_start);
+    ImGui::InputText("##CM_PER_360", &cm_per_360, ImGuiInputTextFlags_CharsDecimal);
+
+    ImGui::End();
+
+    if (app->StartRender()) {
+      app->FinishRender();
+    }
+  }
+
+  return NavigationEvent::Done();
+}
+
 }  // namespace aim
