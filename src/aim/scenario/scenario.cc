@@ -73,6 +73,7 @@ NavigationEvent Scenario::Run() {
   // Main loop
   bool stop_scenario = false;
   bool show_settings = false;
+  bool is_quick_settings = true;
   bool is_click_held = false;
   u64 num_state_updates = 0;
   while (!stop_scenario) {
@@ -80,13 +81,20 @@ NavigationEvent Scenario::Run() {
       // Need to pause.
       timer_.Pause();
       OnPause();
-      SettingsScreen settings_screen;
-      auto nav_event = settings_screen.Run(app_);
-      app_->logger()->flush();
+      NavigationEvent nav_event;
+      if (is_quick_settings) {
+        QuickSettingsScreen settings_screen;
+        nav_event = settings_screen.Run(app_);
+      } else {
+        SettingsScreen settings_screen;
+        nav_event = settings_screen.Run(app_);
+        app_->logger()->flush();
+      }
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
       show_settings = false;
+      is_quick_settings = false;
 
       // Need to refresh everything based on settings change
       settings = app_->GetSettingsManager()->GetCurrentSettings();
@@ -138,6 +146,10 @@ NavigationEvent Scenario::Run() {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_R) {
           return NavigationEvent::RestartLastScenario();
+        }
+        if (keycode == SDLK_S) {
+          show_settings = true;
+          is_quick_settings = true;
         }
         if (keycode == SDLK_ESCAPE) {
           show_settings = true;

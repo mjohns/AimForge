@@ -8,8 +8,11 @@ namespace aim {
 class SettingsScreen {
  public:
   NavigationEvent Run(Application* app);
+};
 
- private:
+class QuickSettingsScreen {
+ public:
+  NavigationEvent Run(Application* app);
 };
 
 }  // namespace aim
