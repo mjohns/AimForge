@@ -1601,6 +1601,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     kTargetWidthFieldNumber = 1,
     kTargetHeightFieldNumber = 2,
     kStartToEndTimeSecondsFieldNumber = 3,
+    kShowStartAndEndFieldNumber = 6,
   };
   // .aim.StoredVec3 start_position = 4;
   bool has_start_position() const;
@@ -1665,12 +1666,23 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
   void _internal_set_start_to_end_time_seconds(float value);
 
   public:
+  // bool show_start_and_end = 6;
+  bool has_show_start_and_end() const;
+  void clear_show_start_and_end() ;
+  bool show_start_and_end() const;
+  void set_show_start_and_end(bool value);
+
+  private:
+  bool _internal_show_start_and_end() const;
+  void _internal_set_show_start_and_end(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.CenteringScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 2,
+      3, 6, 2,
       0, 2>
       _table_;
 
@@ -1695,6 +1707,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     float target_width_;
     float target_height_;
     float start_to_end_time_seconds_;
+    bool show_start_and_end_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5041,6 +5054,34 @@ inline void CenteringScenarioDef::set_allocated_end_position(::aim::StoredVec3* 
 
   _impl_.end_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.CenteringScenarioDef.end_position)
+}
+
+// bool show_start_and_end = 6;
+inline bool CenteringScenarioDef::has_show_start_and_end() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void CenteringScenarioDef::clear_show_start_and_end() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.show_start_and_end_ = false;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline bool CenteringScenarioDef::show_start_and_end() const {
+  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.show_start_and_end)
+  return _internal_show_start_and_end();
+}
+inline void CenteringScenarioDef::set_show_start_and_end(bool value) {
+  _internal_set_show_start_and_end(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.show_start_and_end)
+}
+inline bool CenteringScenarioDef::_internal_show_start_and_end() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.show_start_and_end_;
+}
+inline void CenteringScenarioDef::_internal_set_show_start_and_end(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.show_start_and_end_ = value;
 }
 
 #ifdef __GNUC__
