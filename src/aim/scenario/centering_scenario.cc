@@ -20,18 +20,67 @@
 namespace aim {
 namespace {
 
+constexpr const float kStartMovingDelaySeconds = 1;
+
 class CenteringScenario : public Scenario {
  public:
-  explicit CenteringScenario(const ScenarioDef& def, Application* app) : Scenario(def, app) {}
+  explicit CenteringScenario(const ScenarioDef& def, Application* app)
+      : Scenario(def, app),
+        start_(ToVec3(def.centering_def().start_position())),
+        end_(ToVec3(def.centering_def().end_position())) {
+    start_to_end_ = glm::normalize(end_ - start_);
+    distance_ = glm::length(start_ - end_);
+    float time_seconds = def.centering_def().start_to_end_time_seconds();
+    if (time_seconds <= 0) {
+      time_seconds = 2;
+    }
+    distance_per_second_ = distance_ / time_seconds;
+  }
 
  protected:
   void Initialize() override {
-    // Add the target.
-    // Target target = target_manager_.AddTarget(GetNewTarget(def_, &target_manager_, app_));
+    Target target;
+    target.radius = def_.centering_def().target_width();
+    target.position = ToVec3(def_.centering_def().start_position());
+
+    target = target_manager_.AddTarget(target);
+    target_ = target_manager_.GetMutableTarget(target.id);
+
     // AddNewTargetEvent(target, 0);
   }
 
-  void UpdateState(UpdateStateData* data) override {}
+  void UpdateState(UpdateStateData* data) override {
+    if (timer_.GetElapsedSeconds() < kStartMovingDelaySeconds) {
+      return;
+    }
+
+    float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
+    float travel_distance = travel_time_seconds * distance_per_second_;
+
+    int num_times_across = travel_distance / distance_;
+
+    float distance_across = travel_distance - (num_times_across * distance_);
+
+    float multiplier;
+    if (num_times_across % 2 == 0) {
+        // Example: first time across.
+        // Going from start to end.
+      multiplier = distance_across;
+    } else {
+        // Going from end to start.
+      multiplier = distance_ - distance_across;
+    }
+
+    target_->position = start_ + (start_to_end_ * multiplier);
+  }
+
+ private:
+  Target* target_ = nullptr;
+  glm::vec3 start_;
+  glm::vec3 end_;
+  glm::vec3 start_to_end_;
+  float distance_;
+  float distance_per_second_;
 };
 
 }  // namespace

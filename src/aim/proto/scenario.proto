@@ -90,4 +90,7 @@ message StaticScenarioDef {
 message CenteringScenarioDef {
   float target_width = 1;
   float target_height = 2;
+  float start_to_end_time_seconds = 3;
+  StoredVec3 start_position = 4;
+  StoredVec3 end_position = 5;
 }

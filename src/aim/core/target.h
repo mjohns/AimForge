@@ -23,6 +23,7 @@ class TargetManager {
   Target AddTarget(Target t);
   void RemoveTarget(u16 target_id);
   Target ReplaceTarget(u16 target_id_to_replace, Target new_target);
+  Target* GetMutableTarget(u16 target_id);
 
   void Clear() {
     targets_.clear();
