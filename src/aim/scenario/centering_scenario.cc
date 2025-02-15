@@ -22,6 +22,38 @@ namespace {
 
 constexpr const float kStartMovingDelaySeconds = 1;
 
+TimedInvokerParams GetInvokerParams() {
+  TimedInvokerParams params;
+  params.interval_micros = 1000 * 110;
+  return params;
+}
+
+class TrackingSound {
+ public:
+  TrackingSound(Application* app)
+      : app_(app), invoker_(GetInvokerParams(), std::bind(&TrackingSound::PlaySound, this)) {
+    stopwatch_.Start();
+  }
+
+  void DoTick(bool is_hitting) {
+    is_hitting_ = is_hitting;
+    invoker_.MaybeInvoke(stopwatch_.GetElapsedMicros());
+  }
+
+ private:
+  void PlaySound() {
+    app_->GetSoundManager()->PlayShootSound();
+    if (is_hitting_) {
+      app_->GetSoundManager()->PlayHitSound();
+    }
+  }
+
+  Application* app_;
+  Stopwatch stopwatch_;
+  TimedInvoker invoker_;
+  bool is_hitting_ = false;
+};
+
 class CenteringScenario : public Scenario {
  public:
   explicit CenteringScenario(const ScenarioDef& def, Application* app)
@@ -56,15 +88,20 @@ class CenteringScenario : public Scenario {
 
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (data->is_click_held) {
+      if (!tracking_sound_) {
+        tracking_sound_ = std::make_unique<TrackingSound>(app_);
+      }
       shot_stopwatch_.Start();
       if (maybe_hit_target_id.has_value()) {
         hit_stopwatch_.Start();
       } else {
         hit_stopwatch_.Stop();
       }
+      tracking_sound_->DoTick(maybe_hit_target_id.has_value());
     } else {
       shot_stopwatch_.Stop();
       hit_stopwatch_.Stop();
+      tracking_sound_ = {};
     }
 
     float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
@@ -101,6 +138,7 @@ class CenteringScenario : public Scenario {
   float distance_per_second_;
   Stopwatch hit_stopwatch_;
   Stopwatch shot_stopwatch_;
+  std::unique_ptr<TrackingSound> tracking_sound_;
 };
 
 }  // namespace
