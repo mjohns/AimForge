@@ -75,15 +75,16 @@ class CenteringScenario : public Scenario {
     Target target;
     target.radius = def_.centering_def().target_width();
 
-    Target start_target = target;
-    start_target.position = start_;
-    start_target.is_ghost = true;
+    if (def_.centering_def().show_start_and_end()) {
+      Target start_target = target;
+      start_target.position = start_;
+      start_target.is_ghost = true;
+      target_manager_.AddTarget(start_target);
 
-    Target end_target = start_target;
-    end_target.position = end_;
-    target_manager_.AddTarget(start_target);
-    target_manager_.AddTarget(end_target);
-
+      Target end_target = start_target;
+      end_target.position = end_;
+      target_manager_.AddTarget(end_target);
+    }
 
     target.position = start_ + (start_to_end_ * initial_distance_offset_);
 
@@ -152,11 +153,10 @@ class CenteringScenario : public Scenario {
 
  private:
   void TrackingHoldDone() {
-      shot_stopwatch_.Stop();
-      hit_stopwatch_.Stop();
-      tracking_sound_ = {};
+    shot_stopwatch_.Stop();
+    hit_stopwatch_.Stop();
+    tracking_sound_ = {};
   }
-
 
   Target* target_ = nullptr;
   glm::vec3 start_;

@@ -868,7 +868,6 @@ class StoredColor final : public ::google::protobuf::Message
     kRFieldNumber = 1,
     kGFieldNumber = 2,
     kBFieldNumber = 3,
-    kAlphaFieldNumber = 5,
   };
   // string hex = 4;
   bool has_hex() const;
@@ -920,23 +919,12 @@ class StoredColor final : public ::google::protobuf::Message
   void _internal_set_b(::int32_t value);
 
   public:
-  // float alpha = 5;
-  bool has_alpha() const;
-  void clear_alpha() ;
-  float alpha() const;
-  void set_alpha(float value);
-
-  private:
-  float _internal_alpha() const;
-  void _internal_set_alpha(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.StoredColor)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 0,
+      2, 4, 0,
       27, 2>
       _table_;
 
@@ -960,7 +948,6 @@ class StoredColor final : public ::google::protobuf::Message
     ::int32_t r_;
     ::int32_t g_;
     ::int32_t b_;
-    float alpha_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1370,34 +1357,6 @@ inline void StoredColor::set_allocated_hex(std::string* value) {
     _impl_.hex_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.StoredColor.hex)
-}
-
-// float alpha = 5;
-inline bool StoredColor::has_alpha() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
-  return value;
-}
-inline void StoredColor::clear_alpha() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.alpha_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
-}
-inline float StoredColor::alpha() const {
-  // @@protoc_insertion_point(field_get:aim.StoredColor.alpha)
-  return _internal_alpha();
-}
-inline void StoredColor::set_alpha(float value) {
-  _internal_set_alpha(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.StoredColor.alpha)
-}
-inline float StoredColor::_internal_alpha() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.alpha_;
-}
-inline void StoredColor::_internal_set_alpha(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.alpha_ = value;
 }
 
 #ifdef __GNUC__
