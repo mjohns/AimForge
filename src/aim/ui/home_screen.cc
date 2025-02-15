@@ -130,6 +130,24 @@ void HomeScreen::Run(Application* app) {
       *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -40);
       scenario_to_start = def;
     }
+    if (ImGui::Button("Start Diagonal Centering 1", sz)) {
+      ScenarioDef def = base_static_def;
+      def.set_scenario_id("diagonal_centering_test_1");
+      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-30, -3, -30);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(30, -3, 30);
+      scenario_to_start = def;
+    }
+    if (ImGui::Button("Start Diagonal Centering 2", sz)) {
+      ScenarioDef def = base_static_def;
+      def.set_scenario_id("diagonal_centering_test_2");
+      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_start_to_end_time_seconds(2);
+      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-30, -3, 30);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(30, -3, -30);
+      scenario_to_start = def;
+    }
     if (ImGui::Button("Start Circle", sz)) {
       ScenarioDef def = base_1w_def;
       def.set_scenario_id("circle_test");
