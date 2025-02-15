@@ -75,6 +75,7 @@ message ScenarioDef {
 
   oneof type {
     StaticScenarioDef static_def = 5;
+    CenteringScenarioDef centering_def = 6;
   }
 }
 
@@ -84,4 +85,9 @@ message StaticScenarioDef {
   bool is_poke_ball = 3;
   bool remove_closest_target_on_miss = 4;
   TargetPlacementStrategy target_placement_strategy = 5;
+}
+
+message CenteringScenarioDef {
+  float target_width = 1;
+  float target_height = 2;
 }

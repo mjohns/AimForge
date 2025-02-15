@@ -24,11 +24,25 @@
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
+#include "aim/scenario/static_scenario.h"
+#include "aim/scenario/centering_scenario.h"
 #include "aim/ui/settings_screen.h"
 
 namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
+
+std::unique_ptr<Scenario> CreateScenarioForType(const ScenarioDef& def, Application* app) {
+  switch (def.type_case()) {
+    case ScenarioDef::kStaticDef:
+      return CreateStaticScenario(def, app);
+    case ScenarioDef::kCenteringDef:
+      return CreateCenteringScenario(def, app);
+    default:
+      break;
+  }
+  return {};
+}
 
 }  // namespace
 
@@ -171,6 +185,21 @@ NavigationEvent Scenario::Run() {
   StatsScreen stats_screen(
       def_.scenario_id(), stats_row.stats_id, std::move(replay_), stats_, app_);
   return stats_screen.Run();
+}
+
+NavigationEvent RunScenario(const ScenarioDef& def, Application* app) {
+  while (true) {
+    std::unique_ptr<Scenario> scenario = CreateScenarioForType(def, app);
+    if (!scenario) {
+      app->logger()->warn("Unable to make scenario for def: {}", def.DebugString());
+      return NavigationEvent::Done();
+    }
+    NavigationEvent nav_event = scenario->Run();
+    if (nav_event.type != NavigationEventType::RESTART_LAST_SCENARIO) {
+      app->logger()->flush();
+      return nav_event;
+    }
+  }
 }
 
 }  // namespace aim

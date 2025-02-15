@@ -104,6 +104,32 @@ struct CircularRoomDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
 
+inline constexpr CenteringScenarioDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        target_width_{0},
+        target_height_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR CenteringScenarioDef::CenteringScenarioDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct CenteringScenarioDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CenteringScenarioDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CenteringScenarioDefDefaultTypeInternal() {}
+  union {
+    CenteringScenarioDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CenteringScenarioDefDefaultTypeInternal _CenteringScenarioDef_default_instance_;
+
 inline constexpr Room::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -432,10 +458,12 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.duration_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.room_),
         ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
         2,
         1,
+        ~0u,
         ~0u,
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _internal_metadata_),
@@ -455,6 +483,18 @@ const ::uint32_t
         3,
         4,
         0,
+        PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.target_width_),
+        PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.target_height_),
+        0,
+        1,
 };
 
 static const ::_pbi::MigrationSchema
@@ -467,8 +507,9 @@ static const ::_pbi::MigrationSchema
         {74, 84, -1, sizeof(::aim::RectangleTargetRegion)},
         {86, 96, -1, sizeof(::aim::OvalTargetRegion)},
         {98, 109, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {112, 125, -1, sizeof(::aim::ScenarioDef)},
-        {129, 142, -1, sizeof(::aim::StaticScenarioDef)},
+        {112, 126, -1, sizeof(::aim::ScenarioDef)},
+        {131, 144, -1, sizeof(::aim::StaticScenarioDef)},
+        {149, 159, -1, sizeof(::aim::CenteringScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -481,6 +522,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_TargetPlacementStrategy_default_instance_._instance,
     &::aim::_ScenarioDef_default_instance_._instance,
     &::aim::_StaticScenarioDef_default_instance_._instance,
+    &::aim::_CenteringScenarioDef_default_instance_._instance,
 };
 const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
@@ -507,15 +549,19 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "(\0132\021.aim.RegionLength\"n\n\027TargetPlacement"
     "Strategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRe"
     "gion\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_"
-    "regions\030\003 \001(\010\"\213\001\n\013ScenarioDef\022\023\n\013scenari"
+    "regions\030\003 \001(\010\"\277\001\n\013ScenarioDef\022\023\n\013scenari"
     "o_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004"
     "room\030\003 \001(\0132\t.aim.Room\022,\n\nstatic_def\030\005 \001("
-    "\0132\026.aim.StaticScenarioDefH\000B\006\n\004type\"\275\001\n\021"
-    "StaticScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025"
-    "\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 "
-    "\001(\010\022%\n\035remove_closest_target_on_miss\030\004 \001"
-    "(\010\022\?\n\031target_placement_strategy\030\005 \001(\0132\034."
-    "aim.TargetPlacementStrategyb\010editionsp\350\007"
+    "\0132\026.aim.StaticScenarioDefH\000\0222\n\rcentering"
+    "_def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000B"
+    "\006\n\004type\"\275\001\n\021StaticScenarioDef\022\023\n\013num_tar"
+    "gets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_"
+    "poke_ball\030\003 \001(\010\022%\n\035remove_closest_target"
+    "_on_miss\030\004 \001(\010\022\?\n\031target_placement_strat"
+    "egy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\""
+    "C\n\024CenteringScenarioDef\022\024\n\014target_width\030"
+    "\001 \001(\002\022\025\n\rtarget_height\030\002 \001(\002b\010editionsp\350"
+    "\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -525,13 +571,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1280,
+    1401,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    10,
+    11,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -3267,6 +3313,19 @@ void ScenarioDef::set_allocated_static_def(::aim::StaticScenarioDef* static_def)
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.static_def)
 }
+void ScenarioDef::set_allocated_centering_def(::aim::CenteringScenarioDef* centering_def) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (centering_def) {
+    ::google::protobuf::Arena* submessage_arena = centering_def->GetArena();
+    if (message_arena != submessage_arena) {
+      centering_def = ::google::protobuf::internal::GetOwnedMessage(message_arena, centering_def, submessage_arena);
+    }
+    set_has_centering_def();
+    _impl_.type_.centering_def_ = centering_def;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.centering_def)
+}
 ScenarioDef::ScenarioDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -3308,6 +3367,9 @@ ScenarioDef::ScenarioDef(
       break;
       case kStaticDef:
         _impl_.type_.static_def_ = ::google::protobuf::Message::CopyConstruct<::aim::StaticScenarioDef>(arena, *from._impl_.type_.static_def_);
+        break;
+      case kCenteringDef:
+        _impl_.type_.centering_def_ = ::google::protobuf::Message::CopyConstruct<::aim::CenteringScenarioDef>(arena, *from._impl_.type_.centering_def_);
         break;
   }
 
@@ -3358,6 +3420,14 @@ void ScenarioDef::clear_type() {
       }
       break;
     }
+    case kCenteringDef: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.centering_def_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.centering_def_);
+      }
+      break;
+    }
     case TYPE_NOT_SET: {
       break;
     }
@@ -3402,16 +3472,16 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 2, 35, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    5, 24,  // max_field_number, fast_idx_mask
+    6, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967272,  // skipmap
+    4294967240,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
-    2,  // num_aux_entries
+    5,  // num_field_entries
+    3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -3445,9 +3515,13 @@ const ::_pbi::TcParseTable<2, 4, 2, 35, 2> ScenarioDef::_table_ = {
     // .aim.StaticScenarioDef static_def = 5;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 1,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.CenteringScenarioDef centering_def = 6;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.centering_def_), _Internal::kOneofCaseOffset + 0, 2,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>()},
+    {::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>()},
   }}, {{
     "\17\13\0\0\0\0\0\0"
     "aim.ScenarioDef"
@@ -3516,13 +3590,22 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                 stream);
           }
 
-          // .aim.StaticScenarioDef static_def = 5;
-          if (this_.type_case() == kStaticDef) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                5, *this_._impl_.type_.static_def_, this_._impl_.type_.static_def_->GetCachedSize(), target,
-                stream);
+          switch (this_.type_case()) {
+            case kStaticDef: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  5, *this_._impl_.type_.static_def_, this_._impl_.type_.static_def_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            case kCenteringDef: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  6, *this_._impl_.type_.centering_def_, this_._impl_.type_.centering_def_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            default:
+              break;
           }
-
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -3569,6 +3652,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
             case kStaticDef: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.static_def_);
+              break;
+            }
+            // .aim.CenteringScenarioDef centering_def = 6;
+            case kCenteringDef: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.centering_def_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -3624,6 +3713,15 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
               ::google::protobuf::Message::CopyConstruct<::aim::StaticScenarioDef>(arena, *from._impl_.type_.static_def_);
         } else {
           _this->_impl_.type_.static_def_->MergeFrom(from._internal_static_def());
+        }
+        break;
+      }
+      case kCenteringDef: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.centering_def_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::CenteringScenarioDef>(arena, *from._impl_.type_.centering_def_);
+        } else {
+          _this->_impl_.type_.centering_def_->MergeFrom(from._internal_centering_def());
         }
         break;
       }
@@ -4019,6 +4117,260 @@ void StaticScenarioDef::InternalSwap(StaticScenarioDef* PROTOBUF_RESTRICT other)
 }
 
 ::google::protobuf::Metadata StaticScenarioDef::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class CenteringScenarioDef::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<CenteringScenarioDef>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_._has_bits_);
+};
+
+CenteringScenarioDef::CenteringScenarioDef(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.CenteringScenarioDef)
+}
+CenteringScenarioDef::CenteringScenarioDef(
+    ::google::protobuf::Arena* arena, const CenteringScenarioDef& from)
+    : CenteringScenarioDef(arena) {
+  MergeFrom(from);
+}
+inline PROTOBUF_NDEBUG_INLINE CenteringScenarioDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void CenteringScenarioDef::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, target_width_),
+           0,
+           offsetof(Impl_, target_height_) -
+               offsetof(Impl_, target_width_) +
+               sizeof(Impl_::target_height_));
+}
+CenteringScenarioDef::~CenteringScenarioDef() {
+  // @@protoc_insertion_point(destructor:aim.CenteringScenarioDef)
+  SharedDtor(*this);
+}
+inline void CenteringScenarioDef::SharedDtor(MessageLite& self) {
+  CenteringScenarioDef& this_ = static_cast<CenteringScenarioDef&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* CenteringScenarioDef::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) CenteringScenarioDef(arena);
+}
+constexpr auto CenteringScenarioDef::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(CenteringScenarioDef),
+                                            alignof(CenteringScenarioDef));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull CenteringScenarioDef::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_CenteringScenarioDef_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &CenteringScenarioDef::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<CenteringScenarioDef>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &CenteringScenarioDef::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<CenteringScenarioDef>(), &CenteringScenarioDef::ByteSizeLong,
+            &CenteringScenarioDef::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_._cached_size_),
+        false,
+    },
+    &CenteringScenarioDef::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* CenteringScenarioDef::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 0, 2> CenteringScenarioDef::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // float target_height = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_height_)}},
+    // float target_width = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_width_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // float target_width = 1;
+    {PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_width_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float target_height = 2;
+    {PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_height_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+PROTOBUF_NOINLINE void CenteringScenarioDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.CenteringScenarioDef)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.target_width_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.target_height_) -
+        reinterpret_cast<char*>(&_impl_.target_width_)) + sizeof(_impl_.target_height_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* CenteringScenarioDef::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const CenteringScenarioDef& this_ = static_cast<const CenteringScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* CenteringScenarioDef::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const CenteringScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.CenteringScenarioDef)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // float target_width = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_target_width(), target);
+          }
+
+          // float target_height = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_target_height(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.CenteringScenarioDef)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t CenteringScenarioDef::ByteSizeLong(const MessageLite& base) {
+          const CenteringScenarioDef& this_ = static_cast<const CenteringScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t CenteringScenarioDef::ByteSizeLong() const {
+          const CenteringScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.CenteringScenarioDef)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
+            // float target_width = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 5;
+            }
+            // float target_height = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void CenteringScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<CenteringScenarioDef*>(&to_msg);
+  auto& from = static_cast<const CenteringScenarioDef&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.CenteringScenarioDef)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.target_width_ = from._impl_.target_width_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.target_height_ = from._impl_.target_height_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CenteringScenarioDef::CopyFrom(const CenteringScenarioDef& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.CenteringScenarioDef)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void CenteringScenarioDef::InternalSwap(CenteringScenarioDef* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_height_)
+      + sizeof(CenteringScenarioDef::_impl_.target_height_)
+      - PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_width_)>(
+          reinterpret_cast<char*>(&_impl_.target_width_),
+          reinterpret_cast<char*>(&other->_impl_.target_width_));
+}
+
+::google::protobuf::Metadata CenteringScenarioDef::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)
