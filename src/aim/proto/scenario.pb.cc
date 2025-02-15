@@ -192,7 +192,7 @@ inline constexpr CenteringScenarioDef::Impl_::Impl_(
         end_position_{nullptr},
         target_width_{0},
         target_height_{0},
-        start_to_end_time_seconds_{0},
+        speed_{0},
         show_start_and_end_{false} {}
 
 template <typename>
@@ -497,7 +497,7 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.target_width_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.target_height_),
-        PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.start_to_end_time_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.speed_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.start_position_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.end_position_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_.show_start_and_end_),
@@ -571,12 +571,12 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "poke_ball\030\003 \001(\010\022%\n\035remove_closest_target"
     "_on_miss\030\004 \001(\010\022\?\n\031target_placement_strat"
     "egy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\""
-    "\322\001\n\024CenteringScenarioDef\022\024\n\014target_width"
-    "\030\001 \001(\002\022\025\n\rtarget_height\030\002 \001(\002\022!\n\031start_t"
-    "o_end_time_seconds\030\003 \001(\002\022\'\n\016start_positi"
-    "on\030\004 \001(\0132\017.aim.StoredVec3\022%\n\014end_positio"
-    "n\030\005 \001(\0132\017.aim.StoredVec3\022\032\n\022show_start_a"
-    "nd_end\030\006 \001(\010b\010editionsp\350\007"
+    "\276\001\n\024CenteringScenarioDef\022\024\n\014target_width"
+    "\030\001 \001(\002\022\025\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003"
+    " \001(\002\022\'\n\016start_position\030\004 \001(\0132\017.aim.Store"
+    "dVec3\022%\n\014end_position\030\005 \001(\0132\017.aim.Stored"
+    "Vec3\022\032\n\022show_start_and_end\030\006 \001(\010b\010editio"
+    "nsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -586,7 +586,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1545,
+    1525,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -4287,9 +4287,9 @@ const ::_pbi::TcParseTable<3, 6, 2, 0, 2> CenteringScenarioDef::_table_ = {
     // float target_height = 2;
     {::_pbi::TcParser::FastF32S1,
      {21, 3, 0, PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_height_)}},
-    // float start_to_end_time_seconds = 3;
+    // float speed = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 4, 0, PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.start_to_end_time_seconds_)}},
+     {29, 4, 0, PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.speed_)}},
     // .aim.StoredVec3 start_position = 4;
     {::_pbi::TcParser::FastMtS1,
      {34, 0, 0, PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.start_position_)}},
@@ -4309,8 +4309,8 @@ const ::_pbi::TcParseTable<3, 6, 2, 0, 2> CenteringScenarioDef::_table_ = {
     // float target_height = 2;
     {PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.target_height_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float start_to_end_time_seconds = 3;
-    {PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.start_to_end_time_seconds_), _Internal::kHasBitsOffset + 4, 0,
+    // float speed = 3;
+    {PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.speed_), _Internal::kHasBitsOffset + 4, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.StoredVec3 start_position = 4;
     {PROTOBUF_FIELD_OFFSET(CenteringScenarioDef, _impl_.start_position_), _Internal::kHasBitsOffset + 0, 0,
@@ -4385,11 +4385,11 @@ PROTOBUF_NOINLINE void CenteringScenarioDef::Clear() {
                 2, this_._internal_target_height(), target);
           }
 
-          // float start_to_end_time_seconds = 3;
+          // float speed = 3;
           if (cached_has_bits & 0x00000010u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_start_to_end_time_seconds(), target);
+                3, this_._internal_speed(), target);
           }
 
           // .aim.StoredVec3 start_position = 4;
@@ -4457,7 +4457,7 @@ PROTOBUF_NOINLINE void CenteringScenarioDef::Clear() {
             if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
-            // float start_to_end_time_seconds = 3;
+            // float speed = 3;
             if (cached_has_bits & 0x00000010u) {
               total_size += 5;
             }
@@ -4506,7 +4506,7 @@ void CenteringScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, co
       _this->_impl_.target_height_ = from._impl_.target_height_;
     }
     if (cached_has_bits & 0x00000010u) {
-      _this->_impl_.start_to_end_time_seconds_ = from._impl_.start_to_end_time_seconds_;
+      _this->_impl_.speed_ = from._impl_.speed_;
     }
     if (cached_has_bits & 0x00000020u) {
       _this->_impl_.show_start_and_end_ = from._impl_.show_start_and_end_;

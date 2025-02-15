@@ -63,11 +63,11 @@ class CenteringScenario : public Scenario {
     start_to_end_ = glm::normalize(end_ - start_);
     distance_ = glm::length(start_ - end_);
     initial_distance_offset_ = distance_ * 0.45;
-    float time_seconds = def.centering_def().start_to_end_time_seconds();
-    if (time_seconds <= 0) {
-      time_seconds = 2;
+    float speed = def.centering_def().speed();
+    if (speed <= 0) {
+      speed = 10;
     }
-    distance_per_second_ = distance_ / time_seconds;
+    distance_per_second_ = speed;
   }
 
  protected:

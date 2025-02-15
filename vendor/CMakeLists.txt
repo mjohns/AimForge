@@ -59,6 +59,7 @@ set(FMT_INSTALL OFF)
 set(SPDLOG_FMT_EXTERNAL ON)
 set(protobuf_BUILD_TESTS OFF)
 set(ABSL_PROPAGATE_CXX_STD ON)
+set(GLM_BUILD_LIBRARY ON)
 
 add_subdirectory(imgui-setup)
 add_subdirectory(glad)
