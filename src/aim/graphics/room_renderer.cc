@@ -1,13 +1,13 @@
 #include "room_renderer.h"
 
 #include <glad/glad.h>
-#include <stb_image.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
+#include "aim/graphics/image.h"
 #include "aim/proto/theme.pb.h"
 
 namespace aim {
@@ -180,17 +180,21 @@ RoomRenderer::RoomRenderer(const std::filesystem::path& texture_folder)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // load image, create texture and generate mipmaps
-    int width, height, nr_channels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load(
-        (texture_folder / "marble1.jpg").string().c_str(), &width, &height, &nr_channels, 0);
-    if (data) {
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    Image image(texture_folder / "marble1.jpg");
+    if (image.is_loaded()) {
+      glTexImage2D(GL_TEXTURE_2D,
+                   0,
+                   GL_RGB,
+                   image.width(),
+                   image.height(),
+                   0,
+                   GL_RGB,
+                   GL_UNSIGNED_BYTE,
+                   image.data());
       glGenerateMipmap(GL_TEXTURE_2D);
     } else {
       std::cout << "Failed to load texture" << std::endl;
     }
-    stbi_image_free(data);
   }
 
   {
