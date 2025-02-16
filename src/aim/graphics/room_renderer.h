@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <glm/mat4x4.hpp>
 
 #include "aim/graphics/shader.h"
@@ -10,7 +11,8 @@ namespace aim {
 
 struct RoomRenderer {
  public:
-  RoomRenderer();
+  RoomRenderer(const std::filesystem::path& texture_folder);
+  ~RoomRenderer();
 
   void SetProjection(const glm::mat4& projection);
   void Draw(const Room& room, const Theme& theme, const glm::mat4& view);
@@ -26,7 +28,11 @@ struct RoomRenderer {
   unsigned int circular_wall_vao_;
   unsigned int circular_wall_num_vertices_;
 
-  Shader shader_;
+  unsigned int texture_;
+
+  // Color a quad all with a single color.
+  Shader simple_shader_;
+  Shader pattern_shader_;
 };
 
 }  // namespace aim

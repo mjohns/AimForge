@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 #include "aim/core/target.h"
 #include "aim/graphics/room_renderer.h"
 #include "aim/graphics/sphere_renderer.h"
@@ -10,7 +12,7 @@ namespace aim {
 
 class Renderer {
  public:
-  Renderer() {}
+  Renderer(const std::filesystem::path& texture_folder) : room_renderer_(texture_folder) {}
   void SetProjection(const glm::mat4& projection);
 
   void DrawScenario(const Room& room,
