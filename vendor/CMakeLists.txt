@@ -33,12 +33,6 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-  FlatBuffers
-  GIT_REPOSITORY https://github.com/google/flatbuffers.git
-  GIT_TAG v25.1.24
-)
-
-FetchContent_Declare(
   protobuf
   GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
   GIT_TAG        v29.3
@@ -61,5 +55,5 @@ add_subdirectory(sqlite3)
 add_subdirectory(implot)
 add_subdirectory(json)
 
-FetchContent_MakeAvailable(fmt SDL3 SDL_mixer spdlog glm FlatBuffers protobuf)
+FetchContent_MakeAvailable(fmt SDL3 SDL_mixer spdlog glm protobuf)
 
