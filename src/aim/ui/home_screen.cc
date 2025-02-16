@@ -108,7 +108,8 @@ void HomeScreen::Run(Application* app) {
       duration_seconds = 10;
     }
 
-    float default_centering_speed = 40;
+    float default_centering_speed = 45;
+    float default_centering_radius = 1.2;
 
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("Settings", sz)) {
@@ -117,37 +118,51 @@ void HomeScreen::Run(Application* app) {
     if (ImGui::Button("Start Centering", sz)) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("centering_test");
-      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_target_width(default_centering_radius);
       def.mutable_centering_def()->set_speed(default_centering_speed);
       *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
       *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
       scenario_to_start = def;
     }
+    if (ImGui::Button("Start Overhead Centering", sz)) {
+      ScenarioDef def = base_static_def;
+      def.set_scenario_id("overhead_centering_test");
+      def.mutable_centering_def()->set_target_width(default_centering_radius);
+      def.mutable_centering_def()->set_speed(default_centering_speed);
+      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 50);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 50);
+      scenario_to_start = def;
+    }
     if (ImGui::Button("Start Vertical Centering", sz)) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("vertical_centering_test");
-      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_target_width(default_centering_radius);
       def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 40);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -40);
+      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 45);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -45);
       scenario_to_start = def;
     }
+    float diagonal = 35;
+    float neg_diagonal = -35;
     if (ImGui::Button("Start Diagonal Centering 1", sz)) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("diagonal_centering_test_1");
-      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_target_width(default_centering_radius);
       def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-30, -3, -30);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(30, -3, 30);
+      *def.mutable_centering_def()->mutable_start_position() =
+          ToStoredVec3(neg_diagonal, -3, neg_diagonal);
+      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, diagonal);
       scenario_to_start = def;
     }
     if (ImGui::Button("Start Diagonal Centering 2", sz)) {
       ScenarioDef def = base_static_def;
       def.set_scenario_id("diagonal_centering_test_2");
-      def.mutable_centering_def()->set_target_width(1.5);
+      def.mutable_centering_def()->set_target_width(default_centering_radius);
       def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-30, -3, 30);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(30, -3, -30);
+      *def.mutable_centering_def()->mutable_start_position() =
+          ToStoredVec3(neg_diagonal, -3, diagonal);
+      *def.mutable_centering_def()->mutable_end_position() =
+          ToStoredVec3(diagonal, -3, neg_diagonal);
       scenario_to_start = def;
     }
     if (ImGui::Button("Start Circle", sz)) {
@@ -191,8 +206,17 @@ void HomeScreen::Run(Application* app) {
       ScenarioDef def = base_1w_def;
       def.set_scenario_id("1w3ts_intermediate_s5_hard");
       def.mutable_static_def()->set_num_targets(3);
-      def.mutable_static_def()->set_target_radius(0.9);
+      def.mutable_static_def()->set_target_radius(1.05);
       def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+      scenario_to_start = def;
+    }
+    if (ImGui::Button("Start 1w3ts hard poke", sz)) {
+      ScenarioDef def = base_1w_def;
+      def.set_scenario_id("1w3ts_intermediate_s5_hard_poke");
+      def.mutable_static_def()->set_num_targets(3);
+      def.mutable_static_def()->set_target_radius(1.05);
+      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+      def.mutable_static_def()->set_is_poke_ball(true);
       scenario_to_start = def;
     }
     if (ImGui::Button("Start 1w1ts", sz)) {

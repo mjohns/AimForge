@@ -183,9 +183,10 @@ NavigationEvent Scenario::Run() {
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("cm/360: %.0f", settings.cm_per_360());
 
     // ~ Around 450k
-    ImGui::Text("ups: %.1f", num_state_updates / elapsed_seconds);
+    // ImGui::Text("ups: %.1f", num_state_updates / elapsed_seconds);
 
     ImGui::End();
 

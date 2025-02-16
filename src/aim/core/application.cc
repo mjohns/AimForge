@@ -145,6 +145,8 @@ int Application::Initialize() {
   }
 
   SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
+  float scale = SDL_GetWindowDisplayScale(sdl_window_);
+  logger_->info("SDL_GetWindowDisplayScale: {}", scale);
 
   SDL_GL_MakeCurrent(sdl_window_, gl_context_);
   LoadGlad();
@@ -152,12 +154,11 @@ int Application::Initialize() {
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
-  
-  // glEnable(GL_BLEND);  
+
+  // glEnable(GL_BLEND);
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   renderer_ = std::make_unique<Renderer>();
-
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -169,7 +170,7 @@ int Application::Initialize() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
   auto font_path = file_system_->GetBasePath("assets/fonts/Manrope.ttf");
-  ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 20);
+  ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 22);
   if (font == nullptr) {
     logger_->error("Unable to load font from: {}", font_path.string());
   }
