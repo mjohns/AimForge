@@ -54,6 +54,7 @@ add_subdirectory(glad)
 add_subdirectory(sqlite3)
 add_subdirectory(implot)
 add_subdirectory(json)
+add_subdirectory(stb)
 
 FetchContent_MakeAvailable(fmt SDL3 SDL_mixer spdlog glm protobuf)
 

@@ -1,6 +1,7 @@
 #include "room_renderer.h"
 
 #include <glad/glad.h>
+#include <stb_image.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
@@ -12,7 +13,7 @@
 namespace aim {
 namespace {
 
-const char* vertex_shader = R"AIMS(
+const char* simple_vertex_shader = R"AIMS(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 
@@ -25,7 +26,7 @@ void main() {
 }
 )AIMS";
 
-const char* fragment_shader = R"AIMS(
+const char* simple_fragment_shader = R"AIMS(
 #version 330 core
 out vec4 FragColor;
 
@@ -33,6 +34,37 @@ uniform vec3 quad_color;
 
 void main() {
   FragColor = vec4(quad_color, 1.0f);
+}
+)AIMS";
+
+const char* pattern_vertex_shader = R"AIMS(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aTexCoord;
+
+uniform mat4 view;
+uniform mat4 model;
+uniform mat4 projection;
+
+out vec2 TexCoord;
+
+void main() {
+  gl_Position = projection * view * model * vec4(aPos, 1.0f);
+  TexCoord = vec2(1 - aTexCoord.x, 1 - aTexCoord.y);
+}
+)AIMS";
+
+const char* pattern_fragment_shader = R"AIMS(
+#version 330 core
+out vec4 FragColor;
+
+in vec2 TexCoord;
+
+uniform sampler2D texture1;
+
+void main() {
+  vec4 texColor = texture(texture1, TexCoord);
+  FragColor = vec4(texColor.x, texColor.y, texColor.z, 1.0f);
 }
 )AIMS";
 
@@ -91,17 +123,33 @@ std::vector<float> GenerateCircularWallVertices(int num_segments) {
 
 }  // namespace
 
-RoomRenderer::RoomRenderer() : shader_(Shader(vertex_shader, fragment_shader)) {
+RoomRenderer::~RoomRenderer() {
+  glDeleteVertexArrays(1, &quad_vao_);
+  glDeleteBuffers(1, &quad_vbo_);
+
+  glDeleteVertexArrays(1, &circular_wall_vao_);
+  glDeleteBuffers(1, &circular_wall_vbo_);
+}
+
+RoomRenderer::RoomRenderer(const std::filesystem::path& texture_folder)
+    : simple_shader_(Shader(simple_vertex_shader, simple_fragment_shader)),
+      pattern_shader_(Shader(pattern_vertex_shader, pattern_fragment_shader)) {
   {
     // clang-format off
     float quad_vertices[] = {
-          0.5f, 0.0f, -0.5f,
-          0.5f, 0.0f, 0.5f,
-          -0.5f, 0.0f, 0.5f,
+          // bottom right
+          0.5f, 0.0f, -0.5f,  1.0f, 0.0f,
+          // top right
+          0.5f, 0.0f, 0.5f,   1.0f, 1.0f,
+          //  top left
+          -0.5f, 0.0f, 0.5f,  0.0f, 1.0f,
 
-          -0.5f, 0.0f, 0.5f,
-          -0.5f, 0.0f, -0.5f,
-          0.5f, 0.0f, -0.5f,
+          //  top left
+          -0.5f, 0.0f, 0.5f,  0.0f, 1.0f,
+          // bottom left
+          -0.5f, 0.0f, -0.5f,  0.0f, 0.0f,
+          // bottom right
+          0.5f, 0.0f, -0.5f,   1.0f, 0.0f,
     };
     // clang-format on
 
@@ -114,9 +162,37 @@ RoomRenderer::RoomRenderer() : shader_(Shader(vertex_shader, fragment_shader)) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices), quad_vertices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    // texture attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // TEXTURE
+    glGenTextures(1, &texture_);
+    glBindTexture(GL_TEXTURE_2D, texture_);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // load image, create texture and generate mipmaps
+    int width, height, nr_channels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(
+        (texture_folder / "marble1.jpg").string().c_str(), &width, &height, &nr_channels, 0);
+    if (data) {
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+      glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+      std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
   }
+
   {
     std::vector<float> vertices = GenerateCircularWallVertices(1000);
     circular_wall_num_vertices_ = vertices.size() / 3;
@@ -136,8 +212,11 @@ RoomRenderer::RoomRenderer() : shader_(Shader(vertex_shader, fragment_shader)) {
 }
 
 void RoomRenderer::SetProjection(const glm::mat4& projection) {
-  shader_.Use();
-  shader_.SetMat4("projection", projection);
+  simple_shader_.Use();
+  simple_shader_.SetMat4("projection", projection);
+
+  pattern_shader_.Use();
+  pattern_shader_.SetMat4("projection", projection);
 }
 
 void RoomRenderer::Draw(const Room& room, const Theme& theme, const glm::mat4& view) {
@@ -152,8 +231,8 @@ void RoomRenderer::Draw(const Room& room, const Theme& theme, const glm::mat4& v
 void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
                                     const Theme& theme,
                                     const glm::mat4& view) {
-  shader_.Use();
-  shader_.SetMat4("view", view);
+  simple_shader_.Use();
+  simple_shader_.SetMat4("view", view);
 
   glm::vec3 wall_color(ToVec3(theme.front_appearance().color()));
   glm::vec3 floor_color(ToVec3(theme.floor_appearance().color()));
@@ -164,13 +243,13 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
 
   {
     // Floor wall
-    shader_.SetVec3("quad_color", floor_color);
+    simple_shader_.SetVec3("quad_color", floor_color);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0, 0, -0.5 * height));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-    shader_.SetMat4("model", model);
+    simple_shader_.SetMat4("model", model);
 
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
@@ -178,23 +257,23 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
 
   {
     // Top wall
-    shader_.SetVec3("quad_color", top_color);
+    simple_shader_.SetVec3("quad_color", top_color);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0, 0, 0.5 * height));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-    shader_.SetMat4("model", model);
+    simple_shader_.SetMat4("model", model);
 
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
   }
 
   {
-    shader_.SetVec3("quad_color", wall_color);
+    simple_shader_.SetVec3("quad_color", wall_color);
     glm::mat4 model(1.f);
     model = glm::scale(model, glm::vec3(room.radius(), room.radius(), height));
-    shader_.SetMat4("model", model);
+    simple_shader_.SetMat4("model", model);
     glBindVertexArray(circular_wall_vao_);
     glDrawArrays(GL_TRIANGLES, 0, circular_wall_num_vertices_);
   }
@@ -203,8 +282,9 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
 void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
                                   const Theme& theme,
                                   const glm::mat4& view) {
-  shader_.Use();
-  shader_.SetMat4("view", view);
+  Shader* shader = &simple_shader_;
+  shader->Use();
+  shader->SetMat4("view", view);
 
   i32 height = room.height();
   i32 width = room.width();
@@ -216,24 +296,41 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
 
   {
     // Back wall
-    shader_.SetVec3("quad_color", wall_color);
+    bool use_texture = false;
+    if (use_texture) {
+      pattern_shader_.Use();
+      pattern_shader_.SetMat4("view", view);
 
-    glm::mat4 model(1.f);
-    model = glm::scale(model, glm::vec3(width, 1.0f, height));
-    shader_.SetMat4("model", model);
-    glBindVertexArray(quad_vao_);
-    glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+      glm::mat4 model(1.f);
+      model = glm::scale(model, glm::vec3(width, 1.0f, height));
+      pattern_shader_.SetInt("texture1", 0);
+      pattern_shader_.SetMat4("model", model);
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, texture_);
+      glBindVertexArray(quad_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+
+      shader->Use();
+    } else {
+      shader->SetVec3("quad_color", wall_color);
+
+      glm::mat4 model(1.f);
+      model = glm::scale(model, glm::vec3(width, 1.0f, height));
+      shader->SetMat4("model", model);
+      glBindVertexArray(quad_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+    }
   }
 
   {
     // Floor wall
-    shader_.SetVec3("quad_color", floor_color);
+    shader->SetVec3("quad_color", floor_color);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, -0.5 * height));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(width, 1.0f, kMaxDistance));
-    shader_.SetMat4("model", model);
+    shader->SetMat4("model", model);
 
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
@@ -241,13 +338,13 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
 
   {
     // Left wall
-    shader_.SetVec3("quad_color", side_color);
+    shader->SetVec3("quad_color", side_color);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(-0.5 * width, -0.5 * kMaxDistance, 0));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
     model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
-    shader_.SetMat4("model", model);
+    shader->SetMat4("model", model);
 
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
@@ -255,13 +352,13 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
 
   {
     // Right wall
-    shader_.SetVec3("quad_color", side_color);
+    shader->SetVec3("quad_color", side_color);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0.5 * width, -0.5 * kMaxDistance, 0));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0, 0, 1));
     model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
-    shader_.SetMat4("model", model);
+    shader->SetMat4("model", model);
 
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
@@ -269,13 +366,13 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
 
   {
     // Top wall
-    shader_.SetVec3("quad_color", top_color);
+    shader->SetVec3("quad_color", top_color);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0.5 * height));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(width, 1.0f, kMaxDistance));
-    shader_.SetMat4("model", model);
+    shader->SetMat4("model", model);
 
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
