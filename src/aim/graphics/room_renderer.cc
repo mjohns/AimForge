@@ -50,7 +50,7 @@ out vec2 TexCoord;
 
 void main() {
   gl_Position = projection * view * model * vec4(aPos, 1.0f);
-  TexCoord = vec2(1 - aTexCoord.x, 1 - aTexCoord.y);
+  TexCoord = vec2(aTexCoord.x * 2.2, aTexCoord.y * 2.2);
 }
 )AIMS";
 
@@ -180,7 +180,7 @@ RoomRenderer::RoomRenderer(const std::filesystem::path& texture_folder)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // load image, create texture and generate mipmaps
-    Image image(texture_folder / "marble1.jpg");
+    Image image(texture_folder / "matte_stack.jpg");
     if (image.is_loaded()) {
       glTexImage2D(GL_TEXTURE_2D,
                    0,
@@ -300,7 +300,7 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
 
   {
     // Back wall
-    bool use_texture = false;
+    bool use_texture = true;
     if (use_texture) {
       pattern_shader_.Use();
       pattern_shader_.SetMat4("view", view);

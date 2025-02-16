@@ -77,6 +77,11 @@ NavigationEvent Scenario::Run() {
   bool is_click_held = false;
   u64 num_state_updates = 0;
   while (!stop_scenario) {
+    if (!(SDL_GetWindowFlags(app_->GetSdlWindow()) & SDL_WINDOW_INPUT_FOCUS)) {
+      // Pause the scenario if user alt-tabs etc.
+      show_settings = true;
+      is_quick_settings = false;
+    }
     if (show_settings) {
       // Need to pause.
       timer_.Pause();
