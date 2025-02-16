@@ -11,6 +11,7 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(${NAME}
   PUBLIC SDL3::SDL3
          SDL3_mixer::SDL3_mixer
+         json
          glm::glm-header-only
          imgui
          implot

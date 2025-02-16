@@ -3,11 +3,11 @@
 #include <absl/status/status.h>
 #include <google/protobuf/json/json.h>
 #include <google/protobuf/util/json_util.h>
+#include <nlohmann/json.h>
 
 #include <fstream>
 
 #include "aim/common/file_util.h"
-#include "aim/common/json.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
