@@ -158,6 +158,7 @@ int Application::Initialize() {
 
   renderer_ = std::make_unique<Renderer>();
 
+
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -166,6 +167,12 @@ int Application::Initialize() {
   (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+  auto font_path = file_system_->GetBasePath("assets/fonts/Manrope.ttf");
+  ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 20);
+  if (font == nullptr) {
+    logger_->error("Unable to load font from: {}", font_path.string());
+  }
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
