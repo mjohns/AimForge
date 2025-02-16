@@ -145,8 +145,11 @@ int Application::Initialize() {
   }
 
   SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
-  float scale = SDL_GetWindowDisplayScale(sdl_window_);
-  logger_->info("SDL_GetWindowDisplayScale: {}", scale);
+  float window_display_scale = SDL_GetWindowDisplayScale(sdl_window_);
+  float window_pixel_density = SDL_GetWindowPixelDensity(sdl_window_);
+  logger_->info("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
+                window_display_scale,
+                window_pixel_density);
 
   SDL_GL_MakeCurrent(sdl_window_, gl_context_);
   LoadGlad();

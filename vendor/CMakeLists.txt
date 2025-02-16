@@ -9,12 +9,6 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-  imgui
-  GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
-  GIT_TAG 4c2e7bb03557dd28f0a6b6809c3466485cc4c3df 
-)
-
-FetchContent_Declare(
   SDL3
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
   GIT_TAG release-3.2.0
@@ -61,10 +55,11 @@ set(protobuf_BUILD_TESTS OFF)
 set(ABSL_PROPAGATE_CXX_STD ON)
 set(GLM_BUILD_LIBRARY ON)
 
-add_subdirectory(imgui-setup)
+add_subdirectory(imgui)
 add_subdirectory(glad)
 add_subdirectory(sqlite3)
 add_subdirectory(implot)
+add_subdirectory(json)
 
-FetchContent_MakeAvailable(fmt imgui SDL3 SDL_mixer spdlog glm FlatBuffers protobuf)
+FetchContent_MakeAvailable(fmt SDL3 SDL_mixer spdlog glm FlatBuffers protobuf)
 
