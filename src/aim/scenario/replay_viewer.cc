@@ -40,12 +40,12 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
                                          const Theme& theme,
                                          const Crosshair& crosshair,
                                          Application* app) {
-  ScreenInfo screen = app->GetScreenInfo();
+  ScreenInfo screen = app->screen_info();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
 
-  app->GetRenderer()->SetProjection(projection);
+  app->renderer()->SetProjection(projection);
 
   TargetManager target_manager;
   Camera camera(replay.room().start_pitch(),
@@ -110,12 +110,12 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
 
     if (has_kill) {
       if (replay.is_poke_ball()) {
-        app->GetSoundManager()->PlayKillSound();
+        app->sound_manager()->PlayKillSound();
       } else {
-        app->GetSoundManager()->PlayKillSound().PlayShootSound();
+        app->sound_manager()->PlayKillSound().PlayShootSound();
       }
     } else if (has_miss) {
-      app->GetSoundManager()->PlayShootSound();
+      app->sound_manager()->PlayShootSound();
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
@@ -128,7 +128,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
     ImGui::End();
 
     if (app->StartRender(ImVec4(0, 0, 0, 1))) {
-      app->GetRenderer()->DrawScenario(
+      app->renderer()->DrawScenario(
           replay.room(), theme, target_manager.GetTargets(), look_at.transform);
       app->FinishRender();
     }

@@ -21,7 +21,7 @@ void HomeScreen::Run(Application* app) {
   while (!stop_scenario) {
     if (needs_reset) {
       SDL_GL_SetSwapInterval(1);  // Enable vsync
-      SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
+      SDL_SetWindowRelativeMouseMode(app->sdl_window(), false);
       needs_reset = false;
     }
     if (scenario_to_start) {

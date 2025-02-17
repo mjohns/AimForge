@@ -42,9 +42,9 @@ class TrackingSound {
 
  private:
   void PlaySound() {
-    app_->GetSoundManager()->PlayShootSound();
+    app_->sound_manager()->PlayShootSound();
     if (is_hitting_) {
-      app_->GetSoundManager()->PlayHitSound();
+      app_->sound_manager()->PlayHitSound();
     }
   }
 

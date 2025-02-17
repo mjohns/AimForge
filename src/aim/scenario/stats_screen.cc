@@ -65,12 +65,12 @@ StatsScreen::StatsScreen(std::string scenario_id,
       app_(app) {}
 
 NavigationEvent StatsScreen::Run() {
-  ScreenInfo screen = app_->GetScreenInfo();
-  Settings settings = app_->GetSettingsManager()->GetCurrentSettings();
+  ScreenInfo screen = app_->screen_info();
+  Settings settings = app_->settings_manager()->GetCurrentSettings();
 
   std::string score_string = MakeScoreString(stats_.targets_hit, stats_.shots_taken, stats_.score);
 
-  auto all_stats = app_->GetStatsDb()->GetStats(scenario_id_);
+  auto all_stats = app_->stats_db()->GetStats(scenario_id_);
   auto maybe_high_score_stats = GetHighScore(all_stats, all_stats.size());
   auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
 
@@ -94,14 +94,14 @@ NavigationEvent StatsScreen::Run() {
 
   // Show results page
   SDL_GL_SetSwapInterval(1);  // Enable vsync
-  SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), false);
+  SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
   bool view_replay = false;
   while (true) {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
       auto nav_event = replay_viewer.PlayReplay(
-          *replay_, app_->GetSettingsManager()->GetCurrentTheme(), settings.crosshair(), app_);
+          *replay_, app_->settings_manager()->GetCurrentTheme(), settings.crosshair(), app_);
       if (!nav_event.IsDone()) {
         return nav_event;
       }
@@ -139,7 +139,7 @@ NavigationEvent StatsScreen::Run() {
     }
     if (ImGui::Button("Save replay", sz)) {
       std::string file_name = std::format("replay_{}_{}.bin", scenario_id_, stats_id_);
-      std::ofstream outfile(app_->GetFileSystem()->GetUserDataPath(file_name), std::ios::binary);
+      std::ofstream outfile(app_->file_system()->GetUserDataPath(file_name), std::ios::binary);
       replay_->SerializeToOstream(&outfile);
       outfile.close();
     }
