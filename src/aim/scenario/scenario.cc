@@ -52,14 +52,14 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
       camera_(Camera(
           def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
       replay_(std::make_unique<Replay>()) {
-  theme_ = app->GetSettingsManager()->GetCurrentTheme();
+  theme_ = app->settings_manager()->GetCurrentTheme();
 }
 
 NavigationEvent Scenario::Run() {
-  ScreenInfo screen = app_->GetScreenInfo();
+  ScreenInfo screen = app_->screen_info();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
-  float dpi = app_->GetSettingsManager()->GetDpi();
-  Settings settings = app_->GetSettingsManager()->GetCurrentSettings();
+  float dpi = app_->settings_manager()->GetDpi();
+  Settings settings = app_->settings_manager()->GetCurrentSettings();
   float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
 
   *replay_->mutable_room() = def_.room();
@@ -67,8 +67,8 @@ NavigationEvent Scenario::Run() {
   Initialize();
 
   SDL_GL_SetSwapInterval(0);  // Disable vsync
-  SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
-  app_->GetRenderer()->SetProjection(projection);
+  SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
+  app_->renderer()->SetProjection(projection);
 
   // Main loop
   bool stop_scenario = false;
@@ -102,13 +102,13 @@ NavigationEvent Scenario::Run() {
       is_quick_settings = false;
 
       // Need to refresh everything based on settings change
-      settings = app_->GetSettingsManager()->GetCurrentSettings();
+      settings = app_->settings_manager()->GetCurrentSettings();
       radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
-      theme_ = app_->GetSettingsManager()->GetCurrentTheme();
+      theme_ = app_->settings_manager()->GetCurrentTheme();
       is_click_held = false;
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
-      SDL_SetWindowRelativeMouseMode(app_->GetSdlWindow(), true);
+      SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
       OnResume();
     }
 
@@ -196,7 +196,7 @@ NavigationEvent Scenario::Run() {
     ImGui::End();
 
     if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
-      app_->GetRenderer()->DrawScenario(
+      app_->renderer()->DrawScenario(
           def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
       app_->FinishRender();
     }
@@ -218,7 +218,7 @@ NavigationEvent Scenario::Run() {
   stats_row.num_kills = stats_.targets_hit;
   stats_row.num_shots = stats_.shots_taken;
   stats_row.score = stats_.score;
-  app_->GetStatsDb()->AddStats(def_.scenario_id(), &stats_row);
+  app_->stats_db()->AddStats(def_.scenario_id(), &stats_row);
 
   StatsScreen stats_screen(
       def_.scenario_id(), stats_row.stats_id, std::move(replay_), stats_, app_);

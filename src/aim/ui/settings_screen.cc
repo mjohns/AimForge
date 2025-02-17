@@ -13,15 +13,15 @@ namespace {}  // namespace
 
 NavigationEvent SettingsScreen::Run(Application* app) {
   SDL_GL_SetSwapInterval(1);  // Enable vsync
-  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
+  SDL_SetWindowRelativeMouseMode(app->sdl_window(), false);
 
-  SettingsManager* mgr = app->GetSettingsManager();
+  SettingsManager* mgr = app->settings_manager();
   Settings* current_settings = mgr->GetMutableCurrentSettings();
 
   std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
   cm_per_360.reserve(20);
   std::string theme_name = current_settings->theme_name();
-  const ScreenInfo& screen = app->GetScreenInfo();
+  const ScreenInfo& screen = app->screen_info();
 
   while (true) {
     if (!app->has_input_focus()) {
@@ -100,14 +100,14 @@ NavigationEvent SettingsScreen::Run(Application* app) {
 
 NavigationEvent QuickSettingsScreen::Run(Application* app) {
   SDL_GL_SetSwapInterval(1);  // Enable vsync
-  SDL_SetWindowRelativeMouseMode(app->GetSdlWindow(), false);
+  SDL_SetWindowRelativeMouseMode(app->sdl_window(), false);
 
-  SettingsManager* mgr = app->GetSettingsManager();
+  SettingsManager* mgr = app->settings_manager();
   Settings* current_settings = mgr->GetMutableCurrentSettings();
 
   std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
   cm_per_360.reserve(20);
-  const ScreenInfo& screen = app->GetScreenInfo();
+  const ScreenInfo& screen = app->screen_info();
 
   const std::string original_cm_per_360 = cm_per_360;
 

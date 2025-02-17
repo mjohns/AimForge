@@ -8,7 +8,7 @@ Metronome::Metronome(float target_bpm, Application* app) {
     TimedInvokerParams metronome_params;
     metronome_params.interval_micros = seconds_per_target * 1000000;
     maybe_invoker_ =
-        TimedInvoker(metronome_params, [=] { app->GetSoundManager()->PlayMetronomeSound(); });
+        TimedInvoker(metronome_params, [=] { app->sound_manager()->PlayMetronomeSound(); });
   }
 }
 

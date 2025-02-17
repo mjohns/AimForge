@@ -52,8 +52,8 @@ glm::vec2 GetRandomPositionInCircle(float max_radius_x, float max_radius_y, Appl
   auto dist_radius = std::uniform_real_distribution<float>(0, max_radius_x);
   auto dist_degrees = std::uniform_real_distribution<float>(0.01, 360);
 
-  float radius = dist_radius(*app->GetRandomGenerator());
-  float rotate_radians = glm::radians(dist_degrees(*app->GetRandomGenerator()));
+  float radius = dist_radius(*app->random_generator());
+  float rotate_radians = glm::radians(dist_degrees(*app->random_generator()));
 
   double cos_angle = cos(rotate_radians);
   double sin_angle = sin(rotate_radians);
@@ -94,7 +94,7 @@ std::optional<TargetRegion> GetRegionToUse(const ScenarioDef& def,
 
   auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
   for (const TargetRegion& region : strategy.regions()) {
-    float region_chance_roll = region_chance_dist(*app->GetRandomGenerator());
+    float region_chance_roll = region_chance_dist(*app->random_generator());
     float percent_chance = region.has_percent_chance() ? region.percent_chance() : 1;
     if (percent_chance >= region_chance_roll) {
       return region;
@@ -129,8 +129,8 @@ glm::vec2 GetNewCandidateTargetPosition(const ScenarioDef& def,
   float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
   auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
   auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
-  return glm::vec2(x_offset + distribution_x(*app->GetRandomGenerator()),
-                   y_offset + distribution_y(*app->GetRandomGenerator()));
+  return glm::vec2(x_offset + distribution_x(*app->random_generator()),
+                   y_offset + distribution_y(*app->random_generator()));
 }
 
 glm::vec3 GetNewTargetPosition(const ScenarioDef& def,
@@ -248,7 +248,7 @@ class StaticScenario : public Scenario {
           if (age_micros >= min_age_micros) {
             stats_.targets_hit++;
             stats_.shots_taken++;
-            app_->GetSoundManager()->PlayKillSound();
+            app_->sound_manager()->PlayKillSound();
             data->force_render = true;
 
             auto hit_target_id = *maybe_hit_target_id;
@@ -272,10 +272,10 @@ class StaticScenario : public Scenario {
       if (data->has_click) {
         stats_.shots_taken++;
         auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-        app_->GetSoundManager()->PlayShootSound();
+        app_->sound_manager()->PlayShootSound();
         if (maybe_hit_target_id.has_value()) {
           stats_.targets_hit++;
-          app_->GetSoundManager()->PlayKillSound();
+          app_->sound_manager()->PlayKillSound();
           data->force_render = true;
 
           auto hit_target_id = *maybe_hit_target_id;

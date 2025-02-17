@@ -39,39 +39,39 @@ class Application {
   bool StartRender(ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
   void FinishRender();
 
-  SDL_Window* GetSdlWindow() {
+  SDL_Window* sdl_window() {
     return sdl_window_;
   }
 
   bool has_input_focus() {
-    return SDL_GetWindowFlags(GetSdlWindow()) & SDL_WINDOW_INPUT_FOCUS;
+    return SDL_GetWindowFlags(sdl_window()) & SDL_WINDOW_INPUT_FOCUS;
   }
 
-  ScreenInfo GetScreenInfo() {
+  ScreenInfo screen_info() {
     return ScreenInfo(window_width_, window_height_);
   }
 
-  std::mt19937* GetRandomGenerator() {
+  std::mt19937* random_generator() {
     return &random_generator_;
   }
 
-  SoundManager* GetSoundManager() {
+  SoundManager* sound_manager() {
     return sound_manager_.get();
   }
 
-  StatsDb* GetStatsDb() {
+  StatsDb* stats_db() {
     return stats_db_.get();
   }
 
-  Renderer* GetRenderer() {
+  Renderer* renderer() {
     return renderer_.get();
   }
 
-  FileSystem* GetFileSystem() {
+  FileSystem* file_system() {
     return file_system_.get();
   }
 
-  SettingsManager* GetSettingsManager() {
+  SettingsManager* settings_manager() {
     return settings_manager_.get();
   }
 
