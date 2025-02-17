@@ -135,7 +135,7 @@ SettingsManager::~SettingsManager() {
 }
 
 absl::Status SettingsManager::Initialize() {
-  WriteJsonMessageToFile(theme_dirs_[0] / "default.json", GetDefaultTheme());
+  // WriteJsonMessageToFile(theme_dirs_[0] / "default.json", GetDefaultTheme());
 
   auto maybe_content = ReadFileContentAsString(settings_path_);
   if (maybe_content.has_value()) {
@@ -162,7 +162,7 @@ Theme SettingsManager::GetTheme(const std::string& theme_name) {
   }
 
   for (auto& dir : theme_dirs_) {
-    auto path = dir / theme_name;
+    auto path = dir / std::format("{}.json", theme_name);
     if (std::filesystem::exists(path)) {
       Theme theme;
       if (ReadJsonMessageFromFile(path, &theme)) {

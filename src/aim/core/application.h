@@ -43,6 +43,10 @@ class Application {
     return sdl_window_;
   }
 
+  bool has_input_focus() {
+    return SDL_GetWindowFlags(GetSdlWindow()) & SDL_WINDOW_INPUT_FOCUS;
+  }
+
   ScreenInfo GetScreenInfo() {
     return ScreenInfo(window_width_, window_height_);
   }
