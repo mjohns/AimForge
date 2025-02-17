@@ -5,7 +5,7 @@
 #include <format>
 #include <string>
 
-#include "aim/common/time_util.h"
+#include "aim/common/times.h"
 
 namespace aim {
 namespace {

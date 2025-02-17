@@ -2,7 +2,7 @@
 
 #include <optional>
 
-#include "aim/common/time_util.h"
+#include "aim/common/times.h"
 #include "aim/core/application.h"
 
 namespace aim {

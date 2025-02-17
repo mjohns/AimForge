@@ -18,7 +18,7 @@
 #include <memory>
 
 #include "aim/common/log.h"
-#include "aim/common/time_util.h"
+#include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/graphics/glad_loader.h"
 
@@ -91,8 +91,12 @@ int Application::Initialize() {
     absl::AddLogSink(absl_log_sink_.get());
   }
   stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
+  std::vector<std::filesystem::path> theme_dirs = {
+      file_system_->GetUserDataPath("assets/themes"),
+      file_system_->GetBasePath("assets/themes"),
+  };
   settings_manager_ =
-      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"));
+      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"), theme_dirs);
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
     logger_->error("Loading settings failed: {}", settings_status.message());

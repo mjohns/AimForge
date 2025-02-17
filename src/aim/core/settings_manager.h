@@ -3,6 +3,9 @@
 #include <absl/status/status.h>
 
 #include <filesystem>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -11,7 +14,8 @@ namespace aim {
 
 class SettingsManager {
  public:
-  explicit SettingsManager(const std::filesystem::path& settings_path);
+  explicit SettingsManager(const std::filesystem::path& settings_path,
+                           std::vector<std::filesystem::path> theme_dirs);
   ~SettingsManager();
 
   absl::Status Initialize();
@@ -39,6 +43,8 @@ class SettingsManager {
   std::filesystem::path settings_path_;
   FullSettings full_settings_;
   bool needs_save_ = false;
+  std::vector<std::filesystem::path> theme_dirs_;
+  std::unordered_map<std::string, Theme> theme_cache_;
 };
 
 }  // namespace aim

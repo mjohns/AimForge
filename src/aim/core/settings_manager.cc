@@ -7,7 +7,7 @@
 
 #include <fstream>
 
-#include "aim/common/file_util.h"
+#include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
@@ -124,8 +124,9 @@ FullSettings GetDefaultFullSettings() {
 
 }  // namespace
 
-SettingsManager::SettingsManager(const std::filesystem::path& settings_path)
-    : settings_path_(settings_path) {}
+SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
+                                 std::vector<std::filesystem::path> theme_dirs)
+    : theme_dirs_(std::move(theme_dirs)), settings_path_(settings_path) {}
 
 SettingsManager::~SettingsManager() {
   if (needs_save_) {
@@ -134,6 +135,8 @@ SettingsManager::~SettingsManager() {
 }
 
 absl::Status SettingsManager::Initialize() {
+  WriteJsonMessageToFile(theme_dirs_[0] / "default.json", GetDefaultTheme());
+
   auto maybe_content = ReadFileContentAsString(settings_path_);
   if (maybe_content.has_value()) {
     google::protobuf::json::ParseOptions opts;
@@ -150,14 +153,26 @@ absl::Status SettingsManager::Initialize() {
 }
 
 Theme SettingsManager::GetTheme(const std::string& theme_name) {
-  if (theme_name == "solarized_light") {
-    return GetSolarizedLightTheme();
+  if (theme_name.size() == 0) {
+    return GetDefaultTheme();
   }
-  if (theme_name == "textured") {
-    return GetTextureTheme();
+  auto it = theme_cache_.find(theme_name);
+  if (it != theme_cache_.end()) {
+    return it->second;
   }
-  return GetTextureTheme();
-  // return GetDefaultTheme();
+
+  for (auto& dir : theme_dirs_) {
+    auto path = dir / theme_name;
+    if (std::filesystem::exists(path)) {
+      Theme theme;
+      if (ReadJsonMessageFromFile(path, &theme)) {
+        theme_cache_[theme_name] = theme;
+        return theme;
+      }
+    }
+  }
+
+  return GetDefaultTheme();
 }
 
 Theme SettingsManager::GetCurrentTheme() {
@@ -212,25 +227,9 @@ void SettingsManager::MaybeFlushToDisk() {
   }
 }
 void SettingsManager::FlushToDisk() {
-  std::string json_string;
-  google::protobuf::json::PrintOptions opts;
-  opts.add_whitespace = true;
-  auto status = google::protobuf::util::MessageToJsonString(full_settings_, &json_string, opts);
-  if (!status.ok()) {
-    Logger::get()->error("Unable to serialize settings to json: {}", status.message());
-    return;
+  if (WriteJsonMessageToFile(settings_path_, full_settings_)) {
+    needs_save_ = false;
   }
-  int indent = 2;
-  nlohmann::json json_data = nlohmann::json::parse(json_string);
-  std::string formatted_json = json_data.dump(indent, ' ', true);
-
-  std::ofstream outfile(settings_path_);
-  if (!outfile.is_open()) {
-    Logger::get()->error("Unable to open settings file for writing: {}", settings_path_.string());
-  }
-  outfile << formatted_json << std::endl;
-  outfile.close();
-  needs_save_ = false;
 }
 
 }  // namespace aim
