@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "aim/common/file_util.h"
+#include "aim/common/log.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -156,7 +157,7 @@ Theme SettingsManager::GetTheme(const std::string& theme_name) {
     return GetTextureTheme();
   }
   return GetTextureTheme();
-  //return GetDefaultTheme();
+  // return GetDefaultTheme();
 }
 
 Theme SettingsManager::GetCurrentTheme() {
@@ -211,23 +212,25 @@ void SettingsManager::MaybeFlushToDisk() {
   }
 }
 void SettingsManager::FlushToDisk() {
-  needs_save_ = false;
-
-  // TODO: handle failure.
   std::string json_string;
   google::protobuf::json::PrintOptions opts;
   opts.add_whitespace = true;
   auto status = google::protobuf::util::MessageToJsonString(full_settings_, &json_string, opts);
-  // if (!status.ok())
+  if (!status.ok()) {
+    Logger::get()->error("Unable to serialize settings to json: {}", status.message());
+    return;
+  }
   int indent = 2;
   nlohmann::json json_data = nlohmann::json::parse(json_string);
   std::string formatted_json = json_data.dump(indent, ' ', true);
 
   std::ofstream outfile(settings_path_);
-  if (outfile.is_open()) {
-    outfile << formatted_json << std::endl;
-    outfile.close();
+  if (!outfile.is_open()) {
+    Logger::get()->error("Unable to open settings file for writing: {}", settings_path_.string());
   }
+  outfile << formatted_json << std::endl;
+  outfile.close();
+  needs_save_ = false;
 }
 
 }  // namespace aim

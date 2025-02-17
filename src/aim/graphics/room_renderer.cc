@@ -218,7 +218,7 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
   if (appearance.has_texture()) {
     Texture* texture = texture_manager_->GetTexture(appearance.texture().texture_name());
     if (texture == nullptr) {
-      // TODO: log error
+      // Too spammy to log this error?
       DrawWallSolidColor(model, view, glm::vec3(0.7));
       return;
     }

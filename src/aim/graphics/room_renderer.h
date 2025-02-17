@@ -5,7 +5,7 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/graphics/shader.h"
-#include "aim/graphics/texture_manager.h"
+#include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/proto/theme.pb.h"
 
