@@ -3,7 +3,9 @@
 #include <filesystem>
 #include <glm/mat4x4.hpp>
 
+#include "aim/common/simple_types.h"
 #include "aim/graphics/shader.h"
+#include "aim/graphics/texture_manager.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/proto/theme.pb.h"
 
@@ -11,7 +13,7 @@ namespace aim {
 
 struct RoomRenderer {
  public:
-  RoomRenderer(const std::filesystem::path& texture_folder);
+  explicit RoomRenderer(TextureManager* texture_manager);
   ~RoomRenderer();
 
   void SetProjection(const glm::mat4& projection);
@@ -21,6 +23,12 @@ struct RoomRenderer {
   void DrawSimpleRoom(const SimpleRoom& room, const Theme& theme, const glm::mat4& view);
   void DrawCircularRoom(const CircularRoom& room, const Theme& theme, const glm::mat4& view);
 
+  void DrawWall(const glm::mat4& model,
+                const glm::mat4& view,
+                const Wall& wall,
+                const WallAppearance& appearance);
+  void DrawWallSolidColor(const glm::mat4& model, const glm::mat4& view, const glm::vec3& color);
+
   unsigned int quad_vbo_;
   unsigned int quad_vao_;
 
@@ -28,11 +36,10 @@ struct RoomRenderer {
   unsigned int circular_wall_vao_;
   unsigned int circular_wall_num_vertices_;
 
-  unsigned int texture_;
-
-  // Color a quad all with a single color.
   Shader simple_shader_;
-  Shader pattern_shader_;
+  Shader texture_shader_;
+
+  TextureManager* texture_manager_;
 };
 
 }  // namespace aim

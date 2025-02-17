@@ -26,13 +26,18 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace aim {
 
-inline constexpr WallAppearance::Impl_::Impl_(
+inline constexpr WallTexture::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        color_{nullptr} {}
+        texture_name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        mix_color_{nullptr},
+        mix_percent_{0},
+        scale_{0} {}
 
 template <typename>
-PROTOBUF_CONSTEXPR WallAppearance::WallAppearance(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR WallTexture::WallTexture(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
@@ -40,16 +45,16 @@ PROTOBUF_CONSTEXPR WallAppearance::WallAppearance(::_pbi::ConstantInitialized)
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
-struct WallAppearanceDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR WallAppearanceDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~WallAppearanceDefaultTypeInternal() {}
+struct WallTextureDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WallTextureDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~WallTextureDefaultTypeInternal() {}
   union {
-    WallAppearance _instance;
+    WallTexture _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallAppearanceDefaultTypeInternal _WallAppearance_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallTextureDefaultTypeInternal _WallTexture_default_instance_;
 
 inline constexpr CrosshairTheme::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -76,6 +81,32 @@ struct CrosshairThemeDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CrosshairThemeDefaultTypeInternal _CrosshairTheme_default_instance_;
+
+inline constexpr WallAppearance::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR WallAppearance::WallAppearance(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct WallAppearanceDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WallAppearanceDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~WallAppearanceDefaultTypeInternal() {}
+  union {
+    WallAppearance _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallAppearanceDefaultTypeInternal _WallAppearance_default_instance_;
 
 inline constexpr Theme::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -130,16 +161,33 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::CrosshairTheme, _impl_.outline_color_),
         0,
         1,
-        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _internal_metadata_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallTexture, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallTexture, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_.color_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallTexture, _impl_.texture_name_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallTexture, _impl_.mix_color_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallTexture, _impl_.mix_percent_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallTexture, _impl_.scale_),
         0,
+        1,
+        2,
+        3,
+        ~0u,  // no _has_bits_
+        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _internal_metadata_),
+        ~0u,  // no _extensions_
+        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_._oneof_case_[0]),
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
+        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_.type_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -169,11 +217,13 @@ const ::uint32_t
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::CrosshairTheme)},
-        {12, 21, -1, sizeof(::aim::WallAppearance)},
-        {22, 38, -1, sizeof(::aim::Theme)},
+        {12, 24, -1, sizeof(::aim::WallTexture)},
+        {28, -1, -1, sizeof(::aim::WallAppearance)},
+        {39, 55, -1, sizeof(::aim::Theme)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_CrosshairTheme_default_instance_._instance,
+    &::aim::_WallTexture_default_instance_._instance,
     &::aim::_WallAppearance_default_instance_._instance,
     &::aim::_Theme_default_instance_._instance,
 };
@@ -182,17 +232,21 @@ const char descriptor_table_protodef_theme_2eproto[] ABSL_ATTRIBUTE_SECTION_VARI
     "\n\013theme.proto\022\003aim\032\014common.proto\"Z\n\016Cros"
     "shairTheme\022\037\n\005color\030\001 \001(\0132\020.aim.StoredCo"
     "lor\022\'\n\routline_color\030\002 \001(\0132\020.aim.StoredC"
-    "olor\"1\n\016WallAppearance\022\037\n\005color\030\001 \001(\0132\020."
-    "aim.StoredColor\"\315\002\n\005Theme\022\014\n\004name\030\001 \001(\t\022"
-    ",\n\017roof_appearance\030\002 \001(\0132\023.aim.WallAppea"
-    "rance\022,\n\017side_appearance\030\003 \001(\0132\023.aim.Wal"
-    "lAppearance\022-\n\020front_appearance\030\004 \001(\0132\023."
-    "aim.WallAppearance\022-\n\020floor_appearance\030\005"
-    " \001(\0132\023.aim.WallAppearance\022&\n\tcrosshair\030\006"
-    " \001(\0132\023.aim.CrosshairTheme\022&\n\014target_colo"
-    "r\030\007 \001(\0132\020.aim.StoredColor\022,\n\022ghost_targe"
-    "t_color\030\010 \001(\0132\020.aim.StoredColorb\010edition"
-    "sp\350\007"
+    "olor\"l\n\013WallTexture\022\024\n\014texture_name\030\001 \001("
+    "\t\022#\n\tmix_color\030\002 \001(\0132\020.aim.StoredColor\022\023"
+    "\n\013mix_percent\030\003 \001(\002\022\r\n\005scale\030\004 \001(\002\"`\n\016Wa"
+    "llAppearance\022!\n\005color\030\001 \001(\0132\020.aim.Stored"
+    "ColorH\000\022#\n\007texture\030\002 \001(\0132\020.aim.WallTextu"
+    "reH\000B\006\n\004type\"\315\002\n\005Theme\022\014\n\004name\030\001 \001(\t\022,\n\017"
+    "roof_appearance\030\002 \001(\0132\023.aim.WallAppearan"
+    "ce\022,\n\017side_appearance\030\003 \001(\0132\023.aim.WallAp"
+    "pearance\022-\n\020front_appearance\030\004 \001(\0132\023.aim"
+    ".WallAppearance\022-\n\020floor_appearance\030\005 \001("
+    "\0132\023.aim.WallAppearance\022&\n\tcrosshair\030\006 \001("
+    "\0132\023.aim.CrosshairTheme\022&\n\014target_color\030\007"
+    " \001(\0132\020.aim.StoredColor\022,\n\022ghost_target_c"
+    "olor\030\010 \001(\0132\020.aim.StoredColorb\010editionsp\350"
+    "\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_theme_2eproto_deps[1] =
     {
@@ -202,13 +256,13 @@ static ::absl::once_flag descriptor_table_theme_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_theme_2eproto = {
     false,
     false,
-    524,
+    681,
     descriptor_table_protodef_theme_2eproto,
     "theme.proto",
     &descriptor_table_theme_2eproto_once,
     descriptor_table_theme_2eproto_deps,
     1,
-    3,
+    4,
     schemas,
     file_default_instances,
     TableStruct_theme_2eproto::offsets,
@@ -529,18 +583,404 @@ void CrosshairTheme::InternalSwap(CrosshairTheme* PROTOBUF_RESTRICT other) {
 }
 // ===================================================================
 
-class WallAppearance::_Internal {
+class WallTexture::_Internal {
  public:
   using HasBits =
-      decltype(std::declval<WallAppearance>()._impl_._has_bits_);
+      decltype(std::declval<WallTexture>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_._has_bits_);
+      8 * PROTOBUF_FIELD_OFFSET(WallTexture, _impl_._has_bits_);
 };
 
+void WallTexture::clear_mix_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.mix_color_ != nullptr) _impl_.mix_color_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+WallTexture::WallTexture(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.WallTexture)
+}
+inline PROTOBUF_NDEBUG_INLINE WallTexture::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::WallTexture& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        texture_name_(arena, from.texture_name_) {}
+
+WallTexture::WallTexture(
+    ::google::protobuf::Arena* arena,
+    const WallTexture& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  WallTexture* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.mix_color_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(
+                              arena, *from._impl_.mix_color_)
+                        : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, mix_percent_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, mix_percent_),
+           offsetof(Impl_, scale_) -
+               offsetof(Impl_, mix_percent_) +
+               sizeof(Impl_::scale_));
+
+  // @@protoc_insertion_point(copy_constructor:aim.WallTexture)
+}
+inline PROTOBUF_NDEBUG_INLINE WallTexture::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        texture_name_(arena) {}
+
+inline void WallTexture::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, mix_color_),
+           0,
+           offsetof(Impl_, scale_) -
+               offsetof(Impl_, mix_color_) +
+               sizeof(Impl_::scale_));
+}
+WallTexture::~WallTexture() {
+  // @@protoc_insertion_point(destructor:aim.WallTexture)
+  SharedDtor(*this);
+}
+inline void WallTexture::SharedDtor(MessageLite& self) {
+  WallTexture& this_ = static_cast<WallTexture&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.texture_name_.Destroy();
+  delete this_._impl_.mix_color_;
+  this_._impl_.~Impl_();
+}
+
+inline void* WallTexture::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) WallTexture(arena);
+}
+constexpr auto WallTexture::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(WallTexture),
+                                            alignof(WallTexture));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull WallTexture::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_WallTexture_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &WallTexture::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<WallTexture>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &WallTexture::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<WallTexture>(), &WallTexture::ByteSizeLong,
+            &WallTexture::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(WallTexture, _impl_._cached_size_),
+        false,
+    },
+    &WallTexture::kDescriptorMethods,
+    &descriptor_table_theme_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* WallTexture::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 4, 1, 36, 2> WallTexture::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(WallTexture, _impl_._has_bits_),
+    0, // no _extensions_
+    4, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967280,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    4,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::WallTexture>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // float scale = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.scale_)}},
+    // string texture_name = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.texture_name_)}},
+    // .aim.StoredColor mix_color = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 0, PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.mix_color_)}},
+    // float mix_percent = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.mix_percent_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string texture_name = 1;
+    {PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.texture_name_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .aim.StoredColor mix_color = 2;
+    {PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.mix_color_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float mix_percent = 3;
+    {PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.mix_percent_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float scale = 4;
+    {PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.scale_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
+  }}, {{
+    "\17\14\0\0\0\0\0\0"
+    "aim.WallTexture"
+    "texture_name"
+  }},
+};
+
+PROTOBUF_NOINLINE void WallTexture::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.WallTexture)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _impl_.texture_name_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.mix_color_ != nullptr);
+      _impl_.mix_color_->Clear();
+    }
+  }
+  if (cached_has_bits & 0x0000000cu) {
+    ::memset(&_impl_.mix_percent_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.scale_) -
+        reinterpret_cast<char*>(&_impl_.mix_percent_)) + sizeof(_impl_.scale_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* WallTexture::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const WallTexture& this_ = static_cast<const WallTexture&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* WallTexture::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const WallTexture& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.WallTexture)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // string texture_name = 1;
+          if (cached_has_bits & 0x00000001u) {
+            const std::string& _s = this_._internal_texture_name();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.WallTexture.texture_name");
+            target = stream->WriteStringMaybeAliased(1, _s, target);
+          }
+
+          // .aim.StoredColor mix_color = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                2, *this_._impl_.mix_color_, this_._impl_.mix_color_->GetCachedSize(), target,
+                stream);
+          }
+
+          // float mix_percent = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_mix_percent(), target);
+          }
+
+          // float scale = 4;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_scale(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.WallTexture)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t WallTexture::ByteSizeLong(const MessageLite& base) {
+          const WallTexture& this_ = static_cast<const WallTexture&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t WallTexture::ByteSizeLong() const {
+          const WallTexture& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.WallTexture)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x0000000fu) {
+            // string texture_name = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_texture_name());
+            }
+            // .aim.StoredColor mix_color = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.mix_color_);
+            }
+            // float mix_percent = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+            // float scale = 4;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void WallTexture::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<WallTexture*>(&to_msg);
+  auto& from = static_cast<const WallTexture&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.WallTexture)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000000fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_set_texture_name(from._internal_texture_name());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(from._impl_.mix_color_ != nullptr);
+      if (_this->_impl_.mix_color_ == nullptr) {
+        _this->_impl_.mix_color_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(arena, *from._impl_.mix_color_);
+      } else {
+        _this->_impl_.mix_color_->MergeFrom(*from._impl_.mix_color_);
+      }
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.mix_percent_ = from._impl_.mix_percent_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.scale_ = from._impl_.scale_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void WallTexture::CopyFrom(const WallTexture& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.WallTexture)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void WallTexture::InternalSwap(WallTexture* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.texture_name_, &other->_impl_.texture_name_, arena);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.scale_)
+      + sizeof(WallTexture::_impl_.scale_)
+      - PROTOBUF_FIELD_OFFSET(WallTexture, _impl_.mix_color_)>(
+          reinterpret_cast<char*>(&_impl_.mix_color_),
+          reinterpret_cast<char*>(&other->_impl_.mix_color_));
+}
+
+::google::protobuf::Metadata WallTexture::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class WallAppearance::_Internal {
+ public:
+  static constexpr ::int32_t kOneofCaseOffset =
+      PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_._oneof_case_);
+};
+
+void WallAppearance::set_allocated_color(::aim::StoredColor* color) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (color) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(color)->GetArena();
+    if (message_arena != submessage_arena) {
+      color = ::google::protobuf::internal::GetOwnedMessage(message_arena, color, submessage_arena);
+    }
+    set_has_color();
+    _impl_.type_.color_ = color;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.WallAppearance.color)
+}
 void WallAppearance::clear_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.color_ != nullptr) _impl_.color_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  if (type_case() == kColor) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.color_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.color_);
+    }
+    clear_has_type();
+  }
+}
+void WallAppearance::set_allocated_texture(::aim::WallTexture* texture) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (texture) {
+    ::google::protobuf::Arena* submessage_arena = texture->GetArena();
+    if (message_arena != submessage_arena) {
+      texture = ::google::protobuf::internal::GetOwnedMessage(message_arena, texture, submessage_arena);
+    }
+    set_has_texture();
+    _impl_.type_.texture_ = texture;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.WallAppearance.texture)
 }
 WallAppearance::WallAppearance(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
@@ -554,8 +994,9 @@ WallAppearance::WallAppearance(::google::protobuf::Arena* arena)
 inline PROTOBUF_NDEBUG_INLINE WallAppearance::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::aim::WallAppearance& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0} {}
+      : type_{},
+        _cached_size_{0},
+        _oneof_case_{from._oneof_case_[0]} {}
 
 WallAppearance::WallAppearance(
     ::google::protobuf::Arena* arena,
@@ -570,21 +1011,28 @@ WallAppearance::WallAppearance(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.color_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(
-                              arena, *from._impl_.color_)
-                        : nullptr;
+  switch (type_case()) {
+    case TYPE_NOT_SET:
+      break;
+      case kColor:
+        _impl_.type_.color_ = ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(arena, *from._impl_.type_.color_);
+        break;
+      case kTexture:
+        _impl_.type_.texture_ = ::google::protobuf::Message::CopyConstruct<::aim::WallTexture>(arena, *from._impl_.type_.texture_);
+        break;
+  }
 
   // @@protoc_insertion_point(copy_constructor:aim.WallAppearance)
 }
 inline PROTOBUF_NDEBUG_INLINE WallAppearance::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
+      : type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
 
 inline void WallAppearance::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.color_ = {};
 }
 WallAppearance::~WallAppearance() {
   // @@protoc_insertion_point(destructor:aim.WallAppearance)
@@ -594,9 +1042,39 @@ inline void WallAppearance::SharedDtor(MessageLite& self) {
   WallAppearance& this_ = static_cast<WallAppearance&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  delete this_._impl_.color_;
+  if (this_.has_type()) {
+    this_.clear_type();
+  }
   this_._impl_.~Impl_();
 }
+
+void WallAppearance::clear_type() {
+// @@protoc_insertion_point(one_of_clear_start:aim.WallAppearance)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  switch (type_case()) {
+    case kColor: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.color_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.color_);
+      }
+      break;
+    }
+    case kTexture: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.texture_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.texture_);
+      }
+      break;
+    }
+    case TYPE_NOT_SET: {
+      break;
+    }
+  }
+  _impl_._oneof_case_[0] = TYPE_NOT_SET;
+}
+
 
 inline void* WallAppearance::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
@@ -634,16 +1112,16 @@ const ::google::protobuf::internal::ClassData* WallAppearance::GetClassData() co
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 1, 0, 2> WallAppearance::_table_ = {
+const ::_pbi::TcParseTable<0, 2, 2, 0, 2> WallAppearance::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_._has_bits_),
+    0,  // no _has_bits_
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    2, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
-    1,  // num_aux_entries
+    2,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -652,17 +1130,19 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> WallAppearance::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::WallAppearance>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .aim.StoredColor color = 1;
-    {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.color_)}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
     // .aim.StoredColor color = 1;
-    {PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.color_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.type_.color_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.WallTexture texture = 2;
+    {PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.type_.texture_), _Internal::kOneofCaseOffset + 0, 1,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
+    {::_pbi::TcParser::GetTable<::aim::WallTexture>()},
   }}, {{
   }},
 };
@@ -674,12 +1154,7 @@ PROTOBUF_NOINLINE void WallAppearance::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.color_ != nullptr);
-    _impl_.color_->Clear();
-  }
-  _impl_._has_bits_.Clear();
+  clear_type();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -698,14 +1173,22 @@ PROTOBUF_NOINLINE void WallAppearance::Clear() {
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // .aim.StoredColor color = 1;
-          if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                1, *this_._impl_.color_, this_._impl_.color_->GetCachedSize(), target,
-                stream);
+          switch (this_.type_case()) {
+            case kColor: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  1, *this_._impl_.type_.color_, this_._impl_.type_.color_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            case kTexture: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  2, *this_._impl_.type_.texture_, this_._impl_.type_.texture_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            default:
+              break;
           }
-
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -729,12 +1212,21 @@ PROTOBUF_NOINLINE void WallAppearance::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-           {
+          switch (this_.type_case()) {
             // .aim.StoredColor color = 1;
-            cached_has_bits = this_._impl_._has_bits_[0];
-            if (cached_has_bits & 0x00000001u) {
+            case kColor: {
               total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.color_);
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.color_);
+              break;
+            }
+            // .aim.WallTexture texture = 2;
+            case kTexture: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.texture_);
+              break;
+            }
+            case TYPE_NOT_SET: {
+              break;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -750,17 +1242,39 @@ void WallAppearance::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(from._impl_.color_ != nullptr);
-    if (_this->_impl_.color_ == nullptr) {
-      _this->_impl_.color_ =
-          ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(arena, *from._impl_.color_);
-    } else {
-      _this->_impl_.color_->MergeFrom(*from._impl_.color_);
+  if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
+    const uint32_t oneof_to_case = _this->_impl_._oneof_case_[0];
+    const bool oneof_needs_init = oneof_to_case != oneof_from_case;
+    if (oneof_needs_init) {
+      if (oneof_to_case != 0) {
+        _this->clear_type();
+      }
+      _this->_impl_._oneof_case_[0] = oneof_from_case;
+    }
+
+    switch (oneof_from_case) {
+      case kColor: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.color_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(arena, *from._impl_.type_.color_);
+        } else {
+          _this->_impl_.type_.color_->MergeFrom(from._internal_color());
+        }
+        break;
+      }
+      case kTexture: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.texture_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::WallTexture>(arena, *from._impl_.type_.texture_);
+        } else {
+          _this->_impl_.type_.texture_->MergeFrom(from._internal_texture());
+        }
+        break;
+      }
+      case TYPE_NOT_SET:
+        break;
     }
   }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -775,8 +1289,8 @@ void WallAppearance::CopyFrom(const WallAppearance& from) {
 void WallAppearance::InternalSwap(WallAppearance* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.color_, other->_impl_.color_);
+  swap(_impl_.type_, other->_impl_.type_);
+  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
 ::google::protobuf::Metadata WallAppearance::GetMetadata() const {

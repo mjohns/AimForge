@@ -32,6 +32,30 @@ Theme GetDefaultTheme() {
   return t;
 }
 
+Theme GetTextureTheme() {
+  Theme t;
+  t.set_name("texture");
+  *(t.mutable_crosshair()->mutable_color()) = ToStoredColor("#FFAC1C");
+  *(t.mutable_crosshair()->mutable_outline_color()) = ToStoredColor("#000000");
+
+  WallAppearance wall;
+  wall.mutable_texture()->set_texture_name("granite1.jpg");
+  wall.mutable_texture()->set_scale(2);
+
+  *t.mutable_front_appearance() = wall;
+  *t.mutable_floor_appearance() = wall;
+  *t.mutable_roof_appearance() = wall;
+  *t.mutable_side_appearance() = wall;
+
+  t.mutable_floor_appearance()->mutable_texture()->set_mix_percent(0.2);
+  t.mutable_roof_appearance()->mutable_texture()->set_mix_percent(0.2);
+  t.mutable_side_appearance()->mutable_texture()->set_mix_percent(0.3);
+
+  *t.mutable_target_color() = ToStoredColor(0);
+  *t.mutable_ghost_target_color() = ToStoredColor(0.65);
+  return t;
+}
+
 Theme GetSolarizedLightTheme() {
   Theme t;
   t.set_name("solarized_light");
@@ -122,6 +146,9 @@ absl::Status SettingsManager::Initialize() {
 Theme SettingsManager::GetTheme(const std::string& theme_name) {
   if (theme_name == "solarized_light") {
     return GetSolarizedLightTheme();
+  }
+  if (theme_name == "textured") {
+    return GetTextureTheme();
   }
   return GetDefaultTheme();
 }

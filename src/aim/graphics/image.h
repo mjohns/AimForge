@@ -6,9 +6,9 @@ namespace aim {
 
 class Image {
  public:
-  explicit Image(const std::filesystem::path& path) {
+  explicit Image(const std::filesystem::path& path, bool flip_vertically = false) {
     int nr_channels;
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(flip_vertically);
     data_ = stbi_load(path.string().c_str(), &width_, &height_, &nr_channels, 0);
   }
 

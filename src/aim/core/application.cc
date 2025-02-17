@@ -161,7 +161,11 @@ int Application::Initialize() {
   // glEnable(GL_BLEND);
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  renderer_ = std::make_unique<Renderer>(file_system_->GetBasePath("assets/textures"));
+  std::vector<std::filesystem::path> texture_dirs = {
+      file_system_->GetUserDataPath("assets/textures"),
+      file_system_->GetBasePath("assets/textures"),
+  };
+  renderer_ = std::make_unique<Renderer>(texture_dirs);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();

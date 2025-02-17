@@ -62,6 +62,9 @@ extern ThemeDefaultTypeInternal _Theme_default_instance_;
 class WallAppearance;
 struct WallAppearanceDefaultTypeInternal;
 extern WallAppearanceDefaultTypeInternal _WallAppearance_default_instance_;
+class WallTexture;
+struct WallTextureDefaultTypeInternal;
+extern WallTextureDefaultTypeInternal _WallTexture_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -75,31 +78,31 @@ namespace aim {
 
 // -------------------------------------------------------------------
 
-class WallAppearance final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.WallAppearance) */ {
+class WallTexture final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.WallTexture) */ {
  public:
-  inline WallAppearance() : WallAppearance(nullptr) {}
-  ~WallAppearance() PROTOBUF_FINAL;
+  inline WallTexture() : WallTexture(nullptr) {}
+  ~WallTexture() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(WallAppearance* msg, std::destroying_delete_t) {
+  void operator delete(WallTexture* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallAppearance));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallTexture));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR WallAppearance(
+  explicit PROTOBUF_CONSTEXPR WallTexture(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline WallAppearance(const WallAppearance& from) : WallAppearance(nullptr, from) {}
-  inline WallAppearance(WallAppearance&& from) noexcept
-      : WallAppearance(nullptr, std::move(from)) {}
-  inline WallAppearance& operator=(const WallAppearance& from) {
+  inline WallTexture(const WallTexture& from) : WallTexture(nullptr, from) {}
+  inline WallTexture(WallTexture&& from) noexcept
+      : WallTexture(nullptr, std::move(from)) {}
+  inline WallTexture& operator=(const WallTexture& from) {
     CopyFrom(from);
     return *this;
   }
-  inline WallAppearance& operator=(WallAppearance&& from) noexcept {
+  inline WallTexture& operator=(WallTexture&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -127,16 +130,16 @@ class WallAppearance final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const WallAppearance& default_instance() {
+  static const WallTexture& default_instance() {
     return *internal_default_instance();
   }
-  static inline const WallAppearance* internal_default_instance() {
-    return reinterpret_cast<const WallAppearance*>(
-        &_WallAppearance_default_instance_);
+  static inline const WallTexture* internal_default_instance() {
+    return reinterpret_cast<const WallTexture*>(
+        &_WallTexture_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 1;
-  friend void swap(WallAppearance& a, WallAppearance& b) { a.Swap(&b); }
-  inline void Swap(WallAppearance* other) {
+  friend void swap(WallTexture& a, WallTexture& b) { a.Swap(&b); }
+  inline void Swap(WallTexture* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -144,7 +147,7 @@ class WallAppearance final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(WallAppearance* other) {
+  void UnsafeArenaSwap(WallTexture* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -152,13 +155,13 @@ class WallAppearance final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  WallAppearance* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<WallAppearance>(arena);
+  WallTexture* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<WallTexture>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const WallAppearance& from);
+  void CopyFrom(const WallTexture& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const WallAppearance& from) { WallAppearance::MergeImpl(*this, from); }
+  void MergeFrom(const WallTexture& from) { WallTexture::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -195,18 +198,18 @@ class WallAppearance final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(WallAppearance* other);
+  void InternalSwap(WallTexture* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.WallAppearance"; }
+  static ::absl::string_view FullMessageName() { return "aim.WallTexture"; }
 
  protected:
-  explicit WallAppearance(::google::protobuf::Arena* arena);
-  WallAppearance(::google::protobuf::Arena* arena, const WallAppearance& from);
-  WallAppearance(::google::protobuf::Arena* arena, WallAppearance&& from) noexcept
-      : WallAppearance(arena) {
+  explicit WallTexture(::google::protobuf::Arena* arena);
+  WallTexture(::google::protobuf::Arena* arena, const WallTexture& from);
+  WallTexture(::google::protobuf::Arena* arena, WallTexture&& from) noexcept
+      : WallTexture(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -221,30 +224,72 @@ class WallAppearance final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kColorFieldNumber = 1,
+    kTextureNameFieldNumber = 1,
+    kMixColorFieldNumber = 2,
+    kMixPercentFieldNumber = 3,
+    kScaleFieldNumber = 4,
   };
-  // .aim.StoredColor color = 1;
-  bool has_color() const;
-  void clear_color() ;
-  const ::aim::StoredColor& color() const;
-  PROTOBUF_NODISCARD ::aim::StoredColor* release_color();
-  ::aim::StoredColor* mutable_color();
-  void set_allocated_color(::aim::StoredColor* value);
-  void unsafe_arena_set_allocated_color(::aim::StoredColor* value);
-  ::aim::StoredColor* unsafe_arena_release_color();
+  // string texture_name = 1;
+  bool has_texture_name() const;
+  void clear_texture_name() ;
+  const std::string& texture_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_texture_name(Arg_&& arg, Args_... args);
+  std::string* mutable_texture_name();
+  PROTOBUF_NODISCARD std::string* release_texture_name();
+  void set_allocated_texture_name(std::string* value);
 
   private:
-  const ::aim::StoredColor& _internal_color() const;
-  ::aim::StoredColor* _internal_mutable_color();
+  const std::string& _internal_texture_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_texture_name(
+      const std::string& value);
+  std::string* _internal_mutable_texture_name();
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.WallAppearance)
+  // .aim.StoredColor mix_color = 2;
+  bool has_mix_color() const;
+  void clear_mix_color() ;
+  const ::aim::StoredColor& mix_color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_mix_color();
+  ::aim::StoredColor* mutable_mix_color();
+  void set_allocated_mix_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_mix_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_mix_color();
+
+  private:
+  const ::aim::StoredColor& _internal_mix_color() const;
+  ::aim::StoredColor* _internal_mutable_mix_color();
+
+  public:
+  // float mix_percent = 3;
+  bool has_mix_percent() const;
+  void clear_mix_percent() ;
+  float mix_percent() const;
+  void set_mix_percent(float value);
+
+  private:
+  float _internal_mix_percent() const;
+  void _internal_set_mix_percent(float value);
+
+  public:
+  // float scale = 4;
+  bool has_scale() const;
+  void clear_scale() ;
+  float scale() const;
+  void set_scale(float value);
+
+  private:
+  float _internal_scale() const;
+  void _internal_set_scale(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.WallTexture)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 1, 1,
-      0, 2>
+      2, 4, 1,
+      36, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -260,10 +305,13 @@ class WallAppearance final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const WallAppearance& from_msg);
+                          const WallTexture& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::StoredColor* color_;
+    ::google::protobuf::internal::ArenaStringPtr texture_name_;
+    ::aim::StoredColor* mix_color_;
+    float mix_percent_;
+    float scale_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -484,6 +532,242 @@ class CrosshairTheme final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class WallAppearance final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.WallAppearance) */ {
+ public:
+  inline WallAppearance() : WallAppearance(nullptr) {}
+  ~WallAppearance() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(WallAppearance* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallAppearance));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR WallAppearance(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline WallAppearance(const WallAppearance& from) : WallAppearance(nullptr, from) {}
+  inline WallAppearance(WallAppearance&& from) noexcept
+      : WallAppearance(nullptr, std::move(from)) {}
+  inline WallAppearance& operator=(const WallAppearance& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WallAppearance& operator=(WallAppearance&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WallAppearance& default_instance() {
+    return *internal_default_instance();
+  }
+  enum TypeCase {
+    kColor = 1,
+    kTexture = 2,
+    TYPE_NOT_SET = 0,
+  };
+  static inline const WallAppearance* internal_default_instance() {
+    return reinterpret_cast<const WallAppearance*>(
+        &_WallAppearance_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 2;
+  friend void swap(WallAppearance& a, WallAppearance& b) { a.Swap(&b); }
+  inline void Swap(WallAppearance* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WallAppearance* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WallAppearance* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<WallAppearance>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const WallAppearance& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const WallAppearance& from) { WallAppearance::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(WallAppearance* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.WallAppearance"; }
+
+ protected:
+  explicit WallAppearance(::google::protobuf::Arena* arena);
+  WallAppearance(::google::protobuf::Arena* arena, const WallAppearance& from);
+  WallAppearance(::google::protobuf::Arena* arena, WallAppearance&& from) noexcept
+      : WallAppearance(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kColorFieldNumber = 1,
+    kTextureFieldNumber = 2,
+  };
+  // .aim.StoredColor color = 1;
+  bool has_color() const;
+  private:
+  bool _internal_has_color() const;
+
+  public:
+  void clear_color() ;
+  const ::aim::StoredColor& color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_color();
+  ::aim::StoredColor* mutable_color();
+  void set_allocated_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_color();
+
+  private:
+  const ::aim::StoredColor& _internal_color() const;
+  ::aim::StoredColor* _internal_mutable_color();
+
+  public:
+  // .aim.WallTexture texture = 2;
+  bool has_texture() const;
+  private:
+  bool _internal_has_texture() const;
+
+  public:
+  void clear_texture() ;
+  const ::aim::WallTexture& texture() const;
+  PROTOBUF_NODISCARD ::aim::WallTexture* release_texture();
+  ::aim::WallTexture* mutable_texture();
+  void set_allocated_texture(::aim::WallTexture* value);
+  void unsafe_arena_set_allocated_texture(::aim::WallTexture* value);
+  ::aim::WallTexture* unsafe_arena_release_texture();
+
+  private:
+  const ::aim::WallTexture& _internal_texture() const;
+  ::aim::WallTexture* _internal_mutable_texture();
+
+  public:
+  void clear_type();
+  TypeCase type_case() const;
+  // @@protoc_insertion_point(class_scope:aim.WallAppearance)
+ private:
+  class _Internal;
+  void set_has_color();
+  void set_has_texture();
+  inline bool has_type() const;
+  inline void clear_has_type();
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      0, 2, 2,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const WallAppearance& from_msg);
+    union TypeUnion {
+      constexpr TypeUnion() : _constinit_{} {}
+      ::google::protobuf::internal::ConstantInitialized _constinit_;
+      ::aim::StoredColor* color_;
+      ::aim::WallTexture* texture_;
+    } type_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::uint32_t _oneof_case_[1];
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_theme_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Theme final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.Theme) */ {
  public:
@@ -543,7 +827,7 @@ class Theme final : public ::google::protobuf::Message
     return reinterpret_cast<const Theme*>(
         &_Theme_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 3;
   friend void swap(Theme& a, Theme& b) { a.Swap(&b); }
   inline void Swap(Theme* other) {
     if (other == this) return;
@@ -1000,42 +1284,111 @@ inline void CrosshairTheme::set_allocated_outline_color(::aim::StoredColor* valu
 
 // -------------------------------------------------------------------
 
-// WallAppearance
+// WallTexture
 
-// .aim.StoredColor color = 1;
-inline bool WallAppearance::has_color() const {
+// string texture_name = 1;
+inline bool WallTexture::has_texture_name() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.color_ != nullptr);
   return value;
 }
-inline const ::aim::StoredColor& WallAppearance::_internal_color() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::StoredColor* p = _impl_.color_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
-}
-inline const ::aim::StoredColor& WallAppearance::color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallAppearance.color)
-  return _internal_color();
-}
-inline void WallAppearance::unsafe_arena_set_allocated_color(::aim::StoredColor* value) {
+inline void WallTexture::clear_texture_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.color_);
+  _impl_.texture_name_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& WallTexture::texture_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallTexture.texture_name)
+  return _internal_texture_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void WallTexture::set_texture_name(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.texture_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.WallTexture.texture_name)
+}
+inline std::string* WallTexture::mutable_texture_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_texture_name();
+  // @@protoc_insertion_point(field_mutable:aim.WallTexture.texture_name)
+  return _s;
+}
+inline const std::string& WallTexture::_internal_texture_name() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.texture_name_.Get();
+}
+inline void WallTexture::_internal_set_texture_name(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.texture_name_.Set(value, GetArena());
+}
+inline std::string* WallTexture::_internal_mutable_texture_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.texture_name_.Mutable( GetArena());
+}
+inline std::string* WallTexture::release_texture_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallTexture.texture_name)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
   }
-  _impl_.color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.texture_name_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.texture_name_.Set("", GetArena());
+  }
+  return released;
+}
+inline void WallTexture::set_allocated_texture_name(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
   if (value != nullptr) {
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallAppearance.color)
+  _impl_.texture_name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.texture_name_.IsDefault()) {
+    _impl_.texture_name_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.WallTexture.texture_name)
 }
-inline ::aim::StoredColor* WallAppearance::release_color() {
+
+// .aim.StoredColor mix_color = 2;
+inline bool WallTexture::has_mix_color() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.mix_color_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredColor& WallTexture::_internal_mix_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredColor* p = _impl_.mix_color_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& WallTexture::mix_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallTexture.mix_color)
+  return _internal_mix_color();
+}
+inline void WallTexture::unsafe_arena_set_allocated_mix_color(::aim::StoredColor* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.mix_color_);
+  }
+  _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallTexture.mix_color)
+}
+inline ::aim::StoredColor* WallTexture::release_mix_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredColor* released = _impl_.color_;
-  _impl_.color_ = nullptr;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredColor* released = _impl_.mix_color_;
+  _impl_.mix_color_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
     auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
     released = ::google::protobuf::internal::DuplicateIfNonNull(released);
@@ -1049,34 +1402,34 @@ inline ::aim::StoredColor* WallAppearance::release_color() {
   }
   return released;
 }
-inline ::aim::StoredColor* WallAppearance::unsafe_arena_release_color() {
+inline ::aim::StoredColor* WallTexture::unsafe_arena_release_mix_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallAppearance.color)
+  // @@protoc_insertion_point(field_release:aim.WallTexture.mix_color)
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredColor* temp = _impl_.color_;
-  _impl_.color_ = nullptr;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredColor* temp = _impl_.mix_color_;
+  _impl_.mix_color_ = nullptr;
   return temp;
 }
-inline ::aim::StoredColor* WallAppearance::_internal_mutable_color() {
+inline ::aim::StoredColor* WallTexture::_internal_mutable_mix_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.color_ == nullptr) {
+  if (_impl_.mix_color_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
-    _impl_.color_ = reinterpret_cast<::aim::StoredColor*>(p);
+    _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(p);
   }
-  return _impl_.color_;
+  return _impl_.mix_color_;
 }
-inline ::aim::StoredColor* WallAppearance::mutable_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::aim::StoredColor* _msg = _internal_mutable_color();
-  // @@protoc_insertion_point(field_mutable:aim.WallAppearance.color)
+inline ::aim::StoredColor* WallTexture::mutable_mix_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::StoredColor* _msg = _internal_mutable_mix_color();
+  // @@protoc_insertion_point(field_mutable:aim.WallTexture.mix_color)
   return _msg;
 }
-inline void WallAppearance::set_allocated_color(::aim::StoredColor* value) {
+inline void WallTexture::set_allocated_mix_color(::aim::StoredColor* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.color_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.mix_color_);
   }
 
   if (value != nullptr) {
@@ -1084,15 +1437,231 @@ inline void WallAppearance::set_allocated_color(::aim::StoredColor* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
 
-  _impl_.color_ = reinterpret_cast<::aim::StoredColor*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallAppearance.color)
+  _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallTexture.mix_color)
 }
 
+// float mix_percent = 3;
+inline bool WallTexture::has_mix_percent() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void WallTexture::clear_mix_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.mix_percent_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float WallTexture::mix_percent() const {
+  // @@protoc_insertion_point(field_get:aim.WallTexture.mix_percent)
+  return _internal_mix_percent();
+}
+inline void WallTexture::set_mix_percent(float value) {
+  _internal_set_mix_percent(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.WallTexture.mix_percent)
+}
+inline float WallTexture::_internal_mix_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.mix_percent_;
+}
+inline void WallTexture::_internal_set_mix_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.mix_percent_ = value;
+}
+
+// float scale = 4;
+inline bool WallTexture::has_scale() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void WallTexture::clear_scale() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.scale_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float WallTexture::scale() const {
+  // @@protoc_insertion_point(field_get:aim.WallTexture.scale)
+  return _internal_scale();
+}
+inline void WallTexture::set_scale(float value) {
+  _internal_set_scale(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.WallTexture.scale)
+}
+inline float WallTexture::_internal_scale() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.scale_;
+}
+inline void WallTexture::_internal_set_scale(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.scale_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// WallAppearance
+
+// .aim.StoredColor color = 1;
+inline bool WallAppearance::has_color() const {
+  return type_case() == kColor;
+}
+inline bool WallAppearance::_internal_has_color() const {
+  return type_case() == kColor;
+}
+inline void WallAppearance::set_has_color() {
+  _impl_._oneof_case_[0] = kColor;
+}
+inline ::aim::StoredColor* WallAppearance::release_color() {
+  // @@protoc_insertion_point(field_release:aim.WallAppearance.color)
+  if (type_case() == kColor) {
+    clear_has_type();
+    auto* temp = _impl_.type_.color_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.color_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::StoredColor& WallAppearance::_internal_color() const {
+  return type_case() == kColor ? *_impl_.type_.color_ : reinterpret_cast<::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& WallAppearance::color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallAppearance.color)
+  return _internal_color();
+}
+inline ::aim::StoredColor* WallAppearance::unsafe_arena_release_color() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.WallAppearance.color)
+  if (type_case() == kColor) {
+    clear_has_type();
+    auto* temp = _impl_.type_.color_;
+    _impl_.type_.color_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void WallAppearance::unsafe_arena_set_allocated_color(::aim::StoredColor* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_color();
+    _impl_.type_.color_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallAppearance.color)
+}
+inline ::aim::StoredColor* WallAppearance::_internal_mutable_color() {
+  if (type_case() != kColor) {
+    clear_type();
+    set_has_color();
+    _impl_.type_.color_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
+  }
+  return _impl_.type_.color_;
+}
+inline ::aim::StoredColor* WallAppearance::mutable_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::StoredColor* _msg = _internal_mutable_color();
+  // @@protoc_insertion_point(field_mutable:aim.WallAppearance.color)
+  return _msg;
+}
+
+// .aim.WallTexture texture = 2;
+inline bool WallAppearance::has_texture() const {
+  return type_case() == kTexture;
+}
+inline bool WallAppearance::_internal_has_texture() const {
+  return type_case() == kTexture;
+}
+inline void WallAppearance::set_has_texture() {
+  _impl_._oneof_case_[0] = kTexture;
+}
+inline void WallAppearance::clear_texture() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kTexture) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.texture_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.texture_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::WallTexture* WallAppearance::release_texture() {
+  // @@protoc_insertion_point(field_release:aim.WallAppearance.texture)
+  if (type_case() == kTexture) {
+    clear_has_type();
+    auto* temp = _impl_.type_.texture_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.texture_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::WallTexture& WallAppearance::_internal_texture() const {
+  return type_case() == kTexture ? *_impl_.type_.texture_ : reinterpret_cast<::aim::WallTexture&>(::aim::_WallTexture_default_instance_);
+}
+inline const ::aim::WallTexture& WallAppearance::texture() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallAppearance.texture)
+  return _internal_texture();
+}
+inline ::aim::WallTexture* WallAppearance::unsafe_arena_release_texture() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.WallAppearance.texture)
+  if (type_case() == kTexture) {
+    clear_has_type();
+    auto* temp = _impl_.type_.texture_;
+    _impl_.type_.texture_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void WallAppearance::unsafe_arena_set_allocated_texture(::aim::WallTexture* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_texture();
+    _impl_.type_.texture_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallAppearance.texture)
+}
+inline ::aim::WallTexture* WallAppearance::_internal_mutable_texture() {
+  if (type_case() != kTexture) {
+    clear_type();
+    set_has_texture();
+    _impl_.type_.texture_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::WallTexture>(GetArena());
+  }
+  return _impl_.type_.texture_;
+}
+inline ::aim::WallTexture* WallAppearance::mutable_texture() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::WallTexture* _msg = _internal_mutable_texture();
+  // @@protoc_insertion_point(field_mutable:aim.WallAppearance.texture)
+  return _msg;
+}
+
+inline bool WallAppearance::has_type() const {
+  return type_case() != TYPE_NOT_SET;
+}
+inline void WallAppearance::clear_has_type() {
+  _impl_._oneof_case_[0] = TYPE_NOT_SET;
+}
+inline WallAppearance::TypeCase WallAppearance::type_case() const {
+  return WallAppearance::TypeCase(_impl_._oneof_case_[0]);
+}
 // -------------------------------------------------------------------
 
 // Theme
