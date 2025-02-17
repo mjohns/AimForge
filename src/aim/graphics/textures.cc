@@ -1,11 +1,11 @@
-#include "texture_manager.h"
+#include "textures.h"
 
 #include <glad/glad.h>
 
 #include <iostream>
 
-#include "aim/graphics/image.h"
 #include "aim/common/log.h"
+#include "aim/graphics/image.h"
 
 namespace aim {
 
