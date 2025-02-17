@@ -4,26 +4,25 @@
 
 #include <iostream>
 
+#include "aim/common/log.h"
+
 namespace aim {
 namespace {
-void checkCompileErrors(GLuint shader, std::string type) {
+
+void CheckCompileErrors(GLuint shader, std::string type) {
   GLint success;
   GLchar infoLog[1024];
   if (type != "PROGRAM") {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
       glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-      std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
-                << infoLog << "\n -- --------------------------------------------------- -- "
-                << std::endl;
+      Logger::get()->error("ERROR::SHADER_COMPILATION_ERROR of type: {}\n{}", type, infoLog);
     }
   } else {
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
       glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-      std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
-                << infoLog << "\n -- --------------------------------------------------- -- "
-                << std::endl;
+      Logger::get()->error("ERROR::PROGRAM_LINKING_ERROR of type: {}\n{}", type, infoLog);
     }
   }
 }
@@ -39,19 +38,19 @@ Shader::Shader(std::string vertex_shader, std::string fragment_shader) {
   vertex = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex, 1, &vShaderCode, NULL);
   glCompileShader(vertex);
-  checkCompileErrors(vertex, "VERTEX");
+  CheckCompileErrors(vertex, "VERTEX");
   // fragment Shader
   fragment = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment, 1, &fShaderCode, NULL);
   glCompileShader(fragment);
-  checkCompileErrors(fragment, "FRAGMENT");
+  CheckCompileErrors(fragment, "FRAGMENT");
 
   // shader Program
   id_ = glCreateProgram();
   glAttachShader(id_, vertex);
   glAttachShader(id_, fragment);
   glLinkProgram(id_);
-  checkCompileErrors(id_, "PROGRAM");
+  CheckCompileErrors(id_, "PROGRAM");
   // delete the shaders as they're linked into our program now and no longer
   // necessery
   glDeleteShader(vertex);
