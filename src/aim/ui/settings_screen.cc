@@ -20,10 +20,15 @@ NavigationEvent SettingsScreen::Run(Application* app) {
 
   std::string cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
   cm_per_360.reserve(20);
+  std::string theme_name = current_settings->theme_name();
   const ScreenInfo& screen = app->GetScreenInfo();
 
   while (true) {
+    if (!app->has_input_focus()) {
+      SDL_Delay(250);
+    }
     SDL_Event event;
+    ImGuiIO& io = ImGui::GetIO();
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
@@ -37,14 +42,20 @@ NavigationEvent SettingsScreen::Run(Application* app) {
             current_settings->set_cm_per_360(new_cm_per_360);
             mgr->MarkDirty();
           }
+          if (current_settings->theme_name() != theme_name) {
+            current_settings->set_theme_name(theme_name);
+            mgr->MarkDirty();
+          }
           mgr->MaybeFlushToDisk();
           return NavigationEvent::Done();
         }
-        if (keycode == SDLK_H) {
-          return NavigationEvent::GoHome();
-        }
-        if (keycode == SDLK_R) {
-          return NavigationEvent::RestartLastScenario();
+        if (!io.WantTextInput) {
+          if (keycode == SDLK_H) {
+            return NavigationEvent::GoHome();
+          }
+          if (keycode == SDLK_R) {
+            return NavigationEvent::RestartLastScenario();
+          }
         }
       }
     }
@@ -63,11 +74,19 @@ NavigationEvent SettingsScreen::Run(Application* app) {
     ImGui::Indent(x_start);
 
     ImGui::Columns(2, "SettingsColumns", false);  // 2 columns, no borders
+
     ImGui::Text("CM/360");
 
     ImGui::SetCursorPosX(screen.width * 0.5);
     ImGui::NextColumn();
     ImGui::InputText("##CM_PER_360", &cm_per_360, ImGuiInputTextFlags_CharsDecimal);
+
+    ImGui::NextColumn();
+    ImGui::Text("Theme");
+
+    ImGui::SetCursorPosX(screen.width * 0.5);
+    ImGui::NextColumn();
+    ImGui::InputText("##THEME_NAME", &theme_name);
 
     ImGui::End();
 
@@ -116,7 +135,7 @@ NavigationEvent QuickSettingsScreen::Run(Application* app) {
       }
       if (event.type == SDL_EVENT_MOUSE_WHEEL) {
         if (event.wheel.y != 0) {
-            float cm_per_360_val = ParseFloat(cm_per_360);
+          float cm_per_360_val = ParseFloat(cm_per_360);
           cm_per_360 = std::format("{}", cm_per_360_val + event.wheel.y);
         }
       }
@@ -146,7 +165,7 @@ NavigationEvent QuickSettingsScreen::Run(Application* app) {
     // ImGui::SetCursorPos(ImVec2(x_start, y_start));
     ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
 
-    ImVec2 button_sz = ImVec2((width - center_gap) / 2.0 , 40);
+    ImVec2 button_sz = ImVec2((width - center_gap) / 2.0, 40);
     ImGui::Indent(x_start);
     for (int i = 20; i <= 70; i += 10) {
       std::string sens1 = std::format("{}", i);
@@ -155,7 +174,7 @@ NavigationEvent QuickSettingsScreen::Run(Application* app) {
         cm_per_360 = sens1;
       }
       ImGui::SameLine();
-    // ImGui::SetCursorPos(ImVec2(x_start, y_start));
+      // ImGui::SetCursorPos(ImVec2(x_start, y_start));
       if (ImGui::Button(sens2.c_str(), button_sz)) {
         cm_per_360 = sens2;
       }
