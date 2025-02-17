@@ -12,6 +12,14 @@ NavigationEvent UiScreen::Run() {
     if (!app_->has_input_focus()) {
       SDL_Delay(250);
     }
+
+    {
+      auto maybe_nav_event = OnBeforeEventHandling();
+      if (maybe_nav_event.has_value()) {
+        return *maybe_nav_event;
+      }
+    }
+
     SDL_Event event;
     ImGuiIO& io = ImGui::GetIO();
     while (SDL_PollEvent(&event)) {

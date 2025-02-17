@@ -16,13 +16,20 @@ class UiScreen {
   NavigationEvent Run();
 
  protected:
+  virtual std::optional<NavigationEvent> OnBeforeEventHandling() {
+    return {};
+  }
+
   virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
+
   virtual std::optional<NavigationEvent> OnKeyDown(const SDL_Event& event, bool user_is_typing) {
     return {};
   }
+
   virtual std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) {
     return {};
   }
+
   virtual void DrawScreen() = 0;
 
   virtual void Resume();
@@ -32,5 +39,6 @@ class UiScreen {
 
 std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app);
 std::unique_ptr<UiScreen> CreateQuickSettingsScreen(Application* app);
+std::unique_ptr<UiScreen> CreateHomeScreen(Application* app);
 
 }  // namespace aim

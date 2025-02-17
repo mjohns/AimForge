@@ -307,6 +307,9 @@ inline constexpr ScenarioDef::Impl_::Impl_(
         scenario_id_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
+        display_name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
         room_{nullptr},
         duration_seconds_{0},
         type_{},
@@ -462,10 +465,12 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.scenario_id_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.duration_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.room_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.display_name_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
+        3,
         2,
         1,
         ~0u,
@@ -522,9 +527,9 @@ static const ::_pbi::MigrationSchema
         {74, 84, -1, sizeof(::aim::RectangleTargetRegion)},
         {86, 96, -1, sizeof(::aim::OvalTargetRegion)},
         {98, 109, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {112, 126, -1, sizeof(::aim::ScenarioDef)},
-        {131, 145, -1, sizeof(::aim::StaticScenarioDef)},
-        {151, 165, -1, sizeof(::aim::CenteringScenarioDef)},
+        {112, 127, -1, sizeof(::aim::ScenarioDef)},
+        {133, 147, -1, sizeof(::aim::StaticScenarioDef)},
+        {153, 167, -1, sizeof(::aim::CenteringScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -564,22 +569,23 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "(\0132\021.aim.RegionLength\"n\n\027TargetPlacement"
     "Strategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRe"
     "gion\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_"
-    "regions\030\003 \001(\010\"\277\001\n\013ScenarioDef\022\023\n\013scenari"
+    "regions\030\003 \001(\010\"\325\001\n\013ScenarioDef\022\023\n\013scenari"
     "o_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004"
-    "room\030\003 \001(\0132\t.aim.Room\022,\n\nstatic_def\030\005 \001("
-    "\0132\026.aim.StaticScenarioDefH\000\0222\n\rcentering"
-    "_def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000B"
-    "\006\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013num_tar"
-    "gets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_"
-    "poke_ball\030\003 \001(\010\022%\n\035remove_closest_target"
-    "_on_miss\030\004 \001(\010\022\?\n\031target_placement_strat"
-    "egy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\022"
-    "\036\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n\024Cent"
-    "eringScenarioDef\022\024\n\014target_width\030\001 \001(\002\022\025"
-    "\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016"
-    "start_position\030\004 \001(\0132\017.aim.StoredVec3\022%\n"
-    "\014end_position\030\005 \001(\0132\017.aim.StoredVec3\022\032\n\022"
-    "show_start_and_end\030\006 \001(\010b\010editionsp\350\007"
+    "room\030\003 \001(\0132\t.aim.Room\022\024\n\014display_name\030\004 "
+    "\001(\t\022,\n\nstatic_def\030\005 \001(\0132\026.aim.StaticScen"
+    "arioDefH\000\0222\n\rcentering_def\030\006 \001(\0132\031.aim.C"
+    "enteringScenarioDefH\000B\006\n\004type\"\335\001\n\021Static"
+    "ScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n\rtarg"
+    "et_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 \001(\010\022%\n"
+    "\035remove_closest_target_on_miss\030\004 \001(\010\022\?\n\031"
+    "target_placement_strategy\030\005 \001(\0132\034.aim.Ta"
+    "rgetPlacementStrategy\022\036\n\026newest_target_i"
+    "s_ghost\030\006 \001(\010\"\276\001\n\024CenteringScenarioDef\022\024"
+    "\n\014target_width\030\001 \001(\002\022\025\n\rtarget_height\030\002 "
+    "\001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016start_position\030\004 \001"
+    "(\0132\017.aim.StoredVec3\022%\n\014end_position\030\005 \001("
+    "\0132\017.aim.StoredVec3\022\032\n\022show_start_and_end"
+    "\030\006 \001(\010b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -589,7 +595,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1557,
+    1579,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -3359,6 +3365,7 @@ inline PROTOBUF_NDEBUG_INLINE ScenarioDef::Impl_::Impl_(
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
         scenario_id_(arena, from.scenario_id_),
+        display_name_(arena, from.display_name_),
         type_{},
         _oneof_case_{from._oneof_case_[0]} {}
 
@@ -3376,7 +3383,7 @@ ScenarioDef::ScenarioDef(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.room_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::Room>(
+  _impl_.room_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::Room>(
                               arena, *from._impl_.room_)
                         : nullptr;
   _impl_.duration_seconds_ = from._impl_.duration_seconds_;
@@ -3398,6 +3405,7 @@ inline PROTOBUF_NDEBUG_INLINE ScenarioDef::Impl_::Impl_(
     ::google::protobuf::Arena* arena)
       : _cached_size_{0},
         scenario_id_(arena),
+        display_name_(arena),
         type_{},
         _oneof_case_{} {}
 
@@ -3419,6 +3427,7 @@ inline void ScenarioDef::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.scenario_id_.Destroy();
+  this_._impl_.display_name_.Destroy();
   delete this_._impl_.room_;
   if (this_.has_type()) {
     this_.clear_type();
@@ -3490,15 +3499,15 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<2, 6, 3, 47, 2> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
     6, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967240,  // skipmap
+    4294967232,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    6,  // num_field_entries
     3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -3508,16 +3517,18 @@ const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::ScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // string display_name = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.display_name_)}},
     // string scenario_id = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_)}},
     // float duration_seconds = 2;
     {::_pbi::TcParser::FastF32S1,
-     {21, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)}},
+     {21, 3, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)}},
     // .aim.Room room = 3;
     {::_pbi::TcParser::FastMtS1,
-     {26, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)}},
+     {26, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -3525,11 +3536,14 @@ const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // float duration_seconds = 2;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 2, 0,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.Room room = 3;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_), _Internal::kHasBitsOffset + 1, 0,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // string display_name = 4;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.display_name_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // .aim.StaticScenarioDef static_def = 5;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 1,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
@@ -3541,9 +3555,10 @@ const ::_pbi::TcParseTable<2, 5, 3, 35, 2> ScenarioDef::_table_ = {
     {::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>()},
   }}, {{
-    "\17\13\0\0\0\0\0\0"
+    "\17\13\0\0\14\0\0\0"
     "aim.ScenarioDef"
     "scenario_id"
+    "display_name"
   }},
 };
 
@@ -3555,11 +3570,14 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _impl_.scenario_id_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000002u) {
+      _impl_.display_name_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000004u) {
       ABSL_DCHECK(_impl_.room_ != nullptr);
       _impl_.room_->Clear();
     }
@@ -3595,17 +3613,25 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
           }
 
           // float duration_seconds = 2;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 2, this_._internal_duration_seconds(), target);
           }
 
           // .aim.Room room = 3;
-          if (cached_has_bits & 0x00000002u) {
+          if (cached_has_bits & 0x00000004u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 3, *this_._impl_.room_, this_._impl_.room_->GetCachedSize(), target,
                 stream);
+          }
+
+          // string display_name = 4;
+          if (cached_has_bits & 0x00000002u) {
+            const std::string& _s = this_._internal_display_name();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.ScenarioDef.display_name");
+            target = stream->WriteStringMaybeAliased(4, _s, target);
           }
 
           switch (this_.type_case()) {
@@ -3649,19 +3675,24 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x0000000fu) {
             // string scenario_id = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_scenario_id());
             }
-            // .aim.Room room = 3;
+            // string display_name = 4;
             if (cached_has_bits & 0x00000002u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_display_name());
+            }
+            // .aim.Room room = 3;
+            if (cached_has_bits & 0x00000004u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.room_);
             }
             // float duration_seconds = 2;
-            if (cached_has_bits & 0x00000004u) {
+            if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
           }
@@ -3696,11 +3727,14 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_set_scenario_id(from._internal_scenario_id());
     }
     if (cached_has_bits & 0x00000002u) {
+      _this->_internal_set_display_name(from._internal_display_name());
+    }
+    if (cached_has_bits & 0x00000004u) {
       ABSL_DCHECK(from._impl_.room_ != nullptr);
       if (_this->_impl_.room_ == nullptr) {
         _this->_impl_.room_ =
@@ -3709,7 +3743,7 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
         _this->_impl_.room_->MergeFrom(*from._impl_.room_);
       }
     }
-    if (cached_has_bits & 0x00000004u) {
+    if (cached_has_bits & 0x00000008u) {
       _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
     }
   }
@@ -3765,6 +3799,7 @@ void ScenarioDef::InternalSwap(ScenarioDef* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.scenario_id_, &other->_impl_.scenario_id_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.display_name_, &other->_impl_.display_name_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)
       + sizeof(ScenarioDef::_impl_.duration_seconds_)

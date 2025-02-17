@@ -26,19 +26,19 @@ struct NavigationEvent {
     return Create(NavigationEventType::RESTART_LAST_SCENARIO);
   }
 
-  bool ShouldGoHome() {
-    return type == NavigationEventType::GO_HOME || type == NavigationEventType::EXIT;
+  bool IsGoHome() const {
+    return type == NavigationEventType::GO_HOME;
   }
 
-  bool IsDone() {
+  bool IsDone() const {
     return type == NavigationEventType::DONE;
   }
 
-  bool IsNotDone() {
+  bool IsNotDone() const {
     return type != NavigationEventType::DONE;
   }
 
-  bool IsExit() {
+  bool IsExit() const {
     return type == NavigationEventType::EXIT;
   }
 

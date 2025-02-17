@@ -1,5 +1,3 @@
-#include "home_screen.h"
-
 #include <backends/imgui_impl_sdl3.h>
 
 #include <format>
@@ -9,276 +7,288 @@
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
-namespace {}  // namespace
+namespace {
 
-void HomeScreen::Run(Application* app) {
-  bool needs_reset = true;
+std::vector<ScenarioDef> GetScenarios() {
+  Room default_wall;
+  default_wall.mutable_simple_room()->set_height(150);
+  default_wall.mutable_simple_room()->set_width(170);
+  *default_wall.mutable_camera_position() = ToStoredVec3(0, -100.0f, 0);
 
-  std::optional<ScenarioDef> scenario_to_start;
-  bool stop_scenario = false;
-  int duration_seconds = 60;
-  bool open_settings = false;
-  while (!stop_scenario) {
-    if (needs_reset) {
-      SDL_GL_SetSwapInterval(1);  // Enable vsync
-      SDL_SetWindowRelativeMouseMode(app->sdl_window(), false);
-      needs_reset = false;
-    }
-    if (scenario_to_start) {
-      app->settings_manager()->MaybeInvalidateThemeCache();
-      auto nav_event = aim::RunScenario(*scenario_to_start, app);
-      if (nav_event.IsExit()) {
-        return;
+  Room circular_wall;
+  circular_wall.mutable_circular_room()->set_height(100);
+  circular_wall.mutable_circular_room()->set_radius(150);
+  *circular_wall.mutable_camera_position() = ToStoredVec3(0, 50, 0);
+
+  ScenarioDef base_static_def;
+  base_static_def.set_duration_seconds(60);
+  *base_static_def.mutable_room() = default_wall;
+
+  std::vector<ScenarioDef> scenarios;
+
+  ScenarioDef base_1w_def = base_static_def;
+  {
+    StaticScenarioDef* static_def = base_1w_def.mutable_static_def();
+    static_def->set_target_radius(1.5);
+
+    TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
+    strat->set_min_distance(20);
+
+    TargetRegion* circle_region = strat->add_regions();
+    circle_region->set_percent_chance(0.3);
+    circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.6);
+    circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.32);
+
+    TargetRegion* square_region = strat->add_regions();
+    square_region->set_percent_chance(1);
+    square_region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.65);
+    square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
+  }
+
+  float default_centering_speed = 45;
+  float default_centering_radius = 1.2;
+
+  {
+    ScenarioDef def = base_static_def;
+    def.set_scenario_id("centering_test");
+    def.set_display_name("Centering");
+    def.mutable_centering_def()->set_target_width(default_centering_radius);
+    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
+    *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_static_def;
+    def.set_scenario_id("overhead_centering_test");
+    def.set_display_name("Overhead Centering");
+    def.mutable_centering_def()->set_target_width(default_centering_radius);
+    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 50);
+    *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 50);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_static_def;
+    def.set_scenario_id("vertical_centering_test");
+    def.set_display_name("Vertical Centering");
+    def.mutable_centering_def()->set_target_width(default_centering_radius);
+    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 45);
+    *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -45);
+    scenarios.push_back(def);
+  }
+  float diagonal = 35;
+  float neg_diagonal = -35;
+  {
+    ScenarioDef def = base_static_def;
+    def.set_scenario_id("diagonal_centering_test_1");
+    def.set_display_name("Diagonal Centering 1");
+    def.mutable_centering_def()->set_target_width(default_centering_radius);
+    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_centering_def()->mutable_start_position() =
+        ToStoredVec3(neg_diagonal, -3, neg_diagonal);
+    *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, diagonal);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_static_def;
+    def.set_display_name("Diagonal Centering 2");
+    def.set_scenario_id("diagonal_centering_test_2");
+    def.mutable_centering_def()->set_target_width(default_centering_radius);
+    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_centering_def()->mutable_start_position() =
+        ToStoredVec3(neg_diagonal, -3, diagonal);
+    *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, neg_diagonal);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_display_name("Circle Room");
+    def.set_scenario_id("circle_test");
+    *def.mutable_room() = circular_wall;
+    def.mutable_static_def()->set_num_targets(5);
+    def.mutable_static_def()->set_target_radius(2.5);
+
+    TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
+    strat->clear_regions();
+
+    TargetRegion* region = strat->add_regions();
+    region->mutable_rectangle()->mutable_x_length()->set_absolute_value(35);
+    region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.5);
+
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_display_name("Nick EZ PZ");
+    def.set_scenario_id("nick_ez_pz");
+    def.mutable_static_def()->set_num_targets(7);
+    def.mutable_static_def()->set_target_radius(3);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_display_name("1w3ts");
+    def.set_scenario_id("1w3ts_intermediate_s5");
+    def.mutable_static_def()->set_num_targets(3);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_display_name("1w2ts advanced");
+    def.set_scenario_id("1w2ts_advanced_s5");
+    def.mutable_static_def()->set_num_targets(2);
+    def.mutable_static_def()->set_target_radius(1.18);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_scenario_id("1w3ts_intermediate_s5_hard");
+    def.set_display_name("1w3ts hard");
+    def.mutable_static_def()->set_num_targets(3);
+    def.mutable_static_def()->set_target_radius(1.05);
+    def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_display_name("1w3ts hard poke");
+    def.set_scenario_id("1w3ts_intermediate_s5_hard_poke");
+    def.mutable_static_def()->set_num_targets(3);
+    def.mutable_static_def()->set_target_radius(1.05);
+    def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+    def.mutable_static_def()->set_is_poke_ball(true);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_scenario_id("1w1ts_intermediate_s5");
+    def.set_display_name("1w1ts");
+    def.mutable_static_def()->set_num_targets(1);
+    def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_scenario_id("1w1ts_intermediate_s5_vertical_alternate");
+    def.set_display_name("vertical alternate");
+    def.mutable_static_def()->set_num_targets(2);
+    def.mutable_static_def()->set_remove_closest_target_on_miss(true);
+    def.mutable_static_def()->set_newest_target_is_ghost(true);
+    TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
+    strat->clear_regions();
+    strat->set_alternate_regions(true);
+
+    TargetRegion* top = strat->add_regions();
+    top->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);
+    top->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.1);
+    top->mutable_y_offset()->set_y_percent_value(0.2);
+
+    TargetRegion* bottom = strat->add_regions();
+    bottom->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);
+    bottom->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.1);
+    bottom->mutable_y_offset()->set_y_percent_value(-0.2);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_scenario_id("1w3ts_intermediate_s5_poke");
+    def.set_display_name("1w3ts poke");
+    def.mutable_static_def()->set_num_targets(3);
+    def.mutable_static_def()->set_is_poke_ball(true);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_scenario_id("raw_control");
+    def.set_display_name("RawControl");
+    def.clear_static_def();
+    StaticScenarioDef* static_def = def.mutable_static_def();
+    static_def->set_target_radius(0.95);
+    static_def->set_num_targets(3);
+
+    TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
+    strat->set_min_distance(3);
+
+    TargetRegion* circle_region = strat->add_regions();
+    circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.08);
+    circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.08);
+
+    scenarios.push_back(def);
+  }
+
+  return scenarios;
+}
+
+bool ShouldExit(const NavigationEvent& e) {
+  bool should_display_home = e.IsGoHome() || e.IsDone();
+  return !should_display_home;
+}
+
+class HomeScreen : public UiScreen {
+ public:
+  explicit HomeScreen(Application* app) : UiScreen(app), scenarios_(GetScenarios()) {}
+
+ protected:
+  std::optional<NavigationEvent> OnBeforeEventHandling() override {
+    if (scenario_to_start_) {
+      app_->settings_manager()->MaybeInvalidateThemeCache();
+      auto nav_event = aim::RunScenario(*scenario_to_start_, app_);
+      if (ShouldExit(nav_event)) {
+        return nav_event;
       }
-      scenario_to_start = {};
-      needs_reset = true;
-      continue;
+      scenario_to_start_ = {};
+      Resume();
     }
-    if (open_settings) {
-      auto settings_screen = CreateSettingsScreen(app);
+    if (open_settings_) {
+      auto settings_screen = CreateSettingsScreen(app_);
       auto nav_event = settings_screen->Run();
-      if (nav_event.IsExit()) {
-        return;
+      if (ShouldExit(nav_event)) {
+        return nav_event;
       }
-      open_settings = false;
-      continue;
+      open_settings_ = false;
+      Resume();
     }
+    return {};
+  }
 
-    Room default_wall;
-    default_wall.mutable_simple_room()->set_height(150);
-    default_wall.mutable_simple_room()->set_width(170);
-    *default_wall.mutable_camera_position() = ToStoredVec3(0, -100.0f, 0);
-
-    Room circular_wall;
-    circular_wall.mutable_circular_room()->set_height(100);
-    circular_wall.mutable_circular_room()->set_radius(150);
-    *circular_wall.mutable_camera_position() = ToStoredVec3(0, 50, 0);
-
-    ScenarioDef base_static_def;
-    base_static_def.set_duration_seconds(duration_seconds);
-    *base_static_def.mutable_room() = default_wall;
-
-    ScenarioDef base_1w_def = base_static_def;
-    {
-      StaticScenarioDef* static_def = base_1w_def.mutable_static_def();
-      static_def->set_target_radius(1.5);
-
-      TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
-      strat->set_min_distance(20);
-
-      TargetRegion* circle_region = strat->add_regions();
-      circle_region->set_percent_chance(0.3);
-      circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.6);
-      circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.32);
-
-      TargetRegion* square_region = strat->add_regions();
-      square_region->set_percent_chance(1);
-      square_region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.65);
-      square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
+  std::optional<NavigationEvent> OnKeyDown(const SDL_Event& event, bool user_is_typing) override {
+    SDL_Keycode keycode = event.key.key;
+    if (keycode == SDLK_ESCAPE) {
+      return NavigationEvent::Exit();
     }
+    return {};
+  }
 
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL3_ProcessEvent(&event);
-      if (event.type == SDL_EVENT_QUIT) {
-        return;
-      }
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_ESCAPE) {
-          return;
-        }
-      }
-    }
-
-    ImDrawList* draw_list = app->StartFullscreenImguiFrame();
-
+  void DrawScreen() override {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-
-    ImGui::Text("duration:");
-    ImGui::SameLine();
-    if (ImGui::RadioButton("60s", duration_seconds == 60)) {
-      duration_seconds = 60;
-    }
-    ImGui::SameLine();
-    if (ImGui::RadioButton("30s", duration_seconds == 30)) {
-      duration_seconds = 30;
-    }
-    ImGui::SameLine();
-    if (ImGui::RadioButton("10s", duration_seconds == 10)) {
-      duration_seconds = 10;
-    }
 
     float default_centering_speed = 45;
     float default_centering_radius = 1.2;
 
     ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
     if (ImGui::Button("Settings", sz)) {
-      open_settings = true;
+      open_settings_ = true;
     }
-    if (ImGui::Button("Start Centering", sz)) {
-      ScenarioDef def = base_static_def;
-      def.set_scenario_id("centering_test");
-      def.mutable_centering_def()->set_target_width(default_centering_radius);
-      def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start Overhead Centering", sz)) {
-      ScenarioDef def = base_static_def;
-      def.set_scenario_id("overhead_centering_test");
-      def.mutable_centering_def()->set_target_width(default_centering_radius);
-      def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 50);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 50);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start Vertical Centering", sz)) {
-      ScenarioDef def = base_static_def;
-      def.set_scenario_id("vertical_centering_test");
-      def.mutable_centering_def()->set_target_width(default_centering_radius);
-      def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 45);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -45);
-      scenario_to_start = def;
-    }
-    float diagonal = 35;
-    float neg_diagonal = -35;
-    if (ImGui::Button("Start Diagonal Centering 1", sz)) {
-      ScenarioDef def = base_static_def;
-      def.set_scenario_id("diagonal_centering_test_1");
-      def.mutable_centering_def()->set_target_width(default_centering_radius);
-      def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() =
-          ToStoredVec3(neg_diagonal, -3, neg_diagonal);
-      *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, diagonal);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start Diagonal Centering 2", sz)) {
-      ScenarioDef def = base_static_def;
-      def.set_scenario_id("diagonal_centering_test_2");
-      def.mutable_centering_def()->set_target_width(default_centering_radius);
-      def.mutable_centering_def()->set_speed(default_centering_speed);
-      *def.mutable_centering_def()->mutable_start_position() =
-          ToStoredVec3(neg_diagonal, -3, diagonal);
-      *def.mutable_centering_def()->mutable_end_position() =
-          ToStoredVec3(diagonal, -3, neg_diagonal);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start Circle", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("circle_test");
-      *def.mutable_room() = circular_wall;
-      def.mutable_static_def()->set_num_targets(5);
-      def.mutable_static_def()->set_target_radius(2.5);
-
-      TargetPlacementStrategy* strat =
-          def.mutable_static_def()->mutable_target_placement_strategy();
-      strat->clear_regions();
-
-      TargetRegion* region = strat->add_regions();
-      region->mutable_rectangle()->mutable_x_length()->set_absolute_value(35);
-      region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.5);
-
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start Nicky EZ PZ", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("nick_ez_pz");
-      def.mutable_static_def()->set_num_targets(7);
-      def.mutable_static_def()->set_target_radius(3);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w3ts intermediate", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w3ts_intermediate_s5");
-      def.mutable_static_def()->set_num_targets(3);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w2ts advanced", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w2ts_advanced_s5");
-      def.mutable_static_def()->set_num_targets(2);
-      def.mutable_static_def()->set_target_radius(1.18);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w3ts hard", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w3ts_intermediate_s5_hard");
-      def.mutable_static_def()->set_num_targets(3);
-      def.mutable_static_def()->set_target_radius(1.05);
-      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w3ts hard poke", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w3ts_intermediate_s5_hard_poke");
-      def.mutable_static_def()->set_num_targets(3);
-      def.mutable_static_def()->set_target_radius(1.05);
-      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
-      def.mutable_static_def()->set_is_poke_ball(true);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w1ts", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w1ts_intermediate_s5");
-      def.mutable_static_def()->set_num_targets(1);
-      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w1ts vertical alternate", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w1ts_intermediate_s5_vertical_alternate");
-      def.mutable_static_def()->set_num_targets(2);
-      def.mutable_static_def()->set_remove_closest_target_on_miss(true);
-      def.mutable_static_def()->set_newest_target_is_ghost(true);
-      TargetPlacementStrategy* strat =
-          def.mutable_static_def()->mutable_target_placement_strategy();
-      strat->clear_regions();
-      strat->set_alternate_regions(true);
-
-      TargetRegion* top = strat->add_regions();
-      top->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);
-      top->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.1);
-      top->mutable_y_offset()->set_y_percent_value(0.2);
-
-      TargetRegion* bottom = strat->add_regions();
-      bottom->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);
-      bottom->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.1);
-      bottom->mutable_y_offset()->set_y_percent_value(-0.2);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start 1w3ts poke", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("1w3ts_intermediate_s5_poke");
-      def.mutable_static_def()->set_num_targets(3);
-      def.mutable_static_def()->set_is_poke_ball(true);
-      scenario_to_start = def;
-    }
-    if (ImGui::Button("Start raw control", sz)) {
-      ScenarioDef def = base_1w_def;
-      def.set_scenario_id("raw_control");
-      def.clear_static_def();
-      StaticScenarioDef* static_def = def.mutable_static_def();
-      static_def->set_target_radius(0.95);
-      static_def->set_num_targets(3);
-
-      TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
-      strat->set_min_distance(3);
-
-      TargetRegion* circle_region = strat->add_regions();
-      circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.08);
-      circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.08);
-
-      scenario_to_start = def;
-    }
-    ImGui::End();
-
-    if (app->StartRender()) {
-      app->FinishRender();
+    for (auto& def : scenarios_) {
+      if (ImGui::Button(def.display_name().c_str(), sz)) {
+        scenario_to_start_ = def;
+      }
     }
   }
+
+ private:
+  std::optional<ScenarioDef> scenario_to_start_;
+  bool open_settings_ = false;
+
+  std::vector<ScenarioDef> scenarios_;
+};
+
+}  // namespace
+
+std::unique_ptr<UiScreen> CreateHomeScreen(Application* app) {
+  return std::make_unique<HomeScreen>(app);
 }
 
 }  // namespace aim

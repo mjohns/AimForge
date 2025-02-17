@@ -1,12 +1,9 @@
 #include "aim/core/application.h"
-#include "aim/ui/home_screen.h"
+#include "aim/ui/ui_screen.h"
 
 int main(int, char**) {
   using namespace aim;
   auto app = Application::Create();
-
-  HomeScreen home_screen;
-  home_screen.Run(app.get());
-
+  CreateHomeScreen(app.get())->Run();
   return 0;
 }
