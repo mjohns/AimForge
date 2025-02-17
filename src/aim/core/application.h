@@ -89,7 +89,7 @@ class Application {
 
   int Initialize();
 
-  SDL_GLContext gl_context_;
+  SDL_GLContext gl_context_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
 
   int window_width_ = -1;

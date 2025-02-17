@@ -6,7 +6,7 @@
 
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
-#include "aim/ui/settings_screen.h"
+#include "aim/ui/ui_screen.h"
 
 namespace aim {
 namespace {}  // namespace
@@ -34,8 +34,8 @@ void HomeScreen::Run(Application* app) {
       continue;
     }
     if (open_settings) {
-      SettingsScreen settings_screen;
-      auto nav_event = settings_screen.Run(app);
+      auto settings_screen = CreateSettingsScreen(app);
+      auto nav_event = settings_screen->Run();
       if (nav_event.IsExit()) {
         return;
       }
