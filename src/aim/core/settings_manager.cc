@@ -158,7 +158,7 @@ Theme SettingsManager::GetTheme(const std::string& theme_name) {
   }
   auto it = theme_cache_.find(theme_name);
   if (it != theme_cache_.end()) {
-    return it->second;
+    return it->second.theme;
   }
 
   for (auto& dir : theme_dirs_) {
@@ -166,7 +166,12 @@ Theme SettingsManager::GetTheme(const std::string& theme_name) {
     if (std::filesystem::exists(path)) {
       Theme theme;
       if (ReadJsonMessageFromFile(path, &theme)) {
-        theme_cache_[theme_name] = theme;
+        ThemeCacheEntry entry;
+        theme.set_name(theme_name);
+        entry.theme = theme;
+        entry.file_path = path;
+        entry.last_modified_time = std::filesystem::last_write_time(path);
+        theme_cache_[theme_name] = entry;
         return theme;
       }
     }
@@ -181,6 +186,21 @@ Theme SettingsManager::GetCurrentTheme() {
     return GetDefaultTheme();
   }
   return GetTheme(settings->theme_name());
+}
+
+void SettingsManager::MaybeInvalidateThemeCache() {
+  std::vector<std::string> entries_to_invalidate;
+  for (auto& map_entry : theme_cache_) {
+    auto& cache_entry = map_entry.second;
+    auto last_modified_time = std::filesystem::last_write_time(cache_entry.file_path);
+    if (last_modified_time > cache_entry.last_modified_time) {
+      Logger::get()->info("Invalidate theme cache entry for {}", map_entry.first);
+      entries_to_invalidate.push_back(map_entry.first);
+    }
+  }
+  for (auto& theme_name : entries_to_invalidate) {
+    theme_cache_.erase(theme_name);
+  }
 }
 
 float SettingsManager::GetDpi() {

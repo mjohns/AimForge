@@ -25,6 +25,7 @@ void HomeScreen::Run(Application* app) {
       needs_reset = false;
     }
     if (scenario_to_start) {
+      app->settings_manager()->MaybeInvalidateThemeCache();
       auto nav_event = aim::RunScenario(*scenario_to_start, app);
       if (nav_event.IsExit()) {
         return;
