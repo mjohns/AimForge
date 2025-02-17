@@ -13,7 +13,7 @@
 #include <memory>
 
 #include "aim/common/scope_guard.h"
-#include "aim/common/time_util.h"
+#include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
