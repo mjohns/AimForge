@@ -24,7 +24,7 @@
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
-#include "aim/ui/settings_screen.h"
+#include "aim/ui/ui_screen.h"
 
 namespace aim {
 namespace {
@@ -88,11 +88,9 @@ NavigationEvent Scenario::Run() {
       OnPause();
       NavigationEvent nav_event;
       if (is_quick_settings) {
-        QuickSettingsScreen settings_screen;
-        nav_event = settings_screen.Run(app_);
+        nav_event = CreateQuickSettingsScreen(app_)->Run();
       } else {
-        SettingsScreen settings_screen;
-        nav_event = settings_screen.Run(app_);
+        nav_event = CreateSettingsScreen(app_)->Run();
         app_->logger()->flush();
       }
       if (nav_event.IsNotDone()) {
