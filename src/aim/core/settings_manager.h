@@ -12,6 +12,12 @@
 
 namespace aim {
 
+struct ThemeCacheEntry {
+  Theme theme;
+  std::filesystem::path file_path;
+  std::filesystem::file_time_type last_modified_time;
+};
+
 class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,
@@ -34,6 +40,8 @@ class SettingsManager {
   // Only flush to disk if marked dirty.
   void MaybeFlushToDisk();
 
+  void MaybeInvalidateThemeCache();
+
   SettingsManager(const SettingsManager&) = delete;
   SettingsManager(SettingsManager&&) = default;
   SettingsManager& operator=(SettingsManager other) = delete;
@@ -44,7 +52,7 @@ class SettingsManager {
   FullSettings full_settings_;
   bool needs_save_ = false;
   std::vector<std::filesystem::path> theme_dirs_;
-  std::unordered_map<std::string, Theme> theme_cache_;
+  std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
 };
 
 }  // namespace aim
