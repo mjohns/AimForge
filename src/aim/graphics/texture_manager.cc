@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "aim/graphics/image.h"
+#include "aim/common/log.h"
 
 namespace aim {
 
@@ -35,7 +36,7 @@ Texture::Texture(const std::filesystem::path& path) {
                  image.data());
     glGenerateMipmap(GL_TEXTURE_2D);
   } else {
-    std::cout << "Failed to load texture" << std::endl;
+    Logger::get()->error("Failed to load texture: {}", path.string());
   }
 }
 

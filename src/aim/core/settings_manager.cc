@@ -39,17 +39,22 @@ Theme GetTextureTheme() {
   *(t.mutable_crosshair()->mutable_outline_color()) = ToStoredColor("#000000");
 
   WallAppearance wall;
-  wall.mutable_texture()->set_texture_name("granite1.jpg");
+  wall.mutable_texture()->set_texture_name("granite_herringbone.jpg");
   wall.mutable_texture()->set_scale(2);
 
-  *t.mutable_front_appearance() = wall;
-  *t.mutable_floor_appearance() = wall;
-  *t.mutable_roof_appearance() = wall;
-  *t.mutable_side_appearance() = wall;
+  WallAppearance sides;
+  sides.mutable_texture()->set_texture_name("basalt.jpg");
+  sides.mutable_texture()->set_scale(2.5);
 
-  t.mutable_floor_appearance()->mutable_texture()->set_mix_percent(0.2);
-  t.mutable_roof_appearance()->mutable_texture()->set_mix_percent(0.2);
-  t.mutable_side_appearance()->mutable_texture()->set_mix_percent(0.3);
+  *t.mutable_front_appearance() = wall;
+  *t.mutable_floor_appearance() = sides;
+  *t.mutable_roof_appearance() = sides;
+  *t.mutable_side_appearance() = sides;
+
+  t.mutable_front_appearance()->mutable_texture()->set_mix_percent(0.2);
+  t.mutable_floor_appearance()->mutable_texture()->set_mix_percent(0.4);
+  t.mutable_roof_appearance()->mutable_texture()->set_mix_percent(0.4);
+  t.mutable_side_appearance()->mutable_texture()->set_mix_percent(0.2);
 
   *t.mutable_target_color() = ToStoredColor(0);
   *t.mutable_ghost_target_color() = ToStoredColor(0.65);
@@ -150,7 +155,8 @@ Theme SettingsManager::GetTheme(const std::string& theme_name) {
   if (theme_name == "textured") {
     return GetTextureTheme();
   }
-  return GetDefaultTheme();
+  return GetTextureTheme();
+  //return GetDefaultTheme();
 }
 
 Theme SettingsManager::GetCurrentTheme() {

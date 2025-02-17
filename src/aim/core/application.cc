@@ -17,6 +17,7 @@
 
 #include <memory>
 
+#include "aim/common/log.h"
 #include "aim/common/time_util.h"
 #include "aim/common/util.h"
 #include "aim/graphics/glad_loader.h"
@@ -63,6 +64,8 @@ Application::~Application() {
   Mix_Quit();
 
   SDL_Quit();
+
+  Logger::getInstance().ResetToDefault();
 }
 
 int Application::Initialize() {
@@ -71,7 +74,7 @@ int Application::Initialize() {
 
   // Setup SDL
   if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
-    printf("Error: SDL_Init(): %s\n", SDL_GetError());
+    Logger::get()->error("Error: SDL_Init(): {}", SDL_GetError());
     return -1;
   }
   file_system_ = std::make_unique<FileSystem>();
@@ -81,6 +84,8 @@ int Application::Initialize() {
     logger_ = spdlog::rotating_logger_mt(
         "aim", file_system_->GetUserDataPath("logs/log_file.txt").string(), max_size, max_files);
     logger_->flush_on(spdlog::level::warn);
+
+    Logger::getInstance().SetLogger(logger_);
 
     absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);
     absl::AddLogSink(absl_log_sink_.get());
