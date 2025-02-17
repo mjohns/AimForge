@@ -1,10 +1,12 @@
 #pragma once
 
 #include <filesystem>
+#include <vector>
 
 #include "aim/core/target.h"
 #include "aim/graphics/room_renderer.h"
 #include "aim/graphics/sphere_renderer.h"
+#include "aim/graphics/texture_manager.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/proto/theme.pb.h"
 
@@ -12,7 +14,9 @@ namespace aim {
 
 class Renderer {
  public:
-  Renderer(const std::filesystem::path& texture_folder) : room_renderer_(texture_folder) {}
+  Renderer(const std::vector<std::filesystem::path>& texture_dirs)
+      : room_renderer_(&texture_manager_), texture_manager_(texture_dirs) {}
+
   void SetProjection(const glm::mat4& projection);
 
   void DrawScenario(const Room& room,
@@ -28,6 +32,7 @@ class Renderer {
  private:
   SphereRenderer sphere_renderer_;
   RoomRenderer room_renderer_;
+  TextureManager texture_manager_;
 };
 
 }  // namespace aim

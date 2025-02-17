@@ -21,8 +21,8 @@ struct Rgb {
 };
 
 struct Wall {
-  float height;
   float width;
+  float height;
 };
 
 struct ScreenInfo {
