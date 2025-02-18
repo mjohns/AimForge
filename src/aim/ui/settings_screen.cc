@@ -92,6 +92,7 @@ class QuickSettingsScreen : public UiScreen {
     current_settings_ = mgr_->GetMutableCurrentSettings();
     if (current_settings_ != nullptr) {
       cm_per_360_ = MaybeIntToString(current_settings_->cm_per_360());
+      theme_name_ = current_settings_->theme_name();
     }
   }
 
