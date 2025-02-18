@@ -26,8 +26,12 @@ struct RoomRenderer {
   void DrawWall(const glm::mat4& model,
                 const glm::mat4& view,
                 const Wall& wall,
-                const WallAppearance& appearance);
-  void DrawWallSolidColor(const glm::mat4& model, const glm::mat4& view, const glm::vec3& color);
+                const WallAppearance& appearance,
+                bool is_circular_wall = false);
+  void DrawWallSolidColor(const glm::mat4& model,
+                          const glm::mat4& view,
+                          const glm::vec3& color,
+                          bool is_circular_wall = false);
 
   unsigned int quad_vbo_;
   unsigned int quad_vao_;
