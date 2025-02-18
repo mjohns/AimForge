@@ -112,6 +112,10 @@ class QuickSettingsScreen : public UiScreen {
         current_settings_->set_cm_per_360(new_cm_per_360);
         mgr_->MarkDirty();
       }
+      if (theme_name_ != current_settings_->theme_name()) {
+        current_settings_->set_theme_name(theme_name_);
+        mgr_->MarkDirty();
+      }
       mgr_->MaybeFlushToDisk();
       return NavigationEvent::Done();
     }
@@ -149,6 +153,18 @@ class QuickSettingsScreen : public UiScreen {
     ImGui::PushItemWidth(button_sz.x);
     ImGui::InputText("##CM_PER_360", &cm_per_360_, ImGuiInputTextFlags_CharsDecimal);
     ImGui::PopItemWidth();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    if (ImGui::Button("Default Theme", button_sz)) {
+      theme_name_ = "default";
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Texture Theme", button_sz)) {
+      theme_name_ = "dark_herringbone";
+    }
   }
 
  private:
