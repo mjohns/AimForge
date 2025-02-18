@@ -80,19 +80,28 @@ constexpr const int kQuadNumVertices = 6;
 
 void PushFloats(std::vector<float>* list,
                 const glm::vec3& v1,
+                const glm::vec2& t1,
                 const glm::vec3& v2,
-                const glm::vec3& v3) {
+                const glm::vec2& t2,
+                const glm::vec3& v3,
+                const glm::vec2& t3) {
   list->push_back(v1.x);
   list->push_back(v1.y);
   list->push_back(v1.z);
+  list->push_back(t1.x);
+  list->push_back(t1.y);
 
   list->push_back(v2.x);
   list->push_back(v2.y);
   list->push_back(v2.z);
+  list->push_back(t2.x);
+  list->push_back(t2.y);
 
   list->push_back(v3.x);
   list->push_back(v3.y);
   list->push_back(v3.z);
+  list->push_back(t3.x);
+  list->push_back(t3.y);
 }
 
 std::vector<float> GenerateCircularWallVertices(int num_segments) {
@@ -103,10 +112,16 @@ std::vector<float> GenerateCircularWallVertices(int num_segments) {
   std::vector<float> vertices;
   vertices.reserve(num_segments * 6 * 3);
 
-  glm::vec2 current_point(0, 1);
+  glm::vec2 current_point(0, -1);
+  float tx_step = 1.0f / num_segments;
+  float ty_top = 1.0f;
+  float ty_bottom = 0.0f;
   for (int i = 0; i < num_segments; ++i) {
     float next_x = current_point.x * cos_theta - current_point.y * sin_theta;
     float next_y = current_point.x * sin_theta + current_point.y * cos_theta;
+
+    float tx_right = i * tx_step;
+    float tx_left = tx_right + tx_step;
 
     glm::vec2 next_point(next_x, next_y);
 
@@ -116,9 +131,21 @@ std::vector<float> GenerateCircularWallVertices(int num_segments) {
     glm::vec3 bottom_left(next_point.x, next_point.y, -0.5);
     glm::vec3 top_left(next_point.x, next_point.y, 0.5);
 
+    glm::vec2 bottom_right_t(tx_right, ty_bottom);
+    glm::vec2 top_right_t(tx_right, ty_top);
+
+    glm::vec2 bottom_left_t(tx_left, ty_bottom);
+    glm::vec2 top_left_t(tx_left, ty_top);
+
     // Add two triangles.
-    PushFloats(&vertices, bottom_right, top_right, bottom_left);
-    PushFloats(&vertices, top_right, top_left, bottom_left);
+    PushFloats(&vertices,
+               bottom_right,
+               bottom_right_t,
+               top_right,
+               top_right_t,
+               bottom_left,
+               bottom_left_t);
+    PushFloats(&vertices, top_right, top_right_t, top_left, top_left_t, bottom_left, bottom_left_t);
 
     current_point = next_point;
   }
@@ -178,7 +205,8 @@ RoomRenderer::RoomRenderer(TextureManager* texture_manager)
 
   {
     std::vector<float> vertices = GenerateCircularWallVertices(1000);
-    circular_wall_num_vertices_ = vertices.size() / 3;
+    // 3 vertices plus 2 texture coords.
+    circular_wall_num_vertices_ = vertices.size() / 5;
 
     glGenVertexArrays(1, &circular_wall_vao_);
     glGenBuffers(1, &circular_wall_vbo_);
@@ -189,8 +217,12 @@ RoomRenderer::RoomRenderer(TextureManager* texture_manager)
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    // texture attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
   }
 }
 
@@ -214,12 +246,13 @@ void RoomRenderer::Draw(const Room& room, const Theme& theme, const glm::mat4& v
 void RoomRenderer::DrawWall(const glm::mat4& model,
                             const glm::mat4& view,
                             const Wall& wall,
-                            const WallAppearance& appearance) {
+                            const WallAppearance& appearance,
+                            bool is_circular_wall) {
   if (appearance.has_texture()) {
     Texture* texture = texture_manager_->GetTexture(appearance.texture().texture_name());
     if (texture == nullptr) {
       // Too spammy to log this error?
-      DrawWallSolidColor(model, view, glm::vec3(0.7));
+      DrawWallSolidColor(model, view, glm::vec3(0.7), is_circular_wall);
       return;
     }
 
@@ -247,23 +280,34 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
     texture_shader_.SetFloat("mix_percent", appearance.texture().mix_percent());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture->id());
-    glBindVertexArray(quad_vao_);
-    glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+    if (is_circular_wall) {
+      glBindVertexArray(circular_wall_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, circular_wall_num_vertices_);
+    } else {
+      glBindVertexArray(quad_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+    }
     return;
   }
 
-  DrawWallSolidColor(model, view, ToVec3(appearance.color()));
+  DrawWallSolidColor(model, view, ToVec3(appearance.color()), is_circular_wall);
 }
 
 void RoomRenderer::DrawWallSolidColor(const glm::mat4& model,
                                       const glm::mat4& view,
-                                      const glm::vec3& color) {
+                                      const glm::vec3& color,
+                                      bool is_circular_wall) {
   simple_shader_.Use();
   simple_shader_.SetMat4("view", view);
   simple_shader_.SetVec3("quad_color", color);
   simple_shader_.SetMat4("model", model);
-  glBindVertexArray(quad_vao_);
-  glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+  if (is_circular_wall) {
+    glBindVertexArray(circular_wall_vao_);
+    glDrawArrays(GL_TRIANGLES, 0, circular_wall_num_vertices_);
+  } else {
+    glBindVertexArray(quad_vao_);
+    glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+  }
 }
 
 void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
@@ -273,47 +317,36 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
   simple_shader_.SetMat4("view", view);
 
   glm::vec3 wall_color(ToVec3(theme.front_appearance().color()));
-  glm::vec3 floor_color(ToVec3(theme.floor_appearance().color()));
-  glm::vec3 top_color(ToVec3(theme.roof_appearance().color()));
 
   float quad_scale = room.radius() * 2.5;
   float height = room.height();
 
   {
     // Floor wall
-    simple_shader_.SetVec3("quad_color", floor_color);
-
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0, 0, -0.5 * height));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-    simple_shader_.SetMat4("model", model);
-
-    glBindVertexArray(quad_vao_);
-    glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+    DrawWall(model, view, {quad_scale, quad_scale}, theme.floor_appearance());
   }
 
   {
     // Top wall
-    simple_shader_.SetVec3("quad_color", top_color);
-
     glm::mat4 model(1.f);
     model = glm::translate(model, glm::vec3(0, 0, 0.5 * height));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-    simple_shader_.SetMat4("model", model);
-
-    glBindVertexArray(quad_vao_);
-    glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+    DrawWall(model, view, {quad_scale, quad_scale}, theme.roof_appearance());
   }
 
   {
-    simple_shader_.SetVec3("quad_color", wall_color);
     glm::mat4 model(1.f);
     model = glm::scale(model, glm::vec3(room.radius(), room.radius(), height));
-    simple_shader_.SetMat4("model", model);
-    glBindVertexArray(circular_wall_vao_);
-    glDrawArrays(GL_TRIANGLES, 0, circular_wall_num_vertices_);
+    DrawWall(model,
+             view,
+             {glm::two_pi<float>() * room.radius(), height},
+             theme.front_appearance(),
+             true);
   }
 }
 
