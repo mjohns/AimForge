@@ -176,11 +176,12 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_1w_def;
     def.set_scenario_id("1w1ts_intermediate_s5_fixed_dist");
     def.set_display_name("1w3ts fixed");
-    def.mutable_static_def()->set_num_targets(2);
+    def.mutable_static_def()->set_num_targets(3);
     def.mutable_static_def()->set_newest_target_is_ghost(true);
     def.mutable_static_def()
         ->mutable_target_placement_strategy()
-        ->set_fixed_distance_from_last_target(25);
+        ->set_fixed_distance_from_last_target(20);
+    def.mutable_static_def()->mutable_target_placement_strategy()->set_min_distance(18);
     scenarios.push_back(def);
   }
   {
@@ -226,8 +227,8 @@ std::vector<ScenarioDef> GetScenarios() {
     strat->set_min_distance(3);
 
     TargetRegion* circle_region = strat->add_regions();
-    circle_region->mutable_ellipse()->mutable_x_diamter()->set_x_percent_value(0.08);
-    circle_region->mutable_ellipse()->mutable_y_diamter()->set_y_percent_value(0.08);
+    circle_region->mutable_ellipse()->mutable_x_diamter()->set_x_percent_value(0.075);
+    circle_region->mutable_ellipse()->mutable_y_diamter()->set_y_percent_value(0.075);
 
     scenarios.push_back(def);
   }
