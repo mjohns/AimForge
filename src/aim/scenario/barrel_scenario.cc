@@ -72,7 +72,8 @@ class BarrelScenario : public Scenario {
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
         info.direction = new_direction;
         new_position = t->static_wall_position + (info.direction * (delta_seconds * speed));
-        AddMoveLinearTargetEvent(t->id, info.direction, info.speed);
+        // Make sure this is added before the new position is actually set on the target.
+        AddMoveLinearTargetEvent(*t, info.direction, info.speed);
       }
       t->static_wall_position = new_position;
       FillInPositionFromStaticWallPos(t);
@@ -121,7 +122,7 @@ class BarrelScenario : public Scenario {
     movement_info_map_[t.id] = info;
 
     AddNewTargetEvent(t);
-    AddMoveLinearTargetEvent(t.id, info.direction, info.speed);
+    AddMoveLinearTargetEvent(t, info.direction, info.speed);
     return t;
   }
 

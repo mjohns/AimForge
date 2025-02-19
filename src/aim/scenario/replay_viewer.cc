@@ -97,6 +97,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
 
     bool has_kill = false;
     bool has_shot = false;
+    float now_seconds = timer.GetElapsedSeconds();
     for (auto& event : replay_frame.events) {
       if (event.has_kill_target()) {
         target_manager.RemoveTarget(event.kill_target().target_id());
@@ -121,8 +122,13 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
         info.target_id = m.target_id();
         info.direction = ToVec3(m.direction());
         info.speed = m.distance_per_second();
-        info.last_update_time_seconds = timer.GetElapsedSeconds();
+        info.last_update_time_seconds = now_seconds;
         move_target_map[event.move_linear_target().target_id()] = info;
+
+        Target* t = target_manager.GetMutableTarget(m.target_id());
+        if (t != nullptr) {
+          t->position = ToVec3(m.starting_position());
+        }
       }
     }
 
@@ -134,7 +140,6 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
     }
 
     // Move targets.
-    float now_seconds = timer.GetElapsedSeconds();
     for (Target* t : target_manager.GetMutableVisibleTargets()) {
       if (move_target_map.find(t->id) != move_target_map.end()) {
         MovementInfo& info = move_target_map[t->id];

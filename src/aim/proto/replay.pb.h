@@ -765,6 +765,7 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kDirectionFieldNumber = 2,
+    kStartingPositionFieldNumber = 4,
     kTargetIdFieldNumber = 1,
     kDistancePerSecondFieldNumber = 3,
   };
@@ -781,6 +782,21 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
   private:
   const ::aim::StoredVec3& _internal_direction() const;
   ::aim::StoredVec3* _internal_mutable_direction();
+
+  public:
+  // .aim.StoredVec3 starting_position = 4;
+  bool has_starting_position() const;
+  void clear_starting_position() ;
+  const ::aim::StoredVec3& starting_position() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec3* release_starting_position();
+  ::aim::StoredVec3* mutable_starting_position();
+  void set_allocated_starting_position(::aim::StoredVec3* value);
+  void unsafe_arena_set_allocated_starting_position(::aim::StoredVec3* value);
+  ::aim::StoredVec3* unsafe_arena_release_starting_position();
+
+  private:
+  const ::aim::StoredVec3& _internal_starting_position() const;
+  ::aim::StoredVec3* _internal_mutable_starting_position();
 
   public:
   // int32 target_id = 1;
@@ -810,7 +826,7 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 1,
+      2, 4, 2,
       0, 2>
       _table_;
 
@@ -831,6 +847,7 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::StoredVec3* direction_;
+    ::aim::StoredVec3* starting_position_;
     ::int32_t target_id_;
     float distance_per_second_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -1865,13 +1882,13 @@ inline void AddTargetEvent::_internal_set_radius(float value) {
 
 // int32 target_id = 1;
 inline bool MoveLinearTargetEvent::has_target_id() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void MoveLinearTargetEvent::clear_target_id() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_id_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline ::int32_t MoveLinearTargetEvent::target_id() const {
   // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.target_id)
@@ -1879,7 +1896,7 @@ inline ::int32_t MoveLinearTargetEvent::target_id() const {
 }
 inline void MoveLinearTargetEvent::set_target_id(::int32_t value) {
   _internal_set_target_id(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.MoveLinearTargetEvent.target_id)
 }
 inline ::int32_t MoveLinearTargetEvent::_internal_target_id() const {
@@ -1984,13 +2001,13 @@ inline void MoveLinearTargetEvent::set_allocated_direction(::aim::StoredVec3* va
 
 // float distance_per_second = 3;
 inline bool MoveLinearTargetEvent::has_distance_per_second() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void MoveLinearTargetEvent::clear_distance_per_second() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_per_second_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float MoveLinearTargetEvent::distance_per_second() const {
   // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.distance_per_second)
@@ -1998,7 +2015,7 @@ inline float MoveLinearTargetEvent::distance_per_second() const {
 }
 inline void MoveLinearTargetEvent::set_distance_per_second(float value) {
   _internal_set_distance_per_second(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.MoveLinearTargetEvent.distance_per_second)
 }
 inline float MoveLinearTargetEvent::_internal_distance_per_second() const {
@@ -2008,6 +2025,97 @@ inline float MoveLinearTargetEvent::_internal_distance_per_second() const {
 inline void MoveLinearTargetEvent::_internal_set_distance_per_second(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_per_second_ = value;
+}
+
+// .aim.StoredVec3 starting_position = 4;
+inline bool MoveLinearTargetEvent::has_starting_position() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.starting_position_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec3& MoveLinearTargetEvent::_internal_starting_position() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec3* p = _impl_.starting_position_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
+}
+inline const ::aim::StoredVec3& MoveLinearTargetEvent::starting_position() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.starting_position)
+  return _internal_starting_position();
+}
+inline void MoveLinearTargetEvent::unsafe_arena_set_allocated_starting_position(::aim::StoredVec3* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.starting_position_);
+  }
+  _impl_.starting_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.MoveLinearTargetEvent.starting_position)
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::release_starting_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredVec3* released = _impl_.starting_position_;
+  _impl_.starting_position_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::unsafe_arena_release_starting_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.MoveLinearTargetEvent.starting_position)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredVec3* temp = _impl_.starting_position_;
+  _impl_.starting_position_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::_internal_mutable_starting_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.starting_position_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
+    _impl_.starting_position_ = reinterpret_cast<::aim::StoredVec3*>(p);
+  }
+  return _impl_.starting_position_;
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::mutable_starting_position() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::StoredVec3* _msg = _internal_mutable_starting_position();
+  // @@protoc_insertion_point(field_mutable:aim.MoveLinearTargetEvent.starting_position)
+  return _msg;
+}
+inline void MoveLinearTargetEvent::set_allocated_starting_position(::aim::StoredVec3* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.starting_position_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.starting_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.MoveLinearTargetEvent.starting_position)
 }
 
 // -------------------------------------------------------------------

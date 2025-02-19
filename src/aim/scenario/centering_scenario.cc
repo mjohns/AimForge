@@ -96,8 +96,7 @@ class CenteringScenario : public Scenario {
 
     target = target_manager_.AddTarget(target);
     target_ = target_manager_.GetMutableTarget(target.id);
-
-    // AddNewTargetEvent(target, 0);
+    AddNewTargetEvent(target);
   }
 
   void UpdateState(UpdateStateData* data) override {

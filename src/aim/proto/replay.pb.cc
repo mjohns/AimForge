@@ -98,6 +98,7 @@ inline constexpr MoveLinearTargetEvent::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         direction_{nullptr},
+        starting_position_{nullptr},
         target_id_{0},
         distance_per_second_{0} {}
 
@@ -263,9 +264,11 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.target_id_),
         PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.direction_),
         PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.distance_per_second_),
-        1,
-        0,
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.starting_position_),
         2,
+        0,
+        3,
+        1,
         PROTOBUF_FIELD_OFFSET(::aim::ReplayEvent, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ReplayEvent, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -311,9 +314,9 @@ static const ::_pbi::MigrationSchema
         {10, 19, -1, sizeof(::aim::RemoveTargetEvent)},
         {20, -1, -1, sizeof(::aim::ShotFiredEvent)},
         {28, 39, -1, sizeof(::aim::AddTargetEvent)},
-        {42, 53, -1, sizeof(::aim::MoveLinearTargetEvent)},
-        {56, 71, -1, sizeof(::aim::ReplayEvent)},
-        {77, 89, -1, sizeof(::aim::Replay)},
+        {42, 54, -1, sizeof(::aim::MoveLinearTargetEvent)},
+        {58, 73, -1, sizeof(::aim::ReplayEvent)},
+        {79, 91, -1, sizeof(::aim::Replay)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_KillTargetEvent_default_instance_._instance,
@@ -331,20 +334,21 @@ const char descriptor_table_protodef_replay_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "d\030\001 \001(\005\"&\n\021RemoveTargetEvent\022\021\n\ttarget_i"
     "d\030\001 \001(\005\"\020\n\016ShotFiredEvent\"V\n\016AddTargetEv"
     "ent\022\021\n\ttarget_id\030\001 \001(\005\022!\n\010position\030\002 \001(\013"
-    "2\017.aim.StoredVec3\022\016\n\006radius\030\003 \001(\002\"k\n\025Mov"
-    "eLinearTargetEvent\022\021\n\ttarget_id\030\001 \001(\005\022\"\n"
-    "\tdirection\030\002 \001(\0132\017.aim.StoredVec3\022\033\n\023dis"
-    "tance_per_second\030\003 \001(\002\"\231\002\n\013ReplayEvent\022\024"
-    "\n\014frame_number\030\001 \001(\005\022+\n\013kill_target\030\002 \001("
-    "\0132\024.aim.KillTargetEventH\000\022/\n\rremove_targ"
-    "et\030\003 \001(\0132\026.aim.RemoveTargetEventH\000\022)\n\nad"
-    "d_target\030\004 \001(\0132\023.aim.AddTargetEventH\000\022)\n"
-    "\nshot_fired\030\005 \001(\0132\023.aim.ShotFiredEventH\000"
-    "\0228\n\022move_linear_target\030\006 \001(\0132\032.aim.MoveL"
-    "inearTargetEventH\000B\006\n\004type\"k\n\006Replay\022\027\n\004"
-    "room\030\001 \001(\0132\t.aim.Room\022\022\n\nreplay_fps\030\002 \001("
-    "\005\022\022\n\npitch_yaws\030\003 \003(\002\022 \n\006events\030\004 \003(\0132\020."
-    "aim.ReplayEventb\010editionsp\350\007"
+    "2\017.aim.StoredVec3\022\016\n\006radius\030\003 \001(\002\"\227\001\n\025Mo"
+    "veLinearTargetEvent\022\021\n\ttarget_id\030\001 \001(\005\022\""
+    "\n\tdirection\030\002 \001(\0132\017.aim.StoredVec3\022\033\n\023di"
+    "stance_per_second\030\003 \001(\002\022*\n\021starting_posi"
+    "tion\030\004 \001(\0132\017.aim.StoredVec3\"\231\002\n\013ReplayEv"
+    "ent\022\024\n\014frame_number\030\001 \001(\005\022+\n\013kill_target"
+    "\030\002 \001(\0132\024.aim.KillTargetEventH\000\022/\n\rremove"
+    "_target\030\003 \001(\0132\026.aim.RemoveTargetEventH\000\022"
+    ")\n\nadd_target\030\004 \001(\0132\023.aim.AddTargetEvent"
+    "H\000\022)\n\nshot_fired\030\005 \001(\0132\023.aim.ShotFiredEv"
+    "entH\000\0228\n\022move_linear_target\030\006 \001(\0132\032.aim."
+    "MoveLinearTargetEventH\000B\006\n\004type\"k\n\006Repla"
+    "y\022\027\n\004room\030\001 \001(\0132\t.aim.Room\022\022\n\nreplay_fps"
+    "\030\002 \001(\005\022\022\n\npitch_yaws\030\003 \003(\002\022 \n\006events\030\004 \003"
+    "(\0132\020.aim.ReplayEventb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_replay_2eproto_deps[2] =
     {
@@ -355,7 +359,7 @@ static ::absl::once_flag descriptor_table_replay_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_replay_2eproto = {
     false,
     false,
-    748,
+    793,
     descriptor_table_protodef_replay_2eproto,
     "replay.proto",
     &descriptor_table_replay_2eproto_once,
@@ -1243,6 +1247,11 @@ void MoveLinearTargetEvent::clear_direction() {
   if (_impl_.direction_ != nullptr) _impl_.direction_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
+void MoveLinearTargetEvent::clear_starting_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.starting_position_ != nullptr) _impl_.starting_position_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
 MoveLinearTargetEvent::MoveLinearTargetEvent(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -1274,6 +1283,9 @@ MoveLinearTargetEvent::MoveLinearTargetEvent(
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
   _impl_.direction_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
                               arena, *from._impl_.direction_)
+                        : nullptr;
+  _impl_.starting_position_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
+                              arena, *from._impl_.starting_position_)
                         : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, target_id_),
@@ -1308,6 +1320,7 @@ inline void MoveLinearTargetEvent::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.direction_;
+  delete this_._impl_.starting_position_;
   this_._impl_.~Impl_();
 }
 
@@ -1347,16 +1360,16 @@ const ::google::protobuf::internal::ClassData* MoveLinearTargetEvent::GetClassDa
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 1, 0, 2> MoveLinearTargetEvent::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 2, 0, 2> MoveLinearTargetEvent::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    1,  // num_aux_entries
+    4,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1365,29 +1378,35 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> MoveLinearTargetEvent::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::MoveLinearTargetEvent>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // .aim.StoredVec3 starting_position = 4;
+    {::_pbi::TcParser::FastMtS1,
+     {34, 1, 1, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.starting_position_)}},
     // int32 target_id = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MoveLinearTargetEvent, _impl_.target_id_), 1>(),
-     {8, 1, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.target_id_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MoveLinearTargetEvent, _impl_.target_id_), 2>(),
+     {8, 2, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.target_id_)}},
     // .aim.StoredVec3 direction = 2;
     {::_pbi::TcParser::FastMtS1,
      {18, 0, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_)}},
     // float distance_per_second = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_)}},
+     {29, 3, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_)}},
   }}, {{
     65535, 65535
   }}, {{
     // int32 target_id = 1;
-    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.target_id_), _Internal::kHasBitsOffset + 1, 0,
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.target_id_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
     // .aim.StoredVec3 direction = 2;
     {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // float distance_per_second = 3;
-    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_), _Internal::kHasBitsOffset + 2, 0,
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.StoredVec3 starting_position = 4;
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.starting_position_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
+    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
     {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
   }}, {{
   }},
@@ -1401,11 +1420,17 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.direction_ != nullptr);
-    _impl_.direction_->Clear();
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.direction_ != nullptr);
+      _impl_.direction_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.starting_position_ != nullptr);
+      _impl_.starting_position_->Clear();
+    }
   }
-  if (cached_has_bits & 0x00000006u) {
+  if (cached_has_bits & 0x0000000cu) {
     ::memset(&_impl_.target_id_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.distance_per_second_) -
         reinterpret_cast<char*>(&_impl_.target_id_)) + sizeof(_impl_.distance_per_second_));
@@ -1431,7 +1456,7 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
 
           cached_has_bits = this_._impl_._has_bits_[0];
           // int32 target_id = 1;
-          if (cached_has_bits & 0x00000002u) {
+          if (cached_has_bits & 0x00000004u) {
             target = ::google::protobuf::internal::WireFormatLite::
                 WriteInt32ToArrayWithField<1>(
                     stream, this_._internal_target_id(), target);
@@ -1445,10 +1470,17 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
           }
 
           // float distance_per_second = 3;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 3, this_._internal_distance_per_second(), target);
+          }
+
+          // .aim.StoredVec3 starting_position = 4;
+          if (cached_has_bits & 0x00000002u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                4, *this_._impl_.starting_position_, this_._impl_.starting_position_->GetCachedSize(), target,
+                stream);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1476,19 +1508,24 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x0000000fu) {
             // .aim.StoredVec3 direction = 2;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.direction_);
             }
-            // int32 target_id = 1;
+            // .aim.StoredVec3 starting_position = 4;
             if (cached_has_bits & 0x00000002u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.starting_position_);
+            }
+            // int32 target_id = 1;
+            if (cached_has_bits & 0x00000004u) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_target_id());
             }
             // float distance_per_second = 3;
-            if (cached_has_bits & 0x00000004u) {
+            if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
           }
@@ -1506,7 +1543,7 @@ void MoveLinearTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, c
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.direction_ != nullptr);
       if (_this->_impl_.direction_ == nullptr) {
@@ -1517,9 +1554,18 @@ void MoveLinearTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, c
       }
     }
     if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.target_id_ = from._impl_.target_id_;
+      ABSL_DCHECK(from._impl_.starting_position_ != nullptr);
+      if (_this->_impl_.starting_position_ == nullptr) {
+        _this->_impl_.starting_position_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.starting_position_);
+      } else {
+        _this->_impl_.starting_position_->MergeFrom(*from._impl_.starting_position_);
+      }
     }
     if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.target_id_ = from._impl_.target_id_;
+    }
+    if (cached_has_bits & 0x00000008u) {
       _this->_impl_.distance_per_second_ = from._impl_.distance_per_second_;
     }
   }
