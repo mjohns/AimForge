@@ -1,6 +1,6 @@
+#include "aim/common/geometry.h";
 #include "aim/core/application.h"
 #include "aim/ui/ui_screen.h"
-#include "aim/common/geometry.h";
 
 int main(int, char**) {
   using namespace aim;

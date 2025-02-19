@@ -69,7 +69,8 @@ message TargetPlacementStrategy {
   // is ignored if this is set.
   bool alternate_regions = 3;
 
-  // The next target will be placed at the specified distance from the last target within the specified region. A random direction will be chosen.
+  // The next target will be placed at the specified distance from the last target within the
+  // specified region. A random direction will be chosen.
   float fixed_distance_from_last_target = 4;
   // If using fixed distance allow the distance to vary by this amount. i.e. +/- jitter.
   float fixed_distance_jitter = 5;
