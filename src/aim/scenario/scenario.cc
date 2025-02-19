@@ -36,6 +36,8 @@ std::unique_ptr<Scenario> CreateScenarioForType(const ScenarioDef& def, Applicat
       return CreateStaticScenario(def, app);
     case ScenarioDef::kCenteringDef:
       return CreateCenteringScenario(def, app);
+    case ScenarioDef::kBarrelDef:
+      return CreateBarrelScenario(def, app);
     default:
       break;
   }

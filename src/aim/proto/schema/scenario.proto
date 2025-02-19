@@ -95,6 +95,7 @@ message ScenarioDef {
   oneof type {
     StaticScenarioDef static_def = 5;
     CenteringScenarioDef centering_def = 6;
+    BarrelScenarioDef barrel_def = 7;
   }
 }
 
@@ -118,4 +119,10 @@ message CenteringScenarioDef {
   StoredVec3 start_position = 4;
   StoredVec3 end_position = 5;
   bool show_start_and_end = 6;
+}
+
+message BarrelScenarioDef {
+  int32 num_targets = 1;
+  float target_radius = 2;
+  float speed = 3;
 }

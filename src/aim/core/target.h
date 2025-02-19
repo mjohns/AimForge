@@ -33,13 +33,19 @@ class TargetManager {
   Target AddTarget(Target t);
   void RemoveTarget(u16 target_id);
   Target ReplaceTarget(u16 target_id_to_replace, Target new_target);
+
   Target* GetMutableTarget(u16 target_id);
+
+  std::vector<Target*> GetMutableVisibleTargets();
 
   void MarkAllAsNonGhost();
 
   std::optional<u16> most_recently_added_target_id() const {
     return most_recently_added_target_id_;
   }
+
+  std::vector<u16> visible_target_ids() const;
+
 
   Target* GetMutableMostRecentlyAddedTarget() {
     if (most_recently_added_target_id_.has_value()) {

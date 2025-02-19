@@ -19,11 +19,21 @@ glm::vec2 GetRandomPositionInEllipse(float radius_x,
 }
 
 glm::vec2 GetRandomPositionOnCircle(float radius, std::mt19937* random_generator) {
+  if (radius <= 0) {
+    return glm::vec2(0);
+  }
   auto dist_degrees = std::uniform_real_distribution<float>(0, 360);
   float rotate_radians = glm::radians(dist_degrees(*random_generator));
   double x = radius * std::cos(rotate_radians);
   double y = radius * std::sin(rotate_radians);
   return glm::vec2(x, y);
+}
+
+glm::vec2 GetRandomPositionInCircle(float min_radius,
+                                    float max_radius,
+                                    std::mt19937* random_generator) {
+  auto dist_radius = std::uniform_real_distribution<float>(min_radius, max_radius);
+  return GetRandomPositionOnCircle(dist_radius(*random_generator), random_generator);
 }
 
 bool IsPointInEllipse(const glm::vec2& point, float x_radius, float y_radius) {
@@ -34,6 +44,10 @@ bool IsPointInEllipse(const glm::vec2& point, float x_radius, float y_radius) {
   double normalized_y = point.y / y_radius;
 
   return (normalized_x * normalized_x + normalized_y * normalized_y) <= 1.0;
+}
+
+bool IsPointInCircle(const glm::vec2& point, float radius) {
+  return IsPointInEllipse(point, radius, radius);
 }
 
 bool IsPointInRectangle(const glm::vec2& point,
