@@ -15,6 +15,9 @@ message CircularRoom {
   float radius = 2;
   // The width of the wall to use for target placement and to draw sides.
   float width = 3;
+  bool hide_sides = 4;
+  // Defaults to 20.
+  float side_angle_degrees = 5;
 }
 
 message Room {

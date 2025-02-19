@@ -19,7 +19,17 @@ std::vector<ScenarioDef> GetScenarios() {
   circular_wall.mutable_circular_room()->set_height(150);
   circular_wall.mutable_circular_room()->set_radius(100);
   circular_wall.mutable_circular_room()->set_width(170);
+  circular_wall.mutable_circular_room()->set_side_angle_degrees(30);
   *circular_wall.mutable_camera_position() = ToStoredVec3(0, 0, 0);
+
+  Room flat_circular_wall;
+  flat_circular_wall.mutable_circular_room()->set_height(150);
+  flat_circular_wall.mutable_circular_room()->set_radius(300);
+  flat_circular_wall.mutable_circular_room()->set_width(250);
+  flat_circular_wall.mutable_circular_room()->set_side_angle_degrees(30);
+  *flat_circular_wall.mutable_camera_position() = ToStoredVec3(0, 200, 0);
+
+  circular_wall = flat_circular_wall;
 
   ScenarioDef base_static_def;
   base_static_def.set_duration_seconds(60);
@@ -108,17 +118,17 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("Circle Room");
     def.set_scenario_id("circle_test");
     *def.mutable_room() = circular_wall;
-    def.mutable_static_def()->set_num_targets(5);
+    def.mutable_static_def()->set_num_targets(6);
     def.mutable_static_def()->set_target_radius(2.5);
 
     TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
     *strat = TargetPlacementStrategy();
 
-    strat->set_min_distance(5);
+    strat->set_min_distance(30);
 
     TargetRegion* region = strat->add_regions();
-    region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.9);
-    region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.6);
+    region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.8);
+    region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
 
     scenarios.push_back(def);
   }
@@ -183,6 +193,11 @@ std::vector<ScenarioDef> GetScenarios() {
         ->mutable_target_placement_strategy()
         ->set_fixed_distance_from_last_target(20);
     def.mutable_static_def()->mutable_target_placement_strategy()->set_min_distance(18);
+    scenarios.push_back(def);
+
+    def.set_scenario_id("1w1ts_intermediate_s5_fixed_dist_poke");
+    def.set_display_name("1w3ts fixed poke");
+    def.mutable_static_def()->set_is_poke_ball(true);
     scenarios.push_back(def);
   }
   {
