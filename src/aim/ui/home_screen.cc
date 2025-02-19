@@ -16,9 +16,10 @@ std::vector<ScenarioDef> GetScenarios() {
   *default_wall.mutable_camera_position() = ToStoredVec3(0, -100.0f, 0);
 
   Room circular_wall;
-  circular_wall.mutable_circular_room()->set_height(100);
-  circular_wall.mutable_circular_room()->set_radius(150);
-  *circular_wall.mutable_camera_position() = ToStoredVec3(0, 50, 0);
+  circular_wall.mutable_circular_room()->set_height(150);
+  circular_wall.mutable_circular_room()->set_radius(100);
+  circular_wall.mutable_circular_room()->set_width(170);
+  *circular_wall.mutable_camera_position() = ToStoredVec3(0, 0, 0);
 
   ScenarioDef base_static_def;
   base_static_def.set_duration_seconds(60);
@@ -36,8 +37,8 @@ std::vector<ScenarioDef> GetScenarios() {
 
     TargetRegion* circle_region = strat->add_regions();
     circle_region->set_percent_chance(0.3);
-    circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.6);
-    circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.32);
+    circle_region->mutable_ellipse()->mutable_x_diamter()->set_x_percent_value(0.6);
+    circle_region->mutable_ellipse()->mutable_y_diamter()->set_y_percent_value(0.32);
 
     TargetRegion* square_region = strat->add_regions();
     square_region->set_percent_chance(1);
@@ -111,11 +112,13 @@ std::vector<ScenarioDef> GetScenarios() {
     def.mutable_static_def()->set_target_radius(2.5);
 
     TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
-    strat->clear_regions();
+    *strat = TargetPlacementStrategy();
+
+    strat->set_min_distance(5);
 
     TargetRegion* region = strat->add_regions();
-    region->mutable_rectangle()->mutable_x_length()->set_absolute_value(35);
-    region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.5);
+    region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.9);
+    region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.6);
 
     scenarios.push_back(def);
   }
@@ -171,6 +174,17 @@ std::vector<ScenarioDef> GetScenarios() {
   }
   {
     ScenarioDef def = base_1w_def;
+    def.set_scenario_id("1w1ts_intermediate_s5_fixed_dist");
+    def.set_display_name("1w3ts fixed");
+    def.mutable_static_def()->set_num_targets(2);
+    def.mutable_static_def()->set_newest_target_is_ghost(true);
+    def.mutable_static_def()
+        ->mutable_target_placement_strategy()
+        ->set_fixed_distance_from_last_target(25);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
     def.set_scenario_id("1w1ts_intermediate_s5_vertical_alternate");
     def.set_display_name("vertical alternate");
     def.mutable_static_def()->set_num_targets(2);
@@ -212,8 +226,8 @@ std::vector<ScenarioDef> GetScenarios() {
     strat->set_min_distance(3);
 
     TargetRegion* circle_region = strat->add_regions();
-    circle_region->mutable_oval()->mutable_x_diamter()->set_x_percent_value(0.08);
-    circle_region->mutable_oval()->mutable_y_diamter()->set_y_percent_value(0.08);
+    circle_region->mutable_ellipse()->mutable_x_diamter()->set_x_percent_value(0.08);
+    circle_region->mutable_ellipse()->mutable_y_diamter()->set_y_percent_value(0.08);
 
     scenarios.push_back(def);
   }

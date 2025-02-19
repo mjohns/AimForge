@@ -5,6 +5,8 @@
 
 #include <glm/gtx/intersect.hpp>
 
+#include "aim/common/log.h"
+
 namespace aim {
 
 Target TargetManager::AddTarget(Target t) {
@@ -13,6 +15,7 @@ Target TargetManager::AddTarget(Target t) {
     t.id = new_id;
   }
 
+  most_recently_added_target_id_ = t.id;
   // Try to overwrite a hidden target.
   for (int i = 0; i < targets_.size(); ++i) {
     if (targets_[i].hidden) {
@@ -52,12 +55,14 @@ Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_ta
     auto new_id = ++target_id_counter_;
     new_target.id = new_id;
   }
+  most_recently_added_target_id_ = new_target.id;
   for (int i = 0; i < targets_.size(); ++i) {
     if (targets_[i].id == target_id_to_replace) {
       targets_[i] = new_target;
     }
   }
   // TODO: error if target did not exist?
+  Logger::get()->warn("Unable to replace target which does not exist");
   return new_target;
 }
 std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
