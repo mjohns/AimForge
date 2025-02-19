@@ -22,6 +22,7 @@ struct RoomRenderer {
  private:
   void DrawSimpleRoom(const SimpleRoom& room, const Theme& theme, const glm::mat4& view);
   void DrawCircularRoom(const CircularRoom& room, const Theme& theme, const glm::mat4& view);
+  void DrawBarrelRoom(const BarrelRoom& room, const Theme& theme, const glm::mat4& view);
 
   void DrawWall(const glm::mat4& model,
                 const glm::mat4& view,

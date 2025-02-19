@@ -31,6 +31,10 @@ std::vector<ScenarioDef> GetScenarios() {
 
   circular_wall = flat_circular_wall;
 
+  Room barrel_wall;
+  barrel_wall.mutable_barrel_room()->set_radius(85);
+  *barrel_wall.mutable_camera_position() = ToStoredVec3(0, -100.0, 0);
+
   ScenarioDef base_static_def;
   base_static_def.set_duration_seconds(60);
   *base_static_def.mutable_room() = default_wall;
@@ -47,8 +51,8 @@ std::vector<ScenarioDef> GetScenarios() {
 
     TargetRegion* circle_region = strat->add_regions();
     circle_region->set_percent_chance(0.3);
-    circle_region->mutable_ellipse()->mutable_x_diamter()->set_x_percent_value(0.6);
-    circle_region->mutable_ellipse()->mutable_y_diamter()->set_y_percent_value(0.32);
+    circle_region->mutable_ellipse()->mutable_x_diameter()->set_x_percent_value(0.6);
+    circle_region->mutable_ellipse()->mutable_y_diameter()->set_y_percent_value(0.32);
 
     TargetRegion* square_region = strat->add_regions();
     square_region->set_percent_chance(1);
@@ -129,6 +133,25 @@ std::vector<ScenarioDef> GetScenarios() {
     TargetRegion* region = strat->add_regions();
     region->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.8);
     region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
+
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_1w_def;
+    def.set_display_name("Barrel Room");
+    def.set_scenario_id("barrel_test");
+    *def.mutable_room() = barrel_wall;
+    def.mutable_static_def()->set_num_targets(6);
+    def.mutable_static_def()->set_target_radius(2.5);
+
+    TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
+    *strat = TargetPlacementStrategy();
+
+    strat->set_min_distance(30);
+
+    TargetRegion* region = strat->add_regions();
+    region->mutable_ellipse()->mutable_x_diameter()->set_x_percent_value(0.7);
+    region->mutable_ellipse()->mutable_y_diameter()->set_x_percent_value(0.7);
 
     scenarios.push_back(def);
   }
@@ -243,8 +266,8 @@ std::vector<ScenarioDef> GetScenarios() {
     strat->set_min_distance(3);
 
     TargetRegion* circle_region = strat->add_regions();
-    circle_region->mutable_ellipse()->mutable_x_diamter()->set_x_percent_value(0.075);
-    circle_region->mutable_ellipse()->mutable_y_diamter()->set_y_percent_value(0.075);
+    circle_region->mutable_ellipse()->mutable_x_diameter()->set_x_percent_value(0.075);
+    circle_region->mutable_ellipse()->mutable_y_diameter()->set_y_percent_value(0.075);
 
     scenarios.push_back(def);
   }
