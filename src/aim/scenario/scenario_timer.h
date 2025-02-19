@@ -32,7 +32,7 @@ class ScenarioTimer {
   }
 
   u64 GetReplayFrameNumber() {
-    return replay_frame_number_;
+    return has_started_ ? replay_frame_number_ : 0;
   }
 
   bool IsNewReplayFrame() {
@@ -62,6 +62,8 @@ class ScenarioTimer {
 
   u64 render_start_time_micros_ = 0;
   u64 render_end_time_micros_ = 0;
+
+  bool has_started_ = false;
 };
 
 }  // namespace aim

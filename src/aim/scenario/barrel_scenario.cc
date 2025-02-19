@@ -68,7 +68,7 @@ class BarrelScenario : public Scenario {
       if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
         // Need to change direction.
         glm::vec2 new_direction_pos =
-            GetRandomPositionInCircle(0, 0.4 * room_radius_, app_->random_generator());
+            GetRandomPositionInCircle(0, 0.5 * room_radius_, app_->random_generator());
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
         info.direction = new_direction;
         new_position = t->static_wall_position + (info.direction * (delta_seconds * speed));
@@ -118,6 +118,7 @@ class BarrelScenario : public Scenario {
 
     movement_info_map_[t.id] = info;
 
+    AddNewTargetEvent(t);
     return t;
   }
 

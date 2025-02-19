@@ -26,23 +26,23 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace aim {
               template <typename>
-PROTOBUF_CONSTEXPR ShotMissedEvent::ShotMissedEvent(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR ShotFiredEvent::ShotFiredEvent(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::internal::ZeroFieldsBase(_class_data_.base()){}
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::internal::ZeroFieldsBase() {
 }
 #endif  // PROTOBUF_CUSTOM_VTABLE
-struct ShotMissedEventDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR ShotMissedEventDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~ShotMissedEventDefaultTypeInternal() {}
+struct ShotFiredEventDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ShotFiredEventDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ShotFiredEventDefaultTypeInternal() {}
   union {
-    ShotMissedEvent _instance;
+    ShotFiredEvent _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ShotMissedEventDefaultTypeInternal _ShotMissedEvent_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ShotFiredEventDefaultTypeInternal _ShotFiredEvent_default_instance_;
 
 inline constexpr RemoveTargetEvent::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -94,15 +94,15 @@ struct KillTargetEventDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 KillTargetEventDefaultTypeInternal _KillTargetEvent_default_instance_;
 
-inline constexpr AddStaticTargetEvent::Impl_::Impl_(
+inline constexpr MoveLinearTargetEvent::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        position_{nullptr},
+        direction_{nullptr},
         target_id_{0},
-        radius_{0} {}
+        distance_per_frame_{0} {}
 
 template <typename>
-PROTOBUF_CONSTEXPR AddStaticTargetEvent::AddStaticTargetEvent(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR MoveLinearTargetEvent::MoveLinearTargetEvent(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
@@ -110,16 +110,43 @@ PROTOBUF_CONSTEXPR AddStaticTargetEvent::AddStaticTargetEvent(::_pbi::ConstantIn
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
-struct AddStaticTargetEventDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR AddStaticTargetEventDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~AddStaticTargetEventDefaultTypeInternal() {}
+struct MoveLinearTargetEventDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MoveLinearTargetEventDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MoveLinearTargetEventDefaultTypeInternal() {}
   union {
-    AddStaticTargetEvent _instance;
+    MoveLinearTargetEvent _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AddStaticTargetEventDefaultTypeInternal _AddStaticTargetEvent_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MoveLinearTargetEventDefaultTypeInternal _MoveLinearTargetEvent_default_instance_;
+
+inline constexpr AddTargetEvent::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        position_{nullptr},
+        target_id_{0},
+        radius_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR AddTargetEvent::AddTargetEvent(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct AddTargetEventDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AddTargetEventDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AddTargetEventDefaultTypeInternal() {}
+  union {
+    AddTargetEvent _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AddTargetEventDefaultTypeInternal _AddTargetEvent_default_instance_;
 
 inline constexpr ReplayEvent::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -205,24 +232,38 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::RemoveTargetEvent, _impl_.target_id_),
         0,
         ~0u,  // no _has_bits_
-        PROTOBUF_FIELD_OFFSET(::aim::ShotMissedEvent, _internal_metadata_),
+        PROTOBUF_FIELD_OFFSET(::aim::ShotFiredEvent, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::AddStaticTargetEvent, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::AddStaticTargetEvent, _internal_metadata_),
+        PROTOBUF_FIELD_OFFSET(::aim::AddTargetEvent, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::AddTargetEvent, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::AddStaticTargetEvent, _impl_.target_id_),
-        PROTOBUF_FIELD_OFFSET(::aim::AddStaticTargetEvent, _impl_.position_),
-        PROTOBUF_FIELD_OFFSET(::aim::AddStaticTargetEvent, _impl_.radius_),
+        PROTOBUF_FIELD_OFFSET(::aim::AddTargetEvent, _impl_.target_id_),
+        PROTOBUF_FIELD_OFFSET(::aim::AddTargetEvent, _impl_.position_),
+        PROTOBUF_FIELD_OFFSET(::aim::AddTargetEvent, _impl_.radius_),
+        1,
+        0,
+        2,
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.target_id_),
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.direction_),
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.distance_per_frame_),
         1,
         0,
         2,
@@ -239,8 +280,10 @@ const ::uint32_t
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ReplayEvent, _impl_.type_),
         0,
+        ~0u,
         ~0u,
         ~0u,
         ~0u,
@@ -269,16 +312,18 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 9, -1, sizeof(::aim::KillTargetEvent)},
         {10, 19, -1, sizeof(::aim::RemoveTargetEvent)},
-        {20, -1, -1, sizeof(::aim::ShotMissedEvent)},
-        {28, 39, -1, sizeof(::aim::AddStaticTargetEvent)},
-        {42, 56, -1, sizeof(::aim::ReplayEvent)},
-        {61, 74, -1, sizeof(::aim::Replay)},
+        {20, -1, -1, sizeof(::aim::ShotFiredEvent)},
+        {28, 39, -1, sizeof(::aim::AddTargetEvent)},
+        {42, 53, -1, sizeof(::aim::MoveLinearTargetEvent)},
+        {56, 71, -1, sizeof(::aim::ReplayEvent)},
+        {77, 90, -1, sizeof(::aim::Replay)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_KillTargetEvent_default_instance_._instance,
     &::aim::_RemoveTargetEvent_default_instance_._instance,
-    &::aim::_ShotMissedEvent_default_instance_._instance,
-    &::aim::_AddStaticTargetEvent_default_instance_._instance,
+    &::aim::_ShotFiredEvent_default_instance_._instance,
+    &::aim::_AddTargetEvent_default_instance_._instance,
+    &::aim::_MoveLinearTargetEvent_default_instance_._instance,
     &::aim::_ReplayEvent_default_instance_._instance,
     &::aim::_Replay_default_instance_._instance,
 };
@@ -287,19 +332,23 @@ const char descriptor_table_protodef_replay_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "\n\014replay.proto\022\003aim\032\014common.proto\032\016scena"
     "rio.proto\"$\n\017KillTargetEvent\022\021\n\ttarget_i"
     "d\030\001 \001(\005\"&\n\021RemoveTargetEvent\022\021\n\ttarget_i"
-    "d\030\001 \001(\005\"\021\n\017ShotMissedEvent\"\\\n\024AddStaticT"
-    "argetEvent\022\021\n\ttarget_id\030\001 \001(\005\022!\n\010positio"
-    "n\030\002 \001(\0132\017.aim.StoredVec3\022\016\n\006radius\030\003 \001(\002"
-    "\"\356\001\n\013ReplayEvent\022\024\n\014frame_number\030\001 \001(\005\022+"
-    "\n\013kill_target\030\002 \001(\0132\024.aim.KillTargetEven"
-    "tH\000\022/\n\rremove_target\030\003 \001(\0132\026.aim.RemoveT"
-    "argetEventH\000\0226\n\021add_static_target\030\004 \001(\0132"
-    "\031.aim.AddStaticTargetEventH\000\022+\n\013shot_mis"
-    "sed\030\005 \001(\0132\024.aim.ShotMissedEventH\000B\006\n\004typ"
-    "e\"\201\001\n\006Replay\022\027\n\004room\030\001 \001(\0132\t.aim.Room\022\022\n"
-    "\nreplay_fps\030\002 \001(\005\022\022\n\npitch_yaws\030\003 \003(\002\022 \n"
-    "\006events\030\004 \003(\0132\020.aim.ReplayEvent\022\024\n\014is_po"
-    "ke_ball\030\005 \001(\010b\010editionsp\350\007"
+    "d\030\001 \001(\005\"\020\n\016ShotFiredEvent\"V\n\016AddTargetEv"
+    "ent\022\021\n\ttarget_id\030\001 \001(\005\022!\n\010position\030\002 \001(\013"
+    "2\017.aim.StoredVec3\022\016\n\006radius\030\003 \001(\002\"j\n\025Mov"
+    "eLinearTargetEvent\022\021\n\ttarget_id\030\001 \001(\005\022\"\n"
+    "\tdirection\030\002 \001(\0132\017.aim.StoredVec3\022\032\n\022dis"
+    "tance_per_frame\030\003 \001(\002\"\231\002\n\013ReplayEvent\022\024\n"
+    "\014frame_number\030\001 \001(\005\022+\n\013kill_target\030\002 \001(\013"
+    "2\024.aim.KillTargetEventH\000\022/\n\rremove_targe"
+    "t\030\003 \001(\0132\026.aim.RemoveTargetEventH\000\022)\n\nadd"
+    "_target\030\004 \001(\0132\023.aim.AddTargetEventH\000\022)\n\n"
+    "shot_fired\030\005 \001(\0132\023.aim.ShotFiredEventH\000\022"
+    "8\n\022move_linear_target\030\006 \001(\0132\032.aim.MoveLi"
+    "nearTargetEventH\000B\006\n\004type\"\201\001\n\006Replay\022\027\n\004"
+    "room\030\001 \001(\0132\t.aim.Room\022\022\n\nreplay_fps\030\002 \001("
+    "\005\022\022\n\npitch_yaws\030\003 \003(\002\022 \n\006events\030\004 \003(\0132\020."
+    "aim.ReplayEvent\022\024\n\014is_poke_ball\030\005 \001(\010b\010e"
+    "ditionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_replay_2eproto_deps[2] =
     {
@@ -310,13 +359,13 @@ static ::absl::once_flag descriptor_table_replay_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_replay_2eproto = {
     false,
     false,
-    626,
+    770,
     descriptor_table_protodef_replay_2eproto,
     "replay.proto",
     &descriptor_table_replay_2eproto_once,
     descriptor_table_replay_2eproto_deps,
     2,
-    6,
+    7,
     schemas,
     file_default_instances,
     TableStruct_replay_2eproto::offsets,
@@ -760,71 +809,71 @@ void RemoveTargetEvent::InternalSwap(RemoveTargetEvent* PROTOBUF_RESTRICT other)
 }
 // ===================================================================
 
-class ShotMissedEvent::_Internal {
+class ShotFiredEvent::_Internal {
  public:
 };
 
-ShotMissedEvent::ShotMissedEvent(::google::protobuf::Arena* arena)
+ShotFiredEvent::ShotFiredEvent(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::internal::ZeroFieldsBase(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::internal::ZeroFieldsBase(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  // @@protoc_insertion_point(arena_constructor:aim.ShotMissedEvent)
+  // @@protoc_insertion_point(arena_constructor:aim.ShotFiredEvent)
 }
-ShotMissedEvent::ShotMissedEvent(
+ShotFiredEvent::ShotFiredEvent(
     ::google::protobuf::Arena* arena,
-    const ShotMissedEvent& from)
+    const ShotFiredEvent& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::internal::ZeroFieldsBase(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::internal::ZeroFieldsBase(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  ShotMissedEvent* const _this = this;
+  ShotFiredEvent* const _this = this;
   (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
 
-  // @@protoc_insertion_point(copy_constructor:aim.ShotMissedEvent)
+  // @@protoc_insertion_point(copy_constructor:aim.ShotFiredEvent)
 }
 
-inline void* ShotMissedEvent::PlacementNew_(const void*, void* mem,
+inline void* ShotFiredEvent::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
-  return ::new (mem) ShotMissedEvent(arena);
+  return ::new (mem) ShotFiredEvent(arena);
 }
-constexpr auto ShotMissedEvent::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(ShotMissedEvent),
-                                            alignof(ShotMissedEvent));
+constexpr auto ShotFiredEvent::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(ShotFiredEvent),
+                                            alignof(ShotFiredEvent));
 }
 PROTOBUF_CONSTINIT
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull ShotMissedEvent::_class_data_ = {
+const ::google::protobuf::internal::ClassDataFull ShotFiredEvent::_class_data_ = {
     ::google::protobuf::internal::ClassData{
-        &_ShotMissedEvent_default_instance_._instance,
+        &_ShotFiredEvent_default_instance_._instance,
         &_table_.header,
         nullptr,  // OnDemandRegisterArenaDtor
         nullptr,  // IsInitialized
-        &ShotMissedEvent::MergeImpl,
-        ::google::protobuf::internal::ZeroFieldsBase::GetNewImpl<ShotMissedEvent>(),
+        &ShotFiredEvent::MergeImpl,
+        ::google::protobuf::internal::ZeroFieldsBase::GetNewImpl<ShotFiredEvent>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        &ShotMissedEvent::SharedDtor,
-        ::google::protobuf::internal::ZeroFieldsBase::GetClearImpl<ShotMissedEvent>(), &ShotMissedEvent::ByteSizeLong,
-            &ShotMissedEvent::_InternalSerialize,
+        &ShotFiredEvent::SharedDtor,
+        ::google::protobuf::internal::ZeroFieldsBase::GetClearImpl<ShotFiredEvent>(), &ShotFiredEvent::ByteSizeLong,
+            &ShotFiredEvent::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(ShotMissedEvent, _impl_._cached_size_),
+        PROTOBUF_FIELD_OFFSET(ShotFiredEvent, _impl_._cached_size_),
         false,
     },
-    &ShotMissedEvent::kDescriptorMethods,
+    &ShotFiredEvent::kDescriptorMethods,
     &descriptor_table_replay_2eproto,
     nullptr,  // tracker
 };
-const ::google::protobuf::internal::ClassData* ShotMissedEvent::GetClassData() const {
+const ::google::protobuf::internal::ClassData* ShotFiredEvent::GetClassData() const {
   ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
   ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 0, 0, 0, 2> ShotMissedEvent::_table_ = {
+const ::_pbi::TcParseTable<0, 0, 0, 0, 2> ShotFiredEvent::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
@@ -839,7 +888,7 @@ const ::_pbi::TcParseTable<0, 0, 0, 0, 2> ShotMissedEvent::_table_ = {
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::ShotMissedEvent>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::ShotFiredEvent>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
@@ -858,48 +907,48 @@ const ::_pbi::TcParseTable<0, 0, 0, 0, 2> ShotMissedEvent::_table_ = {
 
 
 
-::google::protobuf::Metadata ShotMissedEvent::GetMetadata() const {
+::google::protobuf::Metadata ShotFiredEvent::GetMetadata() const {
   return ::google::protobuf::internal::ZeroFieldsBase::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================
 
-class AddStaticTargetEvent::_Internal {
+class AddTargetEvent::_Internal {
  public:
   using HasBits =
-      decltype(std::declval<AddStaticTargetEvent>()._impl_._has_bits_);
+      decltype(std::declval<AddTargetEvent>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_._has_bits_);
+      8 * PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_._has_bits_);
 };
 
-void AddStaticTargetEvent::clear_position() {
+void AddTargetEvent::clear_position() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.position_ != nullptr) _impl_.position_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-AddStaticTargetEvent::AddStaticTargetEvent(::google::protobuf::Arena* arena)
+AddTargetEvent::AddTargetEvent(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.AddStaticTargetEvent)
+  // @@protoc_insertion_point(arena_constructor:aim.AddTargetEvent)
 }
-inline PROTOBUF_NDEBUG_INLINE AddStaticTargetEvent::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE AddTargetEvent::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from, const ::aim::AddStaticTargetEvent& from_msg)
+    const Impl_& from, const ::aim::AddTargetEvent& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0} {}
 
-AddStaticTargetEvent::AddStaticTargetEvent(
+AddTargetEvent::AddTargetEvent(
     ::google::protobuf::Arena* arena,
-    const AddStaticTargetEvent& from)
+    const AddTargetEvent& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  AddStaticTargetEvent* const _this = this;
+  AddTargetEvent* const _this = this;
   (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
@@ -916,14 +965,14 @@ AddStaticTargetEvent::AddStaticTargetEvent(
                offsetof(Impl_, target_id_) +
                sizeof(Impl_::radius_));
 
-  // @@protoc_insertion_point(copy_constructor:aim.AddStaticTargetEvent)
+  // @@protoc_insertion_point(copy_constructor:aim.AddTargetEvent)
 }
-inline PROTOBUF_NDEBUG_INLINE AddStaticTargetEvent::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE AddTargetEvent::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : _cached_size_{0} {}
 
-inline void AddStaticTargetEvent::SharedCtor(::_pb::Arena* arena) {
+inline void AddTargetEvent::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, position_),
@@ -932,57 +981,57 @@ inline void AddStaticTargetEvent::SharedCtor(::_pb::Arena* arena) {
                offsetof(Impl_, position_) +
                sizeof(Impl_::radius_));
 }
-AddStaticTargetEvent::~AddStaticTargetEvent() {
-  // @@protoc_insertion_point(destructor:aim.AddStaticTargetEvent)
+AddTargetEvent::~AddTargetEvent() {
+  // @@protoc_insertion_point(destructor:aim.AddTargetEvent)
   SharedDtor(*this);
 }
-inline void AddStaticTargetEvent::SharedDtor(MessageLite& self) {
-  AddStaticTargetEvent& this_ = static_cast<AddStaticTargetEvent&>(self);
+inline void AddTargetEvent::SharedDtor(MessageLite& self) {
+  AddTargetEvent& this_ = static_cast<AddTargetEvent&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.position_;
   this_._impl_.~Impl_();
 }
 
-inline void* AddStaticTargetEvent::PlacementNew_(const void*, void* mem,
+inline void* AddTargetEvent::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
-  return ::new (mem) AddStaticTargetEvent(arena);
+  return ::new (mem) AddTargetEvent(arena);
 }
-constexpr auto AddStaticTargetEvent::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(AddStaticTargetEvent),
-                                            alignof(AddStaticTargetEvent));
+constexpr auto AddTargetEvent::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(AddTargetEvent),
+                                            alignof(AddTargetEvent));
 }
 PROTOBUF_CONSTINIT
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull AddStaticTargetEvent::_class_data_ = {
+const ::google::protobuf::internal::ClassDataFull AddTargetEvent::_class_data_ = {
     ::google::protobuf::internal::ClassData{
-        &_AddStaticTargetEvent_default_instance_._instance,
+        &_AddTargetEvent_default_instance_._instance,
         &_table_.header,
         nullptr,  // OnDemandRegisterArenaDtor
         nullptr,  // IsInitialized
-        &AddStaticTargetEvent::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<AddStaticTargetEvent>(),
+        &AddTargetEvent::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<AddTargetEvent>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        &AddStaticTargetEvent::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<AddStaticTargetEvent>(), &AddStaticTargetEvent::ByteSizeLong,
-            &AddStaticTargetEvent::_InternalSerialize,
+        &AddTargetEvent::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<AddTargetEvent>(), &AddTargetEvent::ByteSizeLong,
+            &AddTargetEvent::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_._cached_size_),
+        PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_._cached_size_),
         false,
     },
-    &AddStaticTargetEvent::kDescriptorMethods,
+    &AddTargetEvent::kDescriptorMethods,
     &descriptor_table_replay_2eproto,
     nullptr,  // tracker
 };
-const ::google::protobuf::internal::ClassData* AddStaticTargetEvent::GetClassData() const {
+const ::google::protobuf::internal::ClassData* AddTargetEvent::GetClassData() const {
   ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
   ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 1, 0, 2> AddStaticTargetEvent::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> AddTargetEvent::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_._has_bits_),
     0, // no _extensions_
     3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
@@ -995,30 +1044,30 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> AddStaticTargetEvent::_table_ = {
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::AddStaticTargetEvent>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::AddTargetEvent>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
     // int32 target_id = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(AddStaticTargetEvent, _impl_.target_id_), 1>(),
-     {8, 1, 0, PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.target_id_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(AddTargetEvent, _impl_.target_id_), 1>(),
+     {8, 1, 0, PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.target_id_)}},
     // .aim.StoredVec3 position = 2;
     {::_pbi::TcParser::FastMtS1,
-     {18, 0, 0, PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.position_)}},
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.position_)}},
     // float radius = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0, PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.radius_)}},
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.radius_)}},
   }}, {{
     65535, 65535
   }}, {{
     // int32 target_id = 1;
-    {PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.target_id_), _Internal::kHasBitsOffset + 1, 0,
+    {PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.target_id_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
     // .aim.StoredVec3 position = 2;
-    {PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.position_), _Internal::kHasBitsOffset + 0, 0,
+    {PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.position_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // float radius = 3;
-    {PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.radius_), _Internal::kHasBitsOffset + 2, 0,
+    {PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.radius_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
@@ -1026,8 +1075,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> AddStaticTargetEvent::_table_ = {
   }},
 };
 
-PROTOBUF_NOINLINE void AddStaticTargetEvent::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.AddStaticTargetEvent)
+PROTOBUF_NOINLINE void AddTargetEvent::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.AddTargetEvent)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1048,17 +1097,17 @@ PROTOBUF_NOINLINE void AddStaticTargetEvent::Clear() {
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* AddStaticTargetEvent::_InternalSerialize(
+        ::uint8_t* AddTargetEvent::_InternalSerialize(
             const MessageLite& base, ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const AddStaticTargetEvent& this_ = static_cast<const AddStaticTargetEvent&>(base);
+          const AddTargetEvent& this_ = static_cast<const AddTargetEvent&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* AddStaticTargetEvent::_InternalSerialize(
+        ::uint8_t* AddTargetEvent::_InternalSerialize(
             ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const AddStaticTargetEvent& this_ = *this;
+          const AddTargetEvent& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.AddStaticTargetEvent)
+          // @@protoc_insertion_point(serialize_to_array_start:aim.AddTargetEvent)
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
@@ -1089,18 +1138,18 @@ PROTOBUF_NOINLINE void AddStaticTargetEvent::Clear() {
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
                     this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
           }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.AddStaticTargetEvent)
+          // @@protoc_insertion_point(serialize_to_array_end:aim.AddTargetEvent)
           return target;
         }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t AddStaticTargetEvent::ByteSizeLong(const MessageLite& base) {
-          const AddStaticTargetEvent& this_ = static_cast<const AddStaticTargetEvent&>(base);
+        ::size_t AddTargetEvent::ByteSizeLong(const MessageLite& base) {
+          const AddTargetEvent& this_ = static_cast<const AddTargetEvent&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t AddStaticTargetEvent::ByteSizeLong() const {
-          const AddStaticTargetEvent& this_ = *this;
+        ::size_t AddTargetEvent::ByteSizeLong() const {
+          const AddTargetEvent& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.AddStaticTargetEvent)
+          // @@protoc_insertion_point(message_byte_size_start:aim.AddTargetEvent)
           ::size_t total_size = 0;
 
           ::uint32_t cached_has_bits = 0;
@@ -1129,11 +1178,11 @@ PROTOBUF_NOINLINE void AddStaticTargetEvent::Clear() {
                                                      &this_._impl_._cached_size_);
         }
 
-void AddStaticTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<AddStaticTargetEvent*>(&to_msg);
-  auto& from = static_cast<const AddStaticTargetEvent&>(from_msg);
+void AddTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<AddTargetEvent*>(&to_msg);
+  auto& from = static_cast<const AddTargetEvent&>(from_msg);
   ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.AddStaticTargetEvent)
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.AddTargetEvent)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1160,27 +1209,349 @@ void AddStaticTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, co
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void AddStaticTargetEvent::CopyFrom(const AddStaticTargetEvent& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.AddStaticTargetEvent)
+void AddTargetEvent::CopyFrom(const AddTargetEvent& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.AddTargetEvent)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 
-void AddStaticTargetEvent::InternalSwap(AddStaticTargetEvent* PROTOBUF_RESTRICT other) {
+void AddTargetEvent::InternalSwap(AddTargetEvent* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.radius_)
-      + sizeof(AddStaticTargetEvent::_impl_.radius_)
-      - PROTOBUF_FIELD_OFFSET(AddStaticTargetEvent, _impl_.position_)>(
+      PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.radius_)
+      + sizeof(AddTargetEvent::_impl_.radius_)
+      - PROTOBUF_FIELD_OFFSET(AddTargetEvent, _impl_.position_)>(
           reinterpret_cast<char*>(&_impl_.position_),
           reinterpret_cast<char*>(&other->_impl_.position_));
 }
 
-::google::protobuf::Metadata AddStaticTargetEvent::GetMetadata() const {
+::google::protobuf::Metadata AddTargetEvent::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class MoveLinearTargetEvent::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<MoveLinearTargetEvent>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_._has_bits_);
+};
+
+void MoveLinearTargetEvent::clear_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.direction_ != nullptr) _impl_.direction_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+MoveLinearTargetEvent::MoveLinearTargetEvent(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.MoveLinearTargetEvent)
+}
+inline PROTOBUF_NDEBUG_INLINE MoveLinearTargetEvent::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::MoveLinearTargetEvent& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+MoveLinearTargetEvent::MoveLinearTargetEvent(
+    ::google::protobuf::Arena* arena,
+    const MoveLinearTargetEvent& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  MoveLinearTargetEvent* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.direction_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
+                              arena, *from._impl_.direction_)
+                        : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, target_id_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, target_id_),
+           offsetof(Impl_, distance_per_frame_) -
+               offsetof(Impl_, target_id_) +
+               sizeof(Impl_::distance_per_frame_));
+
+  // @@protoc_insertion_point(copy_constructor:aim.MoveLinearTargetEvent)
+}
+inline PROTOBUF_NDEBUG_INLINE MoveLinearTargetEvent::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void MoveLinearTargetEvent::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, direction_),
+           0,
+           offsetof(Impl_, distance_per_frame_) -
+               offsetof(Impl_, direction_) +
+               sizeof(Impl_::distance_per_frame_));
+}
+MoveLinearTargetEvent::~MoveLinearTargetEvent() {
+  // @@protoc_insertion_point(destructor:aim.MoveLinearTargetEvent)
+  SharedDtor(*this);
+}
+inline void MoveLinearTargetEvent::SharedDtor(MessageLite& self) {
+  MoveLinearTargetEvent& this_ = static_cast<MoveLinearTargetEvent&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  delete this_._impl_.direction_;
+  this_._impl_.~Impl_();
+}
+
+inline void* MoveLinearTargetEvent::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) MoveLinearTargetEvent(arena);
+}
+constexpr auto MoveLinearTargetEvent::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(MoveLinearTargetEvent),
+                                            alignof(MoveLinearTargetEvent));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull MoveLinearTargetEvent::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_MoveLinearTargetEvent_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &MoveLinearTargetEvent::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<MoveLinearTargetEvent>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &MoveLinearTargetEvent::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<MoveLinearTargetEvent>(), &MoveLinearTargetEvent::ByteSizeLong,
+            &MoveLinearTargetEvent::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_._cached_size_),
+        false,
+    },
+    &MoveLinearTargetEvent::kDescriptorMethods,
+    &descriptor_table_replay_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* MoveLinearTargetEvent::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> MoveLinearTargetEvent::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::MoveLinearTargetEvent>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // int32 target_id = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(MoveLinearTargetEvent, _impl_.target_id_), 1>(),
+     {8, 1, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.target_id_)}},
+    // .aim.StoredVec3 direction = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_)}},
+    // float distance_per_frame = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_frame_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // int32 target_id = 1;
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.target_id_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // .aim.StoredVec3 direction = 2;
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float distance_per_frame = 3;
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_frame_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
+  }}, {{
+  }},
+};
+
+PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.MoveLinearTargetEvent)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.direction_ != nullptr);
+    _impl_.direction_->Clear();
+  }
+  if (cached_has_bits & 0x00000006u) {
+    ::memset(&_impl_.target_id_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.distance_per_frame_) -
+        reinterpret_cast<char*>(&_impl_.target_id_)) + sizeof(_impl_.distance_per_frame_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* MoveLinearTargetEvent::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const MoveLinearTargetEvent& this_ = static_cast<const MoveLinearTargetEvent&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* MoveLinearTargetEvent::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const MoveLinearTargetEvent& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.MoveLinearTargetEvent)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // int32 target_id = 1;
+          if (cached_has_bits & 0x00000002u) {
+            target = ::google::protobuf::internal::WireFormatLite::
+                WriteInt32ToArrayWithField<1>(
+                    stream, this_._internal_target_id(), target);
+          }
+
+          // .aim.StoredVec3 direction = 2;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                2, *this_._impl_.direction_, this_._impl_.direction_->GetCachedSize(), target,
+                stream);
+          }
+
+          // float distance_per_frame = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_distance_per_frame(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.MoveLinearTargetEvent)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t MoveLinearTargetEvent::ByteSizeLong(const MessageLite& base) {
+          const MoveLinearTargetEvent& this_ = static_cast<const MoveLinearTargetEvent&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t MoveLinearTargetEvent::ByteSizeLong() const {
+          const MoveLinearTargetEvent& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.MoveLinearTargetEvent)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000007u) {
+            // .aim.StoredVec3 direction = 2;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.direction_);
+            }
+            // int32 target_id = 1;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                  this_._internal_target_id());
+            }
+            // float distance_per_frame = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void MoveLinearTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<MoveLinearTargetEvent*>(&to_msg);
+  auto& from = static_cast<const MoveLinearTargetEvent&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.MoveLinearTargetEvent)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(from._impl_.direction_ != nullptr);
+      if (_this->_impl_.direction_ == nullptr) {
+        _this->_impl_.direction_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.direction_);
+      } else {
+        _this->_impl_.direction_->MergeFrom(*from._impl_.direction_);
+      }
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.target_id_ = from._impl_.target_id_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.distance_per_frame_ = from._impl_.distance_per_frame_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MoveLinearTargetEvent::CopyFrom(const MoveLinearTargetEvent& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.MoveLinearTargetEvent)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void MoveLinearTargetEvent::InternalSwap(MoveLinearTargetEvent* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_frame_)
+      + sizeof(MoveLinearTargetEvent::_impl_.distance_per_frame_)
+      - PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_)>(
+          reinterpret_cast<char*>(&_impl_.direction_),
+          reinterpret_cast<char*>(&other->_impl_.direction_));
+}
+
+::google::protobuf::Metadata MoveLinearTargetEvent::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================
@@ -1221,31 +1592,44 @@ void ReplayEvent::set_allocated_remove_target(::aim::RemoveTargetEvent* remove_t
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ReplayEvent.remove_target)
 }
-void ReplayEvent::set_allocated_add_static_target(::aim::AddStaticTargetEvent* add_static_target) {
+void ReplayEvent::set_allocated_add_target(::aim::AddTargetEvent* add_target) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
-  if (add_static_target) {
-    ::google::protobuf::Arena* submessage_arena = add_static_target->GetArena();
+  if (add_target) {
+    ::google::protobuf::Arena* submessage_arena = add_target->GetArena();
     if (message_arena != submessage_arena) {
-      add_static_target = ::google::protobuf::internal::GetOwnedMessage(message_arena, add_static_target, submessage_arena);
+      add_target = ::google::protobuf::internal::GetOwnedMessage(message_arena, add_target, submessage_arena);
     }
-    set_has_add_static_target();
-    _impl_.type_.add_static_target_ = add_static_target;
+    set_has_add_target();
+    _impl_.type_.add_target_ = add_target;
   }
-  // @@protoc_insertion_point(field_set_allocated:aim.ReplayEvent.add_static_target)
+  // @@protoc_insertion_point(field_set_allocated:aim.ReplayEvent.add_target)
 }
-void ReplayEvent::set_allocated_shot_missed(::aim::ShotMissedEvent* shot_missed) {
+void ReplayEvent::set_allocated_shot_fired(::aim::ShotFiredEvent* shot_fired) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
-  if (shot_missed) {
-    ::google::protobuf::Arena* submessage_arena = shot_missed->GetArena();
+  if (shot_fired) {
+    ::google::protobuf::Arena* submessage_arena = shot_fired->GetArena();
     if (message_arena != submessage_arena) {
-      shot_missed = ::google::protobuf::internal::GetOwnedMessage(message_arena, shot_missed, submessage_arena);
+      shot_fired = ::google::protobuf::internal::GetOwnedMessage(message_arena, shot_fired, submessage_arena);
     }
-    set_has_shot_missed();
-    _impl_.type_.shot_missed_ = shot_missed;
+    set_has_shot_fired();
+    _impl_.type_.shot_fired_ = shot_fired;
   }
-  // @@protoc_insertion_point(field_set_allocated:aim.ReplayEvent.shot_missed)
+  // @@protoc_insertion_point(field_set_allocated:aim.ReplayEvent.shot_fired)
+}
+void ReplayEvent::set_allocated_move_linear_target(::aim::MoveLinearTargetEvent* move_linear_target) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (move_linear_target) {
+    ::google::protobuf::Arena* submessage_arena = move_linear_target->GetArena();
+    if (message_arena != submessage_arena) {
+      move_linear_target = ::google::protobuf::internal::GetOwnedMessage(message_arena, move_linear_target, submessage_arena);
+    }
+    set_has_move_linear_target();
+    _impl_.type_.move_linear_target_ = move_linear_target;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ReplayEvent.move_linear_target)
 }
 ReplayEvent::ReplayEvent(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
@@ -1287,11 +1671,14 @@ ReplayEvent::ReplayEvent(
       case kRemoveTarget:
         _impl_.type_.remove_target_ = ::google::protobuf::Message::CopyConstruct<::aim::RemoveTargetEvent>(arena, *from._impl_.type_.remove_target_);
         break;
-      case kAddStaticTarget:
-        _impl_.type_.add_static_target_ = ::google::protobuf::Message::CopyConstruct<::aim::AddStaticTargetEvent>(arena, *from._impl_.type_.add_static_target_);
+      case kAddTarget:
+        _impl_.type_.add_target_ = ::google::protobuf::Message::CopyConstruct<::aim::AddTargetEvent>(arena, *from._impl_.type_.add_target_);
         break;
-      case kShotMissed:
-        _impl_.type_.shot_missed_ = ::google::protobuf::Message::CopyConstruct<::aim::ShotMissedEvent>(arena, *from._impl_.type_.shot_missed_);
+      case kShotFired:
+        _impl_.type_.shot_fired_ = ::google::protobuf::Message::CopyConstruct<::aim::ShotFiredEvent>(arena, *from._impl_.type_.shot_fired_);
+        break;
+      case kMoveLinearTarget:
+        _impl_.type_.move_linear_target_ = ::google::protobuf::Message::CopyConstruct<::aim::MoveLinearTargetEvent>(arena, *from._impl_.type_.move_linear_target_);
         break;
   }
 
@@ -1342,19 +1729,27 @@ void ReplayEvent::clear_type() {
       }
       break;
     }
-    case kAddStaticTarget: {
+    case kAddTarget: {
       if (GetArena() == nullptr) {
-        delete _impl_.type_.add_static_target_;
+        delete _impl_.type_.add_target_;
       } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.add_static_target_);
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.add_target_);
       }
       break;
     }
-    case kShotMissed: {
+    case kShotFired: {
       if (GetArena() == nullptr) {
-        delete _impl_.type_.shot_missed_;
+        delete _impl_.type_.shot_fired_;
       } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.shot_missed_);
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.shot_fired_);
+      }
+      break;
+    }
+    case kMoveLinearTarget: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.move_linear_target_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.move_linear_target_);
       }
       break;
     }
@@ -1402,16 +1797,16 @@ const ::google::protobuf::internal::ClassData* ReplayEvent::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 5, 4, 0, 2> ReplayEvent::_table_ = {
+const ::_pbi::TcParseTable<0, 6, 5, 0, 2> ReplayEvent::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_._has_bits_),
     0, // no _extensions_
-    5, 0,  // max_field_number, fast_idx_mask
+    6, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967232,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
-    4,  // num_aux_entries
+    6,  // num_field_entries
+    5,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1435,17 +1830,21 @@ const ::_pbi::TcParseTable<0, 5, 4, 0, 2> ReplayEvent::_table_ = {
     // .aim.RemoveTargetEvent remove_target = 3;
     {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.remove_target_), _Internal::kOneofCaseOffset + 0, 1,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.AddStaticTargetEvent add_static_target = 4;
-    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.add_static_target_), _Internal::kOneofCaseOffset + 0, 2,
+    // .aim.AddTargetEvent add_target = 4;
+    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.add_target_), _Internal::kOneofCaseOffset + 0, 2,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.ShotMissedEvent shot_missed = 5;
-    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.shot_missed_), _Internal::kOneofCaseOffset + 0, 3,
+    // .aim.ShotFiredEvent shot_fired = 5;
+    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.shot_fired_), _Internal::kOneofCaseOffset + 0, 3,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.MoveLinearTargetEvent move_linear_target = 6;
+    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.move_linear_target_), _Internal::kOneofCaseOffset + 0, 4,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::KillTargetEvent>()},
     {::_pbi::TcParser::GetTable<::aim::RemoveTargetEvent>()},
-    {::_pbi::TcParser::GetTable<::aim::AddStaticTargetEvent>()},
-    {::_pbi::TcParser::GetTable<::aim::ShotMissedEvent>()},
+    {::_pbi::TcParser::GetTable<::aim::AddTargetEvent>()},
+    {::_pbi::TcParser::GetTable<::aim::ShotFiredEvent>()},
+    {::_pbi::TcParser::GetTable<::aim::MoveLinearTargetEvent>()},
   }}, {{
   }},
 };
@@ -1499,15 +1898,21 @@ PROTOBUF_NOINLINE void ReplayEvent::Clear() {
                   stream);
               break;
             }
-            case kAddStaticTarget: {
+            case kAddTarget: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  4, *this_._impl_.type_.add_static_target_, this_._impl_.type_.add_static_target_->GetCachedSize(), target,
+                  4, *this_._impl_.type_.add_target_, this_._impl_.type_.add_target_->GetCachedSize(), target,
                   stream);
               break;
             }
-            case kShotMissed: {
+            case kShotFired: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  5, *this_._impl_.type_.shot_missed_, this_._impl_.type_.shot_missed_->GetCachedSize(), target,
+                  5, *this_._impl_.type_.shot_fired_, this_._impl_.type_.shot_fired_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
+            case kMoveLinearTarget: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  6, *this_._impl_.type_.move_linear_target_, this_._impl_.type_.move_linear_target_->GetCachedSize(), target,
                   stream);
               break;
             }
@@ -1558,16 +1963,22 @@ PROTOBUF_NOINLINE void ReplayEvent::Clear() {
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.remove_target_);
               break;
             }
-            // .aim.AddStaticTargetEvent add_static_target = 4;
-            case kAddStaticTarget: {
+            // .aim.AddTargetEvent add_target = 4;
+            case kAddTarget: {
               total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.add_static_target_);
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.add_target_);
               break;
             }
-            // .aim.ShotMissedEvent shot_missed = 5;
-            case kShotMissed: {
+            // .aim.ShotFiredEvent shot_fired = 5;
+            case kShotFired: {
               total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.shot_missed_);
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.shot_fired_);
+              break;
+            }
+            // .aim.MoveLinearTargetEvent move_linear_target = 6;
+            case kMoveLinearTarget: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.move_linear_target_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -1621,21 +2032,30 @@ void ReplayEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
         }
         break;
       }
-      case kAddStaticTarget: {
+      case kAddTarget: {
         if (oneof_needs_init) {
-          _this->_impl_.type_.add_static_target_ =
-              ::google::protobuf::Message::CopyConstruct<::aim::AddStaticTargetEvent>(arena, *from._impl_.type_.add_static_target_);
+          _this->_impl_.type_.add_target_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::AddTargetEvent>(arena, *from._impl_.type_.add_target_);
         } else {
-          _this->_impl_.type_.add_static_target_->MergeFrom(from._internal_add_static_target());
+          _this->_impl_.type_.add_target_->MergeFrom(from._internal_add_target());
         }
         break;
       }
-      case kShotMissed: {
+      case kShotFired: {
         if (oneof_needs_init) {
-          _this->_impl_.type_.shot_missed_ =
-              ::google::protobuf::Message::CopyConstruct<::aim::ShotMissedEvent>(arena, *from._impl_.type_.shot_missed_);
+          _this->_impl_.type_.shot_fired_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::ShotFiredEvent>(arena, *from._impl_.type_.shot_fired_);
         } else {
-          _this->_impl_.type_.shot_missed_->MergeFrom(from._internal_shot_missed());
+          _this->_impl_.type_.shot_fired_->MergeFrom(from._internal_shot_fired());
+        }
+        break;
+      }
+      case kMoveLinearTarget: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.move_linear_target_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::MoveLinearTargetEvent>(arena, *from._impl_.type_.move_linear_target_);
+        } else {
+          _this->_impl_.type_.move_linear_target_->MergeFrom(from._internal_move_linear_target());
         }
         break;
       }

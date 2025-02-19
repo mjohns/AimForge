@@ -222,39 +222,8 @@ class StaticScenario : public Scenario {
  public:
   explicit StaticScenario(const ScenarioDef& def, Application* app) : Scenario(def, app) {}
 
- private:
-  void AddNewTargetEvent(const Target& target, i32 explicit_frame_number = -1) {
-    auto add_event = replay_->add_events();
-    add_event->set_frame_number(explicit_frame_number >= 0 ? explicit_frame_number
-                                                           : timer_.GetReplayFrameNumber());
-    auto add_target = add_event->mutable_add_static_target();
-    add_target->set_target_id(target.id);
-    *(add_target->mutable_position()) = ToStoredVec3(target.position);
-    add_target->set_radius(target.radius);
-  }
-
-  void AddKillTargetEvent(u16 target_id) {
-    auto event = replay_->add_events();
-    event->set_frame_number(timer_.GetReplayFrameNumber());
-    event->mutable_kill_target()->set_target_id(target_id);
-  }
-
-  void AddRemoveTargetEvent(u16 target_id) {
-    auto event = replay_->add_events();
-    event->set_frame_number(timer_.GetReplayFrameNumber());
-    event->mutable_remove_target()->set_target_id(target_id);
-  }
-
-  void AddShotMissedEvent() {
-    auto event = replay_->add_events();
-    event->set_frame_number(timer_.GetReplayFrameNumber());
-    *event->mutable_shot_missed() = ShotMissedEvent();
-  }
-
  protected:
   void Initialize() override {
-    replay_->set_is_poke_ball(def_.static_def().is_poke_ball());
-
     int num_targets = def_.static_def().num_targets();
     for (int i = 0; i < num_targets; ++i) {
       Target target = GetNewTarget(def_, &target_manager_, app_);
@@ -262,7 +231,7 @@ class StaticScenario : public Scenario {
         target.is_ghost = true;
       }
       target = target_manager_.AddTarget(target);
-      AddNewTargetEvent(target, 0);
+      AddNewTargetEvent(target);
     }
   }
 
@@ -282,7 +251,7 @@ class StaticScenario : public Scenario {
           if (age_micros >= min_age_micros) {
             stats_.targets_hit++;
             stats_.shots_taken++;
-            app_->sound_manager()->PlayKillSound();
+            PlayKillSound();
             data->force_render = true;
 
             auto hit_target_id = *maybe_hit_target_id;
@@ -306,10 +275,10 @@ class StaticScenario : public Scenario {
       if (data->has_click) {
         stats_.shots_taken++;
         auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-        app_->sound_manager()->PlayShootSound();
+        PlayShootSound();
         if (maybe_hit_target_id.has_value()) {
           stats_.targets_hit++;
-          app_->sound_manager()->PlayKillSound();
+          PlayKillSound();
           data->force_render = true;
 
           auto hit_target_id = *maybe_hit_target_id;
@@ -318,7 +287,6 @@ class StaticScenario : public Scenario {
 
         } else {
           // Missed shot
-          AddShotMissedEvent();
           if (def_.static_def().remove_closest_target_on_miss()) {
             std::optional<u16> target_id_to_remove =
                 target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);

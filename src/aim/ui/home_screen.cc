@@ -68,11 +68,11 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_scenario_id("barrel_bounce");
     def.set_display_name("Barrel Bounce");
     *def.mutable_room() = barrel_wall;
-    def.mutable_room()->mutable_barrel_room()->set_radius(70);
+    def.mutable_room()->mutable_barrel_room()->set_radius(75);
 
     def.mutable_barrel_def()->set_num_targets(4);
     def.mutable_barrel_def()->set_target_radius(2.8);
-    def.mutable_barrel_def()->set_speed(70);
+    def.mutable_barrel_def()->set_speed(60);
     scenarios.push_back(def);
   }
   {

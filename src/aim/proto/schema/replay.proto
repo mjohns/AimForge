@@ -13,12 +13,18 @@ message RemoveTargetEvent {
   int32 target_id = 1;
 }
 
-message ShotMissedEvent {}
+message ShotFiredEvent {}
 
-message AddStaticTargetEvent {
+message AddTargetEvent {
   int32 target_id = 1;
   StoredVec3 position = 2;
   float radius = 3;
+}
+
+message MoveLinearTargetEvent {
+  int32 target_id = 1;
+  StoredVec3 direction = 2;
+  float distance_per_frame = 3;
 }
 
 message ReplayEvent {
@@ -26,8 +32,9 @@ message ReplayEvent {
   oneof type {
     KillTargetEvent kill_target = 2;
     RemoveTargetEvent remove_target = 3;
-    AddStaticTargetEvent add_static_target = 4;
-    ShotMissedEvent shot_missed = 5;
+    AddTargetEvent add_target = 4;
+    ShotFiredEvent shot_fired = 5;
+    MoveLinearTargetEvent move_linear_target = 6;
   }
 }
 
@@ -36,5 +43,4 @@ message Replay {
   int32 replay_fps = 2;
   repeated float pitch_yaws = 3;
   repeated ReplayEvent events = 4;
-  bool is_poke_ball = 5;
 }

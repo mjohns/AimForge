@@ -55,12 +55,15 @@ struct TableStruct_replay_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_replay_2eproto;
 namespace aim {
-class AddStaticTargetEvent;
-struct AddStaticTargetEventDefaultTypeInternal;
-extern AddStaticTargetEventDefaultTypeInternal _AddStaticTargetEvent_default_instance_;
+class AddTargetEvent;
+struct AddTargetEventDefaultTypeInternal;
+extern AddTargetEventDefaultTypeInternal _AddTargetEvent_default_instance_;
 class KillTargetEvent;
 struct KillTargetEventDefaultTypeInternal;
 extern KillTargetEventDefaultTypeInternal _KillTargetEvent_default_instance_;
+class MoveLinearTargetEvent;
+struct MoveLinearTargetEventDefaultTypeInternal;
+extern MoveLinearTargetEventDefaultTypeInternal _MoveLinearTargetEvent_default_instance_;
 class RemoveTargetEvent;
 struct RemoveTargetEventDefaultTypeInternal;
 extern RemoveTargetEventDefaultTypeInternal _RemoveTargetEvent_default_instance_;
@@ -70,9 +73,9 @@ extern ReplayDefaultTypeInternal _Replay_default_instance_;
 class ReplayEvent;
 struct ReplayEventDefaultTypeInternal;
 extern ReplayEventDefaultTypeInternal _ReplayEvent_default_instance_;
-class ShotMissedEvent;
-struct ShotMissedEventDefaultTypeInternal;
-extern ShotMissedEventDefaultTypeInternal _ShotMissedEvent_default_instance_;
+class ShotFiredEvent;
+struct ShotFiredEventDefaultTypeInternal;
+extern ShotFiredEventDefaultTypeInternal _ShotFiredEvent_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -86,30 +89,30 @@ namespace aim {
 
 // -------------------------------------------------------------------
 
-class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBase
-/* @@protoc_insertion_point(class_definition:aim.ShotMissedEvent) */ {
+class ShotFiredEvent final : public ::google::protobuf::internal::ZeroFieldsBase
+/* @@protoc_insertion_point(class_definition:aim.ShotFiredEvent) */ {
  public:
-  inline ShotMissedEvent() : ShotMissedEvent(nullptr) {}
+  inline ShotFiredEvent() : ShotFiredEvent(nullptr) {}
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(ShotMissedEvent* msg, std::destroying_delete_t) {
+  void operator delete(ShotFiredEvent* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(ShotMissedEvent));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ShotFiredEvent));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR ShotMissedEvent(
+  explicit PROTOBUF_CONSTEXPR ShotFiredEvent(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline ShotMissedEvent(const ShotMissedEvent& from) : ShotMissedEvent(nullptr, from) {}
-  inline ShotMissedEvent(ShotMissedEvent&& from) noexcept
-      : ShotMissedEvent(nullptr, std::move(from)) {}
-  inline ShotMissedEvent& operator=(const ShotMissedEvent& from) {
+  inline ShotFiredEvent(const ShotFiredEvent& from) : ShotFiredEvent(nullptr, from) {}
+  inline ShotFiredEvent(ShotFiredEvent&& from) noexcept
+      : ShotFiredEvent(nullptr, std::move(from)) {}
+  inline ShotFiredEvent& operator=(const ShotFiredEvent& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ShotMissedEvent& operator=(ShotMissedEvent&& from) noexcept {
+  inline ShotFiredEvent& operator=(ShotFiredEvent&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -137,16 +140,16 @@ class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBas
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ShotMissedEvent& default_instance() {
+  static const ShotFiredEvent& default_instance() {
     return *internal_default_instance();
   }
-  static inline const ShotMissedEvent* internal_default_instance() {
-    return reinterpret_cast<const ShotMissedEvent*>(
-        &_ShotMissedEvent_default_instance_);
+  static inline const ShotFiredEvent* internal_default_instance() {
+    return reinterpret_cast<const ShotFiredEvent*>(
+        &_ShotFiredEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 2;
-  friend void swap(ShotMissedEvent& a, ShotMissedEvent& b) { a.Swap(&b); }
-  inline void Swap(ShotMissedEvent* other) {
+  friend void swap(ShotFiredEvent& a, ShotFiredEvent& b) { a.Swap(&b); }
+  inline void Swap(ShotFiredEvent* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -154,7 +157,7 @@ class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBas
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ShotMissedEvent* other) {
+  void UnsafeArenaSwap(ShotFiredEvent* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -162,15 +165,15 @@ class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBas
 
   // implements Message ----------------------------------------------
 
-  ShotMissedEvent* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<ShotMissedEvent>(arena);
+  ShotFiredEvent* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<ShotFiredEvent>(arena);
   }
   using ::google::protobuf::internal::ZeroFieldsBase::CopyFrom;
-  inline void CopyFrom(const ShotMissedEvent& from) {
+  inline void CopyFrom(const ShotFiredEvent& from) {
     ::google::protobuf::internal::ZeroFieldsBase::CopyImpl(*this, from);
   }
   using ::google::protobuf::internal::ZeroFieldsBase::MergeFrom;
-  void MergeFrom(const ShotMissedEvent& from) {
+  void MergeFrom(const ShotFiredEvent& from) {
     ::google::protobuf::internal::ZeroFieldsBase::MergeImpl(*this, from);
   }
 
@@ -182,13 +185,13 @@ class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBas
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.ShotMissedEvent"; }
+  static ::absl::string_view FullMessageName() { return "aim.ShotFiredEvent"; }
 
  protected:
-  explicit ShotMissedEvent(::google::protobuf::Arena* arena);
-  ShotMissedEvent(::google::protobuf::Arena* arena, const ShotMissedEvent& from);
-  ShotMissedEvent(::google::protobuf::Arena* arena, ShotMissedEvent&& from) noexcept
-      : ShotMissedEvent(arena) {
+  explicit ShotFiredEvent(::google::protobuf::Arena* arena);
+  ShotFiredEvent(::google::protobuf::Arena* arena, const ShotFiredEvent& from);
+  ShotFiredEvent(::google::protobuf::Arena* arena, ShotFiredEvent&& from) noexcept
+      : ShotFiredEvent(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -202,7 +205,7 @@ class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBas
   // nested types ----------------------------------------------------
 
   // accessors -------------------------------------------------------
-  // @@protoc_insertion_point(class_scope:aim.ShotMissedEvent)
+  // @@protoc_insertion_point(class_scope:aim.ShotFiredEvent)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
@@ -224,7 +227,7 @@ class ShotMissedEvent final : public ::google::protobuf::internal::ZeroFieldsBas
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const ShotMissedEvent& from_msg);
+                          const ShotFiredEvent& from_msg);
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   friend struct ::TableStruct_replay_2eproto;
@@ -615,31 +618,31 @@ class KillTargetEvent final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class AddStaticTargetEvent final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.AddStaticTargetEvent) */ {
+class MoveLinearTargetEvent final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.MoveLinearTargetEvent) */ {
  public:
-  inline AddStaticTargetEvent() : AddStaticTargetEvent(nullptr) {}
-  ~AddStaticTargetEvent() PROTOBUF_FINAL;
+  inline MoveLinearTargetEvent() : MoveLinearTargetEvent(nullptr) {}
+  ~MoveLinearTargetEvent() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(AddStaticTargetEvent* msg, std::destroying_delete_t) {
+  void operator delete(MoveLinearTargetEvent* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(AddStaticTargetEvent));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(MoveLinearTargetEvent));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR AddStaticTargetEvent(
+  explicit PROTOBUF_CONSTEXPR MoveLinearTargetEvent(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline AddStaticTargetEvent(const AddStaticTargetEvent& from) : AddStaticTargetEvent(nullptr, from) {}
-  inline AddStaticTargetEvent(AddStaticTargetEvent&& from) noexcept
-      : AddStaticTargetEvent(nullptr, std::move(from)) {}
-  inline AddStaticTargetEvent& operator=(const AddStaticTargetEvent& from) {
+  inline MoveLinearTargetEvent(const MoveLinearTargetEvent& from) : MoveLinearTargetEvent(nullptr, from) {}
+  inline MoveLinearTargetEvent(MoveLinearTargetEvent&& from) noexcept
+      : MoveLinearTargetEvent(nullptr, std::move(from)) {}
+  inline MoveLinearTargetEvent& operator=(const MoveLinearTargetEvent& from) {
     CopyFrom(from);
     return *this;
   }
-  inline AddStaticTargetEvent& operator=(AddStaticTargetEvent&& from) noexcept {
+  inline MoveLinearTargetEvent& operator=(MoveLinearTargetEvent&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -667,16 +670,16 @@ class AddStaticTargetEvent final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const AddStaticTargetEvent& default_instance() {
+  static const MoveLinearTargetEvent& default_instance() {
     return *internal_default_instance();
   }
-  static inline const AddStaticTargetEvent* internal_default_instance() {
-    return reinterpret_cast<const AddStaticTargetEvent*>(
-        &_AddStaticTargetEvent_default_instance_);
+  static inline const MoveLinearTargetEvent* internal_default_instance() {
+    return reinterpret_cast<const MoveLinearTargetEvent*>(
+        &_MoveLinearTargetEvent_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
-  friend void swap(AddStaticTargetEvent& a, AddStaticTargetEvent& b) { a.Swap(&b); }
-  inline void Swap(AddStaticTargetEvent* other) {
+  static constexpr int kIndexInFileMessages = 4;
+  friend void swap(MoveLinearTargetEvent& a, MoveLinearTargetEvent& b) { a.Swap(&b); }
+  inline void Swap(MoveLinearTargetEvent* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -684,7 +687,7 @@ class AddStaticTargetEvent final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(AddStaticTargetEvent* other) {
+  void UnsafeArenaSwap(MoveLinearTargetEvent* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -692,13 +695,13 @@ class AddStaticTargetEvent final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  AddStaticTargetEvent* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<AddStaticTargetEvent>(arena);
+  MoveLinearTargetEvent* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<MoveLinearTargetEvent>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const AddStaticTargetEvent& from);
+  void CopyFrom(const MoveLinearTargetEvent& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const AddStaticTargetEvent& from) { AddStaticTargetEvent::MergeImpl(*this, from); }
+  void MergeFrom(const MoveLinearTargetEvent& from) { MoveLinearTargetEvent::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -735,18 +738,240 @@ class AddStaticTargetEvent final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(AddStaticTargetEvent* other);
+  void InternalSwap(MoveLinearTargetEvent* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.AddStaticTargetEvent"; }
+  static ::absl::string_view FullMessageName() { return "aim.MoveLinearTargetEvent"; }
 
  protected:
-  explicit AddStaticTargetEvent(::google::protobuf::Arena* arena);
-  AddStaticTargetEvent(::google::protobuf::Arena* arena, const AddStaticTargetEvent& from);
-  AddStaticTargetEvent(::google::protobuf::Arena* arena, AddStaticTargetEvent&& from) noexcept
-      : AddStaticTargetEvent(arena) {
+  explicit MoveLinearTargetEvent(::google::protobuf::Arena* arena);
+  MoveLinearTargetEvent(::google::protobuf::Arena* arena, const MoveLinearTargetEvent& from);
+  MoveLinearTargetEvent(::google::protobuf::Arena* arena, MoveLinearTargetEvent&& from) noexcept
+      : MoveLinearTargetEvent(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kDirectionFieldNumber = 2,
+    kTargetIdFieldNumber = 1,
+    kDistancePerFrameFieldNumber = 3,
+  };
+  // .aim.StoredVec3 direction = 2;
+  bool has_direction() const;
+  void clear_direction() ;
+  const ::aim::StoredVec3& direction() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec3* release_direction();
+  ::aim::StoredVec3* mutable_direction();
+  void set_allocated_direction(::aim::StoredVec3* value);
+  void unsafe_arena_set_allocated_direction(::aim::StoredVec3* value);
+  ::aim::StoredVec3* unsafe_arena_release_direction();
+
+  private:
+  const ::aim::StoredVec3& _internal_direction() const;
+  ::aim::StoredVec3* _internal_mutable_direction();
+
+  public:
+  // int32 target_id = 1;
+  bool has_target_id() const;
+  void clear_target_id() ;
+  ::int32_t target_id() const;
+  void set_target_id(::int32_t value);
+
+  private:
+  ::int32_t _internal_target_id() const;
+  void _internal_set_target_id(::int32_t value);
+
+  public:
+  // float distance_per_frame = 3;
+  bool has_distance_per_frame() const;
+  void clear_distance_per_frame() ;
+  float distance_per_frame() const;
+  void set_distance_per_frame(float value);
+
+  private:
+  float _internal_distance_per_frame() const;
+  void _internal_set_distance_per_frame(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.MoveLinearTargetEvent)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 3, 1,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const MoveLinearTargetEvent& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::StoredVec3* direction_;
+    ::int32_t target_id_;
+    float distance_per_frame_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_replay_2eproto;
+};
+// -------------------------------------------------------------------
+
+class AddTargetEvent final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.AddTargetEvent) */ {
+ public:
+  inline AddTargetEvent() : AddTargetEvent(nullptr) {}
+  ~AddTargetEvent() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(AddTargetEvent* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(AddTargetEvent));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR AddTargetEvent(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline AddTargetEvent(const AddTargetEvent& from) : AddTargetEvent(nullptr, from) {}
+  inline AddTargetEvent(AddTargetEvent&& from) noexcept
+      : AddTargetEvent(nullptr, std::move(from)) {}
+  inline AddTargetEvent& operator=(const AddTargetEvent& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline AddTargetEvent& operator=(AddTargetEvent&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const AddTargetEvent& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const AddTargetEvent* internal_default_instance() {
+    return reinterpret_cast<const AddTargetEvent*>(
+        &_AddTargetEvent_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(AddTargetEvent& a, AddTargetEvent& b) { a.Swap(&b); }
+  inline void Swap(AddTargetEvent* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(AddTargetEvent* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  AddTargetEvent* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<AddTargetEvent>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const AddTargetEvent& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const AddTargetEvent& from) { AddTargetEvent::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(AddTargetEvent* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.AddTargetEvent"; }
+
+ protected:
+  explicit AddTargetEvent(::google::protobuf::Arena* arena);
+  AddTargetEvent(::google::protobuf::Arena* arena, const AddTargetEvent& from);
+  AddTargetEvent(::google::protobuf::Arena* arena, AddTargetEvent&& from) noexcept
+      : AddTargetEvent(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -802,7 +1027,7 @@ class AddStaticTargetEvent final : public ::google::protobuf::Message
   void _internal_set_radius(float value);
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.AddStaticTargetEvent)
+  // @@protoc_insertion_point(class_scope:aim.AddTargetEvent)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
@@ -824,7 +1049,7 @@ class AddStaticTargetEvent final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const AddStaticTargetEvent& from_msg);
+                          const AddTargetEvent& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::StoredVec3* position_;
@@ -895,15 +1120,16 @@ class ReplayEvent final : public ::google::protobuf::Message
   enum TypeCase {
     kKillTarget = 2,
     kRemoveTarget = 3,
-    kAddStaticTarget = 4,
-    kShotMissed = 5,
+    kAddTarget = 4,
+    kShotFired = 5,
+    kMoveLinearTarget = 6,
     TYPE_NOT_SET = 0,
   };
   static inline const ReplayEvent* internal_default_instance() {
     return reinterpret_cast<const ReplayEvent*>(
         &_ReplayEvent_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(ReplayEvent& a, ReplayEvent& b) { a.Swap(&b); }
   inline void Swap(ReplayEvent* other) {
     if (other == this) return;
@@ -993,8 +1219,9 @@ class ReplayEvent final : public ::google::protobuf::Message
     kFrameNumberFieldNumber = 1,
     kKillTargetFieldNumber = 2,
     kRemoveTargetFieldNumber = 3,
-    kAddStaticTargetFieldNumber = 4,
-    kShotMissedFieldNumber = 5,
+    kAddTargetFieldNumber = 4,
+    kShotFiredFieldNumber = 5,
+    kMoveLinearTargetFieldNumber = 6,
   };
   // int32 frame_number = 1;
   bool has_frame_number() const;
@@ -1045,42 +1272,61 @@ class ReplayEvent final : public ::google::protobuf::Message
   ::aim::RemoveTargetEvent* _internal_mutable_remove_target();
 
   public:
-  // .aim.AddStaticTargetEvent add_static_target = 4;
-  bool has_add_static_target() const;
+  // .aim.AddTargetEvent add_target = 4;
+  bool has_add_target() const;
   private:
-  bool _internal_has_add_static_target() const;
+  bool _internal_has_add_target() const;
 
   public:
-  void clear_add_static_target() ;
-  const ::aim::AddStaticTargetEvent& add_static_target() const;
-  PROTOBUF_NODISCARD ::aim::AddStaticTargetEvent* release_add_static_target();
-  ::aim::AddStaticTargetEvent* mutable_add_static_target();
-  void set_allocated_add_static_target(::aim::AddStaticTargetEvent* value);
-  void unsafe_arena_set_allocated_add_static_target(::aim::AddStaticTargetEvent* value);
-  ::aim::AddStaticTargetEvent* unsafe_arena_release_add_static_target();
+  void clear_add_target() ;
+  const ::aim::AddTargetEvent& add_target() const;
+  PROTOBUF_NODISCARD ::aim::AddTargetEvent* release_add_target();
+  ::aim::AddTargetEvent* mutable_add_target();
+  void set_allocated_add_target(::aim::AddTargetEvent* value);
+  void unsafe_arena_set_allocated_add_target(::aim::AddTargetEvent* value);
+  ::aim::AddTargetEvent* unsafe_arena_release_add_target();
 
   private:
-  const ::aim::AddStaticTargetEvent& _internal_add_static_target() const;
-  ::aim::AddStaticTargetEvent* _internal_mutable_add_static_target();
+  const ::aim::AddTargetEvent& _internal_add_target() const;
+  ::aim::AddTargetEvent* _internal_mutable_add_target();
 
   public:
-  // .aim.ShotMissedEvent shot_missed = 5;
-  bool has_shot_missed() const;
+  // .aim.ShotFiredEvent shot_fired = 5;
+  bool has_shot_fired() const;
   private:
-  bool _internal_has_shot_missed() const;
+  bool _internal_has_shot_fired() const;
 
   public:
-  void clear_shot_missed() ;
-  const ::aim::ShotMissedEvent& shot_missed() const;
-  PROTOBUF_NODISCARD ::aim::ShotMissedEvent* release_shot_missed();
-  ::aim::ShotMissedEvent* mutable_shot_missed();
-  void set_allocated_shot_missed(::aim::ShotMissedEvent* value);
-  void unsafe_arena_set_allocated_shot_missed(::aim::ShotMissedEvent* value);
-  ::aim::ShotMissedEvent* unsafe_arena_release_shot_missed();
+  void clear_shot_fired() ;
+  const ::aim::ShotFiredEvent& shot_fired() const;
+  PROTOBUF_NODISCARD ::aim::ShotFiredEvent* release_shot_fired();
+  ::aim::ShotFiredEvent* mutable_shot_fired();
+  void set_allocated_shot_fired(::aim::ShotFiredEvent* value);
+  void unsafe_arena_set_allocated_shot_fired(::aim::ShotFiredEvent* value);
+  ::aim::ShotFiredEvent* unsafe_arena_release_shot_fired();
 
   private:
-  const ::aim::ShotMissedEvent& _internal_shot_missed() const;
-  ::aim::ShotMissedEvent* _internal_mutable_shot_missed();
+  const ::aim::ShotFiredEvent& _internal_shot_fired() const;
+  ::aim::ShotFiredEvent* _internal_mutable_shot_fired();
+
+  public:
+  // .aim.MoveLinearTargetEvent move_linear_target = 6;
+  bool has_move_linear_target() const;
+  private:
+  bool _internal_has_move_linear_target() const;
+
+  public:
+  void clear_move_linear_target() ;
+  const ::aim::MoveLinearTargetEvent& move_linear_target() const;
+  PROTOBUF_NODISCARD ::aim::MoveLinearTargetEvent* release_move_linear_target();
+  ::aim::MoveLinearTargetEvent* mutable_move_linear_target();
+  void set_allocated_move_linear_target(::aim::MoveLinearTargetEvent* value);
+  void unsafe_arena_set_allocated_move_linear_target(::aim::MoveLinearTargetEvent* value);
+  ::aim::MoveLinearTargetEvent* unsafe_arena_release_move_linear_target();
+
+  private:
+  const ::aim::MoveLinearTargetEvent& _internal_move_linear_target() const;
+  ::aim::MoveLinearTargetEvent* _internal_mutable_move_linear_target();
 
   public:
   void clear_type();
@@ -1090,13 +1336,14 @@ class ReplayEvent final : public ::google::protobuf::Message
   class _Internal;
   void set_has_kill_target();
   void set_has_remove_target();
-  void set_has_add_static_target();
-  void set_has_shot_missed();
+  void set_has_add_target();
+  void set_has_shot_fired();
+  void set_has_move_linear_target();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 5, 4,
+      0, 6, 5,
       0, 2>
       _table_;
 
@@ -1122,8 +1369,9 @@ class ReplayEvent final : public ::google::protobuf::Message
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       ::aim::KillTargetEvent* kill_target_;
       ::aim::RemoveTargetEvent* remove_target_;
-      ::aim::AddStaticTargetEvent* add_static_target_;
-      ::aim::ShotMissedEvent* shot_missed_;
+      ::aim::AddTargetEvent* add_target_;
+      ::aim::ShotFiredEvent* shot_fired_;
+      ::aim::MoveLinearTargetEvent* move_linear_target_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -1192,7 +1440,7 @@ class Replay final : public ::google::protobuf::Message
     return reinterpret_cast<const Replay*>(
         &_Replay_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 6;
   friend void swap(Replay& a, Replay& b) { a.Swap(&b); }
   inline void Swap(Replay* other) {
     if (other == this) return;
@@ -1471,56 +1719,56 @@ inline void RemoveTargetEvent::_internal_set_target_id(::int32_t value) {
 
 // -------------------------------------------------------------------
 
-// ShotMissedEvent
+// ShotFiredEvent
 
 // -------------------------------------------------------------------
 
-// AddStaticTargetEvent
+// AddTargetEvent
 
 // int32 target_id = 1;
-inline bool AddStaticTargetEvent::has_target_id() const {
+inline bool AddTargetEvent::has_target_id() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
-inline void AddStaticTargetEvent::clear_target_id() {
+inline void AddTargetEvent::clear_target_id() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_id_ = 0;
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline ::int32_t AddStaticTargetEvent::target_id() const {
-  // @@protoc_insertion_point(field_get:aim.AddStaticTargetEvent.target_id)
+inline ::int32_t AddTargetEvent::target_id() const {
+  // @@protoc_insertion_point(field_get:aim.AddTargetEvent.target_id)
   return _internal_target_id();
 }
-inline void AddStaticTargetEvent::set_target_id(::int32_t value) {
+inline void AddTargetEvent::set_target_id(::int32_t value) {
   _internal_set_target_id(value);
   _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.AddStaticTargetEvent.target_id)
+  // @@protoc_insertion_point(field_set:aim.AddTargetEvent.target_id)
 }
-inline ::int32_t AddStaticTargetEvent::_internal_target_id() const {
+inline ::int32_t AddTargetEvent::_internal_target_id() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.target_id_;
 }
-inline void AddStaticTargetEvent::_internal_set_target_id(::int32_t value) {
+inline void AddTargetEvent::_internal_set_target_id(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_id_ = value;
 }
 
 // .aim.StoredVec3 position = 2;
-inline bool AddStaticTargetEvent::has_position() const {
+inline bool AddTargetEvent::has_position() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.position_ != nullptr);
   return value;
 }
-inline const ::aim::StoredVec3& AddStaticTargetEvent::_internal_position() const {
+inline const ::aim::StoredVec3& AddTargetEvent::_internal_position() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::aim::StoredVec3* p = _impl_.position_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
 }
-inline const ::aim::StoredVec3& AddStaticTargetEvent::position() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.AddStaticTargetEvent.position)
+inline const ::aim::StoredVec3& AddTargetEvent::position() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.AddTargetEvent.position)
   return _internal_position();
 }
-inline void AddStaticTargetEvent::unsafe_arena_set_allocated_position(::aim::StoredVec3* value) {
+inline void AddTargetEvent::unsafe_arena_set_allocated_position(::aim::StoredVec3* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.position_);
@@ -1531,9 +1779,9 @@ inline void AddStaticTargetEvent::unsafe_arena_set_allocated_position(::aim::Sto
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AddStaticTargetEvent.position)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AddTargetEvent.position)
 }
-inline ::aim::StoredVec3* AddStaticTargetEvent::release_position() {
+inline ::aim::StoredVec3* AddTargetEvent::release_position() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
@@ -1552,16 +1800,16 @@ inline ::aim::StoredVec3* AddStaticTargetEvent::release_position() {
   }
   return released;
 }
-inline ::aim::StoredVec3* AddStaticTargetEvent::unsafe_arena_release_position() {
+inline ::aim::StoredVec3* AddTargetEvent::unsafe_arena_release_position() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.AddStaticTargetEvent.position)
+  // @@protoc_insertion_point(field_release:aim.AddTargetEvent.position)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
   ::aim::StoredVec3* temp = _impl_.position_;
   _impl_.position_ = nullptr;
   return temp;
 }
-inline ::aim::StoredVec3* AddStaticTargetEvent::_internal_mutable_position() {
+inline ::aim::StoredVec3* AddTargetEvent::_internal_mutable_position() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.position_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
@@ -1569,13 +1817,13 @@ inline ::aim::StoredVec3* AddStaticTargetEvent::_internal_mutable_position() {
   }
   return _impl_.position_;
 }
-inline ::aim::StoredVec3* AddStaticTargetEvent::mutable_position() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::StoredVec3* AddTargetEvent::mutable_position() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000001u;
   ::aim::StoredVec3* _msg = _internal_mutable_position();
-  // @@protoc_insertion_point(field_mutable:aim.AddStaticTargetEvent.position)
+  // @@protoc_insertion_point(field_mutable:aim.AddTargetEvent.position)
   return _msg;
 }
-inline void AddStaticTargetEvent::set_allocated_position(::aim::StoredVec3* value) {
+inline void AddTargetEvent::set_allocated_position(::aim::StoredVec3* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -1593,35 +1841,186 @@ inline void AddStaticTargetEvent::set_allocated_position(::aim::StoredVec3* valu
   }
 
   _impl_.position_ = reinterpret_cast<::aim::StoredVec3*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.AddStaticTargetEvent.position)
+  // @@protoc_insertion_point(field_set_allocated:aim.AddTargetEvent.position)
 }
 
 // float radius = 3;
-inline bool AddStaticTargetEvent::has_radius() const {
+inline bool AddTargetEvent::has_radius() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline void AddStaticTargetEvent::clear_radius() {
+inline void AddTargetEvent::clear_radius() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.radius_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float AddStaticTargetEvent::radius() const {
-  // @@protoc_insertion_point(field_get:aim.AddStaticTargetEvent.radius)
+inline float AddTargetEvent::radius() const {
+  // @@protoc_insertion_point(field_get:aim.AddTargetEvent.radius)
   return _internal_radius();
 }
-inline void AddStaticTargetEvent::set_radius(float value) {
+inline void AddTargetEvent::set_radius(float value) {
   _internal_set_radius(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.AddStaticTargetEvent.radius)
+  // @@protoc_insertion_point(field_set:aim.AddTargetEvent.radius)
 }
-inline float AddStaticTargetEvent::_internal_radius() const {
+inline float AddTargetEvent::_internal_radius() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.radius_;
 }
-inline void AddStaticTargetEvent::_internal_set_radius(float value) {
+inline void AddTargetEvent::_internal_set_radius(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.radius_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MoveLinearTargetEvent
+
+// int32 target_id = 1;
+inline bool MoveLinearTargetEvent::has_target_id() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void MoveLinearTargetEvent::clear_target_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_id_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline ::int32_t MoveLinearTargetEvent::target_id() const {
+  // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.target_id)
+  return _internal_target_id();
+}
+inline void MoveLinearTargetEvent::set_target_id(::int32_t value) {
+  _internal_set_target_id(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.MoveLinearTargetEvent.target_id)
+}
+inline ::int32_t MoveLinearTargetEvent::_internal_target_id() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_id_;
+}
+inline void MoveLinearTargetEvent::_internal_set_target_id(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_id_ = value;
+}
+
+// .aim.StoredVec3 direction = 2;
+inline bool MoveLinearTargetEvent::has_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.direction_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec3& MoveLinearTargetEvent::_internal_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec3* p = _impl_.direction_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
+}
+inline const ::aim::StoredVec3& MoveLinearTargetEvent::direction() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.direction)
+  return _internal_direction();
+}
+inline void MoveLinearTargetEvent::unsafe_arena_set_allocated_direction(::aim::StoredVec3* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.direction_);
+  }
+  _impl_.direction_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.MoveLinearTargetEvent.direction)
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::release_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::StoredVec3* released = _impl_.direction_;
+  _impl_.direction_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::unsafe_arena_release_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.MoveLinearTargetEvent.direction)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::StoredVec3* temp = _impl_.direction_;
+  _impl_.direction_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::_internal_mutable_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.direction_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
+    _impl_.direction_ = reinterpret_cast<::aim::StoredVec3*>(p);
+  }
+  return _impl_.direction_;
+}
+inline ::aim::StoredVec3* MoveLinearTargetEvent::mutable_direction() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::StoredVec3* _msg = _internal_mutable_direction();
+  // @@protoc_insertion_point(field_mutable:aim.MoveLinearTargetEvent.direction)
+  return _msg;
+}
+inline void MoveLinearTargetEvent::set_allocated_direction(::aim::StoredVec3* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.direction_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.direction_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.MoveLinearTargetEvent.direction)
+}
+
+// float distance_per_frame = 3;
+inline bool MoveLinearTargetEvent::has_distance_per_frame() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void MoveLinearTargetEvent::clear_distance_per_frame() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.distance_per_frame_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float MoveLinearTargetEvent::distance_per_frame() const {
+  // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.distance_per_frame)
+  return _internal_distance_per_frame();
+}
+inline void MoveLinearTargetEvent::set_distance_per_frame(float value) {
+  _internal_set_distance_per_frame(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.MoveLinearTargetEvent.distance_per_frame)
+}
+inline float MoveLinearTargetEvent::_internal_distance_per_frame() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.distance_per_frame_;
+}
+inline void MoveLinearTargetEvent::_internal_set_distance_per_frame(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.distance_per_frame_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -1814,161 +2213,240 @@ inline ::aim::RemoveTargetEvent* ReplayEvent::mutable_remove_target() ABSL_ATTRI
   return _msg;
 }
 
-// .aim.AddStaticTargetEvent add_static_target = 4;
-inline bool ReplayEvent::has_add_static_target() const {
-  return type_case() == kAddStaticTarget;
+// .aim.AddTargetEvent add_target = 4;
+inline bool ReplayEvent::has_add_target() const {
+  return type_case() == kAddTarget;
 }
-inline bool ReplayEvent::_internal_has_add_static_target() const {
-  return type_case() == kAddStaticTarget;
+inline bool ReplayEvent::_internal_has_add_target() const {
+  return type_case() == kAddTarget;
 }
-inline void ReplayEvent::set_has_add_static_target() {
-  _impl_._oneof_case_[0] = kAddStaticTarget;
+inline void ReplayEvent::set_has_add_target() {
+  _impl_._oneof_case_[0] = kAddTarget;
 }
-inline void ReplayEvent::clear_add_static_target() {
+inline void ReplayEvent::clear_add_target() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kAddStaticTarget) {
+  if (type_case() == kAddTarget) {
     if (GetArena() == nullptr) {
-      delete _impl_.type_.add_static_target_;
+      delete _impl_.type_.add_target_;
     } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.add_static_target_);
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.add_target_);
     }
     clear_has_type();
   }
 }
-inline ::aim::AddStaticTargetEvent* ReplayEvent::release_add_static_target() {
-  // @@protoc_insertion_point(field_release:aim.ReplayEvent.add_static_target)
-  if (type_case() == kAddStaticTarget) {
+inline ::aim::AddTargetEvent* ReplayEvent::release_add_target() {
+  // @@protoc_insertion_point(field_release:aim.ReplayEvent.add_target)
+  if (type_case() == kAddTarget) {
     clear_has_type();
-    auto* temp = _impl_.type_.add_static_target_;
+    auto* temp = _impl_.type_.add_target_;
     if (GetArena() != nullptr) {
       temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
     }
-    _impl_.type_.add_static_target_ = nullptr;
+    _impl_.type_.add_target_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::aim::AddStaticTargetEvent& ReplayEvent::_internal_add_static_target() const {
-  return type_case() == kAddStaticTarget ? *_impl_.type_.add_static_target_ : reinterpret_cast<::aim::AddStaticTargetEvent&>(::aim::_AddStaticTargetEvent_default_instance_);
+inline const ::aim::AddTargetEvent& ReplayEvent::_internal_add_target() const {
+  return type_case() == kAddTarget ? *_impl_.type_.add_target_ : reinterpret_cast<::aim::AddTargetEvent&>(::aim::_AddTargetEvent_default_instance_);
 }
-inline const ::aim::AddStaticTargetEvent& ReplayEvent::add_static_target() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ReplayEvent.add_static_target)
-  return _internal_add_static_target();
+inline const ::aim::AddTargetEvent& ReplayEvent::add_target() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ReplayEvent.add_target)
+  return _internal_add_target();
 }
-inline ::aim::AddStaticTargetEvent* ReplayEvent::unsafe_arena_release_add_static_target() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ReplayEvent.add_static_target)
-  if (type_case() == kAddStaticTarget) {
+inline ::aim::AddTargetEvent* ReplayEvent::unsafe_arena_release_add_target() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ReplayEvent.add_target)
+  if (type_case() == kAddTarget) {
     clear_has_type();
-    auto* temp = _impl_.type_.add_static_target_;
-    _impl_.type_.add_static_target_ = nullptr;
+    auto* temp = _impl_.type_.add_target_;
+    _impl_.type_.add_target_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void ReplayEvent::unsafe_arena_set_allocated_add_static_target(::aim::AddStaticTargetEvent* value) {
+inline void ReplayEvent::unsafe_arena_set_allocated_add_target(::aim::AddTargetEvent* value) {
   // We rely on the oneof clear method to free the earlier contents
   // of this oneof. We can directly use the pointer we're given to
   // set the new value.
   clear_type();
   if (value) {
-    set_has_add_static_target();
-    _impl_.type_.add_static_target_ = value;
+    set_has_add_target();
+    _impl_.type_.add_target_ = value;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReplayEvent.add_static_target)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReplayEvent.add_target)
 }
-inline ::aim::AddStaticTargetEvent* ReplayEvent::_internal_mutable_add_static_target() {
-  if (type_case() != kAddStaticTarget) {
+inline ::aim::AddTargetEvent* ReplayEvent::_internal_mutable_add_target() {
+  if (type_case() != kAddTarget) {
     clear_type();
-    set_has_add_static_target();
-    _impl_.type_.add_static_target_ =
-        ::google::protobuf::Message::DefaultConstruct<::aim::AddStaticTargetEvent>(GetArena());
+    set_has_add_target();
+    _impl_.type_.add_target_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::AddTargetEvent>(GetArena());
   }
-  return _impl_.type_.add_static_target_;
+  return _impl_.type_.add_target_;
 }
-inline ::aim::AddStaticTargetEvent* ReplayEvent::mutable_add_static_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::aim::AddStaticTargetEvent* _msg = _internal_mutable_add_static_target();
-  // @@protoc_insertion_point(field_mutable:aim.ReplayEvent.add_static_target)
+inline ::aim::AddTargetEvent* ReplayEvent::mutable_add_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::AddTargetEvent* _msg = _internal_mutable_add_target();
+  // @@protoc_insertion_point(field_mutable:aim.ReplayEvent.add_target)
   return _msg;
 }
 
-// .aim.ShotMissedEvent shot_missed = 5;
-inline bool ReplayEvent::has_shot_missed() const {
-  return type_case() == kShotMissed;
+// .aim.ShotFiredEvent shot_fired = 5;
+inline bool ReplayEvent::has_shot_fired() const {
+  return type_case() == kShotFired;
 }
-inline bool ReplayEvent::_internal_has_shot_missed() const {
-  return type_case() == kShotMissed;
+inline bool ReplayEvent::_internal_has_shot_fired() const {
+  return type_case() == kShotFired;
 }
-inline void ReplayEvent::set_has_shot_missed() {
-  _impl_._oneof_case_[0] = kShotMissed;
+inline void ReplayEvent::set_has_shot_fired() {
+  _impl_._oneof_case_[0] = kShotFired;
 }
-inline void ReplayEvent::clear_shot_missed() {
+inline void ReplayEvent::clear_shot_fired() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kShotMissed) {
+  if (type_case() == kShotFired) {
     if (GetArena() == nullptr) {
-      delete _impl_.type_.shot_missed_;
+      delete _impl_.type_.shot_fired_;
     } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.shot_missed_);
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.shot_fired_);
     }
     clear_has_type();
   }
 }
-inline ::aim::ShotMissedEvent* ReplayEvent::release_shot_missed() {
-  // @@protoc_insertion_point(field_release:aim.ReplayEvent.shot_missed)
-  if (type_case() == kShotMissed) {
+inline ::aim::ShotFiredEvent* ReplayEvent::release_shot_fired() {
+  // @@protoc_insertion_point(field_release:aim.ReplayEvent.shot_fired)
+  if (type_case() == kShotFired) {
     clear_has_type();
-    auto* temp = _impl_.type_.shot_missed_;
+    auto* temp = _impl_.type_.shot_fired_;
     if (GetArena() != nullptr) {
       temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
     }
-    _impl_.type_.shot_missed_ = nullptr;
+    _impl_.type_.shot_fired_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::aim::ShotMissedEvent& ReplayEvent::_internal_shot_missed() const {
-  return type_case() == kShotMissed ? *_impl_.type_.shot_missed_ : reinterpret_cast<::aim::ShotMissedEvent&>(::aim::_ShotMissedEvent_default_instance_);
+inline const ::aim::ShotFiredEvent& ReplayEvent::_internal_shot_fired() const {
+  return type_case() == kShotFired ? *_impl_.type_.shot_fired_ : reinterpret_cast<::aim::ShotFiredEvent&>(::aim::_ShotFiredEvent_default_instance_);
 }
-inline const ::aim::ShotMissedEvent& ReplayEvent::shot_missed() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ReplayEvent.shot_missed)
-  return _internal_shot_missed();
+inline const ::aim::ShotFiredEvent& ReplayEvent::shot_fired() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ReplayEvent.shot_fired)
+  return _internal_shot_fired();
 }
-inline ::aim::ShotMissedEvent* ReplayEvent::unsafe_arena_release_shot_missed() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ReplayEvent.shot_missed)
-  if (type_case() == kShotMissed) {
+inline ::aim::ShotFiredEvent* ReplayEvent::unsafe_arena_release_shot_fired() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ReplayEvent.shot_fired)
+  if (type_case() == kShotFired) {
     clear_has_type();
-    auto* temp = _impl_.type_.shot_missed_;
-    _impl_.type_.shot_missed_ = nullptr;
+    auto* temp = _impl_.type_.shot_fired_;
+    _impl_.type_.shot_fired_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void ReplayEvent::unsafe_arena_set_allocated_shot_missed(::aim::ShotMissedEvent* value) {
+inline void ReplayEvent::unsafe_arena_set_allocated_shot_fired(::aim::ShotFiredEvent* value) {
   // We rely on the oneof clear method to free the earlier contents
   // of this oneof. We can directly use the pointer we're given to
   // set the new value.
   clear_type();
   if (value) {
-    set_has_shot_missed();
-    _impl_.type_.shot_missed_ = value;
+    set_has_shot_fired();
+    _impl_.type_.shot_fired_ = value;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReplayEvent.shot_missed)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReplayEvent.shot_fired)
 }
-inline ::aim::ShotMissedEvent* ReplayEvent::_internal_mutable_shot_missed() {
-  if (type_case() != kShotMissed) {
+inline ::aim::ShotFiredEvent* ReplayEvent::_internal_mutable_shot_fired() {
+  if (type_case() != kShotFired) {
     clear_type();
-    set_has_shot_missed();
-    _impl_.type_.shot_missed_ =
-        ::google::protobuf::Message::DefaultConstruct<::aim::ShotMissedEvent>(GetArena());
+    set_has_shot_fired();
+    _impl_.type_.shot_fired_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::ShotFiredEvent>(GetArena());
   }
-  return _impl_.type_.shot_missed_;
+  return _impl_.type_.shot_fired_;
 }
-inline ::aim::ShotMissedEvent* ReplayEvent::mutable_shot_missed() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::aim::ShotMissedEvent* _msg = _internal_mutable_shot_missed();
-  // @@protoc_insertion_point(field_mutable:aim.ReplayEvent.shot_missed)
+inline ::aim::ShotFiredEvent* ReplayEvent::mutable_shot_fired() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::ShotFiredEvent* _msg = _internal_mutable_shot_fired();
+  // @@protoc_insertion_point(field_mutable:aim.ReplayEvent.shot_fired)
+  return _msg;
+}
+
+// .aim.MoveLinearTargetEvent move_linear_target = 6;
+inline bool ReplayEvent::has_move_linear_target() const {
+  return type_case() == kMoveLinearTarget;
+}
+inline bool ReplayEvent::_internal_has_move_linear_target() const {
+  return type_case() == kMoveLinearTarget;
+}
+inline void ReplayEvent::set_has_move_linear_target() {
+  _impl_._oneof_case_[0] = kMoveLinearTarget;
+}
+inline void ReplayEvent::clear_move_linear_target() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kMoveLinearTarget) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.move_linear_target_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.move_linear_target_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::MoveLinearTargetEvent* ReplayEvent::release_move_linear_target() {
+  // @@protoc_insertion_point(field_release:aim.ReplayEvent.move_linear_target)
+  if (type_case() == kMoveLinearTarget) {
+    clear_has_type();
+    auto* temp = _impl_.type_.move_linear_target_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.move_linear_target_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::MoveLinearTargetEvent& ReplayEvent::_internal_move_linear_target() const {
+  return type_case() == kMoveLinearTarget ? *_impl_.type_.move_linear_target_ : reinterpret_cast<::aim::MoveLinearTargetEvent&>(::aim::_MoveLinearTargetEvent_default_instance_);
+}
+inline const ::aim::MoveLinearTargetEvent& ReplayEvent::move_linear_target() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ReplayEvent.move_linear_target)
+  return _internal_move_linear_target();
+}
+inline ::aim::MoveLinearTargetEvent* ReplayEvent::unsafe_arena_release_move_linear_target() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ReplayEvent.move_linear_target)
+  if (type_case() == kMoveLinearTarget) {
+    clear_has_type();
+    auto* temp = _impl_.type_.move_linear_target_;
+    _impl_.type_.move_linear_target_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ReplayEvent::unsafe_arena_set_allocated_move_linear_target(::aim::MoveLinearTargetEvent* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_move_linear_target();
+    _impl_.type_.move_linear_target_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReplayEvent.move_linear_target)
+}
+inline ::aim::MoveLinearTargetEvent* ReplayEvent::_internal_mutable_move_linear_target() {
+  if (type_case() != kMoveLinearTarget) {
+    clear_type();
+    set_has_move_linear_target();
+    _impl_.type_.move_linear_target_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::MoveLinearTargetEvent>(GetArena());
+  }
+  return _impl_.type_.move_linear_target_;
+}
+inline ::aim::MoveLinearTargetEvent* ReplayEvent::mutable_move_linear_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::MoveLinearTargetEvent* _msg = _internal_mutable_move_linear_target();
+  // @@protoc_insertion_point(field_mutable:aim.ReplayEvent.move_linear_target)
   return _msg;
 }
 

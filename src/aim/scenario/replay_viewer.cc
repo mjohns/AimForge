@@ -87,7 +87,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
     LookAtInfo look_at = camera.GetLookAt();
 
     bool has_kill = false;
-    bool has_miss = false;
+    bool has_shot = false;
     for (auto& event : replay_frame.events) {
       if (event.has_kill_target()) {
         target_manager.RemoveTarget(event.kill_target().target_id());
@@ -96,26 +96,23 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
       if (event.has_remove_target()) {
         target_manager.RemoveTarget(event.remove_target().target_id());
       }
-      if (event.has_shot_missed()) {
-        has_miss = true;
+      if (event.has_shot_fired()) {
+        has_shot = true;
       }
-      if (event.has_add_static_target()) {
+      if (event.has_add_target()) {
         Target t;
-        t.id = event.add_static_target().target_id();
-        t.radius = event.add_static_target().radius();
-        t.position = ToVec3(event.add_static_target().position());
+        t.id = event.add_target().target_id();
+        t.radius = event.add_target().radius();
+        t.position = ToVec3(event.add_target().position());
         target_manager.AddTarget(t);
       }
     }
 
+    if (has_shot) {
+        app->sound_manager()->PlayShootSound();
+    }
     if (has_kill) {
-      if (replay.is_poke_ball()) {
-        app->sound_manager()->PlayKillSound();
-      } else {
-        app->sound_manager()->PlayKillSound().PlayShootSound();
-      }
-    } else if (has_miss) {
-      app->sound_manager()->PlayShootSound();
+      app->sound_manager()->PlayKillSound();
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
