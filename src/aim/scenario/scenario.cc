@@ -251,6 +251,26 @@ void Scenario::AddShotFiredEvent() {
   *event->mutable_shot_fired() = ShotFiredEvent();
 }
 
+void Scenario::AddMoveLinearTargetEvent(u16 target_id,
+                                        const glm::vec2& direction,
+                                        float distance_per_second) {
+  // Translate from 2d direction on static wall.
+  glm::vec3 dir3(direction.x, 0, direction.y);
+  AddMoveLinearTargetEvent(target_id, dir3, distance_per_second);
+}
+
+void Scenario::AddMoveLinearTargetEvent(u16 target_id,
+                                        const glm::vec3& direction,
+                                        float distance_per_second) {
+  auto event = replay_->add_events();
+  event->set_frame_number(timer_.GetReplayFrameNumber());
+  MoveLinearTargetEvent t;
+  t.set_target_id(target_id);
+  *t.mutable_direction() = ToStoredVec3(direction);
+  t.set_distance_per_second(distance_per_second);
+  *event->mutable_move_linear_target() = t;
+}
+
 void Scenario::PlayShootSound() {
   app_->sound_manager()->PlayShootSound();
   AddShotFiredEvent();

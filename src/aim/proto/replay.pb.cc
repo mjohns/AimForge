@@ -99,7 +99,7 @@ inline constexpr MoveLinearTargetEvent::Impl_::Impl_(
       : _cached_size_{0},
         direction_{nullptr},
         target_id_{0},
-        distance_per_frame_{0} {}
+        distance_per_second_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR MoveLinearTargetEvent::MoveLinearTargetEvent(::_pbi::ConstantInitialized)
@@ -181,8 +181,7 @@ inline constexpr Replay::Impl_::Impl_(
         pitch_yaws_{},
         events_{},
         room_{nullptr},
-        replay_fps_{0},
-        is_poke_ball_{false} {}
+        replay_fps_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR Replay::Replay(::_pbi::ConstantInitialized)
@@ -263,7 +262,7 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.target_id_),
         PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.direction_),
-        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.distance_per_frame_),
+        PROTOBUF_FIELD_OFFSET(::aim::MoveLinearTargetEvent, _impl_.distance_per_second_),
         1,
         0,
         2,
@@ -300,12 +299,10 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Replay, _impl_.replay_fps_),
         PROTOBUF_FIELD_OFFSET(::aim::Replay, _impl_.pitch_yaws_),
         PROTOBUF_FIELD_OFFSET(::aim::Replay, _impl_.events_),
-        PROTOBUF_FIELD_OFFSET(::aim::Replay, _impl_.is_poke_ball_),
         0,
         1,
         ~0u,
         ~0u,
-        2,
 };
 
 static const ::_pbi::MigrationSchema
@@ -316,7 +313,7 @@ static const ::_pbi::MigrationSchema
         {28, 39, -1, sizeof(::aim::AddTargetEvent)},
         {42, 53, -1, sizeof(::aim::MoveLinearTargetEvent)},
         {56, 71, -1, sizeof(::aim::ReplayEvent)},
-        {77, 90, -1, sizeof(::aim::Replay)},
+        {77, 89, -1, sizeof(::aim::Replay)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_KillTargetEvent_default_instance_._instance,
@@ -334,21 +331,20 @@ const char descriptor_table_protodef_replay_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "d\030\001 \001(\005\"&\n\021RemoveTargetEvent\022\021\n\ttarget_i"
     "d\030\001 \001(\005\"\020\n\016ShotFiredEvent\"V\n\016AddTargetEv"
     "ent\022\021\n\ttarget_id\030\001 \001(\005\022!\n\010position\030\002 \001(\013"
-    "2\017.aim.StoredVec3\022\016\n\006radius\030\003 \001(\002\"j\n\025Mov"
+    "2\017.aim.StoredVec3\022\016\n\006radius\030\003 \001(\002\"k\n\025Mov"
     "eLinearTargetEvent\022\021\n\ttarget_id\030\001 \001(\005\022\"\n"
-    "\tdirection\030\002 \001(\0132\017.aim.StoredVec3\022\032\n\022dis"
-    "tance_per_frame\030\003 \001(\002\"\231\002\n\013ReplayEvent\022\024\n"
-    "\014frame_number\030\001 \001(\005\022+\n\013kill_target\030\002 \001(\013"
-    "2\024.aim.KillTargetEventH\000\022/\n\rremove_targe"
-    "t\030\003 \001(\0132\026.aim.RemoveTargetEventH\000\022)\n\nadd"
-    "_target\030\004 \001(\0132\023.aim.AddTargetEventH\000\022)\n\n"
-    "shot_fired\030\005 \001(\0132\023.aim.ShotFiredEventH\000\022"
-    "8\n\022move_linear_target\030\006 \001(\0132\032.aim.MoveLi"
-    "nearTargetEventH\000B\006\n\004type\"\201\001\n\006Replay\022\027\n\004"
+    "\tdirection\030\002 \001(\0132\017.aim.StoredVec3\022\033\n\023dis"
+    "tance_per_second\030\003 \001(\002\"\231\002\n\013ReplayEvent\022\024"
+    "\n\014frame_number\030\001 \001(\005\022+\n\013kill_target\030\002 \001("
+    "\0132\024.aim.KillTargetEventH\000\022/\n\rremove_targ"
+    "et\030\003 \001(\0132\026.aim.RemoveTargetEventH\000\022)\n\nad"
+    "d_target\030\004 \001(\0132\023.aim.AddTargetEventH\000\022)\n"
+    "\nshot_fired\030\005 \001(\0132\023.aim.ShotFiredEventH\000"
+    "\0228\n\022move_linear_target\030\006 \001(\0132\032.aim.MoveL"
+    "inearTargetEventH\000B\006\n\004type\"k\n\006Replay\022\027\n\004"
     "room\030\001 \001(\0132\t.aim.Room\022\022\n\nreplay_fps\030\002 \001("
     "\005\022\022\n\npitch_yaws\030\003 \003(\002\022 \n\006events\030\004 \003(\0132\020."
-    "aim.ReplayEvent\022\024\n\014is_poke_ball\030\005 \001(\010b\010e"
-    "ditionsp\350\007"
+    "aim.ReplayEventb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_replay_2eproto_deps[2] =
     {
@@ -359,7 +355,7 @@ static ::absl::once_flag descriptor_table_replay_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_replay_2eproto = {
     false,
     false,
-    770,
+    748,
     descriptor_table_protodef_replay_2eproto,
     "replay.proto",
     &descriptor_table_replay_2eproto_once,
@@ -1283,9 +1279,9 @@ MoveLinearTargetEvent::MoveLinearTargetEvent(
                offsetof(Impl_, target_id_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, target_id_),
-           offsetof(Impl_, distance_per_frame_) -
+           offsetof(Impl_, distance_per_second_) -
                offsetof(Impl_, target_id_) +
-               sizeof(Impl_::distance_per_frame_));
+               sizeof(Impl_::distance_per_second_));
 
   // @@protoc_insertion_point(copy_constructor:aim.MoveLinearTargetEvent)
 }
@@ -1299,9 +1295,9 @@ inline void MoveLinearTargetEvent::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, direction_),
            0,
-           offsetof(Impl_, distance_per_frame_) -
+           offsetof(Impl_, distance_per_second_) -
                offsetof(Impl_, direction_) +
-               sizeof(Impl_::distance_per_frame_));
+               sizeof(Impl_::distance_per_second_));
 }
 MoveLinearTargetEvent::~MoveLinearTargetEvent() {
   // @@protoc_insertion_point(destructor:aim.MoveLinearTargetEvent)
@@ -1376,9 +1372,9 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> MoveLinearTargetEvent::_table_ = {
     // .aim.StoredVec3 direction = 2;
     {::_pbi::TcParser::FastMtS1,
      {18, 0, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_)}},
-    // float distance_per_frame = 3;
+    // float distance_per_second = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_frame_)}},
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1388,8 +1384,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> MoveLinearTargetEvent::_table_ = {
     // .aim.StoredVec3 direction = 2;
     {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // float distance_per_frame = 3;
-    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_frame_), _Internal::kHasBitsOffset + 2, 0,
+    // float distance_per_second = 3;
+    {PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
@@ -1411,8 +1407,8 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
   }
   if (cached_has_bits & 0x00000006u) {
     ::memset(&_impl_.target_id_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.distance_per_frame_) -
-        reinterpret_cast<char*>(&_impl_.target_id_)) + sizeof(_impl_.distance_per_frame_));
+        reinterpret_cast<char*>(&_impl_.distance_per_second_) -
+        reinterpret_cast<char*>(&_impl_.target_id_)) + sizeof(_impl_.distance_per_second_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1448,11 +1444,11 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
                 stream);
           }
 
-          // float distance_per_frame = 3;
+          // float distance_per_second = 3;
           if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_distance_per_frame(), target);
+                3, this_._internal_distance_per_second(), target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1491,7 +1487,7 @@ PROTOBUF_NOINLINE void MoveLinearTargetEvent::Clear() {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_target_id());
             }
-            // float distance_per_frame = 3;
+            // float distance_per_second = 3;
             if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
@@ -1524,7 +1520,7 @@ void MoveLinearTargetEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, c
       _this->_impl_.target_id_ = from._impl_.target_id_;
     }
     if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.distance_per_frame_ = from._impl_.distance_per_frame_;
+      _this->_impl_.distance_per_second_ = from._impl_.distance_per_second_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1544,8 +1540,8 @@ void MoveLinearTargetEvent::InternalSwap(MoveLinearTargetEvent* PROTOBUF_RESTRIC
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_frame_)
-      + sizeof(MoveLinearTargetEvent::_impl_.distance_per_frame_)
+      PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.distance_per_second_)
+      + sizeof(MoveLinearTargetEvent::_impl_.distance_per_second_)
       - PROTOBUF_FIELD_OFFSET(MoveLinearTargetEvent, _impl_.direction_)>(
           reinterpret_cast<char*>(&_impl_.direction_),
           reinterpret_cast<char*>(&other->_impl_.direction_));
@@ -2135,13 +2131,7 @@ Replay::Replay(
   _impl_.room_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::Room>(
                               arena, *from._impl_.room_)
                         : nullptr;
-  ::memcpy(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, replay_fps_),
-           reinterpret_cast<const char *>(&from._impl_) +
-               offsetof(Impl_, replay_fps_),
-           offsetof(Impl_, is_poke_ball_) -
-               offsetof(Impl_, replay_fps_) +
-               sizeof(Impl_::is_poke_ball_));
+  _impl_.replay_fps_ = from._impl_.replay_fps_;
 
   // @@protoc_insertion_point(copy_constructor:aim.Replay)
 }
@@ -2157,9 +2147,9 @@ inline void Replay::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, room_),
            0,
-           offsetof(Impl_, is_poke_ball_) -
+           offsetof(Impl_, replay_fps_) -
                offsetof(Impl_, room_) +
-               sizeof(Impl_::is_poke_ball_));
+               sizeof(Impl_::replay_fps_));
 }
 Replay::~Replay() {
   // @@protoc_insertion_point(destructor:aim.Replay)
@@ -2225,15 +2215,15 @@ const ::google::protobuf::internal::ClassData* Replay::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 5, 2, 0, 2> Replay::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 2, 0, 2> Replay::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Replay, _impl_._has_bits_),
     0, // no _extensions_
-    5, 56,  // max_field_number, fast_idx_mask
+    4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    4,  // num_field_entries
     2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -2243,7 +2233,9 @@ const ::_pbi::TcParseTable<3, 5, 2, 0, 2> Replay::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::Replay>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .aim.ReplayEvent events = 4;
+    {::_pbi::TcParser::FastMtR1,
+     {34, 63, 1, PROTOBUF_FIELD_OFFSET(Replay, _impl_.events_)}},
     // .aim.Room room = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(Replay, _impl_.room_)}},
@@ -2253,14 +2245,6 @@ const ::_pbi::TcParseTable<3, 5, 2, 0, 2> Replay::_table_ = {
     // repeated float pitch_yaws = 3;
     {::_pbi::TcParser::FastF32P1,
      {26, 63, 0, PROTOBUF_FIELD_OFFSET(Replay, _impl_.pitch_yaws_)}},
-    // repeated .aim.ReplayEvent events = 4;
-    {::_pbi::TcParser::FastMtR1,
-     {34, 63, 1, PROTOBUF_FIELD_OFFSET(Replay, _impl_.events_)}},
-    // bool is_poke_ball = 5;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Replay, _impl_.is_poke_ball_), 2>(),
-     {40, 2, 0, PROTOBUF_FIELD_OFFSET(Replay, _impl_.is_poke_ball_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -2276,9 +2260,6 @@ const ::_pbi::TcParseTable<3, 5, 2, 0, 2> Replay::_table_ = {
     // repeated .aim.ReplayEvent events = 4;
     {PROTOBUF_FIELD_OFFSET(Replay, _impl_.events_), -1, 1,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
-    // bool is_poke_ball = 5;
-    {PROTOBUF_FIELD_OFFSET(Replay, _impl_.is_poke_ball_), _Internal::kHasBitsOffset + 2, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::ReplayEvent>()},
@@ -2300,11 +2281,7 @@ PROTOBUF_NOINLINE void Replay::Clear() {
     ABSL_DCHECK(_impl_.room_ != nullptr);
     _impl_.room_->Clear();
   }
-  if (cached_has_bits & 0x00000006u) {
-    ::memset(&_impl_.replay_fps_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.is_poke_ball_) -
-        reinterpret_cast<char*>(&_impl_.replay_fps_)) + sizeof(_impl_.is_poke_ball_));
-  }
+  _impl_.replay_fps_ = 0;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -2355,13 +2332,6 @@ PROTOBUF_NOINLINE void Replay::Clear() {
                     target, stream);
           }
 
-          // bool is_poke_ball = 5;
-          if (cached_has_bits & 0x00000004u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                5, this_._internal_is_poke_ball(), target);
-          }
-
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -2406,7 +2376,7 @@ PROTOBUF_NOINLINE void Replay::Clear() {
             }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x00000003u) {
             // .aim.Room room = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
@@ -2416,10 +2386,6 @@ PROTOBUF_NOINLINE void Replay::Clear() {
             if (cached_has_bits & 0x00000002u) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_replay_fps());
-            }
-            // bool is_poke_ball = 5;
-            if (cached_has_bits & 0x00000004u) {
-              total_size += 2;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -2439,7 +2405,7 @@ void Replay::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::
   _this->_internal_mutable_events()->MergeFrom(
       from._internal_events());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.room_ != nullptr);
       if (_this->_impl_.room_ == nullptr) {
@@ -2451,9 +2417,6 @@ void Replay::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::
     }
     if (cached_has_bits & 0x00000002u) {
       _this->_impl_.replay_fps_ = from._impl_.replay_fps_;
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.is_poke_ball_ = from._impl_.is_poke_ball_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -2475,8 +2438,8 @@ void Replay::InternalSwap(Replay* PROTOBUF_RESTRICT other) {
   _impl_.pitch_yaws_.InternalSwap(&other->_impl_.pitch_yaws_);
   _impl_.events_.InternalSwap(&other->_impl_.events_);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Replay, _impl_.is_poke_ball_)
-      + sizeof(Replay::_impl_.is_poke_ball_)
+      PROTOBUF_FIELD_OFFSET(Replay, _impl_.replay_fps_)
+      + sizeof(Replay::_impl_.replay_fps_)
       - PROTOBUF_FIELD_OFFSET(Replay, _impl_.room_)>(
           reinterpret_cast<char*>(&_impl_.room_),
           reinterpret_cast<char*>(&other->_impl_.room_));

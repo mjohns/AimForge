@@ -48,10 +48,10 @@ class BarrelScenario : public Scenario {
     if (data->has_click) {
       stats_.shots_taken++;
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-      app_->sound_manager()->PlayShootSound();
+      PlayShootSound();
       if (maybe_hit_target_id.has_value()) {
         stats_.targets_hit++;
-        app_->sound_manager()->PlayKillSound();
+        PlayKillSound();
         data->force_render = true;
 
         auto hit_target_id = *maybe_hit_target_id;
@@ -72,6 +72,7 @@ class BarrelScenario : public Scenario {
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
         info.direction = new_direction;
         new_position = t->static_wall_position + (info.direction * (delta_seconds * speed));
+        AddMoveLinearTargetEvent(t->id, info.direction, info.speed);
       }
       t->static_wall_position = new_position;
       FillInPositionFromStaticWallPos(t);
@@ -105,6 +106,7 @@ class BarrelScenario : public Scenario {
     FillInPositionFromStaticWallPos(&t);
 
     if (target_to_replace.has_value()) {
+      AddKillTargetEvent(*target_to_replace);
       t = target_manager_.ReplaceTarget(*target_to_replace, t);
     } else {
       t = target_manager_.AddTarget(t);
@@ -119,6 +121,7 @@ class BarrelScenario : public Scenario {
     movement_info_map_[t.id] = info;
 
     AddNewTargetEvent(t);
+    AddMoveLinearTargetEvent(t.id, info.direction, info.speed);
     return t;
   }
 

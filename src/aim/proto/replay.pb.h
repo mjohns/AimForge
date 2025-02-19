@@ -766,7 +766,7 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
   enum : int {
     kDirectionFieldNumber = 2,
     kTargetIdFieldNumber = 1,
-    kDistancePerFrameFieldNumber = 3,
+    kDistancePerSecondFieldNumber = 3,
   };
   // .aim.StoredVec3 direction = 2;
   bool has_direction() const;
@@ -794,15 +794,15 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
   void _internal_set_target_id(::int32_t value);
 
   public:
-  // float distance_per_frame = 3;
-  bool has_distance_per_frame() const;
-  void clear_distance_per_frame() ;
-  float distance_per_frame() const;
-  void set_distance_per_frame(float value);
+  // float distance_per_second = 3;
+  bool has_distance_per_second() const;
+  void clear_distance_per_second() ;
+  float distance_per_second() const;
+  void set_distance_per_second(float value);
 
   private:
-  float _internal_distance_per_frame() const;
-  void _internal_set_distance_per_frame(float value);
+  float _internal_distance_per_second() const;
+  void _internal_set_distance_per_second(float value);
 
   public:
   // @@protoc_insertion_point(class_scope:aim.MoveLinearTargetEvent)
@@ -832,7 +832,7 @@ class MoveLinearTargetEvent final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::StoredVec3* direction_;
     ::int32_t target_id_;
-    float distance_per_frame_;
+    float distance_per_second_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1531,7 +1531,6 @@ class Replay final : public ::google::protobuf::Message
     kEventsFieldNumber = 4,
     kRoomFieldNumber = 1,
     kReplayFpsFieldNumber = 2,
-    kIsPokeBallFieldNumber = 5,
   };
   // repeated float pitch_yaws = 3;
   int pitch_yaws_size() const;
@@ -1594,23 +1593,12 @@ class Replay final : public ::google::protobuf::Message
   void _internal_set_replay_fps(::int32_t value);
 
   public:
-  // bool is_poke_ball = 5;
-  bool has_is_poke_ball() const;
-  void clear_is_poke_ball() ;
-  bool is_poke_ball() const;
-  void set_is_poke_ball(bool value);
-
-  private:
-  bool _internal_is_poke_ball() const;
-  void _internal_set_is_poke_ball(bool value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.Replay)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 2,
+      2, 4, 2,
       0, 2>
       _table_;
 
@@ -1634,7 +1622,6 @@ class Replay final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedPtrField< ::aim::ReplayEvent > events_;
     ::aim::Room* room_;
     ::int32_t replay_fps_;
-    bool is_poke_ball_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1995,32 +1982,32 @@ inline void MoveLinearTargetEvent::set_allocated_direction(::aim::StoredVec3* va
   // @@protoc_insertion_point(field_set_allocated:aim.MoveLinearTargetEvent.direction)
 }
 
-// float distance_per_frame = 3;
-inline bool MoveLinearTargetEvent::has_distance_per_frame() const {
+// float distance_per_second = 3;
+inline bool MoveLinearTargetEvent::has_distance_per_second() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline void MoveLinearTargetEvent::clear_distance_per_frame() {
+inline void MoveLinearTargetEvent::clear_distance_per_second() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_per_frame_ = 0;
+  _impl_.distance_per_second_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float MoveLinearTargetEvent::distance_per_frame() const {
-  // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.distance_per_frame)
-  return _internal_distance_per_frame();
+inline float MoveLinearTargetEvent::distance_per_second() const {
+  // @@protoc_insertion_point(field_get:aim.MoveLinearTargetEvent.distance_per_second)
+  return _internal_distance_per_second();
 }
-inline void MoveLinearTargetEvent::set_distance_per_frame(float value) {
-  _internal_set_distance_per_frame(value);
+inline void MoveLinearTargetEvent::set_distance_per_second(float value) {
+  _internal_set_distance_per_second(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.MoveLinearTargetEvent.distance_per_frame)
+  // @@protoc_insertion_point(field_set:aim.MoveLinearTargetEvent.distance_per_second)
 }
-inline float MoveLinearTargetEvent::_internal_distance_per_frame() const {
+inline float MoveLinearTargetEvent::_internal_distance_per_second() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.distance_per_frame_;
+  return _impl_.distance_per_second_;
 }
-inline void MoveLinearTargetEvent::_internal_set_distance_per_frame(float value) {
+inline void MoveLinearTargetEvent::_internal_set_distance_per_second(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_per_frame_ = value;
+  _impl_.distance_per_second_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -2674,34 +2661,6 @@ inline ::google::protobuf::RepeatedPtrField<::aim::ReplayEvent>*
 Replay::_internal_mutable_events() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.events_;
-}
-
-// bool is_poke_ball = 5;
-inline bool Replay::has_is_poke_ball() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void Replay::clear_is_poke_ball() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.is_poke_ball_ = false;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline bool Replay::is_poke_ball() const {
-  // @@protoc_insertion_point(field_get:aim.Replay.is_poke_ball)
-  return _internal_is_poke_ball();
-}
-inline void Replay::set_is_poke_ball(bool value) {
-  _internal_set_is_poke_ball(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.Replay.is_poke_ball)
-}
-inline bool Replay::_internal_is_poke_ball() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.is_poke_ball_;
-}
-inline void Replay::_internal_set_is_poke_ball(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.is_poke_ball_ = value;
 }
 
 #ifdef __GNUC__

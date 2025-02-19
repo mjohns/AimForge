@@ -34,6 +34,13 @@ std::vector<ReplayFrame> GetReplayFrames(const Replay& replay) {
   return replay_frames;
 }
 
+struct MovementInfo {
+  u16 target_id = 0;
+  glm::vec3 direction;
+  float speed;
+  float last_update_time_seconds;
+};
+
 }  // namespace
 
 NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
@@ -44,6 +51,8 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
   std::vector<ReplayFrame> replay_frames = GetReplayFrames(replay);
+
+  std::unordered_map<u16, MovementInfo> move_target_map;
 
   app->renderer()->SetProjection(projection);
 
@@ -106,13 +115,33 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
         t.position = ToVec3(event.add_target().position());
         target_manager.AddTarget(t);
       }
+      if (event.has_move_linear_target()) {
+        auto m = event.move_linear_target();
+        MovementInfo info;
+        info.target_id = m.target_id();
+        info.direction = ToVec3(m.direction());
+        info.speed = m.distance_per_second();
+        info.last_update_time_seconds = timer.GetElapsedSeconds();
+        move_target_map[event.move_linear_target().target_id()] = info;
+      }
     }
 
     if (has_shot) {
-        app->sound_manager()->PlayShootSound();
+      app->sound_manager()->PlayShootSound();
     }
     if (has_kill) {
       app->sound_manager()->PlayKillSound();
+    }
+
+    // Move targets.
+    float now_seconds = timer.GetElapsedSeconds();
+    for (Target* t : target_manager.GetMutableVisibleTargets()) {
+      if (move_target_map.find(t->id) != move_target_map.end()) {
+        MovementInfo& info = move_target_map[t->id];
+        float delta_seconds = now_seconds - info.last_update_time_seconds;
+        t->position = t->position + (info.direction * (delta_seconds * info.speed));
+        info.last_update_time_seconds = now_seconds;
+      }
     }
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();

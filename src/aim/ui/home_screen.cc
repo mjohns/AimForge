@@ -77,6 +77,19 @@ std::vector<ScenarioDef> GetScenarios() {
   }
   {
     ScenarioDef def = base_static_def;
+    def.set_scenario_id("barrel_bounce_short");
+    def.set_display_name("Barrel Bounce Short");
+    def.set_duration_seconds(10);
+    *def.mutable_room() = barrel_wall;
+    def.mutable_room()->mutable_barrel_room()->set_radius(75);
+
+    def.mutable_barrel_def()->set_num_targets(4);
+    def.mutable_barrel_def()->set_target_radius(2.8);
+    def.mutable_barrel_def()->set_speed(60);
+    scenarios.push_back(def);
+  }
+  {
+    ScenarioDef def = base_static_def;
     def.set_scenario_id("centering_test");
     def.set_display_name("Centering");
     def.mutable_centering_def()->set_target_width(default_centering_radius);
