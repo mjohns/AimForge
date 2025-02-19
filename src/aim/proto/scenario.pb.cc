@@ -82,7 +82,8 @@ inline constexpr CircularRoom::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         height_{0},
-        radius_{0} {}
+        radius_{0},
+        width_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR CircularRoom::CircularRoom(::_pbi::ConstantInitialized)
@@ -159,14 +160,14 @@ struct RectangleTargetRegionDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RectangleTargetRegionDefaultTypeInternal _RectangleTargetRegion_default_instance_;
 
-inline constexpr OvalTargetRegion::Impl_::Impl_(
+inline constexpr EllipseTargetRegion::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         x_diamter_{nullptr},
         y_diamter_{nullptr} {}
 
 template <typename>
-PROTOBUF_CONSTEXPR OvalTargetRegion::OvalTargetRegion(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR EllipseTargetRegion::EllipseTargetRegion(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
@@ -174,16 +175,16 @@ PROTOBUF_CONSTEXPR OvalTargetRegion::OvalTargetRegion(::_pbi::ConstantInitialize
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
-struct OvalTargetRegionDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR OvalTargetRegionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~OvalTargetRegionDefaultTypeInternal() {}
+struct EllipseTargetRegionDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EllipseTargetRegionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EllipseTargetRegionDefaultTypeInternal() {}
   union {
-    OvalTargetRegion _instance;
+    EllipseTargetRegion _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 OvalTargetRegionDefaultTypeInternal _OvalTargetRegion_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EllipseTargetRegionDefaultTypeInternal _EllipseTargetRegion_default_instance_;
 
 inline constexpr CenteringScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -249,7 +250,9 @@ inline constexpr TargetPlacementStrategy::Impl_::Impl_(
       : _cached_size_{0},
         regions_{},
         min_distance_{0},
-        alternate_regions_{false} {}
+        alternate_regions_{false},
+        fixed_distance_from_last_target_{0},
+        fixed_distance_jitter_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR TargetPlacementStrategy::TargetPlacementStrategy(::_pbi::ConstantInitialized)
@@ -364,8 +367,10 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.height_),
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.radius_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.width_),
         0,
         1,
+        2,
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::Room, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -428,16 +433,16 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::RectangleTargetRegion, _impl_.y_length_),
         0,
         1,
-        PROTOBUF_FIELD_OFFSET(::aim::OvalTargetRegion, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::OvalTargetRegion, _internal_metadata_),
+        PROTOBUF_FIELD_OFFSET(::aim::EllipseTargetRegion, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::EllipseTargetRegion, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::OvalTargetRegion, _impl_.x_diamter_),
-        PROTOBUF_FIELD_OFFSET(::aim::OvalTargetRegion, _impl_.y_diamter_),
+        PROTOBUF_FIELD_OFFSET(::aim::EllipseTargetRegion, _impl_.x_diamter_),
+        PROTOBUF_FIELD_OFFSET(::aim::EllipseTargetRegion, _impl_.y_diamter_),
         0,
         1,
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_._has_bits_),
@@ -451,9 +456,13 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.regions_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.min_distance_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.alternate_regions_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.fixed_distance_jitter_),
         ~0u,
         0,
         1,
+        2,
+        3,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -520,16 +529,16 @@ const ::uint32_t
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::SimpleRoom)},
-        {12, 22, -1, sizeof(::aim::CircularRoom)},
-        {24, 38, -1, sizeof(::aim::Room)},
-        {43, -1, -1, sizeof(::aim::RegionLength)},
-        {55, 69, -1, sizeof(::aim::TargetRegion)},
-        {74, 84, -1, sizeof(::aim::RectangleTargetRegion)},
-        {86, 96, -1, sizeof(::aim::OvalTargetRegion)},
-        {98, 109, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {112, 127, -1, sizeof(::aim::ScenarioDef)},
-        {133, 147, -1, sizeof(::aim::StaticScenarioDef)},
-        {153, 167, -1, sizeof(::aim::CenteringScenarioDef)},
+        {12, 23, -1, sizeof(::aim::CircularRoom)},
+        {26, 40, -1, sizeof(::aim::Room)},
+        {45, -1, -1, sizeof(::aim::RegionLength)},
+        {57, 71, -1, sizeof(::aim::TargetRegion)},
+        {76, 86, -1, sizeof(::aim::RectangleTargetRegion)},
+        {88, 98, -1, sizeof(::aim::EllipseTargetRegion)},
+        {100, 113, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {118, 133, -1, sizeof(::aim::ScenarioDef)},
+        {139, 153, -1, sizeof(::aim::StaticScenarioDef)},
+        {159, 173, -1, sizeof(::aim::CenteringScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -538,7 +547,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_RegionLength_default_instance_._instance,
     &::aim::_TargetRegion_default_instance_._instance,
     &::aim::_RectangleTargetRegion_default_instance_._instance,
-    &::aim::_OvalTargetRegion_default_instance_._instance,
+    &::aim::_EllipseTargetRegion_default_instance_._instance,
     &::aim::_TargetPlacementStrategy_default_instance_._instance,
     &::aim::_ScenarioDef_default_instance_._instance,
     &::aim::_StaticScenarioDef_default_instance_._instance,
@@ -548,44 +557,46 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     protodesc_cold) = {
     "\n\016scenario.proto\022\003aim\032\014common.proto\"+\n\nS"
     "impleRoom\022\016\n\006height\030\001 \001(\002\022\r\n\005width\030\002 \001(\002"
-    "\".\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
-    "us\030\002 \001(\002\"\264\001\n\004Room\022(\n\017camera_position\030\001 \001"
-    "(\0132\017.aim.StoredVec3\022\023\n\013start_pitch\030\002 \001(\002"
-    "\022\021\n\tstart_yaw\030\003 \001(\002\022&\n\013simple_room\030\004 \001(\013"
-    "2\017.aim.SimpleRoomH\000\022*\n\rcircular_room\030\005 \001"
-    "(\0132\021.aim.CircularRoomH\000B\006\n\004type\"f\n\014Regio"
-    "nLength\022\031\n\017x_percent_value\030\001 \001(\002H\000\022\031\n\017y_"
-    "percent_value\030\002 \001(\002H\000\022\030\n\016absolute_value\030"
-    "\003 \001(\002H\000B\006\n\004type\"\320\001\n\014TargetRegion\022\026\n\016perc"
-    "ent_chance\030\001 \001(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim"
-    ".RegionLength\022#\n\010y_offset\030\003 \001(\0132\021.aim.Re"
-    "gionLength\022/\n\trectangle\030\004 \001(\0132\032.aim.Rect"
-    "angleTargetRegionH\000\022%\n\004oval\030\005 \001(\0132\025.aim."
-    "OvalTargetRegionH\000B\006\n\004type\"a\n\025RectangleT"
-    "argetRegion\022#\n\010x_length\030\001 \001(\0132\021.aim.Regi"
-    "onLength\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionL"
-    "ength\"^\n\020OvalTargetRegion\022$\n\tx_diamter\030\001"
-    " \001(\0132\021.aim.RegionLength\022$\n\ty_diamter\030\002 \001"
-    "(\0132\021.aim.RegionLength\"n\n\027TargetPlacement"
-    "Strategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRe"
-    "gion\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_"
-    "regions\030\003 \001(\010\"\325\001\n\013ScenarioDef\022\023\n\013scenari"
-    "o_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004"
-    "room\030\003 \001(\0132\t.aim.Room\022\024\n\014display_name\030\004 "
-    "\001(\t\022,\n\nstatic_def\030\005 \001(\0132\026.aim.StaticScen"
-    "arioDefH\000\0222\n\rcentering_def\030\006 \001(\0132\031.aim.C"
-    "enteringScenarioDefH\000B\006\n\004type\"\335\001\n\021Static"
-    "ScenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n\rtarg"
-    "et_radius\030\002 \001(\002\022\024\n\014is_poke_ball\030\003 \001(\010\022%\n"
-    "\035remove_closest_target_on_miss\030\004 \001(\010\022\?\n\031"
-    "target_placement_strategy\030\005 \001(\0132\034.aim.Ta"
-    "rgetPlacementStrategy\022\036\n\026newest_target_i"
-    "s_ghost\030\006 \001(\010\"\276\001\n\024CenteringScenarioDef\022\024"
-    "\n\014target_width\030\001 \001(\002\022\025\n\rtarget_height\030\002 "
-    "\001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016start_position\030\004 \001"
-    "(\0132\017.aim.StoredVec3\022%\n\014end_position\030\005 \001("
-    "\0132\017.aim.StoredVec3\022\032\n\022show_start_and_end"
-    "\030\006 \001(\010b\010editionsp\350\007"
+    "\"=\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
+    "us\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\"\264\001\n\004Room\022(\n\017came"
+    "ra_position\030\001 \001(\0132\017.aim.StoredVec3\022\023\n\013st"
+    "art_pitch\030\002 \001(\002\022\021\n\tstart_yaw\030\003 \001(\002\022&\n\013si"
+    "mple_room\030\004 \001(\0132\017.aim.SimpleRoomH\000\022*\n\rci"
+    "rcular_room\030\005 \001(\0132\021.aim.CircularRoomH\000B\006"
+    "\n\004type\"f\n\014RegionLength\022\031\n\017x_percent_valu"
+    "e\030\001 \001(\002H\000\022\031\n\017y_percent_value\030\002 \001(\002H\000\022\030\n\016"
+    "absolute_value\030\003 \001(\002H\000B\006\n\004type\"\326\001\n\014Targe"
+    "tRegion\022\026\n\016percent_chance\030\001 \001(\002\022#\n\010x_off"
+    "set\030\002 \001(\0132\021.aim.RegionLength\022#\n\010y_offset"
+    "\030\003 \001(\0132\021.aim.RegionLength\022/\n\trectangle\030\004"
+    " \001(\0132\032.aim.RectangleTargetRegionH\000\022+\n\007el"
+    "lipse\030\005 \001(\0132\030.aim.EllipseTargetRegionH\000B"
+    "\006\n\004type\"a\n\025RectangleTargetRegion\022#\n\010x_le"
+    "ngth\030\001 \001(\0132\021.aim.RegionLength\022#\n\010y_lengt"
+    "h\030\002 \001(\0132\021.aim.RegionLength\"a\n\023EllipseTar"
+    "getRegion\022$\n\tx_diamter\030\001 \001(\0132\021.aim.Regio"
+    "nLength\022$\n\ty_diamter\030\002 \001(\0132\021.aim.RegionL"
+    "ength\"\266\001\n\027TargetPlacementStrategy\022\"\n\007reg"
+    "ions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014min_dis"
+    "tance\030\002 \001(\002\022\031\n\021alternate_regions\030\003 \001(\010\022\'"
+    "\n\037fixed_distance_from_last_target\030\004 \001(\002\022"
+    "\035\n\025fixed_distance_jitter\030\005 \001(\002\"\325\001\n\013Scena"
+    "rioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_"
+    "seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\024"
+    "\n\014display_name\030\004 \001(\t\022,\n\nstatic_def\030\005 \001(\013"
+    "2\026.aim.StaticScenarioDefH\000\0222\n\rcentering_"
+    "def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000B\006"
+    "\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013num_targ"
+    "ets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_p"
+    "oke_ball\030\003 \001(\010\022%\n\035remove_closest_target_"
+    "on_miss\030\004 \001(\010\022\?\n\031target_placement_strate"
+    "gy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\022\036"
+    "\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n\024Cente"
+    "ringScenarioDef\022\024\n\014target_width\030\001 \001(\002\022\025\n"
+    "\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016s"
+    "tart_position\030\004 \001(\0132\017.aim.StoredVec3\022%\n\014"
+    "end_position\030\005 \001(\0132\017.aim.StoredVec3\022\032\n\022s"
+    "how_start_and_end\030\006 \001(\010b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -595,7 +606,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1579,
+    1676,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -897,9 +908,9 @@ inline void CircularRoom::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, height_),
            0,
-           offsetof(Impl_, radius_) -
+           offsetof(Impl_, width_) -
                offsetof(Impl_, height_) +
-               sizeof(Impl_::radius_));
+               sizeof(Impl_::width_));
 }
 CircularRoom::~CircularRoom() {
   // @@protoc_insertion_point(destructor:aim.CircularRoom)
@@ -948,15 +959,15 @@ const ::google::protobuf::internal::ClassData* CircularRoom::GetClassData() cons
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 0, 2> CircularRoom::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 0, 0, 2> CircularRoom::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    3,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -966,12 +977,16 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> CircularRoom::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::CircularRoom>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // float radius = 2;
-    {::_pbi::TcParser::FastF32S1,
-     {21, 1, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // float height = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.height_)}},
+    // float radius = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_)}},
+    // float width = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.width_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -980,6 +995,9 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> CircularRoom::_table_ = {
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float radius = 2;
     {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float width = 3;
+    {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.width_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
@@ -995,10 +1013,10 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     ::memset(&_impl_.height_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.radius_) -
-        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.radius_));
+        reinterpret_cast<char*>(&_impl_.width_) -
+        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.width_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1034,6 +1052,13 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
                 2, this_._internal_radius(), target);
           }
 
+          // float width = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_width(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1059,13 +1084,17 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
+          if (cached_has_bits & 0x00000007u) {
             // float height = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
             // float radius = 2;
             if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // float width = 3;
+            if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
           }
@@ -1082,12 +1111,15 @@ void CircularRoom::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::go
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.height_ = from._impl_.height_;
     }
     if (cached_has_bits & 0x00000002u) {
       _this->_impl_.radius_ = from._impl_.radius_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.width_ = from._impl_.width_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1107,8 +1139,8 @@ void CircularRoom::InternalSwap(CircularRoom* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.radius_)
-      + sizeof(CircularRoom::_impl_.radius_)
+      PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.width_)
+      + sizeof(CircularRoom::_impl_.width_)
       - PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.height_)>(
           reinterpret_cast<char*>(&_impl_.height_),
           reinterpret_cast<char*>(&other->_impl_.height_));
@@ -1938,18 +1970,18 @@ void TargetRegion::set_allocated_rectangle(::aim::RectangleTargetRegion* rectang
   }
   // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.rectangle)
 }
-void TargetRegion::set_allocated_oval(::aim::OvalTargetRegion* oval) {
+void TargetRegion::set_allocated_ellipse(::aim::EllipseTargetRegion* ellipse) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
-  if (oval) {
-    ::google::protobuf::Arena* submessage_arena = oval->GetArena();
+  if (ellipse) {
+    ::google::protobuf::Arena* submessage_arena = ellipse->GetArena();
     if (message_arena != submessage_arena) {
-      oval = ::google::protobuf::internal::GetOwnedMessage(message_arena, oval, submessage_arena);
+      ellipse = ::google::protobuf::internal::GetOwnedMessage(message_arena, ellipse, submessage_arena);
     }
-    set_has_oval();
-    _impl_.type_.oval_ = oval;
+    set_has_ellipse();
+    _impl_.type_.ellipse_ = ellipse;
   }
-  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.oval)
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.ellipse)
 }
 TargetRegion::TargetRegion(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
@@ -1995,8 +2027,8 @@ TargetRegion::TargetRegion(
       case kRectangle:
         _impl_.type_.rectangle_ = ::google::protobuf::Message::CopyConstruct<::aim::RectangleTargetRegion>(arena, *from._impl_.type_.rectangle_);
         break;
-      case kOval:
-        _impl_.type_.oval_ = ::google::protobuf::Message::CopyConstruct<::aim::OvalTargetRegion>(arena, *from._impl_.type_.oval_);
+      case kEllipse:
+        _impl_.type_.ellipse_ = ::google::protobuf::Message::CopyConstruct<::aim::EllipseTargetRegion>(arena, *from._impl_.type_.ellipse_);
         break;
   }
 
@@ -2046,11 +2078,11 @@ void TargetRegion::clear_type() {
       }
       break;
     }
-    case kOval: {
+    case kEllipse: {
       if (GetArena() == nullptr) {
-        delete _impl_.type_.oval_;
+        delete _impl_.type_.ellipse_;
       } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.oval_);
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.ellipse_);
       }
       break;
     }
@@ -2141,14 +2173,14 @@ const ::_pbi::TcParseTable<2, 5, 4, 0, 2> TargetRegion::_table_ = {
     // .aim.RectangleTargetRegion rectangle = 4;
     {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.rectangle_), _Internal::kOneofCaseOffset + 0, 2,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.OvalTargetRegion oval = 5;
-    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.oval_), _Internal::kOneofCaseOffset + 0, 3,
+    // .aim.EllipseTargetRegion ellipse = 5;
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.ellipse_), _Internal::kOneofCaseOffset + 0, 3,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
     {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
     {::_pbi::TcParser::GetTable<::aim::RectangleTargetRegion>()},
-    {::_pbi::TcParser::GetTable<::aim::OvalTargetRegion>()},
+    {::_pbi::TcParser::GetTable<::aim::EllipseTargetRegion>()},
   }}, {{
   }},
 };
@@ -2221,9 +2253,9 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
                   stream);
               break;
             }
-            case kOval: {
+            case kEllipse: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  5, *this_._impl_.type_.oval_, this_._impl_.type_.oval_->GetCachedSize(), target,
+                  5, *this_._impl_.type_.ellipse_, this_._impl_.type_.ellipse_->GetCachedSize(), target,
                   stream);
               break;
             }
@@ -2278,10 +2310,10 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.rectangle_);
               break;
             }
-            // .aim.OvalTargetRegion oval = 5;
-            case kOval: {
+            // .aim.EllipseTargetRegion ellipse = 5;
+            case kEllipse: {
               total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.oval_);
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.ellipse_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -2346,12 +2378,12 @@ void TargetRegion::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::go
         }
         break;
       }
-      case kOval: {
+      case kEllipse: {
         if (oneof_needs_init) {
-          _this->_impl_.type_.oval_ =
-              ::google::protobuf::Message::CopyConstruct<::aim::OvalTargetRegion>(arena, *from._impl_.type_.oval_);
+          _this->_impl_.type_.ellipse_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::EllipseTargetRegion>(arena, *from._impl_.type_.ellipse_);
         } else {
-          _this->_impl_.type_.oval_->MergeFrom(from._internal_oval());
+          _this->_impl_.type_.ellipse_->MergeFrom(from._internal_ellipse());
         }
         break;
       }
@@ -2690,38 +2722,38 @@ void RectangleTargetRegion::InternalSwap(RectangleTargetRegion* PROTOBUF_RESTRIC
 }
 // ===================================================================
 
-class OvalTargetRegion::_Internal {
+class EllipseTargetRegion::_Internal {
  public:
   using HasBits =
-      decltype(std::declval<OvalTargetRegion>()._impl_._has_bits_);
+      decltype(std::declval<EllipseTargetRegion>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_._has_bits_);
+      8 * PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_._has_bits_);
 };
 
-OvalTargetRegion::OvalTargetRegion(::google::protobuf::Arena* arena)
+EllipseTargetRegion::EllipseTargetRegion(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.OvalTargetRegion)
+  // @@protoc_insertion_point(arena_constructor:aim.EllipseTargetRegion)
 }
-inline PROTOBUF_NDEBUG_INLINE OvalTargetRegion::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE EllipseTargetRegion::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from, const ::aim::OvalTargetRegion& from_msg)
+    const Impl_& from, const ::aim::EllipseTargetRegion& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0} {}
 
-OvalTargetRegion::OvalTargetRegion(
+EllipseTargetRegion::EllipseTargetRegion(
     ::google::protobuf::Arena* arena,
-    const OvalTargetRegion& from)
+    const EllipseTargetRegion& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  OvalTargetRegion* const _this = this;
+  EllipseTargetRegion* const _this = this;
   (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
@@ -2734,14 +2766,14 @@ OvalTargetRegion::OvalTargetRegion(
                               arena, *from._impl_.y_diamter_)
                         : nullptr;
 
-  // @@protoc_insertion_point(copy_constructor:aim.OvalTargetRegion)
+  // @@protoc_insertion_point(copy_constructor:aim.EllipseTargetRegion)
 }
-inline PROTOBUF_NDEBUG_INLINE OvalTargetRegion::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE EllipseTargetRegion::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : _cached_size_{0} {}
 
-inline void OvalTargetRegion::SharedCtor(::_pb::Arena* arena) {
+inline void EllipseTargetRegion::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, x_diamter_),
@@ -2750,12 +2782,12 @@ inline void OvalTargetRegion::SharedCtor(::_pb::Arena* arena) {
                offsetof(Impl_, x_diamter_) +
                sizeof(Impl_::y_diamter_));
 }
-OvalTargetRegion::~OvalTargetRegion() {
-  // @@protoc_insertion_point(destructor:aim.OvalTargetRegion)
+EllipseTargetRegion::~EllipseTargetRegion() {
+  // @@protoc_insertion_point(destructor:aim.EllipseTargetRegion)
   SharedDtor(*this);
 }
-inline void OvalTargetRegion::SharedDtor(MessageLite& self) {
-  OvalTargetRegion& this_ = static_cast<OvalTargetRegion&>(self);
+inline void EllipseTargetRegion::SharedDtor(MessageLite& self) {
+  EllipseTargetRegion& this_ = static_cast<EllipseTargetRegion&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.x_diamter_;
@@ -2763,45 +2795,45 @@ inline void OvalTargetRegion::SharedDtor(MessageLite& self) {
   this_._impl_.~Impl_();
 }
 
-inline void* OvalTargetRegion::PlacementNew_(const void*, void* mem,
+inline void* EllipseTargetRegion::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
-  return ::new (mem) OvalTargetRegion(arena);
+  return ::new (mem) EllipseTargetRegion(arena);
 }
-constexpr auto OvalTargetRegion::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(OvalTargetRegion),
-                                            alignof(OvalTargetRegion));
+constexpr auto EllipseTargetRegion::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(EllipseTargetRegion),
+                                            alignof(EllipseTargetRegion));
 }
 PROTOBUF_CONSTINIT
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull OvalTargetRegion::_class_data_ = {
+const ::google::protobuf::internal::ClassDataFull EllipseTargetRegion::_class_data_ = {
     ::google::protobuf::internal::ClassData{
-        &_OvalTargetRegion_default_instance_._instance,
+        &_EllipseTargetRegion_default_instance_._instance,
         &_table_.header,
         nullptr,  // OnDemandRegisterArenaDtor
         nullptr,  // IsInitialized
-        &OvalTargetRegion::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<OvalTargetRegion>(),
+        &EllipseTargetRegion::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<EllipseTargetRegion>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        &OvalTargetRegion::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<OvalTargetRegion>(), &OvalTargetRegion::ByteSizeLong,
-            &OvalTargetRegion::_InternalSerialize,
+        &EllipseTargetRegion::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<EllipseTargetRegion>(), &EllipseTargetRegion::ByteSizeLong,
+            &EllipseTargetRegion::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_._cached_size_),
+        PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_._cached_size_),
         false,
     },
-    &OvalTargetRegion::kDescriptorMethods,
+    &EllipseTargetRegion::kDescriptorMethods,
     &descriptor_table_scenario_2eproto,
     nullptr,  // tracker
 };
-const ::google::protobuf::internal::ClassData* OvalTargetRegion::GetClassData() const {
+const ::google::protobuf::internal::ClassData* EllipseTargetRegion::GetClassData() const {
   ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
   ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 2, 0, 2> OvalTargetRegion::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 2, 0, 2> EllipseTargetRegion::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_._has_bits_),
     0, // no _extensions_
     2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
@@ -2814,23 +2846,23 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> OvalTargetRegion::_table_ = {
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::OvalTargetRegion>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::EllipseTargetRegion>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     // .aim.RegionLength y_diamter = 2;
     {::_pbi::TcParser::FastMtS1,
-     {18, 1, 1, PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_.y_diamter_)}},
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_.y_diamter_)}},
     // .aim.RegionLength x_diamter = 1;
     {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_.x_diamter_)}},
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_.x_diamter_)}},
   }}, {{
     65535, 65535
   }}, {{
     // .aim.RegionLength x_diamter = 1;
-    {PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_.x_diamter_), _Internal::kHasBitsOffset + 0, 0,
+    {PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_.x_diamter_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength y_diamter = 2;
-    {PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_.y_diamter_), _Internal::kHasBitsOffset + 1, 1,
+    {PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_.y_diamter_), _Internal::kHasBitsOffset + 1, 1,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
@@ -2839,8 +2871,8 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> OvalTargetRegion::_table_ = {
   }},
 };
 
-PROTOBUF_NOINLINE void OvalTargetRegion::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.OvalTargetRegion)
+PROTOBUF_NOINLINE void EllipseTargetRegion::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.EllipseTargetRegion)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2862,17 +2894,17 @@ PROTOBUF_NOINLINE void OvalTargetRegion::Clear() {
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* OvalTargetRegion::_InternalSerialize(
+        ::uint8_t* EllipseTargetRegion::_InternalSerialize(
             const MessageLite& base, ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const OvalTargetRegion& this_ = static_cast<const OvalTargetRegion&>(base);
+          const EllipseTargetRegion& this_ = static_cast<const EllipseTargetRegion&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* OvalTargetRegion::_InternalSerialize(
+        ::uint8_t* EllipseTargetRegion::_InternalSerialize(
             ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const OvalTargetRegion& this_ = *this;
+          const EllipseTargetRegion& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.OvalTargetRegion)
+          // @@protoc_insertion_point(serialize_to_array_start:aim.EllipseTargetRegion)
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
@@ -2896,18 +2928,18 @@ PROTOBUF_NOINLINE void OvalTargetRegion::Clear() {
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
                     this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
           }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.OvalTargetRegion)
+          // @@protoc_insertion_point(serialize_to_array_end:aim.EllipseTargetRegion)
           return target;
         }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t OvalTargetRegion::ByteSizeLong(const MessageLite& base) {
-          const OvalTargetRegion& this_ = static_cast<const OvalTargetRegion&>(base);
+        ::size_t EllipseTargetRegion::ByteSizeLong(const MessageLite& base) {
+          const EllipseTargetRegion& this_ = static_cast<const EllipseTargetRegion&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t OvalTargetRegion::ByteSizeLong() const {
-          const OvalTargetRegion& this_ = *this;
+        ::size_t EllipseTargetRegion::ByteSizeLong() const {
+          const EllipseTargetRegion& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.OvalTargetRegion)
+          // @@protoc_insertion_point(message_byte_size_start:aim.EllipseTargetRegion)
           ::size_t total_size = 0;
 
           ::uint32_t cached_has_bits = 0;
@@ -2932,11 +2964,11 @@ PROTOBUF_NOINLINE void OvalTargetRegion::Clear() {
                                                      &this_._impl_._cached_size_);
         }
 
-void OvalTargetRegion::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<OvalTargetRegion*>(&to_msg);
-  auto& from = static_cast<const OvalTargetRegion&>(from_msg);
+void EllipseTargetRegion::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<EllipseTargetRegion*>(&to_msg);
+  auto& from = static_cast<const EllipseTargetRegion&>(from_msg);
   ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.OvalTargetRegion)
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.EllipseTargetRegion)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -2966,27 +2998,27 @@ void OvalTargetRegion::MergeImpl(::google::protobuf::MessageLite& to_msg, const 
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void OvalTargetRegion::CopyFrom(const OvalTargetRegion& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.OvalTargetRegion)
+void EllipseTargetRegion::CopyFrom(const EllipseTargetRegion& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.EllipseTargetRegion)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 
-void OvalTargetRegion::InternalSwap(OvalTargetRegion* PROTOBUF_RESTRICT other) {
+void EllipseTargetRegion::InternalSwap(EllipseTargetRegion* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_.y_diamter_)
-      + sizeof(OvalTargetRegion::_impl_.y_diamter_)
-      - PROTOBUF_FIELD_OFFSET(OvalTargetRegion, _impl_.x_diamter_)>(
+      PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_.y_diamter_)
+      + sizeof(EllipseTargetRegion::_impl_.y_diamter_)
+      - PROTOBUF_FIELD_OFFSET(EllipseTargetRegion, _impl_.x_diamter_)>(
           reinterpret_cast<char*>(&_impl_.x_diamter_),
           reinterpret_cast<char*>(&other->_impl_.x_diamter_));
 }
 
-::google::protobuf::Metadata OvalTargetRegion::GetMetadata() const {
+::google::protobuf::Metadata EllipseTargetRegion::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================
@@ -3032,9 +3064,9 @@ TargetPlacementStrategy::TargetPlacementStrategy(
                offsetof(Impl_, min_distance_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, min_distance_),
-           offsetof(Impl_, alternate_regions_) -
+           offsetof(Impl_, fixed_distance_jitter_) -
                offsetof(Impl_, min_distance_) +
-               sizeof(Impl_::alternate_regions_));
+               sizeof(Impl_::fixed_distance_jitter_));
 
   // @@protoc_insertion_point(copy_constructor:aim.TargetPlacementStrategy)
 }
@@ -3049,9 +3081,9 @@ inline void TargetPlacementStrategy::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, min_distance_),
            0,
-           offsetof(Impl_, alternate_regions_) -
+           offsetof(Impl_, fixed_distance_jitter_) -
                offsetof(Impl_, min_distance_) +
-               sizeof(Impl_::alternate_regions_));
+               sizeof(Impl_::fixed_distance_jitter_));
 }
 TargetPlacementStrategy::~TargetPlacementStrategy() {
   // @@protoc_insertion_point(destructor:aim.TargetPlacementStrategy)
@@ -3112,15 +3144,15 @@ const ::google::protobuf::internal::ClassData* TargetPlacementStrategy::GetClass
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 1, 0, 2> TargetPlacementStrategy::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 1, 0, 2> TargetPlacementStrategy::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    5, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    5,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -3140,6 +3172,14 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> TargetPlacementStrategy::_table_ = {
     // bool alternate_regions = 3;
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(TargetPlacementStrategy, _impl_.alternate_regions_), 1>(),
      {24, 1, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_)}},
+    // float fixed_distance_from_last_target = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 2, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_)}},
+    // float fixed_distance_jitter = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 3, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -3152,6 +3192,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> TargetPlacementStrategy::_table_ = {
     // bool alternate_regions = 3;
     {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // float fixed_distance_from_last_target = 4;
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float fixed_distance_jitter = 5;
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetRegion>()},
   }}, {{
@@ -3167,10 +3213,10 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
 
   _impl_.regions_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x0000000fu) {
     ::memset(&_impl_.min_distance_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.alternate_regions_) -
-        reinterpret_cast<char*>(&_impl_.min_distance_)) + sizeof(_impl_.alternate_regions_));
+        reinterpret_cast<char*>(&_impl_.fixed_distance_jitter_) -
+        reinterpret_cast<char*>(&_impl_.min_distance_)) + sizeof(_impl_.fixed_distance_jitter_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -3217,6 +3263,20 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
                 3, this_._internal_alternate_regions(), target);
           }
 
+          // float fixed_distance_from_last_target = 4;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_fixed_distance_from_last_target(), target);
+          }
+
+          // float fixed_distance_jitter = 5;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_fixed_distance_jitter(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -3251,7 +3311,7 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
             }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
+          if (cached_has_bits & 0x0000000fu) {
             // float min_distance = 2;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
@@ -3259,6 +3319,14 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
             // bool alternate_regions = 3;
             if (cached_has_bits & 0x00000002u) {
               total_size += 2;
+            }
+            // float fixed_distance_from_last_target = 4;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+            // float fixed_distance_jitter = 5;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 5;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -3276,12 +3344,18 @@ void TargetPlacementStrategy::MergeImpl(::google::protobuf::MessageLite& to_msg,
   _this->_internal_mutable_regions()->MergeFrom(
       from._internal_regions());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.min_distance_ = from._impl_.min_distance_;
     }
     if (cached_has_bits & 0x00000002u) {
       _this->_impl_.alternate_regions_ = from._impl_.alternate_regions_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.fixed_distance_from_last_target_ = from._impl_.fixed_distance_from_last_target_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.fixed_distance_jitter_ = from._impl_.fixed_distance_jitter_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -3302,8 +3376,8 @@ void TargetPlacementStrategy::InternalSwap(TargetPlacementStrategy* PROTOBUF_RES
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.regions_.InternalSwap(&other->_impl_.regions_);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_)
-      + sizeof(TargetPlacementStrategy::_impl_.alternate_regions_)
+      PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_)
+      + sizeof(TargetPlacementStrategy::_impl_.fixed_distance_jitter_)
       - PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)>(
           reinterpret_cast<char*>(&_impl_.min_distance_),
           reinterpret_cast<char*>(&other->_impl_.min_distance_));

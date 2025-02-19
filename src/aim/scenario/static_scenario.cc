@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <imgui.h>
 
+#include <glm/gtc/constants.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
@@ -8,6 +9,7 @@
 #include <memory>
 #include <random>
 
+#include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
@@ -26,42 +28,14 @@ bool AreNoneWithinDistanceOnWall(const glm::vec2& p,
                                  TargetManager* target_manager) {
   for (auto& target : target_manager->GetTargets()) {
     if (!target.hidden) {
-      glm::vec2 target_position(target.position.x, target.position.z);
-      float distance = glm::length(p - target_position);
-      if (distance < min_distance) {
+      float distance = glm::length(p - target.static_wall_position);
+      float actual_min_distance = min_distance > 0 ? min_distance : target.radius * 2;
+      if (distance < actual_min_distance) {
         return false;
       }
     }
   }
   return true;
-}
-
-bool AreNoneWithinDistance(const glm::vec3& p, float min_distance, TargetManager* target_manager) {
-  for (auto& target : target_manager->GetTargets()) {
-    if (!target.hidden) {
-      float distance = glm::length(p - target.position);
-      if (distance < min_distance) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-glm::vec2 GetRandomPositionInCircle(float max_radius_x, float max_radius_y, Application* app) {
-  auto dist_radius = std::uniform_real_distribution<float>(0, max_radius_x);
-  auto dist_degrees = std::uniform_real_distribution<float>(0.01, 360);
-
-  float radius = dist_radius(*app->random_generator());
-  float rotate_radians = glm::radians(dist_degrees(*app->random_generator()));
-
-  double cos_angle = cos(rotate_radians);
-  double sin_angle = sin(rotate_radians);
-
-  float x = -1 * radius * sin_angle;
-  float y_scale = max_radius_y / max_radius_x;
-  float y = radius * cos_angle * y_scale;
-  return glm::vec2(x, y);
 }
 
 float GetRegionLength(const Room& room, const RegionLength& length) {
@@ -69,7 +43,10 @@ float GetRegionLength(const Room& room, const RegionLength& length) {
     return length.absolute_value();
   }
   if (length.has_x_percent_value()) {
-    float width = room.has_circular_room() ? 360 : room.simple_room().width();
+    float width = room.simple_room().width();
+    if (room.has_circular_room()) {
+      width = room.circular_room().width();
+    }
     return width * length.x_percent_value();
   }
   if (length.has_y_percent_value()) {
@@ -104,8 +81,39 @@ std::optional<TargetRegion> GetRegionToUse(const ScenarioDef& def,
   return {};
 }
 
-// Returns an x/z pair where to place the target on the back wall. For circular rooms x is degrees
-// to rotate.
+glm::vec2 GetNewCandidateFixedDistanceTargetPosition(const ScenarioDef& def,
+                                                     TargetManager* target_manager,
+                                                     Application* app) {
+  auto maybe_region = GetRegionToUse(def, target_manager, app);
+  if (!maybe_region.has_value()) {
+    app->logger()->warn("Unable to find target region for scenario {}", def.scenario_id());
+    return glm::vec2(0);
+  }
+
+  const TargetRegion& region = *maybe_region;
+  float x_offset = GetRegionLength(def.room(), region.x_offset());
+  float y_offset = GetRegionLength(def.room(), region.y_offset());
+
+  const TargetPlacementStrategy& strat = def.static_def().target_placement_strategy();
+  if (strat.has_fixed_distance_from_last_target()) {
+    Target* most_recent_target = target_manager->GetMutableMostRecentlyAddedTarget();
+    if (most_recent_target != nullptr) {
+      float min_radius = strat.fixed_distance_from_last_target() + strat.fixed_distance_jitter();
+      float max_radius = strat.fixed_distance_from_last_target() + strat.fixed_distance_jitter();
+      auto dist_radius = std::uniform_real_distribution<float>(
+          strat.fixed_distance_from_last_target() + strat.fixed_distance_jitter(),
+          strat.fixed_distance_from_last_target() + strat.fixed_distance_jitter());
+      glm::vec2 pos_vector =
+          GetRandomPositionOnCircle(dist_radius(*app->random_generator()), app->random_generator());
+      glm::vec2 pos = most_recent_target->static_wall_position + pos_vector;
+      return pos;
+    }
+
+    // Fall through to normal placement in region.
+  }
+}
+
+// Returns an x/z pair where to place the target on the back wall.
 glm::vec2 GetNewCandidateTargetPosition(const ScenarioDef& def,
                                         TargetManager* target_manager,
                                         Application* app) {
@@ -119,11 +127,14 @@ glm::vec2 GetNewCandidateTargetPosition(const ScenarioDef& def,
   float x_offset = GetRegionLength(def.room(), region.x_offset());
   float y_offset = GetRegionLength(def.room(), region.y_offset());
 
-  if (region.has_oval()) {
-    return GetRandomPositionInCircle(
-        x_offset + 0.5 * GetRegionLength(def.room(), region.oval().x_diamter()),
-        y_offset + 0.5 * GetRegionLength(def.room(), region.oval().y_diamter()),
-        app);
+  if (region.has_ellipse()) {
+    glm::vec2 pos =
+        GetRandomPositionInEllipse(0.5 * GetRegionLength(def.room(), region.ellipse().x_diamter()),
+                                   0.5 * GetRegionLength(def.room(), region.ellipse().y_diamter()),
+                                   app->random_generator());
+    pos.x += x_offset;
+    pos.y += y_offset;
+    return pos;
   }
   float max_x = 0.5 * GetRegionLength(def.room(), region.rectangle().x_length());
   float max_y = 0.5 * GetRegionLength(def.room(), region.rectangle().y_length());
@@ -133,54 +144,71 @@ glm::vec2 GetNewCandidateTargetPosition(const ScenarioDef& def,
                    y_offset + distribution_y(*app->random_generator()));
 }
 
-glm::vec3 GetNewTargetPosition(const ScenarioDef& def,
+glm::vec2 GetFixedDistanceAdjustedPoint(const glm::vec2& point,
+                                        const ScenarioDef& def,
+                                        TargetManager* target_manager,
+                                        Application* app) {
+  Target* most_recent_target = target_manager->GetMutableMostRecentlyAddedTarget();
+  if (most_recent_target == nullptr) {
+    return point;
+  }
+  const TargetPlacementStrategy& strat = def.static_def().target_placement_strategy();
+  float min_distance = strat.fixed_distance_from_last_target() + strat.fixed_distance_jitter();
+  float max_distance = strat.fixed_distance_from_last_target() + strat.fixed_distance_jitter();
+  auto dist = std::uniform_real_distribution<float>(min_distance, max_distance);
+
+  float distance = dist(*app->random_generator());
+
+  glm::vec2 dir = glm::normalize(point - most_recent_target->static_wall_position);
+
+  return most_recent_target->static_wall_position + (dir * distance);
+}
+
+glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
                                TargetManager* target_manager,
                                Application* app) {
-  for (int i = 0; i < 30; ++i) {
-    glm::vec2 candidate_pos = GetNewCandidateTargetPosition(def, target_manager, app);
-
-    if (def.room().has_circular_room()) {
-      glm::vec3 pos;
-      pos.z = candidate_pos.y;
-
-      float radius = def.room().circular_room().radius() - (0.7 * def.static_def().target_radius());
-      glm::vec2 to_rotate(0, radius);
-      glm::vec2 rotated = RotateDegrees(to_rotate, -1 * candidate_pos.x);
-
-      pos.x = rotated.x;
-      pos.y = rotated.y;
-      if (AreNoneWithinDistance(
-              pos, def.static_def().target_placement_strategy().min_distance(), target_manager)) {
-        return pos;
-      }
+  glm::vec2 candidate_pos;
+  for (int i = 0; i < 100; ++i) {
+    candidate_pos = GetNewCandidateTargetPosition(def, target_manager, app);
+    if (def.static_def().target_placement_strategy().has_fixed_distance_from_last_target()) {
+      // Scale the candidate to the correct distance.
+      candidate_pos = GetFixedDistanceAdjustedPoint(candidate_pos, def, target_manager, app);
     }
-
-    if (def.room().has_simple_room()) {
-      // This distance check is done on the 2d wall where the coordinate system has z in the actual
-      // room mapped to y.
-      if (AreNoneWithinDistanceOnWall(candidate_pos,
-                                      def.static_def().target_placement_strategy().min_distance(),
-                                      target_manager)) {
-        glm::vec3 pos;
-        pos.x = candidate_pos.x;
-        pos.z = candidate_pos.y;
-        float radius = def.static_def().target_radius();
-        // Make sure the target does not clip throug wall
-        pos.y = -1 * (radius + 0.5);
-        return pos;
-      }
+    if (AreNoneWithinDistanceOnWall(candidate_pos,
+                                    def.static_def().target_placement_strategy().min_distance(),
+                                    target_manager)) {
+      return candidate_pos;
     }
   }
 
   app->logger()->warn("Unable to place target in scenario {}", def.scenario_id());
-  return glm::vec3();
+  return candidate_pos;
 }
 
 Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Application* app) {
-  glm::vec3 pos = GetNewTargetPosition(def, target_manager, app);
+  glm::vec2 wall_pos = GetNewTargetPosition(def, target_manager, app);
   Target t;
-  t.position = pos;
   t.radius = def.static_def().target_radius();
+  t.static_wall_position = wall_pos;
+
+  t.position.z = wall_pos.y;
+  if (def.room().has_simple_room()) {
+    t.position.x = wall_pos.x;
+    t.position.z = wall_pos.y;
+    // Make sure the target does not clip through wall
+    t.position.y = -1 * (t.radius + 0.5);
+  } else if (def.room().has_circular_room()) {
+    // Effectively wrap the wall around the perimeter of the circle.
+    float radius = def.room().circular_room().radius();
+    // float circumference = glm::two_pi<float>() * radius;
+    float radians_per_x = 1 / radius;
+
+    glm::vec2 to_rotate(0, radius - (0.7 * t.radius));
+    glm::vec2 rotated = RotateRadians(to_rotate, -1 * wall_pos.x * radians_per_x);
+
+    t.position.x = rotated.x;
+    t.position.y = rotated.y;
+  }
   return t;
 }
 

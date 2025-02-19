@@ -59,9 +59,9 @@ extern CenteringScenarioDefDefaultTypeInternal _CenteringScenarioDef_default_ins
 class CircularRoom;
 struct CircularRoomDefaultTypeInternal;
 extern CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
-class OvalTargetRegion;
-struct OvalTargetRegionDefaultTypeInternal;
-extern OvalTargetRegionDefaultTypeInternal _OvalTargetRegion_default_instance_;
+class EllipseTargetRegion;
+struct EllipseTargetRegionDefaultTypeInternal;
+extern EllipseTargetRegionDefaultTypeInternal _EllipseTargetRegion_default_instance_;
 class RectangleTargetRegion;
 struct RectangleTargetRegionDefaultTypeInternal;
 extern RectangleTargetRegionDefaultTypeInternal _RectangleTargetRegion_default_instance_;
@@ -687,6 +687,7 @@ class CircularRoom final : public ::google::protobuf::Message
   enum : int {
     kHeightFieldNumber = 1,
     kRadiusFieldNumber = 2,
+    kWidthFieldNumber = 3,
   };
   // float height = 1;
   bool has_height() const;
@@ -710,12 +711,23 @@ class CircularRoom final : public ::google::protobuf::Message
   void _internal_set_radius(float value);
 
   public:
+  // float width = 3;
+  bool has_width() const;
+  void clear_width() ;
+  float width() const;
+  void set_width(float value);
+
+  private:
+  float _internal_width() const;
+  void _internal_set_width(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.CircularRoom)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 0,
+      2, 3, 0,
       0, 2>
       _table_;
 
@@ -737,6 +749,7 @@ class CircularRoom final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     float height_;
     float radius_;
+    float width_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1237,31 +1250,31 @@ class RectangleTargetRegion final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class OvalTargetRegion final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.OvalTargetRegion) */ {
+class EllipseTargetRegion final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.EllipseTargetRegion) */ {
  public:
-  inline OvalTargetRegion() : OvalTargetRegion(nullptr) {}
-  ~OvalTargetRegion() PROTOBUF_FINAL;
+  inline EllipseTargetRegion() : EllipseTargetRegion(nullptr) {}
+  ~EllipseTargetRegion() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(OvalTargetRegion* msg, std::destroying_delete_t) {
+  void operator delete(EllipseTargetRegion* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(OvalTargetRegion));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(EllipseTargetRegion));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR OvalTargetRegion(
+  explicit PROTOBUF_CONSTEXPR EllipseTargetRegion(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline OvalTargetRegion(const OvalTargetRegion& from) : OvalTargetRegion(nullptr, from) {}
-  inline OvalTargetRegion(OvalTargetRegion&& from) noexcept
-      : OvalTargetRegion(nullptr, std::move(from)) {}
-  inline OvalTargetRegion& operator=(const OvalTargetRegion& from) {
+  inline EllipseTargetRegion(const EllipseTargetRegion& from) : EllipseTargetRegion(nullptr, from) {}
+  inline EllipseTargetRegion(EllipseTargetRegion&& from) noexcept
+      : EllipseTargetRegion(nullptr, std::move(from)) {}
+  inline EllipseTargetRegion& operator=(const EllipseTargetRegion& from) {
     CopyFrom(from);
     return *this;
   }
-  inline OvalTargetRegion& operator=(OvalTargetRegion&& from) noexcept {
+  inline EllipseTargetRegion& operator=(EllipseTargetRegion&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -1289,16 +1302,16 @@ class OvalTargetRegion final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const OvalTargetRegion& default_instance() {
+  static const EllipseTargetRegion& default_instance() {
     return *internal_default_instance();
   }
-  static inline const OvalTargetRegion* internal_default_instance() {
-    return reinterpret_cast<const OvalTargetRegion*>(
-        &_OvalTargetRegion_default_instance_);
+  static inline const EllipseTargetRegion* internal_default_instance() {
+    return reinterpret_cast<const EllipseTargetRegion*>(
+        &_EllipseTargetRegion_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 6;
-  friend void swap(OvalTargetRegion& a, OvalTargetRegion& b) { a.Swap(&b); }
-  inline void Swap(OvalTargetRegion* other) {
+  friend void swap(EllipseTargetRegion& a, EllipseTargetRegion& b) { a.Swap(&b); }
+  inline void Swap(EllipseTargetRegion* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -1306,7 +1319,7 @@ class OvalTargetRegion final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(OvalTargetRegion* other) {
+  void UnsafeArenaSwap(EllipseTargetRegion* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -1314,13 +1327,13 @@ class OvalTargetRegion final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  OvalTargetRegion* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<OvalTargetRegion>(arena);
+  EllipseTargetRegion* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<EllipseTargetRegion>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const OvalTargetRegion& from);
+  void CopyFrom(const EllipseTargetRegion& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const OvalTargetRegion& from) { OvalTargetRegion::MergeImpl(*this, from); }
+  void MergeFrom(const EllipseTargetRegion& from) { EllipseTargetRegion::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -1357,18 +1370,18 @@ class OvalTargetRegion final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(OvalTargetRegion* other);
+  void InternalSwap(EllipseTargetRegion* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.OvalTargetRegion"; }
+  static ::absl::string_view FullMessageName() { return "aim.EllipseTargetRegion"; }
 
  protected:
-  explicit OvalTargetRegion(::google::protobuf::Arena* arena);
-  OvalTargetRegion(::google::protobuf::Arena* arena, const OvalTargetRegion& from);
-  OvalTargetRegion(::google::protobuf::Arena* arena, OvalTargetRegion&& from) noexcept
-      : OvalTargetRegion(arena) {
+  explicit EllipseTargetRegion(::google::protobuf::Arena* arena);
+  EllipseTargetRegion(::google::protobuf::Arena* arena, const EllipseTargetRegion& from);
+  EllipseTargetRegion(::google::protobuf::Arena* arena, EllipseTargetRegion&& from) noexcept
+      : EllipseTargetRegion(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -1416,7 +1429,7 @@ class OvalTargetRegion final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_y_diamter();
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.OvalTargetRegion)
+  // @@protoc_insertion_point(class_scope:aim.EllipseTargetRegion)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
@@ -1438,7 +1451,7 @@ class OvalTargetRegion final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const OvalTargetRegion& from_msg);
+                          const EllipseTargetRegion& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::RegionLength* x_diamter_;
@@ -1772,7 +1785,7 @@ class TargetRegion final : public ::google::protobuf::Message
   }
   enum TypeCase {
     kRectangle = 4,
-    kOval = 5,
+    kEllipse = 5,
     TYPE_NOT_SET = 0,
   };
   static inline const TargetRegion* internal_default_instance() {
@@ -1870,7 +1883,7 @@ class TargetRegion final : public ::google::protobuf::Message
     kYOffsetFieldNumber = 3,
     kPercentChanceFieldNumber = 1,
     kRectangleFieldNumber = 4,
-    kOvalFieldNumber = 5,
+    kEllipseFieldNumber = 5,
   };
   // .aim.RegionLength x_offset = 2;
   bool has_x_offset() const;
@@ -1932,23 +1945,23 @@ class TargetRegion final : public ::google::protobuf::Message
   ::aim::RectangleTargetRegion* _internal_mutable_rectangle();
 
   public:
-  // .aim.OvalTargetRegion oval = 5;
-  bool has_oval() const;
+  // .aim.EllipseTargetRegion ellipse = 5;
+  bool has_ellipse() const;
   private:
-  bool _internal_has_oval() const;
+  bool _internal_has_ellipse() const;
 
   public:
-  void clear_oval() ;
-  const ::aim::OvalTargetRegion& oval() const;
-  PROTOBUF_NODISCARD ::aim::OvalTargetRegion* release_oval();
-  ::aim::OvalTargetRegion* mutable_oval();
-  void set_allocated_oval(::aim::OvalTargetRegion* value);
-  void unsafe_arena_set_allocated_oval(::aim::OvalTargetRegion* value);
-  ::aim::OvalTargetRegion* unsafe_arena_release_oval();
+  void clear_ellipse() ;
+  const ::aim::EllipseTargetRegion& ellipse() const;
+  PROTOBUF_NODISCARD ::aim::EllipseTargetRegion* release_ellipse();
+  ::aim::EllipseTargetRegion* mutable_ellipse();
+  void set_allocated_ellipse(::aim::EllipseTargetRegion* value);
+  void unsafe_arena_set_allocated_ellipse(::aim::EllipseTargetRegion* value);
+  ::aim::EllipseTargetRegion* unsafe_arena_release_ellipse();
 
   private:
-  const ::aim::OvalTargetRegion& _internal_oval() const;
-  ::aim::OvalTargetRegion* _internal_mutable_oval();
+  const ::aim::EllipseTargetRegion& _internal_ellipse() const;
+  ::aim::EllipseTargetRegion* _internal_mutable_ellipse();
 
   public:
   void clear_type();
@@ -1957,7 +1970,7 @@ class TargetRegion final : public ::google::protobuf::Message
  private:
   class _Internal;
   void set_has_rectangle();
-  void set_has_oval();
+  void set_has_ellipse();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
@@ -1989,7 +2002,7 @@ class TargetRegion final : public ::google::protobuf::Message
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       ::aim::RectangleTargetRegion* rectangle_;
-      ::aim::OvalTargetRegion* oval_;
+      ::aim::EllipseTargetRegion* ellipse_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -2148,6 +2161,8 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     kRegionsFieldNumber = 1,
     kMinDistanceFieldNumber = 2,
     kAlternateRegionsFieldNumber = 3,
+    kFixedDistanceFromLastTargetFieldNumber = 4,
+    kFixedDistanceJitterFieldNumber = 5,
   };
   // repeated .aim.TargetRegion regions = 1;
   int regions_size() const;
@@ -2188,12 +2203,34 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   void _internal_set_alternate_regions(bool value);
 
   public:
+  // float fixed_distance_from_last_target = 4;
+  bool has_fixed_distance_from_last_target() const;
+  void clear_fixed_distance_from_last_target() ;
+  float fixed_distance_from_last_target() const;
+  void set_fixed_distance_from_last_target(float value);
+
+  private:
+  float _internal_fixed_distance_from_last_target() const;
+  void _internal_set_fixed_distance_from_last_target(float value);
+
+  public:
+  // float fixed_distance_jitter = 5;
+  bool has_fixed_distance_jitter() const;
+  void clear_fixed_distance_jitter() ;
+  float fixed_distance_jitter() const;
+  void set_fixed_distance_jitter(float value);
+
+  private:
+  float _internal_fixed_distance_jitter() const;
+  void _internal_set_fixed_distance_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetPlacementStrategy)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 1,
+      3, 5, 1,
       0, 2>
       _table_;
 
@@ -2216,6 +2253,8 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedPtrField< ::aim::TargetRegion > regions_;
     float min_distance_;
     bool alternate_regions_;
+    float fixed_distance_from_last_target_;
+    float fixed_distance_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2918,6 +2957,34 @@ inline float CircularRoom::_internal_radius() const {
 inline void CircularRoom::_internal_set_radius(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.radius_ = value;
+}
+
+// float width = 3;
+inline bool CircularRoom::has_width() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void CircularRoom::clear_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float CircularRoom::width() const {
+  // @@protoc_insertion_point(field_get:aim.CircularRoom.width)
+  return _internal_width();
+}
+inline void CircularRoom::set_width(float value) {
+  _internal_set_width(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.CircularRoom.width)
+}
+inline float CircularRoom::_internal_width() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.width_;
+}
+inline void CircularRoom::_internal_set_width(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -3653,82 +3720,82 @@ inline ::aim::RectangleTargetRegion* TargetRegion::mutable_rectangle() ABSL_ATTR
   return _msg;
 }
 
-// .aim.OvalTargetRegion oval = 5;
-inline bool TargetRegion::has_oval() const {
-  return type_case() == kOval;
+// .aim.EllipseTargetRegion ellipse = 5;
+inline bool TargetRegion::has_ellipse() const {
+  return type_case() == kEllipse;
 }
-inline bool TargetRegion::_internal_has_oval() const {
-  return type_case() == kOval;
+inline bool TargetRegion::_internal_has_ellipse() const {
+  return type_case() == kEllipse;
 }
-inline void TargetRegion::set_has_oval() {
-  _impl_._oneof_case_[0] = kOval;
+inline void TargetRegion::set_has_ellipse() {
+  _impl_._oneof_case_[0] = kEllipse;
 }
-inline void TargetRegion::clear_oval() {
+inline void TargetRegion::clear_ellipse() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kOval) {
+  if (type_case() == kEllipse) {
     if (GetArena() == nullptr) {
-      delete _impl_.type_.oval_;
+      delete _impl_.type_.ellipse_;
     } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.oval_);
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.ellipse_);
     }
     clear_has_type();
   }
 }
-inline ::aim::OvalTargetRegion* TargetRegion::release_oval() {
-  // @@protoc_insertion_point(field_release:aim.TargetRegion.oval)
-  if (type_case() == kOval) {
+inline ::aim::EllipseTargetRegion* TargetRegion::release_ellipse() {
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.ellipse)
+  if (type_case() == kEllipse) {
     clear_has_type();
-    auto* temp = _impl_.type_.oval_;
+    auto* temp = _impl_.type_.ellipse_;
     if (GetArena() != nullptr) {
       temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
     }
-    _impl_.type_.oval_ = nullptr;
+    _impl_.type_.ellipse_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::aim::OvalTargetRegion& TargetRegion::_internal_oval() const {
-  return type_case() == kOval ? *_impl_.type_.oval_ : reinterpret_cast<::aim::OvalTargetRegion&>(::aim::_OvalTargetRegion_default_instance_);
+inline const ::aim::EllipseTargetRegion& TargetRegion::_internal_ellipse() const {
+  return type_case() == kEllipse ? *_impl_.type_.ellipse_ : reinterpret_cast<::aim::EllipseTargetRegion&>(::aim::_EllipseTargetRegion_default_instance_);
 }
-inline const ::aim::OvalTargetRegion& TargetRegion::oval() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TargetRegion.oval)
-  return _internal_oval();
+inline const ::aim::EllipseTargetRegion& TargetRegion::ellipse() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.ellipse)
+  return _internal_ellipse();
 }
-inline ::aim::OvalTargetRegion* TargetRegion::unsafe_arena_release_oval() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:aim.TargetRegion.oval)
-  if (type_case() == kOval) {
+inline ::aim::EllipseTargetRegion* TargetRegion::unsafe_arena_release_ellipse() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.TargetRegion.ellipse)
+  if (type_case() == kEllipse) {
     clear_has_type();
-    auto* temp = _impl_.type_.oval_;
-    _impl_.type_.oval_ = nullptr;
+    auto* temp = _impl_.type_.ellipse_;
+    _impl_.type_.ellipse_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void TargetRegion::unsafe_arena_set_allocated_oval(::aim::OvalTargetRegion* value) {
+inline void TargetRegion::unsafe_arena_set_allocated_ellipse(::aim::EllipseTargetRegion* value) {
   // We rely on the oneof clear method to free the earlier contents
   // of this oneof. We can directly use the pointer we're given to
   // set the new value.
   clear_type();
   if (value) {
-    set_has_oval();
-    _impl_.type_.oval_ = value;
+    set_has_ellipse();
+    _impl_.type_.ellipse_ = value;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.oval)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.ellipse)
 }
-inline ::aim::OvalTargetRegion* TargetRegion::_internal_mutable_oval() {
-  if (type_case() != kOval) {
+inline ::aim::EllipseTargetRegion* TargetRegion::_internal_mutable_ellipse() {
+  if (type_case() != kEllipse) {
     clear_type();
-    set_has_oval();
-    _impl_.type_.oval_ =
-        ::google::protobuf::Message::DefaultConstruct<::aim::OvalTargetRegion>(GetArena());
+    set_has_ellipse();
+    _impl_.type_.ellipse_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::EllipseTargetRegion>(GetArena());
   }
-  return _impl_.type_.oval_;
+  return _impl_.type_.ellipse_;
 }
-inline ::aim::OvalTargetRegion* TargetRegion::mutable_oval() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::aim::OvalTargetRegion* _msg = _internal_mutable_oval();
-  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.oval)
+inline ::aim::EllipseTargetRegion* TargetRegion::mutable_ellipse() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::EllipseTargetRegion* _msg = _internal_mutable_ellipse();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.ellipse)
   return _msg;
 }
 
@@ -3939,29 +4006,29 @@ inline void RectangleTargetRegion::set_allocated_y_length(::aim::RegionLength* v
 
 // -------------------------------------------------------------------
 
-// OvalTargetRegion
+// EllipseTargetRegion
 
 // .aim.RegionLength x_diamter = 1;
-inline bool OvalTargetRegion::has_x_diamter() const {
+inline bool EllipseTargetRegion::has_x_diamter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.x_diamter_ != nullptr);
   return value;
 }
-inline void OvalTargetRegion::clear_x_diamter() {
+inline void EllipseTargetRegion::clear_x_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.x_diamter_ != nullptr) _impl_.x_diamter_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const ::aim::RegionLength& OvalTargetRegion::_internal_x_diamter() const {
+inline const ::aim::RegionLength& EllipseTargetRegion::_internal_x_diamter() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::aim::RegionLength* p = _impl_.x_diamter_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
 }
-inline const ::aim::RegionLength& OvalTargetRegion::x_diamter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.OvalTargetRegion.x_diamter)
+inline const ::aim::RegionLength& EllipseTargetRegion::x_diamter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.EllipseTargetRegion.x_diamter)
   return _internal_x_diamter();
 }
-inline void OvalTargetRegion::unsafe_arena_set_allocated_x_diamter(::aim::RegionLength* value) {
+inline void EllipseTargetRegion::unsafe_arena_set_allocated_x_diamter(::aim::RegionLength* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.x_diamter_);
@@ -3972,9 +4039,9 @@ inline void OvalTargetRegion::unsafe_arena_set_allocated_x_diamter(::aim::Region
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.OvalTargetRegion.x_diamter)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.EllipseTargetRegion.x_diamter)
 }
-inline ::aim::RegionLength* OvalTargetRegion::release_x_diamter() {
+inline ::aim::RegionLength* EllipseTargetRegion::release_x_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
@@ -3993,16 +4060,16 @@ inline ::aim::RegionLength* OvalTargetRegion::release_x_diamter() {
   }
   return released;
 }
-inline ::aim::RegionLength* OvalTargetRegion::unsafe_arena_release_x_diamter() {
+inline ::aim::RegionLength* EllipseTargetRegion::unsafe_arena_release_x_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.OvalTargetRegion.x_diamter)
+  // @@protoc_insertion_point(field_release:aim.EllipseTargetRegion.x_diamter)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
   ::aim::RegionLength* temp = _impl_.x_diamter_;
   _impl_.x_diamter_ = nullptr;
   return temp;
 }
-inline ::aim::RegionLength* OvalTargetRegion::_internal_mutable_x_diamter() {
+inline ::aim::RegionLength* EllipseTargetRegion::_internal_mutable_x_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.x_diamter_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
@@ -4010,13 +4077,13 @@ inline ::aim::RegionLength* OvalTargetRegion::_internal_mutable_x_diamter() {
   }
   return _impl_.x_diamter_;
 }
-inline ::aim::RegionLength* OvalTargetRegion::mutable_x_diamter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::RegionLength* EllipseTargetRegion::mutable_x_diamter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000001u;
   ::aim::RegionLength* _msg = _internal_mutable_x_diamter();
-  // @@protoc_insertion_point(field_mutable:aim.OvalTargetRegion.x_diamter)
+  // @@protoc_insertion_point(field_mutable:aim.EllipseTargetRegion.x_diamter)
   return _msg;
 }
-inline void OvalTargetRegion::set_allocated_x_diamter(::aim::RegionLength* value) {
+inline void EllipseTargetRegion::set_allocated_x_diamter(::aim::RegionLength* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -4034,30 +4101,30 @@ inline void OvalTargetRegion::set_allocated_x_diamter(::aim::RegionLength* value
   }
 
   _impl_.x_diamter_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.OvalTargetRegion.x_diamter)
+  // @@protoc_insertion_point(field_set_allocated:aim.EllipseTargetRegion.x_diamter)
 }
 
 // .aim.RegionLength y_diamter = 2;
-inline bool OvalTargetRegion::has_y_diamter() const {
+inline bool EllipseTargetRegion::has_y_diamter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.y_diamter_ != nullptr);
   return value;
 }
-inline void OvalTargetRegion::clear_y_diamter() {
+inline void EllipseTargetRegion::clear_y_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.y_diamter_ != nullptr) _impl_.y_diamter_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline const ::aim::RegionLength& OvalTargetRegion::_internal_y_diamter() const {
+inline const ::aim::RegionLength& EllipseTargetRegion::_internal_y_diamter() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::aim::RegionLength* p = _impl_.y_diamter_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
 }
-inline const ::aim::RegionLength& OvalTargetRegion::y_diamter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.OvalTargetRegion.y_diamter)
+inline const ::aim::RegionLength& EllipseTargetRegion::y_diamter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.EllipseTargetRegion.y_diamter)
   return _internal_y_diamter();
 }
-inline void OvalTargetRegion::unsafe_arena_set_allocated_y_diamter(::aim::RegionLength* value) {
+inline void EllipseTargetRegion::unsafe_arena_set_allocated_y_diamter(::aim::RegionLength* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.y_diamter_);
@@ -4068,9 +4135,9 @@ inline void OvalTargetRegion::unsafe_arena_set_allocated_y_diamter(::aim::Region
   } else {
     _impl_._has_bits_[0] &= ~0x00000002u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.OvalTargetRegion.y_diamter)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.EllipseTargetRegion.y_diamter)
 }
-inline ::aim::RegionLength* OvalTargetRegion::release_y_diamter() {
+inline ::aim::RegionLength* EllipseTargetRegion::release_y_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000002u;
@@ -4089,16 +4156,16 @@ inline ::aim::RegionLength* OvalTargetRegion::release_y_diamter() {
   }
   return released;
 }
-inline ::aim::RegionLength* OvalTargetRegion::unsafe_arena_release_y_diamter() {
+inline ::aim::RegionLength* EllipseTargetRegion::unsafe_arena_release_y_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.OvalTargetRegion.y_diamter)
+  // @@protoc_insertion_point(field_release:aim.EllipseTargetRegion.y_diamter)
 
   _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::RegionLength* temp = _impl_.y_diamter_;
   _impl_.y_diamter_ = nullptr;
   return temp;
 }
-inline ::aim::RegionLength* OvalTargetRegion::_internal_mutable_y_diamter() {
+inline ::aim::RegionLength* EllipseTargetRegion::_internal_mutable_y_diamter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.y_diamter_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
@@ -4106,13 +4173,13 @@ inline ::aim::RegionLength* OvalTargetRegion::_internal_mutable_y_diamter() {
   }
   return _impl_.y_diamter_;
 }
-inline ::aim::RegionLength* OvalTargetRegion::mutable_y_diamter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::RegionLength* EllipseTargetRegion::mutable_y_diamter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000002u;
   ::aim::RegionLength* _msg = _internal_mutable_y_diamter();
-  // @@protoc_insertion_point(field_mutable:aim.OvalTargetRegion.y_diamter)
+  // @@protoc_insertion_point(field_mutable:aim.EllipseTargetRegion.y_diamter)
   return _msg;
 }
-inline void OvalTargetRegion::set_allocated_y_diamter(::aim::RegionLength* value) {
+inline void EllipseTargetRegion::set_allocated_y_diamter(::aim::RegionLength* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -4130,7 +4197,7 @@ inline void OvalTargetRegion::set_allocated_y_diamter(::aim::RegionLength* value
   }
 
   _impl_.y_diamter_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.OvalTargetRegion.y_diamter)
+  // @@protoc_insertion_point(field_set_allocated:aim.EllipseTargetRegion.y_diamter)
 }
 
 // -------------------------------------------------------------------
@@ -4240,6 +4307,62 @@ inline bool TargetPlacementStrategy::_internal_alternate_regions() const {
 inline void TargetPlacementStrategy::_internal_set_alternate_regions(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.alternate_regions_ = value;
+}
+
+// float fixed_distance_from_last_target = 4;
+inline bool TargetPlacementStrategy::has_fixed_distance_from_last_target() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void TargetPlacementStrategy::clear_fixed_distance_from_last_target() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.fixed_distance_from_last_target_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float TargetPlacementStrategy::fixed_distance_from_last_target() const {
+  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
+  return _internal_fixed_distance_from_last_target();
+}
+inline void TargetPlacementStrategy::set_fixed_distance_from_last_target(float value) {
+  _internal_set_fixed_distance_from_last_target(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
+}
+inline float TargetPlacementStrategy::_internal_fixed_distance_from_last_target() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.fixed_distance_from_last_target_;
+}
+inline void TargetPlacementStrategy::_internal_set_fixed_distance_from_last_target(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.fixed_distance_from_last_target_ = value;
+}
+
+// float fixed_distance_jitter = 5;
+inline bool TargetPlacementStrategy::has_fixed_distance_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void TargetPlacementStrategy::clear_fixed_distance_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.fixed_distance_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float TargetPlacementStrategy::fixed_distance_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_jitter)
+  return _internal_fixed_distance_jitter();
+}
+inline void TargetPlacementStrategy::set_fixed_distance_jitter(float value) {
+  _internal_set_fixed_distance_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.fixed_distance_jitter)
+}
+inline float TargetPlacementStrategy::_internal_fixed_distance_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.fixed_distance_jitter_;
+}
+inline void TargetPlacementStrategy::_internal_set_fixed_distance_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.fixed_distance_jitter_ = value;
 }
 
 // -------------------------------------------------------------------

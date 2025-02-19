@@ -13,6 +13,8 @@ message SimpleRoom {
 message CircularRoom {
   float height = 1;
   float radius = 2;
+  // The width of the wall to use for target placement and to draw sides.
+  float width = 3;
 }
 
 message Room {
@@ -46,7 +48,7 @@ message TargetRegion {
 
   oneof type {
     RectangleTargetRegion rectangle = 4;
-    OvalTargetRegion oval = 5;
+    EllipseTargetRegion ellipse = 5;
   }
 }
 
@@ -55,7 +57,7 @@ message RectangleTargetRegion {
   RegionLength y_length = 2;
 }
 
-message OvalTargetRegion {
+message EllipseTargetRegion {
   RegionLength x_diamter = 1;
   RegionLength y_diamter = 2;
 }
@@ -66,6 +68,11 @@ message TargetPlacementStrategy {
   // Pick from then next region for each new target. region.percent_chance
   // is ignored if this is set.
   bool alternate_regions = 3;
+
+  // The next target will be placed at the specified distance from the last target within the specified region. A random direction will be chosen.
+  float fixed_distance_from_last_target = 4;
+  // If using fixed distance allow the distance to vary by this amount. i.e. +/- jitter.
+  float fixed_distance_jitter = 5;
 }
 
 message ScenarioDef {

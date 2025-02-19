@@ -12,6 +12,7 @@ namespace aim {
 struct Target {
   u16 id = 0;
   glm::vec3 position{};
+  glm::vec2 static_wall_position{};
   float radius = 1.0f;
   bool hidden = false;
   bool is_ghost = false;
@@ -36,6 +37,17 @@ class TargetManager {
 
   void MarkAllAsNonGhost();
 
+  std::optional<u16> most_recently_added_target_id() const {
+    return most_recently_added_target_id_;
+  }
+
+  Target* GetMutableMostRecentlyAddedTarget() {
+    if (most_recently_added_target_id_.has_value()) {
+      return GetMutableTarget(*most_recently_added_target_id_);
+    }
+    return nullptr;
+  }
+
   void Clear() {
     targets_.clear();
   }
@@ -54,6 +66,7 @@ class TargetManager {
  private:
   u16 target_id_counter_ = 0;
   std::vector<Target> targets_;
+  std::optional<u16> most_recently_added_target_id_ = 0;
 };
 
 }  // namespace aim

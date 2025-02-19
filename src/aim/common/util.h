@@ -167,14 +167,4 @@ static float ParseFloat(const std::string& text) {
   return strtod(text.c_str(), nullptr);
 }
 
-static glm::vec2 RotateRadians(const glm::vec2& v, float radians) {
-  const float cos_theta = cos(radians);
-  const float sin_theta = sin(radians);
-  return glm::vec2(v.x * cos_theta - v.y * sin_theta, v.x * sin_theta + v.y * cos_theta);
-}
-
-static glm::vec2 RotateDegrees(const glm::vec2& v, float degrees) {
-  return RotateRadians(v, glm::radians<float>(degrees));
-}
-
 }  // namespace aim
