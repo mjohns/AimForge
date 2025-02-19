@@ -178,6 +178,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("1w3ts fixed");
     def.mutable_static_def()->set_num_targets(3);
     def.mutable_static_def()->set_newest_target_is_ghost(true);
+    def.mutable_static_def()->set_remove_closest_target_on_miss(true);
     def.mutable_static_def()
         ->mutable_target_placement_strategy()
         ->set_fixed_distance_from_last_target(20);
@@ -257,7 +258,7 @@ class HomeScreen : public UiScreen {
       Resume();
     }
     if (open_settings_) {
-      auto settings_screen = CreateSettingsScreen(app_);
+      auto settings_screen = CreateSettingsScreen(app_, SettingsScreenType::FULL);
       auto nav_event = settings_screen->Run();
       if (ShouldExit(nav_event)) {
         return nav_event;
