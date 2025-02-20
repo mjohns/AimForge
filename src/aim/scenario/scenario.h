@@ -43,6 +43,16 @@ class Scenario {
   virtual void OnPause() {}
   virtual void OnResume() {}
 
+  // Replay recording methods
+  void AddNewTargetEvent(const Target& target);
+  void AddKillTargetEvent(u16 target_id);
+  void AddRemoveTargetEvent(u16 target_id);
+  void AddShotFiredEvent();
+
+  void PlayShootSound();
+  void PlayMissSound();
+  void PlayKillSound();
+
   ScenarioDef def_;
   Application* app_;
   ScenarioStats stats_;

@@ -224,6 +224,46 @@ NavigationEvent Scenario::Run() {
   return stats_screen.Run();
 }
 
+void Scenario::AddNewTargetEvent(const Target& target) {
+  auto add_event = replay_->add_events();
+  add_event->set_frame_number(timer_.GetReplayFrameNumber());
+  auto add_target = add_event->mutable_add_target();
+  add_target->set_target_id(target.id);
+  *(add_target->mutable_position()) = ToStoredVec3(target.position);
+  add_target->set_radius(target.radius);
+}
+
+void Scenario::AddKillTargetEvent(u16 target_id) {
+  auto event = replay_->add_events();
+  event->set_frame_number(timer_.GetReplayFrameNumber());
+  event->mutable_kill_target()->set_target_id(target_id);
+}
+
+void Scenario::AddRemoveTargetEvent(u16 target_id) {
+  auto event = replay_->add_events();
+  event->set_frame_number(timer_.GetReplayFrameNumber());
+  event->mutable_remove_target()->set_target_id(target_id);
+}
+
+void Scenario::AddShotFiredEvent() {
+  auto event = replay_->add_events();
+  event->set_frame_number(timer_.GetReplayFrameNumber());
+  *event->mutable_shot_fired() = ShotFiredEvent();
+}
+
+void Scenario::PlayShootSound() {
+  app_->sound_manager()->PlayShootSound();
+  AddShotFiredEvent();
+}
+
+void Scenario::PlayMissSound() {
+  app_->sound_manager()->PlayShootSound();
+}
+
+void Scenario::PlayKillSound() {
+  app_->sound_manager()->PlayKillSound();
+}
+
 NavigationEvent RunScenario(const ScenarioDef& def, Application* app) {
   while (true) {
     std::unique_ptr<Scenario> scenario = CreateScenarioForType(def, app);
