@@ -46,12 +46,18 @@ float GetRegionLength(const Room& room, const RegionLength& length) {
     float width = room.simple_room().width();
     if (room.has_circular_room()) {
       width = room.circular_room().width();
+    } else if (room.has_barrel_room()) {
+      width = room.barrel_room().radius() * 2;
     }
     return width * length.x_percent_value();
   }
   if (length.has_y_percent_value()) {
-    float height =
-        room.has_circular_room() ? room.circular_room().height() : room.simple_room().height();
+    float height = room.simple_room().height();
+    if (room.has_circular_room()) {
+      height = room.circular_room().height();
+    } else if (room.has_barrel_room()) {
+      height = room.barrel_room().radius() * 2;
+    }
     return height * length.y_percent_value();
   }
   return 0;
@@ -129,8 +135,8 @@ glm::vec2 GetNewCandidateTargetPosition(const ScenarioDef& def,
 
   if (region.has_ellipse()) {
     glm::vec2 pos =
-        GetRandomPositionInEllipse(0.5 * GetRegionLength(def.room(), region.ellipse().x_diamter()),
-                                   0.5 * GetRegionLength(def.room(), region.ellipse().y_diamter()),
+        GetRandomPositionInEllipse(0.5 * GetRegionLength(def.room(), region.ellipse().x_diameter()),
+                                   0.5 * GetRegionLength(def.room(), region.ellipse().y_diameter()),
                                    app->random_generator());
     pos.x += x_offset;
     pos.y += y_offset;
@@ -192,7 +198,7 @@ Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Appli
   t.static_wall_position = wall_pos;
 
   t.position.z = wall_pos.y;
-  if (def.room().has_simple_room()) {
+  if (def.room().has_simple_room() || def.room().has_barrel_room()) {
     t.position.x = wall_pos.x;
     t.position.z = wall_pos.y;
     // Make sure the target does not clip through wall

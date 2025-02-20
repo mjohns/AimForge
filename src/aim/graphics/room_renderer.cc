@@ -242,6 +242,9 @@ void RoomRenderer::Draw(const Room& room, const Theme& theme, const glm::mat4& v
   if (room.has_circular_room()) {
     DrawCircularRoom(room.circular_room(), theme, view);
   }
+  if (room.has_barrel_room()) {
+    DrawBarrelRoom(room.barrel_room(), theme, view);
+  }
 }
 
 void RoomRenderer::DrawWall(const glm::mat4& model,
@@ -314,11 +317,6 @@ void RoomRenderer::DrawWallSolidColor(const glm::mat4& model,
 void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
                                     const Theme& theme,
                                     const glm::mat4& view) {
-  simple_shader_.Use();
-  simple_shader_.SetMat4("view", view);
-
-  glm::vec3 wall_color(ToVec3(theme.front_appearance().color()));
-
   float quad_scale = room.radius() * 2.5;
   float height = room.height();
 
@@ -382,20 +380,36 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
   }
 }
 
+void RoomRenderer::DrawBarrelRoom(const BarrelRoom& room,
+                                  const Theme& theme,
+                                  const glm::mat4& view) {
+  float quad_scale = room.radius() * 2.1;
+
+  {
+    // Front wall
+    glm::mat4 model(1.f);
+    model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
+    DrawWall(model, view, {quad_scale, quad_scale}, theme.front_appearance());
+  }
+
+  {
+    glm::mat4 model(1.f);
+    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0));
+    model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
+    model = glm::scale(model, glm::vec3(room.radius(), room.radius(), kMaxDistance));
+    DrawWall(model,
+             view,
+             {glm::two_pi<float>() * room.radius(), kMaxDistance},
+             theme.side_appearance(),
+             /* is_circular_wall= */ true);
+  }
+}
+
 void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
                                   const Theme& theme,
                                   const glm::mat4& view) {
-  Shader* shader = &simple_shader_;
-  shader->Use();
-  shader->SetMat4("view", view);
-
   float height = room.height();
   float width = room.width();
-
-  glm::vec3 wall_color(ToVec3(theme.front_appearance().color()));
-  glm::vec3 floor_color(ToVec3(theme.floor_appearance().color()));
-  glm::vec3 top_color(ToVec3(theme.roof_appearance().color()));
-  glm::vec3 side_color(ToVec3(theme.side_appearance().color()));
 
   {
     // Front wall

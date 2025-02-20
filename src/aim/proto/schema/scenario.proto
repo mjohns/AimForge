@@ -20,6 +20,12 @@ message CircularRoom {
   float side_angle_degrees = 5;
 }
 
+// Similar to a circular room but you are looking at the flat side and the side walls are
+// cylindrical.
+message BarrelRoom {
+  float radius = 1;
+}
+
 message Room {
   StoredVec3 camera_position = 1;
   float start_pitch = 2;
@@ -27,6 +33,7 @@ message Room {
   oneof type {
     SimpleRoom simple_room = 4;
     CircularRoom circular_room = 5;
+    BarrelRoom barrel_room = 6;
   }
 }
 
@@ -61,8 +68,8 @@ message RectangleTargetRegion {
 }
 
 message EllipseTargetRegion {
-  RegionLength x_diamter = 1;
-  RegionLength y_diamter = 2;
+  RegionLength x_diameter = 1;
+  RegionLength y_diameter = 2;
 }
 
 message TargetPlacementStrategy {
