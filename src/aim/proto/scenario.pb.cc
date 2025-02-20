@@ -83,7 +83,9 @@ inline constexpr CircularRoom::Impl_::Impl_(
       : _cached_size_{0},
         height_{0},
         radius_{0},
-        width_{0} {}
+        width_{0},
+        hide_sides_{false},
+        side_angle_degrees_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR CircularRoom::CircularRoom(::_pbi::ConstantInitialized)
@@ -368,9 +370,13 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.height_),
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.radius_),
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.width_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.hide_sides_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_.side_angle_degrees_),
         0,
         1,
         2,
+        3,
+        4,
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::Room, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -529,16 +535,16 @@ const ::uint32_t
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::SimpleRoom)},
-        {12, 23, -1, sizeof(::aim::CircularRoom)},
-        {26, 40, -1, sizeof(::aim::Room)},
-        {45, -1, -1, sizeof(::aim::RegionLength)},
-        {57, 71, -1, sizeof(::aim::TargetRegion)},
-        {76, 86, -1, sizeof(::aim::RectangleTargetRegion)},
-        {88, 98, -1, sizeof(::aim::EllipseTargetRegion)},
-        {100, 113, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {118, 133, -1, sizeof(::aim::ScenarioDef)},
-        {139, 153, -1, sizeof(::aim::StaticScenarioDef)},
-        {159, 173, -1, sizeof(::aim::CenteringScenarioDef)},
+        {12, 25, -1, sizeof(::aim::CircularRoom)},
+        {30, 44, -1, sizeof(::aim::Room)},
+        {49, -1, -1, sizeof(::aim::RegionLength)},
+        {61, 75, -1, sizeof(::aim::TargetRegion)},
+        {80, 90, -1, sizeof(::aim::RectangleTargetRegion)},
+        {92, 102, -1, sizeof(::aim::EllipseTargetRegion)},
+        {104, 117, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {122, 137, -1, sizeof(::aim::ScenarioDef)},
+        {143, 157, -1, sizeof(::aim::StaticScenarioDef)},
+        {163, 177, -1, sizeof(::aim::CenteringScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -557,46 +563,48 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     protodesc_cold) = {
     "\n\016scenario.proto\022\003aim\032\014common.proto\"+\n\nS"
     "impleRoom\022\016\n\006height\030\001 \001(\002\022\r\n\005width\030\002 \001(\002"
-    "\"=\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
-    "us\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\"\264\001\n\004Room\022(\n\017came"
-    "ra_position\030\001 \001(\0132\017.aim.StoredVec3\022\023\n\013st"
-    "art_pitch\030\002 \001(\002\022\021\n\tstart_yaw\030\003 \001(\002\022&\n\013si"
-    "mple_room\030\004 \001(\0132\017.aim.SimpleRoomH\000\022*\n\rci"
-    "rcular_room\030\005 \001(\0132\021.aim.CircularRoomH\000B\006"
-    "\n\004type\"f\n\014RegionLength\022\031\n\017x_percent_valu"
-    "e\030\001 \001(\002H\000\022\031\n\017y_percent_value\030\002 \001(\002H\000\022\030\n\016"
-    "absolute_value\030\003 \001(\002H\000B\006\n\004type\"\326\001\n\014Targe"
-    "tRegion\022\026\n\016percent_chance\030\001 \001(\002\022#\n\010x_off"
-    "set\030\002 \001(\0132\021.aim.RegionLength\022#\n\010y_offset"
-    "\030\003 \001(\0132\021.aim.RegionLength\022/\n\trectangle\030\004"
-    " \001(\0132\032.aim.RectangleTargetRegionH\000\022+\n\007el"
-    "lipse\030\005 \001(\0132\030.aim.EllipseTargetRegionH\000B"
-    "\006\n\004type\"a\n\025RectangleTargetRegion\022#\n\010x_le"
-    "ngth\030\001 \001(\0132\021.aim.RegionLength\022#\n\010y_lengt"
-    "h\030\002 \001(\0132\021.aim.RegionLength\"a\n\023EllipseTar"
-    "getRegion\022$\n\tx_diamter\030\001 \001(\0132\021.aim.Regio"
-    "nLength\022$\n\ty_diamter\030\002 \001(\0132\021.aim.RegionL"
-    "ength\"\266\001\n\027TargetPlacementStrategy\022\"\n\007reg"
-    "ions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014min_dis"
-    "tance\030\002 \001(\002\022\031\n\021alternate_regions\030\003 \001(\010\022\'"
-    "\n\037fixed_distance_from_last_target\030\004 \001(\002\022"
-    "\035\n\025fixed_distance_jitter\030\005 \001(\002\"\325\001\n\013Scena"
-    "rioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_"
-    "seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\024"
-    "\n\014display_name\030\004 \001(\t\022,\n\nstatic_def\030\005 \001(\013"
-    "2\026.aim.StaticScenarioDefH\000\0222\n\rcentering_"
-    "def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000B\006"
-    "\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013num_targ"
-    "ets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_p"
-    "oke_ball\030\003 \001(\010\022%\n\035remove_closest_target_"
-    "on_miss\030\004 \001(\010\022\?\n\031target_placement_strate"
-    "gy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\022\036"
-    "\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n\024Cente"
-    "ringScenarioDef\022\024\n\014target_width\030\001 \001(\002\022\025\n"
-    "\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016s"
-    "tart_position\030\004 \001(\0132\017.aim.StoredVec3\022%\n\014"
-    "end_position\030\005 \001(\0132\017.aim.StoredVec3\022\032\n\022s"
-    "how_start_and_end\030\006 \001(\010b\010editionsp\350\007"
+    "\"m\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
+    "us\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\022\n\nhide_sides\030\004 "
+    "\001(\010\022\032\n\022side_angle_degrees\030\005 \001(\002\"\264\001\n\004Room"
+    "\022(\n\017camera_position\030\001 \001(\0132\017.aim.StoredVe"
+    "c3\022\023\n\013start_pitch\030\002 \001(\002\022\021\n\tstart_yaw\030\003 \001"
+    "(\002\022&\n\013simple_room\030\004 \001(\0132\017.aim.SimpleRoom"
+    "H\000\022*\n\rcircular_room\030\005 \001(\0132\021.aim.Circular"
+    "RoomH\000B\006\n\004type\"f\n\014RegionLength\022\031\n\017x_perc"
+    "ent_value\030\001 \001(\002H\000\022\031\n\017y_percent_value\030\002 \001"
+    "(\002H\000\022\030\n\016absolute_value\030\003 \001(\002H\000B\006\n\004type\"\326"
+    "\001\n\014TargetRegion\022\026\n\016percent_chance\030\001 \001(\002\022"
+    "#\n\010x_offset\030\002 \001(\0132\021.aim.RegionLength\022#\n\010"
+    "y_offset\030\003 \001(\0132\021.aim.RegionLength\022/\n\trec"
+    "tangle\030\004 \001(\0132\032.aim.RectangleTargetRegion"
+    "H\000\022+\n\007ellipse\030\005 \001(\0132\030.aim.EllipseTargetR"
+    "egionH\000B\006\n\004type\"a\n\025RectangleTargetRegion"
+    "\022#\n\010x_length\030\001 \001(\0132\021.aim.RegionLength\022#\n"
+    "\010y_length\030\002 \001(\0132\021.aim.RegionLength\"a\n\023El"
+    "lipseTargetRegion\022$\n\tx_diamter\030\001 \001(\0132\021.a"
+    "im.RegionLength\022$\n\ty_diamter\030\002 \001(\0132\021.aim"
+    ".RegionLength\"\266\001\n\027TargetPlacementStrateg"
+    "y\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n"
+    "\014min_distance\030\002 \001(\002\022\031\n\021alternate_regions"
+    "\030\003 \001(\010\022\'\n\037fixed_distance_from_last_targe"
+    "t\030\004 \001(\002\022\035\n\025fixed_distance_jitter\030\005 \001(\002\"\325"
+    "\001\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020d"
+    "uration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.ai"
+    "m.Room\022\024\n\014display_name\030\004 \001(\t\022,\n\nstatic_d"
+    "ef\030\005 \001(\0132\026.aim.StaticScenarioDefH\000\0222\n\rce"
+    "ntering_def\030\006 \001(\0132\031.aim.CenteringScenari"
+    "oDefH\000B\006\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013"
+    "num_targets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002"
+    "\022\024\n\014is_poke_ball\030\003 \001(\010\022%\n\035remove_closest"
+    "_target_on_miss\030\004 \001(\010\022\?\n\031target_placemen"
+    "t_strategy\030\005 \001(\0132\034.aim.TargetPlacementSt"
+    "rategy\022\036\n\026newest_target_is_ghost\030\006 \001(\010\"\276"
+    "\001\n\024CenteringScenarioDef\022\024\n\014target_width\030"
+    "\001 \001(\002\022\025\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 "
+    "\001(\002\022\'\n\016start_position\030\004 \001(\0132\017.aim.Stored"
+    "Vec3\022%\n\014end_position\030\005 \001(\0132\017.aim.StoredV"
+    "ec3\022\032\n\022show_start_and_end\030\006 \001(\010b\010edition"
+    "sp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -606,7 +614,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1676,
+    1724,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -908,9 +916,9 @@ inline void CircularRoom::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, height_),
            0,
-           offsetof(Impl_, width_) -
+           offsetof(Impl_, side_angle_degrees_) -
                offsetof(Impl_, height_) +
-               sizeof(Impl_::width_));
+               sizeof(Impl_::side_angle_degrees_));
 }
 CircularRoom::~CircularRoom() {
   // @@protoc_insertion_point(destructor:aim.CircularRoom)
@@ -959,15 +967,15 @@ const ::google::protobuf::internal::ClassData* CircularRoom::GetClassData() cons
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 0, 2> CircularRoom::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 0, 0, 2> CircularRoom::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    5, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    5,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -987,6 +995,14 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> CircularRoom::_table_ = {
     // float width = 3;
     {::_pbi::TcParser::FastF32S1,
      {29, 2, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.width_)}},
+    // bool hide_sides = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(CircularRoom, _impl_.hide_sides_), 3>(),
+     {32, 3, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.hide_sides_)}},
+    // float side_angle_degrees = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 4, 0, PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.side_angle_degrees_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -998,6 +1014,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> CircularRoom::_table_ = {
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float width = 3;
     {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.width_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // bool hide_sides = 4;
+    {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.hide_sides_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // float side_angle_degrees = 5;
+    {PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.side_angle_degrees_), _Internal::kHasBitsOffset + 4, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
@@ -1013,10 +1035,10 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     ::memset(&_impl_.height_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.width_) -
-        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.width_));
+        reinterpret_cast<char*>(&_impl_.side_angle_degrees_) -
+        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.side_angle_degrees_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1059,6 +1081,20 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
                 3, this_._internal_width(), target);
           }
 
+          // bool hide_sides = 4;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                4, this_._internal_hide_sides(), target);
+          }
+
+          // float side_angle_degrees = 5;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_side_angle_degrees(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1084,7 +1120,7 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x0000001fu) {
             // float height = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
@@ -1095,6 +1131,14 @@ PROTOBUF_NOINLINE void CircularRoom::Clear() {
             }
             // float width = 3;
             if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+            // bool hide_sides = 4;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 2;
+            }
+            // float side_angle_degrees = 5;
+            if (cached_has_bits & 0x00000010u) {
               total_size += 5;
             }
           }
@@ -1111,7 +1155,7 @@ void CircularRoom::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::go
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.height_ = from._impl_.height_;
     }
@@ -1120,6 +1164,12 @@ void CircularRoom::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::go
     }
     if (cached_has_bits & 0x00000004u) {
       _this->_impl_.width_ = from._impl_.width_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.hide_sides_ = from._impl_.hide_sides_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _this->_impl_.side_angle_degrees_ = from._impl_.side_angle_degrees_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1139,8 +1189,8 @@ void CircularRoom::InternalSwap(CircularRoom* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.width_)
-      + sizeof(CircularRoom::_impl_.width_)
+      PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.side_angle_degrees_)
+      + sizeof(CircularRoom::_impl_.side_angle_degrees_)
       - PROTOBUF_FIELD_OFFSET(CircularRoom, _impl_.height_)>(
           reinterpret_cast<char*>(&_impl_.height_),
           reinterpret_cast<char*>(&other->_impl_.height_));

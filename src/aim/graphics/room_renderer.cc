@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 
+#include "aim/common/geometry.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/graphics/image.h"
@@ -73,8 +74,8 @@ void main() {
 }
 )AIMS";
 
-constexpr const float kMaxDistance = 1000.0f;
-constexpr const float kHalfMaxDistance = 500.0f;
+constexpr const float kMaxDistance = 2000.0f;
+constexpr const float kHalfMaxDistance = 100.0f;
 
 constexpr const int kQuadNumVertices = 6;
 
@@ -339,6 +340,37 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
     DrawWall(model, view, {quad_scale, quad_scale}, theme.roof_appearance());
   }
 
+  if (!room.hide_sides()) {
+    float width = room.width();
+    float perimeter = room.radius() * glm::two_pi<float>();
+
+    float radians = (width / perimeter) * glm::pi<float>();
+    glm::vec2 to_rotate(0, room.radius());
+    float side_angle_degrees = room.has_side_angle_degrees() ? room.side_angle_degrees() : 20.0f;
+
+    {
+      // Left
+      glm::vec2 left = RotateRadians(to_rotate, radians);
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(left.x, left.y, 0));
+      model = glm::rotate(model, glm::radians(90.0f + side_angle_degrees), glm::vec3(0, 0, 1));
+      model = glm::translate(model, glm::vec3(-1 * kHalfMaxDistance, 0, 0));
+      model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
+      DrawWall(model, view, {kMaxDistance, height}, theme.side_appearance());
+    }
+
+    {
+      // Right
+      glm::vec2 right = RotateRadians(to_rotate, -1 * radians);
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(right.x, right.y, 0));
+      model = glm::rotate(model, glm::radians(-90.0f - side_angle_degrees), glm::vec3(0, 0, 1));
+      model = glm::translate(model, glm::vec3(kHalfMaxDistance, 0, 0));
+      model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
+      DrawWall(model, view, {kMaxDistance, height}, theme.side_appearance());
+    }
+  }
+
   {
     glm::mat4 model(1.f);
     model = glm::scale(model, glm::vec3(room.radius(), room.radius(), height));
@@ -346,7 +378,7 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
              view,
              {glm::two_pi<float>() * room.radius(), height},
              theme.front_appearance(),
-             true);
+             /* is_circular_wall= */ true);
   }
 }
 
