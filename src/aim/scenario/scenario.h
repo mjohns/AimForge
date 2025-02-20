@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/vec3.hpp>
 #include <optional>
 
 #include "aim/core/application.h"
@@ -48,6 +49,12 @@ class Scenario {
   void AddKillTargetEvent(u16 target_id);
   void AddRemoveTargetEvent(u16 target_id);
   void AddShotFiredEvent();
+  void AddMoveLinearTargetEvent(u16 target_id,
+                                const glm::vec3& direction,
+                                float distance_per_second);
+  void AddMoveLinearTargetEvent(u16 target_id,
+                                const glm::vec2& direction,
+                                float distance_per_second);
 
   void PlayShootSound();
   void PlayMissSound();
