@@ -107,6 +107,33 @@ struct CircularRoomDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
 
+inline constexpr BarrelScenarioDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        num_targets_{0},
+        target_radius_{0},
+        speed_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR BarrelScenarioDef::BarrelScenarioDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct BarrelScenarioDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BarrelScenarioDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BarrelScenarioDefDefaultTypeInternal() {}
+  union {
+    BarrelScenarioDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BarrelScenarioDefDefaultTypeInternal _BarrelScenarioDef_default_instance_;
+
 inline constexpr BarrelRoom::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -520,11 +547,13 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.display_name_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
         3,
         2,
         1,
+        ~0u,
         ~0u,
         ~0u,
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_._has_bits_),
@@ -567,6 +596,20 @@ const ::uint32_t
         0,
         1,
         5,
+        PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _impl_.num_targets_),
+        PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _impl_.target_radius_),
+        PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _impl_.speed_),
+        0,
+        1,
+        2,
 };
 
 static const ::_pbi::MigrationSchema
@@ -580,9 +623,10 @@ static const ::_pbi::MigrationSchema
         {92, 102, -1, sizeof(::aim::RectangleTargetRegion)},
         {104, 114, -1, sizeof(::aim::EllipseTargetRegion)},
         {116, 129, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {134, 149, -1, sizeof(::aim::ScenarioDef)},
-        {155, 169, -1, sizeof(::aim::StaticScenarioDef)},
-        {175, 189, -1, sizeof(::aim::CenteringScenarioDef)},
+        {134, 150, -1, sizeof(::aim::ScenarioDef)},
+        {157, 171, -1, sizeof(::aim::StaticScenarioDef)},
+        {177, 191, -1, sizeof(::aim::CenteringScenarioDef)},
+        {197, 208, -1, sizeof(::aim::BarrelScenarioDef)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -597,6 +641,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_ScenarioDef_default_instance_._instance,
     &::aim::_StaticScenarioDef_default_instance_._instance,
     &::aim::_CenteringScenarioDef_default_instance_._instance,
+    &::aim::_BarrelScenarioDef_default_instance_._instance,
 };
 const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
@@ -628,23 +673,27 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014min_dis"
     "tance\030\002 \001(\002\022\031\n\021alternate_regions\030\003 \001(\010\022\'"
     "\n\037fixed_distance_from_last_target\030\004 \001(\002\022"
-    "\035\n\025fixed_distance_jitter\030\005 \001(\002\"\325\001\n\013Scena"
+    "\035\n\025fixed_distance_jitter\030\005 \001(\002\"\203\002\n\013Scena"
     "rioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_"
     "seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\024"
     "\n\014display_name\030\004 \001(\t\022,\n\nstatic_def\030\005 \001(\013"
     "2\026.aim.StaticScenarioDefH\000\0222\n\rcentering_"
-    "def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000B\006"
-    "\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013num_targ"
-    "ets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is_p"
-    "oke_ball\030\003 \001(\010\022%\n\035remove_closest_target_"
-    "on_miss\030\004 \001(\010\022\?\n\031target_placement_strate"
-    "gy\030\005 \001(\0132\034.aim.TargetPlacementStrategy\022\036"
-    "\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n\024Cente"
-    "ringScenarioDef\022\024\n\014target_width\030\001 \001(\002\022\025\n"
-    "\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016s"
-    "tart_position\030\004 \001(\0132\017.aim.StoredVec3\022%\n\014"
-    "end_position\030\005 \001(\0132\017.aim.StoredVec3\022\032\n\022s"
-    "how_start_and_end\030\006 \001(\010b\010editionsp\350\007"
+    "def\030\006 \001(\0132\031.aim.CenteringScenarioDefH\000\022,"
+    "\n\nbarrel_def\030\007 \001(\0132\026.aim.BarrelScenarioD"
+    "efH\000B\006\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013nu"
+    "m_targets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024"
+    "\n\014is_poke_ball\030\003 \001(\010\022%\n\035remove_closest_t"
+    "arget_on_miss\030\004 \001(\010\022\?\n\031target_placement_"
+    "strategy\030\005 \001(\0132\034.aim.TargetPlacementStra"
+    "tegy\022\036\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n"
+    "\024CenteringScenarioDef\022\024\n\014target_width\030\001 "
+    "\001(\002\022\025\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001("
+    "\002\022\'\n\016start_position\030\004 \001(\0132\017.aim.StoredVe"
+    "c3\022%\n\014end_position\030\005 \001(\0132\017.aim.StoredVec"
+    "3\022\032\n\022show_start_and_end\030\006 \001(\010\"N\n\021BarrelS"
+    "cenarioDef\022\023\n\013num_targets\030\001 \001(\005\022\025\n\rtarge"
+    "t_radius\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002b\010editionsp"
+    "\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -654,13 +703,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1796,
+    1922,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    12,
+    13,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -3779,6 +3828,19 @@ void ScenarioDef::set_allocated_centering_def(::aim::CenteringScenarioDef* cente
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.centering_def)
 }
+void ScenarioDef::set_allocated_barrel_def(::aim::BarrelScenarioDef* barrel_def) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (barrel_def) {
+    ::google::protobuf::Arena* submessage_arena = barrel_def->GetArena();
+    if (message_arena != submessage_arena) {
+      barrel_def = ::google::protobuf::internal::GetOwnedMessage(message_arena, barrel_def, submessage_arena);
+    }
+    set_has_barrel_def();
+    _impl_.type_.barrel_def_ = barrel_def;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.barrel_def)
+}
 ScenarioDef::ScenarioDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -3824,6 +3886,9 @@ ScenarioDef::ScenarioDef(
         break;
       case kCenteringDef:
         _impl_.type_.centering_def_ = ::google::protobuf::Message::CopyConstruct<::aim::CenteringScenarioDef>(arena, *from._impl_.type_.centering_def_);
+        break;
+      case kBarrelDef:
+        _impl_.type_.barrel_def_ = ::google::protobuf::Message::CopyConstruct<::aim::BarrelScenarioDef>(arena, *from._impl_.type_.barrel_def_);
         break;
   }
 
@@ -3884,6 +3949,14 @@ void ScenarioDef::clear_type() {
       }
       break;
     }
+    case kBarrelDef: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.barrel_def_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.barrel_def_);
+      }
+      break;
+    }
     case TYPE_NOT_SET: {
       break;
     }
@@ -3928,16 +4001,16 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 6, 3, 47, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<2, 7, 4, 47, 2> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    6, 24,  // max_field_number, fast_idx_mask
+    7, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967232,  // skipmap
+    4294967168,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
-    3,  // num_aux_entries
+    7,  // num_field_entries
+    4,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -3979,10 +4052,14 @@ const ::_pbi::TcParseTable<2, 6, 3, 47, 2> ScenarioDef::_table_ = {
     // .aim.CenteringScenarioDef centering_def = 6;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.centering_def_), _Internal::kOneofCaseOffset + 0, 2,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.BarrelScenarioDef barrel_def = 7;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.barrel_def_), _Internal::kOneofCaseOffset + 0, 3,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>()},
+    {::_pbi::TcParser::GetTable<::aim::BarrelScenarioDef>()},
   }}, {{
     "\17\13\0\0\14\0\0\0"
     "aim.ScenarioDef"
@@ -4076,6 +4153,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                   stream);
               break;
             }
+            case kBarrelDef: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  7, *this_._impl_.type_.barrel_def_, this_._impl_.type_.barrel_def_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
             default:
               break;
           }
@@ -4136,6 +4219,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
             case kCenteringDef: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.centering_def_);
+              break;
+            }
+            // .aim.BarrelScenarioDef barrel_def = 7;
+            case kBarrelDef: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.barrel_def_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -4203,6 +4292,15 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
               ::google::protobuf::Message::CopyConstruct<::aim::CenteringScenarioDef>(arena, *from._impl_.type_.centering_def_);
         } else {
           _this->_impl_.type_.centering_def_->MergeFrom(from._internal_centering_def());
+        }
+        break;
+      }
+      case kBarrelDef: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.barrel_def_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::BarrelScenarioDef>(arena, *from._impl_.type_.barrel_def_);
+        } else {
+          _this->_impl_.type_.barrel_def_->MergeFrom(from._internal_barrel_def());
         }
         break;
       }
@@ -5023,6 +5121,282 @@ void CenteringScenarioDef::InternalSwap(CenteringScenarioDef* PROTOBUF_RESTRICT 
 }
 
 ::google::protobuf::Metadata CenteringScenarioDef::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class BarrelScenarioDef::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<BarrelScenarioDef>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_._has_bits_);
+};
+
+BarrelScenarioDef::BarrelScenarioDef(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.BarrelScenarioDef)
+}
+BarrelScenarioDef::BarrelScenarioDef(
+    ::google::protobuf::Arena* arena, const BarrelScenarioDef& from)
+    : BarrelScenarioDef(arena) {
+  MergeFrom(from);
+}
+inline PROTOBUF_NDEBUG_INLINE BarrelScenarioDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void BarrelScenarioDef::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, num_targets_),
+           0,
+           offsetof(Impl_, speed_) -
+               offsetof(Impl_, num_targets_) +
+               sizeof(Impl_::speed_));
+}
+BarrelScenarioDef::~BarrelScenarioDef() {
+  // @@protoc_insertion_point(destructor:aim.BarrelScenarioDef)
+  SharedDtor(*this);
+}
+inline void BarrelScenarioDef::SharedDtor(MessageLite& self) {
+  BarrelScenarioDef& this_ = static_cast<BarrelScenarioDef&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* BarrelScenarioDef::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) BarrelScenarioDef(arena);
+}
+constexpr auto BarrelScenarioDef::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(BarrelScenarioDef),
+                                            alignof(BarrelScenarioDef));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull BarrelScenarioDef::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_BarrelScenarioDef_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &BarrelScenarioDef::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<BarrelScenarioDef>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &BarrelScenarioDef::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<BarrelScenarioDef>(), &BarrelScenarioDef::ByteSizeLong,
+            &BarrelScenarioDef::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_._cached_size_),
+        false,
+    },
+    &BarrelScenarioDef::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* BarrelScenarioDef::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 0, 0, 2> BarrelScenarioDef::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::BarrelScenarioDef>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // int32 num_targets = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(BarrelScenarioDef, _impl_.num_targets_), 0>(),
+     {8, 0, 0, PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.num_targets_)}},
+    // float target_radius = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.target_radius_)}},
+    // float speed = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.speed_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // int32 num_targets = 1;
+    {PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.num_targets_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // float target_radius = 2;
+    {PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.target_radius_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float speed = 3;
+    {PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.speed_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+PROTOBUF_NOINLINE void BarrelScenarioDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.BarrelScenarioDef)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    ::memset(&_impl_.num_targets_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.speed_) -
+        reinterpret_cast<char*>(&_impl_.num_targets_)) + sizeof(_impl_.speed_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* BarrelScenarioDef::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const BarrelScenarioDef& this_ = static_cast<const BarrelScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* BarrelScenarioDef::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const BarrelScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.BarrelScenarioDef)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // int32 num_targets = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::
+                WriteInt32ToArrayWithField<1>(
+                    stream, this_._internal_num_targets(), target);
+          }
+
+          // float target_radius = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_target_radius(), target);
+          }
+
+          // float speed = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_speed(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.BarrelScenarioDef)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t BarrelScenarioDef::ByteSizeLong(const MessageLite& base) {
+          const BarrelScenarioDef& this_ = static_cast<const BarrelScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t BarrelScenarioDef::ByteSizeLong() const {
+          const BarrelScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.BarrelScenarioDef)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000007u) {
+            // int32 num_targets = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                  this_._internal_num_targets());
+            }
+            // float target_radius = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // float speed = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void BarrelScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<BarrelScenarioDef*>(&to_msg);
+  auto& from = static_cast<const BarrelScenarioDef&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.BarrelScenarioDef)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.num_targets_ = from._impl_.num_targets_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.target_radius_ = from._impl_.target_radius_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.speed_ = from._impl_.speed_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void BarrelScenarioDef::CopyFrom(const BarrelScenarioDef& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.BarrelScenarioDef)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void BarrelScenarioDef::InternalSwap(BarrelScenarioDef* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.speed_)
+      + sizeof(BarrelScenarioDef::_impl_.speed_)
+      - PROTOBUF_FIELD_OFFSET(BarrelScenarioDef, _impl_.num_targets_)>(
+          reinterpret_cast<char*>(&_impl_.num_targets_),
+          reinterpret_cast<char*>(&other->_impl_.num_targets_));
+}
+
+::google::protobuf::Metadata BarrelScenarioDef::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)

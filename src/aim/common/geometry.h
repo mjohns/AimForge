@@ -9,9 +9,14 @@ glm::vec2 GetRandomPositionInEllipse(float radius_x,
                                      float radius_y,
                                      std::mt19937* random_generator);
 
+glm::vec2 GetRandomPositionInCircle(float min_radius,
+                                    float max_radius,
+                                    std::mt19937* random_generator);
+
 glm::vec2 GetRandomPositionOnCircle(float radius, std::mt19937* random_generator);
 
 bool IsPointInEllipse(const glm::vec2& point, float x_radius, float y_radius);
+bool IsPointInCircle(const glm::vec2& point, float radius);
 
 bool IsPointInRectangle(const glm::vec2& point, const glm::vec2& bottom_left, glm::vec2& top_right);
 

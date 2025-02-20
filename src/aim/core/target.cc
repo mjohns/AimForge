@@ -36,6 +36,16 @@ Target* TargetManager::GetMutableTarget(u16 target_id) {
   return nullptr;
 }
 
+std::vector<Target*> TargetManager::GetMutableVisibleTargets() {
+  std::vector<Target*> result;
+  for (Target& t : targets_) {
+    if (t.ShouldDraw()) {
+      result.push_back(&t);
+    }
+  }
+  return result;
+}
+
 void TargetManager::RemoveTarget(uint16_t target_id) {
   for (Target& t : targets_) {
     if (t.id == target_id) {
@@ -118,6 +128,16 @@ std::optional<uint16_t> TargetManager::GetNearestTargetOnStaticWall(const Camera
     }
   }
   return closest_target_id;
+}
+
+std::vector<u16> TargetManager::visible_target_ids() const {
+  std::vector<u16> ids;
+  for (auto& target : targets_) {
+    if (target.ShouldDraw()) {
+      ids.push_back(target.id);
+    }
+  }
+  return ids;
 }
 
 }  // namespace aim
