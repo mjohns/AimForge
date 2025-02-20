@@ -25,6 +25,7 @@ message MoveLinearTargetEvent {
   int32 target_id = 1;
   StoredVec3 direction = 2;
   float distance_per_second = 3;
+  StoredVec3 starting_position = 4;
 }
 
 message ReplayEvent {
