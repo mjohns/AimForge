@@ -47,7 +47,6 @@ std::unique_ptr<Scenario> CreateScenarioForType(const ScenarioDef& def, Applicat
 Scenario::Scenario(const ScenarioDef& def, Application* app)
     : def_(def),
       app_(app),
-      metronome_(0, app),
       timer_(kReplayFps),
       camera_(Camera(
           def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
@@ -60,6 +59,7 @@ NavigationEvent Scenario::Run() {
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   float dpi = app_->settings_manager()->GetDpi();
   Settings settings = app_->settings_manager()->GetCurrentSettings();
+  metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
   float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
 
   *replay_->mutable_room() = def_.room();
@@ -72,37 +72,30 @@ NavigationEvent Scenario::Run() {
 
   // Main loop
   bool stop_scenario = false;
-  bool show_settings = false;
-  bool is_quick_settings = true;
+  std::optional<SettingsScreenType> show_settings;
   bool is_click_held = false;
   u64 num_state_updates = 0;
   while (!stop_scenario) {
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
-      show_settings = true;
-      is_quick_settings = false;
+      show_settings = SettingsScreenType::FULL;
     }
-    if (show_settings) {
+    if (show_settings.has_value()) {
       // Need to pause.
       timer_.Pause();
       OnPause();
       NavigationEvent nav_event;
-      if (is_quick_settings) {
-        nav_event = CreateQuickSettingsScreen(app_)->Run();
-      } else {
-        nav_event = CreateSettingsScreen(app_)->Run();
-        app_->logger()->flush();
-      }
+      nav_event = CreateSettingsScreen(app_, *show_settings)->Run();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
-      show_settings = false;
-      is_quick_settings = false;
+      show_settings = {};
 
       // Need to refresh everything based on settings change
       settings = app_->settings_manager()->GetCurrentSettings();
       radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
       theme_ = app_->settings_manager()->GetCurrentTheme();
+      metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
       is_click_held = false;
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
@@ -151,12 +144,13 @@ NavigationEvent Scenario::Run() {
           return NavigationEvent::RestartLastScenario();
         }
         if (keycode == SDLK_S) {
-          show_settings = true;
-          is_quick_settings = true;
+          show_settings = SettingsScreenType::QUICK;
+        }
+        if (keycode == SDLK_B) {
+          show_settings = SettingsScreenType::QUICK_METRONOME;
         }
         if (keycode == SDLK_ESCAPE) {
-          show_settings = true;
-          is_quick_settings = false;
+          show_settings = SettingsScreenType::FULL;
         }
       }
       OnEvent(event);
@@ -164,7 +158,9 @@ NavigationEvent Scenario::Run() {
 
     // Update state
 
-    metronome_.DoTick(timer_.GetElapsedMicros());
+    if (metronome_) {
+      metronome_->DoTick(timer_.GetElapsedMicros());
+    }
     look_at_ = camera_.GetLookAt();
 
     update_data.is_click_held = is_click_held;

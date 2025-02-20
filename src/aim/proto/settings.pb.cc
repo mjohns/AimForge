@@ -115,7 +115,8 @@ inline constexpr Settings::Impl_::Impl_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
         crosshair_{nullptr},
-        cm_per_360_{0} {}
+        cm_per_360_{0},
+        metronome_bpm_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR Settings::Settings(::_pbi::ConstantInitialized)
@@ -212,10 +213,12 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.crosshair_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.cm_per_360_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.theme_name_),
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.metronome_bpm_),
         0,
         2,
         3,
         1,
+        4,
         PROTOBUF_FIELD_OFFSET(::aim::SystemSettings, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::SystemSettings, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -246,9 +249,9 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::DotCrosshair)},
         {12, 24, -1, sizeof(::aim::Crosshair)},
-        {27, 39, -1, sizeof(::aim::Settings)},
-        {43, 52, -1, sizeof(::aim::SystemSettings)},
-        {53, 64, -1, sizeof(::aim::FullSettings)},
+        {27, 40, -1, sizeof(::aim::Settings)},
+        {45, 54, -1, sizeof(::aim::SystemSettings)},
+        {55, 66, -1, sizeof(::aim::FullSettings)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
@@ -264,14 +267,14 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "line_color\030\002 \001(\0132\016.aim.StoredRgb\"b\n\tCros"
     "shair\022\014\n\004size\030\001 \001(\002\022\035\n\005color\030\002 \001(\0132\016.aim"
     ".StoredRgb\022 \n\003dot\030\003 \001(\0132\021.aim.DotCrossha"
-    "irH\000B\006\n\004type\"c\n\010Settings\022\014\n\004name\030\001 \001(\t\022!"
+    "irH\000B\006\n\004type\"z\n\010Settings\022\014\n\004name\030\001 \001(\t\022!"
     "\n\tcrosshair\030\002 \001(\0132\016.aim.Crosshair\022\022\n\ncm_"
-    "per_360\030\003 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\"\035\n\016Sys"
-    "temSettings\022\013\n\003dpi\030\001 \001(\002\"}\n\014FullSettings"
-    "\022,\n\017system_settings\030\001 \001(\0132\023.aim.SystemSe"
-    "ttings\022%\n\016saved_settings\030\002 \003(\0132\r.aim.Set"
-    "tings\022\030\n\020current_settings\030\003 \001(\tb\010edition"
-    "sp\350\007"
+    "per_360\030\003 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\022\025\n\rmet"
+    "ronome_bpm\030\005 \001(\002\"\035\n\016SystemSettings\022\013\n\003dp"
+    "i\030\001 \001(\002\"}\n\014FullSettings\022,\n\017system_settin"
+    "gs\030\001 \001(\0132\023.aim.SystemSettings\022%\n\016saved_s"
+    "ettings\030\002 \003(\0132\r.aim.Settings\022\030\n\020current_"
+    "settings\030\003 \001(\tb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_settings_2eproto_deps[1] =
     {
@@ -281,7 +284,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    484,
+    507,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -1017,7 +1020,13 @@ Settings::Settings(
   _impl_.crosshair_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::Crosshair>(
                               arena, *from._impl_.crosshair_)
                         : nullptr;
-  _impl_.cm_per_360_ = from._impl_.cm_per_360_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, cm_per_360_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, cm_per_360_),
+           offsetof(Impl_, metronome_bpm_) -
+               offsetof(Impl_, cm_per_360_) +
+               sizeof(Impl_::metronome_bpm_));
 
   // @@protoc_insertion_point(copy_constructor:aim.Settings)
 }
@@ -1033,9 +1042,9 @@ inline void Settings::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, crosshair_),
            0,
-           offsetof(Impl_, cm_per_360_) -
+           offsetof(Impl_, metronome_bpm_) -
                offsetof(Impl_, crosshair_) +
-               sizeof(Impl_::cm_per_360_));
+               sizeof(Impl_::metronome_bpm_));
 }
 Settings::~Settings() {
   // @@protoc_insertion_point(destructor:aim.Settings)
@@ -1087,15 +1096,15 @@ const ::google::protobuf::internal::ClassData* Settings::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 1, 35, 2> Settings::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 1, 35, 2> Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
-    4, 24,  // max_field_number, fast_idx_mask
+    5, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967280,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
+    5,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -1105,9 +1114,7 @@ const ::_pbi::TcParseTable<2, 4, 1, 35, 2> Settings::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::Settings>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // string theme_name = 4;
-    {::_pbi::TcParser::FastUS1,
-     {34, 1, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // string name = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.name_)}},
@@ -1117,6 +1124,14 @@ const ::_pbi::TcParseTable<2, 4, 1, 35, 2> Settings::_table_ = {
     // float cm_per_360 = 3;
     {::_pbi::TcParser::FastF32S1,
      {29, 3, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_)}},
+    // string theme_name = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 1, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_)}},
+    // float metronome_bpm = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 4, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1132,6 +1147,9 @@ const ::_pbi::TcParseTable<2, 4, 1, 35, 2> Settings::_table_ = {
     // string theme_name = 4;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // float metronome_bpm = 5;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Crosshair>()},
   }}, {{
@@ -1162,7 +1180,11 @@ PROTOBUF_NOINLINE void Settings::Clear() {
       _impl_.crosshair_->Clear();
     }
   }
-  _impl_.cm_per_360_ = 0;
+  if (cached_has_bits & 0x00000018u) {
+    ::memset(&_impl_.cm_per_360_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.metronome_bpm_) -
+        reinterpret_cast<char*>(&_impl_.cm_per_360_)) + sizeof(_impl_.metronome_bpm_));
+  }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -1213,6 +1235,13 @@ PROTOBUF_NOINLINE void Settings::Clear() {
             target = stream->WriteStringMaybeAliased(4, _s, target);
           }
 
+          // float metronome_bpm = 5;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_metronome_bpm(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1238,7 +1267,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000000fu) {
+          if (cached_has_bits & 0x0000001fu) {
             // string name = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -1258,6 +1287,10 @@ PROTOBUF_NOINLINE void Settings::Clear() {
             if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
+            // float metronome_bpm = 5;
+            if (cached_has_bits & 0x00000010u) {
+              total_size += 5;
+            }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
                                                      &this_._impl_._cached_size_);
@@ -1273,7 +1306,7 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_set_name(from._internal_name());
     }
@@ -1291,6 +1324,9 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
     }
     if (cached_has_bits & 0x00000008u) {
       _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1314,8 +1350,8 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT other) {
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.theme_name_, &other->_impl_.theme_name_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_)
-      + sizeof(Settings::_impl_.cm_per_360_)
+      PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)
+      + sizeof(Settings::_impl_.metronome_bpm_)
       - PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_)>(
           reinterpret_cast<char*>(&_impl_.crosshair_),
           reinterpret_cast<char*>(&other->_impl_.crosshair_));

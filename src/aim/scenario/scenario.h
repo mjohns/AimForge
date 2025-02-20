@@ -46,7 +46,7 @@ class Scenario {
   ScenarioDef def_;
   Application* app_;
   ScenarioStats stats_;
-  Metronome metronome_;
+  std::unique_ptr<Metronome> metronome_;
   ScenarioTimer timer_;
   Camera camera_;
   TargetManager target_manager_;

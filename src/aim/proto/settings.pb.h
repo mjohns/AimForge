@@ -876,6 +876,7 @@ class Settings final : public ::google::protobuf::Message
     kThemeNameFieldNumber = 4,
     kCrosshairFieldNumber = 2,
     kCmPer360FieldNumber = 3,
+    kMetronomeBpmFieldNumber = 5,
   };
   // string name = 1;
   bool has_name() const;
@@ -937,12 +938,23 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_cm_per_360(float value);
 
   public:
+  // float metronome_bpm = 5;
+  bool has_metronome_bpm() const;
+  void clear_metronome_bpm() ;
+  float metronome_bpm() const;
+  void set_metronome_bpm(float value);
+
+  private:
+  float _internal_metronome_bpm() const;
+  void _internal_set_metronome_bpm(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 1,
+      3, 5, 1,
       35, 2>
       _table_;
 
@@ -966,6 +978,7 @@ class Settings final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr theme_name_;
     ::aim::Crosshair* crosshair_;
     float cm_per_360_;
+    float metronome_bpm_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1816,6 +1829,34 @@ inline void Settings::set_allocated_theme_name(std::string* value) {
     _impl_.theme_name_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.theme_name)
+}
+
+// float metronome_bpm = 5;
+inline bool Settings::has_metronome_bpm() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void Settings::clear_metronome_bpm() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.metronome_bpm_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float Settings::metronome_bpm() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.metronome_bpm)
+  return _internal_metronome_bpm();
+}
+inline void Settings::set_metronome_bpm(float value) {
+  _internal_set_metronome_bpm(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.Settings.metronome_bpm)
+}
+inline float Settings::_internal_metronome_bpm() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.metronome_bpm_;
+}
+inline void Settings::_internal_set_metronome_bpm(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.metronome_bpm_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -23,6 +23,7 @@ message Settings {
   Crosshair crosshair = 2;
   float cm_per_360 = 3;
   string theme_name = 4;
+  float metronome_bpm = 5;
 }
 
 message SystemSettings {
