@@ -2484,14 +2484,10 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kStartPositionFieldNumber = 4,
-    kEndPositionFieldNumber = 5,
-    kTargetWidthFieldNumber = 1,
-    kTargetHeightFieldNumber = 2,
-    kSpeedFieldNumber = 3,
-    kShowStartAndEndFieldNumber = 6,
+    kStartPositionFieldNumber = 1,
+    kEndPositionFieldNumber = 2,
   };
-  // .aim.StoredVec3 start_position = 4;
+  // .aim.StoredVec3 start_position = 1;
   bool has_start_position() const;
   void clear_start_position() ;
   const ::aim::StoredVec3& start_position() const;
@@ -2506,7 +2502,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
   ::aim::StoredVec3* _internal_mutable_start_position();
 
   public:
-  // .aim.StoredVec3 end_position = 5;
+  // .aim.StoredVec3 end_position = 2;
   bool has_end_position() const;
   void clear_end_position() ;
   const ::aim::StoredVec3& end_position() const;
@@ -2521,56 +2517,12 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
   ::aim::StoredVec3* _internal_mutable_end_position();
 
   public:
-  // float target_width = 1;
-  bool has_target_width() const;
-  void clear_target_width() ;
-  float target_width() const;
-  void set_target_width(float value);
-
-  private:
-  float _internal_target_width() const;
-  void _internal_set_target_width(float value);
-
-  public:
-  // float target_height = 2;
-  bool has_target_height() const;
-  void clear_target_height() ;
-  float target_height() const;
-  void set_target_height(float value);
-
-  private:
-  float _internal_target_height() const;
-  void _internal_set_target_height(float value);
-
-  public:
-  // float speed = 3;
-  bool has_speed() const;
-  void clear_speed() ;
-  float speed() const;
-  void set_speed(float value);
-
-  private:
-  float _internal_speed() const;
-  void _internal_set_speed(float value);
-
-  public:
-  // bool show_start_and_end = 6;
-  bool has_show_start_and_end() const;
-  void clear_show_start_and_end() ;
-  bool show_start_and_end() const;
-  void set_show_start_and_end(bool value);
-
-  private:
-  bool _internal_show_start_and_end() const;
-  void _internal_set_show_start_and_end(bool value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.CenteringScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 2,
+      1, 2, 2,
       0, 2>
       _table_;
 
@@ -2592,10 +2544,6 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::StoredVec3* start_position_;
     ::aim::StoredVec3* end_position_;
-    float target_width_;
-    float target_height_;
-    float speed_;
-    bool show_start_and_end_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -6176,91 +6124,7 @@ inline void StaticScenarioDef::_internal_set_newest_target_is_ghost(bool value) 
 
 // CenteringScenarioDef
 
-// float target_width = 1;
-inline bool CenteringScenarioDef::has_target_width() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void CenteringScenarioDef::clear_target_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_width_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline float CenteringScenarioDef::target_width() const {
-  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.target_width)
-  return _internal_target_width();
-}
-inline void CenteringScenarioDef::set_target_width(float value) {
-  _internal_set_target_width(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.target_width)
-}
-inline float CenteringScenarioDef::_internal_target_width() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.target_width_;
-}
-inline void CenteringScenarioDef::_internal_set_target_width(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_width_ = value;
-}
-
-// float target_height = 2;
-inline bool CenteringScenarioDef::has_target_height() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  return value;
-}
-inline void CenteringScenarioDef::clear_target_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_height_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline float CenteringScenarioDef::target_height() const {
-  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.target_height)
-  return _internal_target_height();
-}
-inline void CenteringScenarioDef::set_target_height(float value) {
-  _internal_set_target_height(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.target_height)
-}
-inline float CenteringScenarioDef::_internal_target_height() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.target_height_;
-}
-inline void CenteringScenarioDef::_internal_set_target_height(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_height_ = value;
-}
-
-// float speed = 3;
-inline bool CenteringScenarioDef::has_speed() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
-  return value;
-}
-inline void CenteringScenarioDef::clear_speed() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.speed_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
-}
-inline float CenteringScenarioDef::speed() const {
-  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.speed)
-  return _internal_speed();
-}
-inline void CenteringScenarioDef::set_speed(float value) {
-  _internal_set_speed(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.speed)
-}
-inline float CenteringScenarioDef::_internal_speed() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.speed_;
-}
-inline void CenteringScenarioDef::_internal_set_speed(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.speed_ = value;
-}
-
-// .aim.StoredVec3 start_position = 4;
+// .aim.StoredVec3 start_position = 1;
 inline bool CenteringScenarioDef::has_start_position() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.start_position_ != nullptr);
@@ -6351,7 +6215,7 @@ inline void CenteringScenarioDef::set_allocated_start_position(::aim::StoredVec3
   // @@protoc_insertion_point(field_set_allocated:aim.CenteringScenarioDef.start_position)
 }
 
-// .aim.StoredVec3 end_position = 5;
+// .aim.StoredVec3 end_position = 2;
 inline bool CenteringScenarioDef::has_end_position() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.end_position_ != nullptr);
@@ -6440,34 +6304,6 @@ inline void CenteringScenarioDef::set_allocated_end_position(::aim::StoredVec3* 
 
   _impl_.end_position_ = reinterpret_cast<::aim::StoredVec3*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.CenteringScenarioDef.end_position)
-}
-
-// bool show_start_and_end = 6;
-inline bool CenteringScenarioDef::has_show_start_and_end() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
-  return value;
-}
-inline void CenteringScenarioDef::clear_show_start_and_end() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.show_start_and_end_ = false;
-  _impl_._has_bits_[0] &= ~0x00000020u;
-}
-inline bool CenteringScenarioDef::show_start_and_end() const {
-  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.show_start_and_end)
-  return _internal_show_start_and_end();
-}
-inline void CenteringScenarioDef::set_show_start_and_end(bool value) {
-  _internal_set_show_start_and_end(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.show_start_and_end)
-}
-inline bool CenteringScenarioDef::_internal_show_start_and_end() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.show_start_and_end_;
-}
-inline void CenteringScenarioDef::_internal_set_show_start_and_end(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.show_start_and_end_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -60,8 +60,9 @@ std::vector<ScenarioDef> GetScenarios() {
     square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
   }
 
-  float default_centering_speed = 45;
-  float default_centering_radius = 1.2;
+  TargetProfile default_centering_profile;
+  default_centering_profile.set_target_radius(1.2);
+  default_centering_profile.set_speed(45);
 
   {
     ScenarioDef def = base_static_def;
@@ -94,8 +95,7 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_static_def;
     def.set_scenario_id("centering_test");
     def.set_display_name("Centering");
-    def.mutable_centering_def()->set_target_width(default_centering_radius);
-    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
     scenarios.push_back(def);
@@ -104,8 +104,7 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_static_def;
     def.set_scenario_id("overhead_centering_test");
     def.set_display_name("Overhead Centering");
-    def.mutable_centering_def()->set_target_width(default_centering_radius);
-    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 50);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 50);
     scenarios.push_back(def);
@@ -114,8 +113,7 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_static_def;
     def.set_scenario_id("vertical_centering_test");
     def.set_display_name("Vertical Centering");
-    def.mutable_centering_def()->set_target_width(default_centering_radius);
-    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 45);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -45);
     scenarios.push_back(def);
@@ -126,8 +124,7 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_static_def;
     def.set_scenario_id("diagonal_centering_test_1");
     def.set_display_name("Diagonal Centering 1");
-    def.mutable_centering_def()->set_target_width(default_centering_radius);
-    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() =
         ToStoredVec3(neg_diagonal, -3, neg_diagonal);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, diagonal);
@@ -137,8 +134,7 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_static_def;
     def.set_display_name("Diagonal Centering 2");
     def.set_scenario_id("diagonal_centering_test_2");
-    def.mutable_centering_def()->set_target_width(default_centering_radius);
-    def.mutable_centering_def()->set_speed(default_centering_speed);
+    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() =
         ToStoredVec3(neg_diagonal, -3, diagonal);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, neg_diagonal);

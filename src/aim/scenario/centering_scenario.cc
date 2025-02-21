@@ -63,28 +63,14 @@ class CenteringScenario : public Scenario {
     start_to_end_ = glm::normalize(end_ - start_);
     distance_ = glm::length(start_ - end_);
     initial_distance_offset_ = distance_ * 0.45;
-    float speed = def.centering_def().speed();
-    if (speed <= 0) {
-      speed = 10;
-    }
-    distance_per_second_ = speed;
   }
 
  protected:
   void Initialize() override {
+    TargetProfile target_profile = GetNextTargetProfile();
+    distance_per_second_ = target_profile.speed();
     Target target;
-    target.radius = def_.centering_def().target_width();
-
-    if (def_.centering_def().show_start_and_end()) {
-      Target start_target = target;
-      start_target.position = start_;
-      start_target.is_ghost = true;
-      target_manager_.AddTarget(start_target);
-
-      Target end_target = start_target;
-      end_target.position = end_;
-      target_manager_.AddTarget(end_target);
-    }
+    target.radius = target_profile.target_radius();
 
     target.position = start_ + (start_to_end_ * initial_distance_offset_);
 
