@@ -2,9 +2,8 @@
 
 #include <imgui.h>
 
-#include <glm/vec3.hpp>
-
 #include <cstdint>
+#include <glm/vec3.hpp>
 
 namespace aim {
 

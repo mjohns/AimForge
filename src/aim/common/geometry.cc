@@ -77,57 +77,13 @@ glm::vec3 PointBetween(const glm::vec3& start, const glm::vec3& end, float perce
   return ((end - start) * percent_across) + start;
 }
 
-bool IntersectRayCylinder(const Cylinder& cylinder,
+bool IntersectRayCylinder(const glm::vec3& mid_point,
+                          const glm::vec3& cylinder_up,
+                          float radius,
                           const glm::vec3& origin,
                           const glm::vec3& direction,
                           float* intersection_distance,
-                          float* intersection_y) {
-  glm::vec3 mid_point = PointBetween(cylinder.top_position, cylinder.bottom_position);
-  glm::vec3 cylinder_up = glm::normalize(cylinder.top_position - cylinder.bottom_position);
-  bool has_hit
-  glm::vec3 cylinder_front = glm::normalize(mid_point - origin);
-  glm::vec3 cylinder_x = glm::normalize(glm::cross(cylinder_front, cylinder_up));
-
-  glm::mat4 rotation = MakeCoordinateSystemTransform(cylinder_x, cylinder_front, cylinder_up);
-  glm::mat4 transform(1.f);
-  transform = glm::translate(transform, mid_point * -1.0f);
-  transform = rotation * transform;
-
-  glm::vec3 transformed_origin = transform * glm::vec4(origin, 1.0f);
-  glm::vec3 transformed_direction = rotation * glm::vec4(direction, 1.0f);
-
-  float plane_distance;
-  bool has_plane_intersection = glm::intersectRayPlane(transformed_origin,
-                                                       transformed_direction,
-                                                       glm::vec3(0, 0, 0),
-                                                       glm::vec3(0, -1, 0),
-                                                       plane_distance);
-  if (!has_plane_intersection) {
-    return false;
-  }
-
-  glm::vec3 intersection_point = transformed_origin + transformed_direction * plane_distance;
-  if (abs(intersection_point.x) > cylinder.radius) {
-    return false;
-  }
-  if (abs(intersection_point.z) >
-      (0.5 * glm::length(cylinder.top_position - cylinder.bottom_position))) {
-    return false;
-  }
-
-  // TODO: Calculate actual distance on the cylinder.
-  *intersection_distance = plane_distance;
-  *intersection_y = intersection_point.z
-  return true;
-}
-
-bool IntersectRayInfiniteCylinder(const glm::vec3& mid_point,
-                                  const glm::vec3& cylinder_up,
-                                  float radius,
-                                  const glm::vec3& origin,
-                                  const glm::vec3& direction,
-                                  float* intersection_distance,
-                                  float* intersection_height) {
+                          float* intersection_height) {
   glm::vec3 cylinder_front = glm::normalize(mid_point - origin);
   glm::vec3 cylinder_x = glm::normalize(glm::cross(cylinder_front, cylinder_up));
 
@@ -157,45 +113,62 @@ bool IntersectRayInfiniteCylinder(const glm::vec3& mid_point,
   // TODO: Calculate actual distance on the cylinder.
   *intersection_distance = plane_distance;
   return true;
+}
 
 bool IntersectRayPill(const Pill& pill,
+                      const glm::vec3& origin,
+                      const glm::vec3& direction,
+                      float* intersection_distance) {
+  glm::vec3 cylinder_up = glm::normalize(pill.top_position - pill.bottom_position);
+  glm::vec3 mid_point = PointBetween(pill.top_position, pill.bottom_position);
+  float cylinder_intersection_distance;
+  float cylinder_intersection_height;
+  bool has_cylinder_hit = IntersectRayCylinder(mid_point,
+                                               cylinder_up,
+                                               pill.radius,
+                                               origin,
+                                               direction,
+                                               &cylinder_intersection_distance,
+                                               &cylinder_intersection_height);
+  if (!has_cylinder_hit) {
+    return false;
+  }
+
+  float full_pill_height = glm::length(pill.top_position - pill.bottom_position);
+  float cylinder_height = (full_pill_height - pill.radius) * 0.5;
+
+  if (abs(cylinder_intersection_height) <= cylinder_height) {
+    // Intersecting with cylinder portion of pill.
+    *intersection_distance = cylinder_intersection_distance;
+    return true;
+  }
+
+  // Do a broad check to see if it could possible even pass through sphere portion.
+  if (abs(cylinder_intersection_height) > (cylinder_height + pill.radius + 5)) {
+    // Too far to hit sphere.
+    return false;
+  }
+
+  float tip_offset = cylinder_intersection_height > 0 ? cylinder_height : -1 * cylinder_height;
+  // TODO: This must take into account rotations once that is supported!!
+  glm::vec3 sphere_position = mid_point + glm::vec3(0, 0, tip_offset);
+
+  return IntersectRaySphere(sphere_position, pill.radius, origin, direction, intersection_distance);
+}
+
+bool IntersectRaySphere(const glm::vec3& position,
+                        float radius,
                         const glm::vec3& origin,
                         const glm::vec3& direction,
                         float* intersection_distance) {
-    /*
-      Cylinder c;
-    c.radius = pill.radius;
-      // Test the full height (plus margin) so we can avoid doing spehere checks if it is a far off
-      // miss.
-      float cylinder_height = (height + radius) * 0.5;
-      c.top_position = target.position + glm::vec3(0, 0, cylinder_height);
-      c.bottom_position = target.position + glm::vec3(0, 0, cylinder_height * -1);
-      float intersection_y;
-      is_hit =
-          IntersectRayCylinder(c, camera.GetPosition(), look_at, &hit_distance, &intersection_y);
-      if (is_hit) {
-        // Now check to see if it was on the tips of the pill and do a more refined check.
-        float real_height = (target.height - target.radius) * 0.5;
-        if (abs(intersection_y) > real_height) {
-          // Now check the appropriate sphere.
-          float offset = intersection_y > 0 ? real_height : -1 * real_height;
-          glm::vec3 pos = target.position + glm::vec3(0, 0, offset);
-
-          glm::vec3 intersection_point;
-          glm::vec3 intersection_normal;
-          is_hit = glm::intersectRaySphere(camera.GetPosition(),
-                                           look_at,
-                                           pos,
-                                           target.radius,
-                                           intersection_point,
-                                           intersection_normal);
-          if (is_hit) {
-            hit_distance = glm::length(intersection_point - camera.GetPosition());
-          }
-        }
-      }
-      */
-  return true;
+  glm::vec3 intersection_point;
+  glm::vec3 intersection_normal;
+  bool is_hit = glm::intersectRaySphere(
+      origin, direction, position, radius, intersection_point, intersection_normal);
+  if (is_hit) {
+    *intersection_distance = glm::length(intersection_point - origin);
+  }
+  return is_hit;
 }
 
 // Axes must be normalized.

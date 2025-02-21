@@ -212,7 +212,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.mutable_target_def()->set_num_targets(1);
     // def.mutable_target_def()->set_remove_closest_on_miss(true);
     def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
-    // def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
+    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {
