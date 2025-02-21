@@ -74,8 +74,7 @@ void main() {
 }
 )AIMS";
 
-constexpr const float kMaxDistance = 2000.0f;
-constexpr const float kHalfMaxDistance = 100.0f;
+constexpr const float kMaxDistance = 1000.0f;
 
 constexpr const int kQuadNumVertices = 6;
 
@@ -352,7 +351,7 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
       glm::mat4 model(1.f);
       model = glm::translate(model, glm::vec3(left.x, left.y, 0));
       model = glm::rotate(model, glm::radians(90.0f + side_angle_degrees), glm::vec3(0, 0, 1));
-      model = glm::translate(model, glm::vec3(-1 * kHalfMaxDistance, 0, 0));
+      model = glm::translate(model, glm::vec3(-0.5 * kMaxDistance, 0, 0));
       model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
       DrawWall(model, view, {kMaxDistance, height}, theme.side_appearance());
     }
@@ -363,7 +362,7 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
       glm::mat4 model(1.f);
       model = glm::translate(model, glm::vec3(right.x, right.y, 0));
       model = glm::rotate(model, glm::radians(-90.0f - side_angle_degrees), glm::vec3(0, 0, 1));
-      model = glm::translate(model, glm::vec3(kHalfMaxDistance, 0, 0));
+      model = glm::translate(model, glm::vec3(0.5 * kMaxDistance, 0, 0));
       model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
       DrawWall(model, view, {kMaxDistance, height}, theme.side_appearance());
     }
@@ -411,6 +410,8 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
   float height = room.height();
   float width = room.width();
 
+  float depth = room.has_depth() ? room.depth() : kMaxDistance;
+
   {
     // Front wall
     glm::mat4 model(1.f);
@@ -419,39 +420,51 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
   }
 
   {
+    // Back wall
+    glm::mat4 model(1.f);
+    model = glm::translate(model, glm::vec3(0, -1 * depth, 0));
+    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+    model = glm::scale(model, glm::vec3(width, 1.0f, height));
+    DrawWall(model,
+             view,
+             {height, width},
+             theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
+  }
+
+  {
     // Floor wall
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, -0.5 * height));
+    model = glm::translate(model, glm::vec3(0, -0.5 * depth, -0.5 * height));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
-    model = glm::scale(model, glm::vec3(width, 1.0f, kMaxDistance));
-    DrawWall(model, view, {width, kMaxDistance}, theme.floor_appearance());
+    model = glm::scale(model, glm::vec3(width, 1.0f, depth));
+    DrawWall(model, view, {width, depth}, theme.floor_appearance());
   }
 
   {
     // Left wall
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(-0.5 * width, -0.5 * kMaxDistance, 0));
+    model = glm::translate(model, glm::vec3(-0.5 * width, -0.5 * depth, 0));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
-    model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
-    DrawWall(model, view, {kMaxDistance, height}, theme.side_appearance());
+    model = glm::scale(model, glm::vec3(depth, 1.0f, height));
+    DrawWall(model, view, {depth, height}, theme.side_appearance());
   }
 
   {
     // Right wall
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(0.5 * width, -0.5 * kMaxDistance, 0));
+    model = glm::translate(model, glm::vec3(0.5 * width, -0.5 * depth, 0));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0, 0, 1));
-    model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
-    DrawWall(model, view, {kMaxDistance, height}, theme.side_appearance());
+    model = glm::scale(model, glm::vec3(depth, 1.0f, height));
+    DrawWall(model, view, {depth, height}, theme.side_appearance());
   }
 
   {
     // Top wall
     glm::mat4 model(1.f);
-    model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0.5 * height));
+    model = glm::translate(model, glm::vec3(0, -0.5 * depth, 0.5 * height));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
-    model = glm::scale(model, glm::vec3(width, 1.0f, kMaxDistance));
-    DrawWall(model, view, {width, kMaxDistance}, theme.roof_appearance());
+    model = glm::scale(model, glm::vec3(width, 1.0f, depth));
+    DrawWall(model, view, {width, depth}, theme.roof_appearance());
   }
 }
 

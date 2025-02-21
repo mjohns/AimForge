@@ -31,8 +31,9 @@ message Theme {
   WallAppearance side_appearance = 3;
   WallAppearance front_appearance = 4;
   WallAppearance floor_appearance = 5;
+  WallAppearance back_appearance = 6;
 
-  CrosshairTheme crosshair = 6;
-  StoredColor target_color = 7;
-  StoredColor ghost_target_color = 8;
+  CrosshairTheme crosshair = 7;
+  StoredColor target_color = 8;
+  StoredColor ghost_target_color = 9;
 }

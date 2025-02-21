@@ -919,9 +919,10 @@ class Theme final : public ::google::protobuf::Message
     kSideAppearanceFieldNumber = 3,
     kFrontAppearanceFieldNumber = 4,
     kFloorAppearanceFieldNumber = 5,
-    kCrosshairFieldNumber = 6,
-    kTargetColorFieldNumber = 7,
-    kGhostTargetColorFieldNumber = 8,
+    kBackAppearanceFieldNumber = 6,
+    kCrosshairFieldNumber = 7,
+    kTargetColorFieldNumber = 8,
+    kGhostTargetColorFieldNumber = 9,
   };
   // string name = 1;
   bool has_name() const;
@@ -1000,7 +1001,22 @@ class Theme final : public ::google::protobuf::Message
   ::aim::WallAppearance* _internal_mutable_floor_appearance();
 
   public:
-  // .aim.CrosshairTheme crosshair = 6;
+  // .aim.WallAppearance back_appearance = 6;
+  bool has_back_appearance() const;
+  void clear_back_appearance() ;
+  const ::aim::WallAppearance& back_appearance() const;
+  PROTOBUF_NODISCARD ::aim::WallAppearance* release_back_appearance();
+  ::aim::WallAppearance* mutable_back_appearance();
+  void set_allocated_back_appearance(::aim::WallAppearance* value);
+  void unsafe_arena_set_allocated_back_appearance(::aim::WallAppearance* value);
+  ::aim::WallAppearance* unsafe_arena_release_back_appearance();
+
+  private:
+  const ::aim::WallAppearance& _internal_back_appearance() const;
+  ::aim::WallAppearance* _internal_mutable_back_appearance();
+
+  public:
+  // .aim.CrosshairTheme crosshair = 7;
   bool has_crosshair() const;
   void clear_crosshair() ;
   const ::aim::CrosshairTheme& crosshair() const;
@@ -1015,7 +1031,7 @@ class Theme final : public ::google::protobuf::Message
   ::aim::CrosshairTheme* _internal_mutable_crosshair();
 
   public:
-  // .aim.StoredColor target_color = 7;
+  // .aim.StoredColor target_color = 8;
   bool has_target_color() const;
   void clear_target_color() ;
   const ::aim::StoredColor& target_color() const;
@@ -1030,7 +1046,7 @@ class Theme final : public ::google::protobuf::Message
   ::aim::StoredColor* _internal_mutable_target_color();
 
   public:
-  // .aim.StoredColor ghost_target_color = 8;
+  // .aim.StoredColor ghost_target_color = 9;
   bool has_ghost_target_color() const;
   void clear_ghost_target_color() ;
   const ::aim::StoredColor& ghost_target_color() const;
@@ -1050,7 +1066,7 @@ class Theme final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 8, 7,
+      4, 9, 8,
       30, 2>
       _table_;
 
@@ -1075,6 +1091,7 @@ class Theme final : public ::google::protobuf::Message
     ::aim::WallAppearance* side_appearance_;
     ::aim::WallAppearance* front_appearance_;
     ::aim::WallAppearance* floor_appearance_;
+    ::aim::WallAppearance* back_appearance_;
     ::aim::CrosshairTheme* crosshair_;
     ::aim::StoredColor* target_color_;
     ::aim::StoredColor* ghost_target_color_;
@@ -2119,16 +2136,112 @@ inline void Theme::set_allocated_floor_appearance(::aim::WallAppearance* value) 
   // @@protoc_insertion_point(field_set_allocated:aim.Theme.floor_appearance)
 }
 
-// .aim.CrosshairTheme crosshair = 6;
-inline bool Theme::has_crosshair() const {
+// .aim.WallAppearance back_appearance = 6;
+inline bool Theme::has_back_appearance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.back_appearance_ != nullptr);
+  return value;
+}
+inline void Theme::clear_back_appearance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.back_appearance_ != nullptr) _impl_.back_appearance_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline const ::aim::WallAppearance& Theme::_internal_back_appearance() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::WallAppearance* p = _impl_.back_appearance_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::WallAppearance&>(::aim::_WallAppearance_default_instance_);
+}
+inline const ::aim::WallAppearance& Theme::back_appearance() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Theme.back_appearance)
+  return _internal_back_appearance();
+}
+inline void Theme::unsafe_arena_set_allocated_back_appearance(::aim::WallAppearance* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.back_appearance_);
+  }
+  _impl_.back_appearance_ = reinterpret_cast<::aim::WallAppearance*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000020u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000020u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.back_appearance)
+}
+inline ::aim::WallAppearance* Theme::release_back_appearance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000020u;
+  ::aim::WallAppearance* released = _impl_.back_appearance_;
+  _impl_.back_appearance_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::WallAppearance* Theme::unsafe_arena_release_back_appearance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Theme.back_appearance)
+
+  _impl_._has_bits_[0] &= ~0x00000020u;
+  ::aim::WallAppearance* temp = _impl_.back_appearance_;
+  _impl_.back_appearance_ = nullptr;
+  return temp;
+}
+inline ::aim::WallAppearance* Theme::_internal_mutable_back_appearance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.back_appearance_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::WallAppearance>(GetArena());
+    _impl_.back_appearance_ = reinterpret_cast<::aim::WallAppearance*>(p);
+  }
+  return _impl_.back_appearance_;
+}
+inline ::aim::WallAppearance* Theme::mutable_back_appearance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000020u;
+  ::aim::WallAppearance* _msg = _internal_mutable_back_appearance();
+  // @@protoc_insertion_point(field_mutable:aim.Theme.back_appearance)
+  return _msg;
+}
+inline void Theme::set_allocated_back_appearance(::aim::WallAppearance* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.back_appearance_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000020u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000020u;
+  }
+
+  _impl_.back_appearance_ = reinterpret_cast<::aim::WallAppearance*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Theme.back_appearance)
+}
+
+// .aim.CrosshairTheme crosshair = 7;
+inline bool Theme::has_crosshair() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.crosshair_ != nullptr);
   return value;
 }
 inline void Theme::clear_crosshair() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.crosshair_ != nullptr) _impl_.crosshair_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline const ::aim::CrosshairTheme& Theme::_internal_crosshair() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -2146,16 +2259,16 @@ inline void Theme::unsafe_arena_set_allocated_crosshair(::aim::CrosshairTheme* v
   }
   _impl_.crosshair_ = reinterpret_cast<::aim::CrosshairTheme*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000020u;
+    _impl_._has_bits_[0] |= 0x00000040u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000020u;
+    _impl_._has_bits_[0] &= ~0x00000040u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.crosshair)
 }
 inline ::aim::CrosshairTheme* Theme::release_crosshair() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
   ::aim::CrosshairTheme* released = _impl_.crosshair_;
   _impl_.crosshair_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -2175,7 +2288,7 @@ inline ::aim::CrosshairTheme* Theme::unsafe_arena_release_crosshair() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Theme.crosshair)
 
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
   ::aim::CrosshairTheme* temp = _impl_.crosshair_;
   _impl_.crosshair_ = nullptr;
   return temp;
@@ -2189,7 +2302,7 @@ inline ::aim::CrosshairTheme* Theme::_internal_mutable_crosshair() {
   return _impl_.crosshair_;
 }
 inline ::aim::CrosshairTheme* Theme::mutable_crosshair() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   ::aim::CrosshairTheme* _msg = _internal_mutable_crosshair();
   // @@protoc_insertion_point(field_mutable:aim.Theme.crosshair)
   return _msg;
@@ -2206,18 +2319,18 @@ inline void Theme::set_allocated_crosshair(::aim::CrosshairTheme* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000020u;
+    _impl_._has_bits_[0] |= 0x00000040u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000020u;
+    _impl_._has_bits_[0] &= ~0x00000040u;
   }
 
   _impl_.crosshair_ = reinterpret_cast<::aim::CrosshairTheme*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Theme.crosshair)
 }
 
-// .aim.StoredColor target_color = 7;
+// .aim.StoredColor target_color = 8;
 inline bool Theme::has_target_color() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.target_color_ != nullptr);
   return value;
 }
@@ -2237,16 +2350,16 @@ inline void Theme::unsafe_arena_set_allocated_target_color(::aim::StoredColor* v
   }
   _impl_.target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000040u;
+    _impl_._has_bits_[0] |= 0x00000080u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000040u;
+    _impl_._has_bits_[0] &= ~0x00000080u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.target_color)
 }
 inline ::aim::StoredColor* Theme::release_target_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
   ::aim::StoredColor* released = _impl_.target_color_;
   _impl_.target_color_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -2266,7 +2379,7 @@ inline ::aim::StoredColor* Theme::unsafe_arena_release_target_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Theme.target_color)
 
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
   ::aim::StoredColor* temp = _impl_.target_color_;
   _impl_.target_color_ = nullptr;
   return temp;
@@ -2280,7 +2393,7 @@ inline ::aim::StoredColor* Theme::_internal_mutable_target_color() {
   return _impl_.target_color_;
 }
 inline ::aim::StoredColor* Theme::mutable_target_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   ::aim::StoredColor* _msg = _internal_mutable_target_color();
   // @@protoc_insertion_point(field_mutable:aim.Theme.target_color)
   return _msg;
@@ -2297,18 +2410,18 @@ inline void Theme::set_allocated_target_color(::aim::StoredColor* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000040u;
+    _impl_._has_bits_[0] |= 0x00000080u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000040u;
+    _impl_._has_bits_[0] &= ~0x00000080u;
   }
 
   _impl_.target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Theme.target_color)
 }
 
-// .aim.StoredColor ghost_target_color = 8;
+// .aim.StoredColor ghost_target_color = 9;
 inline bool Theme::has_ghost_target_color() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.ghost_target_color_ != nullptr);
   return value;
 }
@@ -2328,16 +2441,16 @@ inline void Theme::unsafe_arena_set_allocated_ghost_target_color(::aim::StoredCo
   }
   _impl_.ghost_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000080u;
+    _impl_._has_bits_[0] |= 0x00000100u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000080u;
+    _impl_._has_bits_[0] &= ~0x00000100u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.ghost_target_color)
 }
 inline ::aim::StoredColor* Theme::release_ghost_target_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
   ::aim::StoredColor* released = _impl_.ghost_target_color_;
   _impl_.ghost_target_color_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -2357,7 +2470,7 @@ inline ::aim::StoredColor* Theme::unsafe_arena_release_ghost_target_color() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Theme.ghost_target_color)
 
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
   ::aim::StoredColor* temp = _impl_.ghost_target_color_;
   _impl_.ghost_target_color_ = nullptr;
   return temp;
@@ -2371,7 +2484,7 @@ inline ::aim::StoredColor* Theme::_internal_mutable_ghost_target_color() {
   return _impl_.ghost_target_color_;
 }
 inline ::aim::StoredColor* Theme::mutable_ghost_target_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   ::aim::StoredColor* _msg = _internal_mutable_ghost_target_color();
   // @@protoc_insertion_point(field_mutable:aim.Theme.ghost_target_color)
   return _msg;
@@ -2388,9 +2501,9 @@ inline void Theme::set_allocated_ghost_target_color(::aim::StoredColor* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000080u;
+    _impl_._has_bits_[0] |= 0x00000100u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000080u;
+    _impl_._has_bits_[0] &= ~0x00000100u;
   }
 
   _impl_.ghost_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);

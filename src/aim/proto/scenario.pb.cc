@@ -58,7 +58,8 @@ inline constexpr SimpleRoom::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         height_{0},
-        width_{0} {}
+        width_{0},
+        depth_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR SimpleRoom::SimpleRoom(::_pbi::ConstantInitialized)
@@ -451,8 +452,10 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::SimpleRoom, _impl_.height_),
         PROTOBUF_FIELD_OFFSET(::aim::SimpleRoom, _impl_.width_),
+        PROTOBUF_FIELD_OFFSET(::aim::SimpleRoom, _impl_.depth_),
         0,
         1,
+        2,
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::CircularRoom, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -670,21 +673,21 @@ const ::uint32_t
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-        {0, 10, -1, sizeof(::aim::SimpleRoom)},
-        {12, 25, -1, sizeof(::aim::CircularRoom)},
-        {30, 39, -1, sizeof(::aim::BarrelRoom)},
-        {40, 55, -1, sizeof(::aim::Room)},
-        {61, -1, -1, sizeof(::aim::RegionLength)},
-        {73, 87, -1, sizeof(::aim::TargetRegion)},
-        {92, 102, -1, sizeof(::aim::RectangleTargetRegion)},
-        {104, 114, -1, sizeof(::aim::EllipseTargetRegion)},
-        {116, 129, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {134, 151, -1, sizeof(::aim::ScenarioDef)},
-        {159, 170, -1, sizeof(::aim::StaticScenarioDef)},
-        {173, 183, -1, sizeof(::aim::CenteringScenarioDef)},
-        {185, -1, -1, sizeof(::aim::BarrelScenarioDef)},
-        {193, 205, -1, sizeof(::aim::TargetDef)},
-        {209, 221, -1, sizeof(::aim::TargetProfile)},
+        {0, 11, -1, sizeof(::aim::SimpleRoom)},
+        {14, 27, -1, sizeof(::aim::CircularRoom)},
+        {32, 41, -1, sizeof(::aim::BarrelRoom)},
+        {42, 57, -1, sizeof(::aim::Room)},
+        {63, -1, -1, sizeof(::aim::RegionLength)},
+        {75, 89, -1, sizeof(::aim::TargetRegion)},
+        {94, 104, -1, sizeof(::aim::RectangleTargetRegion)},
+        {106, 116, -1, sizeof(::aim::EllipseTargetRegion)},
+        {118, 131, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {136, 153, -1, sizeof(::aim::ScenarioDef)},
+        {161, 172, -1, sizeof(::aim::StaticScenarioDef)},
+        {175, 185, -1, sizeof(::aim::CenteringScenarioDef)},
+        {187, -1, -1, sizeof(::aim::BarrelScenarioDef)},
+        {195, 207, -1, sizeof(::aim::TargetDef)},
+        {211, 223, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -705,55 +708,56 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\016scenario.proto\022\003aim\032\014common.proto\"+\n\nS"
+    "\n\016scenario.proto\022\003aim\032\014common.proto\":\n\nS"
     "impleRoom\022\016\n\006height\030\001 \001(\002\022\r\n\005width\030\002 \001(\002"
-    "\"m\n\014CircularRoom\022\016\n\006height\030\001 \001(\002\022\016\n\006radi"
-    "us\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\022\n\nhide_sides\030\004 "
-    "\001(\010\022\032\n\022side_angle_degrees\030\005 \001(\002\"\034\n\nBarre"
-    "lRoom\022\016\n\006radius\030\001 \001(\002\"\334\001\n\004Room\022(\n\017camera"
-    "_position\030\001 \001(\0132\017.aim.StoredVec3\022\023\n\013star"
-    "t_pitch\030\002 \001(\002\022\021\n\tstart_yaw\030\003 \001(\002\022&\n\013simp"
-    "le_room\030\004 \001(\0132\017.aim.SimpleRoomH\000\022*\n\rcirc"
-    "ular_room\030\005 \001(\0132\021.aim.CircularRoomH\000\022&\n\013"
-    "barrel_room\030\006 \001(\0132\017.aim.BarrelRoomH\000B\006\n\004"
-    "type\"f\n\014RegionLength\022\031\n\017x_percent_value\030"
-    "\001 \001(\002H\000\022\031\n\017y_percent_value\030\002 \001(\002H\000\022\030\n\016ab"
-    "solute_value\030\003 \001(\002H\000B\006\n\004type\"\326\001\n\014TargetR"
-    "egion\022\026\n\016percent_chance\030\001 \001(\002\022#\n\010x_offse"
-    "t\030\002 \001(\0132\021.aim.RegionLength\022#\n\010y_offset\030\003"
-    " \001(\0132\021.aim.RegionLength\022/\n\trectangle\030\004 \001"
-    "(\0132\032.aim.RectangleTargetRegionH\000\022+\n\007elli"
-    "pse\030\005 \001(\0132\030.aim.EllipseTargetRegionH\000B\006\n"
-    "\004type\"a\n\025RectangleTargetRegion\022#\n\010x_leng"
-    "th\030\001 \001(\0132\021.aim.RegionLength\022#\n\010y_length\030"
-    "\002 \001(\0132\021.aim.RegionLength\"c\n\023EllipseTarge"
-    "tRegion\022%\n\nx_diameter\030\001 \001(\0132\021.aim.Region"
-    "Length\022%\n\ny_diameter\030\002 \001(\0132\021.aim.RegionL"
-    "ength\"\266\001\n\027TargetPlacementStrategy\022\"\n\007reg"
-    "ions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014min_dis"
-    "tance\030\002 \001(\002\022\031\n\021alternate_regions\030\003 \001(\010\022\'"
-    "\n\037fixed_distance_from_last_target\030\004 \001(\002\022"
-    "\035\n\025fixed_distance_jitter\030\005 \001(\002\"\247\002\n\013Scena"
-    "rioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_"
-    "seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\024"
-    "\n\014display_name\030\004 \001(\t\022\"\n\ntarget_def\030\005 \001(\013"
-    "2\016.aim.TargetDef\022,\n\nstatic_def\030\n \001(\0132\026.a"
-    "im.StaticScenarioDefH\000\0222\n\rcentering_def\030"
-    "\013 \001(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nba"
-    "rrel_def\030\014 \001(\0132\026.aim.BarrelScenarioDefH\000"
-    "B\006\n\004type\"\212\001\n\021StaticScenarioDef\022\024\n\014is_pok"
-    "e_ball\030\001 \001(\010\022\?\n\031target_placement_strateg"
-    "y\030\002 \001(\0132\034.aim.TargetPlacementStrategy\022\036\n"
-    "\026newest_target_is_ghost\030\003 \001(\010\"f\n\024Centeri"
-    "ngScenarioDef\022\'\n\016start_position\030\001 \001(\0132\017."
-    "aim.StoredVec3\022%\n\014end_position\030\002 \001(\0132\017.a"
-    "im.StoredVec3\"\023\n\021BarrelScenarioDef\"|\n\tTa"
-    "rgetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.TargetPr"
-    "ofile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remove_clo"
-    "sest_on_miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005"
-    "\"c\n\rTargetProfile\022\026\n\016percent_chance\030\001 \001("
-    "\002\022\025\n\rtarget_radius\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022"
-    "\024\n\014speed_jitter\030\004 \001(\002b\010editionsp\350\007"
+    "\022\r\n\005depth\030\003 \001(\002\"m\n\014CircularRoom\022\016\n\006heigh"
+    "t\030\001 \001(\002\022\016\n\006radius\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\022"
+    "\n\nhide_sides\030\004 \001(\010\022\032\n\022side_angle_degrees"
+    "\030\005 \001(\002\"\034\n\nBarrelRoom\022\016\n\006radius\030\001 \001(\002\"\334\001\n"
+    "\004Room\022(\n\017camera_position\030\001 \001(\0132\017.aim.Sto"
+    "redVec3\022\023\n\013start_pitch\030\002 \001(\002\022\021\n\tstart_ya"
+    "w\030\003 \001(\002\022&\n\013simple_room\030\004 \001(\0132\017.aim.Simpl"
+    "eRoomH\000\022*\n\rcircular_room\030\005 \001(\0132\021.aim.Cir"
+    "cularRoomH\000\022&\n\013barrel_room\030\006 \001(\0132\017.aim.B"
+    "arrelRoomH\000B\006\n\004type\"f\n\014RegionLength\022\031\n\017x"
+    "_percent_value\030\001 \001(\002H\000\022\031\n\017y_percent_valu"
+    "e\030\002 \001(\002H\000\022\030\n\016absolute_value\030\003 \001(\002H\000B\006\n\004t"
+    "ype\"\326\001\n\014TargetRegion\022\026\n\016percent_chance\030\001"
+    " \001(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim.RegionLengt"
+    "h\022#\n\010y_offset\030\003 \001(\0132\021.aim.RegionLength\022/"
+    "\n\trectangle\030\004 \001(\0132\032.aim.RectangleTargetR"
+    "egionH\000\022+\n\007ellipse\030\005 \001(\0132\030.aim.EllipseTa"
+    "rgetRegionH\000B\006\n\004type\"a\n\025RectangleTargetR"
+    "egion\022#\n\010x_length\030\001 \001(\0132\021.aim.RegionLeng"
+    "th\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionLength\""
+    "c\n\023EllipseTargetRegion\022%\n\nx_diameter\030\001 \001"
+    "(\0132\021.aim.RegionLength\022%\n\ny_diameter\030\002 \001("
+    "\0132\021.aim.RegionLength\"\266\001\n\027TargetPlacement"
+    "Strategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRe"
+    "gion\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_"
+    "regions\030\003 \001(\010\022\'\n\037fixed_distance_from_las"
+    "t_target\030\004 \001(\002\022\035\n\025fixed_distance_jitter\030"
+    "\005 \001(\002\"\247\002\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001"
+    "(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001"
+    "(\0132\t.aim.Room\022\024\n\014display_name\030\004 \001(\t\022\"\n\nt"
+    "arget_def\030\005 \001(\0132\016.aim.TargetDef\022,\n\nstati"
+    "c_def\030\n \001(\0132\026.aim.StaticScenarioDefH\000\0222\n"
+    "\rcentering_def\030\013 \001(\0132\031.aim.CenteringScen"
+    "arioDefH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim.Barr"
+    "elScenarioDefH\000B\006\n\004type\"\212\001\n\021StaticScenar"
+    "ioDef\022\024\n\014is_poke_ball\030\001 \001(\010\022\?\n\031target_pl"
+    "acement_strategy\030\002 \001(\0132\034.aim.TargetPlace"
+    "mentStrategy\022\036\n\026newest_target_is_ghost\030\003"
+    " \001(\010\"f\n\024CenteringScenarioDef\022\'\n\016start_po"
+    "sition\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014end_pos"
+    "ition\030\002 \001(\0132\017.aim.StoredVec3\"\023\n\021BarrelSc"
+    "enarioDef\"|\n\tTargetDef\022$\n\010profiles\030\001 \003(\013"
+    "2\022.aim.TargetProfile\022\023\n\013num_targets\030\002 \001("
+    "\005\022\036\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014tar"
+    "get_order\030\004 \003(\005\"c\n\rTargetProfile\022\026\n\016perc"
+    "ent_chance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022"
+    "\r\n\005speed\030\003 \001(\002\022\024\n\014speed_jitter\030\004 \001(\002b\010ed"
+    "itionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -763,7 +767,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1954,
+    1969,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -811,9 +815,9 @@ inline void SimpleRoom::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, height_),
            0,
-           offsetof(Impl_, width_) -
+           offsetof(Impl_, depth_) -
                offsetof(Impl_, height_) +
-               sizeof(Impl_::width_));
+               sizeof(Impl_::depth_));
 }
 SimpleRoom::~SimpleRoom() {
   // @@protoc_insertion_point(destructor:aim.SimpleRoom)
@@ -862,15 +866,15 @@ const ::google::protobuf::internal::ClassData* SimpleRoom::GetClassData() const 
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 0, 2> SimpleRoom::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 0, 0, 2> SimpleRoom::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    3,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -880,12 +884,16 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> SimpleRoom::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::SimpleRoom>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // float width = 2;
-    {::_pbi::TcParser::FastF32S1,
-     {21, 1, 0, PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.width_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // float height = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.height_)}},
+    // float width = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.width_)}},
+    // float depth = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.depth_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -894,6 +902,9 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> SimpleRoom::_table_ = {
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float width = 2;
     {PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.width_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float depth = 3;
+    {PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.depth_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
@@ -909,10 +920,10 @@ PROTOBUF_NOINLINE void SimpleRoom::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     ::memset(&_impl_.height_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.width_) -
-        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.width_));
+        reinterpret_cast<char*>(&_impl_.depth_) -
+        reinterpret_cast<char*>(&_impl_.height_)) + sizeof(_impl_.depth_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -948,6 +959,13 @@ PROTOBUF_NOINLINE void SimpleRoom::Clear() {
                 2, this_._internal_width(), target);
           }
 
+          // float depth = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_depth(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -973,13 +991,17 @@ PROTOBUF_NOINLINE void SimpleRoom::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
+          if (cached_has_bits & 0x00000007u) {
             // float height = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
             // float width = 2;
             if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // float depth = 3;
+            if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
           }
@@ -996,12 +1018,15 @@ void SimpleRoom::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goog
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.height_ = from._impl_.height_;
     }
     if (cached_has_bits & 0x00000002u) {
       _this->_impl_.width_ = from._impl_.width_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.depth_ = from._impl_.depth_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1021,8 +1046,8 @@ void SimpleRoom::InternalSwap(SimpleRoom* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.width_)
-      + sizeof(SimpleRoom::_impl_.width_)
+      PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.depth_)
+      + sizeof(SimpleRoom::_impl_.depth_)
       - PROTOBUF_FIELD_OFFSET(SimpleRoom, _impl_.height_)>(
           reinterpret_cast<char*>(&_impl_.height_),
           reinterpret_cast<char*>(&other->_impl_.height_));
