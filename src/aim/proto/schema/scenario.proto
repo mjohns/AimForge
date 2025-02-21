@@ -91,11 +91,12 @@ message ScenarioDef {
   float duration_seconds = 2;
   Room room = 3;
   string display_name = 4;
+  TargetDef target_def = 5;
 
   oneof type {
-    StaticScenarioDef static_def = 5;
-    CenteringScenarioDef centering_def = 6;
-    BarrelScenarioDef barrel_def = 7;
+    StaticScenarioDef static_def = 10;
+    CenteringScenarioDef centering_def = 11;
+    BarrelScenarioDef barrel_def = 12;
   }
 }
 
@@ -122,12 +123,24 @@ message CenteringScenarioDef {
 }
 
 message BarrelScenarioDef {
-  int32 num_targets = 1;
-  repeated BarrelTargetType target_types = 2;
 }
 
-message BarrelTargetType {
-  float percent = 1; 
+message TargetDef {
+    repeated TargetProfile profiles = 1;
+    int32 num_targets = 2;
+    // For clicking scenarios, remove the target if you miss it.
+    bool remove_closest_on_miss = 3;
+
+    // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.
+    repeated int32 target_order = 4;
+}
+
+message TargetProfile {
+  float percent_chance = 1; 
   float target_radius = 2;
   float speed = 3;
+  // Speed will be adjusted +/- jitter amount.
+  float speed_jitter = 4;
 }
+
+// Target types for all scenarios. Ordered

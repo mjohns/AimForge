@@ -3,9 +3,11 @@
 #include <glm/vec3.hpp>
 #include <optional>
 #include <vector>
+#include <random>
 
 #include "aim/common/simple_types.h"
 #include "aim/core/camera.h"
+#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
@@ -38,6 +40,8 @@ class TargetManager {
 
   std::vector<Target*> GetMutableVisibleTargets();
 
+  TargetProfile GetTargetProfile(const TargetDef& def, std::mt19937* random);
+
   void MarkAllAsNonGhost();
 
   std::optional<u16> most_recently_added_target_id() const {
@@ -45,7 +49,6 @@ class TargetManager {
   }
 
   std::vector<u16> visible_target_ids() const;
-
 
   Target* GetMutableMostRecentlyAddedTarget() {
     if (most_recently_added_target_id_.has_value()) {

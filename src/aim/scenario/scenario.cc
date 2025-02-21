@@ -285,6 +285,10 @@ void Scenario::PlayKillSound() {
   app_->sound_manager()->PlayKillSound();
 }
 
+TargetProfile Scenario::GetNextTargetProfile() {
+  return target_manager_.GetTargetProfile(def_.target_def(), app_->random_generator());
+}
+
 NavigationEvent RunScenario(const ScenarioDef& def, Application* app) {
   while (true) {
     std::unique_ptr<Scenario> scenario = CreateScenarioForType(def, app);
