@@ -101,16 +101,14 @@ message ScenarioDef {
 }
 
 message StaticScenarioDef {
-  int32 num_targets = 1;
-  float target_radius = 2;
-  bool is_poke_ball = 3;
-  bool remove_closest_target_on_miss = 4;
-  TargetPlacementStrategy target_placement_strategy = 5;
+  bool is_poke_ball = 1;
+  TargetPlacementStrategy target_placement_strategy = 2;
   // The most recently placed target will not be clickable and will be
   // displayed with a separate color as determined by theme. This is
   // useful for forced pathing so you know where the target will be
   // but have to click in the correct order.
-  bool newest_target_is_ghost = 6;
+  bool newest_target_is_ghost = 3;
+  float target_radius = 5;
 }
 
 message CenteringScenarioDef {
@@ -141,5 +139,3 @@ message TargetProfile {
   // Speed will be adjusted +/- jitter amount.
   float speed_jitter = 4;
 }
-
-// Target types for all scenarios. Ordered
