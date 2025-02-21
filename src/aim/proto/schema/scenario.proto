@@ -123,6 +123,11 @@ message CenteringScenarioDef {
 
 message BarrelScenarioDef {
   int32 num_targets = 1;
+  repeated BarrelTargetType target_types = 2;
+}
+
+message BarrelTargetType {
+  float percent = 1; 
   float target_radius = 2;
   float speed = 3;
 }
