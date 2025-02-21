@@ -380,11 +380,9 @@ inline constexpr StaticScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         target_placement_strategy_{nullptr},
-        num_targets_{0},
-        target_radius_{0},
         is_poke_ball_{false},
-        remove_closest_target_on_miss_{false},
-        newest_target_is_ghost_{false} {}
+        newest_target_is_ghost_{false},
+        target_radius_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR StaticScenarioDef::StaticScenarioDef(::_pbi::ConstantInitialized)
@@ -615,18 +613,14 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.num_targets_),
-        PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.target_radius_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.is_poke_ball_),
-        PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.remove_closest_target_on_miss_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.target_placement_strategy_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.newest_target_is_ghost_),
+        PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.target_radius_),
         1,
+        0,
         2,
         3,
-        4,
-        0,
-        5,
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -701,11 +695,11 @@ static const ::_pbi::MigrationSchema
         {104, 114, -1, sizeof(::aim::EllipseTargetRegion)},
         {116, 129, -1, sizeof(::aim::TargetPlacementStrategy)},
         {134, 151, -1, sizeof(::aim::ScenarioDef)},
-        {159, 173, -1, sizeof(::aim::StaticScenarioDef)},
-        {179, 193, -1, sizeof(::aim::CenteringScenarioDef)},
-        {199, -1, -1, sizeof(::aim::BarrelScenarioDef)},
-        {207, 219, -1, sizeof(::aim::TargetDef)},
-        {223, 235, -1, sizeof(::aim::TargetProfile)},
+        {159, 171, -1, sizeof(::aim::StaticScenarioDef)},
+        {175, 189, -1, sizeof(::aim::CenteringScenarioDef)},
+        {195, -1, -1, sizeof(::aim::BarrelScenarioDef)},
+        {203, 215, -1, sizeof(::aim::TargetDef)},
+        {219, 231, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -762,24 +756,22 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "im.StaticScenarioDefH\000\0222\n\rcentering_def\030"
     "\013 \001(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nba"
     "rrel_def\030\014 \001(\0132\026.aim.BarrelScenarioDefH\000"
-    "B\006\n\004type\"\335\001\n\021StaticScenarioDef\022\023\n\013num_ta"
-    "rgets\030\001 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\024\n\014is"
-    "_poke_ball\030\003 \001(\010\022%\n\035remove_closest_targe"
-    "t_on_miss\030\004 \001(\010\022\?\n\031target_placement_stra"
-    "tegy\030\005 \001(\0132\034.aim.TargetPlacementStrategy"
-    "\022\036\n\026newest_target_is_ghost\030\006 \001(\010\"\276\001\n\024Cen"
-    "teringScenarioDef\022\024\n\014target_width\030\001 \001(\002\022"
-    "\025\n\rtarget_height\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\'\n"
-    "\016start_position\030\004 \001(\0132\017.aim.StoredVec3\022%"
-    "\n\014end_position\030\005 \001(\0132\017.aim.StoredVec3\022\032\n"
-    "\022show_start_and_end\030\006 \001(\010\"\023\n\021BarrelScena"
-    "rioDef\"|\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022."
-    "aim.TargetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036"
-    "\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014target"
-    "_order\030\004 \003(\005\"c\n\rTargetProfile\022\026\n\016percent"
-    "_chance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\r\n\005"
-    "speed\030\003 \001(\002\022\024\n\014speed_jitter\030\004 \001(\002b\010editi"
-    "onsp\350\007"
+    "B\006\n\004type\"\241\001\n\021StaticScenarioDef\022\024\n\014is_pok"
+    "e_ball\030\001 \001(\010\022\?\n\031target_placement_strateg"
+    "y\030\002 \001(\0132\034.aim.TargetPlacementStrategy\022\036\n"
+    "\026newest_target_is_ghost\030\003 \001(\010\022\025\n\rtarget_"
+    "radius\030\005 \001(\002\"\276\001\n\024CenteringScenarioDef\022\024\n"
+    "\014target_width\030\001 \001(\002\022\025\n\rtarget_height\030\002 \001"
+    "(\002\022\r\n\005speed\030\003 \001(\002\022\'\n\016start_position\030\004 \001("
+    "\0132\017.aim.StoredVec3\022%\n\014end_position\030\005 \001(\013"
+    "2\017.aim.StoredVec3\022\032\n\022show_start_and_end\030"
+    "\006 \001(\010\"\023\n\021BarrelScenarioDef\"|\n\tTargetDef\022"
+    "$\n\010profiles\030\001 \003(\0132\022.aim.TargetProfile\022\023\n"
+    "\013num_targets\030\002 \001(\005\022\036\n\026remove_closest_on_"
+    "miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\"c\n\rTarg"
+    "etProfile\022\026\n\016percent_chance\030\001 \001(\002\022\025\n\rtar"
+    "get_radius\030\002 \001(\002\022\r\n\005speed\030\003 \001(\002\022\024\n\014speed"
+    "_jitter\030\004 \001(\002b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -789,7 +781,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2126,
+    2066,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -4508,12 +4500,12 @@ StaticScenarioDef::StaticScenarioDef(
                               arena, *from._impl_.target_placement_strategy_)
                         : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, num_targets_),
+               offsetof(Impl_, is_poke_ball_),
            reinterpret_cast<const char *>(&from._impl_) +
-               offsetof(Impl_, num_targets_),
-           offsetof(Impl_, newest_target_is_ghost_) -
-               offsetof(Impl_, num_targets_) +
-               sizeof(Impl_::newest_target_is_ghost_));
+               offsetof(Impl_, is_poke_ball_),
+           offsetof(Impl_, target_radius_) -
+               offsetof(Impl_, is_poke_ball_) +
+               sizeof(Impl_::target_radius_));
 
   // @@protoc_insertion_point(copy_constructor:aim.StaticScenarioDef)
 }
@@ -4527,9 +4519,9 @@ inline void StaticScenarioDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, target_placement_strategy_),
            0,
-           offsetof(Impl_, newest_target_is_ghost_) -
+           offsetof(Impl_, target_radius_) -
                offsetof(Impl_, target_placement_strategy_) +
-               sizeof(Impl_::newest_target_is_ghost_));
+               sizeof(Impl_::target_radius_));
 }
 StaticScenarioDef::~StaticScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.StaticScenarioDef)
@@ -4579,15 +4571,15 @@ const ::google::protobuf::internal::ClassData* StaticScenarioDef::GetClassData()
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 6, 1, 0, 2> StaticScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<3, 4, 1, 0, 2> StaticScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    6, 56,  // max_field_number, fast_idx_mask
+    5, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967232,  // skipmap
+    4294967272,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
+    4,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -4598,46 +4590,36 @@ const ::_pbi::TcParseTable<3, 6, 1, 0, 2> StaticScenarioDef::_table_ = {
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
-    // int32 num_targets = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(StaticScenarioDef, _impl_.num_targets_), 1>(),
-     {8, 1, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.num_targets_)}},
-    // float target_radius = 2;
-    {::_pbi::TcParser::FastF32S1,
-     {21, 2, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_radius_)}},
-    // bool is_poke_ball = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.is_poke_ball_), 3>(),
-     {24, 3, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_)}},
-    // bool remove_closest_target_on_miss = 4;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.remove_closest_target_on_miss_), 4>(),
-     {32, 4, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.remove_closest_target_on_miss_)}},
-    // .aim.TargetPlacementStrategy target_placement_strategy = 5;
+    // bool is_poke_ball = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.is_poke_ball_), 1>(),
+     {8, 1, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_)}},
+    // .aim.TargetPlacementStrategy target_placement_strategy = 2;
     {::_pbi::TcParser::FastMtS1,
-     {42, 0, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)}},
-    // bool newest_target_is_ghost = 6;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.newest_target_is_ghost_), 5>(),
-     {48, 5, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_)}},
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)}},
+    // bool newest_target_is_ghost = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.newest_target_is_ghost_), 2>(),
+     {24, 2, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // float target_radius = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 3, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_radius_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
-    // int32 num_targets = 1;
-    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.num_targets_), _Internal::kHasBitsOffset + 1, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
-    // float target_radius = 2;
-    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_radius_), _Internal::kHasBitsOffset + 2, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // bool is_poke_ball = 3;
-    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_), _Internal::kHasBitsOffset + 3, 0,
+    // bool is_poke_ball = 1;
+    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-    // bool remove_closest_target_on_miss = 4;
-    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.remove_closest_target_on_miss_), _Internal::kHasBitsOffset + 4, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-    // .aim.TargetPlacementStrategy target_placement_strategy = 5;
+    // .aim.TargetPlacementStrategy target_placement_strategy = 2;
     {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // bool newest_target_is_ghost = 6;
-    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_), _Internal::kHasBitsOffset + 5, 0,
+    // bool newest_target_is_ghost = 3;
+    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // float target_radius = 5;
+    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_radius_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
   }}, {{
@@ -4656,10 +4638,10 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
     ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
     _impl_.target_placement_strategy_->Clear();
   }
-  if (cached_has_bits & 0x0000003eu) {
-    ::memset(&_impl_.num_targets_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.newest_target_is_ghost_) -
-        reinterpret_cast<char*>(&_impl_.num_targets_)) + sizeof(_impl_.newest_target_is_ghost_));
+  if (cached_has_bits & 0x0000000eu) {
+    ::memset(&_impl_.is_poke_ball_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.target_radius_) -
+        reinterpret_cast<char*>(&_impl_.is_poke_ball_)) + sizeof(_impl_.target_radius_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -4681,46 +4663,32 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
           (void)cached_has_bits;
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // int32 num_targets = 1;
+          // bool is_poke_ball = 1;
           if (cached_has_bits & 0x00000002u) {
-            target = ::google::protobuf::internal::WireFormatLite::
-                WriteInt32ToArrayWithField<1>(
-                    stream, this_._internal_num_targets(), target);
-          }
-
-          // float target_radius = 2;
-          if (cached_has_bits & 0x00000004u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                2, this_._internal_target_radius(), target);
-          }
-
-          // bool is_poke_ball = 3;
-          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                3, this_._internal_is_poke_ball(), target);
+                1, this_._internal_is_poke_ball(), target);
           }
 
-          // bool remove_closest_target_on_miss = 4;
-          if (cached_has_bits & 0x00000010u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                4, this_._internal_remove_closest_target_on_miss(), target);
-          }
-
-          // .aim.TargetPlacementStrategy target_placement_strategy = 5;
+          // .aim.TargetPlacementStrategy target_placement_strategy = 2;
           if (cached_has_bits & 0x00000001u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                5, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
+                2, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
                 stream);
           }
 
-          // bool newest_target_is_ghost = 6;
-          if (cached_has_bits & 0x00000020u) {
+          // bool newest_target_is_ghost = 3;
+          if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                6, this_._internal_newest_target_is_ghost(), target);
+                3, this_._internal_newest_target_is_ghost(), target);
+          }
+
+          // float target_radius = 5;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_target_radius(), target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -4748,32 +4716,23 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000003fu) {
-            // .aim.TargetPlacementStrategy target_placement_strategy = 5;
+          if (cached_has_bits & 0x0000000fu) {
+            // .aim.TargetPlacementStrategy target_placement_strategy = 2;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.target_placement_strategy_);
             }
-            // int32 num_targets = 1;
+            // bool is_poke_ball = 1;
             if (cached_has_bits & 0x00000002u) {
-              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-                  this_._internal_num_targets());
+              total_size += 2;
             }
-            // float target_radius = 2;
+            // bool newest_target_is_ghost = 3;
             if (cached_has_bits & 0x00000004u) {
-              total_size += 5;
+              total_size += 2;
             }
-            // bool is_poke_ball = 3;
+            // float target_radius = 5;
             if (cached_has_bits & 0x00000008u) {
-              total_size += 2;
-            }
-            // bool remove_closest_target_on_miss = 4;
-            if (cached_has_bits & 0x00000010u) {
-              total_size += 2;
-            }
-            // bool newest_target_is_ghost = 6;
-            if (cached_has_bits & 0x00000020u) {
-              total_size += 2;
+              total_size += 5;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -4790,7 +4749,7 @@ void StaticScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
       if (_this->_impl_.target_placement_strategy_ == nullptr) {
@@ -4801,19 +4760,13 @@ void StaticScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
       }
     }
     if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.num_targets_ = from._impl_.num_targets_;
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.target_radius_ = from._impl_.target_radius_;
-    }
-    if (cached_has_bits & 0x00000008u) {
       _this->_impl_.is_poke_ball_ = from._impl_.is_poke_ball_;
     }
-    if (cached_has_bits & 0x00000010u) {
-      _this->_impl_.remove_closest_target_on_miss_ = from._impl_.remove_closest_target_on_miss_;
-    }
-    if (cached_has_bits & 0x00000020u) {
+    if (cached_has_bits & 0x00000004u) {
       _this->_impl_.newest_target_is_ghost_ = from._impl_.newest_target_is_ghost_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.target_radius_ = from._impl_.target_radius_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -4833,8 +4786,8 @@ void StaticScenarioDef::InternalSwap(StaticScenarioDef* PROTOBUF_RESTRICT other)
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.newest_target_is_ghost_)
-      + sizeof(StaticScenarioDef::_impl_.newest_target_is_ghost_)
+      PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_radius_)
+      + sizeof(StaticScenarioDef::_impl_.target_radius_)
       - PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)>(
           reinterpret_cast<char*>(&_impl_.target_placement_strategy_),
           reinterpret_cast<char*>(&other->_impl_.target_placement_strategy_));

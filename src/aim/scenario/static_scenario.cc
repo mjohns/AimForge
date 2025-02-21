@@ -224,7 +224,7 @@ class StaticScenario : public Scenario {
 
  protected:
   void Initialize() override {
-    int num_targets = def_.static_def().num_targets();
+    int num_targets = def_.target_def().num_targets();
     for (int i = 0; i < num_targets; ++i) {
       Target target = GetNewTarget(def_, &target_manager_, app_);
       if (def_.static_def().newest_target_is_ghost() && i == (num_targets - 1)) {
@@ -287,7 +287,7 @@ class StaticScenario : public Scenario {
 
         } else {
           // Missed shot
-          if (def_.static_def().remove_closest_target_on_miss()) {
+          if (def_.target_def().remove_closest_on_miss()) {
             std::optional<u16> target_id_to_remove =
                 target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);
             if (target_id_to_remove.has_value()) {
