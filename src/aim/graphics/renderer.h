@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "aim/core/target.h"
+#include "aim/graphics/cylinder_renderer.h"
 #include "aim/graphics/room_renderer.h"
 #include "aim/graphics/sphere_renderer.h"
 #include "aim/graphics/textures.h"
@@ -31,6 +32,7 @@ class Renderer {
 
  private:
   SphereRenderer sphere_renderer_;
+  CylinderRenderer cylinder_renderer_;
   RoomRenderer room_renderer_;
   TextureManager texture_manager_;
 };

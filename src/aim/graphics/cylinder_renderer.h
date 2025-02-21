@@ -5,20 +5,16 @@
 #include <vector>
 
 #include "aim/graphics/shader.h"
+#include "aim/common/simple_types.h"
 
 namespace aim {
 
-struct Sphere {
-  glm::vec3 position;
-  float radius;
-};
-
-class SphereRenderer {
+class CylinderRenderer {
  public:
-  SphereRenderer();
+  CylinderRenderer();
 
   void SetProjection(const glm::mat4& projection);
-  void Draw(const glm::mat4& view, const glm::vec3& color, const std::vector<Sphere>& spheres);
+  void Draw(const glm::mat4& view, const glm::vec3& color, const std::vector<Cylinder>& shapes);
 
  private:
   unsigned int vbo_;

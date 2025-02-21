@@ -26,34 +26,6 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace aim {
 
-inline constexpr TargetProfile::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        percent_chance_{0},
-        target_radius_{0},
-        speed_{0},
-        speed_jitter_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR TargetProfile::TargetProfile(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct TargetProfileDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TargetProfileDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TargetProfileDefaultTypeInternal() {}
-  union {
-    TargetProfile _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
-
 inline constexpr SimpleRoom::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -106,6 +78,31 @@ struct RegionLengthDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RegionLengthDefaultTypeInternal _RegionLength_default_instance_;
+
+inline constexpr PillTargetDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        height_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR PillTargetDef::PillTargetDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct PillTargetDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PillTargetDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PillTargetDefDefaultTypeInternal() {}
+  union {
+    PillTargetDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PillTargetDefDefaultTypeInternal _PillTargetDef_default_instance_;
 
 inline constexpr CircularRoom::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -179,17 +176,18 @@ struct BarrelRoomDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BarrelRoomDefaultTypeInternal _BarrelRoom_default_instance_;
 
-inline constexpr TargetDef::Impl_::Impl_(
+inline constexpr TargetProfile::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        profiles_{},
-        target_order_{},
-        _target_order_cached_byte_size_{0},
-        num_targets_{0},
-        remove_closest_on_miss_{false} {}
+        percent_chance_{0},
+        target_radius_{0},
+        speed_{0},
+        speed_jitter_{0},
+        type_{},
+        _oneof_case_{} {}
 
 template <typename>
-PROTOBUF_CONSTEXPR TargetDef::TargetDef(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR TargetProfile::TargetProfile(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
@@ -197,16 +195,16 @@ PROTOBUF_CONSTEXPR TargetDef::TargetDef(::_pbi::ConstantInitialized)
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
-struct TargetDefDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TargetDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TargetDefDefaultTypeInternal() {}
+struct TargetProfileDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TargetProfileDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TargetProfileDefaultTypeInternal() {}
   union {
-    TargetDef _instance;
+    TargetProfile _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetDefDefaultTypeInternal _TargetDef_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
 
 inline constexpr Room::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -343,6 +341,35 @@ struct TargetRegionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetRegionDefaultTypeInternal _TargetRegion_default_instance_;
+
+inline constexpr TargetDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        profiles_{},
+        target_order_{},
+        _target_order_cached_byte_size_{0},
+        num_targets_{0},
+        remove_closest_on_miss_{false} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR TargetDef::TargetDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct TargetDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TargetDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TargetDefDefaultTypeInternal() {}
+  union {
+    TargetDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetDefDefaultTypeInternal _TargetDef_default_instance_;
 
 inline constexpr TargetPlacementStrategy::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -653,10 +680,20 @@ const ::uint32_t
         0,
         1,
         ~0u,
+        PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _impl_.height_),
+        0,
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _internal_metadata_),
         ~0u,  // no _extensions_
-        ~0u,  // no _oneof_case_
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_._oneof_case_[0]),
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
@@ -665,10 +702,13 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_jitter_),
+        ::_pbi::kInvalidFieldOffsetTag,
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.type_),
         0,
         1,
         2,
         3,
+        ~0u,
 };
 
 static const ::_pbi::MigrationSchema
@@ -687,7 +727,8 @@ static const ::_pbi::MigrationSchema
         {175, 185, -1, sizeof(::aim::CenteringScenarioDef)},
         {187, -1, -1, sizeof(::aim::BarrelScenarioDef)},
         {195, 207, -1, sizeof(::aim::TargetDef)},
-        {211, 223, -1, sizeof(::aim::TargetProfile)},
+        {211, 220, -1, sizeof(::aim::PillTargetDef)},
+        {221, 235, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -704,6 +745,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_CenteringScenarioDef_default_instance_._instance,
     &::aim::_BarrelScenarioDef_default_instance_._instance,
     &::aim::_TargetDef_default_instance_._instance,
+    &::aim::_PillTargetDef_default_instance_._instance,
     &::aim::_TargetProfile_default_instance_._instance,
 };
 const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
@@ -754,10 +796,12 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "enarioDef\"|\n\tTargetDef\022$\n\010profiles\030\001 \003(\013"
     "2\022.aim.TargetProfile\022\023\n\013num_targets\030\002 \001("
     "\005\022\036\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014tar"
-    "get_order\030\004 \003(\005\"c\n\rTargetProfile\022\026\n\016perc"
-    "ent_chance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022"
-    "\r\n\005speed\030\003 \001(\002\022\024\n\014speed_jitter\030\004 \001(\002b\010ed"
-    "itionsp\350\007"
+    "get_order\030\004 \003(\005\"\037\n\rPillTargetDef\022\016\n\006heig"
+    "ht\030\001 \001(\002\"\217\001\n\rTargetProfile\022\026\n\016percent_ch"
+    "ance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\r\n\005spe"
+    "ed\030\003 \001(\002\022\024\n\014speed_jitter\030\004 \001(\002\022\"\n\004pill\030\005"
+    " \001(\0132\022.aim.PillTargetDefH\000B\006\n\004typeb\010edit"
+    "ionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -767,13 +811,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    1969,
+    2047,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    15,
+    16,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -5550,14 +5594,245 @@ void TargetDef::InternalSwap(TargetDef* PROTOBUF_RESTRICT other) {
 }
 // ===================================================================
 
+class PillTargetDef::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<PillTargetDef>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_._has_bits_);
+};
+
+PillTargetDef::PillTargetDef(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.PillTargetDef)
+}
+PillTargetDef::PillTargetDef(
+    ::google::protobuf::Arena* arena, const PillTargetDef& from)
+    : PillTargetDef(arena) {
+  MergeFrom(from);
+}
+inline PROTOBUF_NDEBUG_INLINE PillTargetDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void PillTargetDef::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.height_ = {};
+}
+PillTargetDef::~PillTargetDef() {
+  // @@protoc_insertion_point(destructor:aim.PillTargetDef)
+  SharedDtor(*this);
+}
+inline void PillTargetDef::SharedDtor(MessageLite& self) {
+  PillTargetDef& this_ = static_cast<PillTargetDef&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* PillTargetDef::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) PillTargetDef(arena);
+}
+constexpr auto PillTargetDef::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(PillTargetDef),
+                                            alignof(PillTargetDef));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull PillTargetDef::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_PillTargetDef_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &PillTargetDef::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<PillTargetDef>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &PillTargetDef::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<PillTargetDef>(), &PillTargetDef::ByteSizeLong,
+            &PillTargetDef::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_._cached_size_),
+        false,
+    },
+    &PillTargetDef::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* PillTargetDef::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> PillTargetDef::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_._has_bits_),
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::PillTargetDef>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // float height = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // float height = 1;
+    {PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+PROTOBUF_NOINLINE void PillTargetDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.PillTargetDef)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.height_ = 0;
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* PillTargetDef::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const PillTargetDef& this_ = static_cast<const PillTargetDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* PillTargetDef::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const PillTargetDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.PillTargetDef)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // float height = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_height(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.PillTargetDef)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t PillTargetDef::ByteSizeLong(const MessageLite& base) {
+          const PillTargetDef& this_ = static_cast<const PillTargetDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t PillTargetDef::ByteSizeLong() const {
+          const PillTargetDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.PillTargetDef)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+           {
+            // float height = 1;
+            cached_has_bits = this_._impl_._has_bits_[0];
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void PillTargetDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<PillTargetDef*>(&to_msg);
+  auto& from = static_cast<const PillTargetDef&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.PillTargetDef)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    _this->_impl_.height_ = from._impl_.height_;
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void PillTargetDef::CopyFrom(const PillTargetDef& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.PillTargetDef)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void PillTargetDef::InternalSwap(PillTargetDef* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+        swap(_impl_.height_, other->_impl_.height_);
+}
+
+::google::protobuf::Metadata PillTargetDef::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
 class TargetProfile::_Internal {
  public:
   using HasBits =
       decltype(std::declval<TargetProfile>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
       8 * PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_._has_bits_);
+  static constexpr ::int32_t kOneofCaseOffset =
+      PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_._oneof_case_);
 };
 
+void TargetProfile::set_allocated_pill(::aim::PillTargetDef* pill) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (pill) {
+    ::google::protobuf::Arena* submessage_arena = pill->GetArena();
+    if (message_arena != submessage_arena) {
+      pill = ::google::protobuf::internal::GetOwnedMessage(message_arena, pill, submessage_arena);
+    }
+    set_has_pill();
+    _impl_.type_.pill_ = pill;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetProfile.pill)
+}
 TargetProfile::TargetProfile(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -5567,15 +5842,50 @@ TargetProfile::TargetProfile(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:aim.TargetProfile)
 }
+inline PROTOBUF_NDEBUG_INLINE TargetProfile::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::TargetProfile& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        type_{},
+        _oneof_case_{from._oneof_case_[0]} {}
+
 TargetProfile::TargetProfile(
-    ::google::protobuf::Arena* arena, const TargetProfile& from)
-    : TargetProfile(arena) {
-  MergeFrom(from);
+    ::google::protobuf::Arena* arena,
+    const TargetProfile& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  TargetProfile* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, percent_chance_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, percent_chance_),
+           offsetof(Impl_, speed_jitter_) -
+               offsetof(Impl_, percent_chance_) +
+               sizeof(Impl_::speed_jitter_));
+  switch (type_case()) {
+    case TYPE_NOT_SET:
+      break;
+      case kPill:
+        _impl_.type_.pill_ = ::google::protobuf::Message::CopyConstruct<::aim::PillTargetDef>(arena, *from._impl_.type_.pill_);
+        break;
+  }
+
+  // @@protoc_insertion_point(copy_constructor:aim.TargetProfile)
 }
 inline PROTOBUF_NDEBUG_INLINE TargetProfile::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
+      : _cached_size_{0},
+        type_{},
+        _oneof_case_{} {}
 
 inline void TargetProfile::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -5594,8 +5904,31 @@ inline void TargetProfile::SharedDtor(MessageLite& self) {
   TargetProfile& this_ = static_cast<TargetProfile&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
+  if (this_.has_type()) {
+    this_.clear_type();
+  }
   this_._impl_.~Impl_();
 }
+
+void TargetProfile::clear_type() {
+// @@protoc_insertion_point(one_of_clear_start:aim.TargetProfile)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  switch (type_case()) {
+    case kPill: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.pill_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.pill_);
+      }
+      break;
+    }
+    case TYPE_NOT_SET: {
+      break;
+    }
+  }
+  _impl_._oneof_case_[0] = TYPE_NOT_SET;
+}
+
 
 inline void* TargetProfile::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
@@ -5633,17 +5966,17 @@ const ::google::protobuf::internal::ClassData* TargetProfile::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 0, 0, 2> TargetProfile::_table_ = {
+const ::_pbi::TcParseTable<2, 5, 1, 0, 2> TargetProfile::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_._has_bits_),
     0, // no _extensions_
-    4, 24,  // max_field_number, fast_idx_mask
+    5, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967280,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
+    5,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
@@ -5678,9 +6011,12 @@ const ::_pbi::TcParseTable<2, 4, 0, 0, 2> TargetProfile::_table_ = {
     // float speed_jitter = 4;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-  }},
-  // no aux_entries
-  {{
+    // .aim.PillTargetDef pill = 5;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.type_.pill_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::aim::PillTargetDef>()},
+  }}, {{
   }},
 };
 
@@ -5697,6 +6033,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
         reinterpret_cast<char*>(&_impl_.speed_jitter_) -
         reinterpret_cast<char*>(&_impl_.percent_chance_)) + sizeof(_impl_.speed_jitter_));
   }
+  clear_type();
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -5745,6 +6082,13 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
                 4, this_._internal_speed_jitter(), target);
           }
 
+          // .aim.PillTargetDef pill = 5;
+          if (this_.type_case() == kPill) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                5, *this_._impl_.type_.pill_, this_._impl_.type_.pill_->GetCachedSize(), target,
+                stream);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -5788,6 +6132,17 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
               total_size += 5;
             }
           }
+          switch (this_.type_case()) {
+            // .aim.PillTargetDef pill = 5;
+            case kPill: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.pill_);
+              break;
+            }
+            case TYPE_NOT_SET: {
+              break;
+            }
+          }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
                                                      &this_._impl_._cached_size_);
         }
@@ -5795,6 +6150,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
 void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
   auto* const _this = static_cast<TargetProfile*>(&to_msg);
   auto& from = static_cast<const TargetProfile&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:aim.TargetProfile)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
@@ -5816,6 +6172,30 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
+  if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
+    const uint32_t oneof_to_case = _this->_impl_._oneof_case_[0];
+    const bool oneof_needs_init = oneof_to_case != oneof_from_case;
+    if (oneof_needs_init) {
+      if (oneof_to_case != 0) {
+        _this->clear_type();
+      }
+      _this->_impl_._oneof_case_[0] = oneof_from_case;
+    }
+
+    switch (oneof_from_case) {
+      case kPill: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.pill_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::PillTargetDef>(arena, *from._impl_.type_.pill_);
+        } else {
+          _this->_impl_.type_.pill_->MergeFrom(from._internal_pill());
+        }
+        break;
+      }
+      case TYPE_NOT_SET:
+        break;
+    }
+  }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -5837,6 +6217,8 @@ void TargetProfile::InternalSwap(TargetProfile* PROTOBUF_RESTRICT other) {
       - PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.percent_chance_)>(
           reinterpret_cast<char*>(&_impl_.percent_chance_),
           reinterpret_cast<char*>(&other->_impl_.percent_chance_));
+  swap(_impl_.type_, other->_impl_.type_);
+  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
 ::google::protobuf::Metadata TargetProfile::GetMetadata() const {

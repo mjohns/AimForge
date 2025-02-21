@@ -102,6 +102,9 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("Centering");
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
+
+    def.mutable_target_def()->mutable_profiles(0)->set_target_radius(0.8);
+    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {
@@ -172,6 +175,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("1w3ts");
     def.set_scenario_id("1w3ts_intermediate_s5");
     def.mutable_target_def()->set_num_targets(3);
+    def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
     scenarios.push_back(def);
   }
   {
@@ -206,7 +210,9 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_scenario_id("1w1ts_intermediate_s5");
     def.set_display_name("1w1ts");
     def.mutable_target_def()->set_num_targets(1);
-    def.mutable_target_def()->set_remove_closest_on_miss(true);
+    // def.mutable_target_def()->set_remove_closest_on_miss(true);
+    def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
+    // def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {
@@ -214,6 +220,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_scenario_id("1w1ts_intermediate_s5_fixed_dist");
     def.set_display_name("1w3ts fixed");
     def.mutable_target_def()->set_num_targets(3);
+    def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
     def.mutable_static_def()->set_newest_target_is_ghost(true);
     def.mutable_target_def()->set_remove_closest_on_miss(true);
     def.mutable_static_def()
@@ -232,6 +239,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_scenario_id("1w1ts_intermediate_s5_vertical_alternate");
     def.set_display_name("vertical alternate");
     def.mutable_target_def()->set_num_targets(2);
+    def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
     def.mutable_target_def()->set_remove_closest_on_miss(true);
     def.mutable_static_def()->set_newest_target_is_ghost(true);
     TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
@@ -254,6 +262,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_scenario_id("1w3ts_intermediate_s5_poke");
     def.set_display_name("1w3ts poke");
     def.mutable_target_def()->set_num_targets(3);
+    def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
     def.mutable_static_def()->set_is_poke_ball(true);
     scenarios.push_back(def);
   }
