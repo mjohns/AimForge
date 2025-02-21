@@ -64,8 +64,10 @@ NavigationEvent Scenario::Run() {
   metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
   float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
 
-  *replay_->mutable_room() = def_.room();
-  replay_->set_replay_fps(timer_.GetReplayFps());
+  if (replay_) {
+    *replay_->mutable_room() = def_.room();
+    replay_->set_replay_fps(timer_.GetReplayFps());
+  }
   Initialize();
 
   SDL_GL_SetSwapInterval(0);  // Disable vsync
@@ -109,8 +111,10 @@ NavigationEvent Scenario::Run() {
 
     if (timer_.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
-      replay_->add_pitch_yaws(camera_.GetPitch());
-      replay_->add_pitch_yaws(camera_.GetYaw());
+      if (replay_) {
+        replay_->add_pitch_yaws(camera_.GetPitch());
+        replay_->add_pitch_yaws(camera_.GetYaw());
+      }
     }
 
     if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
@@ -225,6 +229,9 @@ NavigationEvent Scenario::Run() {
 }
 
 void Scenario::AddNewTargetEvent(const Target& target) {
+  if (!replay_) {
+    return;
+  }
   auto add_event = replay_->add_events();
   add_event->set_frame_number(timer_.GetReplayFrameNumber());
   auto add_target = add_event->mutable_add_target();
@@ -234,18 +241,27 @@ void Scenario::AddNewTargetEvent(const Target& target) {
 }
 
 void Scenario::AddKillTargetEvent(u16 target_id) {
+  if (!replay_) {
+    return;
+  }
   auto event = replay_->add_events();
   event->set_frame_number(timer_.GetReplayFrameNumber());
   event->mutable_kill_target()->set_target_id(target_id);
 }
 
 void Scenario::AddRemoveTargetEvent(u16 target_id) {
+  if (!replay_) {
+    return;
+  }
   auto event = replay_->add_events();
   event->set_frame_number(timer_.GetReplayFrameNumber());
   event->mutable_remove_target()->set_target_id(target_id);
 }
 
 void Scenario::AddShotFiredEvent() {
+  if (!replay_) {
+    return;
+  }
   auto event = replay_->add_events();
   event->set_frame_number(timer_.GetReplayFrameNumber());
   *event->mutable_shot_fired() = ShotFiredEvent();
@@ -254,6 +270,9 @@ void Scenario::AddShotFiredEvent() {
 void Scenario::AddMoveLinearTargetEvent(const Target& target,
                                         const glm::vec2& direction,
                                         float distance_per_second) {
+  if (!replay_) {
+    return;
+  }
   // Translate from 2d direction on static wall.
   glm::vec3 dir3(direction.x, 0, direction.y);
   AddMoveLinearTargetEvent(target, dir3, distance_per_second);
@@ -262,6 +281,9 @@ void Scenario::AddMoveLinearTargetEvent(const Target& target,
 void Scenario::AddMoveLinearTargetEvent(const Target& target,
                                         const glm::vec3& direction,
                                         float distance_per_second) {
+  if (!replay_) {
+    return;
+  }
   auto event = replay_->add_events();
   event->set_frame_number(timer_.GetReplayFrameNumber());
   MoveLinearTargetEvent t;
