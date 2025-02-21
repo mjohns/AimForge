@@ -2,8 +2,8 @@
 
 #include <glm/vec3.hpp>
 #include <optional>
-#include <vector>
 #include <random>
+#include <vector>
 
 #include "aim/common/simple_types.h"
 #include "aim/core/camera.h"
