@@ -111,7 +111,8 @@ void CylinderRenderer::SetProjection(const glm::mat4& projection) {
   shader_.SetMat4("projection", projection);
 }
 
-void CylinderRenderer::Draw(const glm::mat4& view,
+void CylinderRenderer::Draw(const glm::vec3& camera_position,
+                            const glm::mat4& view,
                             const glm::vec3& color,
                             const std::vector<Cylinder>& shapes) {
   shader_.Use();
@@ -120,12 +121,15 @@ void CylinderRenderer::Draw(const glm::mat4& view,
   shader_.SetVec3("quad_color", color);
 
   for (const auto& c : shapes) {
-    glm::vec3 mid_point = PointBetween(c.top_position, c.bottom_position);
     glm::mat4 model(1.f);
-    model = glm::translate(model, mid_point);
-    model = glm::scale(
-        model, glm::vec3(c.radius, c.radius, glm::length(c.top_position - c.bottom_position)));
-    // rotate to orient correctly.
+    model = glm::translate(model, c.position);
+    if (c.up != glm::vec3(0, 0, 1)) {
+      glm::vec3 z_axis = c.up;
+      glm::vec3 y_axis = glm::normalize(glm::cross(z_axis, glm::vec3(0, 0, 1)));
+      glm::vec3 x_axis = glm::normalize(glm::cross(z_axis, y_axis));
+      model = model * MakeCoordinateSystemTransform(x_axis, y_axis, z_axis);
+    }
+    model = glm::scale(model, glm::vec3(c.radius, c.radius, c.height));
     shader_.SetMat4("model", model);
 
     glBindVertexArray(vao_);
