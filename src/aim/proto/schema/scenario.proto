@@ -122,21 +122,20 @@ message CenteringScenarioDef {
   bool show_start_and_end = 6;
 }
 
-message BarrelScenarioDef {
-}
+message BarrelScenarioDef {}
 
 message TargetDef {
-    repeated TargetProfile profiles = 1;
-    int32 num_targets = 2;
-    // For clicking scenarios, remove the target if you miss it.
-    bool remove_closest_on_miss = 3;
+  repeated TargetProfile profiles = 1;
+  int32 num_targets = 2;
+  // For clicking scenarios, remove the target if you miss it.
+  bool remove_closest_on_miss = 3;
 
-    // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.
-    repeated int32 target_order = 4;
+  // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.
+  repeated int32 target_order = 4;
 }
 
 message TargetProfile {
-  float percent_chance = 1; 
+  float percent_chance = 1;
   float target_radius = 2;
   float speed = 3;
   // Speed will be adjusted +/- jitter amount.
