@@ -60,6 +60,8 @@ class Scenario {
   void PlayMissSound();
   void PlayKillSound();
 
+  TargetProfile GetNextTargetProfile();
+
   ScenarioDef def_;
   Application* app_;
   ScenarioStats stats_;

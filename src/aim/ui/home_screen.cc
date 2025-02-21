@@ -70,19 +70,24 @@ std::vector<ScenarioDef> GetScenarios() {
     *def.mutable_room() = barrel_wall;
     def.mutable_room()->mutable_barrel_room()->set_radius(75);
 
-    def.mutable_barrel_def()->set_num_targets(4);
+    def.mutable_target_def()->set_num_targets(4);
+
+    *def.mutable_barrel_def() = BarrelScenarioDef();
 
     {
-      auto* t = def.mutable_barrel_def()->add_target_types();
+      auto* t = def.mutable_target_def()->add_profiles();
       t->set_target_radius(2.8);
       t->set_speed(60);
-      t->set_percent(0.6);
     }
     {
-      auto* t = def.mutable_barrel_def()->add_target_types();
-      t->set_target_radius(2);
-      t->set_speed(45);
+      auto* t = def.mutable_target_def()->add_profiles();
+      t->set_target_radius(2.2);
+      t->set_speed(50);
+      t->set_speed_jitter(3);
     }
+    def.mutable_target_def()->mutable_target_order()->Add(0);
+    def.mutable_target_def()->mutable_target_order()->Add(0);
+    def.mutable_target_def()->mutable_target_order()->Add(1);
     scenarios.push_back(def);
   }
   {

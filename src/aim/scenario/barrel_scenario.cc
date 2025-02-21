@@ -36,7 +36,7 @@ class BarrelScenario : public Scenario {
 
  protected:
   void Initialize() override {
-    int num_targets = def_.barrel_def().num_targets();
+    int num_targets = def_.target_def().num_targets();
     for (int i = 0; i < num_targets; ++i) {
       AddNewTarget();
     }
@@ -87,30 +87,8 @@ class BarrelScenario : public Scenario {
     t->position.z = t->static_wall_position.y;
   }
 
-  BarrelTargetType GetTargetType() {
-    for (auto& target : def_.barrel_def().target_types()) {
-      if (!target.has_percent() || target.percent() >= 1) {
-        return target;
-      }
-      auto dist = std::uniform_real_distribution<float>(0, 1.0f);
-      float roll = dist(*app_->random_generator());
-      if (roll <= target.percent()) {
-        return target;
-      }
-    }
-
-    if (def_.barrel_def().target_types().size() == 0) {
-      BarrelTargetType t;
-      t.set_speed(50);
-      t.set_target_radius(2);
-      return t;
-    }
-
-    return def_.barrel_def().target_types()[0];
-  }
-
   Target AddNewTarget(std::optional<u16> target_to_replace = {}) {
-    auto type = GetTargetType();
+    auto type = GetNextTargetProfile();
     Target t;
     t.radius = type.target_radius();
 
@@ -139,6 +117,11 @@ class BarrelScenario : public Scenario {
     info.target_id = t.id;
     info.direction = direction;
     info.speed = type.speed();
+    if (type.speed_jitter() > 0) {
+      auto dist = std::uniform_real_distribution<float>(-1, 1);
+      float mult = dist(*app_->random_generator());
+      info.speed += type.speed_jitter() * mult;
+    }
     info.last_update_time_seconds = timer_.GetElapsedSeconds();
 
     movement_info_map_[t.id] = info;

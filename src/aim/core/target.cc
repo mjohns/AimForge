@@ -140,4 +140,31 @@ std::vector<u16> TargetManager::visible_target_ids() const {
   return ids;
 }
 
+TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, std::mt19937* random) {
+  auto num_profiles = def.profiles().size();
+  if (num_profiles == 0) {
+    TargetProfile t;
+    t.set_target_radius(4);
+    return t;
+  }
+
+  if (def.target_order().size() > 0) {
+    int target_order_i = target_id_counter_ % def.target_order().size();
+    int i = def.target_order().at(target_order_i);
+    return i < num_profiles ? def.profiles()[i] : def.profiles()[0];
+  }
+
+  for (const auto& target : def.profiles()) {
+    if (!target.has_percent_chance() || target.percent_chance() >= 1) {
+      return target;
+    }
+    auto dist = std::uniform_real_distribution<float>(0, 1.0f);
+    float roll = dist(*random);
+    if (roll <= target.percent_chance()) {
+      return target;
+    }
+  }
+  return def.profiles()[0];
+}
+
 }  // namespace aim
