@@ -108,7 +108,6 @@ message StaticScenarioDef {
   // useful for forced pathing so you know where the target will be
   // but have to click in the correct order.
   bool newest_target_is_ghost = 3;
-  float target_radius = 5;
 }
 
 message CenteringScenarioDef {
