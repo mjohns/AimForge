@@ -119,12 +119,10 @@ bool IntersectRayPill(const Pill& pill,
                       const glm::vec3& origin,
                       const glm::vec3& direction,
                       float* intersection_distance) {
-  glm::vec3 cylinder_up = glm::normalize(pill.top_position - pill.bottom_position);
-  glm::vec3 mid_point = PointBetween(pill.top_position, pill.bottom_position);
   float cylinder_intersection_distance;
   float cylinder_intersection_height;
-  bool has_cylinder_hit = IntersectRayCylinder(mid_point,
-                                               cylinder_up,
+  bool has_cylinder_hit = IntersectRayCylinder(pill.position,
+                                               pill.up,
                                                pill.radius,
                                                origin,
                                                direction,
@@ -134,7 +132,7 @@ bool IntersectRayPill(const Pill& pill,
     return false;
   }
 
-  float full_pill_height = glm::length(pill.top_position - pill.bottom_position);
+  float full_pill_height = pill.height;
   float cylinder_height = (full_pill_height - pill.radius) * 0.5;
 
   if (abs(cylinder_intersection_height) <= cylinder_height) {
@@ -150,8 +148,7 @@ bool IntersectRayPill(const Pill& pill,
   }
 
   float tip_offset = cylinder_intersection_height > 0 ? cylinder_height : -1 * cylinder_height;
-  // TODO: This must take into account rotations once that is supported!!
-  glm::vec3 sphere_position = mid_point + glm::vec3(0, 0, tip_offset);
+  glm::vec3 sphere_position = pill.position + pill.up * tip_offset;
 
   return IntersectRaySphere(sphere_position, pill.radius, origin, direction, intersection_distance);
 }

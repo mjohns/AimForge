@@ -33,9 +33,10 @@ struct Cylinder {
 };
 
 struct Pill {
-  glm::vec3 top_position{};
-  glm::vec3 bottom_position{};
+  glm::vec3 position{};
+  glm::vec3 up{0, 0, 1};
   float radius = 0;
+  float height = 0;
 };
 
 struct ScreenInfo {
