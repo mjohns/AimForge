@@ -43,8 +43,6 @@ class BarrelScenario : public Scenario {
   }
 
   void UpdateState(UpdateStateData* data) override {
-    float speed = def_.barrel_def().speed();
-
     if (data->has_click) {
       stats_.shots_taken++;
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
@@ -64,14 +62,15 @@ class BarrelScenario : public Scenario {
       MovementInfo& info = movement_info_map_[t->id];
 
       float delta_seconds = now_seconds - info.last_update_time_seconds;
-      glm::vec2 new_position = t->static_wall_position + (info.direction * (delta_seconds * speed));
+      glm::vec2 new_position =
+          t->static_wall_position + (info.direction * (delta_seconds * info.speed));
       if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
         // Need to change direction.
         glm::vec2 new_direction_pos =
             GetRandomPositionInCircle(0, 0.5 * room_radius_, app_->random_generator());
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
         info.direction = new_direction;
-        new_position = t->static_wall_position + (info.direction * (delta_seconds * speed));
+        new_position = t->static_wall_position + (info.direction * (delta_seconds * info.speed));
         // Make sure this is added before the new position is actually set on the target.
         AddMoveLinearTargetEvent(*t, info.direction, info.speed);
       }
@@ -88,14 +87,37 @@ class BarrelScenario : public Scenario {
     t->position.z = t->static_wall_position.y;
   }
 
+  BarrelTargetType GetTargetType() {
+    for (auto& target : def_.barrel_def().target_types()) {
+      if (!target.has_percent() || target.percent() >= 1) {
+        return target;
+      }
+      auto dist = std::uniform_real_distribution<float>(0, 1.0f);
+      float roll = dist(*app_->random_generator());
+      if (roll <= target.percent()) {
+        return target;
+      }
+    }
+
+    if (def_.barrel_def().target_types().size() == 0) {
+      BarrelTargetType t;
+      t.set_speed(50);
+      t.set_target_radius(2);
+      return t;
+    }
+
+    return def_.barrel_def().target_types()[0];
+  }
+
   Target AddNewTarget(std::optional<u16> target_to_replace = {}) {
+    auto type = GetTargetType();
     Target t;
-    t.radius = def_.barrel_def().target_radius();
+    t.radius = type.target_radius();
 
     // Get position on wall (not too close in ellipse etc.)
     // Get movement direction vector and speed.
     glm::vec2 pos = GetRandomPositionInCircle(
-        0.5 * room_radius_, room_radius_ - t.radius, app_->random_generator());
+        0.4 * room_radius_, room_radius_ - t.radius, app_->random_generator());
     // Iterate and make sure no overlapping?
     glm::vec2 direction_pos =
         GetRandomPositionInCircle(0, 0.45 * room_radius_, app_->random_generator());
@@ -116,7 +138,7 @@ class BarrelScenario : public Scenario {
     MovementInfo info;
     info.target_id = t.id;
     info.direction = direction;
-    info.speed = def_.barrel_def().speed();
+    info.speed = type.speed();
     info.last_update_time_seconds = timer_.GetElapsedSeconds();
 
     movement_info_map_[t.id] = info;
