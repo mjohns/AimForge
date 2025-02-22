@@ -123,11 +123,11 @@ void CylinderRenderer::Draw(const glm::vec3& camera_position,
   for (const auto& c : shapes) {
     glm::mat4 model(1.f);
     model = glm::translate(model, c.position);
-    if (c.up != glm::vec3(0, 0, 1)) {
-      glm::vec3 z_axis = c.up;
-      glm::vec3 y_axis = glm::normalize(glm::cross(z_axis, glm::vec3(0, 0, 1)));
-      glm::vec3 x_axis = glm::normalize(glm::cross(z_axis, y_axis));
-      model = model * MakeCoordinateSystemTransform(x_axis, y_axis, z_axis);
+    if (c.up != glm::vec3(0, 0, 1) && c.up != glm::vec3(0, 0, -1)) {
+      glm::vec3 up = glm::vec3(0, 0, 1);
+      glm::vec3 rotate_axis = glm::normalize(glm::cross(up, c.up));
+      float angle = glm::acos(glm::dot(up, c.up));
+      model = glm::rotate(model, angle, rotate_axis);
     }
     model = glm::scale(model, glm::vec3(c.radius, c.radius, c.height));
     shader_.SetMat4("model", model);
