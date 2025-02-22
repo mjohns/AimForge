@@ -116,12 +116,7 @@ class BarrelScenario : public Scenario {
     MovementInfo info;
     info.target_id = t.id;
     info.direction = direction;
-    info.speed = type.speed();
-    if (type.speed_jitter() > 0) {
-      auto dist = std::uniform_real_distribution<float>(-1, 1);
-      float mult = dist(*app_->random_generator());
-      info.speed += type.speed_jitter() * mult;
-    }
+    info.speed = GetJitteredValue(type.speed(), type.speed_jitter(), app_->random_generator());
     info.last_update_time_seconds = timer_.GetElapsedSeconds();
 
     movement_info_map_[t.id] = info;

@@ -24,13 +24,15 @@ void Renderer::DrawScenario(const Room& room,
       if (target.is_pill) {
         Cylinder c;
         c.radius = target.radius;
-        float cylinder_height = (target.height - target.radius) * 0.5;
-        c.top_position = target.position + glm::vec3(0, 0, cylinder_height);
-        c.bottom_position = target.position + glm::vec3(0, 0, cylinder_height * -1);
-        cylinder_renderer_.Draw(view, color, {c});
+        c.up = target.pill_up;
+        c.height = target.height - target.radius;
+        c.position = target.position;
+        cylinder_renderer_.Draw(ToVec3(room.camera_position()), view, color, {c});
 
-        sphere_renderer_.Draw(
-            view, color, {{c.top_position, target.radius}, {c.bottom_position, target.radius}});
+        sphere_renderer_.Draw(view,
+                              color,
+                              {{c.position + c.up * (c.height * 0.5f), target.radius},
+                               {c.position + c.up * (c.height * -0.5f), target.radius}});
       } else {
         sphere_renderer_.Draw(view, color, {{target.position, target.radius}});
       }

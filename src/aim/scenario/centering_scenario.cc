@@ -68,12 +68,15 @@ class CenteringScenario : public Scenario {
  protected:
   void Initialize() override {
     TargetProfile target_profile = GetNextTargetProfile();
-    distance_per_second_ = target_profile.speed();
+    distance_per_second_ = GetJitteredValue(
+        target_profile.speed(), target_profile.speed_jitter(), app_->random_generator());
     Target target;
     target.radius = target_profile.target_radius();
     if (target_profile.has_pill()) {
       target.is_pill = true;
       target.height = target_profile.pill().height();
+      target.pill_up =
+          glm::normalize(glm::cross(start_to_end_, glm::normalize(start_ - camera_.GetPosition())));
     }
 
     target.position = start_ + (start_to_end_ * initial_distance_offset_);

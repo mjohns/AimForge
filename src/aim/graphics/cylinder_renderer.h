@@ -14,7 +14,10 @@ class CylinderRenderer {
   CylinderRenderer();
 
   void SetProjection(const glm::mat4& projection);
-  void Draw(const glm::mat4& view, const glm::vec3& color, const std::vector<Cylinder>& shapes);
+  void Draw(const glm::vec3& camera_position,
+            const glm::mat4& view,
+            const glm::vec3& color,
+            const std::vector<Cylinder>& shapes);
 
  private:
   unsigned int vbo_;

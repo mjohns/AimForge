@@ -113,6 +113,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("Overhead Centering");
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 50);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 50);
+    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {
@@ -121,6 +122,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("Vertical Centering");
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 45);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -45);
+    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   float diagonal = 35;
@@ -132,6 +134,7 @@ std::vector<ScenarioDef> GetScenarios() {
     *def.mutable_centering_def()->mutable_start_position() =
         ToStoredVec3(neg_diagonal, -3, neg_diagonal);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, diagonal);
+    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {
@@ -141,6 +144,7 @@ std::vector<ScenarioDef> GetScenarios() {
     *def.mutable_centering_def()->mutable_start_position() =
         ToStoredVec3(neg_diagonal, -3, diagonal);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, neg_diagonal);
+    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {

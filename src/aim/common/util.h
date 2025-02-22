@@ -9,10 +9,8 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <iomanip>
-#include <iostream>
 #include <memory>
-#include <sstream>
+#include <random>
 #include <string>
 
 #include "aim/common/simple_types.h"
@@ -165,6 +163,15 @@ static std::string MaybeIntToString(float value, int decimal_places = 1) {
 
 static float ParseFloat(const std::string& text) {
   return strtod(text.c_str(), nullptr);
+}
+
+static float GetJitteredValue(float base_value, float jitter, std::mt19937* random_generator) {
+  if (jitter > 0) {
+    auto dist = std::uniform_real_distribution<float>(-1, 1);
+    float mult = dist(*random_generator);
+    return base_value + jitter * mult;
+  }
+  return base_value;
 }
 
 }  // namespace aim

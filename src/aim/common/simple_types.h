@@ -27,8 +27,9 @@ struct Wall {
 };
 
 struct Cylinder {
-  glm::vec3 top_position{};
-  glm::vec3 bottom_position{};
+  glm::vec3 position{};
+  glm::vec3 up{};
+  float height = 0;
   float radius = 0;
 };
 
