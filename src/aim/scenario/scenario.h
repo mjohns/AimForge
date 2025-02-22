@@ -61,6 +61,7 @@ class Scenario {
   void PlayKillSound();
 
   TargetProfile GetNextTargetProfile();
+  Target GetTargetTemplate(const TargetProfile& profile);
 
   ScenarioDef def_;
   Application* app_;

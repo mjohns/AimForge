@@ -35,7 +35,7 @@ Theme GetDefaultTheme() {
 
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
-  crosshair.set_size(3);
+  crosshair.set_size(15);
   *crosshair.mutable_color() = ToStoredRgb(254, 138, 24);
   crosshair.mutable_dot()->set_draw_outline(true);
   *(crosshair.mutable_dot()->mutable_outline_color()) = ToStoredRgb(0, 0, 0);

@@ -113,14 +113,8 @@ class StaticScenario : public Scenario {
     glm::vec2 wall_pos = wall_target_placer_->GetNextPosition();
     TargetProfile profile =
         target_manager_.GetTargetProfile(def_.target_def(), app_->random_generator());
-    Target t;
-    t.radius = GetJitteredValue(
-        profile.target_radius(), profile.target_radius_jitter(), app_->random_generator());
+    Target t = GetTargetTemplate(profile);
     t.static_wall_position = wall_pos;
-    if (profile.has_pill()) {
-      t.is_pill = true;
-      t.height = profile.pill().height();
-    }
 
     t.position.z = wall_pos.y;
     if (def_.room().has_simple_room() || def_.room().has_barrel_room()) {

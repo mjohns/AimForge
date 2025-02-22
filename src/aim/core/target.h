@@ -17,6 +17,7 @@ struct Target {
   glm::vec2 static_wall_position{};
   float radius = 1.0f;
   float height = 3.0f;
+  float speed = 0;
 
   bool hidden = false;
   bool is_ghost = false;
