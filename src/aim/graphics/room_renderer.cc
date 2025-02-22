@@ -390,6 +390,17 @@ void RoomRenderer::DrawBarrelRoom(const BarrelRoom& room,
     model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
     DrawWall(model, view, {quad_scale, quad_scale}, theme.front_appearance());
   }
+  {
+    // Back wall
+    glm::mat4 model(1.f);
+    model = glm::translate(model, glm::vec3(0, -1 * kMaxDistance, 0));
+    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+    model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
+    DrawWall(model,
+             view,
+             {quad_scale, quad_scale},
+             theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
+  }
 
   {
     glm::mat4 model(1.f);
