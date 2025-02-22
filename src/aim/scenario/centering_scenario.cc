@@ -71,7 +71,9 @@ class CenteringScenario : public Scenario {
     distance_per_second_ = GetJitteredValue(
         target_profile.speed(), target_profile.speed_jitter(), app_->random_generator());
     Target target;
-    target.radius = target_profile.target_radius();
+    target.radius = GetJitteredValue(target_profile.target_radius(),
+                                     target_profile.target_radius_jitter(),
+                                     app_->random_generator());
     if (target_profile.has_pill()) {
       target.is_pill = true;
       target.height = target_profile.pill().height();

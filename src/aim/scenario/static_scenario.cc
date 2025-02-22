@@ -198,7 +198,8 @@ Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Appli
   TargetProfile profile =
       target_manager->GetTargetProfile(def.target_def(), app->random_generator());
   Target t;
-  t.radius = profile.target_radius();
+  t.radius = GetJitteredValue(
+      profile.target_radius(), profile.target_radius_jitter(), app->random_generator());
   t.static_wall_position = wall_pos;
   if (profile.has_pill()) {
     t.is_pill = true;

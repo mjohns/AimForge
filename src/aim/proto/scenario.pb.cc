@@ -181,6 +181,7 @@ inline constexpr TargetProfile::Impl_::Impl_(
       : _cached_size_{0},
         percent_chance_{0},
         target_radius_{0},
+        target_radius_jitter_{0},
         speed_{0},
         speed_jitter_{0},
         type_{},
@@ -701,6 +702,7 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.percent_chance_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_jitter_),
         ::_pbi::kInvalidFieldOffsetTag,
@@ -709,6 +711,7 @@ const ::uint32_t
         1,
         2,
         3,
+        4,
         ~0u,
 };
 
@@ -729,7 +732,7 @@ static const ::_pbi::MigrationSchema
         {187, -1, -1, sizeof(::aim::BarrelScenarioDef)},
         {195, 207, -1, sizeof(::aim::TargetDef)},
         {211, 220, -1, sizeof(::aim::PillTargetDef)},
-        {221, 235, -1, sizeof(::aim::TargetProfile)},
+        {221, 236, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -798,11 +801,11 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "m.TargetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026"
     "remove_closest_on_miss\030\003 \001(\010\022\024\n\014target_o"
     "rder\030\004 \003(\005\"\037\n\rPillTargetDef\022\016\n\006height\030\001 "
-    "\001(\002\"\217\001\n\rTargetProfile\022\026\n\016percent_chance\030"
-    "\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\r\n\005speed\030\003 "
-    "\001(\002\022\024\n\014speed_jitter\030\004 \001(\002\022\"\n\004pill\030\005 \001(\0132"
-    "\022.aim.PillTargetDefH\000B\006\n\004typeb\010editionsp"
-    "\350\007"
+    "\001(\002\"\255\001\n\rTargetProfile\022\026\n\016percent_chance\030"
+    "\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_r"
+    "adius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014spe"
+    "ed_jitter\030\005 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.Pill"
+    "TargetDefH\000B\006\n\004typeb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -812,7 +815,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2042,
+    2072,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -5980,15 +5983,15 @@ const ::google::protobuf::internal::ClassData* TargetProfile::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 5, 1, 0, 2> TargetProfile::_table_ = {
+const ::_pbi::TcParseTable<3, 6, 1, 0, 2> TargetProfile::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_._has_bits_),
     0, // no _extensions_
-    5, 24,  // max_field_number, fast_idx_mask
+    10, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294966752,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    6,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -5998,18 +6001,24 @@ const ::_pbi::TcParseTable<2, 5, 1, 0, 2> TargetProfile::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::TargetProfile>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // float speed_jitter = 4;
-    {::_pbi::TcParser::FastF32S1,
-     {37, 3, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // float percent_chance = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.percent_chance_)}},
     // float target_radius = 2;
     {::_pbi::TcParser::FastF32S1,
      {21, 1, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_)}},
-    // float speed = 3;
+    // float target_radius_jitter = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_)}},
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_jitter_)}},
+    // float speed = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_)}},
+    // float speed_jitter = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 4, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -6019,13 +6028,16 @@ const ::_pbi::TcParseTable<2, 5, 1, 0, 2> TargetProfile::_table_ = {
     // float target_radius = 2;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float speed = 3;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_), _Internal::kHasBitsOffset + 2, 0,
+    // float target_radius_jitter = 3;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_jitter_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float speed_jitter = 4;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_), _Internal::kHasBitsOffset + 3, 0,
+    // float speed = 4;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.PillTargetDef pill = 5;
+    // float speed_jitter = 5;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.PillTargetDef pill = 10;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.type_.pill_), _Internal::kOneofCaseOffset + 0, 0,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
@@ -6042,7 +6054,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     ::memset(&_impl_.percent_chance_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.speed_jitter_) -
         reinterpret_cast<char*>(&_impl_.percent_chance_)) + sizeof(_impl_.speed_jitter_));
@@ -6082,24 +6094,31 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
                 2, this_._internal_target_radius(), target);
           }
 
-          // float speed = 3;
+          // float target_radius_jitter = 3;
           if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_speed(), target);
+                3, this_._internal_target_radius_jitter(), target);
           }
 
-          // float speed_jitter = 4;
+          // float speed = 4;
           if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                4, this_._internal_speed_jitter(), target);
+                4, this_._internal_speed(), target);
           }
 
-          // .aim.PillTargetDef pill = 5;
+          // float speed_jitter = 5;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_speed_jitter(), target);
+          }
+
+          // .aim.PillTargetDef pill = 10;
           if (this_.type_case() == kPill) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                5, *this_._impl_.type_.pill_, this_._impl_.type_.pill_->GetCachedSize(), target,
+                10, *this_._impl_.type_.pill_, this_._impl_.type_.pill_->GetCachedSize(), target,
                 stream);
           }
 
@@ -6128,7 +6147,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000000fu) {
+          if (cached_has_bits & 0x0000001fu) {
             // float percent_chance = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
@@ -6137,17 +6156,21 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
             if (cached_has_bits & 0x00000002u) {
               total_size += 5;
             }
-            // float speed = 3;
+            // float target_radius_jitter = 3;
             if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
-            // float speed_jitter = 4;
+            // float speed = 4;
             if (cached_has_bits & 0x00000008u) {
+              total_size += 5;
+            }
+            // float speed_jitter = 5;
+            if (cached_has_bits & 0x00000010u) {
               total_size += 5;
             }
           }
           switch (this_.type_case()) {
-            // .aim.PillTargetDef pill = 5;
+            // .aim.PillTargetDef pill = 10;
             case kPill: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.pill_);
@@ -6171,7 +6194,7 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.percent_chance_ = from._impl_.percent_chance_;
     }
@@ -6179,9 +6202,12 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
       _this->_impl_.target_radius_ = from._impl_.target_radius_;
     }
     if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.speed_ = from._impl_.speed_;
+      _this->_impl_.target_radius_jitter_ = from._impl_.target_radius_jitter_;
     }
     if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.speed_ = from._impl_.speed_;
+    }
+    if (cached_has_bits & 0x00000010u) {
       _this->_impl_.speed_jitter_ = from._impl_.speed_jitter_;
     }
   }
