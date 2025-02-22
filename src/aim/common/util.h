@@ -1,6 +1,7 @@
 #pragma once
 
 #include <absl/strings/ascii.h>
+#include <google/protobuf/message.h>
 #include <imgui.h>
 #include <stdlib.h>
 
@@ -10,8 +11,10 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <memory>
+#include <optional>
 #include <random>
 #include <string>
+#include <vector>
 
 #include "aim/common/simple_types.h"
 #include "aim/proto/common.pb.h"
@@ -172,6 +175,29 @@ static float GetJitteredValue(float base_value, float jitter, std::mt19937* rand
     return base_value + jitter * mult;
   }
   return base_value;
+}
+
+template <typename T>
+static bool IsValidIndex(const T& list, int i) {
+  return i >= 0 && i < list.size();
+}
+
+template <typename T>
+static int ClampIndex(const T& list, int i) {
+  if (i < 0) return 0;
+  if (i < list.size()) return i;
+  return list.size() - 1;
+}
+
+template <typename T>
+static std::optional<T> GetValueIfPresent(const std::vector<T>& list, int i) {
+  return IsValidIndex(list, i) ? list[i] : std::optional<T>{};
+}
+
+template <typename T>
+static std::optional<T> GetValueIfPresent(const google::protobuf::RepeatedPtrField<T>& list,
+                                          int i) {
+  return IsValidIndex(list, i) ? list[i] : std::optional<T>{};
 }
 
 }  // namespace aim

@@ -8,6 +8,7 @@
 
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
+#include "aim/common/util.h"
 
 namespace aim {
 
@@ -157,7 +158,7 @@ TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, std::mt19937
   if (def.target_order().size() > 0) {
     int target_order_i = target_id_counter_ % def.target_order().size();
     int i = def.target_order().at(target_order_i);
-    return i < num_profiles ? def.profiles()[i] : def.profiles()[0];
+    return def.profiles()[ClampIndex(def.profiles(), i)];
   }
 
   for (const auto& target : def.profiles()) {

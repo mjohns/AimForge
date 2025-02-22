@@ -248,7 +248,8 @@ std::vector<ScenarioDef> GetScenarios() {
     def.mutable_static_def()->set_newest_target_is_ghost(true);
     TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
     strat->clear_regions();
-    strat->set_alternate_regions(true);
+    strat->mutable_region_order()->Add(0);
+    strat->mutable_region_order()->Add(1);
 
     TargetRegion* top = strat->add_regions();
     top->mutable_rectangle()->mutable_x_length()->set_x_percent_value(0.3);

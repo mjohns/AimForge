@@ -375,8 +375,9 @@ inline constexpr TargetPlacementStrategy::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         regions_{},
+        region_order_{},
+        _region_order_cached_byte_size_{0},
         min_distance_{0},
-        alternate_regions_{false},
         fixed_distance_from_last_target_{0},
         fixed_distance_jitter_{0} {}
 
@@ -596,15 +597,15 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.regions_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.region_order_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.min_distance_),
-        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.alternate_regions_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.fixed_distance_jitter_),
+        ~0u,
         ~0u,
         0,
         1,
         2,
-        3,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -774,34 +775,34 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "th\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionLength\""
     "c\n\023EllipseTargetRegion\022%\n\nx_diameter\030\001 \001"
     "(\0132\021.aim.RegionLength\022%\n\ny_diameter\030\002 \001("
-    "\0132\021.aim.RegionLength\"\266\001\n\027TargetPlacement"
+    "\0132\021.aim.RegionLength\"\261\001\n\027TargetPlacement"
     "Strategy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRe"
-    "gion\022\024\n\014min_distance\030\002 \001(\002\022\031\n\021alternate_"
-    "regions\030\003 \001(\010\022\'\n\037fixed_distance_from_las"
-    "t_target\030\004 \001(\002\022\035\n\025fixed_distance_jitter\030"
-    "\005 \001(\002\"\247\002\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001"
-    "(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001"
-    "(\0132\t.aim.Room\022\024\n\014display_name\030\004 \001(\t\022\"\n\nt"
-    "arget_def\030\005 \001(\0132\016.aim.TargetDef\022,\n\nstati"
-    "c_def\030\n \001(\0132\026.aim.StaticScenarioDefH\000\0222\n"
-    "\rcentering_def\030\013 \001(\0132\031.aim.CenteringScen"
-    "arioDefH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim.Barr"
-    "elScenarioDefH\000B\006\n\004type\"\212\001\n\021StaticScenar"
-    "ioDef\022\024\n\014is_poke_ball\030\001 \001(\010\022\?\n\031target_pl"
-    "acement_strategy\030\002 \001(\0132\034.aim.TargetPlace"
-    "mentStrategy\022\036\n\026newest_target_is_ghost\030\003"
-    " \001(\010\"f\n\024CenteringScenarioDef\022\'\n\016start_po"
-    "sition\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014end_pos"
-    "ition\030\002 \001(\0132\017.aim.StoredVec3\"\023\n\021BarrelSc"
-    "enarioDef\"|\n\tTargetDef\022$\n\010profiles\030\001 \003(\013"
-    "2\022.aim.TargetProfile\022\023\n\013num_targets\030\002 \001("
-    "\005\022\036\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014tar"
-    "get_order\030\004 \003(\005\"\037\n\rPillTargetDef\022\016\n\006heig"
-    "ht\030\001 \001(\002\"\217\001\n\rTargetProfile\022\026\n\016percent_ch"
-    "ance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\r\n\005spe"
-    "ed\030\003 \001(\002\022\024\n\014speed_jitter\030\004 \001(\002\022\"\n\004pill\030\005"
-    " \001(\0132\022.aim.PillTargetDefH\000B\006\n\004typeb\010edit"
-    "ionsp\350\007"
+    "gion\022\024\n\014region_order\030\002 \003(\005\022\024\n\014min_distan"
+    "ce\030\003 \001(\002\022\'\n\037fixed_distance_from_last_tar"
+    "get\030\004 \001(\002\022\035\n\025fixed_distance_jitter\030\005 \001(\002"
+    "\"\247\002\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n"
+    "\020duration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t."
+    "aim.Room\022\024\n\014display_name\030\004 \001(\t\022\"\n\ntarget"
+    "_def\030\005 \001(\0132\016.aim.TargetDef\022,\n\nstatic_def"
+    "\030\n \001(\0132\026.aim.StaticScenarioDefH\000\0222\n\rcent"
+    "ering_def\030\013 \001(\0132\031.aim.CenteringScenarioD"
+    "efH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim.BarrelSce"
+    "narioDefH\000B\006\n\004type\"\212\001\n\021StaticScenarioDef"
+    "\022\024\n\014is_poke_ball\030\001 \001(\010\022\?\n\031target_placeme"
+    "nt_strategy\030\002 \001(\0132\034.aim.TargetPlacementS"
+    "trategy\022\036\n\026newest_target_is_ghost\030\003 \001(\010\""
+    "f\n\024CenteringScenarioDef\022\'\n\016start_positio"
+    "n\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014end_position"
+    "\030\002 \001(\0132\017.aim.StoredVec3\"\023\n\021BarrelScenari"
+    "oDef\"|\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.ai"
+    "m.TargetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026"
+    "remove_closest_on_miss\030\003 \001(\010\022\024\n\014target_o"
+    "rder\030\004 \003(\005\"\037\n\rPillTargetDef\022\016\n\006height\030\001 "
+    "\001(\002\"\217\001\n\rTargetProfile\022\026\n\016percent_chance\030"
+    "\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\r\n\005speed\030\003 "
+    "\001(\002\022\024\n\014speed_jitter\030\004 \001(\002\022\"\n\004pill\030\005 \001(\0132"
+    "\022.aim.PillTargetDefH\000B\006\n\004typeb\010editionsp"
+    "\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -811,7 +812,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2047,
+    2042,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -3578,7 +3579,9 @@ inline PROTOBUF_NDEBUG_INLINE TargetPlacementStrategy::Impl_::Impl_(
     const Impl_& from, const ::aim::TargetPlacementStrategy& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        regions_{visibility, arena, from.regions_} {}
+        regions_{visibility, arena, from.regions_},
+        region_order_{visibility, arena, from.region_order_},
+        _region_order_cached_byte_size_{0} {}
 
 TargetPlacementStrategy::TargetPlacementStrategy(
     ::google::protobuf::Arena* arena,
@@ -3607,7 +3610,9 @@ inline PROTOBUF_NDEBUG_INLINE TargetPlacementStrategy::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : _cached_size_{0},
-        regions_{visibility, arena} {}
+        regions_{visibility, arena},
+        region_order_{visibility, arena},
+        _region_order_cached_byte_size_{0} {}
 
 inline void TargetPlacementStrategy::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -3637,6 +3642,10 @@ constexpr auto TargetPlacementStrategy::InternalNewImpl_() {
   constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
       PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.regions_) +
           decltype(TargetPlacementStrategy::_impl_.regions_)::
+              InternalGetArenaOffset(
+                  ::google::protobuf::Message::internal_visibility()),
+      PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.region_order_) +
+          decltype(TargetPlacementStrategy::_impl_.region_order_)::
               InternalGetArenaOffset(
                   ::google::protobuf::Message::internal_visibility()),
   });
@@ -3699,18 +3708,18 @@ const ::_pbi::TcParseTable<3, 5, 1, 0, 2> TargetPlacementStrategy::_table_ = {
     // repeated .aim.TargetRegion regions = 1;
     {::_pbi::TcParser::FastMtR1,
      {10, 63, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.regions_)}},
-    // float min_distance = 2;
+    // repeated int32 region_order = 2;
+    {::_pbi::TcParser::FastV32P1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.region_order_)}},
+    // float min_distance = 3;
     {::_pbi::TcParser::FastF32S1,
-     {21, 0, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)}},
-    // bool alternate_regions = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(TargetPlacementStrategy, _impl_.alternate_regions_), 1>(),
-     {24, 1, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_)}},
+     {29, 0, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)}},
     // float fixed_distance_from_last_target = 4;
     {::_pbi::TcParser::FastF32S1,
-     {37, 2, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_)}},
+     {37, 1, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_)}},
     // float fixed_distance_jitter = 5;
     {::_pbi::TcParser::FastF32S1,
-     {45, 3, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_)}},
+     {45, 2, 0, PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
@@ -3719,17 +3728,17 @@ const ::_pbi::TcParseTable<3, 5, 1, 0, 2> TargetPlacementStrategy::_table_ = {
     // repeated .aim.TargetRegion regions = 1;
     {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.regions_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
-    // float min_distance = 2;
+    // repeated int32 region_order = 2;
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.region_order_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
+    // float min_distance = 3;
     {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // bool alternate_regions = 3;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.alternate_regions_), _Internal::kHasBitsOffset + 1, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // float fixed_distance_from_last_target = 4;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_), _Internal::kHasBitsOffset + 2, 0,
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float fixed_distance_jitter = 5;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_), _Internal::kHasBitsOffset + 3, 0,
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetRegion>()},
@@ -3745,8 +3754,9 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
   (void) cached_has_bits;
 
   _impl_.regions_.Clear();
+  _impl_.region_order_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x00000007u) {
     ::memset(&_impl_.min_distance_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.fixed_distance_jitter_) -
         reinterpret_cast<char*>(&_impl_.min_distance_)) + sizeof(_impl_.fixed_distance_jitter_));
@@ -3781,30 +3791,32 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
                     target, stream);
           }
 
+          // repeated int32 region_order = 2;
+          {
+            int byte_size = this_._impl_._region_order_cached_byte_size_.Get();
+            if (byte_size > 0) {
+              target = stream->WriteInt32Packed(
+                  2, this_._internal_region_order(), byte_size, target);
+            }
+          }
+
           cached_has_bits = this_._impl_._has_bits_[0];
-          // float min_distance = 2;
+          // float min_distance = 3;
           if (cached_has_bits & 0x00000001u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                2, this_._internal_min_distance(), target);
-          }
-
-          // bool alternate_regions = 3;
-          if (cached_has_bits & 0x00000002u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                3, this_._internal_alternate_regions(), target);
+                3, this_._internal_min_distance(), target);
           }
 
           // float fixed_distance_from_last_target = 4;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000002u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 4, this_._internal_fixed_distance_from_last_target(), target);
           }
 
           // float fixed_distance_jitter = 5;
-          if (cached_has_bits & 0x00000008u) {
+          if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 5, this_._internal_fixed_distance_jitter(), target);
@@ -3842,23 +3854,26 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
                 total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
               }
             }
+            // repeated int32 region_order = 2;
+            {
+              total_size +=
+                  ::_pbi::WireFormatLite::Int32SizeWithPackedTagSize(
+                      this_._internal_region_order(), 1,
+                      this_._impl_._region_order_cached_byte_size_);
+            }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000000fu) {
-            // float min_distance = 2;
+          if (cached_has_bits & 0x00000007u) {
+            // float min_distance = 3;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
-            // bool alternate_regions = 3;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 2;
-            }
             // float fixed_distance_from_last_target = 4;
-            if (cached_has_bits & 0x00000004u) {
+            if (cached_has_bits & 0x00000002u) {
               total_size += 5;
             }
             // float fixed_distance_jitter = 5;
-            if (cached_has_bits & 0x00000008u) {
+            if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
           }
@@ -3876,18 +3891,16 @@ void TargetPlacementStrategy::MergeImpl(::google::protobuf::MessageLite& to_msg,
 
   _this->_internal_mutable_regions()->MergeFrom(
       from._internal_regions());
+  _this->_internal_mutable_region_order()->MergeFrom(from._internal_region_order());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.min_distance_ = from._impl_.min_distance_;
     }
     if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.alternate_regions_ = from._impl_.alternate_regions_;
-    }
-    if (cached_has_bits & 0x00000004u) {
       _this->_impl_.fixed_distance_from_last_target_ = from._impl_.fixed_distance_from_last_target_;
     }
-    if (cached_has_bits & 0x00000008u) {
+    if (cached_has_bits & 0x00000004u) {
       _this->_impl_.fixed_distance_jitter_ = from._impl_.fixed_distance_jitter_;
     }
   }
@@ -3908,6 +3921,7 @@ void TargetPlacementStrategy::InternalSwap(TargetPlacementStrategy* PROTOBUF_RES
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.regions_.InternalSwap(&other->_impl_.regions_);
+  _impl_.region_order_.InternalSwap(&other->_impl_.region_order_);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_jitter_)
       + sizeof(TargetPlacementStrategy::_impl_.fixed_distance_jitter_)
