@@ -20,6 +20,7 @@ class SettingsScreen : public UiScreen {
     if (current_settings_ != nullptr) {
       cm_per_360_ = MaybeIntToString(current_settings_->cm_per_360());
       theme_name_ = current_settings_->theme_name();
+      metronome_bpm_ = MaybeIntToString(current_settings_->metronome_bpm());
     }
   }
 
@@ -33,6 +34,11 @@ class SettingsScreen : public UiScreen {
       }
       if (current_settings_->theme_name() != theme_name_) {
         current_settings_->set_theme_name(theme_name_);
+        mgr_->MarkDirty();
+      }
+      float new_metronome_bpm = ParseFloat(metronome_bpm_);
+      if (new_metronome_bpm >= 0 && current_settings_->metronome_bpm() != new_metronome_bpm) {
+        current_settings_->set_metronome_bpm(new_metronome_bpm);
         mgr_->MarkDirty();
       }
       mgr_->MaybeFlushToDisk();
@@ -77,11 +83,19 @@ class SettingsScreen : public UiScreen {
     ImGui::SetCursorPosX(screen.width * 0.5);
     ImGui::NextColumn();
     ImGui::InputText("##THEME_NAME", &theme_name_);
+
+    ImGui::NextColumn();
+    ImGui::Text("Metronome BPM");
+
+    ImGui::SetCursorPosX(screen.width * 0.5);
+    ImGui::NextColumn();
+    ImGui::InputText("##METRONOME_BPM", &metronome_bpm_, ImGuiInputTextFlags_CharsDecimal);
   }
 
  private:
   std::string cm_per_360_;
   std::string theme_name_;
+  std::string metronome_bpm_;
   SettingsManager* mgr_ = nullptr;
   Settings* current_settings_ = nullptr;
 };
