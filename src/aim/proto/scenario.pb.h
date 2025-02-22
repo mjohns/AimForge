@@ -491,6 +491,7 @@ class SimpleRoom final : public ::google::protobuf::Message
   enum : int {
     kHeightFieldNumber = 1,
     kWidthFieldNumber = 2,
+    kDepthFieldNumber = 3,
   };
   // float height = 1;
   bool has_height() const;
@@ -514,12 +515,23 @@ class SimpleRoom final : public ::google::protobuf::Message
   void _internal_set_width(float value);
 
   public:
+  // float depth = 3;
+  bool has_depth() const;
+  void clear_depth() ;
+  float depth() const;
+  void set_depth(float value);
+
+  private:
+  float _internal_depth() const;
+  void _internal_set_depth(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.SimpleRoom)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 0,
+      2, 3, 0,
       0, 2>
       _table_;
 
@@ -541,6 +553,7 @@ class SimpleRoom final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     float height_;
     float width_;
+    float depth_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3721,6 +3734,34 @@ inline float SimpleRoom::_internal_width() const {
 inline void SimpleRoom::_internal_set_width(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.width_ = value;
+}
+
+// float depth = 3;
+inline bool SimpleRoom::has_depth() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void SimpleRoom::clear_depth() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float SimpleRoom::depth() const {
+  // @@protoc_insertion_point(field_get:aim.SimpleRoom.depth)
+  return _internal_depth();
+}
+inline void SimpleRoom::set_depth(float value) {
+  _internal_set_depth(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.SimpleRoom.depth)
+}
+inline float SimpleRoom::_internal_depth() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.depth_;
+}
+inline void SimpleRoom::_internal_set_depth(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_ = value;
 }
 
 // -------------------------------------------------------------------

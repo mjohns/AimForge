@@ -44,7 +44,7 @@ std::vector<ScenarioDef> GetScenarios() {
   ScenarioDef base_1w_def = base_static_def;
   {
     StaticScenarioDef* static_def = base_1w_def.mutable_static_def();
-    base_1w_def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
+    // base_1w_def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
 
     TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
     strat->set_min_distance(20);
@@ -60,9 +60,13 @@ std::vector<ScenarioDef> GetScenarios() {
     square_region->mutable_rectangle()->mutable_y_length()->set_y_percent_value(0.55);
   }
 
+  ScenarioDef centering_def = base_1w_def;
+  centering_def.mutable_target_def()->Clear();
+  centering_def.mutable_target_def()->set_num_targets(1);
   TargetProfile default_centering_profile;
   default_centering_profile.set_target_radius(1.2);
   default_centering_profile.set_speed(45);
+  *centering_def.mutable_target_def()->add_profiles() = default_centering_profile;
 
   {
     ScenarioDef def = base_static_def;
@@ -75,6 +79,7 @@ std::vector<ScenarioDef> GetScenarios() {
 
     *def.mutable_barrel_def() = BarrelScenarioDef();
 
+    def.mutable_target_def()->clear_profiles();
     {
       auto* t = def.mutable_target_def()->add_profiles();
       t->set_target_radius(2.8);
@@ -92,28 +97,25 @@ std::vector<ScenarioDef> GetScenarios() {
     scenarios.push_back(def);
   }
   {
-    ScenarioDef def = base_static_def;
+    ScenarioDef def = centering_def;
     def.set_scenario_id("centering_test");
     def.set_display_name("Centering");
-    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 0);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 0);
     scenarios.push_back(def);
   }
   {
-    ScenarioDef def = base_static_def;
+    ScenarioDef def = centering_def;
     def.set_scenario_id("overhead_centering_test");
     def.set_display_name("Overhead Centering");
-    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(-60, -3, 50);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(60, -3, 50);
     scenarios.push_back(def);
   }
   {
-    ScenarioDef def = base_static_def;
+    ScenarioDef def = centering_def;
     def.set_scenario_id("vertical_centering_test");
     def.set_display_name("Vertical Centering");
-    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() = ToStoredVec3(0, -3, 45);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(0, -3, -45);
     scenarios.push_back(def);
@@ -121,20 +123,18 @@ std::vector<ScenarioDef> GetScenarios() {
   float diagonal = 35;
   float neg_diagonal = -35;
   {
-    ScenarioDef def = base_static_def;
+    ScenarioDef def = centering_def;
     def.set_scenario_id("diagonal_centering_test_1");
     def.set_display_name("Diagonal Centering 1");
-    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() =
         ToStoredVec3(neg_diagonal, -3, neg_diagonal);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, diagonal);
     scenarios.push_back(def);
   }
   {
-    ScenarioDef def = base_static_def;
+    ScenarioDef def = centering_def;
     def.set_display_name("Diagonal Centering 2");
     def.set_scenario_id("diagonal_centering_test_2");
-    *def.mutable_target_def()->add_profiles() = default_centering_profile;
     *def.mutable_centering_def()->mutable_start_position() =
         ToStoredVec3(neg_diagonal, -3, diagonal);
     *def.mutable_centering_def()->mutable_end_position() = ToStoredVec3(diagonal, -3, neg_diagonal);
@@ -261,11 +261,11 @@ std::vector<ScenarioDef> GetScenarios() {
     ScenarioDef def = base_1w_def;
     def.set_scenario_id("raw_control");
     def.set_display_name("RawControl");
-    def.clear_static_def();
-    StaticScenarioDef* static_def = def.mutable_static_def();
     def.mutable_target_def()->set_num_targets(3);
     def.mutable_target_def()->add_profiles()->set_target_radius(0.95);
 
+    def.clear_static_def();
+    StaticScenarioDef* static_def = def.mutable_static_def();
     TargetPlacementStrategy* strat = static_def->mutable_target_placement_strategy();
     strat->set_min_distance(3);
 
