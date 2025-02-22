@@ -37,7 +37,7 @@ class UiScreen {
   Application* app_ = nullptr;
 };
 
-enum class SettingsScreenType { FULL, QUICK, QUICK_METRONOME };
+enum class SettingsScreenType { FULL, QUICK, QUICK_METRONOME, QUICK_CROSSHAIR };
 
 std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app, SettingsScreenType type);
 std::unique_ptr<UiScreen> CreateHomeScreen(Application* app);

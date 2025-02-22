@@ -155,6 +155,9 @@ NavigationEvent Scenario::Run() {
         if (keycode == SDLK_B) {
           show_settings = SettingsScreenType::QUICK_METRONOME;
         }
+        if (keycode == SDLK_C) {
+          show_settings = SettingsScreenType::QUICK_CROSSHAIR;
+        }
         if (keycode == SDLK_ESCAPE) {
           show_settings = SettingsScreenType::FULL;
         }

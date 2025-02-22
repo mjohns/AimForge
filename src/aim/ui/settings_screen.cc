@@ -7,6 +7,7 @@
 #include "aim/common/util.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
+#include "aim/graphics/crosshair.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -96,11 +97,12 @@ class SettingsScreen : public UiScreen {
   std::string cm_per_360_;
   std::string theme_name_;
   std::string metronome_bpm_;
+  std::string crosshair_size_;
   SettingsManager* mgr_ = nullptr;
   Settings* current_settings_ = nullptr;
 };
 
-enum class QuickSettingsType { DEFAULT, METRONOME };
+enum class QuickSettingsType { DEFAULT, METRONOME, CROSSHAIR };
 
 class QuickSettingsScreen : public UiScreen {
  public:
@@ -112,6 +114,7 @@ class QuickSettingsScreen : public UiScreen {
       cm_per_360_ = MaybeIntToString(current_settings_->cm_per_360());
       metronome_bpm_ = MaybeIntToString(current_settings_->metronome_bpm());
       theme_name_ = current_settings_->theme_name();
+      crosshair_size_ = MaybeIntToString(current_settings_->crosshair().size());
     }
   }
 
@@ -126,13 +129,17 @@ class QuickSettingsScreen : public UiScreen {
           float bpm = ParseFloat(metronome_bpm_);
           metronome_bpm_ = std::format("{}", bpm + event.wheel.y);
         }
+        if (type_ == QuickSettingsType::CROSSHAIR) {
+          float size = ParseFloat(crosshair_size_);
+          crosshair_size_ = std::format("{}", size + event.wheel.y * 0.2);
+        }
       }
     }
   }
 
   std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
     SDL_Keycode keycode = event.key.key;
-    if (keycode == SDLK_S || keycode == SDLK_B) {
+    if (keycode == SDLK_S || keycode == SDLK_B || keycode == SDLK_C) {
       float new_cm_per_360 = ParseFloat(cm_per_360_);
       if (new_cm_per_360 > 0 && current_settings_->cm_per_360() != new_cm_per_360) {
         current_settings_->set_cm_per_360(new_cm_per_360);
@@ -141,6 +148,11 @@ class QuickSettingsScreen : public UiScreen {
       float new_metronome_bpm = ParseFloat(metronome_bpm_);
       if (new_metronome_bpm >= 0 && current_settings_->metronome_bpm() != new_metronome_bpm) {
         current_settings_->set_metronome_bpm(new_metronome_bpm);
+        mgr_->MarkDirty();
+      }
+      float new_crosshair_size = ParseFloat(crosshair_size_);
+      if (new_crosshair_size >= 0 && current_settings_->crosshair().size() != new_crosshair_size) {
+        current_settings_->mutable_crosshair()->set_size(new_crosshair_size);
         mgr_->MarkDirty();
       }
       if (theme_name_ != current_settings_->theme_name()) {
@@ -225,12 +237,22 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::SameLine();
       ImGui::InputText("##METRONOME_BPM", &metronome_bpm_, ImGuiInputTextFlags_CharsDecimal);
     }
+
+    if (type_ == QuickSettingsType::CROSSHAIR) {
+      ImGui::InputText("##CROSSHAIR_SIZE", &crosshair_size_, ImGuiInputTextFlags_CharsDecimal);
+      ImDrawList* draw_list = ImGui::GetWindowDrawList();
+      Crosshair crosshair = mgr_->GetCurrentSettings().crosshair();
+      float size = ParseFloat(crosshair_size_);
+      crosshair.set_size(size);
+      DrawCrosshair(crosshair, mgr_->GetCurrentTheme(), screen, draw_list);
+    }
   }
 
  private:
   std::string cm_per_360_;
   std::string theme_name_;
   std::string metronome_bpm_;
+  std::string crosshair_size_;
   SettingsManager* mgr_ = nullptr;
   Settings* current_settings_ = nullptr;
   QuickSettingsType type_;
@@ -244,6 +266,8 @@ std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app, SettingsScreenT
       return std::make_unique<QuickSettingsScreen>(app, QuickSettingsType::DEFAULT);
     case SettingsScreenType::QUICK_METRONOME:
       return std::make_unique<QuickSettingsScreen>(app, QuickSettingsType::METRONOME);
+    case SettingsScreenType::QUICK_CROSSHAIR:
+      return std::make_unique<QuickSettingsScreen>(app, QuickSettingsType::CROSSHAIR);
   };
   return std::make_unique<SettingsScreen>(app);
 }
