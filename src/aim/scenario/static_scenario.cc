@@ -35,7 +35,7 @@ class StaticScenario : public Scenario {
     int num_targets = def_.target_def().num_targets();
     for (int i = 0; i < num_targets; ++i) {
       Target target = GetNewTarget();
-      if (def_.static_def().newest_target_is_ghost() && i == (num_targets - 1)) {
+      if (def_.target_def().newest_target_is_ghost() && i == (num_targets - 1)) {
         target.is_ghost = true;
       }
       target = target_manager_.AddTarget(target);
@@ -145,7 +145,7 @@ class StaticScenario : public Scenario {
 
   void AddNewTargetDuringRun(u16 old_target_id) {
     Target target = GetNewTarget();
-    if (def_.static_def().newest_target_is_ghost()) {
+    if (def_.target_def().newest_target_is_ghost()) {
       target_manager_.MarkAllAsNonGhost();
       target.is_ghost = true;
     }

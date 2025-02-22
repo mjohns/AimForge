@@ -225,7 +225,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_display_name("1w3ts fixed");
     def.mutable_target_def()->set_num_targets(3);
     def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
-    def.mutable_static_def()->set_newest_target_is_ghost(true);
+    def.mutable_target_def()->set_newest_target_is_ghost(true);
     def.mutable_target_def()->set_remove_closest_on_miss(true);
     def.mutable_static_def()
         ->mutable_target_placement_strategy()
@@ -245,7 +245,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.mutable_target_def()->set_num_targets(2);
     def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
     def.mutable_target_def()->set_remove_closest_on_miss(true);
-    def.mutable_static_def()->set_newest_target_is_ghost(true);
+    def.mutable_target_def()->set_newest_target_is_ghost(true);
     TargetPlacementStrategy* strat = def.mutable_static_def()->mutable_target_placement_strategy();
     strat->clear_regions();
     strat->mutable_region_order()->Add(0);

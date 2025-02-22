@@ -2996,6 +2996,7 @@ class TargetDef final : public ::google::protobuf::Message
     kTargetOrderFieldNumber = 4,
     kNumTargetsFieldNumber = 2,
     kRemoveClosestOnMissFieldNumber = 3,
+    kNewestTargetIsGhostFieldNumber = 5,
   };
   // repeated .aim.TargetProfile profiles = 1;
   int profiles_size() const;
@@ -3054,12 +3055,23 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_remove_closest_on_miss(bool value);
 
   public:
+  // bool newest_target_is_ghost = 5;
+  bool has_newest_target_is_ghost() const;
+  void clear_newest_target_is_ghost() ;
+  bool newest_target_is_ghost() const;
+  void set_newest_target_is_ghost(bool value);
+
+  private:
+  bool _internal_newest_target_is_ghost() const;
+  void _internal_set_newest_target_is_ghost(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 1,
+      3, 5, 1,
       0, 2>
       _table_;
 
@@ -3084,6 +3096,7 @@ class TargetDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _target_order_cached_byte_size_;
     ::int32_t num_targets_;
     bool remove_closest_on_miss_;
+    bool newest_target_is_ghost_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3497,7 +3510,6 @@ class StaticScenarioDef final : public ::google::protobuf::Message
   enum : int {
     kTargetPlacementStrategyFieldNumber = 2,
     kIsPokeBallFieldNumber = 1,
-    kNewestTargetIsGhostFieldNumber = 3,
   };
   // .aim.TargetPlacementStrategy target_placement_strategy = 2;
   bool has_target_placement_strategy() const;
@@ -3525,23 +3537,12 @@ class StaticScenarioDef final : public ::google::protobuf::Message
   void _internal_set_is_poke_ball(bool value);
 
   public:
-  // bool newest_target_is_ghost = 3;
-  bool has_newest_target_is_ghost() const;
-  void clear_newest_target_is_ghost() ;
-  bool newest_target_is_ghost() const;
-  void set_newest_target_is_ghost(bool value);
-
-  private:
-  bool _internal_newest_target_is_ghost() const;
-  void _internal_set_newest_target_is_ghost(bool value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.StaticScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 1,
+      1, 2, 1,
       0, 2>
       _table_;
 
@@ -3563,7 +3564,6 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
     bool is_poke_ball_;
-    bool newest_target_is_ghost_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -6401,34 +6401,6 @@ inline void StaticScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
   // @@protoc_insertion_point(field_set_allocated:aim.StaticScenarioDef.target_placement_strategy)
 }
 
-// bool newest_target_is_ghost = 3;
-inline bool StaticScenarioDef::has_newest_target_is_ghost() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void StaticScenarioDef::clear_newest_target_is_ghost() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.newest_target_is_ghost_ = false;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline bool StaticScenarioDef::newest_target_is_ghost() const {
-  // @@protoc_insertion_point(field_get:aim.StaticScenarioDef.newest_target_is_ghost)
-  return _internal_newest_target_is_ghost();
-}
-inline void StaticScenarioDef::set_newest_target_is_ghost(bool value) {
-  _internal_set_newest_target_is_ghost(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.StaticScenarioDef.newest_target_is_ghost)
-}
-inline bool StaticScenarioDef::_internal_newest_target_is_ghost() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.newest_target_is_ghost_;
-}
-inline void StaticScenarioDef::_internal_set_newest_target_is_ghost(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.newest_target_is_ghost_ = value;
-}
-
 // -------------------------------------------------------------------
 
 // CenteringScenarioDef
@@ -6771,6 +6743,34 @@ TargetDef::_internal_target_order() const {
 inline ::google::protobuf::RepeatedField<::int32_t>* TargetDef::_internal_mutable_target_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.target_order_;
+}
+
+// bool newest_target_is_ghost = 5;
+inline bool TargetDef::has_newest_target_is_ghost() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void TargetDef::clear_newest_target_is_ghost() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.newest_target_is_ghost_ = false;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline bool TargetDef::newest_target_is_ghost() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.newest_target_is_ghost)
+  return _internal_newest_target_is_ghost();
+}
+inline void TargetDef::set_newest_target_is_ghost(bool value) {
+  _internal_set_newest_target_is_ghost(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.TargetDef.newest_target_is_ghost)
+}
+inline bool TargetDef::_internal_newest_target_is_ghost() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.newest_target_is_ghost_;
+}
+inline void TargetDef::_internal_set_newest_target_is_ghost(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.newest_target_is_ghost_ = value;
 }
 
 // -------------------------------------------------------------------
