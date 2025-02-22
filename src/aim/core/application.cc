@@ -156,6 +156,8 @@ int Application::Initialize() {
   SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
   float window_display_scale = SDL_GetWindowDisplayScale(sdl_window_);
   float window_pixel_density = SDL_GetWindowPixelDensity(sdl_window_);
+  window_pixel_width_ = window_width_ * window_pixel_density;
+  window_pixel_height_ = window_height_ * window_pixel_density;
   logger_->info("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
                 window_display_scale,
                 window_pixel_density);
@@ -212,7 +214,7 @@ bool Application::StartRender(ImVec4 clear_color) {
   }
 
   ImGuiIO& io = ImGui::GetIO();
-  glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+  glViewport(0, 0, window_pixel_width_, window_pixel_height_);
   glClearColor(clear_color.x * clear_color.w,
                clear_color.y * clear_color.w,
                clear_color.z * clear_color.w,

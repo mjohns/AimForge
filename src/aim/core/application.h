@@ -94,6 +94,8 @@ class Application {
 
   int window_width_ = -1;
   int window_height_ = -1;
+  int window_pixel_width_ = -1;
+  int window_pixel_height_ = -1;
 
   std::mt19937 random_generator_;
 
