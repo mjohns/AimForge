@@ -123,8 +123,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     float distance = GetJitteredValue(strategy_.fixed_distance_from_last_target(),
                                       strategy_.fixed_distance_jitter(),
                                       app_->random_generator());
-    // TODO: Should we just assume the wall is always in the x/z plane and drop y instead of storing
-    // on the target.
+    // This can't just drop the y component and take x,z from world position because for circular
+    // walls we wrap the flat wall around the circle.
     glm::vec2 dir = glm::normalize(point - most_recent_target->static_wall_position);
 
     return most_recent_target->static_wall_position + (dir * distance);

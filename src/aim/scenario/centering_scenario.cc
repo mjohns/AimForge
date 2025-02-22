@@ -24,7 +24,7 @@ constexpr const float kStartMovingDelaySeconds = 0.2;
 
 TimedInvokerParams GetInvokerParams() {
   TimedInvokerParams params;
-  params.interval_micros = 1000 * 110;
+  params.interval_micros = 1000 * 90;
   return params;
 }
 
