@@ -30,27 +30,25 @@ glm::vec2 RotateDegrees(const glm::vec2& v, float degrees);
 
 glm::vec3 PointBetween(const glm::vec3& start, const glm::vec3& end, float percent_across = 0.5);
 
-// If intersects returns true and fills in the distance and the y value where it intersected. Y is
-// the distance from the midpoint (at maximum being height/2).
-bool IntersectRayCylinder(const Cylinder& cylinder,
+// intersection_height is the distance from the mid_point along the up vector (possibly negative).
+bool IntersectRayCylinder(const glm::vec3& mid_point,
+                          const glm::vec3& up,
+                          float radius,
                           const glm::vec3& origin,
                           const glm::vec3& direction,
                           float* intersection_distance,
-                          std::optional<float>* intersection_y);
-
-// intersection_height is the distance from the mid_point along the up vector (possibly negative).
-bool IntersectRayCylinder(const glm::vec3& mid_point,
-                                  const glm::vec3& up,
-                                  float radius,
-                                  const glm::vec3& origin,
-                                  const glm::vec3& direction,
-                                  float* intersection_distance,
-                                  float* intersection_height);
+                          float* intersection_height);
 
 bool IntersectRayPill(const Pill& pill,
                       const glm::vec3& origin,
                       const glm::vec3& direction,
                       float* intersection_distance);
+
+bool IntersectRaySphere(const glm::vec3& position,
+                        float radius,
+                        const glm::vec3& origin,
+                        const glm::vec3& direction,
+                        float* intersection_distance);
 
 // Axes must be normalized.
 glm::mat4 MakeCoordinateSystemTransform(const glm::vec3& x_axis,

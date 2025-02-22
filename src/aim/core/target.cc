@@ -87,52 +87,17 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
       continue;
     }
     bool is_hit = false;
-    float hit_distance = 0;
+    float hit_distance;
     if (target.is_pill) {
-      Cylinder c;
-      c.radius = target.radius;
-      // Test the full height (plus margin) so we can avoid doing spehere checks if it is a far off
-      // miss.
-      float cylinder_height = (target.height + target.radius) * 0.5;
-      c.top_position = target.position + glm::vec3(0, 0, cylinder_height);
-      c.bottom_position = target.position + glm::vec3(0, 0, cylinder_height * -1);
-      float intersection_y;
-      is_hit =
-          IntersectRayCylinder(c, camera.GetPosition(), look_at, &hit_distance, &intersection_y);
-      if (is_hit) {
-        // Now check to see if it was on the tips of the pill and do a more refined check.
-        float real_height = (target.height - target.radius) * 0.5;
-        if (abs(intersection_y) > real_height) {
-          // Now check the appropriate sphere.
-          float offset = intersection_y > 0 ? real_height : -1 * real_height;
-          glm::vec3 pos = target.position + glm::vec3(0, 0, offset);
-
-          glm::vec3 intersection_point;
-          glm::vec3 intersection_normal;
-          is_hit = glm::intersectRaySphere(camera.GetPosition(),
-                                           look_at,
-                                           pos,
-                                           target.radius,
-                                           intersection_point,
-                                           intersection_normal);
-          if (is_hit) {
-            hit_distance = glm::length(intersection_point - camera.GetPosition());
-          }
-        }
-      }
-
+      Pill pill;
+      pill.radius = target.radius;
+      float pill_height = target.height * 0.5;
+      pill.top_position = target.position + glm::vec3(0, 0, pill_height);
+      pill.bottom_position = target.position + glm::vec3(0, 0, pill_height * -1);
+      is_hit = IntersectRayPill(pill, camera.GetPosition(), look_at, &hit_distance);
     } else {
-      glm::vec3 intersection_point;
-      glm::vec3 intersection_normal;
-      is_hit = glm::intersectRaySphere(camera.GetPosition(),
-                                       look_at,
-                                       target.position,
-                                       target.radius,
-                                       intersection_point,
-                                       intersection_normal);
-      if (is_hit) {
-        hit_distance = glm::length(intersection_point - camera.GetPosition());
-      }
+      is_hit = IntersectRaySphere(
+          target.position, target.radius, camera.GetPosition(), look_at, &hit_distance);
     }
     if (is_hit) {
       if (!closest_hit_target_id.has_value() || hit_distance < closest_hit_distance) {
@@ -140,8 +105,8 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
         closest_hit_target_id = target.id;
       }
     }
-    return closest_hit_target_id;
   }
+  return closest_hit_target_id;
 }
 
 std::optional<uint16_t> TargetManager::GetNearestTargetOnStaticWall(const Camera& camera,
