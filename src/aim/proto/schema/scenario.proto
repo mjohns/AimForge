@@ -104,11 +104,6 @@ message ScenarioDef {
 message StaticScenarioDef {
   bool is_poke_ball = 1;
   TargetPlacementStrategy target_placement_strategy = 2;
-  // The most recently placed target will not be clickable and will be
-  // displayed with a separate color as determined by theme. This is
-  // useful for forced pathing so you know where the target will be
-  // but have to click in the correct order.
-  bool newest_target_is_ghost = 3;
 }
 
 message CenteringScenarioDef {
@@ -126,6 +121,12 @@ message TargetDef {
 
   // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 target_order = 4;
+
+  // The most recently placed target will not be clickable and will be
+  // displayed with a separate color as determined by theme. This is
+  // useful for forced pathing so you know where the target will be
+  // but have to click in the correct order.
+  bool newest_target_is_ghost = 5;
 }
 
 message PillTargetDef {
