@@ -12,6 +12,7 @@ namespace aim {
 class CylinderRenderer {
  public:
   CylinderRenderer();
+  ~CylinderRenderer();
 
   void SetProjection(const glm::mat4& projection);
   void Draw(const glm::vec3& camera_position,
