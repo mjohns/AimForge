@@ -70,9 +70,11 @@ std::optional<TargetRegion> GetRegionToUse(const ScenarioDef& def,
   if (strategy.regions_size() == 0) {
     return {};
   }
-  if (strategy.alternate_regions()) {
-    int i = target_manager->GetTargetIdCounter() % strategy.regions_size();
-    return strategy.regions(i);
+  int order_count = strategy.region_order().size();
+  if (order_count > 0) {
+    int order_i = target_manager->GetTargetIdCounter() % order_count;
+    int i = strategy.region_order(order_i);
+    return GetValueIfPresent(strategy.regions(), i);
   }
 
   auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);

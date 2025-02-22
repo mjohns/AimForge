@@ -3225,8 +3225,8 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kRegionsFieldNumber = 1,
-    kMinDistanceFieldNumber = 2,
-    kAlternateRegionsFieldNumber = 3,
+    kRegionOrderFieldNumber = 2,
+    kMinDistanceFieldNumber = 3,
     kFixedDistanceFromLastTargetFieldNumber = 4,
     kFixedDistanceJitterFieldNumber = 5,
   };
@@ -3247,7 +3247,25 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   const ::aim::TargetRegion& regions(int index) const;
   ::aim::TargetRegion* add_regions();
   const ::google::protobuf::RepeatedPtrField<::aim::TargetRegion>& regions() const;
-  // float min_distance = 2;
+  // repeated int32 region_order = 2;
+  int region_order_size() const;
+  private:
+  int _internal_region_order_size() const;
+
+  public:
+  void clear_region_order() ;
+  ::int32_t region_order(int index) const;
+  void set_region_order(int index, ::int32_t value);
+  void add_region_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& region_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* mutable_region_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_region_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_region_order();
+
+  public:
+  // float min_distance = 3;
   bool has_min_distance() const;
   void clear_min_distance() ;
   float min_distance() const;
@@ -3256,17 +3274,6 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   private:
   float _internal_min_distance() const;
   void _internal_set_min_distance(float value);
-
-  public:
-  // bool alternate_regions = 3;
-  bool has_alternate_regions() const;
-  void clear_alternate_regions() ;
-  bool alternate_regions() const;
-  void set_alternate_regions(bool value);
-
-  private:
-  bool _internal_alternate_regions() const;
-  void _internal_set_alternate_regions(bool value);
 
   public:
   // float fixed_distance_from_last_target = 4;
@@ -3317,8 +3324,9 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::TargetRegion > regions_;
+    ::google::protobuf::RepeatedField<::int32_t> region_order_;
+    ::google::protobuf::internal::CachedSize _region_order_cached_byte_size_;
     float min_distance_;
-    bool alternate_regions_;
     float fixed_distance_from_last_target_;
     float fixed_distance_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -5515,7 +5523,52 @@ TargetPlacementStrategy::_internal_mutable_regions() {
   return &_impl_.regions_;
 }
 
-// float min_distance = 2;
+// repeated int32 region_order = 2;
+inline int TargetPlacementStrategy::_internal_region_order_size() const {
+  return _internal_region_order().size();
+}
+inline int TargetPlacementStrategy::region_order_size() const {
+  return _internal_region_order_size();
+}
+inline void TargetPlacementStrategy::clear_region_order() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.region_order_.Clear();
+}
+inline ::int32_t TargetPlacementStrategy::region_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.region_order)
+  return _internal_region_order().Get(index);
+}
+inline void TargetPlacementStrategy::set_region_order(int index, ::int32_t value) {
+  _internal_mutable_region_order()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.region_order)
+}
+inline void TargetPlacementStrategy::add_region_order(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_region_order()->Add(value);
+  // @@protoc_insertion_point(field_add:aim.TargetPlacementStrategy.region_order)
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>& TargetPlacementStrategy::region_order() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.TargetPlacementStrategy.region_order)
+  return _internal_region_order();
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* TargetPlacementStrategy::mutable_region_order()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.TargetPlacementStrategy.region_order)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_region_order();
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>&
+TargetPlacementStrategy::_internal_region_order() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.region_order_;
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* TargetPlacementStrategy::_internal_mutable_region_order() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.region_order_;
+}
+
+// float min_distance = 3;
 inline bool TargetPlacementStrategy::has_min_distance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -5543,43 +5596,15 @@ inline void TargetPlacementStrategy::_internal_set_min_distance(float value) {
   _impl_.min_distance_ = value;
 }
 
-// bool alternate_regions = 3;
-inline bool TargetPlacementStrategy::has_alternate_regions() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline void TargetPlacementStrategy::clear_alternate_regions() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.alternate_regions_ = false;
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline bool TargetPlacementStrategy::alternate_regions() const {
-  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.alternate_regions)
-  return _internal_alternate_regions();
-}
-inline void TargetPlacementStrategy::set_alternate_regions(bool value) {
-  _internal_set_alternate_regions(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.alternate_regions)
-}
-inline bool TargetPlacementStrategy::_internal_alternate_regions() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.alternate_regions_;
-}
-inline void TargetPlacementStrategy::_internal_set_alternate_regions(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.alternate_regions_ = value;
-}
-
 // float fixed_distance_from_last_target = 4;
 inline bool TargetPlacementStrategy::has_fixed_distance_from_last_target() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline void TargetPlacementStrategy::clear_fixed_distance_from_last_target() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.fixed_distance_from_last_target_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline float TargetPlacementStrategy::fixed_distance_from_last_target() const {
   // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
@@ -5587,7 +5612,7 @@ inline float TargetPlacementStrategy::fixed_distance_from_last_target() const {
 }
 inline void TargetPlacementStrategy::set_fixed_distance_from_last_target(float value) {
   _internal_set_fixed_distance_from_last_target(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
 }
 inline float TargetPlacementStrategy::_internal_fixed_distance_from_last_target() const {
@@ -5601,13 +5626,13 @@ inline void TargetPlacementStrategy::_internal_set_fixed_distance_from_last_targ
 
 // float fixed_distance_jitter = 5;
 inline bool TargetPlacementStrategy::has_fixed_distance_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void TargetPlacementStrategy::clear_fixed_distance_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.fixed_distance_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline float TargetPlacementStrategy::fixed_distance_jitter() const {
   // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_jitter)
@@ -5615,7 +5640,7 @@ inline float TargetPlacementStrategy::fixed_distance_jitter() const {
 }
 inline void TargetPlacementStrategy::set_fixed_distance_jitter(float value) {
   _internal_set_fixed_distance_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.fixed_distance_jitter)
 }
 inline float TargetPlacementStrategy::_internal_fixed_distance_jitter() const {
