@@ -1397,7 +1397,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return *internal_default_instance();
   }
   enum TypeCase {
-    kPill = 5,
+    kPill = 10,
     TYPE_NOT_SET = 0,
   };
   static inline const TargetProfile* internal_default_instance() {
@@ -1493,9 +1493,10 @@ class TargetProfile final : public ::google::protobuf::Message
   enum : int {
     kPercentChanceFieldNumber = 1,
     kTargetRadiusFieldNumber = 2,
-    kSpeedFieldNumber = 3,
-    kSpeedJitterFieldNumber = 4,
-    kPillFieldNumber = 5,
+    kTargetRadiusJitterFieldNumber = 3,
+    kSpeedFieldNumber = 4,
+    kSpeedJitterFieldNumber = 5,
+    kPillFieldNumber = 10,
   };
   // float percent_chance = 1;
   bool has_percent_chance() const;
@@ -1519,7 +1520,18 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_target_radius(float value);
 
   public:
-  // float speed = 3;
+  // float target_radius_jitter = 3;
+  bool has_target_radius_jitter() const;
+  void clear_target_radius_jitter() ;
+  float target_radius_jitter() const;
+  void set_target_radius_jitter(float value);
+
+  private:
+  float _internal_target_radius_jitter() const;
+  void _internal_set_target_radius_jitter(float value);
+
+  public:
+  // float speed = 4;
   bool has_speed() const;
   void clear_speed() ;
   float speed() const;
@@ -1530,7 +1542,7 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_speed(float value);
 
   public:
-  // float speed_jitter = 4;
+  // float speed_jitter = 5;
   bool has_speed_jitter() const;
   void clear_speed_jitter() ;
   float speed_jitter() const;
@@ -1541,7 +1553,7 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_speed_jitter(float value);
 
   public:
-  // .aim.PillTargetDef pill = 5;
+  // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
   bool _internal_has_pill() const;
@@ -1570,7 +1582,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 5, 1,
+      3, 6, 1,
       0, 2>
       _table_;
 
@@ -1592,6 +1604,7 @@ class TargetProfile final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     float percent_chance_;
     float target_radius_;
+    float target_radius_jitter_;
     float speed_;
     float speed_jitter_;
     union TypeUnion {
@@ -6852,15 +6865,43 @@ inline void TargetProfile::_internal_set_target_radius(float value) {
   _impl_.target_radius_ = value;
 }
 
-// float speed = 3;
-inline bool TargetProfile::has_speed() const {
+// float target_radius_jitter = 3;
+inline bool TargetProfile::has_target_radius_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_target_radius_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float TargetProfile::target_radius_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_jitter)
+  return _internal_target_radius_jitter();
+}
+inline void TargetProfile::set_target_radius_jitter(float value) {
+  _internal_set_target_radius_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_jitter)
+}
+inline float TargetProfile::_internal_target_radius_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_radius_jitter_;
+}
+inline void TargetProfile::_internal_set_target_radius_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_jitter_ = value;
+}
+
+// float speed = 4;
+inline bool TargetProfile::has_speed() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void TargetProfile::clear_speed() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float TargetProfile::speed() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.speed)
@@ -6868,7 +6909,7 @@ inline float TargetProfile::speed() const {
 }
 inline void TargetProfile::set_speed(float value) {
   _internal_set_speed(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.speed)
 }
 inline float TargetProfile::_internal_speed() const {
@@ -6880,15 +6921,15 @@ inline void TargetProfile::_internal_set_speed(float value) {
   _impl_.speed_ = value;
 }
 
-// float speed_jitter = 4;
+// float speed_jitter = 5;
 inline bool TargetProfile::has_speed_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void TargetProfile::clear_speed_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float TargetProfile::speed_jitter() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.speed_jitter)
@@ -6896,7 +6937,7 @@ inline float TargetProfile::speed_jitter() const {
 }
 inline void TargetProfile::set_speed_jitter(float value) {
   _internal_set_speed_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.speed_jitter)
 }
 inline float TargetProfile::_internal_speed_jitter() const {
@@ -6908,7 +6949,7 @@ inline void TargetProfile::_internal_set_speed_jitter(float value) {
   _impl_.speed_jitter_ = value;
 }
 
-// .aim.PillTargetDef pill = 5;
+// .aim.PillTargetDef pill = 10;
 inline bool TargetProfile::has_pill() const {
   return type_case() == kPill;
 }
