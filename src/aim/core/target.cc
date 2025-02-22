@@ -90,10 +90,10 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
     float hit_distance;
     if (target.is_pill) {
       Pill pill;
+      pill.position = target.position;
       pill.radius = target.radius;
-      float pill_height = target.height * 0.5;
-      pill.top_position = target.position + glm::vec3(0, 0, pill_height);
-      pill.bottom_position = target.position + glm::vec3(0, 0, pill_height * -1);
+      pill.height = target.height;
+      pill.up = target.pill_up;
       is_hit = IntersectRayPill(pill, camera.GetPosition(), look_at, &hit_distance);
     } else {
       is_hit = IntersectRaySphere(

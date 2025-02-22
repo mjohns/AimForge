@@ -22,6 +22,7 @@ struct Target {
   bool is_ghost = false;
 
   bool is_pill = false;
+  glm::vec3 pill_up{0, 0, 1};
 
   bool CanHit() const {
     return !hidden && !is_ghost;
