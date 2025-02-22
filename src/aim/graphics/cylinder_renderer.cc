@@ -106,6 +106,11 @@ CylinderRenderer::CylinderRenderer() : shader_(Shader(vertex_shader, fragment_sh
   glEnableVertexAttribArray(0);
 }
 
+CylinderRenderer::~CylinderRenderer() {
+  glDeleteVertexArrays(1, &vao_);
+  glDeleteBuffers(1, &vbo_);
+}
+
 void CylinderRenderer::SetProjection(const glm::mat4& projection) {
   shader_.Use();
   shader_.SetMat4("projection", projection);

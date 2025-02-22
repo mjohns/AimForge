@@ -16,6 +16,7 @@ struct Sphere {
 class SphereRenderer {
  public:
   SphereRenderer();
+  ~SphereRenderer();
 
   void SetProjection(const glm::mat4& projection);
   void Draw(const glm::mat4& view, const glm::vec3& color, const std::vector<Sphere>& spheres);

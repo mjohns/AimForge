@@ -149,6 +149,11 @@ SphereRenderer::SphereRenderer() : shader_(Shader(vertex_shader, fragment_shader
   glEnableVertexAttribArray(0);
 }
 
+SphereRenderer::~SphereRenderer() {
+  glDeleteVertexArrays(1, &vao_);
+  glDeleteBuffers(1, &vbo_);
+}
+
 void SphereRenderer::SetProjection(const glm::mat4& projection) {
   shader_.Use();
   shader_.SetMat4("projection", projection);
