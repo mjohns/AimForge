@@ -198,6 +198,10 @@ Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Appli
   Target t;
   t.radius = profile.target_radius();
   t.static_wall_position = wall_pos;
+  if (profile.has_pill()) {
+    t.is_pill = true;
+    t.height = profile.pill().height();
+  }
 
   t.position.z = wall_pos.y;
   if (def.room().has_simple_room() || def.room().has_barrel_room()) {

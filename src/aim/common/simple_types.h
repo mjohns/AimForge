@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <glm/vec3.hpp>
+
 #include <cstdint>
 
 namespace aim {
@@ -23,6 +25,18 @@ struct Rgb {
 struct Wall {
   float width;
   float height;
+};
+
+struct Cylinder {
+  glm::vec3 top_position{};
+  glm::vec3 bottom_position{};
+  float radius = 0;
+};
+
+struct Pill {
+  glm::vec3 top_position{};
+  glm::vec3 bottom_position{};
+  float radius = 0;
 };
 
 struct ScreenInfo {

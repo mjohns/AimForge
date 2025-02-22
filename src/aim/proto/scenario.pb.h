@@ -69,6 +69,9 @@ extern CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
 class EllipseTargetRegion;
 struct EllipseTargetRegionDefaultTypeInternal;
 extern EllipseTargetRegionDefaultTypeInternal _EllipseTargetRegion_default_instance_;
+class PillTargetDef;
+struct PillTargetDefDefaultTypeInternal;
+extern PillTargetDefDefaultTypeInternal _PillTargetDef_default_instance_;
 class RectangleTargetRegion;
 struct RectangleTargetRegionDefaultTypeInternal;
 extern RectangleTargetRegionDefaultTypeInternal _RectangleTargetRegion_default_instance_;
@@ -110,237 +113,6 @@ namespace aim {
 // ===================================================================
 
 
-// -------------------------------------------------------------------
-
-class TargetProfile final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.TargetProfile) */ {
- public:
-  inline TargetProfile() : TargetProfile(nullptr) {}
-  ~TargetProfile() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(TargetProfile* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(TargetProfile));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR TargetProfile(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline TargetProfile(const TargetProfile& from) : TargetProfile(nullptr, from) {}
-  inline TargetProfile(TargetProfile&& from) noexcept
-      : TargetProfile(nullptr, std::move(from)) {}
-  inline TargetProfile& operator=(const TargetProfile& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline TargetProfile& operator=(TargetProfile&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const TargetProfile& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const TargetProfile* internal_default_instance() {
-    return reinterpret_cast<const TargetProfile*>(
-        &_TargetProfile_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 14;
-  friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
-  inline void Swap(TargetProfile* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(TargetProfile* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  TargetProfile* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<TargetProfile>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const TargetProfile& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const TargetProfile& from) { TargetProfile::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(TargetProfile* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.TargetProfile"; }
-
- protected:
-  explicit TargetProfile(::google::protobuf::Arena* arena);
-  TargetProfile(::google::protobuf::Arena* arena, const TargetProfile& from);
-  TargetProfile(::google::protobuf::Arena* arena, TargetProfile&& from) noexcept
-      : TargetProfile(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kPercentChanceFieldNumber = 1,
-    kTargetRadiusFieldNumber = 2,
-    kSpeedFieldNumber = 3,
-    kSpeedJitterFieldNumber = 4,
-  };
-  // float percent_chance = 1;
-  bool has_percent_chance() const;
-  void clear_percent_chance() ;
-  float percent_chance() const;
-  void set_percent_chance(float value);
-
-  private:
-  float _internal_percent_chance() const;
-  void _internal_set_percent_chance(float value);
-
-  public:
-  // float target_radius = 2;
-  bool has_target_radius() const;
-  void clear_target_radius() ;
-  float target_radius() const;
-  void set_target_radius(float value);
-
-  private:
-  float _internal_target_radius() const;
-  void _internal_set_target_radius(float value);
-
-  public:
-  // float speed = 3;
-  bool has_speed() const;
-  void clear_speed() ;
-  float speed() const;
-  void set_speed(float value);
-
-  private:
-  float _internal_speed() const;
-  void _internal_set_speed(float value);
-
-  public:
-  // float speed_jitter = 4;
-  bool has_speed_jitter() const;
-  void clear_speed_jitter() ;
-  float speed_jitter() const;
-  void set_speed_jitter(float value);
-
-  private:
-  float _internal_speed_jitter() const;
-  void _internal_set_speed_jitter(float value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.TargetProfile)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 0,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const TargetProfile& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    float percent_chance_;
-    float target_radius_;
-    float speed_;
-    float speed_jitter_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_scenario_2eproto;
-};
 // -------------------------------------------------------------------
 
 class SimpleRoom final : public ::google::protobuf::Message
@@ -789,6 +561,198 @@ class RegionLength final : public ::google::protobuf::Message
     } type_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint32_t _oneof_case_[1];
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PillTargetDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.PillTargetDef) */ {
+ public:
+  inline PillTargetDef() : PillTargetDef(nullptr) {}
+  ~PillTargetDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(PillTargetDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(PillTargetDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR PillTargetDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline PillTargetDef(const PillTargetDef& from) : PillTargetDef(nullptr, from) {}
+  inline PillTargetDef(PillTargetDef&& from) noexcept
+      : PillTargetDef(nullptr, std::move(from)) {}
+  inline PillTargetDef& operator=(const PillTargetDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PillTargetDef& operator=(PillTargetDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PillTargetDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PillTargetDef* internal_default_instance() {
+    return reinterpret_cast<const PillTargetDef*>(
+        &_PillTargetDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 14;
+  friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
+  inline void Swap(PillTargetDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PillTargetDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PillTargetDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<PillTargetDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const PillTargetDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const PillTargetDef& from) { PillTargetDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(PillTargetDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.PillTargetDef"; }
+
+ protected:
+  explicit PillTargetDef(::google::protobuf::Arena* arena);
+  PillTargetDef(::google::protobuf::Arena* arena, const PillTargetDef& from);
+  PillTargetDef(::google::protobuf::Arena* arena, PillTargetDef&& from) noexcept
+      : PillTargetDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kHeightFieldNumber = 1,
+  };
+  // float height = 1;
+  bool has_height() const;
+  void clear_height() ;
+  float height() const;
+  void set_height(float value);
+
+  private:
+  float _internal_height() const;
+  void _internal_set_height(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.PillTargetDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      0, 1, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const PillTargetDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    float height_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1377,31 +1341,31 @@ class BarrelRoom final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class TargetDef final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.TargetDef) */ {
+class TargetProfile final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.TargetProfile) */ {
  public:
-  inline TargetDef() : TargetDef(nullptr) {}
-  ~TargetDef() PROTOBUF_FINAL;
+  inline TargetProfile() : TargetProfile(nullptr) {}
+  ~TargetProfile() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(TargetDef* msg, std::destroying_delete_t) {
+  void operator delete(TargetProfile* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(TargetDef));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(TargetProfile));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR TargetDef(
+  explicit PROTOBUF_CONSTEXPR TargetProfile(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline TargetDef(const TargetDef& from) : TargetDef(nullptr, from) {}
-  inline TargetDef(TargetDef&& from) noexcept
-      : TargetDef(nullptr, std::move(from)) {}
-  inline TargetDef& operator=(const TargetDef& from) {
+  inline TargetProfile(const TargetProfile& from) : TargetProfile(nullptr, from) {}
+  inline TargetProfile(TargetProfile&& from) noexcept
+      : TargetProfile(nullptr, std::move(from)) {}
+  inline TargetProfile& operator=(const TargetProfile& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TargetDef& operator=(TargetDef&& from) noexcept {
+  inline TargetProfile& operator=(TargetProfile&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -1429,16 +1393,20 @@ class TargetDef final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TargetDef& default_instance() {
+  static const TargetProfile& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TargetDef* internal_default_instance() {
-    return reinterpret_cast<const TargetDef*>(
-        &_TargetDef_default_instance_);
+  enum TypeCase {
+    kPill = 5,
+    TYPE_NOT_SET = 0,
+  };
+  static inline const TargetProfile* internal_default_instance() {
+    return reinterpret_cast<const TargetProfile*>(
+        &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 13;
-  friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
-  inline void Swap(TargetDef* other) {
+  static constexpr int kIndexInFileMessages = 15;
+  friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
+  inline void Swap(TargetProfile* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -1446,7 +1414,7 @@ class TargetDef final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TargetDef* other) {
+  void UnsafeArenaSwap(TargetProfile* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -1454,13 +1422,13 @@ class TargetDef final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  TargetDef* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<TargetDef>(arena);
+  TargetProfile* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<TargetProfile>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const TargetDef& from);
+  void CopyFrom(const TargetProfile& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const TargetDef& from) { TargetDef::MergeImpl(*this, from); }
+  void MergeFrom(const TargetProfile& from) { TargetProfile::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -1497,18 +1465,18 @@ class TargetDef final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(TargetDef* other);
+  void InternalSwap(TargetProfile* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.TargetDef"; }
+  static ::absl::string_view FullMessageName() { return "aim.TargetProfile"; }
 
  protected:
-  explicit TargetDef(::google::protobuf::Arena* arena);
-  TargetDef(::google::protobuf::Arena* arena, const TargetDef& from);
-  TargetDef(::google::protobuf::Arena* arena, TargetDef&& from) noexcept
-      : TargetDef(arena) {
+  explicit TargetProfile(::google::protobuf::Arena* arena);
+  TargetProfile(::google::protobuf::Arena* arena, const TargetProfile& from);
+  TargetProfile(::google::protobuf::Arena* arena, TargetProfile&& from) noexcept
+      : TargetProfile(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -1523,74 +1491,86 @@ class TargetDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kProfilesFieldNumber = 1,
-    kTargetOrderFieldNumber = 4,
-    kNumTargetsFieldNumber = 2,
-    kRemoveClosestOnMissFieldNumber = 3,
+    kPercentChanceFieldNumber = 1,
+    kTargetRadiusFieldNumber = 2,
+    kSpeedFieldNumber = 3,
+    kSpeedJitterFieldNumber = 4,
+    kPillFieldNumber = 5,
   };
-  // repeated .aim.TargetProfile profiles = 1;
-  int profiles_size() const;
-  private:
-  int _internal_profiles_size() const;
-
-  public:
-  void clear_profiles() ;
-  ::aim::TargetProfile* mutable_profiles(int index);
-  ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>* mutable_profiles();
+  // float percent_chance = 1;
+  bool has_percent_chance() const;
+  void clear_percent_chance() ;
+  float percent_chance() const;
+  void set_percent_chance(float value);
 
   private:
-  const ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>& _internal_profiles() const;
-  ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>* _internal_mutable_profiles();
-  public:
-  const ::aim::TargetProfile& profiles(int index) const;
-  ::aim::TargetProfile* add_profiles();
-  const ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>& profiles() const;
-  // repeated int32 target_order = 4;
-  int target_order_size() const;
-  private:
-  int _internal_target_order_size() const;
+  float _internal_percent_chance() const;
+  void _internal_set_percent_chance(float value);
 
   public:
-  void clear_target_order() ;
-  ::int32_t target_order(int index) const;
-  void set_target_order(int index, ::int32_t value);
-  void add_target_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& target_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* mutable_target_order();
+  // float target_radius = 2;
+  bool has_target_radius() const;
+  void clear_target_radius() ;
+  float target_radius() const;
+  void set_target_radius(float value);
 
   private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_target_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_target_order();
+  float _internal_target_radius() const;
+  void _internal_set_target_radius(float value);
 
   public:
-  // int32 num_targets = 2;
-  bool has_num_targets() const;
-  void clear_num_targets() ;
-  ::int32_t num_targets() const;
-  void set_num_targets(::int32_t value);
+  // float speed = 3;
+  bool has_speed() const;
+  void clear_speed() ;
+  float speed() const;
+  void set_speed(float value);
 
   private:
-  ::int32_t _internal_num_targets() const;
-  void _internal_set_num_targets(::int32_t value);
+  float _internal_speed() const;
+  void _internal_set_speed(float value);
 
   public:
-  // bool remove_closest_on_miss = 3;
-  bool has_remove_closest_on_miss() const;
-  void clear_remove_closest_on_miss() ;
-  bool remove_closest_on_miss() const;
-  void set_remove_closest_on_miss(bool value);
+  // float speed_jitter = 4;
+  bool has_speed_jitter() const;
+  void clear_speed_jitter() ;
+  float speed_jitter() const;
+  void set_speed_jitter(float value);
 
   private:
-  bool _internal_remove_closest_on_miss() const;
-  void _internal_set_remove_closest_on_miss(bool value);
+  float _internal_speed_jitter() const;
+  void _internal_set_speed_jitter(float value);
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.TargetDef)
+  // .aim.PillTargetDef pill = 5;
+  bool has_pill() const;
+  private:
+  bool _internal_has_pill() const;
+
+  public:
+  void clear_pill() ;
+  const ::aim::PillTargetDef& pill() const;
+  PROTOBUF_NODISCARD ::aim::PillTargetDef* release_pill();
+  ::aim::PillTargetDef* mutable_pill();
+  void set_allocated_pill(::aim::PillTargetDef* value);
+  void unsafe_arena_set_allocated_pill(::aim::PillTargetDef* value);
+  ::aim::PillTargetDef* unsafe_arena_release_pill();
+
+  private:
+  const ::aim::PillTargetDef& _internal_pill() const;
+  ::aim::PillTargetDef* _internal_mutable_pill();
+
+  public:
+  void clear_type();
+  TypeCase type_case() const;
+  // @@protoc_insertion_point(class_scope:aim.TargetProfile)
  private:
   class _Internal;
+  void set_has_pill();
+  inline bool has_type() const;
+  inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 1,
+      2, 5, 1,
       0, 2>
       _table_;
 
@@ -1607,14 +1587,19 @@ class TargetDef final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const TargetDef& from_msg);
+                          const TargetProfile& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::RepeatedPtrField< ::aim::TargetProfile > profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> target_order_;
-    ::google::protobuf::internal::CachedSize _target_order_cached_byte_size_;
-    ::int32_t num_targets_;
-    bool remove_closest_on_miss_;
+    float percent_chance_;
+    float target_radius_;
+    float speed_;
+    float speed_jitter_;
+    union TypeUnion {
+      constexpr TypeUnion() : _constinit_{} {}
+      ::google::protobuf::internal::ConstantInitialized _constinit_;
+      ::aim::PillTargetDef* pill_;
+    } type_;
+    ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2841,6 +2826,251 @@ class TargetRegion final : public ::google::protobuf::Message
       ::aim::EllipseTargetRegion* ellipse_;
     } type_;
     ::uint32_t _oneof_case_[1];
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TargetDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.TargetDef) */ {
+ public:
+  inline TargetDef() : TargetDef(nullptr) {}
+  ~TargetDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(TargetDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(TargetDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR TargetDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline TargetDef(const TargetDef& from) : TargetDef(nullptr, from) {}
+  inline TargetDef(TargetDef&& from) noexcept
+      : TargetDef(nullptr, std::move(from)) {}
+  inline TargetDef& operator=(const TargetDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TargetDef& operator=(TargetDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TargetDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TargetDef* internal_default_instance() {
+    return reinterpret_cast<const TargetDef*>(
+        &_TargetDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 13;
+  friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
+  inline void Swap(TargetDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TargetDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TargetDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<TargetDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const TargetDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const TargetDef& from) { TargetDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(TargetDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.TargetDef"; }
+
+ protected:
+  explicit TargetDef(::google::protobuf::Arena* arena);
+  TargetDef(::google::protobuf::Arena* arena, const TargetDef& from);
+  TargetDef(::google::protobuf::Arena* arena, TargetDef&& from) noexcept
+      : TargetDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kProfilesFieldNumber = 1,
+    kTargetOrderFieldNumber = 4,
+    kNumTargetsFieldNumber = 2,
+    kRemoveClosestOnMissFieldNumber = 3,
+  };
+  // repeated .aim.TargetProfile profiles = 1;
+  int profiles_size() const;
+  private:
+  int _internal_profiles_size() const;
+
+  public:
+  void clear_profiles() ;
+  ::aim::TargetProfile* mutable_profiles(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>* mutable_profiles();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>& _internal_profiles() const;
+  ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>* _internal_mutable_profiles();
+  public:
+  const ::aim::TargetProfile& profiles(int index) const;
+  ::aim::TargetProfile* add_profiles();
+  const ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>& profiles() const;
+  // repeated int32 target_order = 4;
+  int target_order_size() const;
+  private:
+  int _internal_target_order_size() const;
+
+  public:
+  void clear_target_order() ;
+  ::int32_t target_order(int index) const;
+  void set_target_order(int index, ::int32_t value);
+  void add_target_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& target_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* mutable_target_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_target_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_target_order();
+
+  public:
+  // int32 num_targets = 2;
+  bool has_num_targets() const;
+  void clear_num_targets() ;
+  ::int32_t num_targets() const;
+  void set_num_targets(::int32_t value);
+
+  private:
+  ::int32_t _internal_num_targets() const;
+  void _internal_set_num_targets(::int32_t value);
+
+  public:
+  // bool remove_closest_on_miss = 3;
+  bool has_remove_closest_on_miss() const;
+  void clear_remove_closest_on_miss() ;
+  bool remove_closest_on_miss() const;
+  void set_remove_closest_on_miss(bool value);
+
+  private:
+  bool _internal_remove_closest_on_miss() const;
+  void _internal_set_remove_closest_on_miss(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.TargetDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 1,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const TargetDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::TargetProfile > profiles_;
+    ::google::protobuf::RepeatedField<::int32_t> target_order_;
+    ::google::protobuf::internal::CachedSize _target_order_cached_byte_size_;
+    ::int32_t num_targets_;
+    bool remove_closest_on_miss_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -6507,6 +6737,38 @@ inline ::google::protobuf::RepeatedField<::int32_t>* TargetDef::_internal_mutabl
 
 // -------------------------------------------------------------------
 
+// PillTargetDef
+
+// float height = 1;
+inline bool PillTargetDef::has_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void PillTargetDef::clear_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline float PillTargetDef::height() const {
+  // @@protoc_insertion_point(field_get:aim.PillTargetDef.height)
+  return _internal_height();
+}
+inline void PillTargetDef::set_height(float value) {
+  _internal_set_height(value);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_set:aim.PillTargetDef.height)
+}
+inline float PillTargetDef::_internal_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.height_;
+}
+inline void PillTargetDef::_internal_set_height(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // TargetProfile
 
 // float percent_chance = 1;
@@ -6621,6 +6883,94 @@ inline void TargetProfile::_internal_set_speed_jitter(float value) {
   _impl_.speed_jitter_ = value;
 }
 
+// .aim.PillTargetDef pill = 5;
+inline bool TargetProfile::has_pill() const {
+  return type_case() == kPill;
+}
+inline bool TargetProfile::_internal_has_pill() const {
+  return type_case() == kPill;
+}
+inline void TargetProfile::set_has_pill() {
+  _impl_._oneof_case_[0] = kPill;
+}
+inline void TargetProfile::clear_pill() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kPill) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.pill_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.pill_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::PillTargetDef* TargetProfile::release_pill() {
+  // @@protoc_insertion_point(field_release:aim.TargetProfile.pill)
+  if (type_case() == kPill) {
+    clear_has_type();
+    auto* temp = _impl_.type_.pill_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.pill_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::PillTargetDef& TargetProfile::_internal_pill() const {
+  return type_case() == kPill ? *_impl_.type_.pill_ : reinterpret_cast<::aim::PillTargetDef&>(::aim::_PillTargetDef_default_instance_);
+}
+inline const ::aim::PillTargetDef& TargetProfile::pill() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.pill)
+  return _internal_pill();
+}
+inline ::aim::PillTargetDef* TargetProfile::unsafe_arena_release_pill() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.TargetProfile.pill)
+  if (type_case() == kPill) {
+    clear_has_type();
+    auto* temp = _impl_.type_.pill_;
+    _impl_.type_.pill_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void TargetProfile::unsafe_arena_set_allocated_pill(::aim::PillTargetDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_pill();
+    _impl_.type_.pill_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetProfile.pill)
+}
+inline ::aim::PillTargetDef* TargetProfile::_internal_mutable_pill() {
+  if (type_case() != kPill) {
+    clear_type();
+    set_has_pill();
+    _impl_.type_.pill_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::PillTargetDef>(GetArena());
+  }
+  return _impl_.type_.pill_;
+}
+inline ::aim::PillTargetDef* TargetProfile::mutable_pill() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::PillTargetDef* _msg = _internal_mutable_pill();
+  // @@protoc_insertion_point(field_mutable:aim.TargetProfile.pill)
+  return _msg;
+}
+
+inline bool TargetProfile::has_type() const {
+  return type_case() != TYPE_NOT_SET;
+}
+inline void TargetProfile::clear_has_type() {
+  _impl_._oneof_case_[0] = TYPE_NOT_SET;
+}
+inline TargetProfile::TypeCase TargetProfile::type_case() const {
+  return TargetProfile::TypeCase(_impl_._oneof_case_[0]);
+}
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif  // __GNUC__

@@ -71,6 +71,10 @@ class CenteringScenario : public Scenario {
     distance_per_second_ = target_profile.speed();
     Target target;
     target.radius = target_profile.target_radius();
+    if (target_profile.has_pill()) {
+      target.is_pill = true;
+      target.height = target_profile.pill().height();
+    }
 
     target.position = start_ + (start_to_end_ * initial_distance_offset_);
 

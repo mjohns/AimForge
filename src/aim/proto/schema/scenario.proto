@@ -128,10 +128,19 @@ message TargetDef {
   repeated int32 target_order = 4;
 }
 
+message PillTargetDef {
+  float height = 1;
+}
+
 message TargetProfile {
   float percent_chance = 1;
   float target_radius = 2;
   float speed = 3;
   // Speed will be adjusted +/- jitter amount.
   float speed_jitter = 4;
+
+  // Defaults to spehere if no more specific type is specified.
+  oneof type {
+    PillTargetDef pill = 5;
+  }
 }
