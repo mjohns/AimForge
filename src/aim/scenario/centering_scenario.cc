@@ -68,15 +68,8 @@ class CenteringScenario : public Scenario {
  protected:
   void Initialize() override {
     TargetProfile target_profile = GetNextTargetProfile();
-    distance_per_second_ = GetJitteredValue(
-        target_profile.speed(), target_profile.speed_jitter(), app_->random_generator());
-    Target target;
-    target.radius = GetJitteredValue(target_profile.target_radius(),
-                                     target_profile.target_radius_jitter(),
-                                     app_->random_generator());
+    Target target = GetTargetTemplate(target_profile);
     if (target_profile.has_pill()) {
-      target.is_pill = true;
-      target.height = target_profile.pill().height();
       target.pill_up =
           glm::normalize(glm::cross(start_to_end_, glm::normalize(start_ - camera_.GetPosition())));
     }
@@ -116,7 +109,7 @@ class CenteringScenario : public Scenario {
     }
 
     float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
-    float travel_distance = travel_time_seconds * distance_per_second_ + initial_distance_offset_;
+    float travel_distance = travel_time_seconds * target_->speed + initial_distance_offset_;
 
     int num_times_across = travel_distance / distance_;
 
@@ -158,7 +151,6 @@ class CenteringScenario : public Scenario {
   glm::vec3 start_to_end_;
   float distance_;
   float initial_distance_offset_;
-  float distance_per_second_;
   Stopwatch hit_stopwatch_;
   Stopwatch shot_stopwatch_;
   std::unique_ptr<TrackingSound> tracking_sound_;

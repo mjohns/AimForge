@@ -314,6 +314,19 @@ TargetProfile Scenario::GetNextTargetProfile() {
   return target_manager_.GetTargetProfile(def_.target_def(), app_->random_generator());
 }
 
+Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
+  Target target;
+  target.radius = GetJitteredValue(
+      profile.target_radius(), profile.target_radius_jitter(), app_->random_generator());
+  target.speed =
+      GetJitteredValue(profile.speed(), profile.speed_jitter(), app_->random_generator());
+  if (profile.has_pill()) {
+    target.is_pill = true;
+    target.height = profile.pill().height();
+  }
+  return target;
+}
+
 NavigationEvent RunScenario(const ScenarioDef& def, Application* app) {
   while (true) {
     std::unique_ptr<Scenario> scenario = CreateScenarioForType(def, app);

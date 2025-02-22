@@ -12,7 +12,7 @@ void DrawCrosshair(const Crosshair& crosshair,
   if (!crosshair.has_dot()) {
     return;
   }
-  float radius = crosshair.size();
+  float radius = crosshair.size() / 4.0f;
   ImU32 circle_color = ToImCol32(theme.crosshair().color());
   draw_list->AddCircleFilled(screen.center, radius, circle_color, 0);
   if (crosshair.dot().draw_outline()) {

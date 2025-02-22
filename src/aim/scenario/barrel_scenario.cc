@@ -89,8 +89,7 @@ class BarrelScenario : public Scenario {
 
   Target AddNewTarget(std::optional<u16> target_to_replace = {}) {
     auto type = GetNextTargetProfile();
-    Target t;
-    t.radius = type.target_radius();
+    Target t = GetTargetTemplate(type);
 
     // Get position on wall (not too close in ellipse etc.)
     // Get movement direction vector and speed.
@@ -116,7 +115,7 @@ class BarrelScenario : public Scenario {
     MovementInfo info;
     info.target_id = t.id;
     info.direction = direction;
-    info.speed = GetJitteredValue(type.speed(), type.speed_jitter(), app_->random_generator());
+    info.speed = t.speed;
     info.last_update_time_seconds = timer_.GetElapsedSeconds();
 
     movement_info_map_[t.id] = info;

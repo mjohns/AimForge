@@ -131,7 +131,7 @@ class QuickSettingsScreen : public UiScreen {
         }
         if (type_ == QuickSettingsType::CROSSHAIR) {
           float size = ParseFloat(crosshair_size_);
-          crosshair_size_ = std::format("{}", size + event.wheel.y * 0.2);
+          crosshair_size_ = std::format("{}", size + event.wheel.y);
         }
       }
     }
