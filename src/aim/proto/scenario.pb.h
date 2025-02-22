@@ -3286,7 +3286,6 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     kTargetPlacementStrategyFieldNumber = 2,
     kIsPokeBallFieldNumber = 1,
     kNewestTargetIsGhostFieldNumber = 3,
-    kTargetRadiusFieldNumber = 5,
   };
   // .aim.TargetPlacementStrategy target_placement_strategy = 2;
   bool has_target_placement_strategy() const;
@@ -3325,23 +3324,12 @@ class StaticScenarioDef final : public ::google::protobuf::Message
   void _internal_set_newest_target_is_ghost(bool value);
 
   public:
-  // float target_radius = 5;
-  bool has_target_radius() const;
-  void clear_target_radius() ;
-  float target_radius() const;
-  void set_target_radius(float value);
-
-  private:
-  float _internal_target_radius() const;
-  void _internal_set_target_radius(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.StaticScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 4, 1,
+      2, 3, 1,
       0, 2>
       _table_;
 
@@ -3364,7 +3352,6 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
     bool is_poke_ball_;
     bool newest_target_is_ghost_;
-    float target_radius_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -6183,34 +6170,6 @@ inline bool StaticScenarioDef::_internal_newest_target_is_ghost() const {
 inline void StaticScenarioDef::_internal_set_newest_target_is_ghost(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.newest_target_is_ghost_ = value;
-}
-
-// float target_radius = 5;
-inline bool StaticScenarioDef::has_target_radius() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  return value;
-}
-inline void StaticScenarioDef::clear_target_radius() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_radius_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline float StaticScenarioDef::target_radius() const {
-  // @@protoc_insertion_point(field_get:aim.StaticScenarioDef.target_radius)
-  return _internal_target_radius();
-}
-inline void StaticScenarioDef::set_target_radius(float value) {
-  _internal_set_target_radius(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.StaticScenarioDef.target_radius)
-}
-inline float StaticScenarioDef::_internal_target_radius() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.target_radius_;
-}
-inline void StaticScenarioDef::_internal_set_target_radius(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_radius_ = value;
 }
 
 // -------------------------------------------------------------------

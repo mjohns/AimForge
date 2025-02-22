@@ -193,8 +193,10 @@ glm::vec2 GetNewTargetPosition(const ScenarioDef& def,
 
 Target GetNewTarget(const ScenarioDef& def, TargetManager* target_manager, Application* app) {
   glm::vec2 wall_pos = GetNewTargetPosition(def, target_manager, app);
+  TargetProfile profile =
+      target_manager->GetTargetProfile(def.target_def(), app->random_generator());
   Target t;
-  t.radius = def.static_def().target_radius();
+  t.radius = profile.target_radius();
   t.static_wall_position = wall_pos;
 
   t.position.z = wall_pos.y;
