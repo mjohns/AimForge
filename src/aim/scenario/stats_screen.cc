@@ -136,6 +136,9 @@ NavigationEvent StatsScreen::Run() {
     ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
     ImGui::Indent(x_start);
 
+    if (percent_diff > 0) {
+      ImGui::Text("New High Score!");
+    }
     ImGui::Text("%s", score_string.c_str());
     if (percent_diff > 0) {
       ImGui::Text("+%.1f%%", percent_diff);
@@ -154,9 +157,12 @@ NavigationEvent StatsScreen::Run() {
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Spacing();
-    ImVec2 button_sz = ImVec2(width, 0.0);
-    if (ImGui::Button("View replay", button_sz)) {
-      view_replay = true;
+
+    if (replay_) {
+      ImVec2 button_sz = ImVec2(width, 0.0);
+      if (ImGui::Button("View replay", button_sz)) {
+        view_replay = true;
+      }
     }
     /*
     if (ImGui::Button("Save replay", sz)) {
