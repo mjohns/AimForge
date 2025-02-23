@@ -95,6 +95,11 @@ std::vector<ScenarioDef> GetScenarios() {
     def.mutable_target_def()->mutable_target_order()->Add(0);
     def.mutable_target_def()->mutable_target_order()->Add(1);
     scenarios.push_back(def);
+    
+    def.set_duration_seconds(6);
+    def.set_scenario_id("short_barrel");
+    def.set_display_name("Short Barrel Bounce");
+    scenarios.push_back(def);
   }
   {
     ScenarioDef def = centering_def;

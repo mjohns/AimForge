@@ -40,6 +40,11 @@ struct Pill {
   float height = 0;
 };
 
+struct Sphere {
+  glm::vec3 position{};
+  float radius = 0;
+};
+
 struct ScreenInfo {
   ScreenInfo(int screen_width, int screen_height)
       : width(screen_width),
