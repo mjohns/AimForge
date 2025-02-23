@@ -4,14 +4,10 @@
 #include <glm/vec3.hpp>
 #include <vector>
 
+#include "aim/common/simple_types.h"
 #include "aim/graphics/shader.h"
 
 namespace aim {
-
-struct Sphere {
-  glm::vec3 position;
-  float radius;
-};
 
 class SphereRenderer {
  public:

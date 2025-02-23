@@ -92,6 +92,8 @@ NavigationEvent StatsScreen::Run() {
     percent_diff = (1.0 - percent) * 100;
   }
 
+  bool show_history = false;
+
   // Show results page
   SDL_GL_SetSwapInterval(1);  // Enable vsync
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
@@ -127,23 +129,44 @@ NavigationEvent StatsScreen::Run() {
       }
     }
 
-    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
+    float width = screen.width * 0.3;
+    float x_start = (screen.width - width) * 0.5;
 
-    ImGui::Text("high_score: %s", previous_high_score_string.c_str());
+    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
+    ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
+    ImGui::Indent(x_start);
+
+    ImGui::Text("%s", score_string.c_str());
+    if (percent_diff > 0) {
+      ImGui::Text("+%.1f%%", percent_diff);
+    } else {
+      ImGui::Text("%.1f%%", percent_diff);
+    }
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Text("previous_high_score: %s", previous_high_score_string.c_str());
     ImGui::Text("total_runs: %d", all_stats.size());
-    ImGui::Text("score: %s", score_string.c_str());
-    ImGui::Text("percent diff: %.1f%%", percent_diff);
-    ImVec2 sz = ImVec2(-FLT_MIN, 0.0f);
-    if (ImGui::Button("View replay", sz)) {
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImVec2 button_sz = ImVec2(width, 0.0);
+    if (ImGui::Button("View replay", button_sz)) {
       view_replay = true;
     }
+    /*
     if (ImGui::Button("Save replay", sz)) {
       std::string file_name = std::format("replay_{}_{}.bin", scenario_id_, stats_id_);
       std::ofstream outfile(app_->file_system()->GetUserDataPath(file_name), std::ios::binary);
       replay_->SerializeToOstream(&outfile);
       outfile.close();
     }
-    if (all_stats.size() > 1) {
+    */
+    if (show_history && all_stats.size() > 1) {
       if (ImPlot::BeginPlot("Scores")) {
         // ImPlot::SetupAxis(ImAxis_X1, "Run Number", ImPlotAxisFlags_LockMax);
         auto score_getter = [](int plot_index, void* data) {
