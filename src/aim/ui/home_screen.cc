@@ -97,7 +97,7 @@ std::vector<ScenarioDef> GetScenarios() {
     scenarios.push_back(def);
     
     def.set_duration_seconds(6);
-    def.set_scenario_id("short_barrel");
+    def.set_scenario_id("short_barrel2");
     def.set_display_name("Short Barrel Bounce");
     scenarios.push_back(def);
   }
