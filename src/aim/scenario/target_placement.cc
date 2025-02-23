@@ -21,14 +21,19 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
 
   glm::vec2 GetNextPosition() override {
     glm::vec2 candidate_pos;
-    for (int i = 0; i < 100; ++i) {
+    float min_distance = strategy_.min_distance();
+    for (int i = 0; i < 200; ++i) {
       candidate_pos = GetNewCandidateTargetPosition();
       if (strategy_.has_fixed_distance_from_last_target()) {
         // Scale the candidate to the correct distance.
         candidate_pos = GetFixedDistanceAdjustedPoint(candidate_pos);
       }
-      if (AreNoneWithinDistanceOnWall(candidate_pos, strategy_.min_distance())) {
+      if (AreNoneWithinDistanceOnWall(candidate_pos, min_distance)) {
         return candidate_pos;
+      }
+
+      if (i == 100 || i == 150 || i == 175 || i == 190) {
+        min_distance *= 0.5;
       }
     }
 
