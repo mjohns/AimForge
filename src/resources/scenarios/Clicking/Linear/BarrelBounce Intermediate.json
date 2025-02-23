@@ -1,0 +1,35 @@
+{
+  "barrelDef": {},
+  "displayName": "Barrel Bounce",
+  "durationSeconds": 60,
+  "room": {
+    "barrelRoom": {
+      "radius": 75
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    }
+  },
+  "scenarioId": "barrel_bounce",
+  "targetDef": {
+    "numTargets": 4,
+    "profiles": [
+      {
+        "speed": 60,
+        "targetRadius": 2.8
+      },
+      {
+        "speed": 50,
+        "speedJitter": 3,
+        "targetRadius": 2.2
+      }
+    ],
+    "targetOrder": [
+      0,
+      0,
+      1
+    ]
+  }
+}
