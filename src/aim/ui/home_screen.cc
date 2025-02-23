@@ -2,6 +2,7 @@
 
 #include <format>
 
+#include "aim/common/files.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/ui_screen.h"
@@ -95,7 +96,7 @@ std::vector<ScenarioDef> GetScenarios() {
     def.mutable_target_def()->mutable_target_order()->Add(0);
     def.mutable_target_def()->mutable_target_order()->Add(1);
     scenarios.push_back(def);
-    
+
     def.set_duration_seconds(6);
     def.set_scenario_id("short_barrel2");
     def.set_display_name("Short Barrel Bounce");
@@ -296,7 +297,16 @@ bool ShouldExit(const NavigationEvent& e) {
 
 class HomeScreen : public UiScreen {
  public:
-  explicit HomeScreen(Application* app) : UiScreen(app), scenarios_(GetScenarios()) {}
+  explicit HomeScreen(Application* app) : UiScreen(app), scenarios_(GetScenarios()) {
+      /*
+    for (auto& s : scenarios_) {
+      WriteJsonMessageToFile(app_->file_system()->GetUserDataPath(
+                                 std::format("resources/scenarios/{}.json", s.scenario_id())),
+                             s);
+      ;
+    }
+    */
+  }
 
  protected:
   std::optional<NavigationEvent> OnBeforeEventHandling() override {

@@ -200,4 +200,14 @@ static std::optional<T> GetValueIfPresent(const google::protobuf::RepeatedPtrFie
   return IsValidIndex(list, i) ? list[i] : std::optional<T>{};
 }
 
+template <typename T>
+static void PushBackAll(std::vector<T>* v, const std::vector<T>& values) {
+  if (values.size() == 0) {
+    return;
+  }
+
+  v->reserve(v->size() + values.size());
+  v->insert(v->end(), values.begin(), values.end());
+}
+
 }  // namespace aim

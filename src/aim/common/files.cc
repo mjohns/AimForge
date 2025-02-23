@@ -41,6 +41,7 @@ bool WriteJsonMessageToFile(const std::filesystem::path& path,
   std::string json_string;
   google::protobuf::json::PrintOptions opts;
   opts.add_whitespace = true;
+  opts.unquote_int64_if_possible = true;
   auto status = google::protobuf::util::MessageToJsonString(message, &json_string, opts);
   if (!status.ok()) {
     Logger::get()->error("Unable to serialize message to json: {}", status.message());

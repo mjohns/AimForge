@@ -1,0 +1,40 @@
+{
+  "centeringDef": {
+    "endPosition": {
+      "x": 0,
+      "y": -3,
+      "z": -45
+    },
+    "startPosition": {
+      "x": 0,
+      "y": -3,
+      "z": 45
+    }
+  },
+  "displayName": "Vertical Centering",
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "scenarioId": "vertical_centering_test",
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 20
+        },
+        "speed": 45,
+        "targetRadius": 1.2
+      }
+    ]
+  }
+}

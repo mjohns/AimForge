@@ -1,0 +1,39 @@
+{
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 3,
+      "regions": [
+        {
+          "ellipse": {
+            "xDiameter": {
+              "xPercentValue": 0.075
+            },
+            "yDiameter": {
+              "yPercentValue": 0.075
+            }
+          }
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "numTargets": 3,
+    "profiles": [
+      {
+        "targetRadius": 0.95
+      }
+    ]
+  }
+}

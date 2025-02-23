@@ -1,0 +1,63 @@
+{
+  "displayName": "vertical alternate",
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "scenarioId": "1w1ts_intermediate_s5_vertical_alternate",
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 20,
+      "regionOrder": [
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.3
+            },
+            "yLength": {
+              "yPercentValue": 0.1
+            }
+          },
+          "yOffset": {
+            "yPercentValue": 0.2
+          }
+        },
+        {
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.3
+            },
+            "yLength": {
+              "yPercentValue": 0.1
+            }
+          },
+          "yOffset": {
+            "yPercentValue": -0.2
+          }
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "newestTargetIsGhost": true,
+    "numTargets": 2,
+    "profiles": [
+      {
+        "targetRadius": 1.5
+      }
+    ],
+    "removeClosestOnMiss": true
+  }
+}

@@ -33,47 +33,8 @@ foreach(THE_FILE ${SOUND_FILES})
     )
 endforeach()
 
-file(GLOB FONT_FILES resources/fonts/*)
-file(MAKE_DIRECTORY "${OUTPUT_DIR}/fonts")
-foreach(THE_FILE ${FONT_FILES})
-    file(COPY
-        "${THE_FILE}"
-        DESTINATION "${OUTPUT_DIR}/fonts"
-    )
-endforeach()
-
-file(GLOB TEXTURE_FILES resources/textures/*)
-file(MAKE_DIRECTORY "${OUTPUT_DIR}/textures")
-foreach(THE_FILE ${TEXTURE_FILES})
-    file(COPY
-        "${THE_FILE}"
-        DESTINATION "${OUTPUT_DIR}/textures"
-    )
-endforeach()
-
-file(GLOB THEME_FILES resources/themes/*)
-file(MAKE_DIRECTORY "${OUTPUT_DIR}/themes")
-foreach(THE_FILE ${THEME_FILES})
-    file(COPY
-        "${THE_FILE}"
-        DESTINATION "${OUTPUT_DIR}/themes"
-    )
-endforeach()
-
-file(GLOB SCENARIO_FILES resources/scenarios/*)
-file(MAKE_DIRECTORY "${OUTPUT_DIR}/scenarios")
-foreach(THE_FILE ${SCENARIO_FILES})
-    file(COPY
-        "${THE_FILE}"
-        DESTINATION "${OUTPUT_DIR}/scenarios"
-    )
-endforeach()
-
-file(GLOB PLAYLIST_FILES resources/playlists/*)
-file(MAKE_DIRECTORY "${OUTPUT_DIR}/playlists")
-foreach(THE_FILE ${PLAYLIST_FILES})
-    file(COPY
-        "${THE_FILE}"
-        DESTINATION "${OUTPUT_DIR}/playlists"
-    )
-endforeach()
+file(COPY resources/scenarios DESTINATION "${OUTPUT_DIR}")
+file(COPY resources/playlists DESTINATION "${OUTPUT_DIR}")
+file(COPY resources/themes DESTINATION "${OUTPUT_DIR}")
+file(COPY resources/fonts DESTINATION "${OUTPUT_DIR}")
+file(COPY resources/textures DESTINATION "${OUTPUT_DIR}")

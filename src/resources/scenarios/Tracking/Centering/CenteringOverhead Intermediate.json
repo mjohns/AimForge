@@ -1,0 +1,40 @@
+{
+  "centeringDef": {
+    "endPosition": {
+      "x": 60,
+      "y": -3,
+      "z": 50
+    },
+    "startPosition": {
+      "x": -60,
+      "y": -3,
+      "z": 50
+    }
+  },
+  "displayName": "Overhead Centering",
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "scenarioId": "overhead_centering_test",
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 20
+        },
+        "speed": 45,
+        "targetRadius": 1.2
+      }
+    ]
+  }
+}
