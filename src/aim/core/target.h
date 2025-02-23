@@ -76,7 +76,7 @@ class TargetManager {
   }
 
   std::optional<u16> GetNearestHitTarget(const Camera& camera, const glm::vec3& look_at);
-  std::optional<u16> GetNearestTargetOnStaticWall(const Camera& camera, const glm::vec3& look_at);
+  std::optional<u16> GetNearestTargetOnMiss(const Camera& camera, const glm::vec3& look_at);
 
  private:
   u16 target_id_counter_ = 0;
@@ -84,4 +84,4 @@ class TargetManager {
   std::optional<u16> most_recently_added_target_id_ = 0;
 };
 
-}  // namespace aim
+}  // namespacer aim
