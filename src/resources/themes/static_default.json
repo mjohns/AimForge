@@ -1,0 +1,48 @@
+{
+  "crosshair": {
+    "color": {
+      "hex": "#FFAC1C"
+    },
+    "outlineColor": {
+      "hex": "#000000"
+    }
+  },
+  "floorAppearance": {
+    "color": {
+      "b": 153,
+      "g": 153,
+      "r": 153
+    }
+  },
+  "frontAppearance": {
+    "color": {
+      "b": 178,
+      "g": 178,
+      "r": 178
+    }
+  },
+  "ghostTargetColor": {
+    "b": 165,
+    "g": 165,
+    "r": 165
+  },
+  "roofAppearance": {
+    "color": {
+      "b": 153,
+      "g": 153,
+      "r": 153
+    }
+  },
+  "sideAppearance": {
+    "color": {
+      "b": 165,
+      "g": 165,
+      "r": 165
+    }
+  },
+  "targetColor": {
+    "b": 0,
+    "g": 0,
+    "r": 0
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "crosshair": {
+    "color": {
+      "hex": "#000000"
+    },
+    "outlineColor": {
+      "hex": "#000000"
+    }
+  },
+  "floorAppearance": {
+    "texture": {
+      "mixPercent": 0.5,
+      "scale": 2.5,
+      "textureName": "basalt.jpg"
+    }
+  },
+  "frontAppearance": {
+    "texture": {
+      "mixPercent": 0.4,
+      "scale": 2,
+      "textureName": "polished_concrete.jpg"
+    }
+  },
+  "ghostTargetColor": {
+    "hex": "#6b7a8a"
+  },
+  "roofAppearance": {
+    "texture": {
+      "mixPercent": 0.42,
+      "scale": 2.5,
+      "textureName": "basalt.jpg"
+    }
+  },
+  "sideAppearance": {
+    "texture": {
+      "mixPercent": 0.35,
+      "scale": 2.5,
+      "textureName": "basalt.jpg"
+    }
+  },
+  "targetColor": {
+    "hex": "#FFFFFF"
+  }
+}
