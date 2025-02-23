@@ -24,6 +24,7 @@
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/stats_screen.h"
+#include "aim/scenario/types/scenario_types.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
