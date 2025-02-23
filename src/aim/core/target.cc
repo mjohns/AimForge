@@ -117,7 +117,7 @@ std::optional<uint16_t> TargetManager::GetNearestTargetOnMiss(const Camera& came
   for (auto& target : targets_) {
     if (target.CanHit()) {
       std::optional<float> distance =
-          GetDistanceFromPointOnPlane(camera.GetPosition(), look_at, target.position);
+          GetNormalizedMissedShotDistance(camera.GetPosition(), look_at, target.position);
       bool is_closest = false;
       if (distance.has_value()) {
         if (closest_distance.has_value()) {

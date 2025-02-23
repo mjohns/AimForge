@@ -183,17 +183,20 @@ glm::mat4 MakeCoordinateSystemTransform(const glm::vec3& x_axis,
   return rotation;
 }
 
-std::optional<float> GetDistanceFromPointOnPlane(const glm::vec3& origin,
-                                                 const glm::vec3& direction,
-                                                 const glm::vec3& position) {
+std::optional<float> GetNormalizedMissedShotDistance(const glm::vec3& camera_position,
+                                                     const glm::vec3& look_at,
+                                                     const glm::vec3& position) {
+  glm::vec3 direction_to_point = glm::normalize(position - camera_position);
+  // Find distance on a normalized plane 1 unit in front of the camera position.
+  glm::vec3 plane_origin = camera_position + look_at;
   float plane_distance;
   bool has_plane_intersection = glm::intersectRayPlane(
-      origin, direction, position, glm::normalize(origin - position), plane_distance);
+      camera_position, direction_to_point, plane_origin, look_at, plane_distance);
   if (!has_plane_intersection) {
     return {};
   }
-  glm::vec3 intersection_point = origin + direction * plane_distance;
-  return glm::length(position - intersection_point);
+  glm::vec3 intersection_point = camera_position + direction_to_point * plane_distance;
+  return glm::length(plane_origin - intersection_point);
 }
 
 }  // namespace aim
