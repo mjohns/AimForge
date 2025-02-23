@@ -31,7 +31,7 @@ std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, siz
       max_score = stats.score;
     }
   }
-  if (found_max_index > 0) {
+  if (found_max_index >= 0) {
     return all_stats[found_max_index];
   }
   return {};
@@ -83,6 +83,7 @@ NavigationEvent StatsScreen::Run() {
   float previous_high_score = 0;
   float percent_diff = 0;
   std::string time_ago;
+  bool has_previous_high_score = maybe_previous_high_score_stats.has_value();
   if (maybe_previous_high_score_stats) {
     previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
                                                  maybe_previous_high_score_stats->num_shots,
@@ -144,18 +145,24 @@ NavigationEvent StatsScreen::Run() {
       ImGui::Text("NEW HIGH SCORE!");
     }
     ImGui::Text("%s", score_string.c_str());
+    if (has_previous_high_score) {
     if (percent_diff > 0) {
       ImGui::Text("+%.1f%%", percent_diff);
     } else {
       ImGui::Text("%.1f%%", percent_diff);
     }
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Text("Previous High Score %s", time_ago.c_str());
+      ImGui::Text("%s", previous_high_score_string.c_str());
+    }
     ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Text("Previous High Score %s", time_ago.c_str());
-    ImGui::Text("%s", previous_high_score_string.c_str());
     ImGui::Spacing();
     ImGui::Text("total_runs: %d", all_stats.size());
 
+    ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Spacing();

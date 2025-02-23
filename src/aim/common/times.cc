@@ -132,7 +132,6 @@ std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
     return {};
   }
 
-  // Convert tm to time_point
   auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
   return std::chrono::duration_cast<std::chrono::microseconds>(tp.time_since_epoch()).count();
 }
