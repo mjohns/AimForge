@@ -3,6 +3,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <optional>
 #include <random>
 
 #include "aim/common/simple_types.h"
@@ -49,6 +50,12 @@ bool IntersectRaySphere(const glm::vec3& position,
                         const glm::vec3& origin,
                         const glm::vec3& direction,
                         float* intersection_distance);
+
+// Calculates the distance the camera is off from a point on the plane perpendicular to the look_at
+// vector.
+std::optional<float> GetDistanceFromPointOnPlane(const glm::vec3& origin,
+                                                 const glm::vec3& direction,
+                                                 const glm::vec3& position);
 
 // Axes must be normalized.
 glm::mat4 MakeCoordinateSystemTransform(const glm::vec3& x_axis,

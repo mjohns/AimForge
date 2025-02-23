@@ -1,10 +1,6 @@
 #include "target.h"
 
-// For glm intersect
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/intersect.hpp>
 
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
@@ -110,25 +106,27 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
   return closest_hit_target_id;
 }
 
-std::optional<uint16_t> TargetManager::GetNearestTargetOnStaticWall(const Camera& camera,
-                                                                    const glm::vec3& look_at) {
-  if (targets_.size() == 0 || look_at.y == 0) {
-    return {};
-  }
-  // For static wall scenarios all targets will be at the same y value.
-  float y = targets_[0].position.y;
-  float t = (y - camera.GetPosition().y) / look_at.y;
-  if (t <= 0) {
+std::optional<uint16_t> TargetManager::GetNearestTargetOnMiss(const Camera& camera,
+                                                              const glm::vec3& look_at) {
+  if (targets_.size() == 0) {
     return {};
   }
 
-  glm::vec3 intersection_point = camera.GetPosition() + (look_at * t);
-  float closest_distance = 100000;
+  std::optional<float> closest_distance;
   std::optional<uint16_t> closest_target_id;
   for (auto& target : targets_) {
     if (target.CanHit()) {
-      float distance = glm::length(target.position - intersection_point);
-      if (distance < closest_distance) {
+      std::optional<float> distance =
+          GetDistanceFromPointOnPlane(camera.GetPosition(), look_at, target.position);
+      bool is_closest = false;
+      if (distance.has_value()) {
+        if (closest_distance.has_value()) {
+          is_closest = *closest_distance > *distance;
+        } else {
+          is_closest = true;
+        }
+      }
+      if (is_closest) {
         closest_target_id = target.id;
         closest_distance = distance;
       }

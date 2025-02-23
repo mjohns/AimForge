@@ -97,7 +97,7 @@ class StaticScenario : public Scenario {
           // Missed shot
           if (def_.target_def().remove_closest_on_miss()) {
             std::optional<u16> target_id_to_remove =
-                target_manager_.GetNearestTargetOnStaticWall(camera_, look_at_.front);
+                target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
             if (target_id_to_remove.has_value()) {
               AddNewTargetDuringRun(*target_id_to_remove);
               AddRemoveTargetEvent(*target_id_to_remove);
