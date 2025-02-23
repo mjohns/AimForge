@@ -77,8 +77,4 @@ class Scenario {
 
 NavigationEvent RunScenario(const ScenarioDef& def, Application* app);
 
-std::unique_ptr<Scenario> CreateCenteringScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateStaticScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateBarrelScenario(const ScenarioDef& def, Application* app);
-
 }  // namespace aim

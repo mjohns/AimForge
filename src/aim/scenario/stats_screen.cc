@@ -17,7 +17,7 @@ namespace {
 std::string MakeScoreString(int targets_hit, int shots_taken, float score) {
   float hit_percent = targets_hit / (float)shots_taken;
   std::string score_string =
-      std::format("{}/{} ({:.1f}%) = {:.2f}", targets_hit, shots_taken, hit_percent * 100, score);
+      std::format("{:.2f} - {}/{} ({:.1f}%)", score, targets_hit, shots_taken, hit_percent * 100);
   return score_string;
 }
 
@@ -71,7 +71,6 @@ NavigationEvent StatsScreen::Run() {
   std::string score_string = MakeScoreString(stats_.targets_hit, stats_.shots_taken, stats_.score);
 
   auto all_stats = app_->stats_db()->GetStats(scenario_id_);
-  auto maybe_high_score_stats = GetHighScore(all_stats, all_stats.size());
   auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
 
   std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
