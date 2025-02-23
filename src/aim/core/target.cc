@@ -74,6 +74,7 @@ Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_ta
   Logger::get()->warn("Unable to replace target which does not exist");
   return new_target;
 }
+
 std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
                                                            const glm::vec3& look_at) {
   std::optional<uint16_t> closest_hit_target_id;

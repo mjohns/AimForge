@@ -82,6 +82,7 @@ NavigationEvent StatsScreen::Run() {
   std::string previous_high_score_string;
   float previous_high_score = 0;
   float percent_diff = 0;
+  std::string time_ago;
   if (maybe_previous_high_score_stats) {
     previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
                                                  maybe_previous_high_score_stats->num_shots,
@@ -89,6 +90,10 @@ NavigationEvent StatsScreen::Run() {
     previous_high_score = maybe_previous_high_score_stats->score;
     float percent = previous_high_score / stats_.score;
     percent_diff = (1.0 - percent) * 100;
+    auto maybe_time = ParseTimestampStringAsMicros(maybe_previous_high_score_stats->timestamp);
+    if (maybe_time) {
+      time_ago = std::format("({} ago)", GetFriendlyDurationString(*maybe_time, GetNowMicros()));
+    }
   }
 
   bool show_history = false;
@@ -136,7 +141,7 @@ NavigationEvent StatsScreen::Run() {
     ImGui::Indent(x_start);
 
     if (percent_diff > 0) {
-      ImGui::Text("New High Score!");
+      ImGui::Text("NEW HIGH SCORE!");
     }
     ImGui::Text("%s", score_string.c_str());
     if (percent_diff > 0) {
@@ -146,7 +151,9 @@ NavigationEvent StatsScreen::Run() {
     }
     ImGui::Spacing();
     ImGui::Spacing();
-    ImGui::Text("previous_high_score: %s", previous_high_score_string.c_str());
+    ImGui::Text("Previous High Score %s", time_ago.c_str());
+    ImGui::Text("%s", previous_high_score_string.c_str());
+    ImGui::Spacing();
     ImGui::Text("total_runs: %d", all_stats.size());
 
     ImGui::Spacing();
