@@ -21,32 +21,59 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 target_link_libraries(${NAME} PUBLIC aim)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(SOUND_FILES
-  "kill_confirmed.ogg"
-  "shoot.ogg"
-  "bass_drum.ogg"
-  "short_bass.wav"
-  "body_shot.ogg"
-)
 
-set (SOUND_OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/sounds")
-file(MAKE_DIRECTORY "${SOUND_OUTPUT_DIR}")
-foreach(SOUND_FILE ${SOUND_FILES})
+set (OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
+
+file(GLOB SOUND_FILES resources/sounds/*)
+file(MAKE_DIRECTORY "${OUTPUT_DIR}/sounds")
+foreach(THE_FILE ${SOUND_FILES})
     file(COPY
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds/${SOUND_FILE}"
-        DESTINATION "${SOUND_OUTPUT_DIR}"
+        "${THE_FILE}"
+        DESTINATION "${OUTPUT_DIR}/sounds"
     )
 endforeach()
 
-set(FONT_FILES
-  "Manrope.ttf"
-)
-
-set (FONTS_OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/fonts")
-file(MAKE_DIRECTORY "${FONTS_OUTPUT_DIR}")
-foreach(FONT_FILE ${FONT_FILES})
+file(GLOB FONT_FILES resources/fonts/*)
+file(MAKE_DIRECTORY "${OUTPUT_DIR}/fonts")
+foreach(THE_FILE ${FONT_FILES})
     file(COPY
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets/fonts/${FONT_FILE}"
-        DESTINATION "${FONTS_OUTPUT_DIR}"
+        "${THE_FILE}"
+        DESTINATION "${OUTPUT_DIR}/fonts"
+    )
+endforeach()
+
+file(GLOB TEXTURE_FILES resources/textures/*)
+file(MAKE_DIRECTORY "${OUTPUT_DIR}/textures")
+foreach(THE_FILE ${TEXTURE_FILES})
+    file(COPY
+        "${THE_FILE}"
+        DESTINATION "${OUTPUT_DIR}/textures"
+    )
+endforeach()
+
+file(GLOB THEME_FILES resources/themes/*)
+file(MAKE_DIRECTORY "${OUTPUT_DIR}/themes")
+foreach(THE_FILE ${THEME_FILES})
+    file(COPY
+        "${THE_FILE}"
+        DESTINATION "${OUTPUT_DIR}/themes"
+    )
+endforeach()
+
+file(GLOB SCENARIO_FILES resources/scenarios/*)
+file(MAKE_DIRECTORY "${OUTPUT_DIR}/scenarios")
+foreach(THE_FILE ${SCENARIO_FILES})
+    file(COPY
+        "${THE_FILE}"
+        DESTINATION "${OUTPUT_DIR}/scenarios"
+    )
+endforeach()
+
+file(GLOB PLAYLIST_FILES resources/playlists/*)
+file(MAKE_DIRECTORY "${OUTPUT_DIR}/playlists")
+foreach(THE_FILE ${PLAYLIST_FILES})
+    file(COPY
+        "${THE_FILE}"
+        DESTINATION "${OUTPUT_DIR}/playlists"
     )
 endforeach()

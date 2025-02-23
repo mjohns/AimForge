@@ -204,12 +204,12 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
-      if (ImGui::Button("Default Theme", button_sz)) {
-        theme_name_ = "default";
+      if (ImGui::Button("static_default", button_sz)) {
+        theme_name_ = "static_default";
       }
       ImGui::SameLine();
-      if (ImGui::Button("Texture Theme", button_sz)) {
-        theme_name_ = "dark_herringbone";
+      if (ImGui::Button("concrete_moon", button_sz)) {
+        theme_name_ = "concrete_moon";
       }
     }
 

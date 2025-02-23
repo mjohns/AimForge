@@ -92,8 +92,8 @@ int Application::Initialize() {
   }
   stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
   std::vector<std::filesystem::path> theme_dirs = {
-      file_system_->GetUserDataPath("assets/themes"),
-      file_system_->GetBasePath("assets/themes"),
+      file_system_->GetUserDataPath("resources/themes"),
+      file_system_->GetBasePath("resources/themes"),
   };
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"), theme_dirs);
@@ -118,8 +118,8 @@ int Application::Initialize() {
   }
   // Prefer sounds in the user sounds folder.
   std::vector<std::filesystem::path> sound_dirs = {
-      file_system_->GetUserDataPath("assets/sounds"),
-      file_system_->GetBasePath("assets/sounds"),
+      file_system_->GetUserDataPath("resources/sounds"),
+      file_system_->GetBasePath("resources/sounds"),
   };
   sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
 
@@ -173,8 +173,8 @@ int Application::Initialize() {
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   std::vector<std::filesystem::path> texture_dirs = {
-      file_system_->GetUserDataPath("assets/textures"),
-      file_system_->GetBasePath("assets/textures"),
+      file_system_->GetUserDataPath("resources/textures"),
+      file_system_->GetBasePath("resources/textures"),
   };
   renderer_ = std::make_unique<Renderer>(texture_dirs);
 
@@ -187,7 +187,7 @@ int Application::Initialize() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
-  auto font_path = file_system_->GetBasePath("assets/fonts/Manrope.ttf");
+  auto font_path = file_system_->GetBasePath("resources/fonts/Manrope.ttf");
   ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 26);
   if (font == nullptr) {
     logger_->error("Unable to load font from: {}", font_path.string());
