@@ -173,14 +173,6 @@ std::vector<ScenarioDef> GetScenarios() {
   }
   {
     ScenarioDef def = base_1w_def;
-    def.set_display_name("Nick EZ PZ");
-    def.set_scenario_id("nick_ez_pz");
-    def.mutable_target_def()->set_num_targets(7);
-    def.mutable_target_def()->add_profiles()->set_target_radius(3);
-    scenarios.push_back(def);
-  }
-  {
-    ScenarioDef def = base_1w_def;
     def.set_display_name("1w3ts");
     def.set_scenario_id("1w3ts_intermediate_s5");
     def.mutable_target_def()->set_num_targets(3);
@@ -219,9 +211,8 @@ std::vector<ScenarioDef> GetScenarios() {
     def.set_scenario_id("1w1ts_intermediate_s5");
     def.set_display_name("1w1ts");
     def.mutable_target_def()->set_num_targets(1);
-    // def.mutable_target_def()->set_remove_closest_on_miss(true);
+    def.mutable_target_def()->set_remove_closest_on_miss(true);
     def.mutable_target_def()->add_profiles()->set_target_radius(1.5);
-    def.mutable_target_def()->mutable_profiles(0)->mutable_pill()->set_height(20);
     scenarios.push_back(def);
   }
   {

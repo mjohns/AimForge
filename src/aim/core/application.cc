@@ -188,7 +188,7 @@ int Application::Initialize() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
   auto font_path = file_system_->GetBasePath("assets/fonts/Manrope.ttf");
-  ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 22);
+  ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 26);
   if (font == nullptr) {
     logger_->error("Unable to load font from: {}", font_path.string());
   }

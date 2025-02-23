@@ -2,6 +2,8 @@
 
 #include <chrono>
 #include <format>
+#include <iomanip>
+#include <sstream>
 
 namespace aim {
 
@@ -72,6 +74,72 @@ void TimedInvoker::Invoke(uint64_t now_micros) {
   if (fn_) {
     fn_();
   }
+}
+
+std::string GetFriendlyDurationString(u64 start, u64 end) {
+  u64 duration_micros = start > end ? start - end : end - start;
+  auto duration = std::chrono::microseconds(duration_micros);
+
+  {
+    int weeks = std::chrono::duration_cast<std::chrono::weeks>(duration).count();
+    if (weeks > 0) {
+      return weeks == 1 ? std::format("{} week", weeks) : std::format("{} weeks", weeks);
+    }
+  }
+
+  {
+    int days = std::chrono::duration_cast<std::chrono::days>(duration).count();
+    if (days > 0) {
+      return days == 1 ? std::format("{} day", days) : std::format("{} days", days);
+    }
+  }
+
+  {
+    int hours = std::chrono::duration_cast<std::chrono::hours>(duration).count();
+    if (hours > 0) {
+      return hours == 1 ? std::format("{} hour", hours) : std::format("{} hours", hours);
+    }
+  }
+
+  {
+    int minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
+    if (minutes > 0) {
+      return minutes == 1 ? std::format("{} minute", minutes) : std::format("{} minutes", minutes);
+    }
+  }
+
+  int seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+  return seconds == 1 ? std::format("{} second", seconds) : std::format("{} seconds", seconds);
+}
+
+std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
+  std::tm tm = {};
+  std::istringstream ss(timestamp);
+
+  // Handle different ISO 8601 formats
+  if (timestamp.find('T') != std::string::npos) {
+    // Format with 'T' separator: "2024-02-22T15:30:45Z"
+    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+  } else if (timestamp.find(' ') != std::string::npos) {
+    // Format with space separator: "2024-02-22 15:30:45Z"
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+  } else {
+    // Date only format: "2024-02-22"
+    ss >> std::get_time(&tm, "%Y-%m-%d");
+  }
+
+  if (ss.fail()) {
+    return {};
+  }
+
+  // Convert tm to time_point
+  auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+  return std::chrono::duration_cast<std::chrono::microseconds>(tp.time_since_epoch()).count();
+}
+
+u64 GetNowMicros() {
+  auto now = std::chrono::system_clock::now();
+  return std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
 }
 
 }  // namespace aim
