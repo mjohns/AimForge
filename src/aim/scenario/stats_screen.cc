@@ -146,11 +146,11 @@ NavigationEvent StatsScreen::Run() {
     }
     ImGui::Text("%s", score_string.c_str());
     if (has_previous_high_score) {
-    if (percent_diff > 0) {
-      ImGui::Text("+%.1f%%", percent_diff);
-    } else {
-      ImGui::Text("%.1f%%", percent_diff);
-    }
+      if (percent_diff > 0) {
+        ImGui::Text("+%.1f%%", percent_diff);
+      } else {
+        ImGui::Text("%.1f%%", percent_diff);
+      }
       ImGui::Spacing();
       ImGui::Spacing();
       ImGui::Spacing();

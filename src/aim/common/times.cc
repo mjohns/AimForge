@@ -113,26 +113,15 @@ std::string GetFriendlyDurationString(u64 start, u64 end) {
 }
 
 std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
-  std::tm tm = {};
+  std::chrono::utc_clock::time_point tp;
+  std::chrono::utc_clock::duration time;
   std::istringstream ss(timestamp);
-
-  // Handle different ISO 8601 formats
-  if (timestamp.find('T') != std::string::npos) {
-    // Format with 'T' separator: "2024-02-22T15:30:45Z"
-    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-  } else if (timestamp.find(' ') != std::string::npos) {
-    // Format with space separator: "2024-02-22 15:30:45Z"
-    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
-  } else {
-    // Date only format: "2024-02-22"
-    ss >> std::get_time(&tm, "%Y-%m-%d");
-  }
-
+  // Unfortunately std::chrono::parse directly to %FT%TZ fails because of fractional seconds
+  ss >> std::chrono::parse("%FT", tp) >> std::chrono::parse("%TZ", time);
+  tp += time;
   if (ss.fail()) {
     return {};
   }
-
-  auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
   return std::chrono::duration_cast<std::chrono::microseconds>(tp.time_since_epoch()).count();
 }
 
