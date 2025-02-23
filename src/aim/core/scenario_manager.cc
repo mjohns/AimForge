@@ -28,6 +28,7 @@ std::vector<ScenarioItem> LoadScenarios(const std::filesystem::path& base_dir, b
         Logger::get()->warn("Unable to read scenario {}", entry.path().string());
         continue;
       }
+      item.def.set_scenario_id(item.name);
 
       bool found_scenarios = false;
       for (const auto& part : entry.path()) {

@@ -91,7 +91,6 @@ message ScenarioDef {
   string scenario_id = 1;
   float duration_seconds = 2;
   Room room = 3;
-  string display_name = 4;
   TargetDef target_def = 5;
 
   oneof type {

@@ -10,6 +10,7 @@
 namespace aim {
 namespace {
 
+/*
 std::vector<ScenarioDef> GetScenarios() {
   Room default_wall;
   default_wall.mutable_simple_room()->set_height(150);
@@ -289,6 +290,7 @@ std::vector<ScenarioDef> GetScenarios() {
 
   return scenarios;
 }
+*/
 
 bool ShouldExit(const NavigationEvent& e) {
   bool should_display_home = e.IsGoHome() || e.IsDone();
@@ -297,15 +299,10 @@ bool ShouldExit(const NavigationEvent& e) {
 
 class HomeScreen : public UiScreen {
  public:
-  explicit HomeScreen(Application* app) : UiScreen(app), scenarios_(GetScenarios()) {
-      /*
-    for (auto& s : scenarios_) {
-      WriteJsonMessageToFile(app_->file_system()->GetUserDataPath(
-                                 std::format("resources/scenarios/{}.json", s.scenario_id())),
-                             s);
-      ;
+  explicit HomeScreen(Application* app) : UiScreen(app) {
+    for (auto& item : app->scenario_manager()->scenarios()) {
+      scenarios_.push_back(item.def);
     }
-    */
   }
 
  protected:
@@ -350,7 +347,7 @@ class HomeScreen : public UiScreen {
       open_settings_ = true;
     }
     for (auto& def : scenarios_) {
-      if (ImGui::Button(def.display_name().c_str(), sz)) {
+      if (ImGui::Button(def.scenario_id().c_str(), sz)) {
         scenario_to_start_ = def;
       }
     }
