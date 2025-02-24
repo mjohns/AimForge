@@ -17,8 +17,10 @@ class AppUiImpl : public AppUi {
     while (true) {
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
         if (current_scenario_def_.has_value()) {
-          // RunScenario
-          // Check For Restarts
+          auto nav_event = aim::RunScenario(*current_scenario_def_, app_);
+          if (nav_event.IsExit()) {
+            return;
+          }
         }
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
@@ -100,7 +102,8 @@ class AppUiImpl : public AppUi {
       if (node->scenario.has_value()) {
         ImVec2 sz = ImVec2(0.0f, 0.0f);
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
-          // scenario_to_start_ = node->scenario->def;
+          current_scenario_def_ = node->scenario->def;
+          scenario_run_option_ = ScenarioRunOption::RUN;
         }
       }
     }
