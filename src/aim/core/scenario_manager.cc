@@ -39,7 +39,9 @@ std::vector<ScenarioItem> LoadScenarios(const std::filesystem::path& base_dir, b
           }
           continue;
         }
-        item.path_parts.push_back(dir_name);
+        if (!dir_name.starts_with(item.name)) {
+          item.path_parts.push_back(dir_name);
+        }
       }
 
       scenarios.push_back(item);
