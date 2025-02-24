@@ -29,8 +29,6 @@ class ScenarioManager {
   }
 
  private:
-  std::optional<std::filesystem::file_time_type> GetNewLastUpdateTime();
-  
   std::vector<ScenarioItem> scenarios_;
   std::filesystem::path base_scenario_dir_;
   std::filesystem::path user_scenario_dir_;

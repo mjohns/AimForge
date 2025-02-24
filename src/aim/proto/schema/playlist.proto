@@ -2,12 +2,11 @@ edition = "2023";
 
 package aim;
 
-message Playlist {
-  string name = 1;
-  repeated PlaylistItem items = 2;
+message PlaylistDef {
+  repeated PlaylistItem items = 1;
 }
 
 message PlaylistItem {
-   string scenario_id = 1;
+   string scenario = 1;
    int32 num_plays = 2;
 }

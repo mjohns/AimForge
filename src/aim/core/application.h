@@ -16,6 +16,7 @@
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/core/playlist_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
@@ -81,6 +82,10 @@ class Application {
     return scenario_manager_.get();
   }
 
+  PlaylistManager* playlist_manager() {
+    return playlist_manager_.get();
+  }
+
   spdlog::logger* logger() {
     return logger_.get();
   };
@@ -123,6 +128,7 @@ class Application {
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<SettingsManager> settings_manager_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
+  std::unique_ptr<PlaylistManager> playlist_manager_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
 

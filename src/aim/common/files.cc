@@ -86,4 +86,26 @@ std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
   return most_recent_update_time;
 }
 
+std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
+    const std::vector<std::filesystem::path>& dirs) {
+  std::optional<std::filesystem::file_time_type> last_update_time;
+  for (const auto& dir : dirs) {
+    auto this_update_time = GetMostRecentUpdateTime(dir);
+    if (!this_update_time.has_value()) {
+      continue;
+    }
+    bool is_more_recent = !last_update_time.has_value() || *this_update_time > *last_update_time;
+    if (is_more_recent) {
+      last_update_time = this_update_time;
+    }
+  }
+  return last_update_time;
+}
+
+std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
+    const std::filesystem::path& dir1, const std::filesystem::path& dir2) {
+  std::vector<std::filesystem::path> dirs = {dir1, dir2};
+  return GetMostRecentUpdateTime(dirs);
+}
+
 }  // namespace aim
