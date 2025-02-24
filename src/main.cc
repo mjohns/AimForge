@@ -4,7 +4,12 @@
 int main(int, char**) {
   using namespace aim;
   auto app = Application::Create();
-  // CreateHomeScreen(app.get())->Run();
-  CreateAppUi(app.get())->Run();
+
+  try {
+    CreateAppUi(app.get())->Run();
+  } catch (ApplicationExitException e) {
+    return 0;
+  }
+
   return 0;
 }
