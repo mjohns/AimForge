@@ -60,6 +60,27 @@ void ScenarioManager::LoadScenariosFromDisk() {
   scenarios_.clear();
   PushBackAll(&scenarios_, LoadScenarios(base_scenario_dir_, false));
   PushBackAll(&scenarios_, LoadScenarios(user_scenario_dir_, true));
+  last_update_time_ = GetMostRecentUpdateTime(user_scenario_dir_);
+}
+
+void ScenarioManager::ReloadScenariosIfChanged() {
+  auto new_update_time = GetNewLastUpdateTime();
+  if (!new_update_time.has_value()) {
+    return;
+  }
+  if (!last_update_time_.has_value() || *new_update_time > *last_update_time_) {
+    LoadScenariosFromDisk();
+    return;
+  }
+}
+
+std::optional<std::filesystem::file_time_type> ScenarioManager::GetNewLastUpdateTime() {
+  auto user = GetMostRecentUpdateTime(user_scenario_dir_);
+  auto base = GetMostRecentUpdateTime(base_scenario_dir_);
+  if (user.has_value() && base.has_value()) {
+    return *user > *base ? user : base;
+  }
+  return user.has_value() ? user : base;
 }
 
 }  // namespace aim

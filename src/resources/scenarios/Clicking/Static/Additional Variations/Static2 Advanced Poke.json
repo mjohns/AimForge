@@ -1,5 +1,4 @@
 {
-  "displayName": "1w3ts poke",
   "durationSeconds": 60,
   "room": {
     "cameraPosition": {
@@ -12,7 +11,6 @@
       "width": 170
     }
   },
-  "scenarioId": "1w3ts_intermediate_s5_poke",
   "staticDef": {
     "isPokeBall": true,
     "targetPlacementStrategy": {
@@ -44,10 +42,10 @@
     }
   },
   "targetDef": {
-    "numTargets": 3,
+    "numTargets": 2,
     "profiles": [
       {
-        "targetRadius": 1.5
+        "targetRadius": 1.18
       }
     ]
   }

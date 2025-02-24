@@ -72,4 +72,18 @@ bool ReadJsonMessageFromFile(const std::filesystem::path& path,
   return status.ok();
 }
 
+std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
+    const std::filesystem::path& base_dir) {
+  std::optional<std::filesystem::file_time_type> most_recent_update_time;
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(base_dir)) {
+    if (std::filesystem::is_regular_file(entry)) {
+      auto update_time = std::filesystem::last_write_time(entry.path());
+      if (!most_recent_update_time.has_value() || update_time > *most_recent_update_time) {
+        most_recent_update_time = update_time;
+      }
+    }
+  }
+  return most_recent_update_time;
+}
+
 }  // namespace aim

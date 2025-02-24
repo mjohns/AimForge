@@ -17,4 +17,7 @@ bool WriteJsonMessageToFile(const std::filesystem::path& path,
 
 bool ReadJsonMessageFromFile(const std::filesystem::path& path, google::protobuf::Message* message);
 
+std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
+    const std::filesystem::path& base_dir);
+
 }  // namespace aim
