@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_sdl3.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
@@ -14,8 +15,13 @@ class AppUiImpl : public AppUi {
   explicit AppUiImpl(Application* app) : AppUi(), app_(app) {}
 
   void Run() override {
+    timer_.Start();
     while (true) {
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
+        if (settings_updater_) {
+          settings_updater_->SaveIfChangesMade();
+          settings_updater_ = {};
+        }
         if (current_scenario_def_.has_value()) {
           auto nav_event = aim::RunScenario(*current_scenario_def_, app_);
           if (nav_event.IsExit()) {
@@ -24,6 +30,10 @@ class AppUiImpl : public AppUi {
         }
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
+        if (settings_updater_) {
+          settings_updater_->SaveIfChangesMade();
+          settings_updater_ = {};
+        }
         if (current_running_scenario_) {
           // Resume
         } else {
@@ -60,7 +70,17 @@ class AppUiImpl : public AppUi {
   }
 
  private:
-  void OnEvent(const SDL_Event& event) {}
+  void OnEvent(const SDL_Event& event) {
+    if (event.type == SDL_EVENT_KEY_DOWN) {
+      SDL_Keycode keycode = event.key.key;
+      if (keycode == SDLK_R) {
+        scenario_run_option_ = ScenarioRunOption::RUN;
+      }
+      if (keycode == SDLK_ESCAPE) {
+        throw ApplicationExitException();
+      }
+    }
+  }
 
   void DrawScreen() {
     ScreenInfo screen = app_->screen_info();
@@ -130,14 +150,51 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawPlaylistsScreen() {}
-  void DrawSettingsScreen() {}
+
+  void DrawSettingsScreen() {
+    if (!settings_updater_) {
+      settings_updater_ = std::make_unique<SettingsUpdater>(app_->settings_manager());
+    }
+    const ScreenInfo& screen = app_->screen_info();
+    float width = screen.width * 0.5;
+    float height = screen.height * 0.9;
+
+    ImGui::Columns(2, "SettingsColumns", false);  // 2 columns, no borders
+
+    ImGui::Text("CM/360");
+
+    // ImGui::SetCursorPosX(screen.width * 0.5);
+    ImGui::NextColumn();
+    ImGui::InputText(
+        "##CM_PER_360", &settings_updater_->cm_per_360, ImGuiInputTextFlags_CharsDecimal);
+
+    ImGui::NextColumn();
+    ImGui::Text("Theme");
+
+    // ImGui::SetCursorPosX(screen.width * 0.5);
+    ImGui::NextColumn();
+    ImGui::InputText("##THEME_NAME", &settings_updater_->theme_name);
+
+    ImGui::NextColumn();
+    ImGui::Text("Metronome BPM");
+
+    // ImGui::SetCursorPosX(screen.width * 0.5);
+    ImGui::NextColumn();
+    ImGui::InputText(
+        "##METRONOME_BPM", &settings_updater_->metronome_bpm, ImGuiInputTextFlags_CharsDecimal);
+
+    // TODO: Improve this logic to be more explicit
+    settings_updater_->SaveIfChangesMadeDebounced(5);
+  }
 
   AppScreen app_screen_ = AppScreen::SCENARIOS;
   ScenarioRunOption scenario_run_option_ = ScenarioRunOption::NONE;
   Application* app_;
+  Stopwatch timer_;
 
   std::optional<ScenarioDef> current_scenario_def_;
   std::unique_ptr<Scenario> current_running_scenario_;
+  std::unique_ptr<SettingsUpdater> settings_updater_;
 };
 
 }  // namespace

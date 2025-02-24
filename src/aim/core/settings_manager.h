@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "aim/common/times.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
 
@@ -60,6 +61,7 @@ struct SettingsUpdater {
   explicit SettingsUpdater(SettingsManager* settings_manager);
 
   void SaveIfChangesMade();
+  void SaveIfChangesMadeDebounced(float debounce_seconds);
 
   std::string cm_per_360;
   std::string theme_name;
@@ -68,6 +70,7 @@ struct SettingsUpdater {
 
  private:
   SettingsManager* settings_manager_;
+  Stopwatch last_update_timer_;
 };
 
 }  // namespace aim
