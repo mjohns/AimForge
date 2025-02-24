@@ -298,7 +298,7 @@ bool ShouldExit(const NavigationEvent& e) {
 }
 
 struct ScenarioNode {
-  // Either name or scenario will be specified. If scenario is set this is a leaf node.
+  // Either name or scenario will be specified. If scenario is set, this is a leaf node.
   std::string name;
   std::optional<ScenarioItem> scenario;
   std::vector<std::unique_ptr<ScenarioNode>> child_nodes;
@@ -387,12 +387,24 @@ class HomeScreen : public UiScreen {
     if (ImGui::Button("Settings", sz)) {
       open_settings_ = true;
     }
-    if (ImGui::Button("Reload Scenarios", sz)) {
+    if (ImGui::Button("Reload Scenarios/Playlists", sz)) {
       app_->scenario_manager()->ReloadScenariosIfChanged();
+      app_->playlist_manager()->ReloadPlaylistsIfChanged();
       scenario_nodes_ = GetTopLevelNodes(app_->scenario_manager()->scenarios());
     }
 
     DrawNodes(&scenario_nodes_);
+
+    bool playlists_opened = ImGui::TreeNode("Playlists");
+    if (playlists_opened) {
+      for (const Playlist& playlist : app_->playlist_manager()->playlists()) {
+        ImVec2 sz = ImVec2(0.0f, 0.0f);
+        if (ImGui::Button(playlist.name.c_str())) {
+          // start the playlist
+        }
+      }
+      ImGui::TreePop();
+    }
   }
 
   void DrawNodes(std::vector<std::unique_ptr<ScenarioNode>>* nodes) {

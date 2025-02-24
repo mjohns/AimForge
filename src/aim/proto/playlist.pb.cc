@@ -54,16 +54,13 @@ struct PlaylistItemDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlaylistItemDefaultTypeInternal _PlaylistItem_default_instance_;
 
-inline constexpr Playlist::Impl_::Impl_(
+inline constexpr PlaylistDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        items_{},
-        name_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()) {}
+      : items_{},
+        _cached_size_{0} {}
 
 template <typename>
-PROTOBUF_CONSTEXPR Playlist::Playlist(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR PlaylistDef::PlaylistDef(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
@@ -71,16 +68,16 @@ PROTOBUF_CONSTEXPR Playlist::Playlist(::_pbi::ConstantInitialized)
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
-struct PlaylistDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR PlaylistDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~PlaylistDefaultTypeInternal() {}
+struct PlaylistDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PlaylistDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PlaylistDefDefaultTypeInternal() {}
   union {
-    Playlist _instance;
+    PlaylistDef _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlaylistDefaultTypeInternal _Playlist_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlaylistDefDefaultTypeInternal _PlaylistDef_default_instance_;
 }  // namespace aim
 static constexpr const ::_pb::EnumDescriptor**
     file_level_enum_descriptors_playlist_2eproto = nullptr;
@@ -89,18 +86,15 @@ static constexpr const ::_pb::ServiceDescriptor**
 const ::uint32_t
     TableStruct_playlist_2eproto::offsets[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
         protodesc_cold) = {
-        PROTOBUF_FIELD_OFFSET(::aim::Playlist, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::Playlist, _internal_metadata_),
+        ~0u,  // no _has_bits_
+        PROTOBUF_FIELD_OFFSET(::aim::PlaylistDef, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::Playlist, _impl_.name_),
-        PROTOBUF_FIELD_OFFSET(::aim::Playlist, _impl_.items_),
-        0,
-        ~0u,
+        PROTOBUF_FIELD_OFFSET(::aim::PlaylistDef, _impl_.items_),
         PROTOBUF_FIELD_OFFSET(::aim::PlaylistItem, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::PlaylistItem, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -117,25 +111,25 @@ const ::uint32_t
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-        {0, 10, -1, sizeof(::aim::Playlist)},
-        {12, 22, -1, sizeof(::aim::PlaylistItem)},
+        {0, -1, -1, sizeof(::aim::PlaylistDef)},
+        {9, 19, -1, sizeof(::aim::PlaylistItem)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
-    &::aim::_Playlist_default_instance_._instance,
+    &::aim::_PlaylistDef_default_instance_._instance,
     &::aim::_PlaylistItem_default_instance_._instance,
 };
 const char descriptor_table_protodef_playlist_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\016playlist.proto\022\003aim\":\n\010Playlist\022\014\n\004nam"
-    "e\030\001 \001(\t\022 \n\005items\030\002 \003(\0132\021.aim.PlaylistIte"
-    "m\"6\n\014PlaylistItem\022\023\n\013scenario_id\030\001 \001(\t\022\021"
-    "\n\tnum_plays\030\002 \001(\005b\010editionsp\350\007"
+    "\n\016playlist.proto\022\003aim\"/\n\013PlaylistDef\022 \n\005"
+    "items\030\001 \003(\0132\021.aim.PlaylistItem\"6\n\014Playli"
+    "stItem\022\023\n\013scenario_id\030\001 \001(\t\022\021\n\tnum_plays"
+    "\030\002 \001(\005b\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_playlist_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_playlist_2eproto = {
     false,
     false,
-    150,
+    139,
     descriptor_table_protodef_playlist_2eproto,
     "playlist.proto",
     &descriptor_table_playlist_2eproto_once,
@@ -151,207 +145,176 @@ PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_playlist_2epro
 namespace aim {
 // ===================================================================
 
-class Playlist::_Internal {
+class PlaylistDef::_Internal {
  public:
-  using HasBits =
-      decltype(std::declval<Playlist>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(Playlist, _impl_._has_bits_);
 };
 
-Playlist::Playlist(::google::protobuf::Arena* arena)
+PlaylistDef::PlaylistDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.Playlist)
+  // @@protoc_insertion_point(arena_constructor:aim.PlaylistDef)
 }
-inline PROTOBUF_NDEBUG_INLINE Playlist::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE PlaylistDef::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from, const ::aim::Playlist& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0},
-        items_{visibility, arena, from.items_},
-        name_(arena, from.name_) {}
+    const Impl_& from, const ::aim::PlaylistDef& from_msg)
+      : items_{visibility, arena, from.items_},
+        _cached_size_{0} {}
 
-Playlist::Playlist(
+PlaylistDef::PlaylistDef(
     ::google::protobuf::Arena* arena,
-    const Playlist& from)
+    const PlaylistDef& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  Playlist* const _this = this;
+  PlaylistDef* const _this = this;
   (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
 
-  // @@protoc_insertion_point(copy_constructor:aim.Playlist)
+  // @@protoc_insertion_point(copy_constructor:aim.PlaylistDef)
 }
-inline PROTOBUF_NDEBUG_INLINE Playlist::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE PlaylistDef::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : _cached_size_{0},
-        items_{visibility, arena},
-        name_(arena) {}
+      : items_{visibility, arena},
+        _cached_size_{0} {}
 
-inline void Playlist::SharedCtor(::_pb::Arena* arena) {
+inline void PlaylistDef::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
 }
-Playlist::~Playlist() {
-  // @@protoc_insertion_point(destructor:aim.Playlist)
+PlaylistDef::~PlaylistDef() {
+  // @@protoc_insertion_point(destructor:aim.PlaylistDef)
   SharedDtor(*this);
 }
-inline void Playlist::SharedDtor(MessageLite& self) {
-  Playlist& this_ = static_cast<Playlist&>(self);
+inline void PlaylistDef::SharedDtor(MessageLite& self) {
+  PlaylistDef& this_ = static_cast<PlaylistDef&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.name_.Destroy();
   this_._impl_.~Impl_();
 }
 
-inline void* Playlist::PlacementNew_(const void*, void* mem,
+inline void* PlaylistDef::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
-  return ::new (mem) Playlist(arena);
+  return ::new (mem) PlaylistDef(arena);
 }
-constexpr auto Playlist::InternalNewImpl_() {
+constexpr auto PlaylistDef::InternalNewImpl_() {
   constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
-      PROTOBUF_FIELD_OFFSET(Playlist, _impl_.items_) +
-          decltype(Playlist::_impl_.items_)::
+      PROTOBUF_FIELD_OFFSET(PlaylistDef, _impl_.items_) +
+          decltype(PlaylistDef::_impl_.items_)::
               InternalGetArenaOffset(
                   ::google::protobuf::Message::internal_visibility()),
   });
   if (arena_bits.has_value()) {
-    return ::google::protobuf::internal::MessageCreator::CopyInit(
-        sizeof(Playlist), alignof(Playlist), *arena_bits);
+    return ::google::protobuf::internal::MessageCreator::ZeroInit(
+        sizeof(PlaylistDef), alignof(PlaylistDef), *arena_bits);
   } else {
-    return ::google::protobuf::internal::MessageCreator(&Playlist::PlacementNew_,
-                                 sizeof(Playlist),
-                                 alignof(Playlist));
+    return ::google::protobuf::internal::MessageCreator(&PlaylistDef::PlacementNew_,
+                                 sizeof(PlaylistDef),
+                                 alignof(PlaylistDef));
   }
 }
 PROTOBUF_CONSTINIT
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull Playlist::_class_data_ = {
+const ::google::protobuf::internal::ClassDataFull PlaylistDef::_class_data_ = {
     ::google::protobuf::internal::ClassData{
-        &_Playlist_default_instance_._instance,
+        &_PlaylistDef_default_instance_._instance,
         &_table_.header,
         nullptr,  // OnDemandRegisterArenaDtor
         nullptr,  // IsInitialized
-        &Playlist::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<Playlist>(),
+        &PlaylistDef::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<PlaylistDef>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        &Playlist::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<Playlist>(), &Playlist::ByteSizeLong,
-            &Playlist::_InternalSerialize,
+        &PlaylistDef::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<PlaylistDef>(), &PlaylistDef::ByteSizeLong,
+            &PlaylistDef::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(Playlist, _impl_._cached_size_),
+        PROTOBUF_FIELD_OFFSET(PlaylistDef, _impl_._cached_size_),
         false,
     },
-    &Playlist::kDescriptorMethods,
+    &PlaylistDef::kDescriptorMethods,
     &descriptor_table_playlist_2eproto,
     nullptr,  // tracker
 };
-const ::google::protobuf::internal::ClassData* Playlist::GetClassData() const {
+const ::google::protobuf::internal::ClassData* PlaylistDef::GetClassData() const {
   ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
   ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 25, 2> Playlist::_table_ = {
+const ::_pbi::TcParseTable<0, 1, 1, 0, 2> PlaylistDef::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(Playlist, _impl_._has_bits_),
+    0,  // no _has_bits_
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    1, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    1,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::Playlist>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::PlaylistDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // repeated .aim.PlaylistItem items = 2;
+    // repeated .aim.PlaylistItem items = 1;
     {::_pbi::TcParser::FastMtR1,
-     {18, 63, 0, PROTOBUF_FIELD_OFFSET(Playlist, _impl_.items_)}},
-    // string name = 1;
-    {::_pbi::TcParser::FastUS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(Playlist, _impl_.name_)}},
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(PlaylistDef, _impl_.items_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string name = 1;
-    {PROTOBUF_FIELD_OFFSET(Playlist, _impl_.name_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // repeated .aim.PlaylistItem items = 2;
-    {PROTOBUF_FIELD_OFFSET(Playlist, _impl_.items_), -1, 0,
+    // repeated .aim.PlaylistItem items = 1;
+    {PROTOBUF_FIELD_OFFSET(PlaylistDef, _impl_.items_), 0, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::PlaylistItem>()},
   }}, {{
-    "\14\4\0\0\0\0\0\0"
-    "aim.Playlist"
-    "name"
   }},
 };
 
-PROTOBUF_NOINLINE void Playlist::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.Playlist)
+PROTOBUF_NOINLINE void PlaylistDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.PlaylistDef)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.items_.Clear();
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    _impl_.name_.ClearNonDefaultToEmpty();
-  }
-  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* Playlist::_InternalSerialize(
+        ::uint8_t* PlaylistDef::_InternalSerialize(
             const MessageLite& base, ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const Playlist& this_ = static_cast<const Playlist&>(base);
+          const PlaylistDef& this_ = static_cast<const PlaylistDef&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* Playlist::_InternalSerialize(
+        ::uint8_t* PlaylistDef::_InternalSerialize(
             ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const Playlist& this_ = *this;
+          const PlaylistDef& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.Playlist)
+          // @@protoc_insertion_point(serialize_to_array_start:aim.PlaylistDef)
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // string name = 1;
-          if (cached_has_bits & 0x00000001u) {
-            const std::string& _s = this_._internal_name();
-            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.Playlist.name");
-            target = stream->WriteStringMaybeAliased(1, _s, target);
-          }
-
-          // repeated .aim.PlaylistItem items = 2;
+          // repeated .aim.PlaylistItem items = 1;
           for (unsigned i = 0, n = static_cast<unsigned>(
                                    this_._internal_items_size());
                i < n; i++) {
             const auto& repfield = this_._internal_items().Get(i);
             target =
                 ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                    2, repfield, repfield.GetCachedSize(),
+                    1, repfield, repfield.GetCachedSize(),
                     target, stream);
           }
 
@@ -360,18 +323,18 @@ PROTOBUF_NOINLINE void Playlist::Clear() {
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
                     this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
           }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.Playlist)
+          // @@protoc_insertion_point(serialize_to_array_end:aim.PlaylistDef)
           return target;
         }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t Playlist::ByteSizeLong(const MessageLite& base) {
-          const Playlist& this_ = static_cast<const Playlist&>(base);
+        ::size_t PlaylistDef::ByteSizeLong(const MessageLite& base) {
+          const PlaylistDef& this_ = static_cast<const PlaylistDef&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t Playlist::ByteSizeLong() const {
-          const Playlist& this_ = *this;
+        ::size_t PlaylistDef::ByteSizeLong() const {
+          const PlaylistDef& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.Playlist)
+          // @@protoc_insertion_point(message_byte_size_start:aim.PlaylistDef)
           ::size_t total_size = 0;
 
           ::uint32_t cached_has_bits = 0;
@@ -380,7 +343,7 @@ PROTOBUF_NOINLINE void Playlist::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
            {
-            // repeated .aim.PlaylistItem items = 2;
+            // repeated .aim.PlaylistItem items = 1;
             {
               total_size += 1UL * this_._internal_items_size();
               for (const auto& msg : this_._internal_items()) {
@@ -388,55 +351,38 @@ PROTOBUF_NOINLINE void Playlist::Clear() {
               }
             }
           }
-           {
-            // string name = 1;
-            cached_has_bits = this_._impl_._has_bits_[0];
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                              this_._internal_name());
-            }
-          }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
                                                      &this_._impl_._cached_size_);
         }
 
-void Playlist::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<Playlist*>(&to_msg);
-  auto& from = static_cast<const Playlist&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.Playlist)
+void PlaylistDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<PlaylistDef*>(&to_msg);
+  auto& from = static_cast<const PlaylistDef&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.PlaylistDef)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   _this->_internal_mutable_items()->MergeFrom(
       from._internal_items());
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    _this->_internal_set_name(from._internal_name());
-  }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void Playlist::CopyFrom(const Playlist& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.Playlist)
+void PlaylistDef::CopyFrom(const PlaylistDef& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.PlaylistDef)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 
-void Playlist::InternalSwap(Playlist* PROTOBUF_RESTRICT other) {
+void PlaylistDef::InternalSwap(PlaylistDef* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.items_.InternalSwap(&other->_impl_.items_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
 }
 
-::google::protobuf::Metadata Playlist::GetMetadata() const {
+::google::protobuf::Metadata PlaylistDef::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================

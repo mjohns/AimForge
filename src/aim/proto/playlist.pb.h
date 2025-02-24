@@ -52,9 +52,9 @@ struct TableStruct_playlist_2eproto {
 extern const ::google::protobuf::internal::DescriptorTable
     descriptor_table_playlist_2eproto;
 namespace aim {
-class Playlist;
-struct PlaylistDefaultTypeInternal;
-extern PlaylistDefaultTypeInternal _Playlist_default_instance_;
+class PlaylistDef;
+struct PlaylistDefDefaultTypeInternal;
+extern PlaylistDefDefaultTypeInternal _PlaylistDef_default_instance_;
 class PlaylistItem;
 struct PlaylistItemDefaultTypeInternal;
 extern PlaylistItemDefaultTypeInternal _PlaylistItem_default_instance_;
@@ -282,31 +282,31 @@ class PlaylistItem final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class Playlist final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.Playlist) */ {
+class PlaylistDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.PlaylistDef) */ {
  public:
-  inline Playlist() : Playlist(nullptr) {}
-  ~Playlist() PROTOBUF_FINAL;
+  inline PlaylistDef() : PlaylistDef(nullptr) {}
+  ~PlaylistDef() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(Playlist* msg, std::destroying_delete_t) {
+  void operator delete(PlaylistDef* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(Playlist));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(PlaylistDef));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR Playlist(
+  explicit PROTOBUF_CONSTEXPR PlaylistDef(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline Playlist(const Playlist& from) : Playlist(nullptr, from) {}
-  inline Playlist(Playlist&& from) noexcept
-      : Playlist(nullptr, std::move(from)) {}
-  inline Playlist& operator=(const Playlist& from) {
+  inline PlaylistDef(const PlaylistDef& from) : PlaylistDef(nullptr, from) {}
+  inline PlaylistDef(PlaylistDef&& from) noexcept
+      : PlaylistDef(nullptr, std::move(from)) {}
+  inline PlaylistDef& operator=(const PlaylistDef& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Playlist& operator=(Playlist&& from) noexcept {
+  inline PlaylistDef& operator=(PlaylistDef&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -334,16 +334,16 @@ class Playlist final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const Playlist& default_instance() {
+  static const PlaylistDef& default_instance() {
     return *internal_default_instance();
   }
-  static inline const Playlist* internal_default_instance() {
-    return reinterpret_cast<const Playlist*>(
-        &_Playlist_default_instance_);
+  static inline const PlaylistDef* internal_default_instance() {
+    return reinterpret_cast<const PlaylistDef*>(
+        &_PlaylistDef_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 0;
-  friend void swap(Playlist& a, Playlist& b) { a.Swap(&b); }
-  inline void Swap(Playlist* other) {
+  friend void swap(PlaylistDef& a, PlaylistDef& b) { a.Swap(&b); }
+  inline void Swap(PlaylistDef* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -351,7 +351,7 @@ class Playlist final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(Playlist* other) {
+  void UnsafeArenaSwap(PlaylistDef* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -359,13 +359,13 @@ class Playlist final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  Playlist* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<Playlist>(arena);
+  PlaylistDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<PlaylistDef>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const Playlist& from);
+  void CopyFrom(const PlaylistDef& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const Playlist& from) { Playlist::MergeImpl(*this, from); }
+  void MergeFrom(const PlaylistDef& from) { PlaylistDef::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -402,18 +402,18 @@ class Playlist final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(Playlist* other);
+  void InternalSwap(PlaylistDef* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.Playlist"; }
+  static ::absl::string_view FullMessageName() { return "aim.PlaylistDef"; }
 
  protected:
-  explicit Playlist(::google::protobuf::Arena* arena);
-  Playlist(::google::protobuf::Arena* arena, const Playlist& from);
-  Playlist(::google::protobuf::Arena* arena, Playlist&& from) noexcept
-      : Playlist(arena) {
+  explicit PlaylistDef(::google::protobuf::Arena* arena);
+  PlaylistDef(::google::protobuf::Arena* arena, const PlaylistDef& from);
+  PlaylistDef(::google::protobuf::Arena* arena, PlaylistDef&& from) noexcept
+      : PlaylistDef(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -428,10 +428,9 @@ class Playlist final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kItemsFieldNumber = 2,
-    kNameFieldNumber = 1,
+    kItemsFieldNumber = 1,
   };
-  // repeated .aim.PlaylistItem items = 2;
+  // repeated .aim.PlaylistItem items = 1;
   int items_size() const;
   private:
   int _internal_items_size() const;
@@ -448,30 +447,13 @@ class Playlist final : public ::google::protobuf::Message
   const ::aim::PlaylistItem& items(int index) const;
   ::aim::PlaylistItem* add_items();
   const ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>& items() const;
-  // string name = 1;
-  bool has_name() const;
-  void clear_name() ;
-  const std::string& name() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_name(Arg_&& arg, Args_... args);
-  std::string* mutable_name();
-  PROTOBUF_NODISCARD std::string* release_name();
-  void set_allocated_name(std::string* value);
-
-  private:
-  const std::string& _internal_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(
-      const std::string& value);
-  std::string* _internal_mutable_name();
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.Playlist)
+  // @@protoc_insertion_point(class_scope:aim.PlaylistDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
-      25, 2>
+      0, 1, 1,
+      0, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -487,11 +469,9 @@ class Playlist final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const Playlist& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
+                          const PlaylistDef& from_msg);
     ::google::protobuf::RepeatedPtrField< ::aim::PlaylistItem > items_;
-    ::google::protobuf::internal::ArenaStringPtr name_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -512,122 +492,53 @@ class Playlist final : public ::google::protobuf::Message
 #endif  // __GNUC__
 // -------------------------------------------------------------------
 
-// Playlist
+// PlaylistDef
 
-// string name = 1;
-inline bool Playlist::has_name() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void Playlist::clear_name() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.name_.ClearToEmpty();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& Playlist::name() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Playlist.name)
-  return _internal_name();
-}
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void Playlist::set_name(Arg_&& arg,
-                                                     Args_... args) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:aim.Playlist.name)
-}
-inline std::string* Playlist::mutable_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_name();
-  // @@protoc_insertion_point(field_mutable:aim.Playlist.name)
-  return _s;
-}
-inline const std::string& Playlist::_internal_name() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.name_.Get();
-}
-inline void Playlist::_internal_set_name(const std::string& value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.name_.Set(value, GetArena());
-}
-inline std::string* Playlist::_internal_mutable_name() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  return _impl_.name_.Mutable( GetArena());
-}
-inline std::string* Playlist::release_name() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.Playlist.name)
-  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
-    return nullptr;
-  }
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  auto* released = _impl_.name_.Release();
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.name_.Set("", GetArena());
-  }
-  return released;
-}
-inline void Playlist::set_allocated_name(std::string* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  _impl_.name_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.name_.IsDefault()) {
-    _impl_.name_.Set("", GetArena());
-  }
-  // @@protoc_insertion_point(field_set_allocated:aim.Playlist.name)
-}
-
-// repeated .aim.PlaylistItem items = 2;
-inline int Playlist::_internal_items_size() const {
+// repeated .aim.PlaylistItem items = 1;
+inline int PlaylistDef::_internal_items_size() const {
   return _internal_items().size();
 }
-inline int Playlist::items_size() const {
+inline int PlaylistDef::items_size() const {
   return _internal_items_size();
 }
-inline void Playlist::clear_items() {
+inline void PlaylistDef::clear_items() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.items_.Clear();
 }
-inline ::aim::PlaylistItem* Playlist::mutable_items(int index)
+inline ::aim::PlaylistItem* PlaylistDef::mutable_items(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:aim.Playlist.items)
+  // @@protoc_insertion_point(field_mutable:aim.PlaylistDef.items)
   return _internal_mutable_items()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>* Playlist::mutable_items()
+inline ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>* PlaylistDef::mutable_items()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.Playlist.items)
+  // @@protoc_insertion_point(field_mutable_list:aim.PlaylistDef.items)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_items();
 }
-inline const ::aim::PlaylistItem& Playlist::items(int index) const
+inline const ::aim::PlaylistItem& PlaylistDef::items(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Playlist.items)
+  // @@protoc_insertion_point(field_get:aim.PlaylistDef.items)
   return _internal_items().Get(index);
 }
-inline ::aim::PlaylistItem* Playlist::add_items() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::PlaylistItem* PlaylistDef::add_items() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::aim::PlaylistItem* _add = _internal_mutable_items()->Add();
-  // @@protoc_insertion_point(field_add:aim.Playlist.items)
+  // @@protoc_insertion_point(field_add:aim.PlaylistDef.items)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>& Playlist::items() const
+inline const ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>& PlaylistDef::items() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.Playlist.items)
+  // @@protoc_insertion_point(field_list:aim.PlaylistDef.items)
   return _internal_items();
 }
 inline const ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>&
-Playlist::_internal_items() const {
+PlaylistDef::_internal_items() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.items_;
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>*
-Playlist::_internal_mutable_items() {
+PlaylistDef::_internal_mutable_items() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.items_;
 }
