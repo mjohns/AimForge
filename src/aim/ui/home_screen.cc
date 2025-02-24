@@ -297,12 +297,53 @@ bool ShouldExit(const NavigationEvent& e) {
   return !should_display_home;
 }
 
+struct ScenarioNode {
+  // Either name or scenario will be specified. If scenario is set this is a leaf node.
+  std::string name;
+  std::optional<ScenarioItem> scenario;
+  std::vector<std::unique_ptr<ScenarioNode>> child_nodes;
+};
+
+ScenarioNode* GetOrCreateNode(std::vector<std::unique_ptr<ScenarioNode>>* nodes,
+                              const std::string& name) {
+  for (auto& node : *nodes) {
+    if (node->name == name) {
+      return node.get();
+    }
+  }
+
+  auto node = std::make_unique<ScenarioNode>();
+  node->name = name;
+  ScenarioNode* result = node.get();
+  nodes->push_back(std::move(node));
+  return result;
+}
+
+std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
+    const std::vector<ScenarioItem>& scenarios) {
+  std::set<std::string> seen_scenario_ids;
+
+  std::vector<std::unique_ptr<ScenarioNode>> nodes;
+  for (const ScenarioItem& item : scenarios) {
+    std::vector<std::unique_ptr<ScenarioNode>>* current_nodes = &nodes;
+    ScenarioNode* last_parent = nullptr;
+    for (const std::string& path_name : item.path_parts) {
+      last_parent = GetOrCreateNode(current_nodes, path_name);
+      current_nodes = &last_parent->child_nodes;
+    }
+
+    auto scenario_node = std::make_unique<ScenarioNode>();
+    scenario_node->scenario = item;
+    current_nodes->emplace_back(std::move(scenario_node));
+  }
+
+  return nodes;
+}
+
 class HomeScreen : public UiScreen {
  public:
   explicit HomeScreen(Application* app) : UiScreen(app) {
-    for (auto& item : app->scenario_manager()->scenarios()) {
-      scenarios_.push_back(item.def);
-    }
+    scenario_nodes_ = GetTopLevelNodes(app->scenario_manager()->scenarios());
   }
 
  protected:
@@ -346,9 +387,27 @@ class HomeScreen : public UiScreen {
     if (ImGui::Button("Settings", sz)) {
       open_settings_ = true;
     }
-    for (auto& def : scenarios_) {
-      if (ImGui::Button(def.scenario_id().c_str(), sz)) {
-        scenario_to_start_ = def;
+
+    DrawNodes(&scenario_nodes_);
+  }
+
+  void DrawNodes(std::vector<std::unique_ptr<ScenarioNode>>* nodes) {
+    // First show scenarios.
+    for (auto& node : *nodes) {
+      if (node->scenario.has_value()) {
+        ImVec2 sz = ImVec2(0.0f, 0.0f);
+        if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
+          scenario_to_start_ = node->scenario->def;
+        }
+      }
+    }
+    for (auto& node : *nodes) {
+      if (!node->scenario.has_value()) {
+        bool node_opened = ImGui::TreeNode(node->name.c_str());
+        if (node_opened) {
+          DrawNodes(&node->child_nodes);
+          ImGui::TreePop();
+        }
       }
     }
   }
@@ -357,7 +416,7 @@ class HomeScreen : public UiScreen {
   std::optional<ScenarioDef> scenario_to_start_;
   bool open_settings_ = false;
 
-  std::vector<ScenarioDef> scenarios_;
+  std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
 };
 
 }  // namespace
