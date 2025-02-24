@@ -60,7 +60,67 @@ class AppUiImpl : public AppUi {
  private:
   void OnEvent(const SDL_Event& event) {}
 
-  void DrawScreen() {}
+  void DrawScreen() {
+    ScreenInfo screen = app_->screen_info();
+
+    ImGui::Columns(2, "NavigationContentColumns", false);
+    ImGui::SetColumnWidth(0, screen.width * 0.15);
+    ImGui::BeginChild("Navigation", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
+
+    if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
+      app_screen_ = AppScreen::SCENARIOS;
+    }
+    if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
+      app_screen_ = AppScreen::PLAYLISTS;
+    }
+    if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
+      app_screen_ = AppScreen::SETTINGS;
+    }
+
+    ImGui::EndChild();
+    ImGui::NextColumn();
+
+    ImGui::BeginChild("Content");
+
+    if (app_screen_ == AppScreen::SCENARIOS) {
+      DrawScenariosScreen();
+    }
+    if (app_screen_ == AppScreen::PLAYLISTS) {
+      DrawPlaylistsScreen();
+    }
+    if (app_screen_ == AppScreen::SETTINGS) {
+      DrawSettingsScreen();
+    }
+
+    ImGui::EndChild();
+  }
+
+  void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes) {
+    for (auto& node : nodes) {
+      if (node->scenario.has_value()) {
+        ImVec2 sz = ImVec2(0.0f, 0.0f);
+        if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
+          // scenario_to_start_ = node->scenario->def;
+        }
+      }
+    }
+    for (auto& node : nodes) {
+      if (!node->scenario.has_value()) {
+        bool node_opened = ImGui::TreeNode(node->name.c_str());
+        if (node_opened) {
+          DrawScenarioNodes(node->child_nodes);
+          ImGui::TreePop();
+        }
+      }
+    }
+  }
+
+  void DrawScenariosScreen() {
+    DrawScenarioNodes(app_->scenario_manager()->scenario_nodes());
+  }
+
+  void DrawPlaylistsScreen() {}
+  void DrawSettingsScreen() {}
 
   AppScreen app_screen_ = AppScreen::SCENARIOS;
   ScenarioRunOption scenario_run_option_ = ScenarioRunOption::NONE;

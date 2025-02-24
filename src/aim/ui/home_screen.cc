@@ -300,7 +300,6 @@ bool ShouldExit(const NavigationEvent& e) {
 class HomeScreen : public UiScreen {
  public:
   explicit HomeScreen(Application* app) : UiScreen(app) {
-    scenario_nodes_ = app->scenario_manager()->GetScenarioNodes();
   }
 
  protected:
@@ -347,10 +346,9 @@ class HomeScreen : public UiScreen {
     if (ImGui::Button("Reload Scenarios/Playlists", sz)) {
       app_->scenario_manager()->ReloadScenariosIfChanged();
       app_->playlist_manager()->ReloadPlaylistsIfChanged();
-      scenario_nodes_ = app_->scenario_manager()->GetScenarioNodes();
     }
 
-    DrawNodes(&scenario_nodes_);
+    DrawNodes(app_->scenario_manager()->scenario_nodes());
 
     bool playlists_opened = ImGui::TreeNode("Playlists");
     if (playlists_opened) {
@@ -364,9 +362,9 @@ class HomeScreen : public UiScreen {
     }
   }
 
-  void DrawNodes(std::vector<std::unique_ptr<ScenarioNode>>* nodes) {
+  void DrawNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes) {
     // First show scenarios.
-    for (auto& node : *nodes) {
+    for (auto& node : nodes) {
       if (node->scenario.has_value()) {
         ImVec2 sz = ImVec2(0.0f, 0.0f);
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
@@ -374,11 +372,11 @@ class HomeScreen : public UiScreen {
         }
       }
     }
-    for (auto& node : *nodes) {
+    for (auto& node : nodes) {
       if (!node->scenario.has_value()) {
         bool node_opened = ImGui::TreeNode(node->name.c_str());
         if (node_opened) {
-          DrawNodes(&node->child_nodes);
+          DrawNodes(node->child_nodes);
           ImGui::TreePop();
         }
       }
@@ -388,8 +386,6 @@ class HomeScreen : public UiScreen {
  private:
   std::optional<ScenarioDef> scenario_to_start_;
   bool open_settings_ = false;
-
-  std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
 };
 
 }  // namespace
