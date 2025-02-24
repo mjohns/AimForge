@@ -16,6 +16,14 @@ struct ScenarioItem {
   bool is_user_scenario = false;
 };
 
+// Nodes to represent the scenarios as a tree that can be rendered by ImGui
+struct ScenarioNode {
+  // Either name or scenario will be specified. If scenario is set, this is a leaf node.
+  std::string name;
+  std::optional<ScenarioItem> scenario;
+  std::vector<std::unique_ptr<ScenarioNode>> child_nodes;
+};
+
 class ScenarioManager {
  public:
   ScenarioManager(const std::filesystem::path& base_scenario_dir,
@@ -27,6 +35,8 @@ class ScenarioManager {
   const std::vector<ScenarioItem>& scenarios() const {
     return scenarios_;
   }
+
+  std::vector<std::unique_ptr<ScenarioNode>> GetScenarioNodes() const;
 
  private:
   std::vector<ScenarioItem> scenarios_;

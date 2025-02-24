@@ -10,18 +10,24 @@
 #include <memory>
 #include <optional>
 #include <random>
+#include <stdexcept>
 
 #include "aim/audio/sound_manager.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
-#include "aim/core/scenario_manager.h"
 #include "aim/core/playlist_manager.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
 
 namespace aim {
+
+class ApplicationExitException : public std::runtime_error {
+ public:
+  ApplicationExitException() : std::runtime_error("exit") {}
+};
 
 class AimAbslLogSink : public absl::LogSink {
  public:

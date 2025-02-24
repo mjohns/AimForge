@@ -8,6 +8,19 @@
 
 namespace aim {
 
+enum class AppScreen { SETTINGS, SCENARIOS, PLAYLISTS, STATS };
+enum class ScenarioRunOption { NONE, RUN, RESUME };
+
+class AppUi {
+ public:
+  AppUi() {}
+  virtual ~AppUi() {}
+
+  virtual void Run() = 0;
+};
+
+std::unique_ptr<AppUi> CreateAppUi(Application* app);
+
 class UiScreen {
  public:
   UiScreen(Application* app) : app_(app) {}
