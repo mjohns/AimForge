@@ -329,6 +329,8 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
 }
 
 NavigationEvent RunScenario(const ScenarioDef& def, Application* app) {
+  app->SetLastScenario(def);
+  app->logger()->info("Starting scenario {}", def.scenario_id());
   while (true) {
     std::unique_ptr<Scenario> scenario = CreateScenarioForType(def, app);
     if (!scenario) {

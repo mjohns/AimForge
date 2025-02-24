@@ -68,6 +68,7 @@ Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_ta
   for (int i = 0; i < targets_.size(); ++i) {
     if (targets_[i].id == target_id_to_replace) {
       targets_[i] = new_target;
+      return new_target;
     }
   }
   // TODO: error if target did not exist?
