@@ -387,6 +387,10 @@ class HomeScreen : public UiScreen {
     if (ImGui::Button("Settings", sz)) {
       open_settings_ = true;
     }
+    if (ImGui::Button("Reload Scenarios", sz)) {
+      app_->scenario_manager()->ReloadScenariosIfChanged();
+      scenario_nodes_ = GetTopLevelNodes(app_->scenario_manager()->scenarios());
+    }
 
     DrawNodes(&scenario_nodes_);
   }
