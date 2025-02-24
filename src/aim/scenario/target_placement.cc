@@ -44,7 +44,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
  private:
   bool AreNoneWithinDistanceOnWall(const glm::vec2& p, float min_distance) {
     for (auto& target : target_manager_->GetTargets()) {
-      if (!target.hidden) {
+      if (target.ShouldDraw()) {
         float distance = glm::length(p - target.static_wall_position);
         float actual_min_distance = min_distance > 0 ? min_distance : target.radius * 2;
         if (distance < actual_min_distance) {
