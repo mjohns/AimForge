@@ -23,7 +23,14 @@ class AppUiImpl : public AppUi {
           settings_updater_ = {};
         }
         if (current_scenario_def_.has_value()) {
-          auto nav_event = aim::RunScenario(*current_scenario_def_, app_);
+          current_running_scenario_ = CreateScenario(*current_scenario_def_, app_);
+          auto nav_event = current_running_scenario_->Run();
+          if (nav_event.IsRestartLastScenario()) {
+            scenario_run_option_ = ScenarioRunOption::RUN;
+            continue;
+          }
+          SDL_GL_SetSwapInterval(1);  // Enable vsync
+          SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
           if (nav_event.IsExit()) {
             return;
           }
@@ -35,10 +42,29 @@ class AppUiImpl : public AppUi {
           settings_updater_ = {};
         }
         if (current_running_scenario_) {
-          // Resume
+          auto nav_event = current_running_scenario_->Resume();
+          if (nav_event.IsRestartLastScenario()) {
+            scenario_run_option_ = ScenarioRunOption::RUN;
+            continue;
+          }
+          SDL_GL_SetSwapInterval(1);  // Enable vsync
+          SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+          if (nav_event.IsExit()) {
+            return;
+          }
         } else {
           if (current_scenario_def_.has_value()) {
-            // RunScenario
+            current_running_scenario_ = CreateScenario(*current_scenario_def_, app_);
+            auto nav_event = current_running_scenario_->Run();
+            if (nav_event.IsRestartLastScenario()) {
+              scenario_run_option_ = ScenarioRunOption::RUN;
+              continue;
+            }
+            SDL_GL_SetSwapInterval(1);  // Enable vsync
+            SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+            if (nav_event.IsExit()) {
+              return;
+            }
           }
         }
       }
@@ -77,7 +103,7 @@ class AppUiImpl : public AppUi {
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
       if (keycode == SDLK_ESCAPE) {
-        throw ApplicationExitException();
+        scenario_run_option_ = ScenarioRunOption::RESUME;
       }
     }
   }
