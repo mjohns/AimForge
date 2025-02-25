@@ -42,6 +42,10 @@ struct NavigationEvent {
     return type == NavigationEventType::EXIT;
   }
 
+  bool IsRestartLastScenario() const {
+    return type == NavigationEventType::RESTART_LAST_SCENARIO;
+  }
+
   NavigationEventType type = NavigationEventType::DONE;
 };
 

@@ -39,6 +39,11 @@ class Scenario {
   virtual ~Scenario() {}
 
   NavigationEvent Run();
+  NavigationEvent Resume();
+
+  bool is_done() const {
+    return is_done_;
+  }
 
  protected:
   virtual void Initialize() {}
@@ -46,7 +51,6 @@ class Scenario {
   virtual void UpdateState(UpdateStateData* data) = 0;
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
-  virtual void OnResume() {}
 
   // Replay recording methods
   void AddNewTargetEvent(const Target& target);
@@ -77,8 +81,9 @@ class Scenario {
   LookAtInfo look_at_;
   std::unique_ptr<Replay> replay_;
   Theme theme_;
+  bool is_done_ = false;
 };
 
-NavigationEvent RunScenario(const ScenarioDef& def, Application* app);
+std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);
 
 }  // namespace aim

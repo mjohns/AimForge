@@ -31,20 +31,6 @@ namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
 
-std::unique_ptr<Scenario> CreateScenarioForType(const ScenarioDef& def, Application* app) {
-  switch (def.type_case()) {
-    case ScenarioDef::kStaticDef:
-      return CreateStaticScenario(def, app);
-    case ScenarioDef::kCenteringDef:
-      return CreateCenteringScenario(def, app);
-    case ScenarioDef::kBarrelDef:
-      return CreateBarrelScenario(def, app);
-    default:
-      break;
-  }
-  return {};
-}
-
 }  // namespace
 
 Scenario::Scenario(const ScenarioDef& def, Application* app)
@@ -58,18 +44,25 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
 }
 
 NavigationEvent Scenario::Run() {
+  if (replay_) {
+    *replay_->mutable_room() = def_.room();
+    replay_->set_replay_fps(timer_.GetReplayFps());
+  }
+  Initialize();
+
+  return Resume();
+}
+
+NavigationEvent Scenario::Resume() {
+  if (is_done_) {
+    return NavigationEvent::Done();
+  }
   ScreenInfo screen = app_->screen_info();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
   float dpi = app_->settings_manager()->GetDpi();
   Settings settings = app_->settings_manager()->GetCurrentSettings();
   metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
   float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
-
-  if (replay_) {
-    *replay_->mutable_room() = def_.room();
-    replay_->set_replay_fps(timer_.GetReplayFps());
-  }
-  Initialize();
 
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
@@ -80,10 +73,12 @@ NavigationEvent Scenario::Run() {
   std::optional<SettingsScreenType> show_settings;
   bool is_click_held = false;
   u64 num_state_updates = 0;
+  Stopwatch resume_timer;
+  resume_timer.Start();
   while (!stop_scenario) {
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
-      show_settings = SettingsScreenType::FULL;
+      return NavigationEvent::Done();
     }
     if (show_settings.has_value()) {
       // Need to pause.
@@ -105,7 +100,6 @@ NavigationEvent Scenario::Run() {
       timer_.Resume();
       SDL_GL_SetSwapInterval(0);  // Disable vsync
       SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
-      OnResume();
     }
 
     timer_.OnStartFrame();
@@ -119,6 +113,7 @@ NavigationEvent Scenario::Run() {
     }
 
     if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
+      is_done_ = true;
       stop_scenario = true;
       continue;
     }
@@ -160,7 +155,7 @@ NavigationEvent Scenario::Run() {
           show_settings = SettingsScreenType::QUICK_CROSSHAIR;
         }
         if (keycode == SDLK_ESCAPE) {
-          show_settings = SettingsScreenType::FULL;
+          return NavigationEvent::Done();
         }
       }
       OnEvent(event);
@@ -198,7 +193,7 @@ NavigationEvent Scenario::Run() {
     }
 
     // ~ Around 450k
-    // ImGui::Text("ups: %.1f", num_state_updates / elapsed_seconds);
+    // ImGui::Text("ups: %.1f", num_state_updates / resume_timer.GetElapsedSeconds());
 
     ImGui::End();
 
@@ -328,21 +323,18 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   return target;
 }
 
-NavigationEvent RunScenario(const ScenarioDef& def, Application* app) {
-  app->SetLastScenario(def);
-  app->logger()->info("Starting scenario {}", def.scenario_id());
-  while (true) {
-    std::unique_ptr<Scenario> scenario = CreateScenarioForType(def, app);
-    if (!scenario) {
-      app->logger()->warn("Unable to make scenario for def: {}", def.DebugString());
-      return NavigationEvent::Done();
-    }
-    NavigationEvent nav_event = scenario->Run();
-    if (nav_event.type != NavigationEventType::RESTART_LAST_SCENARIO) {
-      app->logger()->flush();
-      return nav_event;
-    }
+std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app) {
+  switch (def.type_case()) {
+    case ScenarioDef::kStaticDef:
+      return CreateStaticScenario(def, app);
+    case ScenarioDef::kCenteringDef:
+      return CreateCenteringScenario(def, app);
+    case ScenarioDef::kBarrelDef:
+      return CreateBarrelScenario(def, app);
+    default:
+      break;
   }
+  return {};
 }
 
 }  // namespace aim
