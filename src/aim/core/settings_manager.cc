@@ -199,6 +199,13 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager)
   }
 }
 
+void SettingsUpdater::SaveIfChangesMadeDebounced(float debounce_seconds) {
+  if (last_update_timer_.IsRunning() && last_update_timer_.GetElapsedSeconds() < debounce_seconds) {
+    return;
+  }
+  SaveIfChangesMade();
+}
+
 void SettingsUpdater::SaveIfChangesMade() {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   float new_cm_per_360 = ParseFloat(cm_per_360);
@@ -221,6 +228,9 @@ void SettingsUpdater::SaveIfChangesMade() {
     settings_manager_->MarkDirty();
   }
   settings_manager_->MaybeFlushToDisk();
+
+  last_update_timer_ = Stopwatch();
+  last_update_timer_.Start();
 }
 
 }  // namespace aim
