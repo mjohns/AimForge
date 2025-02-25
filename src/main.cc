@@ -4,6 +4,7 @@
 int main(int, char**) {
   using namespace aim;
   auto app = Application::Create();
-  CreateHomeScreen(app.get())->Run();
+  // CreateHomeScreen(app.get())->Run();
+  CreateAppUi(app.get())->Run();
   return 0;
 }

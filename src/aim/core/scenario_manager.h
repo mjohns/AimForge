@@ -36,10 +36,13 @@ class ScenarioManager {
     return scenarios_;
   }
 
-  std::vector<std::unique_ptr<ScenarioNode>> GetScenarioNodes() const;
+  const std::vector<std::unique_ptr<ScenarioNode>>& scenario_nodes() const {
+    return scenario_nodes_;
+  }
 
  private:
   std::vector<ScenarioItem> scenarios_;
+  std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   std::filesystem::path base_scenario_dir_;
   std::filesystem::path user_scenario_dir_;
   std::optional<std::filesystem::file_time_type> last_update_time_;

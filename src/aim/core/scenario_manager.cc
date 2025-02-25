@@ -99,6 +99,7 @@ void ScenarioManager::LoadScenariosFromDisk() {
   scenarios_.clear();
   PushBackAll(&scenarios_, LoadScenarios(base_scenario_dir_, false));
   PushBackAll(&scenarios_, LoadScenarios(user_scenario_dir_, true));
+  scenario_nodes_ = GetTopLevelNodes(scenarios_);
   last_update_time_ = GetMostRecentUpdateTime(user_scenario_dir_, base_scenario_dir_);
 }
 
@@ -111,10 +112,6 @@ void ScenarioManager::ReloadScenariosIfChanged() {
     LoadScenariosFromDisk();
     return;
   }
-}
-
-std::vector<std::unique_ptr<ScenarioNode>> ScenarioManager::GetScenarioNodes() const {
-  return GetTopLevelNodes(scenarios());
 }
 
 }  // namespace aim
