@@ -2,8 +2,8 @@
 
 #include <chrono>
 #include <functional>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "aim/common/simple_types.h"
 

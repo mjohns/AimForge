@@ -27,6 +27,11 @@ message WallAppearance {
 message Theme {
   string name = 1;
 
+  // This theme is a reference to another theme. No other fields should be set when this value is
+  // used. Useful for defining a DefaultStatic theme that can be changed to point to different
+  // themes whenever you want.
+  string reference = 10;
+
   WallAppearance roof_appearance = 2;
   WallAppearance side_appearance = 3;
   WallAppearance front_appearance = 4;
