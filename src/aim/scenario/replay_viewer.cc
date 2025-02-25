@@ -67,7 +67,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return NavigationEvent::Exit();
+        throw ApplicationExitException();
       }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;

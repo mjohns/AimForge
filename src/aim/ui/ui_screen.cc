@@ -31,9 +31,6 @@ class AppUiImpl : public AppUi {
           }
           SDL_GL_SetSwapInterval(1);  // Enable vsync
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-          if (nav_event.IsExit()) {
-            return;
-          }
         }
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
@@ -49,9 +46,6 @@ class AppUiImpl : public AppUi {
           }
           SDL_GL_SetSwapInterval(1);  // Enable vsync
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-          if (nav_event.IsExit()) {
-            return;
-          }
         } else {
           if (current_scenario_def_.has_value()) {
             current_running_scenario_ = CreateScenario(*current_scenario_def_, app_);
@@ -62,9 +56,6 @@ class AppUiImpl : public AppUi {
             }
             SDL_GL_SetSwapInterval(1);  // Enable vsync
             SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-            if (nav_event.IsExit()) {
-              return;
-            }
           }
         }
       }
@@ -249,7 +240,7 @@ NavigationEvent UiScreen::Run() {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return NavigationEvent::Exit();
+        throw ApplicationExitException();
       }
       OnEvent(event, io.WantTextInput);
       if (event.type == SDL_EVENT_KEY_DOWN) {
