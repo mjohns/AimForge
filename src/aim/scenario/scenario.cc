@@ -68,8 +68,11 @@ NavigationEvent Scenario::Resume() {
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
   app_->renderer()->SetProjection(projection);
 
+  Crosshair crosshair = settings.crosshair();
+
   // Main loop
   bool stop_scenario = false;
+  bool is_adjusting_crosshair = false;
   std::optional<SettingsScreenType> show_settings;
   bool is_click_held = false;
   u64 num_state_updates = 0;
@@ -93,6 +96,7 @@ NavigationEvent Scenario::Resume() {
 
       // Need to refresh everything based on settings change
       settings = app_->settings_manager()->GetCurrentSettings();
+      crosshair = settings.crosshair();
       radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
       theme_ = app_->settings_manager()->GetCurrentTheme();
       metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
@@ -140,6 +144,13 @@ NavigationEvent Scenario::Resume() {
           is_click_held = false;
         }
       }
+      if (is_adjusting_crosshair) {
+        if (event.type == SDL_EVENT_MOUSE_WHEEL) {
+          if (event.wheel.y != 0) {
+            crosshair.set_size(crosshair.size() + event.wheel.y);
+          }
+        }
+      }
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_R) {
@@ -152,10 +163,22 @@ NavigationEvent Scenario::Resume() {
           show_settings = SettingsScreenType::QUICK_METRONOME;
         }
         if (keycode == SDLK_C) {
-          show_settings = SettingsScreenType::QUICK_CROSSHAIR;
+          is_adjusting_crosshair = true;
         }
         if (keycode == SDLK_ESCAPE) {
           return NavigationEvent::Done();
+        }
+      }
+      if (event.type == SDL_EVENT_KEY_UP) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_C) {
+          is_adjusting_crosshair = false;
+          Settings* current_settings = app_->settings_manager()->GetMutableCurrentSettings();
+          if (current_settings != nullptr) {
+            *current_settings->mutable_crosshair() = crosshair;
+            app_->settings_manager()->MarkDirty();
+            app_->settings_manager()->MaybeFlushToDisk();
+          }
         }
       }
       OnEvent(event);
@@ -182,7 +205,7 @@ NavigationEvent Scenario::Resume() {
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(settings.crosshair(), theme_, screen, draw_list);
+    DrawCrosshair(crosshair, theme_, screen, draw_list);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
