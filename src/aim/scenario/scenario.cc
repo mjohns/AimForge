@@ -127,7 +127,7 @@ NavigationEvent Scenario::Resume() {
     while (SDL_PollEvent(&event)) {
       ImGui_ImplSDL3_ProcessEvent(&event);
       if (event.type == SDL_EVENT_QUIT) {
-        return NavigationEvent::Exit();
+        throw ApplicationExitException();
       }
       if (event.type == SDL_EVENT_MOUSE_MOTION) {
         camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
