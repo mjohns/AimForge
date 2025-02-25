@@ -297,53 +297,10 @@ bool ShouldExit(const NavigationEvent& e) {
   return !should_display_home;
 }
 
-struct ScenarioNode {
-  // Either name or scenario will be specified. If scenario is set, this is a leaf node.
-  std::string name;
-  std::optional<ScenarioItem> scenario;
-  std::vector<std::unique_ptr<ScenarioNode>> child_nodes;
-};
-
-ScenarioNode* GetOrCreateNode(std::vector<std::unique_ptr<ScenarioNode>>* nodes,
-                              const std::string& name) {
-  for (auto& node : *nodes) {
-    if (node->name == name) {
-      return node.get();
-    }
-  }
-
-  auto node = std::make_unique<ScenarioNode>();
-  node->name = name;
-  ScenarioNode* result = node.get();
-  nodes->push_back(std::move(node));
-  return result;
-}
-
-std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
-    const std::vector<ScenarioItem>& scenarios) {
-  std::set<std::string> seen_scenario_ids;
-
-  std::vector<std::unique_ptr<ScenarioNode>> nodes;
-  for (const ScenarioItem& item : scenarios) {
-    std::vector<std::unique_ptr<ScenarioNode>>* current_nodes = &nodes;
-    ScenarioNode* last_parent = nullptr;
-    for (const std::string& path_name : item.path_parts) {
-      last_parent = GetOrCreateNode(current_nodes, path_name);
-      current_nodes = &last_parent->child_nodes;
-    }
-
-    auto scenario_node = std::make_unique<ScenarioNode>();
-    scenario_node->scenario = item;
-    current_nodes->emplace_back(std::move(scenario_node));
-  }
-
-  return nodes;
-}
-
 class HomeScreen : public UiScreen {
  public:
   explicit HomeScreen(Application* app) : UiScreen(app) {
-    scenario_nodes_ = GetTopLevelNodes(app->scenario_manager()->scenarios());
+    scenario_nodes_ = app->scenario_manager()->GetScenarioNodes();
   }
 
  protected:
@@ -390,7 +347,7 @@ class HomeScreen : public UiScreen {
     if (ImGui::Button("Reload Scenarios/Playlists", sz)) {
       app_->scenario_manager()->ReloadScenariosIfChanged();
       app_->playlist_manager()->ReloadPlaylistsIfChanged();
-      scenario_nodes_ = GetTopLevelNodes(app_->scenario_manager()->scenarios());
+      scenario_nodes_ = app_->scenario_manager()->GetScenarioNodes();
     }
 
     DrawNodes(&scenario_nodes_);
