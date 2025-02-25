@@ -93,7 +93,7 @@ NavigationEvent StatsScreen::Run() {
     percent_diff = (1.0 - percent) * 100;
     auto maybe_time = ParseTimestampStringAsMicros(maybe_previous_high_score_stats->timestamp);
     if (maybe_time) {
-      time_ago = std::format("({} ago)", GetFriendlyDurationString(*maybe_time, GetNowMicros()));
+      time_ago = std::format("({})", GetHowLongAgoString(*maybe_time, GetNowMicros()));
     }
   }
 

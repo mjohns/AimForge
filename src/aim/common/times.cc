@@ -76,40 +76,39 @@ void TimedInvoker::Invoke(uint64_t now_micros) {
   }
 }
 
-std::string GetFriendlyDurationString(u64 start, u64 end) {
+std::string GetHowLongAgoString(u64 start, u64 end) {
   u64 duration_micros = start > end ? start - end : end - start;
   auto duration = std::chrono::microseconds(duration_micros);
 
   {
     int weeks = std::chrono::duration_cast<std::chrono::weeks>(duration).count();
     if (weeks > 0) {
-      return weeks == 1 ? std::format("{} week", weeks) : std::format("{} weeks", weeks);
+      return weeks == 1 ? std::format("{} week ago", weeks) : std::format("{} weeks ago", weeks);
     }
   }
 
   {
     int days = std::chrono::duration_cast<std::chrono::days>(duration).count();
     if (days > 0) {
-      return days == 1 ? std::format("{} day", days) : std::format("{} days", days);
+      return days == 1 ? std::format("{} day ago", days) : std::format("{} days ago", days);
     }
   }
 
   {
     int hours = std::chrono::duration_cast<std::chrono::hours>(duration).count();
     if (hours > 0) {
-      return hours == 1 ? std::format("{} hour", hours) : std::format("{} hours", hours);
+      return hours == 1 ? std::format("{} hour ago", hours) : std::format("{} hours ago", hours);
     }
   }
 
   {
     int minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
     if (minutes > 0) {
-      return minutes == 1 ? std::format("{} minute", minutes) : std::format("{} minutes", minutes);
+      return minutes == 1 ? std::format("{} minute ago", minutes) : std::format("{} minutes ago", minutes);
     }
   }
 
-  int seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
-  return seconds == 1 ? std::format("{} second", seconds) : std::format("{} seconds", seconds);
+  return "Just now";
 }
 
 std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
