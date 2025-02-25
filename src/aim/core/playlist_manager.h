@@ -43,8 +43,6 @@ class PlaylistManager {
   }
 
  private:
-  std::optional<std::filesystem::file_time_type> GetNewLastUpdateTime();
-
   std::optional<PlaylistRun> current_run_;
   std::filesystem::path base_dir_;
   std::filesystem::path user_dir_;
