@@ -79,6 +79,13 @@ class AppUiImpl : public AppUi {
       app_screen_ = AppScreen::SETTINGS;
     }
 
+    // ImGui::SetCursorPosY(screen.height * 0.5);
+    if (ImGui::Selectable("Exit", app_screen_ == AppScreen::EXIT)) {
+      app_screen_ = AppScreen::EXIT;
+      // Show a screen to confirm?
+      throw ApplicationExitException();
+    }
+
     ImGui::EndChild();
     ImGui::NextColumn();
 

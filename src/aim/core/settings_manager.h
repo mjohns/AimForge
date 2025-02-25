@@ -55,4 +55,19 @@ class SettingsManager {
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
 };
 
+struct SettingsUpdater {
+ public:
+  explicit SettingsUpdater(SettingsManager* settings_manager);
+
+  void SaveIfChangesMade();
+
+  std::string cm_per_360;
+  std::string theme_name;
+  std::string metronome_bpm;
+  std::string crosshair_size;
+
+ private:
+  SettingsManager* settings_manager_;
+};
+
 }  // namespace aim

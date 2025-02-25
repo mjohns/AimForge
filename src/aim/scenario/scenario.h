@@ -29,6 +29,10 @@ struct UpdateStateData {
   bool force_render = false;
 };
 
+struct ScenarioRunResult {
+  bool restart_scenario = false;
+};
+
 class Scenario {
  public:
   Scenario(const ScenarioDef& params, Application* app);

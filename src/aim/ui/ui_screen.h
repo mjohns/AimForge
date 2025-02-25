@@ -8,7 +8,7 @@
 
 namespace aim {
 
-enum class AppScreen { SETTINGS, SCENARIOS, PLAYLISTS, STATS };
+enum class AppScreen { SETTINGS, SCENARIOS, PLAYLISTS, STATS, EXIT };
 enum class ScenarioRunOption { NONE, RUN, RESUME };
 
 class AppUi {
@@ -53,6 +53,5 @@ class UiScreen {
 enum class SettingsScreenType { FULL, QUICK, QUICK_METRONOME, QUICK_CROSSHAIR };
 
 std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app, SettingsScreenType type);
-std::unique_ptr<UiScreen> CreateHomeScreen(Application* app);
 
 }  // namespace aim

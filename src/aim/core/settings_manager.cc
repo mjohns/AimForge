@@ -188,4 +188,39 @@ void SettingsManager::FlushToDisk() {
   }
 }
 
+SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager)
+    : settings_manager_(settings_manager) {
+  auto current_settings = settings_manager_->GetMutableCurrentSettings();
+  if (current_settings != nullptr) {
+    cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
+    theme_name = current_settings->theme_name();
+    metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
+    crosshair_size = MaybeIntToString(current_settings->crosshair().size());
+  }
+}
+
+void SettingsUpdater::SaveIfChangesMade() {
+  auto current_settings = settings_manager_->GetMutableCurrentSettings();
+  float new_cm_per_360 = ParseFloat(cm_per_360);
+  if (new_cm_per_360 > 0) {
+    current_settings->set_cm_per_360(new_cm_per_360);
+    settings_manager_->MarkDirty();
+  }
+  if (current_settings->theme_name() != theme_name) {
+    current_settings->set_theme_name(theme_name);
+    settings_manager_->MarkDirty();
+  }
+  float new_metronome_bpm = ParseFloat(metronome_bpm);
+  if (new_metronome_bpm >= 0 && current_settings->metronome_bpm() != new_metronome_bpm) {
+    current_settings->set_metronome_bpm(new_metronome_bpm);
+    settings_manager_->MarkDirty();
+  }
+  float new_crosshair_size = ParseFloat(crosshair_size);
+  if (new_crosshair_size >= 0 && current_settings->crosshair().size() != new_crosshair_size) {
+    current_settings->mutable_crosshair()->set_size(new_crosshair_size);
+    settings_manager_->MarkDirty();
+  }
+  settings_manager_->MaybeFlushToDisk();
+}
+
 }  // namespace aim
