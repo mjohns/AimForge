@@ -114,4 +114,13 @@ void ScenarioManager::ReloadScenariosIfChanged() {
   }
 }
 
+std::optional<ScenarioDef> ScenarioManager::GetScenario(const std::string& scenario_id) {
+  for (const auto& scenario : scenarios_) {
+    if (scenario.def.scenario_id() == scenario_id) {
+      return scenario.def;
+    }
+  }
+  return {};
+}
+
 }  // namespace aim

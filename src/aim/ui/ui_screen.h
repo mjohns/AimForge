@@ -8,7 +8,15 @@
 
 namespace aim {
 
-enum class AppScreen { SETTINGS, SCENARIOS, PLAYLISTS, STATS, EXIT };
+enum class AppScreen {
+  SETTINGS,
+  SCENARIOS,
+  PLAYLISTS,
+  STATS,
+  EXIT,
+  CURRENT_SCENARIO,
+  CURRENT_PLAYLIST
+};
 enum class ScenarioRunOption { NONE, RUN, RESUME };
 
 class AppUi {

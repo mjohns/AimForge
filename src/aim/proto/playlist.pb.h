@@ -217,24 +217,24 @@ class PlaylistItem final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kScenarioIdFieldNumber = 1,
+    kScenarioFieldNumber = 1,
     kNumPlaysFieldNumber = 2,
   };
-  // string scenario_id = 1;
-  bool has_scenario_id() const;
-  void clear_scenario_id() ;
-  const std::string& scenario_id() const;
+  // string scenario = 1;
+  bool has_scenario() const;
+  void clear_scenario() ;
+  const std::string& scenario() const;
   template <typename Arg_ = const std::string&, typename... Args_>
-  void set_scenario_id(Arg_&& arg, Args_... args);
-  std::string* mutable_scenario_id();
-  PROTOBUF_NODISCARD std::string* release_scenario_id();
-  void set_allocated_scenario_id(std::string* value);
+  void set_scenario(Arg_&& arg, Args_... args);
+  std::string* mutable_scenario();
+  PROTOBUF_NODISCARD std::string* release_scenario();
+  void set_allocated_scenario(std::string* value);
 
   private:
-  const std::string& _internal_scenario_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_scenario_id(
+  const std::string& _internal_scenario() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_scenario(
       const std::string& value);
-  std::string* _internal_mutable_scenario_id();
+  std::string* _internal_mutable_scenario();
 
   public:
   // int32 num_plays = 2;
@@ -254,7 +254,7 @@ class PlaylistItem final : public ::google::protobuf::Message
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
       1, 2, 0,
-      36, 2>
+      33, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -273,7 +273,7 @@ class PlaylistItem final : public ::google::protobuf::Message
                           const PlaylistItem& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::internal::ArenaStringPtr scenario_id_;
+    ::google::protobuf::internal::ArenaStringPtr scenario_;
     ::int32_t num_plays_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -547,73 +547,73 @@ PlaylistDef::_internal_mutable_items() {
 
 // PlaylistItem
 
-// string scenario_id = 1;
-inline bool PlaylistItem::has_scenario_id() const {
+// string scenario = 1;
+inline bool PlaylistItem::has_scenario() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline void PlaylistItem::clear_scenario_id() {
+inline void PlaylistItem::clear_scenario() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.scenario_id_.ClearToEmpty();
+  _impl_.scenario_.ClearToEmpty();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const std::string& PlaylistItem::scenario_id() const
+inline const std::string& PlaylistItem::scenario() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.PlaylistItem.scenario_id)
-  return _internal_scenario_id();
+  // @@protoc_insertion_point(field_get:aim.PlaylistItem.scenario)
+  return _internal_scenario();
 }
 template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void PlaylistItem::set_scenario_id(Arg_&& arg,
+inline PROTOBUF_ALWAYS_INLINE void PlaylistItem::set_scenario(Arg_&& arg,
                                                      Args_... args) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.scenario_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:aim.PlaylistItem.scenario_id)
+  _impl_.scenario_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.PlaylistItem.scenario)
 }
-inline std::string* PlaylistItem::mutable_scenario_id() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_scenario_id();
-  // @@protoc_insertion_point(field_mutable:aim.PlaylistItem.scenario_id)
+inline std::string* PlaylistItem::mutable_scenario() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_scenario();
+  // @@protoc_insertion_point(field_mutable:aim.PlaylistItem.scenario)
   return _s;
 }
-inline const std::string& PlaylistItem::_internal_scenario_id() const {
+inline const std::string& PlaylistItem::_internal_scenario() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.scenario_id_.Get();
+  return _impl_.scenario_.Get();
 }
-inline void PlaylistItem::_internal_set_scenario_id(const std::string& value) {
+inline void PlaylistItem::_internal_set_scenario(const std::string& value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.scenario_id_.Set(value, GetArena());
+  _impl_.scenario_.Set(value, GetArena());
 }
-inline std::string* PlaylistItem::_internal_mutable_scenario_id() {
+inline std::string* PlaylistItem::_internal_mutable_scenario() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_._has_bits_[0] |= 0x00000001u;
-  return _impl_.scenario_id_.Mutable( GetArena());
+  return _impl_.scenario_.Mutable( GetArena());
 }
-inline std::string* PlaylistItem::release_scenario_id() {
+inline std::string* PlaylistItem::release_scenario() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.PlaylistItem.scenario_id)
+  // @@protoc_insertion_point(field_release:aim.PlaylistItem.scenario)
   if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
     return nullptr;
   }
   _impl_._has_bits_[0] &= ~0x00000001u;
-  auto* released = _impl_.scenario_id_.Release();
+  auto* released = _impl_.scenario_.Release();
   if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.scenario_id_.Set("", GetArena());
+    _impl_.scenario_.Set("", GetArena());
   }
   return released;
 }
-inline void PlaylistItem::set_allocated_scenario_id(std::string* value) {
+inline void PlaylistItem::set_allocated_scenario(std::string* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (value != nullptr) {
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  _impl_.scenario_id_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.scenario_id_.IsDefault()) {
-    _impl_.scenario_id_.Set("", GetArena());
+  _impl_.scenario_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.scenario_.IsDefault()) {
+    _impl_.scenario_.Set("", GetArena());
   }
-  // @@protoc_insertion_point(field_set_allocated:aim.PlaylistItem.scenario_id)
+  // @@protoc_insertion_point(field_set_allocated:aim.PlaylistItem.scenario)
 }
 
 // int32 num_plays = 2;

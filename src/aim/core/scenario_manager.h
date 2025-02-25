@@ -32,6 +32,8 @@ class ScenarioManager {
   void LoadScenariosFromDisk();
   void ReloadScenariosIfChanged();
 
+  std::optional<ScenarioDef> GetScenario(const std::string& scenario_id);
+
   const std::vector<ScenarioItem>& scenarios() const {
     return scenarios_;
   }

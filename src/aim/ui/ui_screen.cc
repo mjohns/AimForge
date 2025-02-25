@@ -46,17 +46,6 @@ class AppUiImpl : public AppUi {
           }
           SDL_GL_SetSwapInterval(1);  // Enable vsync
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-        } else {
-          if (current_scenario_def_.has_value()) {
-            current_running_scenario_ = CreateScenario(*current_scenario_def_, app_);
-            auto nav_event = current_running_scenario_->Run();
-            if (nav_event.IsRestartLastScenario()) {
-              scenario_run_option_ = ScenarioRunOption::RUN;
-              continue;
-            }
-            SDL_GL_SetSwapInterval(1);  // Enable vsync
-            SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-          }
         }
       }
 
@@ -65,6 +54,7 @@ class AppUiImpl : public AppUi {
       if (!app_->has_input_focus()) {
         SDL_Delay(250);
       }
+
       SDL_Event event;
       ImGuiIO& io = ImGui::GetIO();
       while (SDL_PollEvent(&event)) {
@@ -109,9 +99,25 @@ class AppUiImpl : public AppUi {
     if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
     }
+    if (current_scenario_def_.has_value()) {
+      std::string scenario_label = std::format("  > {}", current_scenario_def_->scenario_id());
+      if (ImGui::Selectable(scenario_label.c_str(), app_screen_ == AppScreen::CURRENT_SCENARIO)) {
+        app_screen_ = AppScreen::CURRENT_SCENARIO;
+      }
+    }
     if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
     }
+    if (current_playlist_.has_value()) {
+      std::string playlist_label = std::format("  > {}", current_playlist_->name);
+      if (ImGui::Selectable(playlist_label.c_str(), app_screen_ == AppScreen::CURRENT_PLAYLIST)) {
+        app_screen_ = AppScreen::CURRENT_PLAYLIST;
+      }
+    }
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+
     if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
       app_screen_ = AppScreen::SETTINGS;
     }
@@ -128,8 +134,23 @@ class AppUiImpl : public AppUi {
 
     ImGui::BeginChild("Content");
 
+    if (app_screen_ == AppScreen::CURRENT_SCENARIO) {
+      if (!current_scenario_def_.has_value()) {
+        app_screen_ = AppScreen::SCENARIOS;
+      } else {
+        DrawCurrentScenarioScreen();
+      }
+    }
     if (app_screen_ == AppScreen::SCENARIOS) {
       DrawScenariosScreen();
+    }
+
+    if (app_screen_ == AppScreen::CURRENT_PLAYLIST) {
+      if (!current_playlist_.has_value()) {
+        app_screen_ = AppScreen::PLAYLISTS;
+      } else {
+        DrawCurrentPlaylistScreen();
+      }
     }
     if (app_screen_ == AppScreen::PLAYLISTS) {
       DrawPlaylistsScreen();
@@ -144,7 +165,6 @@ class AppUiImpl : public AppUi {
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes) {
     for (auto& node : nodes) {
       if (node->scenario.has_value()) {
-        ImVec2 sz = ImVec2(0.0f, 0.0f);
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
           current_scenario_def_ = node->scenario->def;
           scenario_run_option_ = ScenarioRunOption::RUN;
@@ -162,11 +182,50 @@ class AppUiImpl : public AppUi {
     }
   }
 
+  void DrawCurrentScenarioScreen() {
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
+    ImGui::Text(current_scenario_def_->scenario_id().c_str());
+  }
+
   void DrawScenariosScreen() {
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
+    if (ImGui::Button("Reload Scenarios", sz)) {
+      app_->scenario_manager()->ReloadScenariosIfChanged();
+    }
+    ImGui::Spacing();
+    ImGui::Spacing();
+
     DrawScenarioNodes(app_->scenario_manager()->scenario_nodes());
   }
 
-  void DrawPlaylistsScreen() {}
+  void DrawPlaylistsScreen() {
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
+    if (ImGui::Button("Reload Playlists", sz)) {
+      app_->playlist_manager()->ReloadPlaylistsIfChanged();
+    }
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    for (const auto& playlist : app_->playlist_manager()->playlists()) {
+      if (ImGui::Button(playlist.name.c_str(), sz)) {
+        current_playlist_ = playlist;
+        app_screen_ = AppScreen::CURRENT_PLAYLIST;
+      }
+    }
+  }
+
+  void DrawCurrentPlaylistScreen() {
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
+    for (const auto& item : current_playlist_->def.items()) {
+      if (ImGui::Button(item.scenario().c_str(), sz)) {
+        auto maybe_scenario = app_->scenario_manager()->GetScenario(item.scenario());
+        if (maybe_scenario.has_value()) {
+          current_scenario_def_ = *maybe_scenario;
+          scenario_run_option_ = ScenarioRunOption::RUN;
+        }
+      }
+    }
+  }
 
   void DrawSettingsScreen() {
     if (!settings_updater_) {
@@ -211,6 +270,10 @@ class AppUiImpl : public AppUi {
 
   std::optional<ScenarioDef> current_scenario_def_;
   std::unique_ptr<Scenario> current_running_scenario_;
+
+  std::optional<Playlist> current_playlist_;
+  std::unique_ptr<PlaylistRun> current_running_playlist_;
+
   std::unique_ptr<SettingsUpdater> settings_updater_;
 };
 
