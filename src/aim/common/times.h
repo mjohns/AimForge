@@ -12,7 +12,7 @@ namespace aim {
 std::string GetNowString();
 u64 GetNowMicros();
 
-std::string GetFriendlyDurationString(u64 start_epoch_micros, u64 end_epoch_micros);
+std::string GetHowLongAgoString(u64 start_epoch_micros, u64 end_epoch_micros);
 std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp);
 
 class Stopwatch {
