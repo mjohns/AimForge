@@ -26,35 +26,9 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace aim {
 
-inline constexpr SystemSettings::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        dpi_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR SystemSettings::SystemSettings(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct SystemSettingsDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SystemSettingsDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SystemSettingsDefaultTypeInternal() {}
-  union {
-    SystemSettings _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SystemSettingsDefaultTypeInternal _SystemSettings_default_instance_;
-
 inline constexpr DotCrosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        outline_color_{nullptr},
         draw_outline_{false} {}
 
 template <typename>
@@ -80,7 +54,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr Crosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        color_{nullptr},
         size_{0},
         type_{},
         _oneof_case_{} {}
@@ -108,13 +81,11 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr Settings::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        name_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
         theme_name_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
         crosshair_{nullptr},
+        dpi_{0},
         cm_per_360_{0},
         metronome_bpm_{0} {}
 
@@ -137,35 +108,6 @@ struct SettingsDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SettingsDefaultTypeInternal _Settings_default_instance_;
-
-inline constexpr FullSettings::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        saved_settings_{},
-        current_settings_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        system_settings_{nullptr} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR FullSettings::FullSettings(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct FullSettingsDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR FullSettingsDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~FullSettingsDefaultTypeInternal() {}
-  union {
-    FullSettings _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FullSettingsDefaultTypeInternal _FullSettings_default_instance_;
 }  // namespace aim
 static constexpr const ::_pb::EnumDescriptor**
     file_level_enum_descriptors_settings_2eproto = nullptr;
@@ -183,8 +125,6 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::DotCrosshair, _impl_.draw_outline_),
-        PROTOBUF_FIELD_OFFSET(::aim::DotCrosshair, _impl_.outline_color_),
-        1,
         0,
         PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _internal_metadata_),
@@ -195,10 +135,8 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_.size_),
-        PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_.color_),
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_.type_),
-        1,
         0,
         ~0u,
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_._has_bits_),
@@ -209,88 +147,50 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.name_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.crosshair_),
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.dpi_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.cm_per_360_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.theme_name_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.metronome_bpm_),
-        0,
+        1,
         2,
         3,
-        1,
+        0,
         4,
-        PROTOBUF_FIELD_OFFSET(::aim::SystemSettings, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::SystemSettings, _internal_metadata_),
-        ~0u,  // no _extensions_
-        ~0u,  // no _oneof_case_
-        ~0u,  // no _weak_field_map_
-        ~0u,  // no _inlined_string_donated_
-        ~0u,  // no _split_
-        ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::SystemSettings, _impl_.dpi_),
-        0,
-        PROTOBUF_FIELD_OFFSET(::aim::FullSettings, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::FullSettings, _internal_metadata_),
-        ~0u,  // no _extensions_
-        ~0u,  // no _oneof_case_
-        ~0u,  // no _weak_field_map_
-        ~0u,  // no _inlined_string_donated_
-        ~0u,  // no _split_
-        ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::FullSettings, _impl_.system_settings_),
-        PROTOBUF_FIELD_OFFSET(::aim::FullSettings, _impl_.saved_settings_),
-        PROTOBUF_FIELD_OFFSET(::aim::FullSettings, _impl_.current_settings_),
-        1,
-        ~0u,
-        0,
 };
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-        {0, 10, -1, sizeof(::aim::DotCrosshair)},
-        {12, 24, -1, sizeof(::aim::Crosshair)},
-        {27, 40, -1, sizeof(::aim::Settings)},
-        {45, 54, -1, sizeof(::aim::SystemSettings)},
-        {55, 66, -1, sizeof(::aim::FullSettings)},
+        {0, 9, -1, sizeof(::aim::DotCrosshair)},
+        {10, 21, -1, sizeof(::aim::Crosshair)},
+        {23, 36, -1, sizeof(::aim::Settings)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
     &::aim::_Crosshair_default_instance_._instance,
     &::aim::_Settings_default_instance_._instance,
-    &::aim::_SystemSettings_default_instance_._instance,
-    &::aim::_FullSettings_default_instance_._instance,
 };
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\016settings.proto\022\003aim\032\014common.proto\"K\n\014D"
-    "otCrosshair\022\024\n\014draw_outline\030\001 \001(\010\022%\n\rout"
-    "line_color\030\002 \001(\0132\016.aim.StoredRgb\"b\n\tCros"
-    "shair\022\014\n\004size\030\001 \001(\002\022\035\n\005color\030\002 \001(\0132\016.aim"
-    ".StoredRgb\022 \n\003dot\030\003 \001(\0132\021.aim.DotCrossha"
-    "irH\000B\006\n\004type\"z\n\010Settings\022\014\n\004name\030\001 \001(\t\022!"
-    "\n\tcrosshair\030\002 \001(\0132\016.aim.Crosshair\022\022\n\ncm_"
-    "per_360\030\003 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\022\025\n\rmet"
-    "ronome_bpm\030\005 \001(\002\"\035\n\016SystemSettings\022\013\n\003dp"
-    "i\030\001 \001(\002\"}\n\014FullSettings\022,\n\017system_settin"
-    "gs\030\001 \001(\0132\023.aim.SystemSettings\022%\n\016saved_s"
-    "ettings\030\002 \003(\0132\r.aim.Settings\022\030\n\020current_"
-    "settings\030\003 \001(\tb\010editionsp\350\007"
-};
-static const ::_pbi::DescriptorTable* const descriptor_table_settings_2eproto_deps[1] =
-    {
-        &::descriptor_table_common_2eproto,
+    "\n\016settings.proto\022\003aim\"$\n\014DotCrosshair\022\024\n"
+    "\014draw_outline\030\001 \001(\010\"C\n\tCrosshair\022\014\n\004size"
+    "\030\001 \001(\002\022 \n\003dot\030\003 \001(\0132\021.aim.DotCrosshairH\000"
+    "B\006\n\004type\"y\n\010Settings\022!\n\tcrosshair\030\001 \001(\0132"
+    "\016.aim.Crosshair\022\013\n\003dpi\030\002 \001(\002\022\022\n\ncm_per_3"
+    "60\030\003 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\022\025\n\rmetronom"
+    "e_bpm\030\005 \001(\002b\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    507,
+    264,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
-    descriptor_table_settings_2eproto_deps,
-    1,
-    5,
+    nullptr,
+    0,
+    3,
     schemas,
     file_default_instances,
     TableStruct_settings_2eproto::offsets,
@@ -308,11 +208,6 @@ class DotCrosshair::_Internal {
       8 * PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_._has_bits_);
 };
 
-void DotCrosshair::clear_outline_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.outline_color_ != nullptr) _impl_.outline_color_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
 DotCrosshair::DotCrosshair(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -322,32 +217,10 @@ DotCrosshair::DotCrosshair(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:aim.DotCrosshair)
 }
-inline PROTOBUF_NDEBUG_INLINE DotCrosshair::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from, const ::aim::DotCrosshair& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0} {}
-
 DotCrosshair::DotCrosshair(
-    ::google::protobuf::Arena* arena,
-    const DotCrosshair& from)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  DotCrosshair* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.outline_color_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredRgb>(
-                              arena, *from._impl_.outline_color_)
-                        : nullptr;
-  _impl_.draw_outline_ = from._impl_.draw_outline_;
-
-  // @@protoc_insertion_point(copy_constructor:aim.DotCrosshair)
+    ::google::protobuf::Arena* arena, const DotCrosshair& from)
+    : DotCrosshair(arena) {
+  MergeFrom(from);
 }
 inline PROTOBUF_NDEBUG_INLINE DotCrosshair::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
@@ -356,12 +229,7 @@ inline PROTOBUF_NDEBUG_INLINE DotCrosshair::Impl_::Impl_(
 
 inline void DotCrosshair::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, outline_color_),
-           0,
-           offsetof(Impl_, draw_outline_) -
-               offsetof(Impl_, outline_color_) +
-               sizeof(Impl_::draw_outline_));
+  _impl_.draw_outline_ = {};
 }
 DotCrosshair::~DotCrosshair() {
   // @@protoc_insertion_point(destructor:aim.DotCrosshair)
@@ -371,7 +239,6 @@ inline void DotCrosshair::SharedDtor(MessageLite& self) {
   DotCrosshair& this_ = static_cast<DotCrosshair&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  delete this_._impl_.outline_color_;
   this_._impl_.~Impl_();
 }
 
@@ -411,17 +278,17 @@ const ::google::protobuf::internal::ClassData* DotCrosshair::GetClassData() cons
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 0, 2> DotCrosshair::_table_ = {
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> DotCrosshair::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    1, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
-    1,  // num_aux_entries
-    offsetof(decltype(_table_), aux_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
@@ -429,24 +296,18 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> DotCrosshair::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::DotCrosshair>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .aim.StoredRgb outline_color = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 0, 0, PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.outline_color_)}},
     // bool draw_outline = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(DotCrosshair, _impl_.draw_outline_), 1>(),
-     {8, 1, 0, PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.draw_outline_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(DotCrosshair, _impl_.draw_outline_), 0>(),
+     {8, 0, 0, PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.draw_outline_)}},
   }}, {{
     65535, 65535
   }}, {{
     // bool draw_outline = 1;
-    {PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.draw_outline_), _Internal::kHasBitsOffset + 1, 0,
+    {PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.draw_outline_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-    // .aim.StoredRgb outline_color = 2;
-    {PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.outline_color_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-  }}, {{
-    {::_pbi::TcParser::GetTable<::aim::StoredRgb>()},
-  }}, {{
+  }},
+  // no aux_entries
+  {{
   }},
 };
 
@@ -457,11 +318,6 @@ PROTOBUF_NOINLINE void DotCrosshair::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.outline_color_ != nullptr);
-    _impl_.outline_color_->Clear();
-  }
   _impl_.draw_outline_ = false;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -484,17 +340,10 @@ PROTOBUF_NOINLINE void DotCrosshair::Clear() {
 
           cached_has_bits = this_._impl_._has_bits_[0];
           // bool draw_outline = 1;
-          if (cached_has_bits & 0x00000002u) {
+          if (cached_has_bits & 0x00000001u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteBoolToArray(
                 1, this_._internal_draw_outline(), target);
-          }
-
-          // .aim.StoredRgb outline_color = 2;
-          if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.outline_color_, this_._impl_.outline_color_->GetCachedSize(), target,
-                stream);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -520,16 +369,10 @@ PROTOBUF_NOINLINE void DotCrosshair::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-          cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
-            // .aim.StoredRgb outline_color = 2;
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.outline_color_);
-            }
+           {
             // bool draw_outline = 1;
-            if (cached_has_bits & 0x00000002u) {
+            cached_has_bits = this_._impl_._has_bits_[0];
+            if (cached_has_bits & 0x00000001u) {
               total_size += 2;
             }
           }
@@ -540,26 +383,14 @@ PROTOBUF_NOINLINE void DotCrosshair::Clear() {
 void DotCrosshair::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
   auto* const _this = static_cast<DotCrosshair*>(&to_msg);
   auto& from = static_cast<const DotCrosshair&>(from_msg);
-  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:aim.DotCrosshair)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      ABSL_DCHECK(from._impl_.outline_color_ != nullptr);
-      if (_this->_impl_.outline_color_ == nullptr) {
-        _this->_impl_.outline_color_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredRgb>(arena, *from._impl_.outline_color_);
-      } else {
-        _this->_impl_.outline_color_->MergeFrom(*from._impl_.outline_color_);
-      }
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.draw_outline_ = from._impl_.draw_outline_;
-    }
+  if (cached_has_bits & 0x00000001u) {
+    _this->_impl_.draw_outline_ = from._impl_.draw_outline_;
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
@@ -577,12 +408,7 @@ void DotCrosshair::InternalSwap(DotCrosshair* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.draw_outline_)
-      + sizeof(DotCrosshair::_impl_.draw_outline_)
-      - PROTOBUF_FIELD_OFFSET(DotCrosshair, _impl_.outline_color_)>(
-          reinterpret_cast<char*>(&_impl_.outline_color_),
-          reinterpret_cast<char*>(&other->_impl_.outline_color_));
+        swap(_impl_.draw_outline_, other->_impl_.draw_outline_);
 }
 
 ::google::protobuf::Metadata DotCrosshair::GetMetadata() const {
@@ -600,11 +426,6 @@ class Crosshair::_Internal {
       PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_._oneof_case_);
 };
 
-void Crosshair::clear_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.color_ != nullptr) _impl_.color_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
 void Crosshair::set_allocated_dot(::aim::DotCrosshair* dot) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
@@ -648,10 +469,6 @@ Crosshair::Crosshair(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.color_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredRgb>(
-                              arena, *from._impl_.color_)
-                        : nullptr;
   _impl_.size_ = from._impl_.size_;
   switch (type_case()) {
     case TYPE_NOT_SET:
@@ -672,12 +489,7 @@ inline PROTOBUF_NDEBUG_INLINE Crosshair::Impl_::Impl_(
 
 inline void Crosshair::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, color_),
-           0,
-           offsetof(Impl_, size_) -
-               offsetof(Impl_, color_) +
-               sizeof(Impl_::size_));
+  _impl_.size_ = {};
 }
 Crosshair::~Crosshair() {
   // @@protoc_insertion_point(destructor:aim.Crosshair)
@@ -687,7 +499,6 @@ inline void Crosshair::SharedDtor(MessageLite& self) {
   Crosshair& this_ = static_cast<Crosshair&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  delete this_._impl_.color_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -750,16 +561,16 @@ const ::google::protobuf::internal::ClassData* Crosshair::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 3, 2, 0, 2> Crosshair::_table_ = {
+const ::_pbi::TcParseTable<0, 2, 1, 0, 2> Crosshair::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Crosshair, _impl_._has_bits_),
     0, // no _extensions_
-    3, 8,  // max_field_number, fast_idx_mask
+    3, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967290,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    2,  // num_aux_entries
+    2,  // num_field_entries
+    1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -768,26 +579,19 @@ const ::_pbi::TcParseTable<1, 3, 2, 0, 2> Crosshair::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::Crosshair>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .aim.StoredRgb color = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 0, 0, PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.color_)}},
     // float size = 1;
     {::_pbi::TcParser::FastF32S1,
-     {13, 1, 0, PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.size_)}},
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.size_)}},
   }}, {{
     65535, 65535
   }}, {{
     // float size = 1;
-    {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.size_), _Internal::kHasBitsOffset + 1, 0,
+    {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.size_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.StoredRgb color = 2;
-    {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.color_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.DotCrosshair dot = 3;
-    {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.type_.dot_), _Internal::kOneofCaseOffset + 0, 1,
+    {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.type_.dot_), _Internal::kOneofCaseOffset + 0, 0,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
-    {::_pbi::TcParser::GetTable<::aim::StoredRgb>()},
     {::_pbi::TcParser::GetTable<::aim::DotCrosshair>()},
   }}, {{
   }},
@@ -800,11 +604,6 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.color_ != nullptr);
-    _impl_.color_->Clear();
-  }
   _impl_.size_ = 0;
   clear_type();
   _impl_._has_bits_.Clear();
@@ -828,17 +627,10 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
 
           cached_has_bits = this_._impl_._has_bits_[0];
           // float size = 1;
-          if (cached_has_bits & 0x00000002u) {
+          if (cached_has_bits & 0x00000001u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 1, this_._internal_size(), target);
-          }
-
-          // .aim.StoredRgb color = 2;
-          if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.color_, this_._impl_.color_->GetCachedSize(), target,
-                stream);
           }
 
           // .aim.DotCrosshair dot = 3;
@@ -871,16 +663,10 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-          cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
-            // .aim.StoredRgb color = 2;
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.color_);
-            }
+           {
             // float size = 1;
-            if (cached_has_bits & 0x00000002u) {
+            cached_has_bits = this_._impl_._has_bits_[0];
+            if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
           }
@@ -909,19 +695,8 @@ void Crosshair::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::googl
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      ABSL_DCHECK(from._impl_.color_ != nullptr);
-      if (_this->_impl_.color_ == nullptr) {
-        _this->_impl_.color_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredRgb>(arena, *from._impl_.color_);
-      } else {
-        _this->_impl_.color_->MergeFrom(*from._impl_.color_);
-      }
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.size_ = from._impl_.size_;
-    }
+  if (cached_has_bits & 0x00000001u) {
+    _this->_impl_.size_ = from._impl_.size_;
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
@@ -963,12 +738,7 @@ void Crosshair::InternalSwap(Crosshair* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.size_)
-      + sizeof(Crosshair::_impl_.size_)
-      - PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.color_)>(
-          reinterpret_cast<char*>(&_impl_.color_),
-          reinterpret_cast<char*>(&other->_impl_.color_));
+        swap(_impl_.size_, other->_impl_.size_);
   swap(_impl_.type_, other->_impl_.type_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
@@ -1000,7 +770,6 @@ inline PROTOBUF_NDEBUG_INLINE Settings::Impl_::Impl_(
     const Impl_& from, const ::aim::Settings& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        name_(arena, from.name_),
         theme_name_(arena, from.theme_name_) {}
 
 Settings::Settings(
@@ -1017,15 +786,15 @@ Settings::Settings(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.crosshair_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::Crosshair>(
+  _impl_.crosshair_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::Crosshair>(
                               arena, *from._impl_.crosshair_)
                         : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, cm_per_360_),
+               offsetof(Impl_, dpi_),
            reinterpret_cast<const char *>(&from._impl_) +
-               offsetof(Impl_, cm_per_360_),
+               offsetof(Impl_, dpi_),
            offsetof(Impl_, metronome_bpm_) -
-               offsetof(Impl_, cm_per_360_) +
+               offsetof(Impl_, dpi_) +
                sizeof(Impl_::metronome_bpm_));
 
   // @@protoc_insertion_point(copy_constructor:aim.Settings)
@@ -1034,7 +803,6 @@ inline PROTOBUF_NDEBUG_INLINE Settings::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : _cached_size_{0},
-        name_(arena),
         theme_name_(arena) {}
 
 inline void Settings::SharedCtor(::_pb::Arena* arena) {
@@ -1054,7 +822,6 @@ inline void Settings::SharedDtor(MessageLite& self) {
   Settings& this_ = static_cast<Settings&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.name_.Destroy();
   this_._impl_.theme_name_.Destroy();
   delete this_._impl_.crosshair_;
   this_._impl_.~Impl_();
@@ -1096,7 +863,7 @@ const ::google::protobuf::internal::ClassData* Settings::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 5, 1, 35, 2> Settings::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 1, 31, 2> Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
@@ -1115,18 +882,18 @@ const ::_pbi::TcParseTable<3, 5, 1, 35, 2> Settings::_table_ = {
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
-    // string name = 1;
-    {::_pbi::TcParser::FastUS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.name_)}},
-    // .aim.Crosshair crosshair = 2;
+    // .aim.Crosshair crosshair = 1;
     {::_pbi::TcParser::FastMtS1,
-     {18, 2, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_)}},
+     {10, 1, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_)}},
+    // float dpi = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 2, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_)}},
     // float cm_per_360 = 3;
     {::_pbi::TcParser::FastF32S1,
      {29, 3, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_)}},
     // string theme_name = 4;
     {::_pbi::TcParser::FastUS1,
-     {34, 1, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_)}},
+     {34, 0, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_)}},
     // float metronome_bpm = 5;
     {::_pbi::TcParser::FastF32S1,
      {45, 4, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)}},
@@ -1135,17 +902,17 @@ const ::_pbi::TcParseTable<3, 5, 1, 35, 2> Settings::_table_ = {
   }}, {{
     65535, 65535
   }}, {{
-    // string name = 1;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.name_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // .aim.Crosshair crosshair = 2;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_), _Internal::kHasBitsOffset + 2, 0,
+    // .aim.Crosshair crosshair = 1;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float dpi = 2;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float cm_per_360 = 3;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // string theme_name = 4;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_), _Internal::kHasBitsOffset + 1, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // float metronome_bpm = 5;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 4, 0,
@@ -1153,9 +920,8 @@ const ::_pbi::TcParseTable<3, 5, 1, 35, 2> Settings::_table_ = {
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Crosshair>()},
   }}, {{
-    "\14\4\0\0\12\0\0\0"
+    "\14\0\0\0\12\0\0\0"
     "aim.Settings"
-    "name"
     "theme_name"
   }},
 };
@@ -1168,22 +934,19 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
-      _impl_.name_.ClearNonDefaultToEmpty();
-    }
-    if (cached_has_bits & 0x00000002u) {
       _impl_.theme_name_.ClearNonDefaultToEmpty();
     }
-    if (cached_has_bits & 0x00000004u) {
+    if (cached_has_bits & 0x00000002u) {
       ABSL_DCHECK(_impl_.crosshair_ != nullptr);
       _impl_.crosshair_->Clear();
     }
   }
-  if (cached_has_bits & 0x00000018u) {
-    ::memset(&_impl_.cm_per_360_, 0, static_cast<::size_t>(
+  if (cached_has_bits & 0x0000001cu) {
+    ::memset(&_impl_.dpi_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.metronome_bpm_) -
-        reinterpret_cast<char*>(&_impl_.cm_per_360_)) + sizeof(_impl_.metronome_bpm_));
+        reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.metronome_bpm_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1205,19 +968,18 @@ PROTOBUF_NOINLINE void Settings::Clear() {
           (void)cached_has_bits;
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // string name = 1;
-          if (cached_has_bits & 0x00000001u) {
-            const std::string& _s = this_._internal_name();
-            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.Settings.name");
-            target = stream->WriteStringMaybeAliased(1, _s, target);
+          // .aim.Crosshair crosshair = 1;
+          if (cached_has_bits & 0x00000002u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                1, *this_._impl_.crosshair_, this_._impl_.crosshair_->GetCachedSize(), target,
+                stream);
           }
 
-          // .aim.Crosshair crosshair = 2;
+          // float dpi = 2;
           if (cached_has_bits & 0x00000004u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.crosshair_, this_._impl_.crosshair_->GetCachedSize(), target,
-                stream);
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_dpi(), target);
           }
 
           // float cm_per_360 = 3;
@@ -1228,7 +990,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
           }
 
           // string theme_name = 4;
-          if (cached_has_bits & 0x00000002u) {
+          if (cached_has_bits & 0x00000001u) {
             const std::string& _s = this_._internal_theme_name();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.Settings.theme_name");
@@ -1268,20 +1030,19 @@ PROTOBUF_NOINLINE void Settings::Clear() {
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
           if (cached_has_bits & 0x0000001fu) {
-            // string name = 1;
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                              this_._internal_name());
-            }
             // string theme_name = 4;
-            if (cached_has_bits & 0x00000002u) {
+            if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_theme_name());
             }
-            // .aim.Crosshair crosshair = 2;
-            if (cached_has_bits & 0x00000004u) {
+            // .aim.Crosshair crosshair = 1;
+            if (cached_has_bits & 0x00000002u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.crosshair_);
+            }
+            // float dpi = 2;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
             }
             // float cm_per_360 = 3;
             if (cached_has_bits & 0x00000008u) {
@@ -1308,12 +1069,9 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
-      _this->_internal_set_name(from._internal_name());
-    }
-    if (cached_has_bits & 0x00000002u) {
       _this->_internal_set_theme_name(from._internal_theme_name());
     }
-    if (cached_has_bits & 0x00000004u) {
+    if (cached_has_bits & 0x00000002u) {
       ABSL_DCHECK(from._impl_.crosshair_ != nullptr);
       if (_this->_impl_.crosshair_ == nullptr) {
         _this->_impl_.crosshair_ =
@@ -1321,6 +1079,9 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
       } else {
         _this->_impl_.crosshair_->MergeFrom(*from._impl_.crosshair_);
       }
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.dpi_ = from._impl_.dpi_;
     }
     if (cached_has_bits & 0x00000008u) {
       _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
@@ -1347,7 +1108,6 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT other) {
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.theme_name_, &other->_impl_.theme_name_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)
@@ -1358,557 +1118,6 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT other) {
 }
 
 ::google::protobuf::Metadata Settings::GetMetadata() const {
-  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
-}
-// ===================================================================
-
-class SystemSettings::_Internal {
- public:
-  using HasBits =
-      decltype(std::declval<SystemSettings>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(SystemSettings, _impl_._has_bits_);
-};
-
-SystemSettings::SystemSettings(::google::protobuf::Arena* arena)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.SystemSettings)
-}
-SystemSettings::SystemSettings(
-    ::google::protobuf::Arena* arena, const SystemSettings& from)
-    : SystemSettings(arena) {
-  MergeFrom(from);
-}
-inline PROTOBUF_NDEBUG_INLINE SystemSettings::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility,
-    ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
-
-inline void SystemSettings::SharedCtor(::_pb::Arena* arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.dpi_ = {};
-}
-SystemSettings::~SystemSettings() {
-  // @@protoc_insertion_point(destructor:aim.SystemSettings)
-  SharedDtor(*this);
-}
-inline void SystemSettings::SharedDtor(MessageLite& self) {
-  SystemSettings& this_ = static_cast<SystemSettings&>(self);
-  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.~Impl_();
-}
-
-inline void* SystemSettings::PlacementNew_(const void*, void* mem,
-                                        ::google::protobuf::Arena* arena) {
-  return ::new (mem) SystemSettings(arena);
-}
-constexpr auto SystemSettings::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(SystemSettings),
-                                            alignof(SystemSettings));
-}
-PROTOBUF_CONSTINIT
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull SystemSettings::_class_data_ = {
-    ::google::protobuf::internal::ClassData{
-        &_SystemSettings_default_instance_._instance,
-        &_table_.header,
-        nullptr,  // OnDemandRegisterArenaDtor
-        nullptr,  // IsInitialized
-        &SystemSettings::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<SystemSettings>(),
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        &SystemSettings::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<SystemSettings>(), &SystemSettings::ByteSizeLong,
-            &SystemSettings::_InternalSerialize,
-#endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(SystemSettings, _impl_._cached_size_),
-        false,
-    },
-    &SystemSettings::kDescriptorMethods,
-    &descriptor_table_settings_2eproto,
-    nullptr,  // tracker
-};
-const ::google::protobuf::internal::ClassData* SystemSettings::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
-  return _class_data_.base();
-}
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 0, 2> SystemSettings::_table_ = {
-  {
-    PROTOBUF_FIELD_OFFSET(SystemSettings, _impl_._has_bits_),
-    0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
-    _class_data_.base(),
-    nullptr,  // post_loop_handler
-    ::_pbi::TcParser::GenericFallback,  // fallback
-    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::SystemSettings>(),  // to_prefetch
-    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
-  }, {{
-    // float dpi = 1;
-    {::_pbi::TcParser::FastF32S1,
-     {13, 0, 0, PROTOBUF_FIELD_OFFSET(SystemSettings, _impl_.dpi_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // float dpi = 1;
-    {PROTOBUF_FIELD_OFFSET(SystemSettings, _impl_.dpi_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-  }},
-  // no aux_entries
-  {{
-  }},
-};
-
-PROTOBUF_NOINLINE void SystemSettings::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.SystemSettings)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.dpi_ = 0;
-  _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* SystemSettings::_InternalSerialize(
-            const MessageLite& base, ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const SystemSettings& this_ = static_cast<const SystemSettings&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* SystemSettings::_InternalSerialize(
-            ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const SystemSettings& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.SystemSettings)
-          ::uint32_t cached_has_bits = 0;
-          (void)cached_has_bits;
-
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // float dpi = 1;
-          if (cached_has_bits & 0x00000001u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                1, this_._internal_dpi(), target);
-          }
-
-          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
-            target =
-                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-          }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.SystemSettings)
-          return target;
-        }
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t SystemSettings::ByteSizeLong(const MessageLite& base) {
-          const SystemSettings& this_ = static_cast<const SystemSettings&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t SystemSettings::ByteSizeLong() const {
-          const SystemSettings& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.SystemSettings)
-          ::size_t total_size = 0;
-
-          ::uint32_t cached_has_bits = 0;
-          // Prevent compiler warnings about cached_has_bits being unused
-          (void)cached_has_bits;
-
-           {
-            // float dpi = 1;
-            cached_has_bits = this_._impl_._has_bits_[0];
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 5;
-            }
-          }
-          return this_.MaybeComputeUnknownFieldsSize(total_size,
-                                                     &this_._impl_._cached_size_);
-        }
-
-void SystemSettings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<SystemSettings*>(&to_msg);
-  auto& from = static_cast<const SystemSettings&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.SystemSettings)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    _this->_impl_.dpi_ = from._impl_.dpi_;
-  }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void SystemSettings::CopyFrom(const SystemSettings& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.SystemSettings)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-
-void SystemSettings::InternalSwap(SystemSettings* PROTOBUF_RESTRICT other) {
-  using std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-        swap(_impl_.dpi_, other->_impl_.dpi_);
-}
-
-::google::protobuf::Metadata SystemSettings::GetMetadata() const {
-  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
-}
-// ===================================================================
-
-class FullSettings::_Internal {
- public:
-  using HasBits =
-      decltype(std::declval<FullSettings>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(FullSettings, _impl_._has_bits_);
-};
-
-FullSettings::FullSettings(::google::protobuf::Arena* arena)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.FullSettings)
-}
-inline PROTOBUF_NDEBUG_INLINE FullSettings::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from, const ::aim::FullSettings& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0},
-        saved_settings_{visibility, arena, from.saved_settings_},
-        current_settings_(arena, from.current_settings_) {}
-
-FullSettings::FullSettings(
-    ::google::protobuf::Arena* arena,
-    const FullSettings& from)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  FullSettings* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.system_settings_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::SystemSettings>(
-                              arena, *from._impl_.system_settings_)
-                        : nullptr;
-
-  // @@protoc_insertion_point(copy_constructor:aim.FullSettings)
-}
-inline PROTOBUF_NDEBUG_INLINE FullSettings::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility,
-    ::google::protobuf::Arena* arena)
-      : _cached_size_{0},
-        saved_settings_{visibility, arena},
-        current_settings_(arena) {}
-
-inline void FullSettings::SharedCtor(::_pb::Arena* arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.system_settings_ = {};
-}
-FullSettings::~FullSettings() {
-  // @@protoc_insertion_point(destructor:aim.FullSettings)
-  SharedDtor(*this);
-}
-inline void FullSettings::SharedDtor(MessageLite& self) {
-  FullSettings& this_ = static_cast<FullSettings&>(self);
-  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.current_settings_.Destroy();
-  delete this_._impl_.system_settings_;
-  this_._impl_.~Impl_();
-}
-
-inline void* FullSettings::PlacementNew_(const void*, void* mem,
-                                        ::google::protobuf::Arena* arena) {
-  return ::new (mem) FullSettings(arena);
-}
-constexpr auto FullSettings::InternalNewImpl_() {
-  constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
-      PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.saved_settings_) +
-          decltype(FullSettings::_impl_.saved_settings_)::
-              InternalGetArenaOffset(
-                  ::google::protobuf::Message::internal_visibility()),
-  });
-  if (arena_bits.has_value()) {
-    return ::google::protobuf::internal::MessageCreator::CopyInit(
-        sizeof(FullSettings), alignof(FullSettings), *arena_bits);
-  } else {
-    return ::google::protobuf::internal::MessageCreator(&FullSettings::PlacementNew_,
-                                 sizeof(FullSettings),
-                                 alignof(FullSettings));
-  }
-}
-PROTOBUF_CONSTINIT
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull FullSettings::_class_data_ = {
-    ::google::protobuf::internal::ClassData{
-        &_FullSettings_default_instance_._instance,
-        &_table_.header,
-        nullptr,  // OnDemandRegisterArenaDtor
-        nullptr,  // IsInitialized
-        &FullSettings::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<FullSettings>(),
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        &FullSettings::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<FullSettings>(), &FullSettings::ByteSizeLong,
-            &FullSettings::_InternalSerialize,
-#endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(FullSettings, _impl_._cached_size_),
-        false,
-    },
-    &FullSettings::kDescriptorMethods,
-    &descriptor_table_settings_2eproto,
-    nullptr,  // tracker
-};
-const ::google::protobuf::internal::ClassData* FullSettings::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
-  return _class_data_.base();
-}
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 2, 41, 2> FullSettings::_table_ = {
-  {
-    PROTOBUF_FIELD_OFFSET(FullSettings, _impl_._has_bits_),
-    0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    2,  // num_aux_entries
-    offsetof(decltype(_table_), aux_entries),
-    _class_data_.base(),
-    nullptr,  // post_loop_handler
-    ::_pbi::TcParser::GenericFallback,  // fallback
-    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::FullSettings>(),  // to_prefetch
-    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
-  }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // .aim.SystemSettings system_settings = 1;
-    {::_pbi::TcParser::FastMtS1,
-     {10, 1, 0, PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.system_settings_)}},
-    // repeated .aim.Settings saved_settings = 2;
-    {::_pbi::TcParser::FastMtR1,
-     {18, 63, 1, PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.saved_settings_)}},
-    // string current_settings = 3;
-    {::_pbi::TcParser::FastUS1,
-     {26, 0, 0, PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.current_settings_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // .aim.SystemSettings system_settings = 1;
-    {PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.system_settings_), _Internal::kHasBitsOffset + 1, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // repeated .aim.Settings saved_settings = 2;
-    {PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.saved_settings_), -1, 1,
-    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
-    // string current_settings = 3;
-    {PROTOBUF_FIELD_OFFSET(FullSettings, _impl_.current_settings_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }}, {{
-    {::_pbi::TcParser::GetTable<::aim::SystemSettings>()},
-    {::_pbi::TcParser::GetTable<::aim::Settings>()},
-  }}, {{
-    "\20\0\0\20\0\0\0\0"
-    "aim.FullSettings"
-    "current_settings"
-  }},
-};
-
-PROTOBUF_NOINLINE void FullSettings::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.FullSettings)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.saved_settings_.Clear();
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      _impl_.current_settings_.ClearNonDefaultToEmpty();
-    }
-    if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(_impl_.system_settings_ != nullptr);
-      _impl_.system_settings_->Clear();
-    }
-  }
-  _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* FullSettings::_InternalSerialize(
-            const MessageLite& base, ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const FullSettings& this_ = static_cast<const FullSettings&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* FullSettings::_InternalSerialize(
-            ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const FullSettings& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.FullSettings)
-          ::uint32_t cached_has_bits = 0;
-          (void)cached_has_bits;
-
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // .aim.SystemSettings system_settings = 1;
-          if (cached_has_bits & 0x00000002u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                1, *this_._impl_.system_settings_, this_._impl_.system_settings_->GetCachedSize(), target,
-                stream);
-          }
-
-          // repeated .aim.Settings saved_settings = 2;
-          for (unsigned i = 0, n = static_cast<unsigned>(
-                                   this_._internal_saved_settings_size());
-               i < n; i++) {
-            const auto& repfield = this_._internal_saved_settings().Get(i);
-            target =
-                ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                    2, repfield, repfield.GetCachedSize(),
-                    target, stream);
-          }
-
-          // string current_settings = 3;
-          if (cached_has_bits & 0x00000001u) {
-            const std::string& _s = this_._internal_current_settings();
-            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.FullSettings.current_settings");
-            target = stream->WriteStringMaybeAliased(3, _s, target);
-          }
-
-          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
-            target =
-                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-          }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.FullSettings)
-          return target;
-        }
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t FullSettings::ByteSizeLong(const MessageLite& base) {
-          const FullSettings& this_ = static_cast<const FullSettings&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t FullSettings::ByteSizeLong() const {
-          const FullSettings& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.FullSettings)
-          ::size_t total_size = 0;
-
-          ::uint32_t cached_has_bits = 0;
-          // Prevent compiler warnings about cached_has_bits being unused
-          (void)cached_has_bits;
-
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-           {
-            // repeated .aim.Settings saved_settings = 2;
-            {
-              total_size += 1UL * this_._internal_saved_settings_size();
-              for (const auto& msg : this_._internal_saved_settings()) {
-                total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
-              }
-            }
-          }
-          cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
-            // string current_settings = 3;
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                              this_._internal_current_settings());
-            }
-            // .aim.SystemSettings system_settings = 1;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.system_settings_);
-            }
-          }
-          return this_.MaybeComputeUnknownFieldsSize(total_size,
-                                                     &this_._impl_._cached_size_);
-        }
-
-void FullSettings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<FullSettings*>(&to_msg);
-  auto& from = static_cast<const FullSettings&>(from_msg);
-  ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.FullSettings)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  _this->_internal_mutable_saved_settings()->MergeFrom(
-      from._internal_saved_settings());
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      _this->_internal_set_current_settings(from._internal_current_settings());
-    }
-    if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(from._impl_.system_settings_ != nullptr);
-      if (_this->_impl_.system_settings_ == nullptr) {
-        _this->_impl_.system_settings_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::SystemSettings>(arena, *from._impl_.system_settings_);
-      } else {
-        _this->_impl_.system_settings_->MergeFrom(*from._impl_.system_settings_);
-      }
-    }
-  }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void FullSettings::CopyFrom(const FullSettings& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.FullSettings)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-
-void FullSettings::InternalSwap(FullSettings* PROTOBUF_RESTRICT other) {
-  using std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _impl_.saved_settings_.InternalSwap(&other->_impl_.saved_settings_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.current_settings_, &other->_impl_.current_settings_, arena);
-  swap(_impl_.system_settings_, other->_impl_.system_settings_);
-}
-
-::google::protobuf::Metadata FullSettings::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)

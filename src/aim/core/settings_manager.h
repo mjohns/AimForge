@@ -27,8 +27,6 @@ class SettingsManager {
 
   absl::Status Initialize();
 
-  FullSettings GetFullSettings();
-  FullSettings* GetMutableFullSettings();
   float GetDpi();
   Settings GetCurrentSettings();
   Settings* GetMutableCurrentSettings();
@@ -52,7 +50,7 @@ class SettingsManager {
   Theme GetThemeNoReferenceFollow(const std::string& theme_name);
 
   std::filesystem::path settings_path_;
-  FullSettings full_settings_;
+  Settings settings_;
   bool needs_save_ = false;
   std::vector<std::filesystem::path> theme_dirs_;
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
