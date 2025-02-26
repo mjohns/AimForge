@@ -5,13 +5,18 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/util.h"
 #include "aim/proto/playlist.pb.h"
 
 namespace aim {
 
 struct PlaylistItemProgress {
-  int index = 0;
+  PlaylistItem item;
   int runs_done = 0;
+
+  bool IsDone() {
+    return runs_done >= item.num_plays();
+  }
 };
 
 struct Playlist {
@@ -23,6 +28,14 @@ struct PlaylistRun {
   Playlist playlist;
   int current_index = 0;
   std::vector<PlaylistItemProgress> progress_list;
+
+  PlaylistItemProgress* GetMutableCurrentPlaylistItemProgress() {
+    return IsCurrentIndexValid() ? &progress_list[current_index] : nullptr;
+  }
+
+  bool IsCurrentIndexValid() {
+    return IsValidIndex(progress_list, current_index);
+  }
 };
 
 class PlaylistManager {

@@ -11,6 +11,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <memory>
+#include <functional>
 #include <optional>
 #include <random>
 #include <string>
@@ -198,6 +199,28 @@ template <typename T>
 static std::optional<T> GetValueIfPresent(const google::protobuf::RepeatedPtrField<T>& list,
                                           int i) {
   return IsValidIndex(list, i) ? list[i] : std::optional<T>{};
+}
+
+template <typename T>
+static std::optional<T> FindValue(const std::vector<T>& list,
+                                           std::function<bool(const T&)> predicate) {
+  for (const T& value : list) {
+    if (predicate(value)) {
+      return value;
+    }
+  }
+  return {};
+}
+
+template <typename T>
+static std::optional<T> FindValue(const google::protobuf::RepeatedPtrField<T>& list,
+                                           std::function<bool(const T&)> predicate) {
+  for (const T& value : list) {
+    if (predicate(value)) {
+      return value;
+    }
+  }
+  return {};
 }
 
 template <typename T>
