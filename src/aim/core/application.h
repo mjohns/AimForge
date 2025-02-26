@@ -19,6 +19,7 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
+#include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
 
@@ -118,6 +119,7 @@ class Application {
 
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsDb> stats_db_;
+  std::unique_ptr<SettingsDb> settings_db_;
   std::unique_ptr<Renderer> renderer_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<SettingsManager> settings_manager_;

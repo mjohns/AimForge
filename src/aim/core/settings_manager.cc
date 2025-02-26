@@ -51,12 +51,15 @@ Settings GetDefaultSettings() {
 }  // namespace
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
-                                 std::vector<std::filesystem::path> theme_dirs)
-    : theme_dirs_(std::move(theme_dirs)), settings_path_(settings_path) {}
+                                 std::vector<std::filesystem::path> theme_dirs,
+                                 SettingsDb* settings_db)
+    : theme_dirs_(std::move(theme_dirs)),
+      settings_path_(settings_path),
+      settings_db_(settings_db) {}
 
 SettingsManager::~SettingsManager() {
   if (needs_save_) {
-    FlushToDisk();
+    FlushToDisk("");
   }
 }
 
@@ -74,7 +77,7 @@ absl::Status SettingsManager::Initialize() {
 
   // Write initial settings to file.
   settings_ = GetDefaultSettings();
-  FlushToDisk();
+  FlushToDisk("");
   return absl::OkStatus();
 }
 
@@ -147,6 +150,30 @@ float SettingsManager::GetDpi() {
   return dpi > 0 ? dpi : kDefaultDpi;
 }
 
+Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scenario_id) {
+  auto it = scenario_settings_cache_.find(scenario_id);
+  ScenarioSettings scenario_settings;
+  if (it != scenario_settings_cache_.end()) {
+    scenario_settings = it->second;
+  } else {
+    scenario_settings = settings_db_->GetScenarioSettings(scenario_id);
+    scenario_settings_cache_[scenario_id] = scenario_settings;
+  }
+
+  if (scenario_settings.has_cm_per_360()) {
+    settings_.set_cm_per_360(scenario_settings.cm_per_360());
+  }
+  if (scenario_settings.has_theme_name()) {
+    settings_.set_theme_name(scenario_settings.theme_name());
+  }
+  if (scenario_settings.has_metronome_bpm()) {
+    settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
+  }
+  if (scenario_settings.has_crosshair_size()) {
+    settings_.mutable_crosshair()->set_size(scenario_settings.crosshair_size());
+  }
+  return settings_;
+}
 
 Settings SettingsManager::GetCurrentSettings() {
   return settings_;
@@ -160,12 +187,23 @@ void SettingsManager::MarkDirty() {
   needs_save_ = true;
 }
 
-void SettingsManager::MaybeFlushToDisk() {
+bool SettingsManager::MaybeFlushToDisk(const std::string& scenario_id) {
   if (needs_save_) {
-    FlushToDisk();
+    FlushToDisk(scenario_id);
+    return true;
   }
+  return false;
 }
-void SettingsManager::FlushToDisk() {
+void SettingsManager::FlushToDisk(const std::string& scenario_id) {
+  if (scenario_id.size() > 0) {
+    ScenarioSettings scenario_settings;
+    scenario_settings.set_crosshair_size(settings_.crosshair().size());
+    scenario_settings.set_cm_per_360(settings_.cm_per_360());
+    scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
+    scenario_settings.set_theme_name(settings_.theme_name());
+    settings_db_->UpdateScenarioSettings(scenario_id, scenario_settings);
+    scenario_settings_cache_[scenario_id] = scenario_settings;
+  }
   if (WriteJsonMessageToFile(settings_path_, settings_)) {
     needs_save_ = false;
   }
@@ -182,14 +220,15 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager)
   }
 }
 
-void SettingsUpdater::SaveIfChangesMadeDebounced(float debounce_seconds) {
+void SettingsUpdater::SaveIfChangesMadeDebounced(const std::string& scenario_id,
+                                                 float debounce_seconds) {
   if (last_update_timer_.IsRunning() && last_update_timer_.GetElapsedSeconds() < debounce_seconds) {
     return;
   }
-  SaveIfChangesMade();
+  SaveIfChangesMade(scenario_id);
 }
 
-void SettingsUpdater::SaveIfChangesMade() {
+void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   float new_cm_per_360 = ParseFloat(cm_per_360);
   if (new_cm_per_360 > 0) {
@@ -210,7 +249,7 @@ void SettingsUpdater::SaveIfChangesMade() {
     current_settings->mutable_crosshair()->set_size(new_crosshair_size);
     settings_manager_->MarkDirty();
   }
-  settings_manager_->MaybeFlushToDisk();
+  settings_manager_->MaybeFlushToDisk(scenario_id);
 
   last_update_timer_ = Stopwatch();
   last_update_timer_.Start();

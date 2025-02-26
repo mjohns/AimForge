@@ -23,7 +23,7 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
-#include "aim/scenario/stats_screen.h"
+#include "aim/scenario/screens.h"
 #include "aim/scenario/types/scenario_types.h"
 #include "aim/ui/ui_screen.h"
 
@@ -57,7 +57,7 @@ void Scenario::RefreshState() {
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
 
-  settings_ = app_->settings_manager()->GetCurrentSettings();
+  settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(def_.scenario_id());
   glm::mat4 projection = GetPerspectiveTransformation(app_->screen_info());
   app_->renderer()->SetProjection(projection);
 
@@ -79,7 +79,7 @@ NavigationEvent Scenario::Resume() {
 
   bool stop_scenario = false;
   bool is_adjusting_crosshair = false;
-  std::optional<SettingsScreenType> show_settings;
+  std::optional<QuickSettingsType> show_settings;
   while (!stop_scenario) {
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
@@ -90,7 +90,7 @@ NavigationEvent Scenario::Resume() {
       timer_.Pause();
       OnPause();
       NavigationEvent nav_event;
-      nav_event = CreateSettingsScreen(app_, *show_settings)->Run();
+      nav_event = CreateQuickSettingsScreen(def_.scenario_id(), *show_settings, app_)->Run();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
@@ -150,10 +150,10 @@ NavigationEvent Scenario::Resume() {
           return NavigationEvent::RestartLastScenario();
         }
         if (keycode == SDLK_S) {
-          show_settings = SettingsScreenType::QUICK;
+          show_settings = QuickSettingsType::DEFAULT;
         }
         if (keycode == SDLK_B) {
-          show_settings = SettingsScreenType::QUICK_METRONOME;
+          show_settings = QuickSettingsType::METRONOME;
         }
         if (keycode == SDLK_C) {
           is_adjusting_crosshair = true;
@@ -170,7 +170,7 @@ NavigationEvent Scenario::Resume() {
           if (current_settings != nullptr) {
             *current_settings->mutable_crosshair() = crosshair_;
             app_->settings_manager()->MarkDirty();
-            app_->settings_manager()->MaybeFlushToDisk();
+            app_->settings_manager()->MaybeFlushToDisk(def_.scenario_id());
             RefreshState();
           }
         }

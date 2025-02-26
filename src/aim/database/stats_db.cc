@@ -5,7 +5,9 @@
 #include <format>
 #include <string>
 
+#include "aim/common/log.h"
 #include "aim/common/times.h"
+#include "aim/database/sqlite_util.h"
 
 namespace aim {
 namespace {
@@ -50,21 +52,6 @@ WHERE ScenarioId = ?
 ORDER BY StatsId ASC LIMIT 5000;
 )AIMS";
 
-bool ExecuteQuery(sqlite3* db, const char* sql) {
-  char* err_msg = nullptr;
-  int rc = sqlite3_exec(db, sql, nullptr, nullptr, &err_msg);
-  if (rc != SQLITE_OK) {
-    fprintf(stderr, "SQL error: %s\n", err_msg);
-    sqlite3_free(err_msg);
-    return false;
-  }
-  return true;
-}
-
-void BindString(sqlite3_stmt* stmt, int index, const std::string& value) {
-  sqlite3_bind_text(stmt, index, value.c_str(), value.size(), SQLITE_TRANSIENT);
-}
-
 }  // namespace
 
 StatsDb::StatsDb(const std::filesystem::path& db_path) {
@@ -73,12 +60,12 @@ StatsDb::StatsDb(const std::filesystem::path& db_path) {
   int rc = sqlite3_open(db_path_str.c_str(), &db_);
 
   if (rc != SQLITE_OK) {
-    fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db_));
+    Logger::get()->warn("Cannot open stats db: {}", sqlite3_errmsg(db_));
     sqlite3_close(db_);
     db_ = nullptr;
   }
 
-  ExecuteQuery(db_, kCreateStatsTable);
+  ExecuteSqliteQuery(db_, kCreateStatsTable);
 }
 
 StatsDb::~StatsDb() {
@@ -92,7 +79,7 @@ std::vector<StatsRow> StatsDb::GetStats(const std::string& scenario_id) {
 
   int rc = sqlite3_prepare_v2(db_, kGetRecentStatsSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
-    fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db_));
+    Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
     return {};
   }
   BindString(stmt, 1, scenario_id);
@@ -123,7 +110,7 @@ void StatsDb::AddStats(const std::string& scenario_id, StatsRow* row) {
   sqlite3_stmt* stmt;
   int rc = sqlite3_prepare_v2(db_, kInsertSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
-    fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db_));
+    Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
     return;
   }
 

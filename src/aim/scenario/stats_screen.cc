@@ -1,5 +1,3 @@
-#include "stats_screen.h"
-
 #include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
 #include <implot.h>
@@ -10,6 +8,7 @@
 #include "aim/common/scope_guard.h"
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/screens.h"
 
 namespace aim {
 namespace {

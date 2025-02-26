@@ -26,6 +26,36 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace aim {
 
+inline constexpr ScenarioSettings::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        theme_name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        cm_per_360_{0},
+        metronome_bpm_{0},
+        crosshair_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ScenarioSettings::ScenarioSettings(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct ScenarioSettingsDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ScenarioSettingsDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ScenarioSettingsDefaultTypeInternal() {}
+  union {
+    ScenarioSettings _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ScenarioSettingsDefaultTypeInternal _ScenarioSettings_default_instance_;
+
 inline constexpr DotCrosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -157,6 +187,22 @@ const ::uint32_t
         3,
         0,
         4,
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.cm_per_360_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.theme_name_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.metronome_bpm_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.crosshair_size_),
+        1,
+        0,
+        2,
+        3,
 };
 
 static const ::_pbi::MigrationSchema
@@ -164,11 +210,13 @@ static const ::_pbi::MigrationSchema
         {0, 9, -1, sizeof(::aim::DotCrosshair)},
         {10, 21, -1, sizeof(::aim::Crosshair)},
         {23, 36, -1, sizeof(::aim::Settings)},
+        {41, 53, -1, sizeof(::aim::ScenarioSettings)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
     &::aim::_Crosshair_default_instance_._instance,
     &::aim::_Settings_default_instance_._instance,
+    &::aim::_ScenarioSettings_default_instance_._instance,
 };
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
@@ -178,19 +226,22 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "B\006\n\004type\"y\n\010Settings\022!\n\tcrosshair\030\001 \001(\0132"
     "\016.aim.Crosshair\022\013\n\003dpi\030\002 \001(\002\022\022\n\ncm_per_3"
     "60\030\003 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\022\025\n\rmetronom"
-    "e_bpm\030\005 \001(\002b\010editionsp\350\007"
+    "e_bpm\030\005 \001(\002\"i\n\020ScenarioSettings\022\022\n\ncm_pe"
+    "r_360\030\001 \001(\002\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rmetro"
+    "nome_bpm\030\003 \001(\002\022\026\n\016crosshair_size\030\004 \001(\002b\010"
+    "editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    264,
+    371,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
     nullptr,
     0,
-    3,
+    4,
     schemas,
     file_default_instances,
     TableStruct_settings_2eproto::offsets,
@@ -1118,6 +1169,338 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT other) {
 }
 
 ::google::protobuf::Metadata Settings::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class ScenarioSettings::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<ScenarioSettings>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_._has_bits_);
+};
+
+ScenarioSettings::ScenarioSettings(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.ScenarioSettings)
+}
+inline PROTOBUF_NDEBUG_INLINE ScenarioSettings::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::ScenarioSettings& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        theme_name_(arena, from.theme_name_) {}
+
+ScenarioSettings::ScenarioSettings(
+    ::google::protobuf::Arena* arena,
+    const ScenarioSettings& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  ScenarioSettings* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, cm_per_360_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, cm_per_360_),
+           offsetof(Impl_, crosshair_size_) -
+               offsetof(Impl_, cm_per_360_) +
+               sizeof(Impl_::crosshair_size_));
+
+  // @@protoc_insertion_point(copy_constructor:aim.ScenarioSettings)
+}
+inline PROTOBUF_NDEBUG_INLINE ScenarioSettings::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        theme_name_(arena) {}
+
+inline void ScenarioSettings::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, cm_per_360_),
+           0,
+           offsetof(Impl_, crosshair_size_) -
+               offsetof(Impl_, cm_per_360_) +
+               sizeof(Impl_::crosshair_size_));
+}
+ScenarioSettings::~ScenarioSettings() {
+  // @@protoc_insertion_point(destructor:aim.ScenarioSettings)
+  SharedDtor(*this);
+}
+inline void ScenarioSettings::SharedDtor(MessageLite& self) {
+  ScenarioSettings& this_ = static_cast<ScenarioSettings&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.theme_name_.Destroy();
+  this_._impl_.~Impl_();
+}
+
+inline void* ScenarioSettings::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) ScenarioSettings(arena);
+}
+constexpr auto ScenarioSettings::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(ScenarioSettings),
+                                            alignof(ScenarioSettings));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull ScenarioSettings::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_ScenarioSettings_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &ScenarioSettings::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<ScenarioSettings>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &ScenarioSettings::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<ScenarioSettings>(), &ScenarioSettings::ByteSizeLong,
+            &ScenarioSettings::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_._cached_size_),
+        false,
+    },
+    &ScenarioSettings::kDescriptorMethods,
+    &descriptor_table_settings_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* ScenarioSettings::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 4, 0, 39, 2> ScenarioSettings::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_._has_bits_),
+    0, // no _extensions_
+    4, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967280,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    4,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::ScenarioSettings>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // float crosshair_size = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.crosshair_size_)}},
+    // float cm_per_360 = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.cm_per_360_)}},
+    // string theme_name = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.theme_name_)}},
+    // float metronome_bpm = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.metronome_bpm_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // float cm_per_360 = 1;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // string theme_name = 2;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.theme_name_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // float metronome_bpm = 3;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float crosshair_size = 4;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+    "\24\0\12\0\0\0\0\0"
+    "aim.ScenarioSettings"
+    "theme_name"
+  }},
+};
+
+PROTOBUF_NOINLINE void ScenarioSettings::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.ScenarioSettings)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    _impl_.theme_name_.ClearNonDefaultToEmpty();
+  }
+  if (cached_has_bits & 0x0000000eu) {
+    ::memset(&_impl_.cm_per_360_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.crosshair_size_) -
+        reinterpret_cast<char*>(&_impl_.cm_per_360_)) + sizeof(_impl_.crosshair_size_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* ScenarioSettings::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const ScenarioSettings& this_ = static_cast<const ScenarioSettings&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* ScenarioSettings::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const ScenarioSettings& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.ScenarioSettings)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // float cm_per_360 = 1;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_cm_per_360(), target);
+          }
+
+          // string theme_name = 2;
+          if (cached_has_bits & 0x00000001u) {
+            const std::string& _s = this_._internal_theme_name();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.ScenarioSettings.theme_name");
+            target = stream->WriteStringMaybeAliased(2, _s, target);
+          }
+
+          // float metronome_bpm = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_metronome_bpm(), target);
+          }
+
+          // float crosshair_size = 4;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_crosshair_size(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.ScenarioSettings)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t ScenarioSettings::ByteSizeLong(const MessageLite& base) {
+          const ScenarioSettings& this_ = static_cast<const ScenarioSettings&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t ScenarioSettings::ByteSizeLong() const {
+          const ScenarioSettings& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.ScenarioSettings)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x0000000fu) {
+            // string theme_name = 2;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_theme_name());
+            }
+            // float cm_per_360 = 1;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // float metronome_bpm = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+            // float crosshair_size = 4;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void ScenarioSettings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<ScenarioSettings*>(&to_msg);
+  auto& from = static_cast<const ScenarioSettings&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.ScenarioSettings)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000000fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_set_theme_name(from._internal_theme_name());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ScenarioSettings::CopyFrom(const ScenarioSettings& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.ScenarioSettings)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void ScenarioSettings::InternalSwap(ScenarioSettings* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.theme_name_, &other->_impl_.theme_name_, arena);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.crosshair_size_)
+      + sizeof(ScenarioSettings::_impl_.crosshair_size_)
+      - PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.cm_per_360_)>(
+          reinterpret_cast<char*>(&_impl_.cm_per_360_),
+          reinterpret_cast<char*>(&other->_impl_.cm_per_360_));
+}
+
+::google::protobuf::Metadata ScenarioSettings::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)
