@@ -9,4 +9,5 @@ message PlaylistDef {
 message PlaylistItem {
   string scenario = 1;
   int32 num_plays = 2;
+  bool auto_next = 3;
 }

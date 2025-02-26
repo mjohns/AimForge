@@ -244,6 +244,9 @@ NavigationEvent Scenario::Resume() {
     if (def_.scenario_id() == progress->item.scenario()) {
       progress->runs_done++;
     }
+    if (progress->item.auto_next()) {
+      return NavigationEvent::PlaylistNext();
+    }
   }
 
   StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_);

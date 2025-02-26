@@ -219,6 +219,7 @@ class PlaylistItem final : public ::google::protobuf::Message
   enum : int {
     kScenarioFieldNumber = 1,
     kNumPlaysFieldNumber = 2,
+    kAutoNextFieldNumber = 3,
   };
   // string scenario = 1;
   bool has_scenario() const;
@@ -248,12 +249,23 @@ class PlaylistItem final : public ::google::protobuf::Message
   void _internal_set_num_plays(::int32_t value);
 
   public:
+  // bool auto_next = 3;
+  bool has_auto_next() const;
+  void clear_auto_next() ;
+  bool auto_next() const;
+  void set_auto_next(bool value);
+
+  private:
+  bool _internal_auto_next() const;
+  void _internal_set_auto_next(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.PlaylistItem)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 0,
+      2, 3, 0,
       33, 2>
       _table_;
 
@@ -275,6 +287,7 @@ class PlaylistItem final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr scenario_;
     ::int32_t num_plays_;
+    bool auto_next_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -642,6 +655,34 @@ inline ::int32_t PlaylistItem::_internal_num_plays() const {
 inline void PlaylistItem::_internal_set_num_plays(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.num_plays_ = value;
+}
+
+// bool auto_next = 3;
+inline bool PlaylistItem::has_auto_next() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void PlaylistItem::clear_auto_next() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.auto_next_ = false;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline bool PlaylistItem::auto_next() const {
+  // @@protoc_insertion_point(field_get:aim.PlaylistItem.auto_next)
+  return _internal_auto_next();
+}
+inline void PlaylistItem::set_auto_next(bool value) {
+  _internal_set_auto_next(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.PlaylistItem.auto_next)
+}
+inline bool PlaylistItem::_internal_auto_next() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.auto_next_;
+}
+inline void PlaylistItem::_internal_set_auto_next(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.auto_next_ = value;
 }
 
 #ifdef __GNUC__
