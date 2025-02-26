@@ -163,6 +163,7 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes) {
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
     for (auto& node : nodes) {
       if (node->scenario.has_value()) {
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
@@ -184,7 +185,14 @@ class AppUiImpl : public AppUi {
 
   void DrawCurrentScenarioScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
-    ImGui::Text(current_scenario_def_->scenario_id().c_str());
+    if (ImGui::Button("Run Scenario", sz)) {
+      scenario_run_option_ = ScenarioRunOption::RUN;
+    }
+    if (current_running_scenario_) {
+      if (ImGui::Button("Resume Scenario", sz)) {
+        scenario_run_option_ = ScenarioRunOption::RESUME;
+      }
+    }
   }
 
   void DrawScenariosScreen() {
