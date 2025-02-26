@@ -223,7 +223,7 @@ class AppUiImpl : public AppUi {
     for (auto& node : nodes) {
       if (node->scenario.has_value()) {
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
-          current_scenario_def_ = node->scenario->def;
+          current_scenario_def_ = app_->scenario_manager()->GetScenario(node->name);
           scenario_run_option_ = ScenarioRunOption::RUN;
         }
       }

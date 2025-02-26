@@ -83,6 +83,7 @@ std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
 
     auto scenario_node = std::make_unique<ScenarioNode>();
     scenario_node->scenario = item;
+    scenario_node->name = item.def.scenario_id();
     current_nodes->emplace_back(std::move(scenario_node));
   }
 
@@ -115,6 +116,46 @@ void ScenarioManager::ReloadScenariosIfChanged() {
 }
 
 std::optional<ScenarioDef> ScenarioManager::GetScenario(const std::string& scenario_id) {
+  return GetScenario(scenario_id, 1);
+}
+
+std::optional<ScenarioDef> ScenarioManager::GetScenario(const std::string& scenario_id, int depth) {
+  if (depth > 20) {
+    return {};
+  }
+  auto scenario = GetScenarioNoReferenceFollow(scenario_id);
+  if (!scenario.has_value()) {
+    return {};
+  }
+  if (!scenario->has_reference()) {
+    return scenario;
+  }
+  auto referenced_scenario = GetScenario(scenario->reference(), depth + 1);
+  if (!referenced_scenario.has_value()) {
+    return {};
+  }
+
+  ScenarioDef resolved = *referenced_scenario;
+  resolved.set_scenario_id(scenario_id);
+  if (scenario->has_overrides()) {
+    if (scenario->overrides().has_duration_seconds()) {
+      resolved.set_duration_seconds(scenario->overrides().duration_seconds());
+    }
+    if (scenario->overrides().has_num_targets()) {
+      resolved.mutable_target_def()->set_num_targets(scenario->overrides().num_targets());
+    }
+    if (scenario->overrides().has_target_radius_multiplier()) {
+      for (auto& profile : *resolved.mutable_target_def()->mutable_profiles()) {
+        profile.set_target_radius(profile.target_radius() *
+                                  scenario->overrides().target_radius_multiplier());
+      }
+    }
+  }
+  return resolved;
+}
+
+std::optional<ScenarioDef> ScenarioManager::GetScenarioNoReferenceFollow(
+    const std::string& scenario_id) {
   for (const auto& scenario : scenarios_) {
     if (scenario.def.scenario_id() == scenario_id) {
       return scenario.def;

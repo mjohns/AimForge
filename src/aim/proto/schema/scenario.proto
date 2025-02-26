@@ -87,11 +87,21 @@ message TargetPlacementStrategy {
   float fixed_distance_jitter = 5;
 }
 
+message ScenarioReferenceOverrides {
+  float duration_seconds = 1;
+  float target_radius_multiplier = 2;
+  int32 num_targets = 3;
+}
+
 message ScenarioDef {
   string scenario_id = 1;
   float duration_seconds = 2;
   Room room = 3;
   TargetDef target_def = 5;
+
+  // This scenario is a reference to another scenario with the id changed.
+  string reference = 6;
+  ScenarioReferenceOverrides overrides = 7;
 
   oneof type {
     StaticScenarioDef static_def = 10;
