@@ -4,8 +4,8 @@
 #include <memory>
 
 #include "aim/common/simple_types.h"
-#include "aim/core/target.h"
 #include "aim/core/application.h"
+#include "aim/core/target.h"
 #include "aim/proto/scenario.pb.h"
 
 namespace aim {

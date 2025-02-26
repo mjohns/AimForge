@@ -104,7 +104,8 @@ std::string GetHowLongAgoString(u64 start, u64 end) {
   {
     int minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
     if (minutes > 0) {
-      return minutes == 1 ? std::format("{} minute ago", minutes) : std::format("{} minutes ago", minutes);
+      return minutes == 1 ? std::format("{} minute ago", minutes)
+                          : std::format("{} minutes ago", minutes);
     }
   }
 

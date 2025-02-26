@@ -84,4 +84,4 @@ class TargetManager {
   std::optional<u16> most_recently_added_target_id_ = 0;
 };
 
-}  // namespacer aim
+}  // namespace aim

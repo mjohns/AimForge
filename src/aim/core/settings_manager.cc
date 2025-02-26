@@ -89,6 +89,19 @@ absl::Status SettingsManager::Initialize() {
 }
 
 Theme SettingsManager::GetTheme(const std::string& theme_name) {
+  std::string current_theme_name = theme_name;
+  for (int i = 0; i < 20; ++i) {
+    Theme theme = GetThemeNoReferenceFollow(current_theme_name);
+    if (!theme.has_reference()) {
+      return theme;
+    }
+    current_theme_name = theme.reference();
+  }
+
+  return GetDefaultTheme();
+}
+
+Theme SettingsManager::GetThemeNoReferenceFollow(const std::string& theme_name) {
   if (theme_name.size() == 0) {
     return GetDefaultTheme();
   }

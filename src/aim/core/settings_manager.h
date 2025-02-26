@@ -49,6 +49,8 @@ class SettingsManager {
   SettingsManager& operator=(SettingsManager&& other) = delete;
 
  private:
+  Theme GetThemeNoReferenceFollow(const std::string& theme_name);
+
   std::filesystem::path settings_path_;
   FullSettings full_settings_;
   bool needs_save_ = false;
