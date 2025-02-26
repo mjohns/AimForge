@@ -77,8 +77,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   }
   StatsRow stats = *maybe_stats;
 
-  std::string score_string =
-      MakeScoreString(stats.num_hits, stats.num_shots, stats.score);
+  std::string score_string = MakeScoreString(stats.num_hits, stats.num_shots, stats.score);
 
   auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
 

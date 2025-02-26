@@ -9,9 +9,7 @@ namespace aim {
 
 class StatsScreen {
  public:
-  StatsScreen(std::string scenario_id,
-              i64 stats_id,
-              Application* app);
+  StatsScreen(std::string scenario_id, i64 stats_id, Application* app);
 
   NavigationEvent Run(Replay* replay);
 

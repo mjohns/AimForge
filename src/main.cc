@@ -1,5 +1,5 @@
 #include "aim/core/application.h"
-#include "aim/ui/ui_screen.h"
+#include "aim/ui/app_ui.h"
 
 int main(int, char**) {
   using namespace aim;
