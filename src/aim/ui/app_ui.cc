@@ -14,6 +14,51 @@ class AppUiImpl : public AppUi {
  public:
   explicit AppUiImpl(Application* app) : AppUi(), app_(app) {}
 
+  bool HandlePlaylistNext() {
+    PlaylistRun* run = app_->playlist_manager()->GetMutableCurrentRun();
+    if (run == nullptr) {
+      scenario_run_option_ = ScenarioRunOption::RUN;
+      return true;
+    }
+    PlaylistItemProgress* progress = run->GetMutableCurrentPlaylistItemProgress();
+    if (progress == nullptr) {
+      return false;
+    }
+    if (progress->IsDone()) {
+      int next_index = run->current_index + 1;
+      if (!IsValidIndex(run->progress_list, next_index)) {
+        bool found_pending_item = false;
+        // Check to see if any previous item in the list is not done
+        for (int i = 0; i < run->progress_list.size(); ++i) {
+          if (!run->progress_list[i].IsDone()) {
+            next_index = i;
+            found_pending_item = true;
+            break;
+          }
+        }
+
+        if (!found_pending_item) {
+          // Playlist is done.
+          app_screen_ = AppScreen::CURRENT_PLAYLIST;
+          return false;
+        }
+      }
+      run->current_index = next_index;
+      auto scenario_id = run->progress_list[next_index].item.scenario();
+      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
+      if (!maybe_scenario.has_value()) {
+        return false;
+      }
+      current_scenario_def_ = maybe_scenario;
+      scenario_run_option_ = ScenarioRunOption::RUN;
+      return true;
+    }
+
+    // Still more attempts needed.
+    scenario_run_option_ = ScenarioRunOption::RUN;
+    return true;
+  }
+
   void Run() override {
     timer_.Start();
     while (true) {
@@ -29,6 +74,11 @@ class AppUiImpl : public AppUi {
             scenario_run_option_ = ScenarioRunOption::RUN;
             continue;
           }
+          if (nav_event.IsPlaylistNext()) {
+            if (HandlePlaylistNext()) {
+              continue;
+            }
+          }
           SDL_GL_SetSwapInterval(1);  // Enable vsync
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
         }
@@ -40,9 +90,15 @@ class AppUiImpl : public AppUi {
         }
         if (current_running_scenario_) {
           auto nav_event = current_running_scenario_->Resume();
+          // TODO: share this nav_event handling between run and resume.
           if (nav_event.IsRestartLastScenario()) {
             scenario_run_option_ = ScenarioRunOption::RUN;
             continue;
+          }
+          if (nav_event.IsPlaylistNext()) {
+            if (HandlePlaylistNext()) {
+              continue;
+            }
           }
           SDL_GL_SetSwapInterval(1);  // Enable vsync
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
@@ -217,6 +273,7 @@ class AppUiImpl : public AppUi {
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
       if (ImGui::Button(playlist.name.c_str(), sz)) {
         current_playlist_ = playlist;
+        app_->playlist_manager()->StartNewRun(playlist.name);
         app_screen_ = AppScreen::CURRENT_PLAYLIST;
       }
     }
@@ -224,14 +281,25 @@ class AppUiImpl : public AppUi {
 
   void DrawCurrentPlaylistScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
-    for (const auto& item : current_playlist_->def.items()) {
+    PlaylistRun* run = app_->playlist_manager()->GetMutableCurrentRun();
+    if (run == nullptr) {
+      return;
+    }
+
+    for (int i = 0; i < run->playlist.def.items_size(); ++i) {
+      PlaylistItemProgress& progress = run->progress_list[i];
+      PlaylistItem item = run->playlist.def.items(i);
       if (ImGui::Button(item.scenario().c_str(), sz)) {
         auto maybe_scenario = app_->scenario_manager()->GetScenario(item.scenario());
         if (maybe_scenario.has_value()) {
+          run->current_index = i;
           current_scenario_def_ = *maybe_scenario;
           scenario_run_option_ = ScenarioRunOption::RUN;
         }
       }
+      ImGui::SameLine();
+      std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
+      ImGui::Text(progress_text.c_str());
     }
   }
 
@@ -280,7 +348,6 @@ class AppUiImpl : public AppUi {
   std::unique_ptr<Scenario> current_running_scenario_;
 
   std::optional<Playlist> current_playlist_;
-  std::unique_ptr<PlaylistRun> current_running_playlist_;
 
   std::unique_ptr<SettingsUpdater> settings_updater_;
 };

@@ -62,6 +62,11 @@ PlaylistRun* PlaylistManager::StartNewRun(const std::string& name) {
     if (playlist.name == name) {
       PlaylistRun run;
       run.playlist = playlist;
+      for (int i = 0; i < playlist.def.items_size(); ++i) {
+        PlaylistItemProgress progress;
+        progress.item = playlist.def.items(i);
+        run.progress_list.push_back(progress);
+      }
       current_run_ = run;
       return GetMutableCurrentRun();
     }

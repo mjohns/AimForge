@@ -142,6 +142,9 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
         if (keycode == SDLK_R) {
           return NavigationEvent::RestartLastScenario();
         }
+        if (keycode == SDLK_W) {
+          return NavigationEvent::PlaylistNext();
+        }
       }
     }
 

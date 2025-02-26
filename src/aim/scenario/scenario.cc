@@ -238,6 +238,14 @@ NavigationEvent Scenario::Resume() {
 
   stats_id_ = stats_row.stats_id;
 
+  PlaylistRun* playlist_run = app_->playlist_manager()->GetMutableCurrentRun();
+  if (playlist_run != nullptr && playlist_run->IsCurrentIndexValid()) {
+    PlaylistItemProgress* progress = playlist_run->GetMutableCurrentPlaylistItemProgress();
+    if (def_.scenario_id() == progress->item.scenario()) {
+      progress->runs_done++;
+    }
+  }
+
   StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_);
   return stats_screen.Run(replay_.get());
 }

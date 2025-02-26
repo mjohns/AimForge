@@ -3,8 +3,8 @@
 namespace aim {
 
 enum class NavigationEventType {
-  GO_HOME,
   RESTART_LAST_SCENARIO,
+  PLAYLIST_NEXT,
   DONE,
 };
 
@@ -17,16 +17,12 @@ struct NavigationEvent {
     return Create(NavigationEventType::DONE);
   }
 
-  static NavigationEvent GoHome() {
-    return Create(NavigationEventType::GO_HOME);
-  }
-
   static NavigationEvent RestartLastScenario() {
     return Create(NavigationEventType::RESTART_LAST_SCENARIO);
   }
 
-  bool IsGoHome() const {
-    return type == NavigationEventType::GO_HOME;
+  static NavigationEvent PlaylistNext() {
+    return Create(NavigationEventType::PLAYLIST_NEXT);
   }
 
   bool IsDone() const {
@@ -39,6 +35,10 @@ struct NavigationEvent {
 
   bool IsRestartLastScenario() const {
     return type == NavigationEventType::RESTART_LAST_SCENARIO;
+  }
+
+  bool IsPlaylistNext() const {
+    return type == NavigationEventType::PLAYLIST_NEXT;
   }
 
   NavigationEventType type = NavigationEventType::DONE;
