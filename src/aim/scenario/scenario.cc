@@ -111,7 +111,6 @@ NavigationEvent Scenario::Resume() {
     }
 
     if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
-      is_done_ = true;
       stop_scenario = true;
       continue;
     }

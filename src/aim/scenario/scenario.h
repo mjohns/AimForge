@@ -81,7 +81,6 @@ class Scenario {
   LookAtInfo look_at_;
   std::unique_ptr<Replay> replay_;
   Theme theme_;
-  bool is_done_ = false;
 
  private:
   void RefreshState();
@@ -92,6 +91,7 @@ class Scenario {
   bool is_click_held_ = false;
   Settings settings_;
   i64 stats_id_ = 0;
+  bool is_done_ = false;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);

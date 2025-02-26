@@ -112,6 +112,9 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
   bool view_replay = false;
   while (true) {
+    if (!app_->has_input_focus()) {
+      SDL_Delay(250);
+    }
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;

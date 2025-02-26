@@ -96,18 +96,6 @@ class Application {
     return logger_.get();
   };
 
-  std::optional<ScenarioDef> last_scenario() {
-    return last_scenario_;
-  }
-
-  void SetLastScenario(const ScenarioDef& scenario) {
-    last_scenario_ = scenario;
-  }
-
-  std::string last_scenario_id() {
-    return last_scenario_.has_value() ? last_scenario_->scenario_id() : "unknown_scenario";
-  }
-
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -137,8 +125,6 @@ class Application {
   std::unique_ptr<PlaylistManager> playlist_manager_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
-
-  std::optional<ScenarioDef> last_scenario_;
 };
 
 }  // namespace aim
