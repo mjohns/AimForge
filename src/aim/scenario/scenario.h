@@ -82,6 +82,16 @@ class Scenario {
   std::unique_ptr<Replay> replay_;
   Theme theme_;
   bool is_done_ = false;
+
+ private:
+  void RefreshState();
+
+  u64 num_state_updates_ = 0;
+  float radians_per_dot_;
+  Crosshair crosshair_;
+  bool is_click_held_ = false;
+  Settings settings_;
+  i64 stats_id_ = 0;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);

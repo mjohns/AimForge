@@ -51,26 +51,35 @@ std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats)
   return result;
 }
 
+std::optional<StatsRow> GetStats(const std::vector<StatsRow>& all_stats, i64 stats_id) {
+  for (int i = 0; i < all_stats.size(); ++i) {
+    auto& stats = all_stats[i];
+    if (stats.stats_id == stats_id) {
+      return stats;
+    }
+  }
+  return {};
+}
+
 }  // namespace
 
-StatsScreen::StatsScreen(std::string scenario_id,
-                         i64 stats_id,
-                         std::unique_ptr<Replay> replay,
-                         const ScenarioStats& stats,
-                         Application* app)
-    : scenario_id_(std::move(scenario_id)),
-      stats_id_(stats_id),
-      replay_(std::move(replay)),
-      stats_(stats),
-      app_(app) {}
+StatsScreen::StatsScreen(std::string scenario_id, i64 stats_id, Application* app)
+    : scenario_id_(std::move(scenario_id)), stats_id_(stats_id), app_(app) {}
 
-NavigationEvent StatsScreen::Run() {
+NavigationEvent StatsScreen::Run(Replay* replay) {
   ScreenInfo screen = app_->screen_info();
   Settings settings = app_->settings_manager()->GetCurrentSettings();
 
-  std::string score_string = MakeScoreString(stats_.targets_hit, stats_.shots_taken, stats_.score);
-
   auto all_stats = app_->stats_db()->GetStats(scenario_id_);
+  auto maybe_stats = GetStats(all_stats, stats_id_);
+  if (!maybe_stats.has_value()) {
+    return NavigationEvent::Done();
+  }
+  StatsRow stats = *maybe_stats;
+
+  std::string score_string =
+      MakeScoreString(stats.num_hits, stats.num_shots, stats.score);
+
   auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
 
   std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
@@ -89,7 +98,7 @@ NavigationEvent StatsScreen::Run() {
                                                  maybe_previous_high_score_stats->num_shots,
                                                  maybe_previous_high_score_stats->score);
     previous_high_score = maybe_previous_high_score_stats->score;
-    float percent = previous_high_score / stats_.score;
+    float percent = previous_high_score / stats.score;
     percent_diff = (1.0 - percent) * 100;
     auto maybe_time = ParseTimestampStringAsMicros(maybe_previous_high_score_stats->timestamp);
     if (maybe_time) {
@@ -108,7 +117,7 @@ NavigationEvent StatsScreen::Run() {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
       auto nav_event = replay_viewer.PlayReplay(
-          *replay_, app_->settings_manager()->GetCurrentTheme(), settings.crosshair(), app_);
+          *replay, app_->settings_manager()->GetCurrentTheme(), settings.crosshair(), app_);
       if (!nav_event.IsDone()) {
         return nav_event;
       }
@@ -171,7 +180,7 @@ NavigationEvent StatsScreen::Run() {
     ImGui::Spacing();
     ImGui::Spacing();
 
-    if (replay_) {
+    if (replay != nullptr) {
       ImVec2 button_sz = ImVec2(width, 0.0);
       if (ImGui::Button("View replay", button_sz)) {
         view_replay = true;
