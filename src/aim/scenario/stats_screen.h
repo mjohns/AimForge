@@ -11,17 +11,13 @@ class StatsScreen {
  public:
   StatsScreen(std::string scenario_id,
               i64 stats_id,
-              std::unique_ptr<Replay> replay,
-              const ScenarioStats& stats,
               Application* app);
 
-  NavigationEvent Run();
+  NavigationEvent Run(Replay* replay);
 
  private:
   std::string scenario_id_;
   i64 stats_id_;
-  std::unique_ptr<Replay> replay_;
-  ScenarioStats stats_;
   Application* app_;
 };
 

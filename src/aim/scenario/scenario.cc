@@ -53,31 +53,33 @@ NavigationEvent Scenario::Run() {
   return Resume();
 }
 
-NavigationEvent Scenario::Resume() {
-  if (is_done_) {
-    return NavigationEvent::Done();
-  }
-  ScreenInfo screen = app_->screen_info();
-  glm::mat4 projection = GetPerspectiveTransformation(screen);
-  float dpi = app_->settings_manager()->GetDpi();
-  Settings settings = app_->settings_manager()->GetCurrentSettings();
-  metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
-  float radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
-
+void Scenario::RefreshState() {
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
+
+  settings_ = app_->settings_manager()->GetCurrentSettings();
+  glm::mat4 projection = GetPerspectiveTransformation(app_->screen_info());
   app_->renderer()->SetProjection(projection);
 
-  Crosshair crosshair = settings.crosshair();
+  float dpi = app_->settings_manager()->GetDpi();
+  metronome_ = std::make_unique<Metronome>(settings_.metronome_bpm(), app_);
+  radians_per_dot_ = CmPer360ToRadiansPerDot(settings_.cm_per_360(), dpi);
+  is_click_held_ = false;
+  crosshair_ = settings_.crosshair();
+  theme_ = app_->settings_manager()->GetCurrentTheme();
+}
 
-  // Main loop
+NavigationEvent Scenario::Resume() {
+  if (is_done_) {
+    StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_);
+    return stats_screen.Run(replay_.get());
+  }
+
+  RefreshState();
+
   bool stop_scenario = false;
   bool is_adjusting_crosshair = false;
   std::optional<SettingsScreenType> show_settings;
-  bool is_click_held = false;
-  u64 num_state_updates = 0;
-  Stopwatch resume_timer;
-  resume_timer.Start();
   while (!stop_scenario) {
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
@@ -93,17 +95,9 @@ NavigationEvent Scenario::Resume() {
         return nav_event;
       }
       show_settings = {};
-
       // Need to refresh everything based on settings change
-      settings = app_->settings_manager()->GetCurrentSettings();
-      crosshair = settings.crosshair();
-      radians_per_dot = CmPer360ToRadiansPerDot(settings.cm_per_360(), dpi);
-      theme_ = app_->settings_manager()->GetCurrentTheme();
-      metronome_ = std::make_unique<Metronome>(settings.metronome_bpm(), app_);
-      is_click_held = false;
+      RefreshState();
       timer_.Resume();
-      SDL_GL_SetSwapInterval(0);  // Disable vsync
-      SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
     }
 
     timer_.OnStartFrame();
@@ -130,24 +124,24 @@ NavigationEvent Scenario::Resume() {
         throw ApplicationExitException();
       }
       if (event.type == SDL_EVENT_MOUSE_MOTION) {
-        camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot);
+        camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
       }
       if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
           update_data.has_click = true;
-          is_click_held = true;
+          is_click_held_ = true;
         }
       }
       if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
         if (event.button.button == SDL_BUTTON_LEFT) {
           update_data.has_click_up = true;
-          is_click_held = false;
+          is_click_held_ = false;
         }
       }
       if (is_adjusting_crosshair) {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
           if (event.wheel.y != 0) {
-            crosshair.set_size(crosshair.size() + event.wheel.y);
+            crosshair_.set_size(crosshair_.size() + event.wheel.y);
           }
         }
       }
@@ -175,9 +169,10 @@ NavigationEvent Scenario::Resume() {
           is_adjusting_crosshair = false;
           Settings* current_settings = app_->settings_manager()->GetMutableCurrentSettings();
           if (current_settings != nullptr) {
-            *current_settings->mutable_crosshair() = crosshair;
+            *current_settings->mutable_crosshair() = crosshair_;
             app_->settings_manager()->MarkDirty();
             app_->settings_manager()->MaybeFlushToDisk();
+            RefreshState();
           }
         }
       }
@@ -191,9 +186,9 @@ NavigationEvent Scenario::Resume() {
     }
     look_at_ = camera_.GetLookAt();
 
-    update_data.is_click_held = is_click_held;
+    update_data.is_click_held = is_click_held_;
     UpdateState(&update_data);
-    num_state_updates++;
+    num_state_updates_++;
 
     // Render if forced or if the last render was over ~1ms ago.
     bool do_render = update_data.force_render || timer_.LastFrameRenderedMicrosAgo() > 1200;
@@ -205,18 +200,18 @@ NavigationEvent Scenario::Resume() {
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(crosshair, theme_, screen, draw_list);
+    DrawCrosshair(crosshair_, theme_, app_->screen_info(), draw_list);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::Text("cm/360: %.0f", settings.cm_per_360());
-    if (settings.metronome_bpm() > 0) {
-      ImGui::Text("metronome bpm: %.0f", settings.metronome_bpm());
+    ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
+    if (settings_.metronome_bpm() > 0) {
+      ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     }
 
     // ~ Around 450k
-    // ImGui::Text("ups: %.1f", num_state_updates / resume_timer.GetElapsedSeconds());
+    // ImGui::Text("ups: %.1f", num_state_updates_ / timer_.GetElapsedSeconds());
 
     ImGui::End();
 
@@ -228,26 +223,24 @@ NavigationEvent Scenario::Resume() {
   }
 
   OnScenarioDone();
-
-  if (stats_.shots_taken == 0) {
-    return NavigationEvent::GoHome();
-  }
+  is_done_ = true;
 
   stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
   float duration_modifier = 60.0f / def_.duration_seconds();
   stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
 
   StatsRow stats_row;
-  stats_row.cm_per_360 = settings.cm_per_360();
+  stats_row.cm_per_360 = settings_.cm_per_360();
   stats_row.num_hits = stats_.targets_hit;
   stats_row.num_kills = stats_.targets_hit;
   stats_row.num_shots = stats_.shots_taken;
   stats_row.score = stats_.score;
   app_->stats_db()->AddStats(def_.scenario_id(), &stats_row);
 
-  StatsScreen stats_screen(
-      def_.scenario_id(), stats_row.stats_id, std::move(replay_), stats_, app_);
-  return stats_screen.Run();
+  stats_id_ = stats_row.stats_id;
+
+  StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_);
+  return stats_screen.Run(replay_.get());
 }
 
 void Scenario::AddNewTargetEvent(const Target& target) {
