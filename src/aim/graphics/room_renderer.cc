@@ -262,7 +262,7 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
     glm::vec2 tex_scale;
 
     float tex_scale_height = 100;
-    float tex_scale_width = texture->width() * (tex_scale_height / (float)texture->height());
+    float tex_scale_width = (texture->width() * tex_scale_height) / (float)texture->height();
 
     tex_scale.x = wall.width / tex_scale_width;
     tex_scale.y = wall.height / tex_scale_height;
@@ -427,7 +427,7 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
     // Front wall
     glm::mat4 model(1.f);
     model = glm::scale(model, glm::vec3(width, 1.0f, height));
-    DrawWall(model, view, {height, width}, theme.front_appearance());
+    DrawWall(model, view, {width, height}, theme.front_appearance());
   }
 
   {
@@ -438,7 +438,7 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
     model = glm::scale(model, glm::vec3(width, 1.0f, height));
     DrawWall(model,
              view,
-             {height, width},
+             {width, height},
              theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
   }
 
