@@ -23,7 +23,7 @@ struct Target {
   float speed = 0;
   std::optional<glm::vec3> direction;
   std::optional<glm::vec2> wall_direction;
-  float last_update_time_seconds;
+  float last_update_time_seconds = 0;
 
   bool hidden = false;
   bool is_ghost = false;
@@ -54,6 +54,8 @@ class TargetManager {
   void RemoveTarget(u16 target_id);
 
   void UpdateTargetPositions(float now_seconds);
+  glm::vec3 GetUpdatedPosition(const Target& target, float now_seconds);
+  glm::vec2 GetUpdatedWallPosition(const Target& target, float now_seconds);
 
   Target* GetMutableTarget(u16 target_id);
 

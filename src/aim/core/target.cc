@@ -66,17 +66,31 @@ void TargetManager::MarkAllAsNonGhost() {
 
 void TargetManager::UpdateTargetPositions(float now_seconds) {
   for (Target& t : targets_) {
-    float delta_seconds = now_seconds - t.last_update_time_seconds;
     if (t.direction.has_value()) {
-      t.position = t.position + (*t.direction * (delta_seconds * t.speed));
+      t.position = GetUpdatedPosition(t, now_seconds);
     }
     if (t.wall_direction.has_value()) {
-      t.static_wall_position =
-          t.static_wall_position + (*t.wall_direction * (delta_seconds * t.speed));
+      t.static_wall_position = GetUpdatedWallPosition(t, now_seconds);
       t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
     }
     t.last_update_time_seconds = now_seconds;
   }
+}
+
+glm::vec3 TargetManager::GetUpdatedPosition(const Target& target, float now_seconds) {
+  if (target.direction.has_value()) {
+    float delta_seconds = now_seconds - target.last_update_time_seconds;
+    return target.position + (*target.direction * (delta_seconds * target.speed));
+  }
+  return target.position;
+}
+
+glm::vec2 TargetManager::GetUpdatedWallPosition(const Target& target, float now_seconds) {
+  if (target.wall_direction.has_value()) {
+    float delta_seconds = now_seconds - target.last_update_time_seconds;
+    return target.static_wall_position + (*target.wall_direction * (delta_seconds * target.speed));
+  }
+  return target.static_wall_position;
 }
 
 std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
