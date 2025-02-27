@@ -64,7 +64,7 @@ class AppUiImpl : public AppUi {
     while (true) {
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
         if (settings_updater_) {
-          settings_updater_->SaveIfChangesMade();
+          settings_updater_->SaveIfChangesMade("");
           settings_updater_ = {};
         }
         if (current_scenario_def_.has_value()) {
@@ -85,7 +85,7 @@ class AppUiImpl : public AppUi {
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
         if (settings_updater_) {
-          settings_updater_->SaveIfChangesMade();
+          settings_updater_->SaveIfChangesMade("");
           settings_updater_ = {};
         }
         if (current_running_scenario_) {
@@ -337,7 +337,7 @@ class AppUiImpl : public AppUi {
         "##METRONOME_BPM", &settings_updater_->metronome_bpm, ImGuiInputTextFlags_CharsDecimal);
 
     // TODO: Improve this logic to be more explicit
-    settings_updater_->SaveIfChangesMadeDebounced(5);
+    settings_updater_->SaveIfChangesMadeDebounced("", 5);
   }
 
   AppScreen app_screen_ = AppScreen::SCENARIOS;

@@ -58,6 +58,9 @@ extern CrosshairDefaultTypeInternal _Crosshair_default_instance_;
 class DotCrosshair;
 struct DotCrosshairDefaultTypeInternal;
 extern DotCrosshairDefaultTypeInternal _DotCrosshair_default_instance_;
+class ScenarioSettings;
+struct ScenarioSettingsDefaultTypeInternal;
+extern ScenarioSettingsDefaultTypeInternal _ScenarioSettings_default_instance_;
 class Settings;
 struct SettingsDefaultTypeInternal;
 extern SettingsDefaultTypeInternal _Settings_default_instance_;
@@ -72,6 +75,243 @@ namespace aim {
 // ===================================================================
 
 
+// -------------------------------------------------------------------
+
+class ScenarioSettings final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ScenarioSettings) */ {
+ public:
+  inline ScenarioSettings() : ScenarioSettings(nullptr) {}
+  ~ScenarioSettings() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ScenarioSettings* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ScenarioSettings));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ScenarioSettings(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline ScenarioSettings(const ScenarioSettings& from) : ScenarioSettings(nullptr, from) {}
+  inline ScenarioSettings(ScenarioSettings&& from) noexcept
+      : ScenarioSettings(nullptr, std::move(from)) {}
+  inline ScenarioSettings& operator=(const ScenarioSettings& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ScenarioSettings& operator=(ScenarioSettings&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ScenarioSettings& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ScenarioSettings* internal_default_instance() {
+    return reinterpret_cast<const ScenarioSettings*>(
+        &_ScenarioSettings_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(ScenarioSettings& a, ScenarioSettings& b) { a.Swap(&b); }
+  inline void Swap(ScenarioSettings* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ScenarioSettings* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ScenarioSettings* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ScenarioSettings>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ScenarioSettings& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ScenarioSettings& from) { ScenarioSettings::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ScenarioSettings* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ScenarioSettings"; }
+
+ protected:
+  explicit ScenarioSettings(::google::protobuf::Arena* arena);
+  ScenarioSettings(::google::protobuf::Arena* arena, const ScenarioSettings& from);
+  ScenarioSettings(::google::protobuf::Arena* arena, ScenarioSettings&& from) noexcept
+      : ScenarioSettings(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kThemeNameFieldNumber = 2,
+    kCmPer360FieldNumber = 1,
+    kMetronomeBpmFieldNumber = 3,
+    kCrosshairSizeFieldNumber = 4,
+  };
+  // string theme_name = 2;
+  bool has_theme_name() const;
+  void clear_theme_name() ;
+  const std::string& theme_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_theme_name(Arg_&& arg, Args_... args);
+  std::string* mutable_theme_name();
+  PROTOBUF_NODISCARD std::string* release_theme_name();
+  void set_allocated_theme_name(std::string* value);
+
+  private:
+  const std::string& _internal_theme_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_theme_name(
+      const std::string& value);
+  std::string* _internal_mutable_theme_name();
+
+  public:
+  // float cm_per_360 = 1;
+  bool has_cm_per_360() const;
+  void clear_cm_per_360() ;
+  float cm_per_360() const;
+  void set_cm_per_360(float value);
+
+  private:
+  float _internal_cm_per_360() const;
+  void _internal_set_cm_per_360(float value);
+
+  public:
+  // float metronome_bpm = 3;
+  bool has_metronome_bpm() const;
+  void clear_metronome_bpm() ;
+  float metronome_bpm() const;
+  void set_metronome_bpm(float value);
+
+  private:
+  float _internal_metronome_bpm() const;
+  void _internal_set_metronome_bpm(float value);
+
+  public:
+  // float crosshair_size = 4;
+  bool has_crosshair_size() const;
+  void clear_crosshair_size() ;
+  float crosshair_size() const;
+  void set_crosshair_size(float value);
+
+  private:
+  float _internal_crosshair_size() const;
+  void _internal_set_crosshair_size(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.ScenarioSettings)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 0,
+      39, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const ScenarioSettings& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr theme_name_;
+    float cm_per_360_;
+    float metronome_bpm_;
+    float crosshair_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_settings_2eproto;
+};
 // -------------------------------------------------------------------
 
 class DotCrosshair final : public ::google::protobuf::Message
@@ -1161,6 +1401,163 @@ inline float Settings::_internal_metronome_bpm() const {
 inline void Settings::_internal_set_metronome_bpm(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// ScenarioSettings
+
+// float cm_per_360 = 1;
+inline bool ScenarioSettings::has_cm_per_360() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void ScenarioSettings::clear_cm_per_360() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.cm_per_360_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float ScenarioSettings::cm_per_360() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.cm_per_360)
+  return _internal_cm_per_360();
+}
+inline void ScenarioSettings::set_cm_per_360(float value) {
+  _internal_set_cm_per_360(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.cm_per_360)
+}
+inline float ScenarioSettings::_internal_cm_per_360() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.cm_per_360_;
+}
+inline void ScenarioSettings::_internal_set_cm_per_360(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.cm_per_360_ = value;
+}
+
+// string theme_name = 2;
+inline bool ScenarioSettings::has_theme_name() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void ScenarioSettings::clear_theme_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.theme_name_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& ScenarioSettings::theme_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.theme_name)
+  return _internal_theme_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ScenarioSettings::set_theme_name(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.theme_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.theme_name)
+}
+inline std::string* ScenarioSettings::mutable_theme_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_theme_name();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioSettings.theme_name)
+  return _s;
+}
+inline const std::string& ScenarioSettings::_internal_theme_name() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.theme_name_.Get();
+}
+inline void ScenarioSettings::_internal_set_theme_name(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.theme_name_.Set(value, GetArena());
+}
+inline std::string* ScenarioSettings::_internal_mutable_theme_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.theme_name_.Mutable( GetArena());
+}
+inline std::string* ScenarioSettings::release_theme_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioSettings.theme_name)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.theme_name_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.theme_name_.Set("", GetArena());
+  }
+  return released;
+}
+inline void ScenarioSettings::set_allocated_theme_name(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.theme_name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.theme_name_.IsDefault()) {
+    _impl_.theme_name_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioSettings.theme_name)
+}
+
+// float metronome_bpm = 3;
+inline bool ScenarioSettings::has_metronome_bpm() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void ScenarioSettings::clear_metronome_bpm() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.metronome_bpm_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float ScenarioSettings::metronome_bpm() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.metronome_bpm)
+  return _internal_metronome_bpm();
+}
+inline void ScenarioSettings::set_metronome_bpm(float value) {
+  _internal_set_metronome_bpm(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.metronome_bpm)
+}
+inline float ScenarioSettings::_internal_metronome_bpm() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.metronome_bpm_;
+}
+inline void ScenarioSettings::_internal_set_metronome_bpm(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.metronome_bpm_ = value;
+}
+
+// float crosshair_size = 4;
+inline bool ScenarioSettings::has_crosshair_size() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void ScenarioSettings::clear_crosshair_size() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.crosshair_size_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float ScenarioSettings::crosshair_size() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.crosshair_size)
+  return _internal_crosshair_size();
+}
+inline void ScenarioSettings::set_crosshair_size(float value) {
+  _internal_set_crosshair_size(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.crosshair_size)
+}
+inline float ScenarioSettings::_internal_crosshair_size() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.crosshair_size_;
+}
+inline void ScenarioSettings::_internal_set_crosshair_size(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.crosshair_size_ = value;
 }
 
 #ifdef __GNUC__

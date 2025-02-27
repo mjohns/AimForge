@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "aim/common/times.h"
+#include "aim/database/settings_db.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
 
@@ -22,22 +23,24 @@ struct ThemeCacheEntry {
 class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,
-                           std::vector<std::filesystem::path> theme_dirs);
+                           std::vector<std::filesystem::path> theme_dirs,
+                           SettingsDb* settings_db);
   ~SettingsManager();
 
   absl::Status Initialize();
 
   float GetDpi();
   Settings GetCurrentSettings();
+  Settings GetCurrentSettingsForScenario(const std::string& scenario_id);
   Settings* GetMutableCurrentSettings();
 
   Theme GetTheme(const std::string& theme_name);
   Theme GetCurrentTheme();
 
   void MarkDirty();
-  void FlushToDisk();
+  void FlushToDisk(const std::string& scenario_id);
   // Only flush to disk if marked dirty.
-  void MaybeFlushToDisk();
+  bool MaybeFlushToDisk(const std::string& scenario_id);
 
   void MaybeInvalidateThemeCache();
 
@@ -54,14 +57,16 @@ class SettingsManager {
   bool needs_save_ = false;
   std::vector<std::filesystem::path> theme_dirs_;
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
+  std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
+  SettingsDb* settings_db_;
 };
 
 struct SettingsUpdater {
  public:
   explicit SettingsUpdater(SettingsManager* settings_manager);
 
-  void SaveIfChangesMade();
-  void SaveIfChangesMadeDebounced(float debounce_seconds);
+  void SaveIfChangesMade(const std::string& scenario_id);
+  void SaveIfChangesMadeDebounced(const std::string& scenario_id, float debounce_seconds);
 
   std::string cm_per_360;
   std::string theme_name;

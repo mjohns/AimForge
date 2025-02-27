@@ -6,12 +6,12 @@
 #include <stdlib.h>
 
 #include <format>
+#include <functional>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <memory>
-#include <functional>
 #include <optional>
 #include <random>
 #include <string>
@@ -203,7 +203,7 @@ static std::optional<T> GetValueIfPresent(const google::protobuf::RepeatedPtrFie
 
 template <typename T>
 static std::optional<T> FindValue(const std::vector<T>& list,
-                                           std::function<bool(const T&)> predicate) {
+                                  std::function<bool(const T&)> predicate) {
   for (const T& value : list) {
     if (predicate(value)) {
       return value;
@@ -214,7 +214,7 @@ static std::optional<T> FindValue(const std::vector<T>& list,
 
 template <typename T>
 static std::optional<T> FindValue(const google::protobuf::RepeatedPtrField<T>& list,
-                                           std::function<bool(const T&)> predicate) {
+                                  std::function<bool(const T&)> predicate) {
   for (const T& value : list) {
     if (predicate(value)) {
       return value;

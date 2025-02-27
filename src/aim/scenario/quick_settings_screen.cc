@@ -7,17 +7,19 @@
 #include "aim/common/util.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
+#include "aim/scenario/screens.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
 namespace {
 
-enum class QuickSettingsType { DEFAULT, METRONOME };
-
 class QuickSettingsScreen : public UiScreen {
  public:
-  explicit QuickSettingsScreen(Application* app, QuickSettingsType type)
+  explicit QuickSettingsScreen(const std::string& scenario_id,
+                               Application* app,
+                               QuickSettingsType type)
       : UiScreen(app),
+        scenario_id_(scenario_id),
         mgr_(app->settings_manager()),
         updater_(app->settings_manager()),
         type_(type) {}
@@ -40,7 +42,7 @@ class QuickSettingsScreen : public UiScreen {
   std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
     SDL_Keycode keycode = event.key.key;
     if (keycode == SDLK_S || keycode == SDLK_B || keycode == SDLK_C) {
-      updater_.SaveIfChangesMade();
+      updater_.SaveIfChangesMade(scenario_id_);
       return NavigationEvent::Done();
     }
     return {};
@@ -85,12 +87,12 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
-      if (ImGui::Button("static_default", button_sz)) {
-        updater_.theme_name = "static_default";
+      if (ImGui::Button("DefaultStatic", button_sz)) {
+        updater_.theme_name = "DefaultStatic";
       }
       ImGui::SameLine();
-      if (ImGui::Button("concrete_moon", button_sz)) {
-        updater_.theme_name = "concrete_moon";
+      if (ImGui::Button("DefaultDynamic", button_sz)) {
+        updater_.theme_name = "DefaultDynamic";
       }
     }
 
@@ -122,6 +124,7 @@ class QuickSettingsScreen : public UiScreen {
   }
 
  private:
+  std::string scenario_id_;
   SettingsManager* mgr_ = nullptr;
   SettingsUpdater updater_;
   QuickSettingsType type_;
@@ -129,12 +132,10 @@ class QuickSettingsScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app, SettingsScreenType type) {
-  switch (type) {
-    case SettingsScreenType::QUICK_METRONOME:
-      return std::make_unique<QuickSettingsScreen>(app, QuickSettingsType::METRONOME);
-  };
-  return std::make_unique<QuickSettingsScreen>(app, QuickSettingsType::DEFAULT);
+std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_id,
+                                                    QuickSettingsType type,
+                                                    Application* app) {
+  return std::make_unique<QuickSettingsScreen>(scenario_id, app, type);
 }
 
 }  // namespace aim

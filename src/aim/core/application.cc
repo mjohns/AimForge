@@ -90,13 +90,16 @@ int Application::Initialize() {
     absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);
     absl::AddLogSink(absl_log_sink_.get());
   }
+
   stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
+  settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("settings.db"));
+
   std::vector<std::filesystem::path> theme_dirs = {
       file_system_->GetUserDataPath("resources/themes"),
       file_system_->GetBasePath("resources/themes"),
   };
-  settings_manager_ =
-      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"), theme_dirs);
+  settings_manager_ = std::make_unique<SettingsManager>(
+      file_system_->GetUserDataPath("settings.json"), theme_dirs, settings_db_.get());
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
     logger_->error("Loading settings failed: {}", settings_status.message());

@@ -21,3 +21,10 @@ message Settings {
   string theme_name = 4;
   float metronome_bpm = 5;
 }
+
+message ScenarioSettings {
+  float cm_per_360 = 1;
+  string theme_name = 2;
+  float metronome_bpm = 3;
+  float crosshair_size = 4;
+}
