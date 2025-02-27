@@ -1,17 +1,13 @@
 edition = "2023";
 
-import "common.proto";
-
 package aim;
 
 message DotCrosshair {
   bool draw_outline = 1;
-  StoredRgb outline_color = 2;
 }
 
 message Crosshair {
   float size = 1;
-  StoredRgb color = 2;
 
   oneof type {
     DotCrosshair dot = 3;
@@ -19,19 +15,9 @@ message Crosshair {
 }
 
 message Settings {
-  string name = 1;
-  Crosshair crosshair = 2;
+  Crosshair crosshair = 1;
+  float dpi = 2;
   float cm_per_360 = 3;
   string theme_name = 4;
   float metronome_bpm = 5;
-}
-
-message SystemSettings {
-  float dpi = 1;
-}
-
-message FullSettings {
-  SystemSettings system_settings = 1;
-  repeated Settings saved_settings = 2;
-  string current_settings = 3;
 }

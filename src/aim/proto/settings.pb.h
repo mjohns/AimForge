@@ -29,7 +29,6 @@
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
 #include "google/protobuf/unknown_field_set.h"
-#include "common.pb.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
@@ -59,15 +58,9 @@ extern CrosshairDefaultTypeInternal _Crosshair_default_instance_;
 class DotCrosshair;
 struct DotCrosshairDefaultTypeInternal;
 extern DotCrosshairDefaultTypeInternal _DotCrosshair_default_instance_;
-class FullSettings;
-struct FullSettingsDefaultTypeInternal;
-extern FullSettingsDefaultTypeInternal _FullSettings_default_instance_;
 class Settings;
 struct SettingsDefaultTypeInternal;
 extern SettingsDefaultTypeInternal _Settings_default_instance_;
-class SystemSettings;
-struct SystemSettingsDefaultTypeInternal;
-extern SystemSettingsDefaultTypeInternal _SystemSettings_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -79,198 +72,6 @@ namespace aim {
 // ===================================================================
 
 
-// -------------------------------------------------------------------
-
-class SystemSettings final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.SystemSettings) */ {
- public:
-  inline SystemSettings() : SystemSettings(nullptr) {}
-  ~SystemSettings() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(SystemSettings* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(SystemSettings));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR SystemSettings(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline SystemSettings(const SystemSettings& from) : SystemSettings(nullptr, from) {}
-  inline SystemSettings(SystemSettings&& from) noexcept
-      : SystemSettings(nullptr, std::move(from)) {}
-  inline SystemSettings& operator=(const SystemSettings& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline SystemSettings& operator=(SystemSettings&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const SystemSettings& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const SystemSettings* internal_default_instance() {
-    return reinterpret_cast<const SystemSettings*>(
-        &_SystemSettings_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 3;
-  friend void swap(SystemSettings& a, SystemSettings& b) { a.Swap(&b); }
-  inline void Swap(SystemSettings* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(SystemSettings* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  SystemSettings* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<SystemSettings>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const SystemSettings& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const SystemSettings& from) { SystemSettings::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(SystemSettings* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.SystemSettings"; }
-
- protected:
-  explicit SystemSettings(::google::protobuf::Arena* arena);
-  SystemSettings(::google::protobuf::Arena* arena, const SystemSettings& from);
-  SystemSettings(::google::protobuf::Arena* arena, SystemSettings&& from) noexcept
-      : SystemSettings(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kDpiFieldNumber = 1,
-  };
-  // float dpi = 1;
-  bool has_dpi() const;
-  void clear_dpi() ;
-  float dpi() const;
-  void set_dpi(float value);
-
-  private:
-  float _internal_dpi() const;
-  void _internal_set_dpi(float value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.SystemSettings)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      0, 1, 0,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const SystemSettings& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    float dpi_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_settings_2eproto;
-};
 // -------------------------------------------------------------------
 
 class DotCrosshair final : public ::google::protobuf::Message
@@ -419,24 +220,8 @@ class DotCrosshair final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kOutlineColorFieldNumber = 2,
     kDrawOutlineFieldNumber = 1,
   };
-  // .aim.StoredRgb outline_color = 2;
-  bool has_outline_color() const;
-  void clear_outline_color() ;
-  const ::aim::StoredRgb& outline_color() const;
-  PROTOBUF_NODISCARD ::aim::StoredRgb* release_outline_color();
-  ::aim::StoredRgb* mutable_outline_color();
-  void set_allocated_outline_color(::aim::StoredRgb* value);
-  void unsafe_arena_set_allocated_outline_color(::aim::StoredRgb* value);
-  ::aim::StoredRgb* unsafe_arena_release_outline_color();
-
-  private:
-  const ::aim::StoredRgb& _internal_outline_color() const;
-  ::aim::StoredRgb* _internal_mutable_outline_color();
-
-  public:
   // bool draw_outline = 1;
   bool has_draw_outline() const;
   void clear_draw_outline() ;
@@ -453,7 +238,7 @@ class DotCrosshair final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
+      0, 1, 0,
       0, 2>
       _table_;
 
@@ -473,7 +258,6 @@ class DotCrosshair final : public ::google::protobuf::Message
                           const DotCrosshair& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::StoredRgb* outline_color_;
     bool draw_outline_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -632,25 +416,9 @@ class Crosshair final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kColorFieldNumber = 2,
     kSizeFieldNumber = 1,
     kDotFieldNumber = 3,
   };
-  // .aim.StoredRgb color = 2;
-  bool has_color() const;
-  void clear_color() ;
-  const ::aim::StoredRgb& color() const;
-  PROTOBUF_NODISCARD ::aim::StoredRgb* release_color();
-  ::aim::StoredRgb* mutable_color();
-  void set_allocated_color(::aim::StoredRgb* value);
-  void unsafe_arena_set_allocated_color(::aim::StoredRgb* value);
-  ::aim::StoredRgb* unsafe_arena_release_color();
-
-  private:
-  const ::aim::StoredRgb& _internal_color() const;
-  ::aim::StoredRgb* _internal_mutable_color();
-
-  public:
   // float size = 1;
   bool has_size() const;
   void clear_size() ;
@@ -691,7 +459,7 @@ class Crosshair final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 3, 2,
+      0, 2, 1,
       0, 2>
       _table_;
 
@@ -711,7 +479,6 @@ class Crosshair final : public ::google::protobuf::Message
                           const Crosshair& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::StoredRgb* color_;
     float size_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
@@ -872,29 +639,12 @@ class Settings final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kNameFieldNumber = 1,
     kThemeNameFieldNumber = 4,
-    kCrosshairFieldNumber = 2,
+    kCrosshairFieldNumber = 1,
+    kDpiFieldNumber = 2,
     kCmPer360FieldNumber = 3,
     kMetronomeBpmFieldNumber = 5,
   };
-  // string name = 1;
-  bool has_name() const;
-  void clear_name() ;
-  const std::string& name() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_name(Arg_&& arg, Args_... args);
-  std::string* mutable_name();
-  PROTOBUF_NODISCARD std::string* release_name();
-  void set_allocated_name(std::string* value);
-
-  private:
-  const std::string& _internal_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(
-      const std::string& value);
-  std::string* _internal_mutable_name();
-
-  public:
   // string theme_name = 4;
   bool has_theme_name() const;
   void clear_theme_name() ;
@@ -912,7 +662,7 @@ class Settings final : public ::google::protobuf::Message
   std::string* _internal_mutable_theme_name();
 
   public:
-  // .aim.Crosshair crosshair = 2;
+  // .aim.Crosshair crosshair = 1;
   bool has_crosshair() const;
   void clear_crosshair() ;
   const ::aim::Crosshair& crosshair() const;
@@ -925,6 +675,17 @@ class Settings final : public ::google::protobuf::Message
   private:
   const ::aim::Crosshair& _internal_crosshair() const;
   ::aim::Crosshair* _internal_mutable_crosshair();
+
+  public:
+  // float dpi = 2;
+  bool has_dpi() const;
+  void clear_dpi() ;
+  float dpi() const;
+  void set_dpi(float value);
+
+  private:
+  float _internal_dpi() const;
+  void _internal_set_dpi(float value);
 
   public:
   // float cm_per_360 = 3;
@@ -955,7 +716,7 @@ class Settings final : public ::google::protobuf::Message
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
       3, 5, 1,
-      35, 2>
+      31, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -974,245 +735,11 @@ class Settings final : public ::google::protobuf::Message
                           const Settings& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::internal::ArenaStringPtr name_;
     ::google::protobuf::internal::ArenaStringPtr theme_name_;
     ::aim::Crosshair* crosshair_;
+    float dpi_;
     float cm_per_360_;
     float metronome_bpm_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_settings_2eproto;
-};
-// -------------------------------------------------------------------
-
-class FullSettings final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.FullSettings) */ {
- public:
-  inline FullSettings() : FullSettings(nullptr) {}
-  ~FullSettings() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(FullSettings* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(FullSettings));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR FullSettings(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline FullSettings(const FullSettings& from) : FullSettings(nullptr, from) {}
-  inline FullSettings(FullSettings&& from) noexcept
-      : FullSettings(nullptr, std::move(from)) {}
-  inline FullSettings& operator=(const FullSettings& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline FullSettings& operator=(FullSettings&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const FullSettings& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const FullSettings* internal_default_instance() {
-    return reinterpret_cast<const FullSettings*>(
-        &_FullSettings_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 4;
-  friend void swap(FullSettings& a, FullSettings& b) { a.Swap(&b); }
-  inline void Swap(FullSettings* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(FullSettings* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  FullSettings* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<FullSettings>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const FullSettings& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const FullSettings& from) { FullSettings::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(FullSettings* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.FullSettings"; }
-
- protected:
-  explicit FullSettings(::google::protobuf::Arena* arena);
-  FullSettings(::google::protobuf::Arena* arena, const FullSettings& from);
-  FullSettings(::google::protobuf::Arena* arena, FullSettings&& from) noexcept
-      : FullSettings(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kSavedSettingsFieldNumber = 2,
-    kCurrentSettingsFieldNumber = 3,
-    kSystemSettingsFieldNumber = 1,
-  };
-  // repeated .aim.Settings saved_settings = 2;
-  int saved_settings_size() const;
-  private:
-  int _internal_saved_settings_size() const;
-
-  public:
-  void clear_saved_settings() ;
-  ::aim::Settings* mutable_saved_settings(int index);
-  ::google::protobuf::RepeatedPtrField<::aim::Settings>* mutable_saved_settings();
-
-  private:
-  const ::google::protobuf::RepeatedPtrField<::aim::Settings>& _internal_saved_settings() const;
-  ::google::protobuf::RepeatedPtrField<::aim::Settings>* _internal_mutable_saved_settings();
-  public:
-  const ::aim::Settings& saved_settings(int index) const;
-  ::aim::Settings* add_saved_settings();
-  const ::google::protobuf::RepeatedPtrField<::aim::Settings>& saved_settings() const;
-  // string current_settings = 3;
-  bool has_current_settings() const;
-  void clear_current_settings() ;
-  const std::string& current_settings() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_current_settings(Arg_&& arg, Args_... args);
-  std::string* mutable_current_settings();
-  PROTOBUF_NODISCARD std::string* release_current_settings();
-  void set_allocated_current_settings(std::string* value);
-
-  private:
-  const std::string& _internal_current_settings() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_current_settings(
-      const std::string& value);
-  std::string* _internal_mutable_current_settings();
-
-  public:
-  // .aim.SystemSettings system_settings = 1;
-  bool has_system_settings() const;
-  void clear_system_settings() ;
-  const ::aim::SystemSettings& system_settings() const;
-  PROTOBUF_NODISCARD ::aim::SystemSettings* release_system_settings();
-  ::aim::SystemSettings* mutable_system_settings();
-  void set_allocated_system_settings(::aim::SystemSettings* value);
-  void unsafe_arena_set_allocated_system_settings(::aim::SystemSettings* value);
-  ::aim::SystemSettings* unsafe_arena_release_system_settings();
-
-  private:
-  const ::aim::SystemSettings& _internal_system_settings() const;
-  ::aim::SystemSettings* _internal_mutable_system_settings();
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.FullSettings)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 2,
-      41, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const FullSettings& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::RepeatedPtrField< ::aim::Settings > saved_settings_;
-    ::google::protobuf::internal::ArenaStringPtr current_settings_;
-    ::aim::SystemSettings* system_settings_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1237,13 +764,13 @@ class FullSettings final : public ::google::protobuf::Message
 
 // bool draw_outline = 1;
 inline bool DotCrosshair::has_draw_outline() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
 inline void DotCrosshair::clear_draw_outline() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.draw_outline_ = false;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline bool DotCrosshair::draw_outline() const {
   // @@protoc_insertion_point(field_get:aim.DotCrosshair.draw_outline)
@@ -1251,7 +778,7 @@ inline bool DotCrosshair::draw_outline() const {
 }
 inline void DotCrosshair::set_draw_outline(bool value) {
   _internal_set_draw_outline(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   // @@protoc_insertion_point(field_set:aim.DotCrosshair.draw_outline)
 }
 inline bool DotCrosshair::_internal_draw_outline() const {
@@ -1263,110 +790,19 @@ inline void DotCrosshair::_internal_set_draw_outline(bool value) {
   _impl_.draw_outline_ = value;
 }
 
-// .aim.StoredRgb outline_color = 2;
-inline bool DotCrosshair::has_outline_color() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.outline_color_ != nullptr);
-  return value;
-}
-inline const ::aim::StoredRgb& DotCrosshair::_internal_outline_color() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::StoredRgb* p = _impl_.outline_color_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredRgb&>(::aim::_StoredRgb_default_instance_);
-}
-inline const ::aim::StoredRgb& DotCrosshair::outline_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.DotCrosshair.outline_color)
-  return _internal_outline_color();
-}
-inline void DotCrosshair::unsafe_arena_set_allocated_outline_color(::aim::StoredRgb* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.outline_color_);
-  }
-  _impl_.outline_color_ = reinterpret_cast<::aim::StoredRgb*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.DotCrosshair.outline_color)
-}
-inline ::aim::StoredRgb* DotCrosshair::release_outline_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredRgb* released = _impl_.outline_color_;
-  _impl_.outline_color_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::StoredRgb* DotCrosshair::unsafe_arena_release_outline_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.DotCrosshair.outline_color)
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredRgb* temp = _impl_.outline_color_;
-  _impl_.outline_color_ = nullptr;
-  return temp;
-}
-inline ::aim::StoredRgb* DotCrosshair::_internal_mutable_outline_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.outline_color_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredRgb>(GetArena());
-    _impl_.outline_color_ = reinterpret_cast<::aim::StoredRgb*>(p);
-  }
-  return _impl_.outline_color_;
-}
-inline ::aim::StoredRgb* DotCrosshair::mutable_outline_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::aim::StoredRgb* _msg = _internal_mutable_outline_color();
-  // @@protoc_insertion_point(field_mutable:aim.DotCrosshair.outline_color)
-  return _msg;
-}
-inline void DotCrosshair::set_allocated_outline_color(::aim::StoredRgb* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.outline_color_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-
-  _impl_.outline_color_ = reinterpret_cast<::aim::StoredRgb*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.DotCrosshair.outline_color)
-}
-
 // -------------------------------------------------------------------
 
 // Crosshair
 
 // float size = 1;
 inline bool Crosshair::has_size() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
 inline void Crosshair::clear_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.size_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline float Crosshair::size() const {
   // @@protoc_insertion_point(field_get:aim.Crosshair.size)
@@ -1374,7 +810,7 @@ inline float Crosshair::size() const {
 }
 inline void Crosshair::set_size(float value) {
   _internal_set_size(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   // @@protoc_insertion_point(field_set:aim.Crosshair.size)
 }
 inline float Crosshair::_internal_size() const {
@@ -1384,97 +820,6 @@ inline float Crosshair::_internal_size() const {
 inline void Crosshair::_internal_set_size(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.size_ = value;
-}
-
-// .aim.StoredRgb color = 2;
-inline bool Crosshair::has_color() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.color_ != nullptr);
-  return value;
-}
-inline const ::aim::StoredRgb& Crosshair::_internal_color() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::StoredRgb* p = _impl_.color_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredRgb&>(::aim::_StoredRgb_default_instance_);
-}
-inline const ::aim::StoredRgb& Crosshair::color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Crosshair.color)
-  return _internal_color();
-}
-inline void Crosshair::unsafe_arena_set_allocated_color(::aim::StoredRgb* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.color_);
-  }
-  _impl_.color_ = reinterpret_cast<::aim::StoredRgb*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Crosshair.color)
-}
-inline ::aim::StoredRgb* Crosshair::release_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredRgb* released = _impl_.color_;
-  _impl_.color_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::StoredRgb* Crosshair::unsafe_arena_release_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.Crosshair.color)
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::StoredRgb* temp = _impl_.color_;
-  _impl_.color_ = nullptr;
-  return temp;
-}
-inline ::aim::StoredRgb* Crosshair::_internal_mutable_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.color_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredRgb>(GetArena());
-    _impl_.color_ = reinterpret_cast<::aim::StoredRgb*>(p);
-  }
-  return _impl_.color_;
-}
-inline ::aim::StoredRgb* Crosshair::mutable_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::aim::StoredRgb* _msg = _internal_mutable_color();
-  // @@protoc_insertion_point(field_mutable:aim.Crosshair.color)
-  return _msg;
-}
-inline void Crosshair::set_allocated_color(::aim::StoredRgb* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.color_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-
-  _impl_.color_ = reinterpret_cast<::aim::StoredRgb*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.Crosshair.color)
 }
 
 // .aim.DotCrosshair dot = 3;
@@ -1569,85 +914,16 @@ inline Crosshair::TypeCase Crosshair::type_case() const {
 
 // Settings
 
-// string name = 1;
-inline bool Settings::has_name() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void Settings::clear_name() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.name_.ClearToEmpty();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& Settings::name() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Settings.name)
-  return _internal_name();
-}
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void Settings::set_name(Arg_&& arg,
-                                                     Args_... args) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:aim.Settings.name)
-}
-inline std::string* Settings::mutable_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_name();
-  // @@protoc_insertion_point(field_mutable:aim.Settings.name)
-  return _s;
-}
-inline const std::string& Settings::_internal_name() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.name_.Get();
-}
-inline void Settings::_internal_set_name(const std::string& value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.name_.Set(value, GetArena());
-}
-inline std::string* Settings::_internal_mutable_name() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  return _impl_.name_.Mutable( GetArena());
-}
-inline std::string* Settings::release_name() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.Settings.name)
-  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
-    return nullptr;
-  }
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  auto* released = _impl_.name_.Release();
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.name_.Set("", GetArena());
-  }
-  return released;
-}
-inline void Settings::set_allocated_name(std::string* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  _impl_.name_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.name_.IsDefault()) {
-    _impl_.name_.Set("", GetArena());
-  }
-  // @@protoc_insertion_point(field_set_allocated:aim.Settings.name)
-}
-
-// .aim.Crosshair crosshair = 2;
+// .aim.Crosshair crosshair = 1;
 inline bool Settings::has_crosshair() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.crosshair_ != nullptr);
   return value;
 }
 inline void Settings::clear_crosshair() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.crosshair_ != nullptr) _impl_.crosshair_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline const ::aim::Crosshair& Settings::_internal_crosshair() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -1665,16 +941,16 @@ inline void Settings::unsafe_arena_set_allocated_crosshair(::aim::Crosshair* val
   }
   _impl_.crosshair_ = reinterpret_cast<::aim::Crosshair*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.crosshair)
 }
 inline ::aim::Crosshair* Settings::release_crosshair() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::Crosshair* released = _impl_.crosshair_;
   _impl_.crosshair_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -1694,7 +970,7 @@ inline ::aim::Crosshair* Settings::unsafe_arena_release_crosshair() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Settings.crosshair)
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::Crosshair* temp = _impl_.crosshair_;
   _impl_.crosshair_ = nullptr;
   return temp;
@@ -1708,7 +984,7 @@ inline ::aim::Crosshair* Settings::_internal_mutable_crosshair() {
   return _impl_.crosshair_;
 }
 inline ::aim::Crosshair* Settings::mutable_crosshair() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   ::aim::Crosshair* _msg = _internal_mutable_crosshair();
   // @@protoc_insertion_point(field_mutable:aim.Settings.crosshair)
   return _msg;
@@ -1725,13 +1001,41 @@ inline void Settings::set_allocated_crosshair(::aim::Crosshair* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
 
   _impl_.crosshair_ = reinterpret_cast<::aim::Crosshair*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.crosshair)
+}
+
+// float dpi = 2;
+inline bool Settings::has_dpi() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void Settings::clear_dpi() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.dpi_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float Settings::dpi() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.dpi)
+  return _internal_dpi();
+}
+inline void Settings::set_dpi(float value) {
+  _internal_set_dpi(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.Settings.dpi)
+}
+inline float Settings::_internal_dpi() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.dpi_;
+}
+inline void Settings::_internal_set_dpi(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.dpi_ = value;
 }
 
 // float cm_per_360 = 3;
@@ -1764,13 +1068,13 @@ inline void Settings::_internal_set_cm_per_360(float value) {
 
 // string theme_name = 4;
 inline bool Settings::has_theme_name() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
 inline void Settings::clear_theme_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.theme_name_.ClearToEmpty();
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline const std::string& Settings::theme_name() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
@@ -1781,7 +1085,7 @@ template <typename Arg_, typename... Args_>
 inline PROTOBUF_ALWAYS_INLINE void Settings::set_theme_name(Arg_&& arg,
                                                      Args_... args) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   _impl_.theme_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:aim.Settings.theme_name)
 }
@@ -1796,21 +1100,21 @@ inline const std::string& Settings::_internal_theme_name() const {
 }
 inline void Settings::_internal_set_theme_name(const std::string& value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   _impl_.theme_name_.Set(value, GetArena());
 }
 inline std::string* Settings::_internal_mutable_theme_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   return _impl_.theme_name_.Mutable( GetArena());
 }
 inline std::string* Settings::release_theme_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Settings.theme_name)
-  if ((_impl_._has_bits_[0] & 0x00000002u) == 0) {
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
     return nullptr;
   }
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
   auto* released = _impl_.theme_name_.Release();
   if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
     _impl_.theme_name_.Set("", GetArena());
@@ -1820,9 +1124,9 @@ inline std::string* Settings::release_theme_name() {
 inline void Settings::set_allocated_theme_name(std::string* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000001u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000001u;
   }
   _impl_.theme_name_.SetAllocated(value, GetArena());
   if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.theme_name_.IsDefault()) {
@@ -1857,256 +1161,6 @@ inline float Settings::_internal_metronome_bpm() const {
 inline void Settings::_internal_set_metronome_bpm(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// SystemSettings
-
-// float dpi = 1;
-inline bool SystemSettings::has_dpi() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void SystemSettings::clear_dpi() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.dpi_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline float SystemSettings::dpi() const {
-  // @@protoc_insertion_point(field_get:aim.SystemSettings.dpi)
-  return _internal_dpi();
-}
-inline void SystemSettings::set_dpi(float value) {
-  _internal_set_dpi(value);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.SystemSettings.dpi)
-}
-inline float SystemSettings::_internal_dpi() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.dpi_;
-}
-inline void SystemSettings::_internal_set_dpi(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.dpi_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// FullSettings
-
-// .aim.SystemSettings system_settings = 1;
-inline bool FullSettings::has_system_settings() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.system_settings_ != nullptr);
-  return value;
-}
-inline void FullSettings::clear_system_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.system_settings_ != nullptr) _impl_.system_settings_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline const ::aim::SystemSettings& FullSettings::_internal_system_settings() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::SystemSettings* p = _impl_.system_settings_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::SystemSettings&>(::aim::_SystemSettings_default_instance_);
-}
-inline const ::aim::SystemSettings& FullSettings::system_settings() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.FullSettings.system_settings)
-  return _internal_system_settings();
-}
-inline void FullSettings::unsafe_arena_set_allocated_system_settings(::aim::SystemSettings* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.system_settings_);
-  }
-  _impl_.system_settings_ = reinterpret_cast<::aim::SystemSettings*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.FullSettings.system_settings)
-}
-inline ::aim::SystemSettings* FullSettings::release_system_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::SystemSettings* released = _impl_.system_settings_;
-  _impl_.system_settings_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::SystemSettings* FullSettings::unsafe_arena_release_system_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.FullSettings.system_settings)
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::SystemSettings* temp = _impl_.system_settings_;
-  _impl_.system_settings_ = nullptr;
-  return temp;
-}
-inline ::aim::SystemSettings* FullSettings::_internal_mutable_system_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.system_settings_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::SystemSettings>(GetArena());
-    _impl_.system_settings_ = reinterpret_cast<::aim::SystemSettings*>(p);
-  }
-  return _impl_.system_settings_;
-}
-inline ::aim::SystemSettings* FullSettings::mutable_system_settings() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  ::aim::SystemSettings* _msg = _internal_mutable_system_settings();
-  // @@protoc_insertion_point(field_mutable:aim.FullSettings.system_settings)
-  return _msg;
-}
-inline void FullSettings::set_allocated_system_settings(::aim::SystemSettings* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.system_settings_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-
-  _impl_.system_settings_ = reinterpret_cast<::aim::SystemSettings*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.FullSettings.system_settings)
-}
-
-// repeated .aim.Settings saved_settings = 2;
-inline int FullSettings::_internal_saved_settings_size() const {
-  return _internal_saved_settings().size();
-}
-inline int FullSettings::saved_settings_size() const {
-  return _internal_saved_settings_size();
-}
-inline void FullSettings::clear_saved_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.saved_settings_.Clear();
-}
-inline ::aim::Settings* FullSettings::mutable_saved_settings(int index)
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:aim.FullSettings.saved_settings)
-  return _internal_mutable_saved_settings()->Mutable(index);
-}
-inline ::google::protobuf::RepeatedPtrField<::aim::Settings>* FullSettings::mutable_saved_settings()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.FullSettings.saved_settings)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_saved_settings();
-}
-inline const ::aim::Settings& FullSettings::saved_settings(int index) const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.FullSettings.saved_settings)
-  return _internal_saved_settings().Get(index);
-}
-inline ::aim::Settings* FullSettings::add_saved_settings() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::aim::Settings* _add = _internal_mutable_saved_settings()->Add();
-  // @@protoc_insertion_point(field_add:aim.FullSettings.saved_settings)
-  return _add;
-}
-inline const ::google::protobuf::RepeatedPtrField<::aim::Settings>& FullSettings::saved_settings() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.FullSettings.saved_settings)
-  return _internal_saved_settings();
-}
-inline const ::google::protobuf::RepeatedPtrField<::aim::Settings>&
-FullSettings::_internal_saved_settings() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.saved_settings_;
-}
-inline ::google::protobuf::RepeatedPtrField<::aim::Settings>*
-FullSettings::_internal_mutable_saved_settings() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.saved_settings_;
-}
-
-// string current_settings = 3;
-inline bool FullSettings::has_current_settings() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void FullSettings::clear_current_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.current_settings_.ClearToEmpty();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& FullSettings::current_settings() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.FullSettings.current_settings)
-  return _internal_current_settings();
-}
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void FullSettings::set_current_settings(Arg_&& arg,
-                                                     Args_... args) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.current_settings_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:aim.FullSettings.current_settings)
-}
-inline std::string* FullSettings::mutable_current_settings() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_current_settings();
-  // @@protoc_insertion_point(field_mutable:aim.FullSettings.current_settings)
-  return _s;
-}
-inline const std::string& FullSettings::_internal_current_settings() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.current_settings_.Get();
-}
-inline void FullSettings::_internal_set_current_settings(const std::string& value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.current_settings_.Set(value, GetArena());
-}
-inline std::string* FullSettings::_internal_mutable_current_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  return _impl_.current_settings_.Mutable( GetArena());
-}
-inline std::string* FullSettings::release_current_settings() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.FullSettings.current_settings)
-  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
-    return nullptr;
-  }
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  auto* released = _impl_.current_settings_.Release();
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.current_settings_.Set("", GetArena());
-  }
-  return released;
-}
-inline void FullSettings::set_allocated_current_settings(std::string* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  _impl_.current_settings_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.current_settings_.IsDefault()) {
-    _impl_.current_settings_.Set("", GetArena());
-  }
-  // @@protoc_insertion_point(field_set_allocated:aim.FullSettings.current_settings)
 }
 
 #ifdef __GNUC__

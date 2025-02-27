@@ -36,26 +36,16 @@ Theme GetDefaultTheme() {
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
   crosshair.set_size(15);
-  *crosshair.mutable_color() = ToStoredRgb(254, 138, 24);
   crosshair.mutable_dot()->set_draw_outline(true);
-  *(crosshair.mutable_dot()->mutable_outline_color()) = ToStoredRgb(0, 0, 0);
   return crosshair;
 }
 
 Settings GetDefaultSettings() {
   Settings settings;
-  settings.set_name("default");
+  settings.set_dpi(800);
   settings.set_cm_per_360(45);
   *settings.mutable_crosshair() = GetDefaultCrosshair();
   return settings;
-}
-
-FullSettings GetDefaultFullSettings() {
-  FullSettings full_settings;
-  Settings default_settings = GetDefaultSettings();
-  *full_settings.add_saved_settings() = default_settings;
-  full_settings.set_current_settings(default_settings.name());
-  return full_settings;
 }
 
 }  // namespace
@@ -79,11 +69,11 @@ absl::Status SettingsManager::Initialize() {
     opts.ignore_unknown_fields = true;
     opts.case_insensitive_enum_parsing = true;
     std::string json = *maybe_content;
-    return google::protobuf::util::JsonStringToMessage(json, &full_settings_, opts);
+    return google::protobuf::util::JsonStringToMessage(json, &settings_, opts);
   }
 
   // Write initial settings to file.
-  full_settings_ = GetDefaultFullSettings();
+  settings_ = GetDefaultSettings();
   FlushToDisk();
   return absl::OkStatus();
 }
@@ -153,37 +143,17 @@ void SettingsManager::MaybeInvalidateThemeCache() {
 }
 
 float SettingsManager::GetDpi() {
-  float dpi = full_settings_.system_settings().dpi();
+  float dpi = settings_.dpi();
   return dpi > 0 ? dpi : kDefaultDpi;
 }
 
-FullSettings SettingsManager::GetFullSettings() {
-  return full_settings_;
-}
-
-FullSettings* SettingsManager::GetMutableFullSettings() {
-  return &full_settings_;
-}
 
 Settings SettingsManager::GetCurrentSettings() {
-  Settings* existing_settings = GetMutableCurrentSettings();
-  if (existing_settings != nullptr) {
-    return *existing_settings;
-  }
-  Settings settings = GetDefaultSettings();
-  settings.set_name(full_settings_.current_settings());
-  return settings;
+  return settings_;
 }
 
 Settings* SettingsManager::GetMutableCurrentSettings() {
-  for (int i = 0; i < full_settings_.saved_settings_size(); ++i) {
-    Settings* settings = full_settings_.mutable_saved_settings(i);
-    if (settings->name() == full_settings_.current_settings() ||
-        full_settings_.current_settings().size() == 0) {
-      return settings;
-    }
-  }
-  return nullptr;
+  return &settings_;
 }
 
 void SettingsManager::MarkDirty() {
@@ -196,7 +166,7 @@ void SettingsManager::MaybeFlushToDisk() {
   }
 }
 void SettingsManager::FlushToDisk() {
-  if (WriteJsonMessageToFile(settings_path_, full_settings_)) {
+  if (WriteJsonMessageToFile(settings_path_, settings_)) {
     needs_save_ = false;
   }
 }
