@@ -379,7 +379,9 @@ inline constexpr TargetDef::Impl_::Impl_(
         _target_order_cached_byte_size_{0},
         num_targets_{0},
         remove_closest_on_miss_{false},
-        newest_target_is_ghost_{false} {}
+        newest_target_is_ghost_{false},
+        new_target_delay_seconds_{0},
+        remove_target_after_seconds_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR TargetDef::TargetDef(::_pbi::ConstantInitialized)
@@ -724,11 +726,15 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _impl_.remove_closest_on_miss_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _impl_.target_order_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _impl_.newest_target_is_ghost_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _impl_.new_target_delay_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _impl_.remove_target_after_seconds_),
         ~0u,
         0,
         1,
         ~0u,
         2,
+        3,
+        4,
         PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -778,9 +784,9 @@ static const ::_pbi::MigrationSchema
         {179, 189, -1, sizeof(::aim::StaticScenarioDef)},
         {191, 201, -1, sizeof(::aim::CenteringScenarioDef)},
         {203, -1, -1, sizeof(::aim::BarrelScenarioDef)},
-        {211, 224, -1, sizeof(::aim::TargetDef)},
-        {229, 238, -1, sizeof(::aim::PillTargetDef)},
-        {239, 254, -1, sizeof(::aim::TargetProfile)},
+        {211, 226, -1, sizeof(::aim::TargetDef)},
+        {233, 242, -1, sizeof(::aim::PillTargetDef)},
+        {243, 258, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -849,17 +855,19 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\001(\0132\034.aim.TargetPlacementStrategy\"f\n\024Cen"
     "teringScenarioDef\022\'\n\016start_position\030\001 \001("
     "\0132\017.aim.StoredVec3\022%\n\014end_position\030\002 \001(\013"
-    "2\017.aim.StoredVec3\"\023\n\021BarrelScenarioDef\"\234"
+    "2\017.aim.StoredVec3\"\023\n\021BarrelScenarioDef\"\343"
     "\001\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.Tar"
     "getProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remov"
     "e_closest_on_miss\030\003 \001(\010\022\024\n\014target_order\030"
-    "\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\"\037\n"
-    "\rPillTargetDef\022\016\n\006height\030\001 \001(\002\"\255\001\n\rTarge"
-    "tProfile\022\026\n\016percent_chance\030\001 \001(\002\022\025\n\rtarg"
-    "et_radius\030\002 \001(\002\022\034\n\024target_radius_jitter\030"
-    "\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001"
-    "(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006"
-    "\n\004typeb\010editionsp\350\007"
+    "\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\022 \n"
+    "\030new_target_delay_seconds\030\006 \001(\002\022#\n\033remov"
+    "e_target_after_seconds\030\007 \001(\002\"\037\n\rPillTarg"
+    "etDef\022\016\n\006height\030\001 \001(\002\"\255\001\n\rTargetProfile\022"
+    "\026\n\016percent_chance\030\001 \001(\002\022\025\n\rtarget_radius"
+    "\030\002 \001(\002\022\034\n\024target_radius_jitter\030\003 \001(\002\022\r\n\005"
+    "speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\"\n\004pil"
+    "l\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004typeb\010e"
+    "ditionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -869,7 +877,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2259,
+    2330,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -5653,9 +5661,9 @@ TargetDef::TargetDef(
                offsetof(Impl_, num_targets_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, num_targets_),
-           offsetof(Impl_, newest_target_is_ghost_) -
+           offsetof(Impl_, remove_target_after_seconds_) -
                offsetof(Impl_, num_targets_) +
-               sizeof(Impl_::newest_target_is_ghost_));
+               sizeof(Impl_::remove_target_after_seconds_));
 
   // @@protoc_insertion_point(copy_constructor:aim.TargetDef)
 }
@@ -5672,9 +5680,9 @@ inline void TargetDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, num_targets_),
            0,
-           offsetof(Impl_, newest_target_is_ghost_) -
+           offsetof(Impl_, remove_target_after_seconds_) -
                offsetof(Impl_, num_targets_) +
-               sizeof(Impl_::newest_target_is_ghost_));
+               sizeof(Impl_::remove_target_after_seconds_));
 }
 TargetDef::~TargetDef() {
   // @@protoc_insertion_point(destructor:aim.TargetDef)
@@ -5739,15 +5747,15 @@ const ::google::protobuf::internal::ClassData* TargetDef::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 5, 1, 0, 2> TargetDef::_table_ = {
+const ::_pbi::TcParseTable<3, 7, 1, 0, 2> TargetDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetDef, _impl_._has_bits_),
     0, // no _extensions_
-    5, 56,  // max_field_number, fast_idx_mask
+    7, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967168,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    7,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -5773,8 +5781,12 @@ const ::_pbi::TcParseTable<3, 5, 1, 0, 2> TargetDef::_table_ = {
     // bool newest_target_is_ghost = 5;
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(TargetDef, _impl_.newest_target_is_ghost_), 2>(),
      {40, 2, 0, PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.newest_target_is_ghost_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // float new_target_delay_seconds = 6;
+    {::_pbi::TcParser::FastF32S1,
+     {53, 3, 0, PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.new_target_delay_seconds_)}},
+    // float remove_target_after_seconds = 7;
+    {::_pbi::TcParser::FastF32S1,
+     {61, 4, 0, PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.remove_target_after_seconds_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -5793,6 +5805,12 @@ const ::_pbi::TcParseTable<3, 5, 1, 0, 2> TargetDef::_table_ = {
     // bool newest_target_is_ghost = 5;
     {PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.newest_target_is_ghost_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // float new_target_delay_seconds = 6;
+    {PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.new_target_delay_seconds_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float remove_target_after_seconds = 7;
+    {PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.remove_target_after_seconds_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetProfile>()},
   }}, {{
@@ -5809,10 +5827,10 @@ PROTOBUF_NOINLINE void TargetDef::Clear() {
   _impl_.profiles_.Clear();
   _impl_.target_order_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     ::memset(&_impl_.num_targets_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.newest_target_is_ghost_) -
-        reinterpret_cast<char*>(&_impl_.num_targets_)) + sizeof(_impl_.newest_target_is_ghost_));
+        reinterpret_cast<char*>(&_impl_.remove_target_after_seconds_) -
+        reinterpret_cast<char*>(&_impl_.num_targets_)) + sizeof(_impl_.remove_target_after_seconds_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -5875,6 +5893,20 @@ PROTOBUF_NOINLINE void TargetDef::Clear() {
                 5, this_._internal_newest_target_is_ghost(), target);
           }
 
+          // float new_target_delay_seconds = 6;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                6, this_._internal_new_target_delay_seconds(), target);
+          }
+
+          // float remove_target_after_seconds = 7;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                7, this_._internal_remove_target_after_seconds(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -5916,7 +5948,7 @@ PROTOBUF_NOINLINE void TargetDef::Clear() {
             }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x0000001fu) {
             // int32 num_targets = 2;
             if (cached_has_bits & 0x00000001u) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
@@ -5929,6 +5961,14 @@ PROTOBUF_NOINLINE void TargetDef::Clear() {
             // bool newest_target_is_ghost = 5;
             if (cached_has_bits & 0x00000004u) {
               total_size += 2;
+            }
+            // float new_target_delay_seconds = 6;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 5;
+            }
+            // float remove_target_after_seconds = 7;
+            if (cached_has_bits & 0x00000010u) {
+              total_size += 5;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -5947,7 +5987,7 @@ void TargetDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::googl
       from._internal_profiles());
   _this->_internal_mutable_target_order()->MergeFrom(from._internal_target_order());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.num_targets_ = from._impl_.num_targets_;
     }
@@ -5956,6 +5996,12 @@ void TargetDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::googl
     }
     if (cached_has_bits & 0x00000004u) {
       _this->_impl_.newest_target_is_ghost_ = from._impl_.newest_target_is_ghost_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.new_target_delay_seconds_ = from._impl_.new_target_delay_seconds_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _this->_impl_.remove_target_after_seconds_ = from._impl_.remove_target_after_seconds_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -5977,8 +6023,8 @@ void TargetDef::InternalSwap(TargetDef* PROTOBUF_RESTRICT other) {
   _impl_.profiles_.InternalSwap(&other->_impl_.profiles_);
   _impl_.target_order_.InternalSwap(&other->_impl_.target_order_);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.newest_target_is_ghost_)
-      + sizeof(TargetDef::_impl_.newest_target_is_ghost_)
+      PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.remove_target_after_seconds_)
+      + sizeof(TargetDef::_impl_.remove_target_after_seconds_)
       - PROTOBUF_FIELD_OFFSET(TargetDef, _impl_.num_targets_)>(
           reinterpret_cast<char*>(&_impl_.num_targets_),
           reinterpret_cast<char*>(&other->_impl_.num_targets_));

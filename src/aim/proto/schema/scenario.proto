@@ -137,6 +137,12 @@ message TargetDef {
   // useful for forced pathing so you know where the target will be
   // but have to click in the correct order.
   bool newest_target_is_ghost = 5;
+
+  // New targets will be added after the specified amount of seconds.
+  float new_target_delay_seconds = 6;
+
+  // A target will automatically be removed after the specified amount of seconds.
+  float remove_target_after_seconds = 7;
 }
 
 message PillTargetDef {
