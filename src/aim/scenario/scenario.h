@@ -31,7 +31,7 @@ struct UpdateStateData {
 };
 
 struct DelayedTask {
-  std::function<void()> fn;
+  std::optional<std::function<void()>> fn;
   float run_time_seconds;
 };
 
