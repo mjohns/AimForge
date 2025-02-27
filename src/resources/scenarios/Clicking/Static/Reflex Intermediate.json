@@ -1,5 +1,4 @@
 {
-  "displayName": "1w1ts",
   "durationSeconds": 60,
   "room": {
     "cameraPosition": {
@@ -12,7 +11,6 @@
       "width": 170
     }
   },
-  "scenarioId": "1w1ts_intermediate_s5",
   "staticDef": {
     "targetPlacementStrategy": {
       "minDistance": 20,
@@ -49,6 +47,7 @@
         "targetRadius": 1.5
       }
     ],
+    "newTargetDelaySeconds": 0.5,
     "removeClosestOnMiss": true
   }
 }

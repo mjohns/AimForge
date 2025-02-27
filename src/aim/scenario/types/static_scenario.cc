@@ -64,7 +64,6 @@ class StaticScenario : public Scenario {
 
             auto hit_target_id = *maybe_hit_target_id;
             AddNewTargetDuringRun(hit_target_id);
-            AddKillTargetEvent(hit_target_id);
 
             current_poke_target_id_ = {};
             current_poke_start_time_micros_ = 0;
@@ -91,7 +90,6 @@ class StaticScenario : public Scenario {
 
           auto hit_target_id = *maybe_hit_target_id;
           AddNewTargetDuringRun(hit_target_id);
-          AddKillTargetEvent(hit_target_id);
 
         } else {
           // Missed shot
@@ -99,8 +97,7 @@ class StaticScenario : public Scenario {
             std::optional<u16> target_id_to_remove =
                 target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
             if (target_id_to_remove.has_value()) {
-              AddNewTargetDuringRun(*target_id_to_remove);
-              AddRemoveTargetEvent(*target_id_to_remove);
+              AddNewTargetDuringRun(*target_id_to_remove, /*is_kill=*/false);
             }
           }
         }
@@ -137,14 +134,29 @@ class StaticScenario : public Scenario {
     return t;
   }
 
-  void AddNewTargetDuringRun(u16 old_target_id) {
+  void AddNewTargetDuringRun(u16 old_target_id, bool is_kill = true) {
     Target target = GetNewTarget();
     if (def_.target_def().newest_target_is_ghost()) {
       target_manager_.MarkAllAsNonGhost();
       target.is_ghost = true;
     }
-    target = target_manager_.ReplaceTarget(old_target_id, target);
-    AddNewTargetEvent(target);
+
+    if (def_.target_def().has_new_target_delay_seconds()) {
+      target_manager_.RemoveTarget(old_target_id);
+      RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
+        Target new_target = target_manager_.AddTarget(target);
+        AddNewTargetEvent(new_target);
+      });
+    } else {
+      target = target_manager_.ReplaceTarget(old_target_id, target);
+      AddNewTargetEvent(target);
+    }
+
+    if (is_kill) {
+      AddKillTargetEvent(old_target_id);
+    } else {
+      AddRemoveTargetEvent(old_target_id);
+    }
   }
 
   std::optional<u16> current_poke_target_id_;

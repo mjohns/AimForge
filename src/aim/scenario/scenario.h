@@ -2,6 +2,7 @@
 
 #include <glm/vec3.hpp>
 #include <optional>
+#include <functional>
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
@@ -29,8 +30,9 @@ struct UpdateStateData {
   bool force_render = false;
 };
 
-struct ScenarioRunResult {
-  bool restart_scenario = false;
+struct DelayedTask {
+  std::function<void()> fn;
+  float run_time_seconds;
 };
 
 class Scenario {
@@ -51,6 +53,8 @@ class Scenario {
   virtual void UpdateState(UpdateStateData* data) = 0;
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
+
+  void RunAfterSeconds(float delay_seconds, std::function<void()>&& fn);
 
   // Replay recording methods
   void AddNewTargetEvent(const Target& target);
@@ -92,6 +96,7 @@ class Scenario {
   Settings settings_;
   i64 stats_id_ = 0;
   bool is_done_ = false;
+  std::vector<DelayedTask> delayed_tasks_;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);

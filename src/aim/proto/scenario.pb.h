@@ -3231,6 +3231,8 @@ class TargetDef final : public ::google::protobuf::Message
     kNumTargetsFieldNumber = 2,
     kRemoveClosestOnMissFieldNumber = 3,
     kNewestTargetIsGhostFieldNumber = 5,
+    kNewTargetDelaySecondsFieldNumber = 6,
+    kRemoveTargetAfterSecondsFieldNumber = 7,
   };
   // repeated .aim.TargetProfile profiles = 1;
   int profiles_size() const;
@@ -3300,12 +3302,34 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_newest_target_is_ghost(bool value);
 
   public:
+  // float new_target_delay_seconds = 6;
+  bool has_new_target_delay_seconds() const;
+  void clear_new_target_delay_seconds() ;
+  float new_target_delay_seconds() const;
+  void set_new_target_delay_seconds(float value);
+
+  private:
+  float _internal_new_target_delay_seconds() const;
+  void _internal_set_new_target_delay_seconds(float value);
+
+  public:
+  // float remove_target_after_seconds = 7;
+  bool has_remove_target_after_seconds() const;
+  void clear_remove_target_after_seconds() ;
+  float remove_target_after_seconds() const;
+  void set_remove_target_after_seconds(float value);
+
+  private:
+  float _internal_remove_target_after_seconds() const;
+  void _internal_set_remove_target_after_seconds(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 1,
+      3, 7, 1,
       0, 2>
       _table_;
 
@@ -3331,6 +3355,8 @@ class TargetDef final : public ::google::protobuf::Message
     ::int32_t num_targets_;
     bool remove_closest_on_miss_;
     bool newest_target_is_ghost_;
+    float new_target_delay_seconds_;
+    float remove_target_after_seconds_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -7234,6 +7260,62 @@ inline bool TargetDef::_internal_newest_target_is_ghost() const {
 inline void TargetDef::_internal_set_newest_target_is_ghost(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.newest_target_is_ghost_ = value;
+}
+
+// float new_target_delay_seconds = 6;
+inline bool TargetDef::has_new_target_delay_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void TargetDef::clear_new_target_delay_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.new_target_delay_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float TargetDef::new_target_delay_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.new_target_delay_seconds)
+  return _internal_new_target_delay_seconds();
+}
+inline void TargetDef::set_new_target_delay_seconds(float value) {
+  _internal_set_new_target_delay_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.TargetDef.new_target_delay_seconds)
+}
+inline float TargetDef::_internal_new_target_delay_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.new_target_delay_seconds_;
+}
+inline void TargetDef::_internal_set_new_target_delay_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.new_target_delay_seconds_ = value;
+}
+
+// float remove_target_after_seconds = 7;
+inline bool TargetDef::has_remove_target_after_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void TargetDef::clear_remove_target_after_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_target_after_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float TargetDef::remove_target_after_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.remove_target_after_seconds)
+  return _internal_remove_target_after_seconds();
+}
+inline void TargetDef::set_remove_target_after_seconds(float value) {
+  _internal_set_remove_target_after_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.TargetDef.remove_target_after_seconds)
+}
+inline float TargetDef::_internal_remove_target_after_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_target_after_seconds_;
+}
+inline void TargetDef::_internal_set_remove_target_after_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_target_after_seconds_ = value;
 }
 
 // -------------------------------------------------------------------

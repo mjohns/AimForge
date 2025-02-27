@@ -53,6 +53,21 @@ NavigationEvent Scenario::Run() {
   return Resume();
 }
 
+void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) {
+  for (auto& task : delayed_tasks_) {
+    if (!task.fn) {
+      task.fn = std::move(fn);
+      task.run_time_seconds = timer_.GetElapsedSeconds() + delay_seconds;
+      return;
+    }
+  }
+
+  delayed_tasks_.push_back({});
+  DelayedTask& task = delayed_tasks_.back();
+  task.fn = std::move(fn);
+  task.run_time_seconds = timer_.GetElapsedSeconds() + delay_seconds;
+}
+
 void Scenario::RefreshState() {
   SDL_GL_SetSwapInterval(0);  // Disable vsync
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
@@ -186,6 +201,13 @@ NavigationEvent Scenario::Resume() {
     look_at_ = camera_.GetLookAt();
 
     update_data.is_click_held = is_click_held_;
+    for (auto& task : delayed_tasks_) {
+      if (task.fn && task.run_time_seconds < timer_.GetElapsedSeconds()) {
+        task.fn();
+        task.fn = {};
+        task.run_time_seconds = -1;
+      }
+    }
     UpdateState(&update_data);
     num_state_updates_++;
 
