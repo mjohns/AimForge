@@ -58,7 +58,8 @@ inline constexpr ScenarioReferenceOverrides::Impl_::Impl_(
       : _cached_size_{0},
         duration_seconds_{0},
         target_radius_multiplier_{0},
-        num_targets_{0} {}
+        num_targets_{0},
+        speed_multiplier_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR ScenarioReferenceOverrides::ScenarioReferenceOverrides(::_pbi::ConstantInitialized)
@@ -646,9 +647,11 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.duration_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.target_radius_multiplier_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.num_targets_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.speed_multiplier_),
         0,
         1,
         2,
+        3,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -770,14 +773,14 @@ static const ::_pbi::MigrationSchema
         {94, 104, -1, sizeof(::aim::RectangleTargetRegion)},
         {106, 116, -1, sizeof(::aim::EllipseTargetRegion)},
         {118, 131, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {136, 147, -1, sizeof(::aim::ScenarioReferenceOverrides)},
-        {150, 168, -1, sizeof(::aim::ScenarioDef)},
-        {177, 187, -1, sizeof(::aim::StaticScenarioDef)},
-        {189, 199, -1, sizeof(::aim::CenteringScenarioDef)},
-        {201, -1, -1, sizeof(::aim::BarrelScenarioDef)},
-        {209, 222, -1, sizeof(::aim::TargetDef)},
-        {227, 236, -1, sizeof(::aim::PillTargetDef)},
-        {237, 252, -1, sizeof(::aim::TargetProfile)},
+        {136, 148, -1, sizeof(::aim::ScenarioReferenceOverrides)},
+        {152, 170, -1, sizeof(::aim::ScenarioDef)},
+        {179, 189, -1, sizeof(::aim::StaticScenarioDef)},
+        {191, 201, -1, sizeof(::aim::CenteringScenarioDef)},
+        {203, -1, -1, sizeof(::aim::BarrelScenarioDef)},
+        {211, 224, -1, sizeof(::aim::TargetDef)},
+        {229, 238, -1, sizeof(::aim::PillTargetDef)},
+        {239, 254, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -829,33 +832,34 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "gion\022\024\n\014region_order\030\002 \003(\005\022\024\n\014min_distan"
     "ce\030\003 \001(\002\022\'\n\037fixed_distance_from_last_tar"
     "get\030\004 \001(\002\022\035\n\025fixed_distance_jitter\030\005 \001(\002"
-    "\"m\n\032ScenarioReferenceOverrides\022\030\n\020durati"
-    "on_seconds\030\001 \001(\002\022 \n\030target_radius_multip"
-    "lier\030\002 \001(\002\022\023\n\013num_targets\030\003 \001(\005\"\330\002\n\013Scen"
-    "arioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration"
-    "_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022"
-    "\"\n\ntarget_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n\tr"
-    "eference\030\006 \001(\t\0222\n\toverrides\030\007 \001(\0132\037.aim."
-    "ScenarioReferenceOverrides\022,\n\nstatic_def"
-    "\030\n \001(\0132\026.aim.StaticScenarioDefH\000\0222\n\rcent"
-    "ering_def\030\013 \001(\0132\031.aim.CenteringScenarioD"
-    "efH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim.BarrelSce"
-    "narioDefH\000B\006\n\004type\"j\n\021StaticScenarioDef\022"
-    "\024\n\014is_poke_ball\030\001 \001(\010\022\?\n\031target_placemen"
-    "t_strategy\030\002 \001(\0132\034.aim.TargetPlacementSt"
-    "rategy\"f\n\024CenteringScenarioDef\022\'\n\016start_"
-    "position\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014end_p"
-    "osition\030\002 \001(\0132\017.aim.StoredVec3\"\023\n\021Barrel"
-    "ScenarioDef\"\234\001\n\tTargetDef\022$\n\010profiles\030\001 "
-    "\003(\0132\022.aim.TargetProfile\022\023\n\013num_targets\030\002"
-    " \001(\005\022\036\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014"
-    "target_order\030\004 \003(\005\022\036\n\026newest_target_is_g"
-    "host\030\005 \001(\010\"\037\n\rPillTargetDef\022\016\n\006height\030\001 "
-    "\001(\002\"\255\001\n\rTargetProfile\022\026\n\016percent_chance\030"
-    "\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_r"
-    "adius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014spe"
-    "ed_jitter\030\005 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.Pill"
-    "TargetDefH\000B\006\n\004typeb\010editionsp\350\007"
+    "\"\207\001\n\032ScenarioReferenceOverrides\022\030\n\020durat"
+    "ion_seconds\030\001 \001(\002\022 \n\030target_radius_multi"
+    "plier\030\002 \001(\002\022\023\n\013num_targets\030\003 \001(\005\022\030\n\020spee"
+    "d_multiplier\030\004 \001(\002\"\330\002\n\013ScenarioDef\022\023\n\013sc"
+    "enario_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001("
+    "\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarget_def"
+    "\030\005 \001(\0132\016.aim.TargetDef\022\021\n\treference\030\006 \001("
+    "\t\0222\n\toverrides\030\007 \001(\0132\037.aim.ScenarioRefer"
+    "enceOverrides\022,\n\nstatic_def\030\n \001(\0132\026.aim."
+    "StaticScenarioDefH\000\0222\n\rcentering_def\030\013 \001"
+    "(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nbarre"
+    "l_def\030\014 \001(\0132\026.aim.BarrelScenarioDefH\000B\006\n"
+    "\004type\"j\n\021StaticScenarioDef\022\024\n\014is_poke_ba"
+    "ll\030\001 \001(\010\022\?\n\031target_placement_strategy\030\002 "
+    "\001(\0132\034.aim.TargetPlacementStrategy\"f\n\024Cen"
+    "teringScenarioDef\022\'\n\016start_position\030\001 \001("
+    "\0132\017.aim.StoredVec3\022%\n\014end_position\030\002 \001(\013"
+    "2\017.aim.StoredVec3\"\023\n\021BarrelScenarioDef\"\234"
+    "\001\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.Tar"
+    "getProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remov"
+    "e_closest_on_miss\030\003 \001(\010\022\024\n\014target_order\030"
+    "\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\"\037\n"
+    "\rPillTargetDef\022\016\n\006height\030\001 \001(\002\"\255\001\n\rTarge"
+    "tProfile\022\026\n\016percent_chance\030\001 \001(\002\022\025\n\rtarg"
+    "et_radius\030\002 \001(\002\022\034\n\024target_radius_jitter\030"
+    "\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001"
+    "(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006"
+    "\n\004typeb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -865,7 +869,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2232,
+    2259,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -4020,9 +4024,9 @@ inline void ScenarioReferenceOverrides::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, duration_seconds_),
            0,
-           offsetof(Impl_, num_targets_) -
+           offsetof(Impl_, speed_multiplier_) -
                offsetof(Impl_, duration_seconds_) +
-               sizeof(Impl_::num_targets_));
+               sizeof(Impl_::speed_multiplier_));
 }
 ScenarioReferenceOverrides::~ScenarioReferenceOverrides() {
   // @@protoc_insertion_point(destructor:aim.ScenarioReferenceOverrides)
@@ -4071,15 +4075,15 @@ const ::google::protobuf::internal::ClassData* ScenarioReferenceOverrides::GetCl
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 0, 2> ScenarioReferenceOverrides::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 0, 0, 2> ScenarioReferenceOverrides::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    4,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -4089,7 +4093,9 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> ScenarioReferenceOverrides::_table_ = 
     ::_pbi::TcParser::GetTable<::aim::ScenarioReferenceOverrides>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // float speed_multiplier = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.speed_multiplier_)}},
     // float duration_seconds = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.duration_seconds_)}},
@@ -4111,6 +4117,9 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> ScenarioReferenceOverrides::_table_ = 
     // int32 num_targets = 3;
     {PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.num_targets_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // float speed_multiplier = 4;
+    {PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.speed_multiplier_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
   {{
@@ -4125,10 +4134,10 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000000fu) {
     ::memset(&_impl_.duration_seconds_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.num_targets_) -
-        reinterpret_cast<char*>(&_impl_.duration_seconds_)) + sizeof(_impl_.num_targets_));
+        reinterpret_cast<char*>(&_impl_.speed_multiplier_) -
+        reinterpret_cast<char*>(&_impl_.duration_seconds_)) + sizeof(_impl_.speed_multiplier_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -4171,6 +4180,13 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
                     stream, this_._internal_num_targets(), target);
           }
 
+          // float speed_multiplier = 4;
+          if (cached_has_bits & 0x00000008u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_speed_multiplier(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -4196,7 +4212,7 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x0000000fu) {
             // float duration_seconds = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
@@ -4209,6 +4225,10 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
             if (cached_has_bits & 0x00000004u) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_num_targets());
+            }
+            // float speed_multiplier = 4;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 5;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -4224,7 +4244,7 @@ void ScenarioReferenceOverrides::MergeImpl(::google::protobuf::MessageLite& to_m
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
     }
@@ -4233,6 +4253,9 @@ void ScenarioReferenceOverrides::MergeImpl(::google::protobuf::MessageLite& to_m
     }
     if (cached_has_bits & 0x00000004u) {
       _this->_impl_.num_targets_ = from._impl_.num_targets_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.speed_multiplier_ = from._impl_.speed_multiplier_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -4252,8 +4275,8 @@ void ScenarioReferenceOverrides::InternalSwap(ScenarioReferenceOverrides* PROTOB
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.num_targets_)
-      + sizeof(ScenarioReferenceOverrides::_impl_.num_targets_)
+      PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.speed_multiplier_)
+      + sizeof(ScenarioReferenceOverrides::_impl_.speed_multiplier_)
       - PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.duration_seconds_)>(
           reinterpret_cast<char*>(&_impl_.duration_seconds_),
           reinterpret_cast<char*>(&other->_impl_.duration_seconds_));
