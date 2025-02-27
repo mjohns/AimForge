@@ -43,6 +43,9 @@ class ScenarioManager {
   }
 
  private:
+  std::optional<ScenarioDef> GetScenario(const std::string& scenario_id, int depth);
+  std::optional<ScenarioDef> GetScenarioNoReferenceFollow(const std::string& scenario_id);
+
   std::vector<ScenarioItem> scenarios_;
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   std::filesystem::path base_scenario_dir_;
