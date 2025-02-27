@@ -104,6 +104,8 @@ message ScenarioDef {
   string reference = 6;
   ScenarioReferenceOverrides overrides = 7;
 
+  bool is_poke = 8;
+
   oneof type {
     StaticScenarioDef static_def = 10;
     CenteringScenarioDef centering_def = 11;
@@ -112,8 +114,7 @@ message ScenarioDef {
 }
 
 message StaticScenarioDef {
-  bool is_poke_ball = 1;
-  TargetPlacementStrategy target_placement_strategy = 2;
+  TargetPlacementStrategy target_placement_strategy = 1;
 }
 
 message CenteringScenarioDef {

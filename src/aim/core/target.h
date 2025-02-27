@@ -16,6 +16,7 @@ struct Target {
   glm::vec3 position{};
   // Used on cylindrical wall scenarios where the flat wall position is curved onto the cylindrical
   // wall.
+  bool is_wall_target = false;
   glm::vec2 static_wall_position{};
   float radius = 1.0f;
   float height = 3.0f;

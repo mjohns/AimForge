@@ -1,0 +1,140 @@
+#include "base_scenario.h"
+
+#include <glm/gtc/constants.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/trigonometric.hpp>
+#include <glm/vec3.hpp>
+#include <memory>
+#include <random>
+
+#include "aim/common/geometry.h"
+#include "aim/common/times.h"
+#include "aim/common/util.h"
+#include "aim/core/application.h"
+#include "aim/scenario/scenario.h"
+#include "aim/scenario/target_placement.h"
+
+namespace aim {
+namespace {
+constexpr u64 kPokeBallKillTimeMillis = 50;
+}  // namespace
+
+void BaseScenario::Initialize() {
+  int num_targets = def_.target_def().num_targets();
+  for (int i = 0; i < num_targets; ++i) {
+    Target target = GetNewTarget();
+    if (def_.target_def().newest_target_is_ghost() && i == (num_targets - 1)) {
+      target.is_ghost = true;
+    }
+    target = target_manager_.AddTarget(target);
+    AddNewTargetEvent(target);
+  }
+}
+
+void BaseScenario::UpdateState(UpdateStateData* data) {
+  HandleClickHits(data);
+  UpdateTargetPositions();
+}
+
+void BaseScenario::HandleClickHits(UpdateStateData* data) {
+  if (def_.is_poke()) {
+    auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+    if (maybe_hit_target_id.has_value()) {
+      u16 hit_target_id = *maybe_hit_target_id;
+      bool is_hitting_current_target =
+          current_poke_target_id_.has_value() && *(current_poke_target_id_) == hit_target_id;
+      if (is_hitting_current_target) {
+        // Still targeting the correct target.
+        // Has enough time elapsed to kill target?
+        u64 now_micros = timer_.GetElapsedMicros();
+        u64 age_micros = now_micros - current_poke_start_time_micros_;
+        u64 min_age_micros = kPokeBallKillTimeMillis * 1000;
+        if (age_micros >= min_age_micros) {
+          stats_.targets_hit++;
+          stats_.shots_taken++;
+          PlayKillSound();
+          data->force_render = true;
+
+          auto hit_target_id = *maybe_hit_target_id;
+          AddNewTargetDuringRun(hit_target_id);
+
+          current_poke_target_id_ = {};
+          current_poke_start_time_micros_ = 0;
+        }
+      } else {
+        // Starting time on new target.
+        current_poke_target_id_ = hit_target_id;
+        current_poke_start_time_micros_ = timer_.GetElapsedMicros();
+      }
+    } else {
+      // No current target. Clear.
+      current_poke_target_id_ = {};
+      current_poke_start_time_micros_ = 0;
+    }
+  } else {
+    if (data->has_click) {
+      stats_.shots_taken++;
+      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+      PlayShootSound();
+      if (maybe_hit_target_id.has_value()) {
+        stats_.targets_hit++;
+        PlayKillSound();
+        data->force_render = true;
+
+        auto hit_target_id = *maybe_hit_target_id;
+        AddNewTargetDuringRun(hit_target_id);
+
+      } else {
+        // Missed shot
+        if (def_.target_def().remove_closest_on_miss()) {
+          std::optional<u16> target_id_to_remove =
+              target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
+          if (target_id_to_remove.has_value()) {
+            AddNewTargetDuringRun(*target_id_to_remove, /*is_kill=*/false);
+          }
+        }
+      }
+    }
+  }
+}
+
+Target BaseScenario::GetNewTarget() {
+  Target t = GetTargetTemplate(GetNextTargetProfile());
+  FillInNewTarget(&t);
+  return t;
+}
+
+void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
+  Target target = GetNewTarget();
+  if (def_.target_def().newest_target_is_ghost()) {
+    target_manager_.MarkAllAsNonGhost();
+    target.is_ghost = true;
+  }
+
+  if (def_.target_def().has_new_target_delay_seconds()) {
+    target_manager_.RemoveTarget(old_target_id);
+    RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
+      Target new_target = target_manager_.AddWallTarget(target);
+      AddNewTargetEvent(new_target);
+    });
+  } else {
+    target_manager_.RemoveTarget(old_target_id);
+    target = target_manager_.AddWallTarget(target);
+    AddNewTargetEvent(target);
+  }
+
+  if (is_kill) {
+    AddKillTargetEvent(old_target_id);
+  } else {
+    AddRemoveTargetEvent(old_target_id);
+  }
+
+  if (target.wall_direction.has_value()) {
+    AddMoveLinearTargetEvent(target, *target.wall_direction, target.speed);
+  }
+  if (target.direction.has_value()) {
+    AddMoveLinearTargetEvent(target, *target.direction, target.speed);
+  }
+}
+
+}  // namespace aim

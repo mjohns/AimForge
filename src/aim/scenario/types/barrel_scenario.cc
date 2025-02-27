@@ -18,39 +18,37 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/base_scenario.h"
 
 namespace aim {
 namespace {
 
-class BarrelScenario : public Scenario {
+class BarrelScenario : public BaseScenario {
  public:
   explicit BarrelScenario(const ScenarioDef& def, Application* app)
-      : Scenario(def, app), room_radius_(def.room().barrel_room().radius()) {}
+      : BaseScenario(def, app), room_radius_(def.room().barrel_room().radius()) {}
 
  protected:
-  void Initialize() override {
-    int num_targets = def_.target_def().num_targets();
-    for (int i = 0; i < num_targets; ++i) {
-      AddNewTarget();
-    }
+  void FillInNewTarget(Target* target) override {
+    // Get position on wall (not too close in ellipse etc.)
+    // Get movement direction vector and speed.
+    glm::vec2 pos = GetRandomPositionInCircle(
+        0.4 * room_radius_, room_radius_ - target->radius, app_->random_generator());
+    // Iterate and make sure no overlapping?
+    glm::vec2 direction_pos =
+        GetRandomPositionInCircle(0, 0.45 * room_radius_, app_->random_generator());
+
+    // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
+    glm::vec2 direction = glm::normalize(direction_pos - pos);
+
+    target->static_wall_position = pos;
+    target->wall_direction = direction;
+    target->is_wall_target = true;
   }
 
-  void UpdateState(UpdateStateData* data) override {
-    if (data->has_click) {
-      stats_.shots_taken++;
-      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-      PlayShootSound();
-      if (maybe_hit_target_id.has_value()) {
-        stats_.targets_hit++;
-        PlayKillSound();
-        data->force_render = true;
-
-        auto hit_target_id = *maybe_hit_target_id;
-        AddNewTarget(hit_target_id);
-      }
-    }
-
+  void UpdateTargetPositions() override {
     float now_seconds = timer_.GetElapsedSeconds();
+    // Determine if the targets need to change direction.
     for (Target* t : target_manager_.GetMutableVisibleTargets()) {
       glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*t, now_seconds);
       if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
@@ -67,34 +65,6 @@ class BarrelScenario : public Scenario {
   }
 
  private:
-  Target AddNewTarget(std::optional<u16> target_to_replace = {}) {
-    auto type = GetNextTargetProfile();
-    Target t = GetTargetTemplate(type);
-
-    // Get position on wall (not too close in ellipse etc.)
-    // Get movement direction vector and speed.
-    glm::vec2 pos = GetRandomPositionInCircle(
-        0.4 * room_radius_, room_radius_ - t.radius, app_->random_generator());
-    // Iterate and make sure no overlapping?
-    glm::vec2 direction_pos =
-        GetRandomPositionInCircle(0, 0.45 * room_radius_, app_->random_generator());
-
-    // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
-    glm::vec2 direction = glm::normalize(direction_pos - pos);
-
-    t.static_wall_position = pos;
-    t.wall_direction = direction;
-
-    if (target_to_replace.has_value()) {
-      AddKillTargetEvent(*target_to_replace);
-      target_manager_.RemoveTarget(*target_to_replace);
-    }
-    t = target_manager_.AddWallTarget(t);
-
-    AddNewTargetEvent(t);
-    AddMoveLinearTargetEvent(t, *t.wall_direction, t.speed);
-    return t;
-  }
 
   const float room_radius_;
 };
