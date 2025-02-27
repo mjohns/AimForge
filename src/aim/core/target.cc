@@ -17,7 +17,6 @@ Target TargetManager::AddTarget(Target t) {
     t.id = new_id;
   }
 
-  most_recently_added_target_id_ = t.id;
   // Try to overwrite a hidden target.
   for (int i = 0; i < targets_.size(); ++i) {
     if (targets_[i].hidden) {
