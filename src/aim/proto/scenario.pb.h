@@ -485,6 +485,7 @@ class ScenarioReferenceOverrides final : public ::google::protobuf::Message
     kDurationSecondsFieldNumber = 1,
     kTargetRadiusMultiplierFieldNumber = 2,
     kNumTargetsFieldNumber = 3,
+    kSpeedMultiplierFieldNumber = 4,
   };
   // float duration_seconds = 1;
   bool has_duration_seconds() const;
@@ -519,12 +520,23 @@ class ScenarioReferenceOverrides final : public ::google::protobuf::Message
   void _internal_set_num_targets(::int32_t value);
 
   public:
+  // float speed_multiplier = 4;
+  bool has_speed_multiplier() const;
+  void clear_speed_multiplier() ;
+  float speed_multiplier() const;
+  void set_speed_multiplier(float value);
+
+  private:
+  float _internal_speed_multiplier() const;
+  void _internal_set_speed_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioReferenceOverrides)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 0,
+      2, 4, 0,
       0, 2>
       _table_;
 
@@ -547,6 +559,7 @@ class ScenarioReferenceOverrides final : public ::google::protobuf::Message
     float duration_seconds_;
     float target_radius_multiplier_;
     ::int32_t num_targets_;
+    float speed_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5989,6 +6002,34 @@ inline ::int32_t ScenarioReferenceOverrides::_internal_num_targets() const {
 inline void ScenarioReferenceOverrides::_internal_set_num_targets(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.num_targets_ = value;
+}
+
+// float speed_multiplier = 4;
+inline bool ScenarioReferenceOverrides::has_speed_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void ScenarioReferenceOverrides::clear_speed_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float ScenarioReferenceOverrides::speed_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioReferenceOverrides.speed_multiplier)
+  return _internal_speed_multiplier();
+}
+inline void ScenarioReferenceOverrides::set_speed_multiplier(float value) {
+  _internal_set_speed_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioReferenceOverrides.speed_multiplier)
+}
+inline float ScenarioReferenceOverrides::_internal_speed_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.speed_multiplier_;
+}
+inline void ScenarioReferenceOverrides::_internal_set_speed_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------

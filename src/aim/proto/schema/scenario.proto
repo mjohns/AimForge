@@ -91,6 +91,7 @@ message ScenarioReferenceOverrides {
   float duration_seconds = 1;
   float target_radius_multiplier = 2;
   int32 num_targets = 3;
+  float speed_multiplier = 4;
 }
 
 message ScenarioDef {

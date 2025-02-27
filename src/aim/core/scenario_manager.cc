@@ -150,6 +150,11 @@ std::optional<ScenarioDef> ScenarioManager::GetScenario(const std::string& scena
                                   scenario->overrides().target_radius_multiplier());
       }
     }
+    if (scenario->overrides().has_speed_multiplier()) {
+      for (auto& profile : *resolved.mutable_target_def()->mutable_profiles()) {
+        profile.set_speed(profile.speed() * scenario->overrides().speed_multiplier());
+      }
+    }
   }
   return resolved;
 }
