@@ -93,10 +93,15 @@ NavigationEvent Scenario::Resume() {
 
   RefreshState();
 
+  u64 loop_count = 0;
   bool stop_scenario = false;
   bool is_adjusting_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
   while (!stop_scenario) {
+    loop_count++;
+    if (loop_count % 50000 == 0) {
+      state_updates_per_second_ = (num_state_updates_ / timer_.GetElapsedSeconds()) / 1000.0;
+    }
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
       return NavigationEvent::Done();
@@ -227,13 +232,12 @@ NavigationEvent Scenario::Resume() {
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("ups: %.1fk", state_updates_per_second_);
     ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
     if (settings_.metronome_bpm() > 0) {
       ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     }
 
-    // ~ Around 450k
-    // ImGui::Text("ups: %.1f", num_state_updates_ / timer_.GetElapsedSeconds());
 
     ImGui::End();
 
