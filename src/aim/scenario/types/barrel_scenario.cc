@@ -41,9 +41,8 @@ class BarrelScenario : public BaseScenario {
     // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
     glm::vec2 direction = glm::normalize(direction_pos - pos);
 
-    target->static_wall_position = pos;
+    target->wall_position = pos;
     target->wall_direction = direction;
-    target->is_wall_target = true;
   }
 
   void UpdateTargetPositions() override {

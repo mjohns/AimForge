@@ -14,10 +14,7 @@ namespace aim {
 struct Target {
   u16 id = 0;
   glm::vec3 position{};
-  // Used on cylindrical wall scenarios where the flat wall position is curved onto the cylindrical
-  // wall.
-  bool is_wall_target = false;
-  glm::vec2 static_wall_position{};
+  std::optional<glm::vec2> wall_position;
   float radius = 1.0f;
   float height = 3.0f;
 
@@ -50,8 +47,6 @@ class TargetManager {
   explicit TargetManager(const Room& room) : room_(room) {}
 
   Target AddTarget(Target t);
-  Target AddWallTarget(Target t);
-
   void RemoveTarget(u16 target_id);
 
   void UpdateTargetPositions(float now_seconds);

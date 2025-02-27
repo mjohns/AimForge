@@ -9,8 +9,8 @@
 namespace aim {
 
 Target TargetManager::AddTarget(Target t) {
-  if (t.is_wall_target) {
-    t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
+  if (t.wall_position.has_value()) {
+    t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_);
   }
   if (t.id == 0) {
     auto new_id = ++target_id_counter_;
@@ -27,11 +27,6 @@ Target TargetManager::AddTarget(Target t) {
   }
   targets_.push_back(t);
   return t;
-}
-
-Target TargetManager::AddWallTarget(Target t) {
-  t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
-  return AddTarget(t);
 }
 
 Target* TargetManager::GetMutableTarget(u16 target_id) {
@@ -73,8 +68,8 @@ void TargetManager::UpdateTargetPositions(float now_seconds) {
       t.position = GetUpdatedPosition(t, now_seconds);
     }
     if (t.wall_direction.has_value()) {
-      t.static_wall_position = GetUpdatedWallPosition(t, now_seconds);
-      t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
+      t.wall_position = GetUpdatedWallPosition(t, now_seconds);
+      t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_);
     }
     t.last_update_time_seconds = now_seconds;
   }
@@ -91,9 +86,9 @@ glm::vec3 TargetManager::GetUpdatedPosition(const Target& target, float now_seco
 glm::vec2 TargetManager::GetUpdatedWallPosition(const Target& target, float now_seconds) {
   if (target.wall_direction.has_value()) {
     float delta_seconds = now_seconds - target.last_update_time_seconds;
-    return target.static_wall_position + (*target.wall_direction * (delta_seconds * target.speed));
+    return *target.wall_position + (*target.wall_direction * (delta_seconds * target.speed));
   }
-  return target.static_wall_position;
+  return *target.wall_position;
 }
 
 std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,

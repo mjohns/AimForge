@@ -45,7 +45,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   bool AreNoneWithinDistanceOnWall(const glm::vec2& p, float min_distance) {
     for (auto& target : target_manager_->GetTargets()) {
       if (target.ShouldDraw()) {
-        float distance = glm::length(p - target.static_wall_position);
+        float distance = glm::length(p - *target.wall_position);
         float actual_min_distance = min_distance > 0 ? min_distance : target.radius * 2;
         if (distance < actual_min_distance) {
           return false;
@@ -130,9 +130,9 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
                                       app_->random_generator());
     // This can't just drop the y component and take x,z from world position because for circular
     // walls we wrap the flat wall around the circle.
-    glm::vec2 dir = glm::normalize(point - most_recent_target->static_wall_position);
+    glm::vec2 dir = glm::normalize(point - *most_recent_target->wall_position);
 
-    return most_recent_target->static_wall_position + (dir * distance);
+    return *most_recent_target->wall_position + (dir * distance);
   }
 
   Wall wall_;
