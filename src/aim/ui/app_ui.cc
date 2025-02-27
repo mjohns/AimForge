@@ -14,51 +14,6 @@ class AppUiImpl : public AppUi {
  public:
   explicit AppUiImpl(Application* app) : AppUi(), app_(app) {}
 
-  bool HandlePlaylistNext() {
-    PlaylistRun* run = app_->playlist_manager()->GetMutableCurrentRun();
-    if (run == nullptr) {
-      scenario_run_option_ = ScenarioRunOption::RUN;
-      return true;
-    }
-    PlaylistItemProgress* progress = run->GetMutableCurrentPlaylistItemProgress();
-    if (progress == nullptr) {
-      return false;
-    }
-    if (progress->IsDone()) {
-      int next_index = run->current_index + 1;
-      if (!IsValidIndex(run->progress_list, next_index)) {
-        bool found_pending_item = false;
-        // Check to see if any previous item in the list is not done
-        for (int i = 0; i < run->progress_list.size(); ++i) {
-          if (!run->progress_list[i].IsDone()) {
-            next_index = i;
-            found_pending_item = true;
-            break;
-          }
-        }
-
-        if (!found_pending_item) {
-          // Playlist is done.
-          app_screen_ = AppScreen::CURRENT_PLAYLIST;
-          return false;
-        }
-      }
-      run->current_index = next_index;
-      auto scenario_id = run->progress_list[next_index].item.scenario();
-      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
-      if (!maybe_scenario.has_value()) {
-        return false;
-      }
-      current_scenario_def_ = maybe_scenario;
-      scenario_run_option_ = ScenarioRunOption::RUN;
-      return true;
-    }
-
-    // Still more attempts needed.
-    scenario_run_option_ = ScenarioRunOption::RUN;
-    return true;
-  }
-
   void Run() override {
     timer_.Start();
     while (true) {
@@ -145,8 +100,60 @@ class AppUiImpl : public AppUi {
     }
   }
 
+  bool HandlePlaylistNext() {
+    PlaylistRun* run = app_->playlist_manager()->GetMutableCurrentRun();
+    if (run == nullptr) {
+      scenario_run_option_ = ScenarioRunOption::RUN;
+      return true;
+    }
+    PlaylistItemProgress* progress = run->GetMutableCurrentPlaylistItemProgress();
+    if (progress == nullptr) {
+      return false;
+    }
+    if (progress->IsDone()) {
+      int next_index = run->current_index + 1;
+      if (!IsValidIndex(run->progress_list, next_index)) {
+        bool found_pending_item = false;
+        // Check to see if any previous item in the list is not done
+        for (int i = 0; i < run->progress_list.size(); ++i) {
+          if (!run->progress_list[i].IsDone()) {
+            next_index = i;
+            found_pending_item = true;
+            break;
+          }
+        }
+
+        if (!found_pending_item) {
+          // Playlist is done.
+          app_screen_ = AppScreen::CURRENT_PLAYLIST;
+          return false;
+        }
+      }
+      run->current_index = next_index;
+      auto scenario_id = run->progress_list[next_index].item.scenario();
+      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
+      if (!maybe_scenario.has_value()) {
+        return false;
+      }
+      current_scenario_def_ = maybe_scenario;
+      scenario_run_option_ = ScenarioRunOption::RUN;
+      return true;
+    }
+
+    // Still more attempts needed.
+    scenario_run_option_ = ScenarioRunOption::RUN;
+    return true;
+  }
+
   void DrawScreen() {
     ScreenInfo screen = app_->screen_info();
+
+    // TODO: Add top bar
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
 
     ImGui::Columns(2, "NavigationContentColumns", false);
     ImGui::SetColumnWidth(0, screen.width * 0.15);
