@@ -289,7 +289,8 @@ class AppUiImpl : public AppUi {
     for (int i = 0; i < run->playlist.def.items_size(); ++i) {
       PlaylistItemProgress& progress = run->progress_list[i];
       PlaylistItem item = run->playlist.def.items(i);
-      if (ImGui::Button(item.scenario().c_str(), sz)) {
+      std::string item_label = std::format("{}###n{}", item.scenario(), i);
+      if (ImGui::Button(item_label.c_str(), sz)) {
         auto maybe_scenario = app_->scenario_manager()->GetScenario(item.scenario());
         if (maybe_scenario.has_value()) {
           run->current_index = i;

@@ -11,7 +11,6 @@
       "z": 50
     }
   },
-  "displayName": "Overhead Centering",
   "durationSeconds": 60,
   "room": {
     "cameraPosition": {
@@ -24,14 +23,10 @@
       "width": 170
     }
   },
-  "scenarioId": "overhead_centering_test",
   "targetDef": {
     "numTargets": 1,
     "profiles": [
       {
-        "pill": {
-          "height": 20
-        },
         "speed": 45,
         "targetRadius": 1.2
       }
