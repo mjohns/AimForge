@@ -72,6 +72,7 @@ struct SettingsUpdater {
   std::string theme_name;
   std::string metronome_bpm;
   std::string crosshair_size;
+  std::string dpi;
 
  private:
   SettingsManager* settings_manager_;
