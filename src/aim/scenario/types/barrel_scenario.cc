@@ -107,10 +107,9 @@ class BarrelScenario : public Scenario {
 
     if (target_to_replace.has_value()) {
       AddKillTargetEvent(*target_to_replace);
-      t = target_manager_.ReplaceTarget(*target_to_replace, t);
-    } else {
-      t = target_manager_.AddTarget(t);
+      target_manager_.RemoveTarget(*target_to_replace);
     }
+    t = target_manager_.AddTarget(t);
 
     MovementInfo info;
     info.target_id = t.id;

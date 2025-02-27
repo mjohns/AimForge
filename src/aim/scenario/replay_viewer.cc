@@ -56,7 +56,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
 
   app->renderer()->SetProjection(projection);
 
-  TargetManager target_manager;
+  TargetManager target_manager(replay.room());
   Camera camera(replay.room().start_pitch(),
                 replay.room().start_yaw(),
                 ToVec3(replay.room().camera_position()));

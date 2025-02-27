@@ -38,7 +38,7 @@ class StaticScenario : public Scenario {
       if (def_.target_def().newest_target_is_ghost() && i == (num_targets - 1)) {
         target.is_ghost = true;
       }
-      target = target_manager_.AddTarget(target);
+      target = target_manager_.AddWallTarget(target);
       AddNewTargetEvent(target);
     }
   }
@@ -112,25 +112,6 @@ class StaticScenario : public Scenario {
         target_manager_.GetTargetProfile(def_.target_def(), app_->random_generator());
     Target t = GetTargetTemplate(profile);
     t.static_wall_position = wall_pos;
-
-    t.position.z = wall_pos.y;
-    if (def_.room().has_simple_room() || def_.room().has_barrel_room()) {
-      t.position.x = wall_pos.x;
-      t.position.z = wall_pos.y;
-      // Make sure the target does not clip through wall
-      t.position.y = -1 * (t.radius + 0.5);
-    } else if (def_.room().has_circular_room()) {
-      // Effectively wrap the wall around the perimeter of the circle.
-      float radius = def_.room().circular_room().radius();
-      // float circumference = glm::two_pi<float>() * radius;
-      float radians_per_x = 1 / radius;
-
-      glm::vec2 to_rotate(0, radius - (0.7 * t.radius));
-      glm::vec2 rotated = RotateRadians(to_rotate, -1 * wall_pos.x * radians_per_x);
-
-      t.position.x = rotated.x;
-      t.position.y = rotated.y;
-    }
     return t;
   }
 
@@ -144,11 +125,12 @@ class StaticScenario : public Scenario {
     if (def_.target_def().has_new_target_delay_seconds()) {
       target_manager_.RemoveTarget(old_target_id);
       RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
-        Target new_target = target_manager_.AddTarget(target);
+        Target new_target = target_manager_.AddWallTarget(target);
         AddNewTargetEvent(new_target);
       });
     } else {
-      target = target_manager_.ReplaceTarget(old_target_id, target);
+      target_manager_.RemoveTarget(old_target_id);
+      target = target_manager_.AddWallTarget(target);
       AddNewTargetEvent(target);
     }
 
