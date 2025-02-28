@@ -3989,6 +3989,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kTargetDefFieldNumber = 5,
     kOverridesFieldNumber = 7,
     kDurationSecondsFieldNumber = 2,
+    kIsPokeFieldNumber = 8,
     kStaticDefFieldNumber = 10,
     kCenteringDefFieldNumber = 11,
     kBarrelDefFieldNumber = 12,
@@ -4083,6 +4084,17 @@ class ScenarioDef final : public ::google::protobuf::Message
   void _internal_set_duration_seconds(float value);
 
   public:
+  // bool is_poke = 8;
+  bool has_is_poke() const;
+  void clear_is_poke() ;
+  bool is_poke() const;
+  void set_is_poke(bool value);
+
+  private:
+  bool _internal_is_poke() const;
+  void _internal_set_is_poke(bool value);
+
+  public:
   // .aim.StaticScenarioDef static_def = 10;
   bool has_static_def() const;
   private:
@@ -4152,7 +4164,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 9, 6,
+      3, 10, 6,
       52, 2>
       _table_;
 
@@ -4178,6 +4190,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::TargetDef* target_def_;
     ::aim::ScenarioReferenceOverrides* overrides_;
     float duration_seconds_;
+    bool is_poke_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -6514,6 +6527,34 @@ inline void ScenarioDef::set_allocated_overrides(::aim::ScenarioReferenceOverrid
 
   _impl_.overrides_ = reinterpret_cast<::aim::ScenarioReferenceOverrides*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.overrides)
+}
+
+// bool is_poke = 8;
+inline bool ScenarioDef::has_is_poke() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void ScenarioDef::clear_is_poke() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.is_poke_ = false;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline bool ScenarioDef::is_poke() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.is_poke)
+  return _internal_is_poke();
+}
+inline void ScenarioDef::set_is_poke(bool value) {
+  _internal_set_is_poke(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioDef.is_poke)
+}
+inline bool ScenarioDef::_internal_is_poke() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.is_poke_;
+}
+inline void ScenarioDef::_internal_set_is_poke(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.is_poke_ = value;
 }
 
 // .aim.StaticScenarioDef static_def = 10;

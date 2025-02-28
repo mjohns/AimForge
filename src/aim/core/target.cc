@@ -9,6 +9,9 @@
 namespace aim {
 
 Target TargetManager::AddTarget(Target t) {
+  if (t.is_wall_target) {
+    t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
+  }
   if (t.id == 0) {
     auto new_id = ++target_id_counter_;
     t.id = new_id;

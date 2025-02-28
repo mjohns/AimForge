@@ -1,5 +1,6 @@
 {
   "durationSeconds": 60,
+  "isPoke":  true,
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -12,7 +13,6 @@
     }
   },
   "staticDef": {
-    "isPokeBall": true,
     "targetPlacementStrategy": {
       "minDistance": 20,
       "regions": [
