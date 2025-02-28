@@ -216,6 +216,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager)
     cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
     theme_name = current_settings->theme_name();
     metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
+    dpi = MaybeIntToString(current_settings->dpi());
     crosshair_size = MaybeIntToString(current_settings->crosshair().size());
   }
 }
@@ -242,6 +243,11 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   float new_metronome_bpm = ParseFloat(metronome_bpm);
   if (new_metronome_bpm >= 0 && current_settings->metronome_bpm() != new_metronome_bpm) {
     current_settings->set_metronome_bpm(new_metronome_bpm);
+    settings_manager_->MarkDirty();
+  }
+  float new_dpi = ParseFloat(dpi);
+  if (new_dpi >= 0 && current_settings->dpi() != new_dpi) {
+    current_settings->set_dpi(new_dpi);
     settings_manager_->MarkDirty();
   }
   float new_crosshair_size = ParseFloat(crosshair_size);
