@@ -33,8 +33,7 @@ class StaticScenario : public BaseScenario {
  protected:
   void FillInNewTarget(Target* target) override {
     glm::vec2 wall_pos = wall_target_placer_->GetNextPosition();
-    target->static_wall_position = wall_pos;
-    target->is_wall_target = true;
+    target->wall_position = wall_pos;
   }
 
  private:

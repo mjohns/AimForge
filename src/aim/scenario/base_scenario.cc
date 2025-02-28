@@ -114,12 +114,12 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
   if (def_.target_def().has_new_target_delay_seconds()) {
     target_manager_.RemoveTarget(old_target_id);
     RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
-      Target new_target = target_manager_.AddWallTarget(target);
+      Target new_target = target_manager_.AddTarget(target);
       AddNewTargetEvent(new_target);
     });
   } else {
     target_manager_.RemoveTarget(old_target_id);
-    target = target_manager_.AddWallTarget(target);
+    target = target_manager_.AddTarget(target);
     AddNewTargetEvent(target);
   }
 
