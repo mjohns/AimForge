@@ -53,6 +53,33 @@ struct SimpleRoomDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleRoomDefaultTypeInternal _SimpleRoom_default_instance_;
 
+inline constexpr ShotType::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        poke_kill_time_seconds_{0},
+        type_{},
+        _oneof_case_{} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ShotType::ShotType(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct ShotTypeDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ShotTypeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ShotTypeDefaultTypeInternal() {}
+  union {
+    ShotType _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ShotTypeDefaultTypeInternal _ShotType_default_instance_;
+
 inline constexpr ScenarioReferenceOverrides::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -212,6 +239,8 @@ inline constexpr TargetProfile::Impl_::Impl_(
         target_radius_jitter_{0},
         speed_{0},
         speed_jitter_{0},
+        health_seconds_{0},
+        health_seconds_jitter_{0},
         type_{},
         _oneof_case_{} {}
 
@@ -436,8 +465,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr StaticScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        target_placement_strategy_{nullptr},
-        is_poke_ball_{false} {}
+        target_placement_strategy_{nullptr} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR StaticScenarioDef::StaticScenarioDef(::_pbi::ConstantInitialized)
@@ -471,8 +499,8 @@ inline constexpr ScenarioDef::Impl_::Impl_(
         room_{nullptr},
         target_def_{nullptr},
         overrides_{nullptr},
+        shot_type_{nullptr},
         duration_seconds_{0},
-        is_poke_{false},
         type_{},
         _oneof_case_{} {}
 
@@ -655,6 +683,25 @@ const ::uint32_t
         1,
         2,
         3,
+        PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::ShotType, _internal_metadata_),
+        ~0u,  // no _extensions_
+        PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_._oneof_case_[0]),
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
+        PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_.poke_kill_time_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_.type_),
+        ~0u,
+        ~0u,
+        ~0u,
+        ~0u,
+        0,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -669,18 +716,18 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.target_def_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.reference_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.overrides_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.is_poke_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.shot_type_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
-        5,
+        6,
         2,
         3,
         1,
         4,
-        6,
+        5,
         ~0u,
         ~0u,
         ~0u,
@@ -692,9 +739,7 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.is_poke_ball_),
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.target_placement_strategy_),
-        1,
         0,
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _internal_metadata_),
@@ -761,6 +806,8 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.health_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.health_seconds_jitter_),
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.type_),
         0,
@@ -768,6 +815,8 @@ const ::uint32_t
         2,
         3,
         4,
+        5,
+        6,
         ~0u,
 };
 
@@ -783,13 +832,14 @@ static const ::_pbi::MigrationSchema
         {106, 116, -1, sizeof(::aim::EllipseTargetRegion)},
         {118, 131, -1, sizeof(::aim::TargetPlacementStrategy)},
         {136, 148, -1, sizeof(::aim::ScenarioReferenceOverrides)},
-        {152, 171, -1, sizeof(::aim::ScenarioDef)},
-        {181, 191, -1, sizeof(::aim::StaticScenarioDef)},
-        {193, 203, -1, sizeof(::aim::CenteringScenarioDef)},
-        {205, -1, -1, sizeof(::aim::BarrelScenarioDef)},
-        {213, 228, -1, sizeof(::aim::TargetDef)},
-        {235, 244, -1, sizeof(::aim::PillTargetDef)},
-        {245, 260, -1, sizeof(::aim::TargetProfile)},
+        {152, 166, -1, sizeof(::aim::ShotType)},
+        {171, 190, -1, sizeof(::aim::ScenarioDef)},
+        {200, 209, -1, sizeof(::aim::StaticScenarioDef)},
+        {210, 220, -1, sizeof(::aim::CenteringScenarioDef)},
+        {222, -1, -1, sizeof(::aim::BarrelScenarioDef)},
+        {230, 245, -1, sizeof(::aim::TargetDef)},
+        {252, 261, -1, sizeof(::aim::PillTargetDef)},
+        {262, 279, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -802,6 +852,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_EllipseTargetRegion_default_instance_._instance,
     &::aim::_TargetPlacementStrategy_default_instance_._instance,
     &::aim::_ScenarioReferenceOverrides_default_instance_._instance,
+    &::aim::_ShotType_default_instance_._instance,
     &::aim::_ScenarioDef_default_instance_._instance,
     &::aim::_StaticScenarioDef_default_instance_._instance,
     &::aim::_CenteringScenarioDef_default_instance_._instance,
@@ -844,33 +895,38 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\"\207\001\n\032ScenarioReferenceOverrides\022\030\n\020durat"
     "ion_seconds\030\001 \001(\002\022 \n\030target_radius_multi"
     "plier\030\002 \001(\002\022\023\n\013num_targets\030\003 \001(\005\022\030\n\020spee"
-    "d_multiplier\030\004 \001(\002\"\351\002\n\013ScenarioDef\022\023\n\013sc"
-    "enario_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001("
-    "\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarget_def"
-    "\030\005 \001(\0132\016.aim.TargetDef\022\021\n\treference\030\006 \001("
-    "\t\0222\n\toverrides\030\007 \001(\0132\037.aim.ScenarioRefer"
-    "enceOverrides\022\017\n\007is_poke\030\010 \001(\010\022,\n\nstatic"
-    "_def\030\n \001(\0132\026.aim.StaticScenarioDefH\000\0222\n\r"
-    "centering_def\030\013 \001(\0132\031.aim.CenteringScena"
-    "rioDefH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim.Barre"
-    "lScenarioDefH\000B\006\n\004type\"j\n\021StaticScenario"
-    "Def\022\024\n\014is_poke_ball\030\001 \001(\010\022\?\n\031target_plac"
-    "ement_strategy\030\002 \001(\0132\034.aim.TargetPlaceme"
-    "ntStrategy\"f\n\024CenteringScenarioDef\022\'\n\016st"
-    "art_position\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014e"
-    "nd_position\030\002 \001(\0132\017.aim.StoredVec3\"\023\n\021Ba"
-    "rrelScenarioDef\"\343\001\n\tTargetDef\022$\n\010profile"
-    "s\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013num_targe"
-    "ts\030\002 \001(\005\022\036\n\026remove_closest_on_miss\030\003 \001(\010"
-    "\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_target_"
-    "is_ghost\030\005 \001(\010\022 \n\030new_target_delay_secon"
-    "ds\030\006 \001(\002\022#\n\033remove_target_after_seconds\030"
-    "\007 \001(\002\"\037\n\rPillTargetDef\022\016\n\006height\030\001 \001(\002\"\255"
-    "\001\n\rTargetProfile\022\026\n\016percent_chance\030\001 \001(\002"
-    "\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_radius"
-    "_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_ji"
-    "tter\030\005 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTarge"
-    "tDefH\000B\006\n\004typeb\010editionsp\350\007"
+    "d_multiplier\030\004 \001(\002\"\222\001\n\010ShotType\022\016\n\004poke\030"
+    "\001 \001(\010H\000\022\027\n\rtracking_kill\030\002 \001(\010H\000\022\035\n\023trac"
+    "king_invincible\030\003 \001(\010H\000\022\026\n\014click_single\030"
+    "\004 \001(\010H\000\022\036\n\026poke_kill_time_seconds\030\n \001(\002B"
+    "\006\n\004type\"\372\002\n\013ScenarioDef\022\023\n\013scenario_id\030\001"
+    " \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004room\030\003"
+    " \001(\0132\t.aim.Room\022\"\n\ntarget_def\030\005 \001(\0132\016.ai"
+    "m.TargetDef\022\021\n\treference\030\006 \001(\t\0222\n\toverri"
+    "des\030\007 \001(\0132\037.aim.ScenarioReferenceOverrid"
+    "es\022 \n\tshot_type\030\010 \001(\0132\r.aim.ShotType\022,\n\n"
+    "static_def\030\n \001(\0132\026.aim.StaticScenarioDef"
+    "H\000\0222\n\rcentering_def\030\013 \001(\0132\031.aim.Centerin"
+    "gScenarioDefH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim"
+    ".BarrelScenarioDefH\000B\006\n\004type\"T\n\021StaticSc"
+    "enarioDef\022\?\n\031target_placement_strategy\030\001"
+    " \001(\0132\034.aim.TargetPlacementStrategy\"f\n\024Ce"
+    "nteringScenarioDef\022\'\n\016start_position\030\001 \001"
+    "(\0132\017.aim.StoredVec3\022%\n\014end_position\030\002 \001("
+    "\0132\017.aim.StoredVec3\"\023\n\021BarrelScenarioDef\""
+    "\343\001\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.Ta"
+    "rgetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remo"
+    "ve_closest_on_miss\030\003 \001(\010\022\024\n\014target_order"
+    "\030\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\022 "
+    "\n\030new_target_delay_seconds\030\006 \001(\002\022#\n\033remo"
+    "ve_target_after_seconds\030\007 \001(\002\"\037\n\rPillTar"
+    "getDef\022\016\n\006height\030\001 \001(\002\"\344\001\n\rTargetProfile"
+    "\022\026\n\016percent_chance\030\001 \001(\002\022\025\n\rtarget_radiu"
+    "s\030\002 \001(\002\022\034\n\024target_radius_jitter\030\003 \001(\002\022\r\n"
+    "\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016he"
+    "alth_seconds\030\006 \001(\002\022\035\n\025health_seconds_jit"
+    "ter\030\007 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTarget"
+    "DefH\000B\006\n\004typeb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -880,13 +936,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2347,
+    2546,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    17,
+    18,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -4298,6 +4354,392 @@ void ScenarioReferenceOverrides::InternalSwap(ScenarioReferenceOverrides* PROTOB
 }
 // ===================================================================
 
+class ShotType::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<ShotType>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(ShotType, _impl_._has_bits_);
+  static constexpr ::int32_t kOneofCaseOffset =
+      PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_._oneof_case_);
+};
+
+ShotType::ShotType(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.ShotType)
+}
+inline PROTOBUF_NDEBUG_INLINE ShotType::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::ShotType& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        type_{},
+        _oneof_case_{from._oneof_case_[0]} {}
+
+ShotType::ShotType(
+    ::google::protobuf::Arena* arena,
+    const ShotType& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  ShotType* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  _impl_.poke_kill_time_seconds_ = from._impl_.poke_kill_time_seconds_;
+  switch (type_case()) {
+    case TYPE_NOT_SET:
+      break;
+      case kPoke:
+        _impl_.type_.poke_ = from._impl_.type_.poke_;
+        break;
+      case kTrackingKill:
+        _impl_.type_.tracking_kill_ = from._impl_.type_.tracking_kill_;
+        break;
+      case kTrackingInvincible:
+        _impl_.type_.tracking_invincible_ = from._impl_.type_.tracking_invincible_;
+        break;
+      case kClickSingle:
+        _impl_.type_.click_single_ = from._impl_.type_.click_single_;
+        break;
+  }
+
+  // @@protoc_insertion_point(copy_constructor:aim.ShotType)
+}
+inline PROTOBUF_NDEBUG_INLINE ShotType::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        type_{},
+        _oneof_case_{} {}
+
+inline void ShotType::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.poke_kill_time_seconds_ = {};
+}
+ShotType::~ShotType() {
+  // @@protoc_insertion_point(destructor:aim.ShotType)
+  SharedDtor(*this);
+}
+inline void ShotType::SharedDtor(MessageLite& self) {
+  ShotType& this_ = static_cast<ShotType&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  if (this_.has_type()) {
+    this_.clear_type();
+  }
+  this_._impl_.~Impl_();
+}
+
+void ShotType::clear_type() {
+// @@protoc_insertion_point(one_of_clear_start:aim.ShotType)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  switch (type_case()) {
+    case kPoke: {
+      // No need to clear
+      break;
+    }
+    case kTrackingKill: {
+      // No need to clear
+      break;
+    }
+    case kTrackingInvincible: {
+      // No need to clear
+      break;
+    }
+    case kClickSingle: {
+      // No need to clear
+      break;
+    }
+    case TYPE_NOT_SET: {
+      break;
+    }
+  }
+  _impl_._oneof_case_[0] = TYPE_NOT_SET;
+}
+
+
+inline void* ShotType::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) ShotType(arena);
+}
+constexpr auto ShotType::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(ShotType),
+                                            alignof(ShotType));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull ShotType::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_ShotType_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &ShotType::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<ShotType>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &ShotType::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<ShotType>(), &ShotType::ByteSizeLong,
+            &ShotType::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(ShotType, _impl_._cached_size_),
+        false,
+    },
+    &ShotType::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* ShotType::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 5, 0, 0, 2> ShotType::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ShotType, _impl_._has_bits_),
+    0, // no _extensions_
+    10, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294966768,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    5,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::ShotType>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // float poke_kill_time_seconds = 10;
+    {::_pbi::TcParser::FastF32S1,
+     {85, 0, 0, PROTOBUF_FIELD_OFFSET(ShotType, _impl_.poke_kill_time_seconds_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool poke = 1;
+    {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.type_.poke_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kBool)},
+    // bool tracking_kill = 2;
+    {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.type_.tracking_kill_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kBool)},
+    // bool tracking_invincible = 3;
+    {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.type_.tracking_invincible_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kBool)},
+    // bool click_single = 4;
+    {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.type_.click_single_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kBool)},
+    // float poke_kill_time_seconds = 10;
+    {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.poke_kill_time_seconds_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+PROTOBUF_NOINLINE void ShotType::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.ShotType)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.poke_kill_time_seconds_ = 0;
+  clear_type();
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* ShotType::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const ShotType& this_ = static_cast<const ShotType&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* ShotType::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const ShotType& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.ShotType)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          switch (this_.type_case()) {
+            case kPoke: {
+              target = stream->EnsureSpace(target);
+              target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                  1, this_._internal_poke(), target);
+              break;
+            }
+            case kTrackingKill: {
+              target = stream->EnsureSpace(target);
+              target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                  2, this_._internal_tracking_kill(), target);
+              break;
+            }
+            case kTrackingInvincible: {
+              target = stream->EnsureSpace(target);
+              target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                  3, this_._internal_tracking_invincible(), target);
+              break;
+            }
+            case kClickSingle: {
+              target = stream->EnsureSpace(target);
+              target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                  4, this_._internal_click_single(), target);
+              break;
+            }
+            default:
+              break;
+          }
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // float poke_kill_time_seconds = 10;
+          if (cached_has_bits & 0x00000001u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                10, this_._internal_poke_kill_time_seconds(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.ShotType)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t ShotType::ByteSizeLong(const MessageLite& base) {
+          const ShotType& this_ = static_cast<const ShotType&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t ShotType::ByteSizeLong() const {
+          const ShotType& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.ShotType)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+           {
+            // float poke_kill_time_seconds = 10;
+            cached_has_bits = this_._impl_._has_bits_[0];
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 5;
+            }
+          }
+          switch (this_.type_case()) {
+            // bool poke = 1;
+            case kPoke: {
+              total_size += 2;
+              break;
+            }
+            // bool tracking_kill = 2;
+            case kTrackingKill: {
+              total_size += 2;
+              break;
+            }
+            // bool tracking_invincible = 3;
+            case kTrackingInvincible: {
+              total_size += 2;
+              break;
+            }
+            // bool click_single = 4;
+            case kClickSingle: {
+              total_size += 2;
+              break;
+            }
+            case TYPE_NOT_SET: {
+              break;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void ShotType::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<ShotType*>(&to_msg);
+  auto& from = static_cast<const ShotType&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.ShotType)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    _this->_impl_.poke_kill_time_seconds_ = from._impl_.poke_kill_time_seconds_;
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
+    const uint32_t oneof_to_case = _this->_impl_._oneof_case_[0];
+    const bool oneof_needs_init = oneof_to_case != oneof_from_case;
+    if (oneof_needs_init) {
+      if (oneof_to_case != 0) {
+        _this->clear_type();
+      }
+      _this->_impl_._oneof_case_[0] = oneof_from_case;
+    }
+
+    switch (oneof_from_case) {
+      case kPoke: {
+        _this->_impl_.type_.poke_ = from._impl_.type_.poke_;
+        break;
+      }
+      case kTrackingKill: {
+        _this->_impl_.type_.tracking_kill_ = from._impl_.type_.tracking_kill_;
+        break;
+      }
+      case kTrackingInvincible: {
+        _this->_impl_.type_.tracking_invincible_ = from._impl_.type_.tracking_invincible_;
+        break;
+      }
+      case kClickSingle: {
+        _this->_impl_.type_.click_single_ = from._impl_.type_.click_single_;
+        break;
+      }
+      case TYPE_NOT_SET:
+        break;
+    }
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ShotType::CopyFrom(const ShotType& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.ShotType)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void ShotType::InternalSwap(ShotType* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+        swap(_impl_.poke_kill_time_seconds_, other->_impl_.poke_kill_time_seconds_);
+  swap(_impl_.type_, other->_impl_.type_);
+  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
+}
+
+::google::protobuf::Metadata ShotType::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
 class ScenarioDef::_Internal {
  public:
   using HasBits =
@@ -4389,13 +4831,10 @@ ScenarioDef::ScenarioDef(
   _impl_.overrides_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::ScenarioReferenceOverrides>(
                               arena, *from._impl_.overrides_)
                         : nullptr;
-  ::memcpy(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, duration_seconds_),
-           reinterpret_cast<const char *>(&from._impl_) +
-               offsetof(Impl_, duration_seconds_),
-           offsetof(Impl_, is_poke_) -
-               offsetof(Impl_, duration_seconds_) +
-               sizeof(Impl_::is_poke_));
+  _impl_.shot_type_ = (cached_has_bits & 0x00000020u) ? ::google::protobuf::Message::CopyConstruct<::aim::ShotType>(
+                              arena, *from._impl_.shot_type_)
+                        : nullptr;
+  _impl_.duration_seconds_ = from._impl_.duration_seconds_;
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -4426,9 +4865,9 @@ inline void ScenarioDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, room_),
            0,
-           offsetof(Impl_, is_poke_) -
+           offsetof(Impl_, duration_seconds_) -
                offsetof(Impl_, room_) +
-               sizeof(Impl_::is_poke_));
+               sizeof(Impl_::duration_seconds_));
 }
 ScenarioDef::~ScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.ScenarioDef)
@@ -4443,6 +4882,7 @@ inline void ScenarioDef::SharedDtor(MessageLite& self) {
   delete this_._impl_.room_;
   delete this_._impl_.target_def_;
   delete this_._impl_.overrides_;
+  delete this_._impl_.shot_type_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -4521,7 +4961,7 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 10, 6, 52, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<3, 10, 7, 52, 2> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
@@ -4530,7 +4970,7 @@ const ::_pbi::TcParseTable<3, 10, 6, 52, 2> ScenarioDef::_table_ = {
     4294963464,  // skipmap
     offsetof(decltype(_table_), field_entries),
     10,  // num_field_entries
-    6,  // num_aux_entries
+    7,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -4539,15 +4979,15 @@ const ::_pbi::TcParseTable<3, 10, 6, 52, 2> ScenarioDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::ScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // bool is_poke = 8;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ScenarioDef, _impl_.is_poke_), 6>(),
-     {64, 6, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.is_poke_)}},
+    // .aim.ShotType shot_type = 8;
+    {::_pbi::TcParser::FastMtS1,
+     {66, 5, 3, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.shot_type_)}},
     // string scenario_id = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_)}},
     // float duration_seconds = 2;
     {::_pbi::TcParser::FastF32S1,
-     {21, 5, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)}},
+     {21, 6, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)}},
     // .aim.Room room = 3;
     {::_pbi::TcParser::FastMtS1,
      {26, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)}},
@@ -4568,7 +5008,7 @@ const ::_pbi::TcParseTable<3, 10, 6, 52, 2> ScenarioDef::_table_ = {
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // float duration_seconds = 2;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 5, 0,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 6, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.Room room = 3;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_), _Internal::kHasBitsOffset + 2, 0,
@@ -4582,22 +5022,23 @@ const ::_pbi::TcParseTable<3, 10, 6, 52, 2> ScenarioDef::_table_ = {
     // .aim.ScenarioReferenceOverrides overrides = 7;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.overrides_), _Internal::kHasBitsOffset + 4, 2,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // bool is_poke = 8;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.is_poke_), _Internal::kHasBitsOffset + 6, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // .aim.ShotType shot_type = 8;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.shot_type_), _Internal::kHasBitsOffset + 5, 3,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.StaticScenarioDef static_def = 10;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 3,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 4,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.CenteringScenarioDef centering_def = 11;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.centering_def_), _Internal::kOneofCaseOffset + 0, 4,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.centering_def_), _Internal::kOneofCaseOffset + 0, 5,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.BarrelScenarioDef barrel_def = 12;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.barrel_def_), _Internal::kOneofCaseOffset + 0, 5,
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.barrel_def_), _Internal::kOneofCaseOffset + 0, 6,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::TargetDef>()},
     {::_pbi::TcParser::GetTable<::aim::ScenarioReferenceOverrides>()},
+    {::_pbi::TcParser::GetTable<::aim::ShotType>()},
     {::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::BarrelScenarioDef>()},
@@ -4617,7 +5058,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
       _impl_.scenario_id_.ClearNonDefaultToEmpty();
     }
@@ -4636,12 +5077,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
       ABSL_DCHECK(_impl_.overrides_ != nullptr);
       _impl_.overrides_->Clear();
     }
+    if (cached_has_bits & 0x00000020u) {
+      ABSL_DCHECK(_impl_.shot_type_ != nullptr);
+      _impl_.shot_type_->Clear();
+    }
   }
-  if (cached_has_bits & 0x00000060u) {
-    ::memset(&_impl_.duration_seconds_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.is_poke_) -
-        reinterpret_cast<char*>(&_impl_.duration_seconds_)) + sizeof(_impl_.is_poke_));
-  }
+  _impl_.duration_seconds_ = 0;
   clear_type();
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -4672,7 +5113,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
           }
 
           // float duration_seconds = 2;
-          if (cached_has_bits & 0x00000020u) {
+          if (cached_has_bits & 0x00000040u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 2, this_._internal_duration_seconds(), target);
@@ -4707,11 +5148,11 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                 stream);
           }
 
-          // bool is_poke = 8;
-          if (cached_has_bits & 0x00000040u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                8, this_._internal_is_poke(), target);
+          // .aim.ShotType shot_type = 8;
+          if (cached_has_bits & 0x00000020u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                8, *this_._impl_.shot_type_, this_._impl_.shot_type_->GetCachedSize(), target,
+                stream);
           }
 
           switch (this_.type_case()) {
@@ -4787,13 +5228,14 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.overrides_);
             }
-            // float duration_seconds = 2;
+            // .aim.ShotType shot_type = 8;
             if (cached_has_bits & 0x00000020u) {
-              total_size += 5;
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.shot_type_);
             }
-            // bool is_poke = 8;
+            // float duration_seconds = 2;
             if (cached_has_bits & 0x00000040u) {
-              total_size += 2;
+              total_size += 5;
             }
           }
           switch (this_.type_case()) {
@@ -4868,10 +5310,16 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
       }
     }
     if (cached_has_bits & 0x00000020u) {
-      _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
+      ABSL_DCHECK(from._impl_.shot_type_ != nullptr);
+      if (_this->_impl_.shot_type_ == nullptr) {
+        _this->_impl_.shot_type_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::ShotType>(arena, *from._impl_.shot_type_);
+      } else {
+        _this->_impl_.shot_type_->MergeFrom(*from._impl_.shot_type_);
+      }
     }
     if (cached_has_bits & 0x00000040u) {
-      _this->_impl_.is_poke_ = from._impl_.is_poke_;
+      _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -4937,8 +5385,8 @@ void ScenarioDef::InternalSwap(ScenarioDef* PROTOBUF_RESTRICT other) {
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.scenario_id_, &other->_impl_.scenario_id_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.reference_, &other->_impl_.reference_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.is_poke_)
-      + sizeof(ScenarioDef::_impl_.is_poke_)
+      PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)
+      + sizeof(ScenarioDef::_impl_.duration_seconds_)
       - PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)>(
           reinterpret_cast<char*>(&_impl_.room_),
           reinterpret_cast<char*>(&other->_impl_.room_));
@@ -4991,7 +5439,6 @@ StaticScenarioDef::StaticScenarioDef(
   _impl_.target_placement_strategy_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(
                               arena, *from._impl_.target_placement_strategy_)
                         : nullptr;
-  _impl_.is_poke_ball_ = from._impl_.is_poke_ball_;
 
   // @@protoc_insertion_point(copy_constructor:aim.StaticScenarioDef)
 }
@@ -5002,12 +5449,7 @@ inline PROTOBUF_NDEBUG_INLINE StaticScenarioDef::Impl_::Impl_(
 
 inline void StaticScenarioDef::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, target_placement_strategy_),
-           0,
-           offsetof(Impl_, is_poke_ball_) -
-               offsetof(Impl_, target_placement_strategy_) +
-               sizeof(Impl_::is_poke_ball_));
+  _impl_.target_placement_strategy_ = {};
 }
 StaticScenarioDef::~StaticScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.StaticScenarioDef)
@@ -5057,15 +5499,15 @@ const ::google::protobuf::internal::ClassData* StaticScenarioDef::GetClassData()
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 0, 2> StaticScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<0, 1, 1, 0, 2> StaticScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    1, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    1,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -5075,19 +5517,13 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> StaticScenarioDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+    // .aim.TargetPlacementStrategy target_placement_strategy = 1;
     {::_pbi::TcParser::FastMtS1,
-     {18, 0, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)}},
-    // bool is_poke_ball = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StaticScenarioDef, _impl_.is_poke_ball_), 1>(),
-     {8, 1, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_)}},
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // bool is_poke_ball = 1;
-    {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_), _Internal::kHasBitsOffset + 1, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-    // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+    // .aim.TargetPlacementStrategy target_placement_strategy = 1;
     {PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
@@ -5108,7 +5544,6 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
     ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
     _impl_.target_placement_strategy_->Clear();
   }
-  _impl_.is_poke_ball_ = false;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -5129,17 +5564,10 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
           (void)cached_has_bits;
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // bool is_poke_ball = 1;
-          if (cached_has_bits & 0x00000002u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                1, this_._internal_is_poke_ball(), target);
-          }
-
-          // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+          // .aim.TargetPlacementStrategy target_placement_strategy = 1;
           if (cached_has_bits & 0x00000001u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
+                1, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
                 stream);
           }
 
@@ -5166,17 +5594,12 @@ PROTOBUF_NOINLINE void StaticScenarioDef::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-          cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000003u) {
-            // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+           {
+            // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+            cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.target_placement_strategy_);
-            }
-            // bool is_poke_ball = 1;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 2;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -5193,18 +5616,13 @@ void StaticScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
-      if (_this->_impl_.target_placement_strategy_ == nullptr) {
-        _this->_impl_.target_placement_strategy_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(arena, *from._impl_.target_placement_strategy_);
-      } else {
-        _this->_impl_.target_placement_strategy_->MergeFrom(*from._impl_.target_placement_strategy_);
-      }
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.is_poke_ball_ = from._impl_.is_poke_ball_;
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
+    if (_this->_impl_.target_placement_strategy_ == nullptr) {
+      _this->_impl_.target_placement_strategy_ =
+          ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(arena, *from._impl_.target_placement_strategy_);
+    } else {
+      _this->_impl_.target_placement_strategy_->MergeFrom(*from._impl_.target_placement_strategy_);
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -5223,12 +5641,7 @@ void StaticScenarioDef::InternalSwap(StaticScenarioDef* PROTOBUF_RESTRICT other)
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.is_poke_ball_)
-      + sizeof(StaticScenarioDef::_impl_.is_poke_ball_)
-      - PROTOBUF_FIELD_OFFSET(StaticScenarioDef, _impl_.target_placement_strategy_)>(
-          reinterpret_cast<char*>(&_impl_.target_placement_strategy_),
-          reinterpret_cast<char*>(&other->_impl_.target_placement_strategy_));
+  swap(_impl_.target_placement_strategy_, other->_impl_.target_placement_strategy_);
 }
 
 ::google::protobuf::Metadata StaticScenarioDef::GetMetadata() const {
@@ -6340,9 +6753,9 @@ TargetProfile::TargetProfile(
                offsetof(Impl_, percent_chance_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, percent_chance_),
-           offsetof(Impl_, speed_jitter_) -
+           offsetof(Impl_, health_seconds_jitter_) -
                offsetof(Impl_, percent_chance_) +
-               sizeof(Impl_::speed_jitter_));
+               sizeof(Impl_::health_seconds_jitter_));
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -6365,9 +6778,9 @@ inline void TargetProfile::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, percent_chance_),
            0,
-           offsetof(Impl_, speed_jitter_) -
+           offsetof(Impl_, health_seconds_jitter_) -
                offsetof(Impl_, percent_chance_) +
-               sizeof(Impl_::speed_jitter_));
+               sizeof(Impl_::health_seconds_jitter_));
 }
 TargetProfile::~TargetProfile() {
   // @@protoc_insertion_point(destructor:aim.TargetProfile)
@@ -6439,15 +6852,15 @@ const ::google::protobuf::internal::ClassData* TargetProfile::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 6, 1, 0, 2> TargetProfile::_table_ = {
+const ::_pbi::TcParseTable<3, 8, 1, 0, 2> TargetProfile::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_._has_bits_),
     0, // no _extensions_
     10, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294966752,  // skipmap
+    4294966656,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
+    8,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -6473,8 +6886,12 @@ const ::_pbi::TcParseTable<3, 6, 1, 0, 2> TargetProfile::_table_ = {
     // float speed_jitter = 5;
     {::_pbi::TcParser::FastF32S1,
      {45, 4, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // float health_seconds = 6;
+    {::_pbi::TcParser::FastF32S1,
+     {53, 5, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_)}},
+    // float health_seconds_jitter = 7;
+    {::_pbi::TcParser::FastF32S1,
+     {61, 6, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_jitter_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -6493,6 +6910,12 @@ const ::_pbi::TcParseTable<3, 6, 1, 0, 2> TargetProfile::_table_ = {
     // float speed_jitter = 5;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_), _Internal::kHasBitsOffset + 4, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float health_seconds = 6;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_), _Internal::kHasBitsOffset + 5, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float health_seconds_jitter = 7;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_jitter_), _Internal::kHasBitsOffset + 6, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.PillTargetDef pill = 10;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.type_.pill_), _Internal::kOneofCaseOffset + 0, 0,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
@@ -6510,10 +6933,10 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000007fu) {
     ::memset(&_impl_.percent_chance_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.speed_jitter_) -
-        reinterpret_cast<char*>(&_impl_.percent_chance_)) + sizeof(_impl_.speed_jitter_));
+        reinterpret_cast<char*>(&_impl_.health_seconds_jitter_) -
+        reinterpret_cast<char*>(&_impl_.percent_chance_)) + sizeof(_impl_.health_seconds_jitter_));
   }
   clear_type();
   _impl_._has_bits_.Clear();
@@ -6571,6 +6994,20 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
                 5, this_._internal_speed_jitter(), target);
           }
 
+          // float health_seconds = 6;
+          if (cached_has_bits & 0x00000020u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                6, this_._internal_health_seconds(), target);
+          }
+
+          // float health_seconds_jitter = 7;
+          if (cached_has_bits & 0x00000040u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                7, this_._internal_health_seconds_jitter(), target);
+          }
+
           // .aim.PillTargetDef pill = 10;
           if (this_.type_case() == kPill) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
@@ -6603,7 +7040,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000001fu) {
+          if (cached_has_bits & 0x0000007fu) {
             // float percent_chance = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
@@ -6622,6 +7059,14 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
             }
             // float speed_jitter = 5;
             if (cached_has_bits & 0x00000010u) {
+              total_size += 5;
+            }
+            // float health_seconds = 6;
+            if (cached_has_bits & 0x00000020u) {
+              total_size += 5;
+            }
+            // float health_seconds_jitter = 7;
+            if (cached_has_bits & 0x00000040u) {
               total_size += 5;
             }
           }
@@ -6650,7 +7095,7 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000007fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.percent_chance_ = from._impl_.percent_chance_;
     }
@@ -6665,6 +7110,12 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
     }
     if (cached_has_bits & 0x00000010u) {
       _this->_impl_.speed_jitter_ = from._impl_.speed_jitter_;
+    }
+    if (cached_has_bits & 0x00000020u) {
+      _this->_impl_.health_seconds_ = from._impl_.health_seconds_;
+    }
+    if (cached_has_bits & 0x00000040u) {
+      _this->_impl_.health_seconds_jitter_ = from._impl_.health_seconds_jitter_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -6708,8 +7159,8 @@ void TargetProfile::InternalSwap(TargetProfile* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_)
-      + sizeof(TargetProfile::_impl_.speed_jitter_)
+      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_jitter_)
+      + sizeof(TargetProfile::_impl_.health_seconds_jitter_)
       - PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.percent_chance_)>(
           reinterpret_cast<char*>(&_impl_.percent_chance_),
           reinterpret_cast<char*>(&other->_impl_.percent_chance_));

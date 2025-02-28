@@ -16,7 +16,7 @@
 
 namespace aim {
 namespace {
-constexpr u64 kPokeBallKillTimeMillis = 50;
+constexpr const float kPokeBallKillTimeSeconds = 0.05;
 }  // namespace
 
 void BaseScenario::Initialize() {
@@ -32,7 +32,11 @@ void BaseScenario::Initialize() {
 }
 
 void BaseScenario::UpdateState(UpdateStateData* data) {
-  HandleClickHits(data);
+  if (def_.shot_type().has_tracking_kill() || def_.shot_type().has_tracking_invincible()) {
+    HandleTrackingHits(data);
+  } else {
+    HandleClickHits(data);
+  }
   if (def_.target_def().has_remove_target_after_seconds()) {
     std::vector<u16> targets_to_remove;
     for (const Target& target : target_manager_.GetTargets()) {
@@ -47,8 +51,73 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   UpdateTargetPositions();
 }
 
+void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
+  if (data->is_click_held) {
+    auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+    if (!tracking_sound_) {
+      tracking_sound_ = std::make_unique<TrackingSound>(app_);
+    }
+    shot_stopwatch_.Start();
+    if (maybe_hit_target_id.has_value()) {
+      hit_stopwatch_.Start();
+    } else {
+      hit_stopwatch_.Stop();
+    }
+    if (def_.shot_type().tracking_kill()) {
+      for (Target& target : target_manager_.GetMutableTargets()) {
+        if (maybe_hit_target_id.has_value() && *maybe_hit_target_id == target.id) {
+          target.hit_timer.Start();
+        } else {
+          target.hit_timer.Stop();
+        }
+        if (target.health_seconds > 0 &&
+            target.hit_timer.GetElapsedSeconds() >= target.health_seconds) {
+          stats_.targets_hit++;
+          AddNewTargetDuringRun(target.id);
+        }
+      }
+    }
+    tracking_sound_->DoTick(maybe_hit_target_id.has_value());
+  } else {
+    TrackingHoldDone();
+  }
+}
+
+void BaseScenario::OnScenarioDone() {
+  TrackingHoldDone();
+  if (def_.shot_type().tracking_invincible()) {
+    stats_.targets_hit = hit_stopwatch_.GetElapsedSeconds() * 100;
+    stats_.shots_taken = shot_stopwatch_.GetElapsedSeconds() * 100;
+  }
+  if (def_.shot_type().tracking_kill()) {
+    float partial_kills = 0;
+    for (Target& target : target_manager_.GetMutableTargets()) {
+      float elapsed_seconds = target.hit_timer.GetElapsedSeconds();
+      if (target.health_seconds > 0) {
+        partial_kills += elapsed_seconds / target.health_seconds;
+      }
+    }
+    stats_.targets_hit = (stats_.targets_hit + partial_kills) * 100;
+  }
+}
+
+void BaseScenario::TrackingHoldDone() {
+  shot_stopwatch_.Stop();
+  hit_stopwatch_.Stop();
+  tracking_sound_ = {};
+  if (def_.shot_type().tracking_kill()) {
+    for (Target& target : target_manager_.GetMutableTargets()) {
+      target.hit_timer.Stop();
+    }
+  }
+}
+
+void BaseScenario::OnPause() {
+  TrackingHoldDone();
+}
+
 void BaseScenario::HandleClickHits(UpdateStateData* data) {
-  if (def_.is_poke()) {
+  if (def_.shot_type().poke()) {
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (maybe_hit_target_id.has_value()) {
       u16 hit_target_id = *maybe_hit_target_id;
@@ -59,7 +128,9 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
         // Has enough time elapsed to kill target?
         u64 now_micros = timer_.GetElapsedMicros();
         u64 age_micros = now_micros - current_poke_start_time_micros_;
-        u64 min_age_micros = kPokeBallKillTimeMillis * 1000;
+        u64 min_age_micros = def_.shot_type().has_poke_kill_time_seconds()
+                                 ? def_.shot_type().poke_kill_time_seconds()
+                                 : kPokeBallKillTimeSeconds * 1000000;
         if (age_micros >= min_age_micros) {
           stats_.targets_hit++;
           stats_.shots_taken++;

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "aim/common/simple_types.h"
+#include "aim/common/times.h"
 #include "aim/core/camera.h"
 #include "aim/proto/scenario.pb.h"
 
@@ -31,6 +32,9 @@ struct Target {
   bool is_pill = false;
   glm::vec3 pill_up{0, 0, 1};
 
+  Stopwatch hit_timer;
+  float health_seconds = 0;
+
   bool CanHit() const {
     return !hidden && !is_ghost;
   }
@@ -41,8 +45,8 @@ struct Target {
 };
 
 glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
-                                            float target_radius,
-                                            const Room& room);
+                                      float target_radius,
+                                      const Room& room);
 
 class TargetManager {
  public:
@@ -63,7 +67,6 @@ class TargetManager {
 
   void MarkAllAsNonGhost();
 
-
   std::vector<u16> visible_target_ids() const;
 
   void Clear() {
@@ -71,6 +74,10 @@ class TargetManager {
   }
 
   const std::vector<Target>& GetTargets() {
+    return targets_;
+  }
+
+  std::vector<Target>& GetMutableTargets() {
     return targets_;
   }
 

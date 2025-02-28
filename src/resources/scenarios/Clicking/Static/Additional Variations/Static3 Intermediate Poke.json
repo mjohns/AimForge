@@ -1,6 +1,6 @@
 {
   "durationSeconds": 60,
-  "isPoke":  true,
+  "shotType": { "poke": true },
   "room": {
     "cameraPosition": {
       "x": 0,
