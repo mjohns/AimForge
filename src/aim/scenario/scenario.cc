@@ -39,13 +39,13 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
       timer_(kReplayFps),
       camera_(Camera(
           def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
-      replay_(std::make_unique<Replay>()),
       target_manager_(def.room()) {
   theme_ = app->settings_manager()->GetCurrentTheme();
 }
 
 NavigationEvent Scenario::Run() {
-  if (replay_) {
+  if (ShouldRecordReplay()) {
+    replay_ = google::protobuf::Arena::Create<Replay>(&replay_arena_);
     *replay_->mutable_room() = def_.room();
     replay_->set_replay_fps(timer_.GetReplayFps());
   }
@@ -88,7 +88,7 @@ void Scenario::RefreshState() {
 NavigationEvent Scenario::Resume() {
   if (is_done_) {
     StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_);
-    return stats_screen.Run(replay_.get());
+    return stats_screen.Run(replay_);
   }
 
   RefreshState();
@@ -269,7 +269,7 @@ NavigationEvent Scenario::Resume() {
   StatsRow stats_row;
   stats_row.cm_per_360 = settings_.cm_per_360();
   stats_row.num_hits = stats_.targets_hit;
-  //stats_row.num_kills = stats_.targets_killed;
+  // stats_row.num_kills = stats_.targets_killed;
   stats_row.num_shots = stats_.shots_taken;
   stats_row.score = stats_.score;
   app_->stats_db()->AddStats(def_.scenario_id(), &stats_row);
@@ -288,7 +288,7 @@ NavigationEvent Scenario::Resume() {
   }
 
   StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_);
-  return stats_screen.Run(replay_.get());
+  return stats_screen.Run(replay_);
 }
 
 void Scenario::AddNewTargetEvent(const Target& target) {
