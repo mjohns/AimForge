@@ -8,8 +8,10 @@ message DotCrosshair {
 
 message PlusCrosshair {
   float rounding = 1;
-  float horizontal_size_percent = 2;
-  float vertical_size_percent = 3;
+  // Defaults to 1. Multiplier added in addition to crosshair size. Set to 0 to remove horizontal bar.
+  float horizontal_size = 2;
+  // Defaults to 1. Multiplier added in addition to crosshair size. Set to 0 to remove vertical bar.
+  float vertical_size = 3;
   float thickness = 4;
   float outline_thickness = 5;
 }

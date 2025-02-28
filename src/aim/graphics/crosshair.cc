@@ -63,12 +63,12 @@ void DrawCrosshair(const Crosshair& crosshair,
     float thickness = base_length * 0.2 * (plus.has_thickness() ? plus.thickness() : 1.0f);
 
     float horizontal_length = base_length * 0.5;
-    if (plus.has_horizontal_size_percent()) {
-      horizontal_length *= plus.horizontal_size_percent();
+    if (plus.has_horizontal_size()) {
+      horizontal_length *= plus.horizontal_size();
     }
     float vertical_length = base_length * 0.5;
-    if (plus.has_vertical_size_percent()) {
-      horizontal_length *= plus.vertical_size_percent();
+    if (plus.has_vertical_size()) {
+      vertical_length *= plus.vertical_size();
     }
 
     if (plus.outline_thickness() > 0) {

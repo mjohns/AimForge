@@ -483,8 +483,8 @@ class PlusCrosshair final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kRoundingFieldNumber = 1,
-    kHorizontalSizePercentFieldNumber = 2,
-    kVerticalSizePercentFieldNumber = 3,
+    kHorizontalSizeFieldNumber = 2,
+    kVerticalSizeFieldNumber = 3,
     kThicknessFieldNumber = 4,
     kOutlineThicknessFieldNumber = 5,
   };
@@ -499,26 +499,26 @@ class PlusCrosshair final : public ::google::protobuf::Message
   void _internal_set_rounding(float value);
 
   public:
-  // float horizontal_size_percent = 2;
-  bool has_horizontal_size_percent() const;
-  void clear_horizontal_size_percent() ;
-  float horizontal_size_percent() const;
-  void set_horizontal_size_percent(float value);
+  // float horizontal_size = 2;
+  bool has_horizontal_size() const;
+  void clear_horizontal_size() ;
+  float horizontal_size() const;
+  void set_horizontal_size(float value);
 
   private:
-  float _internal_horizontal_size_percent() const;
-  void _internal_set_horizontal_size_percent(float value);
+  float _internal_horizontal_size() const;
+  void _internal_set_horizontal_size(float value);
 
   public:
-  // float vertical_size_percent = 3;
-  bool has_vertical_size_percent() const;
-  void clear_vertical_size_percent() ;
-  float vertical_size_percent() const;
-  void set_vertical_size_percent(float value);
+  // float vertical_size = 3;
+  bool has_vertical_size() const;
+  void clear_vertical_size() ;
+  float vertical_size() const;
+  void set_vertical_size(float value);
 
   private:
-  float _internal_vertical_size_percent() const;
-  void _internal_set_vertical_size_percent(float value);
+  float _internal_vertical_size() const;
+  void _internal_set_vertical_size(float value);
 
   public:
   // float thickness = 4;
@@ -569,8 +569,8 @@ class PlusCrosshair final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     float rounding_;
-    float horizontal_size_percent_;
-    float vertical_size_percent_;
+    float horizontal_size_;
+    float vertical_size_;
     float thickness_;
     float outline_thickness_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -1391,60 +1391,60 @@ inline void PlusCrosshair::_internal_set_rounding(float value) {
   _impl_.rounding_ = value;
 }
 
-// float horizontal_size_percent = 2;
-inline bool PlusCrosshair::has_horizontal_size_percent() const {
+// float horizontal_size = 2;
+inline bool PlusCrosshair::has_horizontal_size() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
-inline void PlusCrosshair::clear_horizontal_size_percent() {
+inline void PlusCrosshair::clear_horizontal_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.horizontal_size_percent_ = 0;
+  _impl_.horizontal_size_ = 0;
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline float PlusCrosshair::horizontal_size_percent() const {
-  // @@protoc_insertion_point(field_get:aim.PlusCrosshair.horizontal_size_percent)
-  return _internal_horizontal_size_percent();
+inline float PlusCrosshair::horizontal_size() const {
+  // @@protoc_insertion_point(field_get:aim.PlusCrosshair.horizontal_size)
+  return _internal_horizontal_size();
 }
-inline void PlusCrosshair::set_horizontal_size_percent(float value) {
-  _internal_set_horizontal_size_percent(value);
+inline void PlusCrosshair::set_horizontal_size(float value) {
+  _internal_set_horizontal_size(value);
   _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.PlusCrosshair.horizontal_size_percent)
+  // @@protoc_insertion_point(field_set:aim.PlusCrosshair.horizontal_size)
 }
-inline float PlusCrosshair::_internal_horizontal_size_percent() const {
+inline float PlusCrosshair::_internal_horizontal_size() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.horizontal_size_percent_;
+  return _impl_.horizontal_size_;
 }
-inline void PlusCrosshair::_internal_set_horizontal_size_percent(float value) {
+inline void PlusCrosshair::_internal_set_horizontal_size(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.horizontal_size_percent_ = value;
+  _impl_.horizontal_size_ = value;
 }
 
-// float vertical_size_percent = 3;
-inline bool PlusCrosshair::has_vertical_size_percent() const {
+// float vertical_size = 3;
+inline bool PlusCrosshair::has_vertical_size() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline void PlusCrosshair::clear_vertical_size_percent() {
+inline void PlusCrosshair::clear_vertical_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.vertical_size_percent_ = 0;
+  _impl_.vertical_size_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float PlusCrosshair::vertical_size_percent() const {
-  // @@protoc_insertion_point(field_get:aim.PlusCrosshair.vertical_size_percent)
-  return _internal_vertical_size_percent();
+inline float PlusCrosshair::vertical_size() const {
+  // @@protoc_insertion_point(field_get:aim.PlusCrosshair.vertical_size)
+  return _internal_vertical_size();
 }
-inline void PlusCrosshair::set_vertical_size_percent(float value) {
-  _internal_set_vertical_size_percent(value);
+inline void PlusCrosshair::set_vertical_size(float value) {
+  _internal_set_vertical_size(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.PlusCrosshair.vertical_size_percent)
+  // @@protoc_insertion_point(field_set:aim.PlusCrosshair.vertical_size)
 }
-inline float PlusCrosshair::_internal_vertical_size_percent() const {
+inline float PlusCrosshair::_internal_vertical_size() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.vertical_size_percent_;
+  return _impl_.vertical_size_;
 }
-inline void PlusCrosshair::_internal_set_vertical_size_percent(float value) {
+inline void PlusCrosshair::_internal_set_vertical_size(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.vertical_size_percent_ = value;
+  _impl_.vertical_size_ = value;
 }
 
 // float thickness = 4;
