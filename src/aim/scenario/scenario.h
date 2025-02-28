@@ -90,6 +90,7 @@ class Scenario {
   void RefreshState();
 
   u64 num_state_updates_ = 0;
+  float state_updates_per_second_ = 0;
   float radians_per_dot_;
   Crosshair crosshair_;
   bool is_click_held_ = false;
