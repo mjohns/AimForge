@@ -11,7 +11,6 @@
       "z": 0
     }
   },
-  "displayName": "Centering",
   "durationSeconds": 60,
   "room": {
     "cameraPosition": {
@@ -24,7 +23,6 @@
       "width": 200
     }
   },
-  "scenarioId": "centering_test",
   "targetDef": {
     "numTargets": 1,
     "profiles": [
@@ -33,7 +31,7 @@
           "height": 20
         },
         "speed": 45,
-        "targetRadius": 0.8
+        "targetRadius": 1.2 
       }
     ]
   }

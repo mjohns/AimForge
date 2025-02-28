@@ -98,7 +98,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   std::string time_ago;
   bool has_previous_high_score = maybe_previous_high_score_stats.has_value();
   if (maybe_previous_high_score_stats) {
-    previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_kills,
+    previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_hits,
                                                  maybe_previous_high_score_stats->num_shots,
                                                  maybe_previous_high_score_stats->score);
     previous_high_score = maybe_previous_high_score_stats->score;
@@ -159,6 +159,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
     ImGui::Indent(x_start);
 
+    ImGui::Text("%s", scenario_id_.c_str());
     if (percent_diff > 0) {
       ImGui::Text("NEW HIGH SCORE!");
     }
