@@ -1,0 +1,61 @@
+{
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 225 
+    }
+  },
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 20,
+      "regionOrder": [
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.1
+            },
+            "yLength": {
+              "yPercentValue": 0.3
+            }
+          },
+          "xOffset": {
+            "yPercentValue": 0.4
+          }
+        },
+        {
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.1
+            },
+            "yLength": {
+              "yPercentValue": 0.3
+            }
+          },
+          "xOffset": {
+            "yPercentValue": -0.4
+          }
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "newestTargetIsGhost": true,
+    "numTargets": 2,
+    "profiles": [
+      {
+        "targetRadius": 1.5
+      }
+    ],
+    "removeClosestOnMiss": true
+  }
+}
