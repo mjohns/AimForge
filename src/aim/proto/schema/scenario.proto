@@ -126,6 +126,7 @@ message ScenarioDef {
     StaticScenarioDef static_def = 10;
     CenteringScenarioDef centering_def = 11;
     BarrelScenarioDef barrel_def = 12;
+    LinearScenarioDef linear_def = 13;
   }
 }
 
@@ -139,6 +140,18 @@ message CenteringScenarioDef {
 }
 
 message BarrelScenarioDef {}
+
+// Targets move linearly within the specified room. Uses 2d wall placement so it support simple room
+// types.
+message LinearScenarioDef {
+  // O degrees would move horizontally. 90 degrees would move vetically. Values must be between
+  // 0-90.
+  float angle = 1;
+  float angle_jitter = 2;
+  // Override width or height of the room. Cannot exceed the room width or height.
+  float width = 3;
+  float height = 4;
+}
 
 message TargetDef {
   repeated TargetProfile profiles = 1;

@@ -18,6 +18,8 @@ glm::vec2 GetRandomPositionInCircle(float min_radius,
                                     float max_radius,
                                     std::mt19937* random_generator);
 
+glm::vec2 GetRandomPositionOnWall(const Wall& wall, std::mt19937* random_generator);
+
 glm::vec2 GetRandomPositionOnCircle(float radius, std::mt19937* random_generator);
 
 bool IsPointInEllipse(const glm::vec2& point, float x_radius, float y_radius);

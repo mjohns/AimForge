@@ -150,20 +150,25 @@ std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const Wall& wall,
   return std::make_unique<WallTargetPlacerImpl>(wall, strategy, target_manager, app);
 }
 
+Wall GetWallForRoom(const Room& room) {
+  Wall wall;
+  if (room.has_circular_room()) {
+    wall.width = room.circular_room().width();
+    wall.height = room.circular_room().height();
+  } else if (room.has_barrel_room()) {
+    wall.width = room.barrel_room().radius() * 2;
+    wall.height = wall.width;
+  } else if (room.has_simple_room()) {
+    wall.width = room.simple_room().width();
+    wall.height = room.simple_room().height();
+  }
+  return wall;
+}
+
 std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const ScenarioDef& def,
                                                          TargetManager* target_manager,
                                                          Application* app) {
-  Wall wall;
-  if (def.room().has_circular_room()) {
-    wall.width = def.room().circular_room().width();
-    wall.height = def.room().circular_room().height();
-  } else if (def.room().has_barrel_room()) {
-    wall.width = def.room().barrel_room().radius() * 2;
-    wall.height = wall.width;
-  } else if (def.room().has_simple_room()) {
-    wall.width = def.room().simple_room().width();
-    wall.height = def.room().simple_room().height();
-  }
+  Wall wall = GetWallForRoom(def.room());
   return CreateWallTargetPlacer(
       wall, def.static_def().target_placement_strategy(), target_manager, app);
 }
