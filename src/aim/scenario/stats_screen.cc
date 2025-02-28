@@ -74,7 +74,6 @@ StatsScreen::StatsScreen(std::string scenario_id, i64 stats_id, Application* app
 
 NavigationEvent StatsScreen::Run(Replay* replay) {
   ScreenInfo screen = app_->screen_info();
-  Settings settings = app_->settings_manager()->GetCurrentSettings();
 
   auto all_stats = app_->stats_db()->GetStats(scenario_id_);
   auto maybe_stats = GetStats(all_stats, stats_id_);
@@ -124,8 +123,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     if (view_replay) {
       SDL_GL_SetSwapInterval(0);
       ReplayViewer replay_viewer;
-      auto nav_event = replay_viewer.PlayReplay(
-          *replay, app_->settings_manager()->GetCurrentTheme(), settings.crosshair(), app_);
+      auto nav_event = replay_viewer.PlayReplay(*replay, app_);
       if (!nav_event.IsDone()) {
         return nav_event;
       }

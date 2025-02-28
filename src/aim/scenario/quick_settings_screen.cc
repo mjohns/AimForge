@@ -94,6 +94,13 @@ class QuickSettingsScreen : public UiScreen {
       if (ImGui::Button("DefaultDynamic", button_sz)) {
         updater_.theme_name = "DefaultDynamic";
       }
+      if (ImGui::Button("DefaultCrosshair", button_sz)) {
+        updater_.crosshair_name = "default";
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("PlusCrosshair", button_sz)) {
+        updater_.crosshair_name = "plus";
+      }
     }
 
     if (type_ == QuickSettingsType::METRONOME) {

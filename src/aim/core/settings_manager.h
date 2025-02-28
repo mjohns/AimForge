@@ -37,6 +37,8 @@ class SettingsManager {
   Theme GetTheme(const std::string& theme_name);
   Theme GetCurrentTheme();
 
+  Crosshair GetCurrentCrosshair();
+
   void MarkDirty();
   void FlushToDisk(const std::string& scenario_id);
   // Only flush to disk if marked dirty.
@@ -72,6 +74,7 @@ struct SettingsUpdater {
   std::string theme_name;
   std::string metronome_bpm;
   std::string crosshair_size;
+  std::string crosshair_name;
   std::string dpi;
 
  private:

@@ -6,20 +6,32 @@ message DotCrosshair {
   bool draw_outline = 1;
 }
 
+message PlusCrosshair {
+  float rounding = 1;
+  float horizontal_size_percent = 2;
+  float vertical_size_percent = 3;
+  float thickness = 4;
+  float outline_thickness = 5;
+}
+
 message Crosshair {
-  float size = 1;
+  string name = 1;
 
   oneof type {
     DotCrosshair dot = 3;
+    PlusCrosshair plus = 4;
   }
 }
 
 message Settings {
-  Crosshair crosshair = 1;
-  float dpi = 2;
-  float cm_per_360 = 3;
-  string theme_name = 4;
-  float metronome_bpm = 5;
+  float dpi = 1;
+  float cm_per_360 = 2;
+  string theme_name = 3;
+  float metronome_bpm = 4;
+
+  float crosshair_size = 5;
+  string current_crosshair_name = 6;
+  repeated Crosshair saved_crosshairs = 7;
 }
 
 message ScenarioSettings {
@@ -27,4 +39,5 @@ message ScenarioSettings {
   string theme_name = 2;
   float metronome_bpm = 3;
   float crosshair_size = 4;
+  string crosshair_name = 5;
 }

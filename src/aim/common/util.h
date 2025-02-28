@@ -233,4 +233,8 @@ static void PushBackAll(std::vector<T>* v, const std::vector<T>& values) {
   v->insert(v->end(), values.begin(), values.end());
 }
 
+static float FirstNonZero(float v1, float v2) {
+  return v1 != 0 ? v1 : v2;
+}
+
 }  // namespace aim

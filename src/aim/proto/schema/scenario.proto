@@ -96,6 +96,8 @@ message ScenarioReferenceOverrides {
 
 message ShotType {
   oneof type {
+    // Targets are killed after being "tracked"" consistently for a short duration. Typical for
+    // static scenarios. Mouse does not need to be held done or clicked.
     bool poke = 1;
     // Targets have health and must be traced for a certain amount of time.
     bool tracking_kill = 2;

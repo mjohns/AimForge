@@ -84,7 +84,8 @@ void Scenario::RefreshState() {
   metronome_ = std::make_unique<Metronome>(settings_.metronome_bpm(), app_);
   radians_per_dot_ = CmPer360ToRadiansPerDot(settings_.cm_per_360(), dpi);
   is_click_held_ = false;
-  crosshair_ = settings_.crosshair();
+  crosshair_ = app_->settings_manager()->GetCurrentCrosshair();
+  crosshair_size_ = settings_.crosshair_size();
   theme_ = app_->settings_manager()->GetCurrentTheme();
 }
 
@@ -129,7 +130,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
       if (is_adjusting_crosshair) {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
           if (event.wheel.y != 0) {
-            crosshair_.set_size(crosshair_.size() + event.wheel.y);
+            crosshair_size_ += event.wheel.y;
           }
         }
       }
@@ -152,13 +153,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_C) {
           is_adjusting_crosshair = false;
-          Settings* current_settings = app_->settings_manager()->GetMutableCurrentSettings();
-          if (current_settings != nullptr) {
-            *current_settings->mutable_crosshair() = crosshair_;
-            app_->settings_manager()->MarkDirty();
-            app_->settings_manager()->MaybeFlushToDisk(def_.scenario_id());
-            RefreshState();
-          }
+          DoneAdjustingCrosshairSize();
         }
       }
     }
@@ -167,7 +162,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(crosshair_, theme_, app_->screen_info(), draw_list);
+    DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
 
     ImGui::Text("%s", def_.scenario_id().c_str());
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
@@ -277,7 +272,7 @@ NavigationEvent Scenario::ResumeInternal() {
       if (is_adjusting_crosshair) {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
           if (event.wheel.y != 0) {
-            crosshair_.set_size(crosshair_.size() + event.wheel.y);
+            crosshair_size_ += event.wheel.y;
           }
         }
       }
@@ -303,13 +298,7 @@ NavigationEvent Scenario::ResumeInternal() {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_C) {
           is_adjusting_crosshair = false;
-          Settings* current_settings = app_->settings_manager()->GetMutableCurrentSettings();
-          if (current_settings != nullptr) {
-            *current_settings->mutable_crosshair() = crosshair_;
-            app_->settings_manager()->MarkDirty();
-            app_->settings_manager()->MaybeFlushToDisk(def_.scenario_id());
-            RefreshState();
-          }
+          DoneAdjustingCrosshairSize();
         }
       }
       OnEvent(event);
@@ -343,7 +332,7 @@ NavigationEvent Scenario::ResumeInternal() {
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(crosshair_, theme_, app_->screen_info(), draw_list);
+    DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -416,16 +405,27 @@ NavigationEvent Scenario::ResumeInternal() {
   return stats_screen.Run(replay_);
 }
 
-void Scenario::AddNewTargetEvent(const Target& target) {
-  if (!replay_) {
-    return;
+void Scenario::DoneAdjustingCrosshairSize() {
+  Settings* current_settings = app_->settings_manager()->GetMutableCurrentSettings();
+  if (current_settings != nullptr) {
+    if (crosshair_size_ != current_settings->crosshair_size()) {
+      current_settings->set_crosshair_size(crosshair_size_);
+      app_->settings_manager()->MarkDirty();
+      app_->settings_manager()->MaybeFlushToDisk(def_.scenario_id());
+      RefreshState();
+    }
   }
-  auto add_event = replay_->add_events();
-  add_event->set_frame_number(timer_.GetReplayFrameNumber());
-  auto add_target = add_event->mutable_add_target();
-  add_target->set_target_id(target.id);
-  *(add_target->mutable_position()) = ToStoredVec3(target.position);
-  add_target->set_radius(target.radius);
+}
+
+void Scenario::AddNewTargetEvent(const Target& target) {
+  if (replay_ != nullptr) {
+    auto add_event = replay_->add_events();
+    add_event->set_frame_number(timer_.GetReplayFrameNumber());
+    auto add_target = add_event->mutable_add_target();
+    add_target->set_target_id(target.id);
+    *(add_target->mutable_position()) = ToStoredVec3(target.position);
+    add_target->set_radius(target.radius);
+  }
 }
 
 void Scenario::AddKillTargetEvent(u16 target_id) {
