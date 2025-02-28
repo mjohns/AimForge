@@ -17,8 +17,8 @@
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
-#include "aim/scenario/scenario.h"
 #include "aim/scenario/base_scenario.h"
+#include "aim/scenario/scenario.h"
 
 namespace aim {
 namespace {
@@ -64,7 +64,6 @@ class BarrelScenario : public BaseScenario {
   }
 
  private:
-
   const float room_radius_;
 };
 
