@@ -37,6 +37,19 @@ Target* TargetManager::GetMutableTarget(u16 target_id) {
   return nullptr;
 }
 
+Target* TargetManager::GetMutableMostRecentlyAddedTarget() {
+  Target* result = nullptr;
+  u16 newest_target_id = 0;
+
+  for (Target& t : targets_) {
+    if (t.id > newest_target_id) {
+      result = &t;
+      newest_target_id = t.id;
+    }
+  }
+  return result;
+}
+
 std::vector<Target*> TargetManager::GetMutableVisibleTargets() {
   std::vector<Target*> result;
   for (Target& t : targets_) {

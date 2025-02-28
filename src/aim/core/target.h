@@ -54,6 +54,7 @@ class TargetManager {
   glm::vec2 GetUpdatedWallPosition(const Target& target, float now_seconds);
 
   Target* GetMutableTarget(u16 target_id);
+  Target* GetMutableMostRecentlyAddedTarget();
   std::vector<Target*> GetMutableVisibleTargets();
 
   TargetProfile GetTargetProfile(const TargetDef& def, std::mt19937* random);
