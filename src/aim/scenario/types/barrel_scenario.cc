@@ -22,13 +22,6 @@
 namespace aim {
 namespace {
 
-struct MovementInfo {
-  u16 target_id = 0;
-  glm::vec2 direction;
-  float speed;
-  float last_update_time_seconds;
-};
-
 class BarrelScenario : public Scenario {
  public:
   explicit BarrelScenario(const ScenarioDef& def, Application* app)
@@ -59,34 +52,21 @@ class BarrelScenario : public Scenario {
 
     float now_seconds = timer_.GetElapsedSeconds();
     for (Target* t : target_manager_.GetMutableVisibleTargets()) {
-      MovementInfo& info = movement_info_map_[t->id];
-
-      float delta_seconds = now_seconds - info.last_update_time_seconds;
-      glm::vec2 new_position =
-          t->static_wall_position + (info.direction * (delta_seconds * info.speed));
+      glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*t, now_seconds);
       if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
         // Need to change direction.
         glm::vec2 new_direction_pos =
             GetRandomPositionInCircle(0, 0.5 * room_radius_, app_->random_generator());
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
-        info.direction = new_direction;
-        new_position = t->static_wall_position + (info.direction * (delta_seconds * info.speed));
+        t->wall_direction = new_direction;
         // Make sure this is added before the new position is actually set on the target.
-        AddMoveLinearTargetEvent(*t, info.direction, info.speed);
+        AddMoveLinearTargetEvent(*t, *t->wall_direction, t->speed);
       }
-      t->static_wall_position = new_position;
-      FillInPositionFromStaticWallPos(t);
-      info.last_update_time_seconds = now_seconds;
     }
+    target_manager_.UpdateTargetPositions(now_seconds);
   }
 
  private:
-  void FillInPositionFromStaticWallPos(Target* t) {
-    t->position.x = t->static_wall_position.x;
-    t->position.y = -1 * (t->radius + 0.5);
-    t->position.z = t->static_wall_position.y;
-  }
-
   Target AddNewTarget(std::optional<u16> target_to_replace = {}) {
     auto type = GetNextTargetProfile();
     Target t = GetTargetTemplate(type);
@@ -103,28 +83,19 @@ class BarrelScenario : public Scenario {
     glm::vec2 direction = glm::normalize(direction_pos - pos);
 
     t.static_wall_position = pos;
-    FillInPositionFromStaticWallPos(&t);
+    t.wall_direction = direction;
 
     if (target_to_replace.has_value()) {
       AddKillTargetEvent(*target_to_replace);
       target_manager_.RemoveTarget(*target_to_replace);
     }
-    t = target_manager_.AddTarget(t);
-
-    MovementInfo info;
-    info.target_id = t.id;
-    info.direction = direction;
-    info.speed = t.speed;
-    info.last_update_time_seconds = timer_.GetElapsedSeconds();
-
-    movement_info_map_[t.id] = info;
+    t = target_manager_.AddWallTarget(t);
 
     AddNewTargetEvent(t);
-    AddMoveLinearTargetEvent(t, info.direction, info.speed);
+    AddMoveLinearTargetEvent(t, *t.wall_direction, t.speed);
     return t;
   }
 
-  std::unordered_map<u16, MovementInfo> movement_info_map_;
   const float room_radius_;
 };
 

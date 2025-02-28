@@ -361,6 +361,7 @@ TargetProfile Scenario::GetNextTargetProfile() {
 
 Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   Target target;
+  target.last_update_time_seconds = timer_.GetElapsedSeconds();
   target.radius = GetJitteredValue(
       profile.target_radius(), profile.target_radius_jitter(), app_->random_generator());
   target.speed =
