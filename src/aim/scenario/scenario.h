@@ -18,10 +18,10 @@
 namespace aim {
 
 struct ScenarioStats {
-  int targets_hit = 0;
-  int shots_taken = 0;
-  float hit_percent = 0;
-  float score = 0;
+  double num_hits = 0;
+  double num_shots = 0;
+  Stopwatch hit_stopwatch;
+  Stopwatch shot_stopwatch;
 };
 
 struct UpdateStateData {

@@ -11,9 +11,8 @@ namespace aim {
 struct StatsRow {
   int64_t stats_id = 0;
   std::string timestamp;
-  int64_t num_hits = 0;
-  int64_t num_kills = 0;
-  int64_t num_shots = 0;
+  double num_hits = 0;
+  double num_shots = 0;
   double score = 0.0;
   double cm_per_360 = 0.0;
 };

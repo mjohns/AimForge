@@ -14,13 +14,13 @@
 namespace aim {
 namespace {
 
-std::string MakeScoreString(int targets_hit, int shots_taken, float score) {
+std::string MakeScoreString(double targets_hit, double shots_taken, float score) {
   if (shots_taken > 0) {
-    float hit_percent = targets_hit / (float)shots_taken;
+    float hit_percent = targets_hit / shots_taken;
     std::string score_string = std::format("{} - {}/{} ({:.1f}%)",
                                            MaybeIntToString(score, 2),
-                                           targets_hit,
-                                           shots_taken,
+                                           MaybeIntToString(targets_hit, 2),
+                                           MaybeIntToString(shots_taken, 2),
                                            hit_percent * 100);
     return score_string;
   }

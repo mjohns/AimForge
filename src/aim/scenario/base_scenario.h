@@ -34,8 +34,6 @@ class BaseScenario : public Scenario {
   std::optional<u16> current_poke_target_id_;
   u64 current_poke_start_time_micros_ = 0;
 
-  Stopwatch hit_stopwatch_;
-  Stopwatch shot_stopwatch_;
   std::unique_ptr<TrackingSound> tracking_sound_;
 };
 
