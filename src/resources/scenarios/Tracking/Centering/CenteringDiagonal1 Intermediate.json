@@ -1,17 +1,16 @@
 {
   "centeringDef": {
     "endPosition": {
-      "x": 35,
+      "x": 50,
       "y": -3,
-      "z": 35
+      "z": 50
     },
     "startPosition": {
-      "x": -35,
+      "x": -50,
       "y": -3,
-      "z": -35
+      "z": -50
     }
   },
-  "displayName": "Diagonal Centering 1",
   "durationSeconds": 60,
   "room": {
     "cameraPosition": {
@@ -20,17 +19,16 @@
       "z": 0
     },
     "simpleRoom": {
-      "height": 150,
-      "width": 170
+      "height": 200,
+      "width": 250
     }
   },
-  "scenarioId": "diagonal_centering_test_1",
   "targetDef": {
     "numTargets": 1,
     "profiles": [
       {
         "pill": {
-          "height": 20
+          "height": 7
         },
         "speed": 45,
         "targetRadius": 1.2

@@ -47,8 +47,7 @@ class CenteringScenario : public Scenario {
     TargetProfile target_profile = GetNextTargetProfile();
     Target target = GetTargetTemplate(target_profile);
     if (target_profile.has_pill()) {
-      target.pill_up =
-          glm::normalize(glm::cross(start_to_end_, glm::normalize(start_ - camera_.GetPosition())));
+      target.pill_up = glm::normalize(glm::cross(start_to_end_, glm::vec3(0, -1, 0)));
     }
 
     target.position = initial_position_;
