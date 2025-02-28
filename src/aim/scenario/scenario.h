@@ -106,6 +106,8 @@ class Scenario {
   NavigationEvent ResumeInternal();
   void DoneAdjustingCrosshairSize();
 
+  NavigationEvent PauseAndReturn();
+
   u64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
   float radians_per_dot_;

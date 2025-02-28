@@ -24,6 +24,18 @@
 namespace aim {
 namespace {
 
+void EnsureNegative(float& val) {
+  if (val > 0) {
+    val *= -1;
+  }
+}
+
+void EnsurePositive(float& val) {
+  if (val < 0) {
+    val *= -1;
+  }
+}
+
 class LinearScenario : public BaseScenario {
  public:
   explicit LinearScenario(const ScenarioDef& def, Application* app)
@@ -50,10 +62,14 @@ class LinearScenario : public BaseScenario {
         GetJitteredValue(
             def_.linear_def().angle(), def_.linear_def().angle_jitter(), app_->random_generator()));
     if (pos.x > 0) {
-      direction.x *= -1;
+      EnsureNegative(direction.x);
+    } else {
+      EnsurePositive(direction.x);
     }
     if (pos.y > 0) {
-      direction.y *= -1;
+      EnsureNegative(direction.y);
+    } else {
+      EnsurePositive(direction.y);
     }
 
     target->wall_position = pos;
@@ -72,12 +88,24 @@ class LinearScenario : public BaseScenario {
       float max_y = (wall_.height * 0.5) - (t->radius * 1.2);
       float min_y = -1 * max_y;
 
-      if (new_position.x >= max_x || new_position.x <= min_x) {
-        (*t->wall_direction).x *= -1;
+      if (new_position.x >= max_x) {
+        // Too far right.
+        EnsureNegative((*t->wall_direction).x);
       }
 
-      if (new_position.y >= max_y || new_position.y <= min_y) {
-        (*t->wall_direction).y *= -1;
+      if (new_position.x <= min_x) {
+        // Too far left.
+        EnsurePositive((*t->wall_direction).x);
+      }
+
+      if (new_position.y >= max_y) {
+        // Too high.
+        EnsureNegative((*t->wall_direction).y);
+      }
+
+      if (new_position.y <= min_y) {
+        // Too low.
+        EnsurePositive((*t->wall_direction).y);
       }
     }
     target_manager_.UpdateTargetPositions(now_seconds);
