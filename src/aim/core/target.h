@@ -54,25 +54,14 @@ class TargetManager {
   glm::vec2 GetUpdatedWallPosition(const Target& target, float now_seconds);
 
   Target* GetMutableTarget(u16 target_id);
-
   std::vector<Target*> GetMutableVisibleTargets();
 
   TargetProfile GetTargetProfile(const TargetDef& def, std::mt19937* random);
 
   void MarkAllAsNonGhost();
 
-  std::optional<u16> most_recently_added_target_id() const {
-    return most_recently_added_target_id_;
-  }
 
   std::vector<u16> visible_target_ids() const;
-
-  Target* GetMutableMostRecentlyAddedTarget() {
-    if (most_recently_added_target_id_.has_value()) {
-      return GetMutableTarget(*most_recently_added_target_id_);
-    }
-    return nullptr;
-  }
 
   void Clear() {
     targets_.clear();
@@ -92,7 +81,6 @@ class TargetManager {
  private:
   u16 target_id_counter_ = 0;
   std::vector<Target> targets_;
-  std::optional<u16> most_recently_added_target_id_ = 0;
   Room room_;
 };
 
