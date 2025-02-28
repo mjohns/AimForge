@@ -23,6 +23,8 @@ struct Target {
   std::optional<glm::vec2> wall_direction;
   float last_update_time_seconds = 0;
 
+  float remove_after_time_seconds = -1;
+
   bool hidden = false;
   bool is_ghost = false;
 

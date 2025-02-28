@@ -56,7 +56,7 @@ NavigationEvent Scenario::Run() {
 
 void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) {
   for (auto& task : delayed_tasks_) {
-    if (!task.fn) {
+    if (!task.fn.has_value()) {
       task.fn = std::move(fn);
       task.run_time_seconds = timer_.GetElapsedSeconds() + delay_seconds;
       return;
@@ -208,10 +208,10 @@ NavigationEvent Scenario::Resume() {
 
     update_data.is_click_held = is_click_held_;
     for (auto& task : delayed_tasks_) {
-      if (task.fn && task.run_time_seconds < timer_.GetElapsedSeconds()) {
-        task.fn();
+      if (task.fn.has_value() && task.run_time_seconds < timer_.GetElapsedSeconds()) {
+        std::function<void()> fn = std::move(*task.fn);
         task.fn = {};
-        task.run_time_seconds = -1;
+        fn();
       }
     }
     UpdateState(&update_data);
