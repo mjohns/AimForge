@@ -12,6 +12,7 @@
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/tracking_sound.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
@@ -21,38 +22,6 @@ namespace aim {
 namespace {
 
 constexpr const float kStartMovingDelaySeconds = 0.2;
-
-TimedInvokerParams GetInvokerParams() {
-  TimedInvokerParams params;
-  params.interval_micros = 1000 * 90;
-  return params;
-}
-
-class TrackingSound {
- public:
-  TrackingSound(Application* app)
-      : app_(app), invoker_(GetInvokerParams(), std::bind(&TrackingSound::PlaySound, this)) {
-    stopwatch_.Start();
-  }
-
-  void DoTick(bool is_hitting) {
-    is_hitting_ = is_hitting;
-    invoker_.MaybeInvoke(stopwatch_.GetElapsedMicros());
-  }
-
- private:
-  void PlaySound() {
-    app_->sound_manager()->PlayShootSound();
-    if (is_hitting_) {
-      app_->sound_manager()->PlayHitSound();
-    }
-  }
-
-  Application* app_;
-  Stopwatch stopwatch_;
-  TimedInvoker invoker_;
-  bool is_hitting_ = false;
-};
 
 class CenteringScenario : public Scenario {
  public:
@@ -92,8 +61,8 @@ class CenteringScenario : public Scenario {
       return;
     }
 
-    auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (data->is_click_held) {
+      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       if (!tracking_sound_) {
         tracking_sound_ = std::make_unique<TrackingSound>(app_);
       }

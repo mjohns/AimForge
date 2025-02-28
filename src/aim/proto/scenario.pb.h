@@ -87,6 +87,9 @@ extern ScenarioDefDefaultTypeInternal _ScenarioDef_default_instance_;
 class ScenarioReferenceOverrides;
 struct ScenarioReferenceOverridesDefaultTypeInternal;
 extern ScenarioReferenceOverridesDefaultTypeInternal _ScenarioReferenceOverrides_default_instance_;
+class ShotType;
+struct ShotTypeDefaultTypeInternal;
+extern ShotTypeDefaultTypeInternal _ShotType_default_instance_;
 class SimpleRoom;
 struct SimpleRoomDefaultTypeInternal;
 extern SimpleRoomDefaultTypeInternal _SimpleRoom_default_instance_;
@@ -329,6 +332,270 @@ class SimpleRoom final : public ::google::protobuf::Message
     float height_;
     float width_;
     float depth_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ShotType final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ShotType) */ {
+ public:
+  inline ShotType() : ShotType(nullptr) {}
+  ~ShotType() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ShotType* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ShotType));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ShotType(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline ShotType(const ShotType& from) : ShotType(nullptr, from) {}
+  inline ShotType(ShotType&& from) noexcept
+      : ShotType(nullptr, std::move(from)) {}
+  inline ShotType& operator=(const ShotType& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ShotType& operator=(ShotType&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ShotType& default_instance() {
+    return *internal_default_instance();
+  }
+  enum TypeCase {
+    kPoke = 1,
+    kTrackingKill = 2,
+    kTrackingInvincible = 3,
+    kClickSingle = 4,
+    TYPE_NOT_SET = 0,
+  };
+  static inline const ShotType* internal_default_instance() {
+    return reinterpret_cast<const ShotType*>(
+        &_ShotType_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 10;
+  friend void swap(ShotType& a, ShotType& b) { a.Swap(&b); }
+  inline void Swap(ShotType* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ShotType* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ShotType* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ShotType>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ShotType& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ShotType& from) { ShotType::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ShotType* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ShotType"; }
+
+ protected:
+  explicit ShotType(::google::protobuf::Arena* arena);
+  ShotType(::google::protobuf::Arena* arena, const ShotType& from);
+  ShotType(::google::protobuf::Arena* arena, ShotType&& from) noexcept
+      : ShotType(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kPokeKillTimeSecondsFieldNumber = 10,
+    kPokeFieldNumber = 1,
+    kTrackingKillFieldNumber = 2,
+    kTrackingInvincibleFieldNumber = 3,
+    kClickSingleFieldNumber = 4,
+  };
+  // float poke_kill_time_seconds = 10;
+  bool has_poke_kill_time_seconds() const;
+  void clear_poke_kill_time_seconds() ;
+  float poke_kill_time_seconds() const;
+  void set_poke_kill_time_seconds(float value);
+
+  private:
+  float _internal_poke_kill_time_seconds() const;
+  void _internal_set_poke_kill_time_seconds(float value);
+
+  public:
+  // bool poke = 1;
+  bool has_poke() const;
+  void clear_poke() ;
+  bool poke() const;
+  void set_poke(bool value);
+
+  private:
+  bool _internal_poke() const;
+  void _internal_set_poke(bool value);
+
+  public:
+  // bool tracking_kill = 2;
+  bool has_tracking_kill() const;
+  void clear_tracking_kill() ;
+  bool tracking_kill() const;
+  void set_tracking_kill(bool value);
+
+  private:
+  bool _internal_tracking_kill() const;
+  void _internal_set_tracking_kill(bool value);
+
+  public:
+  // bool tracking_invincible = 3;
+  bool has_tracking_invincible() const;
+  void clear_tracking_invincible() ;
+  bool tracking_invincible() const;
+  void set_tracking_invincible(bool value);
+
+  private:
+  bool _internal_tracking_invincible() const;
+  void _internal_set_tracking_invincible(bool value);
+
+  public:
+  // bool click_single = 4;
+  bool has_click_single() const;
+  void clear_click_single() ;
+  bool click_single() const;
+  void set_click_single(bool value);
+
+  private:
+  bool _internal_click_single() const;
+  void _internal_set_click_single(bool value);
+
+  public:
+  void clear_type();
+  TypeCase type_case() const;
+  // @@protoc_insertion_point(class_scope:aim.ShotType)
+ private:
+  class _Internal;
+  void set_has_poke();
+  void set_has_tracking_kill();
+  void set_has_tracking_invincible();
+  void set_has_click_single();
+  inline bool has_type() const;
+  inline void clear_has_type();
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      0, 5, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const ShotType& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    float poke_kill_time_seconds_;
+    union TypeUnion {
+      constexpr TypeUnion() : _constinit_{} {}
+      ::google::protobuf::internal::ConstantInitialized _constinit_;
+      bool poke_;
+      bool tracking_kill_;
+      bool tracking_invincible_;
+      bool click_single_;
+    } type_;
+    ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -861,7 +1128,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 15;
+  static constexpr int kIndexInFileMessages = 16;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -1296,7 +1563,7 @@ class BarrelScenarioDef final : public ::google::protobuf::internal::ZeroFieldsB
     return reinterpret_cast<const BarrelScenarioDef*>(
         &_BarrelScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 13;
+  static constexpr int kIndexInFileMessages = 14;
   friend void swap(BarrelScenarioDef& a, BarrelScenarioDef& b) { a.Swap(&b); }
   inline void Swap(BarrelScenarioDef* other) {
     if (other == this) return;
@@ -1638,7 +1905,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
+  static constexpr int kIndexInFileMessages = 17;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -1730,6 +1997,8 @@ class TargetProfile final : public ::google::protobuf::Message
     kTargetRadiusJitterFieldNumber = 3,
     kSpeedFieldNumber = 4,
     kSpeedJitterFieldNumber = 5,
+    kHealthSecondsFieldNumber = 6,
+    kHealthSecondsJitterFieldNumber = 7,
     kPillFieldNumber = 10,
   };
   // float percent_chance = 1;
@@ -1787,6 +2056,28 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_speed_jitter(float value);
 
   public:
+  // float health_seconds = 6;
+  bool has_health_seconds() const;
+  void clear_health_seconds() ;
+  float health_seconds() const;
+  void set_health_seconds(float value);
+
+  private:
+  float _internal_health_seconds() const;
+  void _internal_set_health_seconds(float value);
+
+  public:
+  // float health_seconds_jitter = 7;
+  bool has_health_seconds_jitter() const;
+  void clear_health_seconds_jitter() ;
+  float health_seconds_jitter() const;
+  void set_health_seconds_jitter(float value);
+
+  private:
+  float _internal_health_seconds_jitter() const;
+  void _internal_set_health_seconds_jitter(float value);
+
+  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -1816,7 +2107,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 1,
+      3, 8, 1,
       0, 2>
       _table_;
 
@@ -1841,6 +2132,8 @@ class TargetProfile final : public ::google::protobuf::Message
     float target_radius_jitter_;
     float speed_;
     float speed_jitter_;
+    float health_seconds_;
+    float health_seconds_jitter_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -2642,7 +2935,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const CenteringScenarioDef*>(
         &_CenteringScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 12;
+  static constexpr int kIndexInFileMessages = 13;
   friend void swap(CenteringScenarioDef& a, CenteringScenarioDef& b) { a.Swap(&b); }
   inline void Swap(CenteringScenarioDef* other) {
     if (other == this) return;
@@ -3139,7 +3432,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 14;
+  static constexpr int kIndexInFileMessages = 15;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -3681,7 +3974,7 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const StaticScenarioDef*>(
         &_StaticScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 11;
+  static constexpr int kIndexInFileMessages = 12;
   friend void swap(StaticScenarioDef& a, StaticScenarioDef& b) { a.Swap(&b); }
   inline void Swap(StaticScenarioDef* other) {
     if (other == this) return;
@@ -3768,10 +4061,9 @@ class StaticScenarioDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kTargetPlacementStrategyFieldNumber = 2,
-    kIsPokeBallFieldNumber = 1,
+    kTargetPlacementStrategyFieldNumber = 1,
   };
-  // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+  // .aim.TargetPlacementStrategy target_placement_strategy = 1;
   bool has_target_placement_strategy() const;
   void clear_target_placement_strategy() ;
   const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
@@ -3786,23 +4078,12 @@ class StaticScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
 
   public:
-  // bool is_poke_ball = 1;
-  bool has_is_poke_ball() const;
-  void clear_is_poke_ball() ;
-  bool is_poke_ball() const;
-  void set_is_poke_ball(bool value);
-
-  private:
-  bool _internal_is_poke_ball() const;
-  void _internal_set_is_poke_ball(bool value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.StaticScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
+      0, 1, 1,
       0, 2>
       _table_;
 
@@ -3823,7 +4104,6 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
-    bool is_poke_ball_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3896,7 +4176,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const ScenarioDef*>(
         &_ScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(ScenarioDef& a, ScenarioDef& b) { a.Swap(&b); }
   inline void Swap(ScenarioDef* other) {
     if (other == this) return;
@@ -3988,8 +4268,8 @@ class ScenarioDef final : public ::google::protobuf::Message
     kRoomFieldNumber = 3,
     kTargetDefFieldNumber = 5,
     kOverridesFieldNumber = 7,
+    kShotTypeFieldNumber = 8,
     kDurationSecondsFieldNumber = 2,
-    kIsPokeFieldNumber = 8,
     kStaticDefFieldNumber = 10,
     kCenteringDefFieldNumber = 11,
     kBarrelDefFieldNumber = 12,
@@ -4073,6 +4353,21 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::ScenarioReferenceOverrides* _internal_mutable_overrides();
 
   public:
+  // .aim.ShotType shot_type = 8;
+  bool has_shot_type() const;
+  void clear_shot_type() ;
+  const ::aim::ShotType& shot_type() const;
+  PROTOBUF_NODISCARD ::aim::ShotType* release_shot_type();
+  ::aim::ShotType* mutable_shot_type();
+  void set_allocated_shot_type(::aim::ShotType* value);
+  void unsafe_arena_set_allocated_shot_type(::aim::ShotType* value);
+  ::aim::ShotType* unsafe_arena_release_shot_type();
+
+  private:
+  const ::aim::ShotType& _internal_shot_type() const;
+  ::aim::ShotType* _internal_mutable_shot_type();
+
+  public:
   // float duration_seconds = 2;
   bool has_duration_seconds() const;
   void clear_duration_seconds() ;
@@ -4082,17 +4377,6 @@ class ScenarioDef final : public ::google::protobuf::Message
   private:
   float _internal_duration_seconds() const;
   void _internal_set_duration_seconds(float value);
-
-  public:
-  // bool is_poke = 8;
-  bool has_is_poke() const;
-  void clear_is_poke() ;
-  bool is_poke() const;
-  void set_is_poke(bool value);
-
-  private:
-  bool _internal_is_poke() const;
-  void _internal_set_is_poke(bool value);
 
   public:
   // .aim.StaticScenarioDef static_def = 10;
@@ -4164,7 +4448,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 10, 6,
+      3, 10, 7,
       52, 2>
       _table_;
 
@@ -4189,8 +4473,8 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::Room* room_;
     ::aim::TargetDef* target_def_;
     ::aim::ScenarioReferenceOverrides* overrides_;
+    ::aim::ShotType* shot_type_;
     float duration_seconds_;
-    bool is_poke_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -6073,6 +6357,179 @@ inline void ScenarioReferenceOverrides::_internal_set_speed_multiplier(float val
 
 // -------------------------------------------------------------------
 
+// ShotType
+
+// bool poke = 1;
+inline bool ShotType::has_poke() const {
+  return type_case() == kPoke;
+}
+inline void ShotType::set_has_poke() {
+  _impl_._oneof_case_[0] = kPoke;
+}
+inline void ShotType::clear_poke() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kPoke) {
+    _impl_.type_.poke_ = false;
+    clear_has_type();
+  }
+}
+inline bool ShotType::poke() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.poke)
+  return _internal_poke();
+}
+inline void ShotType::set_poke(bool value) {
+  if (type_case() != kPoke) {
+    clear_type();
+    set_has_poke();
+  }
+  _impl_.type_.poke_ = value;
+  // @@protoc_insertion_point(field_set:aim.ShotType.poke)
+}
+inline bool ShotType::_internal_poke() const {
+  if (type_case() == kPoke) {
+    return _impl_.type_.poke_;
+  }
+  return false;
+}
+
+// bool tracking_kill = 2;
+inline bool ShotType::has_tracking_kill() const {
+  return type_case() == kTrackingKill;
+}
+inline void ShotType::set_has_tracking_kill() {
+  _impl_._oneof_case_[0] = kTrackingKill;
+}
+inline void ShotType::clear_tracking_kill() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kTrackingKill) {
+    _impl_.type_.tracking_kill_ = false;
+    clear_has_type();
+  }
+}
+inline bool ShotType::tracking_kill() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.tracking_kill)
+  return _internal_tracking_kill();
+}
+inline void ShotType::set_tracking_kill(bool value) {
+  if (type_case() != kTrackingKill) {
+    clear_type();
+    set_has_tracking_kill();
+  }
+  _impl_.type_.tracking_kill_ = value;
+  // @@protoc_insertion_point(field_set:aim.ShotType.tracking_kill)
+}
+inline bool ShotType::_internal_tracking_kill() const {
+  if (type_case() == kTrackingKill) {
+    return _impl_.type_.tracking_kill_;
+  }
+  return false;
+}
+
+// bool tracking_invincible = 3;
+inline bool ShotType::has_tracking_invincible() const {
+  return type_case() == kTrackingInvincible;
+}
+inline void ShotType::set_has_tracking_invincible() {
+  _impl_._oneof_case_[0] = kTrackingInvincible;
+}
+inline void ShotType::clear_tracking_invincible() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kTrackingInvincible) {
+    _impl_.type_.tracking_invincible_ = false;
+    clear_has_type();
+  }
+}
+inline bool ShotType::tracking_invincible() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.tracking_invincible)
+  return _internal_tracking_invincible();
+}
+inline void ShotType::set_tracking_invincible(bool value) {
+  if (type_case() != kTrackingInvincible) {
+    clear_type();
+    set_has_tracking_invincible();
+  }
+  _impl_.type_.tracking_invincible_ = value;
+  // @@protoc_insertion_point(field_set:aim.ShotType.tracking_invincible)
+}
+inline bool ShotType::_internal_tracking_invincible() const {
+  if (type_case() == kTrackingInvincible) {
+    return _impl_.type_.tracking_invincible_;
+  }
+  return false;
+}
+
+// bool click_single = 4;
+inline bool ShotType::has_click_single() const {
+  return type_case() == kClickSingle;
+}
+inline void ShotType::set_has_click_single() {
+  _impl_._oneof_case_[0] = kClickSingle;
+}
+inline void ShotType::clear_click_single() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kClickSingle) {
+    _impl_.type_.click_single_ = false;
+    clear_has_type();
+  }
+}
+inline bool ShotType::click_single() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.click_single)
+  return _internal_click_single();
+}
+inline void ShotType::set_click_single(bool value) {
+  if (type_case() != kClickSingle) {
+    clear_type();
+    set_has_click_single();
+  }
+  _impl_.type_.click_single_ = value;
+  // @@protoc_insertion_point(field_set:aim.ShotType.click_single)
+}
+inline bool ShotType::_internal_click_single() const {
+  if (type_case() == kClickSingle) {
+    return _impl_.type_.click_single_;
+  }
+  return false;
+}
+
+// float poke_kill_time_seconds = 10;
+inline bool ShotType::has_poke_kill_time_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void ShotType::clear_poke_kill_time_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.poke_kill_time_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline float ShotType::poke_kill_time_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.poke_kill_time_seconds)
+  return _internal_poke_kill_time_seconds();
+}
+inline void ShotType::set_poke_kill_time_seconds(float value) {
+  _internal_set_poke_kill_time_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.poke_kill_time_seconds)
+}
+inline float ShotType::_internal_poke_kill_time_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.poke_kill_time_seconds_;
+}
+inline void ShotType::_internal_set_poke_kill_time_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.poke_kill_time_seconds_ = value;
+}
+
+inline bool ShotType::has_type() const {
+  return type_case() != TYPE_NOT_SET;
+}
+inline void ShotType::clear_has_type() {
+  _impl_._oneof_case_[0] = TYPE_NOT_SET;
+}
+inline ShotType::TypeCase ShotType::type_case() const {
+  return ShotType::TypeCase(_impl_._oneof_case_[0]);
+}
+// -------------------------------------------------------------------
+
 // ScenarioDef
 
 // string scenario_id = 1;
@@ -6146,13 +6603,13 @@ inline void ScenarioDef::set_allocated_scenario_id(std::string* value) {
 
 // float duration_seconds = 2;
 inline bool ScenarioDef::has_duration_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void ScenarioDef::clear_duration_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.duration_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float ScenarioDef::duration_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.duration_seconds)
@@ -6160,7 +6617,7 @@ inline float ScenarioDef::duration_seconds() const {
 }
 inline void ScenarioDef::set_duration_seconds(float value) {
   _internal_set_duration_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.duration_seconds)
 }
 inline float ScenarioDef::_internal_duration_seconds() const {
@@ -6529,32 +6986,100 @@ inline void ScenarioDef::set_allocated_overrides(::aim::ScenarioReferenceOverrid
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.overrides)
 }
 
-// bool is_poke = 8;
-inline bool ScenarioDef::has_is_poke() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+// .aim.ShotType shot_type = 8;
+inline bool ScenarioDef::has_shot_type() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.shot_type_ != nullptr);
   return value;
 }
-inline void ScenarioDef::clear_is_poke() {
+inline void ScenarioDef::clear_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.is_poke_ = false;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  if (_impl_.shot_type_ != nullptr) _impl_.shot_type_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
-inline bool ScenarioDef::is_poke() const {
-  // @@protoc_insertion_point(field_get:aim.ScenarioDef.is_poke)
-  return _internal_is_poke();
-}
-inline void ScenarioDef::set_is_poke(bool value) {
-  _internal_set_is_poke(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
-  // @@protoc_insertion_point(field_set:aim.ScenarioDef.is_poke)
-}
-inline bool ScenarioDef::_internal_is_poke() const {
+inline const ::aim::ShotType& ScenarioDef::_internal_shot_type() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.is_poke_;
+  const ::aim::ShotType* p = _impl_.shot_type_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ShotType&>(::aim::_ShotType_default_instance_);
 }
-inline void ScenarioDef::_internal_set_is_poke(bool value) {
+inline const ::aim::ShotType& ScenarioDef::shot_type() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.shot_type)
+  return _internal_shot_type();
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_shot_type(::aim::ShotType* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.is_poke_ = value;
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.shot_type_);
+  }
+  _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000020u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000020u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.shot_type)
+}
+inline ::aim::ShotType* ScenarioDef::release_shot_type() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000020u;
+  ::aim::ShotType* released = _impl_.shot_type_;
+  _impl_.shot_type_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::ShotType* ScenarioDef::unsafe_arena_release_shot_type() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.shot_type)
+
+  _impl_._has_bits_[0] &= ~0x00000020u;
+  ::aim::ShotType* temp = _impl_.shot_type_;
+  _impl_.shot_type_ = nullptr;
+  return temp;
+}
+inline ::aim::ShotType* ScenarioDef::_internal_mutable_shot_type() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.shot_type_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ShotType>(GetArena());
+    _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(p);
+  }
+  return _impl_.shot_type_;
+}
+inline ::aim::ShotType* ScenarioDef::mutable_shot_type() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000020u;
+  ::aim::ShotType* _msg = _internal_mutable_shot_type();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.shot_type)
+  return _msg;
+}
+inline void ScenarioDef::set_allocated_shot_type(::aim::ShotType* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.shot_type_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000020u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000020u;
+  }
+
+  _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.shot_type)
 }
 
 // .aim.StaticScenarioDef static_def = 10;
@@ -6807,35 +7332,7 @@ inline ScenarioDef::TypeCase ScenarioDef::type_case() const {
 
 // StaticScenarioDef
 
-// bool is_poke_ball = 1;
-inline bool StaticScenarioDef::has_is_poke_ball() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline void StaticScenarioDef::clear_is_poke_ball() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.is_poke_ball_ = false;
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline bool StaticScenarioDef::is_poke_ball() const {
-  // @@protoc_insertion_point(field_get:aim.StaticScenarioDef.is_poke_ball)
-  return _internal_is_poke_ball();
-}
-inline void StaticScenarioDef::set_is_poke_ball(bool value) {
-  _internal_set_is_poke_ball(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.StaticScenarioDef.is_poke_ball)
-}
-inline bool StaticScenarioDef::_internal_is_poke_ball() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.is_poke_ball_;
-}
-inline void StaticScenarioDef::_internal_set_is_poke_ball(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.is_poke_ball_ = value;
-}
-
-// .aim.TargetPlacementStrategy target_placement_strategy = 2;
+// .aim.TargetPlacementStrategy target_placement_strategy = 1;
 inline bool StaticScenarioDef::has_target_placement_strategy() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
@@ -7533,6 +8030,62 @@ inline float TargetProfile::_internal_speed_jitter() const {
 inline void TargetProfile::_internal_set_speed_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_jitter_ = value;
+}
+
+// float health_seconds = 6;
+inline bool TargetProfile::has_health_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_health_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float TargetProfile::health_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_seconds)
+  return _internal_health_seconds();
+}
+inline void TargetProfile::set_health_seconds(float value) {
+  _internal_set_health_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_seconds)
+}
+inline float TargetProfile::_internal_health_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_seconds_;
+}
+inline void TargetProfile::_internal_set_health_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_seconds_ = value;
+}
+
+// float health_seconds_jitter = 7;
+inline bool TargetProfile::has_health_seconds_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_health_seconds_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_seconds_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline float TargetProfile::health_seconds_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_seconds_jitter)
+  return _internal_health_seconds_jitter();
+}
+inline void TargetProfile::set_health_seconds_jitter(float value) {
+  _internal_set_health_seconds_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_seconds_jitter)
+}
+inline float TargetProfile::_internal_health_seconds_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_seconds_jitter_;
+}
+inline void TargetProfile::_internal_set_health_seconds_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_seconds_jitter_ = value;
 }
 
 // .aim.PillTargetDef pill = 10;

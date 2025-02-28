@@ -36,9 +36,16 @@ class Stopwatch {
 
 // Class to invoke a function at a given rate.
 struct TimedInvokerParams {
+  static TimedInvokerParams TimesPerSecond(float times_per_second) {
+    TimedInvokerParams params;
+    u64 micros_per_second = 1000000;
+    params.interval_micros = micros_per_second / times_per_second;
+    return params;
+  }
+
   // Default to playing once every second.
-  uint64_t interval_micros = 1000000;
-  uint64_t initial_delay_micros = 0;
+  u64 interval_micros = 1000000;
+  u64 initial_delay_micros = 0;
 };
 
 class TimedInvoker {

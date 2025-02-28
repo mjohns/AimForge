@@ -238,7 +238,6 @@ NavigationEvent Scenario::Resume() {
       ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     }
 
-
     ImGui::End();
 
     if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
@@ -251,14 +250,26 @@ NavigationEvent Scenario::Resume() {
   OnScenarioDone();
   is_done_ = true;
 
-  stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
-  float duration_modifier = 60.0f / def_.duration_seconds();
-  stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
+  if (def_.shot_type().tracking_invincible()) {
+    stats_.score = stats_.targets_hit;
+    stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
+  } else if (def_.shot_type().tracking_kill()) {
+    stats_.score = stats_.targets_hit;
+    stats_.shots_taken = 0;
+  } else if (def_.shot_type().poke()) {
+    stats_.score = stats_.targets_hit;
+    stats_.shots_taken = 0;
+  } else {
+    // Default clicking scoring
+    stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
+    float duration_modifier = 60.0f / def_.duration_seconds();
+    stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
+  }
 
   StatsRow stats_row;
   stats_row.cm_per_360 = settings_.cm_per_360();
   stats_row.num_hits = stats_.targets_hit;
-  stats_row.num_kills = stats_.targets_hit;
+  //stats_row.num_kills = stats_.targets_killed;
   stats_row.num_shots = stats_.shots_taken;
   stats_row.score = stats_.score;
   app_->stats_db()->AddStats(def_.scenario_id(), &stats_row);
@@ -370,6 +381,8 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
       profile.target_radius(), profile.target_radius_jitter(), app_->random_generator());
   target.speed =
       GetJitteredValue(profile.speed(), profile.speed_jitter(), app_->random_generator());
+  target.health_seconds = GetJitteredValue(
+      profile.health_seconds(), profile.health_seconds_jitter(), app_->random_generator());
   if (profile.has_pill()) {
     target.is_pill = true;
     target.height = profile.pill().height();

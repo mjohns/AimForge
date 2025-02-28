@@ -6,6 +6,7 @@
 #include <optional>
 
 #include "aim/common/scope_guard.h"
+#include "aim/common/util.h"
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/screens.h"
@@ -14,10 +15,16 @@ namespace aim {
 namespace {
 
 std::string MakeScoreString(int targets_hit, int shots_taken, float score) {
-  float hit_percent = targets_hit / (float)shots_taken;
-  std::string score_string =
-      std::format("{:.2f} - {}/{} ({:.1f}%)", score, targets_hit, shots_taken, hit_percent * 100);
-  return score_string;
+  if (shots_taken > 0) {
+    float hit_percent = targets_hit / (float)shots_taken;
+    std::string score_string = std::format("{} - {}/{} ({:.1f}%)",
+                                           MaybeIntToString(score, 2),
+                                           targets_hit,
+                                           shots_taken,
+                                           hit_percent * 100);
+    return score_string;
+  }
+  return std::format("{}", MaybeIntToString(score, 2));
 }
 
 std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {

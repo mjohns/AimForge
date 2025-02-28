@@ -94,6 +94,20 @@ message ScenarioReferenceOverrides {
   float speed_multiplier = 4;
 }
 
+message ShotType {
+ j   oneof type {
+      bool poke = 1;
+      // Targets have health and must be traced for a certain amount of time.
+      bool tracking_kill = 2;
+      // A single target will be tracked and the total time on target will be the score.
+      bool tracking_invincible = 3;
+      // Target take a single click to kill.
+      bool click_single = 4;
+    }
+    // If unset defaults to 0.05 (50 millis)
+    float poke_kill_time_seconds = 10;
+}
+
 message ScenarioDef {
   string scenario_id = 1;
   float duration_seconds = 2;
@@ -104,7 +118,7 @@ message ScenarioDef {
   string reference = 6;
   ScenarioReferenceOverrides overrides = 7;
 
-  bool is_poke = 8;
+  ShotType shot_type = 8;
 
   oneof type {
     StaticScenarioDef static_def = 10;
@@ -159,6 +173,9 @@ message TargetProfile {
   float speed = 4;
   // Speed will be adjusted +/- jitter amount.
   float speed_jitter = 5;
+
+  float health_seconds = 6;
+  float health_seconds_jitter = 7;
 
   // Defaults to spehere if no more specific type is specified.
   oneof type {
