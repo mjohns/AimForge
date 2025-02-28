@@ -93,9 +93,13 @@ class Scenario {
   google::protobuf::Arena replay_arena_;
   Replay* replay_ = nullptr;
   Theme theme_;
+  bool has_started_ = false;
 
  private:
   void RefreshState();
+
+  NavigationEvent RunWaitingScreenAndThenStart();
+  NavigationEvent ResumeInternal();
 
   u64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
