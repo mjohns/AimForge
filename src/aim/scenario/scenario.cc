@@ -39,7 +39,8 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
       timer_(kReplayFps),
       camera_(Camera(
           def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
-      replay_(std::make_unique<Replay>()) {
+      replay_(std::make_unique<Replay>()),
+      target_manager_(def.room()) {
   theme_ = app->settings_manager()->GetCurrentTheme();
 }
 
@@ -265,9 +266,9 @@ NavigationEvent Scenario::Resume() {
     PlaylistItemProgress* progress = playlist_run->GetMutableCurrentPlaylistItemProgress();
     if (def_.scenario_id() == progress->item.scenario()) {
       progress->runs_done++;
-    }
-    if (progress->item.auto_next()) {
-      return NavigationEvent::PlaylistNext();
+      if (progress->item.auto_next()) {
+        return NavigationEvent::PlaylistNext();
+      }
     }
   }
 

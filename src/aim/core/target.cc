@@ -26,6 +26,11 @@ Target TargetManager::AddTarget(Target t) {
   return t;
 }
 
+Target TargetManager::AddWallTarget(Target t) {
+  t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
+  return AddTarget(t);
+}
+
 Target* TargetManager::GetMutableTarget(u16 target_id) {
   for (Target& t : targets_) {
     if (t.id == target_id) {
@@ -59,21 +64,19 @@ void TargetManager::MarkAllAsNonGhost() {
   }
 }
 
-Target TargetManager::ReplaceTarget(uint16_t target_id_to_replace, Target new_target) {
-  if (new_target.id == 0) {
-    auto new_id = ++target_id_counter_;
-    new_target.id = new_id;
-  }
-  most_recently_added_target_id_ = new_target.id;
-  for (int i = 0; i < targets_.size(); ++i) {
-    if (targets_[i].id == target_id_to_replace) {
-      targets_[i] = new_target;
-      return new_target;
+void TargetManager::UpdateTargetPositions(float now_seconds) {
+  for (Target& t : targets_) {
+    float delta_seconds = now_seconds - t.last_update_time_seconds;
+    if (t.direction.has_value()) {
+      t.position = t.position + (*t.direction * (delta_seconds * t.speed));
     }
+    if (t.wall_direction.has_value()) {
+      t.static_wall_position =
+          t.static_wall_position + (*t.wall_direction * (delta_seconds * t.speed));
+      t.position = WallPositionToWorldPosition(t.static_wall_position, t.radius, room_);
+    }
+    t.last_update_time_seconds = now_seconds;
   }
-  // TODO: error if target did not exist?
-  Logger::get()->warn("Unable to replace target which does not exist");
-  return new_target;
 }
 
 std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
@@ -172,6 +175,33 @@ TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, std::mt19937
     }
   }
   return def.profiles()[0];
+}
+
+glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
+                                      float target_radius,
+                                      const Room& room) {
+  glm::vec3 world_position;
+  world_position.z = wall_position.y;
+  if (room.has_simple_room() || room.has_barrel_room()) {
+    world_position.x = wall_position.x;
+    world_position.z = wall_position.y;
+
+    // Make sure the target does not clip through wall
+    world_position.y = -1 * (target_radius + 0.5);
+  } else if (room.has_circular_room()) {
+    // Effectively wrap the wall around the perimeter of the circle.
+    float radius = room.circular_room().radius();
+    // float circumference = glm::two_pi<float>() * radius;
+    float radians_per_x = 1 / radius;
+
+    glm::vec2 to_rotate(0, radius - (0.7 * target_radius));
+    glm::vec2 rotated = RotateRadians(to_rotate, -1 * wall_position.x * radians_per_x);
+
+    world_position.x = rotated.x;
+    world_position.y = rotated.y;
+  }
+
+  return world_position;
 }
 
 }  // namespace aim
