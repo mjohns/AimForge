@@ -29,7 +29,7 @@ void Stopwatch::Stop() {
   previously_elapsed_duration_ += now - start_time_;
 }
 
-std::chrono::steady_clock::duration Stopwatch::GetElapsed() {
+std::chrono::steady_clock::duration Stopwatch::GetElapsed() const {
   if (!running_) {
     return previously_elapsed_duration_;
   }
@@ -38,12 +38,12 @@ std::chrono::steady_clock::duration Stopwatch::GetElapsed() {
   return elapsed + previously_elapsed_duration_;
 }
 
-uint64_t Stopwatch::GetElapsedMicros() {
+uint64_t Stopwatch::GetElapsedMicros() const {
   auto elapsed = GetElapsed();
   return std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
 }
 
-float Stopwatch::GetElapsedSeconds() {
+float Stopwatch::GetElapsedSeconds() const {
   auto elapsed = GetElapsed();
   auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
   return millis / 1000.0f;

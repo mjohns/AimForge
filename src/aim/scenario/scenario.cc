@@ -374,10 +374,7 @@ NavigationEvent Scenario::ResumeInternal() {
   OnScenarioDone();
   is_done_ = true;
 
-  ShotType::TypeCase shot_type = def_.shot_type().type_case();
-  if (shot_type == ShotType::TYPE_NOT_SET) {
-    shot_type = GetDefaultShotType();
-  }
+  ShotType::TypeCase shot_type = GetShotType();
   float score = 0;
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
@@ -422,6 +419,14 @@ NavigationEvent Scenario::ResumeInternal() {
 
   StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_);
   return stats_screen.Run(replay_);
+}
+
+ShotType::TypeCase Scenario::GetShotType() {
+  ShotType::TypeCase shot_type = def_.shot_type().type_case();
+  if (shot_type == ShotType::TYPE_NOT_SET) {
+    shot_type = GetDefaultShotType();
+  }
+  return shot_type;
 }
 
 void Scenario::DoneAdjustingCrosshairSize() {

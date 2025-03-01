@@ -24,9 +24,9 @@ class Stopwatch {
     return running_;
   }
 
-  std::chrono::steady_clock::duration GetElapsed();
-  uint64_t GetElapsedMicros();
-  float GetElapsedSeconds();
+  std::chrono::steady_clock::duration GetElapsed() const;
+  uint64_t GetElapsedMicros() const;
+  float GetElapsedSeconds() const;
 
  private:
   bool running_ = false;

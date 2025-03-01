@@ -17,6 +17,16 @@
 namespace aim {
 namespace {
 constexpr const float kPokeBallKillTimeSeconds = 0.05;
+
+float GetPartialHitValue(const Target& target) {
+  if (target.health_seconds > 0) {
+    float elapsed_seconds = target.hit_timer.GetElapsedSeconds();
+    float value = elapsed_seconds / target.health_seconds;
+    return value < 1 ? value : 1;
+  }
+  return 0;
+}
+
 }  // namespace
 
 void BaseScenario::Initialize() {
@@ -50,6 +60,9 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     std::vector<u16> targets_to_remove;
     for (const Target& target : target_manager_.GetTargets()) {
       if (target.ShouldDraw() && target.remove_after_time_seconds < timer_.GetElapsedSeconds()) {
+        if (ShouldCountPartialKills()) {
+          stats_.num_hits += GetPartialHitValue(target);
+        }
         targets_to_remove.push_back(target.id);
       }
     }
@@ -95,16 +108,17 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
 
 void BaseScenario::OnScenarioDone() {
   TrackingHoldDone();
-  if (def_.shot_type().tracking_kill()) {
+  if (ShouldCountPartialKills()) {
     float partial_kills = 0;
     for (Target& target : target_manager_.GetMutableTargets()) {
-      float elapsed_seconds = target.hit_timer.GetElapsedSeconds();
-      if (target.health_seconds > 0) {
-        partial_kills += elapsed_seconds / target.health_seconds;
-      }
+      partial_kills += GetPartialHitValue(target);
     }
     stats_.num_hits += partial_kills;
   }
+}
+
+bool BaseScenario::ShouldCountPartialKills() {
+  return GetShotType() == ShotType::kTrackingKill && !def_.shot_type().exclude_partial_kills();
 }
 
 void BaseScenario::TrackingHoldDone() {
