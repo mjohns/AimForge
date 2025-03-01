@@ -160,11 +160,13 @@ SphereRenderer::SphereRenderer() : shader_(Shader(vertex_shader, fragment_shader
   glVertexAttribDivisor(2, 1);
 
   glEnableVertexAttribArray(3);
-  glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+  glVertexAttribPointer(
+      3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
   glVertexAttribDivisor(3, 1);
 
   glEnableVertexAttribArray(4);
-  glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+  glVertexAttribPointer(
+      4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
   glVertexAttribDivisor(4, 1);
 }
 
@@ -180,16 +182,20 @@ void SphereRenderer::SetProjection(const glm::mat4& projection) {
 }
 
 void SphereRenderer::Draw(const glm::mat4& view,
-                          const std::vector<RenderableSphere>& spheres) {
+                          const glm::vec3& color,
+                          const std::vector<Sphere>& spheres) {
+  if (spheres.size() == 0) {
+    return;
+  }
   shader_.Use();
   shader_.SetMat4("view", view);
-  shader_.SetVec3("quad_color", spheres[0].color);
+  shader_.SetVec3("quad_color", color);
 
   std::vector<glm::mat4> model_transforms;
-  for (const RenderableSphere& s : spheres) {
+  for (const Sphere& sphere : spheres) {
     glm::mat4 model(1.f);
-    model = glm::translate(model, s.sphere.position);
-    model = glm::scale(model, glm::vec3(s.sphere.radius));
+    model = glm::translate(model, sphere.position);
+    model = glm::scale(model, glm::vec3(sphere.radius));
     model_transforms.push_back(model);
   }
 
