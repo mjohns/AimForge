@@ -48,14 +48,23 @@ class LinearScenario : public BaseScenario {
     if (height > 0 && height < wall_.height) {
       wall_.height = height;
     }
+    if (def.linear_def().has_target_placement_strategy()) {
+      wall_target_placer_ = CreateWallTargetPlacer(
+          wall_, def.linear_def().target_placement_strategy(), &target_manager_, app_);
+    }
   }
 
  protected:
   void FillInNewTarget(Target* target) override {
-    float padding = target->radius * 2;
-    auto dist_p = std::uniform_real_distribution<float>(-0.5f, 0.5f);
-    glm::vec2 pos(dist_p(*app_->random_generator()) * (wall_.width - padding),
-                  dist_p(*app_->random_generator()) * (wall_.height - padding));
+    glm::vec2 pos;
+    if (wall_target_placer_) {
+      pos = wall_target_placer_->GetNextPosition();
+    } else {
+      float padding = target->radius * 2;
+      auto dist_p = std::uniform_real_distribution<float>(-0.5f, 0.5f);
+      pos.x = dist_p(*app_->random_generator()) * (wall_.width - padding);
+      pos.y = dist_p(*app_->random_generator()) * (wall_.height - padding);
+    }
 
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
@@ -113,6 +122,7 @@ class LinearScenario : public BaseScenario {
 
  private:
   Wall wall_;
+  std::unique_ptr<WallTargetPlacer> wall_target_placer_;
 };
 
 }  // namespace
