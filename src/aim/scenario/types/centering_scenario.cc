@@ -32,6 +32,14 @@ class CenteringScenario : public Scenario {
     start_to_end_ = glm::normalize(end_ - start_);
     distance_ = glm::length(start_ - end_);
     initial_distance_offset_ = distance_ * 0.45;
+
+    initial_position_ = start_ + (start_to_end_ * initial_distance_offset_);
+
+    // Look a little in front of the starting position
+    glm::vec3 initial_look_at =
+        (initial_position_ + (start_to_end_ * (0.07f * distance_))) - camera_.GetPosition();
+    PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
+    camera_.UpdatePitchYaw(pitch_yaw);
   }
 
  protected:
@@ -43,14 +51,7 @@ class CenteringScenario : public Scenario {
           glm::normalize(glm::cross(start_to_end_, glm::normalize(start_ - camera_.GetPosition())));
     }
 
-    target.position = start_ + (start_to_end_ * initial_distance_offset_);
-
-    // Look a little in front of the starting position
-    glm::vec3 initial_look_at =
-        (target.position + (start_to_end_ * (0.07f * distance_))) - camera_.GetPosition();
-    PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
-    camera_.UpdatePitchYaw(pitch_yaw);
-
+    target.position = initial_position_;
     target = target_manager_.AddTarget(target);
     target_ = target_manager_.GetMutableTarget(target.id);
     AddNewTargetEvent(target);
@@ -127,6 +128,7 @@ class CenteringScenario : public Scenario {
   Stopwatch hit_stopwatch_;
   Stopwatch shot_stopwatch_;
   std::unique_ptr<TrackingSound> tracking_sound_;
+  glm::vec3 initial_position_;
 };
 
 }  // namespace
