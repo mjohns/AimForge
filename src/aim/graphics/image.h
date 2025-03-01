@@ -1,25 +1,34 @@
 #pragma once
 
-#include <stb_image.h>
+#include <SDL3_image/SDL_image.h>
+
+#include <filesystem>
+
+#include "aim/common/log.h"
 
 namespace aim {
 
 class Image {
  public:
-  explicit Image(const std::filesystem::path& path, bool flip_vertically = false) {
-    int nr_channels;
-    stbi_set_flip_vertically_on_load(flip_vertically);
-    data_ = stbi_load(path.string().c_str(), &width_, &height_, &nr_channels, 0);
+  explicit Image(const std::filesystem::path& path) {
+    surface_ = IMG_Load(path.string().c_str());
+    if (surface_ == nullptr) {
+      Logger::get()->warn(
+          "Failed to load image {}, IMG_GetError(): {}", path.string(), SDL_GetError());
+      return;
+    }
+    width_ = surface_->w;
+    height_ = surface_->h;
   }
 
   ~Image() {
-    if (data_ != nullptr) {
-      stbi_image_free(data_);
+    if (surface_ != nullptr) {
+      SDL_DestroySurface(surface_);
     }
   }
 
   bool is_loaded() {
-    return data_ != nullptr;
+    return surface_ != nullptr;
   }
 
   int width() {
@@ -30,8 +39,8 @@ class Image {
     return height_;
   }
 
-  unsigned char* data() {
-    return data_;
+  SDL_Surface* surface() {
+    return surface_;
   }
 
   Image(const Image&) = delete;
@@ -40,7 +49,7 @@ class Image {
   Image& operator=(Image&& other) = delete;
 
  private:
-  unsigned char* data_ = nullptr;
+  SDL_Surface* surface_ = nullptr;
   int width_ = 0;
   int height_ = 0;
 };

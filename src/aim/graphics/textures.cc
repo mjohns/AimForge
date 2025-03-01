@@ -1,13 +1,28 @@
 #include "textures.h"
 
+#include <SDL3_image/SDL_image.h>
 #include <glad/glad.h>
 
 #include <iostream>
+#include <optional>
 
 #include "aim/common/log.h"
 #include "aim/graphics/image.h"
 
 namespace aim {
+namespace {
+std::optional<GLenum> GetGlFormat(SDL_Surface* surface) {
+  if (surface->format == SDL_PIXELFORMAT_RGBA32) {
+    return GL_RGBA;
+  }
+  if (surface->format == SDL_PIXELFORMAT_RGB24) {
+    return GL_RGB;
+  }
+  Logger::get()->warn("Invalid image format type for texture");
+  return {};
+}
+
+}  // namespace
 
 Texture::Texture(const std::filesystem::path& path) {
   glGenTextures(1, &texture_);
@@ -18,22 +33,26 @@ Texture::Texture(const std::filesystem::path& path) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  Image image(path, /* flip_vertically= */ true);
+  Image image(path);
   if (image.is_loaded()) {
-    is_loaded_ = true;
-    height_ = image.height();
-    width_ = image.width();
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGB,
-                 image.width(),
-                 image.height(),
-                 0,
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE,
-                 image.data());
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
+    auto format = GetGlFormat(image.surface());
+    if (format.has_value()) {
+      is_loaded_ = true;
+      height_ = image.height();
+      width_ = image.width();
+      glTexImage2D(GL_TEXTURE_2D,
+                   0,
+                   *format,
+                   image.width(),
+                   image.height(),
+                   0,
+                   *format,
+                   GL_UNSIGNED_BYTE,
+                   image.surface()->pixels);
+      glGenerateMipmap(GL_TEXTURE_2D);
+    }
+  }
+  if (!is_loaded_) {
     Logger::get()->error("Failed to load texture: {}", path.string());
   }
 }
