@@ -172,18 +172,18 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
 
     std::string message = "Click to Start";
     ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
-    ImGui::SetCursorPosX(app_->screen_info().center.x  - text_size.x * 0.5);
+    ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y - text_size.y * 2);
     ImGui::Text("%s", message.c_str());
 
     text_size = ImGui::CalcTextSize(def_.scenario_id().c_str());
-    ImGui::SetCursorPosX(app_->screen_info().center.x  - text_size.x * 0.5);
+    ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 1);
     ImGui::Text("%s", def_.scenario_id().c_str());
 
     message = std::format("cm/360: {}", MaybeIntToString(settings_.cm_per_360(), 1));
     text_size = ImGui::CalcTextSize(message.c_str());
-    ImGui::SetCursorPosX(app_->screen_info().center.x  - text_size.x * 0.5);
+    ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 2);
     ImGui::Text("%s", message.c_str());
 
@@ -370,6 +370,8 @@ NavigationEvent Scenario::ResumeInternal() {
     }
   }
 
+  stats_.hit_stopwatch.Stop();
+  stats_.shot_stopwatch.Stop();
   OnScenarioDone();
   is_done_ = true;
 
@@ -377,33 +379,33 @@ NavigationEvent Scenario::ResumeInternal() {
   if (shot_type == ShotType::TYPE_NOT_SET) {
     shot_type = GetDefaultShotType();
   }
+  float score = 0;
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
-      stats_.score = stats_.targets_hit;
-      stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
+      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
+      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
+      score = stats_.hit_stopwatch.GetElapsedSeconds();
       break;
     }
     case ShotType::kClickSingle: {
       // Default clicking scoring
-      stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
+      float hit_percent = stats_.num_hits / stats_.num_shots;
       float duration_modifier = 60.0f / def_.duration_seconds();
-      stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
+      score = stats_.num_hits * 10 * sqrt(hit_percent) * duration_modifier;
       break;
     }
     case ShotType::kTrackingKill:
     case ShotType::kPoke:
     default:
-      stats_.score = stats_.targets_hit;
-      stats_.shots_taken = 0;
+      score = stats_.num_hits;
       break;
   }
 
   StatsRow stats_row;
   stats_row.cm_per_360 = settings_.cm_per_360();
-  stats_row.num_hits = stats_.targets_hit;
-  // stats_row.num_kills = stats_.targets_killed;
-  stats_row.num_shots = stats_.shots_taken;
-  stats_row.score = stats_.score;
+  stats_row.num_hits = stats_.num_hits;
+  stats_row.num_shots = stats_.num_shots;
+  stats_row.score = score;
   app_->stats_db()->AddStats(def_.scenario_id(), &stats_row);
 
   stats_id_ = stats_row.stats_id;

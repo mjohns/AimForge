@@ -70,11 +70,11 @@ class CenteringScenario : public Scenario {
       if (!tracking_sound_) {
         tracking_sound_ = std::make_unique<TrackingSound>(app_);
       }
-      shot_stopwatch_.Start();
+      stats_.shot_stopwatch.Start();
       if (maybe_hit_target_id.has_value()) {
-        hit_stopwatch_.Start();
+        stats_.hit_stopwatch.Start();
       } else {
-        hit_stopwatch_.Stop();
+        stats_.hit_stopwatch.Stop();
       }
       tracking_sound_->DoTick(maybe_hit_target_id.has_value());
     } else {
@@ -107,14 +107,12 @@ class CenteringScenario : public Scenario {
 
   void OnScenarioDone() override {
     TrackingHoldDone();
-    stats_.targets_hit = hit_stopwatch_.GetElapsedSeconds() * 100;
-    stats_.shots_taken = shot_stopwatch_.GetElapsedSeconds() * 100;
   }
 
  private:
   void TrackingHoldDone() {
-    shot_stopwatch_.Stop();
-    hit_stopwatch_.Stop();
+    stats_.shot_stopwatch.Stop();
+    stats_.hit_stopwatch.Stop();
     tracking_sound_ = {};
   }
 
@@ -124,8 +122,6 @@ class CenteringScenario : public Scenario {
   glm::vec3 start_to_end_;
   float distance_;
   float initial_distance_offset_;
-  Stopwatch hit_stopwatch_;
-  Stopwatch shot_stopwatch_;
   std::unique_ptr<TrackingSound> tracking_sound_;
   glm::vec3 initial_position_;
 };
