@@ -56,8 +56,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
   float GetRegionLength(const RegionLength& length) {
-    if (length.has_absolute_value()) {
-      return length.absolute_value();
+    if (length.has_value()) {
+      return length.value();
     }
     if (length.has_x_percent_value()) {
       return wall_.width * length.x_percent_value();

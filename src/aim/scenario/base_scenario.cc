@@ -26,8 +26,17 @@ void BaseScenario::Initialize() {
     if (def_.target_def().newest_target_is_ghost() && i == (num_targets - 1)) {
       target.is_ghost = true;
     }
-    target = target_manager_.AddTarget(target);
-    AddNewTargetEvent(target);
+
+    float stagger_seconds = def_.target_def().stagger_initial_targets_seconds();
+    if (stagger_seconds > 0) {
+      RunAfterSeconds(i * stagger_seconds, [=]() {
+        Target new_target = target_manager_.AddTarget(target);
+        AddNewTargetEvent(new_target);
+      });
+    } else {
+      target = target_manager_.AddTarget(target);
+      AddNewTargetEvent(target);
+    }
   }
 }
 

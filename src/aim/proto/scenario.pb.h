@@ -895,7 +895,7 @@ class RegionLength final : public ::google::protobuf::Message
   enum TypeCase {
     kXPercentValue = 1,
     kYPercentValue = 2,
-    kAbsoluteValue = 3,
+    kValue = 3,
     TYPE_NOT_SET = 0,
   };
   static inline const RegionLength* internal_default_instance() {
@@ -991,7 +991,7 @@ class RegionLength final : public ::google::protobuf::Message
   enum : int {
     kXPercentValueFieldNumber = 1,
     kYPercentValueFieldNumber = 2,
-    kAbsoluteValueFieldNumber = 3,
+    kValueFieldNumber = 3,
   };
   // float x_percent_value = 1;
   bool has_x_percent_value() const;
@@ -1015,15 +1015,15 @@ class RegionLength final : public ::google::protobuf::Message
   void _internal_set_y_percent_value(float value);
 
   public:
-  // float absolute_value = 3;
-  bool has_absolute_value() const;
-  void clear_absolute_value() ;
-  float absolute_value() const;
-  void set_absolute_value(float value);
+  // float value = 3;
+  bool has_value() const;
+  void clear_value() ;
+  float value() const;
+  void set_value(float value);
 
   private:
-  float _internal_absolute_value() const;
-  void _internal_set_absolute_value(float value);
+  float _internal_value() const;
+  void _internal_set_value(float value);
 
   public:
   void clear_type();
@@ -1033,7 +1033,7 @@ class RegionLength final : public ::google::protobuf::Message
   class _Internal;
   void set_has_x_percent_value();
   void set_has_y_percent_value();
-  void set_has_absolute_value();
+  void set_has_value();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
@@ -1061,7 +1061,7 @@ class RegionLength final : public ::google::protobuf::Message
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       float x_percent_value_;
       float y_percent_value_;
-      float absolute_value_;
+      float value_;
     } type_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint32_t _oneof_case_[1];
@@ -3529,6 +3529,7 @@ class TargetDef final : public ::google::protobuf::Message
     kNewestTargetIsGhostFieldNumber = 5,
     kNewTargetDelaySecondsFieldNumber = 6,
     kRemoveTargetAfterSecondsFieldNumber = 7,
+    kStaggerInitialTargetsSecondsFieldNumber = 8,
   };
   // repeated .aim.TargetProfile profiles = 1;
   int profiles_size() const;
@@ -3620,12 +3621,23 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_remove_target_after_seconds(float value);
 
   public:
+  // float stagger_initial_targets_seconds = 8;
+  bool has_stagger_initial_targets_seconds() const;
+  void clear_stagger_initial_targets_seconds() ;
+  float stagger_initial_targets_seconds() const;
+  void set_stagger_initial_targets_seconds(float value);
+
+  private:
+  float _internal_stagger_initial_targets_seconds() const;
+  void _internal_set_stagger_initial_targets_seconds(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 7, 1,
+      3, 8, 1,
       0, 2>
       _table_;
 
@@ -3653,6 +3665,7 @@ class TargetDef final : public ::google::protobuf::Message
     bool newest_target_is_ghost_;
     float new_target_delay_seconds_;
     float remove_target_after_seconds_;
+    float stagger_initial_targets_seconds_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5506,35 +5519,35 @@ inline float RegionLength::_internal_y_percent_value() const {
   return 0;
 }
 
-// float absolute_value = 3;
-inline bool RegionLength::has_absolute_value() const {
-  return type_case() == kAbsoluteValue;
+// float value = 3;
+inline bool RegionLength::has_value() const {
+  return type_case() == kValue;
 }
-inline void RegionLength::set_has_absolute_value() {
-  _impl_._oneof_case_[0] = kAbsoluteValue;
+inline void RegionLength::set_has_value() {
+  _impl_._oneof_case_[0] = kValue;
 }
-inline void RegionLength::clear_absolute_value() {
+inline void RegionLength::clear_value() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kAbsoluteValue) {
-    _impl_.type_.absolute_value_ = 0;
+  if (type_case() == kValue) {
+    _impl_.type_.value_ = 0;
     clear_has_type();
   }
 }
-inline float RegionLength::absolute_value() const {
-  // @@protoc_insertion_point(field_get:aim.RegionLength.absolute_value)
-  return _internal_absolute_value();
+inline float RegionLength::value() const {
+  // @@protoc_insertion_point(field_get:aim.RegionLength.value)
+  return _internal_value();
 }
-inline void RegionLength::set_absolute_value(float value) {
-  if (type_case() != kAbsoluteValue) {
+inline void RegionLength::set_value(float value) {
+  if (type_case() != kValue) {
     clear_type();
-    set_has_absolute_value();
+    set_has_value();
   }
-  _impl_.type_.absolute_value_ = value;
-  // @@protoc_insertion_point(field_set:aim.RegionLength.absolute_value)
+  _impl_.type_.value_ = value;
+  // @@protoc_insertion_point(field_set:aim.RegionLength.value)
 }
-inline float RegionLength::_internal_absolute_value() const {
-  if (type_case() == kAbsoluteValue) {
-    return _impl_.type_.absolute_value_;
+inline float RegionLength::_internal_value() const {
+  if (type_case() == kValue) {
+    return _impl_.type_.value_;
   }
   return 0;
 }
@@ -8419,6 +8432,34 @@ inline float TargetDef::_internal_remove_target_after_seconds() const {
 inline void TargetDef::_internal_set_remove_target_after_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_target_after_seconds_ = value;
+}
+
+// float stagger_initial_targets_seconds = 8;
+inline bool TargetDef::has_stagger_initial_targets_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void TargetDef::clear_stagger_initial_targets_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.stagger_initial_targets_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float TargetDef::stagger_initial_targets_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.stagger_initial_targets_seconds)
+  return _internal_stagger_initial_targets_seconds();
+}
+inline void TargetDef::set_stagger_initial_targets_seconds(float value) {
+  _internal_set_stagger_initial_targets_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.TargetDef.stagger_initial_targets_seconds)
+}
+inline float TargetDef::_internal_stagger_initial_targets_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.stagger_initial_targets_seconds_;
+}
+inline void TargetDef::_internal_set_stagger_initial_targets_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.stagger_initial_targets_seconds_ = value;
 }
 
 // -------------------------------------------------------------------
