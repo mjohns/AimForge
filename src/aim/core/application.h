@@ -109,6 +109,7 @@ class Application {
 
   SDL_GLContext gl_context_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
+  SDL_Surface* icon_ = nullptr;
 
   int window_width_ = -1;
   int window_height_ = -1;
