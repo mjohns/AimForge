@@ -118,7 +118,7 @@ void BaseScenario::OnScenarioDone() {
 }
 
 bool BaseScenario::ShouldCountPartialKills() {
-  return GetShotType() == ShotType::kTrackingKill && !def_.shot_type().exclude_partial_kills();
+  return GetShotType() == ShotType::kTrackingKill && !def_.shot_type().no_partial_kills();
 }
 
 void BaseScenario::TrackingHoldDone() {
