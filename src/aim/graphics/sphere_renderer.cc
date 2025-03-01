@@ -180,17 +180,16 @@ void SphereRenderer::SetProjection(const glm::mat4& projection) {
 }
 
 void SphereRenderer::Draw(const glm::mat4& view,
-                          const glm::vec3& color,
-                          const std::vector<Sphere>& spheres) {
+                          const std::vector<RenderableSphere>& spheres) {
   shader_.Use();
   shader_.SetMat4("view", view);
-  shader_.SetVec3("quad_color", color);
+  shader_.SetVec3("quad_color", spheres[0].color);
 
   std::vector<glm::mat4> model_transforms;
-  for (const Sphere& sphere : spheres) {
+  for (const RenderableSphere& s : spheres) {
     glm::mat4 model(1.f);
-    model = glm::translate(model, sphere.position);
-    model = glm::scale(model, glm::vec3(sphere.radius));
+    model = glm::translate(model, s.sphere.position);
+    model = glm::scale(model, glm::vec3(s.sphere.radius));
     model_transforms.push_back(model);
   }
 

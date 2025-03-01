@@ -19,6 +19,7 @@ void Renderer::DrawScenario(const Room& room,
   glm::vec3 ghost_target_color =
       theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
 
+  std::vector<RenderableSphere> spheres;
   for (const Target& target : targets) {
     if (target.ShouldDraw()) {
       glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;
@@ -30,14 +31,28 @@ void Renderer::DrawScenario(const Room& room,
         c.position = target.position;
         cylinder_renderer_.Draw(ToVec3(room.camera_position()), view, color, {c});
 
-        sphere_renderer_.Draw(view,
-                              color,
-                              {{c.position + c.up * (c.height * 0.5f), target.radius},
-                               {c.position + c.up * (c.height * -0.5f), target.radius}});
+        spheres.push_back({});
+        RenderableSphere& top = spheres.back();
+        top.color = color;
+        top.sphere.position = c.position + c.up*(c.height * 0.5f);
+        top.sphere.radius = target.radius;
+
+        spheres.push_back({});
+        RenderableSphere& bottom = spheres.back();
+        bottom.color = color;
+        bottom.sphere.position = c.position + c.up*(c.height * -0.5f);
+        bottom.sphere.radius = target.radius;
       } else {
-        sphere_renderer_.Draw(view, color, {{target.position, target.radius}});
+        spheres.push_back({});
+        RenderableSphere& s = spheres.back();
+        s.color = color;
+        s.sphere.position = target.position;
+        s.sphere.radius = target.radius;
       }
     }
+  }
+  if (spheres.size() > 0) {
+    sphere_renderer_.Draw(view, spheres);
   }
 }
 
