@@ -170,6 +170,23 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::Text("theme: %s", settings_.theme_name().c_str());
     ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
 
+    std::string message = "Click to Start";
+    ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+    ImGui::SetCursorPosX(app_->screen_info().center.x  - text_size.x * 0.5);
+    ImGui::SetCursorPosY(app_->screen_info().center.y - text_size.y * 2);
+    ImGui::Text("%s", message.c_str());
+
+    text_size = ImGui::CalcTextSize(def_.scenario_id().c_str());
+    ImGui::SetCursorPosX(app_->screen_info().center.x  - text_size.x * 0.5);
+    ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 1);
+    ImGui::Text("%s", def_.scenario_id().c_str());
+
+    message = std::format("cm/360: {}", MaybeIntToString(settings_.cm_per_360(), 1));
+    text_size = ImGui::CalcTextSize(message.c_str());
+    ImGui::SetCursorPosX(app_->screen_info().center.x  - text_size.x * 0.5);
+    ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 2);
+    ImGui::Text("%s", message.c_str());
+
     ImGui::End();
 
     if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
@@ -335,6 +352,7 @@ NavigationEvent Scenario::ResumeInternal() {
     DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
+    ImGui::Text("%s", def_.scenario_id().c_str());
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::Text("ups: %.1fk", state_updates_per_second_);
