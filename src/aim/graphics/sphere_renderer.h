@@ -9,18 +9,13 @@
 
 namespace aim {
 
-struct RenderableSphere {
-  Sphere sphere;
-  glm::vec3 color;
-};
-
 class SphereRenderer {
  public:
   SphereRenderer();
   ~SphereRenderer();
 
   void SetProjection(const glm::mat4& projection);
-  void Draw(const glm::mat4& view, const std::vector<RenderableSphere>& spheres);
+  void Draw(const glm::mat4& view, const glm::vec3& color, const std::vector<Sphere>& spheres);
 
  private:
   unsigned int vbo_;
