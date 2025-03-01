@@ -108,6 +108,9 @@ message ShotType {
   }
   // If unset defaults to 0.05 (50 millis)
   float poke_kill_time_seconds = 10;
+
+  // Partial kills are not counted towards score.
+  bool no_partial_kills = 11;
 }
 
 message ScenarioDef {

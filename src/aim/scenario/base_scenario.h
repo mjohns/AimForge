@@ -30,6 +30,7 @@ class BaseScenario : public Scenario {
   void AddNewTargetDuringRun(u16 old_target_id, bool is_kill = true);
   void TrackingHoldDone();
   Target GetNewTarget();
+  bool ShouldCountPartialKills();
 
   std::optional<u16> current_poke_target_id_;
   u64 current_poke_start_time_micros_ = 0;

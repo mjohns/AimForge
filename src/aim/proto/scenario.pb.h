@@ -496,6 +496,7 @@ class ShotType final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kPokeKillTimeSecondsFieldNumber = 10,
+    kNoPartialKillsFieldNumber = 11,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -510,6 +511,17 @@ class ShotType final : public ::google::protobuf::Message
   private:
   float _internal_poke_kill_time_seconds() const;
   void _internal_set_poke_kill_time_seconds(float value);
+
+  public:
+  // bool no_partial_kills = 11;
+  bool has_no_partial_kills() const;
+  void clear_no_partial_kills() ;
+  bool no_partial_kills() const;
+  void set_no_partial_kills(bool value);
+
+  private:
+  bool _internal_no_partial_kills() const;
+  void _internal_set_no_partial_kills(bool value);
 
   public:
   // bool poke = 1;
@@ -569,7 +581,7 @@ class ShotType final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 5, 0,
+      1, 6, 0,
       0, 2>
       _table_;
 
@@ -590,6 +602,7 @@ class ShotType final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     float poke_kill_time_seconds_;
+    bool no_partial_kills_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -6804,6 +6817,34 @@ inline float ShotType::_internal_poke_kill_time_seconds() const {
 inline void ShotType::_internal_set_poke_kill_time_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.poke_kill_time_seconds_ = value;
+}
+
+// bool no_partial_kills = 11;
+inline bool ShotType::has_no_partial_kills() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void ShotType::clear_no_partial_kills() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.no_partial_kills_ = false;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline bool ShotType::no_partial_kills() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.no_partial_kills)
+  return _internal_no_partial_kills();
+}
+inline void ShotType::set_no_partial_kills(bool value) {
+  _internal_set_no_partial_kills(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.no_partial_kills)
+}
+inline bool ShotType::_internal_no_partial_kills() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.no_partial_kills_;
+}
+inline void ShotType::_internal_set_no_partial_kills(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.no_partial_kills_ = value;
 }
 
 inline bool ShotType::has_type() const {

@@ -64,6 +64,8 @@ class Scenario {
     return ShotType::kClickSingle;
   }
 
+  ShotType::TypeCase GetShotType();
+
   void RunAfterSeconds(float delay_seconds, std::function<void()>&& fn);
 
   // Replay recording methods

@@ -57,6 +57,7 @@ inline constexpr ShotType::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         poke_kill_time_seconds_{0},
+        no_partial_kills_{false},
         type_{},
         _oneof_case_{} {}
 
@@ -726,12 +727,14 @@ const ::uint32_t
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_.poke_kill_time_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_.no_partial_kills_),
         PROTOBUF_FIELD_OFFSET(::aim::ShotType, _impl_.type_),
         ~0u,
         ~0u,
         ~0u,
         ~0u,
         0,
+        1,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -884,15 +887,15 @@ static const ::_pbi::MigrationSchema
         {106, 116, -1, sizeof(::aim::EllipseTargetRegion)},
         {118, 131, -1, sizeof(::aim::TargetPlacementStrategy)},
         {136, 148, -1, sizeof(::aim::ScenarioReferenceOverrides)},
-        {152, 166, -1, sizeof(::aim::ShotType)},
-        {171, 191, -1, sizeof(::aim::ScenarioDef)},
-        {202, 211, -1, sizeof(::aim::StaticScenarioDef)},
-        {212, 222, -1, sizeof(::aim::CenteringScenarioDef)},
-        {224, -1, -1, sizeof(::aim::BarrelScenarioDef)},
-        {232, 245, -1, sizeof(::aim::LinearScenarioDef)},
-        {250, 266, -1, sizeof(::aim::TargetDef)},
-        {274, 283, -1, sizeof(::aim::PillTargetDef)},
-        {284, 301, -1, sizeof(::aim::TargetProfile)},
+        {152, 167, -1, sizeof(::aim::ShotType)},
+        {173, 193, -1, sizeof(::aim::ScenarioDef)},
+        {204, 213, -1, sizeof(::aim::StaticScenarioDef)},
+        {214, 224, -1, sizeof(::aim::CenteringScenarioDef)},
+        {226, -1, -1, sizeof(::aim::BarrelScenarioDef)},
+        {234, 247, -1, sizeof(::aim::LinearScenarioDef)},
+        {252, 268, -1, sizeof(::aim::TargetDef)},
+        {276, 285, -1, sizeof(::aim::PillTargetDef)},
+        {286, 303, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -949,44 +952,45 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "arioReferenceOverrides\022\030\n\020duration_secon"
     "ds\030\001 \001(\002\022 \n\030target_radius_multiplier\030\002 \001"
     "(\002\022\023\n\013num_targets\030\003 \001(\005\022\030\n\020speed_multipl"
-    "ier\030\004 \001(\002\"\222\001\n\010ShotType\022\016\n\004poke\030\001 \001(\010H\000\022\027"
+    "ier\030\004 \001(\002\"\254\001\n\010ShotType\022\016\n\004poke\030\001 \001(\010H\000\022\027"
     "\n\rtracking_kill\030\002 \001(\010H\000\022\035\n\023tracking_invi"
     "ncible\030\003 \001(\010H\000\022\026\n\014click_single\030\004 \001(\010H\000\022\036"
-    "\n\026poke_kill_time_seconds\030\n \001(\002B\006\n\004type\"\250"
-    "\003\n\013ScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020d"
-    "uration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.ai"
-    "m.Room\022\"\n\ntarget_def\030\005 \001(\0132\016.aim.TargetD"
-    "ef\022\021\n\treference\030\006 \001(\t\0222\n\toverrides\030\007 \001(\013"
-    "2\037.aim.ScenarioReferenceOverrides\022 \n\tsho"
-    "t_type\030\010 \001(\0132\r.aim.ShotType\022,\n\nstatic_de"
-    "f\030\n \001(\0132\026.aim.StaticScenarioDefH\000\0222\n\rcen"
-    "tering_def\030\013 \001(\0132\031.aim.CenteringScenario"
-    "DefH\000\022,\n\nbarrel_def\030\014 \001(\0132\026.aim.BarrelSc"
-    "enarioDefH\000\022,\n\nlinear_def\030\r \001(\0132\026.aim.Li"
-    "nearScenarioDefH\000B\006\n\004type\"T\n\021StaticScena"
-    "rioDef\022\?\n\031target_placement_strategy\030\001 \001("
-    "\0132\034.aim.TargetPlacementStrategy\"f\n\024Cente"
-    "ringScenarioDef\022\'\n\016start_position\030\001 \001(\0132"
-    "\017.aim.StoredVec3\022%\n\014end_position\030\002 \001(\0132\017"
-    ".aim.StoredVec3\"\023\n\021BarrelScenarioDef\"\230\001\n"
-    "\021LinearScenarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014ang"
-    "le_jitter\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height"
-    "\030\004 \001(\002\022\?\n\031target_placement_strategy\030\005 \001("
-    "\0132\034.aim.TargetPlacementStrategy\"\214\002\n\tTarg"
-    "etDef\022$\n\010profiles\030\001 \003(\0132\022.aim.TargetProf"
-    "ile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remove_close"
-    "st_on_miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036"
-    "\n\026newest_target_is_ghost\030\005 \001(\010\022 \n\030new_ta"
-    "rget_delay_seconds\030\006 \001(\002\022#\n\033remove_targe"
-    "t_after_seconds\030\007 \001(\002\022\'\n\037stagger_initial"
-    "_targets_seconds\030\010 \001(\002\"\037\n\rPillTargetDef\022"
-    "\016\n\006height\030\001 \001(\002\"\344\001\n\rTargetProfile\022\026\n\016per"
-    "cent_chance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002"
-    "\022\034\n\024target_radius_jitter\030\003 \001(\002\022\r\n\005speed\030"
-    "\004 \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016health_se"
-    "conds\030\006 \001(\002\022\035\n\025health_seconds_jitter\030\007 \001"
-    "(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006"
-    "\n\004typeb\010editionsp\350\007"
+    "\n\026poke_kill_time_seconds\030\n \001(\002\022\030\n\020no_par"
+    "tial_kills\030\013 \001(\010B\006\n\004type\"\250\003\n\013ScenarioDef"
+    "\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_second"
+    "s\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarg"
+    "et_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n\treferenc"
+    "e\030\006 \001(\t\0222\n\toverrides\030\007 \001(\0132\037.aim.Scenari"
+    "oReferenceOverrides\022 \n\tshot_type\030\010 \001(\0132\r"
+    ".aim.ShotType\022,\n\nstatic_def\030\n \001(\0132\026.aim."
+    "StaticScenarioDefH\000\0222\n\rcentering_def\030\013 \001"
+    "(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nbarre"
+    "l_def\030\014 \001(\0132\026.aim.BarrelScenarioDefH\000\022,\n"
+    "\nlinear_def\030\r \001(\0132\026.aim.LinearScenarioDe"
+    "fH\000B\006\n\004type\"T\n\021StaticScenarioDef\022\?\n\031targ"
+    "et_placement_strategy\030\001 \001(\0132\034.aim.Target"
+    "PlacementStrategy\"f\n\024CenteringScenarioDe"
+    "f\022\'\n\016start_position\030\001 \001(\0132\017.aim.StoredVe"
+    "c3\022%\n\014end_position\030\002 \001(\0132\017.aim.StoredVec"
+    "3\"\023\n\021BarrelScenarioDef\"\230\001\n\021LinearScenari"
+    "oDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitter\030\002 \001("
+    "\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022\?\n\031targ"
+    "et_placement_strategy\030\005 \001(\0132\034.aim.Target"
+    "PlacementStrategy\"\214\002\n\tTargetDef\022$\n\010profi"
+    "les\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013num_tar"
+    "gets\030\002 \001(\005\022\036\n\026remove_closest_on_miss\030\003 \001"
+    "(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_targe"
+    "t_is_ghost\030\005 \001(\010\022 \n\030new_target_delay_sec"
+    "onds\030\006 \001(\002\022#\n\033remove_target_after_second"
+    "s\030\007 \001(\002\022\'\n\037stagger_initial_targets_secon"
+    "ds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006height\030\001 \001("
+    "\002\"\344\001\n\rTargetProfile\022\026\n\016percent_chance\030\001 "
+    "\001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_rad"
+    "ius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed"
+    "_jitter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n"
+    "\025health_seconds_jitter\030\007 \001(\002\022\"\n\004pill\030\n \001"
+    "(\0132\022.aim.PillTargetDefH\000B\006\n\004typeb\010editio"
+    "nsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -996,7 +1000,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    2779,
+    2805,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -4454,7 +4458,13 @@ ShotType::ShotType(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  _impl_.poke_kill_time_seconds_ = from._impl_.poke_kill_time_seconds_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, poke_kill_time_seconds_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, poke_kill_time_seconds_),
+           offsetof(Impl_, no_partial_kills_) -
+               offsetof(Impl_, poke_kill_time_seconds_) +
+               sizeof(Impl_::no_partial_kills_));
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -4483,7 +4493,12 @@ inline PROTOBUF_NDEBUG_INLINE ShotType::Impl_::Impl_(
 
 inline void ShotType::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.poke_kill_time_seconds_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, poke_kill_time_seconds_),
+           0,
+           offsetof(Impl_, no_partial_kills_) -
+               offsetof(Impl_, poke_kill_time_seconds_) +
+               sizeof(Impl_::no_partial_kills_));
 }
 ShotType::~ShotType() {
   // @@protoc_insertion_point(destructor:aim.ShotType)
@@ -4563,15 +4578,15 @@ const ::google::protobuf::internal::ClassData* ShotType::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 5, 0, 0, 2> ShotType::_table_ = {
+const ::_pbi::TcParseTable<1, 6, 0, 0, 2> ShotType::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ShotType, _impl_._has_bits_),
     0, // no _extensions_
-    10, 0,  // max_field_number, fast_idx_mask
+    11, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294966768,  // skipmap
+    4294965744,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    6,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -4584,6 +4599,9 @@ const ::_pbi::TcParseTable<0, 5, 0, 0, 2> ShotType::_table_ = {
     // float poke_kill_time_seconds = 10;
     {::_pbi::TcParser::FastF32S1,
      {85, 0, 0, PROTOBUF_FIELD_OFFSET(ShotType, _impl_.poke_kill_time_seconds_)}},
+    // bool no_partial_kills = 11;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ShotType, _impl_.no_partial_kills_), 1>(),
+     {88, 1, 0, PROTOBUF_FIELD_OFFSET(ShotType, _impl_.no_partial_kills_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -4602,6 +4620,9 @@ const ::_pbi::TcParseTable<0, 5, 0, 0, 2> ShotType::_table_ = {
     // float poke_kill_time_seconds = 10;
     {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.poke_kill_time_seconds_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // bool no_partial_kills = 11;
+    {PROTOBUF_FIELD_OFFSET(ShotType, _impl_.no_partial_kills_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }},
   // no aux_entries
   {{
@@ -4615,7 +4636,12 @@ PROTOBUF_NOINLINE void ShotType::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.poke_kill_time_seconds_ = 0;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.poke_kill_time_seconds_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.no_partial_kills_) -
+        reinterpret_cast<char*>(&_impl_.poke_kill_time_seconds_)) + sizeof(_impl_.no_partial_kills_));
+  }
   clear_type();
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -4672,6 +4698,13 @@ PROTOBUF_NOINLINE void ShotType::Clear() {
                 10, this_._internal_poke_kill_time_seconds(), target);
           }
 
+          // bool no_partial_kills = 11;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                11, this_._internal_no_partial_kills(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -4695,11 +4728,16 @@ PROTOBUF_NOINLINE void ShotType::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-           {
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
             // float poke_kill_time_seconds = 10;
-            cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
+            }
+            // bool no_partial_kills = 11;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 2;
             }
           }
           switch (this_.type_case()) {
@@ -4740,8 +4778,13 @@ void ShotType::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    _this->_impl_.poke_kill_time_seconds_ = from._impl_.poke_kill_time_seconds_;
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.poke_kill_time_seconds_ = from._impl_.poke_kill_time_seconds_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.no_partial_kills_ = from._impl_.no_partial_kills_;
+    }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
@@ -4790,7 +4833,12 @@ void ShotType::InternalSwap(ShotType* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-        swap(_impl_.poke_kill_time_seconds_, other->_impl_.poke_kill_time_seconds_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ShotType, _impl_.no_partial_kills_)
+      + sizeof(ShotType::_impl_.no_partial_kills_)
+      - PROTOBUF_FIELD_OFFSET(ShotType, _impl_.poke_kill_time_seconds_)>(
+          reinterpret_cast<char*>(&_impl_.poke_kill_time_seconds_),
+          reinterpret_cast<char*>(&other->_impl_.poke_kill_time_seconds_));
   swap(_impl_.type_, other->_impl_.type_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
