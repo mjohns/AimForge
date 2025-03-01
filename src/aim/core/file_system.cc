@@ -8,7 +8,7 @@ namespace aim {
 namespace {
 
 constexpr const char* kOrgName = "";
-constexpr const char* kAppName = "AimTrainer";
+constexpr const char* kAppName = "AimForge";
 
 }  // namespace
 

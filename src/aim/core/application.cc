@@ -158,7 +158,7 @@ int Application::Initialize() {
 
   SDL_WindowFlags window_flags =
       (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-  sdl_window_ = SDL_CreateWindow("AimTrainer", 0, 0, window_flags);
+  sdl_window_ = SDL_CreateWindow("AimForge", 0, 0, window_flags);
   if (sdl_window_ == nullptr) {
     logger_->error("SDL_CreateWindow(): {}", SDL_GetError());
     return -1;

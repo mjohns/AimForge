@@ -1,4 +1,4 @@
-set(NAME "aim_trainer")
+set(NAME "AimForge")
 
 add_subdirectory(aim)
 
