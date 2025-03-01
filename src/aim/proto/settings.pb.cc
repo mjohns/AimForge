@@ -63,8 +63,8 @@ inline constexpr PlusCrosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         rounding_{0},
-        horizontal_size_percent_{0},
-        vertical_size_percent_{0},
+        horizontal_size_{0},
+        vertical_size_{0},
         thickness_{0},
         outline_thickness_{0} {}
 
@@ -203,8 +203,8 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.rounding_),
-        PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.horizontal_size_percent_),
-        PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.vertical_size_percent_),
+        PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.horizontal_size_),
+        PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.vertical_size_),
         PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.thickness_),
         PROTOBUF_FIELD_OFFSET(::aim::PlusCrosshair, _impl_.outline_thickness_),
         0,
@@ -287,28 +287,27 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
     "\n\016settings.proto\022\003aim\"$\n\014DotCrosshair\022\024\n"
-    "\014draw_outline\030\001 \001(\010\"\217\001\n\rPlusCrosshair\022\020\n"
-    "\010rounding\030\001 \001(\002\022\037\n\027horizontal_size_perce"
-    "nt\030\002 \001(\002\022\035\n\025vertical_size_percent\030\003 \001(\002\022"
-    "\021\n\tthickness\030\004 \001(\002\022\031\n\021outline_thickness\030"
-    "\005 \001(\002\"g\n\tCrosshair\022\014\n\004name\030\001 \001(\t\022 \n\003dot\030"
-    "\003 \001(\0132\021.aim.DotCrosshairH\000\022\"\n\004plus\030\004 \001(\013"
-    "2\022.aim.PlusCrosshairH\000B\006\n\004type\"\270\001\n\010Setti"
-    "ngs\022\013\n\003dpi\030\001 \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\022\n\n"
-    "theme_name\030\003 \001(\t\022\025\n\rmetronome_bpm\030\004 \001(\002\022"
-    "\026\n\016crosshair_size\030\005 \001(\002\022\036\n\026current_cross"
-    "hair_name\030\006 \001(\t\022(\n\020saved_crosshairs\030\007 \003("
-    "\0132\016.aim.Crosshair\"\201\001\n\020ScenarioSettings\022\022"
-    "\n\ncm_per_360\030\001 \001(\002\022\022\n\ntheme_name\030\002 \001(\t\022\025"
-    "\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016crosshair_size\030"
-    "\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\tb\010editionsp"
-    "\350\007"
+    "\014draw_outline\030\001 \001(\010\"\177\n\rPlusCrosshair\022\020\n\010"
+    "rounding\030\001 \001(\002\022\027\n\017horizontal_size\030\002 \001(\002\022"
+    "\025\n\rvertical_size\030\003 \001(\002\022\021\n\tthickness\030\004 \001("
+    "\002\022\031\n\021outline_thickness\030\005 \001(\002\"g\n\tCrosshai"
+    "r\022\014\n\004name\030\001 \001(\t\022 \n\003dot\030\003 \001(\0132\021.aim.DotCr"
+    "osshairH\000\022\"\n\004plus\030\004 \001(\0132\022.aim.PlusCrossh"
+    "airH\000B\006\n\004type\"\270\001\n\010Settings\022\013\n\003dpi\030\001 \001(\002\022"
+    "\022\n\ncm_per_360\030\002 \001(\002\022\022\n\ntheme_name\030\003 \001(\t\022"
+    "\025\n\rmetronome_bpm\030\004 \001(\002\022\026\n\016crosshair_size"
+    "\030\005 \001(\002\022\036\n\026current_crosshair_name\030\006 \001(\t\022("
+    "\n\020saved_crosshairs\030\007 \003(\0132\016.aim.Crosshair"
+    "\"\201\001\n\020ScenarioSettings\022\022\n\ncm_per_360\030\001 \001("
+    "\002\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003"
+    " \001(\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crosshai"
+    "r_name\030\005 \001(\tb\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    642,
+    625,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -645,12 +644,12 @@ const ::_pbi::TcParseTable<3, 5, 0, 0, 2> PlusCrosshair::_table_ = {
     // float rounding = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.rounding_)}},
-    // float horizontal_size_percent = 2;
+    // float horizontal_size = 2;
     {::_pbi::TcParser::FastF32S1,
-     {21, 1, 0, PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.horizontal_size_percent_)}},
-    // float vertical_size_percent = 3;
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.horizontal_size_)}},
+    // float vertical_size = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0, PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.vertical_size_percent_)}},
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.vertical_size_)}},
     // float thickness = 4;
     {::_pbi::TcParser::FastF32S1,
      {37, 3, 0, PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.thickness_)}},
@@ -665,11 +664,11 @@ const ::_pbi::TcParseTable<3, 5, 0, 0, 2> PlusCrosshair::_table_ = {
     // float rounding = 1;
     {PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.rounding_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float horizontal_size_percent = 2;
-    {PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.horizontal_size_percent_), _Internal::kHasBitsOffset + 1, 0,
+    // float horizontal_size = 2;
+    {PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.horizontal_size_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float vertical_size_percent = 3;
-    {PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.vertical_size_percent_), _Internal::kHasBitsOffset + 2, 0,
+    // float vertical_size = 3;
+    {PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.vertical_size_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float thickness = 4;
     {PROTOBUF_FIELD_OFFSET(PlusCrosshair, _impl_.thickness_), _Internal::kHasBitsOffset + 3, 0,
@@ -723,18 +722,18 @@ PROTOBUF_NOINLINE void PlusCrosshair::Clear() {
                 1, this_._internal_rounding(), target);
           }
 
-          // float horizontal_size_percent = 2;
+          // float horizontal_size = 2;
           if (cached_has_bits & 0x00000002u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                2, this_._internal_horizontal_size_percent(), target);
+                2, this_._internal_horizontal_size(), target);
           }
 
-          // float vertical_size_percent = 3;
+          // float vertical_size = 3;
           if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_vertical_size_percent(), target);
+                3, this_._internal_vertical_size(), target);
           }
 
           // float thickness = 4;
@@ -781,11 +780,11 @@ PROTOBUF_NOINLINE void PlusCrosshair::Clear() {
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
-            // float horizontal_size_percent = 2;
+            // float horizontal_size = 2;
             if (cached_has_bits & 0x00000002u) {
               total_size += 5;
             }
-            // float vertical_size_percent = 3;
+            // float vertical_size = 3;
             if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
@@ -816,10 +815,10 @@ void PlusCrosshair::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
       _this->_impl_.rounding_ = from._impl_.rounding_;
     }
     if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.horizontal_size_percent_ = from._impl_.horizontal_size_percent_;
+      _this->_impl_.horizontal_size_ = from._impl_.horizontal_size_;
     }
     if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.vertical_size_percent_ = from._impl_.vertical_size_percent_;
+      _this->_impl_.vertical_size_ = from._impl_.vertical_size_;
     }
     if (cached_has_bits & 0x00000008u) {
       _this->_impl_.thickness_ = from._impl_.thickness_;
