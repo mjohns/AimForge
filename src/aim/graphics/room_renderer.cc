@@ -114,8 +114,8 @@ std::vector<float> GenerateCircularWallVertices(int num_segments) {
 
   glm::vec2 current_point(0, -1);
   float tx_step = 1.0f / num_segments;
-  float ty_top = 1.0f;
-  float ty_bottom = 0.0f;
+  float ty_top = 0.0f;
+  float ty_bottom = 1.0f;
   for (int i = 0; i < num_segments; ++i) {
     float next_x = current_point.x * cos_theta - current_point.y * sin_theta;
     float next_y = current_point.x * sin_theta + current_point.y * cos_theta;
@@ -171,18 +171,18 @@ RoomRenderer::RoomRenderer(TextureManager* texture_manager)
     // clang-format off
     float quad_vertices[] = {
           // bottom right
-          0.5f, 0.0f, -0.5f,  1.0f, 0.0f,
+          0.5f, 0.0f, -0.5f,  1.0f, 1.0f,
           // top right
-          0.5f, 0.0f, 0.5f,   1.0f, 1.0f,
+          0.5f, 0.0f, 0.5f,   1.0f, 0.0f,
           //  top left
-          -0.5f, 0.0f, 0.5f,  0.0f, 1.0f,
+          -0.5f, 0.0f, 0.5f,  0.0f, 0.0f,
 
           //  top left
-          -0.5f, 0.0f, 0.5f,  0.0f, 1.0f,
+          -0.5f, 0.0f, 0.5f,  0.0f, 0.0f,
           // bottom left
-          -0.5f, 0.0f, -0.5f,  0.0f, 0.0f,
+          -0.5f, 0.0f, -0.5f,  0.0f, 1.0f,
           // bottom right
-          0.5f, 0.0f, -0.5f,   1.0f, 0.0f,
+          0.5f, 0.0f, -0.5f,   1.0f, 1.0f,
     };
     // clang-format on
 
