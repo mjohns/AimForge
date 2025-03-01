@@ -1,0 +1,28 @@
+{
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 130,
+      "width": 150
+    }
+  },
+  "linearDef": {
+    "angle": 0,
+    "angleJitter": 12
+  },
+  "targetDef": {
+    "numTargets": 5,
+    "profiles": [
+      {
+        "speed":  50,
+        "speedJitter":  6,
+        "targetRadius": 2
+      }
+    ],
+  }
+}

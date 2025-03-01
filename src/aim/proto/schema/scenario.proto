@@ -151,6 +151,8 @@ message LinearScenarioDef {
   // Override width or height of the room. Cannot exceed the room width or height.
   float width = 3;
   float height = 4;
+
+  TargetPlacementStrategy target_placement_strategy = 5;
 }
 
 message TargetDef {
