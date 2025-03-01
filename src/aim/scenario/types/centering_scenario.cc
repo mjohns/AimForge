@@ -56,6 +56,10 @@ class CenteringScenario : public Scenario {
     AddNewTargetEvent(target);
   }
 
+  ShotType::TypeCase GetDefaultShotType() override {
+    return ShotType::kTrackingInvincible;
+  }
+
   void UpdateState(UpdateStateData* data) override {
     if (timer_.GetElapsedSeconds() < kStartMovingDelaySeconds) {
       return;

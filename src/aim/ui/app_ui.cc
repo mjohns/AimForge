@@ -325,8 +325,7 @@ class AppUiImpl : public AppUi {
 
     // ImGui::SetCursorPosX(screen.width * 0.5);
     ImGui::NextColumn();
-    ImGui::InputText(
-        "##DPI", &settings_updater_->dpi, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::InputText("##DPI", &settings_updater_->dpi, ImGuiInputTextFlags_CharsDecimal);
 
     ImGui::NextColumn();
     ImGui::Text("CM/360");

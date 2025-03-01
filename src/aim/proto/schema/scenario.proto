@@ -95,17 +95,17 @@ message ScenarioReferenceOverrides {
 }
 
 message ShotType {
- j   oneof type {
-      bool poke = 1;
-      // Targets have health and must be traced for a certain amount of time.
-      bool tracking_kill = 2;
-      // A single target will be tracked and the total time on target will be the score.
-      bool tracking_invincible = 3;
-      // Target take a single click to kill.
-      bool click_single = 4;
-    }
-    // If unset defaults to 0.05 (50 millis)
-    float poke_kill_time_seconds = 10;
+  oneof type {
+    bool poke = 1;
+    // Targets have health and must be traced for a certain amount of time.
+    bool tracking_kill = 2;
+    // A single target will be tracked and the total time on target will be the score.
+    bool tracking_invincible = 3;
+    // Target take a single click to kill.
+    bool click_single = 4;
+  }
+  // If unset defaults to 0.05 (50 millis)
+  float poke_kill_time_seconds = 10;
 }
 
 message ScenarioDef {

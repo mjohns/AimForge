@@ -366,20 +366,29 @@ NavigationEvent Scenario::ResumeInternal() {
   OnScenarioDone();
   is_done_ = true;
 
-  if (def_.shot_type().tracking_invincible()) {
-    stats_.score = stats_.targets_hit;
-    stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
-  } else if (def_.shot_type().tracking_kill()) {
-    stats_.score = stats_.targets_hit;
-    stats_.shots_taken = 0;
-  } else if (def_.shot_type().poke()) {
-    stats_.score = stats_.targets_hit;
-    stats_.shots_taken = 0;
-  } else {
-    // Default clicking scoring
-    stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
-    float duration_modifier = 60.0f / def_.duration_seconds();
-    stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
+  ShotType::TypeCase shot_type = def_.shot_type().type_case();
+  if (shot_type == ShotType::TYPE_NOT_SET) {
+    shot_type = GetDefaultShotType();
+  }
+  switch (shot_type) {
+    case ShotType::kTrackingInvincible: {
+      stats_.score = stats_.targets_hit;
+      stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
+      break;
+    }
+    case ShotType::kClickSingle: {
+      // Default clicking scoring
+      stats_.hit_percent = stats_.targets_hit / (float)stats_.shots_taken;
+      float duration_modifier = 60.0f / def_.duration_seconds();
+      stats_.score = stats_.targets_hit * 10 * sqrt(stats_.hit_percent) * duration_modifier;
+      break;
+    }
+    case ShotType::kTrackingKill:
+    case ShotType::kPoke:
+    default:
+      stats_.score = stats_.targets_hit;
+      stats_.shots_taken = 0;
+      break;
   }
 
   StatsRow stats_row;
