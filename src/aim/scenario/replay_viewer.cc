@@ -43,10 +43,11 @@ struct MovementInfo {
 
 }  // namespace
 
-NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
-                                         const Theme& theme,
-                                         const Crosshair& crosshair,
-                                         Application* app) {
+NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
+  Theme theme = app->settings_manager()->GetCurrentTheme();
+  Crosshair crosshair = app->settings_manager()->GetCurrentCrosshair();
+  float crosshair_size = app->settings_manager()->GetCurrentSettings().crosshair_size();
+
   ScreenInfo screen = app->screen_info();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
 
@@ -153,7 +154,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
 
     ImDrawList* draw_list = app->StartFullscreenImguiFrame();
 
-    DrawCrosshair(crosshair, theme, screen, draw_list);
+    DrawCrosshair(crosshair, crosshair_size, theme, screen, draw_list);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);

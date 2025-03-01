@@ -11,8 +11,6 @@ namespace aim {
 class ReplayViewer {
  public:
   NavigationEvent PlayReplay(const Replay& replay,
-                             const Theme& theme,
-                             const Crosshair& crosshair,
                              Application* app);
 };
 

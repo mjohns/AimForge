@@ -104,11 +104,13 @@ class Scenario {
 
   NavigationEvent RunWaitingScreenAndThenStart();
   NavigationEvent ResumeInternal();
+  void DoneAdjustingCrosshairSize();
 
   u64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
   float radians_per_dot_;
   Crosshair crosshair_;
+  float crosshair_size_;
   bool is_click_held_ = false;
   Settings settings_;
   i64 stats_id_ = 0;

@@ -343,6 +343,13 @@ class AppUiImpl : public AppUi {
     ImGui::InputText("##THEME_NAME", &settings_updater_->theme_name);
 
     ImGui::NextColumn();
+    ImGui::Text("Crosshair");
+
+    // ImGui::SetCursorPosX(screen.width * 0.5);
+    ImGui::NextColumn();
+    ImGui::InputText("##CROSSHAIR_NAME", &settings_updater_->crosshair_name);
+
+    ImGui::NextColumn();
     ImGui::Text("Metronome BPM");
 
     // ImGui::SetCursorPosX(screen.width * 0.5);

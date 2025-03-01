@@ -35,7 +35,7 @@ Theme GetDefaultTheme() {
 
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
-  crosshair.set_size(15);
+  crosshair.set_name("default");
   crosshair.mutable_dot()->set_draw_outline(true);
   return crosshair;
 }
@@ -44,7 +44,9 @@ Settings GetDefaultSettings() {
   Settings settings;
   settings.set_dpi(800);
   settings.set_cm_per_360(45);
-  *settings.mutable_crosshair() = GetDefaultCrosshair();
+  *settings.add_saved_crosshairs() = GetDefaultCrosshair();
+  settings.set_current_crosshair_name("default");
+  settings.set_crosshair_size(15);
   return settings;
 }
 
@@ -170,7 +172,10 @@ Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scena
     settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
   }
   if (scenario_settings.has_crosshair_size()) {
-    settings_.mutable_crosshair()->set_size(scenario_settings.crosshair_size());
+    settings_.set_crosshair_size(scenario_settings.crosshair_size());
+  }
+  if (scenario_settings.has_crosshair_name()) {
+    settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
   }
   return settings_;
 }
@@ -181,6 +186,16 @@ Settings SettingsManager::GetCurrentSettings() {
 
 Settings* SettingsManager::GetMutableCurrentSettings() {
   return &settings_;
+}
+
+Crosshair SettingsManager::GetCurrentCrosshair() {
+  Settings settings = GetCurrentSettings();
+  for (const Crosshair& crosshair : settings.saved_crosshairs()) {
+    if (crosshair.name() == settings.current_crosshair_name()) {
+      return crosshair;
+    }
+  }
+  return GetDefaultCrosshair();
 }
 
 void SettingsManager::MarkDirty() {
@@ -197,7 +212,8 @@ bool SettingsManager::MaybeFlushToDisk(const std::string& scenario_id) {
 void SettingsManager::FlushToDisk(const std::string& scenario_id) {
   if (scenario_id.size() > 0) {
     ScenarioSettings scenario_settings;
-    scenario_settings.set_crosshair_size(settings_.crosshair().size());
+    scenario_settings.set_crosshair_size(settings_.crosshair_size());
+    scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
     scenario_settings.set_cm_per_360(settings_.cm_per_360());
     scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
     scenario_settings.set_theme_name(settings_.theme_name());
@@ -217,7 +233,8 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager)
     theme_name = current_settings->theme_name();
     metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
     dpi = MaybeIntToString(current_settings->dpi());
-    crosshair_size = MaybeIntToString(current_settings->crosshair().size());
+    crosshair_size = MaybeIntToString(current_settings->crosshair_size());
+    crosshair_name = current_settings->current_crosshair_name();
   }
 }
 
@@ -240,6 +257,10 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     current_settings->set_theme_name(theme_name);
     settings_manager_->MarkDirty();
   }
+  if (current_settings->current_crosshair_name() != crosshair_name) {
+    current_settings->set_current_crosshair_name(crosshair_name);
+    settings_manager_->MarkDirty();
+  }
   float new_metronome_bpm = ParseFloat(metronome_bpm);
   if (new_metronome_bpm >= 0 && current_settings->metronome_bpm() != new_metronome_bpm) {
     current_settings->set_metronome_bpm(new_metronome_bpm);
@@ -251,8 +272,8 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     settings_manager_->MarkDirty();
   }
   float new_crosshair_size = ParseFloat(crosshair_size);
-  if (new_crosshair_size >= 0 && current_settings->crosshair().size() != new_crosshair_size) {
-    current_settings->mutable_crosshair()->set_size(new_crosshair_size);
+  if (new_crosshair_size >= 0 && current_settings->crosshair_size() != new_crosshair_size) {
+    current_settings->set_crosshair_size(new_crosshair_size);
     settings_manager_->MarkDirty();
   }
   settings_manager_->MaybeFlushToDisk(scenario_id);

@@ -9,6 +9,7 @@
 namespace aim {
 
 void DrawCrosshair(const Crosshair& crosshair,
+                   float crosshair_size,
                    const Theme& theme,
                    const ScreenInfo& screen,
                    ImDrawList* draw_list);
