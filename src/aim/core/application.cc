@@ -59,6 +59,9 @@ Application::~Application() {
   if (sdl_window_ != nullptr) {
     SDL_DestroyWindow(sdl_window_);
   }
+  if (icon_ != nullptr) {
+    SDL_DestroySurface(icon_);
+  }
 
   Mix_CloseAudio();
   Mix_Quit();
@@ -164,6 +167,14 @@ int Application::Initialize() {
   if (gl_context_ == nullptr) {
     logger_->error("SDL_GL_CreateContext(): {}", SDL_GetError());
     return -1;
+  }
+
+  auto logo_path = file_system_->GetBasePath("resources/images/logo.bmp");
+  icon_ = SDL_LoadBMP(logo_path.string().c_str());
+  if (icon_ != nullptr) {
+    SDL_SetWindowIcon(sdl_window_, icon_);
+  } else {
+    logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
   }
 
   SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
