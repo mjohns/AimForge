@@ -69,6 +69,9 @@ extern CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
 class EllipseTargetRegion;
 struct EllipseTargetRegionDefaultTypeInternal;
 extern EllipseTargetRegionDefaultTypeInternal _EllipseTargetRegion_default_instance_;
+class LinearScenarioDef;
+struct LinearScenarioDefDefaultTypeInternal;
+extern LinearScenarioDefDefaultTypeInternal _LinearScenarioDef_default_instance_;
 class PillTargetDef;
 struct PillTargetDefDefaultTypeInternal;
 extern PillTargetDefDefaultTypeInternal _PillTargetDef_default_instance_;
@@ -1128,7 +1131,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
+  static constexpr int kIndexInFileMessages = 17;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -1253,6 +1256,237 @@ class PillTargetDef final : public ::google::protobuf::Message
                           const PillTargetDef& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    float height_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
+class LinearScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.LinearScenarioDef) */ {
+ public:
+  inline LinearScenarioDef() : LinearScenarioDef(nullptr) {}
+  ~LinearScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(LinearScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(LinearScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR LinearScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline LinearScenarioDef(const LinearScenarioDef& from) : LinearScenarioDef(nullptr, from) {}
+  inline LinearScenarioDef(LinearScenarioDef&& from) noexcept
+      : LinearScenarioDef(nullptr, std::move(from)) {}
+  inline LinearScenarioDef& operator=(const LinearScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline LinearScenarioDef& operator=(LinearScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const LinearScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const LinearScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const LinearScenarioDef*>(
+        &_LinearScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 15;
+  friend void swap(LinearScenarioDef& a, LinearScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(LinearScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(LinearScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  LinearScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<LinearScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const LinearScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const LinearScenarioDef& from) { LinearScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(LinearScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.LinearScenarioDef"; }
+
+ protected:
+  explicit LinearScenarioDef(::google::protobuf::Arena* arena);
+  LinearScenarioDef(::google::protobuf::Arena* arena, const LinearScenarioDef& from);
+  LinearScenarioDef(::google::protobuf::Arena* arena, LinearScenarioDef&& from) noexcept
+      : LinearScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kAngleFieldNumber = 1,
+    kAngleJitterFieldNumber = 2,
+    kWidthFieldNumber = 3,
+    kHeightFieldNumber = 4,
+  };
+  // float angle = 1;
+  bool has_angle() const;
+  void clear_angle() ;
+  float angle() const;
+  void set_angle(float value);
+
+  private:
+  float _internal_angle() const;
+  void _internal_set_angle(float value);
+
+  public:
+  // float angle_jitter = 2;
+  bool has_angle_jitter() const;
+  void clear_angle_jitter() ;
+  float angle_jitter() const;
+  void set_angle_jitter(float value);
+
+  private:
+  float _internal_angle_jitter() const;
+  void _internal_set_angle_jitter(float value);
+
+  public:
+  // float width = 3;
+  bool has_width() const;
+  void clear_width() ;
+  float width() const;
+  void set_width(float value);
+
+  private:
+  float _internal_width() const;
+  void _internal_set_width(float value);
+
+  public:
+  // float height = 4;
+  bool has_height() const;
+  void clear_height() ;
+  float height() const;
+  void set_height(float value);
+
+  private:
+  float _internal_height() const;
+  void _internal_set_height(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.LinearScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const LinearScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    float angle_;
+    float angle_jitter_;
+    float width_;
     float height_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -1905,7 +2139,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 17;
+  static constexpr int kIndexInFileMessages = 18;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -3432,7 +3666,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 15;
+  static constexpr int kIndexInFileMessages = 16;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -4170,6 +4404,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kStaticDef = 10,
     kCenteringDef = 11,
     kBarrelDef = 12,
+    kLinearDef = 13,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -4273,6 +4508,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kStaticDefFieldNumber = 10,
     kCenteringDefFieldNumber = 11,
     kBarrelDefFieldNumber = 12,
+    kLinearDefFieldNumber = 13,
   };
   // string scenario_id = 1;
   bool has_scenario_id() const;
@@ -4436,6 +4672,25 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::BarrelScenarioDef* _internal_mutable_barrel_def();
 
   public:
+  // .aim.LinearScenarioDef linear_def = 13;
+  bool has_linear_def() const;
+  private:
+  bool _internal_has_linear_def() const;
+
+  public:
+  void clear_linear_def() ;
+  const ::aim::LinearScenarioDef& linear_def() const;
+  PROTOBUF_NODISCARD ::aim::LinearScenarioDef* release_linear_def();
+  ::aim::LinearScenarioDef* mutable_linear_def();
+  void set_allocated_linear_def(::aim::LinearScenarioDef* value);
+  void unsafe_arena_set_allocated_linear_def(::aim::LinearScenarioDef* value);
+  ::aim::LinearScenarioDef* unsafe_arena_release_linear_def();
+
+  private:
+  const ::aim::LinearScenarioDef& _internal_linear_def() const;
+  ::aim::LinearScenarioDef* _internal_mutable_linear_def();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ScenarioDef)
@@ -4444,11 +4699,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_static_def();
   void set_has_centering_def();
   void set_has_barrel_def();
+  void set_has_linear_def();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 10, 7,
+      3, 11, 8,
       52, 2>
       _table_;
 
@@ -4481,6 +4737,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::StaticScenarioDef* static_def_;
       ::aim::CenteringScenarioDef* centering_def_;
       ::aim::BarrelScenarioDef* barrel_def_;
+      ::aim::LinearScenarioDef* linear_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -7319,6 +7576,85 @@ inline ::aim::BarrelScenarioDef* ScenarioDef::mutable_barrel_def() ABSL_ATTRIBUT
   return _msg;
 }
 
+// .aim.LinearScenarioDef linear_def = 13;
+inline bool ScenarioDef::has_linear_def() const {
+  return type_case() == kLinearDef;
+}
+inline bool ScenarioDef::_internal_has_linear_def() const {
+  return type_case() == kLinearDef;
+}
+inline void ScenarioDef::set_has_linear_def() {
+  _impl_._oneof_case_[0] = kLinearDef;
+}
+inline void ScenarioDef::clear_linear_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kLinearDef) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.linear_def_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.linear_def_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::LinearScenarioDef* ScenarioDef::release_linear_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.linear_def)
+  if (type_case() == kLinearDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.linear_def_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.linear_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::LinearScenarioDef& ScenarioDef::_internal_linear_def() const {
+  return type_case() == kLinearDef ? *_impl_.type_.linear_def_ : reinterpret_cast<::aim::LinearScenarioDef&>(::aim::_LinearScenarioDef_default_instance_);
+}
+inline const ::aim::LinearScenarioDef& ScenarioDef::linear_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.linear_def)
+  return _internal_linear_def();
+}
+inline ::aim::LinearScenarioDef* ScenarioDef::unsafe_arena_release_linear_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.linear_def)
+  if (type_case() == kLinearDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.linear_def_;
+    _impl_.type_.linear_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_linear_def(::aim::LinearScenarioDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_linear_def();
+    _impl_.type_.linear_def_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.linear_def)
+}
+inline ::aim::LinearScenarioDef* ScenarioDef::_internal_mutable_linear_def() {
+  if (type_case() != kLinearDef) {
+    clear_type();
+    set_has_linear_def();
+    _impl_.type_.linear_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::LinearScenarioDef>(GetArena());
+  }
+  return _impl_.type_.linear_def_;
+}
+inline ::aim::LinearScenarioDef* ScenarioDef::mutable_linear_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::LinearScenarioDef* _msg = _internal_mutable_linear_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.linear_def)
+  return _msg;
+}
+
 inline bool ScenarioDef::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -7617,6 +7953,122 @@ inline void CenteringScenarioDef::set_allocated_end_position(::aim::StoredVec3* 
 // -------------------------------------------------------------------
 
 // BarrelScenarioDef
+
+// -------------------------------------------------------------------
+
+// LinearScenarioDef
+
+// float angle = 1;
+inline bool LinearScenarioDef::has_angle() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void LinearScenarioDef::clear_angle() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline float LinearScenarioDef::angle() const {
+  // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.angle)
+  return _internal_angle();
+}
+inline void LinearScenarioDef::set_angle(float value) {
+  _internal_set_angle(value);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.angle)
+}
+inline float LinearScenarioDef::_internal_angle() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.angle_;
+}
+inline void LinearScenarioDef::_internal_set_angle(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_ = value;
+}
+
+// float angle_jitter = 2;
+inline bool LinearScenarioDef::has_angle_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void LinearScenarioDef::clear_angle_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float LinearScenarioDef::angle_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.angle_jitter)
+  return _internal_angle_jitter();
+}
+inline void LinearScenarioDef::set_angle_jitter(float value) {
+  _internal_set_angle_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.angle_jitter)
+}
+inline float LinearScenarioDef::_internal_angle_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.angle_jitter_;
+}
+inline void LinearScenarioDef::_internal_set_angle_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_jitter_ = value;
+}
+
+// float width = 3;
+inline bool LinearScenarioDef::has_width() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void LinearScenarioDef::clear_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float LinearScenarioDef::width() const {
+  // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.width)
+  return _internal_width();
+}
+inline void LinearScenarioDef::set_width(float value) {
+  _internal_set_width(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.width)
+}
+inline float LinearScenarioDef::_internal_width() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.width_;
+}
+inline void LinearScenarioDef::_internal_set_width(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_ = value;
+}
+
+// float height = 4;
+inline bool LinearScenarioDef::has_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void LinearScenarioDef::clear_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float LinearScenarioDef::height() const {
+  // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.height)
+  return _internal_height();
+}
+inline void LinearScenarioDef::set_height(float value) {
+  _internal_set_height(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.height)
+}
+inline float LinearScenarioDef::_internal_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.height_;
+}
+inline void LinearScenarioDef::_internal_set_height(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = value;
+}
 
 // -------------------------------------------------------------------
 

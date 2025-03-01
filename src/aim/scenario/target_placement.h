@@ -10,6 +10,8 @@
 
 namespace aim {
 
+Wall GetWallForRoom(const Room& room);
+
 class WallTargetPlacer {
  public:
   virtual ~WallTargetPlacer() {}

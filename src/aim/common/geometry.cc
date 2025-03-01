@@ -10,6 +10,11 @@
 
 namespace aim {
 
+glm::vec2 GetRandomPositionOnWall(const Wall& wall, std::mt19937* random_generator) {
+  auto dist = std::uniform_real_distribution<float>(-0.5f, 0.5f);
+  return glm::vec2(dist(*random_generator) * wall.width, dist(*random_generator) * wall.height);
+}
+
 glm::vec2 GetRandomPositionInEllipse(float radius_x,
                                      float radius_y,
                                      std::mt19937* random_generator) {
