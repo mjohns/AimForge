@@ -18,6 +18,7 @@ void Renderer::DrawScenario(const Room& room,
   glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
   glm::vec3 ghost_target_color =
       theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
+
   for (const Target& target : targets) {
     if (target.ShouldDraw()) {
       glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;

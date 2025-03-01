@@ -22,6 +22,8 @@ class SphereRenderer {
   unsigned int vao_;
   unsigned int num_vertices_;
 
+  unsigned int instance_vbo_;
+
   Shader shader_;
 };
 
