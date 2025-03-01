@@ -36,6 +36,10 @@ class StaticScenario : public BaseScenario {
     target->wall_position = wall_pos;
   }
 
+  bool ShouldRecordReplay() override {
+    return true;
+  }
+
  private:
   std::unique_ptr<WallTargetPlacer> wall_target_placer_;
 };

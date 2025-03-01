@@ -1,8 +1,10 @@
 #pragma once
 
+#include <google/protobuf/arena.h>
+
+#include <functional>
 #include <glm/vec3.hpp>
 #include <optional>
-#include <functional>
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
@@ -54,6 +56,10 @@ class Scenario {
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
 
+  virtual bool ShouldRecordReplay() {
+    return false;
+  }
+
   void RunAfterSeconds(float delay_seconds, std::function<void()>&& fn);
 
   // Replay recording methods
@@ -83,7 +89,9 @@ class Scenario {
   Camera camera_;
   TargetManager target_manager_;
   LookAtInfo look_at_;
-  std::unique_ptr<Replay> replay_;
+
+  google::protobuf::Arena replay_arena_;
+  Replay* replay_ = nullptr;
   Theme theme_;
 
  private:

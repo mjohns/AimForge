@@ -103,8 +103,8 @@ class CenteringScenario : public Scenario {
 
   void OnScenarioDone() override {
     TrackingHoldDone();
-    stats_.targets_hit = hit_stopwatch_.GetElapsedSeconds() * 10;
-    stats_.shots_taken = shot_stopwatch_.GetElapsedSeconds() * 10;
+    stats_.targets_hit = hit_stopwatch_.GetElapsedSeconds() * 100;
+    stats_.shots_taken = shot_stopwatch_.GetElapsedSeconds() * 100;
   }
 
  private:

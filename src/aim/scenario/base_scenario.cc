@@ -73,6 +73,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
         if (target.health_seconds > 0 &&
             target.hit_timer.GetElapsedSeconds() >= target.health_seconds) {
           stats_.targets_hit++;
+          PlayKillSound();
           AddNewTargetDuringRun(target.id);
         }
       }
