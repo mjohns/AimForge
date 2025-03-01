@@ -99,7 +99,6 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   bool running = true;
   while (running) {
     if (!app_->has_input_focus()) {
-      // Pause the scenario if user alt-tabs etc.
       return NavigationEvent::Done();
     }
     if (show_settings.has_value()) {
@@ -232,7 +231,7 @@ NavigationEvent Scenario::ResumeInternal() {
     }
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
-      return NavigationEvent::Done();
+      return PauseAndReturn();
     }
     if (show_settings.has_value()) {
       // Need to pause.
@@ -308,7 +307,7 @@ NavigationEvent Scenario::ResumeInternal() {
           is_adjusting_crosshair = true;
         }
         if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::Done();
+          return PauseAndReturn();
         }
       }
       if (event.type == SDL_EVENT_KEY_UP) {
@@ -533,6 +532,12 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     target.height = profile.pill().height();
   }
   return target;
+}
+
+NavigationEvent Scenario::PauseAndReturn() {
+  timer_.PauseRun();
+  OnPause();
+  return NavigationEvent::Done();
 }
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app) {
