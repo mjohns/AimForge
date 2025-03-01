@@ -62,6 +62,8 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay,
                 ToVec3(replay.room().camera_position()));
 
   ScenarioTimer timer(replay.replay_fps());
+  timer.StartLoop();
+  timer.ResumeRun();
   while (true) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {

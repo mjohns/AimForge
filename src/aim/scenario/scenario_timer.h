@@ -11,15 +11,18 @@ class ScenarioTimer {
  public:
   explicit ScenarioTimer(uint16_t replay_fps);
 
+  void StartLoop();
+
   void OnStartFrame();
   void OnStartRender();
   void OnEndRender();
 
-  void Pause() {
+  void PauseRun() {
     run_stopwatch_.Stop();
   }
 
-  void Resume() {
+  void ResumeRun() {
+    has_started_run_ = true;
     run_stopwatch_.Start();
   }
 
@@ -32,7 +35,7 @@ class ScenarioTimer {
   }
 
   u64 GetReplayFrameNumber() {
-    return has_started_ ? replay_frame_number_ : 0;
+    return has_started_run_ ? replay_frame_number_ : 0;
   }
 
   bool IsNewReplayFrame() {
@@ -63,7 +66,7 @@ class ScenarioTimer {
   u64 render_start_time_micros_ = 0;
   u64 render_end_time_micros_ = 0;
 
-  bool has_started_ = false;
+  bool has_started_run_ = false;
 };
 
 }  // namespace aim

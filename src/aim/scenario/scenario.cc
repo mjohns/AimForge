@@ -49,8 +49,6 @@ NavigationEvent Scenario::Run() {
     *replay_->mutable_room() = def_.room();
     replay_->set_replay_fps(timer_.GetReplayFps());
   }
-  Initialize();
-
   return Resume();
 }
 
@@ -70,7 +68,12 @@ void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) 
 }
 
 void Scenario::RefreshState() {
-  SDL_GL_SetSwapInterval(0);  // Disable vsync
+  if (has_started_) {
+    SDL_GL_SetSwapInterval(0);  // Disable vsync
+  } else {
+    SDL_GL_SetSwapInterval(1);
+  }
+
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
 
   settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(def_.scenario_id());
@@ -85,7 +88,118 @@ void Scenario::RefreshState() {
   theme_ = app_->settings_manager()->GetCurrentTheme();
 }
 
+NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
+  RefreshState();
+
+  bool is_adjusting_crosshair = false;
+  std::optional<QuickSettingsType> show_settings;
+  look_at_ = camera_.GetLookAt();
+  timer_.StartLoop();
+  bool running = true;
+  while (running) {
+    if (!app_->has_input_focus()) {
+      // Pause the scenario if user alt-tabs etc.
+      return NavigationEvent::Done();
+    }
+    if (show_settings.has_value()) {
+      NavigationEvent nav_event;
+      nav_event = CreateQuickSettingsScreen(def_.scenario_id(), *show_settings, app_)->Run();
+      if (nav_event.IsNotDone()) {
+        return nav_event;
+      }
+      show_settings = {};
+      // Need to refresh everything based on settings change
+      RefreshState();
+    }
+
+    timer_.OnStartFrame();
+
+    SDL_Event event;
+    UpdateStateData update_data;
+    while (SDL_PollEvent(&event)) {
+      ImGui_ImplSDL3_ProcessEvent(&event);
+      if (event.type == SDL_EVENT_QUIT) {
+        throw ApplicationExitException();
+      }
+      if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          running = false;
+        }
+      }
+      if (is_adjusting_crosshair) {
+        if (event.type == SDL_EVENT_MOUSE_WHEEL) {
+          if (event.wheel.y != 0) {
+            crosshair_.set_size(crosshair_.size() + event.wheel.y);
+          }
+        }
+      }
+      if (event.type == SDL_EVENT_KEY_DOWN) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_S) {
+          show_settings = QuickSettingsType::DEFAULT;
+        }
+        if (keycode == SDLK_B) {
+          show_settings = QuickSettingsType::METRONOME;
+        }
+        if (keycode == SDLK_C) {
+          is_adjusting_crosshair = true;
+        }
+        if (keycode == SDLK_ESCAPE) {
+          return NavigationEvent::Done();
+        }
+      }
+      if (event.type == SDL_EVENT_KEY_UP) {
+        SDL_Keycode keycode = event.key.key;
+        if (keycode == SDLK_C) {
+          is_adjusting_crosshair = false;
+          Settings* current_settings = app_->settings_manager()->GetMutableCurrentSettings();
+          if (current_settings != nullptr) {
+            *current_settings->mutable_crosshair() = crosshair_;
+            app_->settings_manager()->MarkDirty();
+            app_->settings_manager()->MaybeFlushToDisk(def_.scenario_id());
+            RefreshState();
+          }
+        }
+      }
+    }
+
+    timer_.OnStartRender();
+    auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
+
+    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
+    DrawCrosshair(crosshair_, theme_, app_->screen_info(), draw_list);
+
+    ImGui::Text("%s", def_.scenario_id().c_str());
+    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
+    ImGui::Text("theme: %s", settings_.theme_name().c_str());
+    ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
+
+    ImGui::End();
+
+    if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
+      app_->renderer()->DrawScenario(
+          def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
+      app_->FinishRender();
+    }
+  }
+
+  // Scenario has started.
+  SDL_Delay(200);
+  has_started_ = true;
+  Initialize();
+  return ResumeInternal();
+}
+
 NavigationEvent Scenario::Resume() {
+  if (!has_started_) {
+    return RunWaitingScreenAndThenStart();
+  } else {
+    return ResumeInternal();
+  }
+}
+
+NavigationEvent Scenario::ResumeInternal() {
   if (is_done_) {
     StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_);
     return stats_screen.Run(replay_);
@@ -97,6 +211,8 @@ NavigationEvent Scenario::Resume() {
   bool stop_scenario = false;
   bool is_adjusting_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
+  timer_.StartLoop();
+  timer_.ResumeRun();
   while (!stop_scenario) {
     loop_count++;
     if (loop_count % 50000 == 0) {
@@ -108,7 +224,7 @@ NavigationEvent Scenario::Resume() {
     }
     if (show_settings.has_value()) {
       // Need to pause.
-      timer_.Pause();
+      timer_.PauseRun();
       OnPause();
       NavigationEvent nav_event;
       nav_event = CreateQuickSettingsScreen(def_.scenario_id(), *show_settings, app_)->Run();
@@ -118,7 +234,7 @@ NavigationEvent Scenario::Resume() {
       show_settings = {};
       // Need to refresh everything based on settings change
       RefreshState();
-      timer_.Resume();
+      timer_.ResumeRun();
     }
 
     timer_.OnStartFrame();
