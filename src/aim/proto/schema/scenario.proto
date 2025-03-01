@@ -44,7 +44,7 @@ message RegionLength {
     // Length is a percent of relevant dimension (x,y) on the wall.
     float x_percent_value = 1;
     float y_percent_value = 2;
-    float absolute_value = 3;
+    float value = 3;
   }
 }
 
@@ -175,6 +175,9 @@ message TargetDef {
 
   // A target will automatically be removed after the specified amount of seconds.
   float remove_target_after_seconds = 7;
+
+  // The initial target will be added with the specified delay between each target.
+  float stagger_initial_targets_seconds = 8;
 }
 
 message PillTargetDef {
