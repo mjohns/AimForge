@@ -148,12 +148,10 @@ class AppUiImpl : public AppUi {
   void DrawScreen() {
     ScreenInfo screen = app_->screen_info();
 
-    // TODO: Add top bar
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
+    // TODO: Improve appearance of top bar.
+    ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
+    ImGui::Text("AimForge");
+    ImGui::EndChild();
 
     ImGui::Columns(2, "NavigationContentColumns", false);
     ImGui::SetColumnWidth(0, screen.width * 0.15);
