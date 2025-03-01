@@ -15,6 +15,12 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
+  SDL3_image
+  GIT_REPOSITORY "https://github.com/libsdl-org/SDL_image.git"
+  GIT_TAG release-3.2.0
+)
+
+FetchContent_Declare(
   SDL_mixer
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL_mixer.git"
   GIT_TAG 269c637263b8c63b053d72b4dde4129b944d6e57
@@ -49,6 +55,17 @@ set(protobuf_BUILD_TESTS OFF)
 set(ABSL_PROPAGATE_CXX_STD ON)
 set(GLM_BUILD_LIBRARY ON)
 
+set(SDLIMAGE_AVIF OFF)
+set(SDLIMAGE_DAV1D OFF)
+SET(SDLIMAGE_LBM OFF)
+SET(SDLIMAGE_PCX OFF)
+SET(SDLIMAGE_PCX OFF)
+SET(SDLIMAGE_QOI OFF)
+SET(SDLIMAGE_XCF OFF)
+SET(SDLIMAGE_XPM OFF)
+SET(SDLIMAGE_XV OFF)
+
+
 add_subdirectory(imgui)
 add_subdirectory(glad)
 add_subdirectory(sqlite3)
@@ -56,5 +73,5 @@ add_subdirectory(implot)
 add_subdirectory(json)
 add_subdirectory(stb)
 
-FetchContent_MakeAvailable(fmt SDL3 SDL_mixer spdlog glm protobuf)
+FetchContent_MakeAvailable(fmt SDL3 SDL3_image SDL_mixer spdlog glm protobuf)
 
