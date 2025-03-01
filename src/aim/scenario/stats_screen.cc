@@ -19,8 +19,8 @@ std::string MakeScoreString(double targets_hit, double shots_taken, float score)
     float hit_percent = targets_hit / shots_taken;
     std::string score_string = std::format("{} - {}/{} ({:.1f}%)",
                                            MaybeIntToString(score, 2),
-                                           MaybeIntToString(targets_hit, 2),
-                                           MaybeIntToString(shots_taken, 2),
+                                           MaybeIntToString(targets_hit, 1),
+                                           MaybeIntToString(shots_taken, 1),
                                            hit_percent * 100);
     return score_string;
   }
