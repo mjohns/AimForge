@@ -12,9 +12,9 @@ namespace {
 const char* vertex_shader = R"AIMS(
 #version 330 core
 layout (location = 0) in vec3 aPos;
+layout (location = 1) in mat4 model;
 
 uniform mat4 view;
-uniform mat4 model;
 uniform mat4 projection;
 
 void main() {
@@ -138,6 +138,7 @@ SphereRenderer::SphereRenderer() : shader_(Shader(vertex_shader, fragment_shader
 
   glGenVertexArrays(1, &vao_);
   glGenBuffers(1, &vbo_);
+  glGenBuffers(1, &instance_vbo_);
 
   glBindVertexArray(vao_);
 
@@ -147,11 +148,30 @@ SphereRenderer::SphereRenderer() : shader_(Shader(vertex_shader, fragment_shader
   // position attribute
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
+
+  // instanced mat4 model transform
+  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo_);
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+  glVertexAttribDivisor(1, 1);
+
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+  glVertexAttribDivisor(2, 1);
+
+  glEnableVertexAttribArray(3);
+  glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+  glVertexAttribDivisor(3, 1);
+
+  glEnableVertexAttribArray(4);
+  glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+  glVertexAttribDivisor(4, 1);
 }
 
 SphereRenderer::~SphereRenderer() {
   glDeleteVertexArrays(1, &vao_);
   glDeleteBuffers(1, &vbo_);
+  glDeleteBuffers(1, &instance_vbo_);
 }
 
 void SphereRenderer::SetProjection(const glm::mat4& projection) {
@@ -164,18 +184,28 @@ void SphereRenderer::Draw(const glm::mat4& view,
                           const std::vector<Sphere>& spheres) {
   shader_.Use();
   shader_.SetMat4("view", view);
-
   shader_.SetVec3("quad_color", color);
 
-  for (const auto& sphere : spheres) {
+  std::vector<glm::mat4> model_transforms;
+  for (const Sphere& sphere : spheres) {
     glm::mat4 model(1.f);
     model = glm::translate(model, sphere.position);
     model = glm::scale(model, glm::vec3(sphere.radius));
-    shader_.SetMat4("model", model);
-
-    glBindVertexArray(vao_);
-    glDrawArrays(GL_TRIANGLES, 0, num_vertices_);
+    model_transforms.push_back(model);
   }
+
+  glBindVertexArray(vao_);
+
+  // instanced model transformation attribute
+  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo_);
+  glBufferData(GL_ARRAY_BUFFER,
+               model_transforms.size() * sizeof(glm::mat4),
+               model_transforms.data(),
+               GL_STATIC_DRAW);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  glDrawArraysInstanced(GL_TRIANGLES, 0, num_vertices_, model_transforms.size());
 }
 
 }  // namespace aim
