@@ -170,8 +170,8 @@ int Application::Initialize() {
     return -1;
   }
 
-  auto logo_path = file_system_->GetBasePath("resources/images/logo.bmp");
-  icon_ = SDL_LoadBMP(logo_path.string().c_str());
+  auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
+  icon_ = IMG_Load(logo_path.string().c_str());
   if (icon_ != nullptr) {
     SDL_SetWindowIcon(sdl_window_, icon_);
   } else {
