@@ -12,6 +12,7 @@
 #include <glm/vec3.hpp>
 #include <memory>
 
+#include "aim/common/imgui_ext.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
@@ -169,18 +170,21 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::Text("theme: %s", settings_.theme_name().c_str());
     ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
 
-    std::string message = "Click to Start";
-    ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
-    ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
-    ImGui::SetCursorPosY(app_->screen_info().center.y - text_size.y * 2);
-    ImGui::Text("%s", message.c_str());
+    {
+      auto bold = app_->font_manager()->UseLargeBold();
+      std::string message = "Click to Start";
+      ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+      ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
+      ImGui::SetCursorPosY(app_->screen_info().center.y - text_size.y * 1.75);
+      ImGui::Text(message);
+    }
 
-    text_size = ImGui::CalcTextSize(def_.scenario_id().c_str());
+    ImVec2 text_size = ImGui::CalcTextSize(def_.scenario_id().c_str());
     ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 1);
     ImGui::Text("%s", def_.scenario_id().c_str());
 
-    message = std::format("cm/360: {}", MaybeIntToString(settings_.cm_per_360(), 1));
+    std::string message = std::format("cm/360: {}", MaybeIntToString(settings_.cm_per_360(), 1));
     text_size = ImGui::CalcTextSize(message.c_str());
     ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 2);
