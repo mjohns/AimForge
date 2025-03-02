@@ -16,6 +16,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
+#include "aim/core/font_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
@@ -67,6 +68,10 @@ class Application {
 
   SoundManager* sound_manager() {
     return sound_manager_.get();
+  }
+
+  FontManager* font_manager() {
+    return font_manager_.get();
   }
 
   StatsDb* stats_db() {
@@ -126,6 +131,7 @@ class Application {
   std::unique_ptr<SettingsManager> settings_manager_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
+  std::unique_ptr<FontManager> font_manager_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
 };

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <optional>
 
+#include "aim/common/imgui_ext.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
 #include "aim/scenario/replay_viewer.h"
@@ -25,6 +26,24 @@ std::string MakeScoreString(double targets_hit, double shots_taken, float score)
     return score_string;
   }
   return std::format("{}", MaybeIntToString(score, 2));
+}
+
+void RenderScore(const StatsRow& stats, Application* app) {
+  if (stats.num_shots > 0) {
+    float hit_percent = stats.num_hits / stats.num_shots;
+    auto bold = app->font_manager()->UseDefaultBold();
+    ImGui::Text(MaybeIntToString(stats.score, 2));
+    auto font = app->font_manager()->UseDefault();
+    std::string score_string = std::format("- {}/{} ({:.1f}%)",
+                                           MaybeIntToString(stats.num_hits, 1),
+                                           MaybeIntToString(stats.num_shots, 1),
+                                           hit_percent * 100);
+    ImGui::SameLine();
+    ImGui::Text(score_string);
+  } else {
+    auto bold = app->font_manager()->UseDefaultBold();
+    ImGui::Text(std::format("{}", MaybeIntToString(stats.score, 2)));
+  }
 }
 
 std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
@@ -82,8 +101,6 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   }
   StatsRow stats = *maybe_stats;
 
-  std::string score_string = MakeScoreString(stats.num_hits, stats.num_shots, stats.score);
-
   auto maybe_previous_high_score_stats = GetHighScore(all_stats, all_stats.size() - 1);
 
   std::vector<float> high_scores_over_time = GetHighScoresOverTime(all_stats);
@@ -98,9 +115,6 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   std::string time_ago;
   bool has_previous_high_score = maybe_previous_high_score_stats.has_value();
   if (maybe_previous_high_score_stats) {
-    previous_high_score_string = MakeScoreString(maybe_previous_high_score_stats->num_hits,
-                                                 maybe_previous_high_score_stats->num_shots,
-                                                 maybe_previous_high_score_stats->score);
     previous_high_score = maybe_previous_high_score_stats->score;
     float percent = previous_high_score / stats.score;
     percent_diff = (1.0 - percent) * 100;
@@ -159,11 +173,17 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
     ImGui::Indent(x_start);
 
-    ImGui::Text("%s", scenario_id_.c_str());
+    {
+      auto bold = app_->font_manager()->UseLarge();
+      ImGui::Text("%s", scenario_id_.c_str());
+    }
+    ImGui::Spacing();
+    ImGui::Spacing();
     if (percent_diff > 0) {
+      auto bold = app_->font_manager()->UseDefaultBold();
       ImGui::Text("NEW HIGH SCORE!");
     }
-    ImGui::Text("%s", score_string.c_str());
+    RenderScore(stats, app_);
     if (has_previous_high_score) {
       if (percent_diff > 0) {
         ImGui::Text("+%.1f%%", percent_diff);
@@ -175,7 +195,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       ImGui::Spacing();
       ImGui::Spacing();
       ImGui::Text("Previous High Score %s", time_ago.c_str());
-      ImGui::Text("%s", previous_high_score_string.c_str());
+      RenderScore(*maybe_previous_high_score_stats, app_);
     }
     ImGui::Spacing();
     ImGui::Spacing();

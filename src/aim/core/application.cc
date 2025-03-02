@@ -212,10 +212,10 @@ int Application::Initialize() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
-  auto font_path = file_system_->GetBasePath("resources/fonts/Manrope.ttf");
-  ImFont* font = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), 26);
-  if (font == nullptr) {
-    logger_->error("Unable to load font from: {}", font_path.string());
+  font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
+  if (!font_manager_->LoadFonts()) {
+    logger_->error("Failed to load fonts");
+    return -1;
   }
 
   // Setup Dear ImGui style

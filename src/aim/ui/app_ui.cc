@@ -155,13 +155,17 @@ class AppUiImpl : public AppUi {
     // TODO: Improve appearance of top bar.
     ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
     if (logo_texture_->is_loaded()) {
+      int size = app_->font_manager()->large_font_size();
       ImGui::Image((ImTextureID)(intptr_t)logo_texture_->id(),
-                   ImVec2(50, 50),
+                   ImVec2(size + 2, size + 2),
                    ImVec2(0.0f, 0.0f),
                    ImVec2(1.0f, 1.0f));
       ImGui::SameLine();
     }
-    ImGui::Text("AimForge");
+    {
+      auto font = app_->font_manager()->UseLarge();
+      ImGui::Text("AimForge");
+    }
     ImGui::EndChild();
 
     ImGui::Columns(2, "NavigationContentColumns", false);
