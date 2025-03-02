@@ -133,17 +133,19 @@ Theme SettingsManager::GetCurrentTheme() {
 }
 
 void SettingsManager::MaybeInvalidateThemeCache() {
-  std::vector<std::string> entries_to_invalidate;
+  bool something_changed = false;
   for (auto& map_entry : theme_cache_) {
     auto& cache_entry = map_entry.second;
     auto last_modified_time = std::filesystem::last_write_time(cache_entry.file_path);
     if (last_modified_time > cache_entry.last_modified_time) {
       Logger::get()->info("Invalidate theme cache entry for {}", map_entry.first);
-      entries_to_invalidate.push_back(map_entry.first);
+      something_changed = true;
     }
   }
-  for (auto& theme_name : entries_to_invalidate) {
-    theme_cache_.erase(theme_name);
+  if (something_changed) {
+    // Invalidate everything since references could not have changed while the theme they point to
+    // changed.
+    theme_cache_.clear();
   }
 }
 
@@ -277,6 +279,7 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     settings_manager_->MarkDirty();
   }
   settings_manager_->MaybeFlushToDisk(scenario_id);
+  settings_manager_->MaybeInvalidateThemeCache();
 
   last_update_timer_ = Stopwatch();
   last_update_timer_.Start();
