@@ -4,6 +4,7 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+#include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 
@@ -12,7 +13,10 @@ namespace {
 
 class AppUiImpl : public AppUi {
  public:
-  explicit AppUiImpl(Application* app) : AppUi(), app_(app) {}
+  explicit AppUiImpl(Application* app) : AppUi(), app_(app) {
+    logo_texture_ =
+        std::make_unique<Texture>(app->file_system()->GetBasePath("resources/images/logo.png"));
+  }
 
   void Run() override {
     timer_.Start();
@@ -150,6 +154,13 @@ class AppUiImpl : public AppUi {
 
     // TODO: Improve appearance of top bar.
     ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
+    if (logo_texture_->is_loaded()) {
+      ImGui::Image((ImTextureID)(intptr_t)logo_texture_->id(),
+                   ImVec2(50, 50),
+                   ImVec2(0.0f, 0.0f),
+                   ImVec2(1.0f, 1.0f));
+      ImGui::SameLine();
+    }
     ImGui::Text("AimForge");
     ImGui::EndChild();
 
@@ -370,6 +381,8 @@ class AppUiImpl : public AppUi {
   std::optional<Playlist> current_playlist_;
 
   std::unique_ptr<SettingsUpdater> settings_updater_;
+
+  std::unique_ptr<Texture> logo_texture_;
 };
 
 }  // namespace
