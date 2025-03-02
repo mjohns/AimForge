@@ -19,14 +19,13 @@ void RenderScore(const StatsRow& stats, Application* app) {
   if (stats.num_shots > 0) {
     float hit_percent = stats.num_hits / stats.num_shots;
     ImGui::Text(MaybeIntToString(stats.score, 2));
-    std::string score_string = std::format("- {}/{} ({:.1f}%%)",
-                                           MaybeIntToString(stats.num_hits, 1),
-                                           MaybeIntToString(stats.num_shots, 1),
-                                           hit_percent * 100);
     ImGui::SameLine();
-    ImGui::Text(score_string);
+    ImGui::TextFmt("- {}/{} ({:.1f}%%)",
+                   MaybeIntToString(stats.num_hits, 1),
+                   MaybeIntToString(stats.num_shots, 1),
+                   hit_percent * 100);
   } else {
-    ImGui::Text(std::format("{}", MaybeIntToString(stats.score, 2)));
+    ImGui::Text(MaybeIntToString(stats.score, 2));
   }
 }
 
@@ -181,11 +180,10 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     }
     if (stats.num_shots > 0) {
       float hit_percent = stats.num_hits / stats.num_shots;
-      std::string score_string = std::format("{}/{} ({:.1f}%%)",
-                                             MaybeIntToString(stats.num_hits, 1),
-                                             MaybeIntToString(stats.num_shots, 1),
-                                             hit_percent * 100);
-      ImGui::Text(score_string);
+      ImGui::TextFmt("{}/{} ({:.1f}%%)",
+                     MaybeIntToString(stats.num_hits, 1),
+                     MaybeIntToString(stats.num_shots, 1),
+                     hit_percent * 100);
     }
     if (has_previous_high_score) {
       ImGui::Spacing();

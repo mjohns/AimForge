@@ -1,12 +1,21 @@
 #pragma once
 
 #include <imgui.h>
+
+#include <format>
 #include <string>
 
 namespace ImGui {
 
-static void Text(const std::string& val) {
-  Text(val.c_str());
+// ImGui::Text but taking same arguments as std::format to product the text.
+template <class... _Types>
+static void TextFmt(const std::format_string<_Types...> fmt, _Types&&... args) {
+  std::string message = std::format(fmt, std::forward<_Types>(args)...);
+  Text(message.c_str());
 }
 
-} // namespace ImGui
+static void Text(const std::string& val) {
+  Text("%s", val.c_str());
+}
+
+}  // namespace ImGui
