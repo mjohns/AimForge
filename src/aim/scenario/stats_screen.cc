@@ -15,33 +15,17 @@
 namespace aim {
 namespace {
 
-std::string MakeScoreString(double targets_hit, double shots_taken, float score) {
-  if (shots_taken > 0) {
-    float hit_percent = targets_hit / shots_taken;
-    std::string score_string = std::format("{} - {}/{} ({:.1f}%)",
-                                           MaybeIntToString(score, 2),
-                                           MaybeIntToString(targets_hit, 1),
-                                           MaybeIntToString(shots_taken, 1),
-                                           hit_percent * 100);
-    return score_string;
-  }
-  return std::format("{}", MaybeIntToString(score, 2));
-}
-
 void RenderScore(const StatsRow& stats, Application* app) {
   if (stats.num_shots > 0) {
     float hit_percent = stats.num_hits / stats.num_shots;
-    auto bold = app->font_manager()->UseDefaultBold();
     ImGui::Text(MaybeIntToString(stats.score, 2));
-    auto font = app->font_manager()->UseDefault();
-    std::string score_string = std::format("- {}/{} ({:.1f}%)",
+    std::string score_string = std::format("- {}/{} ({:.1f}%%)",
                                            MaybeIntToString(stats.num_hits, 1),
                                            MaybeIntToString(stats.num_shots, 1),
                                            hit_percent * 100);
     ImGui::SameLine();
     ImGui::Text(score_string);
   } else {
-    auto bold = app->font_manager()->UseDefaultBold();
     ImGui::Text(std::format("{}", MaybeIntToString(stats.score, 2)));
   }
 }
@@ -174,22 +158,36 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     ImGui::Indent(x_start);
 
     {
-      auto bold = app_->font_manager()->UseLarge();
+      auto font = app_->font_manager()->UseLarge();
       ImGui::Text("%s", scenario_id_.c_str());
     }
     ImGui::Spacing();
     ImGui::Spacing();
     if (percent_diff > 0) {
-      auto bold = app_->font_manager()->UseDefaultBold();
+      auto font = app_->font_manager()->UseDefault();
       ImGui::Text("NEW HIGH SCORE!");
     }
-    RenderScore(stats, app_);
+    {
+      auto font = app_->font_manager()->UseLarge();
+      ImGui::Text(MaybeIntToString(stats.score, 2));
+    }
     if (has_previous_high_score) {
+      auto font = app_->font_manager()->UseLarge();
       if (percent_diff > 0) {
         ImGui::Text("+%.1f%%", percent_diff);
       } else {
         ImGui::Text("%.1f%%", percent_diff);
       }
+    }
+    if (stats.num_shots > 0) {
+      float hit_percent = stats.num_hits / stats.num_shots;
+      std::string score_string = std::format("{}/{} ({:.1f}%%)",
+                                             MaybeIntToString(stats.num_hits, 1),
+                                             MaybeIntToString(stats.num_shots, 1),
+                                             hit_percent * 100);
+      ImGui::Text(score_string);
+    }
+    if (has_previous_high_score) {
       ImGui::Spacing();
       ImGui::Spacing();
       ImGui::Spacing();
