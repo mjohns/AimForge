@@ -19,6 +19,7 @@
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/target_placement.h"
 
 namespace aim {
 namespace {
@@ -26,17 +27,27 @@ namespace {
 class BarrelScenario : public BaseScenario {
  public:
   explicit BarrelScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), room_radius_(def.room().barrel_room().radius()) {}
+      : BaseScenario(def, app), room_radius_(def.room().barrel_room().radius()) {
+    Wall wall = GetWallForRoom(def_.room());
+    TargetPlacementStrategy strat = def.barrel_def().target_placement_strategy();
+    if (!def.barrel_def().has_target_placement_strategy()) {
+      strat.set_min_distance(15);
+      CircleTargetRegion* region = strat.add_regions()->mutable_circle();
+      region->mutable_diameter()->set_x_percent_value(0.92);
+      region->mutable_inner_diameter()->set_x_percent_value(0.6);
+    }
+    wall_target_placer_ = CreateWallTargetPlacer(wall, strat, &target_manager_, app_);
+  }
 
  protected:
   void FillInNewTarget(Target* target) override {
     // Get position on wall (not too close in ellipse etc.)
     // Get movement direction vector and speed.
-    glm::vec2 pos = GetRandomPositionInCircle(
-        0.4 * room_radius_, room_radius_ - target->radius, app_->random_generator());
-    // Iterate and make sure no overlapping?
-    glm::vec2 direction_pos =
-        GetRandomPositionInCircle(0, 0.45 * room_radius_, app_->random_generator());
+    glm::vec2 pos = wall_target_placer_->GetNextPosition();
+    glm::vec2 direction_pos = GetRandomPositionInCircle(
+        0,
+        FirstNonZero(def_.barrel_def().direction_radius_percent(), 0.45f) * room_radius_,
+        app_->random_generator());
 
     // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
     glm::vec2 direction = glm::normalize(direction_pos - pos);
@@ -65,6 +76,7 @@ class BarrelScenario : public BaseScenario {
 
  private:
   const float room_radius_;
+  std::unique_ptr<WallTargetPlacer> wall_target_placer_;
 };
 
 }  // namespace

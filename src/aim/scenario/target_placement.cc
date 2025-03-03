@@ -112,12 +112,25 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       pos.y += y_offset;
       return pos;
     }
-    float max_x = 0.5 * GetRegionLength(region.rectangle().x_length());
-    float max_y = 0.5 * GetRegionLength(region.rectangle().y_length());
-    auto distribution_x = std::uniform_real_distribution<float>(-1 * max_x, max_x);
-    auto distribution_y = std::uniform_real_distribution<float>(-1 * max_y, max_y);
-    return glm::vec2(x_offset + distribution_x(*app_->random_generator()),
-                     y_offset + distribution_y(*app_->random_generator()));
+    if (region.has_circle()) {
+      glm::vec2 pos =
+          GetRandomPositionInCircle(0.5 * GetRegionLength(region.circle().inner_diameter()),
+                                    0.5 * GetRegionLength(region.circle().diameter()),
+                                    app_->random_generator());
+      pos.x += x_offset;
+      pos.y += y_offset;
+      return pos;
+    }
+
+    const RectangleTargetRegion& rect = region.rectangle();
+    glm::vec2 pos = GetRandomPositionInRectangle(GetRegionLength(rect.x_length()),
+                                                 GetRegionLength(rect.y_length()),
+                                                 GetRegionLength(rect.inner_x_length()),
+                                                 GetRegionLength(rect.inner_y_length()),
+                                                 app_->random_generator());
+    pos.x += x_offset;
+    pos.y += y_offset;
+    return pos;
   }
 
   glm::vec2 GetFixedDistanceAdjustedPoint(const glm::vec2& point) {

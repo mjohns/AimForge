@@ -14,6 +14,15 @@ glm::vec2 GetRandomPositionInEllipse(float radius_x,
                                      float radius_y,
                                      std::mt19937* random_generator);
 
+// Center of the rectangle is at (0, 0)
+glm::vec2 GetRandomPositionInRectangle(float width, float height, std::mt19937* random_generator);
+
+glm::vec2 GetRandomPositionInRectangle(float width,
+                                       float height,
+                                       float inner_width,
+                                       float inner_height,
+                                       std::mt19937* random_generator);
+
 glm::vec2 GetRandomPositionInCircle(float min_radius,
                                     float max_radius,
                                     std::mt19937* random_generator);
