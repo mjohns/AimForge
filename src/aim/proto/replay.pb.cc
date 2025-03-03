@@ -152,7 +152,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr ReplayEvent::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        frame_number_{0},
+        time_seconds_{0},
         type_{},
         _oneof_case_{} {}
 
@@ -277,7 +277,7 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::ReplayEvent, _impl_.frame_number_),
+        PROTOBUF_FIELD_OFFSET(::aim::ReplayEvent, _impl_.time_seconds_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
@@ -339,7 +339,7 @@ const char descriptor_table_protodef_replay_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "\n\tdirection\030\002 \001(\0132\017.aim.StoredVec3\022\033\n\023di"
     "stance_per_second\030\003 \001(\002\022*\n\021starting_posi"
     "tion\030\004 \001(\0132\017.aim.StoredVec3\"\231\002\n\013ReplayEv"
-    "ent\022\024\n\014frame_number\030\001 \001(\005\022+\n\013kill_target"
+    "ent\022\024\n\014time_seconds\030\001 \001(\002\022+\n\013kill_target"
     "\030\002 \001(\0132\024.aim.KillTargetEventH\000\022/\n\rremove"
     "_target\030\003 \001(\0132\026.aim.RemoveTargetEventH\000\022"
     ")\n\nadd_target\030\004 \001(\0132\023.aim.AddTargetEvent"
@@ -1703,7 +1703,7 @@ ReplayEvent::ReplayEvent(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  _impl_.frame_number_ = from._impl_.frame_number_;
+  _impl_.time_seconds_ = from._impl_.time_seconds_;
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -1735,7 +1735,7 @@ inline PROTOBUF_NDEBUG_INLINE ReplayEvent::Impl_::Impl_(
 
 inline void ReplayEvent::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.frame_number_ = {};
+  _impl_.time_seconds_ = {};
 }
 ReplayEvent::~ReplayEvent() {
   // @@protoc_insertion_point(destructor:aim.ReplayEvent)
@@ -1857,15 +1857,15 @@ const ::_pbi::TcParseTable<0, 6, 5, 0, 2> ReplayEvent::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::ReplayEvent>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // int32 frame_number = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ReplayEvent, _impl_.frame_number_), 0>(),
-     {8, 0, 0, PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.frame_number_)}},
+    // float time_seconds = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.time_seconds_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // int32 frame_number = 1;
-    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.frame_number_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // float time_seconds = 1;
+    {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.time_seconds_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.KillTargetEvent kill_target = 2;
     {PROTOBUF_FIELD_OFFSET(ReplayEvent, _impl_.type_.kill_target_), _Internal::kOneofCaseOffset + 0, 0,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
@@ -1898,7 +1898,7 @@ PROTOBUF_NOINLINE void ReplayEvent::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.frame_number_ = 0;
+  _impl_.time_seconds_ = 0;
   clear_type();
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1920,11 +1920,11 @@ PROTOBUF_NOINLINE void ReplayEvent::Clear() {
           (void)cached_has_bits;
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // int32 frame_number = 1;
+          // float time_seconds = 1;
           if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::
-                WriteInt32ToArrayWithField<1>(
-                    stream, this_._internal_frame_number(), target);
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_time_seconds(), target);
           }
 
           switch (this_.type_case()) {
@@ -1985,11 +1985,10 @@ PROTOBUF_NOINLINE void ReplayEvent::Clear() {
           (void)cached_has_bits;
 
            {
-            // int32 frame_number = 1;
+            // float time_seconds = 1;
             cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
-              total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
-                  this_._internal_frame_number());
+              total_size += 5;
             }
           }
           switch (this_.type_case()) {
@@ -2042,7 +2041,7 @@ void ReplayEvent::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
 
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    _this->_impl_.frame_number_ = from._impl_.frame_number_;
+    _this->_impl_.time_seconds_ = from._impl_.time_seconds_;
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
@@ -2120,7 +2119,7 @@ void ReplayEvent::InternalSwap(ReplayEvent* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-        swap(_impl_.frame_number_, other->_impl_.frame_number_);
+        swap(_impl_.time_seconds_, other->_impl_.time_seconds_);
   swap(_impl_.type_, other->_impl_.type_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }

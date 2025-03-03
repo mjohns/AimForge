@@ -453,9 +453,9 @@ void Scenario::DoneAdjustingCrosshairSize() {
 
 void Scenario::AddNewTargetEvent(const Target& target) {
   if (replay_ != nullptr) {
-    auto add_event = replay_->add_events();
-    add_event->set_frame_number(timer_.GetReplayFrameNumber());
-    auto add_target = add_event->mutable_add_target();
+    auto event = replay_->add_events();
+    event->set_time_seconds(timer_.GetElapsedSeconds());
+    auto add_target = event->mutable_add_target();
     add_target->set_target_id(target.id);
     *(add_target->mutable_position()) = ToStoredVec3(target.position);
     add_target->set_radius(target.radius);
@@ -467,7 +467,7 @@ void Scenario::AddKillTargetEvent(u16 target_id) {
     return;
   }
   auto event = replay_->add_events();
-  event->set_frame_number(timer_.GetReplayFrameNumber());
+  event->set_time_seconds(timer_.GetElapsedSeconds());
   event->mutable_kill_target()->set_target_id(target_id);
 }
 
@@ -476,7 +476,7 @@ void Scenario::AddRemoveTargetEvent(u16 target_id) {
     return;
   }
   auto event = replay_->add_events();
-  event->set_frame_number(timer_.GetReplayFrameNumber());
+  event->set_time_seconds(timer_.GetElapsedSeconds());
   event->mutable_remove_target()->set_target_id(target_id);
 }
 
@@ -485,7 +485,7 @@ void Scenario::AddShotFiredEvent() {
     return;
   }
   auto event = replay_->add_events();
-  event->set_frame_number(timer_.GetReplayFrameNumber());
+  event->set_time_seconds(timer_.GetElapsedSeconds());
   *event->mutable_shot_fired() = ShotFiredEvent();
 }
 
@@ -502,19 +502,7 @@ void Scenario::AddMoveLinearTargetEvent(const Target& target,
 
 void Scenario::AddMoveLinearTargetEvent(const Target& target,
                                         const glm::vec3& direction,
-                                        float distance_per_second) {
-  if (!replay_) {
-    return;
-  }
-  auto event = replay_->add_events();
-  event->set_frame_number(timer_.GetReplayFrameNumber());
-  MoveLinearTargetEvent t;
-  t.set_target_id(target.id);
-  *t.mutable_starting_position() = ToStoredVec3(target.position);
-  *t.mutable_direction() = ToStoredVec3(direction);
-  t.set_distance_per_second(distance_per_second);
-  *event->mutable_move_linear_target() = t;
-}
+                                        float distance_per_second) {}
 
 void Scenario::PlayShootSound() {
   app_->sound_manager()->PlayShootSound();

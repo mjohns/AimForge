@@ -1233,22 +1233,22 @@ class ReplayEvent final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kFrameNumberFieldNumber = 1,
+    kTimeSecondsFieldNumber = 1,
     kKillTargetFieldNumber = 2,
     kRemoveTargetFieldNumber = 3,
     kAddTargetFieldNumber = 4,
     kShotFiredFieldNumber = 5,
     kMoveLinearTargetFieldNumber = 6,
   };
-  // int32 frame_number = 1;
-  bool has_frame_number() const;
-  void clear_frame_number() ;
-  ::int32_t frame_number() const;
-  void set_frame_number(::int32_t value);
+  // float time_seconds = 1;
+  bool has_time_seconds() const;
+  void clear_time_seconds() ;
+  float time_seconds() const;
+  void set_time_seconds(float value);
 
   private:
-  ::int32_t _internal_frame_number() const;
-  void _internal_set_frame_number(::int32_t value);
+  float _internal_time_seconds() const;
+  void _internal_set_time_seconds(float value);
 
   public:
   // .aim.KillTargetEvent kill_target = 2;
@@ -1380,7 +1380,7 @@ class ReplayEvent final : public ::google::protobuf::Message
                           const ReplayEvent& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::int32_t frame_number_;
+    float time_seconds_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -2122,32 +2122,32 @@ inline void MoveLinearTargetEvent::set_allocated_starting_position(::aim::Stored
 
 // ReplayEvent
 
-// int32 frame_number = 1;
-inline bool ReplayEvent::has_frame_number() const {
+// float time_seconds = 1;
+inline bool ReplayEvent::has_time_seconds() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline void ReplayEvent::clear_frame_number() {
+inline void ReplayEvent::clear_time_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.frame_number_ = 0;
+  _impl_.time_seconds_ = 0;
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline ::int32_t ReplayEvent::frame_number() const {
-  // @@protoc_insertion_point(field_get:aim.ReplayEvent.frame_number)
-  return _internal_frame_number();
+inline float ReplayEvent::time_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.ReplayEvent.time_seconds)
+  return _internal_time_seconds();
 }
-inline void ReplayEvent::set_frame_number(::int32_t value) {
-  _internal_set_frame_number(value);
+inline void ReplayEvent::set_time_seconds(float value) {
+  _internal_set_time_seconds(value);
   _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.ReplayEvent.frame_number)
+  // @@protoc_insertion_point(field_set:aim.ReplayEvent.time_seconds)
 }
-inline ::int32_t ReplayEvent::_internal_frame_number() const {
+inline float ReplayEvent::_internal_time_seconds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.frame_number_;
+  return _impl_.time_seconds_;
 }
-inline void ReplayEvent::_internal_set_frame_number(::int32_t value) {
+inline void ReplayEvent::_internal_set_time_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.frame_number_ = value;
+  _impl_.time_seconds_ = value;
 }
 
 // .aim.KillTargetEvent kill_target = 2;
