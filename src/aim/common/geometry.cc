@@ -62,6 +62,12 @@ glm::vec2 GetRandomPositionInRectangle(float width,
   if (inner_height <= 0 && inner_width <= 0) {
     return GetRandomPositionInRectangle(width, height, random_generator);
   }
+  if (inner_height <= 0) {
+    inner_height = height;
+  }
+  if (inner_width <= 0) {
+    inner_width = width;
+  }
 
   float top_width = width;
   float top_height = height - inner_height;
@@ -89,7 +95,7 @@ glm::vec2 GetRandomPositionInRectangle(float width,
     if (p.x < 0) {
       p.x -= (inner_width * 0.5);
     } else {
-      p.x += (inner_height * 0.5);
+      p.x += (inner_width * 0.5);
     }
     return p;
   }

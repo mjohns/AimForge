@@ -57,6 +57,7 @@ class LinearScenario : public BaseScenario {
       RectangleTargetRegion* region = strat.add_regions()->mutable_rectangle();
       region->mutable_x_length()->set_x_percent_value(0.9);
       region->mutable_y_length()->set_y_percent_value(0.9);
+      region->mutable_inner_x_length()->set_x_percent_value(0.55);
       wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, app_);
     }
   }
