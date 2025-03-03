@@ -568,6 +568,7 @@ inline constexpr ScenarioDef::Impl_::Impl_(
         overrides_{nullptr},
         shot_type_{nullptr},
         duration_seconds_{0},
+        accuracy_penalty_modifier_{0},
         type_{},
         _oneof_case_{} {}
 
@@ -804,6 +805,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.reference_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.overrides_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.shot_type_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.accuracy_penalty_modifier_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
@@ -816,6 +818,7 @@ const ::uint32_t
         1,
         4,
         5,
+        7,
         ~0u,
         ~0u,
         ~0u,
@@ -947,14 +950,14 @@ static const ::_pbi::MigrationSchema
         {136, 149, -1, sizeof(::aim::TargetPlacementStrategy)},
         {154, 166, -1, sizeof(::aim::ScenarioReferenceOverrides)},
         {170, 185, -1, sizeof(::aim::ShotType)},
-        {191, 211, -1, sizeof(::aim::ScenarioDef)},
-        {222, 231, -1, sizeof(::aim::StaticScenarioDef)},
-        {232, 242, -1, sizeof(::aim::CenteringScenarioDef)},
-        {244, 254, -1, sizeof(::aim::BarrelScenarioDef)},
-        {256, 269, -1, sizeof(::aim::LinearScenarioDef)},
-        {274, 290, -1, sizeof(::aim::TargetDef)},
-        {298, 307, -1, sizeof(::aim::PillTargetDef)},
-        {308, 325, -1, sizeof(::aim::TargetProfile)},
+        {191, 212, -1, sizeof(::aim::ScenarioDef)},
+        {224, 233, -1, sizeof(::aim::StaticScenarioDef)},
+        {234, 244, -1, sizeof(::aim::CenteringScenarioDef)},
+        {246, 256, -1, sizeof(::aim::BarrelScenarioDef)},
+        {258, 271, -1, sizeof(::aim::LinearScenarioDef)},
+        {276, 292, -1, sizeof(::aim::TargetDef)},
+        {300, 309, -1, sizeof(::aim::PillTargetDef)},
+        {310, 327, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1022,43 +1025,44 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ng_kill\030\002 \001(\010H\000\022\035\n\023tracking_invincible\030\003"
     " \001(\010H\000\022\026\n\014click_single\030\004 \001(\010H\000\022\036\n\026poke_k"
     "ill_time_seconds\030\n \001(\002\022\030\n\020no_partial_kil"
-    "ls\030\013 \001(\010B\006\n\004type\"\250\003\n\013ScenarioDef\022\023\n\013scen"
+    "ls\030\013 \001(\010B\006\n\004type\"\313\003\n\013ScenarioDef\022\023\n\013scen"
     "ario_id\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022"
     "\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarget_def\030\005"
     " \001(\0132\016.aim.TargetDef\022\021\n\treference\030\006 \001(\t\022"
     "2\n\toverrides\030\007 \001(\0132\037.aim.ScenarioReferen"
     "ceOverrides\022 \n\tshot_type\030\010 \001(\0132\r.aim.Sho"
-    "tType\022,\n\nstatic_def\030\n \001(\0132\026.aim.StaticSc"
-    "enarioDefH\000\0222\n\rcentering_def\030\013 \001(\0132\031.aim"
-    ".CenteringScenarioDefH\000\022,\n\nbarrel_def\030\014 "
-    "\001(\0132\026.aim.BarrelScenarioDefH\000\022,\n\nlinear_"
-    "def\030\r \001(\0132\026.aim.LinearScenarioDefH\000B\006\n\004t"
-    "ype\"T\n\021StaticScenarioDef\022\?\n\031target_place"
-    "ment_strategy\030\001 \001(\0132\034.aim.TargetPlacemen"
-    "tStrategy\"f\n\024CenteringScenarioDef\022\'\n\016sta"
-    "rt_position\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014en"
-    "d_position\030\002 \001(\0132\017.aim.StoredVec3\"v\n\021Bar"
-    "relScenarioDef\022\?\n\031target_placement_strat"
-    "egy\030\001 \001(\0132\034.aim.TargetPlacementStrategy\022"
-    " \n\030direction_radius_percent\030\002 \001(\002\"\230\001\n\021Li"
-    "nearScenarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_"
-    "jitter\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 "
-    "\001(\002\022\?\n\031target_placement_strategy\030\005 \001(\0132\034"
-    ".aim.TargetPlacementStrategy\"\214\002\n\tTargetD"
-    "ef\022$\n\010profiles\030\001 \003(\0132\022.aim.TargetProfile"
-    "\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remove_closest_"
-    "on_miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026n"
-    "ewest_target_is_ghost\030\005 \001(\010\022 \n\030new_targe"
-    "t_delay_seconds\030\006 \001(\002\022#\n\033remove_target_a"
-    "fter_seconds\030\007 \001(\002\022\'\n\037stagger_initial_ta"
-    "rgets_seconds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006"
-    "height\030\001 \001(\002\"\344\001\n\rTargetProfile\022\026\n\016percen"
-    "t_chance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n"
-    "\024target_radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001"
-    "(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016health_secon"
-    "ds\030\006 \001(\002\022\035\n\025health_seconds_jitter\030\007 \001(\002\022"
-    "\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004t"
-    "ypeb\010editionsp\350\007"
+    "tType\022!\n\031accuracy_penalty_modifier\030\t \001(\002"
+    "\022,\n\nstatic_def\030\n \001(\0132\026.aim.StaticScenari"
+    "oDefH\000\0222\n\rcentering_def\030\013 \001(\0132\031.aim.Cent"
+    "eringScenarioDefH\000\022,\n\nbarrel_def\030\014 \001(\0132\026"
+    ".aim.BarrelScenarioDefH\000\022,\n\nlinear_def\030\r"
+    " \001(\0132\026.aim.LinearScenarioDefH\000B\006\n\004type\"T"
+    "\n\021StaticScenarioDef\022\?\n\031target_placement_"
+    "strategy\030\001 \001(\0132\034.aim.TargetPlacementStra"
+    "tegy\"f\n\024CenteringScenarioDef\022\'\n\016start_po"
+    "sition\030\001 \001(\0132\017.aim.StoredVec3\022%\n\014end_pos"
+    "ition\030\002 \001(\0132\017.aim.StoredVec3\"v\n\021BarrelSc"
+    "enarioDef\022\?\n\031target_placement_strategy\030\001"
+    " \001(\0132\034.aim.TargetPlacementStrategy\022 \n\030di"
+    "rection_radius_percent\030\002 \001(\002\"\230\001\n\021LinearS"
+    "cenarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitte"
+    "r\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022\?"
+    "\n\031target_placement_strategy\030\005 \001(\0132\034.aim."
+    "TargetPlacementStrategy\"\214\002\n\tTargetDef\022$\n"
+    "\010profiles\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013n"
+    "um_targets\030\002 \001(\005\022\036\n\026remove_closest_on_mi"
+    "ss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest"
+    "_target_is_ghost\030\005 \001(\010\022 \n\030new_target_del"
+    "ay_seconds\030\006 \001(\002\022#\n\033remove_target_after_"
+    "seconds\030\007 \001(\002\022\'\n\037stagger_initial_targets"
+    "_seconds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006heigh"
+    "t\030\001 \001(\002\"\344\001\n\rTargetProfile\022\026\n\016percent_cha"
+    "nce\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024targ"
+    "et_radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n"
+    "\014speed_jitter\030\005 \001(\002\022\026\n\016health_seconds\030\006 "
+    "\001(\002\022\035\n\025health_seconds_jitter\030\007 \001(\002\022\"\n\004pi"
+    "ll\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004typeb\010"
+    "editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1068,7 +1072,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    3136,
+    3171,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -5445,7 +5449,13 @@ ScenarioDef::ScenarioDef(
   _impl_.shot_type_ = (cached_has_bits & 0x00000020u) ? ::google::protobuf::Message::CopyConstruct<::aim::ShotType>(
                               arena, *from._impl_.shot_type_)
                         : nullptr;
-  _impl_.duration_seconds_ = from._impl_.duration_seconds_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, duration_seconds_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, duration_seconds_),
+           offsetof(Impl_, accuracy_penalty_modifier_) -
+               offsetof(Impl_, duration_seconds_) +
+               sizeof(Impl_::accuracy_penalty_modifier_));
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -5479,9 +5489,9 @@ inline void ScenarioDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, room_),
            0,
-           offsetof(Impl_, duration_seconds_) -
+           offsetof(Impl_, accuracy_penalty_modifier_) -
                offsetof(Impl_, room_) +
-               sizeof(Impl_::duration_seconds_));
+               sizeof(Impl_::accuracy_penalty_modifier_));
 }
 ScenarioDef::~ScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.ScenarioDef)
@@ -5583,15 +5593,15 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 11, 8, 52, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<4, 12, 8, 52, 2> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    13, 56,  // max_field_number, fast_idx_mask
+    13, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294959368,  // skipmap
+    4294959112,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    11,  // num_field_entries
+    12,  // num_field_entries
     8,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -5601,9 +5611,7 @@ const ::_pbi::TcParseTable<3, 11, 8, 52, 2> ScenarioDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::ScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .aim.ShotType shot_type = 8;
-    {::_pbi::TcParser::FastMtS1,
-     {66, 5, 3, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.shot_type_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // string scenario_id = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.scenario_id_)}},
@@ -5623,6 +5631,18 @@ const ::_pbi::TcParseTable<3, 11, 8, 52, 2> ScenarioDef::_table_ = {
     // .aim.ScenarioReferenceOverrides overrides = 7;
     {::_pbi::TcParser::FastMtS1,
      {58, 4, 2, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.overrides_)}},
+    // .aim.ShotType shot_type = 8;
+    {::_pbi::TcParser::FastMtS1,
+     {66, 5, 3, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.shot_type_)}},
+    // float accuracy_penalty_modifier = 9;
+    {::_pbi::TcParser::FastF32S1,
+     {77, 7, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.accuracy_penalty_modifier_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -5647,6 +5667,9 @@ const ::_pbi::TcParseTable<3, 11, 8, 52, 2> ScenarioDef::_table_ = {
     // .aim.ShotType shot_type = 8;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.shot_type_), _Internal::kHasBitsOffset + 5, 3,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float accuracy_penalty_modifier = 9;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.accuracy_penalty_modifier_), _Internal::kHasBitsOffset + 7, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.StaticScenarioDef static_def = 10;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 4,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
@@ -5708,7 +5731,11 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
       _impl_.shot_type_->Clear();
     }
   }
-  _impl_.duration_seconds_ = 0;
+  if (cached_has_bits & 0x000000c0u) {
+    ::memset(&_impl_.duration_seconds_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.accuracy_penalty_modifier_) -
+        reinterpret_cast<char*>(&_impl_.duration_seconds_)) + sizeof(_impl_.accuracy_penalty_modifier_));
+  }
   clear_type();
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -5781,6 +5808,13 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                 stream);
           }
 
+          // float accuracy_penalty_modifier = 9;
+          if (cached_has_bits & 0x00000080u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                9, this_._internal_accuracy_penalty_modifier(), target);
+          }
+
           switch (this_.type_case()) {
             case kStaticDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
@@ -5834,7 +5868,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000007fu) {
+          if (cached_has_bits & 0x000000ffu) {
             // string scenario_id = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -5867,6 +5901,10 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
             }
             // float duration_seconds = 2;
             if (cached_has_bits & 0x00000040u) {
+              total_size += 5;
+            }
+            // float accuracy_penalty_modifier = 9;
+            if (cached_has_bits & 0x00000080u) {
               total_size += 5;
             }
           }
@@ -5913,7 +5951,7 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000007fu) {
+  if (cached_has_bits & 0x000000ffu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_set_scenario_id(from._internal_scenario_id());
     }
@@ -5958,6 +5996,9 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
     }
     if (cached_has_bits & 0x00000040u) {
       _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
+    }
+    if (cached_has_bits & 0x00000080u) {
+      _this->_impl_.accuracy_penalty_modifier_ = from._impl_.accuracy_penalty_modifier_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -6032,8 +6073,8 @@ void ScenarioDef::InternalSwap(ScenarioDef* PROTOBUF_RESTRICT other) {
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.scenario_id_, &other->_impl_.scenario_id_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.reference_, &other->_impl_.reference_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.duration_seconds_)
-      + sizeof(ScenarioDef::_impl_.duration_seconds_)
+      PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.accuracy_penalty_modifier_)
+      + sizeof(ScenarioDef::_impl_.accuracy_penalty_modifier_)
       - PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)>(
           reinterpret_cast<char*>(&_impl_.room_),
           reinterpret_cast<char*>(&other->_impl_.room_));

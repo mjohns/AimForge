@@ -393,7 +393,11 @@ NavigationEvent Scenario::ResumeInternal() {
       // Default clicking scoring
       float hit_percent = stats_.num_hits / stats_.num_shots;
       float duration_modifier = 60.0f / def_.duration_seconds();
-      score = stats_.num_hits * 10 * sqrt(hit_percent) * duration_modifier;
+      float accuracy_penalty = 1.0 - sqrt(hit_percent);
+      if (def_.has_accuracy_penalty_modifier()) {
+        accuracy_penalty *= def_.accuracy_penalty_modifier();
+      }
+      score = stats_.num_hits * 10 * (1 - accuracy_penalty) * duration_modifier;
       break;
     }
     case ShotType::kTrackingKill:
