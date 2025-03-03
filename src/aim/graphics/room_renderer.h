@@ -21,25 +21,25 @@ struct RoomRenderer {
 
  private:
   void DrawSimpleRoom(const SimpleRoom& room, const Theme& theme, const glm::mat4& view);
-  void DrawCircularRoom(const CircularRoom& room, const Theme& theme, const glm::mat4& view);
+  void DrawCylinderRoom(const CylinderRoom& room, const Theme& theme, const glm::mat4& view);
   void DrawBarrelRoom(const BarrelRoom& room, const Theme& theme, const glm::mat4& view);
 
   void DrawWall(const glm::mat4& model,
                 const glm::mat4& view,
                 const Wall& wall,
                 const WallAppearance& appearance,
-                bool is_circular_wall = false);
+                bool is_cylinder_wall = false);
   void DrawWallSolidColor(const glm::mat4& model,
                           const glm::mat4& view,
                           const glm::vec3& color,
-                          bool is_circular_wall = false);
+                          bool is_cylinder_wall = false);
 
   unsigned int quad_vbo_;
   unsigned int quad_vao_;
 
-  unsigned int circular_wall_vbo_;
-  unsigned int circular_wall_vao_;
-  unsigned int circular_wall_num_vertices_;
+  unsigned int cylinder_wall_vbo_;
+  unsigned int cylinder_wall_vao_;
+  unsigned int cylinder_wall_num_vertices_;
 
   Shader simple_shader_;
   Shader texture_shader_;

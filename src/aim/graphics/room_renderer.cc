@@ -104,7 +104,7 @@ void PushFloats(std::vector<float>* list,
   list->push_back(t3.y);
 }
 
-std::vector<float> GenerateCircularWallVertices(int num_segments) {
+std::vector<float> GenerateCylinderWallVertices(int num_segments) {
   const float radians_per_segment = glm::two_pi<float>() / (float)num_segments;
   const float cos_theta = cos(radians_per_segment);
   const float sin_theta = sin(radians_per_segment);
@@ -159,8 +159,8 @@ RoomRenderer::~RoomRenderer() {
   glDeleteVertexArrays(1, &quad_vao_);
   glDeleteBuffers(1, &quad_vbo_);
 
-  glDeleteVertexArrays(1, &circular_wall_vao_);
-  glDeleteBuffers(1, &circular_wall_vbo_);
+  glDeleteVertexArrays(1, &cylinder_wall_vao_);
+  glDeleteBuffers(1, &cylinder_wall_vbo_);
 }
 
 RoomRenderer::RoomRenderer(TextureManager* texture_manager)
@@ -204,16 +204,16 @@ RoomRenderer::RoomRenderer(TextureManager* texture_manager)
   }
 
   {
-    std::vector<float> vertices = GenerateCircularWallVertices(1000);
+    std::vector<float> vertices = GenerateCylinderWallVertices(1000);
     // 3 vertices plus 2 texture coords.
-    circular_wall_num_vertices_ = vertices.size() / 5;
+    cylinder_wall_num_vertices_ = vertices.size() / 5;
 
-    glGenVertexArrays(1, &circular_wall_vao_);
-    glGenBuffers(1, &circular_wall_vbo_);
+    glGenVertexArrays(1, &cylinder_wall_vao_);
+    glGenBuffers(1, &cylinder_wall_vbo_);
 
-    glBindVertexArray(circular_wall_vao_);
+    glBindVertexArray(cylinder_wall_vao_);
 
-    glBindBuffer(GL_ARRAY_BUFFER, circular_wall_vbo_);
+    glBindBuffer(GL_ARRAY_BUFFER, cylinder_wall_vbo_);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
     // position attribute
@@ -238,8 +238,8 @@ void RoomRenderer::Draw(const Room& room, const Theme& theme, const glm::mat4& v
   if (room.has_simple_room()) {
     DrawSimpleRoom(room.simple_room(), theme, view);
   }
-  if (room.has_circular_room()) {
-    DrawCircularRoom(room.circular_room(), theme, view);
+  if (room.has_cylinder_room()) {
+    DrawCylinderRoom(room.cylinder_room(), theme, view);
   }
   if (room.has_barrel_room()) {
     DrawBarrelRoom(room.barrel_room(), theme, view);
@@ -250,12 +250,12 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
                             const glm::mat4& view,
                             const Wall& wall,
                             const WallAppearance& appearance,
-                            bool is_circular_wall) {
+                            bool is_cylinder_wall) {
   if (appearance.has_texture()) {
     Texture* texture = texture_manager_->GetTexture(appearance.texture().texture_name());
     if (texture == nullptr) {
       // Too spammy to log this error?
-      DrawWallSolidColor(model, view, glm::vec3(0.7), is_circular_wall);
+      DrawWallSolidColor(model, view, glm::vec3(0.7), is_cylinder_wall);
       return;
     }
 
@@ -283,9 +283,9 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
     texture_shader_.SetFloat("mix_percent", appearance.texture().mix_percent());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture->id());
-    if (is_circular_wall) {
-      glBindVertexArray(circular_wall_vao_);
-      glDrawArrays(GL_TRIANGLES, 0, circular_wall_num_vertices_);
+    if (is_cylinder_wall) {
+      glBindVertexArray(cylinder_wall_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, cylinder_wall_num_vertices_);
     } else {
       glBindVertexArray(quad_vao_);
       glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
@@ -293,27 +293,27 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
     return;
   }
 
-  DrawWallSolidColor(model, view, ToVec3(appearance.color()), is_circular_wall);
+  DrawWallSolidColor(model, view, ToVec3(appearance.color()), is_cylinder_wall);
 }
 
 void RoomRenderer::DrawWallSolidColor(const glm::mat4& model,
                                       const glm::mat4& view,
                                       const glm::vec3& color,
-                                      bool is_circular_wall) {
+                                      bool is_cylinder_wall) {
   simple_shader_.Use();
   simple_shader_.SetMat4("view", view);
   simple_shader_.SetVec3("quad_color", color);
   simple_shader_.SetMat4("model", model);
-  if (is_circular_wall) {
-    glBindVertexArray(circular_wall_vao_);
-    glDrawArrays(GL_TRIANGLES, 0, circular_wall_num_vertices_);
+  if (is_cylinder_wall) {
+    glBindVertexArray(cylinder_wall_vao_);
+    glDrawArrays(GL_TRIANGLES, 0, cylinder_wall_num_vertices_);
   } else {
     glBindVertexArray(quad_vao_);
     glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
   }
 }
 
-void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
+void RoomRenderer::DrawCylinderRoom(const CylinderRoom& room,
                                     const Theme& theme,
                                     const glm::mat4& view) {
   float quad_scale = room.radius() * 2.5;
@@ -375,7 +375,7 @@ void RoomRenderer::DrawCircularRoom(const CircularRoom& room,
              view,
              {glm::two_pi<float>() * room.radius(), height},
              theme.front_appearance(),
-             /* is_circular_wall= */ true);
+             /* is_cylinder_wall= */ true);
   }
 }
 
@@ -411,7 +411,7 @@ void RoomRenderer::DrawBarrelRoom(const BarrelRoom& room,
              view,
              {glm::two_pi<float>() * room.radius(), kMaxDistance},
              theme.side_appearance(),
-             /* is_circular_wall= */ true);
+             /* is_cylinder_wall= */ true);
   }
 }
 

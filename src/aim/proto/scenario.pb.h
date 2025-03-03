@@ -65,9 +65,9 @@ extern CenteringScenarioDefDefaultTypeInternal _CenteringScenarioDef_default_ins
 class CircleTargetRegion;
 struct CircleTargetRegionDefaultTypeInternal;
 extern CircleTargetRegionDefaultTypeInternal _CircleTargetRegion_default_instance_;
-class CircularRoom;
-struct CircularRoomDefaultTypeInternal;
-extern CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
+class CylinderRoom;
+struct CylinderRoomDefaultTypeInternal;
+extern CylinderRoomDefaultTypeInternal _CylinderRoom_default_instance_;
 class EllipseTargetRegion;
 struct EllipseTargetRegionDefaultTypeInternal;
 extern EllipseTargetRegionDefaultTypeInternal _EllipseTargetRegion_default_instance_;
@@ -1093,31 +1093,31 @@ class RegionLength final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class CircularRoom final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.CircularRoom) */ {
+class CylinderRoom final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.CylinderRoom) */ {
  public:
-  inline CircularRoom() : CircularRoom(nullptr) {}
-  ~CircularRoom() PROTOBUF_FINAL;
+  inline CylinderRoom() : CylinderRoom(nullptr) {}
+  ~CylinderRoom() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(CircularRoom* msg, std::destroying_delete_t) {
+  void operator delete(CylinderRoom* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(CircularRoom));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CylinderRoom));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR CircularRoom(
+  explicit PROTOBUF_CONSTEXPR CylinderRoom(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline CircularRoom(const CircularRoom& from) : CircularRoom(nullptr, from) {}
-  inline CircularRoom(CircularRoom&& from) noexcept
-      : CircularRoom(nullptr, std::move(from)) {}
-  inline CircularRoom& operator=(const CircularRoom& from) {
+  inline CylinderRoom(const CylinderRoom& from) : CylinderRoom(nullptr, from) {}
+  inline CylinderRoom(CylinderRoom&& from) noexcept
+      : CylinderRoom(nullptr, std::move(from)) {}
+  inline CylinderRoom& operator=(const CylinderRoom& from) {
     CopyFrom(from);
     return *this;
   }
-  inline CircularRoom& operator=(CircularRoom&& from) noexcept {
+  inline CylinderRoom& operator=(CylinderRoom&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -1145,16 +1145,16 @@ class CircularRoom final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const CircularRoom& default_instance() {
+  static const CylinderRoom& default_instance() {
     return *internal_default_instance();
   }
-  static inline const CircularRoom* internal_default_instance() {
-    return reinterpret_cast<const CircularRoom*>(
-        &_CircularRoom_default_instance_);
+  static inline const CylinderRoom* internal_default_instance() {
+    return reinterpret_cast<const CylinderRoom*>(
+        &_CylinderRoom_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 1;
-  friend void swap(CircularRoom& a, CircularRoom& b) { a.Swap(&b); }
-  inline void Swap(CircularRoom* other) {
+  friend void swap(CylinderRoom& a, CylinderRoom& b) { a.Swap(&b); }
+  inline void Swap(CylinderRoom* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -1162,7 +1162,7 @@ class CircularRoom final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(CircularRoom* other) {
+  void UnsafeArenaSwap(CylinderRoom* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -1170,13 +1170,13 @@ class CircularRoom final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  CircularRoom* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<CircularRoom>(arena);
+  CylinderRoom* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CylinderRoom>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const CircularRoom& from);
+  void CopyFrom(const CylinderRoom& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const CircularRoom& from) { CircularRoom::MergeImpl(*this, from); }
+  void MergeFrom(const CylinderRoom& from) { CylinderRoom::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -1213,18 +1213,18 @@ class CircularRoom final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(CircularRoom* other);
+  void InternalSwap(CylinderRoom* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.CircularRoom"; }
+  static ::absl::string_view FullMessageName() { return "aim.CylinderRoom"; }
 
  protected:
-  explicit CircularRoom(::google::protobuf::Arena* arena);
-  CircularRoom(::google::protobuf::Arena* arena, const CircularRoom& from);
-  CircularRoom(::google::protobuf::Arena* arena, CircularRoom&& from) noexcept
-      : CircularRoom(arena) {
+  explicit CylinderRoom(::google::protobuf::Arena* arena);
+  CylinderRoom(::google::protobuf::Arena* arena, const CylinderRoom& from);
+  CylinderRoom(::google::protobuf::Arena* arena, CylinderRoom&& from) noexcept
+      : CylinderRoom(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -1300,7 +1300,7 @@ class CircularRoom final : public ::google::protobuf::Message
   void _internal_set_side_angle_degrees(float value);
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.CircularRoom)
+  // @@protoc_insertion_point(class_scope:aim.CylinderRoom)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
@@ -1322,7 +1322,7 @@ class CircularRoom final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const CircularRoom& from_msg);
+                          const CylinderRoom& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     float height_;
@@ -1586,7 +1586,7 @@ class Room final : public ::google::protobuf::Message
   }
   enum TypeCase {
     kSimpleRoom = 4,
-    kCircularRoom = 5,
+    kCylinderRoom = 5,
     kBarrelRoom = 6,
     TYPE_NOT_SET = 0,
   };
@@ -1685,7 +1685,7 @@ class Room final : public ::google::protobuf::Message
     kStartPitchFieldNumber = 2,
     kStartYawFieldNumber = 3,
     kSimpleRoomFieldNumber = 4,
-    kCircularRoomFieldNumber = 5,
+    kCylinderRoomFieldNumber = 5,
     kBarrelRoomFieldNumber = 6,
   };
   // .aim.StoredVec3 camera_position = 1;
@@ -1744,23 +1744,23 @@ class Room final : public ::google::protobuf::Message
   ::aim::SimpleRoom* _internal_mutable_simple_room();
 
   public:
-  // .aim.CircularRoom circular_room = 5;
-  bool has_circular_room() const;
+  // .aim.CylinderRoom cylinder_room = 5;
+  bool has_cylinder_room() const;
   private:
-  bool _internal_has_circular_room() const;
+  bool _internal_has_cylinder_room() const;
 
   public:
-  void clear_circular_room() ;
-  const ::aim::CircularRoom& circular_room() const;
-  PROTOBUF_NODISCARD ::aim::CircularRoom* release_circular_room();
-  ::aim::CircularRoom* mutable_circular_room();
-  void set_allocated_circular_room(::aim::CircularRoom* value);
-  void unsafe_arena_set_allocated_circular_room(::aim::CircularRoom* value);
-  ::aim::CircularRoom* unsafe_arena_release_circular_room();
+  void clear_cylinder_room() ;
+  const ::aim::CylinderRoom& cylinder_room() const;
+  PROTOBUF_NODISCARD ::aim::CylinderRoom* release_cylinder_room();
+  ::aim::CylinderRoom* mutable_cylinder_room();
+  void set_allocated_cylinder_room(::aim::CylinderRoom* value);
+  void unsafe_arena_set_allocated_cylinder_room(::aim::CylinderRoom* value);
+  ::aim::CylinderRoom* unsafe_arena_release_cylinder_room();
 
   private:
-  const ::aim::CircularRoom& _internal_circular_room() const;
-  ::aim::CircularRoom* _internal_mutable_circular_room();
+  const ::aim::CylinderRoom& _internal_cylinder_room() const;
+  ::aim::CylinderRoom* _internal_mutable_cylinder_room();
 
   public:
   // .aim.BarrelRoom barrel_room = 6;
@@ -1788,7 +1788,7 @@ class Room final : public ::google::protobuf::Message
  private:
   class _Internal;
   void set_has_simple_room();
-  void set_has_circular_room();
+  void set_has_cylinder_room();
   void set_has_barrel_room();
   inline bool has_type() const;
   inline void clear_has_type();
@@ -1821,7 +1821,7 @@ class Room final : public ::google::protobuf::Message
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       ::aim::SimpleRoom* simple_room_;
-      ::aim::CircularRoom* circular_room_;
+      ::aim::CylinderRoom* cylinder_room_;
       ::aim::BarrelRoom* barrel_room_;
     } type_;
     ::uint32_t _oneof_case_[1];
@@ -5738,144 +5738,144 @@ inline void SimpleRoom::_internal_set_depth(float value) {
 
 // -------------------------------------------------------------------
 
-// CircularRoom
+// CylinderRoom
 
 // float height = 1;
-inline bool CircularRoom::has_height() const {
+inline bool CylinderRoom::has_height() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline void CircularRoom::clear_height() {
+inline void CylinderRoom::clear_height() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.height_ = 0;
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline float CircularRoom::height() const {
-  // @@protoc_insertion_point(field_get:aim.CircularRoom.height)
+inline float CylinderRoom::height() const {
+  // @@protoc_insertion_point(field_get:aim.CylinderRoom.height)
   return _internal_height();
 }
-inline void CircularRoom::set_height(float value) {
+inline void CylinderRoom::set_height(float value) {
   _internal_set_height(value);
   _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.CircularRoom.height)
+  // @@protoc_insertion_point(field_set:aim.CylinderRoom.height)
 }
-inline float CircularRoom::_internal_height() const {
+inline float CylinderRoom::_internal_height() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.height_;
 }
-inline void CircularRoom::_internal_set_height(float value) {
+inline void CylinderRoom::_internal_set_height(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.height_ = value;
 }
 
 // float radius = 2;
-inline bool CircularRoom::has_radius() const {
+inline bool CylinderRoom::has_radius() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
-inline void CircularRoom::clear_radius() {
+inline void CylinderRoom::clear_radius() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.radius_ = 0;
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline float CircularRoom::radius() const {
-  // @@protoc_insertion_point(field_get:aim.CircularRoom.radius)
+inline float CylinderRoom::radius() const {
+  // @@protoc_insertion_point(field_get:aim.CylinderRoom.radius)
   return _internal_radius();
 }
-inline void CircularRoom::set_radius(float value) {
+inline void CylinderRoom::set_radius(float value) {
   _internal_set_radius(value);
   _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.CircularRoom.radius)
+  // @@protoc_insertion_point(field_set:aim.CylinderRoom.radius)
 }
-inline float CircularRoom::_internal_radius() const {
+inline float CylinderRoom::_internal_radius() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.radius_;
 }
-inline void CircularRoom::_internal_set_radius(float value) {
+inline void CylinderRoom::_internal_set_radius(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.radius_ = value;
 }
 
 // float width = 3;
-inline bool CircularRoom::has_width() const {
+inline bool CylinderRoom::has_width() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline void CircularRoom::clear_width() {
+inline void CylinderRoom::clear_width() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.width_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float CircularRoom::width() const {
-  // @@protoc_insertion_point(field_get:aim.CircularRoom.width)
+inline float CylinderRoom::width() const {
+  // @@protoc_insertion_point(field_get:aim.CylinderRoom.width)
   return _internal_width();
 }
-inline void CircularRoom::set_width(float value) {
+inline void CylinderRoom::set_width(float value) {
   _internal_set_width(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.CircularRoom.width)
+  // @@protoc_insertion_point(field_set:aim.CylinderRoom.width)
 }
-inline float CircularRoom::_internal_width() const {
+inline float CylinderRoom::_internal_width() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.width_;
 }
-inline void CircularRoom::_internal_set_width(float value) {
+inline void CylinderRoom::_internal_set_width(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.width_ = value;
 }
 
 // bool hide_sides = 4;
-inline bool CircularRoom::has_hide_sides() const {
+inline bool CylinderRoom::has_hide_sides() const {
   bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
-inline void CircularRoom::clear_hide_sides() {
+inline void CylinderRoom::clear_hide_sides() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.hide_sides_ = false;
   _impl_._has_bits_[0] &= ~0x00000008u;
 }
-inline bool CircularRoom::hide_sides() const {
-  // @@protoc_insertion_point(field_get:aim.CircularRoom.hide_sides)
+inline bool CylinderRoom::hide_sides() const {
+  // @@protoc_insertion_point(field_get:aim.CylinderRoom.hide_sides)
   return _internal_hide_sides();
 }
-inline void CircularRoom::set_hide_sides(bool value) {
+inline void CylinderRoom::set_hide_sides(bool value) {
   _internal_set_hide_sides(value);
   _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.CircularRoom.hide_sides)
+  // @@protoc_insertion_point(field_set:aim.CylinderRoom.hide_sides)
 }
-inline bool CircularRoom::_internal_hide_sides() const {
+inline bool CylinderRoom::_internal_hide_sides() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.hide_sides_;
 }
-inline void CircularRoom::_internal_set_hide_sides(bool value) {
+inline void CylinderRoom::_internal_set_hide_sides(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.hide_sides_ = value;
 }
 
 // float side_angle_degrees = 5;
-inline bool CircularRoom::has_side_angle_degrees() const {
+inline bool CylinderRoom::has_side_angle_degrees() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
-inline void CircularRoom::clear_side_angle_degrees() {
+inline void CylinderRoom::clear_side_angle_degrees() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.side_angle_degrees_ = 0;
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline float CircularRoom::side_angle_degrees() const {
-  // @@protoc_insertion_point(field_get:aim.CircularRoom.side_angle_degrees)
+inline float CylinderRoom::side_angle_degrees() const {
+  // @@protoc_insertion_point(field_get:aim.CylinderRoom.side_angle_degrees)
   return _internal_side_angle_degrees();
 }
-inline void CircularRoom::set_side_angle_degrees(float value) {
+inline void CylinderRoom::set_side_angle_degrees(float value) {
   _internal_set_side_angle_degrees(value);
   _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.CircularRoom.side_angle_degrees)
+  // @@protoc_insertion_point(field_set:aim.CylinderRoom.side_angle_degrees)
 }
-inline float CircularRoom::_internal_side_angle_degrees() const {
+inline float CylinderRoom::_internal_side_angle_degrees() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.side_angle_degrees_;
 }
-inline void CircularRoom::_internal_set_side_angle_degrees(float value) {
+inline void CylinderRoom::_internal_set_side_angle_degrees(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.side_angle_degrees_ = value;
 }
@@ -6142,82 +6142,82 @@ inline ::aim::SimpleRoom* Room::mutable_simple_room() ABSL_ATTRIBUTE_LIFETIME_BO
   return _msg;
 }
 
-// .aim.CircularRoom circular_room = 5;
-inline bool Room::has_circular_room() const {
-  return type_case() == kCircularRoom;
+// .aim.CylinderRoom cylinder_room = 5;
+inline bool Room::has_cylinder_room() const {
+  return type_case() == kCylinderRoom;
 }
-inline bool Room::_internal_has_circular_room() const {
-  return type_case() == kCircularRoom;
+inline bool Room::_internal_has_cylinder_room() const {
+  return type_case() == kCylinderRoom;
 }
-inline void Room::set_has_circular_room() {
-  _impl_._oneof_case_[0] = kCircularRoom;
+inline void Room::set_has_cylinder_room() {
+  _impl_._oneof_case_[0] = kCylinderRoom;
 }
-inline void Room::clear_circular_room() {
+inline void Room::clear_cylinder_room() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kCircularRoom) {
+  if (type_case() == kCylinderRoom) {
     if (GetArena() == nullptr) {
-      delete _impl_.type_.circular_room_;
+      delete _impl_.type_.cylinder_room_;
     } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.circular_room_);
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.cylinder_room_);
     }
     clear_has_type();
   }
 }
-inline ::aim::CircularRoom* Room::release_circular_room() {
-  // @@protoc_insertion_point(field_release:aim.Room.circular_room)
-  if (type_case() == kCircularRoom) {
+inline ::aim::CylinderRoom* Room::release_cylinder_room() {
+  // @@protoc_insertion_point(field_release:aim.Room.cylinder_room)
+  if (type_case() == kCylinderRoom) {
     clear_has_type();
-    auto* temp = _impl_.type_.circular_room_;
+    auto* temp = _impl_.type_.cylinder_room_;
     if (GetArena() != nullptr) {
       temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
     }
-    _impl_.type_.circular_room_ = nullptr;
+    _impl_.type_.cylinder_room_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::aim::CircularRoom& Room::_internal_circular_room() const {
-  return type_case() == kCircularRoom ? *_impl_.type_.circular_room_ : reinterpret_cast<::aim::CircularRoom&>(::aim::_CircularRoom_default_instance_);
+inline const ::aim::CylinderRoom& Room::_internal_cylinder_room() const {
+  return type_case() == kCylinderRoom ? *_impl_.type_.cylinder_room_ : reinterpret_cast<::aim::CylinderRoom&>(::aim::_CylinderRoom_default_instance_);
 }
-inline const ::aim::CircularRoom& Room::circular_room() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Room.circular_room)
-  return _internal_circular_room();
+inline const ::aim::CylinderRoom& Room::cylinder_room() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Room.cylinder_room)
+  return _internal_cylinder_room();
 }
-inline ::aim::CircularRoom* Room::unsafe_arena_release_circular_room() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:aim.Room.circular_room)
-  if (type_case() == kCircularRoom) {
+inline ::aim::CylinderRoom* Room::unsafe_arena_release_cylinder_room() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.Room.cylinder_room)
+  if (type_case() == kCylinderRoom) {
     clear_has_type();
-    auto* temp = _impl_.type_.circular_room_;
-    _impl_.type_.circular_room_ = nullptr;
+    auto* temp = _impl_.type_.cylinder_room_;
+    _impl_.type_.cylinder_room_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void Room::unsafe_arena_set_allocated_circular_room(::aim::CircularRoom* value) {
+inline void Room::unsafe_arena_set_allocated_cylinder_room(::aim::CylinderRoom* value) {
   // We rely on the oneof clear method to free the earlier contents
   // of this oneof. We can directly use the pointer we're given to
   // set the new value.
   clear_type();
   if (value) {
-    set_has_circular_room();
-    _impl_.type_.circular_room_ = value;
+    set_has_cylinder_room();
+    _impl_.type_.cylinder_room_ = value;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Room.circular_room)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Room.cylinder_room)
 }
-inline ::aim::CircularRoom* Room::_internal_mutable_circular_room() {
-  if (type_case() != kCircularRoom) {
+inline ::aim::CylinderRoom* Room::_internal_mutable_cylinder_room() {
+  if (type_case() != kCylinderRoom) {
     clear_type();
-    set_has_circular_room();
-    _impl_.type_.circular_room_ =
-        ::google::protobuf::Message::DefaultConstruct<::aim::CircularRoom>(GetArena());
+    set_has_cylinder_room();
+    _impl_.type_.cylinder_room_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::CylinderRoom>(GetArena());
   }
-  return _impl_.type_.circular_room_;
+  return _impl_.type_.cylinder_room_;
 }
-inline ::aim::CircularRoom* Room::mutable_circular_room() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::aim::CircularRoom* _msg = _internal_mutable_circular_room();
-  // @@protoc_insertion_point(field_mutable:aim.Room.circular_room)
+inline ::aim::CylinderRoom* Room::mutable_cylinder_room() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::CylinderRoom* _msg = _internal_mutable_cylinder_room();
+  // @@protoc_insertion_point(field_mutable:aim.Room.cylinder_room)
   return _msg;
 }
 
