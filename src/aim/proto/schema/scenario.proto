@@ -60,17 +60,28 @@ message TargetRegion {
   oneof type {
     RectangleTargetRegion rectangle = 4;
     EllipseTargetRegion ellipse = 5;
+    CircleTargetRegion circle = 6;
   }
 }
 
 message RectangleTargetRegion {
   RegionLength x_length = 1;
   RegionLength y_length = 2;
+
+  // If specified the inner rectangle will be cut out. If only 1 of x or y is specified then the other dimension will be assumed the full length resulting in two rectangular regions.
+  RegionLength inner_x_length = 3;
+  RegionLength inner_y_length = 4;
 }
 
 message EllipseTargetRegion {
   RegionLength x_diameter = 1;
   RegionLength y_diameter = 2;
+}
+
+message CircleTargetRegion {
+  RegionLength diameter = 1;
+  // Optional. If specified the region will be a donut.
+  RegionLength inner_diameter = 2;
 }
 
 message TargetPlacementStrategy {
@@ -142,7 +153,12 @@ message CenteringScenarioDef {
   StoredVec3 end_position = 2;
 }
 
-message BarrelScenarioDef {}
+message BarrelScenarioDef {
+    // Typically a Cirle region with the middle missing.
+  TargetPlacementStrategy target_placement_strategy = 1;
+  // When targets spawn or hit a wall they will be directed towards a point in the center percent of the barrel.
+  float direction_radius_percent = 2;
+}
 
 // Targets move linearly within the specified room. Uses 2d wall placement so it support simple room
 // types.

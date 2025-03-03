@@ -47,6 +47,54 @@ glm::vec2 GetRandomPositionInCircle(float min_radius,
   return GetRandomPositionOnCircle(dist_radius(*random_generator), random_generator);
 }
 
+glm::vec2 GetRandomPositionInRectangle(float width, float height, std::mt19937* random_generator) {
+  auto dist = std::uniform_real_distribution<float>(-0.5, 0.5);
+  float px = dist(*random_generator);
+  float py = dist(*random_generator);
+  return glm::vec2(px * width, py * height);
+}
+
+glm::vec2 GetRandomPositionInRectangle(float width,
+                                       float height,
+                                       float inner_width,
+                                       float inner_height,
+                                       std::mt19937* random_generator) {
+  if (inner_height <= 0 && inner_width <= 0) {
+    return GetRandomPositionInRectangle(width, height, random_generator);
+  }
+
+  float top_width = width;
+  float top_height = height - inner_height;
+
+  float side_width = width - inner_width;
+  float side_height = inner_height;
+
+  float top_area = top_width * top_height;
+  float side_area = side_width * side_height;
+  float top_percent = top_area / (top_area + side_area);
+  auto dist = std::uniform_real_distribution<float>(0, 1);
+  float roll = dist(*random_generator);
+  if (roll <= top_percent) {
+    // Place in top.
+    glm::vec2 p = GetRandomPositionInRectangle(top_width, top_height, random_generator);
+    if (p.y < 0) {
+      p.y -= (inner_height * 0.5);
+    } else {
+      p.y += (inner_height * 0.5);
+    }
+    return p;
+  } else {
+    // Place on side.
+    glm::vec2 p = GetRandomPositionInRectangle(side_width, side_height, random_generator);
+    if (p.x < 0) {
+      p.x -= (inner_width * 0.5);
+    } else {
+      p.x += (inner_height * 0.5);
+    }
+    return p;
+  }
+}
+
 bool IsPointInEllipse(const glm::vec2& point, float x_radius, float y_radius) {
   if (x_radius <= 0 || y_radius <= 0) {
     return false;

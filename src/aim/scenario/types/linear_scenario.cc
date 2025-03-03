@@ -51,20 +51,19 @@ class LinearScenario : public BaseScenario {
     if (def.linear_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
           wall_, def.linear_def().target_placement_strategy(), &target_manager_, app_);
+    } else {
+      TargetPlacementStrategy strat;
+      strat.set_min_distance(15);
+      RectangleTargetRegion* region = strat.add_regions()->mutable_rectangle();
+      region->mutable_x_length()->set_x_percent_value(0.9);
+      region->mutable_y_length()->set_y_percent_value(0.9);
+      wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, app_);
     }
   }
 
  protected:
   void FillInNewTarget(Target* target) override {
-    glm::vec2 pos;
-    if (wall_target_placer_) {
-      pos = wall_target_placer_->GetNextPosition();
-    } else {
-      float padding = target->radius * 2;
-      auto dist_p = std::uniform_real_distribution<float>(-0.5f, 0.5f);
-      pos.x = dist_p(*app_->random_generator()) * (wall_.width - padding);
-      pos.y = dist_p(*app_->random_generator()) * (wall_.height - padding);
-    }
+    glm::vec2 pos = wall_target_placer_->GetNextPosition();
 
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),

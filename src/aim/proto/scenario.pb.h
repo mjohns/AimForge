@@ -20,7 +20,6 @@
 #include "google/protobuf/io/coded_stream.h"
 #include "google/protobuf/arena.h"
 #include "google/protobuf/arenastring.h"
-#include "google/protobuf/generated_message_bases.h"
 #include "google/protobuf/generated_message_tctable_decl.h"
 #include "google/protobuf/generated_message_util.h"
 #include "google/protobuf/metadata_lite.h"
@@ -63,6 +62,9 @@ extern BarrelScenarioDefDefaultTypeInternal _BarrelScenarioDef_default_instance_
 class CenteringScenarioDef;
 struct CenteringScenarioDefDefaultTypeInternal;
 extern CenteringScenarioDefDefaultTypeInternal _CenteringScenarioDef_default_instance_;
+class CircleTargetRegion;
+struct CircleTargetRegionDefaultTypeInternal;
+extern CircleTargetRegionDefaultTypeInternal _CircleTargetRegion_default_instance_;
 class CircularRoom;
 struct CircularRoomDefaultTypeInternal;
 extern CircularRoomDefaultTypeInternal _CircularRoom_default_instance_;
@@ -408,7 +410,7 @@ class ShotType final : public ::google::protobuf::Message
     return reinterpret_cast<const ShotType*>(
         &_ShotType_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(ShotType& a, ShotType& b) { a.Swap(&b); }
   inline void Swap(ShotType* other) {
     if (other == this) return;
@@ -678,7 +680,7 @@ class ScenarioReferenceOverrides final : public ::google::protobuf::Message
     return reinterpret_cast<const ScenarioReferenceOverrides*>(
         &_ScenarioReferenceOverrides_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 10;
   friend void swap(ScenarioReferenceOverrides& a, ScenarioReferenceOverrides& b) { a.Swap(&b); }
   inline void Swap(ScenarioReferenceOverrides* other) {
     if (other == this) return;
@@ -1144,7 +1146,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 17;
+  static constexpr int kIndexInFileMessages = 18;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -1521,151 +1523,6 @@ class CircularRoom final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class BarrelScenarioDef final : public ::google::protobuf::internal::ZeroFieldsBase
-/* @@protoc_insertion_point(class_definition:aim.BarrelScenarioDef) */ {
- public:
-  inline BarrelScenarioDef() : BarrelScenarioDef(nullptr) {}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(BarrelScenarioDef* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(BarrelScenarioDef));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR BarrelScenarioDef(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline BarrelScenarioDef(const BarrelScenarioDef& from) : BarrelScenarioDef(nullptr, from) {}
-  inline BarrelScenarioDef(BarrelScenarioDef&& from) noexcept
-      : BarrelScenarioDef(nullptr, std::move(from)) {}
-  inline BarrelScenarioDef& operator=(const BarrelScenarioDef& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline BarrelScenarioDef& operator=(BarrelScenarioDef&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const BarrelScenarioDef& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const BarrelScenarioDef* internal_default_instance() {
-    return reinterpret_cast<const BarrelScenarioDef*>(
-        &_BarrelScenarioDef_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 14;
-  friend void swap(BarrelScenarioDef& a, BarrelScenarioDef& b) { a.Swap(&b); }
-  inline void Swap(BarrelScenarioDef* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(BarrelScenarioDef* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  BarrelScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<BarrelScenarioDef>(arena);
-  }
-  using ::google::protobuf::internal::ZeroFieldsBase::CopyFrom;
-  inline void CopyFrom(const BarrelScenarioDef& from) {
-    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl(*this, from);
-  }
-  using ::google::protobuf::internal::ZeroFieldsBase::MergeFrom;
-  void MergeFrom(const BarrelScenarioDef& from) {
-    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl(*this, from);
-  }
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.BarrelScenarioDef"; }
-
- protected:
-  explicit BarrelScenarioDef(::google::protobuf::Arena* arena);
-  BarrelScenarioDef(::google::protobuf::Arena* arena, const BarrelScenarioDef& from);
-  BarrelScenarioDef(::google::protobuf::Arena* arena, BarrelScenarioDef&& from) noexcept
-      : BarrelScenarioDef(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  // @@protoc_insertion_point(class_scope:aim.BarrelScenarioDef)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      0, 0, 0,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const BarrelScenarioDef& from_msg);
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  friend struct ::TableStruct_scenario_2eproto;
-};
-// -------------------------------------------------------------------
-
 class BarrelRoom final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.BarrelRoom) */ {
  public:
@@ -1921,7 +1778,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 18;
+  static constexpr int kIndexInFileMessages = 19;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -2614,6 +2471,8 @@ class RectangleTargetRegion final : public ::google::protobuf::Message
   enum : int {
     kXLengthFieldNumber = 1,
     kYLengthFieldNumber = 2,
+    kInnerXLengthFieldNumber = 3,
+    kInnerYLengthFieldNumber = 4,
   };
   // .aim.RegionLength x_length = 1;
   bool has_x_length() const;
@@ -2645,12 +2504,42 @@ class RectangleTargetRegion final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_y_length();
 
   public:
+  // .aim.RegionLength inner_x_length = 3;
+  bool has_inner_x_length() const;
+  void clear_inner_x_length() ;
+  const ::aim::RegionLength& inner_x_length() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_inner_x_length();
+  ::aim::RegionLength* mutable_inner_x_length();
+  void set_allocated_inner_x_length(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_inner_x_length(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_inner_x_length();
+
+  private:
+  const ::aim::RegionLength& _internal_inner_x_length() const;
+  ::aim::RegionLength* _internal_mutable_inner_x_length();
+
+  public:
+  // .aim.RegionLength inner_y_length = 4;
+  bool has_inner_y_length() const;
+  void clear_inner_y_length() ;
+  const ::aim::RegionLength& inner_y_length() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_inner_y_length();
+  ::aim::RegionLength* mutable_inner_y_length();
+  void set_allocated_inner_y_length(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_inner_y_length(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_inner_y_length();
+
+  private:
+  const ::aim::RegionLength& _internal_inner_y_length() const;
+  ::aim::RegionLength* _internal_mutable_inner_y_length();
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.RectangleTargetRegion)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 2,
+      2, 4, 4,
       0, 2>
       _table_;
 
@@ -2672,6 +2561,8 @@ class RectangleTargetRegion final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::RegionLength* x_length_;
     ::aim::RegionLength* y_length_;
+    ::aim::RegionLength* inner_x_length_;
+    ::aim::RegionLength* inner_y_length_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2892,6 +2783,219 @@ class EllipseTargetRegion final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class CircleTargetRegion final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.CircleTargetRegion) */ {
+ public:
+  inline CircleTargetRegion() : CircleTargetRegion(nullptr) {}
+  ~CircleTargetRegion() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CircleTargetRegion* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CircleTargetRegion));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CircleTargetRegion(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline CircleTargetRegion(const CircleTargetRegion& from) : CircleTargetRegion(nullptr, from) {}
+  inline CircleTargetRegion(CircleTargetRegion&& from) noexcept
+      : CircleTargetRegion(nullptr, std::move(from)) {}
+  inline CircleTargetRegion& operator=(const CircleTargetRegion& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CircleTargetRegion& operator=(CircleTargetRegion&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CircleTargetRegion& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CircleTargetRegion* internal_default_instance() {
+    return reinterpret_cast<const CircleTargetRegion*>(
+        &_CircleTargetRegion_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 8;
+  friend void swap(CircleTargetRegion& a, CircleTargetRegion& b) { a.Swap(&b); }
+  inline void Swap(CircleTargetRegion* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CircleTargetRegion* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CircleTargetRegion* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CircleTargetRegion>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CircleTargetRegion& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CircleTargetRegion& from) { CircleTargetRegion::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CircleTargetRegion* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.CircleTargetRegion"; }
+
+ protected:
+  explicit CircleTargetRegion(::google::protobuf::Arena* arena);
+  CircleTargetRegion(::google::protobuf::Arena* arena, const CircleTargetRegion& from);
+  CircleTargetRegion(::google::protobuf::Arena* arena, CircleTargetRegion&& from) noexcept
+      : CircleTargetRegion(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kDiameterFieldNumber = 1,
+    kInnerDiameterFieldNumber = 2,
+  };
+  // .aim.RegionLength diameter = 1;
+  bool has_diameter() const;
+  void clear_diameter() ;
+  const ::aim::RegionLength& diameter() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_diameter();
+  ::aim::RegionLength* mutable_diameter();
+  void set_allocated_diameter(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_diameter(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_diameter();
+
+  private:
+  const ::aim::RegionLength& _internal_diameter() const;
+  ::aim::RegionLength* _internal_mutable_diameter();
+
+  public:
+  // .aim.RegionLength inner_diameter = 2;
+  bool has_inner_diameter() const;
+  void clear_inner_diameter() ;
+  const ::aim::RegionLength& inner_diameter() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_inner_diameter();
+  ::aim::RegionLength* mutable_inner_diameter();
+  void set_allocated_inner_diameter(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_inner_diameter(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_inner_diameter();
+
+  private:
+  const ::aim::RegionLength& _internal_inner_diameter() const;
+  ::aim::RegionLength* _internal_mutable_inner_diameter();
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.CircleTargetRegion)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      1, 2, 2,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const CircleTargetRegion& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::RegionLength* diameter_;
+    ::aim::RegionLength* inner_diameter_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class CenteringScenarioDef final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.CenteringScenarioDef) */ {
  public:
@@ -2951,7 +3055,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const CenteringScenarioDef*>(
         &_CenteringScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 13;
+  static constexpr int kIndexInFileMessages = 14;
   friend void swap(CenteringScenarioDef& a, CenteringScenarioDef& b) { a.Swap(&b); }
   inline void Swap(CenteringScenarioDef* other) {
     if (other == this) return;
@@ -3163,6 +3267,7 @@ class TargetRegion final : public ::google::protobuf::Message
   enum TypeCase {
     kRectangle = 4,
     kEllipse = 5,
+    kCircle = 6,
     TYPE_NOT_SET = 0,
   };
   static inline const TargetRegion* internal_default_instance() {
@@ -3261,6 +3366,7 @@ class TargetRegion final : public ::google::protobuf::Message
     kPercentChanceFieldNumber = 1,
     kRectangleFieldNumber = 4,
     kEllipseFieldNumber = 5,
+    kCircleFieldNumber = 6,
   };
   // .aim.RegionLength x_offset = 2;
   bool has_x_offset() const;
@@ -3341,6 +3447,25 @@ class TargetRegion final : public ::google::protobuf::Message
   ::aim::EllipseTargetRegion* _internal_mutable_ellipse();
 
   public:
+  // .aim.CircleTargetRegion circle = 6;
+  bool has_circle() const;
+  private:
+  bool _internal_has_circle() const;
+
+  public:
+  void clear_circle() ;
+  const ::aim::CircleTargetRegion& circle() const;
+  PROTOBUF_NODISCARD ::aim::CircleTargetRegion* release_circle();
+  ::aim::CircleTargetRegion* mutable_circle();
+  void set_allocated_circle(::aim::CircleTargetRegion* value);
+  void unsafe_arena_set_allocated_circle(::aim::CircleTargetRegion* value);
+  ::aim::CircleTargetRegion* unsafe_arena_release_circle();
+
+  private:
+  const ::aim::CircleTargetRegion& _internal_circle() const;
+  ::aim::CircleTargetRegion* _internal_mutable_circle();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.TargetRegion)
@@ -3348,11 +3473,12 @@ class TargetRegion final : public ::google::protobuf::Message
   class _Internal;
   void set_has_rectangle();
   void set_has_ellipse();
+  void set_has_circle();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 5, 4,
+      2, 6, 5,
       0, 2>
       _table_;
 
@@ -3380,6 +3506,7 @@ class TargetRegion final : public ::google::protobuf::Message
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       ::aim::RectangleTargetRegion* rectangle_;
       ::aim::EllipseTargetRegion* ellipse_;
+      ::aim::CircleTargetRegion* circle_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -3448,7 +3575,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
+  static constexpr int kIndexInFileMessages = 17;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -3745,7 +3872,7 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetPlacementStrategy*>(
         &_TargetPlacementStrategy_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(TargetPlacementStrategy& a, TargetPlacementStrategy& b) { a.Swap(&b); }
   inline void Swap(TargetPlacementStrategy* other) {
     if (other == this) return;
@@ -4003,7 +4130,7 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const StaticScenarioDef*>(
         &_StaticScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 12;
+  static constexpr int kIndexInFileMessages = 13;
   friend void swap(StaticScenarioDef& a, StaticScenarioDef& b) { a.Swap(&b); }
   inline void Swap(StaticScenarioDef* other) {
     if (other == this) return;
@@ -4199,7 +4326,7 @@ class LinearScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const LinearScenarioDef*>(
         &_LinearScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 15;
+  static constexpr int kIndexInFileMessages = 16;
   friend void swap(LinearScenarioDef& a, LinearScenarioDef& b) { a.Swap(&b); }
   inline void Swap(LinearScenarioDef* other) {
     if (other == this) return;
@@ -4388,6 +4515,215 @@ class LinearScenarioDef final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class BarrelScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.BarrelScenarioDef) */ {
+ public:
+  inline BarrelScenarioDef() : BarrelScenarioDef(nullptr) {}
+  ~BarrelScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(BarrelScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(BarrelScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR BarrelScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline BarrelScenarioDef(const BarrelScenarioDef& from) : BarrelScenarioDef(nullptr, from) {}
+  inline BarrelScenarioDef(BarrelScenarioDef&& from) noexcept
+      : BarrelScenarioDef(nullptr, std::move(from)) {}
+  inline BarrelScenarioDef& operator=(const BarrelScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BarrelScenarioDef& operator=(BarrelScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const BarrelScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const BarrelScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const BarrelScenarioDef*>(
+        &_BarrelScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 15;
+  friend void swap(BarrelScenarioDef& a, BarrelScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(BarrelScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BarrelScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  BarrelScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<BarrelScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const BarrelScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const BarrelScenarioDef& from) { BarrelScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(BarrelScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.BarrelScenarioDef"; }
+
+ protected:
+  explicit BarrelScenarioDef(::google::protobuf::Arena* arena);
+  BarrelScenarioDef(::google::protobuf::Arena* arena, const BarrelScenarioDef& from);
+  BarrelScenarioDef(::google::protobuf::Arena* arena, BarrelScenarioDef&& from) noexcept
+      : BarrelScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kTargetPlacementStrategyFieldNumber = 1,
+    kDirectionRadiusPercentFieldNumber = 2,
+  };
+  // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+  bool has_target_placement_strategy() const;
+  void clear_target_placement_strategy() ;
+  const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
+  PROTOBUF_NODISCARD ::aim::TargetPlacementStrategy* release_target_placement_strategy();
+  ::aim::TargetPlacementStrategy* mutable_target_placement_strategy();
+  void set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
+  void unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
+  ::aim::TargetPlacementStrategy* unsafe_arena_release_target_placement_strategy();
+
+  private:
+  const ::aim::TargetPlacementStrategy& _internal_target_placement_strategy() const;
+  ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
+
+  public:
+  // float direction_radius_percent = 2;
+  bool has_direction_radius_percent() const;
+  void clear_direction_radius_percent() ;
+  float direction_radius_percent() const;
+  void set_direction_radius_percent(float value);
+
+  private:
+  float _internal_direction_radius_percent() const;
+  void _internal_set_direction_radius_percent(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.BarrelScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      1, 2, 1,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const BarrelScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::TargetPlacementStrategy* target_placement_strategy_;
+    float direction_radius_percent_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ScenarioDef final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.ScenarioDef) */ {
  public:
@@ -4454,7 +4790,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const ScenarioDef*>(
         &_ScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 11;
+  static constexpr int kIndexInFileMessages = 12;
   friend void swap(ScenarioDef& a, ScenarioDef& b) { a.Swap(&b); }
   inline void Swap(ScenarioDef* other) {
     if (other == this) return;
@@ -5956,6 +6292,85 @@ inline ::aim::EllipseTargetRegion* TargetRegion::mutable_ellipse() ABSL_ATTRIBUT
   return _msg;
 }
 
+// .aim.CircleTargetRegion circle = 6;
+inline bool TargetRegion::has_circle() const {
+  return type_case() == kCircle;
+}
+inline bool TargetRegion::_internal_has_circle() const {
+  return type_case() == kCircle;
+}
+inline void TargetRegion::set_has_circle() {
+  _impl_._oneof_case_[0] = kCircle;
+}
+inline void TargetRegion::clear_circle() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kCircle) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.circle_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.circle_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::CircleTargetRegion* TargetRegion::release_circle() {
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.circle)
+  if (type_case() == kCircle) {
+    clear_has_type();
+    auto* temp = _impl_.type_.circle_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.circle_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::CircleTargetRegion& TargetRegion::_internal_circle() const {
+  return type_case() == kCircle ? *_impl_.type_.circle_ : reinterpret_cast<::aim::CircleTargetRegion&>(::aim::_CircleTargetRegion_default_instance_);
+}
+inline const ::aim::CircleTargetRegion& TargetRegion::circle() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.circle)
+  return _internal_circle();
+}
+inline ::aim::CircleTargetRegion* TargetRegion::unsafe_arena_release_circle() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.TargetRegion.circle)
+  if (type_case() == kCircle) {
+    clear_has_type();
+    auto* temp = _impl_.type_.circle_;
+    _impl_.type_.circle_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void TargetRegion::unsafe_arena_set_allocated_circle(::aim::CircleTargetRegion* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_circle();
+    _impl_.type_.circle_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.circle)
+}
+inline ::aim::CircleTargetRegion* TargetRegion::_internal_mutable_circle() {
+  if (type_case() != kCircle) {
+    clear_type();
+    set_has_circle();
+    _impl_.type_.circle_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::CircleTargetRegion>(GetArena());
+  }
+  return _impl_.type_.circle_;
+}
+inline ::aim::CircleTargetRegion* TargetRegion::mutable_circle() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::CircleTargetRegion* _msg = _internal_mutable_circle();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.circle)
+  return _msg;
+}
+
 inline bool TargetRegion::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -6161,6 +6576,198 @@ inline void RectangleTargetRegion::set_allocated_y_length(::aim::RegionLength* v
   // @@protoc_insertion_point(field_set_allocated:aim.RectangleTargetRegion.y_length)
 }
 
+// .aim.RegionLength inner_x_length = 3;
+inline bool RectangleTargetRegion::has_inner_x_length() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.inner_x_length_ != nullptr);
+  return value;
+}
+inline void RectangleTargetRegion::clear_inner_x_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.inner_x_length_ != nullptr) _impl_.inner_x_length_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::RegionLength& RectangleTargetRegion::_internal_inner_x_length() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.inner_x_length_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& RectangleTargetRegion::inner_x_length() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.RectangleTargetRegion.inner_x_length)
+  return _internal_inner_x_length();
+}
+inline void RectangleTargetRegion::unsafe_arena_set_allocated_inner_x_length(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.inner_x_length_);
+  }
+  _impl_.inner_x_length_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.RectangleTargetRegion.inner_x_length)
+}
+inline ::aim::RegionLength* RectangleTargetRegion::release_inner_x_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.inner_x_length_;
+  _impl_.inner_x_length_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* RectangleTargetRegion::unsafe_arena_release_inner_x_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.RectangleTargetRegion.inner_x_length)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.inner_x_length_;
+  _impl_.inner_x_length_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* RectangleTargetRegion::_internal_mutable_inner_x_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.inner_x_length_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.inner_x_length_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.inner_x_length_;
+}
+inline ::aim::RegionLength* RectangleTargetRegion::mutable_inner_x_length() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_inner_x_length();
+  // @@protoc_insertion_point(field_mutable:aim.RectangleTargetRegion.inner_x_length)
+  return _msg;
+}
+inline void RectangleTargetRegion::set_allocated_inner_x_length(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.inner_x_length_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.inner_x_length_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.RectangleTargetRegion.inner_x_length)
+}
+
+// .aim.RegionLength inner_y_length = 4;
+inline bool RectangleTargetRegion::has_inner_y_length() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.inner_y_length_ != nullptr);
+  return value;
+}
+inline void RectangleTargetRegion::clear_inner_y_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.inner_y_length_ != nullptr) _impl_.inner_y_length_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline const ::aim::RegionLength& RectangleTargetRegion::_internal_inner_y_length() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.inner_y_length_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& RectangleTargetRegion::inner_y_length() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.RectangleTargetRegion.inner_y_length)
+  return _internal_inner_y_length();
+}
+inline void RectangleTargetRegion::unsafe_arena_set_allocated_inner_y_length(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.inner_y_length_);
+  }
+  _impl_.inner_y_length_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.RectangleTargetRegion.inner_y_length)
+}
+inline ::aim::RegionLength* RectangleTargetRegion::release_inner_y_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::RegionLength* released = _impl_.inner_y_length_;
+  _impl_.inner_y_length_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* RectangleTargetRegion::unsafe_arena_release_inner_y_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.RectangleTargetRegion.inner_y_length)
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::RegionLength* temp = _impl_.inner_y_length_;
+  _impl_.inner_y_length_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* RectangleTargetRegion::_internal_mutable_inner_y_length() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.inner_y_length_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.inner_y_length_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.inner_y_length_;
+}
+inline ::aim::RegionLength* RectangleTargetRegion::mutable_inner_y_length() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  ::aim::RegionLength* _msg = _internal_mutable_inner_y_length();
+  // @@protoc_insertion_point(field_mutable:aim.RectangleTargetRegion.inner_y_length)
+  return _msg;
+}
+inline void RectangleTargetRegion::set_allocated_inner_y_length(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.inner_y_length_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+
+  _impl_.inner_y_length_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.RectangleTargetRegion.inner_y_length)
+}
+
 // -------------------------------------------------------------------
 
 // EllipseTargetRegion
@@ -6355,6 +6962,202 @@ inline void EllipseTargetRegion::set_allocated_y_diameter(::aim::RegionLength* v
 
   _impl_.y_diameter_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.EllipseTargetRegion.y_diameter)
+}
+
+// -------------------------------------------------------------------
+
+// CircleTargetRegion
+
+// .aim.RegionLength diameter = 1;
+inline bool CircleTargetRegion::has_diameter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.diameter_ != nullptr);
+  return value;
+}
+inline void CircleTargetRegion::clear_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.diameter_ != nullptr) _impl_.diameter_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::RegionLength& CircleTargetRegion::_internal_diameter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.diameter_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& CircleTargetRegion::diameter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.CircleTargetRegion.diameter)
+  return _internal_diameter();
+}
+inline void CircleTargetRegion::unsafe_arena_set_allocated_diameter(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.diameter_);
+  }
+  _impl_.diameter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.CircleTargetRegion.diameter)
+}
+inline ::aim::RegionLength* CircleTargetRegion::release_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* released = _impl_.diameter_;
+  _impl_.diameter_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* CircleTargetRegion::unsafe_arena_release_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.CircleTargetRegion.diameter)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* temp = _impl_.diameter_;
+  _impl_.diameter_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* CircleTargetRegion::_internal_mutable_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.diameter_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.diameter_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.diameter_;
+}
+inline ::aim::RegionLength* CircleTargetRegion::mutable_diameter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::RegionLength* _msg = _internal_mutable_diameter();
+  // @@protoc_insertion_point(field_mutable:aim.CircleTargetRegion.diameter)
+  return _msg;
+}
+inline void CircleTargetRegion::set_allocated_diameter(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.diameter_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.diameter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.CircleTargetRegion.diameter)
+}
+
+// .aim.RegionLength inner_diameter = 2;
+inline bool CircleTargetRegion::has_inner_diameter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.inner_diameter_ != nullptr);
+  return value;
+}
+inline void CircleTargetRegion::clear_inner_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.inner_diameter_ != nullptr) _impl_.inner_diameter_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::RegionLength& CircleTargetRegion::_internal_inner_diameter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.inner_diameter_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& CircleTargetRegion::inner_diameter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.CircleTargetRegion.inner_diameter)
+  return _internal_inner_diameter();
+}
+inline void CircleTargetRegion::unsafe_arena_set_allocated_inner_diameter(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.inner_diameter_);
+  }
+  _impl_.inner_diameter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.CircleTargetRegion.inner_diameter)
+}
+inline ::aim::RegionLength* CircleTargetRegion::release_inner_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.inner_diameter_;
+  _impl_.inner_diameter_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* CircleTargetRegion::unsafe_arena_release_inner_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.CircleTargetRegion.inner_diameter)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.inner_diameter_;
+  _impl_.inner_diameter_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* CircleTargetRegion::_internal_mutable_inner_diameter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.inner_diameter_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.inner_diameter_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.inner_diameter_;
+}
+inline ::aim::RegionLength* CircleTargetRegion::mutable_inner_diameter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_inner_diameter();
+  // @@protoc_insertion_point(field_mutable:aim.CircleTargetRegion.inner_diameter)
+  return _msg;
+}
+inline void CircleTargetRegion::set_allocated_inner_diameter(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.inner_diameter_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.inner_diameter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.CircleTargetRegion.inner_diameter)
 }
 
 // -------------------------------------------------------------------
@@ -8024,6 +8827,130 @@ inline void CenteringScenarioDef::set_allocated_end_position(::aim::StoredVec3* 
 // -------------------------------------------------------------------
 
 // BarrelScenarioDef
+
+// .aim.TargetPlacementStrategy target_placement_strategy = 1;
+inline bool BarrelScenarioDef::has_target_placement_strategy() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
+  return value;
+}
+inline void BarrelScenarioDef::clear_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::TargetPlacementStrategy& BarrelScenarioDef::_internal_target_placement_strategy() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
+}
+inline const ::aim::TargetPlacementStrategy& BarrelScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BarrelScenarioDef.target_placement_strategy)
+  return _internal_target_placement_strategy();
+}
+inline void BarrelScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+  }
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BarrelScenarioDef.target_placement_strategy)
+}
+inline ::aim::TargetPlacementStrategy* BarrelScenarioDef::release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::TargetPlacementStrategy* BarrelScenarioDef::unsafe_arena_release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BarrelScenarioDef.target_placement_strategy)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  return temp;
+}
+inline ::aim::TargetPlacementStrategy* BarrelScenarioDef::_internal_mutable_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
+    _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
+  }
+  return _impl_.target_placement_strategy_;
+}
+inline ::aim::TargetPlacementStrategy* BarrelScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
+  // @@protoc_insertion_point(field_mutable:aim.BarrelScenarioDef.target_placement_strategy)
+  return _msg;
+}
+inline void BarrelScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.target_placement_strategy_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BarrelScenarioDef.target_placement_strategy)
+}
+
+// float direction_radius_percent = 2;
+inline bool BarrelScenarioDef::has_direction_radius_percent() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void BarrelScenarioDef::clear_direction_radius_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_radius_percent_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float BarrelScenarioDef::direction_radius_percent() const {
+  // @@protoc_insertion_point(field_get:aim.BarrelScenarioDef.direction_radius_percent)
+  return _internal_direction_radius_percent();
+}
+inline void BarrelScenarioDef::set_direction_radius_percent(float value) {
+  _internal_set_direction_radius_percent(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.BarrelScenarioDef.direction_radius_percent)
+}
+inline float BarrelScenarioDef::_internal_direction_radius_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.direction_radius_percent_;
+}
+inline void BarrelScenarioDef::_internal_set_direction_radius_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_radius_percent_ = value;
+}
 
 // -------------------------------------------------------------------
 

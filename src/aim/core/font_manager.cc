@@ -13,7 +13,7 @@ int FontManager::default_font_size() {
   return 22;
 }
 bool FontManager::LoadFonts() {
-  auto font_path = fonts_path_ / "Roboto-Medium.ttf";
+  auto font_path = fonts_path_ / "Roboto-Regular.ttf";
   auto bold_font_path = fonts_path_ / "Roboto-Bold.ttf";
 
   ImGuiIO& io = ImGui::GetIO();
@@ -36,7 +36,7 @@ bool FontManager::LoadFonts() {
     return false;
   }
 
- large_bold_font_ =
+  large_bold_font_ =
       io.Fonts->AddFontFromFileTTF(bold_font_path.string().c_str(), large_font_size());
   if (large_bold_font_ == nullptr) {
     Logger::get()->error("Unable to load large bold font from: {}", bold_font_path.string());
