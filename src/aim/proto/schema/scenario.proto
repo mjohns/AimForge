@@ -68,7 +68,8 @@ message RectangleTargetRegion {
   RegionLength x_length = 1;
   RegionLength y_length = 2;
 
-  // If specified the inner rectangle will be cut out. If only 1 of x or y is specified then the other dimension will be assumed the full length resulting in two rectangular regions.
+  // If specified the inner rectangle will be cut out. If only 1 of x or y is specified then the
+  // other dimension will be assumed the full length resulting in two rectangular regions.
   RegionLength inner_x_length = 3;
   RegionLength inner_y_length = 4;
 }
@@ -154,9 +155,10 @@ message CenteringScenarioDef {
 }
 
 message BarrelScenarioDef {
-    // Typically a Cirle region with the middle missing.
+  // Typically a Cirle region with the middle missing.
   TargetPlacementStrategy target_placement_strategy = 1;
-  // When targets spawn or hit a wall they will be directed towards a point in the center percent of the barrel.
+  // When targets spawn or hit a wall they will be directed towards a point in the center percent of
+  // the barrel.
   float direction_radius_percent = 2;
 }
 
