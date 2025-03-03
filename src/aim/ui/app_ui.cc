@@ -167,23 +167,24 @@ class AppUiImpl : public AppUi {
     {
       auto font = app_->font_manager()->UseLargeBold();
       ImGui::Text("AimForge");
+    }
 
-      if (current_scenario_def_.has_value()) {
+    if (current_scenario_def_.has_value()) {
+      auto font = app_->font_manager()->UseMedium();
+      ImGui::SameLine();
+      ImGui::SetCursorPosX(navigation_column_width);
+      ImVec2 sz = ImVec2(0.0f, 0.0f);
+      if (current_running_scenario_) {
+        if (ImGui::Button("Resume", sz)) {
+          scenario_run_option_ = ScenarioRunOption::RESUME;
+        }
         ImGui::SameLine();
-        ImGui::SetCursorPosX(navigation_column_width);
-        ImVec2 sz = ImVec2(0.0f, 0.0f);
-        if (current_running_scenario_) {
-          if (ImGui::Button("Resume", sz)) {
-            scenario_run_option_ = ScenarioRunOption::RESUME;
-          }
-          ImGui::SameLine();
-          if (ImGui::Button("Restart", sz)) {
-            scenario_run_option_ = ScenarioRunOption::RUN;
-          }
-        } else {
-          if (ImGui::Button("Play", sz)) {
-            scenario_run_option_ = ScenarioRunOption::RUN;
-          }
+        if (ImGui::Button("Restart", sz)) {
+          scenario_run_option_ = ScenarioRunOption::RUN;
+        }
+      } else {
+        if (ImGui::Button("Play", sz)) {
+          scenario_run_option_ = ScenarioRunOption::RUN;
         }
       }
     }

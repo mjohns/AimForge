@@ -9,11 +9,10 @@ namespace aim {
 
 class ScopedFont {
  public:
-  explicit ScopedFont(ImFont* font, std::optional<ImU32> color) : font_(font), font_color_(color) {
+  explicit ScopedFont(ImFont* font) : font_(font) {
     if (font_ != nullptr) {
       ImGui::PushFont(font_);
     }
-    // ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
   }
 
   ~ScopedFont() {
@@ -29,7 +28,6 @@ class ScopedFont {
 
  private:
   ImFont* font_ = nullptr;
-  std::optional<ImU32> font_color_;
 };
 
 class FontManager {
@@ -39,22 +37,31 @@ class FontManager {
   bool LoadFonts();
 
   int large_font_size();
+  int medium_font_size();
   int default_font_size();
 
-  ScopedFont UseDefault(std::optional<ImU32> color = {}) {
-    return ScopedFont(default_font_, color);
+  ScopedFont UseDefault() {
+    return ScopedFont(default_font_);
   }
 
-  ScopedFont UseDefaultBold(std::optional<ImU32> color = {}) {
-    return ScopedFont(default_bold_font_, color);
+  ScopedFont UseDefaultBold() {
+    return ScopedFont(default_bold_font_);
   }
 
-  ScopedFont UseLarge(std::optional<ImU32> color = {}) {
-    return ScopedFont(large_font_, color);
+  ScopedFont UseLarge() {
+    return ScopedFont(large_font_);
   }
 
-  ScopedFont UseLargeBold(std::optional<ImU32> color = {}) {
-    return ScopedFont(large_bold_font_, color);
+  ScopedFont UseLargeBold() {
+    return ScopedFont(large_bold_font_);
+  }
+
+  ScopedFont UseMedium() {
+    return ScopedFont(medium_font_);
+  }
+
+  ScopedFont UseMediumBold() {
+    return ScopedFont(medium_bold_font_);
   }
 
   FontManager(const FontManager&) = delete;
@@ -69,6 +76,8 @@ class FontManager {
   ImFont* default_bold_font_ = nullptr;
   ImFont* large_font_ = nullptr;
   ImFont* large_bold_font_ = nullptr;
+  ImFont* medium_font_ = nullptr;
+  ImFont* medium_bold_font_ = nullptr;
 };
 
 }  // namespace aim
