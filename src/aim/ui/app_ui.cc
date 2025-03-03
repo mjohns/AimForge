@@ -152,6 +152,8 @@ class AppUiImpl : public AppUi {
   void DrawScreen() {
     ScreenInfo screen = app_->screen_info();
 
+    float navigation_column_width = screen.width * 0.15;
+
     // TODO: Improve appearance of top bar.
     ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
     if (logo_texture_->is_loaded()) {
@@ -163,13 +165,32 @@ class AppUiImpl : public AppUi {
       ImGui::SameLine();
     }
     {
-      auto font = app_->font_manager()->UseLarge();
+      auto font = app_->font_manager()->UseLargeBold();
       ImGui::Text("AimForge");
+
+      if (current_scenario_def_.has_value()) {
+        ImGui::SameLine();
+        ImGui::SetCursorPosX(navigation_column_width);
+        ImVec2 sz = ImVec2(0.0f, 0.0f);
+        if (current_running_scenario_) {
+          if (ImGui::Button("Resume", sz)) {
+            scenario_run_option_ = ScenarioRunOption::RESUME;
+          }
+          ImGui::SameLine();
+          if (ImGui::Button("Restart", sz)) {
+            scenario_run_option_ = ScenarioRunOption::RUN;
+          }
+        } else {
+          if (ImGui::Button("Play", sz)) {
+            scenario_run_option_ = ScenarioRunOption::RUN;
+          }
+        }
+      }
     }
     ImGui::EndChild();
 
     ImGui::Columns(2, "NavigationContentColumns", false);
-    ImGui::SetColumnWidth(0, screen.width * 0.15);
+    ImGui::SetColumnWidth(0, navigation_column_width);
     ImGui::BeginChild("Navigation", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
 
     if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
