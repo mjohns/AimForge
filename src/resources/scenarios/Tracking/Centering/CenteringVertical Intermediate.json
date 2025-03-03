@@ -11,6 +11,16 @@
       "z": 80 
     }
   },
+  "centeringDef": {
+    "wallPoints": [
+      {
+        "y": { "value": -80 },
+      },
+      {
+        "y": { "value": 80 },
+      }
+    ],
+  },
   "durationSeconds": 60,
   "room": {
     "cameraPosition": {

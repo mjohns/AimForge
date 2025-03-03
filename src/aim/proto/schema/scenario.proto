@@ -48,6 +48,17 @@ message RegionLength {
   }
 }
 
+message RegionVec2 {
+  RegionLength x = 1;
+  RegionLength y = 2;
+}
+
+message RegionVec3 {
+  RegionLength x = 1;
+  RegionLength y = 2;
+  RegionLength z = 3;
+}
+
 message TargetRegion {
   // The percent chance the target will be placed in this region. 0-1
   // First matching region will be chosen. Defaults to 1.
@@ -154,8 +165,12 @@ message StaticScenarioDef {
 }
 
 message CenteringScenarioDef {
-  StoredVec3 start_position = 1;
-  StoredVec3 end_position = 2;
+  // Target will move from point to point and then recycle through the list.
+  repeated RegionVec2 wall_points = 1;
+
+  // Target will move to the next point returned by the strategy. Once it is reached it will head to
+  // a new point.
+  TargetPlacementStrategy target_placement_strategy = 2;
 }
 
 message BarrelScenarioDef {
