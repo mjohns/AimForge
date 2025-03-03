@@ -12,6 +12,11 @@ Target TargetManager::AddTarget(Target t) {
   if (t.wall_position.has_value()) {
     t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_);
   }
+  if (t.pill_wall_up.has_value()) {
+    glm::vec3 world_start = WallPositionToWorldPosition(glm::vec2(0, 0), t.radius, room_);
+    glm::vec3 world_end = WallPositionToWorldPosition(*t.pill_wall_up, t.radius, room_);
+    t.pill_up = glm::normalize(world_end - world_start);
+  }
   if (t.id == 0) {
     auto new_id = ++target_id_counter_;
     t.id = new_id;

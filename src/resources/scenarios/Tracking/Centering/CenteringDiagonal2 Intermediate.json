@@ -1,5 +1,6 @@
 {
   "centeringDef": {
+    "orientPill":  true,
     "wallPoints": [
       {
         "x": { "value": -50 },

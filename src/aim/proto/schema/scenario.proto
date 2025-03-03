@@ -171,6 +171,8 @@ message CenteringScenarioDef {
   // Target will move to the next point returned by the strategy. Once it is reached it will head to
   // a new point.
   TargetPlacementStrategy target_placement_strategy = 2;
+
+  bool orient_pill = 3;
 }
 
 message BarrelScenarioDef {
@@ -222,6 +224,8 @@ message TargetDef {
 
 message PillTargetDef {
   float height = 1;
+  StoredVec3 up = 2;
+  StoredVec2 wall_up = 3;
 }
 
 message TargetProfile {

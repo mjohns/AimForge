@@ -31,6 +31,7 @@ struct Target {
 
   bool is_pill = false;
   glm::vec3 pill_up{0, 0, 1};
+  std::optional<glm::vec2> pill_wall_up;
 
   Stopwatch hit_timer;
   float health_seconds = 0;
