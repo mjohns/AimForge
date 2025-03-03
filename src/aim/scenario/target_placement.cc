@@ -1,5 +1,6 @@
 #include "target_placement.h"
 
+#include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/vec2.hpp>
 #include <optional>
@@ -170,7 +171,12 @@ glm::vec2 GetRegionVec2(const RegionVec2& v, const Wall& wall) {
 Wall GetWallForRoom(const Room& room) {
   Wall wall;
   if (room.has_cylinder_room()) {
-    wall.width = room.cylinder_room().width();
+    if (room.cylinder_room().has_width_perimeter_percent()) {
+      wall.width = room.cylinder_room().width_perimeter_percent() * glm::two_pi<float>() *
+                   room.cylinder_room().radius();
+    } else {
+      wall.width = room.cylinder_room().width();
+    }
     wall.height = room.cylinder_room().height();
   } else if (room.has_barrel_room()) {
     wall.width = room.barrel_room().radius() * 2;

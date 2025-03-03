@@ -16,9 +16,12 @@ message CylinderRoom {
   float radius = 2;
   // The width of the wall to use for target placement and to draw sides.
   float width = 3;
-  bool hide_sides = 4;
+  // Instead of an absolute width, define as percent of perimeter. 0.5 is 180 degree view.
+  float width_perimeter_percent = 4;
+
+  bool hide_sides = 5;
   // Defaults to 20.
-  float side_angle_degrees = 5;
+  float side_angle_degrees = 6;
 }
 
 // Similar to a cylinder room but turned on its side. The target wall is a circle.

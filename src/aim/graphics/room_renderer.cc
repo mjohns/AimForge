@@ -339,6 +339,9 @@ void RoomRenderer::DrawCylinderRoom(const CylinderRoom& room,
 
   if (!room.hide_sides()) {
     float width = room.width();
+    if (room.has_width_perimeter_percent()) {
+      width = room.width_perimeter_percent() * glm::two_pi<float>() * room.radius();
+    }
     float perimeter = room.radius() * glm::two_pi<float>();
 
     float radians = (width / perimeter) * glm::pi<float>();
