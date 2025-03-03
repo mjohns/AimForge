@@ -137,6 +137,10 @@ message ScenarioDef {
 
   ShotType shot_type = 8;
 
+  // Adjust the accuracy penalty modifier. Defaults to 1. 0.5 would take off half as much points
+  // from the score.
+  float accuracy_penalty_modifier = 9;
+
   oneof type {
     StaticScenarioDef static_def = 10;
     CenteringScenarioDef centering_def = 11;

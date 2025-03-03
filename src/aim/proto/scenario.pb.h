@@ -4884,6 +4884,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kOverridesFieldNumber = 7,
     kShotTypeFieldNumber = 8,
     kDurationSecondsFieldNumber = 2,
+    kAccuracyPenaltyModifierFieldNumber = 9,
     kStaticDefFieldNumber = 10,
     kCenteringDefFieldNumber = 11,
     kBarrelDefFieldNumber = 12,
@@ -4994,6 +4995,17 @@ class ScenarioDef final : public ::google::protobuf::Message
   void _internal_set_duration_seconds(float value);
 
   public:
+  // float accuracy_penalty_modifier = 9;
+  bool has_accuracy_penalty_modifier() const;
+  void clear_accuracy_penalty_modifier() ;
+  float accuracy_penalty_modifier() const;
+  void set_accuracy_penalty_modifier(float value);
+
+  private:
+  float _internal_accuracy_penalty_modifier() const;
+  void _internal_set_accuracy_penalty_modifier(float value);
+
+  public:
   // .aim.StaticScenarioDef static_def = 10;
   bool has_static_def() const;
   private:
@@ -5083,7 +5095,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 11, 8,
+      4, 12, 8,
       52, 2>
       _table_;
 
@@ -5110,6 +5122,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::ScenarioReferenceOverrides* overrides_;
     ::aim::ShotType* shot_type_;
     float duration_seconds_;
+    float accuracy_penalty_modifier_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -8211,6 +8224,34 @@ inline void ScenarioDef::set_allocated_shot_type(::aim::ShotType* value) {
 
   _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.shot_type)
+}
+
+// float accuracy_penalty_modifier = 9;
+inline bool ScenarioDef::has_accuracy_penalty_modifier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void ScenarioDef::clear_accuracy_penalty_modifier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.accuracy_penalty_modifier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline float ScenarioDef::accuracy_penalty_modifier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.accuracy_penalty_modifier)
+  return _internal_accuracy_penalty_modifier();
+}
+inline void ScenarioDef::set_accuracy_penalty_modifier(float value) {
+  _internal_set_accuracy_penalty_modifier(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioDef.accuracy_penalty_modifier)
+}
+inline float ScenarioDef::_internal_accuracy_penalty_modifier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.accuracy_penalty_modifier_;
+}
+inline void ScenarioDef::_internal_set_accuracy_penalty_modifier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.accuracy_penalty_modifier_ = value;
 }
 
 // .aim.StaticScenarioDef static_def = 10;
