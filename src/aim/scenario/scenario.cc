@@ -170,6 +170,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::Text("theme: %s", settings_.theme_name().c_str());
     ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
 
+    auto text_color = ScopedStyleColor::Text(ToImCol32(theme_.target_color()));
     {
       auto bold = app_->font_manager()->UseLargeBold();
       std::string message = "Click to Start";
@@ -189,6 +190,8 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 2);
     ImGui::Text("%s", message.c_str());
+
+    text_color.End();
 
     ImGui::End();
 
