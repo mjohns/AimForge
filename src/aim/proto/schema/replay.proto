@@ -29,7 +29,7 @@ message MoveLinearTargetEvent {
 }
 
 message ReplayEvent {
-  int32 frame_number = 1;
+  float time_seconds = 1;
   oneof type {
     KillTargetEvent kill_target = 2;
     RemoveTargetEvent remove_target = 3;
