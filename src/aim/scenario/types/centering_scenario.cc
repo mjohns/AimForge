@@ -71,7 +71,7 @@ class CenteringScenario : public BaseScenario {
     target->wall_position = current_start_;
     target->wall_direction = current_direction_;
 
-    if (target->is_pill) {
+    if (target->is_pill && def_.centering_def().orient_pill()) {
       glm::vec3 start = WallPositionToWorldPosition(current_start_, target->radius, def_.room());
       glm::vec3 end = WallPositionToWorldPosition(
           current_start_ + current_direction_, target->radius, def_.room());

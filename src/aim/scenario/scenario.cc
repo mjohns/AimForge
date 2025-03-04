@@ -533,6 +533,12 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   if (profile.has_pill()) {
     target.is_pill = true;
     target.height = profile.pill().height();
+    if (profile.pill().has_up()) {
+      target.pill_up = ToVec3(profile.pill().up());
+    }
+    if (profile.pill().has_wall_up()) {
+      target.pill_wall_up = ToVec2(profile.pill().wall_up());
+    }
   }
   return target;
 }

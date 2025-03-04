@@ -1,17 +1,5 @@
 {
   "centeringDef": {
-    "endPosition": {
-      "x": 0,
-      "y": -3,
-      "z": -80
-    },
-    "startPosition": {
-      "x": 0,
-      "y": -3,
-      "z": 80 
-    }
-  },
-  "centeringDef": {
     "wallPoints": [
       {
         "y": { "value": -80 },
@@ -38,7 +26,8 @@
     "profiles": [
       {
         "pill": {
-          "height": 10
+          "height": 10,
+          "wallUp": { "x": 1 }
         },
         "speed": 38,
         "targetRadius": 1.2

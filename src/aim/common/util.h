@@ -38,6 +38,10 @@ static glm::vec3 ToVec3(const StoredVec3& v) {
   return glm::vec3(v.x(), v.y(), v.z());
 }
 
+static glm::vec2 ToVec2(const StoredVec2& v) {
+  return glm::vec2(v.x(), v.y());
+}
+
 template <typename T>
 static StoredVec3 ToStoredVec3(const T& v) {
   StoredVec3 result;
