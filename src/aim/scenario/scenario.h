@@ -120,6 +120,7 @@ class Scenario {
   i64 stats_id_ = 0;
   bool is_done_ = false;
   std::vector<DelayedTask> delayed_tasks_;
+  u64 max_render_age_micros_;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);
