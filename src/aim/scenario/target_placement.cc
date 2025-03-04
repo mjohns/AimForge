@@ -128,7 +128,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     float distance = GetJitteredValue(strategy_.fixed_distance_from_last_target(),
                                       strategy_.fixed_distance_jitter(),
                                       app_->random_generator());
-    // This can't just drop the y component and take x,z from world position because for circular
+    // This can't just drop the y component and take x,z from world position because for cylinder
     // walls we wrap the flat wall around the circle.
     glm::vec2 dir = glm::normalize(point - *most_recent_target->wall_position);
 
@@ -169,9 +169,9 @@ glm::vec2 GetRegionVec2(const RegionVec2& v, const Wall& wall) {
 
 Wall GetWallForRoom(const Room& room) {
   Wall wall;
-  if (room.has_circular_room()) {
-    wall.width = room.circular_room().width();
-    wall.height = room.circular_room().height();
+  if (room.has_cylinder_room()) {
+    wall.width = room.cylinder_room().width();
+    wall.height = room.cylinder_room().height();
   } else if (room.has_barrel_room()) {
     wall.width = room.barrel_room().radius() * 2;
     wall.height = wall.width;

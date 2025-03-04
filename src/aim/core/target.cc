@@ -217,9 +217,9 @@ glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
 
     // Make sure the target does not clip through wall
     world_position.y = -1 * (target_radius + 0.5);
-  } else if (room.has_circular_room()) {
+  } else if (room.has_cylinder_room()) {
     // Effectively wrap the wall around the perimeter of the circle.
-    float radius = room.circular_room().radius();
+    float radius = room.cylinder_room().radius();
     // float circumference = glm::two_pi<float>() * radius;
     float radians_per_x = 1 / radius;
 

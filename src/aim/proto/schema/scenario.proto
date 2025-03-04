@@ -11,7 +11,7 @@ message SimpleRoom {
   float depth = 3;
 }
 
-message CircularRoom {
+message CylinderRoom {
   float height = 1;
   float radius = 2;
   // The width of the wall to use for target placement and to draw sides.
@@ -21,8 +21,7 @@ message CircularRoom {
   float side_angle_degrees = 5;
 }
 
-// Similar to a circular room but you are looking at the flat side and the side walls are
-// cylindrical.
+// Similar to a cylinder room but turned on its side. The target wall is a circle.
 message BarrelRoom {
   float radius = 1;
 }
@@ -33,12 +32,11 @@ message Room {
   float start_yaw = 3;
   oneof type {
     SimpleRoom simple_room = 4;
-    CircularRoom circular_room = 5;
+    CylinderRoom cylinder_room = 5;
     BarrelRoom barrel_room = 6;
   }
 }
 
-// For circular rooms x is effectively in degrees.
 message RegionLength {
   oneof type {
     // Length is a percent of relevant dimension (x,y) on the wall.
