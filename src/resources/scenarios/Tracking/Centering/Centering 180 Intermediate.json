@@ -1,0 +1,31 @@
+{
+  "centeringDef": {
+    "wallPoints": [
+      {
+        "x": { "xPercentValue": -0.49 },
+      },
+      {
+        "x": { "xPercentValue": 0.49 },
+      },
+    ],
+  },
+  "durationSeconds": 60,
+  "room": {
+    "cylinderRoom": {
+      "height": 100,
+      "radius": 100,
+      "sideAngleDegrees": 65,
+      "widthPerimeterPercent": 0.5 
+    }
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "speed": 65,
+        "targetRadius": 1.2,
+        "pill": { "height": 15 }
+      }
+    ]
+  }
+}
