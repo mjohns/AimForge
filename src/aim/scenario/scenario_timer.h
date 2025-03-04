@@ -46,7 +46,7 @@ class ScenarioTimer {
     return replay_fps_;
   }
 
-  u64 LastFrameRenderedMicrosAgo();
+  u64 LastFrameRenderStartedMicrosAgo();
 
  private:
   // Stopwatch tracking render time. Can be reset each time scenario resumes.

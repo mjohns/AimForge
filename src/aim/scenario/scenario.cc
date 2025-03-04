@@ -31,6 +31,7 @@
 namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
+constexpr const u64 kTargetRenderFps = 360;
 
 }  // namespace
 
@@ -42,6 +43,7 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
           def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position()))),
       target_manager_(def.room()) {
   theme_ = app->settings_manager()->GetCurrentTheme();
+  max_render_age_micros_ = (1 / (float)kTargetRenderFps) * 1000 * 1000;
 }
 
 NavigationEvent Scenario::Run() {
@@ -345,7 +347,8 @@ NavigationEvent Scenario::ResumeInternal() {
     num_state_updates_++;
 
     // Render if forced or if the last render was over ~1ms ago.
-    bool do_render = update_data.force_render || timer_.LastFrameRenderedMicrosAgo() > 1200;
+    bool do_render = update_data.force_render ||
+                     timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
     if (!do_render) {
       continue;
     }

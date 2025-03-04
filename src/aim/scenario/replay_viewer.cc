@@ -108,7 +108,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
       app->sound_manager()->PlayKillSound();
     }
 
-    bool do_render = force_render || timer.LastFrameRenderedMicrosAgo() > 2000;
+    bool do_render = force_render || timer.LastFrameRenderStartedMicrosAgo() > 2500;
     if (!do_render) {
       continue;
     }

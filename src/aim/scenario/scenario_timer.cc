@@ -33,8 +33,8 @@ void ScenarioTimer::OnEndRender() {
   render_end_time_micros_ = frame_stopwatch_.GetElapsedMicros();
 }
 
-uint64_t ScenarioTimer::LastFrameRenderedMicrosAgo() {
-  return frame_stopwatch_.GetElapsedMicros() - render_end_time_micros_;
+uint64_t ScenarioTimer::LastFrameRenderStartedMicrosAgo() {
+  return frame_stopwatch_.GetElapsedMicros() - render_start_time_micros_;
 }
 
 }  // namespace aim
