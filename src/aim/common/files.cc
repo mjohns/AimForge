@@ -74,6 +74,9 @@ bool ReadJsonMessageFromFile(const std::filesystem::path& path,
 
 std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
     const std::filesystem::path& base_dir) {
+  if (!std::filesystem::exists(base_dir)) {
+    return {};
+  }
   std::optional<std::filesystem::file_time_type> most_recent_update_time;
   for (const auto& entry : std::filesystem::recursive_directory_iterator(base_dir)) {
     if (std::filesystem::is_regular_file(entry)) {
