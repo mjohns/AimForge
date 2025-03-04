@@ -51,7 +51,8 @@ void BaseScenario::Initialize() {
 }
 
 void BaseScenario::UpdateState(UpdateStateData* data) {
-  if (def_.shot_type().has_tracking_kill() || def_.shot_type().has_tracking_invincible()) {
+  auto shot_type = GetShotType();
+  if (shot_type == ShotType::kTrackingKill || shot_type == ShotType::kTrackingInvincible) {
     HandleTrackingHits(data);
   } else {
     HandleClickHits(data);
@@ -85,7 +86,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
     } else {
       stats_.hit_stopwatch.Stop();
     }
-    if (def_.shot_type().tracking_kill()) {
+    if (GetShotType() == ShotType::kTrackingKill) {
       for (Target& target : target_manager_.GetMutableTargets()) {
         if (maybe_hit_target_id.has_value() && *maybe_hit_target_id == target.id) {
           target.hit_timer.Start();
@@ -125,7 +126,7 @@ void BaseScenario::TrackingHoldDone() {
   stats_.shot_stopwatch.Stop();
   stats_.hit_stopwatch.Stop();
   tracking_sound_ = {};
-  if (def_.shot_type().tracking_kill()) {
+  if (GetShotType() == ShotType::kTrackingKill) {
     for (Target& target : target_manager_.GetMutableTargets()) {
       target.hit_timer.Stop();
     }
@@ -137,7 +138,7 @@ void BaseScenario::OnPause() {
 }
 
 void BaseScenario::HandleClickHits(UpdateStateData* data) {
-  if (def_.shot_type().poke()) {
+  if (GetShotType() == ShotType::kPoke) {
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (maybe_hit_target_id.has_value()) {
       u16 hit_target_id = *maybe_hit_target_id;

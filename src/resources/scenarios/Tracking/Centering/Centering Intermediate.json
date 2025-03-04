@@ -1,15 +1,13 @@
 {
   "centeringDef": {
-    "endPosition": {
-      "x": 80,
-      "y": -3,
-      "z": 0
-    },
-    "startPosition": {
-      "x": -80,
-      "y": -3,
-      "z": 0
-    }
+    "wallPoints": [
+      {
+        "x": { "value": -80 },
+      },
+      {
+        "x": { "value": 80 },
+      }
+    ],
   },
   "durationSeconds": 60,
   "room": {
@@ -31,7 +29,7 @@
           "height": 10
         },
         "speed": 55,
-        "targetRadius": 1.2 
+        "targetRadius": 1.2
       }
     ]
   }

@@ -12,118 +12,140 @@
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/target.h"
 #include "aim/core/tracking_sound.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
+#include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/target_placement.h"
 
 namespace aim {
 namespace {
 
 constexpr const float kStartMovingDelaySeconds = 0.2;
 
-class CenteringScenario : public Scenario {
+class CenteringScenario : public BaseScenario {
  public:
   explicit CenteringScenario(const ScenarioDef& def, Application* app)
-      : Scenario(def, app),
-        start_(ToVec3(def.centering_def().start_position())),
-        end_(ToVec3(def.centering_def().end_position())) {
-    start_to_end_ = glm::normalize(end_ - start_);
-    distance_ = glm::length(start_ - end_);
-    initial_distance_offset_ = distance_ * 0.45;
+      : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
+    TargetPlacementStrategy strat = def.centering_def().target_placement_strategy();
+    if (!def.centering_def().has_target_placement_strategy()) {
+      strat.set_min_distance(50);
+      RectangleTargetRegion* region = strat.add_regions()->mutable_rectangle();
+      region->mutable_x_length()->set_x_percent_value(0.9);
+      region->mutable_y_length()->set_y_percent_value(0.9);
+      region->mutable_inner_x_length()->set_x_percent_value(0.55);
+    }
+    wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, app_);
 
-    initial_position_ = start_ + (start_to_end_ * initial_distance_offset_);
+    current_start_ = GetNextPosition();
+    glm::vec2 next_point = GetNextPosition();
+
+    glm::vec2 direction = next_point - current_start_;
+
+    // Start halfway across
+    direction = direction * 0.5f;
+    current_start_ = next_point - direction;
+
+    current_distance_to_travel_ = glm::length(direction);
+    current_direction_ = glm::normalize(direction);
 
     // Look a little in front of the starting position
-    glm::vec3 initial_look_at =
-        (initial_position_ + (start_to_end_ * (0.07f * distance_))) - camera_.GetPosition();
+    float target_radius = GetNextTargetProfile().target_radius();
+    glm::vec3 look_at_pos = WallPositionToWorldPosition(
+        current_start_ + (current_direction_ * 10.0f), target_radius, def.room());
+    glm::vec3 initial_look_at = glm::normalize(look_at_pos - -camera_.GetPosition());
     PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
-    camera_.UpdatePitchYaw(pitch_yaw);
+    // camera_.UpdatePitchYaw(pitch_yaw);
   }
 
  protected:
-  void Initialize() override {
-    TargetProfile target_profile = GetNextTargetProfile();
-    Target target = GetTargetTemplate(target_profile);
-    if (target_profile.has_pill()) {
-      target.pill_up = glm::normalize(glm::cross(start_to_end_, glm::vec3(0, -1, 0)));
-    }
-
-    target.position = initial_position_;
-    target = target_manager_.AddTarget(target);
-    target_ = target_manager_.GetMutableTarget(target.id);
-    AddNewTargetEvent(target);
-  }
-
   ShotType::TypeCase GetDefaultShotType() override {
     return ShotType::kTrackingInvincible;
   }
 
-  void UpdateState(UpdateStateData* data) override {
-    if (timer_.GetElapsedSeconds() < kStartMovingDelaySeconds) {
+  void FillInNewTarget(Target* target) override {
+    // This should only be called once during initialize.
+    target->wall_position = current_start_;
+    target->wall_direction = current_direction_;
+
+    if (target->is_pill) {
+      glm::vec3 start = WallPositionToWorldPosition(current_start_, target->radius, def_.room());
+      glm::vec3 end = WallPositionToWorldPosition(
+          current_start_ + current_direction_, target->radius, def_.room());
+      target->pill_up =
+          glm::normalize(glm::cross(glm::normalize(end - start), glm::vec3(0, -1, 0)));
+    }
+  }
+
+  void UpdateTargetPositions() override {
+    float now_seconds = timer_.GetElapsedSeconds();
+    // Determine if the targets need to change direction.
+    Target* target = nullptr;
+    for (Target* t : target_manager_.GetMutableVisibleTargets()) {
+      target = t;
+      break;
+    }
+    if (target == nullptr) {
       return;
     }
 
-    if (data->is_click_held) {
-      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-      if (!tracking_sound_) {
-        tracking_sound_ = std::make_unique<TrackingSound>(app_);
-      }
-      stats_.shot_stopwatch.Start();
-      if (maybe_hit_target_id.has_value()) {
-        stats_.hit_stopwatch.Start();
-      } else {
-        stats_.hit_stopwatch.Stop();
-      }
-      tracking_sound_->DoTick(maybe_hit_target_id.has_value());
-    } else {
-      TrackingHoldDone();
+    glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*target, now_seconds);
+
+    float distance_traveled = glm::length(new_position - current_start_);
+    if (distance_traveled < current_distance_to_travel_) {
+      // Just keep going ..
+      target_manager_.UpdateTargetPositions(now_seconds);
+      return;
     }
 
-    float travel_time_seconds = timer_.GetElapsedSeconds() - kStartMovingDelaySeconds;
-    float travel_distance = travel_time_seconds * target_->speed + initial_distance_offset_;
+    // Need to reverse direction now.
+    glm::vec2 current_position = *target->wall_position;
+    glm::vec2 next_position = GetNextPosition();
 
-    int num_times_across = travel_distance / distance_;
-
-    float distance_across = travel_distance - (num_times_across * distance_);
-
-    float multiplier;
-    if (num_times_across % 2 == 0) {
-      // Example: first time across.
-      // Going from start to end.
-      multiplier = distance_across;
-    } else {
-      // Going from end to start.
-      multiplier = distance_ - distance_across;
-    }
-
-    target_->position = start_ + (start_to_end_ * multiplier);
-  }
-
-  void OnPause() override {
-    TrackingHoldDone();
-  }
-
-  void OnScenarioDone() override {
-    TrackingHoldDone();
+    glm::vec2 direction = next_position - current_position;
+    current_distance_to_travel_ = glm::length(direction);
+    current_start_ = current_position;
+    current_direction_ = glm::normalize(direction);
+    target->wall_direction = current_direction_;
+    target_manager_.UpdateTargetPositions(now_seconds);
   }
 
  private:
-  void TrackingHoldDone() {
-    stats_.shot_stopwatch.Stop();
-    stats_.hit_stopwatch.Stop();
-    tracking_sound_ = {};
+  glm::vec2 GetNextPosition() {
+    glm::vec2 result = GetNextPositionNoIncrement();
+    current_index_++;
+    return result;
   }
 
-  Target* target_ = nullptr;
-  glm::vec3 start_;
-  glm::vec3 end_;
-  glm::vec3 start_to_end_;
-  float distance_;
-  float initial_distance_offset_;
-  std::unique_ptr<TrackingSound> tracking_sound_;
-  glm::vec3 initial_position_;
+  glm::vec2 GetNextPositionNoIncrement() {
+    if (def_.centering_def().wall_points_size() == 1) {
+      // Point will alternate between the wall point and a point from the target placer.
+      bool is_wall_point = current_index_ % 2 == 0;
+      if (is_wall_point) {
+        return GetRegionVec2(def_.centering_def().wall_points(0), wall_);
+      } else {
+        return wall_target_placer_->GetNextPosition();
+      }
+    }
+    if (def_.centering_def().wall_points_size() > 1) {
+      int i = current_index_ % def_.centering_def().wall_points_size();
+      return GetRegionVec2(def_.centering_def().wall_points(i), wall_);
+    }
+
+    return wall_target_placer_->GetNextPosition();
+  }
+
+  glm::vec2 current_start_;
+  glm::vec2 current_direction_;
+  float current_distance_to_travel_;
+
+  int current_index_ = 0;
+
+  std::unique_ptr<WallTargetPlacer> wall_target_placer_;
+  Wall wall_;
 };
 
 }  // namespace

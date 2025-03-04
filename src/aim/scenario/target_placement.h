@@ -12,6 +12,9 @@ namespace aim {
 
 Wall GetWallForRoom(const Room& room);
 
+float GetRegionLength(const RegionLength& r, const Wall& wall);
+glm::vec2 GetRegionVec2(const RegionVec2& v, const Wall& wall);
+
 class WallTargetPlacer {
  public:
   virtual ~WallTargetPlacer() {}

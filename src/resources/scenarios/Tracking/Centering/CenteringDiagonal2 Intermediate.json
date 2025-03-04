@@ -1,15 +1,15 @@
 {
   "centeringDef": {
-    "endPosition": {
-      "x": 50,
-      "y": -3,
-      "z": -50
-    },
-    "startPosition": {
-      "x": -50,
-      "y": -3,
-      "z": 50
-    }
+    "wallPoints": [
+      {
+        "x": { "value": -50 },
+        "y": { "value": 50 },
+      },
+      {
+        "x": { "value": 50 },
+        "y": { "value": -50 },
+      }
+    ],
   },
   "durationSeconds": 60,
   "room": {

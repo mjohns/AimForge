@@ -55,19 +55,6 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     return true;
   }
 
-  float GetRegionLength(const RegionLength& length) {
-    if (length.has_value()) {
-      return length.value();
-    }
-    if (length.has_x_percent_value()) {
-      return wall_.width * length.x_percent_value();
-    }
-    if (length.has_y_percent_value()) {
-      return wall_.height * length.y_percent_value();
-    }
-    return 0;
-  }
-
   std::optional<TargetRegion> GetRegionToUse() {
     if (strategy_.regions_size() == 0) {
       return {};
@@ -100,13 +87,13 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     }
 
     const TargetRegion& region = *maybe_region;
-    float x_offset = GetRegionLength(region.x_offset());
-    float y_offset = GetRegionLength(region.y_offset());
+    float x_offset = GetRegionLength(region.x_offset(), wall_);
+    float y_offset = GetRegionLength(region.y_offset(), wall_);
 
     if (region.has_ellipse()) {
       glm::vec2 pos =
-          GetRandomPositionInEllipse(0.5 * GetRegionLength(region.ellipse().x_diameter()),
-                                     0.5 * GetRegionLength(region.ellipse().y_diameter()),
+          GetRandomPositionInEllipse(0.5 * GetRegionLength(region.ellipse().x_diameter(), wall_),
+                                     0.5 * GetRegionLength(region.ellipse().y_diameter(), wall_),
                                      app_->random_generator());
       pos.x += x_offset;
       pos.y += y_offset;
@@ -114,8 +101,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     }
     if (region.has_circle()) {
       glm::vec2 pos =
-          GetRandomPositionInCircle(0.5 * GetRegionLength(region.circle().inner_diameter()),
-                                    0.5 * GetRegionLength(region.circle().diameter()),
+          GetRandomPositionInCircle(0.5 * GetRegionLength(region.circle().inner_diameter(), wall_),
+                                    0.5 * GetRegionLength(region.circle().diameter(), wall_),
                                     app_->random_generator());
       pos.x += x_offset;
       pos.y += y_offset;
@@ -123,10 +110,10 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     }
 
     const RectangleTargetRegion& rect = region.rectangle();
-    glm::vec2 pos = GetRandomPositionInRectangle(GetRegionLength(rect.x_length()),
-                                                 GetRegionLength(rect.y_length()),
-                                                 GetRegionLength(rect.inner_x_length()),
-                                                 GetRegionLength(rect.inner_y_length()),
+    glm::vec2 pos = GetRandomPositionInRectangle(GetRegionLength(rect.x_length(), wall_),
+                                                 GetRegionLength(rect.y_length(), wall_),
+                                                 GetRegionLength(rect.inner_x_length(), wall_),
+                                                 GetRegionLength(rect.inner_y_length(), wall_),
                                                  app_->random_generator());
     pos.x += x_offset;
     pos.y += y_offset;
@@ -161,6 +148,23 @@ std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const Wall& wall,
                                                          TargetManager* target_manager,
                                                          Application* app) {
   return std::make_unique<WallTargetPlacerImpl>(wall, strategy, target_manager, app);
+}
+
+float GetRegionLength(const RegionLength& length, const Wall& wall) {
+  if (length.has_value()) {
+    return length.value();
+  }
+  if (length.has_x_percent_value()) {
+    return wall.width * length.x_percent_value();
+  }
+  if (length.has_y_percent_value()) {
+    return wall.height * length.y_percent_value();
+  }
+  return 0;
+}
+
+glm::vec2 GetRegionVec2(const RegionVec2& v, const Wall& wall) {
+  return glm::vec2(GetRegionLength(v.x(), wall), GetRegionLength(v.y(), wall));
 }
 
 Wall GetWallForRoom(const Room& room) {
