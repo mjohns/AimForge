@@ -8,6 +8,7 @@
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/perf.h"
 #include "aim/core/metronome.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/target.h"
@@ -109,6 +110,7 @@ class Scenario {
   void DoneAdjustingCrosshairSize();
 
   NavigationEvent PauseAndReturn();
+  void MaybeUpdateWorstTimes();
 
   u64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
@@ -121,6 +123,9 @@ class Scenario {
   bool is_done_ = false;
   std::vector<DelayedTask> delayed_tasks_;
   u64 max_render_age_micros_;
+
+  FrameTimes current_times_;
+  FrameTimes worst_times_;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);

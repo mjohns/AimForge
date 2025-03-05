@@ -38,6 +38,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
                 replay.room().start_yaw(),
                 ToVec3(replay.room().camera_position()));
 
+  FrameTimes times;
   ScenarioTimer timer(replay.replay_fps());
   timer.StartLoop();
   timer.ResumeRun();
@@ -126,8 +127,12 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
     ImGui::End();
 
     if (app->StartRender(ImVec4(0, 0, 0, 1))) {
-      app->renderer()->DrawScenario(
-          replay.room(), theme, target_manager.GetTargets(), look_at.transform);
+      app->renderer()->DrawScenario(replay.room(),
+                                    theme,
+                                    target_manager.GetTargets(),
+                                    look_at.transform,
+                                    timer.run_stopwatch(),
+                                    &times);
       app->FinishRender();
     }
   }

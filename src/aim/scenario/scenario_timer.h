@@ -46,6 +46,10 @@ class ScenarioTimer {
     return replay_fps_;
   }
 
+  const Stopwatch& run_stopwatch() {
+    return run_stopwatch_;
+  }
+
   u64 LastFrameRenderStartedMicrosAgo();
 
  private:

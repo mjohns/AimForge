@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <vector>
 
+#include "aim/common/times.h"
+#include "aim/core/perf.h"
 #include "aim/core/target.h"
 #include "aim/graphics/cylinder_renderer.h"
 #include "aim/graphics/room_renderer.h"
@@ -23,7 +25,8 @@ class Renderer {
   void DrawScenario(const Room& room,
                     const Theme& theme,
                     const std::vector<Target>& targets,
-                    const glm::mat4& view);
+                    const glm::mat4& view,
+                    const Stopwatch& stopwatch, FrameTimes* times);
 
   Renderer(const Renderer&) = delete;
   Renderer(Renderer&&) = default;
