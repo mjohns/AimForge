@@ -119,6 +119,9 @@ extern TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
 class TargetRegion;
 struct TargetRegionDefaultTypeInternal;
 extern TargetRegionDefaultTypeInternal _TargetRegion_default_instance_;
+class WallStrafeScenarioDef;
+struct WallStrafeScenarioDefDefaultTypeInternal;
+extern WallStrafeScenarioDefDefaultTypeInternal _WallStrafeScenarioDef_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -1542,6 +1545,253 @@ class BarrelRoom final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class WallStrafeScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.WallStrafeScenarioDef) */ {
+ public:
+  inline WallStrafeScenarioDef() : WallStrafeScenarioDef(nullptr) {}
+  ~WallStrafeScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(WallStrafeScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallStrafeScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR WallStrafeScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline WallStrafeScenarioDef(const WallStrafeScenarioDef& from) : WallStrafeScenarioDef(nullptr, from) {}
+  inline WallStrafeScenarioDef(WallStrafeScenarioDef&& from) noexcept
+      : WallStrafeScenarioDef(nullptr, std::move(from)) {}
+  inline WallStrafeScenarioDef& operator=(const WallStrafeScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WallStrafeScenarioDef& operator=(WallStrafeScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WallStrafeScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const WallStrafeScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const WallStrafeScenarioDef*>(
+        &_WallStrafeScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 19;
+  friend void swap(WallStrafeScenarioDef& a, WallStrafeScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(WallStrafeScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WallStrafeScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WallStrafeScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<WallStrafeScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const WallStrafeScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const WallStrafeScenarioDef& from) { WallStrafeScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(WallStrafeScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.WallStrafeScenarioDef"; }
+
+ protected:
+  explicit WallStrafeScenarioDef(::google::protobuf::Arena* arena);
+  WallStrafeScenarioDef(::google::protobuf::Arena* arena, const WallStrafeScenarioDef& from);
+  WallStrafeScenarioDef(::google::protobuf::Arena* arena, WallStrafeScenarioDef&& from) noexcept
+      : WallStrafeScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kWidthFieldNumber = 1,
+    kYFieldNumber = 2,
+    kMinDistanceFieldNumber = 3,
+    kMaxDistanceFieldNumber = 4,
+  };
+  // .aim.RegionLength width = 1;
+  bool has_width() const;
+  void clear_width() ;
+  const ::aim::RegionLength& width() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_width();
+  ::aim::RegionLength* mutable_width();
+  void set_allocated_width(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_width(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_width();
+
+  private:
+  const ::aim::RegionLength& _internal_width() const;
+  ::aim::RegionLength* _internal_mutable_width();
+
+  public:
+  // .aim.RegionLength y = 2;
+  bool has_y() const;
+  void clear_y() ;
+  const ::aim::RegionLength& y() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_y();
+  ::aim::RegionLength* mutable_y();
+  void set_allocated_y(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_y(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_y();
+
+  private:
+  const ::aim::RegionLength& _internal_y() const;
+  ::aim::RegionLength* _internal_mutable_y();
+
+  public:
+  // .aim.RegionLength min_distance = 3;
+  bool has_min_distance() const;
+  void clear_min_distance() ;
+  const ::aim::RegionLength& min_distance() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_min_distance();
+  ::aim::RegionLength* mutable_min_distance();
+  void set_allocated_min_distance(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_min_distance(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_min_distance();
+
+  private:
+  const ::aim::RegionLength& _internal_min_distance() const;
+  ::aim::RegionLength* _internal_mutable_min_distance();
+
+  public:
+  // .aim.RegionLength max_distance = 4;
+  bool has_max_distance() const;
+  void clear_max_distance() ;
+  const ::aim::RegionLength& max_distance() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_max_distance();
+  ::aim::RegionLength* mutable_max_distance();
+  void set_allocated_max_distance(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_max_distance(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_max_distance();
+
+  private:
+  const ::aim::RegionLength& _internal_max_distance() const;
+  ::aim::RegionLength* _internal_mutable_max_distance();
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.WallStrafeScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 4,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const WallStrafeScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::RegionLength* width_;
+    ::aim::RegionLength* y_;
+    ::aim::RegionLength* min_distance_;
+    ::aim::RegionLength* max_distance_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Room final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.Room) */ {
  public:
@@ -2594,7 +2844,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 20;
+  static constexpr int kIndexInFileMessages = 21;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -3557,7 +3807,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 21;
+  static constexpr int kIndexInFileMessages = 22;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -4116,7 +4366,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 19;
+  static constexpr int kIndexInFileMessages = 20;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -5295,6 +5545,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kCenteringDef = 11,
     kBarrelDef = 12,
     kLinearDef = 13,
+    kWallStrafeDef = 14,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -5400,6 +5651,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kCenteringDefFieldNumber = 11,
     kBarrelDefFieldNumber = 12,
     kLinearDefFieldNumber = 13,
+    kWallStrafeDefFieldNumber = 14,
   };
   // string scenario_id = 1;
   bool has_scenario_id() const;
@@ -5593,6 +5845,25 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::LinearScenarioDef* _internal_mutable_linear_def();
 
   public:
+  // .aim.WallStrafeScenarioDef wall_strafe_def = 14;
+  bool has_wall_strafe_def() const;
+  private:
+  bool _internal_has_wall_strafe_def() const;
+
+  public:
+  void clear_wall_strafe_def() ;
+  const ::aim::WallStrafeScenarioDef& wall_strafe_def() const;
+  PROTOBUF_NODISCARD ::aim::WallStrafeScenarioDef* release_wall_strafe_def();
+  ::aim::WallStrafeScenarioDef* mutable_wall_strafe_def();
+  void set_allocated_wall_strafe_def(::aim::WallStrafeScenarioDef* value);
+  void unsafe_arena_set_allocated_wall_strafe_def(::aim::WallStrafeScenarioDef* value);
+  ::aim::WallStrafeScenarioDef* unsafe_arena_release_wall_strafe_def();
+
+  private:
+  const ::aim::WallStrafeScenarioDef& _internal_wall_strafe_def() const;
+  ::aim::WallStrafeScenarioDef* _internal_mutable_wall_strafe_def();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ScenarioDef)
@@ -5602,11 +5873,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_centering_def();
   void set_has_barrel_def();
   void set_has_linear_def();
+  void set_has_wall_strafe_def();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 12, 8,
+      4, 13, 9,
       52, 2>
       _table_;
 
@@ -5641,6 +5913,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::CenteringScenarioDef* centering_def_;
       ::aim::BarrelScenarioDef* barrel_def_;
       ::aim::LinearScenarioDef* linear_def_;
+      ::aim::WallStrafeScenarioDef* wall_strafe_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -9597,6 +9870,85 @@ inline ::aim::LinearScenarioDef* ScenarioDef::mutable_linear_def() ABSL_ATTRIBUT
   return _msg;
 }
 
+// .aim.WallStrafeScenarioDef wall_strafe_def = 14;
+inline bool ScenarioDef::has_wall_strafe_def() const {
+  return type_case() == kWallStrafeDef;
+}
+inline bool ScenarioDef::_internal_has_wall_strafe_def() const {
+  return type_case() == kWallStrafeDef;
+}
+inline void ScenarioDef::set_has_wall_strafe_def() {
+  _impl_._oneof_case_[0] = kWallStrafeDef;
+}
+inline void ScenarioDef::clear_wall_strafe_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kWallStrafeDef) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.wall_strafe_def_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.wall_strafe_def_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::WallStrafeScenarioDef* ScenarioDef::release_wall_strafe_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.wall_strafe_def)
+  if (type_case() == kWallStrafeDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.wall_strafe_def_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.wall_strafe_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::WallStrafeScenarioDef& ScenarioDef::_internal_wall_strafe_def() const {
+  return type_case() == kWallStrafeDef ? *_impl_.type_.wall_strafe_def_ : reinterpret_cast<::aim::WallStrafeScenarioDef&>(::aim::_WallStrafeScenarioDef_default_instance_);
+}
+inline const ::aim::WallStrafeScenarioDef& ScenarioDef::wall_strafe_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.wall_strafe_def)
+  return _internal_wall_strafe_def();
+}
+inline ::aim::WallStrafeScenarioDef* ScenarioDef::unsafe_arena_release_wall_strafe_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.wall_strafe_def)
+  if (type_case() == kWallStrafeDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.wall_strafe_def_;
+    _impl_.type_.wall_strafe_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_wall_strafe_def(::aim::WallStrafeScenarioDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_wall_strafe_def();
+    _impl_.type_.wall_strafe_def_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.wall_strafe_def)
+}
+inline ::aim::WallStrafeScenarioDef* ScenarioDef::_internal_mutable_wall_strafe_def() {
+  if (type_case() != kWallStrafeDef) {
+    clear_type();
+    set_has_wall_strafe_def();
+    _impl_.type_.wall_strafe_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::WallStrafeScenarioDef>(GetArena());
+  }
+  return _impl_.type_.wall_strafe_def_;
+}
+inline ::aim::WallStrafeScenarioDef* ScenarioDef::mutable_wall_strafe_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::WallStrafeScenarioDef* _msg = _internal_mutable_wall_strafe_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.wall_strafe_def)
+  return _msg;
+}
+
 inline bool ScenarioDef::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -10221,6 +10573,394 @@ inline void LinearScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.LinearScenarioDef.target_placement_strategy)
+}
+
+// -------------------------------------------------------------------
+
+// WallStrafeScenarioDef
+
+// .aim.RegionLength width = 1;
+inline bool WallStrafeScenarioDef::has_width() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.width_ != nullptr);
+  return value;
+}
+inline void WallStrafeScenarioDef::clear_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.width_ != nullptr) _impl_.width_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::_internal_width() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.width_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::width() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.width)
+  return _internal_width();
+}
+inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_width(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.width_);
+  }
+  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.width)
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::release_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* released = _impl_.width_;
+  _impl_.width_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::unsafe_arena_release_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.width)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* temp = _impl_.width_;
+  _impl_.width_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::_internal_mutable_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.width_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.width_;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::mutable_width() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::RegionLength* _msg = _internal_mutable_width();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.width)
+  return _msg;
+}
+inline void WallStrafeScenarioDef::set_allocated_width(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.width_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.width)
+}
+
+// .aim.RegionLength y = 2;
+inline bool WallStrafeScenarioDef::has_y() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.y_ != nullptr);
+  return value;
+}
+inline void WallStrafeScenarioDef::clear_y() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.y_ != nullptr) _impl_.y_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::_internal_y() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.y_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::y() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.y)
+  return _internal_y();
+}
+inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_y(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.y_);
+  }
+  _impl_.y_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.y)
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::release_y() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.y_;
+  _impl_.y_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::unsafe_arena_release_y() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.y)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.y_;
+  _impl_.y_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::_internal_mutable_y() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.y_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.y_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.y_;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::mutable_y() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_y();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.y)
+  return _msg;
+}
+inline void WallStrafeScenarioDef::set_allocated_y(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.y_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.y_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.y)
+}
+
+// .aim.RegionLength min_distance = 3;
+inline bool WallStrafeScenarioDef::has_min_distance() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.min_distance_ != nullptr);
+  return value;
+}
+inline void WallStrafeScenarioDef::clear_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.min_distance_ != nullptr) _impl_.min_distance_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::_internal_min_distance() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.min_distance_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::min_distance() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.min_distance)
+  return _internal_min_distance();
+}
+inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_min_distance(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.min_distance_);
+  }
+  _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.min_distance)
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::release_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.min_distance_;
+  _impl_.min_distance_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::unsafe_arena_release_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.min_distance)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.min_distance_;
+  _impl_.min_distance_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::_internal_mutable_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.min_distance_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.min_distance_;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::mutable_min_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_min_distance();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.min_distance)
+  return _msg;
+}
+inline void WallStrafeScenarioDef::set_allocated_min_distance(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.min_distance_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.min_distance)
+}
+
+// .aim.RegionLength max_distance = 4;
+inline bool WallStrafeScenarioDef::has_max_distance() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.max_distance_ != nullptr);
+  return value;
+}
+inline void WallStrafeScenarioDef::clear_max_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.max_distance_ != nullptr) _impl_.max_distance_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::_internal_max_distance() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.max_distance_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallStrafeScenarioDef::max_distance() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.max_distance)
+  return _internal_max_distance();
+}
+inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_max_distance(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.max_distance_);
+  }
+  _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.max_distance)
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::release_max_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::RegionLength* released = _impl_.max_distance_;
+  _impl_.max_distance_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::unsafe_arena_release_max_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.max_distance)
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::RegionLength* temp = _impl_.max_distance_;
+  _impl_.max_distance_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::_internal_mutable_max_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.max_distance_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.max_distance_;
+}
+inline ::aim::RegionLength* WallStrafeScenarioDef::mutable_max_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  ::aim::RegionLength* _msg = _internal_mutable_max_distance();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.max_distance)
+  return _msg;
+}
+inline void WallStrafeScenarioDef::set_allocated_max_distance(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.max_distance_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+
+  _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.max_distance)
 }
 
 // -------------------------------------------------------------------

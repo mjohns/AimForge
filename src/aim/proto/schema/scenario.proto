@@ -158,6 +158,7 @@ message ScenarioDef {
     CenteringScenarioDef centering_def = 11;
     BarrelScenarioDef barrel_def = 12;
     LinearScenarioDef linear_def = 13;
+    WallStrafeScenarioDef wall_strafe_def = 14;
   }
 }
 
@@ -196,6 +197,17 @@ message LinearScenarioDef {
   float height = 4;
 
   TargetPlacementStrategy target_placement_strategy = 5;
+}
+
+message WallStrafeScenarioDef {
+    // The available width for the target to move in.
+    RegionLength width = 1;
+
+    // The height the target will strafe at. Defaults to 0 (center of wall).
+    RegionLength y = 2;
+
+    RegionLength min_distance = 3;
+    RegionLength max_distance = 4;
 }
 
 message TargetDef {
