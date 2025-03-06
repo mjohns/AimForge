@@ -1,6 +1,6 @@
 struct Input
 {
-    uint vertex_index : SV_VertexID;
+    float3 Position : TEXCOORD0;
 };
 
 struct Output
@@ -12,13 +12,13 @@ struct Output
 Output main(Input input)
 {
     Output output;
+          output.color = float4(1.0f, 0.0f, 0.0f, 1.0f);
     float2 pos;
     [forcecase]
     switch (input.vertex_index)
     {
         case 0:
             pos = float2(-1.0f, -1.0f);
-            output.color = float4(1.0f, 0.0f, 0.0f, 1.0f);
             break;
         case 1:
             pos = float2(1.0f, -1.0f);
