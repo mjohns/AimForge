@@ -31,7 +31,7 @@
 namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
-constexpr const u64 kTargetRenderFps = 360;
+constexpr const u64 kTargetRenderFps = 250;
 
 }  // namespace
 
@@ -203,7 +203,9 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
                                      look_at_.transform,
                                      timer_.run_stopwatch(),
                                      &current_times_);
+      current_times_.render_imgui_start = timer_.GetElapsedMicros();
       app_->FinishRender();
+      current_times_.render_imgui_end = timer_.GetElapsedMicros();
     }
   }
 

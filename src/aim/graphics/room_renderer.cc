@@ -74,7 +74,7 @@ void main() {
 }
 )AIMS";
 
-constexpr const float kMaxDistance = 1000.0f;
+constexpr const float kMaxDistance = 500.0f;
 
 constexpr const int kQuadNumVertices = 6;
 
@@ -393,6 +393,7 @@ void RoomRenderer::DrawBarrelRoom(const BarrelRoom& room,
     model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
     DrawWall(model, view, {quad_scale, quad_scale}, theme.front_appearance());
   }
+      /*
   {
     // Back wall
     glm::mat4 model(1.f);
@@ -404,6 +405,7 @@ void RoomRenderer::DrawBarrelRoom(const BarrelRoom& room,
              {quad_scale, quad_scale},
              theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
   }
+  */
 
   {
     glm::mat4 model(1.f);
@@ -433,6 +435,7 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
     DrawWall(model, view, {width, height}, theme.front_appearance());
   }
 
+  /*
   {
     // Back wall
     glm::mat4 model(1.f);
@@ -444,6 +447,7 @@ void RoomRenderer::DrawSimpleRoom(const SimpleRoom& room,
              {width, height},
              theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
   }
+  */
 
   {
     // Floor wall
