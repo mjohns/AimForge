@@ -204,7 +204,7 @@ RoomRenderer::RoomRenderer(TextureManager* texture_manager)
   }
 
   {
-    std::vector<float> vertices = GenerateCylinderWallVertices(1000);
+    std::vector<float> vertices = GenerateCylinderWallVertices(400);
     // 3 vertices plus 2 texture coords.
     cylinder_wall_num_vertices_ = vertices.size() / 5;
 

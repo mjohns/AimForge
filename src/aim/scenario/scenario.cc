@@ -197,8 +197,12 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::End();
 
     if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
-      app_->renderer()->DrawScenario(
-          def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
+      app_->renderer()->DrawScenario(def_.room(),
+                                     theme_,
+                                     target_manager_.GetTargets(),
+                                     look_at_.transform,
+                                     timer_.run_stopwatch(),
+                                     &current_times_);
       app_->FinishRender();
     }
   }
@@ -220,7 +224,7 @@ NavigationEvent Scenario::Resume() {
 
 NavigationEvent Scenario::ResumeInternal() {
   if (is_done_) {
-    StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_);
+    StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_, worst_times_);
     return stats_screen.Run(replay_);
   }
 
@@ -257,6 +261,8 @@ NavigationEvent Scenario::ResumeInternal() {
     }
 
     timer_.OnStartFrame();
+    current_times_.frame_number = loop_count;
+    current_times_.start = timer_.GetElapsedMicros();
 
     if (timer_.IsNewReplayFrame()) {
       // Store the look at vector before the mouse updates for the old frame.
@@ -271,6 +277,7 @@ NavigationEvent Scenario::ResumeInternal() {
       continue;
     }
 
+    current_times_.events_start = timer_.GetElapsedMicros();
     SDL_Event event;
     UpdateStateData update_data;
     while (SDL_PollEvent(&event)) {
@@ -327,9 +334,11 @@ NavigationEvent Scenario::ResumeInternal() {
       }
       OnEvent(event);
     }
+    current_times_.events_end = timer_.GetElapsedMicros();
 
     // Update state
 
+    current_times_.update_start = timer_.GetElapsedMicros();
     if (metronome_) {
       metronome_->DoTick(timer_.GetElapsedMicros());
     }
@@ -345,15 +354,20 @@ NavigationEvent Scenario::ResumeInternal() {
     }
     UpdateState(&update_data);
     num_state_updates_++;
+    current_times_.update_end = timer_.GetElapsedMicros();
 
     // Render if forced or if the last render was over ~1ms ago.
     bool do_render = update_data.force_render ||
                      timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
     if (!do_render) {
+      current_times_.render_start = 0;
+      current_times_.render_end = 0;
+      MaybeUpdateWorstTimes();
       continue;
     }
 
     timer_.OnStartRender();
+    current_times_.render_start = timer_.GetElapsedMicros();
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
@@ -372,10 +386,16 @@ NavigationEvent Scenario::ResumeInternal() {
     ImGui::End();
 
     if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
-      app_->renderer()->DrawScenario(
-          def_.room(), theme_, target_manager_.GetTargets(), look_at_.transform);
+      app_->renderer()->DrawScenario(def_.room(),
+                                     theme_,
+                                     target_manager_.GetTargets(),
+                                     look_at_.transform,
+                                     timer_.run_stopwatch(),
+                                     &current_times_);
       app_->FinishRender();
     }
+    current_times_.render_end = timer_.GetElapsedMicros();
+    MaybeUpdateWorstTimes();
   }
 
   stats_.hit_stopwatch.Stop();
@@ -430,7 +450,7 @@ NavigationEvent Scenario::ResumeInternal() {
     }
   }
 
-  StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_);
+  StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_, worst_times_);
   return stats_screen.Run(replay_);
 }
 
@@ -440,6 +460,15 @@ ShotType::TypeCase Scenario::GetShotType() {
     shot_type = GetDefaultShotType();
   }
   return shot_type;
+}
+
+void Scenario::MaybeUpdateWorstTimes() {
+  current_times_.end = timer_.GetElapsedMicros();
+  current_times_.total = current_times_.end - current_times_.start;
+
+  if (current_times_.total > worst_times_.total) {
+    worst_times_ = current_times_;
+  }
 }
 
 void Scenario::DoneAdjustingCrosshairSize() {

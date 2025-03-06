@@ -71,8 +71,14 @@ std::optional<StatsRow> GetStats(const std::vector<StatsRow>& all_stats, i64 sta
 
 }  // namespace
 
-StatsScreen::StatsScreen(std::string scenario_id, i64 stats_id, Application* app)
-    : scenario_id_(std::move(scenario_id)), stats_id_(stats_id), app_(app) {}
+StatsScreen::StatsScreen(std::string scenario_id,
+                         i64 stats_id,
+                         Application* app,
+                         FrameTimes worst_times)
+    : scenario_id_(std::move(scenario_id)),
+      stats_id_(stats_id),
+      app_(app),
+      worst_times_(worst_times) {}
 
 NavigationEvent StatsScreen::Run(Replay* replay) {
   ScreenInfo screen = app_->screen_info();
@@ -211,6 +217,22 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       if (ImGui::Button("View replay", button_sz)) {
         view_replay = true;
       }
+    }
+
+    ImGui::TextFmt("Worst Frame ({})", worst_times_.frame_number);
+    ImGui::TextFmt("Total time: {:.2f}ms", (worst_times_.end - worst_times_.start) / 1000.0);
+    ImGui::TextFmt("Events time: {:.2f}ms",
+                   (worst_times_.events_end - worst_times_.events_start) / 1000.0);
+    ImGui::TextFmt("Update time: {:.2f}ms",
+                   (worst_times_.update_end - worst_times_.update_start) / 1000.0);
+    if (worst_times_.render_start > 0) {
+      ImGui::TextFmt("Render time: {:.2f}ms",
+                     (worst_times_.render_end - worst_times_.render_start) / 1000.0);
+      ImGui::TextFmt("Render room time: {:.2f}ms",
+                     (worst_times_.render_room_end - worst_times_.render_room_start) / 1000.0);
+      ImGui::TextFmt(
+          "Render targets time: {:.2f}ms",
+          (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
     }
     /*
     if (ImGui::Button("Save replay", sz)) {
