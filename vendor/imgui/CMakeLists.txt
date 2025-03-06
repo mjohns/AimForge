@@ -14,6 +14,10 @@ add_library(imgui STATIC
   misc/cpp/imgui_stdlib.cpp
   backends/imgui_impl_sdl3.h
   backends/imgui_impl_sdl3.cpp
+  backends/imgui_impl_sdl3.cpp
+  backends/imgui_impl_sdlgpu3_shaders.h
+  backends/imgui_impl_sdlgpu3.h
+  backends/imgui_impl_sdlgpu3.cpp
   backends/imgui_impl_opengl3.h
   backends/imgui_impl_opengl3.cpp)
 
