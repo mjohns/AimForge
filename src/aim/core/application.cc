@@ -56,7 +56,9 @@ Application::~Application() {
   ImGui::DestroyContext();
 
   if (gpu_device_ != nullptr) {
-    // TODO: Cleanup renderer before destroying
+    if (renderer_) {
+      renderer_->Cleanup();
+    }
     if (sdl_window_ != nullptr) {
       SDL_ReleaseWindowFromGPUDevice(gpu_device_, sdl_window_);
     }
@@ -187,7 +189,8 @@ int Application::Initialize() {
       file_system_->GetUserDataPath("resources/textures"),
       file_system_->GetBasePath("resources/textures"),
   };
-  // renderer_ = std::make_unique<Renderer>(texture_dirs);
+  std::filesystem::path shader_dir = file_system_->GetBasePath("shaders/compiled");
+  renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();

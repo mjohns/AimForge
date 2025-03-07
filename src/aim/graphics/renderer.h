@@ -37,10 +37,13 @@ class Renderer {
                             RenderContext* ctx,
                             const Stopwatch& stopwatch,
                             FrameTimes* times) = 0;
+
+  virtual void Cleanup() = 0;
 };
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
-                                         SDL_GPUDevice* device);
+                                         SDL_GPUDevice* device,
+                                         SDL_Window* sdl_window);
 
 }  // namespace aim
