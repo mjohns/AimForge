@@ -14,8 +14,8 @@ namespace {
 class AppUiImpl : public AppUi {
  public:
   explicit AppUiImpl(Application* app) : AppUi(), app_(app) {
-    //logo_texture_ =
-     //   std::make_unique<Texture>(app->file_system()->GetBasePath("resources/images/logo.png"));
+    logo_texture_ = std::make_unique<Texture>(
+        app->file_system()->GetBasePath("resources/images/logo.png"), app->gpu_device());
   }
 
   void Run() override {
@@ -155,16 +155,14 @@ class AppUiImpl : public AppUi {
 
     // TODO: Improve appearance of top bar.
     ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
-    /*
     if (logo_texture_->is_loaded()) {
       int size = app_->font_manager()->large_font_size();
-      ImGui::Image((ImTextureID)(intptr_t)logo_texture_->id(),
+      ImGui::Image(logo_texture_->GetImTextureId(),
                    ImVec2(size + 2, size + 2),
                    ImVec2(0.0f, 0.0f),
                    ImVec2(1.0f, 1.0f));
       ImGui::SameLine();
     }
-    */
     {
       auto font = app_->font_manager()->UseLargeBold();
       ImGui::Text("AimForge");

@@ -80,7 +80,7 @@ class RendererImpl : public Renderer {
   RendererImpl(const std::vector<std::filesystem::path>& texture_dirs,
                SDL_GPUDevice* device,
                SDL_Window* sdl_window)
-      : texture_manager_(texture_dirs), device_(device), sdl_window_(sdl_window) {}
+      : texture_manager_(texture_dirs, device), device_(device), sdl_window_(sdl_window) {}
 
   ~RendererImpl() override {
     Cleanup();
