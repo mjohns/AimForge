@@ -85,10 +85,8 @@ class AppUiImpl : public AppUi {
       app_->StartFullscreenImguiFrame();
       DrawScreen();
       ImGui::End();
-      RenderContext ctx;
-      if (app_->StartRender(&ctx)) {
-        app_->FinishRender(&ctx);
-      }
+
+      app_->Render();
     }
   }
 

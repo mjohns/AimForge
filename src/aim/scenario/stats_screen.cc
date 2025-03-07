@@ -265,10 +265,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     ImGui::End();
 
     ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
-    RenderContext ctx;
-    if (app_->StartRender(&ctx, clear_color)) {
-      app_->FinishRender(&ctx);
-    }
+    app_->Render(clear_color);
   }
   return NavigationEvent::Done();
 }

@@ -31,7 +31,7 @@
 namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
-constexpr const u64 kTargetRenderFps = 250;
+constexpr const u64 kTargetRenderFps = 615;
 
 }  // namespace
 
@@ -162,6 +162,11 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
           save_crosshair = true;
         }
       }
+    }
+
+    bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
+    if (!do_render) {
+      continue;
     }
 
     timer_.OnStartRender();

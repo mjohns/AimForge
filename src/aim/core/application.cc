@@ -236,10 +236,52 @@ int Application::Initialize() {
 }
 
 void Application::Render(ImVec4 clear_color) {
-  RenderContext ctx;
-  if (StartRender(&ctx, clear_color)) {
-    FinishRender(&ctx);
+  ImGui::Render();
+  ImDrawData* draw_data = ImGui::GetDrawData();
+  const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+
+  SDL_GPUCommandBuffer* command_buffer = SDL_AcquireGPUCommandBuffer(gpu_device_);
+
+  SDL_GPUTexture* swapchain_texture;
+  SDL_AcquireGPUSwapchainTexture(command_buffer,
+                                 sdl_window_,
+                                 &swapchain_texture,
+                                 nullptr,
+                                 nullptr);  // Acquire a swapchain texture
+
+  if (swapchain_texture != nullptr && !is_minimized) {
+    SDL_GPUColorTargetInfo color_target_info = {0};
+    color_target_info.texture = swapchain_texture;
+    color_target_info.clear_color =
+        SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
+    color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+    color_target_info.store_op = SDL_GPU_STOREOP_STORE;
+
+    // This is mandatory: call Imgui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
+    // buffer!
+    Imgui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
+
+    // Setup and start a render pass
+    SDL_GPUColorTargetInfo target_info = {};
+    target_info.texture = swapchain_texture;
+    target_info.clear_color =
+        SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
+    target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+    target_info.store_op = SDL_GPU_STOREOP_STORE;
+    target_info.mip_level = 0;
+    target_info.layer_or_depth_plane = 0;
+    target_info.cycle = false;
+    SDL_GPURenderPass* render_pass =
+        SDL_BeginGPURenderPass(command_buffer, &target_info, 1, nullptr);
+
+    // Render ImGui
+    ImGui_ImplSDLGPU3_RenderDrawData(draw_data, command_buffer, render_pass);
+
+    SDL_EndGPURenderPass(render_pass);
   }
+
+  // Submit the command buffer
+  SDL_SubmitGPUCommandBuffer(command_buffer);
 }
 
 bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color) {
@@ -280,18 +322,30 @@ bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color)
   depth_stencil_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
   depth_stencil_target_info.store_op = SDL_GPU_STOREOP_STORE;
   depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
-  depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
 
-  render_context->render_pass = SDL_BeginGPURenderPass(
-      render_context->command_buffer, &target_info, 1, &depth_stencil_target_info);
+  depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
+  render_context->render_pass =
+      SDL_BeginGPURenderPass(render_context->command_buffer, &target_info, 1, &depth_stencil_target_info);
   return true;
 }
 
 void Application::FinishRender(RenderContext* render_context) {
-  ImDrawData* draw_data = ImGui::GetDrawData();
-  ImGui_ImplSDLGPU3_RenderDrawData(
-      draw_data, render_context->command_buffer, render_context->render_pass);
   SDL_EndGPURenderPass(render_context->render_pass);
+
+  // Setup and start a render pass
+  SDL_GPUColorTargetInfo target_info = {};
+  target_info.texture = render_context->swapchain_texture;
+  target_info.load_op = SDL_GPU_LOADOP_DONT_CARE;
+  target_info.store_op = SDL_GPU_STOREOP_STORE;
+  target_info.mip_level = 0;
+  target_info.layer_or_depth_plane = 0;
+  target_info.cycle = false;
+
+  auto* imgui_render_pass =
+      SDL_BeginGPURenderPass(render_context->command_buffer, &target_info, 1, nullptr);
+  ImDrawData* draw_data = ImGui::GetDrawData();
+  ImGui_ImplSDLGPU3_RenderDrawData(draw_data, render_context->command_buffer, imgui_render_pass);
+  SDL_EndGPURenderPass(imgui_render_pass);
   SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
 }
 
