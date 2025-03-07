@@ -233,6 +233,9 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       ImGui::TextFmt(
           "Render targets time: {:.2f}ms",
           (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
+      ImGui::TextFmt(
+          "Render imgui time: {:.2f}ms",
+          (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
     }
     /*
     if (ImGui::Button("Save replay", sz)) {

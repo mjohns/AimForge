@@ -16,6 +16,8 @@ struct FrameTimes {
   u64 render_room_end = 0;
   u64 render_targets_start = 0;
   u64 render_targets_end = 0;
+  u64 render_imgui_start = 0;
+  u64 render_imgui_end = 0;
   u64 total = 0;
   u64 frame_number = 0;
 };
