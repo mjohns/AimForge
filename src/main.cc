@@ -2,6 +2,8 @@
 #include <stdio.h>   // printf, fprintf
 #include <stdlib.h>  // abort
 
+#include <glm/vec3.hpp>
+
 #include "backends/imgui_impl_sdl3.h"
 #include "backends/imgui_impl_sdlgpu3.h"
 #include "imgui.h"
@@ -99,15 +101,25 @@ int main(int, char**) {
       gpu_device, window, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 
   // Load shaders + create fill/line pipeline
-  SDL_GPUShader* shader_vert = load_shader(
-      gpu_device, "shaders/compiled/triangle.vert.spv", SDL_GPU_SHADERSTAGE_VERTEX, 0, 0, 0, 0);
+  SDL_GPUShader* shader_vert = load_shader(gpu_device,
+                                           "resources/shaders/compiled/triangle.vert.spv",
+                                           SDL_GPU_SHADERSTAGE_VERTEX,
+                                           0,
+                                           0,
+                                           0,
+                                           0);
   if (shader_vert == NULL) {
     fprintf(stderr, "ERROR: LoadShader failed \n");
     return 1;
   }
 
-  SDL_GPUShader* shader_frag = load_shader(
-      gpu_device, "shaders/compiled/triangle.frag.spv", SDL_GPU_SHADERSTAGE_FRAGMENT, 0, 0, 0, 0);
+  SDL_GPUShader* shader_frag = load_shader(gpu_device,
+                                           "resources/shaders/compiled/triangle.frag.spv",
+                                           SDL_GPU_SHADERSTAGE_FRAGMENT,
+                                           0,
+                                           0,
+                                           0,
+                                           0);
   if (shader_vert == NULL) {
     fprintf(stderr, "ERROR: LoadShader failed \n");
     return 1;
@@ -139,6 +151,23 @@ int main(int, char**) {
   pipeline_info.fragment_shader = shader_frag;
   pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
 
+  SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+  vertex_buffer_descriptions[0].slot = 0;
+  vertex_buffer_descriptions[0].pitch = sizeof(float) * 3;
+  vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+  vertex_buffer_descriptions[0].instance_step_rate = 0;
+
+  pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+  pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
+
+  SDL_GPUVertexAttribute vertex_attributes[1];
+  vertex_attributes[0].location = 0;
+  vertex_attributes[0].buffer_slot = 0;
+  vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+  vertex_attributes[0].offset = 0;
+
+  pipeline_info.vertex_input_state.num_vertex_attributes = 1;
+  pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
   SDL_GPUGraphicsPipeline* pipeline_fill;
   pipeline_fill = SDL_CreateGPUGraphicsPipeline(gpu_device, &pipeline_info);
@@ -158,6 +187,48 @@ int main(int, char**) {
   SDL_FColor COLOR_CYAN = {0.0f, 1.0f, 1.0f, 1.0f};
   SDL_FColor COLOR_YELLOW = {1.0f, 1.0f, 0.0f, 1.0f};
   SDL_FColor COLOR_PINK = {1.0f, 0.0f, 1.0f, 1.0f};
+
+  SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
+  vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+  vertex_buffer_create_info.size = sizeof(float) * 3 * 6;
+
+  SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(gpu_device, &vertex_buffer_create_info);
+
+  // Set up buffer data
+  SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
+  transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+  transfer_buffer_create_info.size = sizeof(float) * 3 * 6;
+  SDL_GPUTransferBuffer* transfer_buffer =
+      SDL_CreateGPUTransferBuffer(gpu_device, &transfer_buffer_create_info);
+
+  glm::vec3* transfer_data =
+      (glm::vec3*)SDL_MapGPUTransferBuffer(gpu_device, transfer_buffer, false);
+  transfer_data[0] = glm::vec3(0.5f, -0.5f, 0.0f);
+  transfer_data[1] = glm::vec3(0.5f, 0.5f, 0.0f);
+  transfer_data[2] = glm::vec3(-0.5f, 0.5f, 0.0f);
+
+  transfer_data[3] = glm::vec3(-0.5f, 0.5f, 0.0f);
+  transfer_data[4] = glm::vec3(-0.5f, -0.5f, 0.0f);
+  transfer_data[5] = glm::vec3(0.5f, -0.5f, 0.0f);
+  SDL_UnmapGPUTransferBuffer(gpu_device, transfer_buffer);
+
+  SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(gpu_device);
+  SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
+
+  {
+    SDL_GPUTransferBufferLocation location{};
+    location.transfer_buffer = transfer_buffer;
+    location.offset = 0;
+    SDL_GPUBufferRegion region{};
+    region.buffer = vertex_buffer;
+    region.offset = 0;
+    region.size = sizeof(float) * 3 * 6;
+    SDL_UploadToGPUBuffer(copyPass, &location, &region, false);
+  }
+
+  SDL_EndGPUCopyPass(copyPass);
+  SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+  SDL_ReleaseGPUTransferBuffer(gpu_device, transfer_buffer);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -324,7 +395,11 @@ int main(int, char**) {
           SDL_BeginGPURenderPass(command_buffer, &target_info, 1, nullptr);
 
       SDL_BindGPUGraphicsPipeline(render_pass, pipeline_fill);
-      SDL_DrawGPUPrimitives(render_pass, 3, 1, 0, 0);
+      SDL_GPUBufferBinding binding{};
+      binding.buffer = vertex_buffer;
+      binding.offset = 0;
+      SDL_BindGPUVertexBuffers(render_pass, 0, &binding, 1);
+      SDL_DrawGPUPrimitives(render_pass, 6, 1, 0, 0);
 
       // Render ImGui
       ImGui_ImplSDLGPU3_RenderDrawData(draw_data, command_buffer, render_pass);
