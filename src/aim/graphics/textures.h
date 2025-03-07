@@ -40,6 +40,10 @@ class Texture {
     return (ImTextureID)&texture_sampler_binding_;
   }
 
+  SDL_GPUTextureSamplerBinding* texture_sampler_binding() {
+    return &texture_sampler_binding_;
+  }
+
   Texture(const Texture&) = delete;
   Texture(Texture&&) = default;
   Texture& operator=(Texture other) = delete;
@@ -49,7 +53,7 @@ class Texture {
   SDL_GPUTexture* texture_ = nullptr;
   SDL_GPUSampler* sampler_ = nullptr;
   SDL_GPUTextureSamplerBinding texture_sampler_binding_{};
-  SDL_GPUDevice* device_ = nullptr;
+  SDL_GPUDevice* gpu_device_ = nullptr;
 
   bool is_loaded_ = false;
   int height_ = 0;
