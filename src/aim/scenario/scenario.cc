@@ -95,6 +95,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   RefreshState();
 
   bool is_adjusting_crosshair = false;
+  bool save_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
   look_at_ = camera_.GetLookAt();
   timer_.StartLoop();
@@ -102,6 +103,10 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   while (running) {
     if (!app_->has_input_focus()) {
       return NavigationEvent::Done();
+    }
+    if (save_crosshair) {
+      DoneAdjustingCrosshairSize();
+      save_crosshair = false;
     }
     if (show_settings.has_value()) {
       NavigationEvent nav_event;
@@ -154,7 +159,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_C) {
           is_adjusting_crosshair = false;
-          DoneAdjustingCrosshairSize();
+          save_crosshair = true;
         }
       }
     }
@@ -237,6 +242,7 @@ NavigationEvent Scenario::ResumeInternal() {
   u64 loop_count = 0;
   bool stop_scenario = false;
   bool is_adjusting_crosshair = false;
+  bool save_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
   timer_.StartLoop();
   timer_.ResumeRun();
@@ -248,6 +254,10 @@ NavigationEvent Scenario::ResumeInternal() {
     if (!app_->has_input_focus()) {
       // Pause the scenario if user alt-tabs etc.
       return PauseAndReturn();
+    }
+    if (save_crosshair) {
+      DoneAdjustingCrosshairSize();
+      save_crosshair = false;
     }
     if (show_settings.has_value()) {
       // Need to pause.
@@ -333,7 +343,7 @@ NavigationEvent Scenario::ResumeInternal() {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_C) {
           is_adjusting_crosshair = false;
-          DoneAdjustingCrosshairSize();
+          save_crosshair = true;
         }
       }
       OnEvent(event);
