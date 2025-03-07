@@ -25,7 +25,7 @@ std::optional<SDL_GPUTextureFormat> GetFormat(SDL_Surface* surface) {
 
 }  // namespace
 
-Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) {
+Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : device_(device) {
   Image image(path);
   if (!image.is_loaded()) {
     Logger::get()->error("Failed to load texture image: {}", path.string());
@@ -91,7 +91,14 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) {
   is_loaded_ = true;
 }
 
-Texture::~Texture() {}
+Texture::~Texture() {
+  if (texture_ != nullptr) {
+    SDL_ReleaseGPUTexture(device_, texture_);
+  }
+  if (sampler_ != nullptr) {
+    SDL_ReleaseGPUSampler(device_, sampler_);
+  }
+}
 
 TextureManager::TextureManager(std::vector<std::filesystem::path> texture_folders,
                                SDL_GPUDevice* device)
