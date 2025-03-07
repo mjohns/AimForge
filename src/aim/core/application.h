@@ -26,6 +26,12 @@
 
 namespace aim {
 
+struct RenderContext {
+  SDL_GPUCommandBuffer* command_buffer = nullptr;
+  SDL_GPUTexture* swapchain_texture = nullptr;
+  SDL_GPURenderPass* render_pass = nullptr;
+};
+
 class ApplicationExitException : public std::runtime_error {
  public:
   ApplicationExitException() : std::runtime_error("exit") {}
@@ -47,12 +53,18 @@ class Application {
   static std::unique_ptr<Application> Create();
 
   ImDrawList* StartFullscreenImguiFrame();
-  bool StartRender(ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
-  void FinishRender();
+  bool StartRender(RenderContext* render_context,
+                   ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
+
+  void FinishRender(RenderContext* render_context);
 
   SDL_Window* sdl_window() {
     return sdl_window_;
   }
+
+  SDL_GPUDevice* gpu_device() {
+    return gpu_device_;
+  } 
 
   bool has_input_focus() {
     return SDL_GetWindowFlags(sdl_window()) & SDL_WINDOW_INPUT_FOCUS;
@@ -102,6 +114,9 @@ class Application {
     return logger_.get();
   };
 
+  void EnableVsync();
+  void DisableVsync();
+
   Application(const Application&) = delete;
   Application(Application&&) = default;
   Application& operator=(Application other) = delete;
@@ -112,9 +127,9 @@ class Application {
 
   int Initialize();
 
-  SDL_GLContext gl_context_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
+  SDL_GPUDevice* gpu_device_ = nullptr;
 
   int window_width_ = -1;
   int window_height_ = -1;

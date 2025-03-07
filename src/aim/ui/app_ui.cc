@@ -14,8 +14,8 @@ namespace {
 class AppUiImpl : public AppUi {
  public:
   explicit AppUiImpl(Application* app) : AppUi(), app_(app) {
-    logo_texture_ =
-        std::make_unique<Texture>(app->file_system()->GetBasePath("resources/images/logo.png"));
+    //logo_texture_ =
+     //   std::make_unique<Texture>(app->file_system()->GetBasePath("resources/images/logo.png"));
   }
 
   void Run() override {
@@ -38,7 +38,7 @@ class AppUiImpl : public AppUi {
               continue;
             }
           }
-          SDL_GL_SetSwapInterval(1);  // Enable vsync
+          app_->EnableVsync();
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
         }
       }
@@ -59,7 +59,7 @@ class AppUiImpl : public AppUi {
               continue;
             }
           }
-          SDL_GL_SetSwapInterval(1);  // Enable vsync
+          app_->EnableVsync();
           SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
         }
       }
@@ -85,8 +85,9 @@ class AppUiImpl : public AppUi {
       app_->StartFullscreenImguiFrame();
       DrawScreen();
       ImGui::End();
-      if (app_->StartRender()) {
-        app_->FinishRender();
+      RenderContext ctx;
+      if (app_->StartRender(&ctx)) {
+        app_->FinishRender(&ctx);
       }
     }
   }
@@ -156,6 +157,7 @@ class AppUiImpl : public AppUi {
 
     // TODO: Improve appearance of top bar.
     ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
+    /*
     if (logo_texture_->is_loaded()) {
       int size = app_->font_manager()->large_font_size();
       ImGui::Image((ImTextureID)(intptr_t)logo_texture_->id(),
@@ -164,6 +166,7 @@ class AppUiImpl : public AppUi {
                    ImVec2(1.0f, 1.0f));
       ImGui::SameLine();
     }
+    */
     {
       auto font = app_->font_manager()->UseLargeBold();
       ImGui::Text("AimForge");

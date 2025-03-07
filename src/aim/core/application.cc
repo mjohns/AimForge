@@ -1,14 +1,13 @@
 #include "application.h"
 
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_opengl.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_mixer/SDL_mixer.h>
 #include <absl/log/log.h>
 #include <absl/log/log_sink.h>
 #include <absl/log/log_sink_registry.h>
-#include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl3.h>
+#include <backends/imgui_impl_sdlgpu3.h>
 #include <imgui.h>
 #include <implot.h>
 #include <spdlog/sinks/rotating_file_sink.h>
@@ -21,7 +20,6 @@
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
-#include "aim/graphics/glad_loader.h"
 
 namespace aim {
 
@@ -49,13 +47,20 @@ Application::~Application() {
   if (absl_log_sink_) {
     absl::RemoveLogSink(absl_log_sink_.get());
   }
+  if (gpu_device_ != nullptr) {
+    SDL_WaitForGPUIdle(gpu_device_);
+  }
 
-  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplSDLGPU3_Shutdown();
   ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
 
-  if (gl_context_ != nullptr) {
-    SDL_GL_DestroyContext(gl_context_);
+  if (gpu_device_ != nullptr) {
+    // TODO: Cleanup renderer before destroying
+    if (sdl_window_ != nullptr) {
+      SDL_ReleaseWindowFromGPUDevice(gpu_device_, sdl_window_);
+    }
+    SDL_DestroyGPUDevice(gpu_device_);
   }
   if (sdl_window_ != nullptr) {
     SDL_DestroyWindow(sdl_window_);
@@ -140,35 +145,26 @@ int Application::Initialize() {
   };
   sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
 
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-
-  const char* glsl_version = "#version 150";
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-
-  // Create window with graphics context
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-  // Simple anti aliasing.
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
-
   SDL_WindowFlags window_flags =
-      (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+      (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   sdl_window_ = SDL_CreateWindow("AimForge", 0, 0, window_flags);
   if (sdl_window_ == nullptr) {
     logger_->error("SDL_CreateWindow(): {}", SDL_GetError());
     return -1;
   }
-  gl_context_ = SDL_GL_CreateContext(sdl_window_);
-  if (gl_context_ == nullptr) {
-    logger_->error("SDL_GL_CreateContext(): {}", SDL_GetError());
+  gpu_device_ = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV, true, nullptr);
+  if (gpu_device_ == nullptr) {
+    logger_->error("SDL_CreateGpuDevice(): {}", SDL_GetError());
     return -1;
   }
+
+  if (!SDL_ClaimWindowForGPUDevice(gpu_device_, sdl_window_)) {
+    logger_->error("Error: SDL_ClaimWindowForGPUDevice(): {}", SDL_GetError());
+    return -1;
+  }
+  EnableVsync();
+   SDL_SetGPUSwapchainParameters(
+      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 
   auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
   icon_ = IMG_Load(logo_path.string().c_str());
@@ -187,21 +183,13 @@ int Application::Initialize() {
                 window_display_scale,
                 window_pixel_density);
 
-  SDL_GL_MakeCurrent(sdl_window_, gl_context_);
-  LoadGlad();
-  SDL_ShowWindow(sdl_window_);
-
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-
-  // glEnable(GL_BLEND);
-  // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  //SDL_ShowWindow(sdl_window_);
 
   std::vector<std::filesystem::path> texture_dirs = {
       file_system_->GetUserDataPath("resources/textures"),
       file_system_->GetBasePath("resources/textures"),
   };
-  renderer_ = std::make_unique<Renderer>(texture_dirs);
+  // renderer_ = std::make_unique<Renderer>(texture_dirs);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -223,39 +211,62 @@ int Application::Initialize() {
   // ImGui::StyleColorsLight();
 
   // Setup Platform/Renderer backends
-  ImGui_ImplSDL3_InitForOpenGL(sdl_window_, gl_context_);
-  ImGui_ImplOpenGL3_Init(glsl_version);
+  ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);
+  ImGui_ImplSDLGPU3_InitInfo init_info = {};
+  init_info.Device = gpu_device_;
+  init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_8;
+  ImGui_ImplSDLGPU3_Init(&init_info);
 
   logger_->info("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   return 0;
 }
 
-bool Application::StartRender(ImVec4 clear_color) {
+bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color) {
   ImGui::Render();
   ImDrawData* draw_data = ImGui::GetDrawData();
   const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-  if (is_minimized) {
+  render_context->command_buffer = SDL_AcquireGPUCommandBuffer(gpu_device_);
+  SDL_AcquireGPUSwapchainTexture(render_context->command_buffer,
+                                 sdl_window_,
+                                 &render_context->swapchain_texture,
+                                 nullptr,
+                                 nullptr);  // Acquire a swapchain texture
+
+  if (render_context->swapchain_texture == nullptr) {
+    SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
     return false;
   }
 
-  ImGuiIO& io = ImGui::GetIO();
-  glViewport(0, 0, window_pixel_width_, window_pixel_height_);
-  glClearColor(clear_color.x * clear_color.w,
-               clear_color.y * clear_color.w,
-               clear_color.z * clear_color.w,
-               clear_color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // This is mandatory: call Imgui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
+  // buffer!
+  Imgui_ImplSDLGPU3_PrepareDrawData(draw_data, render_context->command_buffer);
+
+  // Setup and start a render pass
+  SDL_GPUColorTargetInfo target_info = {};
+  target_info.texture = render_context->swapchain_texture;
+  target_info.clear_color = SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
+  target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+  target_info.store_op = SDL_GPU_STOREOP_STORE;
+  target_info.mip_level = 0;
+  target_info.layer_or_depth_plane = 0;
+  target_info.cycle = false;
+  render_context->render_pass =
+      SDL_BeginGPURenderPass(render_context->command_buffer, &target_info, 1, nullptr);
   return true;
 }
 
-void Application::FinishRender() {
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-  SDL_GL_SwapWindow(sdl_window_);
+void Application::FinishRender(RenderContext* render_context) {
+  ImDrawData* draw_data = ImGui::GetDrawData();
+  ImGui_ImplSDLGPU3_RenderDrawData(
+      draw_data, render_context->command_buffer, render_context->render_pass);
+  SDL_EndGPURenderPass(render_context->render_pass);
+  SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
 }
 
 ImDrawList* Application::StartFullscreenImguiFrame() {
   // Start the Dear ImGui frame
-  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplSDLGPU3_NewFrame();
   ImGui_ImplSDL3_NewFrame();
   ImGui::NewFrame();
 
@@ -271,6 +282,14 @@ ImDrawList* Application::StartFullscreenImguiFrame() {
   ImDrawList* draw_list = ImGui::GetWindowDrawList();
   draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
   return draw_list;
+}
+
+void Application::EnableVsync() {
+}
+
+void Application::DisableVsync() {
+  //SDL_SetGPUSwapchainParameters(
+   //   gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 }
 
 std::unique_ptr<Application> Application::Create() {

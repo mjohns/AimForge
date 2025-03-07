@@ -126,14 +126,15 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
-    if (app->StartRender(ImVec4(0, 0, 0, 1))) {
+    RenderContext ctx;
+    if (app->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
       app->renderer()->DrawScenario(replay.room(),
                                     theme,
                                     target_manager.GetTargets(),
                                     look_at.transform,
                                     timer.run_stopwatch(),
                                     &times);
-      app->FinishRender();
+      app->FinishRender(&ctx);
     }
   }
   return NavigationEvent::Done();

@@ -42,8 +42,9 @@ NavigationEvent UiScreen::Run() {
     app_->StartFullscreenImguiFrame();
     DrawScreen();
     ImGui::End();
-    if (app_->StartRender()) {
-      app_->FinishRender();
+    RenderContext ctx;
+    if (app_->StartRender(&ctx)) {
+      app_->FinishRender(&ctx);
     }
   }
 
