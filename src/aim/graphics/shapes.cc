@@ -107,4 +107,82 @@ std::vector<float> GenerateSphereVertices(int num_subdivisions) {
   return GenerateSphereVertices(std::move(vertices), num_subdivisions);
 }
 
+void PushFloats(std::vector<float>* list,
+                const glm::vec3& v1,
+                const glm::vec2& t1,
+                const glm::vec3& v2,
+                const glm::vec2& t2,
+                const glm::vec3& v3,
+                const glm::vec2& t3) {
+  list->push_back(v1.x);
+  list->push_back(v1.y);
+  list->push_back(v1.z);
+  list->push_back(t1.x);
+  list->push_back(t1.y);
+
+  list->push_back(v2.x);
+  list->push_back(v2.y);
+  list->push_back(v2.z);
+  list->push_back(t2.x);
+  list->push_back(t2.y);
+
+  list->push_back(v3.x);
+  list->push_back(v3.y);
+  list->push_back(v3.z);
+  list->push_back(t3.x);
+  list->push_back(t3.y);
+}
+
+std::vector<VertexAndTexCoord> GenerateCylinderWallVertices(int num_segments) {
+  const float radians_per_segment = glm::two_pi<float>() / (float)num_segments;
+  const float cos_theta = cos(radians_per_segment);
+  const float sin_theta = sin(radians_per_segment);
+
+  std::vector<VertexAndTexCoord> vertices;
+  vertices.reserve(num_segments * 6);
+
+  glm::vec2 current_point(0, -1);
+  float tx_step = 1.0f / num_segments;
+  float ty_top = 0.0f;
+  float ty_bottom = 1.0f;
+  for (int i = 0; i < num_segments; ++i) {
+    float next_x = current_point.x * cos_theta - current_point.y * sin_theta;
+    float next_y = current_point.x * sin_theta + current_point.y * cos_theta;
+
+    float tx_right = i * tx_step;
+    float tx_left = tx_right + tx_step;
+
+    glm::vec2 next_point(next_x, next_y);
+
+    VertexAndTexCoord bottom_right;
+    VertexAndTexCoord top_right;
+    VertexAndTexCoord bottom_left;
+    VertexAndTexCoord top_left;
+
+    bottom_right.vertex = glm::vec3(current_point.x, current_point.y, -0.5);
+    top_right.vertex = glm::vec3(current_point.x, current_point.y, 0.5);
+
+    bottom_left.vertex = glm::vec3(next_point.x, next_point.y, -0.5);
+    top_left.vertex = glm::vec3(next_point.x, next_point.y, 0.5);
+
+    bottom_right.tex_coord = glm::vec2(tx_right, ty_bottom);
+    top_right.tex_coord = glm::vec2(tx_right, ty_top);
+
+    bottom_left.tex_coord = glm::vec2(tx_left, ty_bottom);
+    top_left.tex_coord = glm::vec2(tx_left, ty_top);
+
+    vertices.push_back(bottom_right);
+    vertices.push_back(top_right);
+    vertices.push_back(bottom_left);
+
+    vertices.push_back(top_right);
+    vertices.push_back(top_left);
+    vertices.push_back(bottom_left);
+
+    current_point = next_point;
+  }
+
+  return vertices;
+}
+
 }  // namespace aim
