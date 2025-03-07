@@ -3,7 +3,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 
+#include "aim/common/geometry.h"
 #include "aim/common/log.h"
+#include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/graphics/shapes.h"
 
@@ -130,11 +132,14 @@ class RendererImpl : public Renderer {
 
     SDL_GPUTransferBuffer* sphere_transfer_buffer = CreateSphereVertexBuffer(copy_pass);
     SDL_GPUTransferBuffer* quad_transfer_buffer = CreateQuadVertexBuffer(copy_pass);
+    SDL_GPUTransferBuffer* cylinder_wall_transfer_buffer =
+        CreateCylinderWallVertexBuffer(copy_pass);
 
     SDL_EndGPUCopyPass(copy_pass);
     SDL_SubmitGPUCommandBuffer(upload_command_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, sphere_transfer_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, quad_transfer_buffer);
+    SDL_ReleaseGPUTransferBuffer(device_, cylinder_wall_transfer_buffer);
 
     CleanupShaders();
     return true;
@@ -167,7 +172,7 @@ class RendererImpl : public Renderer {
       DrawSimpleRoom(view_projection, theme, room.simple_room(), ctx);
     }
     if (room.has_cylinder_room()) {
-      // DrawCylinderRoom(room.cylinder_room(), theme, view);
+      DrawCylinderRoom(view_projection, theme, room.cylinder_room(), ctx);
     }
     if (room.has_barrel_room()) {
       // DrawBarrelRoom(room.barrel_room(), theme, view);
@@ -246,6 +251,80 @@ class RendererImpl : public Renderer {
     }
   }
 
+  void DrawCylinderRoom(const glm::mat4& view_projection,
+                        const Theme& theme,
+                        const CylinderRoom& room,
+                        RenderContext* ctx) {
+    float quad_scale = room.radius() * 2.5;
+    float height = room.height();
+
+    {
+      // Floor wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0, 0, -0.5 * height));
+      model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+      model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
+      DrawWall(
+          view_projection * model, {quad_scale, quad_scale}, theme.floor_appearance(), false, ctx);
+    }
+
+    {
+      // Top wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0, 0, 0.5 * height));
+      model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
+      model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
+      DrawWall(
+          view_projection * model, {quad_scale, quad_scale}, theme.roof_appearance(), false, ctx);
+    }
+
+    if (!room.hide_sides()) {
+      float width = room.width();
+      if (room.has_width_perimeter_percent()) {
+        width = room.width_perimeter_percent() * glm::two_pi<float>() * room.radius();
+      }
+      float perimeter = room.radius() * glm::two_pi<float>();
+
+      float radians = (width / perimeter) * glm::pi<float>();
+      glm::vec2 to_rotate(0, room.radius());
+      float side_angle_degrees = room.has_side_angle_degrees() ? room.side_angle_degrees() : 20.0f;
+
+      {
+        // Left
+        glm::vec2 left = RotateRadians(to_rotate, radians);
+        glm::mat4 model(1.f);
+        model = glm::translate(model, glm::vec3(left.x, left.y, 0));
+        model = glm::rotate(model, glm::radians(90.0f + side_angle_degrees), glm::vec3(0, 0, 1));
+        model = glm::translate(model, glm::vec3(-0.5 * kMaxDistance, 0, 0));
+        model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
+        DrawWall(
+            view_projection * model, {kMaxDistance, height}, theme.side_appearance(), false, ctx);
+      }
+
+      {
+        // Right
+        glm::vec2 right = RotateRadians(to_rotate, -1 * radians);
+        glm::mat4 model(1.f);
+        model = glm::translate(model, glm::vec3(right.x, right.y, 0));
+        model = glm::rotate(model, glm::radians(-90.0f - side_angle_degrees), glm::vec3(0, 0, 1));
+        model = glm::translate(model, glm::vec3(0.5 * kMaxDistance, 0, 0));
+        model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
+        DrawWall(
+            view_projection * model, {kMaxDistance, height}, theme.side_appearance(), false, ctx);
+      }
+    }
+
+    {
+      glm::mat4 model(1.f);
+      model = glm::scale(model, glm::vec3(room.radius(), room.radius(), height));
+      DrawWall(view_projection * model,
+               {glm::two_pi<float>() * room.radius(), height},
+               theme.front_appearance(),
+               /* is_cylinder_wall= */ true,
+               ctx);
+    }
+  }
+
   void DrawWall(const glm::mat4& transform,
                 const Wall& wall,
                 const WallAppearance& appearance,
@@ -304,7 +383,7 @@ class RendererImpl : public Renderer {
                           RenderContext* ctx) {
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
     SDL_GPUBufferBinding binding{};
-    binding.buffer = quad_vertex_buffer_;
+    binding.buffer = is_cylinder_wall ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
     binding.offset = 0;
     SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
     SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
@@ -312,7 +391,11 @@ class RendererImpl : public Renderer {
     glm::vec4 color4(color, 1.0f);
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
 
-    SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
+    SDL_DrawGPUPrimitives(ctx->render_pass,
+                          is_cylinder_wall ? num_cylinder_wall_vertices_ : kQuadNumVertices,
+                          1,
+                          0,
+                          0);
   }
 
   void DrawTargets(const glm::mat4& view_projection,
@@ -385,6 +468,8 @@ class RendererImpl : public Renderer {
     SDL_GPUGraphicsPipelineTargetInfo target_info = {};
     target_info.num_color_targets = 1;
     target_info.color_target_descriptions = color_target_desc;
+    target_info.has_depth_stencil_target = true;
+    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
 
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
     pipeline_info.target_info = target_info;
@@ -392,6 +477,8 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_shader = solid_color_vertex_shader_;
     pipeline_info.fragment_shader = solid_color_fragment_shader_;
     pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
+    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
+    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
 
     SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
     vertex_buffer_descriptions[0].slot = 0;
@@ -411,6 +498,12 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_attributes = 1;
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
+    SDL_GPUDepthStencilState depth_stencil_state{};
+    depth_stencil_state.enable_depth_test = true;
+    depth_stencil_state.enable_depth_write = true;
+    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
+    depth_stencil_state.write_mask = 0xFF;
+
     sphere_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
     if (sphere_pipeline_ == NULL) {
       Logger::get()->error("ERROR: SpherePipeline SDL_CreateGPUGraphicsPipeline failed: {}",
@@ -429,6 +522,8 @@ class RendererImpl : public Renderer {
     SDL_GPUGraphicsPipelineTargetInfo target_info = {};
     target_info.num_color_targets = 1;
     target_info.color_target_descriptions = color_target_desc;
+    target_info.has_depth_stencil_target = true;
+    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
 
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
     pipeline_info.target_info = target_info;
@@ -436,6 +531,8 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_shader = solid_color_vertex_shader_;
     pipeline_info.fragment_shader = solid_color_fragment_shader_;
     pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
+    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
+    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
 
     SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
     vertex_buffer_descriptions[0].slot = 0;
@@ -454,6 +551,13 @@ class RendererImpl : public Renderer {
 
     pipeline_info.vertex_input_state.num_vertex_attributes = 1;
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
+
+    SDL_GPUDepthStencilState depth_stencil_state{};
+    depth_stencil_state.enable_depth_test = true;
+    depth_stencil_state.enable_depth_write = true;
+    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
+    depth_stencil_state.write_mask = 0xFF;
+    pipeline_info.depth_stencil_state = depth_stencil_state;
 
     solid_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
     if (solid_quad_pipeline_ == nullptr) {
@@ -558,6 +662,56 @@ class RendererImpl : public Renderer {
     return transfer_buffer;
   }
 
+  SDL_GPUTransferBuffer* CreateCylinderWallVertexBuffer(SDL_GPUCopyPass* copy_pass) {
+    VertexAndTexCoord bottom_right;
+    VertexAndTexCoord bottom_left;
+    VertexAndTexCoord top_left;
+    VertexAndTexCoord top_right;
+
+    bottom_right.vertex = glm::vec3(0.5f, 0.0f, -0.5f);
+    bottom_left.vertex = glm::vec3(-0.5f, 0.0f, -0.5f);
+    top_left.vertex = glm::vec3(-0.5f, 0.0f, 0.5f);
+    top_right.vertex = glm::vec3(0.5f, 0.0f, 0.5f);
+
+    bottom_right.tex_coord = glm::vec2(1.0f, 1.0f);
+    bottom_left.tex_coord = glm::vec2(0.0f, 1.0f);
+    top_left.tex_coord = glm::vec2(0.0f, 0.0f);
+    top_right.tex_coord = glm::vec2(1.0f, 0.0f);
+
+    std::vector<VertexAndTexCoord> vertices = GenerateCylinderWallVertices(400);
+    num_cylinder_wall_vertices_ = vertices.size();
+    int size = sizeof(VertexAndTexCoord) * vertices.size();
+
+    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
+    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+    vertex_buffer_create_info.size = size;
+
+    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
+
+    // Set up buffer data
+    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
+    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+    transfer_buffer_create_info.size = size;
+    SDL_GPUTransferBuffer* transfer_buffer =
+        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
+
+    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
+    SDL_memcpy(transfer_data, vertices.data(), size);
+    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
+
+    SDL_GPUTransferBufferLocation location{};
+    location.transfer_buffer = transfer_buffer;
+    location.offset = 0;
+    SDL_GPUBufferRegion region{};
+    region.buffer = vertex_buffer;
+    region.offset = 0;
+    region.size = size;
+    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
+
+    cylinder_wall_vertex_buffer_ = vertex_buffer;
+    return transfer_buffer;
+  }
+
   SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
@@ -567,8 +721,10 @@ class RendererImpl : public Renderer {
   SDL_Window* sdl_window_ = nullptr;
 
   SDL_GPUBuffer* quad_vertex_buffer_ = nullptr;
+  SDL_GPUBuffer* cylinder_wall_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* sphere_vertex_buffer_ = nullptr;
   unsigned int num_sphere_vertices_;
+  unsigned int num_cylinder_wall_vertices_;
 };
 
 }  // namespace

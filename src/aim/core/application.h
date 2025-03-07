@@ -125,6 +125,7 @@ class Application {
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
+  SDL_GPUTexture* depth_texture_ = nullptr;
 
   int window_width_ = -1;
   int window_height_ = -1;
