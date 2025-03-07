@@ -185,4 +185,43 @@ std::vector<VertexAndTexCoord> GenerateCylinderWallVertices(int num_segments) {
   return vertices;
 }
 
+std::vector<glm::vec3> GenerateCylinderVertices(int num_segments) {
+  const float radians_per_segment = glm::two_pi<float>() / (float)num_segments;
+  const float cos_theta = cos(radians_per_segment);
+  const float sin_theta = sin(radians_per_segment);
+
+  std::vector<glm::vec3> vertices;
+  vertices.reserve(num_segments * 6);
+
+  glm::vec2 current_point(0, -1);
+  float tx_step = 1.0f / num_segments;
+  float ty_top = 1.0f;
+  float ty_bottom = 0.0f;
+  for (int i = 0; i < num_segments; ++i) {
+    float next_x = current_point.x * cos_theta - current_point.y * sin_theta;
+    float next_y = current_point.x * sin_theta + current_point.y * cos_theta;
+
+    glm::vec2 next_point(next_x, next_y);
+
+    glm::vec3 bottom_right(current_point.x, current_point.y, -0.5);
+    glm::vec3 top_right(current_point.x, current_point.y, 0.5);
+
+    glm::vec3 bottom_left(next_point.x, next_point.y, -0.5);
+    glm::vec3 top_left(next_point.x, next_point.y, 0.5);
+
+    // Add two triangles.
+    vertices.push_back(bottom_right);
+    vertices.push_back(bottom_left);
+    vertices.push_back(top_right);
+
+    vertices.push_back(top_right);
+    vertices.push_back(bottom_left);
+    vertices.push_back(top_left);
+
+    current_point = next_point;
+  }
+
+  return vertices;
+}
+
 }  // namespace aim
