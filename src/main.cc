@@ -4,6 +4,8 @@
 
 #include <glm/vec3.hpp>
 
+#include "aim/core/application.h"
+#include "aim/ui/app_ui.h"
 #include "backends/imgui_impl_sdl3.h"
 #include "backends/imgui_impl_sdlgpu3.h"
 #include "imgui.h"
@@ -64,6 +66,16 @@ SDL_GPUShader* load_shader(SDL_GPUDevice* device,
 
 // Main code
 int main(int, char**) {
+    /*
+  using namespace aim;
+  auto app = Application::Create();
+  try {
+    CreateAppUi(app.get())->Run();
+  } catch (ApplicationExitException e) {
+    return 0;
+  }
+  */
+
   // Setup SDL
   // [If using SDL_MAIN_USE_CALLBACKS: all code below until the main loop starts would likely be
   // your SDL_AppInit() function]
@@ -74,19 +86,16 @@ int main(int, char**) {
 
   // Create SDL window graphics context
   SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL3+SDL_GPU example",
-                                        1280,
-                                        720,
-                                        SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+                                        0,
+                                        0,
+                                        SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   if (window == nullptr) {
     printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
     return -1;
   }
 
   // Create GPU Device
-  SDL_GPUDevice* gpu_device = SDL_CreateGPUDevice(
-      SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_METALLIB,
-      true,
-      nullptr);
+  SDL_GPUDevice* gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV, true, nullptr);
   if (gpu_device == nullptr) {
     printf("Error: SDL_CreateGPUDevice(): %s\n", SDL_GetError());
     return -1;

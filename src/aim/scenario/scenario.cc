@@ -196,7 +196,8 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::PopStyleColor();
     ImGui::End();
 
-    if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
+    RenderContext ctx;
+    if (app_->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
       app_->renderer()->DrawScenario(def_.room(),
                                      theme_,
                                      target_manager_.GetTargets(),
@@ -204,7 +205,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
                                      timer_.run_stopwatch(),
                                      &current_times_);
       current_times_.render_imgui_start = timer_.GetElapsedMicros();
-      app_->FinishRender();
+      app_->FinishRender(&ctx);
       current_times_.render_imgui_end = timer_.GetElapsedMicros();
     }
   }
@@ -387,14 +388,15 @@ NavigationEvent Scenario::ResumeInternal() {
 
     ImGui::End();
 
-    if (app_->StartRender(ImVec4(0, 0, 0, 1))) {
+    RenderContext ctx;
+    if (app_->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
       app_->renderer()->DrawScenario(def_.room(),
                                      theme_,
                                      target_manager_.GetTargets(),
                                      look_at_.transform,
                                      timer_.run_stopwatch(),
                                      &current_times_);
-      app_->FinishRender();
+      app_->FinishRender(&ctx);
     }
     current_times_.render_end = timer_.GetElapsedMicros();
     MaybeUpdateWorstTimes();
