@@ -116,7 +116,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   bool show_history = false;
 
   // Show results page
-  SDL_GL_SetSwapInterval(1);  // Enable vsync
+  app_->EnableVsync();
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
   bool view_replay = false;
   while (true) {
@@ -124,13 +124,13 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       SDL_Delay(250);
     }
     if (view_replay) {
-      SDL_GL_SetSwapInterval(0);
+      app_->DisableVsync();
       ReplayViewer replay_viewer;
       auto nav_event = replay_viewer.PlayReplay(*replay, app_);
       if (!nav_event.IsDone()) {
         return nav_event;
       }
-      SDL_GL_SetSwapInterval(1);
+      app_->EnableVsync();
       view_replay = false;
       continue;
     }
@@ -233,9 +233,8 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       ImGui::TextFmt(
           "Render targets time: {:.2f}ms",
           (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
-      ImGui::TextFmt(
-          "Render imgui time: {:.2f}ms",
-          (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
+      ImGui::TextFmt("Render imgui time: {:.2f}ms",
+                     (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
     }
     /*
     if (ImGui::Button("Save replay", sz)) {

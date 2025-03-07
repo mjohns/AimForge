@@ -163,8 +163,6 @@ int Application::Initialize() {
     return -1;
   }
   EnableVsync();
-   SDL_SetGPUSwapchainParameters(
-      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 
   auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
   icon_ = IMG_Load(logo_path.string().c_str());
@@ -183,7 +181,7 @@ int Application::Initialize() {
                 window_display_scale,
                 window_pixel_density);
 
-  //SDL_ShowWindow(sdl_window_);
+  // SDL_ShowWindow(sdl_window_);
 
   std::vector<std::filesystem::path> texture_dirs = {
       file_system_->GetUserDataPath("resources/textures"),
@@ -215,11 +213,18 @@ int Application::Initialize() {
   ImGui_ImplSDLGPU3_InitInfo init_info = {};
   init_info.Device = gpu_device_;
   init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_8;
+  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
   ImGui_ImplSDLGPU3_Init(&init_info);
 
   logger_->info("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   return 0;
+}
+
+void Application::Render(ImVec4 clear_color) {
+  RenderContext ctx;
+  if (StartRender(&ctx, clear_color)) {
+    FinishRender(&ctx);
+  }
 }
 
 bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color) {
@@ -285,11 +290,13 @@ ImDrawList* Application::StartFullscreenImguiFrame() {
 }
 
 void Application::EnableVsync() {
+  SDL_SetGPUSwapchainParameters(
+      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_VSYNC);
 }
 
 void Application::DisableVsync() {
-  //SDL_SetGPUSwapchainParameters(
-   //   gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
+  SDL_SetGPUSwapchainParameters(
+      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 }
 
 std::unique_ptr<Application> Application::Create() {

@@ -2,6 +2,7 @@
 #include <stdio.h>   // printf, fprintf
 #include <stdlib.h>  // abort
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec3.hpp>
 
 #include "aim/core/application.h"
@@ -64,11 +65,16 @@ SDL_GPUShader* load_shader(SDL_GPUDevice* device,
   return shader;
 }
 
+struct InstanceData {
+  glm::vec3 color;
+  glm::mat4 transform;
+};
+
 // Main code
 int main(int, char**) {
-    /*
   using namespace aim;
   auto app = Application::Create();
+  /*
   try {
     CreateAppUi(app.get())->Run();
   } catch (ApplicationExitException e) {
@@ -76,54 +82,22 @@ int main(int, char**) {
   }
   */
 
-  // Setup SDL
-  // [If using SDL_MAIN_USE_CALLBACKS: all code below until the main loop starts would likely be
-  // your SDL_AppInit() function]
-  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
-    printf("Error: SDL_Init(): %s\n", SDL_GetError());
-    return -1;
-  }
-
   // Create SDL window graphics context
-  SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL3+SDL_GPU example",
-                                        0,
-                                        0,
-                                        SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-  if (window == nullptr) {
-    printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
-    return -1;
-  }
+  SDL_Window* window = app->sdl_window();
 
   // Create GPU Device
-  SDL_GPUDevice* gpu_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV, true, nullptr);
-  if (gpu_device == nullptr) {
-    printf("Error: SDL_CreateGPUDevice(): %s\n", SDL_GetError());
-    return -1;
-  }
-
-  // Claim window for GPU Device
-  if (!SDL_ClaimWindowForGPUDevice(gpu_device, window)) {
-    printf("Error: SDL_ClaimWindowForGPUDevice(): %s\n", SDL_GetError());
-    return -1;
-  }
-  SDL_SetGPUSwapchainParameters(
-      gpu_device, window, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
+  SDL_GPUDevice* gpu_device = app->gpu_device();
 
   // Load shaders + create fill/line pipeline
-  SDL_GPUShader* shader_vert = load_shader(gpu_device,
-                                           "resources/shaders/compiled/triangle.vert.spv",
-                                           SDL_GPU_SHADERSTAGE_VERTEX,
-                                           0,
-                                           0,
-                                           0,
-                                           0);
+  SDL_GPUShader* shader_vert = load_shader(
+      gpu_device, "shaders/compiled/solid_color.vert.spv", SDL_GPU_SHADERSTAGE_VERTEX, 0, 0, 0, 0);
   if (shader_vert == NULL) {
     fprintf(stderr, "ERROR: LoadShader failed \n");
     return 1;
   }
 
   SDL_GPUShader* shader_frag = load_shader(gpu_device,
-                                           "resources/shaders/compiled/triangle.frag.spv",
+                                           "shaders/compiled/solid_color.frag.spv",
                                            SDL_GPU_SHADERSTAGE_FRAGMENT,
                                            0,
                                            0,
@@ -160,16 +134,21 @@ int main(int, char**) {
   pipeline_info.fragment_shader = shader_frag;
   pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
 
-  SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+  SDL_GPUVertexBufferDescription vertex_buffer_descriptions[2];
   vertex_buffer_descriptions[0].slot = 0;
   vertex_buffer_descriptions[0].pitch = sizeof(float) * 3;
   vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
   vertex_buffer_descriptions[0].instance_step_rate = 0;
 
-  pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+  vertex_buffer_descriptions[1].slot = 1;
+  vertex_buffer_descriptions[1].pitch = sizeof(InstanceData);
+  vertex_buffer_descriptions[1].input_rate = SDL_GPU_VERTEXINPUTRATE_INSTANCE;
+  vertex_buffer_descriptions[1].instance_step_rate = 1;
+
+  pipeline_info.vertex_input_state.num_vertex_buffers = 2;
   pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
 
-  SDL_GPUVertexAttribute vertex_attributes[1];
+  SDL_GPUVertexAttribute vertex_attributes[6];
   vertex_attributes[0].location = 0;
   vertex_attributes[0].buffer_slot = 0;
   vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
@@ -203,46 +182,48 @@ int main(int, char**) {
 
   SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(gpu_device, &vertex_buffer_create_info);
 
-  // Set up buffer data
-  SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
-  transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
-  transfer_buffer_create_info.size = sizeof(float) * 3 * 6;
-  SDL_GPUTransferBuffer* transfer_buffer =
-      SDL_CreateGPUTransferBuffer(gpu_device, &transfer_buffer_create_info);
-
-  glm::vec3* transfer_data =
-      (glm::vec3*)SDL_MapGPUTransferBuffer(gpu_device, transfer_buffer, false);
-  transfer_data[0] = glm::vec3(0.5f, -0.5f, 0.0f);
-  transfer_data[1] = glm::vec3(0.5f, 0.5f, 0.0f);
-  transfer_data[2] = glm::vec3(-0.5f, 0.5f, 0.0f);
-
-  transfer_data[3] = glm::vec3(-0.5f, 0.5f, 0.0f);
-  transfer_data[4] = glm::vec3(-0.5f, -0.5f, 0.0f);
-  transfer_data[5] = glm::vec3(0.5f, -0.5f, 0.0f);
-  SDL_UnmapGPUTransferBuffer(gpu_device, transfer_buffer);
-
-  SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(gpu_device);
-  SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
-
   {
-    SDL_GPUTransferBufferLocation location{};
-    location.transfer_buffer = transfer_buffer;
-    location.offset = 0;
-    SDL_GPUBufferRegion region{};
-    region.buffer = vertex_buffer;
-    region.offset = 0;
-    region.size = sizeof(float) * 3 * 6;
-    SDL_UploadToGPUBuffer(copyPass, &location, &region, false);
+    // Set up buffer data
+    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
+    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+    transfer_buffer_create_info.size = sizeof(float) * 3 * 6;
+    SDL_GPUTransferBuffer* transfer_buffer =
+        SDL_CreateGPUTransferBuffer(gpu_device, &transfer_buffer_create_info);
+
+    glm::vec3* transfer_data =
+        (glm::vec3*)SDL_MapGPUTransferBuffer(gpu_device, transfer_buffer, false);
+    transfer_data[0] = glm::vec3(0.5f, -0.5f, 0.0f);
+    transfer_data[1] = glm::vec3(0.5f, 0.5f, 0.0f);
+    transfer_data[2] = glm::vec3(-0.5f, 0.5f, 0.0f);
+
+    transfer_data[3] = glm::vec3(-0.5f, 0.5f, 0.0f);
+    transfer_data[4] = glm::vec3(-0.5f, -0.5f, 0.0f);
+    transfer_data[5] = glm::vec3(0.5f, -0.5f, 0.0f);
+    SDL_UnmapGPUTransferBuffer(gpu_device, transfer_buffer);
+
+    SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(gpu_device);
+    SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
+
+    {
+      SDL_GPUTransferBufferLocation location{};
+      location.transfer_buffer = transfer_buffer;
+      location.offset = 0;
+      SDL_GPUBufferRegion region{};
+      region.buffer = vertex_buffer;
+      region.offset = 0;
+      region.size = sizeof(float) * 3 * 6;
+      SDL_UploadToGPUBuffer(copyPass, &location, &region, false);
+    }
+
+    SDL_EndGPUCopyPass(copyPass);
+    SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+    SDL_ReleaseGPUTransferBuffer(gpu_device, transfer_buffer);
   }
 
-  SDL_EndGPUCopyPass(copyPass);
-  SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
-  SDL_ReleaseGPUTransferBuffer(gpu_device, transfer_buffer);
-
+  /*
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
   (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
@@ -258,7 +239,9 @@ int main(int, char**) {
   init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device, window);
   init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
   ImGui_ImplSDLGPU3_Init(&init_info);
+  */
 
+  ImGuiIO& io = ImGui::GetIO();
   // Load Fonts
   // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple
   // fonts and use ImGui::PushFont()/PopFont() to select them.

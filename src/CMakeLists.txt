@@ -24,20 +24,12 @@ target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set (OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
 
-file(GLOB SOUND_FILES resources/sounds/*)
-file(MAKE_DIRECTORY "${OUTPUT_DIR}/sounds")
-foreach(THE_FILE ${SOUND_FILES})
-    file(COPY
-        "${THE_FILE}"
-        DESTINATION "${OUTPUT_DIR}/sounds"
-    )
-endforeach()
-
 file(COPY resources/scenarios DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/playlists DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/themes DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/fonts DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/textures DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/images DESTINATION "${OUTPUT_DIR}")
-file(COPY resources/images DESTINATION "${OUTPUT_DIR}")
-file(COPY shaders DESTINATION "${OUTPUT_DIR}")
+file(COPY resources/sounds DESTINATION "${OUTPUT_DIR}")
+
+file(COPY aim/graphics/shaders/compiled DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders")

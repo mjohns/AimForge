@@ -31,7 +31,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
 
   int processed_events_up_to_index = 0;
 
-  app->renderer()->SetProjection(projection);
+  // app->renderer()->SetProjection(projection);
 
   TargetManager target_manager(replay.room());
   Camera camera(replay.room().start_pitch(),
@@ -128,10 +128,12 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
 
     RenderContext ctx;
     if (app->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
-      app->renderer()->DrawScenario(replay.room(),
+      app->renderer()->DrawScenario(projection,
+                                    replay.room(),
                                     theme,
                                     target_manager.GetTargets(),
                                     look_at.transform,
+                                    &ctx,
                                     timer.run_stopwatch(),
                                     &times);
       app->FinishRender(&ctx);
