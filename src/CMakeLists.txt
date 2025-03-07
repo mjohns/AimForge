@@ -18,7 +18,7 @@ endif(WIN32)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-target_link_libraries(${NAME} PUBLIC aim)
+target_link_libraries(${NAME} PUBLIC aim SDL3::SDL3 imgui)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 
