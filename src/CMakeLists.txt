@@ -2,8 +2,6 @@ set(NAME "AimForge")
 
 add_subdirectory(aim)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 add_executable(
     ${NAME}
     main.cc )
