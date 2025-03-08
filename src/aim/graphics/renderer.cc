@@ -10,6 +10,9 @@
 namespace aim {
 namespace {
 
+constexpr const int kQuadNumVertices = 6;
+constexpr const float kMaxDistance = 500.0f;
+
 SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
                           const std::filesystem::path& shader_path,
                           SDL_GPUShaderStage stage,
@@ -87,6 +90,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, sphere_pipeline_);
       sphere_pipeline_ = nullptr;
     }
+    if (solid_quad_pipeline_ != nullptr) {
+      SDL_ReleaseGPUGraphicsPipeline(device_, sphere_pipeline_);
+      sphere_pipeline_ = nullptr;
+    }
   }
 
   void CleanupShaders() {
@@ -114,15 +121,20 @@ class RendererImpl : public Renderer {
     if (!CreateSpherePipeline()) {
       return false;
     }
+    if (!CreateSolidQuadPipeline()) {
+      return false;
+    }
 
     SDL_GPUCommandBuffer* upload_command_buffer = SDL_AcquireGPUCommandBuffer(device_);
     SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(upload_command_buffer);
 
     SDL_GPUTransferBuffer* sphere_transfer_buffer = CreateSphereVertexBuffer(copy_pass);
+    SDL_GPUTransferBuffer* quad_transfer_buffer = CreateQuadVertexBuffer(copy_pass);
 
     SDL_EndGPUCopyPass(copy_pass);
     SDL_SubmitGPUCommandBuffer(upload_command_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, sphere_transfer_buffer);
+    SDL_ReleaseGPUTransferBuffer(device_, quad_transfer_buffer);
 
     CleanupShaders();
     return true;
@@ -137,26 +149,172 @@ class RendererImpl : public Renderer {
                     const Stopwatch& stopwatch,
                     FrameTimes* times) override {
     const glm::mat4 view_projection = projection * view;
+    times->render_room_start = stopwatch.GetElapsedMicros();
+    DrawRoom(view_projection, theme, room, ctx);
+    times->render_room_end = stopwatch.GetElapsedMicros();
 
-    /*
-    SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
-    SDL_GPUBufferBinding binding{};
-    binding.buffer = sphere_vertex_buffer_;
-    binding.offset = 0;
-    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-    glm::mat4 transform(1.0f);
-    SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
-
-    glm::vec4 color4(1, 1, 0, 1);
-    SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-
-    SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
-    */
-
+    times->render_targets_start = stopwatch.GetElapsedMicros();
     DrawTargets(view_projection, theme, targets, ctx);
+    times->render_targets_end = stopwatch.GetElapsedMicros();
   }
 
  private:
+  void DrawRoom(const glm::mat4& view_projection,
+                const Theme& theme,
+                const Room& room,
+                RenderContext* ctx) {
+    if (room.has_simple_room()) {
+      DrawSimpleRoom(view_projection, theme, room.simple_room(), ctx);
+    }
+    if (room.has_cylinder_room()) {
+      // DrawCylinderRoom(room.cylinder_room(), theme, view);
+    }
+    if (room.has_barrel_room()) {
+      // DrawBarrelRoom(room.barrel_room(), theme, view);
+    }
+  }
+
+  void DrawSimpleRoom(const glm::mat4& view_projection,
+                      const Theme& theme,
+                      const SimpleRoom& room,
+                      RenderContext* ctx) {
+    float height = room.height();
+    float width = room.width();
+
+    float depth = room.has_depth() ? room.depth() : kMaxDistance;
+    bool not_cylinder = false;
+
+    {
+      // Front wall
+      glm::mat4 model(1.f);
+      model = glm::scale(model, glm::vec3(width, 1.0f, height));
+      DrawWall(
+          view_projection * model, {width, height}, theme.front_appearance(), not_cylinder, ctx);
+    }
+
+    /*
+    {
+      // Back wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0, -1 * depth, 0));
+      model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+      model = glm::scale(model, glm::vec3(width, 1.0f, height));
+      DrawWall(model,
+               view,
+               {width, height},
+               theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
+    }
+    */
+
+    {
+      // Floor wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0, -0.5 * depth, -0.5 * height));
+      model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+      model = glm::scale(model, glm::vec3(width, 1.0f, depth));
+      DrawWall(
+          view_projection * model, {width, depth}, theme.floor_appearance(), not_cylinder, ctx);
+    }
+
+    {
+      // Left wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(-0.5 * width, -0.5 * depth, 0));
+      model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+      model = glm::scale(model, glm::vec3(depth, 1.0f, height));
+      DrawWall(
+          view_projection * model, {depth, height}, theme.side_appearance(), not_cylinder, ctx);
+    }
+
+    {
+      // Right wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0.5 * width, -0.5 * depth, 0));
+      model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+      model = glm::scale(model, glm::vec3(depth, 1.0f, height));
+      DrawWall(
+          view_projection * model, {depth, height}, theme.side_appearance(), not_cylinder, ctx);
+    }
+
+    {
+      // Top wall
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0, -0.5 * depth, 0.5 * height));
+      model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
+      model = glm::scale(model, glm::vec3(width, 1.0f, depth));
+      DrawWall(view_projection * model, {width, depth}, theme.roof_appearance(), not_cylinder, ctx);
+    }
+  }
+
+  void DrawWall(const glm::mat4& transform,
+                const Wall& wall,
+                const WallAppearance& appearance,
+                bool is_cylinder_wall,
+                RenderContext* ctx) {
+    /*
+  if (appearance.has_texture()) {
+    Texture* texture = texture_manager_->GetTexture(appearance.texture().texture_name());
+    if (texture == nullptr) {
+      // Too spammy to log this error?
+      DrawWallSolidColor(model, view, glm::vec3(0.7), is_cylinder_wall);
+      return;
+    }
+
+    glm::vec2 tex_scale;
+
+    float tex_scale_height = 100;
+    float tex_scale_width = (texture->width() * tex_scale_height) / (float)texture->height();
+
+    tex_scale.x = wall.width / tex_scale_width;
+    tex_scale.y = wall.height / tex_scale_height;
+
+    if (appearance.texture().has_scale()) {
+      tex_scale *= appearance.texture().scale();
+    }
+
+    texture_shader_.Use();
+    texture_shader_.SetMat4("view", view);
+
+    texture_shader_.SetInt("texture1", 0);
+    texture_shader_.SetMat4("model", model);
+    texture_shader_.SetVec2("tex_scale", tex_scale);
+
+    glm::vec3 mix_color = ToVec3(appearance.texture().mix_color());
+    texture_shader_.SetVec2("mix_color", mix_color);
+    texture_shader_.SetFloat("mix_percent", appearance.texture().mix_percent());
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture->id());
+    if (is_cylinder_wall) {
+      glBindVertexArray(cylinder_wall_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, cylinder_wall_num_vertices_);
+    } else {
+      glBindVertexArray(quad_vao_);
+      glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
+    }
+    return;
+  }
+  */
+
+    DrawWallSolidColor(transform, ToVec3(appearance.color()), is_cylinder_wall, ctx);
+  }
+
+  void DrawWallSolidColor(const glm::mat4& transform,
+                          const glm::vec3& color,
+                          bool is_cylinder_wall,
+                          RenderContext* ctx) {
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = quad_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+    SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
+
+    glm::vec4 color4(color, 1.0f);
+    SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+
+    SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
+  }
+
   void DrawTargets(const glm::mat4& view_projection,
                    const Theme& theme,
                    const std::vector<Target>& targets,
@@ -263,6 +421,50 @@ class RendererImpl : public Renderer {
     return true;
   }
 
+  bool CreateSolidQuadPipeline() {
+    SDL_GPUColorTargetDescription color_target_desc[1];
+    color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    color_target_desc[0].blend_state = DefaultBlendState();
+
+    SDL_GPUGraphicsPipelineTargetInfo target_info = {};
+    target_info.num_color_targets = 1;
+    target_info.color_target_descriptions = color_target_desc;
+
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
+    pipeline_info.target_info = target_info;
+    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
+    pipeline_info.vertex_shader = solid_color_vertex_shader_;
+    pipeline_info.fragment_shader = solid_color_fragment_shader_;
+    pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
+
+    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+    vertex_buffer_descriptions[0].slot = 0;
+    vertex_buffer_descriptions[0].pitch = sizeof(VertexAndTexCoord);
+    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+    vertex_buffer_descriptions[0].instance_step_rate = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+    pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
+
+    SDL_GPUVertexAttribute vertex_attributes[6];
+    vertex_attributes[0].location = 0;
+    vertex_attributes[0].buffer_slot = 0;
+    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+    vertex_attributes[0].offset = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_attributes = 1;
+    pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
+
+    solid_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+    if (solid_quad_pipeline_ == nullptr) {
+      Logger::get()->error("ERROR: SolidQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+                           SDL_GetError());
+      return false;
+    }
+
+    return true;
+  }
+
   SDL_GPUTransferBuffer* CreateSphereVertexBuffer(SDL_GPUCopyPass* copy_pass) {
     std::vector<float> sphere_vertices = GenerateSphereVertices(3);
     num_sphere_vertices_ = sphere_vertices.size() / 3;
@@ -299,70 +501,77 @@ class RendererImpl : public Renderer {
     return transfer_buffer;
   }
 
+  SDL_GPUTransferBuffer* CreateQuadVertexBuffer(SDL_GPUCopyPass* copy_pass) {
+    VertexAndTexCoord bottom_right;
+    VertexAndTexCoord bottom_left;
+    VertexAndTexCoord top_left;
+    VertexAndTexCoord top_right;
+
+    bottom_right.vertex = glm::vec3(0.5f, 0.0f, -0.5f);
+    bottom_left.vertex = glm::vec3(-0.5f, 0.0f, -0.5f);
+    top_left.vertex = glm::vec3(-0.5f, 0.0f, 0.5f);
+    top_right.vertex = glm::vec3(0.5f, 0.0f, 0.5f);
+
+    bottom_right.tex_coord = glm::vec2(1.0f, 1.0f);
+    bottom_left.tex_coord = glm::vec2(0.0f, 1.0f);
+    top_left.tex_coord = glm::vec2(0.0f, 0.0f);
+    top_right.tex_coord = glm::vec2(1.0f, 0.0f);
+
+    std::vector<VertexAndTexCoord> vertices = {
+        bottom_right,
+        top_right,
+        top_left,
+        top_left,
+        bottom_left,
+        bottom_right,
+    };
+
+    int size = sizeof(VertexAndTexCoord) * vertices.size();
+
+    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
+    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+    vertex_buffer_create_info.size = size;
+
+    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
+
+    // Set up buffer data
+    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
+    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+    transfer_buffer_create_info.size = size;
+    SDL_GPUTransferBuffer* transfer_buffer =
+        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
+
+    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
+    SDL_memcpy(transfer_data, vertices.data(), size);
+    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
+
+    SDL_GPUTransferBufferLocation location{};
+    location.transfer_buffer = transfer_buffer;
+    location.offset = 0;
+    SDL_GPUBufferRegion region{};
+    region.buffer = vertex_buffer;
+    region.offset = 0;
+    region.size = size;
+    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
+
+    quad_vertex_buffer_ = vertex_buffer;
+    return transfer_buffer;
+  }
+
   SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
+  SDL_GPUGraphicsPipeline* solid_quad_pipeline_;
   TextureManager texture_manager_;
   SDL_GPUDevice* device_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
 
+  SDL_GPUBuffer* quad_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* sphere_vertex_buffer_ = nullptr;
   unsigned int num_sphere_vertices_;
 };
 
 }  // namespace
-
-/*
-void Renderer::DrawScenario(const Room& room,
-                            const Theme& theme,
-                            const std::vector<Target>& targets,
-                            const glm::mat4& view,
-                            const Stopwatch& stopwatch,
-                            FrameTimes* times) {
-  times->render_room_start = stopwatch.GetElapsedMicros();
-  room_renderer_.Draw(room, theme, view);
-  times->render_room_end = stopwatch.GetElapsedMicros();
-  glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
-  glm::vec3 ghost_target_color =
-      theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
-
-  times->render_targets_start = stopwatch.GetElapsedMicros();
-  std::vector<Sphere> target_spheres;
-  std::vector<Sphere> ghost_spheres;
-  for (const Target& target : targets) {
-    if (target.ShouldDraw()) {
-      std::vector<Sphere>& spheres = target.is_ghost ? ghost_spheres : target_spheres;
-      glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;
-      if (target.is_pill) {
-        Cylinder c;
-        c.radius = target.radius;
-        c.up = target.pill_up;
-        c.height = target.height - target.radius;
-        c.position = target.position;
-        cylinder_renderer_.Draw(ToVec3(room.camera_position()), view, color, {c});
-
-        spheres.push_back({});
-        Sphere& top = spheres.back();
-        top.position = c.position + c.up * (c.height * 0.5f);
-        top.radius = target.radius;
-
-        spheres.push_back({});
-        Sphere& bottom = spheres.back();
-        bottom.position = c.position + c.up * (c.height * -0.5f);
-        bottom.radius = target.radius;
-      } else {
-        spheres.push_back({});
-        Sphere& s = spheres.back();
-        s.position = target.position;
-        s.radius = target.radius;
-      }
-    }
-  }
-  sphere_renderer_.Draw(view, target_color, target_spheres);
-  sphere_renderer_.Draw(view, ghost_target_color, ghost_spheres);
-  times->render_targets_end = stopwatch.GetElapsedMicros();
-}
-*/
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
