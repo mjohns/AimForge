@@ -10,21 +10,6 @@
 #include "aim/graphics/image.h"
 
 namespace aim {
-namespace {
-std::optional<SDL_GPUTextureFormat> GetFormat(SDL_Surface* surface) {
-  // TODO: Make this more robust and correct.
-  if (surface->format == SDL_PIXELFORMAT_RGBA32) {
-    return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
-  }
-  if (surface->format == SDL_PIXELFORMAT_RGB24) {
-    return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
-  }
-  Logger::get()->warn("Invalid image format type for texture");
-  return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
-  // return {};
-}
-
-}  // namespace
 
 Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu_device_(device) {
   Image image(path);
