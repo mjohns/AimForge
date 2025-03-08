@@ -296,10 +296,6 @@ bool Application::StartRender(RenderContext* render_context) {
 }
 
 void Application::FinishRender(RenderContext* render_context) {
-  if (render_context->render_pass != nullptr) {
-    SDL_EndGPURenderPass(render_context->render_pass);
-  }
-
   // Setup and start a render pass
   SDL_GPUColorTargetInfo target_info = {};
   target_info.texture = render_context->swapchain_texture;

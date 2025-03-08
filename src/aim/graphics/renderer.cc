@@ -254,10 +254,13 @@ class RendererImpl : public Renderer {
                     FrameTimes* times) override {
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
-    target_info.texture = ctx->swapchain_texture;
     target_info.clear_color = SDL_FColor{0.7, 0.7, 0.7, 1.0};
     target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-    target_info.store_op = SDL_GPU_STOREOP_STORE;
+
+    target_info.texture = msaa_render_texture_;
+    target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+    target_info.resolve_texture = msaa_resolve_texture_;
+
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
     target_info.cycle = false;
@@ -283,6 +286,20 @@ class RendererImpl : public Renderer {
     times->render_targets_start = stopwatch.GetElapsedMicros();
     DrawTargets(view_projection, theme, targets, ctx);
     times->render_targets_end = stopwatch.GetElapsedMicros();
+
+    SDL_EndGPURenderPass(ctx->render_pass);
+    ctx->render_pass = nullptr;
+
+    SDL_GPUBlitInfo blit_info{};
+    blit_info.source.texture = msaa_resolve_texture_;
+    blit_info.source.w = screen_.width;
+    blit_info.source.h = screen_.height;
+    blit_info.destination.texture = ctx->swapchain_texture;
+    blit_info.destination.w = screen_.width;
+    blit_info.destination.h = screen_.height;
+    blit_info.load_op = SDL_GPU_LOADOP_DONT_CARE;
+    blit_info.filter = SDL_GPU_FILTER_LINEAR;
+    SDL_BlitGPUTexture(ctx->command_buffer, &blit_info);
   }
 
  private:
@@ -787,6 +804,7 @@ class RendererImpl : public Renderer {
     pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
     pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
     pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+    pipeline_info.multisample_state.sample_count = msaa_sample_count_;
 
     SDL_GPUDepthStencilState depth_stencil_state{};
     depth_stencil_state.enable_depth_test = true;
