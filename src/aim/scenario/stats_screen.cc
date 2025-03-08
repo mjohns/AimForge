@@ -229,6 +229,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       ImGui::Spacing();
       ImGui::Text("Previous High Score %s", time_ago.c_str());
       RenderScore(*maybe_previous_high_score_stats, app_);
+      ImGui::TextFmt("cm/360: {}", MaybeIntToString(stats.cm_per_360, 1));
     }
     ImGui::Spacing();
     ImGui::Spacing();
