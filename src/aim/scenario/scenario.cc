@@ -238,7 +238,7 @@ NavigationEvent Scenario::Resume() {
 
 NavigationEvent Scenario::ResumeInternal() {
   if (is_done_) {
-    StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_, worst_times_);
+    StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_, perf_stats_);
     return stats_screen.Run(replay_);
   }
 
@@ -381,7 +381,7 @@ NavigationEvent Scenario::ResumeInternal() {
     if (!do_render) {
       current_times_.render_start = 0;
       current_times_.render_end = 0;
-      MaybeUpdateWorstTimes();
+      UpdatePerfStats();
       continue;
     }
 
@@ -417,7 +417,7 @@ NavigationEvent Scenario::ResumeInternal() {
       app_->FinishRender(&ctx);
     }
     current_times_.render_end = timer_.GetElapsedMicros();
-    MaybeUpdateWorstTimes();
+    UpdatePerfStats();
   }
 
   stats_.hit_stopwatch.Stop();
@@ -472,7 +472,7 @@ NavigationEvent Scenario::ResumeInternal() {
     }
   }
 
-  StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_, worst_times_);
+  StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_, perf_stats_);
   return stats_screen.Run(replay_);
 }
 
@@ -484,12 +484,15 @@ ShotType::TypeCase Scenario::GetShotType() {
   return shot_type;
 }
 
-void Scenario::MaybeUpdateWorstTimes() {
+void Scenario::UpdatePerfStats() {
   current_times_.end = timer_.GetElapsedMicros();
   current_times_.total = current_times_.end - current_times_.start;
 
-  if (current_times_.total > worst_times_.total) {
-    worst_times_ = current_times_;
+  perf_stats_.total_time_histogram.Increment(current_times_.total);
+  perf_stats_.render_time_histogram.Increment(current_times_.render_end -
+                                              current_times_.render_start);
+  if (current_times_.total > perf_stats_.worst_times.total) {
+    perf_stats_.worst_times = current_times_;
   }
 }
 

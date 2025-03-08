@@ -74,11 +74,11 @@ std::optional<StatsRow> GetStats(const std::vector<StatsRow>& all_stats, i64 sta
 StatsScreen::StatsScreen(std::string scenario_id,
                          i64 stats_id,
                          Application* app,
-                         FrameTimes worst_times)
+                         const RunPerformanceStats perf_stats)
     : scenario_id_(std::move(scenario_id)),
       stats_id_(stats_id),
       app_(app),
-      worst_times_(worst_times) {}
+      perf_stats_(perf_stats) {}
 
 NavigationEvent StatsScreen::Run(Replay* replay) {
   ScreenInfo screen = app_->screen_info();
@@ -219,6 +219,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       }
     }
 
+    auto& worst_times_ = perf_stats_.worst_times;
     ImGui::TextFmt("Worst Frame ({})", worst_times_.frame_number);
     ImGui::TextFmt("Total time: {:.2f}ms", (worst_times_.end - worst_times_.start) / 1000.0);
     ImGui::TextFmt("Events time: {:.2f}ms",
