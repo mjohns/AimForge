@@ -184,6 +184,18 @@ int Application::Initialize() {
                 window_pixel_density);
 
   // SDL_ShowWindow(sdl_window_);
+  SDL_GPUTextureCreateInfo depth_texture_info{};
+  depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+  depth_texture_info.width = window_width_;
+  depth_texture_info.height = window_height_;
+
+  depth_texture_info.layer_count_or_depth = 1;
+  depth_texture_info.num_levels = 1;
+  depth_texture_info.sample_count = SDL_GPU_SAMPLECOUNT_1;
+  depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
+  depth_texture_info.usage =
+      SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
+  depth_texture_ = SDL_CreateGPUTexture(gpu_device_, &depth_texture_info);
 
   std::vector<std::filesystem::path> texture_dirs = {
       file_system_->GetUserDataPath("resources/textures"),
@@ -259,8 +271,19 @@ bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color)
   target_info.mip_level = 0;
   target_info.layer_or_depth_plane = 0;
   target_info.cycle = false;
-  render_context->render_pass =
-      SDL_BeginGPURenderPass(render_context->command_buffer, &target_info, 1, nullptr);
+
+  SDL_GPUDepthStencilTargetInfo depth_stencil_target_info = {0};
+  depth_stencil_target_info.texture = depth_texture_;
+  depth_stencil_target_info.cycle = true;
+  depth_stencil_target_info.clear_depth = 1;
+  depth_stencil_target_info.clear_stencil = 0;
+  depth_stencil_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+  depth_stencil_target_info.store_op = SDL_GPU_STOREOP_STORE;
+  depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
+  depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
+
+  render_context->render_pass = SDL_BeginGPURenderPass(
+      render_context->command_buffer, &target_info, 1, &depth_stencil_target_info);
   return true;
 }
 
