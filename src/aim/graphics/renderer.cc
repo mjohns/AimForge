@@ -188,7 +188,7 @@ class RendererImpl : public Renderer {
     depth_texture_info.layer_count_or_depth = 1;
     depth_texture_info.num_levels = 1;
     depth_texture_info.sample_count = msaa_sample_count_;
-    depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
+    depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D32_FLOAT;
     depth_texture_info.usage = SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
     depth_texture_ = SDL_CreateGPUTexture(device_, &depth_texture_info);
 
@@ -271,7 +271,6 @@ class RendererImpl : public Renderer {
     depth_stencil_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
     depth_stencil_target_info.store_op = SDL_GPU_STOREOP_STORE;
     depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
-
     depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
     ctx->render_pass =
         SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, &depth_stencil_target_info);
@@ -792,7 +791,7 @@ class RendererImpl : public Renderer {
     SDL_GPUGraphicsPipelineTargetInfo target_info = {};
     target_info.num_color_targets = 1;
     target_info.has_depth_stencil_target = true;
-    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
+    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D32_FLOAT;
 
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
     pipeline_info.target_info = target_info;
