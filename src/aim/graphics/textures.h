@@ -67,6 +67,10 @@ class TextureManager {
 
   Texture* GetTexture(const std::string& name);
 
+  void clear() {
+    texture_cache_.clear();
+  }
+
  private:
   std::unordered_map<std::string, std::unique_ptr<Texture>> texture_cache_;
   std::vector<std::filesystem::path> texture_folders_;

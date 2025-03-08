@@ -71,9 +71,9 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   SDL_UnmapGPUTransferBuffer(device, transfer_buffer);
 
   // Upload the transfer data to the GPU resources
-  SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
+  SDL_GPUCommandBuffer* upload_cmd_buffer = SDL_AcquireGPUCommandBuffer(device);
 
-  SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
+  SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(upload_cmd_buffer);
   SDL_GPUTextureTransferInfo texture_transfer_info{};
   texture_transfer_info.transfer_buffer = transfer_buffer;
   texture_transfer_info.offset = 0;
@@ -83,10 +83,10 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   region.w = image.width();
   region.h = image.height();
   region.d = 1;
-  SDL_UploadToGPUTexture(copyPass, &texture_transfer_info, &region, true);
+  SDL_UploadToGPUTexture(copy_pass, &texture_transfer_info, &region, true);
 
-  SDL_EndGPUCopyPass(copyPass);
-  SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+  SDL_EndGPUCopyPass(copy_pass);
+  SDL_SubmitGPUCommandBuffer(upload_cmd_buffer);
 
   SDL_ReleaseGPUTransferBuffer(device, transfer_buffer);
   SDL_DestroySurface(image_surface);

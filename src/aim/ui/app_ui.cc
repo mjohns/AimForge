@@ -155,7 +155,7 @@ class AppUiImpl : public AppUi {
 
     // TODO: Improve appearance of top bar.
     ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
-    if (logo_texture_->is_loaded()) {
+    if (logo_texture_ && logo_texture_->is_loaded()) {
       int size = app_->font_manager()->large_font_size();
       ImGui::Image(logo_texture_->GetImTextureId(),
                    ImVec2(size + 2, size + 2),
