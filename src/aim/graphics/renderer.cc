@@ -807,9 +807,10 @@ class RendererImpl : public Renderer {
     SDL_GPUDepthStencilState depth_stencil_state{};
     depth_stencil_state.enable_depth_test = true;
     depth_stencil_state.enable_depth_write = true;
-    depth_stencil_state.enable_stencil_test = true;
+    depth_stencil_state.enable_stencil_test = false;
     depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
     depth_stencil_state.write_mask = 0xFF;
+    pipeline_info.depth_stencil_state = depth_stencil_state;
 
     return pipeline_info;
   }
@@ -918,7 +919,7 @@ class RendererImpl : public Renderer {
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
   SDL_GPUTexture* msaa_resolve_texture_ = nullptr;
 
-  const SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_4;
+  const SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_8;
 
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
