@@ -30,7 +30,7 @@ uniform vec3 quad_color;
 
 void main() {
   FragColor = vec4(quad_color, 1.0f);
-}
+}j
 )AIMS";
 
 void PushFloats(std::vector<float>* list,
