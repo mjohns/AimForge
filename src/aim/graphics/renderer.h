@@ -1,6 +1,9 @@
 #pragma once
 
+#include <SDL3/SDL.h>
+
 #include <filesystem>
+#include <memory>
 #include <vector>
 
 #include "aim/common/times.h"
@@ -15,29 +18,29 @@
 
 namespace aim {
 
+struct RenderContext {
+  SDL_GPUCommandBuffer* command_buffer = nullptr;
+  SDL_GPUTexture* swapchain_texture = nullptr;
+  SDL_GPURenderPass* render_pass = nullptr;
+};
+
 class Renderer {
  public:
-  Renderer(const std::vector<std::filesystem::path>& texture_dirs)
-      : room_renderer_(&texture_manager_), texture_manager_(texture_dirs) {}
+  Renderer() {}
+  virtual ~Renderer() {}
 
-  void SetProjection(const glm::mat4& projection);
-
-  void DrawScenario(const Room& room,
-                    const Theme& theme,
-                    const std::vector<Target>& targets,
-                    const glm::mat4& view,
-                    const Stopwatch& stopwatch, FrameTimes* times);
-
-  Renderer(const Renderer&) = delete;
-  Renderer(Renderer&&) = default;
-  Renderer& operator=(Renderer other) = delete;
-  Renderer& operator=(Renderer&& other) = delete;
-
- private:
-  SphereRenderer sphere_renderer_;
-  CylinderRenderer cylinder_renderer_;
-  RoomRenderer room_renderer_;
-  TextureManager texture_manager_;
+  virtual void DrawScenario(const glm::mat4& projection,
+                            const Room& room,
+                            const Theme& theme,
+                            const std::vector<Target>& targets,
+                            const glm::mat4& view,
+                            RenderContext* ctx,
+                            const Stopwatch& stopwatch,
+                            FrameTimes* times) = 0;
 };
+
+std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
+                                         const std::filesystem::path& shader_dir,
+                                         SDL_GPUDevice* device);
 
 }  // namespace aim

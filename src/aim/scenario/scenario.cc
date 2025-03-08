@@ -72,16 +72,15 @@ void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) 
 
 void Scenario::RefreshState() {
   if (has_started_) {
-    SDL_GL_SetSwapInterval(0);  // Disable vsync
+    app_->DisableVsync();
   } else {
-    SDL_GL_SetSwapInterval(1);
+    app_->EnableVsync();
   }
 
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
 
   settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(def_.scenario_id());
-  glm::mat4 projection = GetPerspectiveTransformation(app_->screen_info());
-  app_->renderer()->SetProjection(projection);
+  projection_ = GetPerspectiveTransformation(app_->screen_info());
 
   float dpi = app_->settings_manager()->GetDpi();
   metronome_ = std::make_unique<Metronome>(settings_.metronome_bpm(), app_);
@@ -198,10 +197,12 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
 
     RenderContext ctx;
     if (app_->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
-      app_->renderer()->DrawScenario(def_.room(),
+      app_->renderer()->DrawScenario(projection_,
+                                     def_.room(),
                                      theme_,
                                      target_manager_.GetTargets(),
                                      look_at_.transform,
+                                     &ctx,
                                      timer_.run_stopwatch(),
                                      &current_times_);
       current_times_.render_imgui_start = timer_.GetElapsedMicros();
@@ -390,10 +391,12 @@ NavigationEvent Scenario::ResumeInternal() {
 
     RenderContext ctx;
     if (app_->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
-      app_->renderer()->DrawScenario(def_.room(),
+      app_->renderer()->DrawScenario(projection_,
+                                     def_.room(),
                                      theme_,
                                      target_manager_.GetTargets(),
                                      look_at_.transform,
+                                     &ctx,
                                      timer_.run_stopwatch(),
                                      &current_times_);
       app_->FinishRender(&ctx);

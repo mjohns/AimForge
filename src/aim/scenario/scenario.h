@@ -4,6 +4,7 @@
 
 #include <functional>
 #include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 #include <optional>
 
 #include "aim/core/application.h"
@@ -96,6 +97,7 @@ class Scenario {
   Camera camera_;
   TargetManager target_manager_;
   LookAtInfo look_at_;
+  glm::mat4 projection_;
 
   google::protobuf::Arena replay_arena_;
   Replay* replay_ = nullptr;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_opengl.h>
 #include <absl/log/log.h>
 #include <absl/log/log_sink.h>
 #include <imgui.h>
@@ -25,12 +24,6 @@
 #include "aim/graphics/renderer.h"
 
 namespace aim {
-
-struct RenderContext {
-  SDL_GPUCommandBuffer* command_buffer = nullptr;
-  SDL_GPUTexture* swapchain_texture = nullptr;
-  SDL_GPURenderPass* render_pass = nullptr;
-};
 
 class ApplicationExitException : public std::runtime_error {
  public:
@@ -57,6 +50,8 @@ class Application {
                    ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
 
   void FinishRender(RenderContext* render_context);
+
+  void Render(ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
 
   SDL_Window* sdl_window() {
     return sdl_window_;

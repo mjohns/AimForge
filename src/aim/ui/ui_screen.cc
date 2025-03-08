@@ -52,7 +52,7 @@ NavigationEvent UiScreen::Run() {
 }
 
 void UiScreen::Resume() {
-  SDL_GL_SetSwapInterval(1);  // Enable vsync
+  app_->EnableVsync();
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
 }
 
