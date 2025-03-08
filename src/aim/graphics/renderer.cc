@@ -129,6 +129,14 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUTexture(device_, depth_texture_);
       depth_texture_ = nullptr;
     }
+    if (msaa_render_texture_ != nullptr) {
+      SDL_ReleaseGPUTexture(device_, msaa_render_texture_);
+      msaa_render_texture_ = nullptr;
+    }
+    if (msaa_resolve_texture_ != nullptr) {
+      SDL_ReleaseGPUTexture(device_, msaa_resolve_texture_);
+      msaa_resolve_texture_ = nullptr;
+    }
     texture_manager_.clear();
   }
 
@@ -184,6 +192,27 @@ class RendererImpl : public Renderer {
     depth_texture_info.usage =
         SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
     depth_texture_ = SDL_CreateGPUTexture(device_, &depth_texture_info);
+
+    SDL_GPUTextureCreateInfo render_texture_info{};
+    render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+    render_texture_info.width = screen_.width;
+    render_texture_info.height = screen_.height;
+    render_texture_info.layer_count_or_depth = 1;
+    render_texture_info.num_levels = 1;
+    render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
+    render_texture_info.sample_count = msaa_sample_count_;
+    msaa_render_texture_ = SDL_CreateGPUTexture(device_, &render_texture_info);
+
+    SDL_GPUTextureCreateInfo resolve_texture_info{};
+    resolve_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+    resolve_texture_info.width = screen_.width;
+    resolve_texture_info.height = screen_.height;
+    resolve_texture_info.layer_count_or_depth = 1;
+    resolve_texture_info.num_levels = 1;
+    resolve_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    resolve_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET | SDL_GPU_TEXTUREUSAGE_SAMPLER;
+    msaa_resolve_texture_ = SDL_CreateGPUTexture(device_, &resolve_texture_info);
 
     if (!CreateSpherePipeline()) {
       return false;
@@ -628,24 +657,13 @@ class RendererImpl : public Renderer {
   }
 
   bool CreateSpherePipeline() {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
+        CreateDefaultPipelineInfo(solid_color_vertex_shader_, solid_color_fragment_shader_);
+
     SDL_GPUColorTargetDescription color_target_desc[1];
     color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
     color_target_desc[0].blend_state = DefaultBlendState();
-
-    SDL_GPUGraphicsPipelineTargetInfo target_info = {};
-    target_info.num_color_targets = 1;
-    target_info.color_target_descriptions = color_target_desc;
-    target_info.has_depth_stencil_target = true;
-    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
-
-    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
-    pipeline_info.target_info = target_info;
-    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
-    pipeline_info.vertex_shader = solid_color_vertex_shader_;
-    pipeline_info.fragment_shader = solid_color_fragment_shader_;
-    pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
-    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
-    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+    pipeline_info.target_info.color_target_descriptions = color_target_desc;
 
     SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
     vertex_buffer_descriptions[0].slot = 0;
@@ -665,12 +683,6 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_attributes = 1;
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
-    SDL_GPUDepthStencilState depth_stencil_state{};
-    depth_stencil_state.enable_depth_test = true;
-    depth_stencil_state.enable_depth_write = true;
-    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
-    depth_stencil_state.write_mask = 0xFF;
-
     sphere_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
     if (sphere_pipeline_ == NULL) {
       Logger::get()->error("ERROR: SpherePipeline SDL_CreateGPUGraphicsPipeline failed: {}",
@@ -682,24 +694,13 @@ class RendererImpl : public Renderer {
   }
 
   bool CreateSolidQuadPipeline() {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
+        CreateDefaultPipelineInfo(solid_color_vertex_shader_, solid_color_fragment_shader_);
+
     SDL_GPUColorTargetDescription color_target_desc[1];
     color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
     color_target_desc[0].blend_state = DefaultBlendState();
-
-    SDL_GPUGraphicsPipelineTargetInfo target_info = {};
-    target_info.num_color_targets = 1;
-    target_info.color_target_descriptions = color_target_desc;
-    target_info.has_depth_stencil_target = true;
-    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
-
-    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
-    pipeline_info.target_info = target_info;
-    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
-    pipeline_info.vertex_shader = solid_color_vertex_shader_;
-    pipeline_info.fragment_shader = solid_color_fragment_shader_;
-    pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
-    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
-    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+    pipeline_info.target_info.color_target_descriptions = color_target_desc;
 
     SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
     vertex_buffer_descriptions[0].slot = 0;
@@ -719,13 +720,6 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_attributes = 1;
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
-    SDL_GPUDepthStencilState depth_stencil_state{};
-    depth_stencil_state.enable_depth_test = true;
-    depth_stencil_state.enable_depth_write = true;
-    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
-    depth_stencil_state.write_mask = 0xFF;
-    pipeline_info.depth_stencil_state = depth_stencil_state;
-
     solid_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
     if (solid_quad_pipeline_ == nullptr) {
       Logger::get()->error("ERROR: SolidQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
@@ -737,24 +731,13 @@ class RendererImpl : public Renderer {
   }
 
   bool CreateTextureQuadPipeline() {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
+        CreateDefaultPipelineInfo(position_and_tex_coord_vertex_shader_, texture_fragment_shader_);
+
     SDL_GPUColorTargetDescription color_target_desc[1];
     color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
     color_target_desc[0].blend_state = DefaultBlendState();
-
-    SDL_GPUGraphicsPipelineTargetInfo target_info = {};
-    target_info.num_color_targets = 1;
-    target_info.color_target_descriptions = color_target_desc;
-    target_info.has_depth_stencil_target = true;
-    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
-
-    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
-    pipeline_info.target_info = target_info;
-    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
-    pipeline_info.vertex_shader = position_and_tex_coord_vertex_shader_;
-    pipeline_info.fragment_shader = texture_fragment_shader_;
-    pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
-    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
-    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+    pipeline_info.target_info.color_target_descriptions = color_target_desc;
 
     SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
     vertex_buffer_descriptions[0].slot = 0;
@@ -779,13 +762,6 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_attributes = 2;
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
-    SDL_GPUDepthStencilState depth_stencil_state{};
-    depth_stencil_state.enable_depth_test = true;
-    depth_stencil_state.enable_depth_write = true;
-    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
-    depth_stencil_state.write_mask = 0xFF;
-    pipeline_info.depth_stencil_state = depth_stencil_state;
-
     texture_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
     if (texture_quad_pipeline_ == nullptr) {
       Logger::get()->error("ERROR: TextureQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
@@ -794,6 +770,31 @@ class RendererImpl : public Renderer {
     }
 
     return true;
+  }
+
+  SDL_GPUGraphicsPipelineCreateInfo CreateDefaultPipelineInfo(SDL_GPUShader* vertex_shader,
+                                                              SDL_GPUShader* fragment_shader) {
+    SDL_GPUGraphicsPipelineTargetInfo target_info = {};
+    target_info.num_color_targets = 1;
+    target_info.has_depth_stencil_target = true;
+    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
+
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
+    pipeline_info.target_info = target_info;
+    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
+    pipeline_info.vertex_shader = vertex_shader;
+    pipeline_info.fragment_shader = fragment_shader;
+    pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
+    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
+    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+
+    SDL_GPUDepthStencilState depth_stencil_state{};
+    depth_stencil_state.enable_depth_test = true;
+    depth_stencil_state.enable_depth_write = true;
+    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
+    depth_stencil_state.write_mask = 0xFF;
+
+    return pipeline_info;
   }
 
   SDL_GPUTransferBuffer* CreateSphereVertexBuffer(SDL_GPUCopyPass* copy_pass) {
@@ -897,6 +898,10 @@ class RendererImpl : public Renderer {
   SDL_GPUBuffer* sphere_vertex_buffer_ = nullptr;
 
   SDL_GPUTexture* depth_texture_ = nullptr;
+  SDL_GPUTexture* msaa_render_texture_ = nullptr;
+  SDL_GPUTexture* msaa_resolve_texture_ = nullptr;
+
+  SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_8;
 
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
