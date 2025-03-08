@@ -74,13 +74,11 @@ struct InstanceData {
 int main(int, char**) {
   using namespace aim;
   auto app = Application::Create();
-  /*
   try {
     CreateAppUi(app.get())->Run();
   } catch (ApplicationExitException e) {
     return 0;
   }
-  */
 
   // Create SDL window graphics context
   SDL_Window* window = app->sdl_window();
