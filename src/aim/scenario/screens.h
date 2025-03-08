@@ -10,7 +10,7 @@ namespace aim {
 
 class StatsScreen {
  public:
-  StatsScreen(std::string scenario_id, i64 stats_id, Application* app, FrameTimes worst_times);
+  StatsScreen(std::string scenario_id, i64 stats_id, Application* app, RunPerformanceStats perf_stats);
 
   NavigationEvent Run(Replay* replay);
 
@@ -18,7 +18,7 @@ class StatsScreen {
   std::string scenario_id_;
   i64 stats_id_;
   Application* app_;
-  FrameTimes worst_times_;
+  RunPerformanceStats perf_stats_;
 };
 
 enum class QuickSettingsType { DEFAULT, METRONOME };

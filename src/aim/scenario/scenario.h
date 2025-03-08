@@ -112,7 +112,7 @@ class Scenario {
   void DoneAdjustingCrosshairSize();
 
   NavigationEvent PauseAndReturn();
-  void MaybeUpdateWorstTimes();
+  void UpdatePerfStats();
 
   u64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
@@ -127,7 +127,7 @@ class Scenario {
   u64 max_render_age_micros_;
 
   FrameTimes current_times_;
-  FrameTimes worst_times_;
+  RunPerformanceStats perf_stats_;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);
