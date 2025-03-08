@@ -206,7 +206,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::End();
 
     RenderContext ctx;
-    if (app_->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
+    if (app_->StartRender(&ctx)) {
       app_->renderer()->DrawScenario(projection_,
                                      def_.room(),
                                      theme_,
@@ -405,7 +405,7 @@ NavigationEvent Scenario::ResumeInternal() {
     ImGui::End();
 
     RenderContext ctx;
-    if (app_->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
+    if (app_->StartRender(&ctx)) {
       app_->renderer()->DrawScenario(projection_,
                                      def_.room(),
                                      theme_,

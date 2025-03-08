@@ -83,9 +83,13 @@ SDL_GPUColorTargetBlendState DefaultBlendState() {
 class RendererImpl : public Renderer {
  public:
   RendererImpl(const std::vector<std::filesystem::path>& texture_dirs,
+               const ScreenInfo& screen,
                SDL_GPUDevice* device,
                SDL_Window* sdl_window)
-      : texture_manager_(texture_dirs, device), device_(device), sdl_window_(sdl_window) {}
+      : texture_manager_(texture_dirs, device),
+        device_(device),
+        sdl_window_(sdl_window),
+        screen_(screen) {}
 
   ~RendererImpl() override {
     Cleanup();
@@ -120,6 +124,10 @@ class RendererImpl : public Renderer {
     if (sphere_vertex_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, sphere_vertex_buffer_);
       sphere_vertex_buffer_ = nullptr;
+    }
+    if (depth_texture_ != nullptr) {
+      SDL_ReleaseGPUTexture(device_, depth_texture_);
+      depth_texture_ = nullptr;
     }
     texture_manager_.clear();
   }
@@ -164,6 +172,19 @@ class RendererImpl : public Renderer {
                    SDL_GPU_SHADERSTAGE_VERTEX,
                    1);
 
+    SDL_GPUTextureCreateInfo depth_texture_info{};
+    depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+    depth_texture_info.width = screen_.width;
+    depth_texture_info.height = screen_.height;
+
+    depth_texture_info.layer_count_or_depth = 1;
+    depth_texture_info.num_levels = 1;
+    depth_texture_info.sample_count = SDL_GPU_SAMPLECOUNT_1;
+    depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
+    depth_texture_info.usage =
+        SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
+    depth_texture_ = SDL_CreateGPUTexture(device_, &depth_texture_info);
+
     if (!CreateSpherePipeline()) {
       return false;
     }
@@ -202,6 +223,29 @@ class RendererImpl : public Renderer {
                     RenderContext* ctx,
                     const Stopwatch& stopwatch,
                     FrameTimes* times) override {
+    // Setup and start a render pass
+    SDL_GPUColorTargetInfo target_info = {};
+    target_info.texture = ctx->swapchain_texture;
+    target_info.clear_color = SDL_FColor{0.7, 0.7, 0.7, 1.0};
+    target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+    target_info.store_op = SDL_GPU_STOREOP_STORE;
+    target_info.mip_level = 0;
+    target_info.layer_or_depth_plane = 0;
+    target_info.cycle = false;
+
+    SDL_GPUDepthStencilTargetInfo depth_stencil_target_info = {0};
+    depth_stencil_target_info.texture = depth_texture_;
+    depth_stencil_target_info.cycle = true;
+    depth_stencil_target_info.clear_depth = 1;
+    depth_stencil_target_info.clear_stencil = 0;
+    depth_stencil_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+    depth_stencil_target_info.store_op = SDL_GPU_STOREOP_STORE;
+    depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
+
+    depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
+    ctx->render_pass =
+        SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, &depth_stencil_target_info);
+
     const glm::mat4 view_projection = projection * view;
     times->render_room_start = stopwatch.GetElapsedMicros();
     DrawRoom(view_projection, theme, room, ctx);
@@ -851,18 +895,24 @@ class RendererImpl : public Renderer {
   SDL_GPUBuffer* cylinder_wall_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* cylinder_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* sphere_vertex_buffer_ = nullptr;
+
+  SDL_GPUTexture* depth_texture_ = nullptr;
+
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
   unsigned int num_cylinder_vertices_;
+
+  ScreenInfo screen_;
 };
 
 }  // namespace
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
+                                         const ScreenInfo& screen,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window) {
-  auto renderer = std::make_unique<RendererImpl>(texture_dirs, device, sdl_window);
+  auto renderer = std::make_unique<RendererImpl>(texture_dirs, screen, device, sdl_window);
   if (!renderer->Initialize(shader_dir)) {
     return {};
   }

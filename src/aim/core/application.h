@@ -46,11 +46,11 @@ class Application {
   static std::unique_ptr<Application> Create();
 
   ImDrawList* StartFullscreenImguiFrame();
-  bool StartRender(RenderContext* render_context,
-                   ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
 
+  bool StartRender(RenderContext* render_context);
   void FinishRender(RenderContext* render_context);
 
+  // Render just ImGui screen.
   void Render(ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
 
   SDL_Window* sdl_window() {
@@ -125,7 +125,6 @@ class Application {
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
-  SDL_GPUTexture* depth_texture_ = nullptr;
 
   int window_width_ = -1;
   int window_height_ = -1;
