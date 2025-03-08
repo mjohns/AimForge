@@ -187,10 +187,9 @@ class RendererImpl : public Renderer {
 
     depth_texture_info.layer_count_or_depth = 1;
     depth_texture_info.num_levels = 1;
-    depth_texture_info.sample_count = SDL_GPU_SAMPLECOUNT_1;
+    depth_texture_info.sample_count = msaa_sample_count_;
     depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
-    depth_texture_info.usage =
-        SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
+    depth_texture_info.usage = SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
     depth_texture_ = SDL_CreateGPUTexture(device_, &depth_texture_info);
 
     SDL_GPUTextureCreateInfo render_texture_info{};
@@ -260,10 +259,9 @@ class RendererImpl : public Renderer {
     target_info.texture = msaa_render_texture_;
     target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
     target_info.resolve_texture = msaa_resolve_texture_;
-
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
-    target_info.cycle = false;
+    target_info.cycle = true;
 
     SDL_GPUDepthStencilTargetInfo depth_stencil_target_info = {0};
     depth_stencil_target_info.texture = depth_texture_;
@@ -809,6 +807,7 @@ class RendererImpl : public Renderer {
     SDL_GPUDepthStencilState depth_stencil_state{};
     depth_stencil_state.enable_depth_test = true;
     depth_stencil_state.enable_depth_write = true;
+    depth_stencil_state.enable_stencil_test = true;
     depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
     depth_stencil_state.write_mask = 0xFF;
 
@@ -919,7 +918,7 @@ class RendererImpl : public Renderer {
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
   SDL_GPUTexture* msaa_resolve_texture_ = nullptr;
 
-  SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_8;
+  const SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_4;
 
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
