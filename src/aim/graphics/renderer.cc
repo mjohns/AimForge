@@ -213,7 +213,7 @@ class RendererImpl : public Renderer {
     transform = view_projection * transform;
     SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
 
-    glm::vec4 color4(color, 1);
+    glm::vec4 color4(color, 1.0f);
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
 
     SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
