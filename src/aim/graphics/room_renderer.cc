@@ -282,7 +282,7 @@ void RoomRenderer::DrawWall(const glm::mat4& model,
     texture_shader_.SetVec2("mix_color", mix_color);
     texture_shader_.SetFloat("mix_percent", appearance.texture().mix_percent());
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture->id());
+    //glBindTexture(GL_TEXTURE_2D, texture->id());
     if (is_cylinder_wall) {
       glBindVertexArray(cylinder_wall_vao_);
       glDrawArrays(GL_TRIANGLES, 0, cylinder_wall_num_vertices_);

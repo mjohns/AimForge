@@ -11,58 +11,91 @@
 
 namespace aim {
 namespace {
-std::optional<GLenum> GetGlFormat(SDL_Surface* surface) {
+std::optional<SDL_GPUTextureFormat> GetFormat(SDL_Surface* surface) {
   if (surface->format == SDL_PIXELFORMAT_RGBA32) {
-    return GL_RGBA;
+    return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
   }
   if (surface->format == SDL_PIXELFORMAT_RGB24) {
-    return GL_RGB;
+    return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
   }
   Logger::get()->warn("Invalid image format type for texture");
-  return {};
+  return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
+  // return {};
 }
 
 }  // namespace
 
-Texture::Texture(const std::filesystem::path& path) {
-  glGenTextures(1, &texture_);
-  glBindTexture(GL_TEXTURE_2D, texture_);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) {
   Image image(path);
-  if (image.is_loaded()) {
-    auto format = GetGlFormat(image.surface());
-    if (format.has_value()) {
-      is_loaded_ = true;
-      height_ = image.height();
-      width_ = image.width();
-      glTexImage2D(GL_TEXTURE_2D,
-                   0,
-                   *format,
-                   image.width(),
-                   image.height(),
-                   0,
-                   *format,
-                   GL_UNSIGNED_BYTE,
-                   image.surface()->pixels);
-      glGenerateMipmap(GL_TEXTURE_2D);
-    }
+  if (!image.is_loaded()) {
+    Logger::get()->error("Failed to load texture image: {}", path.string());
+    return;
   }
-  if (!is_loaded_) {
-    Logger::get()->error("Failed to load texture: {}", path.string());
-  }
+
+  // TODO: optimize image for rendering SDL_ConvertSurface
+
+  SDL_GPUSamplerCreateInfo sampler_create_info{};
+  sampler_create_info.min_filter = SDL_GPU_FILTER_LINEAR;
+  sampler_create_info.mag_filter = SDL_GPU_FILTER_LINEAR;
+  sampler_create_info.mipmap_mode = SDL_GPU_SAMPLERMIPMAPMODE_LINEAR;
+  sampler_create_info.address_mode_u = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
+  sampler_create_info.address_mode_v = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
+  sampler_create_info.address_mode_w = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
+  sampler_ = SDL_CreateGPUSampler(device, &sampler_create_info);
+
+  auto format = GetFormat(image.surface());
+
+  SDL_GPUTextureCreateInfo create_info{};
+  create_info.type = SDL_GPU_TEXTURETYPE_2D;
+  create_info.format = *format;
+  create_info.width = image.width();
+  create_info.height = image.height();
+  create_info.layer_count_or_depth = 1;
+  create_info.num_levels = 1;
+  create_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER;
+  texture_ = SDL_CreateGPUTexture(device, &create_info);
+
+  SDL_GPUTransferBufferCreateInfo transfer_create_info{};
+  transfer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+  int size = image.width() * image.height() * 4;
+  transfer_create_info.size = size;
+
+  SDL_GPUTransferBuffer* transfer_buffer =
+      SDL_CreateGPUTransferBuffer(device, &transfer_create_info);
+
+  Uint8* texture_transfer_ptr = (Uint8*)SDL_MapGPUTransferBuffer(device, transfer_buffer, false);
+  SDL_memcpy(texture_transfer_ptr, image.surface()->pixels, size);
+  SDL_UnmapGPUTransferBuffer(device, transfer_buffer);
+
+  // Upload the transfer data to the GPU resources
+  SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
+
+  SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
+  SDL_GPUTextureTransferInfo texture_transfer_info{};
+  texture_transfer_info.transfer_buffer = transfer_buffer;
+  texture_transfer_info.offset = 0;
+
+  SDL_GPUTextureRegion region{};
+  region.texture = texture_;
+  region.w = image.width();
+  region.h = image.height();
+  region.d = 1;
+  SDL_UploadToGPUTexture(copyPass, &texture_transfer_info, &region, false);
+
+  SDL_EndGPUCopyPass(copyPass);
+  SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+  SDL_ReleaseGPUTransferBuffer(device, transfer_buffer);
+
+  texture_sampler_binding_.texture = texture_;
+  texture_sampler_binding_.sampler = sampler_;
+  is_loaded_ = true;
 }
 
-Texture::~Texture() {
-  glDeleteTextures(1, &texture_);
-}
+Texture::~Texture() {}
 
-TextureManager::TextureManager(std::vector<std::filesystem::path> texture_folders)
-    : texture_folders_(std::move(texture_folders)) {}
+TextureManager::TextureManager(std::vector<std::filesystem::path> texture_folders,
+                               SDL_GPUDevice* device)
+    : texture_folders_(std::move(texture_folders)), gpu_device_(device) {}
 
 Texture* TextureManager::GetTexture(const std::string& name) {
   auto it = texture_cache_.find(name);
@@ -76,7 +109,7 @@ Texture* TextureManager::GetTexture(const std::string& name) {
     if (!std::filesystem::exists(path)) {
       continue;
     }
-    auto texture = std::make_unique<Texture>(path);
+    auto texture = std::make_unique<Texture>(path, gpu_device_);
     if (texture->is_loaded()) {
       Texture* result = texture.get();
       texture_cache_[name] = std::move(texture);
