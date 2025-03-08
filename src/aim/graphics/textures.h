@@ -49,6 +49,7 @@ class Texture {
   SDL_GPUTexture* texture_ = nullptr;
   SDL_GPUSampler* sampler_ = nullptr;
   SDL_GPUTextureSamplerBinding texture_sampler_binding_{};
+  SDL_GPUDevice* device_ = nullptr;
 
   bool is_loaded_ = false;
   int height_ = 0;
