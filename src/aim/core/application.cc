@@ -59,9 +59,6 @@ Application::~Application() {
     if (renderer_) {
       renderer_->Cleanup();
     }
-    if (depth_texture_ != nullptr) {
-      SDL_ReleaseGPUTexture(gpu_device_, depth_texture_);
-    }
     if (sdl_window_ != nullptr) {
       SDL_ReleaseWindowFromGPUDevice(gpu_device_, sdl_window_);
     }
@@ -187,25 +184,13 @@ int Application::Initialize() {
                 window_pixel_density);
 
   // SDL_ShowWindow(sdl_window_);
-  SDL_GPUTextureCreateInfo depth_texture_info{};
-  depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-  depth_texture_info.width = window_width_;
-  depth_texture_info.height = window_height_;
-
-  depth_texture_info.layer_count_or_depth = 1;
-  depth_texture_info.num_levels = 1;
-  depth_texture_info.sample_count = SDL_GPU_SAMPLECOUNT_1;
-  depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
-  depth_texture_info.usage =
-      SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
-  depth_texture_ = SDL_CreateGPUTexture(gpu_device_, &depth_texture_info);
 
   std::vector<std::filesystem::path> texture_dirs = {
       file_system_->GetUserDataPath("resources/textures"),
       file_system_->GetBasePath("resources/textures"),
   };
   std::filesystem::path shader_dir = file_system_->GetBasePath("shaders/compiled");
-  renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
+  renderer_ = CreateRenderer(texture_dirs, shader_dir, screen_info(), gpu_device_, sdl_window_);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -287,7 +272,7 @@ void Application::Render(ImVec4 clear_color) {
   SDL_SubmitGPUCommandBuffer(command_buffer);
 }
 
-bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color) {
+bool Application::StartRender(RenderContext* render_context) {
   ImGui::Render();
   ImDrawData* draw_data = ImGui::GetDrawData();
   const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
@@ -307,28 +292,6 @@ bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color)
   // buffer!
   Imgui_ImplSDLGPU3_PrepareDrawData(draw_data, render_context->command_buffer);
 
-  // Setup and start a render pass
-  SDL_GPUColorTargetInfo target_info = {};
-  target_info.texture = render_context->swapchain_texture;
-  target_info.clear_color = SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
-  target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-  target_info.store_op = SDL_GPU_STOREOP_STORE;
-  target_info.mip_level = 0;
-  target_info.layer_or_depth_plane = 0;
-  target_info.cycle = false;
-
-  SDL_GPUDepthStencilTargetInfo depth_stencil_target_info = {0};
-  depth_stencil_target_info.texture = depth_texture_;
-  depth_stencil_target_info.cycle = true;
-  depth_stencil_target_info.clear_depth = 1;
-  depth_stencil_target_info.clear_stencil = 0;
-  depth_stencil_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-  depth_stencil_target_info.store_op = SDL_GPU_STOREOP_STORE;
-  depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
-
-  depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
-  render_context->render_pass = SDL_BeginGPURenderPass(
-      render_context->command_buffer, &target_info, 1, &depth_stencil_target_info);
   return true;
 }
 

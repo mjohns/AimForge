@@ -127,7 +127,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
     ImGui::End();
 
     RenderContext ctx;
-    if (app->StartRender(&ctx, ImVec4(0, 0, 0, 1))) {
+    if (app->StartRender(&ctx)) {
       app->renderer()->DrawScenario(projection,
                                     replay.room(),
                                     theme,
