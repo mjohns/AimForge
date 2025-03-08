@@ -93,8 +93,12 @@ class RendererImpl : public Renderer {
       sphere_pipeline_ = nullptr;
     }
     if (solid_quad_pipeline_ != nullptr) {
-      SDL_ReleaseGPUGraphicsPipeline(device_, sphere_pipeline_);
+      SDL_ReleaseGPUGraphicsPipeline(device_, solid_quad_pipeline_);
       sphere_pipeline_ = nullptr;
+    }
+    if (texture_quad_pipeline_ != nullptr) {
+      SDL_ReleaseGPUGraphicsPipeline(device_, texture_quad_pipeline_);
+      texture_quad_pipeline_ = nullptr;
     }
   }
 
@@ -106,6 +110,14 @@ class RendererImpl : public Renderer {
     if (solid_color_fragment_shader_ != nullptr) {
       SDL_ReleaseGPUShader(device_, solid_color_fragment_shader_);
       solid_color_fragment_shader_ = nullptr;
+    }
+    if (position_and_tex_coord_vertex_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, position_and_tex_coord_vertex_shader_);
+      position_and_tex_coord_vertex_shader_ = nullptr;
+    }
+    if (texture_fragment_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, texture_fragment_shader_);
+      texture_fragment_shader_ = nullptr;
     }
   }
 
@@ -119,11 +131,24 @@ class RendererImpl : public Renderer {
                    (shader_dir / "solid_color.frag.spv").string().c_str(),
                    SDL_GPU_SHADERSTAGE_FRAGMENT,
                    1);
+    texture_fragment_shader_ = LoadShader(device_,
+                                          (shader_dir / "texture.frag.spv").string().c_str(),
+                                          SDL_GPU_SHADERSTAGE_FRAGMENT,
+                                          1,
+                                          1);
+    position_and_tex_coord_vertex_shader_ =
+        LoadShader(device_,
+                   (shader_dir / "position_and_texture_coord.vert.spv").string().c_str(),
+                   SDL_GPU_SHADERSTAGE_VERTEX,
+                   1);
 
     if (!CreateSpherePipeline()) {
       return false;
     }
     if (!CreateSolidQuadPipeline()) {
+      return false;
+    }
+    if (!CreateTextureQuadPipeline()) {
       return false;
     }
 
@@ -332,49 +357,45 @@ class RendererImpl : public Renderer {
                 const WallAppearance& appearance,
                 bool is_cylinder_wall,
                 RenderContext* ctx) {
-    /*
-  if (appearance.has_texture()) {
-    Texture* texture = texture_manager_->GetTexture(appearance.texture().texture_name());
-    if (texture == nullptr) {
-      // Too spammy to log this error?
-      DrawWallSolidColor(model, view, glm::vec3(0.7), is_cylinder_wall);
+    if (appearance.has_texture()) {
+      Texture* texture = texture_manager_.GetTexture(appearance.texture().texture_name());
+      if (texture == nullptr) {
+        // Too spammy to log this error?
+        DrawWallSolidColor(transform, glm::vec3(0.7), is_cylinder_wall, ctx);
+        return;
+      }
+
+      glm::vec2 tex_scale;
+
+      float tex_scale_height = 100;
+      float tex_scale_width = (texture->width() * tex_scale_height) / (float)texture->height();
+
+      tex_scale.x = wall.width / tex_scale_width;
+      tex_scale.y = wall.height / tex_scale_height;
+
+      if (appearance.texture().has_scale()) {
+        tex_scale *= appearance.texture().scale();
+      }
+
+      SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
+      SDL_GPUBufferBinding binding{};
+      binding.buffer = is_cylinder_wall ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
+      binding.offset = 0;
+      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+      SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
+
+      glm::vec3 mix_color = ToVec3(appearance.texture().mix_color());
+      glm::vec4 color4(mix_color, appearance.texture().mix_percent());
+      SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+      SDL_BindGPUFragmentSamplers(ctx->render_pass, 0, texture->texture_sampler_binding(), 1);
+
+      SDL_DrawGPUPrimitives(ctx->render_pass,
+                            is_cylinder_wall ? num_cylinder_wall_vertices_ : kQuadNumVertices,
+                            1,
+                            0,
+                            0);
       return;
     }
-
-    glm::vec2 tex_scale;
-
-    float tex_scale_height = 100;
-    float tex_scale_width = (texture->width() * tex_scale_height) / (float)texture->height();
-
-    tex_scale.x = wall.width / tex_scale_width;
-    tex_scale.y = wall.height / tex_scale_height;
-
-    if (appearance.texture().has_scale()) {
-      tex_scale *= appearance.texture().scale();
-    }
-
-    texture_shader_.Use();
-    texture_shader_.SetMat4("view", view);
-
-    texture_shader_.SetInt("texture1", 0);
-    texture_shader_.SetMat4("model", model);
-    texture_shader_.SetVec2("tex_scale", tex_scale);
-
-    glm::vec3 mix_color = ToVec3(appearance.texture().mix_color());
-    texture_shader_.SetVec2("mix_color", mix_color);
-    texture_shader_.SetFloat("mix_percent", appearance.texture().mix_percent());
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture->id());
-    if (is_cylinder_wall) {
-      glBindVertexArray(cylinder_wall_vao_);
-      glDrawArrays(GL_TRIANGLES, 0, cylinder_wall_num_vertices_);
-    } else {
-      glBindVertexArray(quad_vao_);
-      glDrawArrays(GL_TRIANGLES, 0, kQuadNumVertices);
-    }
-    return;
-  }
-  */
 
     DrawWallSolidColor(transform, ToVec3(appearance.color()), is_cylinder_wall, ctx);
   }
@@ -520,7 +541,7 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_buffers = 1;
     pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
 
-    SDL_GPUVertexAttribute vertex_attributes[6];
+    SDL_GPUVertexAttribute vertex_attributes[1];
     vertex_attributes[0].location = 0;
     vertex_attributes[0].buffer_slot = 0;
     vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
@@ -574,7 +595,7 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_buffers = 1;
     pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
 
-    SDL_GPUVertexAttribute vertex_attributes[6];
+    SDL_GPUVertexAttribute vertex_attributes[1];
     vertex_attributes[0].location = 0;
     vertex_attributes[0].buffer_slot = 0;
     vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
@@ -593,6 +614,66 @@ class RendererImpl : public Renderer {
     solid_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
     if (solid_quad_pipeline_ == nullptr) {
       Logger::get()->error("ERROR: SolidQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+                           SDL_GetError());
+      return false;
+    }
+
+    return true;
+  }
+
+  bool CreateTextureQuadPipeline() {
+    SDL_GPUColorTargetDescription color_target_desc[1];
+    color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    color_target_desc[0].blend_state = DefaultBlendState();
+
+    SDL_GPUGraphicsPipelineTargetInfo target_info = {};
+    target_info.num_color_targets = 1;
+    target_info.color_target_descriptions = color_target_desc;
+    target_info.has_depth_stencil_target = true;
+    target_info.depth_stencil_format = SDL_GPU_TEXTUREFORMAT_D16_UNORM;
+
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info{};
+    pipeline_info.target_info = target_info;
+    pipeline_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
+    pipeline_info.vertex_shader = position_and_tex_coord_vertex_shader_;
+    pipeline_info.fragment_shader = texture_fragment_shader_;
+    pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
+    pipeline_info.rasterizer_state.cull_mode = SDL_GPU_CULLMODE_BACK;
+    pipeline_info.rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+
+    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+    vertex_buffer_descriptions[0].slot = 0;
+    vertex_buffer_descriptions[0].pitch = sizeof(VertexAndTexCoord);
+    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+    vertex_buffer_descriptions[0].instance_step_rate = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+    pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
+
+    SDL_GPUVertexAttribute vertex_attributes[2];
+    vertex_attributes[0].location = 0;
+    vertex_attributes[0].buffer_slot = 0;
+    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+    vertex_attributes[0].offset = 0;
+
+    vertex_attributes[1].location = 1;
+    vertex_attributes[1].buffer_slot = 0;
+    vertex_attributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
+    vertex_attributes[1].offset = sizeof(float) * 3;
+
+    pipeline_info.vertex_input_state.num_vertex_attributes = 2;
+    pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
+
+    SDL_GPUDepthStencilState depth_stencil_state{};
+    depth_stencil_state.enable_depth_test = true;
+    depth_stencil_state.enable_depth_write = true;
+    depth_stencil_state.compare_op = SDL_GPU_COMPAREOP_LESS;
+    depth_stencil_state.write_mask = 0xFF;
+    pipeline_info.depth_stencil_state = depth_stencil_state;
+
+    texture_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+    if (texture_quad_pipeline_ == nullptr) {
+      Logger::get()->error("ERROR: TextureQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
                            SDL_GetError());
       return false;
     }
@@ -765,8 +846,11 @@ class RendererImpl : public Renderer {
 
   SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
+  SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
+  SDL_GPUShader* texture_fragment_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
   SDL_GPUGraphicsPipeline* solid_quad_pipeline_;
+  SDL_GPUGraphicsPipeline* texture_quad_pipeline_;
   TextureManager texture_manager_;
   SDL_GPUDevice* device_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;

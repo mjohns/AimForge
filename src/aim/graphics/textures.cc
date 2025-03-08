@@ -12,6 +12,7 @@
 namespace aim {
 namespace {
 std::optional<SDL_GPUTextureFormat> GetFormat(SDL_Surface* surface) {
+  // TODO: Make this more robust and correct.
   if (surface->format == SDL_PIXELFORMAT_RGBA32) {
     return SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
   }
@@ -25,14 +26,18 @@ std::optional<SDL_GPUTextureFormat> GetFormat(SDL_Surface* surface) {
 
 }  // namespace
 
-Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : device_(device) {
+Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu_device_(device) {
   Image image(path);
   if (!image.is_loaded()) {
     Logger::get()->error("Failed to load texture image: {}", path.string());
     return;
   }
 
-  // TODO: optimize image for rendering SDL_ConvertSurface
+  SDL_Surface* image_surface = SDL_ConvertSurface(image.surface(), SDL_PIXELFORMAT_ABGR8888);
+  if (image_surface == nullptr || image_surface->format != SDL_PIXELFORMAT_ABGR8888) {
+    SDL_DestroySurface(image_surface);
+    return;
+  }
 
   SDL_GPUSamplerCreateInfo sampler_create_info{};
   sampler_create_info.min_filter = SDL_GPU_FILTER_LINEAR;
@@ -43,11 +48,9 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : dev
   sampler_create_info.address_mode_w = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
   sampler_ = SDL_CreateGPUSampler(device, &sampler_create_info);
 
-  auto format = GetFormat(image.surface());
-
   SDL_GPUTextureCreateInfo create_info{};
   create_info.type = SDL_GPU_TEXTURETYPE_2D;
-  create_info.format = *format;
+  create_info.format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
   create_info.width = image.width();
   create_info.height = image.height();
   create_info.layer_count_or_depth = 1;
@@ -63,8 +66,8 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : dev
   SDL_GPUTransferBuffer* transfer_buffer =
       SDL_CreateGPUTransferBuffer(device, &transfer_create_info);
 
-  Uint8* texture_transfer_ptr = (Uint8*)SDL_MapGPUTransferBuffer(device, transfer_buffer, false);
-  SDL_memcpy(texture_transfer_ptr, image.surface()->pixels, size);
+  Uint8* texture_transfer_ptr = (Uint8*)SDL_MapGPUTransferBuffer(device, transfer_buffer, true);
+  SDL_memcpy(texture_transfer_ptr, image_surface->pixels, size);
   SDL_UnmapGPUTransferBuffer(device, transfer_buffer);
 
   // Upload the transfer data to the GPU resources
@@ -80,11 +83,13 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : dev
   region.w = image.width();
   region.h = image.height();
   region.d = 1;
-  SDL_UploadToGPUTexture(copyPass, &texture_transfer_info, &region, false);
+  SDL_UploadToGPUTexture(copyPass, &texture_transfer_info, &region, true);
 
   SDL_EndGPUCopyPass(copyPass);
   SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+
   SDL_ReleaseGPUTransferBuffer(device, transfer_buffer);
+  SDL_DestroySurface(image_surface);
 
   texture_sampler_binding_.texture = texture_;
   texture_sampler_binding_.sampler = sampler_;
@@ -93,10 +98,10 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : dev
 
 Texture::~Texture() {
   if (texture_ != nullptr) {
-    SDL_ReleaseGPUTexture(device_, texture_);
+    SDL_ReleaseGPUTexture(gpu_device_, texture_);
   }
   if (sampler_ != nullptr) {
-    SDL_ReleaseGPUSampler(device_, sampler_);
+    SDL_ReleaseGPUSampler(gpu_device_, sampler_);
   }
 }
 
