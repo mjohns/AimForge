@@ -8,5 +8,6 @@ SamplerState Sampler : register(s0, space2);
 
 float4 main(float2 TexCoord : TEXCOORD0) : SV_Target0
 {
-    return Texture.Sample(Sampler, TexCoord);
+    float4 FullColor = float4(Color.r, Color.g, Color.b, 1.0);
+    return lerp(Texture.Sample(Sampler, TexCoord), FullColor, Color.a);
 }
