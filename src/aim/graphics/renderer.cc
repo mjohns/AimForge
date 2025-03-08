@@ -134,12 +134,14 @@ class RendererImpl : public Renderer {
     SDL_GPUTransferBuffer* quad_transfer_buffer = CreateQuadVertexBuffer(copy_pass);
     SDL_GPUTransferBuffer* cylinder_wall_transfer_buffer =
         CreateCylinderWallVertexBuffer(copy_pass);
+    SDL_GPUTransferBuffer* cylinder_transfer_buffer = CreateCylinderVertexBuffer(copy_pass);
 
     SDL_EndGPUCopyPass(copy_pass);
     SDL_SubmitGPUCommandBuffer(upload_command_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, sphere_transfer_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, quad_transfer_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, cylinder_wall_transfer_buffer);
+    SDL_ReleaseGPUTransferBuffer(device_, cylinder_transfer_buffer);
 
     CleanupShaders();
     return true;
@@ -416,10 +418,6 @@ class RendererImpl : public Renderer {
         theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
 
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
-    SDL_GPUBufferBinding binding{};
-    binding.buffer = sphere_vertex_buffer_;
-    binding.offset = 0;
-    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
 
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
@@ -430,7 +428,7 @@ class RendererImpl : public Renderer {
           c.up = target.pill_up;
           c.height = target.height - target.radius;
           c.position = target.position;
-          // cylinder_renderer_.Draw(ToVec3(room.camera_position()), view, color, {c});
+          DrawCylinder(view_projection, c, color, ctx);
 
           DrawSphere(
               view_projection, c.position + c.up * (c.height * 0.5f), target.radius, color, ctx);
@@ -448,6 +446,11 @@ class RendererImpl : public Renderer {
                   float radius,
                   const glm::vec3& color,
                   RenderContext* ctx) {
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = sphere_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, position);
     transform = glm::scale(transform, glm::vec3(radius));
@@ -458,6 +461,34 @@ class RendererImpl : public Renderer {
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
 
     SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
+  }
+
+  void DrawCylinder(const glm::mat4& view_projection,
+                    const Cylinder& c,
+                    const glm::vec3& color,
+                    RenderContext* ctx) {
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = cylinder_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, c.position);
+    if (c.up != glm::vec3(0, 0, 1) && c.up != glm::vec3(0, 0, -1)) {
+      glm::vec3 up = glm::vec3(0, 0, 1);
+      glm::vec3 rotate_axis = glm::normalize(glm::cross(up, c.up));
+      float angle = glm::acos(glm::dot(up, c.up));
+      model = glm::rotate(model, angle, rotate_axis);
+    }
+    model = glm::scale(model, glm::vec3(c.radius, c.radius, c.height));
+
+    glm::mat4 transform = view_projection * model;
+    SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
+
+    glm::vec4 color4(color, 1.0f);
+    SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+
+    SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
   }
 
   bool CreateSpherePipeline() {
@@ -663,21 +694,6 @@ class RendererImpl : public Renderer {
   }
 
   SDL_GPUTransferBuffer* CreateCylinderWallVertexBuffer(SDL_GPUCopyPass* copy_pass) {
-    VertexAndTexCoord bottom_right;
-    VertexAndTexCoord bottom_left;
-    VertexAndTexCoord top_left;
-    VertexAndTexCoord top_right;
-
-    bottom_right.vertex = glm::vec3(0.5f, 0.0f, -0.5f);
-    bottom_left.vertex = glm::vec3(-0.5f, 0.0f, -0.5f);
-    top_left.vertex = glm::vec3(-0.5f, 0.0f, 0.5f);
-    top_right.vertex = glm::vec3(0.5f, 0.0f, 0.5f);
-
-    bottom_right.tex_coord = glm::vec2(1.0f, 1.0f);
-    bottom_left.tex_coord = glm::vec2(0.0f, 1.0f);
-    top_left.tex_coord = glm::vec2(0.0f, 0.0f);
-    top_right.tex_coord = glm::vec2(1.0f, 0.0f);
-
     std::vector<VertexAndTexCoord> vertices = GenerateCylinderWallVertices(400);
     num_cylinder_wall_vertices_ = vertices.size();
     int size = sizeof(VertexAndTexCoord) * vertices.size();
@@ -712,6 +728,41 @@ class RendererImpl : public Renderer {
     return transfer_buffer;
   }
 
+  SDL_GPUTransferBuffer* CreateCylinderVertexBuffer(SDL_GPUCopyPass* copy_pass) {
+    std::vector<glm::vec3> vertices = GenerateCylinderVertices(100);
+    num_cylinder_vertices_ = vertices.size();
+    int size = sizeof(glm::vec3) * vertices.size();
+
+    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
+    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+    vertex_buffer_create_info.size = size;
+
+    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
+
+    // Set up buffer data
+    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
+    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+    transfer_buffer_create_info.size = size;
+    SDL_GPUTransferBuffer* transfer_buffer =
+        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
+
+    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
+    SDL_memcpy(transfer_data, vertices.data(), size);
+    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
+
+    SDL_GPUTransferBufferLocation location{};
+    location.transfer_buffer = transfer_buffer;
+    location.offset = 0;
+    SDL_GPUBufferRegion region{};
+    region.buffer = vertex_buffer;
+    region.offset = 0;
+    region.size = size;
+    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
+
+    cylinder_vertex_buffer_ = vertex_buffer;
+    return transfer_buffer;
+  }
+
   SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
@@ -722,9 +773,11 @@ class RendererImpl : public Renderer {
 
   SDL_GPUBuffer* quad_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* cylinder_wall_vertex_buffer_ = nullptr;
+  SDL_GPUBuffer* cylinder_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* sphere_vertex_buffer_ = nullptr;
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
+  unsigned int num_cylinder_vertices_;
 };
 
 }  // namespace

@@ -324,8 +324,8 @@ bool Application::StartRender(RenderContext* render_context, ImVec4 clear_color)
   depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
 
   depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
-  render_context->render_pass =
-      SDL_BeginGPURenderPass(render_context->command_buffer, &target_info, 1, &depth_stencil_target_info);
+  render_context->render_pass = SDL_BeginGPURenderPass(
+      render_context->command_buffer, &target_info, 1, &depth_stencil_target_info);
   return true;
 }
 
