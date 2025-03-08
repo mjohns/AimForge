@@ -2,6 +2,8 @@ set(NAME "AimForge")
 
 add_subdirectory(aim)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 add_executable(
     ${NAME}
     main.cc )
@@ -16,7 +18,6 @@ if(WIN32)
     )
 endif(WIN32)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 target_link_libraries(${NAME} PUBLIC aim SDL3::SDL3 imgui glm::glm-header-only)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
