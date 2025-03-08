@@ -755,37 +755,8 @@ class RendererImpl : public Renderer {
   SDL_GPUTransferBuffer* CreateSphereVertexBuffer(SDL_GPUCopyPass* copy_pass) {
     std::vector<float> sphere_vertices = GenerateSphereVertices(3);
     num_sphere_vertices_ = sphere_vertices.size() / 3;
-
     int size = sizeof(float) * sphere_vertices.size();
-
-    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
-    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
-    vertex_buffer_create_info.size = size;
-
-    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
-
-    // Set up buffer data
-    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
-    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
-    transfer_buffer_create_info.size = size;
-    SDL_GPUTransferBuffer* transfer_buffer =
-        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
-
-    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
-    SDL_memcpy(transfer_data, sphere_vertices.data(), size);
-    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
-
-    SDL_GPUTransferBufferLocation location{};
-    location.transfer_buffer = transfer_buffer;
-    location.offset = 0;
-    SDL_GPUBufferRegion region{};
-    region.buffer = vertex_buffer;
-    region.offset = 0;
-    region.size = size;
-    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
-
-    sphere_vertex_buffer_ = vertex_buffer;
-    return transfer_buffer;
+    return UploadBuffer(sphere_vertices.data(), size, copy_pass, &sphere_vertex_buffer_);
   }
 
   SDL_GPUTransferBuffer* CreateQuadVertexBuffer(SDL_GPUCopyPass* copy_pass) {
@@ -814,77 +785,27 @@ class RendererImpl : public Renderer {
     };
 
     int size = sizeof(VertexAndTexCoord) * vertices.size();
-
-    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
-    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
-    vertex_buffer_create_info.size = size;
-
-    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
-
-    // Set up buffer data
-    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
-    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
-    transfer_buffer_create_info.size = size;
-    SDL_GPUTransferBuffer* transfer_buffer =
-        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
-
-    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
-    SDL_memcpy(transfer_data, vertices.data(), size);
-    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
-
-    SDL_GPUTransferBufferLocation location{};
-    location.transfer_buffer = transfer_buffer;
-    location.offset = 0;
-    SDL_GPUBufferRegion region{};
-    region.buffer = vertex_buffer;
-    region.offset = 0;
-    region.size = size;
-    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
-
-    quad_vertex_buffer_ = vertex_buffer;
-    return transfer_buffer;
+    return UploadBuffer(vertices.data(), size, copy_pass, &quad_vertex_buffer_);
   }
 
   SDL_GPUTransferBuffer* CreateCylinderWallVertexBuffer(SDL_GPUCopyPass* copy_pass) {
     std::vector<VertexAndTexCoord> vertices = GenerateCylinderWallVertices(400);
     num_cylinder_wall_vertices_ = vertices.size();
     int size = sizeof(VertexAndTexCoord) * vertices.size();
-
-    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
-    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
-    vertex_buffer_create_info.size = size;
-
-    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
-
-    // Set up buffer data
-    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
-    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
-    transfer_buffer_create_info.size = size;
-    SDL_GPUTransferBuffer* transfer_buffer =
-        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
-
-    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
-    SDL_memcpy(transfer_data, vertices.data(), size);
-    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
-
-    SDL_GPUTransferBufferLocation location{};
-    location.transfer_buffer = transfer_buffer;
-    location.offset = 0;
-    SDL_GPUBufferRegion region{};
-    region.buffer = vertex_buffer;
-    region.offset = 0;
-    region.size = size;
-    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
-
-    cylinder_wall_vertex_buffer_ = vertex_buffer;
-    return transfer_buffer;
+    return UploadBuffer(vertices.data(), size, copy_pass, &cylinder_wall_vertex_buffer_);
   }
 
   SDL_GPUTransferBuffer* CreateCylinderVertexBuffer(SDL_GPUCopyPass* copy_pass) {
     std::vector<glm::vec3> vertices = GenerateCylinderVertices(100);
     num_cylinder_vertices_ = vertices.size();
     int size = sizeof(glm::vec3) * vertices.size();
+    return UploadBuffer(vertices.data(), size, copy_pass, &cylinder_vertex_buffer_);
+  }
 
+  SDL_GPUTransferBuffer* UploadBuffer(void* data,
+                                      int size,
+                                      SDL_GPUCopyPass* copy_pass,
+                                      SDL_GPUBuffer** vertex_buffer_out) {
     SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
     vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
     vertex_buffer_create_info.size = size;
@@ -898,8 +819,8 @@ class RendererImpl : public Renderer {
     SDL_GPUTransferBuffer* transfer_buffer =
         SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
 
-    float* transfer_data = (float*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
-    SDL_memcpy(transfer_data, vertices.data(), size);
+    void* transfer_data = (void*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
+    SDL_memcpy(transfer_data, data, size);
     SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
 
     SDL_GPUTransferBufferLocation location{};
@@ -911,7 +832,7 @@ class RendererImpl : public Renderer {
     region.size = size;
     SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
 
-    cylinder_vertex_buffer_ = vertex_buffer;
+    *vertex_buffer_out = vertex_buffer;
     return transfer_buffer;
   }
 
