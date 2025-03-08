@@ -59,6 +59,9 @@ Application::~Application() {
     if (renderer_) {
       renderer_->Cleanup();
     }
+    if (depth_texture_ != nullptr) {
+      SDL_ReleaseGPUTexture(gpu_device_, depth_texture_);
+    }
     if (sdl_window_ != nullptr) {
       SDL_ReleaseWindowFromGPUDevice(gpu_device_, sdl_window_);
     }

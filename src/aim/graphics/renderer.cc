@@ -99,11 +99,27 @@ class RendererImpl : public Renderer {
     }
     if (solid_quad_pipeline_ != nullptr) {
       SDL_ReleaseGPUGraphicsPipeline(device_, solid_quad_pipeline_);
-      sphere_pipeline_ = nullptr;
+      solid_quad_pipeline_ = nullptr;
     }
     if (texture_quad_pipeline_ != nullptr) {
       SDL_ReleaseGPUGraphicsPipeline(device_, texture_quad_pipeline_);
       texture_quad_pipeline_ = nullptr;
+    }
+    if (quad_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, quad_vertex_buffer_);
+      quad_vertex_buffer_ = nullptr;
+    }
+    if (cylinder_wall_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, cylinder_wall_vertex_buffer_);
+      cylinder_wall_vertex_buffer_ = nullptr;
+    }
+    if (cylinder_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, cylinder_vertex_buffer_);
+      cylinder_vertex_buffer_ = nullptr;
+    }
+    if (sphere_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, sphere_vertex_buffer_);
+      sphere_vertex_buffer_ = nullptr;
     }
   }
 
@@ -393,8 +409,10 @@ class RendererImpl : public Renderer {
       tex_scale_and_transform.tex_scale.y = tex_scale.y;
       tex_scale_and_transform.transform = transform;
 
-      SDL_PushGPUVertexUniformData(
-          ctx->command_buffer, 0, &tex_scale_and_transform.tex_scale[0], sizeof(TexScaleAndTransform));
+      SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                   0,
+                                   &tex_scale_and_transform.tex_scale[0],
+                                   sizeof(TexScaleAndTransform));
 
       glm::vec3 mix_color = ToVec3(appearance.texture().mix_color());
       glm::vec4 color4(mix_color, appearance.texture().mix_percent());
