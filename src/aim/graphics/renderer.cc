@@ -12,6 +12,11 @@
 namespace aim {
 namespace {
 
+struct TexScaleAndTransform {
+  glm::vec4 tex_scale{};
+  glm::mat4 transform{};
+};
+
 constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 500.0f;
 
@@ -382,7 +387,14 @@ class RendererImpl : public Renderer {
       binding.buffer = is_cylinder_wall ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
       binding.offset = 0;
       SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-      SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
+
+      TexScaleAndTransform tex_scale_and_transform{};
+      tex_scale_and_transform.tex_scale.x = tex_scale.x;
+      tex_scale_and_transform.tex_scale.y = tex_scale.y;
+      tex_scale_and_transform.transform = transform;
+
+      SDL_PushGPUVertexUniformData(
+          ctx->command_buffer, 0, &tex_scale_and_transform.tex_scale[0], sizeof(TexScaleAndTransform));
 
       glm::vec3 mix_color = ToVec3(appearance.texture().mix_color());
       glm::vec4 color4(mix_color, appearance.texture().mix_percent());

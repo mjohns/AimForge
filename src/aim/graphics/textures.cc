@@ -93,6 +93,8 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
 
   texture_sampler_binding_.texture = texture_;
   texture_sampler_binding_.sampler = sampler_;
+  width_ = image.width();
+  height_ = image.height();
   is_loaded_ = true;
 }
 
