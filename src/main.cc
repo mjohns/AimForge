@@ -90,7 +90,7 @@ int main(int, char**) {
 
   // Load shaders + create fill/line pipeline
   SDL_GPUShader* shader_vert = load_shader(
-      gpu_device, "shaders/compiled/solid_color.vert.spv", SDL_GPU_SHADERSTAGE_VERTEX, 0, 0, 0, 0);
+      gpu_device, "shaders/compiled/solid_color.vert.spv", SDL_GPU_SHADERSTAGE_VERTEX, 0, 1, 0, 0);
   if (shader_vert == NULL) {
     fprintf(stderr, "ERROR: LoadShader failed \n");
     return 1;
@@ -100,7 +100,7 @@ int main(int, char**) {
                                            "shaders/compiled/solid_color.frag.spv",
                                            SDL_GPU_SHADERSTAGE_FRAGMENT,
                                            0,
-                                           0,
+                                           1,
                                            0,
                                            0);
   if (shader_vert == NULL) {
@@ -134,18 +134,13 @@ int main(int, char**) {
   pipeline_info.fragment_shader = shader_frag;
   pipeline_info.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
 
-  SDL_GPUVertexBufferDescription vertex_buffer_descriptions[2];
+  SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
   vertex_buffer_descriptions[0].slot = 0;
   vertex_buffer_descriptions[0].pitch = sizeof(float) * 3;
   vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
   vertex_buffer_descriptions[0].instance_step_rate = 0;
 
-  vertex_buffer_descriptions[1].slot = 1;
-  vertex_buffer_descriptions[1].pitch = sizeof(InstanceData);
-  vertex_buffer_descriptions[1].input_rate = SDL_GPU_VERTEXINPUTRATE_INSTANCE;
-  vertex_buffer_descriptions[1].instance_step_rate = 1;
-
-  pipeline_info.vertex_input_state.num_vertex_buffers = 2;
+  pipeline_info.vertex_input_state.num_vertex_buffers = 1;
   pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
 
   SDL_GPUVertexAttribute vertex_attributes[6];
@@ -391,6 +386,13 @@ int main(int, char**) {
       binding.buffer = vertex_buffer;
       binding.offset = 0;
       SDL_BindGPUVertexBuffers(render_pass, 0, &binding, 1);
+
+      glm::mat4 transform(1.0f);
+      transform = glm::rotate(transform, glm::radians(-20.0f), glm::vec3(0, 0, 1));
+
+      SDL_PushGPUVertexUniformData(command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
+      glm::vec4 color(0, 1, 1, 1);
+      SDL_PushGPUFragmentUniformData(command_buffer, 0, &color[0], sizeof(glm::vec4));
       SDL_DrawGPUPrimitives(render_pass, 6, 1, 0, 0);
 
       // Render ImGui
