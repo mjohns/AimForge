@@ -121,6 +121,7 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUBuffer(device_, sphere_vertex_buffer_);
       sphere_vertex_buffer_ = nullptr;
     }
+    texture_manager_.clear();
   }
 
   void CleanupShaders() {
