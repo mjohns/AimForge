@@ -224,7 +224,7 @@ class RendererImpl : public Renderer {
       DrawCylinderRoom(view_projection, theme, room.cylinder_room(), ctx);
     }
     if (room.has_barrel_room()) {
-      // DrawBarrelRoom(room.barrel_room(), theme, view);
+      DrawBarrelRoom(view_projection, theme, room.barrel_room(), ctx);
     }
   }
 
@@ -369,6 +369,46 @@ class RendererImpl : public Renderer {
       DrawWall(view_projection * model,
                {glm::two_pi<float>() * room.radius(), height},
                theme.front_appearance(),
+               /* is_cylinder_wall= */ true,
+               ctx);
+    }
+  }
+
+  void DrawBarrelRoom(const glm::mat4& view_projection,
+                      const Theme& theme,
+                      const BarrelRoom& room,
+                      RenderContext* ctx) {
+    float quad_scale = room.radius() * 2.1;
+
+    {
+      // Front wall
+      glm::mat4 model(1.f);
+      model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
+      DrawWall(
+          view_projection * model, {quad_scale, quad_scale}, theme.front_appearance(), false, ctx);
+    }
+    /*
+{
+  // Back wall
+  glm::mat4 model(1.f);
+  model = glm::translate(model, glm::vec3(0, -1 * kMaxDistance, 0));
+  model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
+  model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
+  DrawWall(model,
+           view,
+           {quad_scale, quad_scale},
+           theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
+}
+*/
+
+    {
+      glm::mat4 model(1.f);
+      model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0));
+      model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
+      model = glm::scale(model, glm::vec3(room.radius(), room.radius(), kMaxDistance));
+      DrawWall(view_projection * model,
+               {glm::two_pi<float>() * room.radius(), kMaxDistance},
+               theme.side_appearance(),
                /* is_cylinder_wall= */ true,
                ctx);
     }
