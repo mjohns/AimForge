@@ -46,6 +46,8 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   sampler_create_info.address_mode_u = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
   sampler_create_info.address_mode_v = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
   sampler_create_info.address_mode_w = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
+  sampler_create_info.enable_anisotropy = true;
+  sampler_create_info.max_anisotropy = 4;
   sampler_ = SDL_CreateGPUSampler(device, &sampler_create_info);
 
   SDL_GPUTextureCreateInfo create_info{};
@@ -54,7 +56,7 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   create_info.width = image.width();
   create_info.height = image.height();
   create_info.layer_count_or_depth = 1;
-  create_info.num_levels = 3;
+  create_info.num_levels = 4;
   create_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
   texture_ = SDL_CreateGPUTexture(device, &create_info);
 

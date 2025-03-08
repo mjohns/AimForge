@@ -296,7 +296,9 @@ bool Application::StartRender(RenderContext* render_context) {
 }
 
 void Application::FinishRender(RenderContext* render_context) {
-  SDL_EndGPURenderPass(render_context->render_pass);
+  if (render_context->render_pass != nullptr) {
+    SDL_EndGPURenderPass(render_context->render_pass);
+  }
 
   // Setup and start a render pass
   SDL_GPUColorTargetInfo target_info = {};
