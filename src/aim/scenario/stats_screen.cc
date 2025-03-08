@@ -29,6 +29,36 @@ void RenderScore(const StatsRow& stats, Application* app) {
   }
 }
 
+void DumpHistogram(const TimeHistogram& h) {
+  if (h.bucket_100 > 0) {
+    ImGui::TextFmt("1-100: {}", h.bucket_100);
+  }
+  if (h.bucket_300 > 0) {
+    ImGui::TextFmt("100-300: {}", h.bucket_300);
+  }
+  if (h.bucket_500 > 0) {
+    ImGui::TextFmt("300-500: {}", h.bucket_500);
+  }
+  if (h.bucket_700 > 0) {
+    ImGui::TextFmt("500-700: {}", h.bucket_700);
+  }
+  if (h.bucket_1000 > 0) {
+    ImGui::TextFmt("700-1000: {}", h.bucket_1000);
+  }
+  if (h.bucket_1500 > 0) {
+    ImGui::TextFmt("1000-1500: {}", h.bucket_1500);
+  }
+  if (h.bucket_2000 > 0) {
+    ImGui::TextFmt("1500-2000: {}", h.bucket_2000);
+  }
+  if (h.bucket_3000 > 0) {
+    ImGui::TextFmt("2000-3000: {}", h.bucket_3000);
+  }
+  if (h.bucket_5000 > 0) {
+    ImGui::TextFmt("3000-5000: {}", h.bucket_5000);
+  }
+}
+
 std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
   int found_max_index = -1;
   float max_score = 0;
@@ -119,6 +149,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   app_->EnableVsync();
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
   bool view_replay = false;
+  bool show_perf_stats = perf_stats_.worst_times.total > 1200;
   while (true) {
     if (!app_->has_input_focus()) {
       SDL_Delay(250);
@@ -212,30 +243,44 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     ImGui::Spacing();
     ImGui::Spacing();
 
+    ImVec2 button_sz = ImVec2(width, 0.0);
     if (replay != nullptr) {
-      ImVec2 button_sz = ImVec2(width, 0.0);
       if (ImGui::Button("View replay", button_sz)) {
         view_replay = true;
       }
     }
 
-    auto& worst_times_ = perf_stats_.worst_times;
-    ImGui::TextFmt("Worst Frame ({})", worst_times_.frame_number);
-    ImGui::TextFmt("Total time: {:.2f}ms", (worst_times_.end - worst_times_.start) / 1000.0);
-    ImGui::TextFmt("Events time: {:.2f}ms",
-                   (worst_times_.events_end - worst_times_.events_start) / 1000.0);
-    ImGui::TextFmt("Update time: {:.2f}ms",
-                   (worst_times_.update_end - worst_times_.update_start) / 1000.0);
-    if (worst_times_.render_start > 0) {
-      ImGui::TextFmt("Render time: {:.2f}ms",
-                     (worst_times_.render_end - worst_times_.render_start) / 1000.0);
-      ImGui::TextFmt("Render room time: {:.2f}ms",
-                     (worst_times_.render_room_end - worst_times_.render_room_start) / 1000.0);
-      ImGui::TextFmt(
-          "Render targets time: {:.2f}ms",
-          (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
-      ImGui::TextFmt("Render imgui time: {:.2f}ms",
-                     (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
+    if (show_perf_stats) {
+      if (ImGui::Button("Hide performance stats", button_sz)) {
+        show_perf_stats = false;
+      }
+      auto& worst_times_ = perf_stats_.worst_times;
+      ImGui::TextFmt("Worst Frame ({})", worst_times_.frame_number);
+      ImGui::TextFmt("Total time: {:.2f}ms", (worst_times_.end - worst_times_.start) / 1000.0);
+      ImGui::TextFmt("Events time: {:.2f}ms",
+                     (worst_times_.events_end - worst_times_.events_start) / 1000.0);
+      ImGui::TextFmt("Update time: {:.2f}ms",
+                     (worst_times_.update_end - worst_times_.update_start) / 1000.0);
+      if (worst_times_.render_start > 0) {
+        ImGui::TextFmt("Render time: {:.2f}ms",
+                       (worst_times_.render_end - worst_times_.render_start) / 1000.0);
+        ImGui::TextFmt("Render room time: {:.2f}ms",
+                       (worst_times_.render_room_end - worst_times_.render_room_start) / 1000.0);
+        ImGui::TextFmt(
+            "Render targets time: {:.2f}ms",
+            (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
+        ImGui::TextFmt("Render imgui time: {:.2f}ms",
+                       (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
+
+        ImGui::Text("Total Times");
+        DumpHistogram(perf_stats_.total_time_histogram);
+        ImGui::Text("Render Times");
+        DumpHistogram(perf_stats_.render_time_histogram);
+      }
+    } else {
+      if (ImGui::Button("Show performance stats", button_sz)) {
+        show_perf_stats = true;
+      }
     }
     /*
     if (ImGui::Button("Save replay", sz)) {
