@@ -22,6 +22,8 @@ message WallAppearance {
     StoredColor color = 1;
     WallTexture texture = 2;
   }
+  StoredColor mix_color = 3;
+  float mix_percent = 4;
 }
 
 message Theme {

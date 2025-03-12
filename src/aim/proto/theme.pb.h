@@ -683,9 +683,37 @@ class WallAppearance final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
+    kMixColorFieldNumber = 3,
+    kMixPercentFieldNumber = 4,
     kColorFieldNumber = 1,
     kTextureFieldNumber = 2,
   };
+  // .aim.StoredColor mix_color = 3;
+  bool has_mix_color() const;
+  void clear_mix_color() ;
+  const ::aim::StoredColor& mix_color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_mix_color();
+  ::aim::StoredColor* mutable_mix_color();
+  void set_allocated_mix_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_mix_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_mix_color();
+
+  private:
+  const ::aim::StoredColor& _internal_mix_color() const;
+  ::aim::StoredColor* _internal_mutable_mix_color();
+
+  public:
+  // float mix_percent = 4;
+  bool has_mix_percent() const;
+  void clear_mix_percent() ;
+  float mix_percent() const;
+  void set_mix_percent(float value);
+
+  private:
+  float _internal_mix_percent() const;
+  void _internal_set_mix_percent(float value);
+
+  public:
   // .aim.StoredColor color = 1;
   bool has_color() const;
   private:
@@ -735,7 +763,7 @@ class WallAppearance final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 2, 2,
+      1, 4, 3,
       0, 2>
       _table_;
 
@@ -753,13 +781,16 @@ class WallAppearance final : public ::google::protobuf::Message
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const WallAppearance& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::StoredColor* mix_color_;
+    float mix_percent_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
       ::aim::StoredColor* color_;
       ::aim::WallTexture* texture_;
     } type_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -1687,6 +1718,125 @@ inline ::aim::WallTexture* WallAppearance::mutable_texture() ABSL_ATTRIBUTE_LIFE
   ::aim::WallTexture* _msg = _internal_mutable_texture();
   // @@protoc_insertion_point(field_mutable:aim.WallAppearance.texture)
   return _msg;
+}
+
+// .aim.StoredColor mix_color = 3;
+inline bool WallAppearance::has_mix_color() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.mix_color_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredColor& WallAppearance::_internal_mix_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredColor* p = _impl_.mix_color_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& WallAppearance::mix_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallAppearance.mix_color)
+  return _internal_mix_color();
+}
+inline void WallAppearance::unsafe_arena_set_allocated_mix_color(::aim::StoredColor* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.mix_color_);
+  }
+  _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallAppearance.mix_color)
+}
+inline ::aim::StoredColor* WallAppearance::release_mix_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::StoredColor* released = _impl_.mix_color_;
+  _impl_.mix_color_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredColor* WallAppearance::unsafe_arena_release_mix_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallAppearance.mix_color)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::StoredColor* temp = _impl_.mix_color_;
+  _impl_.mix_color_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredColor* WallAppearance::_internal_mutable_mix_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.mix_color_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
+    _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(p);
+  }
+  return _impl_.mix_color_;
+}
+inline ::aim::StoredColor* WallAppearance::mutable_mix_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::StoredColor* _msg = _internal_mutable_mix_color();
+  // @@protoc_insertion_point(field_mutable:aim.WallAppearance.mix_color)
+  return _msg;
+}
+inline void WallAppearance::set_allocated_mix_color(::aim::StoredColor* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.mix_color_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallAppearance.mix_color)
+}
+
+// float mix_percent = 4;
+inline bool WallAppearance::has_mix_percent() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void WallAppearance::clear_mix_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.mix_percent_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float WallAppearance::mix_percent() const {
+  // @@protoc_insertion_point(field_get:aim.WallAppearance.mix_percent)
+  return _internal_mix_percent();
+}
+inline void WallAppearance::set_mix_percent(float value) {
+  _internal_set_mix_percent(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.WallAppearance.mix_percent)
+}
+inline float WallAppearance::_internal_mix_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.mix_percent_;
+}
+inline void WallAppearance::_internal_set_mix_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.mix_percent_ = value;
 }
 
 inline bool WallAppearance::has_type() const {
