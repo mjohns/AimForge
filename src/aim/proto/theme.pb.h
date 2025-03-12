@@ -225,9 +225,7 @@ class WallTexture final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kTextureNameFieldNumber = 1,
-    kMixColorFieldNumber = 2,
-    kMixPercentFieldNumber = 3,
-    kScaleFieldNumber = 4,
+    kScaleFieldNumber = 2,
   };
   // string texture_name = 1;
   bool has_texture_name() const;
@@ -246,33 +244,7 @@ class WallTexture final : public ::google::protobuf::Message
   std::string* _internal_mutable_texture_name();
 
   public:
-  // .aim.StoredColor mix_color = 2;
-  bool has_mix_color() const;
-  void clear_mix_color() ;
-  const ::aim::StoredColor& mix_color() const;
-  PROTOBUF_NODISCARD ::aim::StoredColor* release_mix_color();
-  ::aim::StoredColor* mutable_mix_color();
-  void set_allocated_mix_color(::aim::StoredColor* value);
-  void unsafe_arena_set_allocated_mix_color(::aim::StoredColor* value);
-  ::aim::StoredColor* unsafe_arena_release_mix_color();
-
-  private:
-  const ::aim::StoredColor& _internal_mix_color() const;
-  ::aim::StoredColor* _internal_mutable_mix_color();
-
-  public:
-  // float mix_percent = 3;
-  bool has_mix_percent() const;
-  void clear_mix_percent() ;
-  float mix_percent() const;
-  void set_mix_percent(float value);
-
-  private:
-  float _internal_mix_percent() const;
-  void _internal_set_mix_percent(float value);
-
-  public:
-  // float scale = 4;
+  // float scale = 2;
   bool has_scale() const;
   void clear_scale() ;
   float scale() const;
@@ -288,7 +260,7 @@ class WallTexture final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 1,
+      1, 2, 0,
       36, 2>
       _table_;
 
@@ -309,222 +281,7 @@ class WallTexture final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr texture_name_;
-    ::aim::StoredColor* mix_color_;
-    float mix_percent_;
     float scale_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_theme_2eproto;
-};
-// -------------------------------------------------------------------
-
-class CrosshairTheme final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.CrosshairTheme) */ {
- public:
-  inline CrosshairTheme() : CrosshairTheme(nullptr) {}
-  ~CrosshairTheme() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(CrosshairTheme* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(CrosshairTheme));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR CrosshairTheme(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline CrosshairTheme(const CrosshairTheme& from) : CrosshairTheme(nullptr, from) {}
-  inline CrosshairTheme(CrosshairTheme&& from) noexcept
-      : CrosshairTheme(nullptr, std::move(from)) {}
-  inline CrosshairTheme& operator=(const CrosshairTheme& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline CrosshairTheme& operator=(CrosshairTheme&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const CrosshairTheme& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const CrosshairTheme* internal_default_instance() {
-    return reinterpret_cast<const CrosshairTheme*>(
-        &_CrosshairTheme_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 0;
-  friend void swap(CrosshairTheme& a, CrosshairTheme& b) { a.Swap(&b); }
-  inline void Swap(CrosshairTheme* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(CrosshairTheme* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  CrosshairTheme* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<CrosshairTheme>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const CrosshairTheme& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const CrosshairTheme& from) { CrosshairTheme::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(CrosshairTheme* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.CrosshairTheme"; }
-
- protected:
-  explicit CrosshairTheme(::google::protobuf::Arena* arena);
-  CrosshairTheme(::google::protobuf::Arena* arena, const CrosshairTheme& from);
-  CrosshairTheme(::google::protobuf::Arena* arena, CrosshairTheme&& from) noexcept
-      : CrosshairTheme(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kColorFieldNumber = 1,
-    kOutlineColorFieldNumber = 2,
-  };
-  // .aim.StoredColor color = 1;
-  bool has_color() const;
-  void clear_color() ;
-  const ::aim::StoredColor& color() const;
-  PROTOBUF_NODISCARD ::aim::StoredColor* release_color();
-  ::aim::StoredColor* mutable_color();
-  void set_allocated_color(::aim::StoredColor* value);
-  void unsafe_arena_set_allocated_color(::aim::StoredColor* value);
-  ::aim::StoredColor* unsafe_arena_release_color();
-
-  private:
-  const ::aim::StoredColor& _internal_color() const;
-  ::aim::StoredColor* _internal_mutable_color();
-
-  public:
-  // .aim.StoredColor outline_color = 2;
-  bool has_outline_color() const;
-  void clear_outline_color() ;
-  const ::aim::StoredColor& outline_color() const;
-  PROTOBUF_NODISCARD ::aim::StoredColor* release_outline_color();
-  ::aim::StoredColor* mutable_outline_color();
-  void set_allocated_outline_color(::aim::StoredColor* value);
-  void unsafe_arena_set_allocated_outline_color(::aim::StoredColor* value);
-  ::aim::StoredColor* unsafe_arena_release_outline_color();
-
-  private:
-  const ::aim::StoredColor& _internal_outline_color() const;
-  ::aim::StoredColor* _internal_mutable_outline_color();
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.CrosshairTheme)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 2,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const CrosshairTheme& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::StoredColor* color_;
-    ::aim::StoredColor* outline_color_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -792,6 +549,219 @@ class WallAppearance final : public ::google::protobuf::Message
       ::aim::WallTexture* texture_;
     } type_;
     ::uint32_t _oneof_case_[1];
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_theme_2eproto;
+};
+// -------------------------------------------------------------------
+
+class CrosshairTheme final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.CrosshairTheme) */ {
+ public:
+  inline CrosshairTheme() : CrosshairTheme(nullptr) {}
+  ~CrosshairTheme() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CrosshairTheme* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CrosshairTheme));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CrosshairTheme(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline CrosshairTheme(const CrosshairTheme& from) : CrosshairTheme(nullptr, from) {}
+  inline CrosshairTheme(CrosshairTheme&& from) noexcept
+      : CrosshairTheme(nullptr, std::move(from)) {}
+  inline CrosshairTheme& operator=(const CrosshairTheme& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CrosshairTheme& operator=(CrosshairTheme&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CrosshairTheme& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CrosshairTheme* internal_default_instance() {
+    return reinterpret_cast<const CrosshairTheme*>(
+        &_CrosshairTheme_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 0;
+  friend void swap(CrosshairTheme& a, CrosshairTheme& b) { a.Swap(&b); }
+  inline void Swap(CrosshairTheme* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CrosshairTheme* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CrosshairTheme* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CrosshairTheme>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CrosshairTheme& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CrosshairTheme& from) { CrosshairTheme::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CrosshairTheme* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.CrosshairTheme"; }
+
+ protected:
+  explicit CrosshairTheme(::google::protobuf::Arena* arena);
+  CrosshairTheme(::google::protobuf::Arena* arena, const CrosshairTheme& from);
+  CrosshairTheme(::google::protobuf::Arena* arena, CrosshairTheme&& from) noexcept
+      : CrosshairTheme(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kColorFieldNumber = 1,
+    kOutlineColorFieldNumber = 2,
+  };
+  // .aim.StoredColor color = 1;
+  bool has_color() const;
+  void clear_color() ;
+  const ::aim::StoredColor& color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_color();
+  ::aim::StoredColor* mutable_color();
+  void set_allocated_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_color();
+
+  private:
+  const ::aim::StoredColor& _internal_color() const;
+  ::aim::StoredColor* _internal_mutable_color();
+
+  public:
+  // .aim.StoredColor outline_color = 2;
+  bool has_outline_color() const;
+  void clear_outline_color() ;
+  const ::aim::StoredColor& outline_color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_outline_color();
+  ::aim::StoredColor* mutable_outline_color();
+  void set_allocated_outline_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_outline_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_outline_color();
+
+  private:
+  const ::aim::StoredColor& _internal_outline_color() const;
+  ::aim::StoredColor* _internal_mutable_outline_color();
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.CrosshairTheme)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      1, 2, 2,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const CrosshairTheme& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::StoredColor* color_;
+    ::aim::StoredColor* outline_color_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1422,134 +1392,15 @@ inline void WallTexture::set_allocated_texture_name(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.WallTexture.texture_name)
 }
 
-// .aim.StoredColor mix_color = 2;
-inline bool WallTexture::has_mix_color() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.mix_color_ != nullptr);
-  return value;
-}
-inline const ::aim::StoredColor& WallTexture::_internal_mix_color() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::StoredColor* p = _impl_.mix_color_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
-}
-inline const ::aim::StoredColor& WallTexture::mix_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallTexture.mix_color)
-  return _internal_mix_color();
-}
-inline void WallTexture::unsafe_arena_set_allocated_mix_color(::aim::StoredColor* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.mix_color_);
-  }
-  _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallTexture.mix_color)
-}
-inline ::aim::StoredColor* WallTexture::release_mix_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::StoredColor* released = _impl_.mix_color_;
-  _impl_.mix_color_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::StoredColor* WallTexture::unsafe_arena_release_mix_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallTexture.mix_color)
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::StoredColor* temp = _impl_.mix_color_;
-  _impl_.mix_color_ = nullptr;
-  return temp;
-}
-inline ::aim::StoredColor* WallTexture::_internal_mutable_mix_color() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.mix_color_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
-    _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(p);
-  }
-  return _impl_.mix_color_;
-}
-inline ::aim::StoredColor* WallTexture::mutable_mix_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  ::aim::StoredColor* _msg = _internal_mutable_mix_color();
-  // @@protoc_insertion_point(field_mutable:aim.WallTexture.mix_color)
-  return _msg;
-}
-inline void WallTexture::set_allocated_mix_color(::aim::StoredColor* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.mix_color_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-
-  _impl_.mix_color_ = reinterpret_cast<::aim::StoredColor*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallTexture.mix_color)
-}
-
-// float mix_percent = 3;
-inline bool WallTexture::has_mix_percent() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void WallTexture::clear_mix_percent() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.mix_percent_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline float WallTexture::mix_percent() const {
-  // @@protoc_insertion_point(field_get:aim.WallTexture.mix_percent)
-  return _internal_mix_percent();
-}
-inline void WallTexture::set_mix_percent(float value) {
-  _internal_set_mix_percent(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.WallTexture.mix_percent)
-}
-inline float WallTexture::_internal_mix_percent() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.mix_percent_;
-}
-inline void WallTexture::_internal_set_mix_percent(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.mix_percent_ = value;
-}
-
-// float scale = 4;
+// float scale = 2;
 inline bool WallTexture::has_scale() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline void WallTexture::clear_scale() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.scale_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline float WallTexture::scale() const {
   // @@protoc_insertion_point(field_get:aim.WallTexture.scale)
@@ -1557,7 +1408,7 @@ inline float WallTexture::scale() const {
 }
 inline void WallTexture::set_scale(float value) {
   _internal_set_scale(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   // @@protoc_insertion_point(field_set:aim.WallTexture.scale)
 }
 inline float WallTexture::_internal_scale() const {

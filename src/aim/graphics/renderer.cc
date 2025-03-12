@@ -553,8 +553,8 @@ class RendererImpl : public Renderer {
                                    &tex_scale_and_transform.tex_scale[0],
                                    sizeof(TexScaleAndTransform));
 
-      glm::vec3 mix_color = ToVec3(appearance.texture().mix_color());
-      glm::vec4 color4(mix_color, appearance.texture().mix_percent());
+      glm::vec3 mix_color = ToVec3(appearance.mix_color());
+      glm::vec4 color4(mix_color, appearance.mix_percent());
       SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
       SDL_BindGPUFragmentSamplers(ctx->render_pass, 0, texture->texture_sampler_binding(), 1);
 

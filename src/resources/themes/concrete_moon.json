@@ -8,15 +8,15 @@
     }
   },
   "floorAppearance": {
+    "mixPercent": 0.5,
     "texture": {
-      "mixPercent": 0.5,
       "scale": 2.5,
       "textureName": "basalt.jpg"
     }
   },
   "frontAppearance": {
-    "texture": {
       "mixPercent": 0.4,
+    "texture": {
       "scale": 2,
       "textureName": "polished_concrete.jpg"
     }
@@ -25,15 +25,15 @@
     "hex": "#6b7a8a"
   },
   "roofAppearance": {
-    "texture": {
       "mixPercent": 0.42,
+    "texture": {
       "scale": 2.5,
       "textureName": "basalt.jpg"
     }
   },
   "sideAppearance": {
-    "texture": {
       "mixPercent": 0.35,
+    "texture": {
       "scale": 2.5,
       "textureName": "basalt.jpg"
     }
