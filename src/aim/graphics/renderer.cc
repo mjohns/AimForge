@@ -17,6 +17,17 @@ struct TexScaleAndTransform {
   glm::mat4 transform{};
 };
 
+glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
+  return a + (mix_percent * (b - a));
+}
+
+glm::vec3 GetSolidColor(const WallAppearance& appearance) {
+  if (!appearance.has_mix_percent()) {
+    return ToVec3(appearance.color());
+  }
+  return Lerp(ToVec3(appearance.color()), ToVec3(appearance.mix_color()), appearance.mix_percent());
+}
+
 constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 500.0f;
 
@@ -555,7 +566,7 @@ class RendererImpl : public Renderer {
       return;
     }
 
-    DrawWallSolidColor(transform, ToVec3(appearance.color()), is_cylinder_wall, ctx);
+    DrawWallSolidColor(transform, GetSolidColor(appearance), is_cylinder_wall, ctx);
   }
 
   void DrawWallSolidColor(const glm::mat4& transform,

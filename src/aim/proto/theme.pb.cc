@@ -84,8 +84,10 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 
 inline constexpr WallAppearance::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : type_{},
-        _cached_size_{0},
+      : _cached_size_{0},
+        mix_color_{nullptr},
+        mix_percent_{0},
+        type_{},
         _oneof_case_{} {}
 
 template <typename>
@@ -181,7 +183,7 @@ const ::uint32_t
         1,
         2,
         3,
-        ~0u,  // no _has_bits_
+        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _internal_metadata_),
         ~0u,  // no _extensions_
         PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_._oneof_case_[0]),
@@ -191,7 +193,13 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
+        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_.mix_color_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_.mix_percent_),
         PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_.type_),
+        ~0u,
+        ~0u,
+        0,
+        1,
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -226,8 +234,8 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 10, -1, sizeof(::aim::CrosshairTheme)},
         {12, 24, -1, sizeof(::aim::WallTexture)},
-        {28, -1, -1, sizeof(::aim::WallAppearance)},
-        {39, 57, -1, sizeof(::aim::Theme)},
+        {28, 41, -1, sizeof(::aim::WallAppearance)},
+        {45, 63, -1, sizeof(::aim::Theme)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_CrosshairTheme_default_instance_._instance,
@@ -242,20 +250,22 @@ const char descriptor_table_protodef_theme_2eproto[] ABSL_ATTRIBUTE_SECTION_VARI
     "lor\022\'\n\routline_color\030\002 \001(\0132\020.aim.StoredC"
     "olor\"l\n\013WallTexture\022\024\n\014texture_name\030\001 \001("
     "\t\022#\n\tmix_color\030\002 \001(\0132\020.aim.StoredColor\022\023"
-    "\n\013mix_percent\030\003 \001(\002\022\r\n\005scale\030\004 \001(\002\"`\n\016Wa"
-    "llAppearance\022!\n\005color\030\001 \001(\0132\020.aim.Stored"
-    "ColorH\000\022#\n\007texture\030\002 \001(\0132\020.aim.WallTextu"
-    "reH\000B\006\n\004type\"\216\003\n\005Theme\022\014\n\004name\030\001 \001(\t\022\021\n\t"
-    "reference\030\n \001(\t\022,\n\017roof_appearance\030\002 \001(\013"
-    "2\023.aim.WallAppearance\022,\n\017side_appearance"
-    "\030\003 \001(\0132\023.aim.WallAppearance\022-\n\020front_app"
-    "earance\030\004 \001(\0132\023.aim.WallAppearance\022-\n\020fl"
-    "oor_appearance\030\005 \001(\0132\023.aim.WallAppearanc"
-    "e\022,\n\017back_appearance\030\006 \001(\0132\023.aim.WallApp"
-    "earance\022&\n\tcrosshair\030\007 \001(\0132\023.aim.Crossha"
-    "irTheme\022&\n\014target_color\030\010 \001(\0132\020.aim.Stor"
-    "edColor\022,\n\022ghost_target_color\030\t \001(\0132\020.ai"
-    "m.StoredColorb\010editionsp\350\007"
+    "\n\013mix_percent\030\003 \001(\002\022\r\n\005scale\030\004 \001(\002\"\232\001\n\016W"
+    "allAppearance\022!\n\005color\030\001 \001(\0132\020.aim.Store"
+    "dColorH\000\022#\n\007texture\030\002 \001(\0132\020.aim.WallText"
+    "ureH\000\022#\n\tmix_color\030\003 \001(\0132\020.aim.StoredCol"
+    "or\022\023\n\013mix_percent\030\004 \001(\002B\006\n\004type\"\216\003\n\005Them"
+    "e\022\014\n\004name\030\001 \001(\t\022\021\n\treference\030\n \001(\t\022,\n\017ro"
+    "of_appearance\030\002 \001(\0132\023.aim.WallAppearance"
+    "\022,\n\017side_appearance\030\003 \001(\0132\023.aim.WallAppe"
+    "arance\022-\n\020front_appearance\030\004 \001(\0132\023.aim.W"
+    "allAppearance\022-\n\020floor_appearance\030\005 \001(\0132"
+    "\023.aim.WallAppearance\022,\n\017back_appearance\030"
+    "\006 \001(\0132\023.aim.WallAppearance\022&\n\tcrosshair\030"
+    "\007 \001(\0132\023.aim.CrosshairTheme\022&\n\014target_col"
+    "or\030\010 \001(\0132\020.aim.StoredColor\022,\n\022ghost_targ"
+    "et_color\030\t \001(\0132\020.aim.StoredColorb\010editio"
+    "nsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_theme_2eproto_deps[1] =
     {
@@ -265,7 +275,7 @@ static ::absl::once_flag descriptor_table_theme_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_theme_2eproto = {
     false,
     false,
-    746,
+    805,
     descriptor_table_protodef_theme_2eproto,
     "theme.proto",
     &descriptor_table_theme_2eproto_once,
@@ -950,6 +960,10 @@ void WallTexture::InternalSwap(WallTexture* PROTOBUF_RESTRICT other) {
 
 class WallAppearance::_Internal {
  public:
+  using HasBits =
+      decltype(std::declval<WallAppearance>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_._has_bits_);
   static constexpr ::int32_t kOneofCaseOffset =
       PROTOBUF_FIELD_OFFSET(::aim::WallAppearance, _impl_._oneof_case_);
 };
@@ -991,6 +1005,11 @@ void WallAppearance::set_allocated_texture(::aim::WallTexture* texture) {
   }
   // @@protoc_insertion_point(field_set_allocated:aim.WallAppearance.texture)
 }
+void WallAppearance::clear_mix_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.mix_color_ != nullptr) _impl_.mix_color_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
 WallAppearance::WallAppearance(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -1003,8 +1022,9 @@ WallAppearance::WallAppearance(::google::protobuf::Arena* arena)
 inline PROTOBUF_NDEBUG_INLINE WallAppearance::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::aim::WallAppearance& from_msg)
-      : type_{},
+      : _has_bits_{from._has_bits_},
         _cached_size_{0},
+        type_{},
         _oneof_case_{from._oneof_case_[0]} {}
 
 WallAppearance::WallAppearance(
@@ -1020,6 +1040,11 @@ WallAppearance::WallAppearance(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.mix_color_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(
+                              arena, *from._impl_.mix_color_)
+                        : nullptr;
+  _impl_.mix_percent_ = from._impl_.mix_percent_;
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -1036,12 +1061,18 @@ WallAppearance::WallAppearance(
 inline PROTOBUF_NDEBUG_INLINE WallAppearance::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : type_{},
-        _cached_size_{0},
+      : _cached_size_{0},
+        type_{},
         _oneof_case_{} {}
 
 inline void WallAppearance::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, mix_color_),
+           0,
+           offsetof(Impl_, mix_percent_) -
+               offsetof(Impl_, mix_color_) +
+               sizeof(Impl_::mix_percent_));
 }
 WallAppearance::~WallAppearance() {
   // @@protoc_insertion_point(destructor:aim.WallAppearance)
@@ -1051,6 +1082,7 @@ inline void WallAppearance::SharedDtor(MessageLite& self) {
   WallAppearance& this_ = static_cast<WallAppearance&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
+  delete this_._impl_.mix_color_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -1121,16 +1153,16 @@ const ::google::protobuf::internal::ClassData* WallAppearance::GetClassData() co
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 2, 2, 0, 2> WallAppearance::_table_ = {
+const ::_pbi::TcParseTable<1, 4, 3, 0, 2> WallAppearance::_table_ = {
   {
-    0,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_._has_bits_),
     0, // no _extensions_
-    2, 0,  // max_field_number, fast_idx_mask
+    4, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
-    2,  // num_aux_entries
+    4,  // num_field_entries
+    3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1139,7 +1171,12 @@ const ::_pbi::TcParseTable<0, 2, 2, 0, 2> WallAppearance::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::WallAppearance>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // float mix_percent = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 1, 0, PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.mix_percent_)}},
+    // .aim.StoredColor mix_color = 3;
+    {::_pbi::TcParser::FastMtS1,
+     {26, 0, 2, PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.mix_color_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1149,9 +1186,16 @@ const ::_pbi::TcParseTable<0, 2, 2, 0, 2> WallAppearance::_table_ = {
     // .aim.WallTexture texture = 2;
     {PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.type_.texture_), _Internal::kOneofCaseOffset + 0, 1,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.StoredColor mix_color = 3;
+    {PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.mix_color_), _Internal::kHasBitsOffset + 0, 2,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float mix_percent = 4;
+    {PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.mix_percent_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
     {::_pbi::TcParser::GetTable<::aim::WallTexture>()},
+    {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
   }}, {{
   }},
 };
@@ -1163,7 +1207,14 @@ PROTOBUF_NOINLINE void WallAppearance::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.mix_color_ != nullptr);
+    _impl_.mix_color_->Clear();
+  }
+  _impl_.mix_percent_ = 0;
   clear_type();
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -1198,6 +1249,21 @@ PROTOBUF_NOINLINE void WallAppearance::Clear() {
             default:
               break;
           }
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // .aim.StoredColor mix_color = 3;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                3, *this_._impl_.mix_color_, this_._impl_.mix_color_->GetCachedSize(), target,
+                stream);
+          }
+
+          // float mix_percent = 4;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_mix_percent(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1221,6 +1287,19 @@ PROTOBUF_NOINLINE void WallAppearance::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
+            // .aim.StoredColor mix_color = 3;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.mix_color_);
+            }
+            // float mix_percent = 4;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+          }
           switch (this_.type_case()) {
             // .aim.StoredColor color = 1;
             case kColor: {
@@ -1251,6 +1330,22 @@ void WallAppearance::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(from._impl_.mix_color_ != nullptr);
+      if (_this->_impl_.mix_color_ == nullptr) {
+        _this->_impl_.mix_color_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredColor>(arena, *from._impl_.mix_color_);
+      } else {
+        _this->_impl_.mix_color_->MergeFrom(*from._impl_.mix_color_);
+      }
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.mix_percent_ = from._impl_.mix_percent_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
   if (const uint32_t oneof_from_case = from._impl_._oneof_case_[0]) {
     const uint32_t oneof_to_case = _this->_impl_._oneof_case_[0];
     const bool oneof_needs_init = oneof_to_case != oneof_from_case;
@@ -1298,6 +1393,13 @@ void WallAppearance::CopyFrom(const WallAppearance& from) {
 void WallAppearance::InternalSwap(WallAppearance* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.mix_percent_)
+      + sizeof(WallAppearance::_impl_.mix_percent_)
+      - PROTOBUF_FIELD_OFFSET(WallAppearance, _impl_.mix_color_)>(
+          reinterpret_cast<char*>(&_impl_.mix_color_),
+          reinterpret_cast<char*>(&other->_impl_.mix_color_));
   swap(_impl_.type_, other->_impl_.type_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
