@@ -29,7 +29,7 @@
     "profiles": [
       {
         "pill": {
-          "height": 7
+          "height": 4
         },
         "speed": 45,
         "targetRadius": 1.2

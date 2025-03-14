@@ -104,6 +104,7 @@ int Application::Initialize() {
 
   stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("settings.db"));
+  history_db_ = std::make_unique<HistoryDb>(file_system_->GetUserDataPath("history.db"));
 
   std::vector<std::filesystem::path> theme_dirs = {
       file_system_->GetUserDataPath("resources/themes"),

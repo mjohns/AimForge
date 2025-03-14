@@ -149,7 +149,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
   app_->EnableVsync();
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
   bool view_replay = false;
-  bool show_perf_stats = perf_stats_.worst_times.total > 1200;
+  bool show_perf_stats = perf_stats_.worst_times.total > 2500;
   while (true) {
     if (!app_->has_input_focus()) {
       SDL_Delay(250);
