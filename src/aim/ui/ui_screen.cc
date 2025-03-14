@@ -13,6 +13,9 @@ NavigationEvent UiScreen::Run() {
   Resume();
 
   while (true) {
+    if (screen_done_) {
+      return NavigationEvent::Done();
+    }
     if (!app_->has_input_focus()) {
       SDL_Delay(250);
     }

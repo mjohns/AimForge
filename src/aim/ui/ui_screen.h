@@ -30,7 +30,14 @@ class UiScreen {
 
   virtual void Resume();
 
+  void Done() {
+    screen_done_ = true;
+  }
+
   Application* app_ = nullptr;
+
+ private:
+  bool screen_done_ = false;
 };
 
 }  // namespace aim
