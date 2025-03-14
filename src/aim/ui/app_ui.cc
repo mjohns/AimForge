@@ -349,7 +349,8 @@ class AppUiImpl : public AppUi {
 
   void DrawSettingsScreen() {
     if (!settings_updater_) {
-      settings_updater_ = std::make_unique<SettingsUpdater>(app_->settings_manager());
+      settings_updater_ =
+          std::make_unique<SettingsUpdater>(app_->settings_manager(), app_->history_db());
     }
     const ScreenInfo& screen = app_->screen_info();
     float width = screen.width * 0.5;

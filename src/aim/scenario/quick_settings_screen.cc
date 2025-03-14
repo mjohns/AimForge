@@ -21,7 +21,7 @@ class QuickSettingsScreen : public UiScreen {
       : UiScreen(app),
         scenario_id_(scenario_id),
         mgr_(app->settings_manager()),
-        updater_(app->settings_manager()),
+        updater_(app->settings_manager(), app->history_db()),
         type_(type) {}
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {

@@ -227,8 +227,8 @@ void SettingsManager::FlushToDisk(const std::string& scenario_id) {
   }
 }
 
-SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager)
-    : settings_manager_(settings_manager) {
+SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* history_db)
+    : settings_manager_(settings_manager), history_db_(history_db) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (current_settings != nullptr) {
     cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
@@ -258,10 +258,16 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   if (current_settings->theme_name() != theme_name) {
     current_settings->set_theme_name(theme_name);
     settings_manager_->MarkDirty();
+    if (theme_name.size() > 0) {
+      history_db_->UpdateRecentView(RecentViewType::THEME, theme_name);
+    }
   }
   if (current_settings->current_crosshair_name() != crosshair_name) {
     current_settings->set_current_crosshair_name(crosshair_name);
     settings_manager_->MarkDirty();
+    if (crosshair_name.size() > 0) {
+      history_db_->UpdateRecentView(RecentViewType::CROSSHAIR, crosshair_name);
+    }
   }
   float new_metronome_bpm = ParseFloat(metronome_bpm);
   if (new_metronome_bpm >= 0 && current_settings->metronome_bpm() != new_metronome_bpm) {
