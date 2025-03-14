@@ -113,6 +113,10 @@ class SettingsScreen : public UiScreen {
         "##CrosshairSize", &settings_updater_.crosshair_size, ImGuiInputTextFlags_CharsDecimal);
     ImGui::PopItemWidth();
 
+    ImGui::Text("Disable \"Click to Start\"");
+    ImGui::SameLine();
+    ImGui::Checkbox("##disable_click_to_start", &settings_updater_.disable_click_to_start);
+
     {
       ImVec2 sz = ImVec2(0.0f, 0.0f);
       if (ImGui::Button("Save", sz)) {

@@ -269,6 +269,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     dpi = MaybeIntToString(current_settings->dpi());
     crosshair_size = MaybeIntToString(current_settings->crosshair_size());
     crosshair_name = current_settings->current_crosshair_name();
+    disable_click_to_start = current_settings->disable_click_to_start();
   }
 }
 
@@ -300,6 +301,10 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     if (crosshair_name.size() > 0) {
       history_db_->UpdateRecentView(RecentViewType::CROSSHAIR, crosshair_name);
     }
+  }
+  if (current_settings->disable_click_to_start() != disable_click_to_start) {
+    current_settings->set_disable_click_to_start(disable_click_to_start);
+    settings_manager_->MarkDirty();
   }
   float new_metronome_bpm = ParseFloat(metronome_bpm);
   if (new_metronome_bpm >= 0 && current_settings->metronome_bpm() != new_metronome_bpm) {
