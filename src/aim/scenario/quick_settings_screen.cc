@@ -24,6 +24,10 @@ class QuickSettingsScreen : public UiScreen {
         updater_(app->settings_manager(), app->history_db()),
         type_(type) {
     theme_names_ = app->settings_manager()->ListThemes();
+    Settings settings = mgr_->GetCurrentSettings();
+    for (auto& c : settings.saved_crosshairs()) {
+      crosshair_names_.push_back(c.name());
+    }
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
@@ -61,6 +65,7 @@ class QuickSettingsScreen : public UiScreen {
     ImGui::SetColumnWidth(1, width);
 
     ImGui::NextColumn();
+    ImVec2 char_size = ImGui::CalcTextSize("A");
 
     float center_gap = 10;
 
@@ -94,23 +99,40 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
-      if (ImGui::Button("DefaultCrosshair", button_sz)) {
-        updater_.crosshair_name = "Dot";
-      }
+      ImGuiComboFlags combo_flags = 0;
+      ImGui::Text("Theme");
       ImGui::SameLine();
-      if (ImGui::Button("PlusCrosshair", button_sz)) {
-        updater_.crosshair_name = "Plus";
-      }
-
-      ImGui::NextColumn();
-      ImGui::SetCursorPosY(screen.height * 0.3);
-      ImGui::Text("Themes");
-      for (int i = 0; i < 6 && i < theme_names_.size(); ++i) {
-        std::string theme_name = theme_names_[i];
-        if (ImGui::Selectable(std::format("{}##theme_name_{}", theme_name, i).c_str(),
-                              theme_name == updater_.theme_name)) {
-          updater_.theme_name = theme_name;
+      ImGui::PushItemWidth(char_size.x * 20);
+      if (ImGui::BeginCombo("##theme_combo", updater_.theme_name.c_str(), combo_flags)) {
+        for (int i = 0; i < theme_names_.size(); ++i) {
+          auto& theme_name = theme_names_[i];
+          bool is_selected = theme_name == updater_.theme_name;
+          if (ImGui::Selectable(std::format("{}##{}theme_name", theme_name, i).c_str(),
+                                is_selected)) {
+            updater_.theme_name = theme_name;
+          }
+          if (is_selected) {
+            ImGui::SetItemDefaultFocus();
+          }
         }
+        ImGui::EndCombo();
+      }
+      ImGui::Text("Crosshair");
+      ImGui::SameLine();
+      ImGui::PushItemWidth(char_size.x * 15);
+      if (ImGui::BeginCombo("##crosshair_combo", updater_.crosshair_name.c_str(), combo_flags)) {
+        for (int i = 0; i < crosshair_names_.size(); ++i) {
+          auto& crosshair_name = crosshair_names_[i];
+          bool is_selected = crosshair_name == updater_.crosshair_name;
+          if (ImGui::Selectable(std::format("{}##{}crosshair_name", crosshair_name, i).c_str(),
+                                is_selected)) {
+            updater_.crosshair_name = crosshair_name;
+          }
+          if (is_selected) {
+            ImGui::SetItemDefaultFocus();
+          }
+        }
+        ImGui::EndCombo();
       }
     }
 
@@ -147,6 +169,7 @@ class QuickSettingsScreen : public UiScreen {
   SettingsUpdater updater_;
   QuickSettingsType type_;
   std::vector<std::string> theme_names_;
+  std::vector<std::string> crosshair_names_;
 };
 
 }  // namespace
