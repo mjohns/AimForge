@@ -110,8 +110,11 @@ int Application::Initialize() {
       file_system_->GetUserDataPath("resources/themes"),
       file_system_->GetBasePath("resources/themes"),
   };
-  settings_manager_ = std::make_unique<SettingsManager>(
-      file_system_->GetUserDataPath("settings.json"), theme_dirs, settings_db_.get());
+  settings_manager_ =
+      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
+                                        theme_dirs,
+                                        settings_db_.get(),
+                                        history_db_.get());
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
     logger_->error("Loading settings failed: {}", settings_status.message());

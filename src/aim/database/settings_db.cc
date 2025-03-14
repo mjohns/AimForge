@@ -16,14 +16,15 @@ namespace {
 
 const char* kCreateScenarioSettingsTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS ScenarioSettings (
-    ScenarioId TEXT PRIMARY_KEY,
-    Settings TEXT
+    ScenarioId TEXT,
+    Settings TEXT,
+    PRIMARY KEY (ScenarioId)
 );
 )AIMS";
 
 const char* kInsertSql = R"AIMS(
-INSERT OR REPLACE INTO ScenarioSettings (ScenarioId, Settings)
-    VALUES ( ?, ?);
+INSERT OR REPLACE INTO ScenarioSettings (ScenarioId, Settings) VALUES ( ?, ?);
+ON CONFLICT (ScenarioId) DO UPDATE SET Settings = ?;
 )AIMS";
 
 const char* kGetScenarioSettingsSql = R"AIMS(
@@ -75,6 +76,7 @@ void SettingsDb::UpdateScenarioSettings(const std::string& scenario_id,
 
   BindString(stmt, 1, scenario_id);
   BindString(stmt, 2, json_string);
+  BindString(stmt, 3, json_string);
 
   rc = sqlite3_step(stmt);
   sqlite3_finalize(stmt);

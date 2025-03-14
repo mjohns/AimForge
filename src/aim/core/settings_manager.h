@@ -25,7 +25,8 @@ class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,
                            std::vector<std::filesystem::path> theme_dirs,
-                           SettingsDb* settings_db);
+                           SettingsDb* settings_db,
+                           HistoryDb* history_db);
   ~SettingsManager();
 
   absl::Status Initialize();
@@ -37,6 +38,8 @@ class SettingsManager {
 
   Theme GetTheme(const std::string& theme_name);
   Theme GetCurrentTheme();
+
+  std::vector<std::string> ListThemes();
 
   Crosshair GetCurrentCrosshair();
 
@@ -62,6 +65,7 @@ class SettingsManager {
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
   std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
   SettingsDb* settings_db_;
+  HistoryDb* history_db_;
 };
 
 struct SettingsUpdater {

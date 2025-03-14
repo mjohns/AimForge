@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <stdlib.h>
 
+#include <algorithm>
 #include <format>
 #include <functional>
 #include <glm/trigonometric.hpp>
@@ -235,6 +236,12 @@ static void PushBackAll(std::vector<T>* v, const std::vector<T>& values) {
 
   v->reserve(v->size() + values.size());
   v->insert(v->end(), values.begin(), values.end());
+}
+
+template <typename T>
+bool VectorContains(const std::vector<T>& values, const T& value) {
+  auto it = std::find(values.begin(), values.end(), value);
+  return it != values.end();
 }
 
 static float FirstNonZero(float v1, float v2) {

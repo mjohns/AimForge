@@ -22,7 +22,9 @@ class QuickSettingsScreen : public UiScreen {
         scenario_id_(scenario_id),
         mgr_(app->settings_manager()),
         updater_(app->settings_manager(), app->history_db()),
-        type_(type) {}
+        type_(type) {
+    theme_names_ = app->settings_manager()->ListThemes();
+  }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
     if (event.type == SDL_EVENT_MOUSE_WHEEL) {
@@ -51,16 +53,21 @@ class QuickSettingsScreen : public UiScreen {
  protected:
   void DrawScreen() override {
     const ScreenInfo& screen = app_->screen_info();
+    ImGui::Columns(3, "SettingsColumns", false);
+
     float width = screen.width * 0.5;
+    float x_start = (screen.width - width) * 0.5;
+    ImGui::SetColumnWidth(0, x_start);
+    ImGui::SetColumnWidth(1, width);
+
+    ImGui::NextColumn();
+
     float center_gap = 10;
 
-    float x_start = (screen.width - width) * 0.5;
-
     // ImGui::SetCursorPos(ImVec2(x_start, y_start));
-    ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
+    ImGui::SetCursorPosY(screen.height * 0.3);
 
     ImVec2 button_sz = ImVec2((width - center_gap) / 2.0, 40);
-    ImGui::Indent(x_start);
 
     if (type_ == QuickSettingsType::DEFAULT) {
       for (int i = 20; i <= 70; i += 10) {
@@ -101,6 +108,17 @@ class QuickSettingsScreen : public UiScreen {
       if (ImGui::Button("PlusCrosshair", button_sz)) {
         updater_.crosshair_name = "plus";
       }
+
+      ImGui::NextColumn();
+      ImGui::SetCursorPosY(screen.height * 0.3);
+      ImGui::Text("Themes");
+      for (int i = 0; i < 6 && i < theme_names_.size(); ++i) {
+        std::string theme_name = theme_names_[i];
+        if (ImGui::Selectable(std::format("{}##theme_name_{}", theme_name, i).c_str(),
+                              theme_name == updater_.theme_name)) {
+          updater_.theme_name = theme_name;
+        }
+      }
     }
 
     if (type_ == QuickSettingsType::METRONOME) {
@@ -135,6 +153,7 @@ class QuickSettingsScreen : public UiScreen {
   SettingsManager* mgr_ = nullptr;
   SettingsUpdater updater_;
   QuickSettingsType type_;
+  std::vector<std::string> theme_names_;
 };
 
 }  // namespace
