@@ -17,10 +17,16 @@ class SettingsScreen : public UiScreen {
   explicit SettingsScreen(Application* app, const std::string& scenario_id)
       : UiScreen(app),
         settings_updater_(app->settings_manager(), app->history_db()),
+        mgr_(app->settings_manager()),
         scenario_id_(scenario_id) {
     theme_names_ = app->settings_manager()->ListThemes();
     // Always try to save when exiting settings screen.
     app->settings_manager()->MarkDirty();
+
+    Settings settings = mgr_->GetCurrentSettings();
+    for (auto& c : settings.saved_crosshairs()) {
+      crosshair_names_.push_back(c.name());
+    }
   }
 
  protected:
@@ -62,9 +68,9 @@ class SettingsScreen : public UiScreen {
 
     ImGui::Text("Theme");
     ImGui::SameLine();
-    ImGuiComboFlags theme_flags = 0;
+    ImGuiComboFlags combo_flags = 0;
     ImGui::PushItemWidth(char_size.x * 20);
-    if (ImGui::BeginCombo("##theme_combo", settings_updater_.theme_name.c_str(), theme_flags)) {
+    if (ImGui::BeginCombo("##theme_combo", settings_updater_.theme_name.c_str(), combo_flags)) {
       for (int i = 0; i < theme_names_.size(); ++i) {
         auto& theme_name = theme_names_[i];
         bool is_selected = theme_name == settings_updater_.theme_name;
@@ -78,6 +84,33 @@ class SettingsScreen : public UiScreen {
       }
       ImGui::EndCombo();
     }
+
+    ImGui::PopItemWidth();
+    ImGui::Text("Crosshair");
+    ImGui::SameLine();
+    ImGui::PushItemWidth(char_size.x * 15);
+    if (ImGui::BeginCombo(
+            "##crosshair_combo", settings_updater_.crosshair_name.c_str(), combo_flags)) {
+      for (int i = 0; i < crosshair_names_.size(); ++i) {
+        auto& crosshair_name = crosshair_names_[i];
+        bool is_selected = crosshair_name == settings_updater_.crosshair_name;
+        if (ImGui::Selectable(std::format("{}##{}crosshair_name", crosshair_name, i).c_str(),
+                              is_selected)) {
+          settings_updater_.crosshair_name = crosshair_name;
+        }
+        if (is_selected) {
+          ImGui::SetItemDefaultFocus();
+        }
+      }
+      ImGui::EndCombo();
+    }
+    ImGui::PopItemWidth();
+
+    ImGui::Text("Crosshair Size");
+    ImGui::SameLine();
+    ImGui::PushItemWidth(char_size.x * 4);
+    ImGui::InputText(
+        "##CrosshairSize", &settings_updater_.crosshair_size, ImGuiInputTextFlags_CharsDecimal);
     ImGui::PopItemWidth();
 
     {
@@ -101,7 +134,9 @@ class SettingsScreen : public UiScreen {
 
  private:
   SettingsUpdater settings_updater_;
+  SettingsManager* mgr_;
   std::vector<std::string> theme_names_;
+  std::vector<std::string> crosshair_names_;
   const std::string scenario_id_;
 };
 }  // namespace

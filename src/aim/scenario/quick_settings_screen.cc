@@ -94,19 +94,12 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
-      if (ImGui::Button("DefaultStatic", button_sz)) {
-        updater_.theme_name = "DefaultStatic";
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("DefaultDynamic", button_sz)) {
-        updater_.theme_name = "DefaultDynamic";
-      }
       if (ImGui::Button("DefaultCrosshair", button_sz)) {
-        updater_.crosshair_name = "default";
+        updater_.crosshair_name = "Dot";
       }
       ImGui::SameLine();
       if (ImGui::Button("PlusCrosshair", button_sz)) {
-        updater_.crosshair_name = "plus";
+        updater_.crosshair_name = "Plus";
       }
 
       ImGui::NextColumn();
