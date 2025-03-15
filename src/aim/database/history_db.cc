@@ -29,7 +29,7 @@ INSERT OR REPLACE INTO RecentViews (Type, Id, Timestamp)
 )AIMS";
 
 const char* kGetRecentViewsForTypeSql = R"AIMS(
-SELECT Id
+SELECT Id, Timestamp
 FROM RecentViews
 WHERE Type = ?
 ORDER BY Timestamp DESC
@@ -44,6 +44,8 @@ std::string RecentViewTypeToString(RecentViewType t) {
       return "Scenario";
     case RecentViewType::THEME:
       return "Theme";
+    case RecentViewType::CROSSHAIR:
+      return "Crosshair";
   }
   assert(false);
 }
@@ -89,7 +91,7 @@ void HistoryDb::UpdateRecentView(RecentViewType t, const std::string& id) {
   sqlite3_finalize(stmt);
 }
 
-std::vector<std::string> HistoryDb::GetRecentViews(RecentViewType t, int limit) {
+std::vector<RecentView> HistoryDb::GetRecentViews(RecentViewType t, int limit) {
   sqlite3_stmt* stmt;
   int rc = sqlite3_prepare_v2(db_, kGetRecentViewsForTypeSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
@@ -101,14 +103,16 @@ std::vector<std::string> HistoryDb::GetRecentViews(RecentViewType t, int limit) 
   BindString(stmt, 1, type_string);
   sqlite3_bind_int(stmt, 2, limit);
 
-  std::vector<std::string> ids;
+  std::vector<RecentView> views;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
-    std::string id(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
-    ids.push_back(id);
+    views.push_back({});
+    RecentView& view = views.back();
+    view.id = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+    view.timestamp = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
   }
 
   sqlite3_finalize(stmt);
-  return ids;
+  return views;
 }
 
 }  // namespace aim

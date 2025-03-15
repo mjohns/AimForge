@@ -9,7 +9,12 @@
 namespace aim {
 
 enum class RecentViewType {
-    SCENARIO, PLAYLIST, THEME
+    SCENARIO, PLAYLIST, THEME, CROSSHAIR
+};
+
+struct RecentView {
+  std::string id;
+  std::string timestamp;
 };
 
 class HistoryDb {
@@ -19,7 +24,7 @@ class HistoryDb {
 
   void UpdateRecentView(RecentViewType t, const std::string& id);
 
-  std::vector<std::string> GetRecentViews(RecentViewType t, int limit);
+  std::vector<RecentView> GetRecentViews(RecentViewType t, int limit);
 
   HistoryDb(const HistoryDb&) = delete;
   HistoryDb(HistoryDb&&) = default;

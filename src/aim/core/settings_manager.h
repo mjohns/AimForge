@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "aim/common/times.h"
+#include "aim/database/history_db.h"
 #include "aim/database/settings_db.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -65,7 +66,7 @@ class SettingsManager {
 
 struct SettingsUpdater {
  public:
-  explicit SettingsUpdater(SettingsManager* settings_manager);
+  explicit SettingsUpdater(SettingsManager* settings_manager, HistoryDb* history_db);
 
   void SaveIfChangesMade(const std::string& scenario_id);
   void SaveIfChangesMadeDebounced(const std::string& scenario_id, float debounce_seconds);
@@ -79,6 +80,7 @@ struct SettingsUpdater {
 
  private:
   SettingsManager* settings_manager_;
+  HistoryDb* history_db_;
   Stopwatch last_update_timer_;
 };
 
