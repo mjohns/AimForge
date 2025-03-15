@@ -19,6 +19,7 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
+#include "aim/database/history_db.h"
 #include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
@@ -59,7 +60,7 @@ class Application {
 
   SDL_GPUDevice* gpu_device() {
     return gpu_device_;
-  } 
+  }
 
   bool has_input_focus() {
     return SDL_GetWindowFlags(sdl_window()) & SDL_WINDOW_INPUT_FOCUS;
@@ -83,6 +84,10 @@ class Application {
 
   StatsDb* stats_db() {
     return stats_db_.get();
+  }
+
+  HistoryDb* history_db() {
+    return history_db_.get();
   }
 
   Renderer* renderer() {
@@ -136,6 +141,7 @@ class Application {
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsDb> stats_db_;
   std::unique_ptr<SettingsDb> settings_db_;
+  std::unique_ptr<HistoryDb> history_db_;
   std::unique_ptr<Renderer> renderer_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<SettingsManager> settings_manager_;

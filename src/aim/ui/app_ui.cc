@@ -27,6 +27,8 @@ class AppUiImpl : public AppUi {
           settings_updater_ = {};
         }
         if (current_scenario_def_.has_value()) {
+          app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO,
+                                               current_scenario_def_->scenario_id());
           current_running_scenario_ = CreateScenario(*current_scenario_def_, app_);
           auto nav_event = current_running_scenario_->Run();
           if (nav_event.IsRestartLastScenario()) {
