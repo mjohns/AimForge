@@ -1181,6 +1181,7 @@ class Settings final : public ::google::protobuf::Message
     kCmPer360FieldNumber = 2,
     kMetronomeBpmFieldNumber = 4,
     kCrosshairSizeFieldNumber = 5,
+    kDisableClickToStartFieldNumber = 8,
   };
   // repeated .aim.Crosshair saved_crosshairs = 7;
   int saved_crosshairs_size() const;
@@ -1277,13 +1278,24 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_crosshair_size(float value);
 
   public:
+  // bool disable_click_to_start = 8;
+  bool has_disable_click_to_start() const;
+  void clear_disable_click_to_start() ;
+  bool disable_click_to_start() const;
+  void set_disable_click_to_start(bool value);
+
+  private:
+  bool _internal_disable_click_to_start() const;
+  void _internal_set_disable_click_to_start(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 7, 1,
-      53, 2>
+      3, 8, 1,
+      61, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -1309,6 +1321,7 @@ class Settings final : public ::google::protobuf::Message
     float cm_per_360_;
     float metronome_bpm_;
     float crosshair_size_;
+    bool disable_click_to_start_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2044,6 +2057,34 @@ inline ::google::protobuf::RepeatedPtrField<::aim::Crosshair>*
 Settings::_internal_mutable_saved_crosshairs() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.saved_crosshairs_;
+}
+
+// bool disable_click_to_start = 8;
+inline bool Settings::has_disable_click_to_start() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void Settings::clear_disable_click_to_start() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.disable_click_to_start_ = false;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline bool Settings::disable_click_to_start() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.disable_click_to_start)
+  return _internal_disable_click_to_start();
+}
+inline void Settings::set_disable_click_to_start(bool value) {
+  _internal_set_disable_click_to_start(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.Settings.disable_click_to_start)
+}
+inline bool Settings::_internal_disable_click_to_start() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.disable_click_to_start_;
+}
+inline void Settings::_internal_set_disable_click_to_start(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.disable_click_to_start_ = value;
 }
 
 // -------------------------------------------------------------------

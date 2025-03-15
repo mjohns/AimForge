@@ -94,6 +94,12 @@ void Scenario::RefreshState() {
 NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   RefreshState();
 
+  if (settings_.disable_click_to_start()) {
+    has_started_ = true;
+    Initialize();
+    return ResumeInternal();
+  }
+
   bool is_adjusting_crosshair = false;
   bool save_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
