@@ -16,16 +16,17 @@ namespace {
 
 const char* kCreateRecentViewsTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS RecentViews (
-    Type TEXT PRIMARY_KEY,
-    Id TEXT PRIMARY_KEY,
+    Type TEXT,
+    Id TEXT,
     Timestamp TEXT,
-    ExtraInfo TEXT
+    ExtraInfo TEXT,
+    PRIMARY KEY (Type, Id)
 );
 )AIMS";
 
 const char* kInsertRecentViewsSql = R"AIMS(
-INSERT OR REPLACE INTO RecentViews (Type, Id, Timestamp)
-    VALUES (?, ?, ?);
+INSERT INTO RecentViews (Type, Id, Timestamp) VALUES (?, ?, ?)
+ON CONFLICT (Type, Id) DO UPDATE SET Timestamp = ?;
 )AIMS";
 
 const char* kGetRecentViewsForTypeSql = R"AIMS(
@@ -86,6 +87,7 @@ void HistoryDb::UpdateRecentView(RecentViewType t, const std::string& id) {
   BindString(stmt, 1, type_string);
   BindString(stmt, 2, id);
   BindString(stmt, 3, timestamp);
+  BindString(stmt, 4, timestamp);
 
   rc = sqlite3_step(stmt);
   sqlite3_finalize(stmt);

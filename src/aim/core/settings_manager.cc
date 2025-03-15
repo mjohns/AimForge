@@ -1,6 +1,7 @@
 #include "settings_manager.h"
 
 #include <absl/status/status.h>
+#include <absl/strings/strip.h>
 #include <google/protobuf/json/json.h>
 #include <google/protobuf/util/json_util.h>
 #include <nlohmann/json.h>
@@ -54,10 +55,12 @@ Settings GetDefaultSettings() {
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
                                  std::vector<std::filesystem::path> theme_dirs,
-                                 SettingsDb* settings_db)
+                                 SettingsDb* settings_db,
+                                 HistoryDb* history_db)
     : theme_dirs_(std::move(theme_dirs)),
       settings_path_(settings_path),
-      settings_db_(settings_db) {}
+      settings_db_(settings_db),
+      history_db_(history_db) {}
 
 SettingsManager::~SettingsManager() {
   if (needs_save_) {
@@ -81,6 +84,35 @@ absl::Status SettingsManager::Initialize() {
   settings_ = GetDefaultSettings();
   FlushToDisk("");
   return absl::OkStatus();
+}
+
+std::vector<std::string> SettingsManager::ListThemes() {
+  auto recent_themes = history_db_->GetRecentViews(RecentViewType::THEME, 20);
+
+  std::vector<std::string> all_theme_names;
+  for (auto dir : theme_dirs_) {
+    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+      std::string filename = entry.path().filename().string();
+      if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
+        std::string name(absl::StripSuffix(filename, ".json"));
+        all_theme_names.push_back(name);
+      }
+    }
+  }
+
+  std::vector<std::string> theme_names;
+  for (auto& recent_theme : recent_themes) {
+    if (VectorContains(all_theme_names, recent_theme.id)) {
+      theme_names.push_back(recent_theme.id);
+    }
+  }
+
+  for (auto& theme_name : all_theme_names) {
+    if (!VectorContains(theme_names, theme_name)) {
+      theme_names.push_back(theme_name);
+    }
+  }
+  return theme_names;
 }
 
 Theme SettingsManager::GetTheme(const std::string& theme_name) {
