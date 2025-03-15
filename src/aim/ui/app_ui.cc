@@ -7,6 +7,8 @@
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
+#include "aim/ui/settings_screen.h"
+#include "aim/ui/ui_screen.h"
 
 namespace aim {
 namespace {
@@ -21,11 +23,11 @@ class AppUiImpl : public AppUi {
   void Run() override {
     timer_.Start();
     while (true) {
+      if (screen_to_show_) {
+        screen_to_show_->Run();
+        screen_to_show_ = {};
+      }
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
-        if (settings_updater_) {
-          settings_updater_->SaveIfChangesMade("");
-          settings_updater_ = {};
-        }
         if (current_scenario_def_.has_value()) {
           app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO,
                                                current_scenario_def_->scenario_id());
@@ -45,10 +47,6 @@ class AppUiImpl : public AppUi {
         }
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
-        if (settings_updater_) {
-          settings_updater_->SaveIfChangesMade("");
-          settings_updater_ = {};
-        }
         if (current_running_scenario_) {
           auto nav_event = current_running_scenario_->Resume();
           // TODO: share this nav_event handling between run and resume.
@@ -218,7 +216,8 @@ class AppUiImpl : public AppUi {
     ImGui::Spacing();
 
     if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
-      app_screen_ = AppScreen::SETTINGS;
+      screen_to_show_ = CreateSettingsScreen(
+          app_, current_scenario_def_.has_value() ? current_scenario_def_->scenario_id() : "");
     }
 
     // ImGui::SetCursorPosY(screen.height * 0.5);
@@ -253,9 +252,6 @@ class AppUiImpl : public AppUi {
     }
     if (app_screen_ == AppScreen::PLAYLISTS) {
       DrawPlaylistsScreen();
-    }
-    if (app_screen_ == AppScreen::SETTINGS) {
-      DrawSettingsScreen();
     }
 
     ImGui::EndChild();
@@ -347,57 +343,6 @@ class AppUiImpl : public AppUi {
     }
   }
 
-  void DrawSettingsScreen() {
-    if (!settings_updater_) {
-      settings_updater_ =
-          std::make_unique<SettingsUpdater>(app_->settings_manager(), app_->history_db());
-    }
-    const ScreenInfo& screen = app_->screen_info();
-    float width = screen.width * 0.5;
-    float height = screen.height * 0.9;
-
-    ImGui::Columns(2, "SettingsColumns", false);  // 2 columns, no borders
-
-    ImGui::Text("DPI");
-
-    // ImGui::SetCursorPosX(screen.width * 0.5);
-    ImGui::NextColumn();
-    ImGui::InputText("##DPI", &settings_updater_->dpi, ImGuiInputTextFlags_CharsDecimal);
-
-    ImGui::NextColumn();
-    ImGui::Text("CM/360");
-
-    // ImGui::SetCursorPosX(screen.width * 0.5);
-    ImGui::NextColumn();
-    ImGui::InputText(
-        "##CM_PER_360", &settings_updater_->cm_per_360, ImGuiInputTextFlags_CharsDecimal);
-
-    ImGui::NextColumn();
-    ImGui::Text("Theme");
-
-    // ImGui::SetCursorPosX(screen.width * 0.5);
-    ImGui::NextColumn();
-    ImGui::InputText("##THEME_NAME", &settings_updater_->theme_name);
-
-    ImGui::NextColumn();
-    ImGui::Text("Crosshair");
-
-    // ImGui::SetCursorPosX(screen.width * 0.5);
-    ImGui::NextColumn();
-    ImGui::InputText("##CROSSHAIR_NAME", &settings_updater_->crosshair_name);
-
-    ImGui::NextColumn();
-    ImGui::Text("Metronome BPM");
-
-    // ImGui::SetCursorPosX(screen.width * 0.5);
-    ImGui::NextColumn();
-    ImGui::InputText(
-        "##METRONOME_BPM", &settings_updater_->metronome_bpm, ImGuiInputTextFlags_CharsDecimal);
-
-    // TODO: Improve this logic to be more explicit
-    settings_updater_->SaveIfChangesMadeDebounced("", 5);
-  }
-
   AppScreen app_screen_ = AppScreen::SCENARIOS;
   ScenarioRunOption scenario_run_option_ = ScenarioRunOption::NONE;
   Application* app_;
@@ -405,12 +350,10 @@ class AppUiImpl : public AppUi {
 
   std::optional<ScenarioDef> current_scenario_def_;
   std::unique_ptr<Scenario> current_running_scenario_;
-
   std::optional<Playlist> current_playlist_;
-
-  std::unique_ptr<SettingsUpdater> settings_updater_;
-
   std::unique_ptr<Texture> logo_texture_;
+
+  std::unique_ptr<UiScreen> screen_to_show_;
 };
 
 }  // namespace
