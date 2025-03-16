@@ -1183,7 +1183,7 @@ class Keybinds final : public ::google::protobuf::Message
     kRestartScenarioFieldNumber = 2,
     kNextScenarioFieldNumber = 3,
     kQuickSettingsFieldNumber = 4,
-    kQuickCrosshairSizeFieldNumber = 5,
+    kAdjustCrosshairSizeFieldNumber = 5,
     kQuickMetronomeFieldNumber = 6,
   };
   // .aim.KeyMapping fire = 1;
@@ -1246,19 +1246,19 @@ class Keybinds final : public ::google::protobuf::Message
   ::aim::KeyMapping* _internal_mutable_quick_settings();
 
   public:
-  // .aim.KeyMapping quick_crosshair_size = 5;
-  bool has_quick_crosshair_size() const;
-  void clear_quick_crosshair_size() ;
-  const ::aim::KeyMapping& quick_crosshair_size() const;
-  PROTOBUF_NODISCARD ::aim::KeyMapping* release_quick_crosshair_size();
-  ::aim::KeyMapping* mutable_quick_crosshair_size();
-  void set_allocated_quick_crosshair_size(::aim::KeyMapping* value);
-  void unsafe_arena_set_allocated_quick_crosshair_size(::aim::KeyMapping* value);
-  ::aim::KeyMapping* unsafe_arena_release_quick_crosshair_size();
+  // .aim.KeyMapping adjust_crosshair_size = 5;
+  bool has_adjust_crosshair_size() const;
+  void clear_adjust_crosshair_size() ;
+  const ::aim::KeyMapping& adjust_crosshair_size() const;
+  PROTOBUF_NODISCARD ::aim::KeyMapping* release_adjust_crosshair_size();
+  ::aim::KeyMapping* mutable_adjust_crosshair_size();
+  void set_allocated_adjust_crosshair_size(::aim::KeyMapping* value);
+  void unsafe_arena_set_allocated_adjust_crosshair_size(::aim::KeyMapping* value);
+  ::aim::KeyMapping* unsafe_arena_release_adjust_crosshair_size();
 
   private:
-  const ::aim::KeyMapping& _internal_quick_crosshair_size() const;
-  ::aim::KeyMapping* _internal_mutable_quick_crosshair_size();
+  const ::aim::KeyMapping& _internal_adjust_crosshair_size() const;
+  ::aim::KeyMapping* _internal_mutable_adjust_crosshair_size();
 
   public:
   // .aim.KeyMapping quick_metronome = 6;
@@ -1305,7 +1305,7 @@ class Keybinds final : public ::google::protobuf::Message
     ::aim::KeyMapping* restart_scenario_;
     ::aim::KeyMapping* next_scenario_;
     ::aim::KeyMapping* quick_settings_;
-    ::aim::KeyMapping* quick_crosshair_size_;
+    ::aim::KeyMapping* adjust_crosshair_size_;
     ::aim::KeyMapping* quick_metronome_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -3636,45 +3636,45 @@ inline void Keybinds::set_allocated_quick_settings(::aim::KeyMapping* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.Keybinds.quick_settings)
 }
 
-// .aim.KeyMapping quick_crosshair_size = 5;
-inline bool Keybinds::has_quick_crosshair_size() const {
+// .aim.KeyMapping adjust_crosshair_size = 5;
+inline bool Keybinds::has_adjust_crosshair_size() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.quick_crosshair_size_ != nullptr);
+  PROTOBUF_ASSUME(!value || _impl_.adjust_crosshair_size_ != nullptr);
   return value;
 }
-inline void Keybinds::clear_quick_crosshair_size() {
+inline void Keybinds::clear_adjust_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.quick_crosshair_size_ != nullptr) _impl_.quick_crosshair_size_->Clear();
+  if (_impl_.adjust_crosshair_size_ != nullptr) _impl_.adjust_crosshair_size_->Clear();
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline const ::aim::KeyMapping& Keybinds::_internal_quick_crosshair_size() const {
+inline const ::aim::KeyMapping& Keybinds::_internal_adjust_crosshair_size() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::KeyMapping* p = _impl_.quick_crosshair_size_;
+  const ::aim::KeyMapping* p = _impl_.adjust_crosshair_size_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::KeyMapping&>(::aim::_KeyMapping_default_instance_);
 }
-inline const ::aim::KeyMapping& Keybinds::quick_crosshair_size() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.Keybinds.quick_crosshair_size)
-  return _internal_quick_crosshair_size();
+inline const ::aim::KeyMapping& Keybinds::adjust_crosshair_size() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Keybinds.adjust_crosshair_size)
+  return _internal_adjust_crosshair_size();
 }
-inline void Keybinds::unsafe_arena_set_allocated_quick_crosshair_size(::aim::KeyMapping* value) {
+inline void Keybinds::unsafe_arena_set_allocated_adjust_crosshair_size(::aim::KeyMapping* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.quick_crosshair_size_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.adjust_crosshair_size_);
   }
-  _impl_.quick_crosshair_size_ = reinterpret_cast<::aim::KeyMapping*>(value);
+  _impl_.adjust_crosshair_size_ = reinterpret_cast<::aim::KeyMapping*>(value);
   if (value != nullptr) {
     _impl_._has_bits_[0] |= 0x00000010u;
   } else {
     _impl_._has_bits_[0] &= ~0x00000010u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Keybinds.quick_crosshair_size)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Keybinds.adjust_crosshair_size)
 }
-inline ::aim::KeyMapping* Keybinds::release_quick_crosshair_size() {
+inline ::aim::KeyMapping* Keybinds::release_adjust_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000010u;
-  ::aim::KeyMapping* released = _impl_.quick_crosshair_size_;
-  _impl_.quick_crosshair_size_ = nullptr;
+  ::aim::KeyMapping* released = _impl_.adjust_crosshair_size_;
+  _impl_.adjust_crosshair_size_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
     auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
     released = ::google::protobuf::internal::DuplicateIfNonNull(released);
@@ -3688,34 +3688,34 @@ inline ::aim::KeyMapping* Keybinds::release_quick_crosshair_size() {
   }
   return released;
 }
-inline ::aim::KeyMapping* Keybinds::unsafe_arena_release_quick_crosshair_size() {
+inline ::aim::KeyMapping* Keybinds::unsafe_arena_release_adjust_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.Keybinds.quick_crosshair_size)
+  // @@protoc_insertion_point(field_release:aim.Keybinds.adjust_crosshair_size)
 
   _impl_._has_bits_[0] &= ~0x00000010u;
-  ::aim::KeyMapping* temp = _impl_.quick_crosshair_size_;
-  _impl_.quick_crosshair_size_ = nullptr;
+  ::aim::KeyMapping* temp = _impl_.adjust_crosshair_size_;
+  _impl_.adjust_crosshair_size_ = nullptr;
   return temp;
 }
-inline ::aim::KeyMapping* Keybinds::_internal_mutable_quick_crosshair_size() {
+inline ::aim::KeyMapping* Keybinds::_internal_mutable_adjust_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.quick_crosshair_size_ == nullptr) {
+  if (_impl_.adjust_crosshair_size_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::KeyMapping>(GetArena());
-    _impl_.quick_crosshair_size_ = reinterpret_cast<::aim::KeyMapping*>(p);
+    _impl_.adjust_crosshair_size_ = reinterpret_cast<::aim::KeyMapping*>(p);
   }
-  return _impl_.quick_crosshair_size_;
+  return _impl_.adjust_crosshair_size_;
 }
-inline ::aim::KeyMapping* Keybinds::mutable_quick_crosshair_size() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::KeyMapping* Keybinds::mutable_adjust_crosshair_size() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000010u;
-  ::aim::KeyMapping* _msg = _internal_mutable_quick_crosshair_size();
-  // @@protoc_insertion_point(field_mutable:aim.Keybinds.quick_crosshair_size)
+  ::aim::KeyMapping* _msg = _internal_mutable_adjust_crosshair_size();
+  // @@protoc_insertion_point(field_mutable:aim.Keybinds.adjust_crosshair_size)
   return _msg;
 }
-inline void Keybinds::set_allocated_quick_crosshair_size(::aim::KeyMapping* value) {
+inline void Keybinds::set_allocated_adjust_crosshair_size(::aim::KeyMapping* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
-    delete (_impl_.quick_crosshair_size_);
+    delete (_impl_.adjust_crosshair_size_);
   }
 
   if (value != nullptr) {
@@ -3728,8 +3728,8 @@ inline void Keybinds::set_allocated_quick_crosshair_size(::aim::KeyMapping* valu
     _impl_._has_bits_[0] &= ~0x00000010u;
   }
 
-  _impl_.quick_crosshair_size_ = reinterpret_cast<::aim::KeyMapping*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.Keybinds.quick_crosshair_size)
+  _impl_.adjust_crosshair_size_ = reinterpret_cast<::aim::KeyMapping*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Keybinds.adjust_crosshair_size)
 }
 
 // .aim.KeyMapping quick_metronome = 6;

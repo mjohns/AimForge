@@ -61,7 +61,7 @@ message Keybinds {
     KeyMapping restart_scenario = 2;
     KeyMapping next_scenario = 3;
     KeyMapping quick_settings = 4;
-    KeyMapping quick_crosshair_size = 5;
+    KeyMapping adjust_crosshair_size = 5;
     KeyMapping quick_metronome = 6;
 }
 

@@ -8,12 +8,15 @@
 #include <vector>
 
 #include "aim/common/times.h"
+#include "aim/common/simple_types.h"
 #include "aim/database/history_db.h"
 #include "aim/database/settings_db.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
 
 namespace aim {
+
+std::string GetMouseButtonName(u8 button);
 
 struct ThemeCacheEntry {
   Theme theme;
