@@ -1,9 +1,13 @@
 #include "times.h"
 
+#include <absl/time/time.h>
+
 #include <chrono>
 #include <format>
 #include <iomanip>
 #include <sstream>
+
+#include "aim/common/log.h"
 
 namespace aim {
 
@@ -113,16 +117,13 @@ std::string GetHowLongAgoString(u64 start, u64 end) {
 }
 
 std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
-  std::chrono::utc_clock::time_point tp;
-  std::chrono::utc_clock::duration time;
-  std::istringstream ss(timestamp);
-  // Unfortunately std::chrono::parse directly to %FT%TZ fails because of fractional seconds
-  ss >> std::chrono::parse("%FT", tp) >> std::chrono::parse("%TZ", time);
-  tp += time;
-  if (ss.fail()) {
+  absl::Time out;
+  std::string err;
+  if (!absl::ParseTime(absl::RFC3339_full, timestamp, &out, &err)) {
+    Logger::get()->warn("Failed to part time {}. err: {}", timestamp, err);
     return {};
   }
-  return std::chrono::duration_cast<std::chrono::microseconds>(tp.time_since_epoch()).count();
+  return absl::ToUnixMicros(out);
 }
 
 u64 GetNowMicros() {

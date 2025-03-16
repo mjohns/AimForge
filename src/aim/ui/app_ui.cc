@@ -37,6 +37,14 @@ class AppUiImpl : public AppUi {
             scenario_run_option_ = ScenarioRunOption::RUN;
             continue;
           }
+          if (nav_event.IsStartScenario()) {
+            auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
+            if (maybe_scenario.has_value()) {
+              current_scenario_def_ = maybe_scenario;
+              scenario_run_option_ = ScenarioRunOption::RUN;
+              continue;
+            }
+          }
           if (nav_event.IsPlaylistNext()) {
             if (HandlePlaylistNext()) {
               continue;
@@ -312,6 +320,7 @@ class AppUiImpl : public AppUi {
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
       if (ImGui::Button(playlist.name.c_str(), sz)) {
         current_playlist_ = playlist;
+        app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
         app_->playlist_manager()->StartNewRun(playlist.name);
         app_screen_ = AppScreen::CURRENT_PLAYLIST;
       }
