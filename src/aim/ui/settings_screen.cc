@@ -152,27 +152,17 @@ class SettingsScreen : public UiScreen {
       ImVec2 sz = ImVec2(0.0f, 0.0f);
       if (ImGui::Button("Save", sz)) {
         settings_updater_.SaveIfChangesMade(scenario_id_);
-        Done();
+        ScreenDone();
       }
     }
   }
 
-  std::optional<NavigationEvent> OnKeyDown(const SDL_Event& event, bool user_is_typing) override {
+  void OnKeyDown(const SDL_Event& event, bool user_is_typing) override {
     if (capture_key_fn_) {
       auto capture = capture_key_fn_;
       capture_key_fn_ = {};
       capture(event);
     }
-    return {};
-  }
-
-  std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
-    SDL_Keycode keycode = event.key.key;
-    if (!user_is_typing && keycode == SDLK_ESCAPE) {
-      settings_updater_.SaveIfChangesMade(scenario_id_);
-      return NavigationEvent::Done();
-    }
-    return {};
   }
 
  private:

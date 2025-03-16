@@ -17,27 +17,21 @@ class UiScreen {
 
  protected:
   virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
-
-  virtual std::optional<NavigationEvent> OnKeyDown(const SDL_Event& event, bool user_is_typing) {
-    return {};
-  }
-
-  virtual std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) {
-    return {};
-  }
+  virtual void OnKeyDown(const SDL_Event& event, bool user_is_typing) {}
+  virtual void OnKeyUp(const SDL_Event& event, bool user_is_typing) {}
 
   virtual void DrawScreen() = 0;
 
   virtual void Resume();
 
-  void Done() {
-    screen_done_ = true;
+  void ScreenDone(NavigationEvent nav_event = NavigationEvent::Done()) {
+    return_value_ = nav_event;
   }
 
   Application* app_ = nullptr;
 
  private:
-  bool screen_done_ = false;
+  std::optional<NavigationEvent> return_value_;
 };
 
 }  // namespace aim
