@@ -200,14 +200,14 @@ message LinearScenarioDef {
 }
 
 message WallStrafeScenarioDef {
-    // The available width for the target to move in.
-    RegionLength width = 1;
+  // The available width for the target to move in.
+  RegionLength width = 1;
 
-    // The height the target will strafe at. Defaults to 0 (center of wall).
-    RegionLength y = 2;
+  // The height the target will strafe at. Defaults to 0 (center of wall).
+  RegionLength y = 2;
 
-    RegionLength min_distance = 3;
-    RegionLength max_distance = 4;
+  RegionLength min_distance = 3;
+  RegionLength max_distance = 4;
 }
 
 message TargetDef {

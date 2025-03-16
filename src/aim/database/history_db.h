@@ -8,9 +8,7 @@
 
 namespace aim {
 
-enum class RecentViewType {
-    SCENARIO, PLAYLIST, THEME, CROSSHAIR
-};
+enum class RecentViewType { SCENARIO, PLAYLIST, THEME, CROSSHAIR };
 
 struct RecentView {
   std::string id;

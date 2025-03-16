@@ -3,15 +3,15 @@
 #include <google/protobuf/arena.h>
 
 #include <functional>
-#include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <optional>
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
-#include "aim/core/perf.h"
 #include "aim/core/metronome.h"
 #include "aim/core/navigation_event.h"
+#include "aim/core/perf.h"
 #include "aim/core/target.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/scenario.pb.h"
