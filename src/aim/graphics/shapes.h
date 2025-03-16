@@ -1,7 +1,7 @@
 #pragma once
 
-#include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include <vector>
 
 namespace aim {
@@ -17,4 +17,4 @@ std::vector<VertexAndTexCoord> GenerateCylinderWallVertices(int num_segments);
 
 std::vector<glm::vec3> GenerateCylinderVertices(int num_segments);
 
-} // namespace aim
+}  // namespace aim
