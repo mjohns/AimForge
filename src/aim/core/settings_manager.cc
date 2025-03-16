@@ -4,6 +4,7 @@
 #include <absl/strings/strip.h>
 #include <google/protobuf/json/json.h>
 #include <google/protobuf/util/json_util.h>
+#include <google/protobuf/util/message_differencer.h>
 #include <nlohmann/json.h>
 
 #include <fstream>
@@ -270,6 +271,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     crosshair_size = MaybeIntToString(current_settings->crosshair_size());
     crosshair_name = current_settings->current_crosshair_name();
     disable_click_to_start = current_settings->disable_click_to_start();
+    keybinds = current_settings->keybinds();
   }
 }
 
@@ -304,6 +306,11 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   }
   if (current_settings->disable_click_to_start() != disable_click_to_start) {
     current_settings->set_disable_click_to_start(disable_click_to_start);
+    settings_manager_->MarkDirty();
+  }
+  if (!google::protobuf::util::MessageDifferencer::Equivalent(current_settings->keybinds(),
+                                                              keybinds)) {
+    *current_settings->mutable_keybinds() = keybinds;
     settings_manager_->MarkDirty();
   }
   float new_metronome_bpm = ParseFloat(metronome_bpm);

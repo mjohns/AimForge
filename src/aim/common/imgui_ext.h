@@ -11,7 +11,7 @@ namespace ImGui {
 template <class... _Types>
 static void TextFmt(const std::format_string<_Types...> fmt, _Types&&... args) {
   std::string message = std::format(fmt, std::forward<_Types>(args)...);
-  Text(message.c_str());
+  Text("%s", message.c_str());
 }
 
 static void Text(const std::string& val) {

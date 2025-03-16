@@ -82,6 +82,7 @@ struct SettingsUpdater {
   std::string crosshair_name;
   std::string dpi;
   bool disable_click_to_start = false;
+  Keybinds keybinds;
 
  private:
   SettingsManager* settings_manager_;
