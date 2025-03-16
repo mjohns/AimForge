@@ -145,6 +145,8 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
 
   bool show_history = false;
 
+  Settings settings = app_->settings_manager()->GetCurrentSettings();
+
   PlaylistRun* playlist_run = app_->playlist_manager()->GetMutableCurrentRun();
 
   // Show results page
@@ -174,15 +176,15 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       if (event.type == SDL_EVENT_QUIT) {
         throw ApplicationExitException();
       }
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::Done();
-        }
-        if (keycode == SDLK_R) {
+      if (IsEscapeKeyDown(event)) {
+        return NavigationEvent::Done();
+      }
+      if (IsMappableKeyDownEvent(event)) {
+        std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+        if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
           return NavigationEvent::RestartLastScenario();
         }
-        if (keycode == SDLK_W) {
+        if (KeyMappingMatchesEvent(event_name, settings.keybinds().next_scenario())) {
           return NavigationEvent::PlaylistNext();
         }
       }

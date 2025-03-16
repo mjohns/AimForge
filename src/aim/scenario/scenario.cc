@@ -161,10 +161,9 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
           is_adjusting_crosshair = true;
         }
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::Done();
-        }
+      }
+      if (IsEscapeKeyDown(event)) {
+        return NavigationEvent::Done();
       }
       if (IsMappableKeyUpEvent(event)) {
         std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
@@ -348,10 +347,9 @@ NavigationEvent Scenario::ResumeInternal() {
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
           is_adjusting_crosshair = true;
         }
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_ESCAPE) {
-          return PauseAndReturn();
-        }
+      }
+      if (IsEscapeKeyDown(event)) {
+        return PauseAndReturn();
       }
       if (IsMappableKeyUpEvent(event)) {
         std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));

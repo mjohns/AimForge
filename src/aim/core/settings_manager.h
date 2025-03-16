@@ -25,6 +25,7 @@ bool KeyMappingMatchesEvent(const SDL_Event& event, const KeyMapping& mapping);
 bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& mapping);
 bool IsMappableKeyDownEvent(const SDL_Event& event);
 bool IsMappableKeyUpEvent(const SDL_Event& event);
+bool IsEscapeKeyDown(const SDL_Event& event);
 
 struct ThemeCacheEntry {
   Theme theme;

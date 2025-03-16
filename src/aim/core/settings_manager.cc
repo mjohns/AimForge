@@ -96,6 +96,10 @@ std::string GetKeyNameForEvent(const SDL_Event& event) {
   return "";
 }
 
+bool IsEscapeKeyDown(const SDL_Event& event) {
+  return event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE;
+}
+
 bool KeyNameMatchesEvent(const SDL_Event& event, const std::string& name) {
   if (name.size() == 0) {
     return false;
