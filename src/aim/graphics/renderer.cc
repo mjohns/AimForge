@@ -113,15 +113,10 @@ SDL_GPUColorTargetBlendState DefaultBlendState() {
 class RendererImpl : public Renderer {
  public:
   RendererImpl(const std::vector<std::filesystem::path>& texture_dirs,
-               const ScreenInfo& screen,
                SDL_GPUDevice* device,
                SDL_Window* sdl_window)
-      : texture_manager_(texture_dirs, device),
-        device_(device),
-        sdl_window_(sdl_window),
-        screen_(screen) {
+      : texture_manager_(texture_dirs, device), device_(device), sdl_window_(sdl_window) {
     SDL_GetWindowSizeInPixels(sdl_window_, &viewport_width_, &viewport_height_);
-    printf("%d, %d\n", viewport_width_ , viewport_height_);
   }
 
   ~RendererImpl() override {
@@ -963,18 +958,15 @@ class RendererImpl : public Renderer {
 
   int viewport_width_ = 0;
   int viewport_height_ = 0;
-
-  ScreenInfo screen_;
 };
 
 }  // namespace
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
-                                         const ScreenInfo& screen,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window) {
-  auto renderer = std::make_unique<RendererImpl>(texture_dirs, screen, device, sdl_window);
+  auto renderer = std::make_unique<RendererImpl>(texture_dirs, device, sdl_window);
   if (!renderer->Initialize(shader_dir)) {
     return {};
   }

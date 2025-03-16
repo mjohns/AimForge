@@ -6,11 +6,17 @@
 #include <format>
 #include <optional>
 
+#include "aim/common/imgui_ext.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
 
 namespace aim {
 namespace {
+
+struct KeybindItem {
+  std::string label;
+  KeyMapping* mapping;
+};
 
 class SettingsScreen : public UiScreen {
  public:
@@ -117,6 +123,31 @@ class SettingsScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##disable_click_to_start", &settings_updater_.disable_click_to_start);
 
+    std::vector<KeybindItem> keybind_items = {
+        {"Fire", settings_updater_.keybinds.mutable_fire()},
+        {"Restart Scenario", settings_updater_.keybinds.mutable_restart_scenario()},
+    };
+
+    for (KeybindItem& item : keybind_items) {
+      ImGui::Text(item.label);
+      ImGui::SameLine();
+      if (ImGui::Button(std::format("{}##key1_{}", item.mapping->mapping1(), item.label).c_str(),
+                        ImVec2(char_size.x * 10, 0))) {
+        KeyMapping* mapping = item.mapping;
+        capture_key_fn_ = [=](const SDL_Event& event) {
+          mapping->set_mapping1(SDL_GetKeyName(event.key.key));
+        };
+      }
+      ImGui::SameLine();
+      if (ImGui::Button(std::format("{}##key2_{}", item.mapping->mapping2(), item.label).c_str(),
+                        ImVec2(char_size.x * 10, 0))) {
+        KeyMapping* mapping = item.mapping;
+        capture_key_fn_ = [=](const SDL_Event& event) {
+          mapping->set_mapping2(SDL_GetKeyName(event.key.key));
+        };
+      }
+    }
+
     {
       ImVec2 sz = ImVec2(0.0f, 0.0f);
       if (ImGui::Button("Save", sz)) {
@@ -126,13 +157,21 @@ class SettingsScreen : public UiScreen {
     }
   }
 
+  std::optional<NavigationEvent> OnKeyDown(const SDL_Event& event, bool user_is_typing) override {
+    if (capture_key_fn_) {
+      auto capture = capture_key_fn_;
+      capture_key_fn_ = {};
+      capture(event);
+    }
+    return {};
+  }
+
   std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
     SDL_Keycode keycode = event.key.key;
     if (!user_is_typing && keycode == SDLK_ESCAPE) {
       settings_updater_.SaveIfChangesMade(scenario_id_);
       return NavigationEvent::Done();
     }
-
     return {};
   }
 
@@ -142,6 +181,8 @@ class SettingsScreen : public UiScreen {
   std::vector<std::string> theme_names_;
   std::vector<std::string> crosshair_names_;
   const std::string scenario_id_;
+
+  std::function<void(const SDL_Event&)> capture_key_fn_;
 };
 }  // namespace
 

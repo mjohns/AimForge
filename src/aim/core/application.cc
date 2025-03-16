@@ -197,7 +197,7 @@ int Application::Initialize() {
       file_system_->GetBasePath("resources/textures"),
   };
   std::filesystem::path shader_dir = file_system_->GetBasePath("shaders/compiled");
-  renderer_ = CreateRenderer(texture_dirs, shader_dir, screen_info(), gpu_device_, sdl_window_);
+  renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -347,7 +347,7 @@ void Application::EnableVsync() {
 
 void Application::DisableVsync() {
   SDL_SetGPUSwapchainParameters(
-      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_VSYNC);
+      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 }
 
 std::unique_ptr<Application> Application::Create() {

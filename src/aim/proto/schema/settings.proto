@@ -37,6 +37,8 @@ message Settings {
   repeated Crosshair saved_crosshairs = 7;
 
   bool disable_click_to_start = 8;
+
+  Keybinds keybinds = 9;
 }
 
 message ScenarioSettings {
@@ -46,3 +48,20 @@ message ScenarioSettings {
   float crosshair_size = 4;
   string crosshair_name = 5;
 }
+
+message KeyMapping {
+    string mapping1 = 1;
+    string mapping2 = 2;
+    string mapping3 = 3;
+    string mapping4 = 4;
+}
+
+message Keybinds {
+    KeyMapping fire = 1;
+    KeyMapping restart_scenario = 2;
+    KeyMapping next_scenario = 3;
+    KeyMapping quick_settings = 4;
+    KeyMapping quick_crosshair_size = 5;
+    KeyMapping quick_metronome = 6;
+}
+

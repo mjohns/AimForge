@@ -88,6 +88,42 @@ struct PlusCrosshairDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlusCrosshairDefaultTypeInternal _PlusCrosshair_default_instance_;
 
+inline constexpr KeyMapping::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        mapping1_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        mapping2_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        mapping3_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        mapping4_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()) {}
+
+template <typename>
+PROTOBUF_CONSTEXPR KeyMapping::KeyMapping(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct KeyMappingDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR KeyMappingDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~KeyMappingDefaultTypeInternal() {}
+  union {
+    KeyMapping _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 KeyMappingDefaultTypeInternal _KeyMapping_default_instance_;
+
 inline constexpr DotCrosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -112,6 +148,36 @@ struct DotCrosshairDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DotCrosshairDefaultTypeInternal _DotCrosshair_default_instance_;
+
+inline constexpr Keybinds::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        fire_{nullptr},
+        restart_scenario_{nullptr},
+        next_scenario_{nullptr},
+        quick_settings_{nullptr},
+        quick_crosshair_size_{nullptr},
+        quick_metronome_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR Keybinds::Keybinds(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct KeybindsDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR KeybindsDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~KeybindsDefaultTypeInternal() {}
+  union {
+    Keybinds _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 KeybindsDefaultTypeInternal _Keybinds_default_instance_;
 
 inline constexpr Crosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -152,6 +218,7 @@ inline constexpr Settings::Impl_::Impl_(
         current_crosshair_name_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
+        keybinds_{nullptr},
         dpi_{0},
         cm_per_360_{0},
         metronome_bpm_{0},
@@ -244,14 +311,16 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.current_crosshair_name_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.saved_crosshairs_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.disable_click_to_start_),
-        2,
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.keybinds_),
         3,
-        0,
         4,
+        0,
         5,
+        6,
         1,
         ~0u,
-        6,
+        7,
+        2,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -270,6 +339,42 @@ const ::uint32_t
         3,
         4,
         1,
+        PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _impl_.mapping1_),
+        PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _impl_.mapping2_),
+        PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _impl_.mapping3_),
+        PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _impl_.mapping4_),
+        0,
+        1,
+        2,
+        3,
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.fire_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.restart_scenario_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.next_scenario_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.quick_settings_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.quick_crosshair_size_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.quick_metronome_),
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
 };
 
 static const ::_pbi::MigrationSchema
@@ -277,8 +382,10 @@ static const ::_pbi::MigrationSchema
         {0, 9, -1, sizeof(::aim::DotCrosshair)},
         {10, 23, -1, sizeof(::aim::PlusCrosshair)},
         {28, 40, -1, sizeof(::aim::Crosshair)},
-        {43, 59, -1, sizeof(::aim::Settings)},
-        {67, 80, -1, sizeof(::aim::ScenarioSettings)},
+        {43, 60, -1, sizeof(::aim::Settings)},
+        {69, 82, -1, sizeof(::aim::ScenarioSettings)},
+        {87, 99, -1, sizeof(::aim::KeyMapping)},
+        {103, 117, -1, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
@@ -286,6 +393,8 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_Crosshair_default_instance_._instance,
     &::aim::_Settings_default_instance_._instance,
     &::aim::_ScenarioSettings_default_instance_._instance,
+    &::aim::_KeyMapping_default_instance_._instance,
+    &::aim::_Keybinds_default_instance_._instance,
 };
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
@@ -296,28 +405,37 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\002\022\031\n\021outline_thickness\030\005 \001(\002\"g\n\tCrosshai"
     "r\022\014\n\004name\030\001 \001(\t\022 \n\003dot\030\003 \001(\0132\021.aim.DotCr"
     "osshairH\000\022\"\n\004plus\030\004 \001(\0132\022.aim.PlusCrossh"
-    "airH\000B\006\n\004type\"\330\001\n\010Settings\022\013\n\003dpi\030\001 \001(\002\022"
+    "airH\000B\006\n\004type\"\371\001\n\010Settings\022\013\n\003dpi\030\001 \001(\002\022"
     "\022\n\ncm_per_360\030\002 \001(\002\022\022\n\ntheme_name\030\003 \001(\t\022"
     "\025\n\rmetronome_bpm\030\004 \001(\002\022\026\n\016crosshair_size"
     "\030\005 \001(\002\022\036\n\026current_crosshair_name\030\006 \001(\t\022("
     "\n\020saved_crosshairs\030\007 \003(\0132\016.aim.Crosshair"
-    "\022\036\n\026disable_click_to_start\030\010 \001(\010\"\201\001\n\020Sce"
-    "narioSettings\022\022\n\ncm_per_360\030\001 \001(\002\022\022\n\nthe"
-    "me_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016"
-    "crosshair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005"
-    " \001(\tb\010editionsp\350\007"
+    "\022\036\n\026disable_click_to_start\030\010 \001(\010\022\037\n\010keyb"
+    "inds\030\t \001(\0132\r.aim.Keybinds\"\201\001\n\020ScenarioSe"
+    "ttings\022\022\n\ncm_per_360\030\001 \001(\002\022\022\n\ntheme_name"
+    "\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016crossha"
+    "ir_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t\"T\n"
+    "\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping"
+    "2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 "
+    "\001(\t\"\376\001\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.Key"
+    "Mapping\022)\n\020restart_scenario\030\002 \001(\0132\017.aim."
+    "KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.aim."
+    "KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017.aim"
+    ".KeyMapping\022-\n\024quick_crosshair_size\030\005 \001("
+    "\0132\017.aim.KeyMapping\022(\n\017quick_metronome\030\006 "
+    "\001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    657,
+    1033,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
     nullptr,
     0,
-    5,
+    7,
     schemas,
     file_default_instances,
     TableStruct_settings_2eproto::offsets,
@@ -1294,6 +1412,10 @@ Settings::Settings(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.keybinds_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::Keybinds>(
+                              arena, *from._impl_.keybinds_)
+                        : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, dpi_),
            reinterpret_cast<const char *>(&from._impl_) +
@@ -1315,10 +1437,10 @@ inline PROTOBUF_NDEBUG_INLINE Settings::Impl_::Impl_(
 inline void Settings::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, dpi_),
+               offsetof(Impl_, keybinds_),
            0,
            offsetof(Impl_, disable_click_to_start_) -
-               offsetof(Impl_, dpi_) +
+               offsetof(Impl_, keybinds_) +
                sizeof(Impl_::disable_click_to_start_));
 }
 Settings::~Settings() {
@@ -1331,6 +1453,7 @@ inline void Settings::SharedDtor(MessageLite& self) {
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.theme_name_.Destroy();
   this_._impl_.current_crosshair_name_.Destroy();
+  delete this_._impl_.keybinds_;
   this_._impl_.~Impl_();
 }
 
@@ -1382,16 +1505,16 @@ const ::google::protobuf::internal::ClassData* Settings::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 8, 1, 61, 2> Settings::_table_ = {
+const ::_pbi::TcParseTable<4, 9, 2, 61, 2> Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
-    8, 56,  // max_field_number, fast_idx_mask
+    9, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967040,  // skipmap
+    4294966784,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    8,  // num_field_entries
-    1,  // num_aux_entries
+    9,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1400,47 +1523,57 @@ const ::_pbi::TcParseTable<3, 8, 1, 61, 2> Settings::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::Settings>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // bool disable_click_to_start = 8;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_click_to_start_), 6>(),
-     {64, 6, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // float dpi = 1;
     {::_pbi::TcParser::FastF32S1,
-     {13, 2, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_)}},
+     {13, 3, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_)}},
     // float cm_per_360 = 2;
     {::_pbi::TcParser::FastF32S1,
-     {21, 3, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_)}},
+     {21, 4, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_)}},
     // string theme_name = 3;
     {::_pbi::TcParser::FastUS1,
      {26, 0, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_)}},
     // float metronome_bpm = 4;
     {::_pbi::TcParser::FastF32S1,
-     {37, 4, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)}},
+     {37, 5, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)}},
     // float crosshair_size = 5;
     {::_pbi::TcParser::FastF32S1,
-     {45, 5, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_)}},
+     {45, 6, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_)}},
     // string current_crosshair_name = 6;
     {::_pbi::TcParser::FastUS1,
      {50, 1, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.current_crosshair_name_)}},
     // repeated .aim.Crosshair saved_crosshairs = 7;
     {::_pbi::TcParser::FastMtR1,
      {58, 63, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.saved_crosshairs_)}},
+    // bool disable_click_to_start = 8;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_click_to_start_), 7>(),
+     {64, 7, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_)}},
+    // .aim.Keybinds keybinds = 9;
+    {::_pbi::TcParser::FastMtS1,
+     {74, 2, 1, PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
     // float dpi = 1;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_), _Internal::kHasBitsOffset + 2, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float cm_per_360 = 2;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 3, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 4, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // string theme_name = 3;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // float metronome_bpm = 4;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 4, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 5, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float crosshair_size = 5;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 5, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 6, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // string current_crosshair_name = 6;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.current_crosshair_name_), _Internal::kHasBitsOffset + 1, 0,
@@ -1449,10 +1582,14 @@ const ::_pbi::TcParseTable<3, 8, 1, 61, 2> Settings::_table_ = {
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.saved_crosshairs_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // bool disable_click_to_start = 8;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_), _Internal::kHasBitsOffset + 6, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_), _Internal::kHasBitsOffset + 7, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // .aim.Keybinds keybinds = 9;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_), _Internal::kHasBitsOffset + 2, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Crosshair>()},
+    {::_pbi::TcParser::GetTable<::aim::Keybinds>()},
   }}, {{
     "\14\0\0\12\0\0\26\0\0\0\0\0\0\0\0\0"
     "aim.Settings"
@@ -1470,15 +1607,19 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 
   _impl_.saved_crosshairs_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _impl_.theme_name_.ClearNonDefaultToEmpty();
     }
     if (cached_has_bits & 0x00000002u) {
       _impl_.current_crosshair_name_.ClearNonDefaultToEmpty();
     }
+    if (cached_has_bits & 0x00000004u) {
+      ABSL_DCHECK(_impl_.keybinds_ != nullptr);
+      _impl_.keybinds_->Clear();
+    }
   }
-  if (cached_has_bits & 0x0000007cu) {
+  if (cached_has_bits & 0x000000f8u) {
     ::memset(&_impl_.dpi_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.disable_click_to_start_) -
         reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.disable_click_to_start_));
@@ -1504,14 +1645,14 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 
           cached_has_bits = this_._impl_._has_bits_[0];
           // float dpi = 1;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 1, this_._internal_dpi(), target);
           }
 
           // float cm_per_360 = 2;
-          if (cached_has_bits & 0x00000008u) {
+          if (cached_has_bits & 0x00000010u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 2, this_._internal_cm_per_360(), target);
@@ -1526,14 +1667,14 @@ PROTOBUF_NOINLINE void Settings::Clear() {
           }
 
           // float metronome_bpm = 4;
-          if (cached_has_bits & 0x00000010u) {
+          if (cached_has_bits & 0x00000020u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 4, this_._internal_metronome_bpm(), target);
           }
 
           // float crosshair_size = 5;
-          if (cached_has_bits & 0x00000020u) {
+          if (cached_has_bits & 0x00000040u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 5, this_._internal_crosshair_size(), target);
@@ -1559,10 +1700,17 @@ PROTOBUF_NOINLINE void Settings::Clear() {
           }
 
           // bool disable_click_to_start = 8;
-          if (cached_has_bits & 0x00000040u) {
+          if (cached_has_bits & 0x00000080u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteBoolToArray(
                 8, this_._internal_disable_click_to_start(), target);
+          }
+
+          // .aim.Keybinds keybinds = 9;
+          if (cached_has_bits & 0x00000004u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                9, *this_._impl_.keybinds_, this_._impl_.keybinds_->GetCachedSize(), target,
+                stream);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1599,7 +1747,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
             }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000007fu) {
+          if (cached_has_bits & 0x000000ffu) {
             // string theme_name = 3;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -1610,24 +1758,29 @@ PROTOBUF_NOINLINE void Settings::Clear() {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_current_crosshair_name());
             }
-            // float dpi = 1;
+            // .aim.Keybinds keybinds = 9;
             if (cached_has_bits & 0x00000004u) {
-              total_size += 5;
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.keybinds_);
             }
-            // float cm_per_360 = 2;
+            // float dpi = 1;
             if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
-            // float metronome_bpm = 4;
+            // float cm_per_360 = 2;
             if (cached_has_bits & 0x00000010u) {
               total_size += 5;
             }
-            // float crosshair_size = 5;
+            // float metronome_bpm = 4;
             if (cached_has_bits & 0x00000020u) {
               total_size += 5;
             }
-            // bool disable_click_to_start = 8;
+            // float crosshair_size = 5;
             if (cached_has_bits & 0x00000040u) {
+              total_size += 5;
+            }
+            // bool disable_click_to_start = 8;
+            if (cached_has_bits & 0x00000080u) {
               total_size += 2;
             }
           }
@@ -1638,6 +1791,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
   auto* const _this = static_cast<Settings*>(&to_msg);
   auto& from = static_cast<const Settings&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:aim.Settings)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
@@ -1646,7 +1800,7 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
   _this->_internal_mutable_saved_crosshairs()->MergeFrom(
       from._internal_saved_crosshairs());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000007fu) {
+  if (cached_has_bits & 0x000000ffu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_set_theme_name(from._internal_theme_name());
     }
@@ -1654,18 +1808,27 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
       _this->_internal_set_current_crosshair_name(from._internal_current_crosshair_name());
     }
     if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.dpi_ = from._impl_.dpi_;
+      ABSL_DCHECK(from._impl_.keybinds_ != nullptr);
+      if (_this->_impl_.keybinds_ == nullptr) {
+        _this->_impl_.keybinds_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::Keybinds>(arena, *from._impl_.keybinds_);
+      } else {
+        _this->_impl_.keybinds_->MergeFrom(*from._impl_.keybinds_);
+      }
     }
     if (cached_has_bits & 0x00000008u) {
-      _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
+      _this->_impl_.dpi_ = from._impl_.dpi_;
     }
     if (cached_has_bits & 0x00000010u) {
-      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
+      _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
     }
     if (cached_has_bits & 0x00000020u) {
-      _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
+      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
     }
     if (cached_has_bits & 0x00000040u) {
+      _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
+    }
+    if (cached_has_bits & 0x00000080u) {
       _this->_impl_.disable_click_to_start_ = from._impl_.disable_click_to_start_;
     }
   }
@@ -1693,9 +1856,9 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT other) {
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_)
       + sizeof(Settings::_impl_.disable_click_to_start_)
-      - PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_)>(
-          reinterpret_cast<char*>(&_impl_.dpi_),
-          reinterpret_cast<char*>(&other->_impl_.dpi_));
+      - PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_)>(
+          reinterpret_cast<char*>(&_impl_.keybinds_),
+          reinterpret_cast<char*>(&other->_impl_.keybinds_));
 }
 
 ::google::protobuf::Metadata Settings::GetMetadata() const {
@@ -2066,6 +2229,793 @@ void ScenarioSettings::InternalSwap(ScenarioSettings* PROTOBUF_RESTRICT other) {
 }
 
 ::google::protobuf::Metadata ScenarioSettings::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class KeyMapping::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<KeyMapping>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_._has_bits_);
+};
+
+KeyMapping::KeyMapping(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.KeyMapping)
+}
+inline PROTOBUF_NDEBUG_INLINE KeyMapping::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::KeyMapping& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        mapping1_(arena, from.mapping1_),
+        mapping2_(arena, from.mapping2_),
+        mapping3_(arena, from.mapping3_),
+        mapping4_(arena, from.mapping4_) {}
+
+KeyMapping::KeyMapping(
+    ::google::protobuf::Arena* arena,
+    const KeyMapping& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  KeyMapping* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+
+  // @@protoc_insertion_point(copy_constructor:aim.KeyMapping)
+}
+inline PROTOBUF_NDEBUG_INLINE KeyMapping::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        mapping1_(arena),
+        mapping2_(arena),
+        mapping3_(arena),
+        mapping4_(arena) {}
+
+inline void KeyMapping::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+KeyMapping::~KeyMapping() {
+  // @@protoc_insertion_point(destructor:aim.KeyMapping)
+  SharedDtor(*this);
+}
+inline void KeyMapping::SharedDtor(MessageLite& self) {
+  KeyMapping& this_ = static_cast<KeyMapping&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.mapping1_.Destroy();
+  this_._impl_.mapping2_.Destroy();
+  this_._impl_.mapping3_.Destroy();
+  this_._impl_.mapping4_.Destroy();
+  this_._impl_.~Impl_();
+}
+
+inline void* KeyMapping::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) KeyMapping(arena);
+}
+constexpr auto KeyMapping::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(KeyMapping),
+                                            alignof(KeyMapping));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull KeyMapping::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_KeyMapping_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &KeyMapping::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<KeyMapping>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &KeyMapping::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<KeyMapping>(), &KeyMapping::ByteSizeLong,
+            &KeyMapping::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_._cached_size_),
+        false,
+    },
+    &KeyMapping::kDescriptorMethods,
+    &descriptor_table_settings_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* KeyMapping::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 4, 0, 55, 2> KeyMapping::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_._has_bits_),
+    0, // no _extensions_
+    4, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967280,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    4,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::KeyMapping>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // string mapping4 = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 3, 0, PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping4_)}},
+    // string mapping1 = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping1_)}},
+    // string mapping2 = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 1, 0, PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping2_)}},
+    // string mapping3 = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 2, 0, PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping3_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string mapping1 = 1;
+    {PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping1_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string mapping2 = 2;
+    {PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping2_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string mapping3 = 3;
+    {PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping3_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string mapping4 = 4;
+    {PROTOBUF_FIELD_OFFSET(KeyMapping, _impl_.mapping4_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\16\10\10\10\10\0\0\0"
+    "aim.KeyMapping"
+    "mapping1"
+    "mapping2"
+    "mapping3"
+    "mapping4"
+  }},
+};
+
+PROTOBUF_NOINLINE void KeyMapping::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.KeyMapping)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000000fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _impl_.mapping1_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _impl_.mapping2_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _impl_.mapping3_.ClearNonDefaultToEmpty();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _impl_.mapping4_.ClearNonDefaultToEmpty();
+    }
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* KeyMapping::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const KeyMapping& this_ = static_cast<const KeyMapping&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* KeyMapping::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const KeyMapping& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.KeyMapping)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // string mapping1 = 1;
+          if (cached_has_bits & 0x00000001u) {
+            const std::string& _s = this_._internal_mapping1();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.KeyMapping.mapping1");
+            target = stream->WriteStringMaybeAliased(1, _s, target);
+          }
+
+          // string mapping2 = 2;
+          if (cached_has_bits & 0x00000002u) {
+            const std::string& _s = this_._internal_mapping2();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.KeyMapping.mapping2");
+            target = stream->WriteStringMaybeAliased(2, _s, target);
+          }
+
+          // string mapping3 = 3;
+          if (cached_has_bits & 0x00000004u) {
+            const std::string& _s = this_._internal_mapping3();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.KeyMapping.mapping3");
+            target = stream->WriteStringMaybeAliased(3, _s, target);
+          }
+
+          // string mapping4 = 4;
+          if (cached_has_bits & 0x00000008u) {
+            const std::string& _s = this_._internal_mapping4();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.KeyMapping.mapping4");
+            target = stream->WriteStringMaybeAliased(4, _s, target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.KeyMapping)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t KeyMapping::ByteSizeLong(const MessageLite& base) {
+          const KeyMapping& this_ = static_cast<const KeyMapping&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t KeyMapping::ByteSizeLong() const {
+          const KeyMapping& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.KeyMapping)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x0000000fu) {
+            // string mapping1 = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_mapping1());
+            }
+            // string mapping2 = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_mapping2());
+            }
+            // string mapping3 = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_mapping3());
+            }
+            // string mapping4 = 4;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_mapping4());
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void KeyMapping::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<KeyMapping*>(&to_msg);
+  auto& from = static_cast<const KeyMapping&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.KeyMapping)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000000fu) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_set_mapping1(from._internal_mapping1());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_set_mapping2(from._internal_mapping2());
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_internal_set_mapping3(from._internal_mapping3());
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_internal_set_mapping4(from._internal_mapping4());
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void KeyMapping::CopyFrom(const KeyMapping& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.KeyMapping)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void KeyMapping::InternalSwap(KeyMapping* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.mapping1_, &other->_impl_.mapping1_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.mapping2_, &other->_impl_.mapping2_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.mapping3_, &other->_impl_.mapping3_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.mapping4_, &other->_impl_.mapping4_, arena);
+}
+
+::google::protobuf::Metadata KeyMapping::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class Keybinds::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<Keybinds>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(Keybinds, _impl_._has_bits_);
+};
+
+Keybinds::Keybinds(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.Keybinds)
+}
+inline PROTOBUF_NDEBUG_INLINE Keybinds::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::Keybinds& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+Keybinds::Keybinds(
+    ::google::protobuf::Arena* arena,
+    const Keybinds& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  Keybinds* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.fire_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.fire_)
+                        : nullptr;
+  _impl_.restart_scenario_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.restart_scenario_)
+                        : nullptr;
+  _impl_.next_scenario_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.next_scenario_)
+                        : nullptr;
+  _impl_.quick_settings_ = (cached_has_bits & 0x00000008u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.quick_settings_)
+                        : nullptr;
+  _impl_.quick_crosshair_size_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.quick_crosshair_size_)
+                        : nullptr;
+  _impl_.quick_metronome_ = (cached_has_bits & 0x00000020u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.quick_metronome_)
+                        : nullptr;
+
+  // @@protoc_insertion_point(copy_constructor:aim.Keybinds)
+}
+inline PROTOBUF_NDEBUG_INLINE Keybinds::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void Keybinds::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, fire_),
+           0,
+           offsetof(Impl_, quick_metronome_) -
+               offsetof(Impl_, fire_) +
+               sizeof(Impl_::quick_metronome_));
+}
+Keybinds::~Keybinds() {
+  // @@protoc_insertion_point(destructor:aim.Keybinds)
+  SharedDtor(*this);
+}
+inline void Keybinds::SharedDtor(MessageLite& self) {
+  Keybinds& this_ = static_cast<Keybinds&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  delete this_._impl_.fire_;
+  delete this_._impl_.restart_scenario_;
+  delete this_._impl_.next_scenario_;
+  delete this_._impl_.quick_settings_;
+  delete this_._impl_.quick_crosshair_size_;
+  delete this_._impl_.quick_metronome_;
+  this_._impl_.~Impl_();
+}
+
+inline void* Keybinds::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) Keybinds(arena);
+}
+constexpr auto Keybinds::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(Keybinds),
+                                            alignof(Keybinds));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull Keybinds::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_Keybinds_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &Keybinds::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<Keybinds>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &Keybinds::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<Keybinds>(), &Keybinds::ByteSizeLong,
+            &Keybinds::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(Keybinds, _impl_._cached_size_),
+        false,
+    },
+    &Keybinds::kDescriptorMethods,
+    &descriptor_table_settings_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* Keybinds::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 6, 6, 0, 2> Keybinds::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(Keybinds, _impl_._has_bits_),
+    0, // no _extensions_
+    6, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967232,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    6,  // num_field_entries
+    6,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::Keybinds>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .aim.KeyMapping fire = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.fire_)}},
+    // .aim.KeyMapping restart_scenario = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.restart_scenario_)}},
+    // .aim.KeyMapping next_scenario = 3;
+    {::_pbi::TcParser::FastMtS1,
+     {26, 2, 2, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.next_scenario_)}},
+    // .aim.KeyMapping quick_settings = 4;
+    {::_pbi::TcParser::FastMtS1,
+     {34, 3, 3, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_settings_)}},
+    // .aim.KeyMapping quick_crosshair_size = 5;
+    {::_pbi::TcParser::FastMtS1,
+     {42, 4, 4, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_crosshair_size_)}},
+    // .aim.KeyMapping quick_metronome = 6;
+    {::_pbi::TcParser::FastMtS1,
+     {50, 5, 5, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_metronome_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .aim.KeyMapping fire = 1;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.fire_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.KeyMapping restart_scenario = 2;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.restart_scenario_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.KeyMapping next_scenario = 3;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.next_scenario_), _Internal::kHasBitsOffset + 2, 2,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.KeyMapping quick_settings = 4;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_settings_), _Internal::kHasBitsOffset + 3, 3,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.KeyMapping quick_crosshair_size = 5;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_crosshair_size_), _Internal::kHasBitsOffset + 4, 4,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.KeyMapping quick_metronome = 6;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_metronome_), _Internal::kHasBitsOffset + 5, 5,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::aim::KeyMapping>()},
+    {::_pbi::TcParser::GetTable<::aim::KeyMapping>()},
+    {::_pbi::TcParser::GetTable<::aim::KeyMapping>()},
+    {::_pbi::TcParser::GetTable<::aim::KeyMapping>()},
+    {::_pbi::TcParser::GetTable<::aim::KeyMapping>()},
+    {::_pbi::TcParser::GetTable<::aim::KeyMapping>()},
+  }}, {{
+  }},
+};
+
+PROTOBUF_NOINLINE void Keybinds::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.Keybinds)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000003fu) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.fire_ != nullptr);
+      _impl_.fire_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.restart_scenario_ != nullptr);
+      _impl_.restart_scenario_->Clear();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      ABSL_DCHECK(_impl_.next_scenario_ != nullptr);
+      _impl_.next_scenario_->Clear();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      ABSL_DCHECK(_impl_.quick_settings_ != nullptr);
+      _impl_.quick_settings_->Clear();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      ABSL_DCHECK(_impl_.quick_crosshair_size_ != nullptr);
+      _impl_.quick_crosshair_size_->Clear();
+    }
+    if (cached_has_bits & 0x00000020u) {
+      ABSL_DCHECK(_impl_.quick_metronome_ != nullptr);
+      _impl_.quick_metronome_->Clear();
+    }
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* Keybinds::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const Keybinds& this_ = static_cast<const Keybinds&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* Keybinds::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const Keybinds& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.Keybinds)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // .aim.KeyMapping fire = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                1, *this_._impl_.fire_, this_._impl_.fire_->GetCachedSize(), target,
+                stream);
+          }
+
+          // .aim.KeyMapping restart_scenario = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                2, *this_._impl_.restart_scenario_, this_._impl_.restart_scenario_->GetCachedSize(), target,
+                stream);
+          }
+
+          // .aim.KeyMapping next_scenario = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                3, *this_._impl_.next_scenario_, this_._impl_.next_scenario_->GetCachedSize(), target,
+                stream);
+          }
+
+          // .aim.KeyMapping quick_settings = 4;
+          if (cached_has_bits & 0x00000008u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                4, *this_._impl_.quick_settings_, this_._impl_.quick_settings_->GetCachedSize(), target,
+                stream);
+          }
+
+          // .aim.KeyMapping quick_crosshair_size = 5;
+          if (cached_has_bits & 0x00000010u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                5, *this_._impl_.quick_crosshair_size_, this_._impl_.quick_crosshair_size_->GetCachedSize(), target,
+                stream);
+          }
+
+          // .aim.KeyMapping quick_metronome = 6;
+          if (cached_has_bits & 0x00000020u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                6, *this_._impl_.quick_metronome_, this_._impl_.quick_metronome_->GetCachedSize(), target,
+                stream);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.Keybinds)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t Keybinds::ByteSizeLong(const MessageLite& base) {
+          const Keybinds& this_ = static_cast<const Keybinds&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t Keybinds::ByteSizeLong() const {
+          const Keybinds& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.Keybinds)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x0000003fu) {
+            // .aim.KeyMapping fire = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.fire_);
+            }
+            // .aim.KeyMapping restart_scenario = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.restart_scenario_);
+            }
+            // .aim.KeyMapping next_scenario = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.next_scenario_);
+            }
+            // .aim.KeyMapping quick_settings = 4;
+            if (cached_has_bits & 0x00000008u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.quick_settings_);
+            }
+            // .aim.KeyMapping quick_crosshair_size = 5;
+            if (cached_has_bits & 0x00000010u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.quick_crosshair_size_);
+            }
+            // .aim.KeyMapping quick_metronome = 6;
+            if (cached_has_bits & 0x00000020u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.quick_metronome_);
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void Keybinds::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<Keybinds*>(&to_msg);
+  auto& from = static_cast<const Keybinds&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.Keybinds)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x0000003fu) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(from._impl_.fire_ != nullptr);
+      if (_this->_impl_.fire_ == nullptr) {
+        _this->_impl_.fire_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.fire_);
+      } else {
+        _this->_impl_.fire_->MergeFrom(*from._impl_.fire_);
+      }
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(from._impl_.restart_scenario_ != nullptr);
+      if (_this->_impl_.restart_scenario_ == nullptr) {
+        _this->_impl_.restart_scenario_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.restart_scenario_);
+      } else {
+        _this->_impl_.restart_scenario_->MergeFrom(*from._impl_.restart_scenario_);
+      }
+    }
+    if (cached_has_bits & 0x00000004u) {
+      ABSL_DCHECK(from._impl_.next_scenario_ != nullptr);
+      if (_this->_impl_.next_scenario_ == nullptr) {
+        _this->_impl_.next_scenario_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.next_scenario_);
+      } else {
+        _this->_impl_.next_scenario_->MergeFrom(*from._impl_.next_scenario_);
+      }
+    }
+    if (cached_has_bits & 0x00000008u) {
+      ABSL_DCHECK(from._impl_.quick_settings_ != nullptr);
+      if (_this->_impl_.quick_settings_ == nullptr) {
+        _this->_impl_.quick_settings_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.quick_settings_);
+      } else {
+        _this->_impl_.quick_settings_->MergeFrom(*from._impl_.quick_settings_);
+      }
+    }
+    if (cached_has_bits & 0x00000010u) {
+      ABSL_DCHECK(from._impl_.quick_crosshair_size_ != nullptr);
+      if (_this->_impl_.quick_crosshair_size_ == nullptr) {
+        _this->_impl_.quick_crosshair_size_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.quick_crosshair_size_);
+      } else {
+        _this->_impl_.quick_crosshair_size_->MergeFrom(*from._impl_.quick_crosshair_size_);
+      }
+    }
+    if (cached_has_bits & 0x00000020u) {
+      ABSL_DCHECK(from._impl_.quick_metronome_ != nullptr);
+      if (_this->_impl_.quick_metronome_ == nullptr) {
+        _this->_impl_.quick_metronome_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.quick_metronome_);
+      } else {
+        _this->_impl_.quick_metronome_->MergeFrom(*from._impl_.quick_metronome_);
+      }
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void Keybinds::CopyFrom(const Keybinds& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.Keybinds)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void Keybinds::InternalSwap(Keybinds* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_metronome_)
+      + sizeof(Keybinds::_impl_.quick_metronome_)
+      - PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.fire_)>(
+          reinterpret_cast<char*>(&_impl_.fire_),
+          reinterpret_cast<char*>(&other->_impl_.fire_));
+}
+
+::google::protobuf::Metadata Keybinds::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)
