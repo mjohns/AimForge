@@ -45,13 +45,12 @@ class QuickSettingsScreen : public UiScreen {
     }
   }
 
-  std::optional<NavigationEvent> OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
+  void OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
     SDL_Keycode keycode = event.key.key;
     if (keycode == SDLK_S || keycode == SDLK_B || keycode == SDLK_C) {
       updater_.SaveIfChangesMade(scenario_id_);
-      return NavigationEvent::Done();
+      ScreenDone();
     }
-    return {};
   }
 
  protected:

@@ -13,8 +13,8 @@ NavigationEvent UiScreen::Run() {
   Resume();
 
   while (true) {
-    if (screen_done_) {
-      return NavigationEvent::Done();
+    if (return_value_.has_value()) {
+      return *return_value_;
     }
     if (!app_->has_input_focus()) {
       SDL_Delay(250);
@@ -29,17 +29,14 @@ NavigationEvent UiScreen::Run() {
       }
       OnEvent(event, io.WantTextInput);
       if (event.type == SDL_EVENT_KEY_DOWN) {
-        auto maybe_nav_event = OnKeyDown(event, io.WantTextInput);
-        if (maybe_nav_event.has_value()) {
-          return *maybe_nav_event;
-        }
+        OnKeyDown(event, io.WantTextInput);
       }
       if (event.type == SDL_EVENT_KEY_UP) {
-        auto maybe_nav_event = OnKeyUp(event, io.WantTextInput);
-        if (maybe_nav_event.has_value()) {
-          return *maybe_nav_event;
-        }
+        OnKeyUp(event, io.WantTextInput);
       }
+    }
+    if (return_value_.has_value()) {
+      return *return_value_;
     }
 
     app_->StartFullscreenImguiFrame();
