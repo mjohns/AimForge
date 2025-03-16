@@ -1,5 +1,7 @@
 #include "renderer.h"
 
+#include <SDL3/SDL.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 
@@ -117,7 +119,10 @@ class RendererImpl : public Renderer {
       : texture_manager_(texture_dirs, device),
         device_(device),
         sdl_window_(sdl_window),
-        screen_(screen) {}
+        screen_(screen) {
+    SDL_GetWindowSizeInPixels(sdl_window_, &viewport_width_, &viewport_height_);
+    printf("%d, %d\n", viewport_width_ , viewport_height_);
+  }
 
   ~RendererImpl() override {
     Cleanup();
@@ -199,8 +204,8 @@ class RendererImpl : public Renderer {
 
     SDL_GPUTextureCreateInfo depth_texture_info{};
     depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-    depth_texture_info.width = screen_.width;
-    depth_texture_info.height = screen_.height;
+    depth_texture_info.width = viewport_width_;
+    depth_texture_info.height = viewport_height_;
 
     depth_texture_info.layer_count_or_depth = 1;
     depth_texture_info.num_levels = 1;
@@ -211,8 +216,8 @@ class RendererImpl : public Renderer {
 
     SDL_GPUTextureCreateInfo render_texture_info{};
     render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-    render_texture_info.width = screen_.width;
-    render_texture_info.height = screen_.height;
+    render_texture_info.width = viewport_width_;
+    render_texture_info.height = viewport_height_;
     render_texture_info.layer_count_or_depth = 1;
     render_texture_info.num_levels = 1;
     render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
@@ -222,8 +227,8 @@ class RendererImpl : public Renderer {
 
     SDL_GPUTextureCreateInfo resolve_texture_info{};
     resolve_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-    resolve_texture_info.width = screen_.width;
-    resolve_texture_info.height = screen_.height;
+    resolve_texture_info.width = viewport_width_;
+    resolve_texture_info.height = viewport_height_;
     resolve_texture_info.layer_count_or_depth = 1;
     resolve_texture_info.num_levels = 1;
     resolve_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
@@ -292,6 +297,21 @@ class RendererImpl : public Renderer {
     ctx->render_pass =
         SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, &depth_stencil_target_info);
 
+    /*
+    auto viewport_desc = SDL_GPUViewport{
+        .x = 0.0f,
+        .y = 0.0f,
+        .w = (float)viewport_width_,
+        .h = (float)viewport_height_,
+        .min_depth = 0.0f,
+        .max_depth = 1.0f,
+    };
+
+    SDL_SetGPUViewport(ctx->render_pass, &viewport_desc);
+    SDL_Rect scissor_rect{0, 0, viewport_width_, viewport_height_};
+    SDL_SetGPUScissor(ctx->render_pass, &scissor_rect);
+    */
+
     const glm::mat4 view_projection = projection * view;
     times->render_room_start = stopwatch.GetElapsedMicros();
     DrawRoom(view_projection, theme, room, ctx);
@@ -306,11 +326,11 @@ class RendererImpl : public Renderer {
 
     SDL_GPUBlitInfo blit_info{};
     blit_info.source.texture = msaa_resolve_texture_;
-    blit_info.source.w = screen_.width;
-    blit_info.source.h = screen_.height;
+    blit_info.source.w = viewport_width_;
+    blit_info.source.h = viewport_height_;
     blit_info.destination.texture = ctx->swapchain_texture;
-    blit_info.destination.w = screen_.width;
-    blit_info.destination.h = screen_.height;
+    blit_info.destination.w = viewport_width_;
+    blit_info.destination.h = viewport_height_;
     blit_info.load_op = SDL_GPU_LOADOP_DONT_CARE;
     blit_info.filter = SDL_GPU_FILTER_LINEAR;
     SDL_BlitGPUTexture(ctx->command_buffer, &blit_info);
@@ -935,11 +955,14 @@ class RendererImpl : public Renderer {
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
   SDL_GPUTexture* msaa_resolve_texture_ = nullptr;
 
-  const SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_8;
+  const SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_4;
 
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
   unsigned int num_cylinder_vertices_;
+
+  int viewport_width_ = 0;
+  int viewport_height_ = 0;
 
   ScreenInfo screen_;
 };
