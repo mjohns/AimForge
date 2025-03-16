@@ -1,5 +1,6 @@
 #include "settings_manager.h"
 
+#include <SDL3/SDL.h>
 #include <absl/status/status.h>
 #include <absl/strings/strip.h>
 #include <google/protobuf/json/json.h>
@@ -49,10 +50,32 @@ Settings GetDefaultSettings() {
   *settings.add_saved_crosshairs() = GetDefaultCrosshair();
   settings.set_current_crosshair_name("default");
   settings.set_crosshair_size(15);
+
+  Keybinds* binds = settings.mutable_keybinds();
+  binds->mutable_fire()->set_mapping1("Left Click");
+  binds->mutable_restart_scenario()->set_mapping1("R");
+  binds->mutable_next_scenario()->set_mapping1("Space");
+  binds->mutable_quick_metronome()->set_mapping1("B");
+  binds->mutable_adjust_crosshair_size()->set_mapping1("C");
+  binds->mutable_quick_settings()->set_mapping1("S");
+
   return settings;
 }
 
 }  // namespace
+
+std::string GetMouseButtonName(u8 button) {
+  if (button == SDL_BUTTON_LEFT) {
+    return "Left Click";
+  }
+  if (button == SDL_BUTTON_MIDDLE) {
+    return "Middle Click";
+  }
+  if (button == SDL_BUTTON_RIGHT) {
+    return "Right Click";
+  }
+  return "";
+}
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
                                  std::vector<std::filesystem::path> theme_dirs,

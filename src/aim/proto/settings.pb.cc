@@ -156,7 +156,7 @@ inline constexpr Keybinds::Impl_::Impl_(
         restart_scenario_{nullptr},
         next_scenario_{nullptr},
         quick_settings_{nullptr},
-        quick_crosshair_size_{nullptr},
+        adjust_crosshair_size_{nullptr},
         quick_metronome_{nullptr} {}
 
 template <typename>
@@ -367,7 +367,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.restart_scenario_),
         PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.next_scenario_),
         PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.quick_settings_),
-        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.quick_crosshair_size_),
+        PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.adjust_crosshair_size_),
         PROTOBUF_FIELD_OFFSET(::aim::Keybinds, _impl_.quick_metronome_),
         0,
         1,
@@ -417,19 +417,19 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ir_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t\"T\n"
     "\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping"
     "2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 "
-    "\001(\t\"\376\001\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.Key"
+    "\001(\t\"\377\001\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.Key"
     "Mapping\022)\n\020restart_scenario\030\002 \001(\0132\017.aim."
     "KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.aim."
     "KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017.aim"
-    ".KeyMapping\022-\n\024quick_crosshair_size\030\005 \001("
-    "\0132\017.aim.KeyMapping\022(\n\017quick_metronome\030\006 "
-    "\001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
+    ".KeyMapping\022.\n\025adjust_crosshair_size\030\005 \001"
+    "(\0132\017.aim.KeyMapping\022(\n\017quick_metronome\030\006"
+    " \001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1033,
+    1034,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -2622,8 +2622,8 @@ Keybinds::Keybinds(
   _impl_.quick_settings_ = (cached_has_bits & 0x00000008u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
                               arena, *from._impl_.quick_settings_)
                         : nullptr;
-  _impl_.quick_crosshair_size_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
-                              arena, *from._impl_.quick_crosshair_size_)
+  _impl_.adjust_crosshair_size_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
+                              arena, *from._impl_.adjust_crosshair_size_)
                         : nullptr;
   _impl_.quick_metronome_ = (cached_has_bits & 0x00000020u) ? ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(
                               arena, *from._impl_.quick_metronome_)
@@ -2657,7 +2657,7 @@ inline void Keybinds::SharedDtor(MessageLite& self) {
   delete this_._impl_.restart_scenario_;
   delete this_._impl_.next_scenario_;
   delete this_._impl_.quick_settings_;
-  delete this_._impl_.quick_crosshair_size_;
+  delete this_._impl_.adjust_crosshair_size_;
   delete this_._impl_.quick_metronome_;
   this_._impl_.~Impl_();
 }
@@ -2729,9 +2729,9 @@ const ::_pbi::TcParseTable<3, 6, 6, 0, 2> Keybinds::_table_ = {
     // .aim.KeyMapping quick_settings = 4;
     {::_pbi::TcParser::FastMtS1,
      {34, 3, 3, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_settings_)}},
-    // .aim.KeyMapping quick_crosshair_size = 5;
+    // .aim.KeyMapping adjust_crosshair_size = 5;
     {::_pbi::TcParser::FastMtS1,
-     {42, 4, 4, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_crosshair_size_)}},
+     {42, 4, 4, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.adjust_crosshair_size_)}},
     // .aim.KeyMapping quick_metronome = 6;
     {::_pbi::TcParser::FastMtS1,
      {50, 5, 5, PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_metronome_)}},
@@ -2751,8 +2751,8 @@ const ::_pbi::TcParseTable<3, 6, 6, 0, 2> Keybinds::_table_ = {
     // .aim.KeyMapping quick_settings = 4;
     {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_settings_), _Internal::kHasBitsOffset + 3, 3,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.KeyMapping quick_crosshair_size = 5;
-    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_crosshair_size_), _Internal::kHasBitsOffset + 4, 4,
+    // .aim.KeyMapping adjust_crosshair_size = 5;
+    {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.adjust_crosshair_size_), _Internal::kHasBitsOffset + 4, 4,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.KeyMapping quick_metronome = 6;
     {PROTOBUF_FIELD_OFFSET(Keybinds, _impl_.quick_metronome_), _Internal::kHasBitsOffset + 5, 5,
@@ -2794,8 +2794,8 @@ PROTOBUF_NOINLINE void Keybinds::Clear() {
       _impl_.quick_settings_->Clear();
     }
     if (cached_has_bits & 0x00000010u) {
-      ABSL_DCHECK(_impl_.quick_crosshair_size_ != nullptr);
-      _impl_.quick_crosshair_size_->Clear();
+      ABSL_DCHECK(_impl_.adjust_crosshair_size_ != nullptr);
+      _impl_.adjust_crosshair_size_->Clear();
     }
     if (cached_has_bits & 0x00000020u) {
       ABSL_DCHECK(_impl_.quick_metronome_ != nullptr);
@@ -2850,10 +2850,10 @@ PROTOBUF_NOINLINE void Keybinds::Clear() {
                 stream);
           }
 
-          // .aim.KeyMapping quick_crosshair_size = 5;
+          // .aim.KeyMapping adjust_crosshair_size = 5;
           if (cached_has_bits & 0x00000010u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                5, *this_._impl_.quick_crosshair_size_, this_._impl_.quick_crosshair_size_->GetCachedSize(), target,
+                5, *this_._impl_.adjust_crosshair_size_, this_._impl_.adjust_crosshair_size_->GetCachedSize(), target,
                 stream);
           }
 
@@ -2910,10 +2910,10 @@ PROTOBUF_NOINLINE void Keybinds::Clear() {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.quick_settings_);
             }
-            // .aim.KeyMapping quick_crosshair_size = 5;
+            // .aim.KeyMapping adjust_crosshair_size = 5;
             if (cached_has_bits & 0x00000010u) {
               total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.quick_crosshair_size_);
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.adjust_crosshair_size_);
             }
             // .aim.KeyMapping quick_metronome = 6;
             if (cached_has_bits & 0x00000020u) {
@@ -2973,12 +2973,12 @@ void Keybinds::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
       }
     }
     if (cached_has_bits & 0x00000010u) {
-      ABSL_DCHECK(from._impl_.quick_crosshair_size_ != nullptr);
-      if (_this->_impl_.quick_crosshair_size_ == nullptr) {
-        _this->_impl_.quick_crosshair_size_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.quick_crosshair_size_);
+      ABSL_DCHECK(from._impl_.adjust_crosshair_size_ != nullptr);
+      if (_this->_impl_.adjust_crosshair_size_ == nullptr) {
+        _this->_impl_.adjust_crosshair_size_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::KeyMapping>(arena, *from._impl_.adjust_crosshair_size_);
       } else {
-        _this->_impl_.quick_crosshair_size_->MergeFrom(*from._impl_.quick_crosshair_size_);
+        _this->_impl_.adjust_crosshair_size_->MergeFrom(*from._impl_.adjust_crosshair_size_);
       }
     }
     if (cached_has_bits & 0x00000020u) {

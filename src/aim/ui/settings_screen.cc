@@ -16,6 +16,7 @@ namespace {
 struct KeybindItem {
   std::string label;
   KeyMapping* mapping;
+  int is_capturing_index = 0;
 };
 
 class SettingsScreen : public UiScreen {
@@ -33,6 +34,15 @@ class SettingsScreen : public UiScreen {
     for (auto& c : settings.saved_crosshairs()) {
       crosshair_names_.push_back(c.name());
     }
+
+    keybind_items_ = {
+        {"Fire", settings_updater_.keybinds.mutable_fire()},
+        {"Restart Scenario", settings_updater_.keybinds.mutable_restart_scenario()},
+        {"Next Scenario", settings_updater_.keybinds.mutable_next_scenario()},
+        {"Quick Settings", settings_updater_.keybinds.mutable_quick_settings()},
+        {"Quick Metronome", settings_updater_.keybinds.mutable_quick_metronome()},
+        {"Adjust Crosshair Size", settings_updater_.keybinds.mutable_adjust_crosshair_size()},
+    };
   }
 
  protected:
@@ -123,42 +133,91 @@ class SettingsScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##disable_click_to_start", &settings_updater_.disable_click_to_start);
 
-    std::vector<KeybindItem> keybind_items = {
-        {"Fire", settings_updater_.keybinds.mutable_fire()},
-        {"Restart Scenario", settings_updater_.keybinds.mutable_restart_scenario()},
-    };
-
-    for (KeybindItem& item : keybind_items) {
+    for (KeybindItem& item : keybind_items_) {
       ImGui::Text(item.label);
+      float entry_width = char_size.x * 10;
       ImGui::SameLine();
-      if (ImGui::Button(std::format("{}##key1_{}", item.mapping->mapping1(), item.label).c_str(),
-                        ImVec2(char_size.x * 10, 0))) {
-        KeyMapping* mapping = item.mapping;
-        capture_key_fn_ = [=](const SDL_Event& event) {
-          mapping->set_mapping1(SDL_GetKeyName(event.key.key));
-        };
-      }
+      KeyMappingEntry(&item, 1, entry_width);
       ImGui::SameLine();
-      if (ImGui::Button(std::format("{}##key2_{}", item.mapping->mapping2(), item.label).c_str(),
-                        ImVec2(char_size.x * 10, 0))) {
-        KeyMapping* mapping = item.mapping;
-        capture_key_fn_ = [=](const SDL_Event& event) {
-          mapping->set_mapping2(SDL_GetKeyName(event.key.key));
-        };
-      }
+      KeyMappingEntry(&item, 2, entry_width);
+      ImGui::SameLine();
+      KeyMappingEntry(&item, 3, entry_width);
+      ImGui::SameLine();
+      KeyMappingEntry(&item, 4, entry_width);
     }
 
     {
-      ImVec2 sz = ImVec2(0.0f, 0.0f);
+      ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
         settings_updater_.SaveIfChangesMade(scenario_id_);
         ScreenDone();
       }
     }
+    {
+      ImGui::SameLine();
+      ImVec2 sz = ImVec2(0, 0.0f);
+      if (ImGui::Button("Cancel", sz)) {
+        ScreenDone();
+      }
+    }
   }
 
-  void OnKeyDown(const SDL_Event& event, bool user_is_typing) override {
-    if (capture_key_fn_) {
+  void KeyMappingEntry(KeybindItem* item, int i, float width) {
+    std::string value;
+    if (item->is_capturing_index == i) {
+      value = "...";
+    } else if (i == 1) {
+      value = item->mapping->mapping1();
+    } else if (i == 2) {
+      value = item->mapping->mapping2();
+    } else if (i == 3) {
+      value = item->mapping->mapping3();
+    } else if (i == 4) {
+      value = item->mapping->mapping4();
+    }
+
+    if (ImGui::Button(std::format("{}##key{}_{}", value, i, item->label).c_str(),
+                      ImVec2(width, 0))) {
+      for (KeybindItem& other_item : keybind_items_) {
+        other_item.is_capturing_index = 0;
+      }
+
+      item->is_capturing_index = i;
+      capture_key_fn_ = [item, i](const SDL_Event& event) {
+        std::string key_value = SDL_GetKeyName(event.key.key);
+        if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+          key_value = GetMouseButtonName(event.button.button);
+        }
+        if (i == 1) {
+          item->mapping->set_mapping1(key_value);
+        } else if (i == 2) {
+          item->mapping->set_mapping2(key_value);
+        } else if (i == 3) {
+          item->mapping->set_mapping3(key_value);
+        } else if (i == 4) {
+          item->mapping->set_mapping4(key_value);
+        }
+        item->is_capturing_index = 0;
+      };
+    }
+    ImGui::SameLine();
+    if (ImGui::Button(std::format("x##clear_{}_{}", i, item->label).c_str(), ImVec2(0, 0))) {
+      if (i == 1) {
+        item->mapping->set_mapping1("");
+      } else if (i == 2) {
+        item->mapping->set_mapping2("");
+      } else if (i == 3) {
+        item->mapping->set_mapping3("");
+      } else if (i == 4) {
+        item->mapping->set_mapping4("");
+      }
+    }
+  }
+
+  void OnEvent(const SDL_Event& event, bool user_is_typing) override {
+    bool is_capturable =
+        event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_MOUSE_BUTTON_DOWN;
+    if (capture_key_fn_ && is_capturable) {
       auto capture = capture_key_fn_;
       capture_key_fn_ = {};
       capture(event);
@@ -173,6 +232,7 @@ class SettingsScreen : public UiScreen {
   const std::string scenario_id_;
 
   std::function<void(const SDL_Event&)> capture_key_fn_;
+  std::vector<KeybindItem> keybind_items_;
 };
 }  // namespace
 
