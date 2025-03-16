@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL3/SDL.h>
 #include <absl/status/status.h>
 
 #include <filesystem>
@@ -7,8 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "aim/common/times.h"
 #include "aim/common/simple_types.h"
+#include "aim/common/times.h"
 #include "aim/database/history_db.h"
 #include "aim/database/settings_db.h"
 #include "aim/proto/settings.pb.h"
@@ -17,6 +18,13 @@
 namespace aim {
 
 std::string GetMouseButtonName(u8 button);
+
+std::string GetKeyNameForEvent(const SDL_Event& event);
+bool KeyNameMatchesEvent(const SDL_Event& event, const std::string& name);
+bool KeyMappingMatchesEvent(const SDL_Event& event, const KeyMapping& mapping);
+bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& mapping);
+bool IsMappableKeyDownEvent(const SDL_Event& event);
+bool IsMappableKeyUpEvent(const SDL_Event& event);
 
 struct ThemeCacheEntry {
   Theme theme;
