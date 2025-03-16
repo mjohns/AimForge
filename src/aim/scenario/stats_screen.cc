@@ -145,6 +145,8 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
 
   bool show_history = false;
 
+  PlaylistRun* playlist_run = app_->playlist_manager()->GetMutableCurrentRun();
+
   // Show results page
   app_->EnableVsync();
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
@@ -190,9 +192,36 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     float x_start = (screen.width - width) * 0.5;
 
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    ImGui::SetCursorPos(ImVec2(0, screen.height * 0.3));
-    ImGui::Indent(x_start);
 
+    ImGui::Columns(2, "StatsColumns", false);
+
+    ImGui::SetColumnWidth(0, x_start);
+
+    std::string scenario_to_start;
+
+    if (playlist_run != nullptr) {
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Spacing();
+
+      ImVec2 sz = ImVec2(0.0f, 0.0f);
+      for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
+        PlaylistItemProgress& progress = playlist_run->progress_list[i];
+        PlaylistItem item = playlist_run->playlist.def.items(i);
+        std::string item_label = std::format("{}###play_n{}", item.scenario(), i);
+        if (ImGui::Button(item_label.c_str(), sz)) {
+          playlist_run->current_index = i;
+          scenario_to_start = item.scenario();
+        }
+        ImGui::SameLine();
+        std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
+        ImGui::Text(progress_text.c_str());
+      }
+    }
+
+    ImGui::NextColumn();
+
+    ImGui::SetCursorPosY(screen.height * 0.3);
     {
       auto font = app_->font_manager()->UseLarge();
       ImGui::Text("%s", scenario_id_.c_str());
@@ -313,6 +342,10 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
 
     ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
     app_->Render(clear_color);
+
+    if (scenario_to_start.size() > 0) {
+      return NavigationEvent::StartScenario(scenario_to_start);
+    }
   }
   return NavigationEvent::Done();
 }
