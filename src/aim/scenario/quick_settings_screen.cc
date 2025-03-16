@@ -17,12 +17,14 @@ class QuickSettingsScreen : public UiScreen {
  public:
   explicit QuickSettingsScreen(const std::string& scenario_id,
                                Application* app,
-                               QuickSettingsType type)
+                               QuickSettingsType type,
+                               const std::string& release_key)
       : UiScreen(app),
         scenario_id_(scenario_id),
         mgr_(app->settings_manager()),
         updater_(app->settings_manager(), app->history_db()),
-        type_(type) {
+        type_(type),
+        release_key_(release_key) {
     theme_names_ = app->settings_manager()->ListThemes();
     Settings settings = mgr_->GetCurrentSettings();
     for (auto& c : settings.saved_crosshairs()) {
@@ -43,11 +45,7 @@ class QuickSettingsScreen : public UiScreen {
         }
       }
     }
-  }
-
-  void OnKeyUp(const SDL_Event& event, bool user_is_typing) override {
-    SDL_Keycode keycode = event.key.key;
-    if (keycode == SDLK_S || keycode == SDLK_B || keycode == SDLK_C) {
+    if (IsMappableKeyUpEvent(event) && KeyNameMatchesEvent(event, release_key_)) {
       updater_.SaveIfChangesMade(scenario_id_);
       ScreenDone();
     }
@@ -169,14 +167,16 @@ class QuickSettingsScreen : public UiScreen {
   QuickSettingsType type_;
   std::vector<std::string> theme_names_;
   std::vector<std::string> crosshair_names_;
+  std::string release_key_;
 };
 
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_id,
                                                     QuickSettingsType type,
+                                                    const std::string& release_key,
                                                     Application* app) {
-  return std::make_unique<QuickSettingsScreen>(scenario_id, app, type);
+  return std::make_unique<QuickSettingsScreen>(scenario_id, app, type, release_key);
 }
 
 }  // namespace aim

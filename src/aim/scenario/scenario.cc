@@ -1,6 +1,7 @@
 #include "scenario.h"
 
 #include <SDL3/SDL.h>
+#include <absl/strings/ascii.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
 
@@ -103,6 +104,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   bool is_adjusting_crosshair = false;
   bool save_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
+  std::string show_settings_release_key;
   look_at_ = camera_.GetLookAt();
   timer_.StartLoop();
   bool running = true;
@@ -116,7 +118,9 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     }
     if (show_settings.has_value()) {
       NavigationEvent nav_event;
-      nav_event = CreateQuickSettingsScreen(def_.scenario_id(), *show_settings, app_)->Run();
+      nav_event = CreateQuickSettingsScreen(
+                      def_.scenario_id(), *show_settings, show_settings_release_key, app_)
+                      ->Run();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
@@ -134,11 +138,6 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
       if (event.type == SDL_EVENT_QUIT) {
         throw ApplicationExitException();
       }
-      if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        if (event.button.button == SDL_BUTTON_LEFT) {
-          running = false;
-        }
-      }
       if (is_adjusting_crosshair) {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
           if (event.wheel.y != 0) {
@@ -146,24 +145,30 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
           }
         }
       }
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_S) {
+      if (IsMappableKeyDownEvent(event)) {
+        std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+          running = false;
+        }
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
           show_settings = QuickSettingsType::DEFAULT;
+          show_settings_release_key = event_name;
         }
-        if (keycode == SDLK_B) {
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
           show_settings = QuickSettingsType::METRONOME;
+          show_settings_release_key = event_name;
         }
-        if (keycode == SDLK_C) {
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
           is_adjusting_crosshair = true;
         }
+        SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
           return NavigationEvent::Done();
         }
       }
-      if (event.type == SDL_EVENT_KEY_UP) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_C) {
+      if (IsMappableKeyUpEvent(event)) {
+        std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
           is_adjusting_crosshair = false;
           save_crosshair = true;
         }
@@ -255,6 +260,7 @@ NavigationEvent Scenario::ResumeInternal() {
   bool is_adjusting_crosshair = false;
   bool save_crosshair = false;
   std::optional<QuickSettingsType> show_settings;
+  std::string show_settings_release_key;
   timer_.StartLoop();
   timer_.ResumeRun();
   while (!stop_scenario) {
@@ -275,7 +281,9 @@ NavigationEvent Scenario::ResumeInternal() {
       timer_.PauseRun();
       OnPause();
       NavigationEvent nav_event;
-      nav_event = CreateQuickSettingsScreen(def_.scenario_id(), *show_settings, app_)->Run();
+      nav_event = CreateQuickSettingsScreen(
+                      def_.scenario_id(), *show_settings, show_settings_release_key, app_)
+                      ->Run();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
@@ -313,18 +321,6 @@ NavigationEvent Scenario::ResumeInternal() {
       if (event.type == SDL_EVENT_MOUSE_MOTION) {
         camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
       }
-      if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        if (event.button.button == SDL_BUTTON_LEFT) {
-          update_data.has_click = true;
-          is_click_held_ = true;
-        }
-      }
-      if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-        if (event.button.button == SDL_BUTTON_LEFT) {
-          update_data.has_click_up = true;
-          is_click_held_ = false;
-        }
-      }
       if (is_adjusting_crosshair) {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
           if (event.wheel.y != 0) {
@@ -332,29 +328,40 @@ NavigationEvent Scenario::ResumeInternal() {
           }
         }
       }
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_R) {
+      if (IsMappableKeyDownEvent(event)) {
+        std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+          update_data.has_click = true;
+          is_click_held_ = true;
+        }
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
           return NavigationEvent::RestartLastScenario();
         }
-        if (keycode == SDLK_S) {
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
           show_settings = QuickSettingsType::DEFAULT;
+          show_settings_release_key = event_name;
         }
-        if (keycode == SDLK_B) {
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
           show_settings = QuickSettingsType::METRONOME;
+          show_settings_release_key = event_name;
         }
-        if (keycode == SDLK_C) {
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
           is_adjusting_crosshair = true;
         }
+        SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
           return PauseAndReturn();
         }
       }
-      if (event.type == SDL_EVENT_KEY_UP) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_C) {
+      if (IsMappableKeyUpEvent(event)) {
+        std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
           is_adjusting_crosshair = false;
           save_crosshair = true;
+        }
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+          update_data.has_click_up = true;
+          is_click_held_ = false;
         }
       }
       OnEvent(event);

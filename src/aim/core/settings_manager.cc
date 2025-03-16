@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <absl/status/status.h>
+#include <absl/strings/ascii.h>
 #include <absl/strings/strip.h>
 #include <google/protobuf/json/json.h>
 #include <google/protobuf/util/json_util.h>
@@ -75,6 +76,55 @@ std::string GetMouseButtonName(u8 button) {
     return "Right Click";
   }
   return "";
+}
+
+bool IsMappableKeyDownEvent(const SDL_Event& event) {
+  return event.type == SDL_EVENT_MOUSE_BUTTON_DOWN || event.type == SDL_EVENT_KEY_DOWN;
+}
+
+bool IsMappableKeyUpEvent(const SDL_Event& event) {
+  return event.type == SDL_EVENT_KEY_UP || event.type == SDL_EVENT_MOUSE_BUTTON_UP;
+}
+
+std::string GetKeyNameForEvent(const SDL_Event& event) {
+  if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN || event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+    return GetMouseButtonName(event.button.button);
+  }
+  if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {
+    return SDL_GetKeyName(event.key.key);
+  }
+  return "";
+}
+
+bool KeyNameMatchesEvent(const SDL_Event& event, const std::string& name) {
+  if (name.size() == 0) {
+    return false;
+  }
+  return absl::AsciiStrToLower(name) == absl::AsciiStrToLower(GetKeyNameForEvent(event));
+}
+
+bool KeyMappingMatchesEvent(const SDL_Event& event, const KeyMapping& mapping) {
+  std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+  return KeyMappingMatchesEvent(event_name, mapping);
+}
+
+bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& mapping) {
+  if (event_name.size() == 0) {
+    return false;
+  }
+  if (absl::AsciiStrToLower(mapping.mapping1()) == event_name) {
+    return true;
+  }
+  if (absl::AsciiStrToLower(mapping.mapping2()) == event_name) {
+    return true;
+  }
+  if (absl::AsciiStrToLower(mapping.mapping3()) == event_name) {
+    return true;
+  }
+  if (absl::AsciiStrToLower(mapping.mapping4()) == event_name) {
+    return true;
+  }
+  return false;
 }
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
