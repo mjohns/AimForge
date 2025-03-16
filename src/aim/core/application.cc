@@ -347,7 +347,7 @@ void Application::EnableVsync() {
 
 void Application::DisableVsync() {
   SDL_SetGPUSwapchainParameters(
-      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
+      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_VSYNC);
 }
 
 std::unique_ptr<Application> Application::Create() {
