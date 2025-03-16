@@ -32,7 +32,8 @@ constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 500.0f;
 
 SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
-                          const std::filesystem::path& shader_path,
+                          const std::filesystem::path& shader_dir,
+                          const std::string& shader_name,
                           SDL_GPUShaderStage stage,
                           Uint32 uniform_buffer_count = 0,
                           Uint32 sampler_count = 0,
@@ -41,11 +42,27 @@ SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
   const char* entrypoint;
   SDL_GPUShaderFormat backend_formats = SDL_GetGPUShaderFormats(device);
   SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_INVALID;
+
+  std::string shader_extension;
   if (backend_formats & SDL_GPU_SHADERFORMAT_SPIRV) {
+    shader_extension = "spv";
     format = SDL_GPU_SHADERFORMAT_SPIRV;
     entrypoint = "main";
+  } else if (backend_formats & SDL_GPU_SHADERFORMAT_MSL) {
+    shader_extension = "msl";
+    format = SDL_GPU_SHADERFORMAT_MSL;
+    entrypoint = "main0";
+  } else if (backend_formats & SDL_GPU_SHADERFORMAT_DXIL) {
+    shader_extension = "dxil";
+    format = SDL_GPU_SHADERFORMAT_DXIL;
+    entrypoint = "main";
+  } else {
+    Logger::get()->warn("Unrecognized backend shader format!");
+    return nullptr;
   }
 
+  std::filesystem::path shader_path =
+      shader_dir / std::format("{}.{}", shader_name, shader_extension);
   std::string filename = shader_path.string();
 
   size_t code_size;
@@ -171,25 +188,14 @@ class RendererImpl : public Renderer {
   }
 
   bool Initialize(const std::filesystem::path& shader_dir) {
-    solid_color_vertex_shader_ = LoadShader(device_,
-                                            (shader_dir / "solid_color.vert.spv").string().c_str(),
-                                            SDL_GPU_SHADERSTAGE_VERTEX,
-                                            1);
+    solid_color_vertex_shader_ =
+        LoadShader(device_, shader_dir, "solid_color.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
     solid_color_fragment_shader_ =
-        LoadShader(device_,
-                   (shader_dir / "solid_color.frag.spv").string().c_str(),
-                   SDL_GPU_SHADERSTAGE_FRAGMENT,
-                   1);
-    texture_fragment_shader_ = LoadShader(device_,
-                                          (shader_dir / "texture.frag.spv").string().c_str(),
-                                          SDL_GPU_SHADERSTAGE_FRAGMENT,
-                                          1,
-                                          1);
-    position_and_tex_coord_vertex_shader_ =
-        LoadShader(device_,
-                   (shader_dir / "position_and_texture_coord.vert.spv").string().c_str(),
-                   SDL_GPU_SHADERSTAGE_VERTEX,
-                   1);
+        LoadShader(device_, shader_dir, "solid_color.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
+    texture_fragment_shader_ =
+        LoadShader(device_, shader_dir, "texture.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1, 1);
+    position_and_tex_coord_vertex_shader_ = LoadShader(
+        device_, shader_dir, "position_and_texture_coord.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
 
     SDL_GPUTextureCreateInfo depth_texture_info{};
     depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;

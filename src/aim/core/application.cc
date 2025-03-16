@@ -158,7 +158,10 @@ int Application::Initialize() {
     logger_->error("SDL_CreateWindow(): {}", SDL_GetError());
     return -1;
   }
-  gpu_device_ = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV, true, nullptr);
+  gpu_device_ = SDL_CreateGPUDevice(
+      SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+      true,
+      nullptr);
   if (gpu_device_ == nullptr) {
     logger_->error("SDL_CreateGpuDevice(): {}", SDL_GetError());
     return -1;
