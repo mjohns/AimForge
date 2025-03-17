@@ -133,6 +133,10 @@ class SettingsScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##disable_click_to_start", &settings_updater_.disable_click_to_start);
 
+    ImGui::Text("Auto Hold Tracking");
+    ImGui::SameLine();
+    ImGui::Checkbox("##auto_hold_tracking", &settings_updater_.auto_hold_tracking);
+
     for (KeybindItem& item : keybind_items_) {
       ImGui::Text(item.label);
       float entry_width = char_size.x * 10;

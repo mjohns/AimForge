@@ -90,6 +90,17 @@ void Scenario::RefreshState() {
   crosshair_ = app_->settings_manager()->GetCurrentCrosshair();
   crosshair_size_ = settings_.crosshair_size();
   theme_ = app_->settings_manager()->GetCurrentTheme();
+  if (ShouldAutoHold()) {
+    is_click_held_ = true;
+  }
+}
+
+bool Scenario::ShouldAutoHold() {
+  if (!settings_.auto_hold_tracking()) {
+    return false;
+  }
+  auto type = GetShotType();
+  return type == ShotType::kTrackingInvincible || type == ShotType::kTrackingKill;
 }
 
 NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
@@ -329,9 +340,11 @@ NavigationEvent Scenario::ResumeInternal() {
       }
       if (IsMappableKeyDownEvent(event)) {
         std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-          update_data.has_click = true;
-          is_click_held_ = true;
+        if (!ShouldAutoHold()) {
+          if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+            update_data.has_click = true;
+            is_click_held_ = true;
+          }
         }
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
           return NavigationEvent::RestartLastScenario();
@@ -357,9 +370,11 @@ NavigationEvent Scenario::ResumeInternal() {
           is_adjusting_crosshair = false;
           save_crosshair = true;
         }
-        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-          update_data.has_click_up = true;
-          is_click_held_ = false;
+        if (!ShouldAutoHold()) {
+          if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+            update_data.has_click_up = true;
+            is_click_held_ = false;
+          }
         }
       }
       OnEvent(event);

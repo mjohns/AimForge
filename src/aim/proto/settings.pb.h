@@ -1725,6 +1725,7 @@ class Settings final : public ::google::protobuf::Message
     kMetronomeBpmFieldNumber = 4,
     kCrosshairSizeFieldNumber = 5,
     kDisableClickToStartFieldNumber = 8,
+    kAutoHoldTrackingFieldNumber = 10,
   };
   // repeated .aim.Crosshair saved_crosshairs = 7;
   int saved_crosshairs_size() const;
@@ -1847,12 +1848,23 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_disable_click_to_start(bool value);
 
   public:
+  // bool auto_hold_tracking = 10;
+  bool has_auto_hold_tracking() const;
+  void clear_auto_hold_tracking() ;
+  bool auto_hold_tracking() const;
+  void set_auto_hold_tracking(bool value);
+
+  private:
+  bool _internal_auto_hold_tracking() const;
+  void _internal_set_auto_hold_tracking(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 9, 2,
+      4, 10, 2,
       61, 2>
       _table_;
 
@@ -1881,6 +1893,7 @@ class Settings final : public ::google::protobuf::Message
     float metronome_bpm_;
     float crosshair_size_;
     bool disable_click_to_start_;
+    bool auto_hold_tracking_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2740,6 +2753,34 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* value) {
 
   _impl_.keybinds_ = reinterpret_cast<::aim::Keybinds*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.keybinds)
+}
+
+// bool auto_hold_tracking = 10;
+inline bool Settings::has_auto_hold_tracking() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  return value;
+}
+inline void Settings::clear_auto_hold_tracking() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.auto_hold_tracking_ = false;
+  _impl_._has_bits_[0] &= ~0x00000100u;
+}
+inline bool Settings::auto_hold_tracking() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.auto_hold_tracking)
+  return _internal_auto_hold_tracking();
+}
+inline void Settings::set_auto_hold_tracking(bool value) {
+  _internal_set_auto_hold_tracking(value);
+  _impl_._has_bits_[0] |= 0x00000100u;
+  // @@protoc_insertion_point(field_set:aim.Settings.auto_hold_tracking)
+}
+inline bool Settings::_internal_auto_hold_tracking() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.auto_hold_tracking_;
+}
+inline void Settings::_internal_set_auto_hold_tracking(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.auto_hold_tracking_ = value;
 }
 
 // -------------------------------------------------------------------

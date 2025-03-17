@@ -106,6 +106,7 @@ class Scenario {
 
  private:
   void RefreshState();
+  bool ShouldAutoHold();
 
   NavigationEvent RunWaitingScreenAndThenStart();
   NavigationEvent ResumeInternal();
