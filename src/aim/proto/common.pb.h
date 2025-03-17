@@ -868,6 +868,7 @@ class StoredColor final : public ::google::protobuf::Message
     kRFieldNumber = 1,
     kGFieldNumber = 2,
     kBFieldNumber = 3,
+    kMultiplierFieldNumber = 5,
   };
   // string hex = 4;
   bool has_hex() const;
@@ -919,12 +920,23 @@ class StoredColor final : public ::google::protobuf::Message
   void _internal_set_b(::int32_t value);
 
   public:
+  // float multiplier = 5;
+  bool has_multiplier() const;
+  void clear_multiplier() ;
+  float multiplier() const;
+  void set_multiplier(float value);
+
+  private:
+  float _internal_multiplier() const;
+  void _internal_set_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.StoredColor)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 0,
+      3, 5, 0,
       27, 2>
       _table_;
 
@@ -948,6 +960,7 @@ class StoredColor final : public ::google::protobuf::Message
     ::int32_t r_;
     ::int32_t g_;
     ::int32_t b_;
+    float multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1357,6 +1370,34 @@ inline void StoredColor::set_allocated_hex(std::string* value) {
     _impl_.hex_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.StoredColor.hex)
+}
+
+// float multiplier = 5;
+inline bool StoredColor::has_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void StoredColor::clear_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float StoredColor::multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.StoredColor.multiplier)
+  return _internal_multiplier();
+}
+inline void StoredColor::set_multiplier(float value) {
+  _internal_set_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.StoredColor.multiplier)
+}
+inline float StoredColor::_internal_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.multiplier_;
+}
+inline void StoredColor::_internal_set_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.multiplier_ = value;
 }
 
 #ifdef __GNUC__
