@@ -20,7 +20,7 @@ void RenderScore(const StatsRow& stats, Application* app) {
     float hit_percent = stats.num_hits / stats.num_shots;
     ImGui::Text(MaybeIntToString(stats.score, 2));
     ImGui::SameLine();
-    ImGui::TextFmt("- {}/{} ({:.1f}%%)",
+    ImGui::TextFmt("- {}/{} ({:.1f}%)",
                    MaybeIntToString(stats.num_hits, 1),
                    MaybeIntToString(stats.num_shots, 1),
                    hit_percent * 100);
@@ -217,7 +217,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
         }
         ImGui::SameLine();
         std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
-        ImGui::Text(progress_text.c_str());
+        ImGui::Text(progress_text);
       }
     }
 
@@ -241,14 +241,14 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     if (has_previous_high_score) {
       auto font = app_->font_manager()->UseLarge();
       if (percent_diff > 0) {
-        ImGui::Text("+%.1f%%", percent_diff);
+        ImGui::Text("+%.1f%", percent_diff);
       } else {
-        ImGui::Text("%.1f%%", percent_diff);
+        ImGui::Text("%.1f%", percent_diff);
       }
     }
     if (stats.num_shots > 0) {
       float hit_percent = stats.num_hits / stats.num_shots;
-      ImGui::TextFmt("{}/{} ({:.1f}%%)",
+      ImGui::TextFmt("{}/{} ({:.1f}%)",
                      MaybeIntToString(stats.num_hits, 1),
                      MaybeIntToString(stats.num_shots, 1),
                      hit_percent * 100);
