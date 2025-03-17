@@ -43,6 +43,7 @@ class WallStrafeScenario : public BaseScenario {
       max_strafe_distance_ = width;
     }
 
+    acceleration_ = def_.wall_strafe_def().acceleration();
     last_direction_change_position_ = glm::vec2(0, y_);
 
     auto dist = std::uniform_real_distribution<float>(0, 1);
@@ -64,6 +65,7 @@ class WallStrafeScenario : public BaseScenario {
   void FillInNewTarget(Target* target) override {
     target->wall_position = last_direction_change_position_;
     target->wall_direction = direction_;
+    max_velocity_ = target->speed;
   }
 
   void UpdateTargetPositions() override {
@@ -79,14 +81,34 @@ class WallStrafeScenario : public BaseScenario {
       return;
     }
 
-    glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*target, now_seconds);
-
     float distance = abs(target->wall_position->x - last_direction_change_position_.x);
-    if (distance > current_target_travel_distance_) {
-      ChangeDirection(target->wall_position->x);
-      target->wall_direction = direction_;
+    bool should_turn = distance > current_target_travel_distance_;
+    if (acceleration_ > 0) {
+      float delta_seconds = now_seconds - target->last_update_time_seconds;
+      if (should_turn) {
+        // Decelerate until we reach 0 speed and then change direction.
+        target->speed -= delta_seconds * acceleration_;
+        if (target->speed <= 0) {
+          target->speed = 0;
+          ChangeDirection(target->wall_position->x);
+          target->wall_direction = direction_;
+        }
+      } else {
+        // Maybe continue accelerating to max velocity
+        target->speed += delta_seconds * acceleration_;
+        if (target->speed > max_velocity_) {
+          target->speed = max_velocity_;
+        }
+      }
+      target_manager_.UpdateTargetPositions(now_seconds);
+    } else {
+      // No accel/decel. Instant turn.
+      if (should_turn) {
+        ChangeDirection(target->wall_position->x);
+        target->wall_direction = direction_;
+      }
+      target_manager_.UpdateTargetPositions(now_seconds);
     }
-    target_manager_.UpdateTargetPositions(now_seconds);
   }
 
  private:
@@ -113,6 +135,9 @@ class WallStrafeScenario : public BaseScenario {
   float y_;
   float min_strafe_distance_;
   float max_strafe_distance_;
+
+  float max_velocity_;
+  float acceleration_;
 
   glm::vec2 last_direction_change_position_;
   glm::vec2 direction_;
