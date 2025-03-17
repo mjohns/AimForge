@@ -208,6 +208,8 @@ message WallStrafeScenarioDef {
 
   RegionLength min_distance = 3;
   RegionLength max_distance = 4;
+
+  float acceleration = 5;
 }
 
 message TargetDef {
