@@ -348,6 +348,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     crosshair_size = MaybeIntToString(current_settings->crosshair_size());
     crosshair_name = current_settings->current_crosshair_name();
     disable_click_to_start = current_settings->disable_click_to_start();
+    auto_hold_tracking = current_settings->auto_hold_tracking();
     keybinds = current_settings->keybinds();
   }
 }
@@ -383,6 +384,10 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   }
   if (current_settings->disable_click_to_start() != disable_click_to_start) {
     current_settings->set_disable_click_to_start(disable_click_to_start);
+    settings_manager_->MarkDirty();
+  }
+  if (current_settings->auto_hold_tracking() != auto_hold_tracking) {
+    current_settings->set_auto_hold_tracking(auto_hold_tracking);
     settings_manager_->MarkDirty();
   }
   if (!google::protobuf::util::MessageDifferencer::Equivalent(current_settings->keybinds(),

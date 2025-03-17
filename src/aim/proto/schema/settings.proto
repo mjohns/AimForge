@@ -39,6 +39,9 @@ message Settings {
   bool disable_click_to_start = 8;
 
   Keybinds keybinds = 9;
+
+  // Left click is automatically held down in tracking scenarios.
+  bool auto_hold_tracking = 10;
 }
 
 message ScenarioSettings {

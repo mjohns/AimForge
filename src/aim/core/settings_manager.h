@@ -94,6 +94,7 @@ struct SettingsUpdater {
   std::string crosshair_name;
   std::string dpi;
   bool disable_click_to_start = false;
+  bool auto_hold_tracking = false;
   Keybinds keybinds;
 
  private:
