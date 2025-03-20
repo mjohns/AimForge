@@ -241,9 +241,9 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     if (has_previous_high_score) {
       auto font = app_->font_manager()->UseLarge();
       if (percent_diff > 0) {
-        ImGui::Text("+%.1f%", percent_diff);
+        ImGui::TextFmt("+{:.1f}%", percent_diff);
       } else {
-        ImGui::Text("%.1f%", percent_diff);
+        ImGui::TextFmt("{:.1f}%", percent_diff);
       }
     }
     if (stats.num_shots > 0) {
