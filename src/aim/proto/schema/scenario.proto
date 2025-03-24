@@ -210,6 +210,8 @@ message WallStrafeScenarioDef {
   RegionLength max_distance = 4;
 
   float acceleration = 5;
+  // Defaults to acceleration if not set. Must also specify acceleration.
+  float deceleration = 6;
 }
 
 message TargetDef {
