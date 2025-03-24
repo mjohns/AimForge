@@ -1696,6 +1696,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     kMinDistanceFieldNumber = 3,
     kMaxDistanceFieldNumber = 4,
     kAccelerationFieldNumber = 5,
+    kDecelerationFieldNumber = 6,
   };
   // .aim.RegionLength width = 1;
   bool has_width() const;
@@ -1768,12 +1769,23 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
   void _internal_set_acceleration(float value);
 
   public:
+  // float deceleration = 6;
+  bool has_deceleration() const;
+  void clear_deceleration() ;
+  float deceleration() const;
+  void set_deceleration(float value);
+
+  private:
+  float _internal_deceleration() const;
+  void _internal_set_deceleration(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallStrafeScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 4,
+      3, 6, 4,
       0, 2>
       _table_;
 
@@ -1798,6 +1810,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* min_distance_;
     ::aim::RegionLength* max_distance_;
     float acceleration_;
+    float deceleration_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -11002,6 +11015,34 @@ inline float WallStrafeScenarioDef::_internal_acceleration() const {
 inline void WallStrafeScenarioDef::_internal_set_acceleration(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_ = value;
+}
+
+// float deceleration = 6;
+inline bool WallStrafeScenarioDef::has_deceleration() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void WallStrafeScenarioDef::clear_deceleration() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.deceleration_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float WallStrafeScenarioDef::deceleration() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.deceleration)
+  return _internal_deceleration();
+}
+inline void WallStrafeScenarioDef::set_deceleration(float value) {
+  _internal_set_deceleration(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeScenarioDef.deceleration)
+}
+inline float WallStrafeScenarioDef::_internal_deceleration() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.deceleration_;
+}
+inline void WallStrafeScenarioDef::_internal_set_deceleration(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.deceleration_ = value;
 }
 
 // -------------------------------------------------------------------

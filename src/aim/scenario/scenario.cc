@@ -418,6 +418,7 @@ NavigationEvent Scenario::ResumeInternal() {
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
     DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
 
+    /*
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("%s", def_.scenario_id().c_str());
     ImGui::Text("time: %.1f", elapsed_seconds);
@@ -427,6 +428,7 @@ NavigationEvent Scenario::ResumeInternal() {
     if (settings_.metronome_bpm() > 0) {
       ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     }
+    */
 
     ImGui::End();
 

@@ -80,7 +80,7 @@ StoredRgb ToStoredRgb(const StoredColor& c) {
     auto v = HexToRgb(c.hex());
     r = v.r;
     g = v.g;
-    b = v.g;
+    b = v.b;
   }
   StoredRgb result;
   result.set_r(glm::clamp((int)(r * mult), 0, kMaxRgbValue));

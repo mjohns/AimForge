@@ -44,6 +44,11 @@ class WallStrafeScenario : public BaseScenario {
     }
 
     acceleration_ = def_.wall_strafe_def().acceleration();
+    deceleration_ = def_.wall_strafe_def().deceleration();
+    if (deceleration_ <= 0) {
+      deceleration_ = acceleration_;
+    }
+
     last_direction_change_position_ = glm::vec2(0, y_);
 
     auto dist = std::uniform_real_distribution<float>(0, 1);
@@ -87,7 +92,7 @@ class WallStrafeScenario : public BaseScenario {
       float delta_seconds = now_seconds - target->last_update_time_seconds;
       if (should_turn) {
         // Decelerate until we reach 0 speed and then change direction.
-        target->speed -= delta_seconds * acceleration_;
+        target->speed -= delta_seconds * deceleration_;
         if (target->speed <= 0) {
           target->speed = 0;
           ChangeDirection(target->wall_position->x);
@@ -138,6 +143,7 @@ class WallStrafeScenario : public BaseScenario {
 
   float max_velocity_;
   float acceleration_;
+  float deceleration_;
 
   glm::vec2 last_direction_change_position_;
   glm::vec2 direction_;
