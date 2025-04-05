@@ -1971,6 +1971,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     kHeightFieldNumber = 2,
     kDurationFieldNumber = 3,
     kControlHeightFieldNumber = 4,
+    kStartOnGroundFieldNumber = 5,
   };
   // .aim.RegionLength width = 1;
   bool has_width() const;
@@ -2024,12 +2025,23 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   void _internal_set_control_height(float value);
 
   public:
+  // bool start_on_ground = 5;
+  bool has_start_on_ground() const;
+  void clear_start_on_ground() ;
+  bool start_on_ground() const;
+  void set_start_on_ground(bool value);
+
+  private:
+  bool _internal_start_on_ground() const;
+  void _internal_set_start_on_ground(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallArcScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 2,
+      3, 5, 2,
       0, 2>
       _table_;
 
@@ -2053,6 +2065,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* height_;
     float duration_;
     float control_height_;
+    bool start_on_ground_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -11639,6 +11652,34 @@ inline float WallArcScenarioDef::_internal_control_height() const {
 inline void WallArcScenarioDef::_internal_set_control_height(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.control_height_ = value;
+}
+
+// bool start_on_ground = 5;
+inline bool WallArcScenarioDef::has_start_on_ground() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void WallArcScenarioDef::clear_start_on_ground() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_on_ground_ = false;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline bool WallArcScenarioDef::start_on_ground() const {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.start_on_ground)
+  return _internal_start_on_ground();
+}
+inline void WallArcScenarioDef::set_start_on_ground(bool value) {
+  _internal_set_start_on_ground(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.start_on_ground)
+}
+inline bool WallArcScenarioDef::_internal_start_on_ground() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.start_on_ground_;
+}
+inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_on_ground_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -226,6 +226,8 @@ message WallArcScenarioDef {
   // The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). The specified height is for the control point (1, height).
   // https://www.desmos.com/calculator/scz7zhonfw
   float control_height = 4;
+
+  bool start_on_ground = 5;
 }
 
 message TargetDef {
