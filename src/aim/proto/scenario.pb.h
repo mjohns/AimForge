@@ -119,6 +119,9 @@ extern TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
 class TargetRegion;
 struct TargetRegionDefaultTypeInternal;
 extern TargetRegionDefaultTypeInternal _TargetRegion_default_instance_;
+class WallArcScenarioDef;
+struct WallArcScenarioDefDefaultTypeInternal;
+extern WallArcScenarioDefDefaultTypeInternal _WallArcScenarioDef_default_instance_;
 class WallStrafeScenarioDef;
 struct WallStrafeScenarioDefDefaultTypeInternal;
 extern WallStrafeScenarioDefDefaultTypeInternal _WallStrafeScenarioDef_default_instance_;
@@ -1818,6 +1821,283 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class WallArcScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.WallArcScenarioDef) */ {
+ public:
+  inline WallArcScenarioDef() : WallArcScenarioDef(nullptr) {}
+  ~WallArcScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(WallArcScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallArcScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR WallArcScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline WallArcScenarioDef(const WallArcScenarioDef& from) : WallArcScenarioDef(nullptr, from) {}
+  inline WallArcScenarioDef(WallArcScenarioDef&& from) noexcept
+      : WallArcScenarioDef(nullptr, std::move(from)) {}
+  inline WallArcScenarioDef& operator=(const WallArcScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WallArcScenarioDef& operator=(WallArcScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WallArcScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const WallArcScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const WallArcScenarioDef*>(
+        &_WallArcScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 20;
+  friend void swap(WallArcScenarioDef& a, WallArcScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(WallArcScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WallArcScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WallArcScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<WallArcScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const WallArcScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const WallArcScenarioDef& from) { WallArcScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(WallArcScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.WallArcScenarioDef"; }
+
+ protected:
+  explicit WallArcScenarioDef(::google::protobuf::Arena* arena);
+  WallArcScenarioDef(::google::protobuf::Arena* arena, const WallArcScenarioDef& from);
+  WallArcScenarioDef(::google::protobuf::Arena* arena, WallArcScenarioDef&& from) noexcept
+      : WallArcScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kWidthFieldNumber = 1,
+    kHeightFieldNumber = 2,
+    kStartFieldNumber = 4,
+    kEndFieldNumber = 5,
+    kControlFieldNumber = 6,
+    kDurationFieldNumber = 3,
+  };
+  // .aim.RegionLength width = 1;
+  bool has_width() const;
+  void clear_width() ;
+  const ::aim::RegionLength& width() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_width();
+  ::aim::RegionLength* mutable_width();
+  void set_allocated_width(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_width(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_width();
+
+  private:
+  const ::aim::RegionLength& _internal_width() const;
+  ::aim::RegionLength* _internal_mutable_width();
+
+  public:
+  // .aim.RegionLength height = 2;
+  bool has_height() const;
+  void clear_height() ;
+  const ::aim::RegionLength& height() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_height();
+  ::aim::RegionLength* mutable_height();
+  void set_allocated_height(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_height(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_height();
+
+  private:
+  const ::aim::RegionLength& _internal_height() const;
+  ::aim::RegionLength* _internal_mutable_height();
+
+  public:
+  // .aim.StoredVec2 start = 4;
+  bool has_start() const;
+  void clear_start() ;
+  const ::aim::StoredVec2& start() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec2* release_start();
+  ::aim::StoredVec2* mutable_start();
+  void set_allocated_start(::aim::StoredVec2* value);
+  void unsafe_arena_set_allocated_start(::aim::StoredVec2* value);
+  ::aim::StoredVec2* unsafe_arena_release_start();
+
+  private:
+  const ::aim::StoredVec2& _internal_start() const;
+  ::aim::StoredVec2* _internal_mutable_start();
+
+  public:
+  // .aim.StoredVec2 end = 5;
+  bool has_end() const;
+  void clear_end() ;
+  const ::aim::StoredVec2& end() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec2* release_end();
+  ::aim::StoredVec2* mutable_end();
+  void set_allocated_end(::aim::StoredVec2* value);
+  void unsafe_arena_set_allocated_end(::aim::StoredVec2* value);
+  ::aim::StoredVec2* unsafe_arena_release_end();
+
+  private:
+  const ::aim::StoredVec2& _internal_end() const;
+  ::aim::StoredVec2* _internal_mutable_end();
+
+  public:
+  // .aim.StoredVec2 control = 6;
+  bool has_control() const;
+  void clear_control() ;
+  const ::aim::StoredVec2& control() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec2* release_control();
+  ::aim::StoredVec2* mutable_control();
+  void set_allocated_control(::aim::StoredVec2* value);
+  void unsafe_arena_set_allocated_control(::aim::StoredVec2* value);
+  ::aim::StoredVec2* unsafe_arena_release_control();
+
+  private:
+  const ::aim::StoredVec2& _internal_control() const;
+  ::aim::StoredVec2* _internal_mutable_control();
+
+  public:
+  // float duration = 3;
+  bool has_duration() const;
+  void clear_duration() ;
+  float duration() const;
+  void set_duration(float value);
+
+  private:
+  float _internal_duration() const;
+  void _internal_set_duration(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.WallArcScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 6, 5,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const WallArcScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::RegionLength* width_;
+    ::aim::RegionLength* height_;
+    ::aim::StoredVec2* start_;
+    ::aim::StoredVec2* end_;
+    ::aim::StoredVec2* control_;
+    float duration_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Room final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.Room) */ {
  public:
@@ -2870,7 +3150,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 21;
+  static constexpr int kIndexInFileMessages = 22;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -3833,7 +4113,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 22;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -4392,7 +4672,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 20;
+  static constexpr int kIndexInFileMessages = 21;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -5572,6 +5852,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kBarrelDef = 12,
     kLinearDef = 13,
     kWallStrafeDef = 14,
+    kWallArcDef = 15,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -5678,6 +5959,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kBarrelDefFieldNumber = 12,
     kLinearDefFieldNumber = 13,
     kWallStrafeDefFieldNumber = 14,
+    kWallArcDefFieldNumber = 15,
   };
   // string scenario_id = 1;
   bool has_scenario_id() const;
@@ -5890,6 +6172,25 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::WallStrafeScenarioDef* _internal_mutable_wall_strafe_def();
 
   public:
+  // .aim.WallArcScenarioDef wall_arc_def = 15;
+  bool has_wall_arc_def() const;
+  private:
+  bool _internal_has_wall_arc_def() const;
+
+  public:
+  void clear_wall_arc_def() ;
+  const ::aim::WallArcScenarioDef& wall_arc_def() const;
+  PROTOBUF_NODISCARD ::aim::WallArcScenarioDef* release_wall_arc_def();
+  ::aim::WallArcScenarioDef* mutable_wall_arc_def();
+  void set_allocated_wall_arc_def(::aim::WallArcScenarioDef* value);
+  void unsafe_arena_set_allocated_wall_arc_def(::aim::WallArcScenarioDef* value);
+  ::aim::WallArcScenarioDef* unsafe_arena_release_wall_arc_def();
+
+  private:
+  const ::aim::WallArcScenarioDef& _internal_wall_arc_def() const;
+  ::aim::WallArcScenarioDef* _internal_mutable_wall_arc_def();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ScenarioDef)
@@ -5900,11 +6201,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_barrel_def();
   void set_has_linear_def();
   void set_has_wall_strafe_def();
+  void set_has_wall_arc_def();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 13, 9,
+      4, 14, 10,
       52, 2>
       _table_;
 
@@ -5940,6 +6242,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::BarrelScenarioDef* barrel_def_;
       ::aim::LinearScenarioDef* linear_def_;
       ::aim::WallStrafeScenarioDef* wall_strafe_def_;
+      ::aim::WallArcScenarioDef* wall_arc_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -9975,6 +10278,85 @@ inline ::aim::WallStrafeScenarioDef* ScenarioDef::mutable_wall_strafe_def() ABSL
   return _msg;
 }
 
+// .aim.WallArcScenarioDef wall_arc_def = 15;
+inline bool ScenarioDef::has_wall_arc_def() const {
+  return type_case() == kWallArcDef;
+}
+inline bool ScenarioDef::_internal_has_wall_arc_def() const {
+  return type_case() == kWallArcDef;
+}
+inline void ScenarioDef::set_has_wall_arc_def() {
+  _impl_._oneof_case_[0] = kWallArcDef;
+}
+inline void ScenarioDef::clear_wall_arc_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kWallArcDef) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.wall_arc_def_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.wall_arc_def_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::WallArcScenarioDef* ScenarioDef::release_wall_arc_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.wall_arc_def)
+  if (type_case() == kWallArcDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.wall_arc_def_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.wall_arc_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::WallArcScenarioDef& ScenarioDef::_internal_wall_arc_def() const {
+  return type_case() == kWallArcDef ? *_impl_.type_.wall_arc_def_ : reinterpret_cast<::aim::WallArcScenarioDef&>(::aim::_WallArcScenarioDef_default_instance_);
+}
+inline const ::aim::WallArcScenarioDef& ScenarioDef::wall_arc_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.wall_arc_def)
+  return _internal_wall_arc_def();
+}
+inline ::aim::WallArcScenarioDef* ScenarioDef::unsafe_arena_release_wall_arc_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.wall_arc_def)
+  if (type_case() == kWallArcDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.wall_arc_def_;
+    _impl_.type_.wall_arc_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_wall_arc_def(::aim::WallArcScenarioDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_wall_arc_def();
+    _impl_.type_.wall_arc_def_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.wall_arc_def)
+}
+inline ::aim::WallArcScenarioDef* ScenarioDef::_internal_mutable_wall_arc_def() {
+  if (type_case() != kWallArcDef) {
+    clear_type();
+    set_has_wall_arc_def();
+    _impl_.type_.wall_arc_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::WallArcScenarioDef>(GetArena());
+  }
+  return _impl_.type_.wall_arc_def_;
+}
+inline ::aim::WallArcScenarioDef* ScenarioDef::mutable_wall_arc_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::WallArcScenarioDef* _msg = _internal_mutable_wall_arc_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.wall_arc_def)
+  return _msg;
+}
+
 inline bool ScenarioDef::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -11043,6 +11425,503 @@ inline float WallStrafeScenarioDef::_internal_deceleration() const {
 inline void WallStrafeScenarioDef::_internal_set_deceleration(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.deceleration_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// WallArcScenarioDef
+
+// .aim.RegionLength width = 1;
+inline bool WallArcScenarioDef::has_width() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.width_ != nullptr);
+  return value;
+}
+inline void WallArcScenarioDef::clear_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.width_ != nullptr) _impl_.width_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::RegionLength& WallArcScenarioDef::_internal_width() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.width_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallArcScenarioDef::width() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.width)
+  return _internal_width();
+}
+inline void WallArcScenarioDef::unsafe_arena_set_allocated_width(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.width_);
+  }
+  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallArcScenarioDef.width)
+}
+inline ::aim::RegionLength* WallArcScenarioDef::release_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* released = _impl_.width_;
+  _impl_.width_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallArcScenarioDef::unsafe_arena_release_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallArcScenarioDef.width)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* temp = _impl_.width_;
+  _impl_.width_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallArcScenarioDef::_internal_mutable_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.width_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.width_;
+}
+inline ::aim::RegionLength* WallArcScenarioDef::mutable_width() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::RegionLength* _msg = _internal_mutable_width();
+  // @@protoc_insertion_point(field_mutable:aim.WallArcScenarioDef.width)
+  return _msg;
+}
+inline void WallArcScenarioDef::set_allocated_width(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.width_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.width)
+}
+
+// .aim.RegionLength height = 2;
+inline bool WallArcScenarioDef::has_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.height_ != nullptr);
+  return value;
+}
+inline void WallArcScenarioDef::clear_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.height_ != nullptr) _impl_.height_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::RegionLength& WallArcScenarioDef::_internal_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.height_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallArcScenarioDef::height() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.height)
+  return _internal_height();
+}
+inline void WallArcScenarioDef::unsafe_arena_set_allocated_height(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.height_);
+  }
+  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallArcScenarioDef.height)
+}
+inline ::aim::RegionLength* WallArcScenarioDef::release_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.height_;
+  _impl_.height_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallArcScenarioDef::unsafe_arena_release_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallArcScenarioDef.height)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.height_;
+  _impl_.height_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallArcScenarioDef::_internal_mutable_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.height_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.height_;
+}
+inline ::aim::RegionLength* WallArcScenarioDef::mutable_height() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_height();
+  // @@protoc_insertion_point(field_mutable:aim.WallArcScenarioDef.height)
+  return _msg;
+}
+inline void WallArcScenarioDef::set_allocated_height(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.height_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.height)
+}
+
+// float duration = 3;
+inline bool WallArcScenarioDef::has_duration() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void WallArcScenarioDef::clear_duration() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.duration_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float WallArcScenarioDef::duration() const {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.duration)
+  return _internal_duration();
+}
+inline void WallArcScenarioDef::set_duration(float value) {
+  _internal_set_duration(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.duration)
+}
+inline float WallArcScenarioDef::_internal_duration() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.duration_;
+}
+inline void WallArcScenarioDef::_internal_set_duration(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.duration_ = value;
+}
+
+// .aim.StoredVec2 start = 4;
+inline bool WallArcScenarioDef::has_start() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.start_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec2& WallArcScenarioDef::_internal_start() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec2* p = _impl_.start_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec2&>(::aim::_StoredVec2_default_instance_);
+}
+inline const ::aim::StoredVec2& WallArcScenarioDef::start() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.start)
+  return _internal_start();
+}
+inline void WallArcScenarioDef::unsafe_arena_set_allocated_start(::aim::StoredVec2* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.start_);
+  }
+  _impl_.start_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallArcScenarioDef.start)
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::release_start() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::StoredVec2* released = _impl_.start_;
+  _impl_.start_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::unsafe_arena_release_start() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallArcScenarioDef.start)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::StoredVec2* temp = _impl_.start_;
+  _impl_.start_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::_internal_mutable_start() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.start_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec2>(GetArena());
+    _impl_.start_ = reinterpret_cast<::aim::StoredVec2*>(p);
+  }
+  return _impl_.start_;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::mutable_start() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::StoredVec2* _msg = _internal_mutable_start();
+  // @@protoc_insertion_point(field_mutable:aim.WallArcScenarioDef.start)
+  return _msg;
+}
+inline void WallArcScenarioDef::set_allocated_start(::aim::StoredVec2* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.start_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.start_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.start)
+}
+
+// .aim.StoredVec2 end = 5;
+inline bool WallArcScenarioDef::has_end() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.end_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec2& WallArcScenarioDef::_internal_end() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec2* p = _impl_.end_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec2&>(::aim::_StoredVec2_default_instance_);
+}
+inline const ::aim::StoredVec2& WallArcScenarioDef::end() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.end)
+  return _internal_end();
+}
+inline void WallArcScenarioDef::unsafe_arena_set_allocated_end(::aim::StoredVec2* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.end_);
+  }
+  _impl_.end_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallArcScenarioDef.end)
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::release_end() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::StoredVec2* released = _impl_.end_;
+  _impl_.end_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::unsafe_arena_release_end() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallArcScenarioDef.end)
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::StoredVec2* temp = _impl_.end_;
+  _impl_.end_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::_internal_mutable_end() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.end_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec2>(GetArena());
+    _impl_.end_ = reinterpret_cast<::aim::StoredVec2*>(p);
+  }
+  return _impl_.end_;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::mutable_end() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  ::aim::StoredVec2* _msg = _internal_mutable_end();
+  // @@protoc_insertion_point(field_mutable:aim.WallArcScenarioDef.end)
+  return _msg;
+}
+inline void WallArcScenarioDef::set_allocated_end(::aim::StoredVec2* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.end_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+
+  _impl_.end_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.end)
+}
+
+// .aim.StoredVec2 control = 6;
+inline bool WallArcScenarioDef::has_control() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.control_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec2& WallArcScenarioDef::_internal_control() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec2* p = _impl_.control_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec2&>(::aim::_StoredVec2_default_instance_);
+}
+inline const ::aim::StoredVec2& WallArcScenarioDef::control() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.control)
+  return _internal_control();
+}
+inline void WallArcScenarioDef::unsafe_arena_set_allocated_control(::aim::StoredVec2* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.control_);
+  }
+  _impl_.control_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000010u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000010u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallArcScenarioDef.control)
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::release_control() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000010u;
+  ::aim::StoredVec2* released = _impl_.control_;
+  _impl_.control_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::unsafe_arena_release_control() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallArcScenarioDef.control)
+
+  _impl_._has_bits_[0] &= ~0x00000010u;
+  ::aim::StoredVec2* temp = _impl_.control_;
+  _impl_.control_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::_internal_mutable_control() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.control_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec2>(GetArena());
+    _impl_.control_ = reinterpret_cast<::aim::StoredVec2*>(p);
+  }
+  return _impl_.control_;
+}
+inline ::aim::StoredVec2* WallArcScenarioDef::mutable_control() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000010u;
+  ::aim::StoredVec2* _msg = _internal_mutable_control();
+  // @@protoc_insertion_point(field_mutable:aim.WallArcScenarioDef.control)
+  return _msg;
+}
+inline void WallArcScenarioDef::set_allocated_control(::aim::StoredVec2* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.control_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000010u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000010u;
+  }
+
+  _impl_.control_ = reinterpret_cast<::aim::StoredVec2*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.control)
 }
 
 // -------------------------------------------------------------------
