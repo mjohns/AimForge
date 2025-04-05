@@ -223,13 +223,9 @@ message WallArcScenarioDef {
   // Time to go across full arc in seconds.
   float duration = 3;
 
-  // Points for a quadratic bezier curve. start.x must be less than end.x.
-  // This curve defines half of the arc and will be reflected at end position.
-  // Defaults to start(0,0), end(1, 1), control(0.4, 1)
+  // The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). The specified height is for the control point (1, height).
   // https://www.desmos.com/calculator/scz7zhonfw
-  StoredVec2 start = 4;
-  StoredVec2 end = 5;
-  StoredVec2 control = 6;
+  float control_height = 4;
 }
 
 message TargetDef {

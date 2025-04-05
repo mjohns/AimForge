@@ -225,10 +225,8 @@ inline constexpr WallArcScenarioDef::Impl_::Impl_(
       : _cached_size_{0},
         width_{nullptr},
         height_{nullptr},
-        start_{nullptr},
-        end_{nullptr},
-        control_{nullptr},
-        duration_{0} {}
+        duration_{0},
+        control_height_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR WallArcScenarioDef::WallArcScenarioDef(::_pbi::ConstantInitialized)
@@ -1057,15 +1055,11 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.width_),
         PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.height_),
         PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.duration_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.start_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.end_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.control_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_.control_height_),
         0,
         1,
-        5,
         2,
         3,
-        4,
         PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1153,10 +1147,10 @@ static const ::_pbi::MigrationSchema
         {280, 290, -1, sizeof(::aim::BarrelScenarioDef)},
         {292, 305, -1, sizeof(::aim::LinearScenarioDef)},
         {310, 324, -1, sizeof(::aim::WallStrafeScenarioDef)},
-        {330, 344, -1, sizeof(::aim::WallArcScenarioDef)},
-        {350, 366, -1, sizeof(::aim::TargetDef)},
-        {374, 385, -1, sizeof(::aim::PillTargetDef)},
-        {388, 405, -1, sizeof(::aim::TargetProfile)},
+        {330, 342, -1, sizeof(::aim::WallArcScenarioDef)},
+        {346, 362, -1, sizeof(::aim::TargetDef)},
+        {370, 381, -1, sizeof(::aim::PillTargetDef)},
+        {384, 401, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1266,27 +1260,25 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "n_distance\030\003 \001(\0132\021.aim.RegionLength\022\'\n\014m"
     "ax_distance\030\004 \001(\0132\021.aim.RegionLength\022\024\n\014"
     "acceleration\030\005 \001(\002\022\024\n\014deceleration\030\006 \001(\002"
-    "\"\313\001\n\022WallArcScenarioDef\022 \n\005width\030\001 \001(\0132\021"
+    "\"\203\001\n\022WallArcScenarioDef\022 \n\005width\030\001 \001(\0132\021"
     ".aim.RegionLength\022!\n\006height\030\002 \001(\0132\021.aim."
-    "RegionLength\022\020\n\010duration\030\003 \001(\002\022\036\n\005start\030"
-    "\004 \001(\0132\017.aim.StoredVec2\022\034\n\003end\030\005 \001(\0132\017.ai"
-    "m.StoredVec2\022 \n\007control\030\006 \001(\0132\017.aim.Stor"
-    "edVec2\"\214\002\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022"
-    ".aim.TargetProfile\022\023\n\013num_targets\030\002 \001(\005\022"
-    "\036\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014targe"
-    "t_order\030\004 \003(\005\022\036\n\026newest_target_is_ghost\030"
-    "\005 \001(\010\022 \n\030new_target_delay_seconds\030\006 \001(\002\022"
-    "#\n\033remove_target_after_seconds\030\007 \001(\002\022\'\n\037"
-    "stagger_initial_targets_seconds\030\010 \001(\002\"^\n"
-    "\rPillTargetDef\022\016\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001"
-    "(\0132\017.aim.StoredVec3\022 \n\007wall_up\030\003 \001(\0132\017.a"
-    "im.StoredVec2\"\344\001\n\rTargetProfile\022\026\n\016perce"
-    "nt_chance\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034"
-    "\n\024target_radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 "
-    "\001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016health_seco"
-    "nds\030\006 \001(\002\022\035\n\025health_seconds_jitter\030\007 \001(\002"
-    "\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004"
-    "typeb\010editionsp\350\007"
+    "RegionLength\022\020\n\010duration\030\003 \001(\002\022\026\n\016contro"
+    "l_height\030\004 \001(\002\"\214\002\n\tTargetDef\022$\n\010profiles"
+    "\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013num_target"
+    "s\030\002 \001(\005\022\036\n\026remove_closest_on_miss\030\003 \001(\010\022"
+    "\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_target_i"
+    "s_ghost\030\005 \001(\010\022 \n\030new_target_delay_second"
+    "s\030\006 \001(\002\022#\n\033remove_target_after_seconds\030\007"
+    " \001(\002\022\'\n\037stagger_initial_targets_seconds\030"
+    "\010 \001(\002\"^\n\rPillTargetDef\022\016\n\006height\030\001 \001(\002\022\033"
+    "\n\002up\030\002 \001(\0132\017.aim.StoredVec3\022 \n\007wall_up\030\003"
+    " \001(\0132\017.aim.StoredVec2\"\344\001\n\rTargetProfile\022"
+    "\026\n\016percent_chance\030\001 \001(\002\022\025\n\rtarget_radius"
+    "\030\002 \001(\002\022\034\n\024target_radius_jitter\030\003 \001(\002\022\r\n\005"
+    "speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016hea"
+    "lth_seconds\030\006 \001(\002\022\035\n\025health_seconds_jitt"
+    "er\030\007 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetD"
+    "efH\000B\006\n\004typeb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1296,7 +1288,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    4017,
+    3945,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -8726,21 +8718,6 @@ class WallArcScenarioDef::_Internal {
       8 * PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_._has_bits_);
 };
 
-void WallArcScenarioDef::clear_start() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.start_ != nullptr) _impl_.start_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-void WallArcScenarioDef::clear_end() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.end_ != nullptr) _impl_.end_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-void WallArcScenarioDef::clear_control() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.control_ != nullptr) _impl_.control_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000010u;
-}
 WallArcScenarioDef::WallArcScenarioDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -8776,16 +8753,13 @@ WallArcScenarioDef::WallArcScenarioDef(
   _impl_.height_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(
                               arena, *from._impl_.height_)
                         : nullptr;
-  _impl_.start_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(
-                              arena, *from._impl_.start_)
-                        : nullptr;
-  _impl_.end_ = (cached_has_bits & 0x00000008u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(
-                              arena, *from._impl_.end_)
-                        : nullptr;
-  _impl_.control_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(
-                              arena, *from._impl_.control_)
-                        : nullptr;
-  _impl_.duration_ = from._impl_.duration_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, duration_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, duration_),
+           offsetof(Impl_, control_height_) -
+               offsetof(Impl_, duration_) +
+               sizeof(Impl_::control_height_));
 
   // @@protoc_insertion_point(copy_constructor:aim.WallArcScenarioDef)
 }
@@ -8799,9 +8773,9 @@ inline void WallArcScenarioDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, width_),
            0,
-           offsetof(Impl_, duration_) -
+           offsetof(Impl_, control_height_) -
                offsetof(Impl_, width_) +
-               sizeof(Impl_::duration_));
+               sizeof(Impl_::control_height_));
 }
 WallArcScenarioDef::~WallArcScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.WallArcScenarioDef)
@@ -8813,9 +8787,6 @@ inline void WallArcScenarioDef::SharedDtor(MessageLite& self) {
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.width_;
   delete this_._impl_.height_;
-  delete this_._impl_.start_;
-  delete this_._impl_.end_;
-  delete this_._impl_.control_;
   this_._impl_.~Impl_();
 }
 
@@ -8855,16 +8826,16 @@ const ::google::protobuf::internal::ClassData* WallArcScenarioDef::GetClassData(
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 6, 5, 0, 2> WallArcScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 2, 0, 2> WallArcScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    6, 56,  // max_field_number, fast_idx_mask
+    4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967232,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
-    5,  // num_aux_entries
+    4,  // num_field_entries
+    2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -8873,7 +8844,9 @@ const ::_pbi::TcParseTable<3, 6, 5, 0, 2> WallArcScenarioDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::WallArcScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // float control_height = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.control_height_)}},
     // .aim.RegionLength width = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.width_)}},
@@ -8882,17 +8855,7 @@ const ::_pbi::TcParseTable<3, 6, 5, 0, 2> WallArcScenarioDef::_table_ = {
      {18, 1, 1, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.height_)}},
     // float duration = 3;
     {::_pbi::TcParser::FastF32S1,
-     {29, 5, 0, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.duration_)}},
-    // .aim.StoredVec2 start = 4;
-    {::_pbi::TcParser::FastMtS1,
-     {34, 2, 2, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.start_)}},
-    // .aim.StoredVec2 end = 5;
-    {::_pbi::TcParser::FastMtS1,
-     {42, 3, 3, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.end_)}},
-    // .aim.StoredVec2 control = 6;
-    {::_pbi::TcParser::FastMtS1,
-     {50, 4, 4, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.control_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.duration_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -8903,23 +8866,14 @@ const ::_pbi::TcParseTable<3, 6, 5, 0, 2> WallArcScenarioDef::_table_ = {
     {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.height_), _Internal::kHasBitsOffset + 1, 1,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // float duration = 3;
-    {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.duration_), _Internal::kHasBitsOffset + 5, 0,
+    {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.duration_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.StoredVec2 start = 4;
-    {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.start_), _Internal::kHasBitsOffset + 2, 2,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.StoredVec2 end = 5;
-    {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.end_), _Internal::kHasBitsOffset + 3, 3,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.StoredVec2 control = 6;
-    {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.control_), _Internal::kHasBitsOffset + 4, 4,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float control_height = 4;
+    {PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.control_height_), _Internal::kHasBitsOffset + 3, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
     {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
-    {::_pbi::TcParser::GetTable<::aim::StoredVec2>()},
-    {::_pbi::TcParser::GetTable<::aim::StoredVec2>()},
-    {::_pbi::TcParser::GetTable<::aim::StoredVec2>()},
   }}, {{
   }},
 };
@@ -8932,7 +8886,7 @@ PROTOBUF_NOINLINE void WallArcScenarioDef::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(_impl_.width_ != nullptr);
       _impl_.width_->Clear();
@@ -8941,20 +8895,12 @@ PROTOBUF_NOINLINE void WallArcScenarioDef::Clear() {
       ABSL_DCHECK(_impl_.height_ != nullptr);
       _impl_.height_->Clear();
     }
-    if (cached_has_bits & 0x00000004u) {
-      ABSL_DCHECK(_impl_.start_ != nullptr);
-      _impl_.start_->Clear();
-    }
-    if (cached_has_bits & 0x00000008u) {
-      ABSL_DCHECK(_impl_.end_ != nullptr);
-      _impl_.end_->Clear();
-    }
-    if (cached_has_bits & 0x00000010u) {
-      ABSL_DCHECK(_impl_.control_ != nullptr);
-      _impl_.control_->Clear();
-    }
   }
-  _impl_.duration_ = 0;
+  if (cached_has_bits & 0x0000000cu) {
+    ::memset(&_impl_.duration_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.control_height_) -
+        reinterpret_cast<char*>(&_impl_.duration_)) + sizeof(_impl_.control_height_));
+  }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -8990,31 +8936,17 @@ PROTOBUF_NOINLINE void WallArcScenarioDef::Clear() {
           }
 
           // float duration = 3;
-          if (cached_has_bits & 0x00000020u) {
+          if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 3, this_._internal_duration(), target);
           }
 
-          // .aim.StoredVec2 start = 4;
-          if (cached_has_bits & 0x00000004u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                4, *this_._impl_.start_, this_._impl_.start_->GetCachedSize(), target,
-                stream);
-          }
-
-          // .aim.StoredVec2 end = 5;
+          // float control_height = 4;
           if (cached_has_bits & 0x00000008u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                5, *this_._impl_.end_, this_._impl_.end_->GetCachedSize(), target,
-                stream);
-          }
-
-          // .aim.StoredVec2 control = 6;
-          if (cached_has_bits & 0x00000010u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                6, *this_._impl_.control_, this_._impl_.control_->GetCachedSize(), target,
-                stream);
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_control_height(), target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -9042,7 +8974,7 @@ PROTOBUF_NOINLINE void WallArcScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000003fu) {
+          if (cached_has_bits & 0x0000000fu) {
             // .aim.RegionLength width = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
@@ -9053,23 +8985,12 @@ PROTOBUF_NOINLINE void WallArcScenarioDef::Clear() {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.height_);
             }
-            // .aim.StoredVec2 start = 4;
-            if (cached_has_bits & 0x00000004u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.start_);
-            }
-            // .aim.StoredVec2 end = 5;
-            if (cached_has_bits & 0x00000008u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.end_);
-            }
-            // .aim.StoredVec2 control = 6;
-            if (cached_has_bits & 0x00000010u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.control_);
-            }
             // float duration = 3;
-            if (cached_has_bits & 0x00000020u) {
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+            // float control_height = 4;
+            if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
           }
@@ -9087,7 +9008,7 @@ void WallArcScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, cons
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.width_ != nullptr);
       if (_this->_impl_.width_ == nullptr) {
@@ -9107,34 +9028,10 @@ void WallArcScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, cons
       }
     }
     if (cached_has_bits & 0x00000004u) {
-      ABSL_DCHECK(from._impl_.start_ != nullptr);
-      if (_this->_impl_.start_ == nullptr) {
-        _this->_impl_.start_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(arena, *from._impl_.start_);
-      } else {
-        _this->_impl_.start_->MergeFrom(*from._impl_.start_);
-      }
+      _this->_impl_.duration_ = from._impl_.duration_;
     }
     if (cached_has_bits & 0x00000008u) {
-      ABSL_DCHECK(from._impl_.end_ != nullptr);
-      if (_this->_impl_.end_ == nullptr) {
-        _this->_impl_.end_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(arena, *from._impl_.end_);
-      } else {
-        _this->_impl_.end_->MergeFrom(*from._impl_.end_);
-      }
-    }
-    if (cached_has_bits & 0x00000010u) {
-      ABSL_DCHECK(from._impl_.control_ != nullptr);
-      if (_this->_impl_.control_ == nullptr) {
-        _this->_impl_.control_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(arena, *from._impl_.control_);
-      } else {
-        _this->_impl_.control_->MergeFrom(*from._impl_.control_);
-      }
-    }
-    if (cached_has_bits & 0x00000020u) {
-      _this->_impl_.duration_ = from._impl_.duration_;
+      _this->_impl_.control_height_ = from._impl_.control_height_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -9154,8 +9051,8 @@ void WallArcScenarioDef::InternalSwap(WallArcScenarioDef* PROTOBUF_RESTRICT othe
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.duration_)
-      + sizeof(WallArcScenarioDef::_impl_.duration_)
+      PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.control_height_)
+      + sizeof(WallArcScenarioDef::_impl_.control_height_)
       - PROTOBUF_FIELD_OFFSET(WallArcScenarioDef, _impl_.width_)>(
           reinterpret_cast<char*>(&_impl_.width_),
           reinterpret_cast<char*>(&other->_impl_.width_));
