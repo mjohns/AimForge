@@ -35,7 +35,7 @@ unsigned int HexStrToInt(const std::string& val) {
   return x;
 }
 
-} // namespace
+}  // namespace
 
 glm::vec3 ToVec3(const StoredVec3& v) {
   return glm::vec3(v.x(), v.y(), v.z());
@@ -173,6 +173,12 @@ float GetJitteredValue(float base_value, float jitter, std::mt19937* random_gene
 
 float FirstNonZero(float v1, float v2) {
   return v1 != 0 ? v1 : v2;
+}
+
+bool FlipCoin(std::mt19937* random_generator) {
+  auto dist = std::uniform_real_distribution<float>(0, 1);
+  float roll = dist(*random_generator);
+  return roll > 0.5;
 }
 
 }  // namespace aim

@@ -51,9 +51,7 @@ class WallStrafeScenario : public BaseScenario {
 
     last_direction_change_position_ = glm::vec2(0, y_);
 
-    auto dist = std::uniform_real_distribution<float>(0, 1);
-    float direction_roll = dist(*app_->random_generator());
-    if (direction_roll > 0.5) {
+    if (FlipCoin(app_->random_generator())) {
       direction_ = glm::vec2(-1, 0);
     } else {
       direction_ = glm::vec2(1, 0);

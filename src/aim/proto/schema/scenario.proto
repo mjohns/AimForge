@@ -216,14 +216,16 @@ message WallStrafeScenarioDef {
 }
 
 message WallArcScenarioDef {
-    // The spline will be stretched to fit in a box with specified height/width centered around 0,0 on the wall.
+  // The spline will be stretched to fit in a box with specified height/width centered around 0,0 on
+  // the wall.
   RegionLength width = 1;
   RegionLength height = 2;
 
   // Time to go across full arc in seconds.
   float duration = 3;
 
-  // The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). The specified height is for the control point (1, height).
+  // The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). The
+  // specified height is for the control point (1, height).
   // https://www.desmos.com/calculator/scz7zhonfw
   float control_height = 4;
 
