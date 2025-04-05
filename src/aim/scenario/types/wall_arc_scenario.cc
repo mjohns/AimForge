@@ -44,14 +44,16 @@ class WallArcScenario : public BaseScenario {
     spline_scale_y_ = height_ / abs(GetSplinePoint(0.5).y);
 
     wall_start_.x = -0.5 * width_;
+
+    float target_radius = GetNextTargetProfile().target_radius();
+    float start_height_mult = arc.start_on_ground() ? (wall_.height - target_radius) : height_;
     if (control_.y > 0) {
-      wall_start_.y = -0.5 * height_;
+      wall_start_.y = -0.5 * start_height_mult;
     } else {
-      wall_start_.y = 0.5 * height_;
+      wall_start_.y = 0.5 * start_height_mult;
     }
 
     // Look at start position
-    float target_radius = GetNextTargetProfile().target_radius();
     glm::vec3 look_at_pos = WallPositionToWorldPosition(wall_start_, target_radius, def.room());
     glm::vec3 initial_look_at = glm::normalize(look_at_pos - camera_.GetPosition());
     PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
