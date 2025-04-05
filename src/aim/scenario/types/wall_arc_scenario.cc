@@ -32,25 +32,19 @@ class WallArcScenario : public BaseScenario {
     width_ = GetRegionLength(arc.width(), wall_);
     height_ = GetRegionLength(arc.height(), wall_);
 
-    if (arc.has_start()) {
-      start_ = ToVec2(arc.start());
-    }
-    if (arc.has_end()) {
-      end_ = ToVec2(arc.end());
-    }
-    if (arc.has_control()) {
-      control_ = ToVec2(arc.control());
+    if (arc.control_height() != 0) {
+      control_.y = arc.control_height();
     }
 
     if (arc.has_duration()) {
       arc_duration_seconds_ = arc.duration();
     }
 
-    spline_scale_x_ = width_ / (2.0 * abs(start_.x - end_.x));
-    spline_scale_y_ = height_ / abs(start_.y - end_.y);
+    spline_scale_x_ = width_ / abs(start_.x - end_.x);
+    spline_scale_y_ = height_ / abs(GetSplinePoint(0.5).y);
 
     wall_start_.x = -0.5 * width_;
-    if (start_.y < end_.y) {
+    if (control_.y > 0) {
       wall_start_.y = -0.5 * height_;
     } else {
       wall_start_.y = 0.5 * height_;
@@ -102,7 +96,7 @@ class WallArcScenario : public BaseScenario {
  private:
   // Start is always at 0,0.
   glm::vec2 GetWallScaledPoint(float t) {
-    glm::vec2 spline_point = GetSplinePointWithReflection(t) - start_;
+    glm::vec2 spline_point = GetSplinePoint(t) - start_;
     float x = spline_point.x * spline_scale_x_;
     float y = spline_point.y * spline_scale_y_;
     return glm::vec2(x, y);
@@ -135,8 +129,8 @@ class WallArcScenario : public BaseScenario {
 
   // https://www.desmos.com/calculator/scz7zhonfw
   glm::vec2 start_{0, 0};
-  glm::vec2 control_{0.4, 0.9};
-  glm::vec2 end_{1, 1};
+  glm::vec2 control_{1, 2};
+  glm::vec2 end_{2, 0};
 
   float spline_scale_x_;
   float spline_scale_y_;
