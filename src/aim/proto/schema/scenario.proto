@@ -159,6 +159,7 @@ message ScenarioDef {
     BarrelScenarioDef barrel_def = 12;
     LinearScenarioDef linear_def = 13;
     WallStrafeScenarioDef wall_strafe_def = 14;
+    WallArcScenarioDef wall_arc_def = 15;
   }
 }
 
@@ -212,6 +213,23 @@ message WallStrafeScenarioDef {
   float acceleration = 5;
   // Defaults to acceleration if not set. Must also specify acceleration.
   float deceleration = 6;
+}
+
+message WallArcScenarioDef {
+    // The spline will be stretched to fit in a box with specified height/width centered around 0,0 on the wall.
+  RegionLength width = 1;
+  RegionLength height = 2;
+
+  // Time to go across full arc in seconds.
+  float duration = 3;
+
+  // Points for a quadratic bezier curve. start.x must be less than end.x.
+  // This curve defines half of the arc and will be reflected at end position.
+  // Defaults to start(0,0), end(1, 1), control(0.4, 1)
+  // https://www.desmos.com/calculator/scz7zhonfw
+  StoredVec2 start = 4;
+  StoredVec2 end = 5;
+  StoredVec2 control = 6;
 }
 
 message TargetDef {
