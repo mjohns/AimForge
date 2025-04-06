@@ -91,6 +91,10 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::PushItemWidth(button_sz.x);
       ImGui::InputText("##CM_PER_360", &updater_.cm_per_360, ImGuiInputTextFlags_CharsDecimal);
       ImGui::PopItemWidth();
+      ImGui::SameLine();
+      ImGui::Text("+/-");
+      ImGui::SameLine();
+      ImGui::InputText("##CM_PER_360_JITTER", &updater_.cm_per_360_jitter, ImGuiInputTextFlags_CharsDecimal);
 
       ImGui::Spacing();
       ImGui::Spacing();

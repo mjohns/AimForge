@@ -277,6 +277,9 @@ Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scena
   if (scenario_settings.has_cm_per_360()) {
     settings_.set_cm_per_360(scenario_settings.cm_per_360());
   }
+  if (scenario_settings.has_cm_per_360_jitter()) {
+    settings_.set_cm_per_360_jitter(scenario_settings.cm_per_360_jitter());
+  }
   if (scenario_settings.has_theme_name()) {
     settings_.set_theme_name(scenario_settings.theme_name());
   }
@@ -288,6 +291,9 @@ Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scena
   }
   if (scenario_settings.has_crosshair_name()) {
     settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
+  }
+  if (scenario_settings.has_auto_hold_tracking()) {
+    settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
   }
   return settings_;
 }
@@ -327,8 +333,10 @@ void SettingsManager::FlushToDisk(const std::string& scenario_id) {
     scenario_settings.set_crosshair_size(settings_.crosshair_size());
     scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
     scenario_settings.set_cm_per_360(settings_.cm_per_360());
+    scenario_settings.set_cm_per_360_jitter(settings_.cm_per_360_jitter());
     scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
     scenario_settings.set_theme_name(settings_.theme_name());
+    scenario_settings.set_auto_hold_tracking(settings_.auto_hold_tracking());
     settings_db_->UpdateScenarioSettings(scenario_id, scenario_settings);
     scenario_settings_cache_[scenario_id] = scenario_settings;
   }
@@ -342,6 +350,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (current_settings != nullptr) {
     cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
+    cm_per_360_jitter = MaybeIntToString(current_settings->cm_per_360_jitter());
     theme_name = current_settings->theme_name();
     metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
     dpi = MaybeIntToString(current_settings->dpi());
@@ -366,6 +375,11 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   float new_cm_per_360 = ParseFloat(cm_per_360);
   if (new_cm_per_360 > 0) {
     current_settings->set_cm_per_360(new_cm_per_360);
+    settings_manager_->MarkDirty();
+  }
+  float new_cm_per_360_jitter = cm_per_360_jitter.size() == 0 ? 0 : ParseFloat(cm_per_360_jitter);
+  if (new_cm_per_360_jitter != current_settings->cm_per_360_jitter()) {
+    current_settings->set_cm_per_360_jitter(new_cm_per_360_jitter);
     settings_manager_->MarkDirty();
   }
   if (current_settings->theme_name() != theme_name) {
