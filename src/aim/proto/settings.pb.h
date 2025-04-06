@@ -237,6 +237,8 @@ class ScenarioSettings final : public ::google::protobuf::Message
     kCmPer360FieldNumber = 1,
     kMetronomeBpmFieldNumber = 3,
     kCrosshairSizeFieldNumber = 4,
+    kCmPer360JitterFieldNumber = 6,
+    kAutoHoldTrackingFieldNumber = 7,
   };
   // string theme_name = 2;
   bool has_theme_name() const;
@@ -305,12 +307,34 @@ class ScenarioSettings final : public ::google::protobuf::Message
   void _internal_set_crosshair_size(float value);
 
   public:
+  // float cm_per_360_jitter = 6;
+  bool has_cm_per_360_jitter() const;
+  void clear_cm_per_360_jitter() ;
+  float cm_per_360_jitter() const;
+  void set_cm_per_360_jitter(float value);
+
+  private:
+  float _internal_cm_per_360_jitter() const;
+  void _internal_set_cm_per_360_jitter(float value);
+
+  public:
+  // bool auto_hold_tracking = 7;
+  bool has_auto_hold_tracking() const;
+  void clear_auto_hold_tracking() ;
+  bool auto_hold_tracking() const;
+  void set_auto_hold_tracking(bool value);
+
+  private:
+  bool _internal_auto_hold_tracking() const;
+  void _internal_set_auto_hold_tracking(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioSettings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 0,
+      3, 7, 0,
       53, 2>
       _table_;
 
@@ -335,6 +359,8 @@ class ScenarioSettings final : public ::google::protobuf::Message
     float cm_per_360_;
     float metronome_bpm_;
     float crosshair_size_;
+    float cm_per_360_jitter_;
+    bool auto_hold_tracking_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1726,6 +1752,7 @@ class Settings final : public ::google::protobuf::Message
     kCrosshairSizeFieldNumber = 5,
     kDisableClickToStartFieldNumber = 8,
     kAutoHoldTrackingFieldNumber = 10,
+    kCmPer360JitterFieldNumber = 11,
   };
   // repeated .aim.Crosshair saved_crosshairs = 7;
   int saved_crosshairs_size() const;
@@ -1859,12 +1886,23 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_auto_hold_tracking(bool value);
 
   public:
+  // float cm_per_360_jitter = 11;
+  bool has_cm_per_360_jitter() const;
+  void clear_cm_per_360_jitter() ;
+  float cm_per_360_jitter() const;
+  void set_cm_per_360_jitter(float value);
+
+  private:
+  float _internal_cm_per_360_jitter() const;
+  void _internal_set_cm_per_360_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 10, 2,
+      4, 11, 2,
       61, 2>
       _table_;
 
@@ -1894,6 +1932,7 @@ class Settings final : public ::google::protobuf::Message
     float crosshair_size_;
     bool disable_click_to_start_;
     bool auto_hold_tracking_;
+    float cm_per_360_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2388,6 +2427,34 @@ inline void Settings::_internal_set_cm_per_360(float value) {
   _impl_.cm_per_360_ = value;
 }
 
+// float cm_per_360_jitter = 11;
+inline bool Settings::has_cm_per_360_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  return value;
+}
+inline void Settings::clear_cm_per_360_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.cm_per_360_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000200u;
+}
+inline float Settings::cm_per_360_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360_jitter)
+  return _internal_cm_per_360_jitter();
+}
+inline void Settings::set_cm_per_360_jitter(float value) {
+  _internal_set_cm_per_360_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000200u;
+  // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360_jitter)
+}
+inline float Settings::_internal_cm_per_360_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.cm_per_360_jitter_;
+}
+inline void Settings::_internal_set_cm_per_360_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.cm_per_360_jitter_ = value;
+}
+
 // string theme_name = 3;
 inline bool Settings::has_theme_name() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
@@ -2815,6 +2882,34 @@ inline void ScenarioSettings::_internal_set_cm_per_360(float value) {
   _impl_.cm_per_360_ = value;
 }
 
+// float cm_per_360_jitter = 6;
+inline bool ScenarioSettings::has_cm_per_360_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void ScenarioSettings::clear_cm_per_360_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.cm_per_360_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float ScenarioSettings::cm_per_360_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.cm_per_360_jitter)
+  return _internal_cm_per_360_jitter();
+}
+inline void ScenarioSettings::set_cm_per_360_jitter(float value) {
+  _internal_set_cm_per_360_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.cm_per_360_jitter)
+}
+inline float ScenarioSettings::_internal_cm_per_360_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.cm_per_360_jitter_;
+}
+inline void ScenarioSettings::_internal_set_cm_per_360_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.cm_per_360_jitter_ = value;
+}
+
 // string theme_name = 2;
 inline bool ScenarioSettings::has_theme_name() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
@@ -3007,6 +3102,34 @@ inline void ScenarioSettings::set_allocated_crosshair_name(std::string* value) {
     _impl_.crosshair_name_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioSettings.crosshair_name)
+}
+
+// bool auto_hold_tracking = 7;
+inline bool ScenarioSettings::has_auto_hold_tracking() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void ScenarioSettings::clear_auto_hold_tracking() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.auto_hold_tracking_ = false;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline bool ScenarioSettings::auto_hold_tracking() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.auto_hold_tracking)
+  return _internal_auto_hold_tracking();
+}
+inline void ScenarioSettings::set_auto_hold_tracking(bool value) {
+  _internal_set_auto_hold_tracking(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.auto_hold_tracking)
+}
+inline bool ScenarioSettings::_internal_auto_hold_tracking() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.auto_hold_tracking_;
+}
+inline void ScenarioSettings::_internal_set_auto_hold_tracking(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.auto_hold_tracking_ = value;
 }
 
 // -------------------------------------------------------------------

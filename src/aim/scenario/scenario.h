@@ -120,6 +120,9 @@ class Scenario {
   float radians_per_dot_;
   Crosshair crosshair_;
   float crosshair_size_;
+  float cm_per_360_base_ = 0;
+  float cm_per_360_jitter_ = 0;
+  float effective_cm_per_360_ = 0;
   bool is_click_held_ = false;
   Settings settings_;
   i64 stats_id_ = 0;

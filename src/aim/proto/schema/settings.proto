@@ -29,6 +29,8 @@ message Crosshair {
 message Settings {
   float dpi = 1;
   float cm_per_360 = 2;
+  // The cm_per_360 per scenario run will be adjusted by a random value in +/- jitter.
+  float cm_per_360_jitter = 11;
   string theme_name = 3;
   float metronome_bpm = 4;
 
@@ -46,10 +48,12 @@ message Settings {
 
 message ScenarioSettings {
   float cm_per_360 = 1;
+  float cm_per_360_jitter = 6;
   string theme_name = 2;
   float metronome_bpm = 3;
   float crosshair_size = 4;
   string crosshair_name = 5;
+  bool auto_hold_tracking = 7;
 }
 
 message KeyMapping {

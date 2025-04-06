@@ -85,7 +85,21 @@ void Scenario::RefreshState() {
 
   float dpi = app_->settings_manager()->GetDpi();
   metronome_ = std::make_unique<Metronome>(settings_.metronome_bpm(), app_);
-  radians_per_dot_ = CmPer360ToRadiansPerDot(settings_.cm_per_360(), dpi);
+
+  bool needs_sens_update = effective_cm_per_360_ == 0 ||
+                           cm_per_360_base_ != settings_.cm_per_360() ||
+                           cm_per_360_jitter_ != settings_.cm_per_360_jitter();
+  if (needs_sens_update) {
+    cm_per_360_base_ = settings_.cm_per_360();
+    cm_per_360_jitter_ = settings_.cm_per_360_jitter();
+    effective_cm_per_360_ = GetJitteredValue(
+        settings_.cm_per_360(), settings_.cm_per_360_jitter(), app_->random_generator());
+    if (effective_cm_per_360_ <= 0) {
+      effective_cm_per_360_ = 0.1;
+    }
+  }
+
+  radians_per_dot_ = CmPer360ToRadiansPerDot(effective_cm_per_360_, dpi);
   is_click_held_ = false;
   crosshair_ = app_->settings_manager()->GetCurrentCrosshair();
   crosshair_size_ = settings_.crosshair_size();
@@ -200,7 +214,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     ImGui::Text("theme: %s", settings_.theme_name().c_str());
-    ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
+    ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
 
     ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
     {
@@ -217,7 +231,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 1);
     ImGui::Text("%s", def_.scenario_id().c_str());
 
-    std::string message = std::format("cm/360: {}", MaybeIntToString(settings_.cm_per_360(), 1));
+    std::string message = std::format("cm/360: {}", MaybeIntToString(effective_cm_per_360_, 1));
     text_size = ImGui::CalcTextSize(message.c_str());
     ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 2);
@@ -418,17 +432,14 @@ NavigationEvent Scenario::ResumeInternal() {
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
     DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
 
-    /*
     float elapsed_seconds = timer_.GetElapsedSeconds();
-    ImGui::Text("%s", def_.scenario_id().c_str());
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::Text("ups: %.1fk", state_updates_per_second_);
-    ImGui::Text("cm/360: %.0f", settings_.cm_per_360());
+    ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
     if (settings_.metronome_bpm() > 0) {
       ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     }
-    */
 
     ImGui::End();
 
@@ -465,12 +476,12 @@ NavigationEvent Scenario::ResumeInternal() {
     case ShotType::kClickSingle: {
       // Default clicking scoring
       float hit_percent = stats_.num_hits / stats_.num_shots;
-      float duration_modifier = 60.0f / def_.duration_seconds();
+      // float duration_modifier = 60.0f / def_.duration_seconds();
       float accuracy_penalty = 1.0 - sqrt(hit_percent);
       if (def_.has_accuracy_penalty_modifier()) {
         accuracy_penalty *= def_.accuracy_penalty_modifier();
       }
-      score = stats_.num_hits * 10 * (1 - accuracy_penalty) * duration_modifier;
+      score = stats_.num_hits * 10 * (1 - accuracy_penalty);
       break;
     }
     case ShotType::kTrackingKill:
@@ -481,7 +492,7 @@ NavigationEvent Scenario::ResumeInternal() {
   }
 
   StatsRow stats_row;
-  stats_row.cm_per_360 = settings_.cm_per_360();
+  stats_row.cm_per_360 = effective_cm_per_360_;
   stats_row.num_hits = stats_.num_hits;
   stats_row.num_shots = stats_.num_shots;
   stats_row.score = score;
