@@ -12,6 +12,11 @@
 
 namespace aim {
 
+struct RadiusAtKill {
+  float start_radius;
+  float end_radius;
+};
+
 struct Target {
   u16 id = 0;
   glm::vec3 position{};
@@ -35,6 +40,7 @@ struct Target {
 
   Stopwatch hit_timer;
   float health_seconds = 0;
+  std::optional<RadiusAtKill> radius_at_kill{};
 
   bool CanHit() const {
     return !hidden && !is_ghost;

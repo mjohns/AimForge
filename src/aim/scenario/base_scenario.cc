@@ -93,11 +93,18 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
         } else {
           target.hit_timer.Stop();
         }
-        if (target.health_seconds > 0 &&
-            target.hit_timer.GetElapsedSeconds() >= target.health_seconds) {
-          stats_.num_hits++;
-          PlayKillSound();
-          AddNewTargetDuringRun(target.id);
+        if (target.health_seconds > 0) {
+          if (target.hit_timer.GetElapsedSeconds() >= target.health_seconds) {
+            stats_.num_hits++;
+            PlayKillSound();
+            AddNewTargetDuringRun(target.id);
+          } else if (target.radius_at_kill.has_value()) {
+            float scale = (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
+                          target.health_seconds;
+            float radius_diff =
+                target.radius_at_kill->start_radius - target.radius_at_kill->end_radius;
+            target.radius = target.radius_at_kill->end_radius + scale * radius_diff;
+          }
         }
       }
     }
