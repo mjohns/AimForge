@@ -4182,6 +4182,7 @@ class TargetProfile final : public ::google::protobuf::Message
     kSpeedJitterFieldNumber = 5,
     kHealthSecondsFieldNumber = 6,
     kHealthSecondsJitterFieldNumber = 7,
+    kTargetRadiusAtKillFieldNumber = 8,
     kPillFieldNumber = 10,
   };
   // float percent_chance = 1;
@@ -4261,6 +4262,17 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_health_seconds_jitter(float value);
 
   public:
+  // float target_radius_at_kill = 8;
+  bool has_target_radius_at_kill() const;
+  void clear_target_radius_at_kill() ;
+  float target_radius_at_kill() const;
+  void set_target_radius_at_kill(float value);
+
+  private:
+  float _internal_target_radius_at_kill() const;
+  void _internal_set_target_radius_at_kill(float value);
+
+  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -4290,7 +4302,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 8, 1,
+      3, 9, 1,
       0, 2>
       _table_;
 
@@ -4317,6 +4329,7 @@ class TargetProfile final : public ::google::protobuf::Message
     float speed_jitter_;
     float health_seconds_;
     float health_seconds_jitter_;
+    float target_radius_at_kill_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -12360,6 +12373,34 @@ inline float TargetProfile::_internal_health_seconds_jitter() const {
 inline void TargetProfile::_internal_set_health_seconds_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_seconds_jitter_ = value;
+}
+
+// float target_radius_at_kill = 8;
+inline bool TargetProfile::has_target_radius_at_kill() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_target_radius_at_kill() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_at_kill_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline float TargetProfile::target_radius_at_kill() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_at_kill)
+  return _internal_target_radius_at_kill();
+}
+inline void TargetProfile::set_target_radius_at_kill(float value) {
+  _internal_set_target_radius_at_kill(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_at_kill)
+}
+inline float TargetProfile::_internal_target_radius_at_kill() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_radius_at_kill_;
+}
+inline void TargetProfile::_internal_set_target_radius_at_kill(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_at_kill_ = value;
 }
 
 // .aim.PillTargetDef pill = 10;

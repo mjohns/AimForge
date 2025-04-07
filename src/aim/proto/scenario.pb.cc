@@ -477,6 +477,7 @@ inline constexpr TargetProfile::Impl_::Impl_(
         speed_jitter_{0},
         health_seconds_{0},
         health_seconds_jitter_{0},
+        target_radius_at_kill_{0},
         type_{},
         _oneof_case_{} {}
 
@@ -1116,6 +1117,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.health_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.health_seconds_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_at_kill_),
         ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.type_),
         0,
@@ -1125,6 +1127,7 @@ const ::uint32_t
         4,
         5,
         6,
+        7,
         ~0u,
 };
 
@@ -1153,7 +1156,7 @@ static const ::_pbi::MigrationSchema
         {330, 343, -1, sizeof(::aim::WallArcScenarioDef)},
         {348, 364, -1, sizeof(::aim::TargetDef)},
         {372, 383, -1, sizeof(::aim::PillTargetDef)},
-        {386, 403, -1, sizeof(::aim::TargetProfile)},
+        {386, 404, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1276,13 +1279,14 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "_initial_targets_seconds\030\010 \001(\002\"^\n\rPillTa"
     "rgetDef\022\016\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.ai"
     "m.StoredVec3\022 \n\007wall_up\030\003 \001(\0132\017.aim.Stor"
-    "edVec2\"\344\001\n\rTargetProfile\022\026\n\016percent_chan"
+    "edVec2\"\203\002\n\rTargetProfile\022\026\n\016percent_chan"
     "ce\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024targe"
     "t_radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014"
     "speed_jitter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001"
-    "(\002\022\035\n\025health_seconds_jitter\030\007 \001(\002\022\"\n\004pil"
-    "l\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004typeb\010e"
-    "ditionsp\350\007"
+    "(\002\022\035\n\025health_seconds_jitter\030\007 \001(\002\022\035\n\025tar"
+    "get_radius_at_kill\030\010 \001(\002\022\"\n\004pill\030\n \001(\0132\022"
+    ".aim.PillTargetDefH\000B\006\n\004typeb\010editionsp\350"
+    "\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1292,7 +1296,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    3970,
+    4001,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -9917,9 +9921,9 @@ TargetProfile::TargetProfile(
                offsetof(Impl_, percent_chance_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, percent_chance_),
-           offsetof(Impl_, health_seconds_jitter_) -
+           offsetof(Impl_, target_radius_at_kill_) -
                offsetof(Impl_, percent_chance_) +
-               sizeof(Impl_::health_seconds_jitter_));
+               sizeof(Impl_::target_radius_at_kill_));
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -9942,9 +9946,9 @@ inline void TargetProfile::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, percent_chance_),
            0,
-           offsetof(Impl_, health_seconds_jitter_) -
+           offsetof(Impl_, target_radius_at_kill_) -
                offsetof(Impl_, percent_chance_) +
-               sizeof(Impl_::health_seconds_jitter_));
+               sizeof(Impl_::target_radius_at_kill_));
 }
 TargetProfile::~TargetProfile() {
   // @@protoc_insertion_point(destructor:aim.TargetProfile)
@@ -10016,15 +10020,15 @@ const ::google::protobuf::internal::ClassData* TargetProfile::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 8, 1, 0, 2> TargetProfile::_table_ = {
+const ::_pbi::TcParseTable<3, 9, 1, 0, 2> TargetProfile::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_._has_bits_),
     0, // no _extensions_
     10, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294966656,  // skipmap
+    4294966528,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    8,  // num_field_entries
+    9,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -10034,7 +10038,9 @@ const ::_pbi::TcParseTable<3, 8, 1, 0, 2> TargetProfile::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::TargetProfile>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // float target_radius_at_kill = 8;
+    {::_pbi::TcParser::FastF32S1,
+     {69, 7, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_)}},
     // float percent_chance = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.percent_chance_)}},
@@ -10080,6 +10086,9 @@ const ::_pbi::TcParseTable<3, 8, 1, 0, 2> TargetProfile::_table_ = {
     // float health_seconds_jitter = 7;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_jitter_), _Internal::kHasBitsOffset + 6, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float target_radius_at_kill = 8;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_), _Internal::kHasBitsOffset + 7, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.PillTargetDef pill = 10;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.type_.pill_), _Internal::kOneofCaseOffset + 0, 0,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
@@ -10097,10 +10106,10 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000007fu) {
+  if (cached_has_bits & 0x000000ffu) {
     ::memset(&_impl_.percent_chance_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.health_seconds_jitter_) -
-        reinterpret_cast<char*>(&_impl_.percent_chance_)) + sizeof(_impl_.health_seconds_jitter_));
+        reinterpret_cast<char*>(&_impl_.target_radius_at_kill_) -
+        reinterpret_cast<char*>(&_impl_.percent_chance_)) + sizeof(_impl_.target_radius_at_kill_));
   }
   clear_type();
   _impl_._has_bits_.Clear();
@@ -10172,6 +10181,13 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
                 7, this_._internal_health_seconds_jitter(), target);
           }
 
+          // float target_radius_at_kill = 8;
+          if (cached_has_bits & 0x00000080u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                8, this_._internal_target_radius_at_kill(), target);
+          }
+
           // .aim.PillTargetDef pill = 10;
           if (this_.type_case() == kPill) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
@@ -10204,7 +10220,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000007fu) {
+          if (cached_has_bits & 0x000000ffu) {
             // float percent_chance = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
@@ -10233,6 +10249,10 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
             if (cached_has_bits & 0x00000040u) {
               total_size += 5;
             }
+            // float target_radius_at_kill = 8;
+            if (cached_has_bits & 0x00000080u) {
+              total_size += 5;
+            }
           }
           switch (this_.type_case()) {
             // .aim.PillTargetDef pill = 10;
@@ -10259,7 +10279,7 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000007fu) {
+  if (cached_has_bits & 0x000000ffu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_impl_.percent_chance_ = from._impl_.percent_chance_;
     }
@@ -10280,6 +10300,9 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
     }
     if (cached_has_bits & 0x00000040u) {
       _this->_impl_.health_seconds_jitter_ = from._impl_.health_seconds_jitter_;
+    }
+    if (cached_has_bits & 0x00000080u) {
+      _this->_impl_.target_radius_at_kill_ = from._impl_.target_radius_at_kill_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -10323,8 +10346,8 @@ void TargetProfile::InternalSwap(TargetProfile* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.health_seconds_jitter_)
-      + sizeof(TargetProfile::_impl_.health_seconds_jitter_)
+      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_)
+      + sizeof(TargetProfile::_impl_.target_radius_at_kill_)
       - PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.percent_chance_)>(
           reinterpret_cast<char*>(&_impl_.percent_chance_),
           reinterpret_cast<char*>(&other->_impl_.percent_chance_));

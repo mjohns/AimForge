@@ -622,6 +622,12 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   target.last_update_time_seconds = timer_.GetElapsedSeconds();
   target.radius = GetJitteredValue(
       profile.target_radius(), profile.target_radius_jitter(), app_->random_generator());
+  if (profile.target_radius_at_kill() > 0) {
+    RadiusAtKill k;
+    k.start_radius = target.radius;
+    k.end_radius = profile.target_radius_at_kill();
+    target.radius_at_kill = k;
+  }
   target.speed =
       GetJitteredValue(profile.speed(), profile.speed_jitter(), app_->random_generator());
   target.health_seconds = GetJitteredValue(
