@@ -228,8 +228,9 @@ message WallArcScenarioDef {
   // specified height is for the control point (1, height).
   // https://www.desmos.com/calculator/scz7zhonfw
   float control_height = 4;
+  float control_height_jitter = 5;
 
-  bool start_on_ground = 5;
+  bool start_on_ground = 6;
 }
 
 message TargetDef {
