@@ -26,7 +26,7 @@ SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
     : sound_dirs_(sound_dirs) {
   std::string kill_sound_name = "kill_confirmed.ogg";
   std::string shoot_sound_name = "shoot.ogg";
-  std::string metronome_sound_name = "short_bass.wav";
+  std::string metronome_sound_name = "metronome.ogg";
   std::string hit_sound_name = "body_shot.ogg";
 
   auto kill_sound = LoadSound(sound_dirs_, kill_sound_name);

@@ -94,7 +94,8 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::SameLine();
       ImGui::Text("+/-");
       ImGui::SameLine();
-      ImGui::InputText("##CM_PER_360_JITTER", &updater_.cm_per_360_jitter, ImGuiInputTextFlags_CharsDecimal);
+      ImGui::InputText(
+          "##CM_PER_360_JITTER", &updater_.cm_per_360_jitter, ImGuiInputTextFlags_CharsDecimal);
 
       ImGui::Spacing();
       ImGui::Spacing();
@@ -135,6 +136,10 @@ class QuickSettingsScreen : public UiScreen {
         }
         ImGui::EndCombo();
       }
+
+      ImGui::Text("Auto Hold Tracking");
+      ImGui::SameLine();
+      ImGui::Checkbox("##auto_hold_tracking", &updater_.auto_hold_tracking);
     }
 
     if (type_ == QuickSettingsType::METRONOME) {
