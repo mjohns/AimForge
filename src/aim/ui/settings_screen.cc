@@ -74,6 +74,14 @@ class SettingsScreen : public UiScreen {
     ImGui::PushItemWidth(char_size.x * 4);
     ImGui::InputText("##CM/360", &settings_updater_.cm_per_360, ImGuiInputTextFlags_CharsDecimal);
     ImGui::PopItemWidth();
+    ImGui::SameLine();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    ImGui::PushItemWidth(char_size.x * 3);
+    ImGui::InputText("##CM_PER_360_JITTER",
+                     &settings_updater_.cm_per_360_jitter,
+                     ImGuiInputTextFlags_CharsDecimal);
+    ImGui::PopItemWidth();
 
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
