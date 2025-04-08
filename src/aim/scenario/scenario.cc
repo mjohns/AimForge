@@ -481,7 +481,7 @@ NavigationEvent Scenario::ResumeInternal() {
       if (def_.has_accuracy_penalty_modifier()) {
         accuracy_penalty *= def_.accuracy_penalty_modifier();
       }
-      score = stats_.num_hits * 10 * (1 - accuracy_penalty);
+      score = stats_.num_hits * (1 - accuracy_penalty);
       break;
     }
     case ShotType::kTrackingKill:
