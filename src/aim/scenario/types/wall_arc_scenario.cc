@@ -85,6 +85,13 @@ class WallArcScenario : public BaseScenario {
     float times_across = now_seconds / arc_duration_seconds_;
     int full_times_across = (int)times_across;
 
+    if (last_times_across_ != full_times_across) {
+      last_times_across_ = full_times_across;
+      control_.y = GetJitteredValue(def_.wall_arc_def().control_height(),
+                                    def_.wall_arc_def().control_height_jitter(),
+                                    app_->random_generator());
+    }
+
     float partial_time_across = times_across - full_times_across;
     if (full_times_across % 2 != 0) {
       partial_time_across = 1 - partial_time_across;
@@ -136,6 +143,8 @@ class WallArcScenario : public BaseScenario {
 
   float spline_scale_x_;
   float spline_scale_y_;
+
+  int last_times_across_ = 0;
 };
 
 }  // namespace
