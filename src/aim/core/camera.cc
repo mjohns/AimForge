@@ -18,6 +18,18 @@ constexpr float kMinYaw = -1 * glm::radians(10.0f);
 
 constexpr float k90DegreesInRadians = glm::radians(90.0f);
 
+glm::vec3 GetNormalizedRight(const glm::vec3& v) {
+  return glm::normalize(glm::cross(v, glm::vec3(0, 0, 1)));
+}
+
+PitchYaw GetPitchYawFromLookAt(const glm::vec3& front) {
+  auto v = glm::normalize(front);
+  PitchYaw result;
+  result.pitch = asin(v.z);
+  result.yaw = atan2(v.x, v.y);
+  return result;
+}
+
 void FillInLookAt(const glm::vec3& position, LookAtInfo* info) {
   info->front = glm::normalize(info->front);
   info->right = GetNormalizedRight(info->front);
@@ -34,21 +46,15 @@ float CmPer360ToRadiansPerDot(float cm_per_360, float dpi) {
   return glm::two_pi<float>() / dots_per_360;
 }
 
-PitchYaw GetPitchYawFromLookAt(const glm::vec3& front) {
-  auto v = glm::normalize(front);
-  PitchYaw result;
-  result.pitch = asin(v.z);
-  result.yaw = atan2(v.x, v.y);
-  return result;
+void Camera::SetPitchYawLookingAtPoint(const glm::vec3& look_at_pos) {
+  glm::vec3 initial_look_at = glm::normalize(look_at_pos - GetPosition());
+  auto pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
+  UpdatePitchYaw(pitch_yaw);
 }
 
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov) {
   return glm::perspective(
       glm::radians(fov), (float)screen.width / (float)screen.height, 0.1f, 2000.0f);
-}
-
-glm::vec3 GetNormalizedRight(const glm::vec3& v) {
-  return glm::normalize(glm::cross(v, glm::vec3(0.0f, 0.0f, 1.0f)));
 }
 
 LookAtInfo Camera::GetLookAt() {
@@ -59,13 +65,6 @@ LookAtInfo Camera::GetLookAt() {
   info.front.z = sin(pitch_);
 
   FillInLookAt(position_, &info);
-  return info;
-}
-
-LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front) {
-  LookAtInfo info;
-  info.front = front;
-  FillInLookAt(position, &info);
   return info;
 }
 

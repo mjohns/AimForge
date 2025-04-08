@@ -17,16 +17,11 @@ struct LookAtInfo {
   glm::mat4 transform;
 };
 
-LookAtInfo GetLookAt(const glm::vec3& position, const glm::vec3& front);
 
 struct PitchYaw {
   float pitch = 0;
   float yaw = 0;
 };
-
-PitchYaw GetPitchYawFromLookAt(const glm::vec3& front);
-
-glm::vec3 GetNormalizedRight(const glm::vec3& v);
 
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov = 103.0f);
 
@@ -51,6 +46,8 @@ class Camera {
   float GetYaw() {
     return yaw_;
   }
+
+  void SetPitchYawLookingAtPoint(const glm::vec3& look_at_pos);
 
   void Update(int xrel, int yrel, float radians_per_dot);
 

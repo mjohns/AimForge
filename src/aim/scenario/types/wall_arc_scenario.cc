@@ -55,9 +55,7 @@ class WallArcScenario : public BaseScenario {
 
     // Look at start position
     glm::vec3 look_at_pos = WallPositionToWorldPosition(wall_start_, target_radius, def.room());
-    glm::vec3 initial_look_at = glm::normalize(look_at_pos - camera_.GetPosition());
-    PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
-    camera_.UpdatePitchYaw(pitch_yaw);
+    camera_.SetPitchYawLookingAtPoint(look_at_pos);
   }
 
  protected:
