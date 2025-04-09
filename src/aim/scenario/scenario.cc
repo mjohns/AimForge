@@ -40,8 +40,7 @@ Scenario::Scenario(const ScenarioDef& def, Application* app)
     : def_(def),
       app_(app),
       timer_(kReplayFps),
-      camera_(Camera(CameraParams(
-          def.room().start_pitch(), def.room().start_yaw(), ToVec3(def.room().camera_position())))),
+      camera_(Camera(CameraParams(def.room()))),
       target_manager_(def.room()) {
   theme_ = app->settings_manager()->GetCurrentTheme();
   max_render_age_micros_ = (1 / (float)(kTargetRenderFps + 1)) * 1000 * 1000;
