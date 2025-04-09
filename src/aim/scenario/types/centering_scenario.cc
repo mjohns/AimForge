@@ -56,9 +56,7 @@ class CenteringScenario : public BaseScenario {
     float target_radius = GetNextTargetProfile().target_radius();
     glm::vec3 look_at_pos = WallPositionToWorldPosition(
         current_start_ + (current_direction_ * 10.0f), target_radius, def.room());
-    glm::vec3 initial_look_at = glm::normalize(look_at_pos - camera_.GetPosition());
-    PitchYaw pitch_yaw = GetPitchYawFromLookAt(initial_look_at);
-    camera_.UpdatePitchYaw(pitch_yaw);
+    camera_.SetPitchYawLookingAtPoint(look_at_pos);
   }
 
  protected:
