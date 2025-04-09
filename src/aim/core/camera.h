@@ -17,7 +17,6 @@ struct LookAtInfo {
   glm::mat4 transform;
 };
 
-
 struct PitchYaw {
   float pitch = 0;
   float yaw = 0;
@@ -25,13 +24,22 @@ struct PitchYaw {
 
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov = 103.0f);
 
+struct CameraParams {
+  CameraParams() {}
+  CameraParams(float pitch, float yaw, const glm::vec3& position)
+      : pitch(pitch), yaw(yaw), position(position) {}
+
+  glm::vec3 position{0, 0, 0};
+  glm::vec3 up{0, 0, 1};
+  glm::vec3 front{0, 1, 0};
+  float pitch = 0;
+  float yaw = 0;
+};
+
 class Camera {
  public:
   Camera();
-  Camera(float pitch, float yaw);
-  Camera(float pitch, float yaw, glm::vec3 position);
-  // Defaults to looking (0, 1, 0)
-  Camera(glm::vec3 position);
+  explicit Camera(const CameraParams& params);
 
   LookAtInfo GetLookAt();
 
@@ -50,23 +58,18 @@ class Camera {
   void SetPitchYawLookingAtPoint(const glm::vec3& look_at_pos);
 
   void Update(int xrel, int yrel, float radians_per_dot);
-
-  void UpdatePitch(float pitch) {
-    pitch_ = pitch;
-  }
-  void UpdateYaw(float yaw) {
-    yaw_ = yaw;
-  }
-
-  void UpdatePitchYaw(const PitchYaw& pitch_yaw) {
-    pitch_ = pitch_yaw.pitch;
-    yaw_ = pitch_yaw.yaw;
-  }
+  void UpdatePitch(float pitch);
+  void UpdateYaw(float yaw);
+  void UpdatePitchYaw(const PitchYaw& pitch_yaw);
 
  private:
   glm::vec3 position_;
+  glm::vec3 up_;
+  glm::vec3 front_;
+  glm::vec3 right_;
   float pitch_;
   float yaw_;
+  bool is_default_orientation_;
 };
 
 }  // namespace aim
