@@ -254,6 +254,8 @@ inline constexpr Room::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         camera_position_{nullptr},
+        camera_up_{nullptr},
+        camera_front_{nullptr},
         start_pitch_{0},
         start_yaw_{0},
         type_{},
@@ -770,6 +772,8 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.camera_position_),
+        PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.camera_up_),
+        PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.camera_front_),
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.start_pitch_),
         PROTOBUF_FIELD_OFFSET(::aim::Room, _impl_.start_yaw_),
         ::_pbi::kInvalidFieldOffsetTag,
@@ -779,6 +783,8 @@ const ::uint32_t
         0,
         1,
         2,
+        3,
+        4,
         ~0u,
         ~0u,
         ~0u,
@@ -1139,27 +1145,27 @@ static const ::_pbi::MigrationSchema
         {0, 11, -1, sizeof(::aim::SimpleRoom)},
         {14, 28, -1, sizeof(::aim::CylinderRoom)},
         {34, 43, -1, sizeof(::aim::BarrelRoom)},
-        {44, 59, -1, sizeof(::aim::Room)},
-        {65, -1, -1, sizeof(::aim::RegionLength)},
-        {77, 87, -1, sizeof(::aim::RegionVec2)},
-        {89, 100, -1, sizeof(::aim::RegionVec3)},
-        {103, 118, -1, sizeof(::aim::TargetRegion)},
-        {124, 136, -1, sizeof(::aim::RectangleTargetRegion)},
-        {140, 150, -1, sizeof(::aim::EllipseTargetRegion)},
-        {152, 162, -1, sizeof(::aim::CircleTargetRegion)},
-        {164, 177, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {182, 194, -1, sizeof(::aim::ScenarioReferenceOverrides)},
-        {198, 213, -1, sizeof(::aim::ShotType)},
-        {219, 242, -1, sizeof(::aim::ScenarioDef)},
-        {256, 265, -1, sizeof(::aim::StaticScenarioDef)},
-        {266, 277, -1, sizeof(::aim::CenteringScenarioDef)},
-        {280, 290, -1, sizeof(::aim::BarrelScenarioDef)},
-        {292, 305, -1, sizeof(::aim::LinearScenarioDef)},
-        {310, 324, -1, sizeof(::aim::WallStrafeScenarioDef)},
-        {330, 344, -1, sizeof(::aim::WallArcScenarioDef)},
-        {350, 366, -1, sizeof(::aim::TargetDef)},
-        {374, 385, -1, sizeof(::aim::PillTargetDef)},
-        {388, 406, -1, sizeof(::aim::TargetProfile)},
+        {44, 61, -1, sizeof(::aim::Room)},
+        {69, -1, -1, sizeof(::aim::RegionLength)},
+        {81, 91, -1, sizeof(::aim::RegionVec2)},
+        {93, 104, -1, sizeof(::aim::RegionVec3)},
+        {107, 122, -1, sizeof(::aim::TargetRegion)},
+        {128, 140, -1, sizeof(::aim::RectangleTargetRegion)},
+        {144, 154, -1, sizeof(::aim::EllipseTargetRegion)},
+        {156, 166, -1, sizeof(::aim::CircleTargetRegion)},
+        {168, 181, -1, sizeof(::aim::TargetPlacementStrategy)},
+        {186, 198, -1, sizeof(::aim::ScenarioReferenceOverrides)},
+        {202, 217, -1, sizeof(::aim::ShotType)},
+        {223, 246, -1, sizeof(::aim::ScenarioDef)},
+        {260, 269, -1, sizeof(::aim::StaticScenarioDef)},
+        {270, 281, -1, sizeof(::aim::CenteringScenarioDef)},
+        {284, 294, -1, sizeof(::aim::BarrelScenarioDef)},
+        {296, 309, -1, sizeof(::aim::LinearScenarioDef)},
+        {314, 328, -1, sizeof(::aim::WallStrafeScenarioDef)},
+        {334, 348, -1, sizeof(::aim::WallArcScenarioDef)},
+        {354, 370, -1, sizeof(::aim::TargetDef)},
+        {378, 389, -1, sizeof(::aim::PillTargetDef)},
+        {392, 410, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1195,101 +1201,103 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ht\030\001 \001(\002\022\016\n\006radius\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022"
     "\037\n\027width_perimeter_percent\030\004 \001(\002\022\022\n\nhide"
     "_sides\030\005 \001(\010\022\032\n\022side_angle_degrees\030\006 \001(\002"
-    "\"\034\n\nBarrelRoom\022\016\n\006radius\030\001 \001(\002\"\334\001\n\004Room\022"
+    "\"\034\n\nBarrelRoom\022\016\n\006radius\030\001 \001(\002\"\247\002\n\004Room\022"
     "(\n\017camera_position\030\001 \001(\0132\017.aim.StoredVec"
-    "3\022\023\n\013start_pitch\030\002 \001(\002\022\021\n\tstart_yaw\030\003 \001("
-    "\002\022&\n\013simple_room\030\004 \001(\0132\017.aim.SimpleRoomH"
-    "\000\022*\n\rcylinder_room\030\005 \001(\0132\021.aim.CylinderR"
-    "oomH\000\022&\n\013barrel_room\030\006 \001(\0132\017.aim.BarrelR"
-    "oomH\000B\006\n\004type\"]\n\014RegionLength\022\031\n\017x_perce"
-    "nt_value\030\001 \001(\002H\000\022\031\n\017y_percent_value\030\002 \001("
-    "\002H\000\022\017\n\005value\030\003 \001(\002H\000B\006\n\004type\"H\n\nRegionVe"
-    "c2\022\034\n\001x\030\001 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\002 "
-    "\001(\0132\021.aim.RegionLength\"f\n\nRegionVec3\022\034\n\001"
-    "x\030\001 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\002 \001(\0132\021."
-    "aim.RegionLength\022\034\n\001z\030\003 \001(\0132\021.aim.Region"
-    "Length\"\201\002\n\014TargetRegion\022\026\n\016percent_chanc"
-    "e\030\001 \001(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim.RegionLe"
-    "ngth\022#\n\010y_offset\030\003 \001(\0132\021.aim.RegionLengt"
-    "h\022/\n\trectangle\030\004 \001(\0132\032.aim.RectangleTarg"
-    "etRegionH\000\022+\n\007ellipse\030\005 \001(\0132\030.aim.Ellips"
-    "eTargetRegionH\000\022)\n\006circle\030\006 \001(\0132\027.aim.Ci"
-    "rcleTargetRegionH\000B\006\n\004type\"\267\001\n\025Rectangle"
-    "TargetRegion\022#\n\010x_length\030\001 \001(\0132\021.aim.Reg"
-    "ionLength\022#\n\010y_length\030\002 \001(\0132\021.aim.Region"
-    "Length\022)\n\016inner_x_length\030\003 \001(\0132\021.aim.Reg"
-    "ionLength\022)\n\016inner_y_length\030\004 \001(\0132\021.aim."
-    "RegionLength\"c\n\023EllipseTargetRegion\022%\n\nx"
-    "_diameter\030\001 \001(\0132\021.aim.RegionLength\022%\n\ny_"
-    "diameter\030\002 \001(\0132\021.aim.RegionLength\"d\n\022Cir"
-    "cleTargetRegion\022#\n\010diameter\030\001 \001(\0132\021.aim."
-    "RegionLength\022)\n\016inner_diameter\030\002 \001(\0132\021.a"
-    "im.RegionLength\"\261\001\n\027TargetPlacementStrat"
-    "egy\022\"\n\007regions\030\001 \003(\0132\021.aim.TargetRegion\022"
-    "\024\n\014region_order\030\002 \003(\005\022\024\n\014min_distance\030\003 "
-    "\001(\002\022\'\n\037fixed_distance_from_last_target\030\004"
-    " \001(\002\022\035\n\025fixed_distance_jitter\030\005 \001(\002\"\207\001\n\032"
-    "ScenarioReferenceOverrides\022\030\n\020duration_s"
-    "econds\030\001 \001(\002\022 \n\030target_radius_multiplier"
-    "\030\002 \001(\002\022\023\n\013num_targets\030\003 \001(\005\022\030\n\020speed_mul"
-    "tiplier\030\004 \001(\002\"\254\001\n\010ShotType\022\016\n\004poke\030\001 \001(\010"
-    "H\000\022\027\n\rtracking_kill\030\002 \001(\010H\000\022\035\n\023tracking_"
-    "invincible\030\003 \001(\010H\000\022\026\n\014click_single\030\004 \001(\010"
-    "H\000\022\036\n\026poke_kill_time_seconds\030\n \001(\002\022\030\n\020no"
-    "_partial_kills\030\013 \001(\010B\006\n\004type\"\263\004\n\013Scenari"
-    "oDef\022\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_se"
-    "conds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\n"
-    "target_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n\trefe"
-    "rence\030\006 \001(\t\0222\n\toverrides\030\007 \001(\0132\037.aim.Sce"
-    "narioReferenceOverrides\022 \n\tshot_type\030\010 \001"
-    "(\0132\r.aim.ShotType\022!\n\031accuracy_penalty_mo"
-    "difier\030\t \001(\002\022,\n\nstatic_def\030\n \001(\0132\026.aim.S"
-    "taticScenarioDefH\000\0222\n\rcentering_def\030\013 \001("
-    "\0132\031.aim.CenteringScenarioDefH\000\022,\n\nbarrel"
-    "_def\030\014 \001(\0132\026.aim.BarrelScenarioDefH\000\022,\n\n"
-    "linear_def\030\r \001(\0132\026.aim.LinearScenarioDef"
-    "H\000\0225\n\017wall_strafe_def\030\016 \001(\0132\032.aim.WallSt"
-    "rafeScenarioDefH\000\022/\n\014wall_arc_def\030\017 \001(\0132"
-    "\027.aim.WallArcScenarioDefH\000B\006\n\004type\"T\n\021St"
-    "aticScenarioDef\022\?\n\031target_placement_stra"
-    "tegy\030\001 \001(\0132\034.aim.TargetPlacementStrategy"
-    "\"\222\001\n\024CenteringScenarioDef\022$\n\013wall_points"
-    "\030\001 \003(\0132\017.aim.RegionVec2\022\?\n\031target_placem"
-    "ent_strategy\030\002 \001(\0132\034.aim.TargetPlacement"
-    "Strategy\022\023\n\013orient_pill\030\003 \001(\010\"v\n\021BarrelS"
+    "3\022\"\n\tcamera_up\030\002 \001(\0132\017.aim.StoredVec3\022%\n"
+    "\014camera_front\030\003 \001(\0132\017.aim.StoredVec3\022\023\n\013"
+    "start_pitch\030\004 \001(\002\022\021\n\tstart_yaw\030\005 \001(\002\022&\n\013"
+    "simple_room\030\025 \001(\0132\017.aim.SimpleRoomH\000\022*\n\r"
+    "cylinder_room\030\026 \001(\0132\021.aim.CylinderRoomH\000"
+    "\022&\n\013barrel_room\030\027 \001(\0132\017.aim.BarrelRoomH\000"
+    "B\006\n\004type\"]\n\014RegionLength\022\031\n\017x_percent_va"
+    "lue\030\001 \001(\002H\000\022\031\n\017y_percent_value\030\002 \001(\002H\000\022\017"
+    "\n\005value\030\003 \001(\002H\000B\006\n\004type\"H\n\nRegionVec2\022\034\n"
+    "\001x\030\001 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\002 \001(\0132\021"
+    ".aim.RegionLength\"f\n\nRegionVec3\022\034\n\001x\030\001 \001"
+    "(\0132\021.aim.RegionLength\022\034\n\001y\030\002 \001(\0132\021.aim.R"
+    "egionLength\022\034\n\001z\030\003 \001(\0132\021.aim.RegionLengt"
+    "h\"\201\002\n\014TargetRegion\022\026\n\016percent_chance\030\001 \001"
+    "(\002\022#\n\010x_offset\030\002 \001(\0132\021.aim.RegionLength\022"
+    "#\n\010y_offset\030\003 \001(\0132\021.aim.RegionLength\022/\n\t"
+    "rectangle\030\004 \001(\0132\032.aim.RectangleTargetReg"
+    "ionH\000\022+\n\007ellipse\030\005 \001(\0132\030.aim.EllipseTarg"
+    "etRegionH\000\022)\n\006circle\030\006 \001(\0132\027.aim.CircleT"
+    "argetRegionH\000B\006\n\004type\"\267\001\n\025RectangleTarge"
+    "tRegion\022#\n\010x_length\030\001 \001(\0132\021.aim.RegionLe"
+    "ngth\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionLengt"
+    "h\022)\n\016inner_x_length\030\003 \001(\0132\021.aim.RegionLe"
+    "ngth\022)\n\016inner_y_length\030\004 \001(\0132\021.aim.Regio"
+    "nLength\"c\n\023EllipseTargetRegion\022%\n\nx_diam"
+    "eter\030\001 \001(\0132\021.aim.RegionLength\022%\n\ny_diame"
+    "ter\030\002 \001(\0132\021.aim.RegionLength\"d\n\022CircleTa"
+    "rgetRegion\022#\n\010diameter\030\001 \001(\0132\021.aim.Regio"
+    "nLength\022)\n\016inner_diameter\030\002 \001(\0132\021.aim.Re"
+    "gionLength\"\261\001\n\027TargetPlacementStrategy\022\""
+    "\n\007regions\030\001 \003(\0132\021.aim.TargetRegion\022\024\n\014re"
+    "gion_order\030\002 \003(\005\022\024\n\014min_distance\030\003 \001(\002\022\'"
+    "\n\037fixed_distance_from_last_target\030\004 \001(\002\022"
+    "\035\n\025fixed_distance_jitter\030\005 \001(\002\"\207\001\n\032Scena"
+    "rioReferenceOverrides\022\030\n\020duration_second"
+    "s\030\001 \001(\002\022 \n\030target_radius_multiplier\030\002 \001("
+    "\002\022\023\n\013num_targets\030\003 \001(\005\022\030\n\020speed_multipli"
+    "er\030\004 \001(\002\"\254\001\n\010ShotType\022\016\n\004poke\030\001 \001(\010H\000\022\027\n"
+    "\rtracking_kill\030\002 \001(\010H\000\022\035\n\023tracking_invin"
+    "cible\030\003 \001(\010H\000\022\026\n\014click_single\030\004 \001(\010H\000\022\036\n"
+    "\026poke_kill_time_seconds\030\n \001(\002\022\030\n\020no_part"
+    "ial_kills\030\013 \001(\010B\006\n\004type\"\263\004\n\013ScenarioDef\022"
+    "\023\n\013scenario_id\030\001 \001(\t\022\030\n\020duration_seconds"
+    "\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarge"
+    "t_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n\treference"
+    "\030\006 \001(\t\0222\n\toverrides\030\007 \001(\0132\037.aim.Scenario"
+    "ReferenceOverrides\022 \n\tshot_type\030\010 \001(\0132\r."
+    "aim.ShotType\022!\n\031accuracy_penalty_modifie"
+    "r\030\t \001(\002\022,\n\nstatic_def\030\n \001(\0132\026.aim.Static"
+    "ScenarioDefH\000\0222\n\rcentering_def\030\013 \001(\0132\031.a"
+    "im.CenteringScenarioDefH\000\022,\n\nbarrel_def\030"
+    "\014 \001(\0132\026.aim.BarrelScenarioDefH\000\022,\n\nlinea"
+    "r_def\030\r \001(\0132\026.aim.LinearScenarioDefH\000\0225\n"
+    "\017wall_strafe_def\030\016 \001(\0132\032.aim.WallStrafeS"
+    "cenarioDefH\000\022/\n\014wall_arc_def\030\017 \001(\0132\027.aim"
+    ".WallArcScenarioDefH\000B\006\n\004type\"T\n\021StaticS"
     "cenarioDef\022\?\n\031target_placement_strategy\030"
-    "\001 \001(\0132\034.aim.TargetPlacementStrategy\022 \n\030d"
-    "irection_radius_percent\030\002 \001(\002\"\230\001\n\021Linear"
-    "ScenarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitt"
-    "er\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022"
-    "\?\n\031target_placement_strategy\030\005 \001(\0132\034.aim"
-    ".TargetPlacementStrategy\"\325\001\n\025WallStrafeS"
-    "cenarioDef\022 \n\005width\030\001 \001(\0132\021.aim.RegionLe"
-    "ngth\022\034\n\001y\030\002 \001(\0132\021.aim.RegionLength\022\'\n\014mi"
-    "n_distance\030\003 \001(\0132\021.aim.RegionLength\022\'\n\014m"
-    "ax_distance\030\004 \001(\0132\021.aim.RegionLength\022\024\n\014"
-    "acceleration\030\005 \001(\002\022\024\n\014deceleration\030\006 \001(\002"
-    "\"\273\001\n\022WallArcScenarioDef\022 \n\005width\030\001 \001(\0132\021"
-    ".aim.RegionLength\022!\n\006height\030\002 \001(\0132\021.aim."
-    "RegionLength\022\020\n\010duration\030\003 \001(\002\022\026\n\016contro"
-    "l_height\030\004 \001(\002\022\035\n\025control_height_jitter\030"
-    "\005 \001(\002\022\027\n\017start_on_ground\030\006 \001(\010\"\214\002\n\tTarge"
-    "tDef\022$\n\010profiles\030\001 \003(\0132\022.aim.TargetProfi"
-    "le\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remove_closes"
-    "t_on_miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n"
-    "\026newest_target_is_ghost\030\005 \001(\010\022 \n\030new_tar"
-    "get_delay_seconds\030\006 \001(\002\022#\n\033remove_target"
-    "_after_seconds\030\007 \001(\002\022\'\n\037stagger_initial_"
-    "targets_seconds\030\010 \001(\002\"^\n\rPillTargetDef\022\016"
-    "\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.aim.StoredV"
-    "ec3\022 \n\007wall_up\030\003 \001(\0132\017.aim.StoredVec2\"\203\002"
-    "\n\rTargetProfile\022\026\n\016percent_chance\030\001 \001(\002\022"
-    "\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_radius_"
-    "jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jit"
-    "ter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025hea"
-    "lth_seconds_jitter\030\007 \001(\002\022\035\n\025target_radiu"
-    "s_at_kill\030\010 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.Pill"
-    "TargetDefH\000B\006\n\004typeb\010editionsp\350\007"
+    "\001 \001(\0132\034.aim.TargetPlacementStrategy\"\222\001\n\024"
+    "CenteringScenarioDef\022$\n\013wall_points\030\001 \003("
+    "\0132\017.aim.RegionVec2\022\?\n\031target_placement_s"
+    "trategy\030\002 \001(\0132\034.aim.TargetPlacementStrat"
+    "egy\022\023\n\013orient_pill\030\003 \001(\010\"v\n\021BarrelScenar"
+    "ioDef\022\?\n\031target_placement_strategy\030\001 \001(\013"
+    "2\034.aim.TargetPlacementStrategy\022 \n\030direct"
+    "ion_radius_percent\030\002 \001(\002\"\230\001\n\021LinearScena"
+    "rioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitter\030\002 "
+    "\001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022\?\n\031ta"
+    "rget_placement_strategy\030\005 \001(\0132\034.aim.Targ"
+    "etPlacementStrategy\"\325\001\n\025WallStrafeScenar"
+    "ioDef\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022"
+    "\034\n\001y\030\002 \001(\0132\021.aim.RegionLength\022\'\n\014min_dis"
+    "tance\030\003 \001(\0132\021.aim.RegionLength\022\'\n\014max_di"
+    "stance\030\004 \001(\0132\021.aim.RegionLength\022\024\n\014accel"
+    "eration\030\005 \001(\002\022\024\n\014deceleration\030\006 \001(\002\"\273\001\n\022"
+    "WallArcScenarioDef\022 \n\005width\030\001 \001(\0132\021.aim."
+    "RegionLength\022!\n\006height\030\002 \001(\0132\021.aim.Regio"
+    "nLength\022\020\n\010duration\030\003 \001(\002\022\026\n\016control_hei"
+    "ght\030\004 \001(\002\022\035\n\025control_height_jitter\030\005 \001(\002"
+    "\022\027\n\017start_on_ground\030\006 \001(\010\"\214\002\n\tTargetDef\022"
+    "$\n\010profiles\030\001 \003(\0132\022.aim.TargetProfile\022\023\n"
+    "\013num_targets\030\002 \001(\005\022\036\n\026remove_closest_on_"
+    "miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newe"
+    "st_target_is_ghost\030\005 \001(\010\022 \n\030new_target_d"
+    "elay_seconds\030\006 \001(\002\022#\n\033remove_target_afte"
+    "r_seconds\030\007 \001(\002\022\'\n\037stagger_initial_targe"
+    "ts_seconds\030\010 \001(\002\"^\n\rPillTargetDef\022\016\n\006hei"
+    "ght\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.aim.StoredVec3\022 "
+    "\n\007wall_up\030\003 \001(\0132\017.aim.StoredVec2\"\203\002\n\rTar"
+    "getProfile\022\026\n\016percent_chance\030\001 \001(\002\022\025\n\rta"
+    "rget_radius\030\002 \001(\002\022\034\n\024target_radius_jitte"
+    "r\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005"
+    " \001(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025health_s"
+    "econds_jitter\030\007 \001(\002\022\035\n\025target_radius_at_"
+    "kill\030\010 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTarge"
+    "tDefH\000B\006\n\004typeb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1299,7 +1307,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    4032,
+    4107,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -2157,6 +2165,16 @@ void Room::clear_camera_position() {
   if (_impl_.camera_position_ != nullptr) _impl_.camera_position_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
+void Room::clear_camera_up() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.camera_up_ != nullptr) _impl_.camera_up_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+void Room::clear_camera_front() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.camera_front_ != nullptr) _impl_.camera_front_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
 void Room::set_allocated_simple_room(::aim::SimpleRoom* simple_room) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
@@ -2230,6 +2248,12 @@ Room::Room(
   _impl_.camera_position_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
                               arena, *from._impl_.camera_position_)
                         : nullptr;
+  _impl_.camera_up_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
+                              arena, *from._impl_.camera_up_)
+                        : nullptr;
+  _impl_.camera_front_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
+                              arena, *from._impl_.camera_front_)
+                        : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, start_pitch_),
            reinterpret_cast<const char *>(&from._impl_) +
@@ -2278,6 +2302,8 @@ inline void Room::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.camera_position_;
+  delete this_._impl_.camera_up_;
+  delete this_._impl_.camera_front_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -2356,16 +2382,16 @@ const ::google::protobuf::internal::ClassData* Room::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 6, 4, 0, 2> Room::_table_ = {
+const ::_pbi::TcParseTable<3, 8, 6, 0, 2> Room::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Room, _impl_._has_bits_),
     0, // no _extensions_
-    6, 24,  // max_field_number, fast_idx_mask
+    23, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967232,  // skipmap
+    4287627232,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
-    4,  // num_aux_entries
+    8,  // num_field_entries
+    6,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -2378,34 +2404,50 @@ const ::_pbi::TcParseTable<2, 6, 4, 0, 2> Room::_table_ = {
     // .aim.StoredVec3 camera_position = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_position_)}},
-    // float start_pitch = 2;
+    // .aim.StoredVec3 camera_up = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_up_)}},
+    // .aim.StoredVec3 camera_front = 3;
+    {::_pbi::TcParser::FastMtS1,
+     {26, 2, 2, PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_front_)}},
+    // float start_pitch = 4;
     {::_pbi::TcParser::FastF32S1,
-     {21, 1, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.start_pitch_)}},
-    // float start_yaw = 3;
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.start_pitch_)}},
+    // float start_yaw = 5;
     {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_)}},
+     {45, 4, 0, PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
     // .aim.StoredVec3 camera_position = 1;
     {PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_position_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // float start_pitch = 2;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.start_pitch_), _Internal::kHasBitsOffset + 1, 0,
+    // .aim.StoredVec3 camera_up = 2;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_up_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.StoredVec3 camera_front = 3;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.camera_front_), _Internal::kHasBitsOffset + 2, 2,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float start_pitch = 4;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.start_pitch_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float start_yaw = 3;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_), _Internal::kHasBitsOffset + 2, 0,
+    // float start_yaw = 5;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.start_yaw_), _Internal::kHasBitsOffset + 4, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.SimpleRoom simple_room = 4;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.simple_room_), _Internal::kOneofCaseOffset + 0, 1,
+    // .aim.SimpleRoom simple_room = 21;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.simple_room_), _Internal::kOneofCaseOffset + 0, 3,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.CylinderRoom cylinder_room = 5;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.cylinder_room_), _Internal::kOneofCaseOffset + 0, 2,
+    // .aim.CylinderRoom cylinder_room = 22;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.cylinder_room_), _Internal::kOneofCaseOffset + 0, 4,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.BarrelRoom barrel_room = 6;
-    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.barrel_room_), _Internal::kOneofCaseOffset + 0, 3,
+    // .aim.BarrelRoom barrel_room = 23;
+    {PROTOBUF_FIELD_OFFSET(Room, _impl_.type_.barrel_room_), _Internal::kOneofCaseOffset + 0, 5,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
+    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
+    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
     {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
     {::_pbi::TcParser::GetTable<::aim::SimpleRoom>()},
     {::_pbi::TcParser::GetTable<::aim::CylinderRoom>()},
@@ -2422,11 +2464,21 @@ PROTOBUF_NOINLINE void Room::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    ABSL_DCHECK(_impl_.camera_position_ != nullptr);
-    _impl_.camera_position_->Clear();
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.camera_position_ != nullptr);
+      _impl_.camera_position_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.camera_up_ != nullptr);
+      _impl_.camera_up_->Clear();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      ABSL_DCHECK(_impl_.camera_front_ != nullptr);
+      _impl_.camera_front_->Clear();
+    }
   }
-  if (cached_has_bits & 0x00000006u) {
+  if (cached_has_bits & 0x00000018u) {
     ::memset(&_impl_.start_pitch_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.start_yaw_) -
         reinterpret_cast<char*>(&_impl_.start_pitch_)) + sizeof(_impl_.start_yaw_));
@@ -2459,36 +2511,50 @@ PROTOBUF_NOINLINE void Room::Clear() {
                 stream);
           }
 
-          // float start_pitch = 2;
+          // .aim.StoredVec3 camera_up = 2;
           if (cached_has_bits & 0x00000002u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                2, this_._internal_start_pitch(), target);
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                2, *this_._impl_.camera_up_, this_._impl_.camera_up_->GetCachedSize(), target,
+                stream);
           }
 
-          // float start_yaw = 3;
+          // .aim.StoredVec3 camera_front = 3;
           if (cached_has_bits & 0x00000004u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                3, *this_._impl_.camera_front_, this_._impl_.camera_front_->GetCachedSize(), target,
+                stream);
+          }
+
+          // float start_pitch = 4;
+          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_start_yaw(), target);
+                4, this_._internal_start_pitch(), target);
+          }
+
+          // float start_yaw = 5;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_start_yaw(), target);
           }
 
           switch (this_.type_case()) {
             case kSimpleRoom: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  4, *this_._impl_.type_.simple_room_, this_._impl_.type_.simple_room_->GetCachedSize(), target,
+                  21, *this_._impl_.type_.simple_room_, this_._impl_.type_.simple_room_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kCylinderRoom: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  5, *this_._impl_.type_.cylinder_room_, this_._impl_.type_.cylinder_room_->GetCachedSize(), target,
+                  22, *this_._impl_.type_.cylinder_room_, this_._impl_.type_.cylinder_room_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kBarrelRoom: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  6, *this_._impl_.type_.barrel_room_, this_._impl_.type_.barrel_room_->GetCachedSize(), target,
+                  23, *this_._impl_.type_.barrel_room_, this_._impl_.type_.barrel_room_->GetCachedSize(), target,
                   stream);
               break;
             }
@@ -2520,37 +2586,47 @@ PROTOBUF_NOINLINE void Room::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
+          if (cached_has_bits & 0x0000001fu) {
             // .aim.StoredVec3 camera_position = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.camera_position_);
             }
-            // float start_pitch = 2;
+            // .aim.StoredVec3 camera_up = 2;
             if (cached_has_bits & 0x00000002u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.camera_up_);
+            }
+            // .aim.StoredVec3 camera_front = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.camera_front_);
+            }
+            // float start_pitch = 4;
+            if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
-            // float start_yaw = 3;
-            if (cached_has_bits & 0x00000004u) {
+            // float start_yaw = 5;
+            if (cached_has_bits & 0x00000010u) {
               total_size += 5;
             }
           }
           switch (this_.type_case()) {
-            // .aim.SimpleRoom simple_room = 4;
+            // .aim.SimpleRoom simple_room = 21;
             case kSimpleRoom: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.simple_room_);
               break;
             }
-            // .aim.CylinderRoom cylinder_room = 5;
+            // .aim.CylinderRoom cylinder_room = 22;
             case kCylinderRoom: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.cylinder_room_);
               break;
             }
-            // .aim.BarrelRoom barrel_room = 6;
+            // .aim.BarrelRoom barrel_room = 23;
             case kBarrelRoom: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.barrel_room_);
               break;
             }
@@ -2572,7 +2648,7 @@ void Room::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::pr
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.camera_position_ != nullptr);
       if (_this->_impl_.camera_position_ == nullptr) {
@@ -2583,9 +2659,27 @@ void Room::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::pr
       }
     }
     if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.start_pitch_ = from._impl_.start_pitch_;
+      ABSL_DCHECK(from._impl_.camera_up_ != nullptr);
+      if (_this->_impl_.camera_up_ == nullptr) {
+        _this->_impl_.camera_up_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.camera_up_);
+      } else {
+        _this->_impl_.camera_up_->MergeFrom(*from._impl_.camera_up_);
+      }
     }
     if (cached_has_bits & 0x00000004u) {
+      ABSL_DCHECK(from._impl_.camera_front_ != nullptr);
+      if (_this->_impl_.camera_front_ == nullptr) {
+        _this->_impl_.camera_front_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.camera_front_);
+      } else {
+        _this->_impl_.camera_front_->MergeFrom(*from._impl_.camera_front_);
+      }
+    }
+    if (cached_has_bits & 0x00000008u) {
+      _this->_impl_.start_pitch_ = from._impl_.start_pitch_;
+    }
+    if (cached_has_bits & 0x00000010u) {
       _this->_impl_.start_yaw_ = from._impl_.start_yaw_;
     }
   }

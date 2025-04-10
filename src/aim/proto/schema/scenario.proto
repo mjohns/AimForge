@@ -31,12 +31,17 @@ message BarrelRoom {
 
 message Room {
   StoredVec3 camera_position = 1;
-  float start_pitch = 2;
-  float start_yaw = 3;
+  // Default to (0,0,1)
+  StoredVec3 camera_up = 2;
+  // Default to (0,1,0)
+  StoredVec3 camera_front = 3;
+  float start_pitch = 4;
+  float start_yaw = 5;
+
   oneof type {
-    SimpleRoom simple_room = 4;
-    CylinderRoom cylinder_room = 5;
-    BarrelRoom barrel_room = 6;
+    SimpleRoom simple_room = 21;
+    CylinderRoom cylinder_room = 22;
+    BarrelRoom barrel_room = 23;
   }
 }
 

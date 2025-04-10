@@ -4,6 +4,8 @@
 #include <glm/vec3.hpp>
 
 #include "aim/common/simple_types.h"
+#include "aim/common/util.h"
+#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
@@ -26,8 +28,17 @@ glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov = 103
 
 struct CameraParams {
   CameraParams() {}
-  CameraParams(float pitch, float yaw, const glm::vec3& position)
-      : pitch(pitch), yaw(yaw), position(position) {}
+  CameraParams(const Room& room) {
+    pitch = room.start_pitch();
+    yaw = room.start_yaw();
+    position = ToVec3(room.camera_position());
+    if (room.has_camera_up()) {
+      up = ToVec3(room.camera_up());
+    }
+    if (room.has_camera_front()) {
+      front = ToVec3(room.camera_front());
+    }
+  }
 
   glm::vec3 position{0, 0, 0};
   glm::vec3 up{0, 0, 1};

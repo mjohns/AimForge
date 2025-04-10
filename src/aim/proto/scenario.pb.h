@@ -2142,9 +2142,9 @@ class Room final : public ::google::protobuf::Message
     return *internal_default_instance();
   }
   enum TypeCase {
-    kSimpleRoom = 4,
-    kCylinderRoom = 5,
-    kBarrelRoom = 6,
+    kSimpleRoom = 21,
+    kCylinderRoom = 22,
+    kBarrelRoom = 23,
     TYPE_NOT_SET = 0,
   };
   static inline const Room* internal_default_instance() {
@@ -2239,11 +2239,13 @@ class Room final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kCameraPositionFieldNumber = 1,
-    kStartPitchFieldNumber = 2,
-    kStartYawFieldNumber = 3,
-    kSimpleRoomFieldNumber = 4,
-    kCylinderRoomFieldNumber = 5,
-    kBarrelRoomFieldNumber = 6,
+    kCameraUpFieldNumber = 2,
+    kCameraFrontFieldNumber = 3,
+    kStartPitchFieldNumber = 4,
+    kStartYawFieldNumber = 5,
+    kSimpleRoomFieldNumber = 21,
+    kCylinderRoomFieldNumber = 22,
+    kBarrelRoomFieldNumber = 23,
   };
   // .aim.StoredVec3 camera_position = 1;
   bool has_camera_position() const;
@@ -2260,7 +2262,37 @@ class Room final : public ::google::protobuf::Message
   ::aim::StoredVec3* _internal_mutable_camera_position();
 
   public:
-  // float start_pitch = 2;
+  // .aim.StoredVec3 camera_up = 2;
+  bool has_camera_up() const;
+  void clear_camera_up() ;
+  const ::aim::StoredVec3& camera_up() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec3* release_camera_up();
+  ::aim::StoredVec3* mutable_camera_up();
+  void set_allocated_camera_up(::aim::StoredVec3* value);
+  void unsafe_arena_set_allocated_camera_up(::aim::StoredVec3* value);
+  ::aim::StoredVec3* unsafe_arena_release_camera_up();
+
+  private:
+  const ::aim::StoredVec3& _internal_camera_up() const;
+  ::aim::StoredVec3* _internal_mutable_camera_up();
+
+  public:
+  // .aim.StoredVec3 camera_front = 3;
+  bool has_camera_front() const;
+  void clear_camera_front() ;
+  const ::aim::StoredVec3& camera_front() const;
+  PROTOBUF_NODISCARD ::aim::StoredVec3* release_camera_front();
+  ::aim::StoredVec3* mutable_camera_front();
+  void set_allocated_camera_front(::aim::StoredVec3* value);
+  void unsafe_arena_set_allocated_camera_front(::aim::StoredVec3* value);
+  ::aim::StoredVec3* unsafe_arena_release_camera_front();
+
+  private:
+  const ::aim::StoredVec3& _internal_camera_front() const;
+  ::aim::StoredVec3* _internal_mutable_camera_front();
+
+  public:
+  // float start_pitch = 4;
   bool has_start_pitch() const;
   void clear_start_pitch() ;
   float start_pitch() const;
@@ -2271,7 +2303,7 @@ class Room final : public ::google::protobuf::Message
   void _internal_set_start_pitch(float value);
 
   public:
-  // float start_yaw = 3;
+  // float start_yaw = 5;
   bool has_start_yaw() const;
   void clear_start_yaw() ;
   float start_yaw() const;
@@ -2282,7 +2314,7 @@ class Room final : public ::google::protobuf::Message
   void _internal_set_start_yaw(float value);
 
   public:
-  // .aim.SimpleRoom simple_room = 4;
+  // .aim.SimpleRoom simple_room = 21;
   bool has_simple_room() const;
   private:
   bool _internal_has_simple_room() const;
@@ -2301,7 +2333,7 @@ class Room final : public ::google::protobuf::Message
   ::aim::SimpleRoom* _internal_mutable_simple_room();
 
   public:
-  // .aim.CylinderRoom cylinder_room = 5;
+  // .aim.CylinderRoom cylinder_room = 22;
   bool has_cylinder_room() const;
   private:
   bool _internal_has_cylinder_room() const;
@@ -2320,7 +2352,7 @@ class Room final : public ::google::protobuf::Message
   ::aim::CylinderRoom* _internal_mutable_cylinder_room();
 
   public:
-  // .aim.BarrelRoom barrel_room = 6;
+  // .aim.BarrelRoom barrel_room = 23;
   bool has_barrel_room() const;
   private:
   bool _internal_has_barrel_room() const;
@@ -2351,7 +2383,7 @@ class Room final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 6, 4,
+      3, 8, 6,
       0, 2>
       _table_;
 
@@ -2372,6 +2404,8 @@ class Room final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::StoredVec3* camera_position_;
+    ::aim::StoredVec3* camera_up_;
+    ::aim::StoredVec3* camera_front_;
     float start_pitch_;
     float start_yaw_;
     union TypeUnion {
@@ -6651,15 +6685,197 @@ inline void Room::set_allocated_camera_position(::aim::StoredVec3* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.Room.camera_position)
 }
 
-// float start_pitch = 2;
-inline bool Room::has_start_pitch() const {
+// .aim.StoredVec3 camera_up = 2;
+inline bool Room::has_camera_up() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.camera_up_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec3& Room::_internal_camera_up() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec3* p = _impl_.camera_up_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
+}
+inline const ::aim::StoredVec3& Room::camera_up() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Room.camera_up)
+  return _internal_camera_up();
+}
+inline void Room::unsafe_arena_set_allocated_camera_up(::aim::StoredVec3* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_up_);
+  }
+  _impl_.camera_up_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Room.camera_up)
+}
+inline ::aim::StoredVec3* Room::release_camera_up() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredVec3* released = _impl_.camera_up_;
+  _impl_.camera_up_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec3* Room::unsafe_arena_release_camera_up() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Room.camera_up)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredVec3* temp = _impl_.camera_up_;
+  _impl_.camera_up_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec3* Room::_internal_mutable_camera_up() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.camera_up_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
+    _impl_.camera_up_ = reinterpret_cast<::aim::StoredVec3*>(p);
+  }
+  return _impl_.camera_up_;
+}
+inline ::aim::StoredVec3* Room::mutable_camera_up() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::StoredVec3* _msg = _internal_mutable_camera_up();
+  // @@protoc_insertion_point(field_mutable:aim.Room.camera_up)
+  return _msg;
+}
+inline void Room::set_allocated_camera_up(::aim::StoredVec3* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_up_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.camera_up_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Room.camera_up)
+}
+
+// .aim.StoredVec3 camera_front = 3;
+inline bool Room::has_camera_front() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.camera_front_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredVec3& Room::_internal_camera_front() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredVec3* p = _impl_.camera_front_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredVec3&>(::aim::_StoredVec3_default_instance_);
+}
+inline const ::aim::StoredVec3& Room::camera_front() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Room.camera_front)
+  return _internal_camera_front();
+}
+inline void Room::unsafe_arena_set_allocated_camera_front(::aim::StoredVec3* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_front_);
+  }
+  _impl_.camera_front_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Room.camera_front)
+}
+inline ::aim::StoredVec3* Room::release_camera_front() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::StoredVec3* released = _impl_.camera_front_;
+  _impl_.camera_front_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredVec3* Room::unsafe_arena_release_camera_front() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Room.camera_front)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::StoredVec3* temp = _impl_.camera_front_;
+  _impl_.camera_front_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredVec3* Room::_internal_mutable_camera_front() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.camera_front_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredVec3>(GetArena());
+    _impl_.camera_front_ = reinterpret_cast<::aim::StoredVec3*>(p);
+  }
+  return _impl_.camera_front_;
+}
+inline ::aim::StoredVec3* Room::mutable_camera_front() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::StoredVec3* _msg = _internal_mutable_camera_front();
+  // @@protoc_insertion_point(field_mutable:aim.Room.camera_front)
+  return _msg;
+}
+inline void Room::set_allocated_camera_front(::aim::StoredVec3* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.camera_front_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.camera_front_ = reinterpret_cast<::aim::StoredVec3*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Room.camera_front)
+}
+
+// float start_pitch = 4;
+inline bool Room::has_start_pitch() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void Room::clear_start_pitch() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_pitch_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float Room::start_pitch() const {
   // @@protoc_insertion_point(field_get:aim.Room.start_pitch)
@@ -6667,7 +6883,7 @@ inline float Room::start_pitch() const {
 }
 inline void Room::set_start_pitch(float value) {
   _internal_set_start_pitch(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.Room.start_pitch)
 }
 inline float Room::_internal_start_pitch() const {
@@ -6679,15 +6895,15 @@ inline void Room::_internal_set_start_pitch(float value) {
   _impl_.start_pitch_ = value;
 }
 
-// float start_yaw = 3;
+// float start_yaw = 5;
 inline bool Room::has_start_yaw() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void Room::clear_start_yaw() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_yaw_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float Room::start_yaw() const {
   // @@protoc_insertion_point(field_get:aim.Room.start_yaw)
@@ -6695,7 +6911,7 @@ inline float Room::start_yaw() const {
 }
 inline void Room::set_start_yaw(float value) {
   _internal_set_start_yaw(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.Room.start_yaw)
 }
 inline float Room::_internal_start_yaw() const {
@@ -6707,7 +6923,7 @@ inline void Room::_internal_set_start_yaw(float value) {
   _impl_.start_yaw_ = value;
 }
 
-// .aim.SimpleRoom simple_room = 4;
+// .aim.SimpleRoom simple_room = 21;
 inline bool Room::has_simple_room() const {
   return type_case() == kSimpleRoom;
 }
@@ -6786,7 +7002,7 @@ inline ::aim::SimpleRoom* Room::mutable_simple_room() ABSL_ATTRIBUTE_LIFETIME_BO
   return _msg;
 }
 
-// .aim.CylinderRoom cylinder_room = 5;
+// .aim.CylinderRoom cylinder_room = 22;
 inline bool Room::has_cylinder_room() const {
   return type_case() == kCylinderRoom;
 }
@@ -6865,7 +7081,7 @@ inline ::aim::CylinderRoom* Room::mutable_cylinder_room() ABSL_ATTRIBUTE_LIFETIM
   return _msg;
 }
 
-// .aim.BarrelRoom barrel_room = 6;
+// .aim.BarrelRoom barrel_room = 23;
 inline bool Room::has_barrel_room() const {
   return type_case() == kBarrelRoom;
 }
