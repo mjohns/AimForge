@@ -205,19 +205,28 @@ message LinearScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 5;
 }
 
+message WallStrafeProfile {
+  float percent_chance = 1;
+  RegionLength min_distance = 2;
+  RegionLength max_distance = 3;
+}
+
 message WallStrafeScenarioDef {
   // The available width for the target to move in.
   RegionLength width = 1;
+  // The available height for the target to move in. The target can escape this height based on the angle and where it starts the strafe from.
+  RegionLength height = 2;
 
   // The height the target will strafe at. Defaults to 0 (center of wall).
-  RegionLength y = 2;
+  RegionLength y = 3;
 
-  RegionLength min_distance = 3;
-  RegionLength max_distance = 4;
+  repeated WallStrafeProfile profiles = 4;
+  // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
+  repeated int32 profile_order = 5;
 
-  float acceleration = 5;
+  float acceleration = 6;
   // Defaults to acceleration if not set. Must also specify acceleration.
-  float deceleration = 6;
+  float deceleration = 7;
 }
 
 message WallArcScenarioDef {
