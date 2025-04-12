@@ -209,6 +209,10 @@ message WallStrafeProfile {
   float percent_chance = 1;
   RegionLength min_distance = 2;
   RegionLength max_distance = 3;
+
+  // Angle to strafe at. In range 0-45. Will choose between strafing up or down at this angle evenly.
+  float angle = 4;
+  float angle_jitter = 5;
 }
 
 message WallStrafeScenarioDef {

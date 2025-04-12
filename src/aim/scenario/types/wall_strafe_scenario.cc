@@ -33,9 +33,10 @@ class WallStrafeScenario : public BaseScenario {
     min_x_ = -0.5 * width;
     max_x_ = 0.5 * width;
 
-    float height = d.has_height() ? GetRegionLength(d.height(), wall_) : 0.85 * wall_.height;
-    min_y_ = -0.5 * height;
-    max_y_ = 0.5 * height;
+    float height = d.has_height() ? GetRegionLength(d.height(), wall_) : 0.6 * wall_.height;
+    float starting_y = GetRegionLength(d.y(), wall_);
+    min_y_ = (-0.5 * height) + starting_y;
+    max_y_ = (0.5 * height) + starting_y;
 
     acceleration_ = d.acceleration();
     deceleration_ = d.deceleration();
@@ -43,7 +44,6 @@ class WallStrafeScenario : public BaseScenario {
       deceleration_ = acceleration_;
     }
 
-    float starting_y = GetRegionLength(d.y(), wall_);
     last_direction_change_position_ = glm::vec2(0, starting_y);
 
     if (FlipCoin(app_->random_generator())) {
@@ -125,23 +125,33 @@ class WallStrafeScenario : public BaseScenario {
     float distance = dist(*app_->random_generator());
 
     glm::vec2 new_direction;
-    if (direction_.x > 0) {
-      new_direction = glm::vec2(-1, 0);
+    float angle =
+        abs(GetJitteredValue(profile.angle(), profile.angle_jitter(), app_->random_generator()));
+    angle = glm::clamp(angle, 0.f, 45.f);
+    if (current_pos.y >= max_y_) {
+      angle *= -1;
+    } else if (current_pos.y <= min_y_) {
+      // Keep angle positive
     } else {
-      new_direction = glm::vec2(1, 0);
-    }
-    direction_ = new_direction;
-
-    glm::vec2 potential_end_position = current_pos + distance * direction_;
-    float distance_mult = 1;
-    if (potential_end_position.x > max_x_) {
-      distance_mult = (max_x_ - current_pos.x) / distance;
-    }
-    if (potential_end_position.x < min_x_) {
-      distance_mult = (current_pos.x - min_x_) / distance;
+      // 50/50 strafe up or down
+      if (FlipCoin(app_->random_generator())) {
+        angle *= -1;
+      }
     }
 
-    distance *= distance_mult;
+    new_direction = RotateDegrees(glm::vec2(1, 0), angle);
+    if (direction_.x > 0) {
+      new_direction.x *= -1;
+    }
+
+    glm::vec2 end_pos = current_pos + distance * new_direction;
+    end_pos.x = glm::clamp(end_pos.x, min_x_, max_x_);
+    end_pos.y = glm::clamp(end_pos.y, min_y_, max_y_);
+
+    // Recalculate distance and direction
+    direction_ = end_pos - current_pos;
+    distance = glm::length(direction_);
+    direction_ = glm::normalize(direction_);
 
     current_target_travel_distance_ = distance;
     last_direction_change_position_ = current_pos;

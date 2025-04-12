@@ -1700,6 +1700,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     kMinDistanceFieldNumber = 2,
     kMaxDistanceFieldNumber = 3,
     kPercentChanceFieldNumber = 1,
+    kAngleFieldNumber = 4,
+    kAngleJitterFieldNumber = 5,
   };
   // .aim.RegionLength min_distance = 2;
   bool has_min_distance() const;
@@ -1742,12 +1744,34 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_percent_chance(float value);
 
   public:
+  // float angle = 4;
+  bool has_angle() const;
+  void clear_angle() ;
+  float angle() const;
+  void set_angle(float value);
+
+  private:
+  float _internal_angle() const;
+  void _internal_set_angle(float value);
+
+  public:
+  // float angle_jitter = 5;
+  bool has_angle_jitter() const;
+  void clear_angle_jitter() ;
+  float angle_jitter() const;
+  void set_angle_jitter(float value);
+
+  private:
+  float _internal_angle_jitter() const;
+  void _internal_set_angle_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallStrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 2,
+      3, 5, 2,
       0, 2>
       _table_;
 
@@ -1770,6 +1794,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     ::aim::RegionLength* min_distance_;
     ::aim::RegionLength* max_distance_;
     float percent_chance_;
+    float angle_;
+    float angle_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -11674,6 +11700,62 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
 
   _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.max_distance)
+}
+
+// float angle = 4;
+inline bool WallStrafeProfile::has_angle() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_angle() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float WallStrafeProfile::angle() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle)
+  return _internal_angle();
+}
+inline void WallStrafeProfile::set_angle(float value) {
+  _internal_set_angle(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle)
+}
+inline float WallStrafeProfile::_internal_angle() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.angle_;
+}
+inline void WallStrafeProfile::_internal_set_angle(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_ = value;
+}
+
+// float angle_jitter = 5;
+inline bool WallStrafeProfile::has_angle_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_angle_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float WallStrafeProfile::angle_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle_jitter)
+  return _internal_angle_jitter();
+}
+inline void WallStrafeProfile::set_angle_jitter(float value) {
+  _internal_set_angle_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle_jitter)
+}
+inline float WallStrafeProfile::_internal_angle_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.angle_jitter_;
+}
+inline void WallStrafeProfile::_internal_set_angle_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_jitter_ = value;
 }
 
 // -------------------------------------------------------------------
