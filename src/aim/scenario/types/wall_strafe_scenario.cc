@@ -28,28 +28,23 @@ class WallStrafeScenario : public BaseScenario {
  public:
   explicit WallStrafeScenario(const ScenarioDef& def, Application* app)
       : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
-    float width = def.wall_strafe_def().has_width()
-                      ? GetRegionLength(def.wall_strafe_def().width(), wall_)
-                      : 0.85 * wall_.width;
+    auto d = def.wall_strafe_def();
+    float width = d.has_width() ? GetRegionLength(d.width(), wall_) : 0.85 * wall_.width;
     min_x_ = -0.5 * width;
     max_x_ = 0.5 * width;
-    y_ = GetRegionLength(def.wall_strafe_def().y(), wall_);
-    min_strafe_distance_ = GetRegionLength(def.wall_strafe_def().min_distance(), wall_);
-    if (min_strafe_distance_ <= 0) {
-      min_strafe_distance_ = 30;
-    }
-    max_strafe_distance_ = GetRegionLength(def.wall_strafe_def().max_distance(), wall_);
-    if (max_strafe_distance_ <= 0) {
-      max_strafe_distance_ = width;
-    }
 
-    acceleration_ = def_.wall_strafe_def().acceleration();
-    deceleration_ = def_.wall_strafe_def().deceleration();
+    float height = d.has_height() ? GetRegionLength(d.height(), wall_) : 0.85 * wall_.height;
+    min_y_ = -0.5 * height;
+    max_y_ = 0.5 * height;
+
+    acceleration_ = d.acceleration();
+    deceleration_ = d.deceleration();
     if (deceleration_ <= 0) {
       deceleration_ = acceleration_;
     }
 
-    last_direction_change_position_ = glm::vec2(0, y_);
+    float starting_y = GetRegionLength(d.y(), wall_);
+    last_direction_change_position_ = glm::vec2(0, starting_y);
 
     if (FlipCoin(app_->random_generator())) {
       direction_ = glm::vec2(-1, 0);
@@ -57,7 +52,7 @@ class WallStrafeScenario : public BaseScenario {
       direction_ = glm::vec2(1, 0);
     }
 
-    ChangeDirection(0);
+    ChangeDirection(last_direction_change_position_);
   }
 
  protected:
@@ -84,7 +79,7 @@ class WallStrafeScenario : public BaseScenario {
       return;
     }
 
-    float distance = abs(target->wall_position->x - last_direction_change_position_.x);
+    float distance = glm::length(*target->wall_position - last_direction_change_position_);
     bool should_turn = distance > current_target_travel_distance_;
     if (acceleration_ > 0) {
       float delta_seconds = now_seconds - target->last_update_time_seconds;
@@ -93,7 +88,7 @@ class WallStrafeScenario : public BaseScenario {
         target->speed -= delta_seconds * deceleration_;
         if (target->speed <= 0) {
           target->speed = 0;
-          ChangeDirection(target->wall_position->x);
+          ChangeDirection(*target->wall_position);
           target->wall_direction = direction_;
         }
       } else {
@@ -107,7 +102,7 @@ class WallStrafeScenario : public BaseScenario {
     } else {
       // No accel/decel. Instant turn.
       if (should_turn) {
-        ChangeDirection(target->wall_position->x);
+        ChangeDirection(*target->wall_position);
         target->wall_direction = direction_;
       }
       target_manager_.UpdateTargetPositions(now_seconds);
@@ -115,29 +110,72 @@ class WallStrafeScenario : public BaseScenario {
   }
 
  private:
-  void ChangeDirection(float current_x) {
-    auto dist = std::uniform_real_distribution<float>(min_strafe_distance_, max_strafe_distance_);
+  void ChangeDirection(const glm::vec2& current_pos) {
+    WallStrafeProfile profile = GetNextProfile();
+    strafe_number_++;
+    float min_strafe_distance = GetRegionLength(profile.min_distance(), wall_);
+    if (min_strafe_distance <= 0) {
+      min_strafe_distance = 30;
+    }
+    float max_strafe_distance = GetRegionLength(profile.max_distance(), wall_);
+    if (max_strafe_distance <= 0) {
+      max_strafe_distance = 100;
+    }
+    auto dist = std::uniform_real_distribution<float>(min_strafe_distance, max_strafe_distance);
     float distance = dist(*app_->random_generator());
 
-    direction_.x *= -1;
-    float potential_end_position_x = current_x + (distance * direction_.x);
-    if (potential_end_position_x > max_x_) {
-      distance = max_x_ - current_x;
+    glm::vec2 new_direction;
+    if (direction_.x > 0) {
+      new_direction = glm::vec2(-1, 0);
+    } else {
+      new_direction = glm::vec2(1, 0);
     }
-    if (potential_end_position_x < min_x_) {
-      distance = current_x - min_x_;
+    direction_ = new_direction;
+
+    glm::vec2 potential_end_position = current_pos + distance * direction_;
+    float distance_mult = 1;
+    if (potential_end_position.x > max_x_) {
+      distance_mult = (max_x_ - current_pos.x) / distance;
+    }
+    if (potential_end_position.x < min_x_) {
+      distance_mult = (current_pos.x - min_x_) / distance;
     }
 
+    distance *= distance_mult;
+
     current_target_travel_distance_ = distance;
-    last_direction_change_position_.x = current_x;
+    last_direction_change_position_ = current_pos;
+  }
+
+  WallStrafeProfile GetNextProfile() {
+    auto d = def_.wall_strafe_def();
+    if (d.profile_order().size() > 0) {
+      int profile_order_i = strafe_number_ % d.profile_order().size();
+      int i = d.profile_order().at(profile_order_i);
+      return d.profiles()[ClampIndex(d.profiles(), i)];
+    }
+
+    for (const auto& profile : d.profiles()) {
+      if (!profile.has_percent_chance() || profile.percent_chance() >= 1) {
+        return profile;
+      }
+      auto dist = std::uniform_real_distribution<float>(0, 1.0f);
+      float roll = dist(*app_->random_generator());
+      if (roll <= profile.percent_chance()) {
+        return profile;
+      }
+    }
+
+    return {};
   }
 
   Wall wall_;
   float min_x_;
   float max_x_;
-  float y_;
-  float min_strafe_distance_;
-  float max_strafe_distance_;
+  float min_y_;
+  float max_y_;
+
+  int strafe_number_ = 0;
 
   float max_velocity_;
   float acceleration_;

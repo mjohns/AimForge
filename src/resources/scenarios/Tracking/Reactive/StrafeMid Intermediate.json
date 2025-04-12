@@ -9,8 +9,12 @@
     }
   },
   "wallStrafeDef": {
-    "minDistance" : { "xPercentValue": 0.3 },
-    "maxDistance" : { "xPercentValue": 0.6 },
+    "profiles": [
+      {
+        "minDistance": { "xPercentValue": 0.3 },
+        "maxDistance": { "xPercentValue": 0.6 },
+      }
+    ],
   },
   "targetDef": {
     "numTargets": 1,

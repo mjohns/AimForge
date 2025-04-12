@@ -31,8 +31,6 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
 
   int processed_events_up_to_index = 0;
 
-  // app->renderer()->SetProjection(projection);
-
   TargetManager target_manager(replay.room());
   Camera camera(CameraParams(replay.room()));
 
