@@ -20,6 +20,7 @@
 #include "google/protobuf/io/coded_stream.h"
 #include "google/protobuf/arena.h"
 #include "google/protobuf/arenastring.h"
+#include "google/protobuf/generated_message_bases.h"
 #include "google/protobuf/generated_message_tctable_decl.h"
 #include "google/protobuf/generated_message_util.h"
 #include "google/protobuf/metadata_lite.h"
@@ -122,6 +123,9 @@ extern TargetRegionDefaultTypeInternal _TargetRegion_default_instance_;
 class WallArcScenarioDef;
 struct WallArcScenarioDefDefaultTypeInternal;
 extern WallArcScenarioDefDefaultTypeInternal _WallArcScenarioDef_default_instance_;
+class WallMovementScenarioDef;
+struct WallMovementScenarioDefDefaultTypeInternal;
+extern WallMovementScenarioDefDefaultTypeInternal _WallMovementScenarioDef_default_instance_;
 class WallStrafeProfile;
 struct WallStrafeProfileDefaultTypeInternal;
 extern WallStrafeProfileDefaultTypeInternal _WallStrafeProfile_default_instance_;
@@ -139,6 +143,151 @@ namespace aim {
 // ===================================================================
 
 
+// -------------------------------------------------------------------
+
+class WallMovementScenarioDef final : public ::google::protobuf::internal::ZeroFieldsBase
+/* @@protoc_insertion_point(class_definition:aim.WallMovementScenarioDef) */ {
+ public:
+  inline WallMovementScenarioDef() : WallMovementScenarioDef(nullptr) {}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(WallMovementScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallMovementScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR WallMovementScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline WallMovementScenarioDef(const WallMovementScenarioDef& from) : WallMovementScenarioDef(nullptr, from) {}
+  inline WallMovementScenarioDef(WallMovementScenarioDef&& from) noexcept
+      : WallMovementScenarioDef(nullptr, std::move(from)) {}
+  inline WallMovementScenarioDef& operator=(const WallMovementScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WallMovementScenarioDef& operator=(WallMovementScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WallMovementScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const WallMovementScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const WallMovementScenarioDef*>(
+        &_WallMovementScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 22;
+  friend void swap(WallMovementScenarioDef& a, WallMovementScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(WallMovementScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WallMovementScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WallMovementScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<WallMovementScenarioDef>(arena);
+  }
+  using ::google::protobuf::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const WallMovementScenarioDef& from) {
+    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  }
+  using ::google::protobuf::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const WallMovementScenarioDef& from) {
+    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.WallMovementScenarioDef"; }
+
+ protected:
+  explicit WallMovementScenarioDef(::google::protobuf::Arena* arena);
+  WallMovementScenarioDef(::google::protobuf::Arena* arena, const WallMovementScenarioDef& from);
+  WallMovementScenarioDef(::google::protobuf::Arena* arena, WallMovementScenarioDef&& from) noexcept
+      : WallMovementScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  // @@protoc_insertion_point(class_scope:aim.WallMovementScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      0, 0, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const WallMovementScenarioDef& from_msg);
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  friend struct ::TableStruct_scenario_2eproto;
+};
 // -------------------------------------------------------------------
 
 class SimpleRoom final : public ::google::protobuf::Message
@@ -514,7 +663,6 @@ class ShotType final : public ::google::protobuf::Message
   enum : int {
     kPokeKillTimeSecondsFieldNumber = 10,
     kNoPartialKillsFieldNumber = 11,
-    kNotifyBeforeKillSecondsFieldNumber = 12,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -540,17 +688,6 @@ class ShotType final : public ::google::protobuf::Message
   private:
   bool _internal_no_partial_kills() const;
   void _internal_set_no_partial_kills(bool value);
-
-  public:
-  // float notify_before_kill_seconds = 12;
-  bool has_notify_before_kill_seconds() const;
-  void clear_notify_before_kill_seconds() ;
-  float notify_before_kill_seconds() const;
-  void set_notify_before_kill_seconds(float value);
-
-  private:
-  float _internal_notify_before_kill_seconds() const;
-  void _internal_set_notify_before_kill_seconds(float value);
 
   public:
   // bool poke = 1;
@@ -610,7 +747,7 @@ class ShotType final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 7, 0,
+      1, 6, 0,
       0, 2>
       _table_;
 
@@ -632,7 +769,6 @@ class ShotType final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     float poke_kill_time_seconds_;
     bool no_partial_kills_;
-    float notify_before_kill_seconds_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -3167,7 +3303,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 23;
+  static constexpr int kIndexInFileMessages = 24;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -4426,7 +4562,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 24;
+  static constexpr int kIndexInFileMessages = 25;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -4998,7 +5134,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 22;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -6179,6 +6315,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kLinearDef = 13,
     kWallStrafeDef = 14,
     kWallArcDef = 15,
+    kWallMovementDef = 16,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -6286,6 +6423,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kLinearDefFieldNumber = 13,
     kWallStrafeDefFieldNumber = 14,
     kWallArcDefFieldNumber = 15,
+    kWallMovementDefFieldNumber = 16,
   };
   // string scenario_id = 1;
   bool has_scenario_id() const;
@@ -6517,6 +6655,25 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::WallArcScenarioDef* _internal_mutable_wall_arc_def();
 
   public:
+  // .aim.WallMovementScenarioDef wall_movement_def = 16;
+  bool has_wall_movement_def() const;
+  private:
+  bool _internal_has_wall_movement_def() const;
+
+  public:
+  void clear_wall_movement_def() ;
+  const ::aim::WallMovementScenarioDef& wall_movement_def() const;
+  PROTOBUF_NODISCARD ::aim::WallMovementScenarioDef* release_wall_movement_def();
+  ::aim::WallMovementScenarioDef* mutable_wall_movement_def();
+  void set_allocated_wall_movement_def(::aim::WallMovementScenarioDef* value);
+  void unsafe_arena_set_allocated_wall_movement_def(::aim::WallMovementScenarioDef* value);
+  ::aim::WallMovementScenarioDef* unsafe_arena_release_wall_movement_def();
+
+  private:
+  const ::aim::WallMovementScenarioDef& _internal_wall_movement_def() const;
+  ::aim::WallMovementScenarioDef* _internal_mutable_wall_movement_def();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ScenarioDef)
@@ -6528,11 +6685,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_linear_def();
   void set_has_wall_strafe_def();
   void set_has_wall_arc_def();
+  void set_has_wall_movement_def();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 14, 10,
+      4, 15, 11,
       52, 2>
       _table_;
 
@@ -6569,6 +6727,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::LinearScenarioDef* linear_def_;
       ::aim::WallStrafeScenarioDef* wall_strafe_def_;
       ::aim::WallArcScenarioDef* wall_arc_def_;
+      ::aim::WallMovementScenarioDef* wall_movement_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -9800,34 +9959,6 @@ inline void ShotType::_internal_set_no_partial_kills(bool value) {
   _impl_.no_partial_kills_ = value;
 }
 
-// float notify_before_kill_seconds = 12;
-inline bool ShotType::has_notify_before_kill_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void ShotType::clear_notify_before_kill_seconds() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.notify_before_kill_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline float ShotType::notify_before_kill_seconds() const {
-  // @@protoc_insertion_point(field_get:aim.ShotType.notify_before_kill_seconds)
-  return _internal_notify_before_kill_seconds();
-}
-inline void ShotType::set_notify_before_kill_seconds(float value) {
-  _internal_set_notify_before_kill_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.ShotType.notify_before_kill_seconds)
-}
-inline float ShotType::_internal_notify_before_kill_seconds() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.notify_before_kill_seconds_;
-}
-inline void ShotType::_internal_set_notify_before_kill_seconds(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.notify_before_kill_seconds_ = value;
-}
-
 inline bool ShotType::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -10890,6 +11021,85 @@ inline ::aim::WallArcScenarioDef* ScenarioDef::_internal_mutable_wall_arc_def() 
 inline ::aim::WallArcScenarioDef* ScenarioDef::mutable_wall_arc_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::aim::WallArcScenarioDef* _msg = _internal_mutable_wall_arc_def();
   // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.wall_arc_def)
+  return _msg;
+}
+
+// .aim.WallMovementScenarioDef wall_movement_def = 16;
+inline bool ScenarioDef::has_wall_movement_def() const {
+  return type_case() == kWallMovementDef;
+}
+inline bool ScenarioDef::_internal_has_wall_movement_def() const {
+  return type_case() == kWallMovementDef;
+}
+inline void ScenarioDef::set_has_wall_movement_def() {
+  _impl_._oneof_case_[0] = kWallMovementDef;
+}
+inline void ScenarioDef::clear_wall_movement_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kWallMovementDef) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.wall_movement_def_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.wall_movement_def_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::WallMovementScenarioDef* ScenarioDef::release_wall_movement_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.wall_movement_def)
+  if (type_case() == kWallMovementDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.wall_movement_def_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.wall_movement_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::WallMovementScenarioDef& ScenarioDef::_internal_wall_movement_def() const {
+  return type_case() == kWallMovementDef ? *_impl_.type_.wall_movement_def_ : reinterpret_cast<::aim::WallMovementScenarioDef&>(::aim::_WallMovementScenarioDef_default_instance_);
+}
+inline const ::aim::WallMovementScenarioDef& ScenarioDef::wall_movement_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.wall_movement_def)
+  return _internal_wall_movement_def();
+}
+inline ::aim::WallMovementScenarioDef* ScenarioDef::unsafe_arena_release_wall_movement_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.wall_movement_def)
+  if (type_case() == kWallMovementDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.wall_movement_def_;
+    _impl_.type_.wall_movement_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_wall_movement_def(::aim::WallMovementScenarioDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_wall_movement_def();
+    _impl_.type_.wall_movement_def_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.wall_movement_def)
+}
+inline ::aim::WallMovementScenarioDef* ScenarioDef::_internal_mutable_wall_movement_def() {
+  if (type_case() != kWallMovementDef) {
+    clear_type();
+    set_has_wall_movement_def();
+    _impl_.type_.wall_movement_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::WallMovementScenarioDef>(GetArena());
+  }
+  return _impl_.type_.wall_movement_def_;
+}
+inline ::aim::WallMovementScenarioDef* ScenarioDef::mutable_wall_movement_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::WallMovementScenarioDef* _msg = _internal_mutable_wall_movement_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.wall_movement_def)
   return _msg;
 }
 
@@ -12548,6 +12758,10 @@ inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_on_ground_ = value;
 }
+
+// -------------------------------------------------------------------
+
+// WallMovementScenarioDef
 
 // -------------------------------------------------------------------
 

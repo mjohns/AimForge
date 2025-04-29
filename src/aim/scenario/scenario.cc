@@ -672,6 +672,8 @@ std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* ap
       return CreateWallStrafeScenario(def, app);
     case ScenarioDef::kWallArcDef:
       return CreateWallArcScenario(def, app);
+    case ScenarioDef::kWallMovementDef:
+      return CreateWallMovementScenario(def, app);
     default:
       break;
   }

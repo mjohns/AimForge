@@ -40,7 +40,8 @@ SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
   shoot_sound_ = shoot_sound.get();
   metronome_sound_ = metronome_sound.get();
   hit_sound_ = hit_sound.get();
-  notify_before_kill_sound_ = notify_before_kill_sound.get();
+  // TODO: Make it easier to use same file for multiple sounds.
+  notify_before_kill_sound_ = kill_sound.get();
 
   sound_cache_[kill_sound_name] = std::move(kill_sound);
   sound_cache_[shoot_sound_name] = std::move(shoot_sound);

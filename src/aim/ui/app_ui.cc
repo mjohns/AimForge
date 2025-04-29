@@ -263,7 +263,7 @@ class AppUiImpl : public AppUi {
       DrawPlaylistsScreen();
     }
 
-    //ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    // ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::EndChild();
   }
 
