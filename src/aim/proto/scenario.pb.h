@@ -514,6 +514,7 @@ class ShotType final : public ::google::protobuf::Message
   enum : int {
     kPokeKillTimeSecondsFieldNumber = 10,
     kNoPartialKillsFieldNumber = 11,
+    kNotifyBeforeKillSecondsFieldNumber = 12,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -539,6 +540,17 @@ class ShotType final : public ::google::protobuf::Message
   private:
   bool _internal_no_partial_kills() const;
   void _internal_set_no_partial_kills(bool value);
+
+  public:
+  // float notify_before_kill_seconds = 12;
+  bool has_notify_before_kill_seconds() const;
+  void clear_notify_before_kill_seconds() ;
+  float notify_before_kill_seconds() const;
+  void set_notify_before_kill_seconds(float value);
+
+  private:
+  float _internal_notify_before_kill_seconds() const;
+  void _internal_set_notify_before_kill_seconds(float value);
 
   public:
   // bool poke = 1;
@@ -598,7 +610,7 @@ class ShotType final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 6, 0,
+      2, 7, 0,
       0, 2>
       _table_;
 
@@ -620,6 +632,7 @@ class ShotType final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     float poke_kill_time_seconds_;
     bool no_partial_kills_;
+    float notify_before_kill_seconds_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -9785,6 +9798,34 @@ inline bool ShotType::_internal_no_partial_kills() const {
 inline void ShotType::_internal_set_no_partial_kills(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.no_partial_kills_ = value;
+}
+
+// float notify_before_kill_seconds = 12;
+inline bool ShotType::has_notify_before_kill_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void ShotType::clear_notify_before_kill_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.notify_before_kill_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float ShotType::notify_before_kill_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.notify_before_kill_seconds)
+  return _internal_notify_before_kill_seconds();
+}
+inline void ShotType::set_notify_before_kill_seconds(float value) {
+  _internal_set_notify_before_kill_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.notify_before_kill_seconds)
+}
+inline float ShotType::_internal_notify_before_kill_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.notify_before_kill_seconds_;
+}
+inline void ShotType::_internal_set_notify_before_kill_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.notify_before_kill_seconds_ = value;
 }
 
 inline bool ShotType::has_type() const {

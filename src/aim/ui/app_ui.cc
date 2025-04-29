@@ -95,6 +95,7 @@ class AppUiImpl : public AppUi {
       ImGui::End();
 
       app_->Render();
+      SDL_Delay(6);
     }
   }
 
@@ -262,6 +263,7 @@ class AppUiImpl : public AppUi {
       DrawPlaylistsScreen();
     }
 
+    //ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::EndChild();
   }
 

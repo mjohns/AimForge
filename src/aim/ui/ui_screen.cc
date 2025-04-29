@@ -44,6 +44,7 @@ NavigationEvent UiScreen::Run() {
     ImGui::End();
 
     app_->Render();
+    SDL_Delay(6);
   }
 
   return NavigationEvent::Done();
