@@ -88,22 +88,32 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
     }
     if (GetShotType() == ShotType::kTrackingKill) {
       for (Target& target : target_manager_.GetMutableTargets()) {
+        bool is_hitting_this_target = false;
         if (maybe_hit_target_id.has_value() && *maybe_hit_target_id == target.id) {
           target.hit_timer.Start();
+          is_hitting_this_target = true;
         } else {
           target.hit_timer.Stop();
         }
         if (target.health_seconds > 0) {
-          if (target.hit_timer.GetElapsedSeconds() >= target.health_seconds) {
+          float health_left = target.health_seconds - target.hit_timer.GetElapsedSeconds();
+          if (health_left <= 0) {
             stats_.num_hits++;
             PlayKillSound();
             AddNewTargetDuringRun(target.id);
-          } else if (target.radius_at_kill.has_value()) {
-            float scale = (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
-                          target.health_seconds;
-            float radius_diff =
-                target.radius_at_kill->start_radius - target.radius_at_kill->end_radius;
-            target.radius = target.radius_at_kill->end_radius + scale * radius_diff;
+          } else {
+            if (is_hitting_this_target && target.notify_at_health_seconds > 0 &&
+                target.notify_at_health_seconds >= health_left) {
+              app_->sound_manager()->PlayNotifyBeforeKillSound();
+              target.notify_at_health_seconds = 0;
+            }
+            if (target.radius_at_kill.has_value()) {
+              float scale = (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
+                            target.health_seconds;
+              float radius_diff =
+                  target.radius_at_kill->start_radius - target.radius_at_kill->end_radius;
+              target.radius = target.radius_at_kill->end_radius + scale * radius_diff;
+            }
           }
         }
       }

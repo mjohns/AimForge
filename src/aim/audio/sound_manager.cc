@@ -25,11 +25,13 @@ std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound
 SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
     : sound_dirs_(sound_dirs) {
   std::string kill_sound_name = "kill_confirmed.ogg";
+  std::string notify_before_kill_sound_name = "short_bass.wav";
   std::string shoot_sound_name = "shoot.ogg";
   std::string metronome_sound_name = "metronome.ogg";
   std::string hit_sound_name = "body_shot.ogg";
 
   auto kill_sound = LoadSound(sound_dirs_, kill_sound_name);
+  auto notify_before_kill_sound = LoadSound(sound_dirs_, notify_before_kill_sound_name);
   auto shoot_sound = LoadSound(sound_dirs_, shoot_sound_name);
   auto metronome_sound = LoadSound(sound_dirs, metronome_sound_name);
   auto hit_sound = LoadSound(sound_dirs, hit_sound_name);
@@ -38,11 +40,13 @@ SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
   shoot_sound_ = shoot_sound.get();
   metronome_sound_ = metronome_sound.get();
   hit_sound_ = hit_sound.get();
+  notify_before_kill_sound_ = notify_before_kill_sound.get();
 
   sound_cache_[kill_sound_name] = std::move(kill_sound);
   sound_cache_[shoot_sound_name] = std::move(shoot_sound);
   sound_cache_[metronome_sound_name] = std::move(metronome_sound);
   sound_cache_[hit_sound_name] = std::move(hit_sound);
+  sound_cache_[notify_before_kill_sound_name] = std::move(notify_before_kill_sound);
 }
 
 SoundManager& SoundManager::PlayKillSound() {
@@ -55,6 +59,13 @@ SoundManager& SoundManager::PlayKillSound() {
 SoundManager& SoundManager::PlayHitSound() {
   if (hit_sound_ != nullptr) {
     hit_sound_->Play(kKillChannel);
+  }
+  return *this;
+}
+
+SoundManager& SoundManager::PlayNotifyBeforeKillSound() {
+  if (notify_before_kill_sound_ != nullptr) {
+    notify_before_kill_sound_->Play(kHitChannel);
   }
   return *this;
 }

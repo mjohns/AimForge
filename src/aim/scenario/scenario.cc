@@ -33,6 +33,7 @@ namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
 constexpr const u64 kTargetRenderFps = 615;
+constexpr const u64 kClickDebounceMicros = 1000;
 
 }  // namespace
 
@@ -333,6 +334,8 @@ NavigationEvent Scenario::ResumeInternal() {
       continue;
     }
 
+    u64 last_click_time_micros = 0;
+
     current_times_.events_start = timer_.GetElapsedMicros();
     SDL_Event event;
     UpdateStateData update_data;
@@ -355,7 +358,11 @@ NavigationEvent Scenario::ResumeInternal() {
         std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
         if (!ShouldAutoHold()) {
           if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-            update_data.has_click = true;
+            u64 now_micros = timer_.GetElapsedMicros();
+            if (now_micros - last_click_time_micros > kClickDebounceMicros) {
+              update_data.has_click = true;
+              last_click_time_micros = now_micros;
+            }
             is_click_held_ = true;
           }
         }
@@ -627,6 +634,7 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     k.end_radius = profile.target_radius_at_kill();
     target.radius_at_kill = k;
   }
+  target.notify_at_health_seconds = 0.12;
   target.speed =
       GetJitteredValue(profile.speed(), profile.speed_jitter(), app_->random_generator());
   target.health_seconds = GetJitteredValue(

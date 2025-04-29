@@ -13,12 +13,14 @@ class SoundManager {
   explicit SoundManager(const std::vector<std::filesystem::path>& sound_dirs);
 
   SoundManager& PlayKillSound();
+  SoundManager& PlayNotifyBeforeKillSound();
   SoundManager& PlayHitSound();
   SoundManager& PlayShootSound();
   SoundManager& PlayMetronomeSound();
 
  private:
   Sound* kill_sound_ = nullptr;
+  Sound* notify_before_kill_sound_ = nullptr;
   Sound* shoot_sound_ = nullptr;
   Sound* hit_sound_ = nullptr;
   Sound* metronome_sound_ = nullptr;

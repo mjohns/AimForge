@@ -39,6 +39,7 @@ struct Target {
   std::optional<glm::vec2> pill_wall_up;
 
   Stopwatch hit_timer;
+  float notify_at_health_seconds = 0;
   float health_seconds = 0;
   std::optional<RadiusAtKill> radius_at_kill{};
 
