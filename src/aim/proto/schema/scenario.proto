@@ -165,6 +165,7 @@ message ScenarioDef {
     LinearScenarioDef linear_def = 13;
     WallStrafeScenarioDef wall_strafe_def = 14;
     WallArcScenarioDef wall_arc_def = 15;
+    WallMovementScenarioDef wall_movement_def = 16;
   }
 }
 
@@ -210,7 +211,8 @@ message WallStrafeProfile {
   RegionLength min_distance = 2;
   RegionLength max_distance = 3;
 
-  // Angle to strafe at. In range 0-45. Will choose between strafing up or down at this angle evenly.
+  // Angle to strafe at. In range 0-45. Will choose between strafing up or down at this angle
+  // evenly.
   float angle = 4;
   float angle_jitter = 5;
 }
@@ -218,7 +220,8 @@ message WallStrafeProfile {
 message WallStrafeScenarioDef {
   // The available width for the target to move in.
   RegionLength width = 1;
-  // The available height for the target to move in. The target can escape this height based on the angle and where it starts the strafe from.
+  // The available height for the target to move in. The target can escape this height based on the
+  // angle and where it starts the strafe from.
   RegionLength height = 2;
 
   // The height the target will strafe at. Defaults to 0 (center of wall).
@@ -250,6 +253,8 @@ message WallArcScenarioDef {
 
   bool start_on_ground = 6;
 }
+
+message WallMovementScenarioDef {}
 
 message TargetDef {
   repeated TargetProfile profiles = 1;
