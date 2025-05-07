@@ -165,7 +165,7 @@ message ScenarioDef {
     LinearScenarioDef linear_def = 13;
     WallStrafeScenarioDef wall_strafe_def = 14;
     WallArcScenarioDef wall_arc_def = 15;
-    WallMovementScenarioDef wall_movement_def = 16;
+    WallSwerveScenarioDef wall_swerve_def = 16;
   }
 }
 
@@ -254,7 +254,15 @@ message WallArcScenarioDef {
   bool start_on_ground = 6;
 }
 
-message WallMovementScenarioDef {}
+message WallSwerveScenarioDef {
+  TargetPlacementStrategy origin_strategy = 1;
+
+  RegionLength height = 2;
+  RegionLength width = 3;
+  RegionLength spread = 4;
+  
+  float turn_rate = 5;
+}
 
 message TargetDef {
   repeated TargetProfile profiles = 1;
@@ -301,6 +309,9 @@ message TargetProfile {
   float health_seconds_jitter = 7;
   // Target will shrink from target_radius to this value based on health amount.
   float target_radius_at_kill = 8;
+
+  // Optional. If specified this radius will be used to determine whether the target is hit instead of target_radius.
+  float target_hit_radius = 9;
 
   // Defaults to spehere if no more specific type is specified.
   oneof type {

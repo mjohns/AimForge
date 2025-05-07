@@ -62,6 +62,7 @@ float GetJitteredValue(float base_value, float jitter, std::mt19937* random_gene
 
 // Even chance of true or false.
 bool FlipCoin(std::mt19937* random_generator);
+float GetRandInRange(float min, float max, std::mt19937* random_generator);
 
 float FirstNonZero(float v1, float v2);
 

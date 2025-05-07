@@ -119,16 +119,17 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
     }
     bool is_hit = false;
     float hit_distance;
+    float radius = target.hit_radius > 0 ? target.hit_radius : target.radius;
     if (target.is_pill) {
       Pill pill;
       pill.position = target.position;
-      pill.radius = target.radius;
+      pill.radius = radius;
       pill.height = target.height;
       pill.up = target.pill_up;
       is_hit = IntersectRayPill(pill, camera.GetPosition(), look_at, &hit_distance);
     } else {
       is_hit = IntersectRaySphere(
-          target.position, target.radius, camera.GetPosition(), look_at, &hit_distance);
+          target.position, radius, camera.GetPosition(), look_at, &hit_distance);
     }
     if (is_hit) {
       if (!closest_hit_target_id.has_value() || hit_distance < closest_hit_distance) {

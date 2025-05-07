@@ -23,6 +23,7 @@ struct Target {
   std::optional<glm::vec2> wall_position;
   float radius = 1.0f;
   float height = 3.0f;
+  float hit_radius = -1.0f;
 
   float speed = 0;
   std::optional<glm::vec3> direction;
