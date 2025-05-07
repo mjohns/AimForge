@@ -181,4 +181,9 @@ bool FlipCoin(std::mt19937* random_generator) {
   return roll > 0.5;
 }
 
+float GetRandInRange(float min, float max, std::mt19937* random_generator) {
+  auto dist = std::uniform_real_distribution<float>(min, max);
+  return dist(*random_generator);
+}
+
 }  // namespace aim

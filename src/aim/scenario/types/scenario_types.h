@@ -14,6 +14,6 @@ std::unique_ptr<Scenario> CreateBarrelScenario(const ScenarioDef& def, Applicati
 std::unique_ptr<Scenario> CreateLinearScenario(const ScenarioDef& def, Application* app);
 std::unique_ptr<Scenario> CreateWallStrafeScenario(const ScenarioDef& def, Application* app);
 std::unique_ptr<Scenario> CreateWallArcScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateWallMovementScenario(const ScenarioDef& def, Application* app);
+std::unique_ptr<Scenario> CreateWallSwerveScenario(const ScenarioDef& def, Application* app);
 
 }  // namespace aim

@@ -21,10 +21,14 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       : wall_(wall), strategy_(strategy), target_manager_(target_manager), app_(app) {}
 
   glm::vec2 GetNextPosition() override {
+    return GetNextPosition(target_manager_->GetTargetIdCounter());
+  }
+
+  glm::vec2 GetNextPosition(int counter) override {
     glm::vec2 candidate_pos;
     float min_distance = strategy_.min_distance();
     for (int i = 0; i < 200; ++i) {
-      candidate_pos = GetNewCandidateTargetPosition();
+      candidate_pos = GetNewCandidateTargetPosition(counter);
       if (strategy_.has_fixed_distance_from_last_target()) {
         // Scale the candidate to the correct distance.
         candidate_pos = GetFixedDistanceAdjustedPoint(candidate_pos);
@@ -56,13 +60,13 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     return true;
   }
 
-  std::optional<TargetRegion> GetRegionToUse() {
+  std::optional<TargetRegion> GetRegionToUse(int counter) {
     if (strategy_.regions_size() == 0) {
       return {};
     }
     int order_count = strategy_.region_order().size();
     if (order_count > 0) {
-      int order_i = target_manager_->GetTargetIdCounter() % order_count;
+      int order_i = counter % order_count;
       int i = strategy_.region_order(order_i);
       return GetValueIfPresent(strategy_.regions(), i);
     }
@@ -80,8 +84,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
   // Returns an x/z pair where to place the target on the wall.
-  glm::vec2 GetNewCandidateTargetPosition() {
-    auto maybe_region = GetRegionToUse();
+  glm::vec2 GetNewCandidateTargetPosition(int counter) {
+    auto maybe_region = GetRegionToUse(counter);
     if (!maybe_region.has_value()) {
       app_->logger()->warn("Unable to find target region");
       return glm::vec2(0);

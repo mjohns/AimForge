@@ -33,7 +33,7 @@ namespace aim {
 namespace {
 constexpr const u16 kReplayFps = 240;
 constexpr const u64 kTargetRenderFps = 615;
-constexpr const u64 kClickDebounceMicros = 1000;
+constexpr const u64 kClickDebounceMicros = 3 * 1000;
 
 }  // namespace
 
@@ -628,6 +628,9 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   target.last_update_time_seconds = timer_.GetElapsedSeconds();
   target.radius = GetJitteredValue(
       profile.target_radius(), profile.target_radius_jitter(), app_->random_generator());
+  if (profile.has_target_hit_radius()) {
+    target.hit_radius = profile.target_hit_radius();
+  }
   if (profile.target_radius_at_kill() > 0) {
     RadiusAtKill k;
     k.start_radius = target.radius;
@@ -672,8 +675,8 @@ std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* ap
       return CreateWallStrafeScenario(def, app);
     case ScenarioDef::kWallArcDef:
       return CreateWallArcScenario(def, app);
-    case ScenarioDef::kWallMovementDef:
-      return CreateWallMovementScenario(def, app);
+    case ScenarioDef::kWallSwerveDef:
+      return CreateWallSwerveScenario(def, app);
     default:
       break;
   }
