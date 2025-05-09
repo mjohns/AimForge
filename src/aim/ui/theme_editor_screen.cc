@@ -91,37 +91,101 @@ struct WallAppearanceEditor {
   std::string text_scale;
   std::string texture_name;
 
-  void Draw(const ImVec2& char_size) {
+  void Draw(const std::string& header,
+            const std::vector<std::string>& texture_names,
+            const ImVec2& char_size) {
     if (appearance == nullptr) {
       return;
     }
-    std::string selected_type = kSolidColorItem;
-    if (appearance->has_texture()) {
-      selected_type = kTextureItem;
-    }
-
     ImGui::PushItemWidth(char_size.x * 20);
-    std::string selector_id = "##appearance_selector" + id;
-    ImGuiComboFlags combo_flags = 0;
-    if (ImGui::BeginCombo(selector_id.c_str(), selected_type.c_str(), combo_flags)) {
-      for (auto item : {kSolidColorItem, kTextureItem}) {
-        bool is_selected = selected_type == item;
-        if (ImGui::Selectable(std::format("{}##appearance_type{}", item, id).c_str(),
-                              is_selected)) {
-          selected_type = item;
+    bool opened = ImGui::TreeNode(header.c_str());
+    ImGui::PopItemWidth();
+
+    if (opened) {
+      std::string selected_type = kSolidColorItem;
+      if (appearance->has_texture()) {
+        selected_type = kTextureItem;
+      }
+
+      ImGui::PushItemWidth(char_size.x * 20);
+      std::string selector_id = "##appearance_selector" + id;
+      ImGuiComboFlags combo_flags = 0;
+      if (ImGui::BeginCombo(selector_id.c_str(), selected_type.c_str(), combo_flags)) {
+        for (auto item : {kSolidColorItem, kTextureItem}) {
+          bool is_selected = selected_type == item;
+          if (ImGui::Selectable(std::format("{}##appearance_type{}", item, id).c_str(),
+                                is_selected)) {
+            selected_type = item;
+          }
+          if (is_selected) {
+            ImGui::SetItemDefaultFocus();
+          }
         }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
+        ImGui::EndCombo();
+      }
+
+      if (selected_type == kSolidColorItem) {
+        color_editor.stored_color = appearance->mutable_color();
+        color_editor.Draw(char_size);
+      }
+      if (selected_type == kTextureItem) {
+        WallTexture* texture = appearance->mutable_texture();
+        texture_name = texture->texture_name();
+        ImGuiComboFlags combo_flags = 0;
+        ImGui::PushItemWidth(char_size.x * 20);
+        if (ImGui::BeginCombo(
+                std::format("##texture_combo{}", id).c_str(), texture_name.c_str(), combo_flags)) {
+          for (int i = 0; i < texture_names.size(); ++i) {
+            auto& combo_texture_name = texture_names[i];
+            bool is_selected = texture_name == combo_texture_name;
+            if (ImGui::Selectable(
+                    std::format("{}##{}texture_name{}", combo_texture_name, i, id).c_str(),
+                    is_selected)) {
+              texture_name = combo_texture_name;
+            }
+            if (is_selected) {
+              ImGui::SetItemDefaultFocus();
+            }
+          }
+          ImGui::EndCombo();
+        }
+        ImGui::PopItemWidth();
+        texture->set_texture_name(texture_name);
+
+        ImGui::Text("Scale");
+        std::string scale_str = std::format("{}", texture->scale());
+        ImGui::SameLine();
+        ImGui::PushItemWidth(char_size.x * 5);
+        ImGui::InputText(std::format("##texture_scale{}", id).c_str(),
+                         &scale_str,
+                         ImGuiInputTextFlags_CharsDecimal);
+        ImGui::PopItemWidth();
+        float scale = ParseFloat(scale_str);
+        if (scale > 0) {
+          texture->set_scale(scale);
+        } else {
+          texture->clear_scale();
         }
       }
-      ImGui::EndCombo();
-    }
 
-    if (selected_type == kSolidColorItem) {
-      color_editor.stored_color = appearance->mutable_color();
-      color_editor.Draw(char_size);
-    }
-    if (selected_type == kTextureItem) {
+      ImGui::Text("Mix percent");
+      mix_percent = std::format("{}", appearance->mix_percent());
+      ImGui::SameLine();
+      ImGui::PushItemWidth(char_size.x * 5);
+      ImGui::InputText(std::format("##mix_percent{}", id).c_str(),
+                       &mix_percent,
+                       ImGuiInputTextFlags_CharsDecimal);
+      ImGui::PopItemWidth();
+
+      float mix = ParseFloat(mix_percent);
+      if (mix > 0) {
+        appearance->set_mix_percent(mix);
+        mix_color_editor.stored_color = appearance->mutable_mix_color();
+        mix_color_editor.Draw(char_size);
+      } else {
+        appearance->clear_mix_percent();
+      }
+      ImGui::TreePop();
     }
   }
 };
@@ -138,6 +202,7 @@ class ThemeEditorScreen : public UiScreen {
  public:
   explicit ThemeEditorScreen(Application* app)
       : UiScreen(app), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
+    texture_names_ = app->settings_manager()->ListTextures();
     theme_names_ = app->settings_manager()->ListThemes();
     if (theme_names_.size() > 0) {
       UpdateCurrentTheme(theme_names_[0]);
@@ -189,12 +254,11 @@ class ThemeEditorScreen : public UiScreen {
     crosshair_color_.Draw(char_size);
     crosshair_outline_color_.Draw(char_size);
 
-    ImGui::Text("Walls");
-    
-    ImGui::Text("Front");
-    front_.Draw(char_size);
-    ImGui::Text("Sides");
-    sides_.Draw(char_size);
+    front_.Draw("Front", texture_names_, char_size);
+    sides_.Draw("Sides", texture_names_, char_size);
+    roof_.Draw("Roof", texture_names_, char_size);
+    floor_.Draw("Floor", texture_names_, char_size);
+    back_.Draw("Back", texture_names_, char_size);
 
     {
       ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
@@ -250,6 +314,9 @@ class ThemeEditorScreen : public UiScreen {
 
     front_.appearance = current_theme_.mutable_front_appearance();
     sides_.appearance = current_theme_.mutable_side_appearance();
+    back_.appearance = current_theme_.mutable_back_appearance();
+    floor_.appearance = current_theme_.mutable_floor_appearance();
+    roof_.appearance = current_theme_.mutable_roof_appearance();
   }
 
   Room default_room_;
@@ -266,9 +333,14 @@ class ThemeEditorScreen : public UiScreen {
   StoredColorEditor crosshair_color_{"Crosshair color", "CrosshairColorEditor"};
   StoredColorEditor crosshair_outline_color_{"Crosshair outline color",
                                              "CrosshairOutlineColorEditor"};
-  WallAppearanceEditor front_ {"Front", "FrontEditor"};
-  WallAppearanceEditor sides_ {"Sides", "SidesEditor"};
-  };
+  WallAppearanceEditor front_{"Front", "FrontEditor"};
+  WallAppearanceEditor sides_{"Sides", "SidesEditor"};
+  WallAppearanceEditor roof_{"Roof", "RoofEditor"};
+  WallAppearanceEditor floor_{"Floor", "FloorEditor"};
+  WallAppearanceEditor back_{"Back", "BackEditor"};
+
+  std::vector<std::string> texture_names_;
+};
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app) {

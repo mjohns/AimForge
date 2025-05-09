@@ -37,6 +37,7 @@ class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,
                            const std::filesystem::path& theme_dir,
+                           const std::filesystem::path& texture_dir,
                            SettingsDb* settings_db,
                            HistoryDb* history_db);
   ~SettingsManager();
@@ -52,6 +53,7 @@ class SettingsManager {
   Theme GetCurrentTheme();
 
   std::vector<std::string> ListThemes();
+  std::vector<std::string> ListTextures();
   void SaveThemeToDisk(const std::string& theme_name, const Theme& theme);
 
   Crosshair GetCurrentCrosshair();
@@ -75,6 +77,7 @@ class SettingsManager {
   Settings settings_;
   bool needs_save_ = false;
   std::filesystem::path theme_dir_;
+  std::filesystem::path texture_dir_;
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
   std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
   SettingsDb* settings_db_;
