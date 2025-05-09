@@ -5,12 +5,19 @@
 
 namespace aim {
 
+struct BundleInfo {
+  std::string name;
+  std::filesystem::path path;
+};
+
 class FileSystem {
  public:
   FileSystem();
 
   std::filesystem::path GetUserDataPath(const std::filesystem::path& file_name);
   std::filesystem::path GetBasePath(const std::filesystem::path& file_name);
+
+  std::vector<BundleInfo> GetBundles();
 
  private:
   std::filesystem::path pref_dir_;

@@ -260,7 +260,7 @@ message WallSwerveScenarioDef {
   RegionLength height = 2;
   RegionLength width = 3;
   RegionLength spread = 4;
-  
+
   float turn_rate = 5;
 }
 
@@ -270,7 +270,7 @@ message WallWanderScenarioDef {
   RegionLength height = 2;
   RegionLength width = 3;
   RegionLength spread = 4;
-  
+
   float turn_rate = 5;
 }
 
@@ -320,7 +320,8 @@ message TargetProfile {
   // Target will shrink from target_radius to this value based on health amount.
   float target_radius_at_kill = 8;
 
-  // Optional. If specified this radius will be used to determine whether the target is hit instead of target_radius.
+  // Optional. If specified this radius will be used to determine whether the target is hit instead
+  // of target_radius.
   float target_hit_radius = 9;
 
   // Defaults to spehere if no more specific type is specified.

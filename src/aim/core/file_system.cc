@@ -25,4 +25,18 @@ std::filesystem::path FileSystem::GetBasePath(const std::filesystem::path& file_
   return base_dir_ / file_name;
 }
 
+std::vector<BundleInfo> FileSystem::GetBundles() {
+  std::vector<BundleInfo> bundles;
+  for (const auto& entry : std::filesystem::directory_iterator(GetUserDataPath("bundles"))) {
+    if (!std::filesystem::is_directory(entry)) {
+      continue;
+    }
+    BundleInfo bundle;
+    bundle.path = entry.path();
+    bundle.name = entry.path().filename().string();
+    bundles.push_back(bundle);
+  }
+  return bundles;
+}
+
 }  // namespace aim

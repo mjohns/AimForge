@@ -128,8 +128,8 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
       pill.up = target.pill_up;
       is_hit = IntersectRayPill(pill, camera.GetPosition(), look_at, &hit_distance);
     } else {
-      is_hit = IntersectRaySphere(
-          target.position, radius, camera.GetPosition(), look_at, &hit_distance);
+      is_hit =
+          IntersectRaySphere(target.position, radius, camera.GetPosition(), look_at, &hit_distance);
     }
     if (is_hit) {
       if (!closest_hit_target_id.has_value() || hit_distance < closest_hit_distance) {
