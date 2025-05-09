@@ -133,10 +133,12 @@ bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& map
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
                                  const std::filesystem::path& theme_dir,
+                                 const std::filesystem::path& texture_dir,
                                  SettingsDb* settings_db,
                                  HistoryDb* history_db)
-    : theme_dir_(theme_dir),
-      settings_path_(settings_path),
+    : settings_path_(settings_path),
+      theme_dir_(theme_dir),
+      texture_dir_(texture_dir),
       settings_db_(settings_db),
       history_db_(history_db) {}
 
@@ -189,6 +191,17 @@ std::vector<std::string> SettingsManager::ListThemes() {
     }
   }
   return theme_names;
+}
+
+std::vector<std::string> SettingsManager::ListTextures() {
+  std::vector<std::string> texture_names;
+  for (const auto& entry : std::filesystem::directory_iterator(texture_dir_)) {
+    std::string filename = entry.path().filename().string();
+    if (std::filesystem::is_regular_file(entry)) {
+      texture_names.push_back(filename);
+    }
+  }
+  return texture_names;
 }
 
 Theme SettingsManager::GetTheme(const std::string& theme_name) {
