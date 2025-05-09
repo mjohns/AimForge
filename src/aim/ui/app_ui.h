@@ -10,6 +10,7 @@ namespace aim {
 
 enum class AppScreen {
   SETTINGS,
+  THEMES,
   SCENARIOS,
   PLAYLISTS,
   STATS,

@@ -43,11 +43,16 @@ NavigationEvent UiScreen::Run() {
     DrawScreen();
     ImGui::End();
 
-    app_->Render();
+    Render();
+
     SDL_Delay(6);
   }
 
   return NavigationEvent::Done();
+}
+
+void UiScreen::Render() {
+  app_->Render();
 }
 
 void UiScreen::Resume() {

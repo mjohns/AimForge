@@ -36,7 +36,7 @@ struct ThemeCacheEntry {
 class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,
-                           std::vector<std::filesystem::path> theme_dirs,
+                           const std::filesystem::path& theme_dir,
                            SettingsDb* settings_db,
                            HistoryDb* history_db);
   ~SettingsManager();
@@ -52,6 +52,7 @@ class SettingsManager {
   Theme GetCurrentTheme();
 
   std::vector<std::string> ListThemes();
+  void SaveThemeToDisk(const std::string& theme_name, const Theme& theme);
 
   Crosshair GetCurrentCrosshair();
 
@@ -73,7 +74,7 @@ class SettingsManager {
   std::filesystem::path settings_path_;
   Settings settings_;
   bool needs_save_ = false;
-  std::vector<std::filesystem::path> theme_dirs_;
+  std::filesystem::path theme_dir_;
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
   std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
   SettingsDb* settings_db_;

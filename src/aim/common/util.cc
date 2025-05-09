@@ -69,6 +69,21 @@ Rgb HexToRgb(std::string hex) {
   return v;
 }
 
+std::string ToHexString(const StoredColor& c) {
+  return ToHexString(ToStoredRgb(c));
+}
+
+std::string ToHexString(const StoredRgb& c) {
+  int r = c.r();
+  int g = c.g();
+  int b = c.b();
+
+  std::stringstream ss;
+  ss << "#" << std::hex << std::setw(2) << std::setfill('0') << r << std::hex << std::setw(2)
+     << std::setfill('0') << g << std::hex << std::setw(2) << std::setfill('0') << b;
+  return ss.str();
+}
+
 StoredRgb ToStoredRgb(const StoredColor& c) {
   float mult = c.has_multiplier() ? c.multiplier() : 1.0f;
   int a = kMaxRgbValue;
@@ -184,6 +199,25 @@ bool FlipCoin(std::mt19937* random_generator) {
 float GetRandInRange(float min, float max, std::mt19937* random_generator) {
   auto dist = std::uniform_real_distribution<float>(min, max);
   return dist(*random_generator);
+}
+
+i32 FloatColorTo255(float value) {
+  i32 result = 255 * value;
+  if (result < 0) {
+    return 0;
+  }
+  if (result > 255) {
+    return 255;
+  }
+  return result;
+}
+
+StoredColor FloatToStoredColor(float r, float g, float b) {
+  return ToStoredColor(FloatColorTo255(r), FloatColorTo255(g), FloatColorTo255(b));
+}
+
+StoredRgb FloatToStoredRgb(float r, float g, float b) {
+  return ToStoredRgb(FloatToStoredColor(r, g, b));
 }
 
 }  // namespace aim
