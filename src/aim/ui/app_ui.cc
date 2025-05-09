@@ -318,7 +318,7 @@ class AppUiImpl : public AppUi {
   void DrawPlaylistsScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     if (ImGui::Button("Reload Playlists", sz)) {
-      app_->playlist_manager()->ReloadPlaylistsIfChanged();
+      app_->playlist_manager()->LoadPlaylistsFromDisk();
     }
     ImGui::Spacing();
     ImGui::Spacing();

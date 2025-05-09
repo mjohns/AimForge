@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "aim/common/util.h"
+#include "aim/core/file_system.h"
 #include "aim/proto/playlist.pb.h"
 
 namespace aim {
@@ -40,10 +41,9 @@ struct PlaylistRun {
 
 class PlaylistManager {
  public:
-  PlaylistManager(const std::filesystem::path& base_dir, const std::filesystem::path& user_dir);
+  explicit PlaylistManager(FileSystem* fs);
 
   void LoadPlaylistsFromDisk();
-  void ReloadPlaylistsIfChanged();
 
   PlaylistRun* GetMutableCurrentRun() {
     return current_run_.has_value() ? &(*current_run_) : nullptr;
@@ -60,7 +60,7 @@ class PlaylistManager {
   std::filesystem::path base_dir_;
   std::filesystem::path user_dir_;
   std::vector<Playlist> playlists_;
-  std::optional<std::filesystem::file_time_type> last_update_time_;
+  FileSystem* fs_;
 };
 
 }  // namespace aim
