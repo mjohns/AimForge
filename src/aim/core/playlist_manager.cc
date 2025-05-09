@@ -31,6 +31,9 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
       playlists.push_back(p);
     }
   }
+  std::sort(playlists.begin(), playlists.end(), [](const Playlist& lhs, const Playlist& rhs) {
+    return lhs.name < rhs.name;
+  });
   return playlists;
 }
 

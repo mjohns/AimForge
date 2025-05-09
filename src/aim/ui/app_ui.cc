@@ -274,10 +274,10 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
-                         const std::vector<absl::string_view>& search_words) {
+                         const std::vector<std::string>& search_words) {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     for (auto& node : nodes) {
-      if (node->scenario.has_value() && ScenarioMatchesSearch(*node->scenario, search_words)) {
+      if (node->scenario.has_value() && StringMatchesSearch(node->scenario->name, search_words)) {
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
           current_scenario_def_ = app_->scenario_manager()->GetScenario(node->name);
           scenario_run_option_ = ScenarioRunOption::RUN;
@@ -286,8 +286,7 @@ class AppUiImpl : public AppUi {
     }
     for (auto& node : nodes) {
       if (!node->scenario.has_value()) {
-        ImGui::SetNextItemOpen(true);
-        bool node_opened = ImGui::TreeNode(node->name.c_str());
+        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
         if (node_opened) {
           DrawScenarioNodes(node->child_nodes, search_words);
           ImGui::TreePop();
@@ -296,16 +295,24 @@ class AppUiImpl : public AppUi {
     }
   }
 
-  bool ScenarioMatchesSearch(ScenarioItem& item,
-                             const std::vector<absl::string_view>& search_words) {
+  std::vector<std::string> GetSearchWords(const std::string& text) {
+    std::vector<absl::string_view> search_words = absl::StrSplit(text, ' ');
+    std::vector<std::string> result;
+    for (auto& part : search_words) {
+      result.push_back(absl::AsciiStrToLower(part));
+    }
+    return result;
+  }
+
+  bool StringMatchesSearch(const std::string& input, const std::vector<std::string>& search_words) {
     if (search_words.size() == 0) {
       return true;
     }
-    auto name = absl::AsciiStrToLower(item.name);
+
+    auto value = absl::AsciiStrToLower(input);
     for (auto& part : search_words) {
-      auto lower_part = absl::AsciiStrToLower(part);
-      bool matches = absl::StartsWith(name, lower_part) ||
-                     name.find(std::format(" {}", lower_part)) != std::string::npos;
+      bool matches = absl::StartsWith(value, part) ||
+                     value.find(std::format(" {}", part)) != std::string::npos;
       if (!matches) {
         return false;
       }
@@ -326,7 +333,10 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawScenariosScreen() {
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    ImGui::PushItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##ScenarioSearchInput", "Search..", &scenario_search_text_);
+    ImGui::PopItemWidth();
     ImGui::SameLine();
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     if (ImGui::Button("Reload Scenarios", sz)) {
@@ -335,11 +345,16 @@ class AppUiImpl : public AppUi {
     ImGui::Spacing();
     ImGui::Spacing();
 
-    std::vector<absl::string_view> search_words = absl::StrSplit(scenario_search_text_, ' ');
+    auto search_words = GetSearchWords(scenario_search_text_);
     DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words);
   }
 
   void DrawPlaylistsScreen() {
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    ImGui::PushItemWidth(char_size.x * 30);
+    ImGui::InputTextWithHint("##PlaylistSearchInput", "Search..", &playlist_search_text_);
+    ImGui::PopItemWidth();
+    ImGui::SameLine();
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     if (ImGui::Button("Reload Playlists", sz)) {
       app_->playlist_manager()->LoadPlaylistsFromDisk();
@@ -347,12 +362,15 @@ class AppUiImpl : public AppUi {
     ImGui::Spacing();
     ImGui::Spacing();
 
+    auto search_words = GetSearchWords(playlist_search_text_);
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
-      if (ImGui::Button(playlist.name.c_str(), sz)) {
-        current_playlist_ = playlist;
-        app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
-        app_->playlist_manager()->StartNewRun(playlist.name);
-        app_screen_ = AppScreen::CURRENT_PLAYLIST;
+      if (StringMatchesSearch(playlist.name, search_words)) {
+        if (ImGui::Button(playlist.name.c_str(), sz)) {
+          current_playlist_ = playlist;
+          app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
+          app_->playlist_manager()->StartNewRun(playlist.name);
+          app_screen_ = AppScreen::CURRENT_PLAYLIST;
+        }
       }
     }
   }
@@ -395,6 +413,7 @@ class AppUiImpl : public AppUi {
   std::unique_ptr<UiScreen> screen_to_show_;
 
   std::string scenario_search_text_;
+  std::string playlist_search_text_;
 };
 
 }  // namespace
