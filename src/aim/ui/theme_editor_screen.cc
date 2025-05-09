@@ -23,8 +23,9 @@ struct StoredColorEditor {
   std::string id;
   StoredColor* stored_color = nullptr;
   float color[3];
+  std::string multiplier;
 
-  void Draw() {
+  void Draw(const ImVec2& char_size) {
     if (stored_color == nullptr) {
       return;
     }
@@ -51,6 +52,21 @@ struct StoredColorEditor {
     }
 
     // Multiplier
+    multiplier =
+        stored_color->has_multiplier() ? std::format("{}", stored_color->multiplier()) : "";
+    ImGui::SameLine();
+    ImGui::Text("mult");
+    ImGui::SameLine();
+    std::string mult_id = "##Multiplier" + id;
+    ImGui::PushItemWidth(char_size.x * 5);
+    ImGui::InputText(mult_id.c_str(), &multiplier, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::PopItemWidth();
+
+    if (multiplier.size() > 0) {
+      stored_color->set_multiplier(ParseFloat(multiplier));
+    } else {
+      stored_color->clear_multiplier();
+    }
   }
 };
 
@@ -110,11 +126,12 @@ class ThemeEditorScreen : public UiScreen {
       }
       ImGui::EndCombo();
     }
+    ImGui::PopItemWidth();
 
-    target_color_.Draw();
-    ghost_target_color_.Draw();
-    crosshair_color_.Draw();
-    crosshair_outline_color_.Draw();
+    target_color_.Draw(char_size);
+    ghost_target_color_.Draw(char_size);
+    crosshair_color_.Draw(char_size);
+    crosshair_outline_color_.Draw(char_size);
 
     {
       ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
