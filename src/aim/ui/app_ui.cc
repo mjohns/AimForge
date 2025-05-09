@@ -1,6 +1,8 @@
 #include "app_ui.h"
 
 #include <SDL3/SDL.h>
+#include <absl/strings/str_split.h>
+#include <absl/strings/string_view.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
@@ -271,10 +273,11 @@ class AppUiImpl : public AppUi {
     ImGui::EndChild();
   }
 
-  void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes) {
+  void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
+                         const std::vector<absl::string_view>& search_words) {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     for (auto& node : nodes) {
-      if (node->scenario.has_value()) {
+      if (node->scenario.has_value() && ScenarioMatchesSearch(*node->scenario, search_words)) {
         if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
           current_scenario_def_ = app_->scenario_manager()->GetScenario(node->name);
           scenario_run_option_ = ScenarioRunOption::RUN;
@@ -283,13 +286,31 @@ class AppUiImpl : public AppUi {
     }
     for (auto& node : nodes) {
       if (!node->scenario.has_value()) {
+        ImGui::SetNextItemOpen(true);
         bool node_opened = ImGui::TreeNode(node->name.c_str());
         if (node_opened) {
-          DrawScenarioNodes(node->child_nodes);
+          DrawScenarioNodes(node->child_nodes, search_words);
           ImGui::TreePop();
         }
       }
     }
+  }
+
+  bool ScenarioMatchesSearch(ScenarioItem& item,
+                             const std::vector<absl::string_view>& search_words) {
+    if (search_words.size() == 0) {
+      return true;
+    }
+    auto name = absl::AsciiStrToLower(item.name);
+    for (auto& part : search_words) {
+      auto lower_part = absl::AsciiStrToLower(part);
+      bool matches = absl::StartsWith(name, lower_part) ||
+                     name.find(std::format(" {}", lower_part)) != std::string::npos;
+      if (!matches) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void DrawCurrentScenarioScreen() {
@@ -305,6 +326,8 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawScenariosScreen() {
+    ImGui::InputTextWithHint("##ScenarioSearchInput", "Search..", &scenario_search_text_);
+    ImGui::SameLine();
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     if (ImGui::Button("Reload Scenarios", sz)) {
       app_->scenario_manager()->LoadScenariosFromDisk();
@@ -312,7 +335,8 @@ class AppUiImpl : public AppUi {
     ImGui::Spacing();
     ImGui::Spacing();
 
-    DrawScenarioNodes(app_->scenario_manager()->scenario_nodes());
+    std::vector<absl::string_view> search_words = absl::StrSplit(scenario_search_text_, ' ');
+    DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words);
   }
 
   void DrawPlaylistsScreen() {
@@ -369,6 +393,8 @@ class AppUiImpl : public AppUi {
   std::unique_ptr<Texture> logo_texture_;
 
   std::unique_ptr<UiScreen> screen_to_show_;
+
+  std::string scenario_search_text_;
 };
 
 }  // namespace
