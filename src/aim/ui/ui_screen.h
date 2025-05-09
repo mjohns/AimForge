@@ -23,6 +23,7 @@ class UiScreen {
   virtual void DrawScreen() = 0;
 
   virtual void Resume();
+  virtual void Render();
 
   void ScreenDone(NavigationEvent nav_event = NavigationEvent::Done()) {
     return_value_ = nav_event;

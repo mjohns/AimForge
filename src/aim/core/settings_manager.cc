@@ -132,10 +132,10 @@ bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& map
 }
 
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
-                                 std::vector<std::filesystem::path> theme_dirs,
+                                 const std::filesystem::path& theme_dir,
                                  SettingsDb* settings_db,
                                  HistoryDb* history_db)
-    : theme_dirs_(std::move(theme_dirs)),
+    : theme_dir_(theme_dir),
       settings_path_(settings_path),
       settings_db_(settings_db),
       history_db_(history_db) {}
@@ -168,13 +168,11 @@ std::vector<std::string> SettingsManager::ListThemes() {
   auto recent_themes = history_db_->GetRecentViews(RecentViewType::THEME, 20);
 
   std::vector<std::string> all_theme_names;
-  for (auto dir : theme_dirs_) {
-    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
-      std::string filename = entry.path().filename().string();
-      if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
-        std::string name(absl::StripSuffix(filename, ".json"));
-        all_theme_names.push_back(name);
-      }
+  for (const auto& entry : std::filesystem::directory_iterator(theme_dir_)) {
+    std::string filename = entry.path().filename().string();
+    if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
+      std::string name(absl::StripSuffix(filename, ".json"));
+      all_theme_names.push_back(name);
     }
   }
 
@@ -215,19 +213,17 @@ Theme SettingsManager::GetThemeNoReferenceFollow(const std::string& theme_name) 
     return it->second.theme;
   }
 
-  for (auto& dir : theme_dirs_) {
-    auto path = dir / std::format("{}.json", theme_name);
-    if (std::filesystem::exists(path)) {
-      Theme theme;
-      if (ReadJsonMessageFromFile(path, &theme)) {
-        ThemeCacheEntry entry;
-        theme.set_name(theme_name);
-        entry.theme = theme;
-        entry.file_path = path;
-        entry.last_modified_time = std::filesystem::last_write_time(path);
-        theme_cache_[theme_name] = entry;
-        return theme;
-      }
+  auto path = theme_dir_ / std::format("{}.json", theme_name);
+  if (std::filesystem::exists(path)) {
+    Theme theme;
+    if (ReadJsonMessageFromFile(path, &theme)) {
+      ThemeCacheEntry entry;
+      theme.set_name(theme_name);
+      entry.theme = theme;
+      entry.file_path = path;
+      entry.last_modified_time = std::filesystem::last_write_time(path);
+      theme_cache_[theme_name] = entry;
+      return theme;
     }
   }
 
@@ -240,6 +236,12 @@ Theme SettingsManager::GetCurrentTheme() {
     return GetDefaultTheme();
   }
   return GetTheme(settings->theme_name());
+}
+
+void SettingsManager::SaveThemeToDisk(const std::string& theme_name, const Theme& theme) {
+  const std::filesystem::path full_path = theme_dir_ / std::format("{}.json", theme_name);
+  WriteJsonMessageToFile(full_path, theme);
+  theme_cache_.erase(theme_name);
 }
 
 void SettingsManager::MaybeInvalidateThemeCache() {

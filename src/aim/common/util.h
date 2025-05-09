@@ -45,11 +45,16 @@ static StoredVec3 ToStoredVec3(const T& v) {
   return result;
 }
 
+i32 FloatColorTo255(float value);
 Rgb HexToRgb(std::string hex);
+std::string ToHexString(const StoredColor& c);
+std::string ToHexString(const StoredRgb& c);
 StoredRgb ToStoredRgb(const StoredColor& c);
 StoredRgb ToStoredRgb(i32 r, i32 g, i32 b);
 StoredColor ToStoredColor(const std::string& hex);
 StoredColor ToStoredColor(i32 r, i32 g, i32 b);
+StoredColor FloatToStoredColor(float r, float g, float b);
+StoredRgb FloatToStoredRgb(float r, float g, float b);
 StoredColor ToStoredColor(float gray_value);
 ImU32 ToImCol32(const StoredRgb& c, uint8_t alpha = 255);
 ImU32 ToImCol32(const StoredColor& c);

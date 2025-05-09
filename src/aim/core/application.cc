@@ -106,13 +106,11 @@ int Application::Initialize() {
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("settings.db"));
   history_db_ = std::make_unique<HistoryDb>(file_system_->GetUserDataPath("history.db"));
 
-  std::vector<std::filesystem::path> theme_dirs = {
-      file_system_->GetUserDataPath("resources/themes"),
-      file_system_->GetBasePath("resources/themes"),
-  };
+  std::filesystem::path theme_dir = 
+      file_system_->GetUserDataPath("resources/themes");
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
-                                        theme_dirs,
+                                        theme_dir,
                                         settings_db_.get(),
                                         history_db_.get());
   auto settings_status = settings_manager_->Initialize();
