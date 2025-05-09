@@ -16,6 +16,7 @@ enum class AppScreen {
   STATS,
   EXIT,
   CURRENT_SCENARIO,
+  RECENT_SCENARIOS,
   CURRENT_PLAYLIST
 };
 
