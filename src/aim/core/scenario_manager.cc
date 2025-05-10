@@ -38,6 +38,9 @@ std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
     item.def.set_scenario_id(item.name);
     scenarios.push_back(item);
   }
+  std::sort(scenarios.begin(),
+            scenarios.end(),
+            [](const ScenarioItem& lhs, const ScenarioItem& rhs) { return lhs.name < rhs.name; });
   return scenarios;
 }
 
