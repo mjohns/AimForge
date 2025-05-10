@@ -6,6 +6,7 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+#include "aim/common/util.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
@@ -214,6 +215,10 @@ class AppUiImpl : public AppUi {
         app_screen_ = AppScreen::CURRENT_SCENARIO;
       }
     }
+    if (ImGui::Selectable("Recent Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
+      LoadRecentScenarioNames();
+      app_screen_ = AppScreen::RECENT_SCENARIOS;
+    }
     if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
     }
@@ -256,6 +261,9 @@ class AppUiImpl : public AppUi {
     }
     if (app_screen_ == AppScreen::SCENARIOS) {
       DrawScenariosScreen();
+    }
+    if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
+      DrawRecentScenariosScreen();
     }
 
     if (app_screen_ == AppScreen::CURRENT_PLAYLIST) {
@@ -349,6 +357,29 @@ class AppUiImpl : public AppUi {
     DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words);
   }
 
+  void DrawRecentScenariosScreen() {
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
+    for (int i = 0; i < recent_scenario_names_.size(); ++i) {
+      auto& scenario = recent_scenario_names_[i];
+      if (ImGui::Button(std::format("{}##recent_scenario{}", scenario, i).c_str(), sz)) {
+        current_scenario_def_ = app_->scenario_manager()->GetScenario(scenario);
+        scenario_run_option_ = ScenarioRunOption::RUN;
+      }
+    }
+  }
+
+  void LoadRecentScenarioNames() {
+    auto recent_scenarios = app_->history_db()->GetRecentViews(RecentViewType::SCENARIO, 50);
+    std::vector<std::string> names;
+    for (auto& s : recent_scenarios) {
+      std::string name = s.id;
+      if (!VectorContains(names, name)) {
+        names.push_back(name);
+      }
+    }
+    recent_scenario_names_ = std::move(names);
+  }
+
   void DrawPlaylistsScreen() {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::PushItemWidth(char_size.x * 30);
@@ -414,6 +445,8 @@ class AppUiImpl : public AppUi {
 
   std::string scenario_search_text_;
   std::string playlist_search_text_;
+
+  std::vector<std::string> recent_scenario_names_;
 };
 
 }  // namespace
