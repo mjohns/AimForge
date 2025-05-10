@@ -307,7 +307,7 @@ class AppUiImpl : public AppUi {
   void DrawScenariosScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     if (ImGui::Button("Reload Scenarios", sz)) {
-      app_->scenario_manager()->ReloadScenariosIfChanged();
+      app_->scenario_manager()->LoadScenariosFromDisk();
     }
     ImGui::Spacing();
     ImGui::Spacing();

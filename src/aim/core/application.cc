@@ -118,9 +118,7 @@ int Application::Initialize() {
     return -1;
   }
 
-  scenario_manager_ =
-      std::make_unique<ScenarioManager>(file_system_->GetBasePath("resources/scenarios"),
-                                        file_system_->GetUserDataPath("resources/scenarios"));
+  scenario_manager_ = std::make_unique<ScenarioManager>(file_system_.get());
   scenario_manager_->LoadScenariosFromDisk();
 
   playlist_manager_ =

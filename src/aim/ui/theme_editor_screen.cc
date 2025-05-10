@@ -240,6 +240,7 @@ class ThemeEditorScreen : public UiScreen {
         if (ImGui::Selectable(std::format("{}##{}theme_name", theme_name, i).c_str(),
                               is_selected)) {
           UpdateCurrentTheme(theme_name);
+          app_->history_db()->UpdateRecentView(RecentViewType::THEME, theme_name);
         }
         if (is_selected) {
           ImGui::SetItemDefaultFocus();
