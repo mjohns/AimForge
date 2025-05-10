@@ -121,9 +121,7 @@ int Application::Initialize() {
   scenario_manager_ = std::make_unique<ScenarioManager>(file_system_.get());
   scenario_manager_->LoadScenariosFromDisk();
 
-  playlist_manager_ =
-      std::make_unique<PlaylistManager>(file_system_->GetBasePath("resources/playlists"),
-                                        file_system_->GetUserDataPath("resources/playlists"));
+  playlist_manager_ = std::make_unique<PlaylistManager>(file_system_.get());
   playlist_manager_->LoadPlaylistsFromDisk();
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
