@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL_filesystem.h>
 
+#include <algorithm>
 #include <filesystem>
 
 namespace aim {
@@ -36,6 +37,9 @@ std::vector<BundleInfo> FileSystem::GetBundles() {
     bundle.name = entry.path().filename().string();
     bundles.push_back(bundle);
   }
+  std::sort(bundles.begin(), bundles.end(), [](const BundleInfo& lhs, const BundleInfo& rhs) {
+    return lhs.name < rhs.name;
+  });
   return bundles;
 }
 
