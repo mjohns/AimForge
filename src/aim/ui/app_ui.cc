@@ -215,10 +215,6 @@ class AppUiImpl : public AppUi {
         app_screen_ = AppScreen::CURRENT_SCENARIO;
       }
     }
-    if (ImGui::Selectable("Recent Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
-      LoadRecentScenarioNames();
-      app_screen_ = AppScreen::RECENT_SCENARIOS;
-    }
     if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
     }
@@ -227,6 +223,15 @@ class AppUiImpl : public AppUi {
       if (ImGui::Selectable(playlist_label.c_str(), app_screen_ == AppScreen::CURRENT_PLAYLIST)) {
         app_screen_ = AppScreen::CURRENT_PLAYLIST;
       }
+    }
+
+    bool node_opened = ImGui::TreeNodeEx("Recent", ImGuiTreeNodeFlags_DefaultOpen);
+    if (node_opened) {
+      if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
+        LoadRecentScenarioNames();
+        app_screen_ = AppScreen::RECENT_SCENARIOS;
+      }
+      ImGui::TreePop();
     }
 
     ImGui::Spacing();
