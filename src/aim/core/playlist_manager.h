@@ -46,7 +46,7 @@ class PlaylistManager {
   void LoadPlaylistsFromDisk();
 
   PlaylistRun* GetMutableCurrentRun() {
-    return current_run_.has_value() ? &(*current_run_) : nullptr;
+    return GetOptionalRun(current_playlist_name_);
   }
 
   PlaylistRun* StartNewRun(const std::string& name);
@@ -56,11 +56,14 @@ class PlaylistManager {
   }
 
  private:
-  std::optional<PlaylistRun> current_run_;
+  PlaylistRun* GetOptionalRun(const std::string& name);
+
+  std::string current_playlist_name_;
   std::filesystem::path base_dir_;
   std::filesystem::path user_dir_;
   std::vector<Playlist> playlists_;
   FileSystem* fs_;
+  std::unordered_map<std::string, std::unique_ptr<PlaylistRun>> playlist_run_map_;
 };
 
 }  // namespace aim

@@ -10,6 +10,7 @@
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
+#include "aim/ui/playlist_ui.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/ui_screen.h"
@@ -417,22 +418,13 @@ class AppUiImpl : public AppUi {
     if (run == nullptr) {
       return;
     }
-
-    for (int i = 0; i < run->playlist.def.items_size(); ++i) {
-      PlaylistItemProgress& progress = run->progress_list[i];
-      PlaylistItem item = run->playlist.def.items(i);
-      std::string item_label = std::format("{}###n{}", item.scenario(), i);
-      if (ImGui::Button(item_label.c_str(), sz)) {
-        auto maybe_scenario = app_->scenario_manager()->GetScenario(item.scenario());
-        if (maybe_scenario.has_value()) {
-          run->current_index = i;
-          current_scenario_def_ = *maybe_scenario;
-          scenario_run_option_ = ScenarioRunOption::RUN;
-        }
+    std::string scenario_id;
+    if (PlaylistRunComponent("PlaylistRun", run, &scenario_id)) {
+      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
+      if (maybe_scenario.has_value()) {
+        current_scenario_def_ = *maybe_scenario;
+        scenario_run_option_ = ScenarioRunOption::RUN;
       }
-      ImGui::SameLine();
-      std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
-      ImGui::Text(progress_text.c_str());
     }
   }
 

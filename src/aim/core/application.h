@@ -114,6 +114,10 @@ class Application {
     return logger_.get();
   };
 
+  u64 GetNextComponentId() {
+    return component_id_counter_++;
+  }
+
   void EnableVsync();
   void DisableVsync();
 
@@ -150,6 +154,7 @@ class Application {
   std::unique_ptr<FontManager> font_manager_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
+  u64 component_id_counter_ = 1;
 };
 
 }  // namespace aim

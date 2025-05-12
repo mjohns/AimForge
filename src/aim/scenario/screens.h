@@ -5,6 +5,7 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/ui_screen.h"
+#include "aim/ui/playlist_ui.h"
 
 namespace aim {
 
