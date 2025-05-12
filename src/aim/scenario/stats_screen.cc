@@ -11,6 +11,7 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/screens.h"
+#include "aim/ui/playlist_ui.h"
 
 namespace aim {
 namespace {
@@ -205,20 +206,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
       ImGui::Spacing();
       ImGui::Spacing();
       ImGui::Spacing();
-
-      ImVec2 sz = ImVec2(0.0f, 0.0f);
-      for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
-        PlaylistItemProgress& progress = playlist_run->progress_list[i];
-        PlaylistItem item = playlist_run->playlist.def.items(i);
-        std::string item_label = std::format("{}###play_n{}", item.scenario(), i);
-        if (ImGui::Button(item_label.c_str(), sz)) {
-          playlist_run->current_index = i;
-          scenario_to_start = item.scenario();
-        }
-        ImGui::SameLine();
-        std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
-        ImGui::Text(progress_text);
-      }
+      PlaylistRunComponent("PlaylistRun", playlist_run, &scenario_to_start);
     }
 
     ImGui::NextColumn();
