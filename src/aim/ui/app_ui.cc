@@ -118,7 +118,7 @@ class AppUiImpl : public AppUi {
   }
 
   bool HandlePlaylistNext() {
-    PlaylistRun* run = app_->playlist_manager()->GetMutableCurrentRun();
+    PlaylistRun* run = app_->playlist_manager()->GetCurrentRun();
     if (run == nullptr) {
       scenario_run_option_ = ScenarioRunOption::RUN;
       return true;
@@ -405,7 +405,7 @@ class AppUiImpl : public AppUi {
         if (ImGui::Button(playlist.name.c_str(), sz)) {
           current_playlist_ = playlist;
           app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
-          app_->playlist_manager()->StartNewRun(playlist.name);
+          app_->playlist_manager()->SetCurrentPlaylist(playlist.name);
           app_screen_ = AppScreen::CURRENT_PLAYLIST;
         }
       }
@@ -414,7 +414,7 @@ class AppUiImpl : public AppUi {
 
   void DrawCurrentPlaylistScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
-    PlaylistRun* run = app_->playlist_manager()->GetMutableCurrentRun();
+    PlaylistRun* run = app_->playlist_manager()->GetCurrentRun();
     if (run == nullptr) {
       return;
     }
