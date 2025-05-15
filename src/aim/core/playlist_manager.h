@@ -45,18 +45,25 @@ class PlaylistManager {
 
   void LoadPlaylistsFromDisk();
 
-  PlaylistRun* GetMutableCurrentRun() {
-    return GetOptionalRun(current_playlist_name_);
+  PlaylistRun* GetCurrentRun() {
+    if (current_playlist_name_.size() == 0) {
+      return nullptr;
+    }
+    return GetRun(current_playlist_name_);
   }
 
-  PlaylistRun* StartNewRun(const std::string& name);
+  PlaylistRun* GetRun(const std::string& name);
+
+  void SetCurrentPlaylist(const std::string& name) {
+    current_playlist_name_ = name;
+  }
 
   const std::vector<Playlist>& playlists() const {
     return playlists_;
   }
 
  private:
-  PlaylistRun* GetOptionalRun(const std::string& name);
+  PlaylistRun* GetOptionalExistingRun(const std::string& name);
 
   std::string current_playlist_name_;
   std::filesystem::path base_dir_;

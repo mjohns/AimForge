@@ -148,7 +148,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
 
   Settings settings = app_->settings_manager()->GetCurrentSettings();
 
-  PlaylistRun* playlist_run = app_->playlist_manager()->GetMutableCurrentRun();
+  PlaylistRun* playlist_run = app_->playlist_manager()->GetCurrentRun();
 
   // Show results page
   app_->EnableVsync();

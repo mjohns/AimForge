@@ -48,7 +48,7 @@ void PlaylistManager::LoadPlaylistsFromDisk() {
   }
 }
 
-PlaylistRun* PlaylistManager::GetOptionalRun(const std::string& name) {
+PlaylistRun* PlaylistManager::GetOptionalExistingRun(const std::string& name) {
   auto it = playlist_run_map_.find(name);
   if (it != playlist_run_map_.end()) {
     return it->second.get();
@@ -56,7 +56,11 @@ PlaylistRun* PlaylistManager::GetOptionalRun(const std::string& name) {
   return nullptr;
 }
 
-PlaylistRun* PlaylistManager::StartNewRun(const std::string& name) {
+PlaylistRun* PlaylistManager::GetRun(const std::string& name) {
+  auto existing_run = GetOptionalExistingRun(name);
+  if (existing_run != nullptr) {
+    return existing_run;
+  }
   for (const Playlist& playlist : playlists_) {
     if (playlist.name == name) {
       auto run = std::make_unique<PlaylistRun>();
@@ -66,13 +70,11 @@ PlaylistRun* PlaylistManager::StartNewRun(const std::string& name) {
         progress.item = playlist.def.items(i);
         run->progress_list.push_back(progress);
       }
-      current_playlist_name_ = name;
+      PlaylistRun* result = run.get();
       playlist_run_map_[name] = std::move(run);
-
-      return GetMutableCurrentRun();
+      return result;
     }
   }
-
   return nullptr;
 }
 

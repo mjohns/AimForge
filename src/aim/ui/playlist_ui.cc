@@ -5,6 +5,30 @@
 #include "aim/common/imgui_ext.h"
 
 namespace aim {
+namespace {
+
+class PlaylistEditorComponent : public UiComponent {
+ public:
+  explicit PlaylistEditorComponent(Application* app)
+      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
+
+  void Show() {}
+
+ private:
+  PlaylistManager* playlist_manager_;
+};
+
+class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
+ public:
+  explicit PlaylistComponentImpl(Application* app) : UiComponent(app) {}
+
+  void Show(const std::string& playlist_name) override {}
+
+ private:
+  PlaylistManager* playlist_manager_;
+};
+
+}  // namespace
 
 bool PlaylistRunComponent(const std::string& id,
                           PlaylistRun* playlist_run,
@@ -25,6 +49,10 @@ bool PlaylistRunComponent(const std::string& id,
     ImGui::Text(progress_text);
   }
   return selected;
+}
+
+std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(Application* app) {
+  return std::make_unique<PlaylistComponentImpl>(app);
 }
 
 }  // namespace aim
