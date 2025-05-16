@@ -7,25 +7,21 @@
 namespace aim {
 namespace {
 
-class PlaylistEditorComponent : public UiComponent {
- public:
-  explicit PlaylistEditorComponent(Application* app)
-      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
-
-  void Show() {}
-
- private:
-  PlaylistManager* playlist_manager_;
+struct EditorResult {
+  bool playlist_updated = false;
+  bool editor_closed = false;
 };
 
-class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
+class PlaylistEditorComponent : public UiComponent {
  public:
-  explicit PlaylistComponentImpl(Application* app)
-      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
+  explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
+      : UiComponent(app),
+        playlist_manager_(app->playlist_manager()),
+        playlist_name_(playlist_name) {}
 
-  void Show(const std::string& playlist_name) override {
+  void Show(EditorResult* result) {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
-    PlaylistRun* run = playlist_manager_->GetRun(playlist_name);
+    PlaylistRun* run = playlist_manager_->GetRun(playlist_name_);
 
     if (scenario_names_.size() == 0) {
       for (auto& i : run->playlist.def.items()) {
@@ -84,20 +80,8 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
           if (payload->IsDelivery()) {
             scenario_names_ = MoveVectorItem(scenario_names_, dragging_i_, dest_before_i++);
             dragging_i_ = -1;
-            // move the items.
           }
         }
-        /*
-        // Optional: Draw a visual indicator for the drop target
-        ImGuiIO& io = ImGui::GetIO();
-        ImDrawList* draw_list = ImGui::GetWindowDrawList();
-        ImVec2 target_pos = ImGui::GetItemRectMin();    // Position of the Dummy
-        ImVec2 target_size = ImGui::GetItemRectSize();  // Size of the Dummy
-        draw_list->AddLine(target_pos,
-                           ImVec2(target_pos.x + target_size.x, target_pos.y),
-                           ImGui::GetColorU32(ImGuiCol_DragDropTarget),
-                           2.0f);
-                           */
 
         ImGui::EndDragDropTarget();
       }
@@ -109,6 +93,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
 
       ImGui::PopID();
     }
+
     if (!still_dragging) {
       dragging_i_ = -1;
     }
@@ -119,6 +104,53 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
   std::vector<std::string> scenario_names_;
   int dragging_i_ = -1;
   int last_hovered_i_ = -1;
+  std::string playlist_name_;
+};
+
+class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
+ public:
+  explicit PlaylistComponentImpl(Application* app)
+      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
+
+  bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
+    if (playlist_name != current_playlist_name_) {
+      current_playlist_name_ = playlist_name;
+      ResetForNewCurrentPlaylist();
+    }
+
+    if (showing_editor_) {
+      if (!editor_component_) {
+        editor_component_ = std::make_unique<PlaylistEditorComponent>(app_, playlist_name);
+      }
+      EditorResult editor_result;
+      editor_component_->Show(&editor_result);
+      if (editor_result.editor_closed) {
+        editor_component_ = {};
+        showing_editor_ = false;
+        // Check if updated and handle appropriately.
+      }
+      return false;
+    }
+
+    ImGui::Text("%s", playlist_name.c_str());
+    ImGui::SameLine();
+    if (ImGui::Button("Edit")) {
+      showing_editor_ = true;
+    }
+    return PlaylistRunComponent(
+        "PlaylistRun", playlist_manager_->GetCurrentRun(), scenario_to_start);
+  }
+
+ private:
+  void ResetForNewCurrentPlaylist() {
+    editor_component_ = {};
+    showing_editor_ = false;
+  }
+
+  PlaylistManager* playlist_manager_;
+  bool showing_editor_ = false;
+  std::unique_ptr<PlaylistEditorComponent> editor_component_;
+  std::string current_playlist_name_;
 };
 
 }  // namespace
