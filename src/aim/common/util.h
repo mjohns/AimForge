@@ -130,4 +130,31 @@ bool VectorContains(const std::vector<T>& values, const T& value) {
   return it != values.end();
 }
 
+template <typename T>
+std::vector<T> MoveVectorItem(const std::vector<T>& original_values, int src_i, int dest_before_i) {
+  if (!IsValidIndex(original_values, src_i)) {
+    return original_values;
+  }
+  bool is_valid_dest = dest_before_i >= 0 && dest_before_i <= original_values.size();
+  if (!is_valid_dest) {
+    return original_values;
+  }
+
+  std::vector<T> result;
+
+  // Copy over all values before dest_before_i except the item being moved.
+  for (int i = 0; i < original_values.size() && i < dest_before_i; ++i) {
+    if (i != src_i) {
+      result.push_back(original_values[i]);
+    }
+  }
+  result.push_back(original_values[src_i]);
+  for (int i = dest_before_i; i < original_values.size(); ++i) {
+    if (i != src_i) {
+      result.push_back(original_values[i]);
+    }
+  }
+  return result;
+}
+
 }  // namespace aim
