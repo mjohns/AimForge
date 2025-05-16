@@ -23,6 +23,7 @@ class AppUiImpl : public AppUi {
   explicit AppUiImpl(Application* app) : AppUi(), app_(app) {
     logo_texture_ = std::make_unique<Texture>(
         app->file_system()->GetBasePath("resources/images/logo.png"), app->gpu_device());
+    playlist_component_ = CreatePlaylistComponent(app);
   }
 
   void Run() override {
@@ -426,6 +427,8 @@ class AppUiImpl : public AppUi {
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
     }
+
+    playlist_component_->Show(run->playlist.name);
   }
 
   AppScreen app_screen_ = AppScreen::SCENARIOS;
@@ -444,6 +447,8 @@ class AppUiImpl : public AppUi {
   std::string playlist_search_text_;
 
   std::vector<std::string> recent_scenario_names_;
+
+  std::unique_ptr<PlaylistComponent> playlist_component_;
 };
 
 }  // namespace
