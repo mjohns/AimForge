@@ -22,7 +22,9 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
         continue;
       }
       Playlist p;
-      p.name = std::format("{} {}", bundle_name, absl::StripSuffix(filename, ".json"));
+      p.bundle_playlist_name = absl::StripSuffix(filename, ".json");
+      p.bundle_name = bundle_name;
+      p.name = std::format("{} {}", bundle_name, p.bundle_playlist_name);
 
       if (!ReadJsonMessageFromFile(entry.path(), &p.def)) {
         Logger::get()->warn("Unable to read playlist {}", entry.path().string());

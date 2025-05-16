@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/search.h"
 
 namespace aim {
 namespace {
@@ -17,26 +18,49 @@ class PlaylistEditorComponent : public UiComponent {
   explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
       : UiComponent(app),
         playlist_manager_(app->playlist_manager()),
-        playlist_name_(playlist_name) {}
-
-  void Show(EditorResult* result) {
-    ImVec2 sz = ImVec2(0.0f, 0.0f);
+        playlist_name_(playlist_name) {
     PlaylistRun* run = playlist_manager_->GetRun(playlist_name_);
-
-    if (scenario_names_.size() == 0) {
+    if (run != nullptr) {
+      new_playlist_name_ = run->playlist.bundle_playlist_name;
       for (auto& i : run->playlist.def.items()) {
-        scenario_names_.push_back(i.scenario());
+        scenario_items_.push_back(i);
       }
     }
+  }
 
+  void Show(EditorResult* result) {
+    PlaylistRun* run = playlist_manager_->GetRun(playlist_name_);
+    if (run == nullptr) {
+      result->editor_closed = true;
+      return;
+    }
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+
+    ImGui::Text("%s", run->playlist.bundle_name.c_str());
+    ImGui::SameLine();
+    ImGui::PushItemWidth(400);
+    ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
+    ImGui::PopItemWidth();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    int remove_i = -1;
     bool still_dragging = false;
-    for (int i = 0; i < scenario_names_.size(); ++i) {
-      const std::string& scenario_name = scenario_names_[i];
+    for (int i = 0; i < scenario_items_.size(); ++i) {
+      PlaylistItem& item = scenario_items_[i];
+      const std::string& scenario_name = item.scenario();
       std::string item_label =
           std::format("{}###Component{}PlaylistEditorItem{}", scenario_name, component_id_, i);
       ImGui::PushID(std::format("PlaylistItem{}", i).c_str());
 
-      ImGui::Selectable(item_label.c_str());
+      if (i == dragging_i_) {
+        ImGui::BeginDisabled();
+        ImGui::Button(item_label.c_str());
+        ImGui::EndDisabled();
+      } else {
+        ImGui::Button(item_label.c_str());
+      }
       if (ImGui::BeginDragDropSource()) {
         ImGui::SetDragDropPayload("PLAYLIST_ITEM_TYPE", &i, sizeof(int));
         ImGui::Text("Move \"%s\"", scenario_name.c_str());
@@ -48,13 +72,6 @@ class PlaylistEditorComponent : public UiComponent {
             ImGuiDragDropFlags_AcceptBeforeDelivery | ImGuiDragDropFlags_AcceptNoDrawDefaultRect;
         if (const ImGuiPayload* payload =
                 ImGui::AcceptDragDropPayload("PLAYLIST_ITEM_TYPE", drop_target_flags)) {
-          // Process the drop: 'i' is the index *after* which the item will be inserted
-          int dragged_item_index = *(const int*)payload->Data;
-          last_hovered_i_ = i;
-          // Perform reordering or insertion logic here
-          // Be careful with index validity and potential issues when modifying the list while
-          // iterating
-
           ImVec2 rect_min = ImGui::GetItemRectMin();
           ImVec2 rect_max = ImGui::GetItemRectMax();
 
@@ -78,8 +95,9 @@ class PlaylistEditorComponent : public UiComponent {
                              2.0f);
 
           if (payload->IsDelivery()) {
-            scenario_names_ = MoveVectorItem(scenario_names_, dragging_i_, dest_before_i++);
+            scenario_items_ = MoveVectorItem(scenario_items_, dragging_i_, dest_before_i);
             dragging_i_ = -1;
+            updated_ = true;
           }
         }
 
@@ -91,20 +109,85 @@ class PlaylistEditorComponent : public UiComponent {
         still_dragging = true;
       }
 
+      if (ImGui::BeginPopupContextItem("item_menu")) {
+        if (ImGui::Selectable("Delete")) remove_i = i;
+        ImGui::EndPopup();
+      }
+      ImGui::OpenPopupOnItemClick("item_menu", ImGuiPopupFlags_MouseButtonRight);
+
+      ImGui::SameLine();
+      u32 num_plays = item.num_plays();
+      u32 step = 1;
+      ImGui::SetNextItemWidth(char_size.x * 8);
+      ImGui::InputScalar("###NumPlays", ImGuiDataType_U32, &num_plays, &step, nullptr, "%u");
+
+      item.set_num_plays(num_plays);
+
       ImGui::PopID();
+    }
+
+    if (IsValidIndex(scenario_items_, remove_i)) {
+      auto it = scenario_items_.begin() + remove_i;
+      scenario_items_.erase(it);
     }
 
     if (!still_dragging) {
       dragging_i_ = -1;
     }
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Text("Add scenario");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_size.x * 30);
+    ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
+    ImGui::SameLine();
+    if (ImGui::Button("Clear")) {
+      scenario_search_text_ = "";
+    }
+    if (scenario_search_text_.size() > 0) {
+      auto search_words = GetSearchWords(scenario_search_text_);
+      ImGui::Indent();
+      for (int i = 0; i < app_->scenario_manager()->scenarios().size(); ++i) {
+        ImGui::PushID(std::format("ScenarioSearch{}", i).c_str());
+        const auto& scenario = app_->scenario_manager()->scenarios()[i];
+        if (StringMatchesSearch(scenario.name, search_words, /*empty_matches=*/false)) {
+          if (ImGui::Button(scenario.name.c_str())) {
+            PlaylistItem item;
+            item.set_scenario(scenario.name);
+            item.set_num_plays(1);
+            scenario_items_.push_back(item);
+            scenario_search_text_ = "";
+          }
+        }
+        ImGui::PopID();
+      }
+      ImGui::Unindent();
+    }
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    if (ImGui::Button("Save")) {
+      result->editor_closed = true;
+      return;
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      result->editor_closed = true;
+      return;
+    }
   }
 
  private:
   PlaylistManager* playlist_manager_;
-  std::vector<std::string> scenario_names_;
+  std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
-  int last_hovered_i_ = -1;
   std::string playlist_name_;
+  bool updated_ = false;
+
+  std::string scenario_search_text_;
+  std::string new_playlist_name_;
 };
 
 class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
@@ -158,13 +241,12 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
 bool PlaylistRunComponent(const std::string& id,
                           PlaylistRun* playlist_run,
                           std::string* scenario_to_start) {
-  ImVec2 sz = ImVec2(0.0f, 0.0f);
   bool selected = false;
   for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
     PlaylistItemProgress& progress = playlist_run->progress_list[i];
     PlaylistItem item = playlist_run->playlist.def.items(i);
     std::string item_label = std::format("{}###{}_n{}", item.scenario(), id, i);
-    if (ImGui::Button(item_label.c_str(), sz)) {
+    if (ImGui::Button(item_label.c_str())) {
       selected = true;
       playlist_run->current_index = i;
       *scenario_to_start = item.scenario();

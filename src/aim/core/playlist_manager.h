@@ -23,6 +23,10 @@ struct PlaylistItemProgress {
 struct Playlist {
   std::string name;
   PlaylistDef def;
+
+  std::string bundle_name;
+  // Name without the bundle prefix.
+  std::string bundle_playlist_name;
 };
 
 struct PlaylistRun {
