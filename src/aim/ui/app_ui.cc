@@ -420,15 +420,13 @@ class AppUiImpl : public AppUi {
       return;
     }
     std::string scenario_id;
-    if (PlaylistRunComponent("PlaylistRun", run, &scenario_id)) {
+    if (playlist_component_->Show(run->playlist.name, &scenario_id)) {
       auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
         current_scenario_def_ = *maybe_scenario;
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
     }
-
-    playlist_component_->Show(run->playlist.name);
   }
 
   AppScreen app_screen_ = AppScreen::SCENARIOS;

@@ -17,7 +17,9 @@ bool PlaylistRunComponent(const std::string& id,
 class PlaylistComponent {
  public:
   virtual ~PlaylistComponent() {}
-  virtual void Show(const std::string& playlist_name) = 0;
+
+  // Returns whether to a scenario from the playlist needs to be started.
+  virtual bool Show(const std::string& playlist_name, std::string* scenario_to_start) = 0;
 };
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(Application* app);
