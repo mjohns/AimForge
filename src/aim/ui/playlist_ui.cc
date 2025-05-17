@@ -10,6 +10,16 @@
 namespace aim {
 namespace {
 
+std::vector<std::string> GetAllNamesInBundle(const std::string& bundle_name, Application* app) {
+  std::vector<std::string> names;
+  for (const Playlist& playlist : app->playlist_manager()->playlists()) {
+    if (playlist.bundle_name == bundle_name) {
+      names.push_back(playlist.bundle_playlist_name);
+    }
+  }
+  return names;
+}
+
 struct EditorResult {
   bool playlist_updated = false;
   bool editor_closed = false;
@@ -217,12 +227,7 @@ class PlaylistEditorComponent : public UiComponent {
     bool name_changed = new_playlist_name_ != original_bundle_playlist_name_;
     if (name_changed) {
       // Need to move file.
-      std::vector<std::string> taken_names;
-      for (const Playlist& playlist : playlist_manager_->playlists()) {
-        if (playlist.bundle_name == bundle_name_) {
-          taken_names.push_back(playlist.bundle_playlist_name);
-        }
-      }
+      std::vector<std::string> taken_names = GetAllNamesInBundle(bundle_name_, app_);
       final_name = MakeUniqueName(new_playlist_name_, taken_names);
       if (!playlist_manager_->RenamePlaylist(
               bundle_name_, original_bundle_playlist_name_, final_name)) {
@@ -316,13 +321,45 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     ImGui::Spacing();
     ImGui::Spacing();
 
+    std::optional<Playlist> delete_playlist;
+    std::optional<Playlist> copy_playlist;
     auto search_words = GetSearchWords(playlist_search_text_);
+    int loop_id = 0;
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
+      loop_id++;
+      ImGui::PushID(loop_id);
       if (StringMatchesSearch(playlist.name, search_words)) {
         if (ImGui::Button(playlist.name.c_str(), sz)) {
           result->open_playlist = playlist;
         }
+        if (ImGui::BeginPopupContextItem("playlist_item_menu")) {
+          if (ImGui::Selectable("Copy")) {
+            copy_playlist = playlist;
+          }
+          if (ImGui::Selectable("Delete")) {
+            delete_playlist = playlist;
+          }
+          ImGui::EndPopup();
+        }
+        ImGui::OpenPopupOnItemClick("playlist_item_menu", ImGuiPopupFlags_MouseButtonRight);
       }
+      ImGui::PopID();
+    }
+
+    if (ImGui::Button("Create new playlist")) {
+    }
+
+    if (delete_playlist.has_value()) {
+      app_->playlist_manager()->DeletePlaylist(delete_playlist->bundle_name,
+                                               delete_playlist->bundle_playlist_name);
+      app_->playlist_manager()->LoadPlaylistsFromDisk();
+    }
+    if (copy_playlist.has_value()) {
+      auto playlist = *copy_playlist;
+      auto taken_names = GetAllNamesInBundle(playlist.bundle_name, app_);
+      std::string new_name = MakeUniqueName(playlist.bundle_playlist_name + " Copy", taken_names);
+      app_->playlist_manager()->SavePlaylist(playlist.bundle_name, new_name, playlist.def);
+      app_->playlist_manager()->LoadPlaylistsFromDisk();
     }
   }
 
