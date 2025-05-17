@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <algorithm>
+
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
 
@@ -18,10 +20,12 @@ class PlaylistEditorComponent : public UiComponent {
   explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
       : UiComponent(app),
         playlist_manager_(app->playlist_manager()),
-        playlist_name_(playlist_name) {
-    PlaylistRun* run = playlist_manager_->GetRun(playlist_name_);
+        full_playlist_name_(playlist_name) {
+    PlaylistRun* run = playlist_manager_->GetRun(full_playlist_name_);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.bundle_playlist_name;
+      original_bundle_playlist_name_ = new_playlist_name_;
+      bundle_name_ = run->playlist.bundle_name;
       for (auto& i : run->playlist.def.items()) {
         scenario_items_.push_back(i);
       }
@@ -29,7 +33,7 @@ class PlaylistEditorComponent : public UiComponent {
   }
 
   void Show(EditorResult* result) {
-    PlaylistRun* run = playlist_manager_->GetRun(playlist_name_);
+    PlaylistRun* run = playlist_manager_->GetRun(full_playlist_name_);
     if (run == nullptr) {
       result->editor_closed = true;
       return;
@@ -110,6 +114,9 @@ class PlaylistEditorComponent : public UiComponent {
       }
 
       if (ImGui::BeginPopupContextItem("item_menu")) {
+        if (ImGui::Selectable("Copy")) {
+          scenario_items_.push_back(item);
+        }
         if (ImGui::Selectable("Delete")) remove_i = i;
         ImGui::EndPopup();
       }
@@ -152,12 +159,18 @@ class PlaylistEditorComponent : public UiComponent {
         ImGui::PushID(std::format("ScenarioSearch{}", i).c_str());
         const auto& scenario = app_->scenario_manager()->scenarios()[i];
         if (StringMatchesSearch(scenario.name, search_words, /*empty_matches=*/false)) {
-          if (ImGui::Button(scenario.name.c_str())) {
-            PlaylistItem item;
-            item.set_scenario(scenario.name);
-            item.set_num_plays(1);
-            scenario_items_.push_back(item);
-            scenario_search_text_ = "";
+          bool already_in_playlist =
+              std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
+                return item.scenario() == scenario.name;
+              });
+          if (!already_in_playlist) {
+            if (ImGui::Button(scenario.name.c_str())) {
+              PlaylistItem item;
+              item.set_scenario(scenario.name);
+              item.set_num_plays(1);
+              scenario_items_.push_back(item);
+              scenario_search_text_ = "";
+            }
           }
         }
         ImGui::PopID();
@@ -168,8 +181,12 @@ class PlaylistEditorComponent : public UiComponent {
     ImGui::Spacing();
     ImGui::Spacing();
     if (ImGui::Button("Save")) {
-      result->editor_closed = true;
-      return;
+      if (SavePlaylist()) {
+        result->editor_closed = true;
+        result->playlist_updated = true;
+        return;
+      }
+      ImGui::OpenPopup("Error");
     }
 
     ImGui::SameLine();
@@ -177,13 +194,50 @@ class PlaylistEditorComponent : public UiComponent {
       result->editor_closed = true;
       return;
     }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal("Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+      ImGui::Text("Unable to save playlist");
+
+      if (ImGui::Button("OK", ImVec2(120, 0))) {
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
   }
 
  private:
+  bool SavePlaylist() {
+    PlaylistDef playlist;
+    playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
+
+    std::string final_name = new_playlist_name_;
+    bool name_changed = new_playlist_name_ != original_bundle_playlist_name_;
+    if (name_changed) {
+      // Need to move file.
+      std::vector<std::string> taken_names;
+      for (const Playlist& playlist : playlist_manager_->playlists()) {
+        if (playlist.bundle_name == bundle_name_) {
+          taken_names.push_back(playlist.bundle_playlist_name);
+        }
+      }
+      final_name = MakeUniqueName(new_playlist_name_, taken_names);
+      if (!playlist_manager_->RenamePlaylist(
+              bundle_name_, original_bundle_playlist_name_, final_name)) {
+        return false;
+      }
+    }
+
+    return playlist_manager_->SavePlaylist(bundle_name_, final_name, playlist);
+  }
+
   PlaylistManager* playlist_manager_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
-  std::string playlist_name_;
+  std::string full_playlist_name_;
+  std::string original_bundle_playlist_name_;
+  std::string bundle_name_;
   bool updated_ = false;
 
   std::string scenario_search_text_;
@@ -210,7 +264,9 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
       if (editor_result.editor_closed) {
         editor_component_ = {};
         showing_editor_ = false;
-        // Check if updated and handle appropriately.
+        if (editor_result.playlist_updated) {
+          playlist_manager_->LoadPlaylistsFromDisk();
+        }
       }
       return false;
     }

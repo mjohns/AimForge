@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <string>
+#include <optional>
 
 namespace aim {
 
@@ -18,6 +19,7 @@ class FileSystem {
   std::filesystem::path GetBasePath(const std::filesystem::path& file_name);
 
   std::vector<BundleInfo> GetBundles();
+  std::optional<BundleInfo> GetBundle(const std::string& bundle_name);
 
  private:
   std::filesystem::path pref_dir_;
