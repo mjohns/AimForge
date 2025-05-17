@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <string>
 
 #include "aim/core/application.h"
@@ -23,5 +24,19 @@ class PlaylistComponent {
 };
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(Application* app);
+
+struct PlaylistListResult {
+  std::optional<Playlist> open_playlist{};
+};
+
+class PlaylistListComponent {
+ public:
+  virtual ~PlaylistListComponent() {}
+
+  // Returns whether to open an individual playlist.
+  virtual void Show(PlaylistListResult* result) = 0;
+};
+
+std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(Application* app);
 
 }  // namespace aim

@@ -6,8 +6,8 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
-#include "aim/common/util.h"
 #include "aim/common/search.h"
+#include "aim/common/util.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
@@ -25,6 +25,7 @@ class AppUiImpl : public AppUi {
     logo_texture_ = std::make_unique<Texture>(
         app->file_system()->GetBasePath("resources/images/logo.png"), app->gpu_device());
     playlist_component_ = CreatePlaylistComponent(app);
+    playlist_list_component_ = CreatePlaylistListComponent(app);
   }
 
   void Run() override {
@@ -364,28 +365,14 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawPlaylistsScreen() {
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-    ImGui::PushItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##PlaylistSearchInput", "Search..", &playlist_search_text_);
-    ImGui::PopItemWidth();
-    ImGui::SameLine();
-    ImVec2 sz = ImVec2(0.0f, 0.0f);
-    if (ImGui::Button("Reload Playlists", sz)) {
-      app_->playlist_manager()->LoadPlaylistsFromDisk();
-    }
-    ImGui::Spacing();
-    ImGui::Spacing();
-
-    auto search_words = GetSearchWords(playlist_search_text_);
-    for (const auto& playlist : app_->playlist_manager()->playlists()) {
-      if (StringMatchesSearch(playlist.name, search_words)) {
-        if (ImGui::Button(playlist.name.c_str(), sz)) {
-          current_playlist_ = playlist;
-          app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
-          app_->playlist_manager()->SetCurrentPlaylist(playlist.name);
-          app_screen_ = AppScreen::CURRENT_PLAYLIST;
-        }
-      }
+    PlaylistListResult result;
+    playlist_list_component_->Show(&result);
+    if (result.open_playlist.has_value()) {
+      auto playlist = *result.open_playlist;
+      current_playlist_ = playlist;
+      app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
+      app_->playlist_manager()->SetCurrentPlaylist(playlist.name);
+      app_screen_ = AppScreen::CURRENT_PLAYLIST;
     }
   }
 
@@ -418,11 +405,11 @@ class AppUiImpl : public AppUi {
   std::unique_ptr<UiScreen> screen_to_show_;
 
   std::string scenario_search_text_;
-  std::string playlist_search_text_;
 
   std::vector<std::string> recent_scenario_names_;
 
   std::unique_ptr<PlaylistComponent> playlist_component_;
+  std::unique_ptr<PlaylistListComponent> playlist_list_component_;
 };
 
 }  // namespace
