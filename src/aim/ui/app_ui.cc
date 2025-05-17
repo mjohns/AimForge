@@ -7,6 +7,7 @@
 #include <misc/cpp/imgui_stdlib.h>
 
 #include "aim/common/util.h"
+#include "aim/common/search.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
@@ -308,31 +309,6 @@ class AppUiImpl : public AppUi {
         }
       }
     }
-  }
-
-  std::vector<std::string> GetSearchWords(const std::string& text) {
-    std::vector<absl::string_view> search_words = absl::StrSplit(text, ' ');
-    std::vector<std::string> result;
-    for (auto& part : search_words) {
-      result.push_back(absl::AsciiStrToLower(part));
-    }
-    return result;
-  }
-
-  bool StringMatchesSearch(const std::string& input, const std::vector<std::string>& search_words) {
-    if (search_words.size() == 0) {
-      return true;
-    }
-
-    auto value = absl::AsciiStrToLower(input);
-    for (auto& part : search_words) {
-      bool matches = absl::StartsWith(value, part) ||
-                     value.find(std::format(" {}", part)) != std::string::npos;
-      if (!matches) {
-        return false;
-      }
-    }
-    return true;
   }
 
   void DrawCurrentScenarioScreen() {
