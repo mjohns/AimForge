@@ -25,6 +25,7 @@ class PlaylistEditorComponent : public UiComponent {
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.bundle_playlist_name;
       original_bundle_playlist_name_ = new_playlist_name_;
+      original_full_playlist_name_ = run->playlist.name;
       bundle_name_ = run->playlist.bundle_name;
       for (auto& i : run->playlist.def.items()) {
         scenario_items_.push_back(i);
@@ -227,6 +228,10 @@ class PlaylistEditorComponent : public UiComponent {
               bundle_name_, original_bundle_playlist_name_, final_name)) {
         return false;
       }
+      PlaylistRun* current_run = playlist_manager_->GetCurrentRun();
+      if (current_run != nullptr && current_run->playlist.name == original_full_playlist_name_) {
+        playlist_manager_->SetCurrentPlaylist(std::format("{} {}", bundle_name_, final_name));
+      }
     }
 
     return playlist_manager_->SavePlaylist(bundle_name_, final_name, playlist);
@@ -237,6 +242,7 @@ class PlaylistEditorComponent : public UiComponent {
   int dragging_i_ = -1;
   std::string full_playlist_name_;
   std::string original_bundle_playlist_name_;
+  std::string original_full_playlist_name_;
   std::string bundle_name_;
   bool updated_ = false;
 
@@ -292,6 +298,39 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
   std::string current_playlist_name_;
 };
 
+class PlaylistListComponentImpl : public UiComponent, public PlaylistListComponent {
+ public:
+  explicit PlaylistListComponentImpl(Application* app)
+      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
+
+  void Show(PlaylistListResult* result) override {
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    ImGui::SetNextItemWidth(char_size.x * 30);
+    ImGui::InputTextWithHint("##PlaylistSearchInput", "Search..", &playlist_search_text_);
+    ImGui::SameLine();
+
+    ImVec2 sz = ImVec2(0.0f, 0.0f);
+    if (ImGui::Button("Reload Playlists", sz)) {
+      app_->playlist_manager()->LoadPlaylistsFromDisk();
+    }
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    auto search_words = GetSearchWords(playlist_search_text_);
+    for (const auto& playlist : app_->playlist_manager()->playlists()) {
+      if (StringMatchesSearch(playlist.name, search_words)) {
+        if (ImGui::Button(playlist.name.c_str(), sz)) {
+          result->open_playlist = playlist;
+        }
+      }
+    }
+  }
+
+ private:
+  std::string playlist_search_text_;
+  PlaylistManager* playlist_manager_;
+};
+
 }  // namespace
 
 bool PlaylistRunComponent(const std::string& id,
@@ -316,6 +355,10 @@ bool PlaylistRunComponent(const std::string& id,
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(Application* app) {
   return std::make_unique<PlaylistComponentImpl>(app);
+}
+
+std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(Application* app) {
+  return std::make_unique<PlaylistListComponentImpl>(app);
 }
 
 }  // namespace aim
