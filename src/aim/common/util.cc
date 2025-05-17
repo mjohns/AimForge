@@ -220,4 +220,22 @@ StoredRgb FloatToStoredRgb(float r, float g, float b) {
   return ToStoredRgb(FloatToStoredColor(r, g, b));
 }
 
+std::string MakeUniqueName(const std::string& name, const std::vector<std::string>& used_names) {
+  std::unordered_set<std::string> used_names_set(used_names.begin(), used_names.end());
+
+  if (used_names_set.find(name) == used_names_set.end()) {
+    return name;
+  }
+
+  int n = 1;
+  while (true) {
+    std::string unique_name = std::format("{} ({})", name, n);
+    if (used_names_set.find(unique_name) == used_names_set.end()) {
+      return unique_name;
+    }
+
+    n++;
+  }
+}
+
 }  // namespace aim

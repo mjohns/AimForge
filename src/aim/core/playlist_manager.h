@@ -66,6 +66,15 @@ class PlaylistManager {
     return playlists_;
   }
 
+  bool SavePlaylist(const std::string& bundle_name,
+                    const std::string& name,
+                    const PlaylistDef& def);
+
+  bool DeletePlaylist(const std::string& bundle_name, const std::string& name);
+  bool RenamePlaylist(const std::string& bundle_name,
+                      const std::string& old_name,
+                      const std::string& new_name);
+
  private:
   PlaylistRun* GetOptionalExistingRun(const std::string& name);
 

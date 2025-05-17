@@ -2,12 +2,19 @@
 
 #include <absl/strings/strip.h>
 
+#include <filesystem>
+
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
 
 namespace aim {
 namespace {
+
+std::filesystem::path GetPlaylistPath(const std::filesystem::path& bundle_path,
+                                      const std::string& name) {
+  return bundle_path / "playlists" / (name + ".json");
+}
 
 std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
                                     const std::filesystem::path& base_dir) {
@@ -43,11 +50,42 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
 
 PlaylistManager::PlaylistManager(FileSystem* fs) : fs_(fs) {}
 
+bool PlaylistManager::SavePlaylist(const std::string& bundle_name,
+                                   const std::string& name,
+                                   const PlaylistDef& def) {
+  auto maybe_bundle = fs_->GetBundle(bundle_name);
+  if (!maybe_bundle.has_value()) {
+    return false;
+  }
+  return WriteJsonMessageToFile(GetPlaylistPath(maybe_bundle->path, name), def);
+}
+
+bool PlaylistManager::DeletePlaylist(const std::string& bundle_name, const std::string& name) {
+  auto maybe_bundle = fs_->GetBundle(bundle_name);
+  if (!maybe_bundle.has_value()) {
+    return false;
+  }
+  return std::filesystem::remove(GetPlaylistPath(maybe_bundle->path, name));
+}
+
+bool PlaylistManager::RenamePlaylist(const std::string& bundle_name,
+                                     const std::string& old_name,
+                                     const std::string& new_name) {
+  auto maybe_bundle = fs_->GetBundle(bundle_name);
+  if (!maybe_bundle.has_value()) {
+    return false;
+  }
+  std::filesystem::rename(GetPlaylistPath(maybe_bundle->path, old_name),
+                          GetPlaylistPath(maybe_bundle->path, new_name));
+  return true;
+}
+
 void PlaylistManager::LoadPlaylistsFromDisk() {
   playlists_.clear();
   for (BundleInfo& bundle : fs_->GetBundles()) {
     PushBackAll(&playlists_, LoadPlaylists(bundle.name, bundle.path / "playlists"));
   }
+  playlist_run_map_.clear();
 }
 
 PlaylistRun* PlaylistManager::GetOptionalExistingRun(const std::string& name) {

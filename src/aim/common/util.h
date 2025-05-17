@@ -157,4 +157,16 @@ std::vector<T> MoveVectorItem(const std::vector<T>& original_values, int src_i, 
   return result;
 }
 
+template <typename T, typename R>
+std::vector<R> MapVector(const std::vector<T>& values, std::function<R(const T&)> fn) {
+  std::vector<R> result;
+  result.reserve(values.size());
+  for (const T& value : values) {
+    result.push_back(fn(value));
+  }
+  return result;
+}
+
+std::string MakeUniqueName(const std::string& name, const std::vector<std::string>& used_names);
+
 }  // namespace aim

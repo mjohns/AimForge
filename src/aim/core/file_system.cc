@@ -43,4 +43,13 @@ std::vector<BundleInfo> FileSystem::GetBundles() {
   return bundles;
 }
 
+std::optional<BundleInfo> FileSystem::GetBundle(const std::string& bundle_name) {
+  for (auto& bundle : GetBundles()) {
+    if (bundle.name == bundle_name) {
+      return bundle;
+    }
+  }
+  return {};
+}
+
 }  // namespace aim
