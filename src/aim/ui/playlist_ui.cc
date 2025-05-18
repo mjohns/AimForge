@@ -346,6 +346,9 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
       ImGui::PopID();
     }
 
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
     if (ImGui::Button("Create new playlist")) {
     }
 
