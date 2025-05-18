@@ -96,6 +96,27 @@ PlaylistRun* PlaylistManager::GetOptionalExistingRun(const std::string& name) {
   return nullptr;
 }
 
+void PlaylistManager::AddScenarioToPlaylist(const std::string& playlist_name,
+                                            const std::string& scenario_name) {
+  for (Playlist& playlist : playlists_) {
+    if (playlist.name == playlist_name) {
+      auto* item = playlist.def.add_items();
+      item->set_scenario(scenario_name);
+      item->set_num_plays(1);
+
+      PlaylistRun* run = GetOptionalExistingRun(playlist_name);
+      if (run != nullptr) {
+        run->playlist = playlist;
+        PlaylistItemProgress progress;
+        progress.item = *item;
+        run->progress_list.push_back(progress);
+      }
+      SavePlaylist(playlist.bundle_name, playlist.bundle_playlist_name, playlist.def);
+      return;
+    }
+  }
+}
+
 PlaylistRun* PlaylistManager::GetRun(const std::string& name) {
   auto existing_run = GetOptionalExistingRun(name);
   if (existing_run != nullptr) {
@@ -104,18 +125,24 @@ PlaylistRun* PlaylistManager::GetRun(const std::string& name) {
   for (const Playlist& playlist : playlists_) {
     if (playlist.name == name) {
       auto run = std::make_unique<PlaylistRun>();
-      run->playlist = playlist;
-      for (int i = 0; i < playlist.def.items_size(); ++i) {
-        PlaylistItemProgress progress;
-        progress.item = playlist.def.items(i);
-        run->progress_list.push_back(progress);
-      }
+      *run = InitializeRun(playlist);
       PlaylistRun* result = run.get();
       playlist_run_map_[name] = std::move(run);
       return result;
     }
   }
   return nullptr;
+}
+
+PlaylistRun PlaylistManager::InitializeRun(const Playlist& playlist) {
+  PlaylistRun run;
+  run.playlist = playlist;
+  for (int i = 0; i < playlist.def.items_size(); ++i) {
+    PlaylistItemProgress progress;
+    progress.item = playlist.def.items(i);
+    run.progress_list.push_back(progress);
+  }
+  return run;
 }
 
 }  // namespace aim

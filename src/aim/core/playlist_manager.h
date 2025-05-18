@@ -66,6 +66,8 @@ class PlaylistManager {
     return playlists_;
   }
 
+  void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
+
   bool SavePlaylist(const std::string& bundle_name,
                     const std::string& name,
                     const PlaylistDef& def);
@@ -77,6 +79,7 @@ class PlaylistManager {
 
  private:
   PlaylistRun* GetOptionalExistingRun(const std::string& name);
+  PlaylistRun InitializeRun(const Playlist& playlist);
 
   std::string current_playlist_name_;
   std::filesystem::path base_dir_;
