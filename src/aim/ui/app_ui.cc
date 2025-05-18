@@ -12,6 +12,7 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/playlist_ui.h"
+#include "aim/ui/scenario_ui.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/ui_screen.h"
@@ -26,6 +27,7 @@ class AppUiImpl : public AppUi {
         app->file_system()->GetBasePath("resources/images/logo.png"), app->gpu_device());
     playlist_component_ = CreatePlaylistComponent(app);
     playlist_list_component_ = CreatePlaylistListComponent(app);
+    scenario_browser_component_ = CreateScenarioBrowserComponent(app);
   }
 
   void Run() override {
@@ -290,28 +292,6 @@ class AppUiImpl : public AppUi {
     ImGui::EndChild();
   }
 
-  void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
-                         const std::vector<std::string>& search_words) {
-    ImVec2 sz = ImVec2(0.0f, 0.0f);
-    for (auto& node : nodes) {
-      if (node->scenario.has_value() && StringMatchesSearch(node->scenario->name, search_words)) {
-        if (ImGui::Button(node->scenario->def.scenario_id().c_str(), sz)) {
-          current_scenario_def_ = app_->scenario_manager()->GetScenario(node->name);
-          scenario_run_option_ = ScenarioRunOption::RUN;
-        }
-      }
-    }
-    for (auto& node : nodes) {
-      if (!node->scenario.has_value()) {
-        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
-        if (node_opened) {
-          DrawScenarioNodes(node->child_nodes, search_words);
-          ImGui::TreePop();
-        }
-      }
-    }
-  }
-
   void DrawCurrentScenarioScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     if (ImGui::Button("Run Scenario", sz)) {
@@ -325,20 +305,12 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawScenariosScreen() {
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-    ImGui::PushItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##ScenarioSearchInput", "Search..", &scenario_search_text_);
-    ImGui::PopItemWidth();
-    ImGui::SameLine();
-    ImVec2 sz = ImVec2(0.0f, 0.0f);
-    if (ImGui::Button("Reload Scenarios", sz)) {
-      app_->scenario_manager()->LoadScenariosFromDisk();
+    ScenarioBrowserResult result;
+    scenario_browser_component_->Show(&result);
+    if (result.scenario_to_start.size() > 0) {
+      current_scenario_def_ = app_->scenario_manager()->GetScenario(result.scenario_to_start);
+      scenario_run_option_ = ScenarioRunOption::RUN;
     }
-    ImGui::Spacing();
-    ImGui::Spacing();
-
-    auto search_words = GetSearchWords(scenario_search_text_);
-    DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words);
   }
 
   void DrawRecentScenariosScreen() {
@@ -410,6 +382,7 @@ class AppUiImpl : public AppUi {
 
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
+  std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component_;
 };
 
 }  // namespace
