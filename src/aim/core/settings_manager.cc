@@ -21,22 +21,6 @@ namespace aim {
 namespace {
 constexpr const float kDefaultDpi = 1600;
 
-Theme GetDefaultTheme() {
-  Theme t;
-  t.set_name("default");
-  *(t.mutable_crosshair()->mutable_color()) = ToStoredColor("#FFAC1C");
-  *(t.mutable_crosshair()->mutable_outline_color()) = ToStoredColor("#000000");
-
-  *t.mutable_front_appearance()->mutable_color() = ToStoredColor(0.7);
-  *t.mutable_floor_appearance()->mutable_color() = ToStoredColor(0.6);
-  *t.mutable_roof_appearance()->mutable_color() = ToStoredColor(0.6);
-  *t.mutable_side_appearance()->mutable_color() = ToStoredColor(0.65);
-
-  *t.mutable_target_color() = ToStoredColor(0);
-  *t.mutable_ghost_target_color() = ToStoredColor(0.65);
-  return t;
-}
-
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
   crosshair.set_name("default");
@@ -445,5 +429,22 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   last_update_timer_ = Stopwatch();
   last_update_timer_.Start();
 }
+
+Theme GetDefaultTheme() {
+  Theme t;
+  t.set_name("default");
+  *(t.mutable_crosshair()->mutable_color()) = ToStoredColor("#FFAC1C");
+  *(t.mutable_crosshair()->mutable_outline_color()) = ToStoredColor("#000000");
+
+  *t.mutable_front_appearance()->mutable_color() = ToStoredColor(0.7);
+  *t.mutable_floor_appearance()->mutable_color() = ToStoredColor(0.6);
+  *t.mutable_roof_appearance()->mutable_color() = ToStoredColor(0.6);
+  *t.mutable_side_appearance()->mutable_color() = ToStoredColor(0.65);
+
+  *t.mutable_target_color() = ToStoredColor(0);
+  *t.mutable_ghost_target_color() = ToStoredColor(0.65);
+  return t;
+}
+
 
 }  // namespace aim

@@ -169,4 +169,8 @@ std::vector<R> MapVector(const std::vector<T>& values, std::function<R(const T&)
 
 std::string MakeUniqueName(const std::string& name, const std::vector<std::string>& used_names);
 
+static bool IsZero(const StoredVec3& v) {
+  return v.x() == 0 && v.y() == 0 && v.z() == 0;
+}
+
 }  // namespace aim

@@ -27,6 +27,8 @@ bool IsMappableKeyDownEvent(const SDL_Event& event);
 bool IsMappableKeyUpEvent(const SDL_Event& event);
 bool IsEscapeKeyDown(const SDL_Event& event);
 
+Theme GetDefaultTheme();
+
 struct ThemeCacheEntry {
   Theme theme;
   std::filesystem::path file_path;
