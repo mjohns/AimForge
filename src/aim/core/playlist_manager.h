@@ -46,6 +46,7 @@ class PlaylistManager {
 
   void LoadPlaylistsFromDisk();
 
+  // Don't hold onto the pointer for long periods of time as it could be invalidated.
   PlaylistRun* GetCurrentRun() {
     if (current_playlist_name_.size() == 0) {
       return nullptr;
@@ -53,6 +54,7 @@ class PlaylistManager {
     return GetRun(current_playlist_name_);
   }
 
+  // Don't hold onto the pointer for long periods of time as it could be invalidated.
   PlaylistRun* GetRun(const std::string& name);
 
   void SetCurrentPlaylist(const std::string& name) {
@@ -65,8 +67,7 @@ class PlaylistManager {
 
   void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
 
-  bool SavePlaylist(const ResourceName& name,
-                    const PlaylistDef& def);
+  bool SavePlaylist(const ResourceName& name, const PlaylistDef& def);
 
   bool DeletePlaylist(const ResourceName& name);
   bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);

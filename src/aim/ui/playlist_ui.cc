@@ -372,10 +372,10 @@ bool PlaylistRunComponent(const std::string& id,
                           std::string* scenario_to_start) {
   bool selected = false;
   for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
+    ImGui::IdGuard id(i);
     PlaylistItemProgress& progress = playlist_run->progress_list[i];
     PlaylistItem item = playlist_run->playlist.def.items(i);
-    std::string item_label = std::format("{}###{}_n{}", item.scenario(), id, i);
-    if (ImGui::Button(item_label.c_str())) {
+    if (ImGui::Button(item.scenario().c_str())) {
       selected = true;
       playlist_run->current_index = i;
       *scenario_to_start = item.scenario();
