@@ -44,6 +44,8 @@ class PlaylistEditorComponent : public UiComponent {
   }
 
   void Show(EditorResult* result) {
+    auto cid = GetComponentIdGuard();
+
     PlaylistRun* run = playlist_manager_->GetRun(full_playlist_name_);
     if (run == nullptr) {
       result->editor_closed = true;
@@ -258,6 +260,8 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
       : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
 
   bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
+    auto cid = GetComponentIdGuard();
+
     if (playlist_name != current_playlist_name_) {
       current_playlist_name_ = playlist_name;
       ResetForNewCurrentPlaylist();
@@ -306,6 +310,8 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
       : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
 
   void Show(PlaylistListResult* result) override {
+    auto cid = GetComponentIdGuard();
+
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##PlaylistSearchInput", "Search..", &playlist_search_text_);

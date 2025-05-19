@@ -15,6 +15,8 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
   explicit ScenarioBrowserComponentImpl(Application* app) : UiComponent(app) {}
 
   void Show(ScenarioBrowserResult* result) override {
+    auto cid = GetComponentIdGuard();
+
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##ScenarioSearchInput", "Search..", &search_text_);
