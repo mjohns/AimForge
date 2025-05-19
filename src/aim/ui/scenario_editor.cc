@@ -37,6 +37,13 @@ Room GetDefaultCylinderRoom() {
   return r;
 }
 
+Room GetDefaultBarrelRoom() {
+  Room r;
+  r.mutable_barrel_room()->set_radius(75);
+  *r.mutable_camera_position() = ToStoredVec3(0, -100, 0);
+  return r;
+}
+
 void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
   float values[3];
   values[0] = v->x();
@@ -136,6 +143,9 @@ class ScenarioEditorScreen : public UiScreen {
             if (type == Room::kCylinderRoom) {
               room_ = GetDefaultCylinderRoom();
             }
+            if (type == Room::kBarrelRoom) {
+              room_ = GetDefaultBarrelRoom();
+            }
           }
         }
         if (is_selected) {
@@ -160,6 +170,15 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SetNextItemWidth(char_size.x * 12);
       ImGui::InputFloat("##RoomWidth", &width, 10, 1, "%.0f");
       room_.mutable_simple_room()->set_width(width);
+    }
+
+    if (room_.type_case() == Room::kBarrelRoom) {
+      ImGui::Text("Radius");
+      ImGui::SameLine();
+      float radius = room_.barrel_room().radius();
+      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::InputFloat("##RoomRadius", &radius, 5, 1, "%.0f");
+      room_.mutable_barrel_room()->set_radius(radius);
     }
 
     if (room_.type_case() == Room::kCylinderRoom) {
