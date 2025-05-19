@@ -29,6 +29,9 @@ class ScopeGuard {
     }
   }
 
+  ScopeGuard(const ScopeGuard&) = delete;
+  ScopeGuard& operator=(const ScopeGuard&) = delete;
+
  private:
   std::function<void()> fn_;
 };

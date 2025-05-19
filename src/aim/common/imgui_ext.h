@@ -19,4 +19,45 @@ static void Text(const std::string& val) {
   Text("%s", val.c_str());
 }
 
+struct IdGuard {
+  IdGuard(std::string id) {
+    ImGui::PushID(id.c_str());
+  }
+
+  IdGuard(std::string prefix, int num) {
+    ImGui::PushID(std::format("{}{}", prefix, num).c_str());
+  }
+
+  IdGuard(int id) {
+    ImGui::PushID(id);
+  }
+
+  ~IdGuard() {
+    Pop();
+  }
+
+  void Pop() {
+    if (!closed) {
+      ImGui::PopID();
+      closed = true;
+    }
+  }
+
+  IdGuard(const IdGuard&) = delete;
+  IdGuard& operator=(const IdGuard&) = delete;
+
+ private:
+  bool closed = false;
+};
+
+struct LoopId {
+  LoopId() {}
+
+  IdGuard Get() {
+    return IdGuard(++i);
+  }
+
+  int i = -1;
+};
+
 }  // namespace ImGui
