@@ -67,7 +67,7 @@ class PlaylistEditorComponent : public UiComponent {
       const std::string& scenario_name = item.scenario();
       std::string item_label =
           std::format("{}###Component{}PlaylistEditorItem{}", scenario_name, component_id_, i);
-      ImGui::PushID(std::format("PlaylistItem{}", i).c_str());
+      ImGui::IdGuard id("PlaylistItem", i);
 
       if (i == dragging_i_) {
         ImGui::BeginDisabled();
@@ -140,8 +140,6 @@ class PlaylistEditorComponent : public UiComponent {
       ImGui::InputScalar("###NumPlays", ImGuiDataType_U32, &num_plays, &step, nullptr, "%u");
 
       item.set_num_plays(num_plays);
-
-      ImGui::PopID();
     }
 
     if (IsValidIndex(scenario_items_, remove_i)) {
@@ -167,7 +165,7 @@ class PlaylistEditorComponent : public UiComponent {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
       for (int i = 0; i < app_->scenario_manager()->scenarios().size(); ++i) {
-        ImGui::PushID(std::format("ScenarioSearch{}", i).c_str());
+        ImGui::IdGuard id("ScenarioSearch", i);
         const auto& scenario = app_->scenario_manager()->scenarios()[i];
         if (StringMatchesSearch(scenario.name, search_words, /*empty_matches=*/false)) {
           bool already_in_playlist =
@@ -184,7 +182,6 @@ class PlaylistEditorComponent : public UiComponent {
             }
           }
         }
-        ImGui::PopID();
       }
       ImGui::Unindent();
     }
@@ -324,10 +321,9 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     std::optional<Playlist> delete_playlist;
     std::optional<Playlist> copy_playlist;
     auto search_words = GetSearchWords(playlist_search_text_);
-    int loop_id = 0;
+    ImGui::LoopId loop_id;
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
-      loop_id++;
-      ImGui::PushID(loop_id);
+      auto id_guard = loop_id.Get();
       if (StringMatchesSearch(playlist.name, search_words)) {
         if (ImGui::Button(playlist.name.c_str(), sz)) {
           result->open_playlist = playlist;
@@ -343,7 +339,6 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
         }
         ImGui::OpenPopupOnItemClick("playlist_item_menu", ImGuiPopupFlags_MouseButtonRight);
       }
-      ImGui::PopID();
     }
 
     ImGui::Spacing();

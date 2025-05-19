@@ -33,11 +33,10 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
                          const std::vector<std::string>& search_words,
                          ScenarioBrowserResult* result) {
-    int loop_id = 0;
     PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
+    ImGui::LoopId loop_id;
     for (auto& node : nodes) {
-      loop_id++;
-      ImGui::PushID(loop_id);
+      auto id = loop_id.Get();
       if (node->scenario.has_value() && StringMatchesSearch(node->scenario->name, search_words)) {
         if (ImGui::Button(node->scenario->def.scenario_id().c_str())) {
           result->scenario_to_start = node->name;
@@ -54,7 +53,6 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
           ImGui::OpenPopupOnItemClick("scenario_item_menu", ImGuiPopupFlags_MouseButtonRight);
         }
       }
-      ImGui::PopID();
     }
     for (auto& node : nodes) {
       if (!node->scenario.has_value()) {
