@@ -10,11 +10,12 @@
 namespace aim {
 namespace {
 
-std::vector<std::string> GetAllNamesInBundle(const std::string& bundle_name, Application* app) {
+std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
+                                                     Application* app) {
   std::vector<std::string> names;
   for (const Playlist& playlist : app->playlist_manager()->playlists()) {
-    if (playlist.bundle_name == bundle_name) {
-      names.push_back(playlist.bundle_playlist_name);
+    if (playlist.name.bundle_name() == bundle_name) {
+      names.push_back(playlist.name.relative_name());
     }
   }
   return names;
@@ -33,10 +34,9 @@ class PlaylistEditorComponent : public UiComponent {
         full_playlist_name_(playlist_name) {
     PlaylistRun* run = playlist_manager_->GetRun(full_playlist_name_);
     if (run != nullptr) {
-      new_playlist_name_ = run->playlist.bundle_playlist_name;
-      original_bundle_playlist_name_ = new_playlist_name_;
-      original_full_playlist_name_ = run->playlist.name;
-      bundle_name_ = run->playlist.bundle_name;
+      new_playlist_name_ = run->playlist.name.relative_name();
+      original_playlist_name_ = run->playlist.name;
+      bundle_name_ = run->playlist.name.bundle_name();
       for (auto& i : run->playlist.def.items()) {
         scenario_items_.push_back(i);
       }
@@ -46,14 +46,9 @@ class PlaylistEditorComponent : public UiComponent {
   void Show(EditorResult* result) {
     auto cid = GetComponentIdGuard();
 
-    PlaylistRun* run = playlist_manager_->GetRun(full_playlist_name_);
-    if (run == nullptr) {
-      result->editor_closed = true;
-      return;
-    }
     ImVec2 char_size = ImGui::CalcTextSize("A");
 
-    ImGui::Text("%s", run->playlist.bundle_name.c_str());
+    ImGui::Text(bundle_name_);
     ImGui::SameLine();
     ImGui::PushItemWidth(400);
     ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
@@ -222,23 +217,22 @@ class PlaylistEditorComponent : public UiComponent {
     PlaylistDef playlist;
     playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
 
-    std::string final_name = new_playlist_name_;
-    bool name_changed = new_playlist_name_ != original_bundle_playlist_name_;
+    ResourceName final_name(bundle_name_, new_playlist_name_);
+    bool name_changed = final_name != original_playlist_name_;
     if (name_changed) {
       // Need to move file.
-      std::vector<std::string> taken_names = GetAllNamesInBundle(bundle_name_, app_);
-      final_name = MakeUniqueName(new_playlist_name_, taken_names);
-      if (!playlist_manager_->RenamePlaylist(
-              bundle_name_, original_bundle_playlist_name_, final_name)) {
+      std::vector<std::string> taken_names = GetAllRelativeNamesInBundle(bundle_name_, app_);
+      final_name.set(bundle_name_, MakeUniqueName(new_playlist_name_, taken_names));
+      if (!playlist_manager_->RenamePlaylist(original_playlist_name_, final_name)) {
         return false;
       }
       PlaylistRun* current_run = playlist_manager_->GetCurrentRun();
-      if (current_run != nullptr && current_run->playlist.name == original_full_playlist_name_) {
-        playlist_manager_->SetCurrentPlaylist(std::format("{} {}", bundle_name_, final_name));
+      if (current_run != nullptr && current_run->playlist.name == original_playlist_name_) {
+        playlist_manager_->SetCurrentPlaylist(final_name.full_name());
       }
     }
 
-    return playlist_manager_->SavePlaylist(bundle_name_, final_name, playlist);
+    return playlist_manager_->SavePlaylist(final_name, playlist);
   }
 
   PlaylistManager* playlist_manager_;
@@ -246,7 +240,7 @@ class PlaylistEditorComponent : public UiComponent {
   int dragging_i_ = -1;
   std::string full_playlist_name_;
   std::string original_bundle_playlist_name_;
-  std::string original_full_playlist_name_;
+  ResourceName original_playlist_name_;
   std::string bundle_name_;
   bool updated_ = false;
 
@@ -317,8 +311,7 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     ImGui::InputTextWithHint("##PlaylistSearchInput", "Search..", &playlist_search_text_);
     ImGui::SameLine();
 
-    ImVec2 sz = ImVec2(0.0f, 0.0f);
-    if (ImGui::Button("Reload Playlists", sz)) {
+    if (ImGui::Button("Reload Playlists")) {
       app_->playlist_manager()->LoadPlaylistsFromDisk();
     }
     ImGui::Spacing();
@@ -330,8 +323,8 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     ImGui::LoopId loop_id;
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
       auto id_guard = loop_id.Get();
-      if (StringMatchesSearch(playlist.name, search_words)) {
-        if (ImGui::Button(playlist.name.c_str(), sz)) {
+      if (StringMatchesSearch(playlist.name.full_name(), search_words)) {
+        if (ImGui::Button(playlist.name.full_name().c_str())) {
           result->open_playlist = playlist;
         }
         if (ImGui::BeginPopupContextItem("playlist_item_menu")) {
@@ -354,15 +347,15 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     }
 
     if (delete_playlist.has_value()) {
-      app_->playlist_manager()->DeletePlaylist(delete_playlist->bundle_name,
-                                               delete_playlist->bundle_playlist_name);
+      app_->playlist_manager()->DeletePlaylist(delete_playlist->name);
       app_->playlist_manager()->LoadPlaylistsFromDisk();
     }
     if (copy_playlist.has_value()) {
       auto playlist = *copy_playlist;
-      auto taken_names = GetAllNamesInBundle(playlist.bundle_name, app_);
-      std::string new_name = MakeUniqueName(playlist.bundle_playlist_name + " Copy", taken_names);
-      app_->playlist_manager()->SavePlaylist(playlist.bundle_name, new_name, playlist.def);
+      auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), app_);
+      std::string new_name = MakeUniqueName(playlist.name.relative_name() + " Copy", taken_names);
+      app_->playlist_manager()->SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
+                                             playlist.def);
       app_->playlist_manager()->LoadPlaylistsFromDisk();
     }
   }

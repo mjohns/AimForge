@@ -45,7 +45,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         }
         if (current_playlist_run != nullptr) {
           if (ImGui::BeginPopupContextItem("scenario_item_menu")) {
-            std::string playlist_name = current_playlist_run->playlist.name;
+            std::string playlist_name = current_playlist_run->playlist.name.full_name();
             std::string add_text = std::format("Add to \"{}\"", playlist_name);
             if (ImGui::Selectable(add_text.c_str())) {
               app_->playlist_manager()->AddScenarioToPlaylist(playlist_name, node->name);
