@@ -33,7 +33,7 @@ class WallStrafeScenario : public BaseScenario {
     min_x_ = -0.5 * width;
     max_x_ = 0.5 * width;
 
-    float height = d.has_height() ? GetRegionLength(d.height(), wall_) : 0.6 * wall_.height;
+    float height = d.has_height() ? GetRegionLength(d.height(), wall_) : 0.85 * wall_.height;
     float starting_y = GetRegionLength(d.y(), wall_);
     min_y_ = (-0.5 * height) + starting_y;
     max_y_ = (0.5 * height) + starting_y;
