@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
 #include "aim/proto/playlist.pb.h"
@@ -21,12 +22,8 @@ struct PlaylistItemProgress {
 };
 
 struct Playlist {
-  std::string name;
+  ResourceName name;
   PlaylistDef def;
-
-  std::string bundle_name;
-  // Name without the bundle prefix.
-  std::string bundle_playlist_name;
 };
 
 struct PlaylistRun {
@@ -68,14 +65,11 @@ class PlaylistManager {
 
   void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
 
-  bool SavePlaylist(const std::string& bundle_name,
-                    const std::string& name,
+  bool SavePlaylist(const ResourceName& name,
                     const PlaylistDef& def);
 
-  bool DeletePlaylist(const std::string& bundle_name, const std::string& name);
-  bool RenamePlaylist(const std::string& bundle_name,
-                      const std::string& old_name,
-                      const std::string& new_name);
+  bool DeletePlaylist(const ResourceName& name);
+  bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);
 
  private:
   PlaylistRun* GetOptionalExistingRun(const std::string& name);

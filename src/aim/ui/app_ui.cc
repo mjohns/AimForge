@@ -225,7 +225,7 @@ class AppUiImpl : public AppUi {
       app_screen_ = AppScreen::PLAYLISTS;
     }
     if (current_playlist_.has_value()) {
-      std::string playlist_label = std::format("  > {}", current_playlist_->name);
+      std::string playlist_label = std::format("  > {}", current_playlist_->name.full_name());
       if (ImGui::Selectable(playlist_label.c_str(), app_screen_ == AppScreen::CURRENT_PLAYLIST)) {
         app_screen_ = AppScreen::CURRENT_PLAYLIST;
       }
@@ -342,8 +342,8 @@ class AppUiImpl : public AppUi {
     if (result.open_playlist.has_value()) {
       auto playlist = *result.open_playlist;
       current_playlist_ = playlist;
-      app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name);
-      app_->playlist_manager()->SetCurrentPlaylist(playlist.name);
+      app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
+      app_->playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
       app_screen_ = AppScreen::CURRENT_PLAYLIST;
     }
   }
@@ -355,7 +355,7 @@ class AppUiImpl : public AppUi {
       return;
     }
     std::string scenario_id;
-    if (playlist_component_->Show(run->playlist.name, &scenario_id)) {
+    if (playlist_component_->Show(run->playlist.name.full_name(), &scenario_id)) {
       auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
         current_scenario_def_ = *maybe_scenario;

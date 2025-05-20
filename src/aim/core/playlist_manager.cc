@@ -16,6 +16,14 @@ std::filesystem::path GetPlaylistPath(const std::filesystem::path& bundle_path,
   return bundle_path / "playlists" / (name + ".json");
 }
 
+std::optional<std::filesystem::path> GetPlaylistPath(FileSystem* fs, const ResourceName& resource) {
+  auto maybe_bundle = fs->GetBundle(resource.bundle_name());
+  if (!maybe_bundle.has_value()) {
+    return {};
+  }
+  return GetPlaylistPath(maybe_bundle->path, resource.relative_name());
+}
+
 std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
                                     const std::filesystem::path& base_dir) {
   if (!std::filesystem::exists(base_dir)) {
@@ -29,9 +37,7 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
         continue;
       }
       Playlist p;
-      p.bundle_playlist_name = absl::StripSuffix(filename, ".json");
-      p.bundle_name = bundle_name;
-      p.name = std::format("{} {}", bundle_name, p.bundle_playlist_name);
+      p.name.set(bundle_name, absl::StripSuffix(filename, ".json"));
 
       if (!ReadJsonMessageFromFile(entry.path(), &p.def)) {
         Logger::get()->warn("Unable to read playlist {}", entry.path().string());
@@ -41,7 +47,7 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
     }
   }
   std::sort(playlists.begin(), playlists.end(), [](const Playlist& lhs, const Playlist& rhs) {
-    return lhs.name < rhs.name;
+    return lhs.name.full_name() < rhs.name.full_name();
   });
   return playlists;
 }
@@ -50,33 +56,32 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
 
 PlaylistManager::PlaylistManager(FileSystem* fs) : fs_(fs) {}
 
-bool PlaylistManager::SavePlaylist(const std::string& bundle_name,
-                                   const std::string& name,
-                                   const PlaylistDef& def) {
-  auto maybe_bundle = fs_->GetBundle(bundle_name);
-  if (!maybe_bundle.has_value()) {
+bool PlaylistManager::SavePlaylist(const ResourceName& name, const PlaylistDef& def) {
+  auto path = GetPlaylistPath(fs_, name);
+  if (!path.has_value()) {
     return false;
   }
-  return WriteJsonMessageToFile(GetPlaylistPath(maybe_bundle->path, name), def);
+  return WriteJsonMessageToFile(*path, def);
 }
 
-bool PlaylistManager::DeletePlaylist(const std::string& bundle_name, const std::string& name) {
-  auto maybe_bundle = fs_->GetBundle(bundle_name);
-  if (!maybe_bundle.has_value()) {
+bool PlaylistManager::DeletePlaylist(const ResourceName& name) {
+  auto path = GetPlaylistPath(fs_, name);
+  if (!path.has_value()) {
     return false;
   }
-  return std::filesystem::remove(GetPlaylistPath(maybe_bundle->path, name));
+  return std::filesystem::remove(*path);
 }
 
-bool PlaylistManager::RenamePlaylist(const std::string& bundle_name,
-                                     const std::string& old_name,
-                                     const std::string& new_name) {
-  auto maybe_bundle = fs_->GetBundle(bundle_name);
-  if (!maybe_bundle.has_value()) {
+bool PlaylistManager::RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) {
+  auto old_path = GetPlaylistPath(fs_, old_name);
+  if (!old_path.has_value()) {
     return false;
   }
-  std::filesystem::rename(GetPlaylistPath(maybe_bundle->path, old_name),
-                          GetPlaylistPath(maybe_bundle->path, new_name));
+  auto new_path = GetPlaylistPath(fs_, old_name);
+  if (!old_path.has_value()) {
+    return false;
+  }
+  std::filesystem::rename(*old_path, *new_path);
   return true;
 }
 
@@ -99,7 +104,7 @@ PlaylistRun* PlaylistManager::GetOptionalExistingRun(const std::string& name) {
 void PlaylistManager::AddScenarioToPlaylist(const std::string& playlist_name,
                                             const std::string& scenario_name) {
   for (Playlist& playlist : playlists_) {
-    if (playlist.name == playlist_name) {
+    if (playlist.name.full_name() == playlist_name) {
       auto* item = playlist.def.add_items();
       item->set_scenario(scenario_name);
       item->set_num_plays(1);
@@ -111,7 +116,7 @@ void PlaylistManager::AddScenarioToPlaylist(const std::string& playlist_name,
         progress.item = *item;
         run->progress_list.push_back(progress);
       }
-      SavePlaylist(playlist.bundle_name, playlist.bundle_playlist_name, playlist.def);
+      SavePlaylist(playlist.name, playlist.def);
       return;
     }
   }
@@ -123,7 +128,7 @@ PlaylistRun* PlaylistManager::GetRun(const std::string& name) {
     return existing_run;
   }
   for (const Playlist& playlist : playlists_) {
-    if (playlist.name == name) {
+    if (playlist.name.full_name() == name) {
       auto run = std::make_unique<PlaylistRun>();
       *run = InitializeRun(playlist);
       PlaylistRun* result = run.get();
