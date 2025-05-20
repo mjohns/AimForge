@@ -96,7 +96,16 @@ class ScenarioEditorScreen : public UiScreen {
     def_.set_duration_seconds(duration_seconds);
 
     if (ImGui::TreeNode("Room")) {
+      ImGui::Indent();
       DrawRoomEditor(char_size);
+      ImGui::Unindent();
+      ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("Targets")) {
+      ImGui::Indent();
+      DrawTargetEditor(char_size);
+      ImGui::Unindent();
       ImGui::TreePop();
     }
 
@@ -351,6 +360,128 @@ class ScenarioEditorScreen : public UiScreen {
 
       ImGui::TreePop();
     }
+  }
+
+  void DrawTargetEditor(const ImVec2& char_size) {
+    ImGui::IdGuard cid("TargetEditor");
+    TargetDef* t = def_.mutable_target_def();
+
+    int num_targets = t->num_targets();
+    if (num_targets <= 0) {
+      num_targets = 1;
+    }
+    ImGui::Text("Number");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_size.x * 8);
+    ImGui::InputInt("##NumberEntry", &num_targets, 1, 1);
+    t->set_num_targets(num_targets);
+
+    ImGui::Text("Remove closest target on miss");
+    ImGui::SameLine();
+    bool remove_closest = t->remove_closest_on_miss();
+    ImGui::Checkbox("##RemoveClosest", &remove_closest);
+    t->set_remove_closest_on_miss(remove_closest);
+
+    ImGui::Text("Newest target is ghost");
+    ImGui::SameLine();
+    bool is_ghost = t->newest_target_is_ghost();
+    ImGui::Checkbox("##IsGhost", &is_ghost);
+    t->set_newest_target_is_ghost(is_ghost);
+
+    if (t->profiles_size() == 0) {
+      t->add_profiles();
+    }
+
+    bool allow_percents = t->target_order_size() == 0 && t->profiles_size() > 1;
+    for (int i = 0; i < t->profiles_size(); ++i) {
+      auto lid = ImGui::IdGuard(i);
+      ImGui::Text("Profile #%d", i);
+      ImGui::Indent();
+      DrawTargetProfile(t->mutable_profiles(i), allow_percents, char_size);
+      ImGui::Unindent();
+    }
+
+    if (ImGui::Button("Add profile")) {
+      t->add_profiles();
+    }
+
+    if (ImGui::TreeNode("Advanced")) {
+      ImGui::Text("New target delay seconds");
+      ImGui::SameLine();
+      float new_target_delay = t->new_target_delay_seconds();
+      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::InputFloat("##NewTargetDelay", &new_target_delay, 0.1, 0.1, "%.2f");
+      t->set_new_target_delay_seconds(new_target_delay);
+
+      ImGui::Text("Remove target after seconds");
+      ImGui::SameLine();
+      float remove_after = t->remove_target_after_seconds();
+      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::InputFloat("##RemoveAfterDelay", &remove_after, 0.1, 0.1, "%.2f");
+      t->set_remove_target_after_seconds(remove_after);
+
+      ImGui::Text("Stagger initial targets seconds");
+      ImGui::SameLine();
+      float stagger = t->stagger_initial_targets_seconds();
+      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::InputFloat("##StaggerDelay", &stagger, 0.1, 0.1, "%.2f");
+      t->set_stagger_initial_targets_seconds(stagger);
+
+      ImGui::TreePop();
+    }
+  }
+
+  void DrawTargetProfile(TargetProfile* profile, bool allow_percents, const ImVec2& char_size) {
+    if (allow_percents) {
+      ImGui::Text("Percent chance to use");
+      ImGui::SameLine();
+      int percent = profile->percent_chance() * 100;
+      if (percent <= 0) {
+        percent = 100;
+      }
+      ImGui::SetNextItemWidth(char_size.x * 10);
+      ImGui::InputInt("##PercentChance", &percent, 5, 10);
+      profile->set_percent_chance(percent / 100.0);
+    } else {
+      profile->clear_percent_chance();
+    }
+
+    ImGui::Text("Radius");
+    ImGui::SameLine();
+    float target_radius = profile->target_radius();
+    if (target_radius <= 0) {
+      target_radius = 2;
+    }
+    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::InputFloat("##TargetRadiusEntry", &target_radius, 0.1, 0.1, "%.1f");
+    profile->set_target_radius(target_radius);
+
+    ImGui::SameLine();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    float radius_jitter = profile->target_radius_jitter();
+    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::InputFloat("##TargetRadiusJitterEntry", &radius_jitter, 0.1, 0.1, "%.1f");
+    profile->set_target_radius_jitter(radius_jitter);
+
+    ImGui::Text("Speed");
+    ImGui::SameLine();
+    float speed = profile->speed();
+    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::InputFloat("##SpeedEntry", &speed, 1, 5, "%.1f");
+    if (speed > 0) {
+      profile->set_speed(speed);
+    } else {
+      profile->clear_speed();
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    float speed_jitter = profile->speed_jitter();
+    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::InputFloat("##SpeedJitterEntry", &speed_jitter, 1, 5, "%.1f");
+    profile->set_speed_jitter(speed_jitter);
   }
 
   void Render() override {
