@@ -20,6 +20,13 @@ const std::vector<Room::TypeCase> kSupportedRoomTypes{
     Room::kCylinderRoom,
     Room::kBarrelRoom,
 };
+const std::vector<ShotType::TypeCase> kShotTypes{
+    ShotType::kClickSingle,
+    ShotType::kTrackingInvincible,
+    ShotType::kTrackingKill,
+    ShotType::kPoke,
+    ShotType::TYPE_NOT_SET,
+};
 
 Room GetDefaultSimpleRoom() {
   Room r;
@@ -76,6 +83,18 @@ class ScenarioEditorScreen : public UiScreen {
     const ScreenInfo& screen = app_->screen_info();
     ImVec2 char_size = ImGui::CalcTextSize("A");
 
+    DrawShotTypeEditor(char_size);
+
+    float duration_seconds = def_.duration_seconds();
+    if (duration_seconds <= 0) {
+      duration_seconds = 60;
+    }
+    ImGui::Text("Duration");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
+    def_.set_duration_seconds(duration_seconds);
+
     if (ImGui::TreeNode("Room")) {
       DrawRoomEditor(char_size);
       ImGui::TreePop();
@@ -104,6 +123,59 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
+
+  void DrawShotTypeEditor(const ImVec2& char_size) {
+    ImGui::Text("Shot type");
+    ImGui::SameLine();
+
+    ImGui::PushItemWidth(char_size.x * 25);
+    std::string type_string = ShotTypeToString(def_.shot_type().type_case());
+    if (ImGui::BeginCombo("##shot_type_combo", type_string.c_str(), 0)) {
+      ImGui::LoopId loop_id;
+      for (auto type : kShotTypes) {
+        auto lid = loop_id.Get();
+        std::string name = ShotTypeToString(type);
+        bool is_selected = type_string == name;
+        if (ImGui::Selectable(name.c_str(), is_selected)) {
+          if (type == ShotType::kClickSingle) {
+            def_.mutable_shot_type()->set_click_single(true);
+          }
+          if (type == ShotType::kTrackingInvincible) {
+            def_.mutable_shot_type()->set_tracking_invincible(true);
+          }
+          if (type == ShotType::kTrackingKill) {
+            def_.mutable_shot_type()->set_tracking_kill(true);
+          }
+          if (type == ShotType::kPoke) {
+            def_.mutable_shot_type()->set_poke(true);
+          }
+        }
+        if (is_selected) {
+          ImGui::SetItemDefaultFocus();
+        }
+      }
+      ImGui::EndCombo();
+    }
+    ImGui::PopItemWidth();
+  }
+
+  std::string ShotTypeToString(const ShotType::TypeCase& type) {
+    switch (type) {
+      case ShotType::kClickSingle:
+        return "Click";
+      case ShotType::kTrackingInvincible:
+        return "Tracking";
+      case ShotType::kTrackingKill:
+        return "Tracking kill";
+      case ShotType::kPoke:
+        return "Poke";
+      case ShotType::TYPE_NOT_SET:
+        return "Default";
+      default:
+        break;
+    }
+    return "";
+  }
 
   std::string RoomTypeToString(const Room::TypeCase& type) {
     switch (type) {
@@ -282,6 +354,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void Render() override {
+    target_manager_.UpdateRoom(room_);
     CameraParams camera_params(room_);
     Camera camera(camera_params);
     auto look_at = camera.GetLookAt();
@@ -304,6 +377,7 @@ class ScenarioEditorScreen : public UiScreen {
 
  private:
   Room room_;
+  ScenarioDef def_;
   TargetManager target_manager_;
   glm::mat4 projection_;
   Theme theme_;
