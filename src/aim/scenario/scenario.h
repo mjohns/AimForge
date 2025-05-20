@@ -22,6 +22,7 @@ namespace aim {
 struct CreateScenarioParams {
   std::string id;
   ScenarioDef def;
+  bool force_start_immediately = false;
 };
 
 struct ScenarioStats {
@@ -138,6 +139,7 @@ class Scenario {
 
   FrameTimes current_times_;
   RunPerformanceStats perf_stats_;
+  bool force_start_immediately_ = false;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);

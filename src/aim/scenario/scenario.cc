@@ -43,7 +43,8 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       app_(app),
       timer_(kReplayFps),
       camera_(Camera(CameraParams(params.def.room()))),
-      target_manager_(params.def.room()) {
+      target_manager_(params.def.room()),
+      force_start_immediately_(params.force_start_immediately) {
   theme_ = app->settings_manager()->GetCurrentTheme();
   max_render_age_micros_ = (1 / (float)(kTargetRenderFps + 1)) * 1000 * 1000;
 }
@@ -121,7 +122,7 @@ bool Scenario::ShouldAutoHold() {
 NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   RefreshState();
 
-  if (settings_.disable_click_to_start()) {
+  if (settings_.disable_click_to_start() || force_start_immediately_) {
     has_started_ = true;
     Initialize();
     return ResumeInternal();
