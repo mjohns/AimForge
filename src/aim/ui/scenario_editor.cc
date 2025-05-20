@@ -392,9 +392,47 @@ class ScenarioEditorScreen : public UiScreen {
       t->add_profiles();
     }
 
+    ImGui::Text("Explicit profile selection order");
+    bool use_target_order = t->target_order_size() > 0;
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseTargetOrder", &use_target_order);
+    if (use_target_order) {
+      ImGui::Indent();
+      if (t->target_order_size() == 0) {
+        t->add_target_order(0);
+      }
+      int remove_at_i = -1;
+      for (int i = 0; i < t->target_order_size(); ++i) {
+        ImGui::IdGuard lid("TargetOrder", i);
+        u32 profile_number = t->target_order(i);
+        u32 step = 1;
+        ImGui::Text("Profile");
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(char_size.x * 8);
+        ImGui::InputScalar(
+            "##TargetOrderItemInput", ImGuiDataType_U32, &profile_number, &step, nullptr, "%u");
+        profile_number = std::min<u32>(profile_number, t->profiles_size() - 1);
+        t->set_target_order(i, profile_number);
+
+        ImGui::SameLine();
+        if (ImGui::Button("x")) {
+          remove_at_i = i;
+        }
+      }
+      if (ImGui::Button("Add##target_order")) {
+        t->add_target_order(0);
+      }
+      if (remove_at_i >= 0) {
+        t->mutable_target_order()->erase(t->mutable_target_order()->begin() + remove_at_i);
+      }
+      ImGui::Unindent();
+    } else {
+      t->clear_target_order();
+    }
+
     bool allow_percents = t->target_order_size() == 0 && t->profiles_size() > 1;
     for (int i = 0; i < t->profiles_size(); ++i) {
-      auto lid = ImGui::IdGuard(i);
+      ImGui::IdGuard lid("Profile", i);
       ImGui::Text("Profile #%d", i);
       ImGui::Indent();
       DrawTargetProfile(t->mutable_profiles(i), allow_percents, char_size);
@@ -482,6 +520,28 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SetNextItemWidth(char_size.x * 12);
     ImGui::InputFloat("##SpeedJitterEntry", &speed_jitter, 1, 5, "%.1f");
     profile->set_speed_jitter(speed_jitter);
+
+    ImGui::Text("Pill");
+    ImGui::SameLine();
+    bool use_pill = profile->has_pill();
+    ImGui::Checkbox("##UsePill", &use_pill);
+    if (use_pill) {
+      ImGui::Indent();
+
+      ImGui::Text("Height");
+      ImGui::SameLine();
+      float height = profile->pill().height();
+      if (height <= 0) {
+        height = 20;
+      }
+      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::InputFloat("##PillHeightEntry", &height, 0.1, 1, "%.1f");
+      profile->mutable_pill()->set_height(height);
+
+      ImGui::Unindent();
+    } else {
+      profile->clear_pill();
+    }
   }
 
   void Render() override {
