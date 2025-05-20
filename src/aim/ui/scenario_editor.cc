@@ -139,7 +139,7 @@ void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
 class ScenarioEditorScreen : public UiScreen {
  public:
   explicit ScenarioEditorScreen(Application* app)
-      : UiScreen(app), room_(GetDefaultSimpleRoom()), target_manager_(room_) {
+      : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
     projection_ = GetPerspectiveTransformation(app_->screen_info());
     auto themes = app_->settings_manager()->ListThemes();
     if (themes.size() > 0) {
@@ -147,6 +147,8 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       theme_ = GetDefaultTheme();
     }
+    *def_.mutable_room() = GetDefaultSimpleRoom();
+    def_ = *app->scenario_manager()->GetScenario("AF Centering Intermediate");
   }
 
  protected:
@@ -172,14 +174,14 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::TreePop();
     }
 
-    if (ImGui::TreeNode("Targets")) {
+    if (ImGui::TreeNodeEx("Targets", ImGuiTreeNodeFlags_DefaultOpen)) {
       ImGui::Indent();
       DrawTargetEditor(char_size);
       ImGui::Unindent();
       ImGui::TreePop();
     }
 
-    if (ImGui::TreeNode("Scenario")) {
+    if (ImGui::TreeNodeEx("Scenario", ImGuiTreeNodeFlags_DefaultOpen)) {
       ImGui::Indent();
       DrawScenarioTypeEditor(char_size);
       ImGui::Unindent();
@@ -219,7 +221,7 @@ class ScenarioEditorScreen : public UiScreen {
       def_.mutable_static_def();
     }
 
-    ImGui::PushItemWidth(char_x_ * 25);
+    ImGui::PushItemWidth(char_x_ * 15);
     auto scenario_type = def_.type_case();
     std::string type_string = ScenarioTypeToString(scenario_type);
     if (ImGui::BeginCombo("##ScenarioTypeCombo", type_string.c_str(), 0)) {
@@ -243,6 +245,43 @@ class ScenarioEditorScreen : public UiScreen {
 
     if (scenario_type == ScenarioDef::kStaticDef) {
       DrawStaticEditor();
+    }
+    if (scenario_type == ScenarioDef::kCenteringDef) {
+      DrawCenteringEditor();
+    }
+  }
+
+  void DrawCenteringEditor() {
+    ImGui::IdGuard cid("CenteringEditor");
+    CenteringScenarioDef& c = *def_.mutable_centering_def();
+    if (c.wall_points_size() > 2 || c.has_target_placement_strategy()) {
+      ImGui::Text("Unsupported editable features");
+      return;
+    }
+
+    // Ensure two wall points.
+    while (c.wall_points_size() < 2) {
+      c.add_wall_points();
+    }
+
+    ImGui::Text("Point 1");
+    ImGui::Indent();
+    DrawRegionVec2Editor("Point1", c.mutable_wall_points(0));
+    ImGui::Unindent();
+
+    ImGui::Text("Point 2");
+    ImGui::Indent();
+    DrawRegionVec2Editor("Point2", c.mutable_wall_points(1));
+    ImGui::Unindent();
+
+    ImGui::Text("Orient pill");
+    ImGui::SameLine();
+    bool orient_pill = c.orient_pill();
+    ImGui::Checkbox("##OrientPillCheck", &orient_pill);
+    if (orient_pill) {
+      c.set_orient_pill(true);
+    } else {
+      c.clear_orient_pill();
     }
   }
 
@@ -381,7 +420,7 @@ class ScenarioEditorScreen : public UiScreen {
       region->clear_percent_chance();
     }
 
-    ImGui::PushItemWidth(char_x_ * 25);
+    ImGui::PushItemWidth(char_x_ * 15);
     auto region_type = region->type_case();
     std::string type_string = RegionTypeToString(region_type);
     if (ImGui::BeginCombo("##RegionTypeCombo", type_string.c_str(), 0)) {
@@ -476,11 +515,13 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Indent();
       ImGui::Text("X offset");
       ImGui::SameLine();
-      DrawRegionLengthEditor("XOffset", /*default_to_x=*/true, region->mutable_x_offset());
+      DrawRegionLengthEditor(
+          "XOffset", /*default_to_x=*/true, region->mutable_x_offset(), /*is_point=*/true);
 
       ImGui::Text("Y offset");
       ImGui::SameLine();
-      DrawRegionLengthEditor("YOffset", /*default_to_x=*/false, region->mutable_y_offset());
+      DrawRegionLengthEditor(
+          "YOffset", /*default_to_x=*/false, region->mutable_y_offset(), /*is_point=*/true);
       ImGui::Unindent();
     } else {
       region->clear_x_offset();
@@ -488,7 +529,10 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawRegionLengthEditor(const std::string& id, bool default_to_x, RegionLength* length) {
+  void DrawRegionLengthEditor(const std::string& id,
+                              bool default_to_x,
+                              RegionLength* length,
+                              bool is_point = false) {
     ImGui::IdGuard cid(id);
     bool is_x = length->type_case() == RegionLength::kXPercentValue;
     bool is_y = length->type_case() == RegionLength::kYPercentValue;
@@ -498,7 +542,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (is_percent) {
       float value = is_x ? length->x_percent_value() : length->y_percent_value();
       value *= 100;
-      if (value <= 0) {
+      if (!is_point && value <= 0) {
         value = 50;
       }
       ImGui::InputFloat("##PercentValue", &value, 5, 10, "%.0f");
@@ -512,7 +556,7 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       // Absolute value.
       float value = length->value();
-      if (value <= 0) {
+      if (!is_point && value <= 0) {
         value = 50;
       }
       ImGui::InputFloat("##AbsoluteValue", &value, 10, 20, "%.0f");
@@ -567,7 +611,21 @@ class ScenarioEditorScreen : public UiScreen {
 
       ImGui::PopItemWidth();
       // TODO: Display evaluated value based on room.
+    } else {
+      if (!length->has_value()) {
+        length->set_value(0);
+      }
     }
+  }
+
+  void DrawRegionVec2Editor(const std::string& id, RegionVec2* v) {
+    ImGui::IdGuard cid(id);
+    ImGui::Text("x");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("X" + id, /*default_to_x=*/true, v->mutable_x(), /*is_point=*/true);
+    ImGui::Text("y");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Y" + id, /*default_to_x=*/false, v->mutable_y(), /*is_point=*/true);
   }
 
   void DrawShotTypeEditor(const ImVec2& char_size) {
@@ -575,7 +633,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Shot type");
     ImGui::SameLine();
 
-    ImGui::PushItemWidth(char_x_ * 25);
+    ImGui::PushItemWidth(char_x_ * 15);
     std::string type_string = ShotTypeToString(def_.shot_type().type_case());
     if (ImGui::BeginCombo("##shot_type_combo", type_string.c_str(), 0)) {
       ImGui::LoopId loop_id;
@@ -608,30 +666,31 @@ class ScenarioEditorScreen : public UiScreen {
 
   void DrawRoomEditor(const ImVec2& char_size) {
     ImGui::IdGuard cid("RoomEditor");
+    Room& room = *def_.mutable_room();
 
     ImGuiComboFlags combo_flags = 0;
-    if (room_.type_case() == Room::TYPE_NOT_SET) {
-      room_ = GetDefaultSimpleRoom();
+    if (room.type_case() == Room::TYPE_NOT_SET) {
+      room = GetDefaultSimpleRoom();
     }
 
-    ImGui::PushItemWidth(char_x_ * 25);
-    std::string room_type_string = RoomTypeToString(room_.type_case());
-    if (ImGui::BeginCombo("##room_type_combo", room_type_string.c_str(), combo_flags)) {
+    ImGui::PushItemWidth(char_x_ * 15);
+    std::string roomtype_string = RoomTypeToString(room.type_case());
+    if (ImGui::BeginCombo("##roomtype_combo", roomtype_string.c_str(), combo_flags)) {
       ImGui::LoopId loop_id;
       for (auto type : kSupportedRoomTypes) {
         auto lid = loop_id.Get();
         std::string name = RoomTypeToString(type);
-        bool is_selected = room_type_string == name;
+        bool is_selected = roomtype_string == name;
         if (ImGui::Selectable(name.c_str(), is_selected)) {
-          if (type != room_.type_case()) {
+          if (type != room.type_case()) {
             if (type == Room::kSimpleRoom) {
-              room_ = GetDefaultSimpleRoom();
+              room = GetDefaultSimpleRoom();
             }
             if (type == Room::kCylinderRoom) {
-              room_ = GetDefaultCylinderRoom();
+              room = GetDefaultCylinderRoom();
             }
             if (type == Room::kBarrelRoom) {
-              room_ = GetDefaultBarrelRoom();
+              room = GetDefaultBarrelRoom();
             }
           }
         }
@@ -643,39 +702,39 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::PopItemWidth();
 
-    if (room_.type_case() == Room::kSimpleRoom) {
+    if (room.type_case() == Room::kSimpleRoom) {
       ImGui::Text("Width");
       ImGui::SameLine();
-      float width = room_.simple_room().width();
+      float width = room.simple_room().width();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomWidth", &width, 10, 1, "%.0f");
-      room_.mutable_simple_room()->set_width(width);
+      room.mutable_simple_room()->set_width(width);
 
       ImGui::Text("Height");
       ImGui::SameLine();
-      float height = room_.simple_room().height();
+      float height = room.simple_room().height();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
-      room_.mutable_simple_room()->set_height(height);
+      room.mutable_simple_room()->set_height(height);
     }
 
-    if (room_.type_case() == Room::kBarrelRoom) {
+    if (room.type_case() == Room::kBarrelRoom) {
       ImGui::Text("Radius");
       ImGui::SameLine();
-      float radius = room_.barrel_room().radius();
+      float radius = room.barrel_room().radius();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomRadius", &radius, 5, 1, "%.0f");
-      room_.mutable_barrel_room()->set_radius(radius);
+      room.mutable_barrel_room()->set_radius(radius);
     }
 
-    if (room_.type_case() == Room::kCylinderRoom) {
+    if (room.type_case() == Room::kCylinderRoom) {
       ImGui::Text("Height");
       ImGui::SameLine();
-      float height = room_.cylinder_room().height();
+      float height = room.cylinder_room().height();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
 
-      bool use_width_percent = room_.cylinder_room().width_perimeter_percent() > 0;
+      bool use_width_percent = room.cylinder_room().width_perimeter_percent() > 0;
       ImGui::Text("Width as percent of perimeter?");
       ImGui::SameLine();
       ImGui::Checkbox("##WidthPercentCheckbox", &use_width_percent);
@@ -683,41 +742,41 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Text("Width");
       ImGui::SameLine();
       if (use_width_percent) {
-        float width_percent = room_.cylinder_room().width_perimeter_percent() * 100;
+        float width_percent = room.cylinder_room().width_perimeter_percent() * 100;
         if (width_percent <= 0) {
           width_percent = 40;
         }
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##WidthPercent", &width_percent, 5, 1, "%.1f");
-        room_.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
-        room_.mutable_cylinder_room()->set_width(0);
+        room.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
+        room.mutable_cylinder_room()->set_width(0);
       } else {
-        float width = room_.cylinder_room().width();
+        float width = room.cylinder_room().width();
         if (width <= 0) {
           width = 100;
         }
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##Width", &width, 10, 1, "%.0f");
-        room_.mutable_cylinder_room()->set_width(width);
-        room_.mutable_cylinder_room()->set_width_perimeter_percent(0);
+        room.mutable_cylinder_room()->set_width(width);
+        room.mutable_cylinder_room()->set_width_perimeter_percent(0);
       }
 
-      room_.mutable_cylinder_room()->set_height(height);
+      room.mutable_cylinder_room()->set_height(height);
       ImGui::Text("Radius");
       ImGui::SameLine();
-      float radius = room_.cylinder_room().radius();
+      float radius = room.cylinder_room().radius();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomRadius", &radius, 10, 1, "%.0f");
-      room_.mutable_cylinder_room()->set_radius(radius);
+      room.mutable_cylinder_room()->set_radius(radius);
 
       ImGui::Text("Draw sides");
       ImGui::SameLine();
-      bool has_sides = !room_.cylinder_room().hide_sides();
+      bool has_sides = !room.cylinder_room().hide_sides();
       ImGui::Checkbox("##DrawSides", &has_sides);
-      room_.mutable_cylinder_room()->set_hide_sides(!has_sides);
+      room.mutable_cylinder_room()->set_hide_sides(!has_sides);
 
       if (has_sides) {
-        float side_angle = room_.cylinder_room().side_angle_degrees();
+        float side_angle = room.cylinder_room().side_angle_degrees();
         if (side_angle <= 0) {
           side_angle = 20;
         }
@@ -725,43 +784,43 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::SameLine();
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##SideAngle", &side_angle, 1, 1, "%.0f");
-        room_.mutable_cylinder_room()->set_side_angle_degrees(side_angle);
+        room.mutable_cylinder_room()->set_side_angle_degrees(side_angle);
       } else {
-        room_.mutable_cylinder_room()->clear_side_angle_degrees();
+        room.mutable_cylinder_room()->clear_side_angle_degrees();
       }
     }
 
     ImGui::Text("Camera position");
     ImGui::SameLine();
-    VectorEditor("CameraPositionVector", room_.mutable_camera_position(), char_size);
+    VectorEditor("CameraPositionVector", room.mutable_camera_position(), char_size);
 
     if (ImGui::TreeNode("Advanced")) {
-      bool has_camera_up = room_.has_camera_up();
+      bool has_camera_up = room.has_camera_up();
       ImGui::Text("Set camera up");
       ImGui::SameLine();
       ImGui::Checkbox("##CameraUp", &has_camera_up);
       if (has_camera_up) {
         ImGui::SameLine();
-        if (IsZero(room_.camera_up())) {
-          room_.mutable_camera_up()->set_z(1);
+        if (IsZero(room.camera_up())) {
+          room.mutable_camera_up()->set_z(1);
         }
-        VectorEditor("CameraUpVector", room_.mutable_camera_up(), char_size);
+        VectorEditor("CameraUpVector", room.mutable_camera_up(), char_size);
       } else {
-        room_.clear_camera_up();
+        room.clear_camera_up();
       }
 
-      bool has_camera_front = room_.has_camera_front();
+      bool has_camera_front = room.has_camera_front();
       ImGui::Text("Set camera front");
       ImGui::SameLine();
       ImGui::Checkbox("##CameraFront", &has_camera_front);
       if (has_camera_front) {
         ImGui::SameLine();
-        if (IsZero(room_.camera_front())) {
-          room_.mutable_camera_front()->set_y(1);
+        if (IsZero(room.camera_front())) {
+          room.mutable_camera_front()->set_y(1);
         }
-        VectorEditor("CameraFrontVector", room_.mutable_camera_front(), char_size);
+        VectorEditor("CameraFrontVector", room.mutable_camera_front(), char_size);
       } else {
-        room_.clear_camera_front();
+        room.clear_camera_front();
       }
 
       ImGui::TreePop();
@@ -956,8 +1015,8 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void Render() override {
-    target_manager_.UpdateRoom(room_);
-    CameraParams camera_params(room_);
+    target_manager_.UpdateRoom(def_.room());
+    CameraParams camera_params(def_.room());
     Camera camera(camera_params);
     auto look_at = camera.GetLookAt();
 
@@ -966,7 +1025,7 @@ class ScenarioEditorScreen : public UiScreen {
     FrameTimes frame_times;
     if (app_->StartRender(&ctx)) {
       app_->renderer()->DrawScenario(projection_,
-                                     room_,
+                                     def_.room(),
                                      theme_,
                                      target_manager_.GetTargets(),
                                      look_at.transform,
@@ -978,7 +1037,6 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
  private:
-  Room room_;
   ScenarioDef def_;
   TargetManager target_manager_;
   glm::mat4 projection_;
