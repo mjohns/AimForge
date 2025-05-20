@@ -19,6 +19,7 @@ NavigationEvent UiScreen::Run() {
     if (!app_->has_input_focus()) {
       SDL_Delay(250);
     }
+    OnTickStart();
 
     SDL_Event event;
     ImGuiIO& io = ImGui::GetIO();

@@ -19,6 +19,7 @@ class UiScreen {
   virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
   virtual void OnKeyDown(const SDL_Event& event, bool user_is_typing) {}
   virtual void OnKeyUp(const SDL_Event& event, bool user_is_typing) {}
+  virtual void OnTickStart() {}
 
   virtual void DrawScreen() = 0;
 
