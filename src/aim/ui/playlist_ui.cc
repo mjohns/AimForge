@@ -30,9 +30,8 @@ class PlaylistEditorComponent : public UiComponent {
  public:
   explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
       : UiComponent(app),
-        playlist_manager_(app->playlist_manager()),
-        full_playlist_name_(playlist_name) {
-    PlaylistRun* run = playlist_manager_->GetRun(full_playlist_name_);
+        playlist_manager_(app->playlist_manager()) {
+    PlaylistRun* run = playlist_manager_->GetRun(playlist_name);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.name.relative_name();
       original_playlist_name_ = run->playlist.name;
@@ -109,7 +108,6 @@ class PlaylistEditorComponent : public UiComponent {
           if (payload->IsDelivery()) {
             scenario_items_ = MoveVectorItem(scenario_items_, dragging_i_, dest_before_i);
             dragging_i_ = -1;
-            updated_ = true;
           }
         }
 
@@ -238,11 +236,8 @@ class PlaylistEditorComponent : public UiComponent {
   PlaylistManager* playlist_manager_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
-  std::string full_playlist_name_;
-  std::string original_bundle_playlist_name_;
   ResourceName original_playlist_name_;
   std::string bundle_name_;
-  bool updated_ = false;
 
   std::string scenario_search_text_;
   std::string new_playlist_name_;
