@@ -19,6 +19,11 @@
 
 namespace aim {
 
+struct CreateScenarioParams {
+  std::string id;
+  ScenarioDef def;
+};
+
 struct ScenarioStats {
   double num_hits = 0;
   double num_shots = 0;
@@ -41,7 +46,7 @@ struct DelayedTask {
 
 class Scenario {
  public:
-  Scenario(const ScenarioDef& params, Application* app);
+  Scenario(const CreateScenarioParams& params, Application* app);
   virtual ~Scenario() {}
 
   NavigationEvent Run();
@@ -89,6 +94,7 @@ class Scenario {
   TargetProfile GetNextTargetProfile();
   Target GetTargetTemplate(const TargetProfile& profile);
 
+  std::string id_;
   ScenarioDef def_;
   Application* app_;
   ScenarioStats stats_;
@@ -134,6 +140,6 @@ class Scenario {
   RunPerformanceStats perf_stats_;
 };
 
-std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app);
+std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);
 
 }  // namespace aim

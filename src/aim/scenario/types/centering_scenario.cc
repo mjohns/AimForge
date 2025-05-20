@@ -28,10 +28,10 @@ constexpr const float kStartMovingDelaySeconds = 0.2;
 
 class CenteringScenario : public BaseScenario {
  public:
-  explicit CenteringScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
-    TargetPlacementStrategy strat = def.centering_def().target_placement_strategy();
-    if (!def.centering_def().has_target_placement_strategy()) {
+  explicit CenteringScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+    TargetPlacementStrategy strat = params.def.centering_def().target_placement_strategy();
+    if (!params.def.centering_def().has_target_placement_strategy()) {
       strat.set_min_distance(50);
       RectangleTargetRegion* region = strat.add_regions()->mutable_rectangle();
       region->mutable_x_length()->set_x_percent_value(0.9);
@@ -55,7 +55,7 @@ class CenteringScenario : public BaseScenario {
     // Look a little in front of the starting position
     float target_radius = GetNextTargetProfile().target_radius();
     glm::vec3 look_at_pos = WallPositionToWorldPosition(
-        current_start_ + (current_direction_ * 10.0f), target_radius, def.room());
+        current_start_ + (current_direction_ * 10.0f), target_radius, params.def.room());
     camera_.SetPitchYawLookingAtPoint(look_at_pos);
   }
 
@@ -148,8 +148,9 @@ class CenteringScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateCenteringScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<CenteringScenario>(def, app);
+std::unique_ptr<Scenario> CreateCenteringScenario(const CreateScenarioParams& params,
+                                                  Application* app) {
+  return std::make_unique<CenteringScenario>(params, app);
 }
 
 }  // namespace aim

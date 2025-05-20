@@ -44,11 +44,11 @@ struct TargetInfo {
 
 class WallSwerveScenario : public BaseScenario {
  public:
-  explicit WallSwerveScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
-    swerve_ = def.wall_swerve_def();
+  explicit WallSwerveScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+    swerve_ = params.def.wall_swerve_def();
     if (swerve_.has_origin_strategy()) {
-      origin_target_placer_ = CreateWallTargetPlacer(def, &target_manager_, app_);
+      origin_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, app_);
     }
     if (swerve_.has_turn_rate()) {
       turn_rate_ = swerve_.turn_rate();
@@ -131,8 +131,9 @@ class WallSwerveScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWallSwerveScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<WallSwerveScenario>(def, app);
+std::unique_ptr<Scenario> CreateWallSwerveScenario(const CreateScenarioParams& params,
+                                                   Application* app) {
+  return std::make_unique<WallSwerveScenario>(params, app);
 }
 
 }  // namespace aim

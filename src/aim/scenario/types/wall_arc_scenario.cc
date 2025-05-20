@@ -26,9 +26,9 @@ namespace {
 
 class WallArcScenario : public BaseScenario {
  public:
-  explicit WallArcScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
-    auto arc = def.wall_arc_def();
+  explicit WallArcScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+    auto arc = params.def.wall_arc_def();
     width_ = GetRegionLength(arc.width(), wall_);
     height_ = GetRegionLength(arc.height(), wall_);
 
@@ -54,7 +54,7 @@ class WallArcScenario : public BaseScenario {
     }
 
     // Look at start position
-    glm::vec3 look_at_pos = WallPositionToWorldPosition(wall_start_, target_radius, def.room());
+    glm::vec3 look_at_pos = WallPositionToWorldPosition(wall_start_, target_radius, def_.room());
     camera_.SetPitchYawLookingAtPoint(look_at_pos);
   }
 
@@ -147,8 +147,9 @@ class WallArcScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWallArcScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<WallArcScenario>(def, app);
+std::unique_ptr<Scenario> CreateWallArcScenario(const CreateScenarioParams& params,
+                                                Application* app) {
+  return std::make_unique<WallArcScenario>(params, app);
 }
 
 }  // namespace aim

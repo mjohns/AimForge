@@ -29,8 +29,7 @@ struct EditorResult {
 class PlaylistEditorComponent : public UiComponent {
  public:
   explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
-      : UiComponent(app),
-        playlist_manager_(app->playlist_manager()) {
+      : UiComponent(app), playlist_manager_(app->playlist_manager()) {
     PlaylistRun* run = playlist_manager_->GetRun(playlist_name);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.name.relative_name();
@@ -162,15 +161,15 @@ class PlaylistEditorComponent : public UiComponent {
       for (int i = 0; i < app_->scenario_manager()->scenarios().size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
         const auto& scenario = app_->scenario_manager()->scenarios()[i];
-        if (StringMatchesSearch(scenario.name, search_words, /*empty_matches=*/false)) {
+        if (StringMatchesSearch(scenario.id(), search_words, /*empty_matches=*/false)) {
           bool already_in_playlist =
               std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
-                return item.scenario() == scenario.name;
+                return item.scenario() == scenario.id();
               });
           if (!already_in_playlist) {
-            if (ImGui::Button(scenario.name.c_str())) {
+            if (ImGui::Button(scenario.id().c_str())) {
               PlaylistItem item;
-              item.set_scenario(scenario.name);
+              item.set_scenario(scenario.id());
               item.set_num_plays(1);
               scenario_items_.push_back(item);
               scenario_search_text_ = "";

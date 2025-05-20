@@ -37,12 +37,13 @@ constexpr const u64 kClickDebounceMicros = 3 * 1000;
 
 }  // namespace
 
-Scenario::Scenario(const ScenarioDef& def, Application* app)
-    : def_(def),
+Scenario::Scenario(const CreateScenarioParams& params, Application* app)
+    : id_(params.id),
+      def_(params.def),
       app_(app),
       timer_(kReplayFps),
-      camera_(Camera(CameraParams(def.room()))),
-      target_manager_(def.room()) {
+      camera_(Camera(CameraParams(params.def.room()))),
+      target_manager_(params.def.room()) {
   theme_ = app->settings_manager()->GetCurrentTheme();
   max_render_age_micros_ = (1 / (float)(kTargetRenderFps + 1)) * 1000 * 1000;
 }
@@ -80,7 +81,7 @@ void Scenario::RefreshState() {
 
   SDL_SetWindowRelativeMouseMode(app_->sdl_window(), true);
 
-  settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(def_.scenario_id());
+  settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(id_);
   projection_ = GetPerspectiveTransformation(app_->screen_info());
 
   float dpi = app_->settings_manager()->GetDpi();
@@ -143,9 +144,8 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     }
     if (show_settings.has_value()) {
       NavigationEvent nav_event;
-      nav_event = CreateQuickSettingsScreen(
-                      def_.scenario_id(), *show_settings, show_settings_release_key, app_)
-                      ->Run();
+      nav_event =
+          CreateQuickSettingsScreen(id_, *show_settings, show_settings_release_key, app_)->Run();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
@@ -210,7 +210,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
     DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
 
-    ImGui::Text("%s", def_.scenario_id().c_str());
+    ImGui::Text("%s", id_.c_str());
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
     ImGui::Text("theme: %s", settings_.theme_name().c_str());
@@ -226,10 +226,10 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
       ImGui::Text(message);
     }
 
-    ImVec2 text_size = ImGui::CalcTextSize(def_.scenario_id().c_str());
+    ImVec2 text_size = ImGui::CalcTextSize(id_.c_str());
     ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
     ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 1);
-    ImGui::Text("%s", def_.scenario_id().c_str());
+    ImGui::Text("%s", id_.c_str());
 
     std::string message = std::format("cm/360: {}", MaybeIntToString(effective_cm_per_360_, 1));
     text_size = ImGui::CalcTextSize(message.c_str());
@@ -273,7 +273,7 @@ NavigationEvent Scenario::Resume() {
 
 NavigationEvent Scenario::ResumeInternal() {
   if (is_done_) {
-    StatsScreen stats_screen(def_.scenario_id(), stats_id_, app_, perf_stats_);
+    StatsScreen stats_screen(id_, stats_id_, app_, perf_stats_);
     return stats_screen.Run(replay_);
   }
 
@@ -305,9 +305,8 @@ NavigationEvent Scenario::ResumeInternal() {
       timer_.PauseRun();
       OnPause();
       NavigationEvent nav_event;
-      nav_event = CreateQuickSettingsScreen(
-                      def_.scenario_id(), *show_settings, show_settings_release_key, app_)
-                      ->Run();
+      nav_event =
+          CreateQuickSettingsScreen(id_, *show_settings, show_settings_release_key, app_)->Run();
       if (nav_event.IsNotDone()) {
         return nav_event;
       }
@@ -502,14 +501,14 @@ NavigationEvent Scenario::ResumeInternal() {
   stats_row.num_hits = stats_.num_hits;
   stats_row.num_shots = stats_.num_shots;
   stats_row.score = score;
-  app_->stats_db()->AddStats(def_.scenario_id(), &stats_row);
+  app_->stats_db()->AddStats(id_, &stats_row);
 
   stats_id_ = stats_row.stats_id;
 
   PlaylistRun* playlist_run = app_->playlist_manager()->GetCurrentRun();
   if (playlist_run != nullptr && playlist_run->IsCurrentIndexValid()) {
     PlaylistItemProgress* progress = playlist_run->GetMutableCurrentPlaylistItemProgress();
-    if (def_.scenario_id() == progress->item.scenario()) {
+    if (id_ == progress->item.scenario()) {
       progress->runs_done++;
       if (progress->item.auto_next()) {
         return NavigationEvent::PlaylistNext();
@@ -517,7 +516,7 @@ NavigationEvent Scenario::ResumeInternal() {
     }
   }
 
-  StatsScreen stats_screen(def_.scenario_id(), stats_row.stats_id, app_, perf_stats_);
+  StatsScreen stats_screen(id_, stats_row.stats_id, app_, perf_stats_);
   return stats_screen.Run(replay_);
 }
 
@@ -547,7 +546,7 @@ void Scenario::DoneAdjustingCrosshairSize() {
     if (crosshair_size_ != current_settings->crosshair_size()) {
       current_settings->set_crosshair_size(crosshair_size_);
       app_->settings_manager()->MarkDirty();
-      app_->settings_manager()->MaybeFlushToDisk(def_.scenario_id());
+      app_->settings_manager()->MaybeFlushToDisk(id_);
       RefreshState();
     }
   }
@@ -661,22 +660,22 @@ NavigationEvent Scenario::PauseAndReturn() {
   return NavigationEvent::Done();
 }
 
-std::unique_ptr<Scenario> CreateScenario(const ScenarioDef& def, Application* app) {
-  switch (def.type_case()) {
+std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app) {
+  switch (params.def.type_case()) {
     case ScenarioDef::kStaticDef:
-      return CreateStaticScenario(def, app);
+      return CreateStaticScenario(params, app);
     case ScenarioDef::kCenteringDef:
-      return CreateCenteringScenario(def, app);
+      return CreateCenteringScenario(params, app);
     case ScenarioDef::kBarrelDef:
-      return CreateBarrelScenario(def, app);
+      return CreateBarrelScenario(params, app);
     case ScenarioDef::kLinearDef:
-      return CreateLinearScenario(def, app);
+      return CreateLinearScenario(params, app);
     case ScenarioDef::kWallStrafeDef:
-      return CreateWallStrafeScenario(def, app);
+      return CreateWallStrafeScenario(params, app);
     case ScenarioDef::kWallArcDef:
-      return CreateWallArcScenario(def, app);
+      return CreateWallArcScenario(params, app);
     case ScenarioDef::kWallSwerveDef:
-      return CreateWallSwerveScenario(def, app);
+      return CreateWallSwerveScenario(params, app);
     default:
       break;
   }

@@ -12,7 +12,8 @@ namespace aim {
 
 class BaseScenario : public Scenario {
  public:
-  explicit BaseScenario(const ScenarioDef& def, Application* app) : Scenario(def, app) {}
+  explicit BaseScenario(const CreateScenarioParams& params, Application* app)
+      : Scenario(params, app) {}
   ~BaseScenario() {}
 
  protected:

@@ -148,7 +148,7 @@ class ScenarioEditorScreen : public UiScreen {
       theme_ = GetDefaultTheme();
     }
     *def_.mutable_room() = GetDefaultSimpleRoom();
-    def_ = *app->scenario_manager()->GetScenario("AF Centering Intermediate");
+    def_ = app->scenario_manager()->GetScenario("AF Centering Intermediate")->def;
   }
 
  protected:
