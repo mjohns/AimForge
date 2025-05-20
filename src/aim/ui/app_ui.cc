@@ -15,6 +15,7 @@
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/theme_editor_screen.h"
+#include "aim/ui/scenario_editor.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -249,6 +250,9 @@ class AppUiImpl : public AppUi {
     }
     if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
       screen_to_show_ = CreateThemeEditorScreen(app_);
+    }
+    if (ImGui::Selectable("Scenario Editor", app_screen_ == AppScreen::SCENARIO_EDITOR)) {
+      screen_to_show_ = CreateScenarioEditorScreen(app_);
     }
 
     // ImGui::SetCursorPosY(screen.height * 0.5);

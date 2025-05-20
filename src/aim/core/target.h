@@ -64,6 +64,10 @@ class TargetManager {
   Target AddTarget(Target t);
   void RemoveTarget(u16 target_id);
 
+  void UpdateRoom(const Room& room) {
+    room_ = room;
+  }
+
   void UpdateTargetPositions(float now_seconds);
   glm::vec3 GetUpdatedPosition(const Target& target, float now_seconds);
   glm::vec2 GetUpdatedWallPosition(const Target& target, float now_seconds);
