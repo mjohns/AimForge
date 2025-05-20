@@ -27,6 +27,58 @@ const std::vector<ShotType::TypeCase> kShotTypes{
     ShotType::kPoke,
     ShotType::TYPE_NOT_SET,
 };
+const std::vector<ScenarioDef::TypeCase> kScenarioTypes{
+    ScenarioDef::kStaticDef,
+    ScenarioDef::kCenteringDef,
+};
+
+std::string ShotTypeToString(const ShotType::TypeCase& type) {
+  switch (type) {
+    case ShotType::kClickSingle:
+      return "Click";
+    case ShotType::kTrackingInvincible:
+      return "Tracking";
+    case ShotType::kTrackingKill:
+      return "Tracking kill";
+    case ShotType::kPoke:
+      return "Poke";
+    case ShotType::TYPE_NOT_SET:
+      return "Default";
+    default:
+      break;
+  }
+  return "";
+}
+
+std::string RoomTypeToString(const Room::TypeCase& type) {
+  switch (type) {
+    case Room::kSimpleRoom:
+      return "Simple Room";
+    case Room::kCylinderRoom:
+      return "Cylinder Room";
+    case Room::kBarrelRoom:
+      return "Barrel Room";
+    default:
+      break;
+  }
+  return "";
+}
+
+std::string ScenarioTypeToString(const ScenarioDef::TypeCase& type) {
+  switch (type) {
+    case ScenarioDef::kStaticDef:
+      return "Static";
+    case ScenarioDef::kCenteringDef:
+      return "Centering";
+    case ScenarioDef::kBarrelDef:
+      return "Barrel";
+    case ScenarioDef::kLinearDef:
+      return "Linear";
+    default:
+      break;
+  }
+  return "";
+}
 
 Room GetDefaultSimpleRoom() {
   Room r;
@@ -80,10 +132,9 @@ class ScenarioEditorScreen : public UiScreen {
 
  protected:
   void DrawScreen() override {
-    const ScreenInfo& screen = app_->screen_info();
     ImVec2 char_size = ImGui::CalcTextSize("A");
-
-    DrawShotTypeEditor(char_size);
+    char_size_ = char_size;
+    char_x_ = char_size_.x;
 
     float duration_seconds = def_.duration_seconds();
     if (duration_seconds <= 0) {
@@ -105,6 +156,13 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::TreeNode("Targets")) {
       ImGui::Indent();
       DrawTargetEditor(char_size);
+      ImGui::Unindent();
+      ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("Scenario")) {
+      ImGui::Indent();
+      DrawScenarioTypeEditor(char_size);
       ImGui::Unindent();
       ImGui::TreePop();
     }
@@ -133,7 +191,176 @@ class ScenarioEditorScreen : public UiScreen {
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
 
+  void DrawScenarioTypeEditor(const ImVec2& char_size) {
+    ImGui::IdGuard cid("ScenarioTypeEditor");
+    ImGui::Text("Scenario type");
+    ImGui::SameLine();
+
+    if (def_.type_case() == ScenarioDef::TYPE_NOT_SET) {
+      def_.mutable_static_def();
+    }
+
+    ImGui::PushItemWidth(char_size.x * 25);
+    auto scenario_type = def_.type_case();
+    std::string type_string = ScenarioTypeToString(scenario_type);
+    if (ImGui::BeginCombo("##ScenarioTypeCombo", type_string.c_str(), 0)) {
+      ImGui::LoopId loop_id;
+      for (auto type_item : kScenarioTypes) {
+        auto lid = loop_id.Get();
+        std::string item_name = ScenarioTypeToString(type_item);
+        bool is_selected = type_string == item_name;
+        if (ImGui::Selectable(item_name.c_str(), is_selected)) {
+          scenario_type = type_item;
+        }
+        if (is_selected) {
+          ImGui::SetItemDefaultFocus();
+        }
+      }
+      ImGui::EndCombo();
+    }
+    ImGui::PopItemWidth();
+
+    DrawShotTypeEditor(char_size);
+
+    if (scenario_type == ScenarioDef::kStaticDef) {
+      DrawStaticEditor();
+    }
+  }
+
+  void DrawStaticEditor() {
+    ImGui::IdGuard cid("StaticEditor");
+    DrawTargetPlacementStrategyEditor(
+        "Placement", def_.mutable_static_def()->mutable_target_placement_strategy());
+  }
+
+  void DrawTargetPlacementStrategyEditor(const std::string& id, TargetPlacementStrategy* s) {
+    ImGui::IdGuard cid(id);
+    if (s->regions_size() == 0) {
+      s->add_regions();
+    }
+    bool allow_percents = s->region_order_size() == 0 && s->regions_size() > 1;
+    for (int i = 0; i < s->regions_size(); ++i) {
+      ImGui::IdGuard lid("Region", i);
+      ImGui::Text("Region #%d", i);
+      ImGui::Indent();
+      DrawTargetRegion(s->mutable_regions(i), allow_percents);
+      ImGui::Unindent();
+    }
+
+    if (ImGui::Button("Add region")) {
+      s->add_regions();
+    }
+  }
+
+  void DrawTargetRegion(TargetRegion* region, bool allow_percents) {
+    if (allow_percents) {
+      ImGui::Text("Percent chance to use");
+      ImGui::SameLine();
+      int percent = region->percent_chance() * 100;
+      if (percent <= 0) {
+        percent = 100;
+      }
+      ImGui::SetNextItemWidth(char_x_ * 10);
+      ImGui::InputInt("##PercentChance", &percent, 5, 10);
+      region->set_percent_chance(percent / 100.0);
+    } else {
+      region->clear_percent_chance();
+    }
+
+    ImGui::Text("X offset");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("XOffset", /*default_to_x=*/true, region->mutable_x_offset());
+
+    ImGui::Text("Y offset");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("YOffset", /*default_to_x=*/false, region->mutable_y_offset());
+  }
+
+  void DrawRegionLengthEditor(const std::string& id, bool default_to_x, RegionLength* length) {
+    ImGui::IdGuard cid(id);
+    bool is_x = length->type_case() == RegionLength::kXPercentValue;
+    bool is_y = length->type_case() == RegionLength::kYPercentValue;
+    bool is_percent = is_x || is_y;
+
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    if (is_percent) {
+      float value = is_x ? length->x_percent_value() : length->y_percent_value();
+      value *= 100;
+      if (value <= 0) {
+        value = 50;
+      }
+      ImGui::InputFloat("##PercentValue", &value, 5, 10, "%.0f");
+
+      value /= 100.0;
+      if (is_x) {
+        length->set_x_percent_value(value);
+      } else {
+        length->set_y_percent_value(value);
+      }
+    } else {
+      // Absolute value.
+      float value = length->value();
+      if (value <= 0) {
+        value = 50;
+      }
+      ImGui::InputFloat("##AbsoluteValue", &value, 10, 20, "%.0f");
+      length->set_value(value);
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("as percent");
+    ImGui::SameLine();
+    ImGui::Checkbox("##UsePercent", &is_percent);
+
+    if (is_percent) {
+      ImGui::SameLine();
+      ImGui::Text("of");
+      ImGui::SameLine();
+      if (!is_x && !is_y) {
+        if (default_to_x) {
+          is_x = true;
+        } else {
+          is_y = true;
+        }
+      }
+
+      ImGui::PushItemWidth(char_x_ * 12);
+      const char* x_str = "width";
+      const char* y_str = "height";
+      if (ImGui::BeginCombo("##XYCombo", is_x ? x_str : y_str, 0)) {
+        if (ImGui::Selectable(x_str, is_x)) {
+          is_x = true;
+          is_y = false;
+        }
+        if (is_x) {
+          ImGui::SetItemDefaultFocus();
+        }
+
+        if (ImGui::Selectable(y_str, is_y)) {
+          is_y = true;
+          is_x = false;
+        }
+        if (is_y) {
+          ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+      }
+
+      if (is_x && !length->has_x_percent_value()) {
+        length->set_x_percent_value(length->y_percent_value());
+      }
+      if (is_y && !length->has_y_percent_value()) {
+        length->set_y_percent_value(length->x_percent_value());
+      }
+
+
+      ImGui::PopItemWidth();
+      // TODO: Display evaluated value based on room.
+    }
+  }
+
   void DrawShotTypeEditor(const ImVec2& char_size) {
+    ImGui::IdGuard cid("ShotTypeEditor");
     ImGui::Text("Shot type");
     ImGui::SameLine();
 
@@ -166,38 +393,6 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::EndCombo();
     }
     ImGui::PopItemWidth();
-  }
-
-  std::string ShotTypeToString(const ShotType::TypeCase& type) {
-    switch (type) {
-      case ShotType::kClickSingle:
-        return "Click";
-      case ShotType::kTrackingInvincible:
-        return "Tracking";
-      case ShotType::kTrackingKill:
-        return "Tracking kill";
-      case ShotType::kPoke:
-        return "Poke";
-      case ShotType::TYPE_NOT_SET:
-        return "Default";
-      default:
-        break;
-    }
-    return "";
-  }
-
-  std::string RoomTypeToString(const Room::TypeCase& type) {
-    switch (type) {
-      case Room::kSimpleRoom:
-        return "Simple Room";
-      case Room::kCylinderRoom:
-        return "Cylinder Room";
-      case Room::kBarrelRoom:
-        return "Barrel Room";
-      default:
-        break;
-    }
-    return "";
   }
 
   void DrawRoomEditor(const ImVec2& char_size) {
@@ -502,6 +697,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputFloat("##TargetRadiusJitterEntry", &radius_jitter, 0.1, 0.1, "%.1f");
     profile->set_target_radius_jitter(radius_jitter);
 
+    // TODO: target_hit_radius
+
     ImGui::Text("Speed");
     ImGui::SameLine();
     float speed = profile->speed();
@@ -572,7 +769,10 @@ class ScenarioEditorScreen : public UiScreen {
   TargetManager target_manager_;
   glm::mat4 projection_;
   Theme theme_;
+  float char_x_ = 0;
+  ImVec2 char_size_{};
 };
+
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateScenarioEditorScreen(Application* app) {
