@@ -10,6 +10,17 @@
 namespace aim {
 namespace {
 
+std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
+                                                     Application* app) {
+  std::vector<std::string> names;
+  for (const ScenarioItem& s : app->scenario_manager()->scenarios()) {
+    if (s.name.bundle_name() == bundle_name) {
+      names.push_back(s.name.relative_name());
+    }
+  }
+  return names;
+}
+
 class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserComponent {
  public:
   explicit ScenarioBrowserComponentImpl(Application* app) : UiComponent(app) {}
@@ -22,7 +33,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     ImGui::InputTextWithHint("##ScenarioSearchInput", "Search..", &search_text_);
     ImGui::SameLine();
     if (ImGui::Button("Reload Scenarios")) {
-      app_->scenario_manager()->LoadScenariosFromDisk();
+      result->reload_scenarios = true;
     }
     ImGui::Spacing();
     ImGui::Spacing();
@@ -32,6 +43,14 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
   }
 
  private:
+  void CopyScenario(const ScenarioItem& item) {
+    auto& mgr = *app_->scenario_manager();
+    std::vector<std::string> taken_names =
+        GetAllRelativeNamesInBundle(item.name.bundle_name(), app_);
+    std::string final_name = MakeUniqueName(item.name.relative_name() + " Copy", taken_names);
+    mgr.SaveScenario(ResourceName(item.name.bundle_name(), final_name), item.def);
+  }
+
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
                          const std::vector<std::string>& search_words,
                          ScenarioBrowserResult* result) {
@@ -54,9 +73,19 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
           if (ImGui::Selectable("Edit")) {
             result->scenario_to_edit = node->name;
           }
+          if (ImGui::Selectable("Copy")) {
+            CopyScenario(*node->scenario);
+            result->reload_scenarios = true;
+          }
+          if (ImGui::Selectable("Delete")) {
+            app_->scenario_manager()->DeleteScenario(node->scenario->name);
+            result->reload_scenarios = true;
+          }
+          /*
           if (ImGui::Selectable("Open file")) {
             app_->scenario_manager()->OpenFile(node->scenario->name);
           }
+          */
           ImGui::EndPopup();
         }
         ImGui::OpenPopupOnItemClick("scenario_item_menu", ImGuiPopupFlags_MouseButtonRight);
