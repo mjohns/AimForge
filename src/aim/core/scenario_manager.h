@@ -15,7 +15,7 @@ struct ScenarioItem {
   ResourceName name;
   ScenarioDef def;
 
-  const std::string& id() const {
+  std::string id() const {
     return name.full_name();
   }
 };
@@ -43,6 +43,10 @@ class ScenarioManager {
   const std::vector<std::unique_ptr<ScenarioNode>>& scenario_nodes() const {
     return scenario_nodes_;
   }
+
+  bool SaveScenario(const ResourceName& name, const ScenarioDef& def);
+  bool DeleteScenario(const ResourceName& name);
+  bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name);
 
  private:
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id, int depth);

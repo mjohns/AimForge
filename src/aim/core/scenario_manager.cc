@@ -13,6 +13,19 @@
 namespace aim {
 namespace {
 
+std::filesystem::path GetScenarioPath(const std::filesystem::path& bundle_path,
+                                      const std::string& name) {
+  return bundle_path / "scenarios" / (name + ".json");
+}
+
+std::optional<std::filesystem::path> GetScenarioPath(FileSystem* fs, const ResourceName& resource) {
+  auto maybe_bundle = fs->GetBundle(resource.bundle_name());
+  if (!maybe_bundle.has_value()) {
+    return {};
+  }
+  return GetScenarioPath(maybe_bundle->path, resource.relative_name());
+}
+
 std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
                                         const std::filesystem::path& base_dir) {
   if (!std::filesystem::exists(base_dir)) {
@@ -137,6 +150,35 @@ std::optional<ScenarioItem> ScenarioManager::GetScenarioNoReferenceFollow(
     }
   }
   return {};
+}
+
+bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& def) {
+  auto path = GetScenarioPath(fs_, name);
+  if (!path.has_value()) {
+    return false;
+  }
+  return WriteJsonMessageToFile(*path, def);
+}
+
+bool ScenarioManager::DeleteScenario(const ResourceName& name) {
+  auto path = GetScenarioPath(fs_, name);
+  if (!path.has_value()) {
+    return false;
+  }
+  return std::filesystem::remove(*path);
+}
+
+bool ScenarioManager::RenameScenario(const ResourceName& old_name, const ResourceName& new_name) {
+  auto old_path = GetScenarioPath(fs_, old_name);
+  if (!old_path.has_value()) {
+    return false;
+  }
+  auto new_path = GetScenarioPath(fs_, old_name);
+  if (!old_path.has_value()) {
+    return false;
+  }
+  std::filesystem::rename(*old_path, *new_path);
+  return true;
 }
 
 }  // namespace aim
