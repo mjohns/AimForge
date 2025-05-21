@@ -39,8 +39,8 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     ImGui::LoopId loop_id;
     for (auto& node : nodes) {
       auto id = loop_id.Get();
-      if (node->scenario.has_value() && StringMatchesSearch(node->scenario->name, search_words)) {
-        if (ImGui::Button(node->scenario->def.scenario_id().c_str())) {
+      if (node->scenario.has_value() && StringMatchesSearch(node->scenario->id(), search_words)) {
+        if (ImGui::Button(node->scenario->id().c_str())) {
           result->scenario_to_start = node->name;
         }
         if (current_playlist_run != nullptr) {

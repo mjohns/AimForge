@@ -26,9 +26,9 @@ namespace {
 
 class WallStrafeScenario : public BaseScenario {
  public:
-  explicit WallStrafeScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
-    auto d = def.wall_strafe_def();
+  explicit WallStrafeScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+    auto d = params.def.wall_strafe_def();
     float width = d.has_width() ? GetRegionLength(d.width(), wall_) : 0.85 * wall_.width;
     min_x_ = -0.5 * width;
     max_x_ = 0.5 * width;
@@ -198,8 +198,9 @@ class WallStrafeScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWallStrafeScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<WallStrafeScenario>(def, app);
+std::unique_ptr<Scenario> CreateWallStrafeScenario(const CreateScenarioParams& params,
+                                                   Application* app) {
+  return std::make_unique<WallStrafeScenario>(params, app);
 }
 
 }  // namespace aim

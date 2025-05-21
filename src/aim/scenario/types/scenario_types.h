@@ -8,12 +8,19 @@
 
 namespace aim {
 
-std::unique_ptr<Scenario> CreateCenteringScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateStaticScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateBarrelScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateLinearScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateWallStrafeScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateWallArcScenario(const ScenarioDef& def, Application* app);
-std::unique_ptr<Scenario> CreateWallSwerveScenario(const ScenarioDef& def, Application* app);
+std::unique_ptr<Scenario> CreateCenteringScenario(const CreateScenarioParams& params,
+                                                  Application* app);
+std::unique_ptr<Scenario> CreateStaticScenario(const CreateScenarioParams& params,
+                                               Application* app);
+std::unique_ptr<Scenario> CreateBarrelScenario(const CreateScenarioParams& params,
+                                               Application* app);
+std::unique_ptr<Scenario> CreateLinearScenario(const CreateScenarioParams& params,
+                                               Application* app);
+std::unique_ptr<Scenario> CreateWallStrafeScenario(const CreateScenarioParams& params,
+                                                   Application* app);
+std::unique_ptr<Scenario> CreateWallArcScenario(const CreateScenarioParams& params,
+                                                Application* app);
+std::unique_ptr<Scenario> CreateWallSwerveScenario(const CreateScenarioParams& params,
+                                                   Application* app);
 
 }  // namespace aim

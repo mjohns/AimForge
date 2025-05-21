@@ -12,10 +12,10 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/playlist_ui.h"
+#include "aim/ui/scenario_editor.h"
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/theme_editor_screen.h"
-#include "aim/ui/scenario_editor.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -39,10 +39,12 @@ class AppUiImpl : public AppUi {
         screen_to_show_ = {};
       }
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
-        if (current_scenario_def_.has_value()) {
-          app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO,
-                                               current_scenario_def_->scenario_id());
-          current_running_scenario_ = CreateScenario(*current_scenario_def_, app_);
+        if (current_scenario_.has_value()) {
+          app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO, current_scenario_->id());
+          CreateScenarioParams params;
+          params.id = current_scenario_->id();
+          params.def = current_scenario_->def;
+          current_running_scenario_ = CreateScenario(params, app_);
           auto nav_event = current_running_scenario_->Run();
           if (nav_event.IsRestartLastScenario()) {
             scenario_run_option_ = ScenarioRunOption::RUN;
@@ -51,7 +53,7 @@ class AppUiImpl : public AppUi {
           if (nav_event.IsStartScenario()) {
             auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
             if (maybe_scenario.has_value()) {
-              current_scenario_def_ = maybe_scenario;
+              current_scenario_ = maybe_scenario;
               scenario_run_option_ = ScenarioRunOption::RUN;
               continue;
             }
@@ -158,7 +160,7 @@ class AppUiImpl : public AppUi {
       if (!maybe_scenario.has_value()) {
         return false;
       }
-      current_scenario_def_ = maybe_scenario;
+      current_scenario_ = maybe_scenario;
       scenario_run_option_ = ScenarioRunOption::RUN;
       return true;
     }
@@ -188,7 +190,7 @@ class AppUiImpl : public AppUi {
       ImGui::Text("AimForge");
     }
 
-    if (current_scenario_def_.has_value()) {
+    if (current_scenario_.has_value()) {
       auto font = app_->font_manager()->UseMedium();
       ImGui::SameLine();
       ImGui::SetCursorPosX(navigation_column_width);
@@ -216,8 +218,8 @@ class AppUiImpl : public AppUi {
     if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
     }
-    if (current_scenario_def_.has_value()) {
-      std::string scenario_label = std::format("  > {}", current_scenario_def_->scenario_id());
+    if (current_scenario_.has_value()) {
+      std::string scenario_label = std::format("  > {}", current_scenario_->id());
       if (ImGui::Selectable(scenario_label.c_str(), app_screen_ == AppScreen::CURRENT_SCENARIO)) {
         app_screen_ = AppScreen::CURRENT_SCENARIO;
       }
@@ -245,8 +247,8 @@ class AppUiImpl : public AppUi {
     ImGui::Spacing();
 
     if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
-      screen_to_show_ = CreateSettingsScreen(
-          app_, current_scenario_def_.has_value() ? current_scenario_def_->scenario_id() : "");
+      screen_to_show_ =
+          CreateSettingsScreen(app_, current_scenario_.has_value() ? current_scenario_->id() : "");
     }
     if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
       screen_to_show_ = CreateThemeEditorScreen(app_);
@@ -268,7 +270,7 @@ class AppUiImpl : public AppUi {
     ImGui::BeginChild("Content");
 
     if (app_screen_ == AppScreen::CURRENT_SCENARIO) {
-      if (!current_scenario_def_.has_value()) {
+      if (!current_scenario_.has_value()) {
         app_screen_ = AppScreen::SCENARIOS;
       } else {
         DrawCurrentScenarioScreen();
@@ -312,7 +314,7 @@ class AppUiImpl : public AppUi {
     ScenarioBrowserResult result;
     scenario_browser_component_->Show(&result);
     if (result.scenario_to_start.size() > 0) {
-      current_scenario_def_ = app_->scenario_manager()->GetScenario(result.scenario_to_start);
+      current_scenario_ = app_->scenario_manager()->GetScenario(result.scenario_to_start);
       scenario_run_option_ = ScenarioRunOption::RUN;
     }
   }
@@ -322,7 +324,7 @@ class AppUiImpl : public AppUi {
     for (int i = 0; i < recent_scenario_names_.size(); ++i) {
       auto& scenario = recent_scenario_names_[i];
       if (ImGui::Button(std::format("{}##recent_scenario{}", scenario, i).c_str(), sz)) {
-        current_scenario_def_ = app_->scenario_manager()->GetScenario(scenario);
+        current_scenario_ = app_->scenario_manager()->GetScenario(scenario);
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
     }
@@ -362,7 +364,7 @@ class AppUiImpl : public AppUi {
     if (playlist_component_->Show(run->playlist.name.full_name(), &scenario_id)) {
       auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
-        current_scenario_def_ = *maybe_scenario;
+        current_scenario_ = *maybe_scenario;
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
     }
@@ -373,7 +375,7 @@ class AppUiImpl : public AppUi {
   Application* app_;
   Stopwatch timer_;
 
-  std::optional<ScenarioDef> current_scenario_def_;
+  std::optional<ScenarioItem> current_scenario_;
   std::unique_ptr<Scenario> current_running_scenario_;
   std::optional<Playlist> current_playlist_;
   std::unique_ptr<Texture> logo_texture_;

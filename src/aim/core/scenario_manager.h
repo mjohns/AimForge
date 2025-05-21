@@ -5,15 +5,19 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/resource_name.h"
 #include "aim/core/file_system.h"
 #include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
 struct ScenarioItem {
-  std::string bundle_name;
-  std::string name;
+  ResourceName name;
   ScenarioDef def;
+
+  const std::string& id() const {
+    return name.full_name();
+  }
 };
 
 // Nodes to represent the scenarios as a tree that can be rendered by ImGui
@@ -30,7 +34,7 @@ class ScenarioManager {
 
   void LoadScenariosFromDisk();
 
-  std::optional<ScenarioDef> GetScenario(const std::string& scenario_id);
+  std::optional<ScenarioItem> GetScenario(const std::string& scenario_id);
 
   const std::vector<ScenarioItem>& scenarios() const {
     return scenarios_;
@@ -41,8 +45,8 @@ class ScenarioManager {
   }
 
  private:
-  std::optional<ScenarioDef> GetScenario(const std::string& scenario_id, int depth);
-  std::optional<ScenarioDef> GetScenarioNoReferenceFollow(const std::string& scenario_id);
+  std::optional<ScenarioItem> GetScenario(const std::string& scenario_id, int depth);
+  std::optional<ScenarioItem> GetScenarioNoReferenceFollow(const std::string& scenario_id);
 
   std::vector<ScenarioItem> scenarios_;
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;

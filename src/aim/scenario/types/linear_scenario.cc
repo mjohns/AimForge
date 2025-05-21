@@ -38,8 +38,8 @@ void EnsurePositive(float& val) {
 
 class LinearScenario : public BaseScenario {
  public:
-  explicit LinearScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), wall_(GetWallForRoom(def.room())) {
+  explicit LinearScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
     float width = def_.linear_def().width();
     if (width > 0 && width < wall_.width) {
       wall_.width = width;
@@ -48,9 +48,9 @@ class LinearScenario : public BaseScenario {
     if (height > 0 && height < wall_.height) {
       wall_.height = height;
     }
-    if (def.linear_def().has_target_placement_strategy()) {
+    if (params.def.linear_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
-          wall_, def.linear_def().target_placement_strategy(), &target_manager_, app_);
+          wall_, params.def.linear_def().target_placement_strategy(), &target_manager_, app_);
     } else {
       TargetPlacementStrategy strat;
       strat.set_min_distance(15);
@@ -127,8 +127,9 @@ class LinearScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateLinearScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<LinearScenario>(def, app);
+std::unique_ptr<Scenario> CreateLinearScenario(const CreateScenarioParams& params,
+                                               Application* app) {
+  return std::make_unique<LinearScenario>(params, app);
 }
 
 }  // namespace aim

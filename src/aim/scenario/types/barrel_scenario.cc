@@ -26,11 +26,11 @@ namespace {
 
 class BarrelScenario : public BaseScenario {
  public:
-  explicit BarrelScenario(const ScenarioDef& def, Application* app)
-      : BaseScenario(def, app), room_radius_(def.room().barrel_room().radius()) {
+  explicit BarrelScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), room_radius_(params.def.room().barrel_room().radius()) {
     Wall wall = GetWallForRoom(def_.room());
-    TargetPlacementStrategy strat = def.barrel_def().target_placement_strategy();
-    if (!def.barrel_def().has_target_placement_strategy()) {
+    TargetPlacementStrategy strat = params.def.barrel_def().target_placement_strategy();
+    if (!params.def.barrel_def().has_target_placement_strategy()) {
       strat.set_min_distance(15);
       CircleTargetRegion* region = strat.add_regions()->mutable_circle();
       region->mutable_diameter()->set_x_percent_value(0.92);
@@ -81,8 +81,9 @@ class BarrelScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateBarrelScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<BarrelScenario>(def, app);
+std::unique_ptr<Scenario> CreateBarrelScenario(const CreateScenarioParams& params,
+                                               Application* app) {
+  return std::make_unique<BarrelScenario>(params, app);
 }
 
 }  // namespace aim

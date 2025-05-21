@@ -26,8 +26,9 @@ namespace {
 
 class StaticScenario : public BaseScenario {
  public:
-  explicit StaticScenario(const ScenarioDef& def, Application* app) : BaseScenario(def, app) {
-    wall_target_placer_ = CreateWallTargetPlacer(def, &target_manager_, app_);
+  explicit StaticScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app) {
+    wall_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, app_);
   }
 
  protected:
@@ -46,8 +47,9 @@ class StaticScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateStaticScenario(const ScenarioDef& def, Application* app) {
-  return std::make_unique<StaticScenario>(def, app);
+std::unique_ptr<Scenario> CreateStaticScenario(const CreateScenarioParams& params,
+                                               Application* app) {
+  return std::make_unique<StaticScenario>(params, app);
 }
 
 }  // namespace aim
