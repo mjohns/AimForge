@@ -216,19 +216,6 @@ class ScenarioEditorScreen : public UiScreen {
     */
   }
 
-  void OnTickStart() {
-    if (!start_scenario_) {
-      return;
-    }
-    start_scenario_ = false;
-    CreateScenarioParams params;
-    params.def = def_;
-    params.id = "TEST";
-    CreateScenario(params, app_)->Run();
-    app_->EnableVsync();
-    SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-  }
-
   void DrawScenarioTypeEditor(const ImVec2& char_size) {
     ImGui::IdGuard cid("ScenarioTypeEditor");
     ImGui::Text("Scenario type");
@@ -1050,6 +1037,35 @@ class ScenarioEditorScreen : public UiScreen {
                                      stopwatch,
                                      &frame_times);
       app_->FinishRender(&ctx);
+    }
+  }
+
+  void OnTickStart() override {
+    if (!start_scenario_) {
+      return;
+    }
+    start_scenario_ = false;
+    CreateScenarioParams params;
+    params.def = def_;
+    params.def.set_duration_seconds(1000000);
+    params.id = "TEST";
+    params.force_start_immediately = true;
+    CreateScenario(params, app_)->Run();
+    app_->EnableVsync();
+    SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+  }
+
+  void OnEvent(const SDL_Event& event, bool user_is_typing) override {
+    if (user_is_typing) {
+      return;
+    }
+    if (IsMappableKeyDownEvent(event)) {
+      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+      if (KeyMappingMatchesEvent(
+              event_name,
+              app_->settings_manager()->GetCurrentSettings().keybinds().restart_scenario())) {
+        start_scenario_ = true;
+      }
     }
   }
 
