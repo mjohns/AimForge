@@ -2,6 +2,7 @@
 #include <misc/cpp/imgui_stdlib.h>
 
 #include <format>
+#include <functional>
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
@@ -298,56 +299,12 @@ class ScenarioEditorScreen : public UiScreen {
       w.add_profiles();
     }
 
-    ImGui::Text("Explicit profile selection order");
-    bool use_order = w.profile_order_size() > 0;
-    ImGui::SameLine();
-    ImGui::Checkbox("##UseOrder", &use_order);
-    if (use_order) {
-      ImGui::Indent();
-      if (w.profile_order_size() == 0) {
-        w.add_profile_order(0);
-      }
-      int remove_at_i = -1;
-      for (int i = 0; i < w.profile_order_size(); ++i) {
-        ImGui::IdGuard lid("Order", i);
-        u32 profile_number = w.profile_order(i);
-        u32 step = 1;
-        ImGui::Text("Profile");
-        ImGui::SameLine();
-        ImGui::SetNextItemWidth(char_x_ * 8);
-        ImGui::InputScalar(
-            "##OrderItemInput", ImGuiDataType_U32, &profile_number, &step, nullptr, "%u");
-        profile_number = std::min<u32>(profile_number, w.profiles_size() - 1);
-        w.set_profile_order(i, profile_number);
-
-        ImGui::SameLine();
-        if (ImGui::Button("x")) {
-          remove_at_i = i;
-        }
-      }
-      if (ImGui::Button("Add##Order")) {
-        w.add_profile_order(0);
-      }
-      if (remove_at_i >= 0) {
-        w.mutable_profile_order()->erase(w.mutable_profile_order()->begin() + remove_at_i);
-      }
-      ImGui::Unindent();
-    } else {
-      w.clear_profile_order();
-    }
-
-    bool allow_percents = w.profile_order_size() == 0 && w.profiles_size() > 1;
-    for (int i = 0; i < w.profiles_size(); ++i) {
-      ImGui::IdGuard lid("Profile", i);
-      ImGui::Text("Profile #%d", i);
-      ImGui::Indent();
-      DrawWallStrafeProfile(w.mutable_profiles(i), allow_percents);
-      ImGui::Unindent();
-    }
-
-    if (ImGui::Button("Add profile")) {
-      w.add_profiles();
-    }
+    std::function<void(WallStrafeProfile*, bool)> draw_profile = [this](WallStrafeProfile* p,
+                                                                        bool allow_percents) {
+      DrawWallStrafeProfile(p, allow_percents);
+    };
+    DrawProfileList(
+        "ProfileList", "Profile", w.mutable_profile_order(), w.mutable_profiles(), draw_profile);
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p, bool allow_percents) {
@@ -420,56 +377,10 @@ class ScenarioEditorScreen : public UiScreen {
       s->add_regions();
     }
 
-    ImGui::Text("Explicit region selection order");
-    bool use_order = s->region_order_size() > 0;
-    ImGui::SameLine();
-    ImGui::Checkbox("##UseOrder", &use_order);
-    if (use_order) {
-      ImGui::Indent();
-      if (s->region_order_size() == 0) {
-        s->add_region_order(0);
-      }
-      int remove_at_i = -1;
-      for (int i = 0; i < s->region_order_size(); ++i) {
-        ImGui::IdGuard lid("RegionOrder", i);
-        u32 region_number = s->region_order(i);
-        u32 step = 1;
-        ImGui::Text("Region");
-        ImGui::SameLine();
-        ImGui::SetNextItemWidth(char_x_ * 8);
-        ImGui::InputScalar(
-            "##OrderItemInput", ImGuiDataType_U32, &region_number, &step, nullptr, "%u");
-        region_number = std::min<u32>(region_number, s->regions_size() - 1);
-        s->set_region_order(i, region_number);
-
-        ImGui::SameLine();
-        if (ImGui::Button("x")) {
-          remove_at_i = i;
-        }
-      }
-      if (ImGui::Button("Add##RegionOrder")) {
-        s->add_region_order(0);
-      }
-      if (remove_at_i >= 0) {
-        s->mutable_region_order()->erase(s->mutable_region_order()->begin() + remove_at_i);
-      }
-      ImGui::Unindent();
-    } else {
-      s->clear_region_order();
-    }
-
-    bool allow_percents = s->region_order_size() == 0 && s->regions_size() > 1;
-    for (int i = 0; i < s->regions_size(); ++i) {
-      ImGui::IdGuard lid("Region", i);
-      ImGui::Text("Region #%d", i);
-      ImGui::Indent();
-      DrawTargetRegion(s->mutable_regions(i), allow_percents);
-      ImGui::Unindent();
-    }
-
-    if (ImGui::Button("Add region")) {
-      s->add_regions();
-    }
+    std::function<void(TargetRegion*, bool)> draw_region =
+        [this](TargetRegion* p, bool allow_percents) { DrawTargetRegion(p, allow_percents); };
+    DrawProfileList(
+        "RegionList", "Region", s->mutable_region_order(), s->mutable_regions(), draw_region);
 
     ImGui::Spacing();
     ImGui::Text("Min distance between targets");
@@ -649,6 +560,65 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       region->clear_x_offset();
       region->clear_y_offset();
+    }
+  }
+
+  template <typename T>
+  void DrawProfileList(const std::string& id,
+                       const std::string& type_name,
+                       google::protobuf::RepeatedField<int>* order_list,
+                       google::protobuf::RepeatedPtrField<T>* profile_list,
+                       std::function<void(T*, bool)> draw_profile_fn) {
+    ImGui::IdGuard cid(id);
+
+    ImGui::TextFmt("Explicit {} selection order", absl::AsciiStrToLower(type_name));
+    bool use_order = order_list->size() > 0;
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseOrder", &use_order);
+    if (use_order) {
+      ImGui::Indent();
+      if (order_list->size() == 0) {
+        order_list->Add(0);
+      }
+      int remove_at_i = -1;
+      for (int i = 0; i < order_list->size(); ++i) {
+        ImGui::IdGuard lid("Order", i);
+        u32 number = order_list->at(i);
+        u32 step = 1;
+        ImGui::Text(type_name);
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(char_x_ * 8);
+        ImGui::InputScalar("##OrderItemInput", ImGuiDataType_U32, &number, &step, nullptr, "%u");
+        number = std::min<u32>(number, profile_list->size() - 1);
+        order_list->Set(i, number);
+
+        ImGui::SameLine();
+        if (ImGui::Button("x")) {
+          remove_at_i = i;
+        }
+      }
+      if (ImGui::Button("Add##Order")) {
+        order_list->Add(0);
+      }
+      if (remove_at_i >= 0) {
+        order_list->erase(order_list->begin() + remove_at_i);
+      }
+      ImGui::Unindent();
+    } else {
+      order_list->Clear();
+    }
+
+    bool allow_percents = order_list->size() == 0 && profile_list->size() > 1;
+    for (int i = 0; i < profile_list->size(); ++i) {
+      ImGui::IdGuard lid(type_name, i);
+      ImGui::TextFmt("{} #{}", type_name, i);
+      ImGui::Indent();
+      draw_profile_fn(&profile_list->at(i), allow_percents);
+      ImGui::Unindent();
+    }
+
+    if (ImGui::Button("Add")) {
+      profile_list->Add();
     }
   }
 
@@ -980,56 +950,10 @@ class ScenarioEditorScreen : public UiScreen {
       t->add_profiles();
     }
 
-    ImGui::Text("Explicit profile selection order");
-    bool use_target_order = t->target_order_size() > 0;
-    ImGui::SameLine();
-    ImGui::Checkbox("##UseTargetOrder", &use_target_order);
-    if (use_target_order) {
-      ImGui::Indent();
-      if (t->target_order_size() == 0) {
-        t->add_target_order(0);
-      }
-      int remove_at_i = -1;
-      for (int i = 0; i < t->target_order_size(); ++i) {
-        ImGui::IdGuard lid("TargetOrder", i);
-        u32 profile_number = t->target_order(i);
-        u32 step = 1;
-        ImGui::Text("Profile");
-        ImGui::SameLine();
-        ImGui::SetNextItemWidth(char_x_ * 8);
-        ImGui::InputScalar(
-            "##TargetOrderItemInput", ImGuiDataType_U32, &profile_number, &step, nullptr, "%u");
-        profile_number = std::min<u32>(profile_number, t->profiles_size() - 1);
-        t->set_target_order(i, profile_number);
-
-        ImGui::SameLine();
-        if (ImGui::Button("x")) {
-          remove_at_i = i;
-        }
-      }
-      if (ImGui::Button("Add##target_order")) {
-        t->add_target_order(0);
-      }
-      if (remove_at_i >= 0) {
-        t->mutable_target_order()->erase(t->mutable_target_order()->begin() + remove_at_i);
-      }
-      ImGui::Unindent();
-    } else {
-      t->clear_target_order();
-    }
-
-    bool allow_percents = t->target_order_size() == 0 && t->profiles_size() > 1;
-    for (int i = 0; i < t->profiles_size(); ++i) {
-      ImGui::IdGuard lid("Profile", i);
-      ImGui::Text("Profile #%d", i);
-      ImGui::Indent();
-      DrawTargetProfile(t->mutable_profiles(i), allow_percents, char_size);
-      ImGui::Unindent();
-    }
-
-    if (ImGui::Button("Add profile")) {
-      t->add_profiles();
-    }
+    std::function<void(TargetProfile*, bool)> draw_profile =
+        [this](TargetProfile* p, bool allow_percents) { DrawTargetProfile(p, allow_percents); };
+    DrawProfileList(
+        "ProfileList", "Profile", t->mutable_target_order(), t->mutable_profiles(), draw_profile);
 
     if (ImGui::TreeNode("Advanced")) {
       ImGui::Text("New target delay seconds");
@@ -1057,7 +981,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawTargetProfile(TargetProfile* profile, bool allow_percents, const ImVec2& char_size) {
+  void DrawTargetProfile(TargetProfile* profile, bool allow_percents) {
     if (allow_percents) {
       ImGui::Text("Percent chance to use");
       ImGui::SameLine();
