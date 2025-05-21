@@ -308,6 +308,59 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Button("Add region")) {
       s->add_regions();
     }
+
+    ImGui::Spacing();
+    ImGui::Text("Min distance between targets");
+    ImGui::SameLine();
+    bool use_min = s->has_min_distance();
+    ImGui::Checkbox("##MinDistanceCheck", &use_min);
+    if (use_min) {
+      float value = s->min_distance();
+      if (!s->has_min_distance()) {
+        value = 20;
+      }
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 12);
+      ImGui::InputFloat("##MinDistance", &value, 1, 10, "%.0f");
+      if (value < 0) {
+        value = 0;
+      }
+      s->set_min_distance(value);
+    } else {
+      s->clear_min_distance();
+    }
+
+    ImGui::Text("Fixed distance from last target");
+    ImGui::SameLine();
+    bool use_fixed = s->has_fixed_distance_from_last_target();
+    ImGui::Checkbox("##FixedDistanceCheck", &use_fixed);
+    if (use_fixed) {
+      float value = s->fixed_distance_from_last_target();
+      if (!s->has_fixed_distance_from_last_target()) {
+        value = 20;
+      }
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 12);
+      ImGui::InputFloat("##FixedDistance", &value, 1, 10, "%.0f");
+      if (value < 0) {
+        value = 0;
+      }
+      s->set_fixed_distance_from_last_target(value);
+
+      ImGui::SameLine();
+      ImGui::Text("+/-");
+      ImGui::SameLine();
+      float jitter = s->fixed_distance_jitter();
+      ImGui::SetNextItemWidth(char_x_ * 10);
+      ImGui::InputFloat("##FixedDistanceJitter", &jitter, 0.5, 1, "%.1f");
+      if (jitter < 0) {
+        jitter = 0;
+      }
+      s->set_fixed_distance_jitter(jitter);
+    } else {
+      s->clear_fixed_distance_from_last_target();
+      s->clear_fixed_distance_jitter();
+    }
   }
 
   void DrawTargetRegion(TargetRegion* region, bool allow_percents) {
@@ -853,6 +906,9 @@ class ScenarioEditorScreen : public UiScreen {
     float radius_jitter = profile->target_radius_jitter();
     ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##TargetRadiusJitterEntry", &radius_jitter, 0.1, 0.1, "%.1f");
+    if (radius_jitter < 0) {
+      radius_jitter = 0;
+    }
     profile->set_target_radius_jitter(radius_jitter);
 
     // TODO: target_hit_radius
