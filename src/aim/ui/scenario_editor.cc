@@ -31,6 +31,25 @@ const std::vector<ScenarioDef::TypeCase> kScenarioTypes{
     ScenarioDef::kStaticDef,
     ScenarioDef::kCenteringDef,
 };
+const std::vector<TargetRegion::TypeCase> kRegionTypes{
+    TargetRegion::kRectangle,
+    TargetRegion::kCircle,
+    TargetRegion::kEllipse,
+};
+
+std::string RegionTypeToString(const TargetRegion::TypeCase& type) {
+  switch (type) {
+    case TargetRegion::kRectangle:
+      return "Rectangle";
+    case TargetRegion::kCircle:
+      return "Circle";
+    case TargetRegion::kEllipse:
+      return "Ellipse";
+    default:
+      break;
+  }
+  return "";
+}
 
 std::string ShotTypeToString(const ShotType::TypeCase& type) {
   switch (type) {
@@ -142,7 +161,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::Text("Duration");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
     def_.set_duration_seconds(duration_seconds);
 
@@ -168,7 +187,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     {
-      ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
+      ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
         // app_->settings_manager()->SaveScenarioToDisk(current_theme_name_, current_theme_);
         ScreenDone();
@@ -200,7 +219,7 @@ class ScenarioEditorScreen : public UiScreen {
       def_.mutable_static_def();
     }
 
-    ImGui::PushItemWidth(char_size.x * 25);
+    ImGui::PushItemWidth(char_x_ * 25);
     auto scenario_type = def_.type_case();
     std::string type_string = ScenarioTypeToString(scenario_type);
     if (ImGui::BeginCombo("##ScenarioTypeCombo", type_string.c_str(), 0)) {
@@ -238,6 +257,45 @@ class ScenarioEditorScreen : public UiScreen {
     if (s->regions_size() == 0) {
       s->add_regions();
     }
+
+    ImGui::Text("Explicit region selection order");
+    bool use_order = s->region_order_size() > 0;
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseOrder", &use_order);
+    if (use_order) {
+      ImGui::Indent();
+      if (s->region_order_size() == 0) {
+        s->add_region_order(0);
+      }
+      int remove_at_i = -1;
+      for (int i = 0; i < s->region_order_size(); ++i) {
+        ImGui::IdGuard lid("RegionOrder", i);
+        u32 region_number = s->region_order(i);
+        u32 step = 1;
+        ImGui::Text("Region");
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(char_x_ * 8);
+        ImGui::InputScalar(
+            "##OrderItemInput", ImGuiDataType_U32, &region_number, &step, nullptr, "%u");
+        region_number = std::min<u32>(region_number, s->regions_size() - 1);
+        s->set_region_order(i, region_number);
+
+        ImGui::SameLine();
+        if (ImGui::Button("x")) {
+          remove_at_i = i;
+        }
+      }
+      if (ImGui::Button("Add##RegionOrder")) {
+        s->add_region_order(0);
+      }
+      if (remove_at_i >= 0) {
+        s->mutable_region_order()->erase(s->mutable_region_order()->begin() + remove_at_i);
+      }
+      ImGui::Unindent();
+    } else {
+      s->clear_region_order();
+    }
+
     bool allow_percents = s->region_order_size() == 0 && s->regions_size() > 1;
     for (int i = 0; i < s->regions_size(); ++i) {
       ImGui::IdGuard lid("Region", i);
@@ -253,6 +311,9 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawTargetRegion(TargetRegion* region, bool allow_percents) {
+    if (region->type_case() == TargetRegion::TYPE_NOT_SET) {
+      region->mutable_rectangle();
+    }
     if (allow_percents) {
       ImGui::Text("Percent chance to use");
       ImGui::SameLine();
@@ -267,13 +328,111 @@ class ScenarioEditorScreen : public UiScreen {
       region->clear_percent_chance();
     }
 
-    ImGui::Text("X offset");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("XOffset", /*default_to_x=*/true, region->mutable_x_offset());
+    ImGui::PushItemWidth(char_x_ * 25);
+    auto region_type = region->type_case();
+    std::string type_string = RegionTypeToString(region_type);
+    if (ImGui::BeginCombo("##RegionTypeCombo", type_string.c_str(), 0)) {
+      ImGui::LoopId loop_id;
+      for (auto type_item : kRegionTypes) {
+        auto lid = loop_id.Get();
+        std::string item_name = RegionTypeToString(type_item);
+        bool is_selected = type_string == item_name;
+        if (ImGui::Selectable(item_name.c_str(), is_selected)) {
+          region_type = type_item;
+        }
+        if (is_selected) {
+          ImGui::SetItemDefaultFocus();
+        }
+      }
+      ImGui::EndCombo();
+    }
+    ImGui::PopItemWidth();
 
-    ImGui::Text("Y offset");
+    if (region_type == TargetRegion::kRectangle) {
+      auto* t = region->mutable_rectangle();
+      ImGui::Text("Width");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Width", /*default_to_x=*/true, t->mutable_x_length());
+
+      ImGui::Text("Height");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Height", /*default_to_x=*/false, t->mutable_y_length());
+
+      ImGui::Text("Inner");
+      ImGui::SameLine();
+      bool use_inner = t->has_inner_x_length() || t->has_inner_y_length();
+      ImGui::Checkbox("##InnerCheckbox", &use_inner);
+      if (use_inner) {
+        ImGui::IdGuard lid("InnerInputs");
+        ImGui::Indent();
+
+        ImGui::Text("Width");
+        ImGui::SameLine();
+        DrawRegionLengthEditor("Width", /*default_to_x=*/true, t->mutable_inner_x_length());
+
+        ImGui::Text("Height");
+
+        ImGui::SameLine();
+        DrawRegionLengthEditor("Height", /*default_to_x=*/false, t->mutable_inner_y_length());
+
+        ImGui::Unindent();
+      } else {
+        t->clear_inner_x_length();
+        t->clear_inner_y_length();
+      }
+    }
+
+    if (region_type == TargetRegion::kCircle) {
+      auto* t = region->mutable_circle();
+      ImGui::Text("Diameter");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Diameter", /*default_to_x=*/true, t->mutable_diameter());
+
+      ImGui::Text("Inner diameter");
+      ImGui::SameLine();
+      bool use_inner = t->has_inner_diameter();
+      ImGui::Checkbox("##InnerCheckbox", &use_inner);
+      if (use_inner) {
+        ImGui::Indent();
+        DrawRegionLengthEditor("InnerDiameter", /*default_to_x=*/true, t->mutable_inner_diameter());
+        ImGui::Unindent();
+      } else {
+        t->clear_inner_diameter();
+      }
+    }
+
+    if (region_type == TargetRegion::kEllipse) {
+      auto* t = region->mutable_ellipse();
+      ImGui::Text("X diameter");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("XDiameter", /*default_to_x=*/true, t->mutable_x_diameter());
+
+      ImGui::Text("Y diameter");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("XDiameter", /*default_to_x=*/false, t->mutable_y_diameter());
+    }
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    ImGui::Text("Offset");
     ImGui::SameLine();
-    DrawRegionLengthEditor("YOffset", /*default_to_x=*/false, region->mutable_y_offset());
+    bool use_offsets = region->has_x_offset() && region->has_y_offset();
+    ImGui::Checkbox("##OffsetsCheckbox", &use_offsets);
+    if (use_offsets) {
+      ImGui::Indent();
+      ImGui::Text("X offset");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("XOffset", /*default_to_x=*/true, region->mutable_x_offset());
+
+      ImGui::Text("Y offset");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("YOffset", /*default_to_x=*/false, region->mutable_y_offset());
+      ImGui::Unindent();
+    } else {
+      region->clear_x_offset();
+      region->clear_y_offset();
+    }
   }
 
   void DrawRegionLengthEditor(const std::string& id, bool default_to_x, RegionLength* length) {
@@ -353,7 +512,6 @@ class ScenarioEditorScreen : public UiScreen {
         length->set_y_percent_value(length->x_percent_value());
       }
 
-
       ImGui::PopItemWidth();
       // TODO: Display evaluated value based on room.
     }
@@ -364,7 +522,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Shot type");
     ImGui::SameLine();
 
-    ImGui::PushItemWidth(char_size.x * 25);
+    ImGui::PushItemWidth(char_x_ * 25);
     std::string type_string = ShotTypeToString(def_.shot_type().type_case());
     if (ImGui::BeginCombo("##shot_type_combo", type_string.c_str(), 0)) {
       ImGui::LoopId loop_id;
@@ -403,7 +561,7 @@ class ScenarioEditorScreen : public UiScreen {
       room_ = GetDefaultSimpleRoom();
     }
 
-    ImGui::PushItemWidth(char_size.x * 25);
+    ImGui::PushItemWidth(char_x_ * 25);
     std::string room_type_string = RoomTypeToString(room_.type_case());
     if (ImGui::BeginCombo("##room_type_combo", room_type_string.c_str(), combo_flags)) {
       ImGui::LoopId loop_id;
@@ -433,26 +591,26 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::PopItemWidth();
 
     if (room_.type_case() == Room::kSimpleRoom) {
-      ImGui::Text("Height");
-      ImGui::SameLine();
-      float height = room_.simple_room().height();
-      ImGui::SetNextItemWidth(char_size.x * 12);
-      ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
-      room_.mutable_simple_room()->set_height(height);
-
       ImGui::Text("Width");
       ImGui::SameLine();
       float width = room_.simple_room().width();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomWidth", &width, 10, 1, "%.0f");
       room_.mutable_simple_room()->set_width(width);
+
+      ImGui::Text("Height");
+      ImGui::SameLine();
+      float height = room_.simple_room().height();
+      ImGui::SetNextItemWidth(char_x_ * 12);
+      ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
+      room_.mutable_simple_room()->set_height(height);
     }
 
     if (room_.type_case() == Room::kBarrelRoom) {
       ImGui::Text("Radius");
       ImGui::SameLine();
       float radius = room_.barrel_room().radius();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomRadius", &radius, 5, 1, "%.0f");
       room_.mutable_barrel_room()->set_radius(radius);
     }
@@ -461,7 +619,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Text("Height");
       ImGui::SameLine();
       float height = room_.cylinder_room().height();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
 
       bool use_width_percent = room_.cylinder_room().width_perimeter_percent() > 0;
@@ -476,7 +634,7 @@ class ScenarioEditorScreen : public UiScreen {
         if (width_percent <= 0) {
           width_percent = 40;
         }
-        ImGui::SetNextItemWidth(char_size.x * 12);
+        ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##WidthPercent", &width_percent, 5, 1, "%.1f");
         room_.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
         room_.mutable_cylinder_room()->set_width(0);
@@ -485,7 +643,7 @@ class ScenarioEditorScreen : public UiScreen {
         if (width <= 0) {
           width = 100;
         }
-        ImGui::SetNextItemWidth(char_size.x * 12);
+        ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##Width", &width, 10, 1, "%.0f");
         room_.mutable_cylinder_room()->set_width(width);
         room_.mutable_cylinder_room()->set_width_perimeter_percent(0);
@@ -495,7 +653,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Text("Radius");
       ImGui::SameLine();
       float radius = room_.cylinder_room().radius();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RoomRadius", &radius, 10, 1, "%.0f");
       room_.mutable_cylinder_room()->set_radius(radius);
 
@@ -512,7 +670,7 @@ class ScenarioEditorScreen : public UiScreen {
         }
         ImGui::Text("Side angle degrees");
         ImGui::SameLine();
-        ImGui::SetNextItemWidth(char_size.x * 12);
+        ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##SideAngle", &side_angle, 1, 1, "%.0f");
         room_.mutable_cylinder_room()->set_side_angle_degrees(side_angle);
       } else {
@@ -567,7 +725,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::Text("Number");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 8);
+    ImGui::SetNextItemWidth(char_x_ * 8);
     ImGui::InputInt("##NumberEntry", &num_targets, 1, 1);
     t->set_num_targets(num_targets);
 
@@ -603,7 +761,7 @@ class ScenarioEditorScreen : public UiScreen {
         u32 step = 1;
         ImGui::Text("Profile");
         ImGui::SameLine();
-        ImGui::SetNextItemWidth(char_size.x * 8);
+        ImGui::SetNextItemWidth(char_x_ * 8);
         ImGui::InputScalar(
             "##TargetOrderItemInput", ImGuiDataType_U32, &profile_number, &step, nullptr, "%u");
         profile_number = std::min<u32>(profile_number, t->profiles_size() - 1);
@@ -642,21 +800,21 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Text("New target delay seconds");
       ImGui::SameLine();
       float new_target_delay = t->new_target_delay_seconds();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##NewTargetDelay", &new_target_delay, 0.1, 0.1, "%.2f");
       t->set_new_target_delay_seconds(new_target_delay);
 
       ImGui::Text("Remove target after seconds");
       ImGui::SameLine();
       float remove_after = t->remove_target_after_seconds();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RemoveAfterDelay", &remove_after, 0.1, 0.1, "%.2f");
       t->set_remove_target_after_seconds(remove_after);
 
       ImGui::Text("Stagger initial targets seconds");
       ImGui::SameLine();
       float stagger = t->stagger_initial_targets_seconds();
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##StaggerDelay", &stagger, 0.1, 0.1, "%.2f");
       t->set_stagger_initial_targets_seconds(stagger);
 
@@ -672,7 +830,7 @@ class ScenarioEditorScreen : public UiScreen {
       if (percent <= 0) {
         percent = 100;
       }
-      ImGui::SetNextItemWidth(char_size.x * 10);
+      ImGui::SetNextItemWidth(char_x_ * 10);
       ImGui::InputInt("##PercentChance", &percent, 5, 10);
       profile->set_percent_chance(percent / 100.0);
     } else {
@@ -685,7 +843,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (target_radius <= 0) {
       target_radius = 2;
     }
-    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##TargetRadiusEntry", &target_radius, 0.1, 0.1, "%.1f");
     profile->set_target_radius(target_radius);
 
@@ -693,7 +851,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("+/-");
     ImGui::SameLine();
     float radius_jitter = profile->target_radius_jitter();
-    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##TargetRadiusJitterEntry", &radius_jitter, 0.1, 0.1, "%.1f");
     profile->set_target_radius_jitter(radius_jitter);
 
@@ -702,7 +860,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Speed");
     ImGui::SameLine();
     float speed = profile->speed();
-    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##SpeedEntry", &speed, 1, 5, "%.1f");
     if (speed > 0) {
       profile->set_speed(speed);
@@ -714,7 +872,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("+/-");
     ImGui::SameLine();
     float speed_jitter = profile->speed_jitter();
-    ImGui::SetNextItemWidth(char_size.x * 12);
+    ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##SpeedJitterEntry", &speed_jitter, 1, 5, "%.1f");
     profile->set_speed_jitter(speed_jitter);
 
@@ -731,7 +889,7 @@ class ScenarioEditorScreen : public UiScreen {
       if (height <= 0) {
         height = 20;
       }
-      ImGui::SetNextItemWidth(char_size.x * 12);
+      ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##PillHeightEntry", &height, 0.1, 1, "%.1f");
       profile->mutable_pill()->set_height(height);
 
