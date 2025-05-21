@@ -173,4 +173,8 @@ static bool IsZero(const StoredVec3& v) {
   return v.x() == 0 && v.y() == 0 && v.z() == 0;
 }
 
+static float FirstGreaterThanZero(float val1, float val2) {
+  return val1 > 0 ? val1 : val2;
+}
+
 }  // namespace aim

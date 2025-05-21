@@ -272,6 +272,45 @@ class ScenarioEditorScreen : public UiScreen {
 
   void DrawLinearEditor() {
     ImGui::IdGuard cid("LinearEditor");
+    LinearScenarioDef& d = *def_.mutable_linear_def();
+
+    ImGui::Text("Angle");
+    ImGui::SameLine();
+    float angle = d.angle();
+    float angle_jitter = d.angle_jitter();
+    JitteredValueInput("AngleInput", &angle, &angle_jitter, 1, 3, "%.0f");
+    d.set_angle(angle);
+    d.set_angle_jitter(angle_jitter);
+
+    ImGui::Text("Initial target location");
+    ImGui::Indent();
+    DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
+    ImGui::Unindent();
+
+    if (ImGui::TreeNode("Advanced")) {
+      ImGui::Text("Override wall width");
+      ImGui::SameLine();
+      bool has_width = d.has_width();
+      float width = FirstGreaterThanZero(d.width(), 100);
+      OptionalFloatInput("WidthOverride", &has_width, &width, 10, 20, "%.0f");
+      if (has_width) {
+        d.set_width(width);
+      } else {
+        d.clear_width();
+      }
+
+      ImGui::Text("Override wall height");
+      ImGui::SameLine();
+      bool has_height = d.has_height();
+      float height = FirstGreaterThanZero(d.height(), 100);
+      OptionalFloatInput("HeightOverride", &has_height, &height, 10, 20, "%.0f");
+      if (has_height) {
+        d.set_height(height);
+      } else {
+        d.clear_height();
+      }
+      ImGui::TreePop();
+    }
   }
 
   void DrawBarrelEditor() {
@@ -432,20 +471,15 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Text("Min distance between targets");
     ImGui::SameLine();
+
     bool use_min = s->has_min_distance();
-    ImGui::Checkbox("##MinDistanceCheck", &use_min);
+    float min_value = s->min_distance();
+    if (!s->has_min_distance()) {
+      min_value = 20;
+    }
+    OptionalFloatInput("MinDistanceInput", &use_min, &min_value, 1, 10, "%.0f");
     if (use_min) {
-      float value = s->min_distance();
-      if (!s->has_min_distance()) {
-        value = 20;
-      }
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##MinDistance", &value, 1, 10, "%.0f");
-      if (value < 0) {
-        value = 0;
-      }
-      s->set_min_distance(value);
+      s->set_min_distance(min_value);
     } else {
       s->clear_min_distance();
     }
@@ -1096,6 +1130,21 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputFloat("##JitterEntry", jitter_value, step, fast_step, format);
     if (*jitter_value < 0) {
       *jitter_value = 0;
+    }
+  }
+
+  void OptionalFloatInput(const std::string& id,
+                          bool* has_value,
+                          float* value,
+                          float step,
+                          float fast_step,
+                          const char* format = "%.1f") {
+    ImGui::IdGuard cid(id);
+    ImGui::Checkbox("##HasValue", has_value);
+    if (*has_value) {
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 12);
+      ImGui::InputFloat("##ValueInput", value, step, fast_step, format);
     }
   }
 
