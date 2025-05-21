@@ -254,7 +254,7 @@ class AppUiImpl : public AppUi {
       screen_to_show_ = CreateThemeEditorScreen(app_);
     }
     if (ImGui::Selectable("Scenario Editor", app_screen_ == AppScreen::SCENARIO_EDITOR)) {
-      screen_to_show_ = CreateScenarioEditorScreen(app_);
+      screen_to_show_ = CreateScenarioEditorScreen(current_scenario_, app_);
     }
 
     // ImGui::SetCursorPosY(screen.height * 0.5);

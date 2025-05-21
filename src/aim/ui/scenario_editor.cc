@@ -145,7 +145,8 @@ void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
 
 class ScenarioEditorScreen : public UiScreen {
  public:
-  explicit ScenarioEditorScreen(Application* app)
+  explicit ScenarioEditorScreen(const std::optional<ScenarioItem>& initial_scenario,
+                                Application* app)
       : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
     projection_ = GetPerspectiveTransformation(app_->screen_info());
     auto themes = app_->settings_manager()->ListThemes();
@@ -155,28 +156,54 @@ class ScenarioEditorScreen : public UiScreen {
       theme_ = GetDefaultTheme();
     }
     *def_.mutable_room() = GetDefaultSimpleRoom();
-    def_ = app->scenario_manager()->GetScenario("AF Centering Intermediate")->def;
+    bundle_names_ = app->file_system()->GetBundleNames();
+    if (initial_scenario.has_value()) {
+      def_ = initial_scenario->def;
+      original_name_ = initial_scenario->name;
+      name_ = initial_scenario->name;
+    } else {
+    }
   }
 
  protected:
+  void BundlePicker(const std::string& id, std::string* bundle_name) {
+    ImGui::PushItemWidth(char_x_ * 7);
+    if (ImGui::BeginCombo("##ScenarioTypeCombo", bundle_name->c_str(), 0)) {
+      ImGui::LoopId loop_id;
+      for (const std::string& bundle_item : bundle_names_) {
+        auto lid = loop_id.Get();
+        bool is_selected = bundle_item == *bundle_name;
+        if (ImGui::Selectable(bundle_item.c_str(), is_selected)) {
+          *bundle_name = bundle_item;
+        }
+        if (is_selected) {
+          ImGui::SetItemDefaultFocus();
+        }
+      }
+      ImGui::EndCombo();
+    }
+    ImGui::PopItemWidth();
+  }
+
   void DrawScreen() override {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_size_ = char_size;
     char_x_ = char_size_.x;
 
-    float duration_seconds = def_.duration_seconds();
-    if (duration_seconds <= 0) {
-      duration_seconds = 60;
-    }
+    BundlePicker("BundlePicker", name_.mutable_bundle_name());
+    ImGui::SameLine();
+    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+
+    float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
     ImGui::Text("Duration");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_x_ * 12);
     ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
     def_.set_duration_seconds(duration_seconds);
 
-    if (ImGui::TreeNode("Room")) {
+    if (ImGui::TreeNodeEx("Scenario", ImGuiTreeNodeFlags_DefaultOpen)) {
       ImGui::Indent();
-      DrawRoomEditor(char_size);
+      DrawScenarioTypeEditor(char_size);
       ImGui::Unindent();
       ImGui::TreePop();
     }
@@ -188,9 +215,9 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::TreePop();
     }
 
-    if (ImGui::TreeNodeEx("Scenario", ImGuiTreeNodeFlags_DefaultOpen)) {
+    if (ImGui::TreeNode("Room")) {
       ImGui::Indent();
-      DrawScenarioTypeEditor(char_size);
+      DrawRoomEditor(char_size);
       ImGui::Unindent();
       ImGui::TreePop();
     }
@@ -385,12 +412,11 @@ class ScenarioEditorScreen : public UiScreen {
       w.add_profiles();
     }
 
-    std::function<void(WallStrafeProfile*, bool)> draw_profile = [this](WallStrafeProfile* p,
-                                                                        bool allow_percents) {
-      DrawWallStrafeProfile(p, allow_percents);
-    };
-    DrawProfileList(
-        "ProfileList", "Profile", w.mutable_profile_order(), w.mutable_profiles(), draw_profile);
+    DrawProfileList("ProfileList",
+                    "Profile",
+                    w.mutable_profile_order(),
+                    w.mutable_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawWallStrafeProfile, this));
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p, bool allow_percents) {
@@ -460,10 +486,11 @@ class ScenarioEditorScreen : public UiScreen {
       s->add_regions();
     }
 
-    std::function<void(TargetRegion*, bool)> draw_region =
-        [this](TargetRegion* p, bool allow_percents) { DrawTargetRegion(p, allow_percents); };
-    DrawProfileList(
-        "RegionList", "Region", s->mutable_region_order(), s->mutable_regions(), draw_region);
+    DrawProfileList("RegionList",
+                    "Region",
+                    s->mutable_region_order(),
+                    s->mutable_regions(),
+                    std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this));
 
     ImGui::Spacing();
     ImGui::Text("Min distance between targets");
@@ -625,12 +652,12 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  template <typename T>
+  template <typename T, typename DrawFn>
   void DrawProfileList(const std::string& id,
                        const std::string& type_name,
                        google::protobuf::RepeatedField<int>* order_list,
                        google::protobuf::RepeatedPtrField<T>* profile_list,
-                       std::function<void(T*, bool)> draw_profile_fn) {
+                       DrawFn&& draw_profile_fn) {
     ImGui::IdGuard cid(id);
 
     ImGui::TextFmt("Explicit {} selection order", absl::AsciiStrToLower(type_name));
@@ -1007,10 +1034,11 @@ class ScenarioEditorScreen : public UiScreen {
       t->add_profiles();
     }
 
-    std::function<void(TargetProfile*, bool)> draw_profile =
-        [this](TargetProfile* p, bool allow_percents) { DrawTargetProfile(p, allow_percents); };
-    DrawProfileList(
-        "ProfileList", "Profile", t->mutable_target_order(), t->mutable_profiles(), draw_profile);
+    DrawProfileList("ProfileList",
+                    "Profile",
+                    t->mutable_target_order(),
+                    t->mutable_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawTargetProfile, this));
 
     if (ImGui::TreeNode("Advanced")) {
       ImGui::Text("New target delay seconds");
@@ -1194,12 +1222,27 @@ class ScenarioEditorScreen : public UiScreen {
   ImVec2 char_size_{};
 
   bool start_scenario_ = false;
+  std::vector<std::string> bundle_names_;
+  std::optional<ResourceName> original_name_;
+  ResourceName name_;
 };
 
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateScenarioEditorScreen(Application* app) {
-  return std::make_unique<ScenarioEditorScreen>(app);
+  std::optional<ScenarioItem> scenario;
+  return std::make_unique<ScenarioEditorScreen>(scenario, app);
+}
+
+std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const std::string& scenario_id,
+                                                     Application* app) {
+  return std::make_unique<ScenarioEditorScreen>(app->scenario_manager()->GetScenario(scenario_id),
+                                                app);
+}
+
+std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const std::optional<ScenarioItem>& scenario,
+                                                     Application* app) {
+  return std::make_unique<ScenarioEditorScreen>(scenario, app);
 }
 
 }  // namespace aim

@@ -31,8 +31,16 @@ class ResourceName {
     return bundle_name_;
   }
 
+  std::string* mutable_bundle_name() {
+    return &bundle_name_;
+  }
+
   const std::string& relative_name() const {
     return relative_name_;
+  }
+
+  std::string* mutable_relative_name() {
+    return &relative_name_;
   }
 
   const bool empty() const {
