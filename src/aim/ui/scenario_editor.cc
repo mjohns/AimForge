@@ -10,6 +10,7 @@
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
+#include "aim/scenario/scenario.h"
 #include "theme_editor_screen.h"
 
 namespace aim {
@@ -189,6 +190,11 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     {
+      if (ImGui::Button("Play")) {
+        start_scenario_ = true;
+      }
+    }
+    {
       ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
         // app_->settings_manager()->SaveScenarioToDisk(current_theme_name_, current_theme_);
@@ -210,7 +216,18 @@ class ScenarioEditorScreen : public UiScreen {
     */
   }
 
-  void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
+  void OnTickStart() {
+    if (!start_scenario_) {
+      return;
+    }
+    start_scenario_ = false;
+    CreateScenarioParams params;
+    params.def = def_;
+    params.id = "TEST";
+    CreateScenario(params, app_)->Run();
+    app_->EnableVsync();
+    SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+  }
 
   void DrawScenarioTypeEditor(const ImVec2& char_size) {
     ImGui::IdGuard cid("ScenarioTypeEditor");
@@ -1043,6 +1060,8 @@ class ScenarioEditorScreen : public UiScreen {
   Theme theme_;
   float char_x_ = 0;
   ImVec2 char_size_{};
+
+  bool start_scenario_ = false;
 };
 
 }  // namespace
