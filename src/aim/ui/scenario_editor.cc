@@ -459,23 +459,10 @@ class ScenarioEditorScreen : public UiScreen {
       if (!s->has_fixed_distance_from_last_target()) {
         value = 20;
       }
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##FixedDistance", &value, 1, 10, "%.0f");
-      if (value < 0) {
-        value = 0;
-      }
-      s->set_fixed_distance_from_last_target(value);
-
-      ImGui::SameLine();
-      ImGui::Text("+/-");
-      ImGui::SameLine();
       float jitter = s->fixed_distance_jitter();
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputFloat("##FixedDistanceJitter", &jitter, 0.5, 1, "%.1f");
-      if (jitter < 0) {
-        jitter = 0;
-      }
+      ImGui::SameLine();
+      JitteredValueInput("FixedDistanceInput", &value, &jitter, 1, 5, "%.0f");
+      s->set_fixed_distance_from_last_target(value);
       s->set_fixed_distance_jitter(jitter);
     } else {
       s->clear_fixed_distance_from_last_target();
@@ -1049,19 +1036,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (target_radius <= 0) {
       target_radius = 2;
     }
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##TargetRadiusEntry", &target_radius, 0.1, 0.1, "%.1f");
-    profile->set_target_radius(target_radius);
-
-    ImGui::SameLine();
-    ImGui::Text("+/-");
-    ImGui::SameLine();
     float radius_jitter = profile->target_radius_jitter();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##TargetRadiusJitterEntry", &radius_jitter, 0.1, 0.1, "%.1f");
-    if (radius_jitter < 0) {
-      radius_jitter = 0;
-    }
+    JitteredValueInput("TargetRadiusInput", &target_radius, &radius_jitter, 0.1, 0.3, "%.1f");
+    profile->set_target_radius(target_radius);
     profile->set_target_radius_jitter(radius_jitter);
 
     // TODO: target_hit_radius
@@ -1069,21 +1046,15 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Speed");
     ImGui::SameLine();
     float speed = profile->speed();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##SpeedEntry", &speed, 1, 5, "%.1f");
+    float speed_jitter = profile->speed_jitter();
+    JitteredValueInput("SpeedInput", &speed, &speed_jitter, 1, 10, "%.1f");
     if (speed > 0) {
       profile->set_speed(speed);
+      profile->set_speed_jitter(speed_jitter);
     } else {
       profile->clear_speed();
+      profile->clear_speed_jitter();
     }
-
-    ImGui::SameLine();
-    ImGui::Text("+/-");
-    ImGui::SameLine();
-    float speed_jitter = profile->speed_jitter();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##SpeedJitterEntry", &speed_jitter, 1, 5, "%.1f");
-    profile->set_speed_jitter(speed_jitter);
 
     ImGui::Text("Pill");
     ImGui::SameLine();
@@ -1105,6 +1076,26 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Unindent();
     } else {
       profile->clear_pill();
+    }
+  }
+
+  void JitteredValueInput(const std::string& id,
+                          float* value,
+                          float* jitter_value,
+                          float step,
+                          float fast_step,
+                          const char* format = "%.1f") {
+    ImGui::IdGuard cid(id);
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##ValueEntry", value, step, fast_step, format);
+
+    ImGui::SameLine();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##JitterEntry", jitter_value, step, fast_step, format);
+    if (*jitter_value < 0) {
+      *jitter_value = 0;
     }
   }
 
