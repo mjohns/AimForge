@@ -33,6 +33,8 @@ const std::vector<ScenarioDef::TypeCase> kScenarioTypes{
     ScenarioDef::kStaticDef,
     ScenarioDef::kCenteringDef,
     ScenarioDef::kWallStrafeDef,
+    ScenarioDef::kBarrelDef,
+    ScenarioDef::kLinearDef,
 };
 const std::vector<TargetRegion::TypeCase> kRegionTypes{
     TargetRegion::kRectangle,
@@ -260,6 +262,51 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kWallStrafeDef) {
       DrawWallStrafeEditor();
     }
+    if (scenario_type == ScenarioDef::kLinearDef) {
+      DrawLinearEditor();
+    }
+    if (scenario_type == ScenarioDef::kBarrelDef) {
+      DrawBarrelEditor();
+    }
+  }
+
+  void DrawLinearEditor() {
+    ImGui::IdGuard cid("LinearEditor");
+  }
+
+  void DrawBarrelEditor() {
+    ImGui::IdGuard cid("BarrelEditor");
+    BarrelScenarioDef& d = *def_.mutable_barrel_def();
+
+    if (!def_.room().has_barrel_room()) {
+      ImGui::Text("Must use barrel room");
+      return;
+    }
+
+    ImGui::Text("Direction radius percent");
+    ImGui::SameLine();
+    int percent = d.direction_radius_percent() * 100;
+    if (!d.has_direction_radius_percent()) {
+      percent = 45;
+    } else if (percent <= 0) {
+      percent = 1;
+    }
+    ImGui::SetNextItemWidth(char_x_ * 10);
+    ImGui::InputInt("##DirectionRadiusPercent", &percent, 5, 10);
+    d.set_direction_radius_percent(percent / 100.0);
+
+    if (!d.has_target_placement_strategy()) {
+      d.mutable_target_placement_strategy()->set_min_distance(15);
+      CircleTargetRegion* region =
+          d.mutable_target_placement_strategy()->add_regions()->mutable_circle();
+      region->mutable_diameter()->set_x_percent_value(0.92);
+      region->mutable_inner_diameter()->set_x_percent_value(0.6);
+    }
+
+    ImGui::Text("Initial target location");
+    ImGui::Indent();
+    DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
+    ImGui::Unindent();
   }
 
   void DrawWallStrafeEditor() {
