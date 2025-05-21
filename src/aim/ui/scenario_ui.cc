@@ -43,17 +43,23 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         if (ImGui::Button(node->scenario->id().c_str())) {
           result->scenario_to_start = node->name;
         }
-        if (current_playlist_run != nullptr) {
-          if (ImGui::BeginPopupContextItem("scenario_item_menu")) {
+        if (ImGui::BeginPopupContextItem("scenario_item_menu")) {
+          if (current_playlist_run != nullptr) {
             std::string playlist_name = current_playlist_run->playlist.name.full_name();
             std::string add_text = std::format("Add to \"{}\"", playlist_name);
             if (ImGui::Selectable(add_text.c_str())) {
               app_->playlist_manager()->AddScenarioToPlaylist(playlist_name, node->name);
             }
-            ImGui::EndPopup();
           }
-          ImGui::OpenPopupOnItemClick("scenario_item_menu", ImGuiPopupFlags_MouseButtonRight);
+          if (ImGui::Selectable("Edit")) {
+            result->scenario_to_edit = node->name;
+          }
+          if (ImGui::Selectable("Open file")) {
+            app_->scenario_manager()->OpenFile(node->scenario->name);
+          }
+          ImGui::EndPopup();
         }
+        ImGui::OpenPopupOnItemClick("scenario_item_menu", ImGuiPopupFlags_MouseButtonRight);
       }
     }
     for (auto& node : nodes) {

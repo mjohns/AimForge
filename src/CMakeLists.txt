@@ -14,6 +14,7 @@ if(WIN32)
         LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
         LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
     )
+    target_link_libraries(${NAME} PRIVATE shell32)
 endif(WIN32)
 
 
