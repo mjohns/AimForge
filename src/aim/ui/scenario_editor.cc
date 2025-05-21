@@ -31,6 +31,7 @@ const std::vector<ShotType::TypeCase> kShotTypes{
 const std::vector<ScenarioDef::TypeCase> kScenarioTypes{
     ScenarioDef::kStaticDef,
     ScenarioDef::kCenteringDef,
+    ScenarioDef::kWallStrafeDef,
 };
 const std::vector<TargetRegion::TypeCase> kRegionTypes{
     TargetRegion::kRectangle,
@@ -94,6 +95,8 @@ std::string ScenarioTypeToString(const ScenarioDef::TypeCase& type) {
       return "Barrel";
     case ScenarioDef::kLinearDef:
       return "Linear";
+    case ScenarioDef::kWallStrafeDef:
+      return "Wall Strafe";
     default:
       break;
   }
@@ -253,6 +256,122 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kCenteringDef) {
       DrawCenteringEditor();
     }
+    if (scenario_type == ScenarioDef::kWallStrafeDef) {
+      DrawWallStrafeEditor();
+    }
+  }
+
+  void DrawWallStrafeEditor() {
+    ImGui::IdGuard cid("WallStrafeEditor");
+    WallStrafeScenarioDef& w = *def_.mutable_wall_strafe_def();
+    if (!w.has_width()) {
+      w.mutable_width()->set_x_percent_value(0.85);
+    }
+    if (!w.has_height()) {
+      w.mutable_height()->set_y_percent_value(0.85);
+    }
+
+    ImGui::Text("Strafing bounds");
+    ImGui::Indent();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Width", /*default_to_x=*/true, w.mutable_width());
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Height", /*default_to_x=*/false, w.mutable_height());
+    ImGui::Unindent();
+
+    ImGui::Text("Strafe at height");
+    bool has_y = w.has_y();
+    ImGui::SameLine();
+    ImGui::Checkbox("##HasStrafeHeight", &has_y);
+    if (has_y) {
+      ImGui::Indent();
+      DrawRegionLengthEditor(
+          "Height##StrafeHeight", /*default_to_x=*/false, w.mutable_y(), /*is_point=*/true);
+      ImGui::Unindent();
+    } else {
+      w.clear_y();
+    }
+
+    if (w.profiles_size() == 0) {
+      w.add_profiles();
+    }
+
+    ImGui::Text("Explicit profile selection order");
+    bool use_order = w.profile_order_size() > 0;
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseOrder", &use_order);
+    if (use_order) {
+      ImGui::Indent();
+      if (w.profile_order_size() == 0) {
+        w.add_profile_order(0);
+      }
+      int remove_at_i = -1;
+      for (int i = 0; i < w.profile_order_size(); ++i) {
+        ImGui::IdGuard lid("Order", i);
+        u32 profile_number = w.profile_order(i);
+        u32 step = 1;
+        ImGui::Text("Profile");
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(char_x_ * 8);
+        ImGui::InputScalar(
+            "##OrderItemInput", ImGuiDataType_U32, &profile_number, &step, nullptr, "%u");
+        profile_number = std::min<u32>(profile_number, w.profiles_size() - 1);
+        w.set_profile_order(i, profile_number);
+
+        ImGui::SameLine();
+        if (ImGui::Button("x")) {
+          remove_at_i = i;
+        }
+      }
+      if (ImGui::Button("Add##Order")) {
+        w.add_profile_order(0);
+      }
+      if (remove_at_i >= 0) {
+        w.mutable_profile_order()->erase(w.mutable_profile_order()->begin() + remove_at_i);
+      }
+      ImGui::Unindent();
+    } else {
+      w.clear_profile_order();
+    }
+
+    bool allow_percents = w.profile_order_size() == 0 && w.profiles_size() > 1;
+    for (int i = 0; i < w.profiles_size(); ++i) {
+      ImGui::IdGuard lid("Profile", i);
+      ImGui::Text("Profile #%d", i);
+      ImGui::Indent();
+      DrawWallStrafeProfile(w.mutable_profiles(i), allow_percents);
+      ImGui::Unindent();
+    }
+
+    if (ImGui::Button("Add profile")) {
+      w.add_profiles();
+    }
+  }
+
+  void DrawWallStrafeProfile(WallStrafeProfile* p, bool allow_percents) {
+    if (allow_percents) {
+      ImGui::Text("Percent chance to use");
+      ImGui::SameLine();
+      int percent = p->percent_chance() * 100;
+      if (percent <= 0) {
+        percent = 100;
+      }
+      ImGui::SetNextItemWidth(char_x_ * 10);
+      ImGui::InputInt("##PercentChance", &percent, 5, 10);
+      p->set_percent_chance(percent / 100.0);
+    } else {
+      p->clear_percent_chance();
+    }
+
+    ImGui::Text("Min distance");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("MinDistance", /*default_to_x=*/true, p->mutable_min_distance());
+
+    ImGui::Text("Max distance");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("MaxDistance", /*default_to_x=*/true, p->mutable_max_distance());
   }
 
   void DrawCenteringEditor() {
