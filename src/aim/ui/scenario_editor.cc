@@ -718,7 +718,7 @@ class ScenarioEditorScreen : public UiScreen {
 
       ImGui::Text("Y diameter");
       ImGui::SameLine();
-      DrawRegionLengthEditor("XDiameter", /*default_to_x=*/false, t->mutable_y_diameter());
+      DrawRegionLengthEditor("YDiameter", /*default_to_x=*/false, t->mutable_y_diameter());
     }
 
     ImGui::Spacing();
@@ -1325,7 +1325,7 @@ class ScenarioEditorScreen : public UiScreen {
     CreateScenarioParams params;
     params.def = def_;
     params.def.set_duration_seconds(1000000);
-    params.id = "TEST";
+    params.id = name_.full_name();
     params.force_start_immediately = true;
     CreateScenario(params, app_)->Run();
     app_->EnableVsync();
