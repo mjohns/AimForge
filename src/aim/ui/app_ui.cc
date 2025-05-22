@@ -29,6 +29,18 @@ class AppUiImpl : public AppUi {
     playlist_component_ = CreatePlaylistComponent(app);
     playlist_list_component_ = CreatePlaylistListComponent(app);
     scenario_browser_component_ = CreateScenarioBrowserComponent(app);
+
+    auto last_playlist = app_->history_db()->GetRecentViews(RecentViewType::PLAYLIST, 1);
+    if (last_playlist.size() > 0) {
+      std::string name = last_playlist[0].id;
+      if (name.size() > 0) {
+        app_->playlist_manager()->SetCurrentPlaylist(name);
+      }
+    }
+    auto last_scenario = app_->history_db()->GetRecentViews(RecentViewType::SCENARIO, 1);
+    if (last_scenario.size() > 0) {
+      current_scenario_ = app_->scenario_manager()->GetScenario(last_scenario[0].id);
+    }
   }
 
   void Run() override {
@@ -247,8 +259,9 @@ class AppUiImpl : public AppUi {
     if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
     }
-    if (current_playlist_.has_value()) {
-      std::string playlist_label = std::format("  > {}", current_playlist_->name.full_name());
+    PlaylistRun* playlist_run = app_->playlist_manager()->GetCurrentRun();
+    if (playlist_run != nullptr) {
+      std::string playlist_label = std::format("  > {}", playlist_run->playlist.name.full_name());
       if (ImGui::Selectable(playlist_label.c_str(), app_screen_ == AppScreen::CURRENT_PLAYLIST)) {
         app_screen_ = AppScreen::CURRENT_PLAYLIST;
       }
@@ -300,11 +313,7 @@ class AppUiImpl : public AppUi {
     }
 
     if (app_screen_ == AppScreen::CURRENT_PLAYLIST) {
-      if (!current_playlist_.has_value()) {
-        app_screen_ = AppScreen::PLAYLISTS;
-      } else {
-        DrawCurrentPlaylistScreen();
-      }
+      DrawCurrentPlaylistScreen();
     }
     if (app_screen_ == AppScreen::PLAYLISTS) {
       DrawPlaylistsScreen();
@@ -346,7 +355,6 @@ class AppUiImpl : public AppUi {
     playlist_list_component_->Show(&result);
     if (result.open_playlist.has_value()) {
       auto playlist = *result.open_playlist;
-      current_playlist_ = playlist;
       app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
       app_->playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
       app_screen_ = AppScreen::CURRENT_PLAYLIST;
@@ -376,7 +384,6 @@ class AppUiImpl : public AppUi {
 
   std::optional<ScenarioItem> current_scenario_;
   std::unique_ptr<Scenario> current_running_scenario_;
-  std::optional<Playlist> current_playlist_;
   std::unique_ptr<Texture> logo_texture_;
 
   std::unique_ptr<UiScreen> screen_to_show_;
