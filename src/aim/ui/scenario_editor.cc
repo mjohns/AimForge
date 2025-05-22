@@ -767,12 +767,43 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     bool allow_percents = order_list->size() == 0 && profile_list->size() > 1;
+    int remove_at_i = -1;
+    int move_up_i = -1;
+    int move_down_i = -1;
     for (int i = 0; i < profile_list->size(); ++i) {
       ImGui::IdGuard lid(type_name, i);
       ImGui::TextFmt("{} #{}", type_name, i);
+      if (ImGui::BeginPopupContextItem("profile_item_menu")) {
+        if (ImGui::Selectable("Move up")) {
+          move_up_i = i;
+        }
+        if (ImGui::Selectable("Move down")) {
+          move_down_i = i;
+        }
+        if (ImGui::Selectable("Delete")) {
+          remove_at_i = i;
+        }
+        ImGui::EndPopup();
+      }
+      ImGui::OpenPopupOnItemClick("profile_item_menu", ImGuiPopupFlags_MouseButtonRight);
+
       ImGui::Indent();
       draw_profile_fn(&profile_list->at(i), allow_percents);
       ImGui::Unindent();
+    }
+
+    if (remove_at_i >= 0) {
+      profile_list->erase(profile_list->begin() + remove_at_i);
+    } else if (move_up_i > 0) {
+      int i1 = move_up_i;
+      int i2 = move_up_i - 1;
+      std::swap((*profile_list)[i1], (*profile_list)[i2]);
+    } else if (move_down_i >= 0) {
+      int i1 = move_down_i;
+      int i2 = move_down_i + 1;
+      if (i2 < profile_list->size()) {
+        std::swap((*profile_list)[i1], (*profile_list)[i2]);
+      }
     }
 
     if (ImGui::Button(std::format("Add {}", lower_type_name).c_str())) {
