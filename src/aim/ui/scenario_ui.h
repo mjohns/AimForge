@@ -16,8 +16,8 @@ struct ScenarioBrowserResult {
 };
 
 enum ScenarioBrowserType {
-    FULL,
-    RECENT,
+  FULL,
+  RECENT,
 };
 
 class ScenarioBrowserComponent {
