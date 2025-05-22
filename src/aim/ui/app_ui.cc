@@ -49,26 +49,29 @@ class AppUiImpl : public AppUi {
           params.id = current_scenario_->id();
           params.def = current_scenario_->def;
           current_running_scenario_ = CreateScenario(params, app_);
-          auto nav_event = current_running_scenario_->Run();
-          if (nav_event.IsRestartLastScenario()) {
-            scenario_run_option_ = ScenarioRunOption::RUN;
-            continue;
-          }
-          if (nav_event.IsStartScenario()) {
-            auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
-            if (maybe_scenario.has_value()) {
-              current_scenario_ = maybe_scenario;
+          // TODO: Error dialog for invalid scenarios.
+          if (current_running_scenario_) {
+            auto nav_event = current_running_scenario_->Run();
+            if (nav_event.IsRestartLastScenario()) {
               scenario_run_option_ = ScenarioRunOption::RUN;
               continue;
             }
-          }
-          if (nav_event.IsPlaylistNext()) {
-            if (HandlePlaylistNext()) {
-              continue;
+            if (nav_event.IsStartScenario()) {
+              auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
+              if (maybe_scenario.has_value()) {
+                current_scenario_ = maybe_scenario;
+                scenario_run_option_ = ScenarioRunOption::RUN;
+                continue;
+              }
             }
+            if (nav_event.IsPlaylistNext()) {
+              if (HandlePlaylistNext()) {
+                continue;
+              }
+            }
+            app_->EnableVsync();
+            SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
           }
-          app_->EnableVsync();
-          SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
         }
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
@@ -238,10 +241,9 @@ class AppUiImpl : public AppUi {
       }
     }
 
-    bool node_opened = ImGui::TreeNodeEx("Recent", ImGuiTreeNodeFlags_DefaultOpen);
+    bool node_opened = ImGui::TreeNode("Recent");
     if (node_opened) {
       if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
-        LoadRecentScenarioNames();
         app_screen_ = AppScreen::RECENT_SCENARIOS;
       }
       ImGui::TreePop();
@@ -278,10 +280,10 @@ class AppUiImpl : public AppUi {
       }
     }
     if (app_screen_ == AppScreen::SCENARIOS) {
-      DrawScenariosScreen();
+      DrawScenariosScreen(ScenarioBrowserType::FULL);
     }
     if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
-      DrawRecentScenariosScreen();
+      DrawScenariosScreen(ScenarioBrowserType::RECENT);
     }
 
     if (app_screen_ == AppScreen::CURRENT_PLAYLIST) {
@@ -311,9 +313,9 @@ class AppUiImpl : public AppUi {
     }
   }
 
-  void DrawScenariosScreen() {
+  void DrawScenariosScreen(ScenarioBrowserType type) {
     ScenarioBrowserResult result;
-    scenario_browser_component_->Show(&result);
+    scenario_browser_component_->Show(type, &result);
     if (result.scenario_to_start.size() > 0) {
       current_scenario_ = app_->scenario_manager()->GetScenario(result.scenario_to_start);
       scenario_run_option_ = ScenarioRunOption::RUN;
@@ -324,29 +326,6 @@ class AppUiImpl : public AppUi {
     if (result.reload_scenarios) {
       app_->scenario_manager()->LoadScenariosFromDisk();
     }
-  }
-
-  void DrawRecentScenariosScreen() {
-    ImVec2 sz = ImVec2(0.0f, 0.0f);
-    for (int i = 0; i < recent_scenario_names_.size(); ++i) {
-      auto& scenario = recent_scenario_names_[i];
-      if (ImGui::Button(std::format("{}##recent_scenario{}", scenario, i).c_str(), sz)) {
-        current_scenario_ = app_->scenario_manager()->GetScenario(scenario);
-        scenario_run_option_ = ScenarioRunOption::RUN;
-      }
-    }
-  }
-
-  void LoadRecentScenarioNames() {
-    auto recent_scenarios = app_->history_db()->GetRecentViews(RecentViewType::SCENARIO, 50);
-    std::vector<std::string> names;
-    for (auto& s : recent_scenarios) {
-      std::string name = s.id;
-      if (!VectorContains(names, name)) {
-        names.push_back(name);
-      }
-    }
-    recent_scenario_names_ = std::move(names);
   }
 
   void DrawPlaylistsScreen() {
@@ -388,10 +367,6 @@ class AppUiImpl : public AppUi {
   std::unique_ptr<Texture> logo_texture_;
 
   std::unique_ptr<UiScreen> screen_to_show_;
-
-  std::string scenario_search_text_;
-
-  std::vector<std::string> recent_scenario_names_;
 
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
