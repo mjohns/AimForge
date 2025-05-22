@@ -387,7 +387,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       bool has_width = d.has_width();
       float width = FirstGreaterThanZero(d.width(), 100);
-      OptionalFloatInput("WidthOverride", &has_width, &width, 10, 20, "%.0f");
+      OptionalInputFloat("WidthOverride", &has_width, &width, 10, 20, "%.0f");
       if (has_width) {
         d.set_width(width);
       } else {
@@ -398,7 +398,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       bool has_height = d.has_height();
       float height = FirstGreaterThanZero(d.height(), 100);
-      OptionalFloatInput("HeightOverride", &has_height, &height, 10, 20, "%.0f");
+      OptionalInputFloat("HeightOverride", &has_height, &height, 10, 20, "%.0f");
       if (has_height) {
         d.set_height(height);
       } else {
@@ -485,6 +485,31 @@ class ScenarioEditorScreen : public UiScreen {
                     w.mutable_profile_order(),
                     w.mutable_profiles(),
                     std::bind_front(&ScenarioEditorScreen::DrawWallStrafeProfile, this));
+
+    ImGui::Spacing();
+
+    float acceleration = w.acceleration();
+    ImGui::Text("Acceleration");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##AccelerationInput", &acceleration, 1, 5, "%.0f");
+    if (acceleration <= 0) {
+      w.clear_acceleration();
+      w.clear_deceleration();
+    } else {
+      w.set_acceleration(acceleration);
+
+      bool has_decel = w.deceleration() > 0;
+      float deceleration = w.deceleration();
+      ImGui::Text("Different deceleration");
+      ImGui::SameLine();
+      OptionalInputFloat("##DecelerationInput", &has_decel, &deceleration, 1, 5, "%.0f");
+      if (has_decel) {
+        w.set_deceleration(ClampPositive(deceleration));
+      } else {
+        w.clear_deceleration();
+      }
+    }
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p, bool allow_percents) {
@@ -569,7 +594,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (!s->has_min_distance()) {
       min_value = 20;
     }
-    OptionalFloatInput("MinDistanceInput", &use_min, &min_value, 1, 10, "%.0f");
+    OptionalInputFloat("MinDistanceInput", &use_min, &min_value, 1, 10, "%.0f");
     if (use_min) {
       s->set_min_distance(min_value);
     } else {
@@ -1253,7 +1278,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void OptionalFloatInput(const std::string& id,
+  void OptionalInputFloat(const std::string& id,
                           bool* has_value,
                           float* value,
                           float step,
