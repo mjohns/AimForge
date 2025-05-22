@@ -194,7 +194,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     BundlePicker("BundlePicker", name_.mutable_bundle_name());
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 30);
+    ImGui::SetNextItemWidth(char_x_ * 40);
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
     float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
@@ -770,6 +770,7 @@ class ScenarioEditorScreen : public UiScreen {
     int remove_at_i = -1;
     int move_up_i = -1;
     int move_down_i = -1;
+    int copy_i = -1;
     for (int i = 0; i < profile_list->size(); ++i) {
       ImGui::IdGuard lid(type_name, i);
       ImGui::TextFmt("{} #{}", type_name, i);
@@ -779,6 +780,9 @@ class ScenarioEditorScreen : public UiScreen {
         }
         if (ImGui::Selectable("Move down")) {
           move_down_i = i;
+        }
+        if (ImGui::Selectable("Copy")) {
+          copy_i = i;
         }
         if (ImGui::Selectable("Delete")) {
           remove_at_i = i;
@@ -804,6 +808,8 @@ class ScenarioEditorScreen : public UiScreen {
       if (i2 < profile_list->size()) {
         std::swap((*profile_list)[i1], (*profile_list)[i2]);
       }
+    } else if (copy_i >= 0) {
+      *profile_list->Add() = (*profile_list)[copy_i];
     }
 
     if (ImGui::Button(std::format("Add {}", lower_type_name).c_str())) {
