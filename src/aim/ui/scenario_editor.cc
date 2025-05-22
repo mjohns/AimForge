@@ -397,10 +397,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (allow_percents) {
       ImGui::Text("Percent chance to use");
       ImGui::SameLine();
-      int percent = p->percent_chance() * 100;
-      if (percent <= 0) {
-        percent = 100;
-      }
+      int percent = FirstGreaterThanZero(p->percent_chance() * 100, 100);
       ImGui::SetNextItemWidth(char_x_ * 10);
       ImGui::InputInt("##PercentChance", &percent, 5, 10);
       p->set_percent_chance(percent / 100.0);
@@ -511,10 +508,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (allow_percents) {
       ImGui::Text("Percent chance to use");
       ImGui::SameLine();
-      int percent = region->percent_chance() * 100;
-      if (percent <= 0) {
-        percent = 100;
-      }
+      int percent = FirstGreaterThanZero(region->percent_chance() * 100, 100);
       ImGui::SetNextItemWidth(char_x_ * 10);
       ImGui::InputInt("##PercentChance", &percent, 5, 10);
       region->set_percent_chance(percent / 100.0);
@@ -903,19 +897,14 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Text("Width");
       ImGui::SameLine();
       if (use_width_percent) {
-        float width_percent = room.cylinder_room().width_perimeter_percent() * 100;
-        if (width_percent <= 0) {
-          width_percent = 40;
-        }
+        float width_percent =
+            FirstGreaterThanZero(room.cylinder_room().width_perimeter_percent() * 100, 40);
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##WidthPercent", &width_percent, 5, 1, "%.1f");
         room.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
         room.mutable_cylinder_room()->set_width(0);
       } else {
-        float width = room.cylinder_room().width();
-        if (width <= 0) {
-          width = 100;
-        }
+        float width = FirstGreaterThanZero(room.cylinder_room().width(), 100);
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##Width", &width, 10, 1, "%.0f");
         room.mutable_cylinder_room()->set_width(width);
@@ -1053,10 +1042,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (allow_percents) {
       ImGui::Text("Percent chance to use");
       ImGui::SameLine();
-      int percent = profile->percent_chance() * 100;
-      if (percent <= 0) {
-        percent = 100;
-      }
+      int percent = FirstGreaterThanZero(profile->percent_chance() * 100, 100);
       ImGui::SetNextItemWidth(char_x_ * 10);
       ImGui::InputInt("##PercentChance", &percent, 5, 10);
       profile->set_percent_chance(percent / 100.0);

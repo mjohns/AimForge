@@ -177,4 +177,8 @@ static float FirstGreaterThanZero(float val1, float val2) {
   return val1 > 0 ? val1 : val2;
 }
 
+static float ClampPositive(float val) {
+  return val > 0 ? val : 0.0f;
+}
+
 }  // namespace aim
