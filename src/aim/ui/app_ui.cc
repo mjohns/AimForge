@@ -56,7 +56,7 @@ class AppUiImpl : public AppUi {
               scenario_run_option_ = ScenarioRunOption::RUN;
               continue;
             }
-            if (nav_event.IsStartScenario()) {
+            if (nav_event.type == NavigationEventType::START_SCENARIO) {
               auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
               if (maybe_scenario.has_value()) {
                 current_scenario_ = maybe_scenario;
@@ -64,7 +64,14 @@ class AppUiImpl : public AppUi {
                 continue;
               }
             }
-            if (nav_event.IsPlaylistNext()) {
+            if (nav_event.type == NavigationEventType::EDIT_SCENARIO) {
+              auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
+              if (maybe_scenario.has_value()) {
+                screen_to_show_ = CreateScenarioEditorScreen(*maybe_scenario, app_);
+                continue;
+              }
+            }
+            if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
               if (HandlePlaylistNext()) {
                 continue;
               }
@@ -82,7 +89,7 @@ class AppUiImpl : public AppUi {
             scenario_run_option_ = ScenarioRunOption::RUN;
             continue;
           }
-          if (nav_event.IsPlaylistNext()) {
+          if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
             if (HandlePlaylistNext()) {
               continue;
             }
@@ -121,12 +128,18 @@ class AppUiImpl : public AppUi {
 
  private:
   void OnEvent(const SDL_Event& event) {
-    if (event.type == SDL_EVENT_KEY_DOWN) {
-      SDL_Keycode keycode = event.key.key;
-      if (keycode == SDLK_R) {
+    Settings settings = app_->settings_manager()->GetCurrentSettings();
+    if (IsMappableKeyDownEvent(event)) {
+      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+      if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
-      if (keycode == SDLK_ESCAPE) {
+      if (KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
+        if (current_scenario_.has_value()) {
+          screen_to_show_ = CreateScenarioEditorScreen(current_scenario_, app_);
+        }
+      }
+      if (event.key.key == SDLK_ESCAPE) {
         scenario_run_option_ = ScenarioRunOption::RESUME;
       }
     }

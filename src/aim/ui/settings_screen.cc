@@ -39,6 +39,7 @@ class SettingsScreen : public UiScreen {
         {"Fire", settings_updater_.keybinds.mutable_fire()},
         {"Restart Scenario", settings_updater_.keybinds.mutable_restart_scenario()},
         {"Next Scenario", settings_updater_.keybinds.mutable_next_scenario()},
+        {"Edit Scenario", settings_updater_.keybinds.mutable_edit_scenario()},
         {"Quick Settings", settings_updater_.keybinds.mutable_quick_settings()},
         {"Quick Metronome", settings_updater_.keybinds.mutable_quick_metronome()},
         {"Adjust Crosshair Size", settings_updater_.keybinds.mutable_adjust_crosshair_size()},
