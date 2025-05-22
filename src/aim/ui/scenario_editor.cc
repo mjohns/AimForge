@@ -1065,13 +1065,13 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##WidthPercent", &width_percent, 5, 1, "%.1f");
         room.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
-        room.mutable_cylinder_room()->set_width(0);
+        room.mutable_cylinder_room()->clear_width();
       } else {
         float width = FirstGreaterThanZero(room.cylinder_room().width(), 100);
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##Width", &width, 10, 1, "%.0f");
         room.mutable_cylinder_room()->set_width(width);
-        room.mutable_cylinder_room()->set_width_perimeter_percent(0);
+        room.mutable_cylinder_room()->clear_width_perimeter_percent();
       }
 
       room.mutable_cylinder_room()->set_height(height);

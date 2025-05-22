@@ -4204,6 +4204,8 @@ class TargetRegion final : public ::google::protobuf::Message
     kXOffsetFieldNumber = 2,
     kYOffsetFieldNumber = 3,
     kPercentChanceFieldNumber = 1,
+    kDepthFieldNumber = 7,
+    kDepthJitterFieldNumber = 8,
     kRectangleFieldNumber = 4,
     kEllipseFieldNumber = 5,
     kCircleFieldNumber = 6,
@@ -4247,6 +4249,28 @@ class TargetRegion final : public ::google::protobuf::Message
   private:
   float _internal_percent_chance() const;
   void _internal_set_percent_chance(float value);
+
+  public:
+  // float depth = 7;
+  bool has_depth() const;
+  void clear_depth() ;
+  float depth() const;
+  void set_depth(float value);
+
+  private:
+  float _internal_depth() const;
+  void _internal_set_depth(float value);
+
+  public:
+  // float depth_jitter = 8;
+  bool has_depth_jitter() const;
+  void clear_depth_jitter() ;
+  float depth_jitter() const;
+  void set_depth_jitter(float value);
+
+  private:
+  float _internal_depth_jitter() const;
+  void _internal_set_depth_jitter(float value);
 
   public:
   // .aim.RectangleTargetRegion rectangle = 4;
@@ -4318,7 +4342,7 @@ class TargetRegion final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 6, 5,
+      3, 8, 5,
       0, 2>
       _table_;
 
@@ -4341,6 +4365,8 @@ class TargetRegion final : public ::google::protobuf::Message
     ::aim::RegionLength* x_offset_;
     ::aim::RegionLength* y_offset_;
     float percent_chance_;
+    float depth_;
+    float depth_jitter_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -8812,6 +8838,62 @@ inline void TargetRegion::set_allocated_y_offset(::aim::RegionLength* value) {
 
   _impl_.y_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.y_offset)
+}
+
+// float depth = 7;
+inline bool TargetRegion::has_depth() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void TargetRegion::clear_depth() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float TargetRegion::depth() const {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.depth)
+  return _internal_depth();
+}
+inline void TargetRegion::set_depth(float value) {
+  _internal_set_depth(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.TargetRegion.depth)
+}
+inline float TargetRegion::_internal_depth() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.depth_;
+}
+inline void TargetRegion::_internal_set_depth(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_ = value;
+}
+
+// float depth_jitter = 8;
+inline bool TargetRegion::has_depth_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void TargetRegion::clear_depth_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float TargetRegion::depth_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.depth_jitter)
+  return _internal_depth_jitter();
+}
+inline void TargetRegion::set_depth_jitter(float value) {
+  _internal_set_depth_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.TargetRegion.depth_jitter)
+}
+inline float TargetRegion::_internal_depth_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.depth_jitter_;
+}
+inline void TargetRegion::_internal_set_depth_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_jitter_ = value;
 }
 
 // .aim.RectangleTargetRegion rectangle = 4;
