@@ -56,6 +56,9 @@ namespace aim {
 class CrosshairTheme;
 struct CrosshairThemeDefaultTypeInternal;
 extern CrosshairThemeDefaultTypeInternal _CrosshairTheme_default_instance_;
+class HealthBarAppearance;
+struct HealthBarAppearanceDefaultTypeInternal;
+extern HealthBarAppearanceDefaultTypeInternal _HealthBarAppearance_default_instance_;
 class Theme;
 struct ThemeDefaultTypeInternal;
 extern ThemeDefaultTypeInternal _Theme_default_instance_;
@@ -556,6 +559,245 @@ class WallAppearance final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class HealthBarAppearance final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.HealthBarAppearance) */ {
+ public:
+  inline HealthBarAppearance() : HealthBarAppearance(nullptr) {}
+  ~HealthBarAppearance() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(HealthBarAppearance* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(HealthBarAppearance));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR HealthBarAppearance(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline HealthBarAppearance(const HealthBarAppearance& from) : HealthBarAppearance(nullptr, from) {}
+  inline HealthBarAppearance(HealthBarAppearance&& from) noexcept
+      : HealthBarAppearance(nullptr, std::move(from)) {}
+  inline HealthBarAppearance& operator=(const HealthBarAppearance& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline HealthBarAppearance& operator=(HealthBarAppearance&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const HealthBarAppearance& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const HealthBarAppearance* internal_default_instance() {
+    return reinterpret_cast<const HealthBarAppearance*>(
+        &_HealthBarAppearance_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(HealthBarAppearance& a, HealthBarAppearance& b) { a.Swap(&b); }
+  inline void Swap(HealthBarAppearance* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(HealthBarAppearance* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  HealthBarAppearance* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<HealthBarAppearance>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const HealthBarAppearance& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const HealthBarAppearance& from) { HealthBarAppearance::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(HealthBarAppearance* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.HealthBarAppearance"; }
+
+ protected:
+  explicit HealthBarAppearance(::google::protobuf::Arena* arena);
+  HealthBarAppearance(::google::protobuf::Arena* arena, const HealthBarAppearance& from);
+  HealthBarAppearance(::google::protobuf::Arena* arena, HealthBarAppearance&& from) noexcept
+      : HealthBarAppearance(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kHealthColorFieldNumber = 1,
+    kBackgroundColorFieldNumber = 3,
+    kHealthAlphaFieldNumber = 2,
+    kBackgroundAlphaFieldNumber = 4,
+  };
+  // .aim.StoredColor health_color = 1;
+  bool has_health_color() const;
+  void clear_health_color() ;
+  const ::aim::StoredColor& health_color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_health_color();
+  ::aim::StoredColor* mutable_health_color();
+  void set_allocated_health_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_health_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_health_color();
+
+  private:
+  const ::aim::StoredColor& _internal_health_color() const;
+  ::aim::StoredColor* _internal_mutable_health_color();
+
+  public:
+  // .aim.StoredColor background_color = 3;
+  bool has_background_color() const;
+  void clear_background_color() ;
+  const ::aim::StoredColor& background_color() const;
+  PROTOBUF_NODISCARD ::aim::StoredColor* release_background_color();
+  ::aim::StoredColor* mutable_background_color();
+  void set_allocated_background_color(::aim::StoredColor* value);
+  void unsafe_arena_set_allocated_background_color(::aim::StoredColor* value);
+  ::aim::StoredColor* unsafe_arena_release_background_color();
+
+  private:
+  const ::aim::StoredColor& _internal_background_color() const;
+  ::aim::StoredColor* _internal_mutable_background_color();
+
+  public:
+  // float health_alpha = 2;
+  bool has_health_alpha() const;
+  void clear_health_alpha() ;
+  float health_alpha() const;
+  void set_health_alpha(float value);
+
+  private:
+  float _internal_health_alpha() const;
+  void _internal_set_health_alpha(float value);
+
+  public:
+  // float background_alpha = 4;
+  bool has_background_alpha() const;
+  void clear_background_alpha() ;
+  float background_alpha() const;
+  void set_background_alpha(float value);
+
+  private:
+  float _internal_background_alpha() const;
+  void _internal_set_background_alpha(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.HealthBarAppearance)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 2,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const HealthBarAppearance& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::StoredColor* health_color_;
+    ::aim::StoredColor* background_color_;
+    float health_alpha_;
+    float background_alpha_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_theme_2eproto;
+};
+// -------------------------------------------------------------------
+
 class CrosshairTheme final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.CrosshairTheme) */ {
  public:
@@ -828,7 +1070,7 @@ class Theme final : public ::google::protobuf::Message
     return reinterpret_cast<const Theme*>(
         &_Theme_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(Theme& a, Theme& b) { a.Swap(&b); }
   inline void Swap(Theme* other) {
     if (other == this) return;
@@ -925,6 +1167,7 @@ class Theme final : public ::google::protobuf::Message
     kCrosshairFieldNumber = 7,
     kTargetColorFieldNumber = 8,
     kGhostTargetColorFieldNumber = 9,
+    kHealthBarFieldNumber = 11,
   };
   // string name = 1;
   bool has_name() const;
@@ -1080,12 +1323,27 @@ class Theme final : public ::google::protobuf::Message
   ::aim::StoredColor* _internal_mutable_ghost_target_color();
 
   public:
+  // .aim.HealthBarAppearance health_bar = 11;
+  bool has_health_bar() const;
+  void clear_health_bar() ;
+  const ::aim::HealthBarAppearance& health_bar() const;
+  PROTOBUF_NODISCARD ::aim::HealthBarAppearance* release_health_bar();
+  ::aim::HealthBarAppearance* mutable_health_bar();
+  void set_allocated_health_bar(::aim::HealthBarAppearance* value);
+  void unsafe_arena_set_allocated_health_bar(::aim::HealthBarAppearance* value);
+  ::aim::HealthBarAppearance* unsafe_arena_release_health_bar();
+
+  private:
+  const ::aim::HealthBarAppearance& _internal_health_bar() const;
+  ::aim::HealthBarAppearance* _internal_mutable_health_bar();
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Theme)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 10, 8,
+      4, 11, 9,
       39, 2>
       _table_;
 
@@ -1115,6 +1373,7 @@ class Theme final : public ::google::protobuf::Message
     ::aim::CrosshairTheme* crosshair_;
     ::aim::StoredColor* target_color_;
     ::aim::StoredColor* ghost_target_color_;
+    ::aim::HealthBarAppearance* health_bar_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1699,6 +1958,248 @@ inline void WallAppearance::clear_has_type() {
 inline WallAppearance::TypeCase WallAppearance::type_case() const {
   return WallAppearance::TypeCase(_impl_._oneof_case_[0]);
 }
+// -------------------------------------------------------------------
+
+// HealthBarAppearance
+
+// .aim.StoredColor health_color = 1;
+inline bool HealthBarAppearance::has_health_color() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.health_color_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredColor& HealthBarAppearance::_internal_health_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredColor* p = _impl_.health_color_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& HealthBarAppearance::health_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.HealthBarAppearance.health_color)
+  return _internal_health_color();
+}
+inline void HealthBarAppearance::unsafe_arena_set_allocated_health_color(::aim::StoredColor* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.health_color_);
+  }
+  _impl_.health_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.HealthBarAppearance.health_color)
+}
+inline ::aim::StoredColor* HealthBarAppearance::release_health_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::StoredColor* released = _impl_.health_color_;
+  _impl_.health_color_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredColor* HealthBarAppearance::unsafe_arena_release_health_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.HealthBarAppearance.health_color)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::StoredColor* temp = _impl_.health_color_;
+  _impl_.health_color_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredColor* HealthBarAppearance::_internal_mutable_health_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_color_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
+    _impl_.health_color_ = reinterpret_cast<::aim::StoredColor*>(p);
+  }
+  return _impl_.health_color_;
+}
+inline ::aim::StoredColor* HealthBarAppearance::mutable_health_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::StoredColor* _msg = _internal_mutable_health_color();
+  // @@protoc_insertion_point(field_mutable:aim.HealthBarAppearance.health_color)
+  return _msg;
+}
+inline void HealthBarAppearance::set_allocated_health_color(::aim::StoredColor* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.health_color_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.health_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.HealthBarAppearance.health_color)
+}
+
+// float health_alpha = 2;
+inline bool HealthBarAppearance::has_health_alpha() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void HealthBarAppearance::clear_health_alpha() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_alpha_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float HealthBarAppearance::health_alpha() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarAppearance.health_alpha)
+  return _internal_health_alpha();
+}
+inline void HealthBarAppearance::set_health_alpha(float value) {
+  _internal_set_health_alpha(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarAppearance.health_alpha)
+}
+inline float HealthBarAppearance::_internal_health_alpha() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_alpha_;
+}
+inline void HealthBarAppearance::_internal_set_health_alpha(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_alpha_ = value;
+}
+
+// .aim.StoredColor background_color = 3;
+inline bool HealthBarAppearance::has_background_color() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.background_color_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredColor& HealthBarAppearance::_internal_background_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredColor* p = _impl_.background_color_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& HealthBarAppearance::background_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.HealthBarAppearance.background_color)
+  return _internal_background_color();
+}
+inline void HealthBarAppearance::unsafe_arena_set_allocated_background_color(::aim::StoredColor* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.background_color_);
+  }
+  _impl_.background_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.HealthBarAppearance.background_color)
+}
+inline ::aim::StoredColor* HealthBarAppearance::release_background_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredColor* released = _impl_.background_color_;
+  _impl_.background_color_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredColor* HealthBarAppearance::unsafe_arena_release_background_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.HealthBarAppearance.background_color)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::StoredColor* temp = _impl_.background_color_;
+  _impl_.background_color_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredColor* HealthBarAppearance::_internal_mutable_background_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.background_color_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
+    _impl_.background_color_ = reinterpret_cast<::aim::StoredColor*>(p);
+  }
+  return _impl_.background_color_;
+}
+inline ::aim::StoredColor* HealthBarAppearance::mutable_background_color() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::StoredColor* _msg = _internal_mutable_background_color();
+  // @@protoc_insertion_point(field_mutable:aim.HealthBarAppearance.background_color)
+  return _msg;
+}
+inline void HealthBarAppearance::set_allocated_background_color(::aim::StoredColor* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.background_color_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.background_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.HealthBarAppearance.background_color)
+}
+
+// float background_alpha = 4;
+inline bool HealthBarAppearance::has_background_alpha() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void HealthBarAppearance::clear_background_alpha() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.background_alpha_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float HealthBarAppearance::background_alpha() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarAppearance.background_alpha)
+  return _internal_background_alpha();
+}
+inline void HealthBarAppearance::set_background_alpha(float value) {
+  _internal_set_background_alpha(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarAppearance.background_alpha)
+}
+inline float HealthBarAppearance::_internal_background_alpha() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.background_alpha_;
+}
+inline void HealthBarAppearance::_internal_set_background_alpha(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.background_alpha_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // Theme
@@ -2597,6 +3098,102 @@ inline void Theme::set_allocated_ghost_target_color(::aim::StoredColor* value) {
 
   _impl_.ghost_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Theme.ghost_target_color)
+}
+
+// .aim.HealthBarAppearance health_bar = 11;
+inline bool Theme::has_health_bar() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.health_bar_ != nullptr);
+  return value;
+}
+inline void Theme::clear_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_bar_ != nullptr) _impl_.health_bar_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000400u;
+}
+inline const ::aim::HealthBarAppearance& Theme::_internal_health_bar() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::HealthBarAppearance* p = _impl_.health_bar_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::HealthBarAppearance&>(::aim::_HealthBarAppearance_default_instance_);
+}
+inline const ::aim::HealthBarAppearance& Theme::health_bar() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Theme.health_bar)
+  return _internal_health_bar();
+}
+inline void Theme::unsafe_arena_set_allocated_health_bar(::aim::HealthBarAppearance* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.health_bar_);
+  }
+  _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarAppearance*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000400u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000400u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.health_bar)
+}
+inline ::aim::HealthBarAppearance* Theme::release_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000400u;
+  ::aim::HealthBarAppearance* released = _impl_.health_bar_;
+  _impl_.health_bar_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::HealthBarAppearance* Theme::unsafe_arena_release_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Theme.health_bar)
+
+  _impl_._has_bits_[0] &= ~0x00000400u;
+  ::aim::HealthBarAppearance* temp = _impl_.health_bar_;
+  _impl_.health_bar_ = nullptr;
+  return temp;
+}
+inline ::aim::HealthBarAppearance* Theme::_internal_mutable_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_bar_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::HealthBarAppearance>(GetArena());
+    _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarAppearance*>(p);
+  }
+  return _impl_.health_bar_;
+}
+inline ::aim::HealthBarAppearance* Theme::mutable_health_bar() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000400u;
+  ::aim::HealthBarAppearance* _msg = _internal_mutable_health_bar();
+  // @@protoc_insertion_point(field_mutable:aim.Theme.health_bar)
+  return _msg;
+}
+inline void Theme::set_allocated_health_bar(::aim::HealthBarAppearance* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.health_bar_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000400u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000400u;
+  }
+
+  _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarAppearance*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Theme.health_bar)
 }
 
 #ifdef __GNUC__

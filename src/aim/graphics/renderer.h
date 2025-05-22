@@ -12,6 +12,7 @@
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/proto/theme.pb.h"
+#include "aim/proto/settings.pb.h"
 
 namespace aim {
 
@@ -29,6 +30,7 @@ class Renderer {
   virtual void DrawScenario(const glm::mat4& projection,
                             const Room& room,
                             const Theme& theme,
+                            const HealthBarSettings& health_bar,
                             const std::vector<Target>& targets,
                             const glm::mat4& view,
                             RenderContext* ctx,

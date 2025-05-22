@@ -69,7 +69,6 @@ float GetJitteredValue(float base_value, float jitter, std::mt19937* random_gene
 bool FlipCoin(std::mt19937* random_generator);
 float GetRandInRange(float min, float max, std::mt19937* random_generator);
 
-float FirstNonZero(float v1, float v2);
 
 template <typename T>
 bool IsValidIndex(const T& list, int i) {
@@ -162,6 +161,8 @@ std::string MakeUniqueName(const std::string& name, const std::vector<std::strin
 static bool IsZero(const StoredVec3& v) {
   return v.x() == 0 && v.y() == 0 && v.z() == 0;
 }
+
+float FirstNonZero(float v1, float v2);
 
 static float FirstGreaterThanZero(float val1, float val2) {
   return val1 > 0 ? val1 : val2;

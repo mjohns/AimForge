@@ -30,7 +30,7 @@ Crosshair GetDefaultCrosshair() {
 
 Settings GetDefaultSettings() {
   Settings settings;
-  settings.set_dpi(800);
+  settings.set_dpi(kDefaultDpi);
   settings.set_cm_per_360(45);
   *settings.add_saved_crosshairs() = GetDefaultCrosshair();
   settings.set_current_crosshair_name("default");
@@ -215,6 +215,9 @@ Theme SettingsManager::GetThemeNoReferenceFollow(const std::string& theme_name) 
   if (std::filesystem::exists(path)) {
     Theme theme;
     if (ReadJsonMessageFromFile(path, &theme)) {
+      if (!theme.has_health_bar()) {
+        *theme.mutable_health_bar() = GetDefaultHealthBarAppearance();
+      }
       ThemeCacheEntry entry;
       theme.set_name(theme_name);
       entry.theme = theme;
@@ -295,6 +298,9 @@ Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scena
   if (scenario_settings.has_auto_hold_tracking()) {
     settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
   }
+  if (scenario_settings.has_health_bar()) {
+    *settings_.mutable_health_bar() = scenario_settings.health_bar();
+  }
   return settings_;
 }
 
@@ -353,12 +359,13 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     cm_per_360_jitter = MaybeIntToString(current_settings->cm_per_360_jitter());
     theme_name = current_settings->theme_name();
     metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
-    dpi = MaybeIntToString(current_settings->dpi());
+    dpi = current_settings->dpi();
     crosshair_size = MaybeIntToString(current_settings->crosshair_size());
     crosshair_name = current_settings->current_crosshair_name();
     disable_click_to_start = current_settings->disable_click_to_start();
     auto_hold_tracking = current_settings->auto_hold_tracking();
     keybinds = current_settings->keybinds();
+    health_bar = current_settings->health_bar();
   }
 }
 
@@ -414,14 +421,18 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     current_settings->set_metronome_bpm(new_metronome_bpm);
     settings_manager_->MarkDirty();
   }
-  float new_dpi = ParseFloat(dpi);
-  if (new_dpi >= 0 && current_settings->dpi() != new_dpi) {
-    current_settings->set_dpi(new_dpi);
+  if (dpi >= 0 && current_settings->dpi() != dpi) {
+    current_settings->set_dpi(dpi);
     settings_manager_->MarkDirty();
   }
   float new_crosshair_size = ParseFloat(crosshair_size);
   if (new_crosshair_size >= 0 && current_settings->crosshair_size() != new_crosshair_size) {
     current_settings->set_crosshair_size(new_crosshair_size);
+    settings_manager_->MarkDirty();
+  }
+  if (!google::protobuf::util::MessageDifferencer::Equivalent(health_bar,
+                                                              current_settings->health_bar())) {
+    *current_settings->mutable_health_bar() = health_bar;
     settings_manager_->MarkDirty();
   }
   settings_manager_->MaybeFlushToDisk(scenario_id);
@@ -444,7 +455,18 @@ Theme GetDefaultTheme() {
 
   *t.mutable_target_color() = ToStoredColor(0);
   *t.mutable_ghost_target_color() = ToStoredColor(0.65);
+
+  *t.mutable_health_bar() = GetDefaultHealthBarAppearance();
   return t;
+}
+
+HealthBarAppearance GetDefaultHealthBarAppearance() {
+  HealthBarAppearance h;
+  *h.mutable_background_color() = ToStoredColor(0.75);
+  h.set_background_alpha(0.8);
+
+  *h.mutable_health_color() = ToStoredColor(0.3);
+  return h;
 }
 
 }  // namespace aim
