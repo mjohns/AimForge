@@ -4,6 +4,9 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <vector>
+
+#include "aim/common/util.h"
 
 namespace aim {
 namespace {
@@ -24,6 +27,14 @@ std::filesystem::path FileSystem::GetUserDataPath(const std::filesystem::path& f
 
 std::filesystem::path FileSystem::GetBasePath(const std::filesystem::path& file_name) {
   return base_dir_ / file_name;
+}
+
+std::vector<std::string> FileSystem::GetBundleNames() {
+  std::vector<std::string> names;
+  for (auto& b : GetBundles()) {
+    names.push_back(b.name);
+  }
+  return names;
 }
 
 std::vector<BundleInfo> FileSystem::GetBundles() {
