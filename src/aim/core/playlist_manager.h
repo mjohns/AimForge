@@ -68,7 +68,6 @@ class PlaylistManager {
   void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
 
   bool SavePlaylist(const ResourceName& name, const PlaylistDef& def);
-
   bool DeletePlaylist(const ResourceName& name);
   bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);
 

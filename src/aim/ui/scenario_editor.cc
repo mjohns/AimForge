@@ -6,6 +6,7 @@
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/camera.h"
 #include "aim/core/navigation_event.h"
@@ -16,6 +17,8 @@
 
 namespace aim {
 namespace {
+
+const char* kErrorPopup = "ERROR_POPUP";
 
 const std::vector<Room::TypeCase> kSupportedRoomTypes{
     Room::kSimpleRoom,
@@ -161,7 +164,6 @@ class ScenarioEditorScreen : public UiScreen {
       def_ = initial_scenario->def;
       original_name_ = initial_scenario->name;
       name_ = initial_scenario->name;
-    } else {
     }
   }
 
@@ -192,6 +194,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     BundlePicker("BundlePicker", name_.mutable_bundle_name());
     ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 30);
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
     float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
@@ -222,16 +225,19 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::TreePop();
     }
 
-    {
-      if (ImGui::Button("Play")) {
-        start_scenario_ = true;
-      }
+    if (ImGui::Button("Play")) {
+      start_scenario_ = true;
+    }
+    if (ImGui::Button("Error")) {
+      SetErrorMessage("Simulated error!");
     }
     {
       ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
-        // app_->settings_manager()->SaveScenarioToDisk(current_theme_name_, current_theme_);
-        ScreenDone();
+        if (SaveScenario()) {
+          app_->scenario_manager()->LoadScenariosFromDisk();
+          ScreenDone();
+        }
       }
     }
     {
@@ -241,12 +247,74 @@ class ScenarioEditorScreen : public UiScreen {
       }
     }
 
+    bool show_error_popup = error_popup_message_.size() > 0;
+    if (show_error_popup) {
+      ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+                              ImGuiCond_Appearing,
+                              ImVec2(0.5f, 0.5f));  // Center the popup
+      if (ImGui::BeginPopupModal(kErrorPopup,
+                                 &show_error_popup,
+                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+        ImGui::Text(error_popup_message_);
+
+        float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+
+        if (ImGui::Button("OK", ImVec2(button_width, 0))) {
+          error_popup_message_ = "";
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+      }
+    }
+
     /*
     Crosshair crosshair;
     crosshair.mutable_dot()->set_draw_outline(true);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     DrawCrosshair(crosshair, 25, current_theme_, app_->screen_info(), draw_list);
     */
+  }
+
+  // Returns whether the screen should close
+  bool SaveScenario() {
+    if (name_.bundle_name().size() == 0 || name_.relative_name().size() == 0) {
+      SetErrorMessage("Missing scenario name");
+      return false;
+    }
+
+    auto& mgr = *app_->scenario_manager();
+
+    bool is_new_file = !original_name_.has_value() || *original_name_ != name_;
+    if (is_new_file) {
+      auto existing_scenario_with_name = mgr.GetScenario(name_.full_name());
+      if (existing_scenario_with_name.has_value()) {
+        SetErrorMessage(std::format("Scenario \"{}\" already exists", name_.full_name()));
+        return false;
+      }
+
+      if (original_name_.has_value()) {
+        if (!mgr.RenameScenario(*original_name_, name_)) {
+          SetErrorMessage(std::format("Unable to rename \"{}\" to \"{}\".",
+                                      original_name_->full_name(),
+                                      name_.full_name()));
+          return false;
+        }
+      }
+    }
+
+    if (!mgr.SaveScenario(name_, def_)) {
+      SetErrorMessage(std::format("Unable to save scenario \"{}\".", name_.full_name()));
+      return false;
+    }
+
+    return true;
+  }
+
+  void SetErrorMessage(const std::string& msg) {
+    error_popup_message_ = msg;
+    ImGui::OpenPopup(kErrorPopup);
   }
 
   void DrawScenarioTypeEditor(const ImVec2& char_size) {
@@ -1225,6 +1293,8 @@ class ScenarioEditorScreen : public UiScreen {
   std::vector<std::string> bundle_names_;
   std::optional<ResourceName> original_name_;
   ResourceName name_;
+
+  std::string error_popup_message_;
 };
 
 }  // namespace

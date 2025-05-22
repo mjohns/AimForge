@@ -40,6 +40,10 @@ class AppUiImpl : public AppUi {
       }
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
         if (current_scenario_.has_value()) {
+          auto updated_scenario = app_->scenario_manager()->GetScenario(current_scenario_->id());
+          if (updated_scenario.has_value()) {
+            current_scenario_ = updated_scenario;
+          }
           app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO, current_scenario_->id());
           CreateScenarioParams params;
           params.id = current_scenario_->id();
