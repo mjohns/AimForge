@@ -321,6 +321,9 @@ class AppUiImpl : public AppUi {
     if (result.scenario_to_edit.size() > 0) {
       screen_to_show_ = CreateScenarioEditorScreen(result.scenario_to_edit, app_);
     }
+    if (result.reload_scenarios) {
+      app_->scenario_manager()->LoadScenariosFromDisk();
+    }
   }
 
   void DrawRecentScenariosScreen() {
