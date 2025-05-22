@@ -700,7 +700,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Offset");
     ImGui::SameLine();
-    bool use_offsets = region->has_x_offset() && region->has_y_offset();
+    bool use_offsets = region->has_x_offset() || region->has_y_offset();
     ImGui::Checkbox("##OffsetsCheckbox", &use_offsets);
     if (use_offsets) {
       ImGui::Indent();
@@ -728,7 +728,8 @@ class ScenarioEditorScreen : public UiScreen {
                        DrawFn&& draw_profile_fn) {
     ImGui::IdGuard cid(id);
 
-    ImGui::TextFmt("Explicit {} selection order", absl::AsciiStrToLower(type_name));
+    std::string lower_type_name = absl::AsciiStrToLower(type_name);
+    ImGui::TextFmt("Explicit {} selection order", lower_type_name);
     bool use_order = order_list->size() > 0;
     ImGui::SameLine();
     ImGui::Checkbox("##UseOrder", &use_order);
@@ -774,7 +775,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Unindent();
     }
 
-    if (ImGui::Button("Add")) {
+    if (ImGui::Button(std::format("Add {}", lower_type_name).c_str())) {
       profile_list->Add();
     }
   }
@@ -795,7 +796,7 @@ class ScenarioEditorScreen : public UiScreen {
       if (!is_point && value <= 0) {
         value = 50;
       }
-      ImGui::InputFloat("##PercentValue", &value, 5, 10, "%.0f");
+      ImGui::InputFloat("##PercentValue", &value, 1, 5, "%.0f");
 
       value /= 100.0;
       if (is_x) {
@@ -809,7 +810,7 @@ class ScenarioEditorScreen : public UiScreen {
       if (!is_point && value <= 0) {
         value = 50;
       }
-      ImGui::InputFloat("##AbsoluteValue", &value, 10, 20, "%.0f");
+      ImGui::InputFloat("##AbsoluteValue", &value, 1, 5, "%.0f");
       length->set_value(value);
     }
 

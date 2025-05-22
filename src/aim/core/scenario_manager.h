@@ -48,6 +48,8 @@ class ScenarioManager {
   bool DeleteScenario(const ResourceName& name);
   bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name);
 
+  void OpenFile(const ResourceName& name);
+
  private:
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id, int depth);
   std::optional<ScenarioItem> GetScenarioNoReferenceFollow(const std::string& scenario_id);

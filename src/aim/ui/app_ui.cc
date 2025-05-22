@@ -257,9 +257,6 @@ class AppUiImpl : public AppUi {
     if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
       screen_to_show_ = CreateThemeEditorScreen(app_);
     }
-    if (ImGui::Selectable("Scenario Editor", app_screen_ == AppScreen::SCENARIO_EDITOR)) {
-      screen_to_show_ = CreateScenarioEditorScreen(current_scenario_, app_);
-    }
 
     // ImGui::SetCursorPosY(screen.height * 0.5);
     if (ImGui::Selectable("Exit", app_screen_ == AppScreen::EXIT)) {
@@ -320,6 +317,9 @@ class AppUiImpl : public AppUi {
     if (result.scenario_to_start.size() > 0) {
       current_scenario_ = app_->scenario_manager()->GetScenario(result.scenario_to_start);
       scenario_run_option_ = ScenarioRunOption::RUN;
+    }
+    if (result.scenario_to_edit.size() > 0) {
+      screen_to_show_ = CreateScenarioEditorScreen(result.scenario_to_edit, app_);
     }
   }
 

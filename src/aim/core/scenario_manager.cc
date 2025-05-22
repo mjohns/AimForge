@@ -1,6 +1,10 @@
 #include "scenario_manager.h"
 
 #include <absl/strings/strip.h>
+#ifdef _WIN32
+#include <Windows.h>
+#include <shellapi.h>
+#endif
 
 #include <memory>
 #include <vector>
@@ -179,6 +183,15 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
   }
   std::filesystem::rename(*old_path, *new_path);
   return true;
+}
+
+void ScenarioManager::OpenFile(const ResourceName& name) {
+  auto maybe_path = GetScenarioPath(fs_, name);
+  if (maybe_path.has_value()) {
+    // #ifdef _WIN32
+    //auto rc = ShellExecuteW(NULL, L"explore", maybe_path->c_str(), NULL, NULL, SW_SHOWNORMAL);
+    // #endif
+  }
 }
 
 }  // namespace aim
