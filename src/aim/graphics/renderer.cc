@@ -25,6 +25,11 @@ struct ProgressBarUniform {
   float progress = 0.0;
 };
 
+struct ProgressBar {
+  glm::mat4 transform;
+  float progress;
+};
+
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
   return a + (mix_percent * (b - a));
 }
@@ -634,30 +639,31 @@ class RendererImpl : public Renderer {
                    const Theme& theme,
                    const std::vector<Target>& targets,
                    RenderContext* ctx) {
+    /*
+  glm::mat4 transform(1.0f);
+  transform = glm::translate(transform, glm::vec3(0, -20, 4));
+  transform = glm::scale(transform, glm::vec3(10, 2, 1));
+  transform = view_projection * transform;
+  DrawProgressBar(transform, glm::vec4(1, 0, 0, 1), glm::vec4(0, 1, 0, 0.1), 0.3, ctx);
+  */
 
-      /*
-    glm::mat4 transform(1.0f);
-    transform = glm::translate(transform, glm::vec3(0, -20, 4));
-    transform = glm::scale(transform, glm::vec3(10, 2, 1));
-    transform = view_projection * transform;
-    DrawProgressBar(transform, glm::vec4(1, 0, 0, 1), glm::vec4(0, 1, 0, 0.1), 0.3, ctx);
-    */
-
-    bool has_spheres = false;
+    bool should_draw = false;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
-        has_spheres = true;
+        should_draw = true;
       }
     }
-    if (!has_spheres) {
+    if (!should_draw) {
       return;
     }
+
     glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
     glm::vec3 ghost_target_color =
         theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
 
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
 
+    std::vector<ProgressBar> progress_bars;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
         glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;
@@ -675,8 +681,31 @@ class RendererImpl : public Renderer {
               view_projection, c.position + c.up * (c.height * -0.5f), target.radius, color, ctx);
         } else {
           DrawSphere(view_projection, target.position, target.radius, color, ctx);
+          if (target.draw_health_bar && target.health_seconds > 0) {
+            float width = 6;
+            float height = 1.5;
+            glm::vec3 health_bar_center =
+                target.position + glm::vec3(0, 0, 1) * (0.5f + target.radius + height / 2.0f);
+
+            auto& progress_bar = progress_bars.emplace_back(glm::mat4(1.0f));
+            auto& transform = progress_bar.transform;
+            transform = glm::translate(transform, health_bar_center);
+            transform = glm::scale(transform, glm::vec3(width, 1, height));
+            transform = view_projection * transform;
+
+            progress_bar.progress = (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
+                                    target.health_seconds;
+          }
         }
       }
+    }
+
+    for (auto& bar : progress_bars) {
+      DrawProgressBar(bar.transform,
+                      glm::vec4(0.3, 0.3, 0.3, 1),
+                      glm::vec4(0.8, 0.8, 0.8, 0.8),
+                      bar.progress,
+                      ctx);
     }
   }
 
