@@ -7,6 +7,7 @@
 #include <functional>
 #include <optional>
 
+#include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
@@ -155,9 +156,11 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Button("Play")) {
       start_scenario_ = true;
     }
-    if (ImGui::Button("Error")) {
-      SetErrorMessage("Simulated error!");
+    ImGui::SameLine();
+    if (ImGui::Button("View Json")) {
+      SetErrorMessage(MessageToJson(def_, 6));
     }
+
     {
       ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {

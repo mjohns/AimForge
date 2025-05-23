@@ -36,6 +36,20 @@ bool WriteStringToFile(const std::filesystem::path& path, const std::string& con
   return true;
 }
 
+std::string MessageToJson(const google::protobuf::Message& message, int indent) {
+  std::string json_string;
+  google::protobuf::json::PrintOptions opts;
+  opts.add_whitespace = true;
+  opts.unquote_int64_if_possible = true;
+  auto status = google::protobuf::util::MessageToJsonString(message, &json_string, opts);
+  if (!status.ok()) {
+    return "";
+  }
+  nlohmann::json json_data = nlohmann::json::parse(json_string);
+  std::string formatted_json = json_data.dump(indent, ' ', true);
+  return formatted_json;
+}
+
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
                             const google::protobuf::Message& message) {
   std::string json_string;
