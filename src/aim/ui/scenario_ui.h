@@ -12,6 +12,7 @@ namespace aim {
 struct ScenarioBrowserResult {
   std::string scenario_to_start;
   std::string scenario_to_edit;
+  std::string scenario_to_edit_copy;
   bool reload_scenarios = false;
 };
 

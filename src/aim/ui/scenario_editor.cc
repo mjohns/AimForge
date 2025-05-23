@@ -95,11 +95,9 @@ void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
 
 class ScenarioEditorScreen : public UiScreen {
  public:
-  explicit ScenarioEditorScreen(const std::optional<ScenarioItem>& initial_scenario,
-                                Application* app)
+  explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application* app)
       : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
     projection_ = GetPerspectiveTransformation(app_->screen_info());
-
     auto themes = app_->settings_manager()->ListThemes();
     if (themes.size() > 0) {
       theme_ = app_->settings_manager()->GetTheme(themes[0]);
@@ -109,12 +107,19 @@ class ScenarioEditorScreen : public UiScreen {
     settings_ = app_->settings_manager()->GetCurrentSettings();
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app->file_system()->GetBundleNames();
+
+    auto initial_scenario = app_->scenario_manager()->GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->def;
-      original_name_ = initial_scenario->name;
       name_ = initial_scenario->name;
-      settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(name_.full_name());
-      theme_ = app_->settings_manager()->GetCurrentTheme();
+      if (opts.is_new_copy) {
+        std::string final_name = MakeUniqueName(
+            name_.relative_name() + " Copy",
+            app_->scenario_manager()->GetAllRelativeNamesInBundle(name_.bundle_name()));
+        *name_.mutable_relative_name() = final_name;
+      } else {
+        original_name_ = initial_scenario->name;
+      }
     }
   }
 
@@ -210,7 +215,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     auto& mgr = *app_->scenario_manager();
 
-    bool is_new_file = !original_name_.has_value() || *original_name_ != name_;
+    bool is_new_file = !original_name_.has_value() || original_name_->full_name() != name_.full_name();
     if (is_new_file) {
       auto existing_scenario_with_name = mgr.GetScenario(name_.full_name());
       if (existing_scenario_with_name.has_value()) {
@@ -1217,20 +1222,9 @@ class ScenarioEditorScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(Application* app) {
-  std::optional<ScenarioItem> scenario;
-  return std::make_unique<ScenarioEditorScreen>(scenario, app);
-}
-
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const std::string& scenario_id,
+std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const ScenarioEditorOptions& options,
                                                      Application* app) {
-  return std::make_unique<ScenarioEditorScreen>(app->scenario_manager()->GetScenario(scenario_id),
-                                                app);
-}
-
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const std::optional<ScenarioItem>& scenario,
-                                                     Application* app) {
-  return std::make_unique<ScenarioEditorScreen>(scenario, app);
+  return std::make_unique<ScenarioEditorScreen>(options, app);
 }
 
 }  // namespace aim

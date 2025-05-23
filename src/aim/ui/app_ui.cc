@@ -77,11 +77,10 @@ class AppUiImpl : public AppUi {
               }
             }
             if (nav_event.type == NavigationEventType::EDIT_SCENARIO) {
-              auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
-              if (maybe_scenario.has_value()) {
-                screen_to_show_ = CreateScenarioEditorScreen(*maybe_scenario, app_);
-                continue;
-              }
+              ScenarioEditorOptions opts;
+              opts.scenario_id = nav_event.scenario_id;
+              screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
+              continue;
             }
             if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
               if (HandlePlaylistNext()) {
@@ -148,7 +147,9 @@ class AppUiImpl : public AppUi {
       }
       if (KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
         if (current_scenario_.has_value()) {
-          screen_to_show_ = CreateScenarioEditorScreen(current_scenario_, app_);
+          ScenarioEditorOptions opts;
+          opts.scenario_id = current_scenario_->id();
+          screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
         }
       }
       if (event.key.key == SDLK_ESCAPE) {
@@ -343,7 +344,15 @@ class AppUiImpl : public AppUi {
       scenario_run_option_ = ScenarioRunOption::RUN;
     }
     if (result.scenario_to_edit.size() > 0) {
-      screen_to_show_ = CreateScenarioEditorScreen(result.scenario_to_edit, app_);
+      ScenarioEditorOptions opts;
+      opts.scenario_id = result.scenario_to_edit;
+      screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
+    }
+    if (result.scenario_to_edit_copy.size() > 0) {
+      ScenarioEditorOptions opts;
+      opts.scenario_id = result.scenario_to_edit_copy;
+      opts.is_new_copy = true;
+      screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
     }
     if (result.reload_scenarios) {
       app_->scenario_manager()->LoadScenariosFromDisk();

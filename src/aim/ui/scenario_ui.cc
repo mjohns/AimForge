@@ -121,6 +121,9 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       if (ImGui::Selectable("Edit")) {
         result->scenario_to_edit = scenario.id();
       }
+      if (ImGui::Selectable("Edit copy")) {
+        result->scenario_to_edit_copy = scenario.id();
+      }
       if (ImGui::Selectable("Copy")) {
         CopyScenario(scenario);
         result->reload_scenarios = true;

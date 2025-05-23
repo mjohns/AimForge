@@ -33,6 +33,7 @@ class ScenarioManager {
   explicit ScenarioManager(FileSystem* fs);
 
   void LoadScenariosFromDisk();
+  std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);
 
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id);
 
