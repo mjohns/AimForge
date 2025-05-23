@@ -19,6 +19,12 @@ struct TexScaleAndTransform {
   glm::mat4 transform{};
 };
 
+struct ProgressBarUniform {
+  glm::vec4 left_color{};
+  glm::vec4 right_color{};
+  float progress = 0.0;
+};
+
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
   return a + (mix_percent * (b - a));
 }
@@ -137,6 +143,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, texture_quad_pipeline_);
       texture_quad_pipeline_ = nullptr;
     }
+    if (progress_bar_pipeline_ != nullptr) {
+      SDL_ReleaseGPUGraphicsPipeline(device_, progress_bar_pipeline_);
+      progress_bar_pipeline_ = nullptr;
+    }
     if (quad_vertex_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, quad_vertex_buffer_);
       quad_vertex_buffer_ = nullptr;
@@ -185,6 +195,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUShader(device_, texture_fragment_shader_);
       texture_fragment_shader_ = nullptr;
     }
+    if (progress_bar_fragment_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, progress_bar_fragment_shader_);
+      progress_bar_fragment_shader_ = nullptr;
+    }
   }
 
   bool Initialize(const std::filesystem::path& shader_dir) {
@@ -194,6 +208,8 @@ class RendererImpl : public Renderer {
         LoadShader(device_, shader_dir, "solid_color.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
     texture_fragment_shader_ =
         LoadShader(device_, shader_dir, "texture.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1, 1);
+    progress_bar_fragment_shader_ =
+        LoadShader(device_, shader_dir, "progress_bar.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
     position_and_tex_coord_vertex_shader_ = LoadShader(
         device_, shader_dir, "position_and_texture_coord.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
 
@@ -237,6 +253,9 @@ class RendererImpl : public Renderer {
       return false;
     }
     if (!CreateTextureQuadPipeline()) {
+      return false;
+    }
+    if (!CreateTextureQuadPipeline(/*is_progress_bar=*/true)) {
       return false;
     }
 
@@ -615,6 +634,15 @@ class RendererImpl : public Renderer {
                    const Theme& theme,
                    const std::vector<Target>& targets,
                    RenderContext* ctx) {
+
+      /*
+    glm::mat4 transform(1.0f);
+    transform = glm::translate(transform, glm::vec3(0, -20, 4));
+    transform = glm::scale(transform, glm::vec3(10, 2, 1));
+    transform = view_projection * transform;
+    DrawProgressBar(transform, glm::vec4(1, 0, 0, 1), glm::vec4(0, 1, 0, 0.1), 0.3, ctx);
+    */
+
     bool has_spheres = false;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
@@ -702,6 +730,38 @@ class RendererImpl : public Renderer {
     SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
   }
 
+  void DrawProgressBar(const glm::mat4& transform,
+                       const glm::vec4& left_color,
+                       const glm::vec4& right_color,
+                       float progress,
+                       RenderContext* ctx) {
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, progress_bar_pipeline_);
+
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = quad_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+    TexScaleAndTransform tex_scale_and_transform{};
+    tex_scale_and_transform.tex_scale.x = 1;
+    tex_scale_and_transform.tex_scale.y = 1;
+    tex_scale_and_transform.transform = transform;
+
+    SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                 0,
+                                 &tex_scale_and_transform.tex_scale[0],
+                                 sizeof(TexScaleAndTransform));
+
+    ProgressBarUniform uniform;
+    uniform.left_color = left_color;
+    uniform.right_color = right_color;
+    uniform.progress = progress;
+    SDL_PushGPUFragmentUniformData(
+        ctx->command_buffer, 0, &uniform.left_color[0], sizeof(ProgressBarUniform));
+
+    SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
+  }
+
   bool CreateSpherePipeline() {
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
         CreateDefaultPipelineInfo(solid_color_vertex_shader_, solid_color_fragment_shader_);
@@ -776,7 +836,59 @@ class RendererImpl : public Renderer {
     return true;
   }
 
-  bool CreateTextureQuadPipeline() {
+  bool CreateTextureQuadPipeline(bool is_progress_bar = false) {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info = CreateDefaultPipelineInfo(
+        position_and_tex_coord_vertex_shader_,
+        is_progress_bar ? progress_bar_fragment_shader_ : texture_fragment_shader_);
+
+    SDL_GPUColorTargetDescription color_target_desc[1];
+    color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    color_target_desc[0].blend_state = DefaultBlendState();
+    pipeline_info.target_info.color_target_descriptions = color_target_desc;
+
+    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+    vertex_buffer_descriptions[0].slot = 0;
+    vertex_buffer_descriptions[0].pitch = sizeof(VertexAndTexCoord);
+    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+    vertex_buffer_descriptions[0].instance_step_rate = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+    pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
+
+    SDL_GPUVertexAttribute vertex_attributes[2];
+    vertex_attributes[0].location = 0;
+    vertex_attributes[0].buffer_slot = 0;
+    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+    vertex_attributes[0].offset = 0;
+
+    vertex_attributes[1].location = 1;
+    vertex_attributes[1].buffer_slot = 0;
+    vertex_attributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
+    vertex_attributes[1].offset = sizeof(float) * 3;
+
+    pipeline_info.vertex_input_state.num_vertex_attributes = 2;
+    pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
+
+    if (is_progress_bar) {
+      progress_bar_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+      if (progress_bar_pipeline_ == nullptr) {
+        Logger::get()->error("ERROR: ProgressBarPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+                             SDL_GetError());
+        return false;
+      }
+    } else {
+      texture_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+      if (texture_quad_pipeline_ == nullptr) {
+        Logger::get()->error("ERROR: TextureQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+                             SDL_GetError());
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool CreateProgressBarQuadPipeline() {
     SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
         CreateDefaultPipelineInfo(position_and_tex_coord_vertex_shader_, texture_fragment_shader_);
 
@@ -819,7 +931,8 @@ class RendererImpl : public Renderer {
   }
 
   SDL_GPUGraphicsPipelineCreateInfo CreateDefaultPipelineInfo(SDL_GPUShader* vertex_shader,
-                                                              SDL_GPUShader* fragment_shader) {
+                                                              SDL_GPUShader* fragment_shader,
+                                                              bool use_depth = true) {
     SDL_GPUGraphicsPipelineTargetInfo target_info = {};
     target_info.num_color_targets = 1;
     target_info.has_depth_stencil_target = true;
@@ -934,9 +1047,11 @@ class RendererImpl : public Renderer {
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
   SDL_GPUShader* texture_fragment_shader_ = nullptr;
+  SDL_GPUShader* progress_bar_fragment_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
   SDL_GPUGraphicsPipeline* solid_quad_pipeline_;
   SDL_GPUGraphicsPipeline* texture_quad_pipeline_;
+  SDL_GPUGraphicsPipeline* progress_bar_pipeline_;
   TextureManager texture_manager_;
   SDL_GPUDevice* device_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
