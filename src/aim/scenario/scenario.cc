@@ -249,6 +249,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
       app_->renderer()->DrawScenario(projection_,
                                      def_.room(),
                                      theme_,
+                                     settings_.health_bar(),
                                      target_manager_.GetTargets(),
                                      look_at_.transform,
                                      &ctx,
@@ -460,6 +461,7 @@ NavigationEvent Scenario::ResumeInternal() {
       app_->renderer()->DrawScenario(projection_,
                                      def_.room(),
                                      theme_,
+                                     settings_.health_bar(),
                                      target_manager_.GetTargets(),
                                      look_at_.transform,
                                      &ctx,
@@ -643,7 +645,7 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     k.end_radius = profile.target_radius_at_kill();
     target.radius_at_kill = k;
   }
-  target.notify_at_health_seconds = 0.12;
+  // target.notify_at_health_seconds = 0.12;
   target.speed =
       GetJitteredValue(profile.speed(), profile.speed_jitter(), app_->random_generator());
   target.health_seconds = GetJitteredValue(

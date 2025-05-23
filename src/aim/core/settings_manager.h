@@ -28,6 +28,7 @@ bool IsMappableKeyUpEvent(const SDL_Event& event);
 bool IsEscapeKeyDown(const SDL_Event& event);
 
 Theme GetDefaultTheme();
+HealthBarAppearance GetDefaultHealthBarAppearance();
 
 struct ThemeCacheEntry {
   Theme theme;
@@ -99,9 +100,10 @@ struct SettingsUpdater {
   std::string metronome_bpm;
   std::string crosshair_size;
   std::string crosshair_name;
-  std::string dpi;
+  float dpi;
   bool disable_click_to_start = false;
   bool auto_hold_tracking = false;
+  HealthBarSettings health_bar;
   Keybinds keybinds;
 
  private:

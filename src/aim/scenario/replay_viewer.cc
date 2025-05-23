@@ -20,8 +20,9 @@ bool CompareEventsByTime(const ReplayEvent& lhs, const ReplayEvent& rhs) {
 
 NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
   Theme theme = app->settings_manager()->GetCurrentTheme();
+  Settings settings = app->settings_manager()->GetCurrentSettings();
   Crosshair crosshair = app->settings_manager()->GetCurrentCrosshair();
-  float crosshair_size = app->settings_manager()->GetCurrentSettings().crosshair_size();
+  float crosshair_size = settings.crosshair_size();
 
   ScreenInfo screen = app->screen_info();
   glm::mat4 projection = GetPerspectiveTransformation(screen);
@@ -127,6 +128,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
       app->renderer()->DrawScenario(projection,
                                     replay.room(),
                                     theme,
+                                    settings.health_bar(),
                                     target_manager.GetTargets(),
                                     look_at.transform,
                                     &ctx,

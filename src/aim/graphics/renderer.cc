@@ -25,9 +25,9 @@ struct ProgressBarUniform {
   float progress = 0.0;
 };
 
-struct ProgressBar {
+struct HealthBar {
   glm::mat4 transform;
-  float progress;
+  float health_percent;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -128,6 +128,7 @@ class RendererImpl : public Renderer {
                SDL_Window* sdl_window)
       : texture_manager_(texture_dirs, device), device_(device), sdl_window_(sdl_window) {
     SDL_GetWindowSizeInPixels(sdl_window_, &viewport_width_, &viewport_height_);
+    msaa_sample_count_ = GetMaxMsaaSampleCount();
   }
 
   ~RendererImpl() override {
@@ -287,6 +288,7 @@ class RendererImpl : public Renderer {
   void DrawScenario(const glm::mat4& projection,
                     const Room& room,
                     const Theme& theme,
+                    const HealthBarSettings& health_bar,
                     const std::vector<Target>& targets,
                     const glm::mat4& view,
                     RenderContext* ctx,
@@ -337,7 +339,7 @@ class RendererImpl : public Renderer {
     times->render_room_end = stopwatch.GetElapsedMicros();
 
     times->render_targets_start = stopwatch.GetElapsedMicros();
-    DrawTargets(view_projection, theme, targets, ctx);
+    DrawTargets(view_projection, theme, health_bar, targets, ctx);
     times->render_targets_end = stopwatch.GetElapsedMicros();
 
     SDL_EndGPURenderPass(ctx->render_pass);
@@ -637,16 +639,9 @@ class RendererImpl : public Renderer {
 
   void DrawTargets(const glm::mat4& view_projection,
                    const Theme& theme,
+                   const HealthBarSettings& health_bar_settings,
                    const std::vector<Target>& targets,
                    RenderContext* ctx) {
-    /*
-  glm::mat4 transform(1.0f);
-  transform = glm::translate(transform, glm::vec3(0, -20, 4));
-  transform = glm::scale(transform, glm::vec3(10, 2, 1));
-  transform = view_projection * transform;
-  DrawProgressBar(transform, glm::vec4(1, 0, 0, 1), glm::vec4(0, 1, 0, 0.1), 0.3, ctx);
-  */
-
     bool should_draw = false;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
@@ -663,7 +658,7 @@ class RendererImpl : public Renderer {
 
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
 
-    std::vector<ProgressBar> progress_bars;
+    std::vector<HealthBar> health_bars;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
         glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;
@@ -681,31 +676,43 @@ class RendererImpl : public Renderer {
               view_projection, c.position + c.up * (c.height * -0.5f), target.radius, color, ctx);
         } else {
           DrawSphere(view_projection, target.position, target.radius, color, ctx);
-          if (target.draw_health_bar && target.health_seconds > 0) {
-            float width = 6;
-            float height = 1.5;
-            glm::vec3 health_bar_center =
-                target.position + glm::vec3(0, 0, 1) * (0.5f + target.radius + height / 2.0f);
+          if (health_bar_settings.show() && target.health_seconds > 0) {
+            bool is_damaged = target.hit_timer.GetElapsedMicros() > 0;
+            if (!health_bar_settings.only_damaged() || is_damaged) {
+              float width = FirstGreaterThanZero(health_bar_settings.width(), 6);
+              float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
+              float height_above_target =
+                  FirstGreaterThanZero(health_bar_settings.height_above_target(), 0.6);
+              glm::vec3 health_bar_center =
+                  target.position +
+                  glm::vec3(0, 0, 1) * (height_above_target + target.radius + height / 2.0f);
 
-            auto& progress_bar = progress_bars.emplace_back(glm::mat4(1.0f));
-            auto& transform = progress_bar.transform;
-            transform = glm::translate(transform, health_bar_center);
-            transform = glm::scale(transform, glm::vec3(width, 1, height));
-            transform = view_projection * transform;
+              auto& health_bar = health_bars.emplace_back(glm::mat4(1.0f));
+              auto& transform = health_bar.transform;
+              transform = glm::translate(transform, health_bar_center);
+              transform = glm::scale(transform, glm::vec3(width, 1, height));
+              transform = view_projection * transform;
 
-            progress_bar.progress = (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
-                                    target.health_seconds;
+              health_bar.health_percent =
+                  (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
+                  target.health_seconds;
+            }
           }
         }
       }
     }
 
-    for (auto& bar : progress_bars) {
-      DrawProgressBar(bar.transform,
-                      glm::vec4(0.3, 0.3, 0.3, 1),
-                      glm::vec4(0.8, 0.8, 0.8, 0.8),
-                      bar.progress,
-                      ctx);
+    for (auto& bar : health_bars) {
+      auto& h = theme.health_bar();
+      auto left = ToVec3(h.health_color());
+      auto right = ToVec3(h.background_color());
+      DrawProgressBar(
+          bar.transform,
+          glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f),
+          glm::vec4(
+              right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f),
+          bar.health_percent,
+          ctx);
     }
   }
 
@@ -1072,6 +1079,17 @@ class RendererImpl : public Renderer {
     return transfer_buffer;
   }
 
+  SDL_GPUSampleCount GetMaxMsaaSampleCount() {
+    SDL_GPUTextureFormat format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    for (auto count : {SDL_GPU_SAMPLECOUNT_8, SDL_GPU_SAMPLECOUNT_4, SDL_GPU_SAMPLECOUNT_2}) {
+      if (SDL_GPUTextureSupportsSampleCount(device_, format, count)) {
+        return count;
+      }
+    }
+    Logger::get()->warn("MSAA is not supported");
+    return SDL_GPU_SAMPLECOUNT_2;
+  }
+
   SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
@@ -1094,7 +1112,7 @@ class RendererImpl : public Renderer {
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
   SDL_GPUTexture* msaa_resolve_texture_ = nullptr;
 
-  const SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_4;
+  SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_2;
 
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;

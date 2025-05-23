@@ -58,6 +58,9 @@ extern CrosshairDefaultTypeInternal _Crosshair_default_instance_;
 class DotCrosshair;
 struct DotCrosshairDefaultTypeInternal;
 extern DotCrosshairDefaultTypeInternal _DotCrosshair_default_instance_;
+class HealthBarSettings;
+struct HealthBarSettingsDefaultTypeInternal;
+extern HealthBarSettingsDefaultTypeInternal _HealthBarSettings_default_instance_;
 class KeyMapping;
 struct KeyMappingDefaultTypeInternal;
 extern KeyMappingDefaultTypeInternal _KeyMapping_default_instance_;
@@ -84,288 +87,6 @@ namespace aim {
 // ===================================================================
 
 
-// -------------------------------------------------------------------
-
-class ScenarioSettings final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.ScenarioSettings) */ {
- public:
-  inline ScenarioSettings() : ScenarioSettings(nullptr) {}
-  ~ScenarioSettings() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(ScenarioSettings* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(ScenarioSettings));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR ScenarioSettings(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline ScenarioSettings(const ScenarioSettings& from) : ScenarioSettings(nullptr, from) {}
-  inline ScenarioSettings(ScenarioSettings&& from) noexcept
-      : ScenarioSettings(nullptr, std::move(from)) {}
-  inline ScenarioSettings& operator=(const ScenarioSettings& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ScenarioSettings& operator=(ScenarioSettings&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const ScenarioSettings& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const ScenarioSettings* internal_default_instance() {
-    return reinterpret_cast<const ScenarioSettings*>(
-        &_ScenarioSettings_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 4;
-  friend void swap(ScenarioSettings& a, ScenarioSettings& b) { a.Swap(&b); }
-  inline void Swap(ScenarioSettings* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(ScenarioSettings* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  ScenarioSettings* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<ScenarioSettings>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const ScenarioSettings& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const ScenarioSettings& from) { ScenarioSettings::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(ScenarioSettings* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.ScenarioSettings"; }
-
- protected:
-  explicit ScenarioSettings(::google::protobuf::Arena* arena);
-  ScenarioSettings(::google::protobuf::Arena* arena, const ScenarioSettings& from);
-  ScenarioSettings(::google::protobuf::Arena* arena, ScenarioSettings&& from) noexcept
-      : ScenarioSettings(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kThemeNameFieldNumber = 2,
-    kCrosshairNameFieldNumber = 5,
-    kCmPer360FieldNumber = 1,
-    kMetronomeBpmFieldNumber = 3,
-    kCrosshairSizeFieldNumber = 4,
-    kCmPer360JitterFieldNumber = 6,
-    kAutoHoldTrackingFieldNumber = 7,
-  };
-  // string theme_name = 2;
-  bool has_theme_name() const;
-  void clear_theme_name() ;
-  const std::string& theme_name() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_theme_name(Arg_&& arg, Args_... args);
-  std::string* mutable_theme_name();
-  PROTOBUF_NODISCARD std::string* release_theme_name();
-  void set_allocated_theme_name(std::string* value);
-
-  private:
-  const std::string& _internal_theme_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_theme_name(
-      const std::string& value);
-  std::string* _internal_mutable_theme_name();
-
-  public:
-  // string crosshair_name = 5;
-  bool has_crosshair_name() const;
-  void clear_crosshair_name() ;
-  const std::string& crosshair_name() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_crosshair_name(Arg_&& arg, Args_... args);
-  std::string* mutable_crosshair_name();
-  PROTOBUF_NODISCARD std::string* release_crosshair_name();
-  void set_allocated_crosshair_name(std::string* value);
-
-  private:
-  const std::string& _internal_crosshair_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_crosshair_name(
-      const std::string& value);
-  std::string* _internal_mutable_crosshair_name();
-
-  public:
-  // float cm_per_360 = 1;
-  bool has_cm_per_360() const;
-  void clear_cm_per_360() ;
-  float cm_per_360() const;
-  void set_cm_per_360(float value);
-
-  private:
-  float _internal_cm_per_360() const;
-  void _internal_set_cm_per_360(float value);
-
-  public:
-  // float metronome_bpm = 3;
-  bool has_metronome_bpm() const;
-  void clear_metronome_bpm() ;
-  float metronome_bpm() const;
-  void set_metronome_bpm(float value);
-
-  private:
-  float _internal_metronome_bpm() const;
-  void _internal_set_metronome_bpm(float value);
-
-  public:
-  // float crosshair_size = 4;
-  bool has_crosshair_size() const;
-  void clear_crosshair_size() ;
-  float crosshair_size() const;
-  void set_crosshair_size(float value);
-
-  private:
-  float _internal_crosshair_size() const;
-  void _internal_set_crosshair_size(float value);
-
-  public:
-  // float cm_per_360_jitter = 6;
-  bool has_cm_per_360_jitter() const;
-  void clear_cm_per_360_jitter() ;
-  float cm_per_360_jitter() const;
-  void set_cm_per_360_jitter(float value);
-
-  private:
-  float _internal_cm_per_360_jitter() const;
-  void _internal_set_cm_per_360_jitter(float value);
-
-  public:
-  // bool auto_hold_tracking = 7;
-  bool has_auto_hold_tracking() const;
-  void clear_auto_hold_tracking() ;
-  bool auto_hold_tracking() const;
-  void set_auto_hold_tracking(bool value);
-
-  private:
-  bool _internal_auto_hold_tracking() const;
-  void _internal_set_auto_hold_tracking(bool value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.ScenarioSettings)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      3, 7, 0,
-      53, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const ScenarioSettings& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::internal::ArenaStringPtr theme_name_;
-    ::google::protobuf::internal::ArenaStringPtr crosshair_name_;
-    float cm_per_360_;
-    float metronome_bpm_;
-    float crosshair_size_;
-    float cm_per_360_jitter_;
-    bool auto_hold_tracking_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_settings_2eproto;
-};
 // -------------------------------------------------------------------
 
 class PlusCrosshair final : public ::google::protobuf::Message
@@ -671,7 +392,7 @@ class KeyMapping final : public ::google::protobuf::Message
     return reinterpret_cast<const KeyMapping*>(
         &_KeyMapping_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 6;
   friend void swap(KeyMapping& a, KeyMapping& b) { a.Swap(&b); }
   inline void Swap(KeyMapping* other) {
     if (other == this) return;
@@ -860,6 +581,250 @@ class KeyMapping final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr mapping2_;
     ::google::protobuf::internal::ArenaStringPtr mapping3_;
     ::google::protobuf::internal::ArenaStringPtr mapping4_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_settings_2eproto;
+};
+// -------------------------------------------------------------------
+
+class HealthBarSettings final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.HealthBarSettings) */ {
+ public:
+  inline HealthBarSettings() : HealthBarSettings(nullptr) {}
+  ~HealthBarSettings() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(HealthBarSettings* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(HealthBarSettings));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR HealthBarSettings(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline HealthBarSettings(const HealthBarSettings& from) : HealthBarSettings(nullptr, from) {}
+  inline HealthBarSettings(HealthBarSettings&& from) noexcept
+      : HealthBarSettings(nullptr, std::move(from)) {}
+  inline HealthBarSettings& operator=(const HealthBarSettings& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline HealthBarSettings& operator=(HealthBarSettings&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const HealthBarSettings& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const HealthBarSettings* internal_default_instance() {
+    return reinterpret_cast<const HealthBarSettings*>(
+        &_HealthBarSettings_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(HealthBarSettings& a, HealthBarSettings& b) { a.Swap(&b); }
+  inline void Swap(HealthBarSettings* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(HealthBarSettings* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  HealthBarSettings* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<HealthBarSettings>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const HealthBarSettings& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const HealthBarSettings& from) { HealthBarSettings::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(HealthBarSettings* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.HealthBarSettings"; }
+
+ protected:
+  explicit HealthBarSettings(::google::protobuf::Arena* arena);
+  HealthBarSettings(::google::protobuf::Arena* arena, const HealthBarSettings& from);
+  HealthBarSettings(::google::protobuf::Arena* arena, HealthBarSettings&& from) noexcept
+      : HealthBarSettings(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kShowFieldNumber = 1,
+    kOnlyDamagedFieldNumber = 2,
+    kHeightFieldNumber = 3,
+    kWidthFieldNumber = 4,
+    kHeightAboveTargetFieldNumber = 5,
+  };
+  // bool show = 1;
+  bool has_show() const;
+  void clear_show() ;
+  bool show() const;
+  void set_show(bool value);
+
+  private:
+  bool _internal_show() const;
+  void _internal_set_show(bool value);
+
+  public:
+  // bool only_damaged = 2;
+  bool has_only_damaged() const;
+  void clear_only_damaged() ;
+  bool only_damaged() const;
+  void set_only_damaged(bool value);
+
+  private:
+  bool _internal_only_damaged() const;
+  void _internal_set_only_damaged(bool value);
+
+  public:
+  // float height = 3;
+  bool has_height() const;
+  void clear_height() ;
+  float height() const;
+  void set_height(float value);
+
+  private:
+  float _internal_height() const;
+  void _internal_set_height(float value);
+
+  public:
+  // float width = 4;
+  bool has_width() const;
+  void clear_width() ;
+  float width() const;
+  void set_width(float value);
+
+  private:
+  float _internal_width() const;
+  void _internal_set_width(float value);
+
+  public:
+  // float height_above_target = 5;
+  bool has_height_above_target() const;
+  void clear_height_above_target() ;
+  float height_above_target() const;
+  void set_height_above_target(float value);
+
+  private:
+  float _internal_height_above_target() const;
+  void _internal_set_height_above_target(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.HealthBarSettings)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 5, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const HealthBarSettings& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    bool show_;
+    bool only_damaged_;
+    float height_;
+    float width_;
+    float height_above_target_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1059,6 +1024,305 @@ class DotCrosshair final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class ScenarioSettings final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ScenarioSettings) */ {
+ public:
+  inline ScenarioSettings() : ScenarioSettings(nullptr) {}
+  ~ScenarioSettings() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ScenarioSettings* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ScenarioSettings));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ScenarioSettings(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline ScenarioSettings(const ScenarioSettings& from) : ScenarioSettings(nullptr, from) {}
+  inline ScenarioSettings(ScenarioSettings&& from) noexcept
+      : ScenarioSettings(nullptr, std::move(from)) {}
+  inline ScenarioSettings& operator=(const ScenarioSettings& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ScenarioSettings& operator=(ScenarioSettings&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ScenarioSettings& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ScenarioSettings* internal_default_instance() {
+    return reinterpret_cast<const ScenarioSettings*>(
+        &_ScenarioSettings_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 5;
+  friend void swap(ScenarioSettings& a, ScenarioSettings& b) { a.Swap(&b); }
+  inline void Swap(ScenarioSettings* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ScenarioSettings* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ScenarioSettings* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ScenarioSettings>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ScenarioSettings& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ScenarioSettings& from) { ScenarioSettings::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ScenarioSettings* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ScenarioSettings"; }
+
+ protected:
+  explicit ScenarioSettings(::google::protobuf::Arena* arena);
+  ScenarioSettings(::google::protobuf::Arena* arena, const ScenarioSettings& from);
+  ScenarioSettings(::google::protobuf::Arena* arena, ScenarioSettings&& from) noexcept
+      : ScenarioSettings(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kThemeNameFieldNumber = 2,
+    kCrosshairNameFieldNumber = 5,
+    kHealthBarFieldNumber = 8,
+    kCmPer360FieldNumber = 1,
+    kMetronomeBpmFieldNumber = 3,
+    kCrosshairSizeFieldNumber = 4,
+    kCmPer360JitterFieldNumber = 6,
+    kAutoHoldTrackingFieldNumber = 7,
+  };
+  // string theme_name = 2;
+  bool has_theme_name() const;
+  void clear_theme_name() ;
+  const std::string& theme_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_theme_name(Arg_&& arg, Args_... args);
+  std::string* mutable_theme_name();
+  PROTOBUF_NODISCARD std::string* release_theme_name();
+  void set_allocated_theme_name(std::string* value);
+
+  private:
+  const std::string& _internal_theme_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_theme_name(
+      const std::string& value);
+  std::string* _internal_mutable_theme_name();
+
+  public:
+  // string crosshair_name = 5;
+  bool has_crosshair_name() const;
+  void clear_crosshair_name() ;
+  const std::string& crosshair_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_crosshair_name(Arg_&& arg, Args_... args);
+  std::string* mutable_crosshair_name();
+  PROTOBUF_NODISCARD std::string* release_crosshair_name();
+  void set_allocated_crosshair_name(std::string* value);
+
+  private:
+  const std::string& _internal_crosshair_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_crosshair_name(
+      const std::string& value);
+  std::string* _internal_mutable_crosshair_name();
+
+  public:
+  // .aim.HealthBarSettings health_bar = 8;
+  bool has_health_bar() const;
+  void clear_health_bar() ;
+  const ::aim::HealthBarSettings& health_bar() const;
+  PROTOBUF_NODISCARD ::aim::HealthBarSettings* release_health_bar();
+  ::aim::HealthBarSettings* mutable_health_bar();
+  void set_allocated_health_bar(::aim::HealthBarSettings* value);
+  void unsafe_arena_set_allocated_health_bar(::aim::HealthBarSettings* value);
+  ::aim::HealthBarSettings* unsafe_arena_release_health_bar();
+
+  private:
+  const ::aim::HealthBarSettings& _internal_health_bar() const;
+  ::aim::HealthBarSettings* _internal_mutable_health_bar();
+
+  public:
+  // float cm_per_360 = 1;
+  bool has_cm_per_360() const;
+  void clear_cm_per_360() ;
+  float cm_per_360() const;
+  void set_cm_per_360(float value);
+
+  private:
+  float _internal_cm_per_360() const;
+  void _internal_set_cm_per_360(float value);
+
+  public:
+  // float metronome_bpm = 3;
+  bool has_metronome_bpm() const;
+  void clear_metronome_bpm() ;
+  float metronome_bpm() const;
+  void set_metronome_bpm(float value);
+
+  private:
+  float _internal_metronome_bpm() const;
+  void _internal_set_metronome_bpm(float value);
+
+  public:
+  // float crosshair_size = 4;
+  bool has_crosshair_size() const;
+  void clear_crosshair_size() ;
+  float crosshair_size() const;
+  void set_crosshair_size(float value);
+
+  private:
+  float _internal_crosshair_size() const;
+  void _internal_set_crosshair_size(float value);
+
+  public:
+  // float cm_per_360_jitter = 6;
+  bool has_cm_per_360_jitter() const;
+  void clear_cm_per_360_jitter() ;
+  float cm_per_360_jitter() const;
+  void set_cm_per_360_jitter(float value);
+
+  private:
+  float _internal_cm_per_360_jitter() const;
+  void _internal_set_cm_per_360_jitter(float value);
+
+  public:
+  // bool auto_hold_tracking = 7;
+  bool has_auto_hold_tracking() const;
+  void clear_auto_hold_tracking() ;
+  bool auto_hold_tracking() const;
+  void set_auto_hold_tracking(bool value);
+
+  private:
+  bool _internal_auto_hold_tracking() const;
+  void _internal_set_auto_hold_tracking(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.ScenarioSettings)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 8, 1,
+      61, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const ScenarioSettings& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr theme_name_;
+    ::google::protobuf::internal::ArenaStringPtr crosshair_name_;
+    ::aim::HealthBarSettings* health_bar_;
+    float cm_per_360_;
+    float metronome_bpm_;
+    float crosshair_size_;
+    float cm_per_360_jitter_;
+    bool auto_hold_tracking_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_settings_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Keybinds final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.Keybinds) */ {
  public:
@@ -1118,7 +1382,7 @@ class Keybinds final : public ::google::protobuf::Message
     return reinterpret_cast<const Keybinds*>(
         &_Keybinds_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 7;
   friend void swap(Keybinds& a, Keybinds& b) { a.Swap(&b); }
   inline void Swap(Keybinds* other) {
     if (other == this) return;
@@ -1672,7 +1936,7 @@ class Settings final : public ::google::protobuf::Message
     return reinterpret_cast<const Settings*>(
         &_Settings_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(Settings& a, Settings& b) { a.Swap(&b); }
   inline void Swap(Settings* other) {
     if (other == this) return;
@@ -1763,6 +2027,7 @@ class Settings final : public ::google::protobuf::Message
     kThemeNameFieldNumber = 3,
     kCurrentCrosshairNameFieldNumber = 6,
     kKeybindsFieldNumber = 9,
+    kHealthBarFieldNumber = 12,
     kDpiFieldNumber = 1,
     kCmPer360FieldNumber = 2,
     kMetronomeBpmFieldNumber = 4,
@@ -1835,6 +2100,21 @@ class Settings final : public ::google::protobuf::Message
   private:
   const ::aim::Keybinds& _internal_keybinds() const;
   ::aim::Keybinds* _internal_mutable_keybinds();
+
+  public:
+  // .aim.HealthBarSettings health_bar = 12;
+  bool has_health_bar() const;
+  void clear_health_bar() ;
+  const ::aim::HealthBarSettings& health_bar() const;
+  PROTOBUF_NODISCARD ::aim::HealthBarSettings* release_health_bar();
+  ::aim::HealthBarSettings* mutable_health_bar();
+  void set_allocated_health_bar(::aim::HealthBarSettings* value);
+  void unsafe_arena_set_allocated_health_bar(::aim::HealthBarSettings* value);
+  ::aim::HealthBarSettings* unsafe_arena_release_health_bar();
+
+  private:
+  const ::aim::HealthBarSettings& _internal_health_bar() const;
+  ::aim::HealthBarSettings* _internal_mutable_health_bar();
 
   public:
   // float dpi = 1;
@@ -1919,7 +2199,7 @@ class Settings final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 11, 2,
+      4, 12, 3,
       61, 2>
       _table_;
 
@@ -1943,6 +2223,7 @@ class Settings final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr theme_name_;
     ::google::protobuf::internal::ArenaStringPtr current_crosshair_name_;
     ::aim::Keybinds* keybinds_;
+    ::aim::HealthBarSettings* health_bar_;
     float dpi_;
     float cm_per_360_;
     float metronome_bpm_;
@@ -2386,17 +2667,161 @@ inline Crosshair::TypeCase Crosshair::type_case() const {
 }
 // -------------------------------------------------------------------
 
+// HealthBarSettings
+
+// bool show = 1;
+inline bool HealthBarSettings::has_show() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void HealthBarSettings::clear_show() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.show_ = false;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline bool HealthBarSettings::show() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.show)
+  return _internal_show();
+}
+inline void HealthBarSettings::set_show(bool value) {
+  _internal_set_show(value);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.show)
+}
+inline bool HealthBarSettings::_internal_show() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.show_;
+}
+inline void HealthBarSettings::_internal_set_show(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.show_ = value;
+}
+
+// bool only_damaged = 2;
+inline bool HealthBarSettings::has_only_damaged() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void HealthBarSettings::clear_only_damaged() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.only_damaged_ = false;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline bool HealthBarSettings::only_damaged() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.only_damaged)
+  return _internal_only_damaged();
+}
+inline void HealthBarSettings::set_only_damaged(bool value) {
+  _internal_set_only_damaged(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.only_damaged)
+}
+inline bool HealthBarSettings::_internal_only_damaged() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.only_damaged_;
+}
+inline void HealthBarSettings::_internal_set_only_damaged(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.only_damaged_ = value;
+}
+
+// float height = 3;
+inline bool HealthBarSettings::has_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void HealthBarSettings::clear_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float HealthBarSettings::height() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.height)
+  return _internal_height();
+}
+inline void HealthBarSettings::set_height(float value) {
+  _internal_set_height(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.height)
+}
+inline float HealthBarSettings::_internal_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.height_;
+}
+inline void HealthBarSettings::_internal_set_height(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_ = value;
+}
+
+// float width = 4;
+inline bool HealthBarSettings::has_width() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void HealthBarSettings::clear_width() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float HealthBarSettings::width() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.width)
+  return _internal_width();
+}
+inline void HealthBarSettings::set_width(float value) {
+  _internal_set_width(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.width)
+}
+inline float HealthBarSettings::_internal_width() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.width_;
+}
+inline void HealthBarSettings::_internal_set_width(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_ = value;
+}
+
+// float height_above_target = 5;
+inline bool HealthBarSettings::has_height_above_target() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void HealthBarSettings::clear_height_above_target() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_above_target_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float HealthBarSettings::height_above_target() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.height_above_target)
+  return _internal_height_above_target();
+}
+inline void HealthBarSettings::set_height_above_target(float value) {
+  _internal_set_height_above_target(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.height_above_target)
+}
+inline float HealthBarSettings::_internal_height_above_target() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.height_above_target_;
+}
+inline void HealthBarSettings::_internal_set_height_above_target(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.height_above_target_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // Settings
 
 // float dpi = 1;
 inline bool Settings::has_dpi() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void Settings::clear_dpi() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.dpi_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float Settings::dpi() const {
   // @@protoc_insertion_point(field_get:aim.Settings.dpi)
@@ -2404,7 +2829,7 @@ inline float Settings::dpi() const {
 }
 inline void Settings::set_dpi(float value) {
   _internal_set_dpi(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.Settings.dpi)
 }
 inline float Settings::_internal_dpi() const {
@@ -2418,13 +2843,13 @@ inline void Settings::_internal_set_dpi(float value) {
 
 // float cm_per_360 = 2;
 inline bool Settings::has_cm_per_360() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void Settings::clear_cm_per_360() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float Settings::cm_per_360() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360)
@@ -2432,7 +2857,7 @@ inline float Settings::cm_per_360() const {
 }
 inline void Settings::set_cm_per_360(float value) {
   _internal_set_cm_per_360(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360)
 }
 inline float Settings::_internal_cm_per_360() const {
@@ -2446,13 +2871,13 @@ inline void Settings::_internal_set_cm_per_360(float value) {
 
 // float cm_per_360_jitter = 11;
 inline bool Settings::has_cm_per_360_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
 inline void Settings::clear_cm_per_360_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000200u;
+  _impl_._has_bits_[0] &= ~0x00000400u;
 }
 inline float Settings::cm_per_360_jitter() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360_jitter)
@@ -2460,7 +2885,7 @@ inline float Settings::cm_per_360_jitter() const {
 }
 inline void Settings::set_cm_per_360_jitter(float value) {
   _internal_set_cm_per_360_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000200u;
+  _impl_._has_bits_[0] |= 0x00000400u;
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360_jitter)
 }
 inline float Settings::_internal_cm_per_360_jitter() const {
@@ -2543,13 +2968,13 @@ inline void Settings::set_allocated_theme_name(std::string* value) {
 
 // float metronome_bpm = 4;
 inline bool Settings::has_metronome_bpm() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void Settings::clear_metronome_bpm() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float Settings::metronome_bpm() const {
   // @@protoc_insertion_point(field_get:aim.Settings.metronome_bpm)
@@ -2557,7 +2982,7 @@ inline float Settings::metronome_bpm() const {
 }
 inline void Settings::set_metronome_bpm(float value) {
   _internal_set_metronome_bpm(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.Settings.metronome_bpm)
 }
 inline float Settings::_internal_metronome_bpm() const {
@@ -2571,13 +2996,13 @@ inline void Settings::_internal_set_metronome_bpm(float value) {
 
 // float crosshair_size = 5;
 inline bool Settings::has_crosshair_size() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void Settings::clear_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.crosshair_size_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float Settings::crosshair_size() const {
   // @@protoc_insertion_point(field_get:aim.Settings.crosshair_size)
@@ -2585,7 +3010,7 @@ inline float Settings::crosshair_size() const {
 }
 inline void Settings::set_crosshair_size(float value) {
   _internal_set_crosshair_size(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.Settings.crosshair_size)
 }
 inline float Settings::_internal_crosshair_size() const {
@@ -2717,13 +3142,13 @@ Settings::_internal_mutable_saved_crosshairs() {
 
 // bool disable_click_to_start = 8;
 inline bool Settings::has_disable_click_to_start() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void Settings::clear_disable_click_to_start() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_click_to_start_ = false;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline bool Settings::disable_click_to_start() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_click_to_start)
@@ -2731,7 +3156,7 @@ inline bool Settings::disable_click_to_start() const {
 }
 inline void Settings::set_disable_click_to_start(bool value) {
   _internal_set_disable_click_to_start(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.Settings.disable_click_to_start)
 }
 inline bool Settings::_internal_disable_click_to_start() const {
@@ -2841,13 +3266,13 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* value) {
 
 // bool auto_hold_tracking = 10;
 inline bool Settings::has_auto_hold_tracking() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void Settings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline bool Settings::auto_hold_tracking() const {
   // @@protoc_insertion_point(field_get:aim.Settings.auto_hold_tracking)
@@ -2855,7 +3280,7 @@ inline bool Settings::auto_hold_tracking() const {
 }
 inline void Settings::set_auto_hold_tracking(bool value) {
   _internal_set_auto_hold_tracking(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.Settings.auto_hold_tracking)
 }
 inline bool Settings::_internal_auto_hold_tracking() const {
@@ -2867,19 +3292,115 @@ inline void Settings::_internal_set_auto_hold_tracking(bool value) {
   _impl_.auto_hold_tracking_ = value;
 }
 
+// .aim.HealthBarSettings health_bar = 12;
+inline bool Settings::has_health_bar() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.health_bar_ != nullptr);
+  return value;
+}
+inline void Settings::clear_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_bar_ != nullptr) _impl_.health_bar_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline const ::aim::HealthBarSettings& Settings::_internal_health_bar() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::HealthBarSettings* p = _impl_.health_bar_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::HealthBarSettings&>(::aim::_HealthBarSettings_default_instance_);
+}
+inline const ::aim::HealthBarSettings& Settings::health_bar() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Settings.health_bar)
+  return _internal_health_bar();
+}
+inline void Settings::unsafe_arena_set_allocated_health_bar(::aim::HealthBarSettings* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.health_bar_);
+  }
+  _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.health_bar)
+}
+inline ::aim::HealthBarSettings* Settings::release_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::HealthBarSettings* released = _impl_.health_bar_;
+  _impl_.health_bar_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::HealthBarSettings* Settings::unsafe_arena_release_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Settings.health_bar)
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::HealthBarSettings* temp = _impl_.health_bar_;
+  _impl_.health_bar_ = nullptr;
+  return temp;
+}
+inline ::aim::HealthBarSettings* Settings::_internal_mutable_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_bar_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::HealthBarSettings>(GetArena());
+    _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(p);
+  }
+  return _impl_.health_bar_;
+}
+inline ::aim::HealthBarSettings* Settings::mutable_health_bar() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  ::aim::HealthBarSettings* _msg = _internal_mutable_health_bar();
+  // @@protoc_insertion_point(field_mutable:aim.Settings.health_bar)
+  return _msg;
+}
+inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.health_bar_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+
+  _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Settings.health_bar)
+}
+
 // -------------------------------------------------------------------
 
 // ScenarioSettings
 
 // float cm_per_360 = 1;
 inline bool ScenarioSettings::has_cm_per_360() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void ScenarioSettings::clear_cm_per_360() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float ScenarioSettings::cm_per_360() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioSettings.cm_per_360)
@@ -2887,7 +3408,7 @@ inline float ScenarioSettings::cm_per_360() const {
 }
 inline void ScenarioSettings::set_cm_per_360(float value) {
   _internal_set_cm_per_360(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.ScenarioSettings.cm_per_360)
 }
 inline float ScenarioSettings::_internal_cm_per_360() const {
@@ -2901,13 +3422,13 @@ inline void ScenarioSettings::_internal_set_cm_per_360(float value) {
 
 // float cm_per_360_jitter = 6;
 inline bool ScenarioSettings::has_cm_per_360_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void ScenarioSettings::clear_cm_per_360_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float ScenarioSettings::cm_per_360_jitter() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioSettings.cm_per_360_jitter)
@@ -2915,7 +3436,7 @@ inline float ScenarioSettings::cm_per_360_jitter() const {
 }
 inline void ScenarioSettings::set_cm_per_360_jitter(float value) {
   _internal_set_cm_per_360_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.ScenarioSettings.cm_per_360_jitter)
 }
 inline float ScenarioSettings::_internal_cm_per_360_jitter() const {
@@ -2998,13 +3519,13 @@ inline void ScenarioSettings::set_allocated_theme_name(std::string* value) {
 
 // float metronome_bpm = 3;
 inline bool ScenarioSettings::has_metronome_bpm() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void ScenarioSettings::clear_metronome_bpm() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float ScenarioSettings::metronome_bpm() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioSettings.metronome_bpm)
@@ -3012,7 +3533,7 @@ inline float ScenarioSettings::metronome_bpm() const {
 }
 inline void ScenarioSettings::set_metronome_bpm(float value) {
   _internal_set_metronome_bpm(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.ScenarioSettings.metronome_bpm)
 }
 inline float ScenarioSettings::_internal_metronome_bpm() const {
@@ -3026,13 +3547,13 @@ inline void ScenarioSettings::_internal_set_metronome_bpm(float value) {
 
 // float crosshair_size = 4;
 inline bool ScenarioSettings::has_crosshair_size() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void ScenarioSettings::clear_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.crosshair_size_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float ScenarioSettings::crosshair_size() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioSettings.crosshair_size)
@@ -3040,7 +3561,7 @@ inline float ScenarioSettings::crosshair_size() const {
 }
 inline void ScenarioSettings::set_crosshair_size(float value) {
   _internal_set_crosshair_size(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.ScenarioSettings.crosshair_size)
 }
 inline float ScenarioSettings::_internal_crosshair_size() const {
@@ -3123,13 +3644,13 @@ inline void ScenarioSettings::set_allocated_crosshair_name(std::string* value) {
 
 // bool auto_hold_tracking = 7;
 inline bool ScenarioSettings::has_auto_hold_tracking() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void ScenarioSettings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline bool ScenarioSettings::auto_hold_tracking() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioSettings.auto_hold_tracking)
@@ -3137,7 +3658,7 @@ inline bool ScenarioSettings::auto_hold_tracking() const {
 }
 inline void ScenarioSettings::set_auto_hold_tracking(bool value) {
   _internal_set_auto_hold_tracking(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.ScenarioSettings.auto_hold_tracking)
 }
 inline bool ScenarioSettings::_internal_auto_hold_tracking() const {
@@ -3147,6 +3668,102 @@ inline bool ScenarioSettings::_internal_auto_hold_tracking() const {
 inline void ScenarioSettings::_internal_set_auto_hold_tracking(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = value;
+}
+
+// .aim.HealthBarSettings health_bar = 8;
+inline bool ScenarioSettings::has_health_bar() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.health_bar_ != nullptr);
+  return value;
+}
+inline void ScenarioSettings::clear_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_bar_ != nullptr) _impl_.health_bar_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::HealthBarSettings& ScenarioSettings::_internal_health_bar() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::HealthBarSettings* p = _impl_.health_bar_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::HealthBarSettings&>(::aim::_HealthBarSettings_default_instance_);
+}
+inline const ::aim::HealthBarSettings& ScenarioSettings::health_bar() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.health_bar)
+  return _internal_health_bar();
+}
+inline void ScenarioSettings::unsafe_arena_set_allocated_health_bar(::aim::HealthBarSettings* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.health_bar_);
+  }
+  _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioSettings.health_bar)
+}
+inline ::aim::HealthBarSettings* ScenarioSettings::release_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::HealthBarSettings* released = _impl_.health_bar_;
+  _impl_.health_bar_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::HealthBarSettings* ScenarioSettings::unsafe_arena_release_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioSettings.health_bar)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::HealthBarSettings* temp = _impl_.health_bar_;
+  _impl_.health_bar_ = nullptr;
+  return temp;
+}
+inline ::aim::HealthBarSettings* ScenarioSettings::_internal_mutable_health_bar() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.health_bar_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::HealthBarSettings>(GetArena());
+    _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(p);
+  }
+  return _impl_.health_bar_;
+}
+inline ::aim::HealthBarSettings* ScenarioSettings::mutable_health_bar() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::HealthBarSettings* _msg = _internal_mutable_health_bar();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioSettings.health_bar)
+  return _msg;
+}
+inline void ScenarioSettings::set_allocated_health_bar(::aim::HealthBarSettings* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.health_bar_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioSettings.health_bar)
 }
 
 // -------------------------------------------------------------------

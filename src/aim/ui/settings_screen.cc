@@ -50,6 +50,8 @@ class SettingsScreen : public UiScreen {
   void DrawScreen() override {
     const ScreenInfo& screen = app_->screen_info();
     ImGui::Columns(2, "SettingsColumns", false);
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    char_x_ = char_size.x;
 
     float left_width = screen.width * 0.15;
     ImGui::SetColumnWidth(0, left_width);
@@ -62,12 +64,10 @@ class SettingsScreen : public UiScreen {
       ImGui::Spacing();
     }
 
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-
     ImGui::Text("DPI");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 5);
-    ImGui::InputText("##DPI", &settings_updater_.dpi, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::PushItemWidth(char_x_ * 10);
+    ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
     ImGui::PopItemWidth();
 
     ImGui::Text("CM/360");
@@ -146,6 +146,59 @@ class SettingsScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##auto_hold_tracking", &settings_updater_.auto_hold_tracking);
 
+    ImGui::Text("Show health bars");
+    ImGui::SameLine();
+    bool show_health_bars = settings_updater_.health_bar.show();
+    ImGui::Checkbox("##HealthBarCheckbox", &show_health_bars);
+    settings_updater_.health_bar.set_show(show_health_bars);
+    if (show_health_bars) {
+      ImGui::Indent();
+
+      ImGui::Text("Only damaged");
+      ImGui::SameLine();
+      bool only_damaged = settings_updater_.health_bar.only_damaged();
+      ImGui::Checkbox("##HealthBarDamaged", &only_damaged);
+      settings_updater_.health_bar.set_only_damaged(only_damaged);
+
+      ImGui::Text("Width");
+      ImGui::SameLine();
+      float bar_width = FirstGreaterThanZero(settings_updater_.health_bar.width(), 6);
+      ImGui::SetNextItemWidth(char_x_ * 9);
+      ImGui::InputFloat("##HealthBarWidth", &bar_width, 0.1, 1, "%.1f");
+      if (bar_width <= 0) {
+        bar_width = 0.1;
+      }
+      settings_updater_.health_bar.set_width(bar_width);
+
+      ImGui::Text("Height");
+      ImGui::SameLine();
+      float bar_height = FirstGreaterThanZero(settings_updater_.health_bar.height(), 1.5);
+      ImGui::SetNextItemWidth(char_x_ * 9);
+      ImGui::InputFloat("##HealthBarHeight", &bar_height, 0.1, 1, "%.1f");
+      if (bar_height <= 0) {
+        bar_height = 0.1;
+      }
+      settings_updater_.health_bar.set_height(bar_height);
+
+      ImGui::Text("Height above target");
+      ImGui::SameLine();
+      float height_above =
+          FirstGreaterThanZero(settings_updater_.health_bar.height_above_target(), 0.6);
+      ImGui::SetNextItemWidth(char_x_ * 9);
+      ImGui::InputFloat("##HeightAbove", &height_above, 0.1, 1, "%.1f");
+      if (height_above <= 0) {
+        height_above = 0.1;
+      }
+      settings_updater_.health_bar.set_height_above_target(height_above);
+
+      ImGui::Unindent();
+    }
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    ImGui::Text("Keybinds");
+    ImGui::Indent();
     for (KeybindItem& item : keybind_items_) {
       ImGui::Text(item.label);
       float entry_width = char_size.x * 10;
@@ -158,6 +211,10 @@ class SettingsScreen : public UiScreen {
       ImGui::SameLine();
       KeyMappingEntry(&item, 4, entry_width);
     }
+    ImGui::Unindent();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
 
     {
       ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
@@ -172,6 +229,21 @@ class SettingsScreen : public UiScreen {
       if (ImGui::Button("Cancel", sz)) {
         ScreenDone();
       }
+    }
+  }
+
+  void OptionalInputFloat(const std::string& id,
+                          bool* has_value,
+                          float* value,
+                          float step,
+                          float fast_step,
+                          const char* format = "%.1f") {
+    ImGui::IdGuard cid(id);
+    ImGui::Checkbox("##HasValue", has_value);
+    if (*has_value) {
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 10);
+      ImGui::InputFloat("##ValueInput", value, step, fast_step, format);
     }
   }
 
@@ -246,6 +318,7 @@ class SettingsScreen : public UiScreen {
 
   std::function<void(const SDL_Event&)> capture_key_fn_;
   std::vector<KeybindItem> keybind_items_;
+  float char_x_;
 };
 }  // namespace
 

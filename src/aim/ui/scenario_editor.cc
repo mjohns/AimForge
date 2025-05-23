@@ -158,6 +158,7 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       theme_ = GetDefaultTheme();
     }
+    settings_ = app_->settings_manager()->GetCurrentSettings();
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app->file_system()->GetBundleNames();
     if (initial_scenario.has_value()) {
@@ -1306,6 +1307,7 @@ class ScenarioEditorScreen : public UiScreen {
       app_->renderer()->DrawScenario(projection_,
                                      def_.room(),
                                      theme_,
+                                     settings_.health_bar(),
                                      target_manager_.GetTargets(),
                                      look_at.transform,
                                      &ctx,
@@ -1356,6 +1358,7 @@ class ScenarioEditorScreen : public UiScreen {
   std::vector<std::string> bundle_names_;
   std::optional<ResourceName> original_name_;
   ResourceName name_;
+  Settings settings_;
 
   std::string error_popup_message_;
 };

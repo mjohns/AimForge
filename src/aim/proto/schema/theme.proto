@@ -24,6 +24,14 @@ message WallAppearance {
   float mix_percent = 4;
 }
 
+message HealthBarAppearance {
+  StoredColor health_color = 1;
+  float health_alpha = 2;
+
+  StoredColor background_color = 3;
+  float background_alpha = 4;
+}
+
 message Theme {
   string name = 1;
 
@@ -41,4 +49,6 @@ message Theme {
   CrosshairTheme crosshair = 7;
   StoredColor target_color = 8;
   StoredColor ghost_target_color = 9;
+
+  HealthBarAppearance health_bar = 11;
 }

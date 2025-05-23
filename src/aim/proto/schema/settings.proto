@@ -26,6 +26,14 @@ message Crosshair {
   }
 }
 
+message HealthBarSettings {
+   bool show = 1;
+   bool only_damaged = 2;
+   float height = 3;
+   float width = 4;
+   float height_above_target = 5;
+}
+
 message Settings {
   float dpi = 1;
   float cm_per_360 = 2;
@@ -44,6 +52,8 @@ message Settings {
 
   // Left click is automatically held down in tracking scenarios.
   bool auto_hold_tracking = 10;
+
+  HealthBarSettings health_bar = 12;
 }
 
 message ScenarioSettings {
@@ -54,6 +64,7 @@ message ScenarioSettings {
   float crosshair_size = 4;
   string crosshair_name = 5;
   bool auto_hold_tracking = 7;
+  HealthBarSettings health_bar = 8;
 }
 
 message KeyMapping {
