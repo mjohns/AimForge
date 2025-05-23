@@ -1,8 +1,11 @@
 #include "renderer.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <SDL3/SDL.h>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/vector_angle.hpp> 
 #include <glm/mat4x4.hpp>
 
 #include "aim/common/geometry.h"
@@ -684,13 +687,22 @@ class RendererImpl : public Renderer {
               float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
               float height_above_target =
                   FirstGreaterThanZero(health_bar_settings.height_above_target(), 0.6);
+              glm::vec3 up = glm::vec3(0, 0, 1);
               glm::vec3 health_bar_center =
-                  target.position +
-                  glm::vec3(0, 0, 1) * (height_above_target + target.radius + height / 2.0f);
+                  target.position + up * (height_above_target + target.radius + height / 2.0f);
 
               auto& health_bar = health_bars.emplace_back(glm::mat4(1.0f));
               auto& transform = health_bar.transform;
               transform = glm::translate(transform, health_bar_center);
+
+              // Rotate to face towards camera
+              glm::vec3 to_camera = look_at.position - target.position;
+              to_camera.z = 0;
+              if (glm::length(to_camera) > 0.01) {
+                float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), up);
+                transform = glm::rotate(transform, angle, up);
+              }
+
               transform = glm::scale(transform, glm::vec3(width, 1, height));
               transform = view_projection * transform;
 
