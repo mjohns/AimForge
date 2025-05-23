@@ -90,6 +90,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         }
         ImGui::SameLine();
         if (ImGui::Button("Cancel")) {
+          scenario_to_maybe_delete_ = "";
           ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();

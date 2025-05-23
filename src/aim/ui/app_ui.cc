@@ -359,6 +359,9 @@ class AppUiImpl : public AppUi {
       app_->playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
       app_screen_ = AppScreen::CURRENT_PLAYLIST;
     }
+    if (result.reload_playlists) {
+      app_->playlist_manager()->LoadPlaylistsFromDisk();
+    }
   }
 
   void DrawCurrentPlaylistScreen() {

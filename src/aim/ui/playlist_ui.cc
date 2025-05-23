@@ -10,6 +10,8 @@
 namespace aim {
 namespace {
 
+const char* kDeleteConfirmationPopup = "DELETE_CONFIRMATION_POPUP";
+
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;
@@ -299,6 +301,7 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
 
   void Show(PlaylistListResult* result) override {
     auto cid = GetComponentIdGuard();
+    DrawDeleteConfirmationPopup(result);
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
@@ -326,7 +329,8 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
             copy_playlist = playlist;
           }
           if (ImGui::Selectable("Delete")) {
-            delete_playlist = playlist;
+            delete_playlist_ = playlist;
+            open_delete_confirmation_popup_ = true;
           }
           ImGui::EndPopup();
         }
@@ -340,10 +344,6 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     if (ImGui::Button("Create new playlist")) {
     }
 
-    if (delete_playlist.has_value()) {
-      app_->playlist_manager()->DeletePlaylist(delete_playlist->name);
-      app_->playlist_manager()->LoadPlaylistsFromDisk();
-    }
     if (copy_playlist.has_value()) {
       auto playlist = *copy_playlist;
       auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), app_);
@@ -355,6 +355,44 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
   }
 
  private:
+  void DrawDeleteConfirmationPopup(PlaylistListResult* result) {
+    bool show_popup = delete_playlist_.has_value();
+    if (show_popup) {
+      ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+                              ImGuiCond_Appearing,
+                              ImVec2(0.5f, 0.5f));  // Center the popup
+      if (ImGui::BeginPopupModal(kDeleteConfirmationPopup,
+                                 &show_popup,
+                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+        ImGui::TextFmt("Delete \"{}\"?", delete_playlist_->name.full_name());
+
+        float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+
+        if (ImGui::Button("Delete")) {
+          app_->playlist_manager()->DeletePlaylist(delete_playlist_->name);
+          result->reload_playlists = true;
+          delete_playlist_ = {};
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel")) {
+          delete_playlist_ = {};
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+      }
+    }
+    if (open_delete_confirmation_popup_) {
+      ImGui::OpenPopup(kDeleteConfirmationPopup);
+      open_delete_confirmation_popup_ = false;
+    }
+  }
+
+  bool open_delete_confirmation_popup_ = false;
+  std::optional<Playlist> delete_playlist_;
+
   std::string playlist_search_text_;
   PlaylistManager* playlist_manager_;
 };
