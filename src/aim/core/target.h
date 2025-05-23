@@ -43,6 +43,7 @@ struct Target {
   float notify_at_health_seconds = 0;
   float health_seconds = 0;
   std::optional<RadiusAtKill> radius_at_kill{};
+  bool draw_health_bar = true;
 
   bool CanHit() const {
     return !hidden && !is_ghost;
