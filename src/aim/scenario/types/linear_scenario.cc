@@ -64,7 +64,7 @@ class LinearScenario : public BaseScenario {
 
  protected:
   void FillInNewTarget(Target* target) override {
-    glm::vec2 pos = wall_target_placer_->GetNextPosition();
+    glm::vec3 pos = wall_target_placer_->GetNextPosition();
 
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
@@ -81,7 +81,7 @@ class LinearScenario : public BaseScenario {
       EnsurePositive(direction.y);
     }
 
-    target->wall_position = pos;
+    target->SetWallPosition(pos, def_.room());
     target->wall_direction = direction;
   }
 

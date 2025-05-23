@@ -19,8 +19,9 @@ class WallTargetPlacer {
  public:
   virtual ~WallTargetPlacer() {}
 
-  virtual glm::vec2 GetNextPosition() = 0;
-  virtual glm::vec2 GetNextPosition(int counter) = 0;
+  // z represents the distance away from the wall for the target. 0 means on the wall.
+  virtual glm::vec3 GetNextPosition() = 0;
+  virtual glm::vec3 GetNextPosition(int counter) = 0;
 };
 
 std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const ScenarioDef& def,

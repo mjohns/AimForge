@@ -607,6 +607,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
 
+    ImGui::Text("Depth");
+    ImGui::SameLine();
+    float depth = region->depth();
+    float depth_jitter = region->depth_jitter();
+    JitteredValueInput("DepthInput", &depth, &depth_jitter, 1, 5, "%.0f");
+    region->set_depth(depth);
+    region->set_depth_jitter(depth_jitter);
+
     ImGui::Text("Offset");
     ImGui::SameLine();
     bool use_offsets = region->has_x_offset() || region->has_y_offset();

@@ -8,13 +8,21 @@
 
 namespace aim {
 
+void Target::SetWallPosition(const glm::vec3& p, const Room& room) {
+  wall_position = p;
+  wall_depth = p.z;
+  position = WallPositionToWorldPosition(*wall_position, radius, room, wall_depth);
+}
+
 Target TargetManager::AddTarget(Target t) {
   if (t.wall_position.has_value()) {
-    t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_);
+    t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_, t.wall_depth);
   }
   if (t.pill_wall_up.has_value()) {
-    glm::vec3 world_start = WallPositionToWorldPosition(glm::vec2(0, 0), t.radius, room_);
-    glm::vec3 world_end = WallPositionToWorldPosition(*t.pill_wall_up, t.radius, room_);
+    glm::vec3 world_start =
+        WallPositionToWorldPosition(glm::vec2(0, 0), t.radius, room_, t.wall_depth);
+    glm::vec3 world_end =
+        WallPositionToWorldPosition(*t.pill_wall_up, t.radius, room_, t.wall_depth);
     t.pill_up = glm::normalize(world_end - world_start);
   }
   if (t.id == 0) {
@@ -86,7 +94,7 @@ void TargetManager::UpdateTargetPositions(float now_seconds) {
     }
     if (t.wall_direction.has_value()) {
       t.wall_position = GetUpdatedWallPosition(t, now_seconds);
-      t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_);
+      t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_, t.wall_depth);
     }
     t.last_update_time_seconds = now_seconds;
   }
@@ -100,7 +108,11 @@ glm::vec3 TargetManager::GetUpdatedPosition(const Target& target, float now_seco
   return target.position;
 }
 
-glm::vec2 TargetManager::GetUpdatedWallPosition(const Target& target, float now_seconds) {
+glm::vec2 TargetManager::GetUpdatedWallPosition(const Target& in, float now_seconds) {
+  Target target = in;
+  if (!target.wall_position.has_value()) {
+    target.wall_position = glm::vec2(0.f);
+  }
   if (target.wall_direction.has_value()) {
     float delta_seconds = now_seconds - target.last_update_time_seconds;
     return *target.wall_position + (*target.wall_direction * (delta_seconds * target.speed));
@@ -209,22 +221,25 @@ TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, std::mt19937
 
 glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
                                       float target_radius,
-                                      const Room& room) {
+                                      const Room& room,
+                                      float depth) {
+  // Make sure the target does not clip through wall and use depth if greater.
+  depth = std::max(target_radius + 0.5f, depth);
+
   glm::vec3 world_position;
   world_position.z = wall_position.y;
   if (room.has_simple_room() || room.has_barrel_room()) {
     world_position.x = wall_position.x;
     world_position.z = wall_position.y;
 
-    // Make sure the target does not clip through wall
-    world_position.y = -1 * (target_radius + 0.5);
+    world_position.y = -1 * depth;
   } else if (room.has_cylinder_room()) {
     // Effectively wrap the wall around the perimeter of the circle.
     float radius = room.cylinder_room().radius();
     // float circumference = glm::two_pi<float>() * radius;
     float radians_per_x = 1 / radius;
 
-    glm::vec2 to_rotate(0, radius - (0.7 * target_radius));
+    glm::vec2 to_rotate(0, radius - depth);
     glm::vec2 rotated = RotateRadians(to_rotate, -1 * wall_position.x * radians_per_x);
 
     world_position.x = rotated.x;

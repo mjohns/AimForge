@@ -33,8 +33,8 @@ class StaticScenario : public BaseScenario {
 
  protected:
   void FillInNewTarget(Target* target) override {
-    glm::vec2 wall_pos = wall_target_placer_->GetNextPosition();
-    target->wall_position = wall_pos;
+    glm::vec3 wall_pos = wall_target_placer_->GetNextPosition();
+    target->SetWallPosition(wall_pos, def_.room());
   }
 
   bool ShouldRecordReplay() override {
