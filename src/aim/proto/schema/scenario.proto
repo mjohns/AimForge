@@ -74,6 +74,10 @@ message TargetRegion {
   RegionLength x_offset = 2;
   RegionLength y_offset = 3;
 
+  // The distance in from the wall to place the target. The larget the depth, the closer to the camera. 0 depth is on the wall.
+  float depth = 7;
+  float depth_jitter = 8;
+
   oneof type {
     RectangleTargetRegion rectangle = 4;
     EllipseTargetRegion ellipse = 5;
