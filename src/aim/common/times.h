@@ -28,6 +28,8 @@ class Stopwatch {
   uint64_t GetElapsedMicros() const;
   float GetElapsedSeconds() const;
 
+  void AddElapsedSeconds(float seconds);
+
  private:
   bool running_ = false;
   std::chrono::steady_clock::time_point start_time_;

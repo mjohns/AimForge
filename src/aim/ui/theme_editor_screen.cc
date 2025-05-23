@@ -26,12 +26,13 @@ struct StoredColorEditor {
   std::string id;
   StoredColor* stored_color = nullptr;
   float color[3];
-  std::string multiplier;
+  float multiplier = 0;
 
   void Draw(const ImVec2& char_size) {
     if (stored_color == nullptr) {
       return;
     }
+    ImGui::IdGuard cid(id);
 
     ImGui::TextFmt("{}", label);
     ImGui::SameLine();
@@ -40,7 +41,7 @@ struct StoredColorEditor {
     color[1] = c.g() / 255.0;
     color[2] = c.b() / 255.0;
     if (ImGui::ColorEdit3(
-            id.c_str(), color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
+            "##ColorEditor", color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
       StoredRgb result = FloatToStoredRgb(color[0], color[1], color[2]);
       if (stored_color->has_hex()) {
         stored_color->set_hex(ToHexString(result));
@@ -54,19 +55,14 @@ struct StoredColorEditor {
       }
     }
 
-    // Multiplier
-    multiplier =
-        stored_color->has_multiplier() ? std::format("{}", stored_color->multiplier()) : "";
+    multiplier = stored_color->multiplier();
     ImGui::SameLine();
-    ImGui::Text("mult");
+    ImGui::Text("multiplier");
     ImGui::SameLine();
-    std::string mult_id = "##Multiplier" + id;
-    ImGui::PushItemWidth(char_size.x * 5);
-    ImGui::InputText(mult_id.c_str(), &multiplier, ImGuiInputTextFlags_CharsDecimal);
-    ImGui::PopItemWidth();
-
-    if (multiplier.size() > 0) {
-      stored_color->set_multiplier(ParseFloat(multiplier));
+    ImGui::SetNextItemWidth(char_size.x * 9);
+    ImGui::InputFloat("##MultiplierInput", &multiplier, 0.01, 0.2, "%.2f");
+    if (multiplier > 0) {
+      stored_color->set_multiplier(multiplier);
     } else {
       stored_color->clear_multiplier();
     }
@@ -87,8 +83,6 @@ struct WallAppearanceEditor {
   StoredColorEditor color_editor;
   StoredColorEditor mix_color_editor;
 
-  std::string mix_percent;
-  std::string text_scale;
   std::string texture_name;
 
   void Draw(const std::string& header,
@@ -97,10 +91,10 @@ struct WallAppearanceEditor {
     if (appearance == nullptr) {
       return;
     }
-    ImGui::PushItemWidth(char_size.x * 20);
-    bool opened = ImGui::TreeNode(header.c_str());
-    ImGui::PopItemWidth();
+    ImGui::IdGuard cid(id);
 
+    ImGui::SetNextItemWidth(char_size.x * 20);
+    bool opened = ImGui::TreeNode(header.c_str());
     if (opened) {
       std::string selected_type = kSolidColorItem;
       if (appearance->has_texture()) {
@@ -153,14 +147,10 @@ struct WallAppearanceEditor {
         texture->set_texture_name(texture_name);
 
         ImGui::Text("Scale");
-        std::string scale_str = std::format("{}", texture->scale());
         ImGui::SameLine();
-        ImGui::PushItemWidth(char_size.x * 5);
-        ImGui::InputText(std::format("##texture_scale{}", id).c_str(),
-                         &scale_str,
-                         ImGuiInputTextFlags_CharsDecimal);
-        ImGui::PopItemWidth();
-        float scale = ParseFloat(scale_str);
+        ImGui::SetNextItemWidth(char_size.x * 9);
+        float scale = texture->scale();
+        ImGui::InputFloat("##TextureScale", &scale, 0.1, 1, "%.1f");
         if (scale > 0) {
           texture->set_scale(scale);
         } else {
@@ -169,17 +159,12 @@ struct WallAppearanceEditor {
       }
 
       ImGui::Text("Mix percent");
-      mix_percent = std::format("{}", appearance->mix_percent());
       ImGui::SameLine();
-      ImGui::PushItemWidth(char_size.x * 5);
-      ImGui::InputText(std::format("##mix_percent{}", id).c_str(),
-                       &mix_percent,
-                       ImGuiInputTextFlags_CharsDecimal);
-      ImGui::PopItemWidth();
-
-      float mix = ParseFloat(mix_percent);
-      if (mix > 0) {
-        appearance->set_mix_percent(mix);
+      ImGui::SetNextItemWidth(char_size.x * 9);
+      float mix_percent = appearance->mix_percent();
+      ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.2f");
+      if (mix_percent > 0) {
+        appearance->set_mix_percent(mix_percent);
         mix_color_editor.stored_color = appearance->mutable_mix_color();
         mix_color_editor.Draw(char_size);
       } else {
@@ -216,10 +201,15 @@ class ThemeEditorScreen : public UiScreen {
     Target t;
     t.radius = 3;
     t.wall_position = glm::vec2(20, 20);
+    t.health_seconds = 3;
+    t.hit_timer.AddElapsedSeconds(1);
+
 
     Target g = t;
     g.is_ghost = true;
     g.wall_position = glm::vec2(20, -20);
+    g.health_seconds = 3;
+    g.hit_timer.AddElapsedSeconds(1);
 
     target_manager_.AddTarget(t);
     target_manager_.AddTarget(g);
@@ -229,6 +219,8 @@ class ThemeEditorScreen : public UiScreen {
   void DrawScreen() override {
     const ScreenInfo& screen = app_->screen_info();
     ImVec2 char_size = ImGui::CalcTextSize("A");
+    char_x_ = char_size.x;
+
     ImGuiComboFlags combo_flags = 0;
     ImGui::Text("Theme");
     ImGui::SameLine();
@@ -250,16 +242,66 @@ class ThemeEditorScreen : public UiScreen {
     }
     ImGui::PopItemWidth();
 
+    ImGui::Text("Targets");
+    ImGui::Indent();
     target_color_.Draw(char_size);
     ghost_target_color_.Draw(char_size);
+    ImGui::Unindent();
+
+    ImGui::Text("Crosshair");
+    ImGui::Indent();
     crosshair_color_.Draw(char_size);
     crosshair_outline_color_.Draw(char_size);
+    ImGui::Unindent();
 
+    ImGui::Text("Health bar");
+    HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
+    ImGui::Indent();
+    health_color_.Draw(char_size);
+
+    ImGui::Text("Health alpha");
+    ImGui::SameLine();
+    bool has_health_alpha = health_bar.has_health_alpha();
+    float health_alpha = health_bar.health_alpha();
+    ImGui::OptionalInputFloat(
+        "HealthAlpha", &has_health_alpha, &health_alpha, 0.05, 0.2, "%.2f", char_x_ * 9);
+    if (has_health_alpha) {
+      health_bar.set_health_alpha(health_alpha);
+    } else {
+      health_bar.clear_health_alpha();
+    }
+
+    health_background_color_.Draw(char_size);
+
+    ImGui::Text("Background alpha");
+    ImGui::SameLine();
+    bool has_background_alpha = health_bar.has_background_alpha();
+    float background_alpha = health_bar.background_alpha();
+    ImGui::OptionalInputFloat("BackgroundAlpha",
+                              &has_background_alpha,
+                              &background_alpha,
+                              0.05,
+                              0.2,
+                              "%.2f",
+                              char_x_ * 9);
+    if (has_background_alpha) {
+      health_bar.set_background_alpha(background_alpha);
+    } else {
+      health_bar.clear_background_alpha();
+    }
+    ImGui::Unindent();
+
+    ImGui::Text("Walls");
+    ImGui::Indent();
     front_.Draw("Front", texture_names_, char_size);
     sides_.Draw("Sides", texture_names_, char_size);
     roof_.Draw("Roof", texture_names_, char_size);
     floor_.Draw("Floor", texture_names_, char_size);
     back_.Draw("Back", texture_names_, char_size);
+    ImGui::Unindent();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
 
     {
       ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
@@ -318,6 +360,10 @@ class ThemeEditorScreen : public UiScreen {
     target_color_.stored_color = current_theme_.mutable_target_color();
     ghost_target_color_.stored_color = current_theme_.mutable_ghost_target_color();
 
+    health_color_.stored_color = current_theme_.mutable_health_bar()->mutable_health_color();
+    health_background_color_.stored_color =
+        current_theme_.mutable_health_bar()->mutable_background_color();
+
     front_.appearance = current_theme_.mutable_front_appearance();
     sides_.appearance = current_theme_.mutable_side_appearance();
     back_.appearance = current_theme_.mutable_back_appearance();
@@ -336,9 +382,14 @@ class ThemeEditorScreen : public UiScreen {
 
   StoredColorEditor target_color_{"Target color", "TargetColorEditor"};
   StoredColorEditor ghost_target_color_{"Ghost target color", "GhostTargetColorEditor"};
+
   StoredColorEditor crosshair_color_{"Crosshair color", "CrosshairColorEditor"};
   StoredColorEditor crosshair_outline_color_{"Crosshair outline color",
                                              "CrosshairOutlineColorEditor"};
+
+  StoredColorEditor health_color_{"Health color", "HealthColorEditor"};
+  StoredColorEditor health_background_color_{"Background color", "HealthBackgroundColorEditor"};
+
   WallAppearanceEditor front_{"Front", "FrontEditor"};
   WallAppearanceEditor sides_{"Sides", "SidesEditor"};
   WallAppearanceEditor roof_{"Roof", "RoofEditor"};
@@ -346,6 +397,8 @@ class ThemeEditorScreen : public UiScreen {
   WallAppearanceEditor back_{"Back", "BackEditor"};
 
   std::vector<std::string> texture_names_;
+
+  float char_x_;
 };
 }  // namespace
 
