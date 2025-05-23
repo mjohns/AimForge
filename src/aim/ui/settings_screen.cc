@@ -21,7 +21,7 @@ struct KeybindItem {
 
 class SettingsScreen : public UiScreen {
  public:
-  explicit SettingsScreen(Application* app, const std::string& scenario_id)
+  SettingsScreen(Application* app, const std::string& scenario_id)
       : UiScreen(app),
         settings_updater_(app->settings_manager(), app->history_db()),
         mgr_(app->settings_manager()),
@@ -66,9 +66,8 @@ class SettingsScreen : public UiScreen {
 
     ImGui::Text("DPI");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_x_ * 10);
+    ImGui::SetNextItemWidth(char_x_ * 10);
     ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
-    ImGui::PopItemWidth();
 
     ImGui::Text("cm/360");
     ImGui::SameLine();
@@ -82,10 +81,9 @@ class SettingsScreen : public UiScreen {
 
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 4);
+    ImGui::SetNextItemWidth(char_size.x * 4);
     ImGui::InputText(
         "##Metronome_BPM", &settings_updater_.metronome_bpm, ImGuiInputTextFlags_CharsDecimal);
-    ImGui::PopItemWidth();
 
     ImGui::Text("Theme");
     ImGui::SameLine();
@@ -129,10 +127,9 @@ class SettingsScreen : public UiScreen {
 
     ImGui::Text("Crosshair Size");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 4);
+    ImGui::SetNextItemWidth(char_size.x * 4);
     ImGui::InputText(
         "##CrosshairSize", &settings_updater_.crosshair_size, ImGuiInputTextFlags_CharsDecimal);
-    ImGui::PopItemWidth();
 
     ImGui::Text("Disable \"Click to Start\"");
     ImGui::SameLine();
@@ -308,7 +305,7 @@ class SettingsScreen : public UiScreen {
 
   std::function<void(const SDL_Event&)> capture_key_fn_;
   std::vector<KeybindItem> keybind_items_;
-  float char_x_;
+  float char_x_ = 0;
 };
 }  // namespace
 
