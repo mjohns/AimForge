@@ -42,6 +42,12 @@ std::chrono::steady_clock::duration Stopwatch::GetElapsed() const {
   return elapsed + previously_elapsed_duration_;
 }
 
+void Stopwatch::AddElapsedSeconds(float value) {
+  std::chrono::duration<double> seconds(value);
+  previously_elapsed_duration_ +=
+      std::chrono::duration_cast<std::chrono::steady_clock::duration>(seconds);
+}
+
 uint64_t Stopwatch::GetElapsedMicros() const {
   auto elapsed = GetElapsed();
   return std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();

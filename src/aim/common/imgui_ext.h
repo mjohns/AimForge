@@ -60,4 +60,20 @@ struct LoopId {
   int i = -1;
 };
 
+static void OptionalInputFloat(const std::string& id,
+                               bool* has_value,
+                               float* value,
+                               float step,
+                               float fast_step,
+                               const char* format,
+                               float input_width) {
+  ImGui::IdGuard cid(id);
+  ImGui::Checkbox("##HasValue", has_value);
+  if (*has_value) {
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(input_width);
+    ImGui::InputFloat("##ValueInput", value, step, fast_step, format);
+  }
+}
+
 }  // namespace ImGui

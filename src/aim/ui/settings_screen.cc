@@ -238,13 +238,7 @@ class SettingsScreen : public UiScreen {
                           float step,
                           float fast_step,
                           const char* format = "%.1f") {
-    ImGui::IdGuard cid(id);
-    ImGui::Checkbox("##HasValue", has_value);
-    if (*has_value) {
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputFloat("##ValueInput", value, step, fast_step, format);
-    }
+    ImGui::OptionalInputFloat(id, has_value, value, step, fast_step, format, char_x_ * 10);
   }
 
   void KeyMappingEntry(KeybindItem* item, int i, float width) {
