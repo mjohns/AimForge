@@ -161,20 +161,15 @@ class ScenarioEditorScreen : public UiScreen {
       SetErrorMessage(MessageToJson(def_, 6));
     }
 
-    {
-      ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
-      if (ImGui::Button("Save", sz)) {
-        if (SaveScenario()) {
-          app_->scenario_manager()->LoadScenariosFromDisk();
-          ScreenDone();
-        }
-      }
-    }
-    {
-      ImGui::SameLine();
-      if (ImGui::Button("Cancel")) {
+    if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
+      if (SaveScenario()) {
+        app_->scenario_manager()->LoadScenariosFromDisk();
         ScreenDone();
       }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      ScreenDone();
     }
 
     bool show_error_popup = error_popup_message_.size() > 0;
