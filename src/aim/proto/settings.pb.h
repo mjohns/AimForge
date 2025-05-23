@@ -1211,6 +1211,7 @@ class Keybinds final : public ::google::protobuf::Message
     kQuickSettingsFieldNumber = 4,
     kAdjustCrosshairSizeFieldNumber = 5,
     kQuickMetronomeFieldNumber = 6,
+    kEditScenarioFieldNumber = 7,
   };
   // .aim.KeyMapping fire = 1;
   bool has_fire() const;
@@ -1302,12 +1303,27 @@ class Keybinds final : public ::google::protobuf::Message
   ::aim::KeyMapping* _internal_mutable_quick_metronome();
 
   public:
+  // .aim.KeyMapping edit_scenario = 7;
+  bool has_edit_scenario() const;
+  void clear_edit_scenario() ;
+  const ::aim::KeyMapping& edit_scenario() const;
+  PROTOBUF_NODISCARD ::aim::KeyMapping* release_edit_scenario();
+  ::aim::KeyMapping* mutable_edit_scenario();
+  void set_allocated_edit_scenario(::aim::KeyMapping* value);
+  void unsafe_arena_set_allocated_edit_scenario(::aim::KeyMapping* value);
+  ::aim::KeyMapping* unsafe_arena_release_edit_scenario();
+
+  private:
+  const ::aim::KeyMapping& _internal_edit_scenario() const;
+  ::aim::KeyMapping* _internal_mutable_edit_scenario();
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Keybinds)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 6,
+      3, 7, 7,
       0, 2>
       _table_;
 
@@ -1333,6 +1349,7 @@ class Keybinds final : public ::google::protobuf::Message
     ::aim::KeyMapping* quick_settings_;
     ::aim::KeyMapping* adjust_crosshair_size_;
     ::aim::KeyMapping* quick_metronome_;
+    ::aim::KeyMapping* edit_scenario_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3990,6 +4007,102 @@ inline void Keybinds::set_allocated_quick_metronome(::aim::KeyMapping* value) {
 
   _impl_.quick_metronome_ = reinterpret_cast<::aim::KeyMapping*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Keybinds.quick_metronome)
+}
+
+// .aim.KeyMapping edit_scenario = 7;
+inline bool Keybinds::has_edit_scenario() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.edit_scenario_ != nullptr);
+  return value;
+}
+inline void Keybinds::clear_edit_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.edit_scenario_ != nullptr) _impl_.edit_scenario_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline const ::aim::KeyMapping& Keybinds::_internal_edit_scenario() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::KeyMapping* p = _impl_.edit_scenario_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::KeyMapping&>(::aim::_KeyMapping_default_instance_);
+}
+inline const ::aim::KeyMapping& Keybinds::edit_scenario() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Keybinds.edit_scenario)
+  return _internal_edit_scenario();
+}
+inline void Keybinds::unsafe_arena_set_allocated_edit_scenario(::aim::KeyMapping* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.edit_scenario_);
+  }
+  _impl_.edit_scenario_ = reinterpret_cast<::aim::KeyMapping*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000040u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000040u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Keybinds.edit_scenario)
+}
+inline ::aim::KeyMapping* Keybinds::release_edit_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000040u;
+  ::aim::KeyMapping* released = _impl_.edit_scenario_;
+  _impl_.edit_scenario_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::KeyMapping* Keybinds::unsafe_arena_release_edit_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Keybinds.edit_scenario)
+
+  _impl_._has_bits_[0] &= ~0x00000040u;
+  ::aim::KeyMapping* temp = _impl_.edit_scenario_;
+  _impl_.edit_scenario_ = nullptr;
+  return temp;
+}
+inline ::aim::KeyMapping* Keybinds::_internal_mutable_edit_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.edit_scenario_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::KeyMapping>(GetArena());
+    _impl_.edit_scenario_ = reinterpret_cast<::aim::KeyMapping*>(p);
+  }
+  return _impl_.edit_scenario_;
+}
+inline ::aim::KeyMapping* Keybinds::mutable_edit_scenario() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000040u;
+  ::aim::KeyMapping* _msg = _internal_mutable_edit_scenario();
+  // @@protoc_insertion_point(field_mutable:aim.Keybinds.edit_scenario)
+  return _msg;
+}
+inline void Keybinds::set_allocated_edit_scenario(::aim::KeyMapping* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.edit_scenario_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000040u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000040u;
+  }
+
+  _impl_.edit_scenario_ = reinterpret_cast<::aim::KeyMapping*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Keybinds.edit_scenario)
 }
 
 #ifdef __GNUC__

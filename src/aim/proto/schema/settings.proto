@@ -70,4 +70,5 @@ message Keybinds {
   KeyMapping quick_settings = 4;
   KeyMapping adjust_crosshair_size = 5;
   KeyMapping quick_metronome = 6;
+  KeyMapping edit_scenario = 7;
 }

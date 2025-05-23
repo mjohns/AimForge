@@ -185,6 +185,9 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
         if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
           return NavigationEvent::RestartLastScenario();
         }
+        if (KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
+          return NavigationEvent::EditScenario(scenario_id_);
+        }
         if (KeyMappingMatchesEvent(event_name, settings.keybinds().next_scenario())) {
           return NavigationEvent::PlaylistNext();
         }

@@ -176,6 +176,9 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
           running = false;
         }
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().edit_scenario())) {
+          return NavigationEvent::EditScenario(id_);
+        }
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
           show_settings = QuickSettingsType::DEFAULT;
           show_settings_release_key = event_name;
@@ -368,6 +371,9 @@ NavigationEvent Scenario::ResumeInternal() {
         }
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
           return NavigationEvent::RestartLastScenario();
+        }
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().edit_scenario())) {
+          return NavigationEvent::EditScenario(id_);
         }
         if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
           show_settings = QuickSettingsType::DEFAULT;

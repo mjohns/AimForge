@@ -7,6 +7,7 @@ enum class NavigationEventType {
   PLAYLIST_NEXT,
   DONE,
   START_SCENARIO,
+  EDIT_SCENARIO,
 };
 
 struct NavigationEvent {
@@ -28,6 +29,12 @@ struct NavigationEvent {
     return event;
   }
 
+  static NavigationEvent EditScenario(const std::string& name) {
+    auto event = Create(NavigationEventType::EDIT_SCENARIO);
+    event.scenario_id = name;
+    return event;
+  }
+
   static NavigationEvent PlaylistNext() {
     return Create(NavigationEventType::PLAYLIST_NEXT);
   }
@@ -42,14 +49,6 @@ struct NavigationEvent {
 
   bool IsRestartLastScenario() const {
     return type == NavigationEventType::RESTART_LAST_SCENARIO;
-  }
-
-  bool IsStartScenario() const {
-    return type == NavigationEventType::START_SCENARIO;
-  }
-
-  bool IsPlaylistNext() const {
-    return type == NavigationEventType::PLAYLIST_NEXT;
   }
 
   NavigationEventType type = NavigationEventType::DONE;

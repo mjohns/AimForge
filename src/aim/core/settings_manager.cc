@@ -19,7 +19,7 @@
 
 namespace aim {
 namespace {
-constexpr const float kDefaultDpi = 1600;
+constexpr const float kDefaultDpi = 800;
 
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
@@ -43,6 +43,7 @@ Settings GetDefaultSettings() {
   binds->mutable_quick_metronome()->set_mapping1("B");
   binds->mutable_adjust_crosshair_size()->set_mapping1("C");
   binds->mutable_quick_settings()->set_mapping1("S");
+  binds->mutable_edit_scenario()->set_mapping1("U");
 
   return settings;
 }
