@@ -5,6 +5,7 @@
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
+#include "aim/core/profile_selection.h"
 
 namespace aim {
 
@@ -193,30 +194,14 @@ std::vector<u16> TargetManager::visible_target_ids() const {
 }
 
 TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, std::mt19937* random) {
-  auto num_profiles = def.profiles().size();
-  if (num_profiles == 0) {
-    TargetProfile t;
-    t.set_target_radius(4);
-    return t;
+  auto maybe_profile =
+      SelectProfile(def.target_order(), def.profiles(), target_id_counter_, random);
+  if (maybe_profile.has_value()) {
+    return *maybe_profile;
   }
-
-  if (def.target_order().size() > 0) {
-    int target_order_i = target_id_counter_ % def.target_order().size();
-    int i = def.target_order().at(target_order_i);
-    return def.profiles()[ClampIndex(def.profiles(), i)];
-  }
-
-  for (const auto& target : def.profiles()) {
-    if (!target.has_percent_chance() || target.percent_chance() >= 1) {
-      return target;
-    }
-    auto dist = std::uniform_real_distribution<float>(0, 1.0f);
-    float roll = dist(*random);
-    if (roll <= target.percent_chance()) {
-      return target;
-    }
-  }
-  return def.profiles()[0];
+  TargetProfile t;
+  t.set_target_radius(4);
+  return t;
 }
 
 glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,

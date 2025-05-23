@@ -66,9 +66,7 @@ message RegionVec3 {
 }
 
 message TargetRegion {
-  // The percent chance the target will be placed in this region. 0-1
-  // First matching region will be chosen. Defaults to 1.
-  float percent_chance = 1;
+  float weight = 1;
 
   // (0, 0) is the center of the wall.
   RegionLength x_offset = 2;
@@ -210,7 +208,7 @@ message LinearScenarioDef {
 }
 
 message WallStrafeProfile {
-  float percent_chance = 1;
+  float weight = 1;
   RegionLength min_distance = 2;
   RegionLength max_distance = 3;
 
@@ -309,7 +307,8 @@ message PillTargetDef {
 }
 
 message TargetProfile {
-  float percent_chance = 1;
+  // Proportional weight used to select this profile. If the weight of this profile is 2 and the other is 1, then this profile will be used 2/3 of the time.
+  float weight = 1;
 
   float target_radius = 2;
   float target_radius_jitter = 3;

@@ -413,18 +413,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawWallStrafeProfile(WallStrafeProfile* p, bool allow_percents) {
-    if (allow_percents) {
-      ImGui::Text("Percent chance to use");
-      ImGui::SameLine();
-      int percent = FirstGreaterThanZero(p->percent_chance() * 100, 100);
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputInt("##PercentChance", &percent, 5, 10);
-      p->set_percent_chance(percent / 100.0);
-    } else {
-      p->clear_percent_chance();
-    }
-
+  void DrawWallStrafeProfile(WallStrafeProfile* p) {
     ImGui::Text("Min distance");
     ImGui::SameLine();
     DrawRegionLengthEditor("MinDistance", /*default_to_x=*/true, p->mutable_min_distance());
@@ -522,21 +511,10 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawTargetRegion(TargetRegion* region, bool allow_percents) {
+  void DrawTargetRegion(TargetRegion* region) {
     if (region->type_case() == TargetRegion::TYPE_NOT_SET) {
       region->mutable_rectangle();
     }
-    if (allow_percents) {
-      ImGui::Text("Percent chance to use");
-      ImGui::SameLine();
-      int percent = FirstGreaterThanZero(region->percent_chance() * 100, 100);
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputInt("##PercentChance", &percent, 5, 10);
-      region->set_percent_chance(percent / 100.0);
-    } else {
-      region->clear_percent_chance();
-    }
-
     auto region_type = region->type_case();
     ImGui::SimpleTypeDropdown("RegionTypeDropdown", &region_type, kRegionTypes, char_x_ * 15);
 
@@ -683,7 +661,7 @@ class ScenarioEditorScreen : public UiScreen {
       order_list->Clear();
     }
 
-    bool allow_percents = order_list->size() == 0 && profile_list->size() > 1;
+    bool use_weights = order_list->size() == 0 && profile_list->size() > 1;
     int remove_at_i = -1;
     int move_up_i = -1;
     int move_down_i = -1;
@@ -709,7 +687,22 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::OpenPopupOnItemClick("profile_item_menu", ImGuiPopupFlags_MouseButtonRight);
 
       ImGui::Indent();
-      draw_profile_fn(&profile_list->at(i), allow_percents);
+      auto* p = &profile_list->at(i);
+      if (use_weights) {
+        ImGui::Text("Selection weight");
+        ImGui::SameLine();
+        int weight = p->weight();
+        if (!p->has_weight()) {
+          weight = 1;
+        }
+        ImGui::SetNextItemWidth(char_x_ * 10);
+        ImGui::InputInt("##WeightInput", &weight, 1, 5);
+        p->set_weight(weight);
+      } else {
+        p->clear_weight();
+      }
+
+      draw_profile_fn(&profile_list->at(i));
       ImGui::Unindent();
     }
 
@@ -1061,18 +1054,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawTargetProfile(TargetProfile* profile, bool allow_percents) {
-    if (allow_percents) {
-      ImGui::Text("Percent chance to use");
-      ImGui::SameLine();
-      int percent = FirstGreaterThanZero(profile->percent_chance() * 100, 100);
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputInt("##PercentChance", &percent, 5, 10);
-      profile->set_percent_chance(percent / 100.0);
-    } else {
-      profile->clear_percent_chance();
-    }
-
+  void DrawTargetProfile(TargetProfile* profile) {
     ImGui::Text("Radius");
     ImGui::SameLine();
     float target_radius = profile->target_radius();

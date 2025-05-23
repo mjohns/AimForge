@@ -1705,7 +1705,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   enum : int {
     kMinDistanceFieldNumber = 2,
     kMaxDistanceFieldNumber = 3,
-    kPercentChanceFieldNumber = 1,
+    kWeightFieldNumber = 1,
     kAngleFieldNumber = 4,
     kAngleJitterFieldNumber = 5,
   };
@@ -1739,15 +1739,15 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_max_distance();
 
   public:
-  // float percent_chance = 1;
-  bool has_percent_chance() const;
-  void clear_percent_chance() ;
-  float percent_chance() const;
-  void set_percent_chance(float value);
+  // float weight = 1;
+  bool has_weight() const;
+  void clear_weight() ;
+  float weight() const;
+  void set_weight(float value);
 
   private:
-  float _internal_percent_chance() const;
-  void _internal_set_percent_chance(float value);
+  float _internal_weight() const;
+  void _internal_set_weight(float value);
 
   public:
   // float angle = 4;
@@ -1799,7 +1799,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::RegionLength* min_distance_;
     ::aim::RegionLength* max_distance_;
-    float percent_chance_;
+    float weight_;
     float angle_;
     float angle_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -4203,7 +4203,7 @@ class TargetRegion final : public ::google::protobuf::Message
   enum : int {
     kXOffsetFieldNumber = 2,
     kYOffsetFieldNumber = 3,
-    kPercentChanceFieldNumber = 1,
+    kWeightFieldNumber = 1,
     kDepthFieldNumber = 7,
     kDepthJitterFieldNumber = 8,
     kRectangleFieldNumber = 4,
@@ -4240,15 +4240,15 @@ class TargetRegion final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_y_offset();
 
   public:
-  // float percent_chance = 1;
-  bool has_percent_chance() const;
-  void clear_percent_chance() ;
-  float percent_chance() const;
-  void set_percent_chance(float value);
+  // float weight = 1;
+  bool has_weight() const;
+  void clear_weight() ;
+  float weight() const;
+  void set_weight(float value);
 
   private:
-  float _internal_percent_chance() const;
-  void _internal_set_percent_chance(float value);
+  float _internal_weight() const;
+  void _internal_set_weight(float value);
 
   public:
   // float depth = 7;
@@ -4364,7 +4364,7 @@ class TargetRegion final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::RegionLength* x_offset_;
     ::aim::RegionLength* y_offset_;
-    float percent_chance_;
+    float weight_;
     float depth_;
     float depth_jitter_;
     union TypeUnion {
@@ -4532,7 +4532,7 @@ class TargetProfile final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kPercentChanceFieldNumber = 1,
+    kWeightFieldNumber = 1,
     kTargetRadiusFieldNumber = 2,
     kTargetRadiusJitterFieldNumber = 3,
     kSpeedFieldNumber = 4,
@@ -4543,15 +4543,15 @@ class TargetProfile final : public ::google::protobuf::Message
     kTargetHitRadiusFieldNumber = 9,
     kPillFieldNumber = 10,
   };
-  // float percent_chance = 1;
-  bool has_percent_chance() const;
-  void clear_percent_chance() ;
-  float percent_chance() const;
-  void set_percent_chance(float value);
+  // float weight = 1;
+  bool has_weight() const;
+  void clear_weight() ;
+  float weight() const;
+  void set_weight(float value);
 
   private:
-  float _internal_percent_chance() const;
-  void _internal_set_percent_chance(float value);
+  float _internal_weight() const;
+  void _internal_set_weight(float value);
 
   public:
   // float target_radius = 2;
@@ -4691,7 +4691,7 @@ class TargetProfile final : public ::google::protobuf::Message
                           const TargetProfile& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    float percent_chance_;
+    float weight_;
     float target_radius_;
     float target_radius_jitter_;
     float speed_;
@@ -8620,32 +8620,32 @@ inline void RegionVec3::set_allocated_z(::aim::RegionLength* value) {
 
 // TargetRegion
 
-// float percent_chance = 1;
-inline bool TargetRegion::has_percent_chance() const {
+// float weight = 1;
+inline bool TargetRegion::has_weight() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline void TargetRegion::clear_percent_chance() {
+inline void TargetRegion::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.percent_chance_ = 0;
+  _impl_.weight_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float TargetRegion::percent_chance() const {
-  // @@protoc_insertion_point(field_get:aim.TargetRegion.percent_chance)
-  return _internal_percent_chance();
+inline float TargetRegion::weight() const {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.weight)
+  return _internal_weight();
 }
-inline void TargetRegion::set_percent_chance(float value) {
-  _internal_set_percent_chance(value);
+inline void TargetRegion::set_weight(float value) {
+  _internal_set_weight(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.TargetRegion.percent_chance)
+  // @@protoc_insertion_point(field_set:aim.TargetRegion.weight)
 }
-inline float TargetRegion::_internal_percent_chance() const {
+inline float TargetRegion::_internal_weight() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.percent_chance_;
+  return _impl_.weight_;
 }
-inline void TargetRegion::_internal_set_percent_chance(float value) {
+inline void TargetRegion::_internal_set_weight(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.percent_chance_ = value;
+  _impl_.weight_ = value;
 }
 
 // .aim.RegionLength x_offset = 2;
@@ -12117,32 +12117,32 @@ inline void LinearScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
 
 // WallStrafeProfile
 
-// float percent_chance = 1;
-inline bool WallStrafeProfile::has_percent_chance() const {
+// float weight = 1;
+inline bool WallStrafeProfile::has_weight() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
-inline void WallStrafeProfile::clear_percent_chance() {
+inline void WallStrafeProfile::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.percent_chance_ = 0;
+  _impl_.weight_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float WallStrafeProfile::percent_chance() const {
-  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.percent_chance)
-  return _internal_percent_chance();
+inline float WallStrafeProfile::weight() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.weight)
+  return _internal_weight();
 }
-inline void WallStrafeProfile::set_percent_chance(float value) {
-  _internal_set_percent_chance(value);
+inline void WallStrafeProfile::set_weight(float value) {
+  _internal_set_weight(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.percent_chance)
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.weight)
 }
-inline float WallStrafeProfile::_internal_percent_chance() const {
+inline float WallStrafeProfile::_internal_weight() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.percent_chance_;
+  return _impl_.weight_;
 }
-inline void WallStrafeProfile::_internal_set_percent_chance(float value) {
+inline void WallStrafeProfile::_internal_set_weight(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.percent_chance_ = value;
+  _impl_.weight_ = value;
 }
 
 // .aim.RegionLength min_distance = 2;
@@ -14459,32 +14459,32 @@ inline void PillTargetDef::set_allocated_wall_up(::aim::StoredVec2* value) {
 
 // TargetProfile
 
-// float percent_chance = 1;
-inline bool TargetProfile::has_percent_chance() const {
+// float weight = 1;
+inline bool TargetProfile::has_weight() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline void TargetProfile::clear_percent_chance() {
+inline void TargetProfile::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.percent_chance_ = 0;
+  _impl_.weight_ = 0;
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline float TargetProfile::percent_chance() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.percent_chance)
-  return _internal_percent_chance();
+inline float TargetProfile::weight() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.weight)
+  return _internal_weight();
 }
-inline void TargetProfile::set_percent_chance(float value) {
-  _internal_set_percent_chance(value);
+inline void TargetProfile::set_weight(float value) {
+  _internal_set_weight(value);
   _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.percent_chance)
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.weight)
 }
-inline float TargetProfile::_internal_percent_chance() const {
+inline float TargetProfile::_internal_weight() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.percent_chance_;
+  return _impl_.weight_;
 }
-inline void TargetProfile::_internal_set_percent_chance(float value) {
+inline void TargetProfile::_internal_set_weight(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.percent_chance_ = value;
+  _impl_.weight_ = value;
 }
 
 // float target_radius = 2;
