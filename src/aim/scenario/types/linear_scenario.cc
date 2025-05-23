@@ -70,15 +70,34 @@ class LinearScenario : public BaseScenario {
         glm::vec2(1, 0),
         GetJitteredValue(
             def_.linear_def().angle(), def_.linear_def().angle_jitter(), app_->random_generator()));
-    if (pos.x > 0) {
-      EnsureNegative(direction.x);
-    } else {
-      EnsurePositive(direction.x);
+    InOutDirection in_out = def_.linear_def().direction();
+    if (in_out == InOutDirection::RANDOM) {
+      in_out = FlipCoin(app_->random_generator()) ? InOutDirection::IN : InOutDirection::OUT;
     }
-    if (pos.y > 0) {
-      EnsureNegative(direction.y);
+    if (in_out == InOutDirection::OUT) {
+      // Away from center
+      if (pos.x < 0) {
+        EnsureNegative(direction.x);
+      } else {
+        EnsurePositive(direction.x);
+      }
+      if (pos.y < 0) {
+        EnsureNegative(direction.y);
+      } else {
+        EnsurePositive(direction.y);
+      }
     } else {
-      EnsurePositive(direction.y);
+      // Towards center
+      if (pos.x > 0) {
+        EnsureNegative(direction.x);
+      } else {
+        EnsurePositive(direction.x);
+      }
+      if (pos.y > 0) {
+        EnsureNegative(direction.y);
+      } else {
+        EnsurePositive(direction.y);
+      }
     }
 
     target->SetWallPosition(pos, def_.room());

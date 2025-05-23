@@ -28,6 +28,12 @@ const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kBarrelRoom, "Barrel"},
 };
 
+const std::vector<std::pair<InOutDirection, std::string>> kInOutDirections{
+    {InOutDirection::IN, "Towards center"},
+    {InOutDirection::OUT, "Away from center"},
+    {InOutDirection::RANDOM, "Random"},
+};
+
 const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kClickSingle, "Single"},
     {ShotType::kTrackingInvincible, "Tracking"},
@@ -277,6 +283,13 @@ class ScenarioEditorScreen : public UiScreen {
     JitteredValueInput("AngleInput", &angle, &angle_jitter, 1, 3, "%.0f");
     d.set_angle(angle);
     d.set_angle_jitter(angle_jitter);
+
+    ImGui::Text("Initial direction");
+    ImGui::SameLine();
+    InOutDirection direction_type = d.has_direction() ? d.direction() : InOutDirection::IN;
+    ImGui::SimpleTypeDropdown(
+        "DirectionTypeDropdown", &direction_type, kInOutDirections, char_x_ * 20);
+    d.set_direction(direction_type);
 
     ImGui::Text("Initial target location");
     ImGui::Indent();
