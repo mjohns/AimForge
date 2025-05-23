@@ -82,8 +82,7 @@ class SettingsScreen : public UiScreen {
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_size.x * 4);
-    ImGui::InputText(
-        "##Metronome_BPM", &settings_updater_.metronome_bpm, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::InputFloat("##MetronomeBpm", &settings_updater_.metronome_bpm, 1, 5, "%.0f");
 
     ImGui::Text("Theme");
     ImGui::SameLine();
@@ -128,8 +127,7 @@ class SettingsScreen : public UiScreen {
     ImGui::Text("Crosshair Size");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_size.x * 4);
-    ImGui::InputText(
-        "##CrosshairSize", &settings_updater_.crosshair_size, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::InputFloat("##CrosshairSize", &settings_updater_.crosshair_size, 0.1, 1, "%.1f");
 
     ImGui::Text("Disable \"Click to Start\"");
     ImGui::SameLine();
