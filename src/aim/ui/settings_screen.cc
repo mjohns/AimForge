@@ -81,52 +81,23 @@ class SettingsScreen : public UiScreen {
 
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 4);
+    ImGui::SetNextItemWidth(char_size.x * 9);
     ImGui::InputFloat("##MetronomeBpm", &settings_updater_.metronome_bpm, 1, 5, "%.0f");
 
     ImGui::Text("Theme");
     ImGui::SameLine();
-    ImGuiComboFlags combo_flags = 0;
-    ImGui::PushItemWidth(char_size.x * 20);
-    if (ImGui::BeginCombo("##theme_combo", settings_updater_.theme_name.c_str(), combo_flags)) {
-      for (int i = 0; i < theme_names_.size(); ++i) {
-        auto& theme_name = theme_names_[i];
-        bool is_selected = theme_name == settings_updater_.theme_name;
-        if (ImGui::Selectable(std::format("{}##{}theme_name", theme_name, i).c_str(),
-                              is_selected)) {
-          settings_updater_.theme_name = theme_name;
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
-      }
-      ImGui::EndCombo();
-    }
 
-    ImGui::PopItemWidth();
+    ImGui::SimpleDropdown(
+        "ThemeDropdown", &settings_updater_.theme_name, theme_names_, char_size.x * 20);
+
     ImGui::Text("Crosshair");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 15);
-    if (ImGui::BeginCombo(
-            "##crosshair_combo", settings_updater_.crosshair_name.c_str(), combo_flags)) {
-      for (int i = 0; i < crosshair_names_.size(); ++i) {
-        auto& crosshair_name = crosshair_names_[i];
-        bool is_selected = crosshair_name == settings_updater_.crosshair_name;
-        if (ImGui::Selectable(std::format("{}##{}crosshair_name", crosshair_name, i).c_str(),
-                              is_selected)) {
-          settings_updater_.crosshair_name = crosshair_name;
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
-      }
-      ImGui::EndCombo();
-    }
-    ImGui::PopItemWidth();
+    ImGui::SimpleDropdown(
+        "CrosshairDropdown", &settings_updater_.crosshair_name, crosshair_names_, char_size.x * 15);
 
     ImGui::Text("Crosshair Size");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 4);
+    ImGui::SetNextItemWidth(char_size.x * 9);
     ImGui::InputFloat("##CrosshairSize", &settings_updater_.crosshair_size, 0.1, 1, "%.1f");
 
     ImGui::Text("Disable \"Click to Start\"");
