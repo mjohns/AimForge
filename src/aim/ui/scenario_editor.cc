@@ -1,3 +1,5 @@
+#include "scenario_editor.h"
+
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
@@ -13,7 +15,6 @@
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/scenario.h"
-#include "theme_editor_screen.h"
 
 namespace aim {
 namespace {
@@ -152,6 +153,7 @@ class ScenarioEditorScreen : public UiScreen {
                                 Application* app)
       : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
     projection_ = GetPerspectiveTransformation(app_->screen_info());
+
     auto themes = app_->settings_manager()->ListThemes();
     if (themes.size() > 0) {
       theme_ = app_->settings_manager()->GetTheme(themes[0]);
@@ -165,6 +167,8 @@ class ScenarioEditorScreen : public UiScreen {
       def_ = initial_scenario->def;
       original_name_ = initial_scenario->name;
       name_ = initial_scenario->name;
+      settings_ = app_->settings_manager()->GetCurrentSettingsForScenario(name_.full_name());
+      theme_ = app_->settings_manager()->GetCurrentTheme();
     }
   }
 
