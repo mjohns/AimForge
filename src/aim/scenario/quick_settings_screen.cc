@@ -166,13 +166,13 @@ class QuickSettingsScreen : public UiScreen {
       // ImGui::SetCursorPos(ImVec2(x_start, y_start));
 
       ImGui::Spacing();
-      ImGui::PushItemWidth(button_sz.x);
+      ImGui::SetNextItemWidth(button_sz.x);
       if (ImGui::Button("0", button_sz)) {
         updater_.metronome_bpm = 0;
       }
       ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_size.x * 9);
       ImGui::InputFloat("##MetronomeBpm", &updater_.metronome_bpm, 1, 5, "%.0f");
-      ImGui::PopItemWidth();
     }
   }
 

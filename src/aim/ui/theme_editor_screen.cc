@@ -101,22 +101,8 @@ struct WallAppearanceEditor {
         selected_type = kTextureItem;
       }
 
-      ImGui::PushItemWidth(char_size.x * 20);
-      std::string selector_id = "##appearance_selector" + id;
-      ImGuiComboFlags combo_flags = 0;
-      if (ImGui::BeginCombo(selector_id.c_str(), selected_type.c_str(), combo_flags)) {
-        for (auto item : {kSolidColorItem, kTextureItem}) {
-          bool is_selected = selected_type == item;
-          if (ImGui::Selectable(std::format("{}##appearance_type{}", item, id).c_str(),
-                                is_selected)) {
-            selected_type = item;
-          }
-          if (is_selected) {
-            ImGui::SetItemDefaultFocus();
-          }
-        }
-        ImGui::EndCombo();
-      }
+      std::vector<std::string> types = {kSolidColorItem, kTextureItem};
+      ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_size.x * 20);
 
       if (selected_type == kSolidColorItem) {
         color_editor.stored_color = appearance->mutable_color();
@@ -124,27 +110,10 @@ struct WallAppearanceEditor {
       }
       if (selected_type == kTextureItem) {
         WallTexture* texture = appearance->mutable_texture();
-        texture_name = texture->texture_name();
-        ImGuiComboFlags combo_flags = 0;
-        ImGui::PushItemWidth(char_size.x * 20);
-        if (ImGui::BeginCombo(
-                std::format("##texture_combo{}", id).c_str(), texture_name.c_str(), combo_flags)) {
-          for (int i = 0; i < texture_names.size(); ++i) {
-            auto& combo_texture_name = texture_names[i];
-            bool is_selected = texture_name == combo_texture_name;
-            if (ImGui::Selectable(
-                    std::format("{}##{}texture_name{}", combo_texture_name, i, id).c_str(),
-                    is_selected)) {
-              texture_name = combo_texture_name;
-            }
-            if (is_selected) {
-              ImGui::SetItemDefaultFocus();
-            }
-          }
-          ImGui::EndCombo();
-        }
-        ImGui::PopItemWidth();
-        texture->set_texture_name(texture_name);
+        ImGui::SimpleDropdown("TextureNameDropdown",
+                              texture->mutable_texture_name(),
+                              texture_names,
+                              char_size.x * 20);
 
         ImGui::Text("Scale");
         ImGui::SameLine();
@@ -204,7 +173,6 @@ class ThemeEditorScreen : public UiScreen {
     t.health_seconds = 3;
     t.hit_timer.AddElapsedSeconds(1);
 
-
     Target g = t;
     g.is_ghost = true;
     g.wall_position = glm::vec2(20, -20);
@@ -221,26 +189,13 @@ class ThemeEditorScreen : public UiScreen {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
 
-    ImGuiComboFlags combo_flags = 0;
     ImGui::Text("Theme");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 20);
-    if (ImGui::BeginCombo("##theme_combo", current_theme_name_.c_str(), combo_flags)) {
-      for (int i = 0; i < theme_names_.size(); ++i) {
-        auto& theme_name = theme_names_[i];
-        bool is_selected = theme_name == current_theme_name_;
-        if (ImGui::Selectable(std::format("{}##{}theme_name", theme_name, i).c_str(),
-                              is_selected)) {
-          UpdateCurrentTheme(theme_name);
-          app_->history_db()->UpdateRecentView(RecentViewType::THEME, theme_name);
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
-      }
-      ImGui::EndCombo();
+    if (ImGui::SimpleDropdown(
+            "ThemeDropdown", &current_theme_name_, theme_names_, char_size.x * 20)) {
+      UpdateCurrentTheme(current_theme_name_);
+      app_->history_db()->UpdateRecentView(RecentViewType::THEME, current_theme_name_);
     }
-    ImGui::PopItemWidth();
 
     ImGui::Text("Targets");
     ImGui::Indent();
