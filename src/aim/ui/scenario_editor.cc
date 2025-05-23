@@ -193,13 +193,6 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::EndPopup();
       }
     }
-
-    /*
-    Crosshair crosshair;
-    crosshair.mutable_dot()->set_draw_outline(true);
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    DrawCrosshair(crosshair, 25, current_theme_, app_->screen_info(), draw_list);
-    */
   }
 
   // Returns whether the screen should close
@@ -1165,7 +1158,7 @@ class ScenarioEditorScreen : public UiScreen {
                                      theme_,
                                      settings_.health_bar(),
                                      target_manager_.GetTargets(),
-                                     look_at.transform,
+                                     look_at,
                                      &ctx,
                                      stopwatch,
                                      &frame_times);

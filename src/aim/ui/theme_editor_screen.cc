@@ -295,7 +295,7 @@ class ThemeEditorScreen : public UiScreen {
                                      current_theme_,
                                      health_bar,
                                      target_manager_.GetTargets(),
-                                     look_at_.transform,
+                                     look_at_,
                                      &ctx,
                                      stopwatch,
                                      &frame_times);

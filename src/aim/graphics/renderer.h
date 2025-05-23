@@ -7,12 +7,13 @@
 #include <vector>
 
 #include "aim/common/times.h"
+#include "aim/core/camera.h"
 #include "aim/core/perf.h"
 #include "aim/core/target.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
-#include "aim/proto/theme.pb.h"
 #include "aim/proto/settings.pb.h"
+#include "aim/proto/theme.pb.h"
 
 namespace aim {
 
@@ -32,7 +33,7 @@ class Renderer {
                             const Theme& theme,
                             const HealthBarSettings& health_bar,
                             const std::vector<Target>& targets,
-                            const glm::mat4& view,
+                            const LookAtInfo& look_at,
                             RenderContext* ctx,
                             const Stopwatch& stopwatch,
                             FrameTimes* times) = 0;
