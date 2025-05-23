@@ -94,8 +94,8 @@ struct SettingsUpdater {
   void SaveIfChangesMade(const std::string& scenario_id);
   void SaveIfChangesMadeDebounced(const std::string& scenario_id, float debounce_seconds);
 
-  std::string cm_per_360;
-  std::string cm_per_360_jitter;
+  float cm_per_360;
+  float cm_per_360_jitter;
   std::string theme_name;
   std::string metronome_bpm;
   std::string crosshair_size;

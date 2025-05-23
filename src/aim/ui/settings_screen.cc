@@ -70,19 +70,15 @@ class SettingsScreen : public UiScreen {
     ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
     ImGui::PopItemWidth();
 
-    ImGui::Text("CM/360");
+    ImGui::Text("cm/360");
     ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 4);
-    ImGui::InputText("##CM/360", &settings_updater_.cm_per_360, ImGuiInputTextFlags_CharsDecimal);
-    ImGui::PopItemWidth();
-    ImGui::SameLine();
-    ImGui::Text("+/-");
-    ImGui::SameLine();
-    ImGui::PushItemWidth(char_size.x * 3);
-    ImGui::InputText("##CM_PER_360_JITTER",
-                     &settings_updater_.cm_per_360_jitter,
-                     ImGuiInputTextFlags_CharsDecimal);
-    ImGui::PopItemWidth();
+    ImGui::InputJitteredFloat("CmPer360",
+                              &settings_updater_.cm_per_360,
+                              &settings_updater_.cm_per_360_jitter,
+                              1,
+                              5,
+                              "%.0f",
+                              char_size.x * 9);
 
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
