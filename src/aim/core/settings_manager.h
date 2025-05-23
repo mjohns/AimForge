@@ -92,7 +92,6 @@ struct SettingsUpdater {
   explicit SettingsUpdater(SettingsManager* settings_manager, HistoryDb* history_db);
 
   void SaveIfChangesMade(const std::string& scenario_id);
-  void SaveIfChangesMadeDebounced(const std::string& scenario_id, float debounce_seconds);
 
   float cm_per_360;
   float cm_per_360_jitter;
@@ -109,7 +108,6 @@ struct SettingsUpdater {
  private:
   SettingsManager* settings_manager_;
   HistoryDb* history_db_;
-  Stopwatch last_update_timer_;
 };
 
 }  // namespace aim

@@ -139,7 +139,13 @@ class QuickSettingsScreen : public UiScreen {
 
       ImGui::Text("Auto Hold Tracking");
       ImGui::SameLine();
-      ImGui::Checkbox("##auto_hold_tracking", &updater_.auto_hold_tracking);
+      ImGui::Checkbox("##AutoHoldTracking", &updater_.auto_hold_tracking);
+
+      ImGui::Text("Show health bars");
+      ImGui::SameLine();
+      bool show_health_bars = updater_.health_bar.show();
+      ImGui::Checkbox("##ShowHealthBars", &show_health_bars);
+      updater_.health_bar.set_show(show_health_bars);
     }
 
     if (type_ == QuickSettingsType::METRONOME) {

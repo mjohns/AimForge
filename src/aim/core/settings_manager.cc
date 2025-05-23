@@ -369,14 +369,6 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
   }
 }
 
-void SettingsUpdater::SaveIfChangesMadeDebounced(const std::string& scenario_id,
-                                                 float debounce_seconds) {
-  if (last_update_timer_.IsRunning() && last_update_timer_.GetElapsedSeconds() < debounce_seconds) {
-    return;
-  }
-  SaveIfChangesMade(scenario_id);
-}
-
 void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (cm_per_360 > 0) {
@@ -435,9 +427,6 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   }
   settings_manager_->MaybeFlushToDisk(scenario_id);
   settings_manager_->MaybeInvalidateThemeCache();
-
-  last_update_timer_ = Stopwatch();
-  last_update_timer_.Start();
 }
 
 Theme GetDefaultTheme() {
