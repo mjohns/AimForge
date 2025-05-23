@@ -39,8 +39,7 @@ class QuickSettingsScreen : public UiScreen {
           updater_.cm_per_360 += event.wheel.y;
         }
         if (type_ == QuickSettingsType::METRONOME) {
-          float bpm = ParseFloat(updater_.metronome_bpm);
-          updater_.metronome_bpm = std::format("{}", bpm + event.wheel.y);
+          updater_.metronome_bpm += event.wheel.y;
         }
       }
     }
@@ -119,6 +118,7 @@ class QuickSettingsScreen : public UiScreen {
         }
         ImGui::EndCombo();
       }
+      ImGui::PopItemWidth();
       ImGui::Text("Crosshair");
       ImGui::SameLine();
       ImGui::PushItemWidth(char_size.x * 15);
@@ -136,6 +136,7 @@ class QuickSettingsScreen : public UiScreen {
         }
         ImGui::EndCombo();
       }
+      ImGui::PopItemWidth();
 
       ImGui::Text("Auto Hold Tracking");
       ImGui::SameLine();
@@ -153,12 +154,12 @@ class QuickSettingsScreen : public UiScreen {
         std::string bpm1 = std::format("{}", i);
         std::string bpm2 = std::format("{}", i + 5);
         if (ImGui::Button(bpm1.c_str(), button_sz)) {
-          updater_.metronome_bpm = bpm1;
+          updater_.metronome_bpm = i;
         }
         ImGui::SameLine();
         // ImGui::SetCursorPos(ImVec2(x_start, y_start));
         if (ImGui::Button(bpm2.c_str(), button_sz)) {
-          updater_.metronome_bpm = bpm2;
+          updater_.metronome_bpm = i + 5;
         }
       }
 
@@ -167,11 +168,11 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::PushItemWidth(button_sz.x);
       if (ImGui::Button("0", button_sz)) {
-        updater_.metronome_bpm = "0";
+        updater_.metronome_bpm = 0;
       }
       ImGui::SameLine();
-      ImGui::InputText(
-          "##METRONOME_BPM", &updater_.metronome_bpm, ImGuiInputTextFlags_CharsDecimal);
+      ImGui::InputFloat("##MetronomeBpm", &updater_.metronome_bpm, 1, 5, "%.0f");
+      ImGui::PopItemWidth();
     }
   }
 

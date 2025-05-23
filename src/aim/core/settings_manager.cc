@@ -358,9 +358,9 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     cm_per_360 = current_settings->cm_per_360();
     cm_per_360_jitter = current_settings->cm_per_360_jitter();
     theme_name = current_settings->theme_name();
-    metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
+    metronome_bpm = current_settings->metronome_bpm();
     dpi = current_settings->dpi();
-    crosshair_size = MaybeIntToString(current_settings->crosshair_size());
+    crosshair_size = current_settings->crosshair_size();
     crosshair_name = current_settings->current_crosshair_name();
     disable_click_to_start = current_settings->disable_click_to_start();
     auto_hold_tracking = current_settings->auto_hold_tracking();
@@ -406,18 +406,16 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     *current_settings->mutable_keybinds() = keybinds;
     settings_manager_->MarkDirty();
   }
-  float new_metronome_bpm = ParseFloat(metronome_bpm);
-  if (new_metronome_bpm >= 0 && current_settings->metronome_bpm() != new_metronome_bpm) {
-    current_settings->set_metronome_bpm(new_metronome_bpm);
+  if (metronome_bpm >= 0 && current_settings->metronome_bpm() != metronome_bpm) {
+    current_settings->set_metronome_bpm(metronome_bpm);
     settings_manager_->MarkDirty();
   }
   if (dpi >= 0 && current_settings->dpi() != dpi) {
     current_settings->set_dpi(dpi);
     settings_manager_->MarkDirty();
   }
-  float new_crosshair_size = ParseFloat(crosshair_size);
-  if (new_crosshair_size >= 0 && current_settings->crosshair_size() != new_crosshair_size) {
-    current_settings->set_crosshair_size(new_crosshair_size);
+  if (crosshair_size >= 0 && current_settings->crosshair_size() != crosshair_size) {
+    current_settings->set_crosshair_size(crosshair_size);
     settings_manager_->MarkDirty();
   }
   if (!google::protobuf::util::MessageDifferencer::Equivalent(health_bar,

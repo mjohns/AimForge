@@ -96,8 +96,8 @@ struct SettingsUpdater {
   float cm_per_360;
   float cm_per_360_jitter;
   std::string theme_name;
-  std::string metronome_bpm;
-  std::string crosshair_size;
+  float metronome_bpm;
+  float crosshair_size;
   std::string crosshair_name;
   float dpi;
   bool disable_click_to_start = false;
