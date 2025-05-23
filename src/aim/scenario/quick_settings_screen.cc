@@ -36,8 +36,7 @@ class QuickSettingsScreen : public UiScreen {
     if (event.type == SDL_EVENT_MOUSE_WHEEL) {
       if (event.wheel.y != 0) {
         if (type_ == QuickSettingsType::DEFAULT) {
-          float cm_per_360_val = ParseFloat(updater_.cm_per_360);
-          updater_.cm_per_360 = std::format("{}", cm_per_360_val + event.wheel.y);
+          updater_.cm_per_360 += event.wheel.y;
         }
         if (type_ == QuickSettingsType::METRONOME) {
           float bpm = ParseFloat(updater_.metronome_bpm);
@@ -76,26 +75,27 @@ class QuickSettingsScreen : public UiScreen {
         std::string sens1 = std::format("{}", i);
         std::string sens2 = std::format("{}", i + 5);
         if (ImGui::Button(sens1.c_str(), button_sz)) {
-          updater_.cm_per_360 = sens1;
+          updater_.cm_per_360 = i;
         }
         ImGui::SameLine();
         // ImGui::SetCursorPos(ImVec2(x_start, y_start));
         if (ImGui::Button(sens2.c_str(), button_sz)) {
-          updater_.cm_per_360 = sens2;
+          updater_.cm_per_360 = i + 5;
         }
       }
 
       // ImGui::SetCursorPos(ImVec2(x_start, y_start));
 
       ImGui::Spacing();
-      ImGui::PushItemWidth(button_sz.x);
-      ImGui::InputText("##CM_PER_360", &updater_.cm_per_360, ImGuiInputTextFlags_CharsDecimal);
-      ImGui::PopItemWidth();
+      ImGui::Text("cm/360");
       ImGui::SameLine();
-      ImGui::Text("+/-");
-      ImGui::SameLine();
-      ImGui::InputText(
-          "##CM_PER_360_JITTER", &updater_.cm_per_360_jitter, ImGuiInputTextFlags_CharsDecimal);
+      ImGui::InputJitteredFloat("CmPer360",
+                                &updater_.cm_per_360,
+                                &updater_.cm_per_360_jitter,
+                                1,
+                                5,
+                                "%.0f",
+                                char_size.x * 9);
 
       ImGui::Spacing();
       ImGui::Spacing();

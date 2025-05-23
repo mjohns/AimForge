@@ -76,4 +76,25 @@ static void OptionalInputFloat(const std::string& id,
   }
 }
 
+static void InputJitteredFloat(const std::string& id,
+                               float* value,
+                               float* jitter_value,
+                               float step,
+                               float fast_step,
+                               const char* format,
+                               float input_width) {
+  ImGui::IdGuard cid(id);
+  ImGui::SetNextItemWidth(input_width);
+  ImGui::InputFloat("##ValueEntry", value, step, fast_step, format);
+
+  ImGui::SameLine();
+  ImGui::Text("+/-");
+  ImGui::SameLine();
+  ImGui::SetNextItemWidth(input_width);
+  ImGui::InputFloat("##JitterValueEntry", jitter_value, step, fast_step, format);
+  if (*jitter_value < 0) {
+    *jitter_value = 0;
+  }
+}
+
 }  // namespace ImGui

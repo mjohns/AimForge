@@ -355,8 +355,8 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     : settings_manager_(settings_manager), history_db_(history_db) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (current_settings != nullptr) {
-    cm_per_360 = MaybeIntToString(current_settings->cm_per_360());
-    cm_per_360_jitter = MaybeIntToString(current_settings->cm_per_360_jitter());
+    cm_per_360 = current_settings->cm_per_360();
+    cm_per_360_jitter = current_settings->cm_per_360_jitter();
     theme_name = current_settings->theme_name();
     metronome_bpm = MaybeIntToString(current_settings->metronome_bpm());
     dpi = current_settings->dpi();
@@ -379,14 +379,12 @@ void SettingsUpdater::SaveIfChangesMadeDebounced(const std::string& scenario_id,
 
 void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
-  float new_cm_per_360 = ParseFloat(cm_per_360);
-  if (new_cm_per_360 > 0) {
-    current_settings->set_cm_per_360(new_cm_per_360);
+  if (cm_per_360 > 0) {
+    current_settings->set_cm_per_360(cm_per_360);
     settings_manager_->MarkDirty();
   }
-  float new_cm_per_360_jitter = cm_per_360_jitter.size() == 0 ? 0 : ParseFloat(cm_per_360_jitter);
-  if (new_cm_per_360_jitter != current_settings->cm_per_360_jitter()) {
-    current_settings->set_cm_per_360_jitter(new_cm_per_360_jitter);
+  if (cm_per_360_jitter != current_settings->cm_per_360_jitter()) {
+    current_settings->set_cm_per_360_jitter(cm_per_360_jitter);
     settings_manager_->MarkDirty();
   }
   if (current_settings->theme_name() != theme_name) {
