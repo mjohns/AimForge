@@ -215,7 +215,8 @@ class ScenarioEditorScreen : public UiScreen {
 
     auto& mgr = *app_->scenario_manager();
 
-    bool is_new_file = !original_name_.has_value() || original_name_->full_name() != name_.full_name();
+    bool is_new_file =
+        !original_name_.has_value() || original_name_->full_name() != name_.full_name();
     if (is_new_file) {
       auto existing_scenario_with_name = mgr.GetScenario(name_.full_name());
       if (existing_scenario_with_name.has_value()) {
@@ -686,7 +687,11 @@ class ScenarioEditorScreen : public UiScreen {
     int copy_i = -1;
     for (int i = 0; i < profile_list->size(); ++i) {
       ImGui::IdGuard lid(type_name, i);
+      auto* p = &profile_list->at(i);
       ImGui::TextFmt("{} #{}", type_name, i);
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 22);
+      ImGui::InputText("##DescriptionInput", p->mutable_description());
       if (ImGui::BeginPopupContextItem("profile_item_menu")) {
         if (ImGui::Selectable("Move up")) {
           move_up_i = i;
@@ -705,7 +710,6 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::OpenPopupOnItemClick("profile_item_menu", ImGuiPopupFlags_MouseButtonRight);
 
       ImGui::Indent();
-      auto* p = &profile_list->at(i);
       if (use_weights) {
         ImGui::Text("Selection weight");
         ImGui::SameLine();
@@ -1097,6 +1101,32 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       profile->clear_speed();
       profile->clear_speed_jitter();
+    }
+
+    bool has_growth = profile->target_radius_growth_time_seconds() > 0;
+    ImGui::Text("Pulse");
+    ImGui::SameLine();
+    ImGui::Checkbox("##PulseCheckbox", &has_growth);
+    if (has_growth) {
+      ImGui::Indent();
+      ImGui::Text("Time seconds");
+      ImGui::SameLine();
+      float growth_time = FirstGreaterThanZero(profile->target_radius_growth_time_seconds(), 2);
+      ImGui::SetNextItemWidth(char_x_ * 10);
+      ImGui::InputFloat("##GrowthTime", &growth_time, 0.1, 0.5, "%.1f");
+      profile->set_target_radius_growth_time_seconds(std::max(growth_time, 0.1f));
+
+      ImGui::Text("Final radius");
+      ImGui::SameLine();
+      float final_radius =
+          FirstGreaterThanZero(profile->target_radius_growth_size(), profile->target_radius() * 3);
+      ImGui::SetNextItemWidth(char_x_ * 10);
+      ImGui::InputFloat("##FinalGrowthRadius", &final_radius, 0.1, 0.5, "%.1f");
+      profile->set_target_radius_growth_size(std::max(final_radius, 0.1f));
+      ImGui::Unindent();
+    } else {
+      profile->clear_target_radius_growth_time_seconds();
+      profile->clear_target_radius_growth_size();
     }
 
     ImGui::Text("Pill");
