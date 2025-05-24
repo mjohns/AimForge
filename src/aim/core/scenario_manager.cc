@@ -93,6 +93,17 @@ std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
 
 ScenarioManager::ScenarioManager(FileSystem* fs) : fs_(fs) {}
 
+std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
+    const std::string& bundle_name) {
+  std::vector<std::string> names;
+  for (const ScenarioItem& s : scenarios()) {
+    if (s.name.bundle_name() == bundle_name) {
+      names.push_back(s.name.relative_name());
+    }
+  }
+  return names;
+}
+
 void ScenarioManager::LoadScenariosFromDisk() {
   scenarios_.clear();
   for (BundleInfo& bundle : fs_->GetBundles()) {

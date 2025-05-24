@@ -10,10 +10,12 @@
 
 namespace aim {
 
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(Application* app);
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const std::string& scenario_id,
-                                                     Application* app);
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const std::optional<ScenarioItem>& scenario,
+struct ScenarioEditorOptions {
+  std::string scenario_id;
+  bool is_new_copy = false;
+};
+
+std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const ScenarioEditorOptions& options,
                                                      Application* app);
 
 }  // namespace aim
