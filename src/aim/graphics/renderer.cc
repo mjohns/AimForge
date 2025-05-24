@@ -5,7 +5,7 @@
 #include <SDL3/SDL.h>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/vector_angle.hpp> 
+#include <glm/gtx/vector_angle.hpp>
 #include <glm/mat4x4.hpp>
 
 #include "aim/common/geometry.h"
@@ -699,7 +699,8 @@ class RendererImpl : public Renderer {
               glm::vec3 to_camera = look_at.position - target.position;
               to_camera.z = 0;
               if (glm::length(to_camera) > 0.01) {
-                float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), up);
+                float angle =
+                    glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), up);
                 transform = glm::rotate(transform, angle, up);
               }
 

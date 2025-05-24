@@ -21,6 +21,7 @@ struct Target {
   u16 id = 0;
   glm::vec3 position{};
   std::optional<glm::vec2> wall_position;
+  float wall_depth = 0;
   float radius = 1.0f;
   float height = 3.0f;
   float hit_radius = -1.0f;
@@ -44,6 +45,8 @@ struct Target {
   float health_seconds = 0;
   std::optional<RadiusAtKill> radius_at_kill{};
 
+  void SetWallPosition(const glm::vec3& p, const Room& room);
+
   bool CanHit() const {
     return !hidden && !is_ghost;
   }
@@ -55,7 +58,8 @@ struct Target {
 
 glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
                                       float target_radius,
-                                      const Room& room);
+                                      const Room& room,
+                                      float depth = 0);
 
 class TargetManager {
  public:

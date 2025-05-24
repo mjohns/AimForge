@@ -43,16 +43,17 @@ class BarrelScenario : public BaseScenario {
   void FillInNewTarget(Target* target) override {
     // Get position on wall (not too close in ellipse etc.)
     // Get movement direction vector and speed.
-    glm::vec2 pos = wall_target_placer_->GetNextPosition();
+    glm::vec3 pos = wall_target_placer_->GetNextPosition();
+    glm::vec2 pos2 = pos;
     glm::vec2 direction_pos = GetRandomPositionInCircle(
         0,
         FirstNonZero(def_.barrel_def().direction_radius_percent(), 0.45f) * room_radius_,
         app_->random_generator());
 
     // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
-    glm::vec2 direction = glm::normalize(direction_pos - pos);
+    glm::vec2 direction = glm::normalize(direction_pos - pos2);
 
-    target->wall_position = pos;
+    target->SetWallPosition(pos, def_.room());
     target->wall_direction = direction;
   }
 
