@@ -251,7 +251,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
                                      theme_,
                                      settings_.health_bar(),
                                      target_manager_.GetTargets(),
-                                     look_at_.transform,
+                                     look_at_,
                                      &ctx,
                                      timer_.run_stopwatch(),
                                      &current_times_);
@@ -463,7 +463,7 @@ NavigationEvent Scenario::ResumeInternal() {
                                      theme_,
                                      settings_.health_bar(),
                                      target_manager_.GetTargets(),
-                                     look_at_.transform,
+                                     look_at_,
                                      &ctx,
                                      timer_.run_stopwatch(),
                                      &current_times_);

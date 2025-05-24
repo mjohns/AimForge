@@ -42,6 +42,7 @@ PitchYaw GetPitchYawFromLookAt(const glm::vec3& look_at,
 }
 
 void FillInLookAt(const glm::vec3& position, const glm::vec3& camera_up, LookAtInfo* info) {
+  info->position = position;
   info->front = glm::normalize(info->front);
   info->right = GetNormalizedRight(info->front, camera_up);
   info->up = glm::normalize(glm::cross(info->right, info->front));

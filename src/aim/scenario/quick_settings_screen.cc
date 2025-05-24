@@ -138,7 +138,6 @@ class QuickSettingsScreen : public UiScreen {
       // ImGui::SetCursorPos(ImVec2(x_start, y_start));
 
       ImGui::Spacing();
-      ImGui::SetNextItemWidth(button_sz.x);
       if (ImGui::Button("0", button_sz)) {
         updater_.metronome_bpm = 0;
       }

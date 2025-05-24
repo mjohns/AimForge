@@ -290,7 +290,7 @@ class RendererImpl : public Renderer {
                     const Theme& theme,
                     const HealthBarSettings& health_bar,
                     const std::vector<Target>& targets,
-                    const glm::mat4& view,
+                    const LookAtInfo& look_at,
                     RenderContext* ctx,
                     const Stopwatch& stopwatch,
                     FrameTimes* times) override {
@@ -333,13 +333,13 @@ class RendererImpl : public Renderer {
     SDL_SetGPUScissor(ctx->render_pass, &scissor_rect);
     */
 
-    const glm::mat4 view_projection = projection * view;
+    const glm::mat4 view_projection = projection * look_at.transform;
     times->render_room_start = stopwatch.GetElapsedMicros();
     DrawRoom(view_projection, theme, room, ctx);
     times->render_room_end = stopwatch.GetElapsedMicros();
 
     times->render_targets_start = stopwatch.GetElapsedMicros();
-    DrawTargets(view_projection, theme, health_bar, targets, ctx);
+    DrawTargets(view_projection, look_at, theme, health_bar, targets, ctx);
     times->render_targets_end = stopwatch.GetElapsedMicros();
 
     SDL_EndGPURenderPass(ctx->render_pass);
@@ -638,6 +638,7 @@ class RendererImpl : public Renderer {
   }
 
   void DrawTargets(const glm::mat4& view_projection,
+                   const LookAtInfo& look_at,
                    const Theme& theme,
                    const HealthBarSettings& health_bar_settings,
                    const std::vector<Target>& targets,

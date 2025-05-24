@@ -130,7 +130,7 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
                                     theme,
                                     settings.health_bar(),
                                     target_manager.GetTargets(),
-                                    look_at.transform,
+                                    look_at,
                                     &ctx,
                                     timer.run_stopwatch(),
                                     &times);
