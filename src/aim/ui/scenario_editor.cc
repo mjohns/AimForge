@@ -27,75 +27,27 @@ const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kBarrelRoom, "Barrel"},
 };
 
-const std::vector<ShotType::TypeCase> kShotTypes{
-    ShotType::kClickSingle,
-    ShotType::kTrackingInvincible,
-    ShotType::kTrackingKill,
-    ShotType::kPoke,
-    ShotType::TYPE_NOT_SET,
-};
-const std::vector<ScenarioDef::TypeCase> kScenarioTypes{
-    ScenarioDef::kStaticDef,
-    ScenarioDef::kCenteringDef,
-    ScenarioDef::kWallStrafeDef,
-    ScenarioDef::kBarrelDef,
-    ScenarioDef::kLinearDef,
-};
-const std::vector<TargetRegion::TypeCase> kRegionTypes{
-    TargetRegion::kRectangle,
-    TargetRegion::kCircle,
-    TargetRegion::kEllipse,
+const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
+    {ShotType::kClickSingle, "Single"},
+    {ShotType::kTrackingInvincible, "Tracking"},
+    {ShotType::kTrackingKill, "Tracking kill"},
+    {ShotType::kPoke, "Poke"},
+    {ShotType::TYPE_NOT_SET, "Default"},
 };
 
-std::string RegionTypeToString(const TargetRegion::TypeCase& type) {
-  switch (type) {
-    case TargetRegion::kRectangle:
-      return "Rectangle";
-    case TargetRegion::kCircle:
-      return "Circle";
-    case TargetRegion::kEllipse:
-      return "Ellipse";
-    default:
-      break;
-  }
-  return "";
-}
+const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
+    {ScenarioDef::kStaticDef, "Static"},
+    {ScenarioDef::kCenteringDef, "Centering"},
+    {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
+    {ScenarioDef::kBarrelDef, "Barrel"},
+    {ScenarioDef::kLinearDef, "Linear"},
+};
 
-std::string ShotTypeToString(const ShotType::TypeCase& type) {
-  switch (type) {
-    case ShotType::kClickSingle:
-      return "Click";
-    case ShotType::kTrackingInvincible:
-      return "Tracking";
-    case ShotType::kTrackingKill:
-      return "Tracking kill";
-    case ShotType::kPoke:
-      return "Poke";
-    case ShotType::TYPE_NOT_SET:
-      return "Default";
-    default:
-      break;
-  }
-  return "";
-}
-
-std::string ScenarioTypeToString(const ScenarioDef::TypeCase& type) {
-  switch (type) {
-    case ScenarioDef::kStaticDef:
-      return "Static";
-    case ScenarioDef::kCenteringDef:
-      return "Centering";
-    case ScenarioDef::kBarrelDef:
-      return "Barrel";
-    case ScenarioDef::kLinearDef:
-      return "Linear";
-    case ScenarioDef::kWallStrafeDef:
-      return "Wall Strafe";
-    default:
-      break;
-  }
-  return "";
-}
+const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
+    {TargetRegion::kRectangle, "Rectangle"},
+    {TargetRegion::kCircle, "Circle"},
+    {TargetRegion::kEllipse, "Ellipse"},
+};
 
 Room GetDefaultSimpleRoom() {
   Room r;
@@ -301,25 +253,8 @@ class ScenarioEditorScreen : public UiScreen {
       def_.mutable_static_def();
     }
 
-    ImGui::PushItemWidth(char_x_ * 15);
     auto scenario_type = def_.type_case();
-    std::string type_string = ScenarioTypeToString(scenario_type);
-    if (ImGui::BeginCombo("##ScenarioTypeCombo", type_string.c_str(), 0)) {
-      ImGui::LoopId loop_id;
-      for (auto type_item : kScenarioTypes) {
-        auto lid = loop_id.Get();
-        std::string item_name = ScenarioTypeToString(type_item);
-        bool is_selected = type_string == item_name;
-        if (ImGui::Selectable(item_name.c_str(), is_selected)) {
-          scenario_type = type_item;
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
-      }
-      ImGui::EndCombo();
-    }
-    ImGui::PopItemWidth();
+    ImGui::SimpleTypeDropdown("ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
 
     DrawShotTypeEditor(char_size);
 
@@ -611,25 +546,8 @@ class ScenarioEditorScreen : public UiScreen {
       region->clear_percent_chance();
     }
 
-    ImGui::PushItemWidth(char_x_ * 15);
     auto region_type = region->type_case();
-    std::string type_string = RegionTypeToString(region_type);
-    if (ImGui::BeginCombo("##RegionTypeCombo", type_string.c_str(), 0)) {
-      ImGui::LoopId loop_id;
-      for (auto type_item : kRegionTypes) {
-        auto lid = loop_id.Get();
-        std::string item_name = RegionTypeToString(type_item);
-        bool is_selected = type_string == item_name;
-        if (ImGui::Selectable(item_name.c_str(), is_selected)) {
-          region_type = type_item;
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
-      }
-      ImGui::EndCombo();
-    }
-    ImGui::PopItemWidth();
+    ImGui::SimpleTypeDropdown("RegionTypeDropdown", &region_type, kRegionTypes, char_x_ * 15);
 
     if (region_type == TargetRegion::kRectangle) {
       auto* t = region->mutable_rectangle();
@@ -921,35 +839,21 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Shot type");
     ImGui::SameLine();
 
-    ImGui::PushItemWidth(char_x_ * 15);
-    std::string type_string = ShotTypeToString(def_.shot_type().type_case());
-    if (ImGui::BeginCombo("##shot_type_combo", type_string.c_str(), 0)) {
-      ImGui::LoopId loop_id;
-      for (auto type : kShotTypes) {
-        auto lid = loop_id.Get();
-        std::string name = ShotTypeToString(type);
-        bool is_selected = type_string == name;
-        if (ImGui::Selectable(name.c_str(), is_selected)) {
-          if (type == ShotType::kClickSingle) {
-            def_.mutable_shot_type()->set_click_single(true);
-          }
-          if (type == ShotType::kTrackingInvincible) {
-            def_.mutable_shot_type()->set_tracking_invincible(true);
-          }
-          if (type == ShotType::kTrackingKill) {
-            def_.mutable_shot_type()->set_tracking_kill(true);
-          }
-          if (type == ShotType::kPoke) {
-            def_.mutable_shot_type()->set_poke(true);
-          }
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
+    auto type = def_.shot_type().type_case();
+    if (ImGui::SimpleTypeDropdown("ShotTypeDropdown", &type, kShotTypes, char_x_ * 15)) {
+      if (type == ShotType::kClickSingle) {
+        def_.mutable_shot_type()->set_click_single(true);
       }
-      ImGui::EndCombo();
+      if (type == ShotType::kTrackingInvincible) {
+        def_.mutable_shot_type()->set_tracking_invincible(true);
+      }
+      if (type == ShotType::kTrackingKill) {
+        def_.mutable_shot_type()->set_tracking_kill(true);
+      }
+      if (type == ShotType::kPoke) {
+        def_.mutable_shot_type()->set_poke(true);
+      }
     }
-    ImGui::PopItemWidth();
   }
 
   void DrawRoomEditor(const ImVec2& char_size) {
