@@ -129,4 +129,44 @@ static bool SimpleDropdown(const std::string& id,
   return item_was_selected;
 }
 
+template <typename T>
+bool SimpleTypeDropdown(const std::string& id,
+                        T* value,
+                        const std::vector<std::pair<T, std::string>>& values,
+                        float input_width = -1) {
+  ImGui::IdGuard cid(id);
+  if (input_width > 0) {
+    ImGui::PushItemWidth(input_width);
+  }
+  std::string initial_value;
+  for (auto& v : values) {
+    if (v.first == *value) {
+      initial_value = v.second;
+      break;
+    }
+  }
+
+  bool item_was_selected = false;
+  ImGuiComboFlags combo_flags = 0;
+  if (ImGui::BeginCombo("##Combo", initial_value.c_str(), combo_flags)) {
+    ImGui::LoopId loop_id;
+    for (const auto& item : values) {
+      auto id = loop_id.Get();
+      bool is_selected = item.first == *value;
+      if (ImGui::Selectable(item.second.c_str(), is_selected)) {
+        *value = item.first;
+        item_was_selected = true;
+      }
+      if (is_selected) {
+        ImGui::SetItemDefaultFocus();
+      }
+    }
+    ImGui::EndCombo();
+  }
+  if (input_width > 0) {
+    ImGui::PopItemWidth();
+  }
+  return item_was_selected;
+}
+
 }  // namespace ImGui

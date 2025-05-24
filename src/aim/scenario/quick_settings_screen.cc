@@ -100,43 +100,15 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
-      ImGuiComboFlags combo_flags = 0;
       ImGui::Text("Theme");
       ImGui::SameLine();
+      ImGui::SimpleDropdown("ThemeDropdown", &updater_.theme_name, theme_names_, char_size.x * 20);
       ImGui::PushItemWidth(char_size.x * 20);
-      if (ImGui::BeginCombo("##theme_combo", updater_.theme_name.c_str(), combo_flags)) {
-        for (int i = 0; i < theme_names_.size(); ++i) {
-          auto& theme_name = theme_names_[i];
-          bool is_selected = theme_name == updater_.theme_name;
-          if (ImGui::Selectable(std::format("{}##{}theme_name", theme_name, i).c_str(),
-                                is_selected)) {
-            updater_.theme_name = theme_name;
-          }
-          if (is_selected) {
-            ImGui::SetItemDefaultFocus();
-          }
-        }
-        ImGui::EndCombo();
-      }
-      ImGui::PopItemWidth();
+
       ImGui::Text("Crosshair");
       ImGui::SameLine();
-      ImGui::PushItemWidth(char_size.x * 15);
-      if (ImGui::BeginCombo("##crosshair_combo", updater_.crosshair_name.c_str(), combo_flags)) {
-        for (int i = 0; i < crosshair_names_.size(); ++i) {
-          auto& crosshair_name = crosshair_names_[i];
-          bool is_selected = crosshair_name == updater_.crosshair_name;
-          if (ImGui::Selectable(std::format("{}##{}crosshair_name", crosshair_name, i).c_str(),
-                                is_selected)) {
-            updater_.crosshair_name = crosshair_name;
-          }
-          if (is_selected) {
-            ImGui::SetItemDefaultFocus();
-          }
-        }
-        ImGui::EndCombo();
-      }
-      ImGui::PopItemWidth();
+      ImGui::SimpleDropdown(
+          "CrosshairDropdown", &updater_.crosshair_name, crosshair_names_, char_size.x * 15);
 
       ImGui::Text("Auto Hold Tracking");
       ImGui::SameLine();

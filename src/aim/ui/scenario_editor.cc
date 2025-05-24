@@ -21,11 +21,12 @@ namespace {
 
 const char* kErrorPopup = "ERROR_POPUP";
 
-const std::vector<Room::TypeCase> kSupportedRoomTypes{
-    Room::kSimpleRoom,
-    Room::kCylinderRoom,
-    Room::kBarrelRoom,
+const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
+    {Room::kSimpleRoom, "Simple"},
+    {Room::kCylinderRoom, "Cylinder"},
+    {Room::kBarrelRoom, "Barrel"},
 };
+
 const std::vector<ShotType::TypeCase> kShotTypes{
     ShotType::kClickSingle,
     ShotType::kTrackingInvincible,
@@ -72,20 +73,6 @@ std::string ShotTypeToString(const ShotType::TypeCase& type) {
       return "Poke";
     case ShotType::TYPE_NOT_SET:
       return "Default";
-    default:
-      break;
-  }
-  return "";
-}
-
-std::string RoomTypeToString(const Room::TypeCase& type) {
-  switch (type) {
-    case Room::kSimpleRoom:
-      return "Simple Room";
-    case Room::kCylinderRoom:
-      return "Cylinder Room";
-    case Room::kBarrelRoom:
-      return "Barrel Room";
     default:
       break;
   }
@@ -173,31 +160,14 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
  protected:
-  void BundlePicker(const std::string& id, std::string* bundle_name) {
-    ImGui::PushItemWidth(char_x_ * 7);
-    if (ImGui::BeginCombo("##ScenarioTypeCombo", bundle_name->c_str(), 0)) {
-      ImGui::LoopId loop_id;
-      for (const std::string& bundle_item : bundle_names_) {
-        auto lid = loop_id.Get();
-        bool is_selected = bundle_item == *bundle_name;
-        if (ImGui::Selectable(bundle_item.c_str(), is_selected)) {
-          *bundle_name = bundle_item;
-        }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
-        }
-      }
-      ImGui::EndCombo();
-    }
-    ImGui::PopItemWidth();
-  }
-
   void DrawScreen() override {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_size_ = char_size;
     char_x_ = char_size_.x;
 
-    BundlePicker("BundlePicker", name_.mutable_bundle_name());
+    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 7);
+
+    ImGui::PushItemWidth(char_x_ * 7);
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_x_ * 40);
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
@@ -991,34 +961,20 @@ class ScenarioEditorScreen : public UiScreen {
       room = GetDefaultSimpleRoom();
     }
 
-    ImGui::PushItemWidth(char_x_ * 15);
-    std::string roomtype_string = RoomTypeToString(room.type_case());
-    if (ImGui::BeginCombo("##roomtype_combo", roomtype_string.c_str(), combo_flags)) {
-      ImGui::LoopId loop_id;
-      for (auto type : kSupportedRoomTypes) {
-        auto lid = loop_id.Get();
-        std::string name = RoomTypeToString(type);
-        bool is_selected = roomtype_string == name;
-        if (ImGui::Selectable(name.c_str(), is_selected)) {
-          if (type != room.type_case()) {
-            if (type == Room::kSimpleRoom) {
-              room = GetDefaultSimpleRoom();
-            }
-            if (type == Room::kCylinderRoom) {
-              room = GetDefaultCylinderRoom();
-            }
-            if (type == Room::kBarrelRoom) {
-              room = GetDefaultBarrelRoom();
-            }
-          }
+    auto type = room.type_case();
+    if (ImGui::SimpleTypeDropdown("RoomTypeDropdown", &type, kRoomTypes, char_x_ * 15)) {
+      if (type != room.type_case()) {
+        if (type == Room::kSimpleRoom) {
+          room = GetDefaultSimpleRoom();
         }
-        if (is_selected) {
-          ImGui::SetItemDefaultFocus();
+        if (type == Room::kCylinderRoom) {
+          room = GetDefaultCylinderRoom();
+        }
+        if (type == Room::kBarrelRoom) {
+          room = GetDefaultBarrelRoom();
         }
       }
-      ImGui::EndCombo();
     }
-    ImGui::PopItemWidth();
 
     if (room.type_case() == Room::kSimpleRoom) {
       ImGui::Text("Width");
