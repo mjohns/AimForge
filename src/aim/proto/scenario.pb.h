@@ -28,6 +28,7 @@
 #include "google/protobuf/message_lite.h"
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
+#include "google/protobuf/generated_enum_reflection.h"
 #include "google/protobuf/unknown_field_set.h"
 #include "common.pb.h"
 // @@protoc_insertion_point(includes)
@@ -141,6 +142,40 @@ namespace protobuf {
 }  // namespace google
 
 namespace aim {
+enum InOutDirection : int {
+  IN = 0,
+  OUT = 1,
+  RANDOM = 2,
+  InOutDirection_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  InOutDirection_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool InOutDirection_IsValid(int value);
+extern const uint32_t InOutDirection_internal_data_[];
+constexpr InOutDirection InOutDirection_MIN = static_cast<InOutDirection>(0);
+constexpr InOutDirection InOutDirection_MAX = static_cast<InOutDirection>(2);
+constexpr int InOutDirection_ARRAYSIZE = 2 + 1;
+const ::google::protobuf::EnumDescriptor*
+InOutDirection_descriptor();
+template <typename T>
+const std::string& InOutDirection_Name(T value) {
+  static_assert(std::is_same<T, InOutDirection>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to InOutDirection_Name().");
+  return InOutDirection_Name(static_cast<InOutDirection>(value));
+}
+template <>
+inline const std::string& InOutDirection_Name(InOutDirection value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<InOutDirection_descriptor,
+                                                 0, 2>(
+      static_cast<int>(value));
+}
+inline bool InOutDirection_Parse(absl::string_view name, InOutDirection* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<InOutDirection>(
+      InOutDirection_descriptor(), name, value);
+}
 
 // ===================================================================
 
@@ -6135,6 +6170,7 @@ class LinearScenarioDef final : public ::google::protobuf::Message
     kAngleJitterFieldNumber = 2,
     kWidthFieldNumber = 3,
     kHeightFieldNumber = 4,
+    kDirectionFieldNumber = 6,
   };
   // .aim.TargetPlacementStrategy target_placement_strategy = 5;
   bool has_target_placement_strategy() const;
@@ -6195,12 +6231,23 @@ class LinearScenarioDef final : public ::google::protobuf::Message
   void _internal_set_height(float value);
 
   public:
+  // .aim.InOutDirection direction = 6;
+  bool has_direction() const;
+  void clear_direction() ;
+  ::aim::InOutDirection direction() const;
+  void set_direction(::aim::InOutDirection value);
+
+  private:
+  ::aim::InOutDirection _internal_direction() const;
+  void _internal_set_direction(::aim::InOutDirection value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.LinearScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 1,
+      3, 6, 1,
       0, 2>
       _table_;
 
@@ -6225,6 +6272,7 @@ class LinearScenarioDef final : public ::google::protobuf::Message
     float angle_jitter_;
     float width_;
     float height_;
+    int direction_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -6608,6 +6656,7 @@ class BarrelScenarioDef final : public ::google::protobuf::Message
   enum : int {
     kTargetPlacementStrategyFieldNumber = 1,
     kDirectionRadiusPercentFieldNumber = 2,
+    kDirectionFieldNumber = 3,
   };
   // .aim.TargetPlacementStrategy target_placement_strategy = 1;
   bool has_target_placement_strategy() const;
@@ -6635,12 +6684,23 @@ class BarrelScenarioDef final : public ::google::protobuf::Message
   void _internal_set_direction_radius_percent(float value);
 
   public:
+  // .aim.InOutDirection direction = 3;
+  bool has_direction() const;
+  void clear_direction() ;
+  ::aim::InOutDirection direction() const;
+  void set_direction(::aim::InOutDirection value);
+
+  private:
+  ::aim::InOutDirection _internal_direction() const;
+  void _internal_set_direction(::aim::InOutDirection value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.BarrelScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
+      2, 3, 1,
       0, 2>
       _table_;
 
@@ -6662,6 +6722,7 @@ class BarrelScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
     float direction_radius_percent_;
+    int direction_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -11901,6 +11962,34 @@ inline void BarrelScenarioDef::_internal_set_direction_radius_percent(float valu
   _impl_.direction_radius_percent_ = value;
 }
 
+// .aim.InOutDirection direction = 3;
+inline bool BarrelScenarioDef::has_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void BarrelScenarioDef::clear_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline ::aim::InOutDirection BarrelScenarioDef::direction() const {
+  // @@protoc_insertion_point(field_get:aim.BarrelScenarioDef.direction)
+  return _internal_direction();
+}
+inline void BarrelScenarioDef::set_direction(::aim::InOutDirection value) {
+  _internal_set_direction(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.BarrelScenarioDef.direction)
+}
+inline ::aim::InOutDirection BarrelScenarioDef::_internal_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::InOutDirection>(_impl_.direction_);
+}
+inline void BarrelScenarioDef::_internal_set_direction(::aim::InOutDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // LinearScenarioDef
@@ -12111,6 +12200,34 @@ inline void LinearScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.LinearScenarioDef.target_placement_strategy)
+}
+
+// .aim.InOutDirection direction = 6;
+inline bool LinearScenarioDef::has_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void LinearScenarioDef::clear_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline ::aim::InOutDirection LinearScenarioDef::direction() const {
+  // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.direction)
+  return _internal_direction();
+}
+inline void LinearScenarioDef::set_direction(::aim::InOutDirection value) {
+  _internal_set_direction(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.direction)
+}
+inline ::aim::InOutDirection LinearScenarioDef::_internal_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::InOutDirection>(_impl_.direction_);
+}
+inline void LinearScenarioDef::_internal_set_direction(::aim::InOutDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -14806,6 +14923,19 @@ inline TargetProfile::TypeCase TargetProfile::type_case() const {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace aim
 
+
+namespace google {
+namespace protobuf {
+
+template <>
+struct is_proto_enum<::aim::InOutDirection> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::aim::InOutDirection>() {
+  return ::aim::InOutDirection_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

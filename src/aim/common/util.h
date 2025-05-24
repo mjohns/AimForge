@@ -69,7 +69,6 @@ float GetJitteredValue(float base_value, float jitter, std::mt19937* random_gene
 bool FlipCoin(std::mt19937* random_generator);
 float GetRandInRange(float min, float max, std::mt19937* random_generator);
 
-
 template <typename T>
 bool IsValidIndex(const T& list, int i) {
   return i >= 0 && i < list.size();

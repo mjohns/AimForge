@@ -72,7 +72,8 @@ message TargetRegion {
   RegionLength x_offset = 2;
   RegionLength y_offset = 3;
 
-  // The distance in from the wall to place the target. The larget the depth, the closer to the camera. 0 depth is on the wall.
+  // The distance in from the wall to place the target. The larget the depth, the closer to the
+  // camera. 0 depth is on the wall.
   float depth = 7;
   float depth_jitter = 8;
 
@@ -191,6 +192,14 @@ message BarrelScenarioDef {
   // When targets spawn or hit a wall they will be directed towards a point in the center percent of
   // the barrel.
   float direction_radius_percent = 2;
+
+  InOutDirection direction = 3;
+}
+
+enum InOutDirection {
+  IN = 0;
+  OUT = 1;
+  RANDOM = 2;
 }
 
 // Targets move linearly within the specified room. Uses 2d wall placement so it support simple room
@@ -205,6 +214,8 @@ message LinearScenarioDef {
   float height = 4;
 
   TargetPlacementStrategy target_placement_strategy = 5;
+
+  InOutDirection direction = 6;
 }
 
 message WallStrafeProfile {
@@ -307,7 +318,8 @@ message PillTargetDef {
 }
 
 message TargetProfile {
-  // Proportional weight used to select this profile. If the weight of this profile is 2 and the other is 1, then this profile will be used 2/3 of the time.
+  // Proportional weight used to select this profile. If the weight of this profile is 2 and the
+  // other is 1, then this profile will be used 2/3 of the time.
   float weight = 1;
 
   float target_radius = 2;

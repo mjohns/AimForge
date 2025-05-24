@@ -27,11 +27,11 @@ message Crosshair {
 }
 
 message HealthBarSettings {
-   bool show = 1;
-   bool only_damaged = 2;
-   float height = 3;
-   float width = 4;
-   float height_above_target = 5;
+  bool show = 1;
+  bool only_damaged = 2;
+  float height = 3;
+  float width = 4;
+  float height_above_target = 5;
 }
 
 message Settings {
