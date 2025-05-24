@@ -664,9 +664,15 @@ class ScenarioEditorScreen : public UiScreen {
         number = std::min<u32>(number, profile_list->size() - 1);
         order_list->Set(i, number);
 
+        auto last_size = ImGui::GetItemRectSize();
+
         ImGui::SameLine();
-        if (ImGui::Button("x")) {
-          remove_at_i = i;
+        {
+          auto mat_icon = app_->font_manager()->UseMaterialIcons();
+          std::string cancel_icon = "\xEE\x97\x89";
+          if (ImGui::Button(cancel_icon.c_str(), ImVec2(0, last_size.y))) {
+            remove_at_i = i;
+          }
         }
       }
       if (ImGui::Button("Add##Order")) {
