@@ -20,6 +20,8 @@ int FontManager::medium_font_size() {
 bool FontManager::LoadFonts() {
   auto font_path = fonts_path_ / "Roboto-Regular.ttf";
   auto bold_font_path = fonts_path_ / "Roboto-Bold.ttf";
+  auto material_icons_path = fonts_path_ / "MaterialIcons-Regular.ttf";
+  // auto material_icons_path = fonts_path_ / "MaterialIconsOutlined-Regular.otf";
 
   ImGuiIO& io = ImGui::GetIO();
   default_font_ = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), default_font_size());
@@ -58,6 +60,19 @@ bool FontManager::LoadFonts() {
       io.Fonts->AddFontFromFileTTF(bold_font_path.string().c_str(), medium_font_size());
   if (medium_bold_font_ == nullptr) {
     Logger::get()->error("Unable to load medium bold font from: {}", bold_font_path.string());
+    return false;
+  }
+
+  static const ImWchar icons_ranges[] = {0xE005, 0xFFFF, 0};
+  ImFontConfig icons_config;
+  icons_config.MergeMode = true;
+  icons_config.PixelSnapH = true;
+
+  material_icons_font_ = io.Fonts->AddFontFromFileTTF(
+      material_icons_path.string().c_str(), medium_font_size() * 0.9, &icons_config, icons_ranges);
+  if (material_icons_font_ == nullptr) {
+    Logger::get()->error("Unable to load material icons font from: {}",
+                         material_icons_path.string());
     return false;
   }
 

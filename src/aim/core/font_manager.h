@@ -64,6 +64,10 @@ class FontManager {
     return ScopedFont(medium_bold_font_);
   }
 
+  ScopedFont UseMaterialIcons() {
+    return ScopedFont(material_icons_font_);
+  }
+
   FontManager(const FontManager&) = delete;
   FontManager(FontManager&&) = default;
   FontManager& operator=(FontManager other) = delete;
@@ -78,6 +82,7 @@ class FontManager {
   ImFont* large_bold_font_ = nullptr;
   ImFont* medium_font_ = nullptr;
   ImFont* medium_bold_font_ = nullptr;
+  ImFont* material_icons_font_ = nullptr;
 };
 
 }  // namespace aim

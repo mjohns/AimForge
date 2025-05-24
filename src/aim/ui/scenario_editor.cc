@@ -1107,6 +1107,21 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Pulse");
     ImGui::SameLine();
     ImGui::Checkbox("##PulseCheckbox", &has_growth);
+    ImGui::SameLine();
+    {
+      auto mat_icon = app_->font_manager()->UseMaterialIcons();
+      std::string help_icon = "\xEE\xA2\x87";
+      // std::string help_icon = "\xEE\x83\x86";
+      ImGui::TextDisabled(help_icon.c_str());
+    }
+    if (ImGui::BeginItemTooltip()) {
+      ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+      ImGui::Text(
+          "Target will grow/shrink to a certain size over some duration. If it is not killed by "
+          "then, it will be removed");
+      ImGui::PopTextWrapPos();
+      ImGui::EndTooltip();
+    }
     if (has_growth) {
       ImGui::Indent();
       ImGui::Text("Time seconds");
