@@ -27,6 +27,7 @@ std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(Application* app);
 
 struct PlaylistListResult {
   std::optional<Playlist> open_playlist{};
+  bool reload_playlists = false;
 };
 
 class PlaylistListComponent {
