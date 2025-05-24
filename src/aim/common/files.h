@@ -12,6 +12,7 @@ std::optional<std::string> ReadFileContentAsString(const std::filesystem::path& 
 
 bool WriteStringToFile(const std::filesystem::path& path, const std::string& content);
 
+std::string MessageToJson(const google::protobuf::Message& message, int indent = 2);
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
                             const google::protobuf::Message& message);
 
