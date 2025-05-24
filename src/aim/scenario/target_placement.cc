@@ -8,6 +8,7 @@
 
 #include "aim/common/geometry.h"
 #include "aim/common/util.h"
+#include "aim/core/profile_selection.h"
 
 namespace aim {
 namespace {
@@ -61,26 +62,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
   std::optional<TargetRegion> GetRegionToUse(int counter) {
-    if (strategy_.regions_size() == 0) {
-      return {};
-    }
-    int order_count = strategy_.region_order().size();
-    if (order_count > 0) {
-      int order_i = counter % order_count;
-      int i = strategy_.region_order(order_i);
-      return GetValueIfPresent(strategy_.regions(), i);
-    }
-
-    auto region_chance_dist = std::uniform_real_distribution<float>(0, 1);
-    for (const TargetRegion& region : strategy_.regions()) {
-      float region_chance_roll = region_chance_dist(*app_->random_generator());
-      float percent_chance = region.has_percent_chance() ? region.percent_chance() : 1;
-      if (percent_chance >= region_chance_roll) {
-        return region;
-      }
-    }
-
-    return {};
+    return SelectProfile(
+        strategy_.region_order(), strategy_.regions(), counter, app_->random_generator());
   }
 
   // Returns an x/z pair where to place the target on the wall.

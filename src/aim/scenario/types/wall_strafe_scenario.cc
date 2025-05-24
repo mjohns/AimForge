@@ -14,6 +14,7 @@
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/profile_selection.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
@@ -159,24 +160,10 @@ class WallStrafeScenario : public BaseScenario {
 
   WallStrafeProfile GetNextProfile() {
     auto d = def_.wall_strafe_def();
-    if (d.profile_order().size() > 0) {
-      int profile_order_i = strafe_number_ % d.profile_order().size();
-      int i = d.profile_order().at(profile_order_i);
-      return d.profiles()[ClampIndex(d.profiles(), i)];
-    }
-
-    for (const auto& profile : d.profiles()) {
-      if (!profile.has_percent_chance() || profile.percent_chance() >= 1) {
-        return profile;
-      }
-      auto dist = std::uniform_real_distribution<float>(0, 1.0f);
-      float roll = dist(*app_->random_generator());
-      if (roll <= profile.percent_chance()) {
-        return profile;
-      }
-    }
-
-    return {};
+    auto maybe_profile =
+        SelectProfile(d.profile_order(), d.profiles(), strafe_number_, app_->random_generator());
+    WallStrafeProfile fallback;
+    return maybe_profile.value_or(fallback);
   }
 
   Wall wall_;
