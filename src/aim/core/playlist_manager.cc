@@ -77,8 +77,8 @@ bool PlaylistManager::RenamePlaylist(const ResourceName& old_name, const Resourc
   if (!old_path.has_value()) {
     return false;
   }
-  auto new_path = GetPlaylistPath(fs_, old_name);
-  if (!old_path.has_value()) {
+  auto new_path = GetPlaylistPath(fs_, new_name);
+  if (!new_path.has_value()) {
     return false;
   }
   std::filesystem::rename(*old_path, *new_path);
