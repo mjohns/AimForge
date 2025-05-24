@@ -1738,12 +1738,30 @@ class WallStrafeProfile final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
+    kDescriptionFieldNumber = 6,
     kMinDistanceFieldNumber = 2,
     kMaxDistanceFieldNumber = 3,
     kWeightFieldNumber = 1,
     kAngleFieldNumber = 4,
     kAngleJitterFieldNumber = 5,
   };
+  // string description = 6;
+  bool has_description() const;
+  void clear_description() ;
+  const std::string& description() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  std::string* mutable_description();
+  PROTOBUF_NODISCARD std::string* release_description();
+  void set_allocated_description(std::string* value);
+
+  private:
+  const std::string& _internal_description() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_description(
+      const std::string& value);
+  std::string* _internal_mutable_description();
+
+  public:
   // .aim.RegionLength min_distance = 2;
   bool has_min_distance() const;
   void clear_min_distance() ;
@@ -1812,8 +1830,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 2,
-      0, 2>
+      3, 6, 2,
+      41, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -1832,6 +1850,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
                           const WallStrafeProfile& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
     ::aim::RegionLength* min_distance_;
     ::aim::RegionLength* max_distance_;
     float weight_;
@@ -4236,6 +4255,7 @@ class TargetRegion final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
+    kDescriptionFieldNumber = 9,
     kXOffsetFieldNumber = 2,
     kYOffsetFieldNumber = 3,
     kWeightFieldNumber = 1,
@@ -4245,6 +4265,23 @@ class TargetRegion final : public ::google::protobuf::Message
     kEllipseFieldNumber = 5,
     kCircleFieldNumber = 6,
   };
+  // string description = 9;
+  bool has_description() const;
+  void clear_description() ;
+  const std::string& description() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  std::string* mutable_description();
+  PROTOBUF_NODISCARD std::string* release_description();
+  void set_allocated_description(std::string* value);
+
+  private:
+  const std::string& _internal_description() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_description(
+      const std::string& value);
+  std::string* _internal_mutable_description();
+
+  public:
   // .aim.RegionLength x_offset = 2;
   bool has_x_offset() const;
   void clear_x_offset() ;
@@ -4377,8 +4414,8 @@ class TargetRegion final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 8, 5,
-      0, 2>
+      4, 9, 5,
+      44, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -4397,6 +4434,7 @@ class TargetRegion final : public ::google::protobuf::Message
                           const TargetRegion& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
     ::aim::RegionLength* x_offset_;
     ::aim::RegionLength* y_offset_;
     float weight_;
@@ -4567,6 +4605,7 @@ class TargetProfile final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
+    kDescriptionFieldNumber = 11,
     kWeightFieldNumber = 1,
     kTargetRadiusFieldNumber = 2,
     kTargetRadiusJitterFieldNumber = 3,
@@ -4576,8 +4615,27 @@ class TargetProfile final : public ::google::protobuf::Message
     kHealthSecondsJitterFieldNumber = 7,
     kTargetRadiusAtKillFieldNumber = 8,
     kTargetHitRadiusFieldNumber = 9,
+    kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
+    kTargetRadiusGrowthSizeFieldNumber = 13,
     kPillFieldNumber = 10,
   };
+  // string description = 11;
+  bool has_description() const;
+  void clear_description() ;
+  const std::string& description() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  std::string* mutable_description();
+  PROTOBUF_NODISCARD std::string* release_description();
+  void set_allocated_description(std::string* value);
+
+  private:
+  const std::string& _internal_description() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_description(
+      const std::string& value);
+  std::string* _internal_mutable_description();
+
+  public:
   // float weight = 1;
   bool has_weight() const;
   void clear_weight() ;
@@ -4677,6 +4735,28 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_target_hit_radius(float value);
 
   public:
+  // float target_radius_growth_time_seconds = 12;
+  bool has_target_radius_growth_time_seconds() const;
+  void clear_target_radius_growth_time_seconds() ;
+  float target_radius_growth_time_seconds() const;
+  void set_target_radius_growth_time_seconds(float value);
+
+  private:
+  float _internal_target_radius_growth_time_seconds() const;
+  void _internal_set_target_radius_growth_time_seconds(float value);
+
+  public:
+  // float target_radius_growth_size = 13;
+  bool has_target_radius_growth_size() const;
+  void clear_target_radius_growth_size() ;
+  float target_radius_growth_size() const;
+  void set_target_radius_growth_size(float value);
+
+  private:
+  float _internal_target_radius_growth_size() const;
+  void _internal_set_target_radius_growth_size(float value);
+
+  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -4706,8 +4786,8 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 10, 1,
-      0, 2>
+      4, 13, 1,
+      45, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -4726,6 +4806,7 @@ class TargetProfile final : public ::google::protobuf::Message
                           const TargetProfile& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
     float weight_;
     float target_radius_;
     float target_radius_jitter_;
@@ -4735,6 +4816,8 @@ class TargetProfile final : public ::google::protobuf::Message
     float health_seconds_jitter_;
     float target_radius_at_kill_;
     float target_hit_radius_;
+    float target_radius_growth_time_seconds_;
+    float target_radius_growth_size_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -8683,13 +8766,13 @@ inline void RegionVec3::set_allocated_z(::aim::RegionLength* value) {
 
 // float weight = 1;
 inline bool TargetRegion::has_weight() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void TargetRegion::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.weight_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float TargetRegion::weight() const {
   // @@protoc_insertion_point(field_get:aim.TargetRegion.weight)
@@ -8697,7 +8780,7 @@ inline float TargetRegion::weight() const {
 }
 inline void TargetRegion::set_weight(float value) {
   _internal_set_weight(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.TargetRegion.weight)
 }
 inline float TargetRegion::_internal_weight() const {
@@ -8711,14 +8794,14 @@ inline void TargetRegion::_internal_set_weight(float value) {
 
 // .aim.RegionLength x_offset = 2;
 inline bool TargetRegion::has_x_offset() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.x_offset_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_x_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.x_offset_ != nullptr) _impl_.x_offset_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline const ::aim::RegionLength& TargetRegion::_internal_x_offset() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -8736,16 +8819,16 @@ inline void TargetRegion::unsafe_arena_set_allocated_x_offset(::aim::RegionLengt
   }
   _impl_.x_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.x_offset)
 }
 inline ::aim::RegionLength* TargetRegion::release_x_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::RegionLength* released = _impl_.x_offset_;
   _impl_.x_offset_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -8765,7 +8848,7 @@ inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_x_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetRegion.x_offset)
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::RegionLength* temp = _impl_.x_offset_;
   _impl_.x_offset_ = nullptr;
   return temp;
@@ -8779,7 +8862,7 @@ inline ::aim::RegionLength* TargetRegion::_internal_mutable_x_offset() {
   return _impl_.x_offset_;
 }
 inline ::aim::RegionLength* TargetRegion::mutable_x_offset() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   ::aim::RegionLength* _msg = _internal_mutable_x_offset();
   // @@protoc_insertion_point(field_mutable:aim.TargetRegion.x_offset)
   return _msg;
@@ -8796,9 +8879,9 @@ inline void TargetRegion::set_allocated_x_offset(::aim::RegionLength* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
 
   _impl_.x_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -8807,14 +8890,14 @@ inline void TargetRegion::set_allocated_x_offset(::aim::RegionLength* value) {
 
 // .aim.RegionLength y_offset = 3;
 inline bool TargetRegion::has_y_offset() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.y_offset_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_y_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.y_offset_ != nullptr) _impl_.y_offset_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline const ::aim::RegionLength& TargetRegion::_internal_y_offset() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -8832,16 +8915,16 @@ inline void TargetRegion::unsafe_arena_set_allocated_y_offset(::aim::RegionLengt
   }
   _impl_.y_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000004u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000004u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.y_offset)
 }
 inline ::aim::RegionLength* TargetRegion::release_y_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::RegionLength* released = _impl_.y_offset_;
   _impl_.y_offset_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -8861,7 +8944,7 @@ inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_y_offset() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetRegion.y_offset)
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::RegionLength* temp = _impl_.y_offset_;
   _impl_.y_offset_ = nullptr;
   return temp;
@@ -8875,7 +8958,7 @@ inline ::aim::RegionLength* TargetRegion::_internal_mutable_y_offset() {
   return _impl_.y_offset_;
 }
 inline ::aim::RegionLength* TargetRegion::mutable_y_offset() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   ::aim::RegionLength* _msg = _internal_mutable_y_offset();
   // @@protoc_insertion_point(field_mutable:aim.TargetRegion.y_offset)
   return _msg;
@@ -8892,9 +8975,9 @@ inline void TargetRegion::set_allocated_y_offset(::aim::RegionLength* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000004u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000004u;
   }
 
   _impl_.y_offset_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -8903,13 +8986,13 @@ inline void TargetRegion::set_allocated_y_offset(::aim::RegionLength* value) {
 
 // float depth = 7;
 inline bool TargetRegion::has_depth() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void TargetRegion::clear_depth() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.depth_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float TargetRegion::depth() const {
   // @@protoc_insertion_point(field_get:aim.TargetRegion.depth)
@@ -8917,7 +9000,7 @@ inline float TargetRegion::depth() const {
 }
 inline void TargetRegion::set_depth(float value) {
   _internal_set_depth(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.TargetRegion.depth)
 }
 inline float TargetRegion::_internal_depth() const {
@@ -8931,13 +9014,13 @@ inline void TargetRegion::_internal_set_depth(float value) {
 
 // float depth_jitter = 8;
 inline bool TargetRegion::has_depth_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void TargetRegion::clear_depth_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.depth_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float TargetRegion::depth_jitter() const {
   // @@protoc_insertion_point(field_get:aim.TargetRegion.depth_jitter)
@@ -8945,7 +9028,7 @@ inline float TargetRegion::depth_jitter() const {
 }
 inline void TargetRegion::set_depth_jitter(float value) {
   _internal_set_depth_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.TargetRegion.depth_jitter)
 }
 inline float TargetRegion::_internal_depth_jitter() const {
@@ -8955,6 +9038,75 @@ inline float TargetRegion::_internal_depth_jitter() const {
 inline void TargetRegion::_internal_set_depth_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.depth_jitter_ = value;
+}
+
+// string description = 9;
+inline bool TargetRegion::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void TargetRegion::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& TargetRegion::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void TargetRegion::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.TargetRegion.description)
+}
+inline std::string* TargetRegion::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.description)
+  return _s;
+}
+inline const std::string& TargetRegion::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void TargetRegion::_internal_set_description(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* TargetRegion::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* TargetRegion::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TargetRegion::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.description)
 }
 
 // .aim.RectangleTargetRegion rectangle = 4;
@@ -12236,13 +12388,13 @@ inline void LinearScenarioDef::_internal_set_direction(::aim::InOutDirection val
 
 // float weight = 1;
 inline bool WallStrafeProfile::has_weight() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.weight_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float WallStrafeProfile::weight() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.weight)
@@ -12250,7 +12402,7 @@ inline float WallStrafeProfile::weight() const {
 }
 inline void WallStrafeProfile::set_weight(float value) {
   _internal_set_weight(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.weight)
 }
 inline float WallStrafeProfile::_internal_weight() const {
@@ -12264,14 +12416,14 @@ inline void WallStrafeProfile::_internal_set_weight(float value) {
 
 // .aim.RegionLength min_distance = 2;
 inline bool WallStrafeProfile::has_min_distance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.min_distance_ != nullptr);
   return value;
 }
 inline void WallStrafeProfile::clear_min_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.min_distance_ != nullptr) _impl_.min_distance_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline const ::aim::RegionLength& WallStrafeProfile::_internal_min_distance() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -12289,16 +12441,16 @@ inline void WallStrafeProfile::unsafe_arena_set_allocated_min_distance(::aim::Re
   }
   _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeProfile.min_distance)
 }
 inline ::aim::RegionLength* WallStrafeProfile::release_min_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::RegionLength* released = _impl_.min_distance_;
   _impl_.min_distance_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -12318,7 +12470,7 @@ inline ::aim::RegionLength* WallStrafeProfile::unsafe_arena_release_min_distance
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.min_distance)
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::RegionLength* temp = _impl_.min_distance_;
   _impl_.min_distance_ = nullptr;
   return temp;
@@ -12332,7 +12484,7 @@ inline ::aim::RegionLength* WallStrafeProfile::_internal_mutable_min_distance() 
   return _impl_.min_distance_;
 }
 inline ::aim::RegionLength* WallStrafeProfile::mutable_min_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   ::aim::RegionLength* _msg = _internal_mutable_min_distance();
   // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.min_distance)
   return _msg;
@@ -12349,9 +12501,9 @@ inline void WallStrafeProfile::set_allocated_min_distance(::aim::RegionLength* v
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000002u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000002u;
   }
 
   _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -12360,14 +12512,14 @@ inline void WallStrafeProfile::set_allocated_min_distance(::aim::RegionLength* v
 
 // .aim.RegionLength max_distance = 3;
 inline bool WallStrafeProfile::has_max_distance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.max_distance_ != nullptr);
   return value;
 }
 inline void WallStrafeProfile::clear_max_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.max_distance_ != nullptr) _impl_.max_distance_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline const ::aim::RegionLength& WallStrafeProfile::_internal_max_distance() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -12385,16 +12537,16 @@ inline void WallStrafeProfile::unsafe_arena_set_allocated_max_distance(::aim::Re
   }
   _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000004u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000004u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeProfile.max_distance)
 }
 inline ::aim::RegionLength* WallStrafeProfile::release_max_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::RegionLength* released = _impl_.max_distance_;
   _impl_.max_distance_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -12414,7 +12566,7 @@ inline ::aim::RegionLength* WallStrafeProfile::unsafe_arena_release_max_distance
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.max_distance)
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::RegionLength* temp = _impl_.max_distance_;
   _impl_.max_distance_ = nullptr;
   return temp;
@@ -12428,7 +12580,7 @@ inline ::aim::RegionLength* WallStrafeProfile::_internal_mutable_max_distance() 
   return _impl_.max_distance_;
 }
 inline ::aim::RegionLength* WallStrafeProfile::mutable_max_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   ::aim::RegionLength* _msg = _internal_mutable_max_distance();
   // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.max_distance)
   return _msg;
@@ -12445,9 +12597,9 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000004u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000004u;
   }
 
   _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -12456,13 +12608,13 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
 
 // float angle = 4;
 inline bool WallStrafeProfile::has_angle() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_angle() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float WallStrafeProfile::angle() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle)
@@ -12470,7 +12622,7 @@ inline float WallStrafeProfile::angle() const {
 }
 inline void WallStrafeProfile::set_angle(float value) {
   _internal_set_angle(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle)
 }
 inline float WallStrafeProfile::_internal_angle() const {
@@ -12484,13 +12636,13 @@ inline void WallStrafeProfile::_internal_set_angle(float value) {
 
 // float angle_jitter = 5;
 inline bool WallStrafeProfile::has_angle_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_angle_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float WallStrafeProfile::angle_jitter() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle_jitter)
@@ -12498,7 +12650,7 @@ inline float WallStrafeProfile::angle_jitter() const {
 }
 inline void WallStrafeProfile::set_angle_jitter(float value) {
   _internal_set_angle_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle_jitter)
 }
 inline float WallStrafeProfile::_internal_angle_jitter() const {
@@ -12508,6 +12660,75 @@ inline float WallStrafeProfile::_internal_angle_jitter() const {
 inline void WallStrafeProfile::_internal_set_angle_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_jitter_ = value;
+}
+
+// string description = 6;
+inline bool WallStrafeProfile::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& WallStrafeProfile::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void WallStrafeProfile::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.description)
+}
+inline std::string* WallStrafeProfile::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.description)
+  return _s;
+}
+inline const std::string& WallStrafeProfile::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void WallStrafeProfile::_internal_set_description(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* WallStrafeProfile::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* WallStrafeProfile::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void WallStrafeProfile::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.description)
 }
 
 // -------------------------------------------------------------------
@@ -14578,13 +14799,13 @@ inline void PillTargetDef::set_allocated_wall_up(::aim::StoredVec2* value) {
 
 // float weight = 1;
 inline bool TargetProfile::has_weight() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline void TargetProfile::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.weight_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline float TargetProfile::weight() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.weight)
@@ -14592,7 +14813,7 @@ inline float TargetProfile::weight() const {
 }
 inline void TargetProfile::set_weight(float value) {
   _internal_set_weight(value);
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.weight)
 }
 inline float TargetProfile::_internal_weight() const {
@@ -14606,13 +14827,13 @@ inline void TargetProfile::_internal_set_weight(float value) {
 
 // float target_radius = 2;
 inline bool TargetProfile::has_target_radius() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_radius() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline float TargetProfile::target_radius() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius)
@@ -14620,7 +14841,7 @@ inline float TargetProfile::target_radius() const {
 }
 inline void TargetProfile::set_target_radius(float value) {
   _internal_set_target_radius(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius)
 }
 inline float TargetProfile::_internal_target_radius() const {
@@ -14634,13 +14855,13 @@ inline void TargetProfile::_internal_set_target_radius(float value) {
 
 // float target_radius_jitter = 3;
 inline bool TargetProfile::has_target_radius_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_radius_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float TargetProfile::target_radius_jitter() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_jitter)
@@ -14648,7 +14869,7 @@ inline float TargetProfile::target_radius_jitter() const {
 }
 inline void TargetProfile::set_target_radius_jitter(float value) {
   _internal_set_target_radius_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_jitter)
 }
 inline float TargetProfile::_internal_target_radius_jitter() const {
@@ -14662,13 +14883,13 @@ inline void TargetProfile::_internal_set_target_radius_jitter(float value) {
 
 // float speed = 4;
 inline bool TargetProfile::has_speed() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void TargetProfile::clear_speed() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float TargetProfile::speed() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.speed)
@@ -14676,7 +14897,7 @@ inline float TargetProfile::speed() const {
 }
 inline void TargetProfile::set_speed(float value) {
   _internal_set_speed(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.speed)
 }
 inline float TargetProfile::_internal_speed() const {
@@ -14690,13 +14911,13 @@ inline void TargetProfile::_internal_set_speed(float value) {
 
 // float speed_jitter = 5;
 inline bool TargetProfile::has_speed_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void TargetProfile::clear_speed_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float TargetProfile::speed_jitter() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.speed_jitter)
@@ -14704,7 +14925,7 @@ inline float TargetProfile::speed_jitter() const {
 }
 inline void TargetProfile::set_speed_jitter(float value) {
   _internal_set_speed_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.speed_jitter)
 }
 inline float TargetProfile::_internal_speed_jitter() const {
@@ -14718,13 +14939,13 @@ inline void TargetProfile::_internal_set_speed_jitter(float value) {
 
 // float health_seconds = 6;
 inline bool TargetProfile::has_health_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void TargetProfile::clear_health_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float TargetProfile::health_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.health_seconds)
@@ -14732,7 +14953,7 @@ inline float TargetProfile::health_seconds() const {
 }
 inline void TargetProfile::set_health_seconds(float value) {
   _internal_set_health_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.health_seconds)
 }
 inline float TargetProfile::_internal_health_seconds() const {
@@ -14746,13 +14967,13 @@ inline void TargetProfile::_internal_set_health_seconds(float value) {
 
 // float health_seconds_jitter = 7;
 inline bool TargetProfile::has_health_seconds_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void TargetProfile::clear_health_seconds_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_seconds_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float TargetProfile::health_seconds_jitter() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.health_seconds_jitter)
@@ -14760,7 +14981,7 @@ inline float TargetProfile::health_seconds_jitter() const {
 }
 inline void TargetProfile::set_health_seconds_jitter(float value) {
   _internal_set_health_seconds_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.health_seconds_jitter)
 }
 inline float TargetProfile::_internal_health_seconds_jitter() const {
@@ -14774,13 +14995,13 @@ inline void TargetProfile::_internal_set_health_seconds_jitter(float value) {
 
 // float target_radius_at_kill = 8;
 inline bool TargetProfile::has_target_radius_at_kill() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_radius_at_kill() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_at_kill_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float TargetProfile::target_radius_at_kill() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_at_kill)
@@ -14788,7 +15009,7 @@ inline float TargetProfile::target_radius_at_kill() const {
 }
 inline void TargetProfile::set_target_radius_at_kill(float value) {
   _internal_set_target_radius_at_kill(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_at_kill)
 }
 inline float TargetProfile::_internal_target_radius_at_kill() const {
@@ -14802,13 +15023,13 @@ inline void TargetProfile::_internal_set_target_radius_at_kill(float value) {
 
 // float target_hit_radius = 9;
 inline bool TargetProfile::has_target_hit_radius() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_hit_radius() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_hit_radius_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline float TargetProfile::target_hit_radius() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_hit_radius)
@@ -14816,7 +15037,7 @@ inline float TargetProfile::target_hit_radius() const {
 }
 inline void TargetProfile::set_target_hit_radius(float value) {
   _internal_set_target_hit_radius(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_hit_radius)
 }
 inline float TargetProfile::_internal_target_hit_radius() const {
@@ -14826,6 +15047,131 @@ inline float TargetProfile::_internal_target_hit_radius() const {
 inline void TargetProfile::_internal_set_target_hit_radius(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_hit_radius_ = value;
+}
+
+// string description = 11;
+inline bool TargetProfile::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& TargetProfile::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void TargetProfile::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.description)
+}
+inline std::string* TargetProfile::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.TargetProfile.description)
+  return _s;
+}
+inline const std::string& TargetProfile::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void TargetProfile::_internal_set_description(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* TargetProfile::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* TargetProfile::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetProfile.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TargetProfile::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetProfile.description)
+}
+
+// float target_radius_growth_time_seconds = 12;
+inline bool TargetProfile::has_target_radius_growth_time_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_target_radius_growth_time_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_growth_time_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000400u;
+}
+inline float TargetProfile::target_radius_growth_time_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_time_seconds)
+  return _internal_target_radius_growth_time_seconds();
+}
+inline void TargetProfile::set_target_radius_growth_time_seconds(float value) {
+  _internal_set_target_radius_growth_time_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000400u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_time_seconds)
+}
+inline float TargetProfile::_internal_target_radius_growth_time_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_radius_growth_time_seconds_;
+}
+inline void TargetProfile::_internal_set_target_radius_growth_time_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_growth_time_seconds_ = value;
+}
+
+// float target_radius_growth_size = 13;
+inline bool TargetProfile::has_target_radius_growth_size() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_target_radius_growth_size() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_growth_size_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000800u;
+}
+inline float TargetProfile::target_radius_growth_size() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_size)
+  return _internal_target_radius_growth_size();
+}
+inline void TargetProfile::set_target_radius_growth_size(float value) {
+  _internal_set_target_radius_growth_size(value);
+  _impl_._has_bits_[0] |= 0x00000800u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_size)
+}
+inline float TargetProfile::_internal_target_radius_growth_size() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_radius_growth_size_;
+}
+inline void TargetProfile::_internal_set_target_radius_growth_size(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_growth_size_ = value;
 }
 
 // .aim.PillTargetDef pill = 10;

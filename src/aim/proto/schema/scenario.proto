@@ -77,6 +77,8 @@ message TargetRegion {
   float depth = 7;
   float depth_jitter = 8;
 
+  string description = 9;
+
   oneof type {
     RectangleTargetRegion rectangle = 4;
     EllipseTargetRegion ellipse = 5;
@@ -227,6 +229,8 @@ message WallStrafeProfile {
   // evenly.
   float angle = 4;
   float angle_jitter = 5;
+
+  string description = 6;
 }
 
 message WallStrafeScenarioDef {
@@ -337,6 +341,12 @@ message TargetProfile {
   // Optional. If specified this radius will be used to determine whether the target is hit instead
   // of target_radius.
   float target_hit_radius = 9;
+
+  string description = 11;
+
+  // The target will grow to the specified size after n seconds.
+  float target_radius_growth_time_seconds = 12;
+  float target_radius_growth_size = 13;
 
   // Defaults to spehere if no more specific type is specified.
   oneof type {

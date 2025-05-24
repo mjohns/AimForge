@@ -57,8 +57,8 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   } else {
     HandleClickHits(data);
   }
+  std::vector<u16> targets_to_remove;
   if (def_.target_def().has_remove_target_after_seconds()) {
-    std::vector<u16> targets_to_remove;
     for (const Target& target : target_manager_.GetTargets()) {
       if (target.ShouldDraw() && target.remove_after_time_seconds < timer_.GetElapsedSeconds()) {
         if (ShouldCountPartialKills()) {
@@ -67,10 +67,32 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
         targets_to_remove.push_back(target.id);
       }
     }
-    for (u16 target_id : targets_to_remove) {
-      AddNewTargetDuringRun(target_id, /*is_kill=*/false);
+  }
+  // Handle target growth
+  float now_seconds = timer_.GetElapsedSeconds();
+  for (Target& target : target_manager_.GetMutableTargets()) {
+    if (target.growth_info.has_value()) {
+      auto g = *target.growth_info;
+      float delta_seconds = now_seconds - g.start_time_seconds;
+      if (delta_seconds >= g.grow_time_seconds) {
+        targets_to_remove.push_back(target.id);
+      } else {
+        // Change radius.
+        float radius_range = std::abs(g.start_radius - g.end_radius);
+        float rate = radius_range / g.grow_time_seconds;
+        if (g.start_radius < g.end_radius) {
+          target.radius = g.start_radius + (rate * delta_seconds);
+        } else {
+          target.radius = g.start_radius - (rate * delta_seconds);
+        }
+      }
     }
   }
+
+  for (u16 target_id : targets_to_remove) {
+    AddNewTargetDuringRun(target_id, /*is_kill=*/false);
+  }
+
   UpdateTargetPositions();
 }
 
