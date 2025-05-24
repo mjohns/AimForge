@@ -17,6 +17,13 @@ struct RadiusAtKill {
   float end_radius;
 };
 
+struct TargetGrowthInfo {
+  float grow_time_seconds;
+  float start_time_seconds;
+  float start_radius;
+  float end_radius;
+};
+
 struct Target {
   u16 id = 0;
   glm::vec3 position{};
@@ -44,6 +51,8 @@ struct Target {
   float notify_at_health_seconds = 0;
   float health_seconds = 0;
   std::optional<RadiusAtKill> radius_at_kill{};
+
+  std::optional<TargetGrowthInfo> growth_info{};
 
   void SetWallPosition(const glm::vec3& p, const Room& room);
 

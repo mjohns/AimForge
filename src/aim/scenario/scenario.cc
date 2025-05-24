@@ -645,6 +645,15 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     k.end_radius = profile.target_radius_at_kill();
     target.radius_at_kill = k;
   }
+  if (profile.target_radius_growth_time_seconds() > 0) {
+    TargetGrowthInfo growth_info;
+    growth_info.start_time_seconds = target.last_update_time_seconds;
+    growth_info.grow_time_seconds = profile.target_radius_growth_time_seconds();
+    growth_info.end_radius = profile.target_radius_growth_size();
+    growth_info.start_radius = target.radius;
+    target.growth_info = growth_info;
+  }
+
   // target.notify_at_health_seconds = 0.12;
   target.speed =
       GetJitteredValue(profile.speed(), profile.speed_jitter(), app_->random_generator());
