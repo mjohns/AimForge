@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/mat_icons.h"
+
 namespace ImGui {
 
 // ImGui::Text but taking same arguments as std::format to product the text.
@@ -264,5 +266,15 @@ class NotificationPopup {
   std::string id_;
   std::string text_;
 };
+
+static void HelpMarker(const std::string& text) {
+  ImGui::TextDisabled(aim::kIconHelp);
+  if (ImGui::BeginItemTooltip()) {
+    ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+    ImGui::Text(text.c_str());
+    ImGui::PopTextWrapPos();
+    ImGui::EndTooltip();
+  }
+}
 
 }  // namespace ImGui

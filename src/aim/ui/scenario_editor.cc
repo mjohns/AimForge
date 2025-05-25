@@ -1028,6 +1028,8 @@ class ScenarioEditorScreen : public UiScreen {
     bool is_ghost = t->newest_target_is_ghost();
     ImGui::Checkbox("##IsGhost", &is_ghost);
     t->set_newest_target_is_ghost(is_ghost);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
 
     if (t->profiles_size() == 0) {
       t->add_profiles();
@@ -1097,15 +1099,9 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##PulseCheckbox", &has_growth);
     ImGui::SameLine();
-    ImGui::TextDisabled(kIconHelp);
-    if (ImGui::BeginItemTooltip()) {
-      ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-      ImGui::Text(
-          "Target will grow/shrink to a certain size over some duration. If it is not killed by "
-          "then, it will be removed");
-      ImGui::PopTextWrapPos();
-      ImGui::EndTooltip();
-    }
+    ImGui::HelpMarker(
+        "Target will grow to a certain size over some duration. If it is not killed by "
+        "then, it will be removed.");
     if (has_growth) {
       ImGui::Indent();
       ImGui::Text("Time seconds");
