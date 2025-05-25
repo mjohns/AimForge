@@ -223,4 +223,46 @@ class ConfirmationDialog {
   std::string text_;
 };
 
+class NotificationPopup {
+ public:
+  explicit NotificationPopup(const std::string& id) : id_(id) {}
+
+  void NotifyOpen(const std::string& text) {
+    open_ = true;
+    text_ = text;
+  }
+
+  void Draw() {
+    bool show_popup = text_.size() > 0;
+    if (show_popup) {
+      ImGui::SetNextWindowPos(
+          ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+      if (ImGui::BeginPopupModal(id_.c_str(),
+                                 &show_popup,
+                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+        ImGui::Text(text_);
+
+        float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+
+        if (ImGui::Button("Ok")) {
+          text_ = "";
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+      }
+    }
+    if (open_) {
+      ImGui::OpenPopup(id_.c_str());
+      open_ = false;
+    }
+  }
+
+ private:
+  bool open_ = false;
+  std::string id_;
+  std::string text_;
+};
+
 }  // namespace ImGui

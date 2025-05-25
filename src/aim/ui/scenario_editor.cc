@@ -21,8 +21,6 @@
 namespace aim {
 namespace {
 
-const char* kErrorPopup = "ERROR_POPUP";
-
 const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kSimpleRoom, "Simple"},
     {Room::kCylinderRoom, "Cylinder"},
@@ -188,27 +186,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::End();
 
-    bool show_error_popup = error_popup_message_.size() > 0;
-    if (show_error_popup) {
-      ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
-                              ImGuiCond_Appearing,
-                              ImVec2(0.5f, 0.5f));  // Center the popup
-      if (ImGui::BeginPopupModal(kErrorPopup,
-                                 &show_error_popup,
-                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
-        ImGui::Text(error_popup_message_);
-
-        float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
-        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
-
-        if (ImGui::Button("OK", ImVec2(button_width, 0))) {
-          error_popup_message_ = "";
-          ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-      }
-    }
+    notification_popup_.Draw();
   }
 
   // Returns whether the screen should close
@@ -248,8 +226,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void SetErrorMessage(const std::string& msg) {
-    error_popup_message_ = msg;
-    ImGui::OpenPopup(kErrorPopup);
+    notification_popup_.NotifyOpen(msg);
   }
 
   void DrawScenarioTypeEditor(const ImVec2& char_size) {
@@ -676,8 +653,7 @@ class ScenarioEditorScreen : public UiScreen {
           remove_at_i = i;
         }
       }
-      std::string icon = "\xEE\x97\x89";
-      if (ImGui::Button(std::format("Add{}##Order", icon).c_str())) {
+      if (ImGui::Button("Add##Order")) {
         order_list->Add(0);
       }
       if (remove_at_i >= 0) {
@@ -1265,7 +1241,7 @@ class ScenarioEditorScreen : public UiScreen {
   ResourceName name_;
   Settings settings_;
 
-  std::string error_popup_message_;
+  ImGui::NotificationPopup notification_popup_{"Notification"};
 };
 
 }  // namespace
