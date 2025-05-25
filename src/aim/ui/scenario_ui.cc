@@ -43,30 +43,34 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##ScenarioSearchInput", "Search..", &search_text_);
     ImGui::SameLine();
-    if (ImGui::Button("Reload")) {
+    if (ImGui::Button(kIconRefresh)) {
       result->reload_scenarios = true;
       recent_scenario_load_time_micros_ = 0;
     }
+    ImGui::HelpTooltip("Reload scenarios from disk.");
 
     ImGui::Spacing();
     ImGui::Spacing();
 
-    auto search_words = GetSearchWords(search_text_);
-    if (type == ScenarioBrowserType::RECENT) {
-      MaybeLoadRecentScenarioIds();
-      PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
-      ImGui::LoopId loop_id;
-      for (const std::string& scenario_id : recent_scenario_ids_) {
-        auto id = loop_id.Get();
-        auto scenario = app_->scenario_manager()->GetScenario(scenario_id);
-        if (scenario.has_value()) {
-          DrawScenarioListItem(*scenario, search_words, current_playlist_run, result);
+    if (ImGui::BeginChild("ScenarioContent")) {
+      auto search_words = GetSearchWords(search_text_);
+      if (type == ScenarioBrowserType::RECENT) {
+        MaybeLoadRecentScenarioIds();
+        PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
+        ImGui::LoopId loop_id;
+        for (const std::string& scenario_id : recent_scenario_ids_) {
+          auto id = loop_id.Get();
+          auto scenario = app_->scenario_manager()->GetScenario(scenario_id);
+          if (scenario.has_value()) {
+            DrawScenarioListItem(*scenario, search_words, current_playlist_run, result);
+          }
         }
+        return;
       }
-      return;
-    }
 
-    DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words, result);
+      DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words, result);
+    }
+    ImGui::EndChild();
   }
 
  private:

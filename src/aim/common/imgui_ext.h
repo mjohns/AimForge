@@ -277,4 +277,13 @@ static void HelpMarker(const std::string& text) {
   }
 }
 
+static void HelpTooltip(const std::string& text) {
+  if (ImGui::BeginItemTooltip()) {
+    ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+    ImGui::Text(text.c_str());
+    ImGui::PopTextWrapPos();
+    ImGui::EndTooltip();
+  }
+}
+
 }  // namespace ImGui
