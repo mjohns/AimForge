@@ -482,7 +482,9 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this));
 
     ImGui::Spacing();
-    ImGui::Text("Min distance between targets");
+    ImGui::Text("Min distance");
+    ImGui::SameLine();
+    ImGui::HelpMarker("Minimum distance between targets.");
     ImGui::SameLine();
 
     bool use_min = s->has_min_distance();
@@ -497,7 +499,10 @@ class ScenarioEditorScreen : public UiScreen {
       s->clear_min_distance();
     }
 
-    ImGui::Text("Fixed distance from last target");
+    ImGui::Text("Fixed distance");
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "New target will be placed at a fixed distance from the last target that was added.");
     ImGui::SameLine();
     bool use_fixed = s->has_fixed_distance_from_last_target();
     ImGui::Checkbox("##FixedDistanceCheck", &use_fixed);
@@ -678,10 +683,8 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::IdGuard lid(type_name, i);
       auto* p = &profile_list->at(i);
       ImGui::TextFmt("{} #{}", type_name, i);
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 22);
-      ImGui::InputText("##DescriptionInput", p->mutable_description());
-      if (ImGui::BeginPopupContextItem("profile_item_menu")) {
+      const char* item_menu_id = "profile_item_menu";
+      if (ImGui::BeginPopupContextItem(item_menu_id)) {
         if (ImGui::Selectable("Move up")) {
           move_up_i = i;
         }
@@ -696,7 +699,14 @@ class ScenarioEditorScreen : public UiScreen {
         }
         ImGui::EndPopup();
       }
-      ImGui::OpenPopupOnItemClick("profile_item_menu", ImGuiPopupFlags_MouseButtonRight);
+      ImGui::OpenPopupOnItemClick(item_menu_id, ImGuiPopupFlags_MouseButtonRight);
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 22);
+      ImGui::InputText("##DescriptionInput", p->mutable_description());
+      ImGui::SameLine();
+      if (ImGui::Button(kIconMoreVert)) {
+        ImGui::OpenPopup(item_menu_id);
+      }
 
       ImGui::Indent();
       if (use_weights) {
@@ -1025,11 +1035,11 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Newest target is ghost");
     ImGui::SameLine();
+    ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
+    ImGui::SameLine();
     bool is_ghost = t->newest_target_is_ghost();
     ImGui::Checkbox("##IsGhost", &is_ghost);
     t->set_newest_target_is_ghost(is_ghost);
-    ImGui::SameLine();
-    ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
 
     if (t->profiles_size() == 0) {
       t->add_profiles();
@@ -1097,11 +1107,11 @@ class ScenarioEditorScreen : public UiScreen {
     bool has_growth = profile->target_radius_growth_time_seconds() > 0;
     ImGui::Text("Pulse");
     ImGui::SameLine();
-    ImGui::Checkbox("##PulseCheckbox", &has_growth);
-    ImGui::SameLine();
     ImGui::HelpMarker(
         "Target will grow to a certain size over some duration. If it is not killed by "
         "then, it will be removed.");
+    ImGui::SameLine();
+    ImGui::Checkbox("##PulseCheckbox", &has_growth);
     if (has_growth) {
       ImGui::Indent();
       ImGui::Text("Time seconds");
@@ -1122,6 +1132,26 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       profile->clear_target_radius_growth_time_seconds();
       profile->clear_target_radius_growth_size();
+    }
+
+    float health_seconds = profile->health_seconds();
+    float health_seconds_jitter = profile->health_seconds_jitter();
+    if (def_.shot_type().type_case() == ShotType::kTrackingKill) {
+      ImGui::Text("Health");
+      ImGui::SameLine();
+      ImGui::HelpMarker("The amount of time in seconds to kill the target.");
+      ImGui::SameLine();
+      JitteredValueInput(
+          "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.1, 0.5, "%.1f");
+    } else {
+      health_seconds = 0;
+    }
+    if (health_seconds > 0) {
+      profile->set_health_seconds(health_seconds);
+      profile->set_health_seconds_jitter(health_seconds_jitter);
+    } else {
+      profile->clear_health_seconds();
+      profile->clear_health_seconds_jitter();
     }
 
     ImGui::Text("Pill");
@@ -1154,13 +1184,13 @@ class ScenarioEditorScreen : public UiScreen {
                           float fast_step,
                           const char* format = "%.1f") {
     ImGui::IdGuard cid(id);
-    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::SetNextItemWidth(char_x_ * 9);
     ImGui::InputFloat("##ValueEntry", value, step, fast_step, format);
 
     ImGui::SameLine();
     ImGui::Text("+/-");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::SetNextItemWidth(char_x_ * 9);
     ImGui::InputFloat("##JitterEntry", jitter_value, step, fast_step, format);
     if (*jitter_value < 0) {
       *jitter_value = 0;
