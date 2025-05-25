@@ -207,7 +207,8 @@ int Application::Initialize() {
     return -1;
   }
 
-  ImGui::StyleColorsDark();
+  //ImGui::StyleColorsDark();
+  ImGui::StyleColorsClassic();
 
   // Setup Platform/Renderer backends
   ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);

@@ -52,7 +52,7 @@ class Application {
   void FinishRender(RenderContext* render_context);
 
   // Render just ImGui screen.
-  void Render(ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f));
+  void Render(ImVec4 clear_color = ImVec4(0.05f, 0.05f, 0.07f, 1.00f));
 
   SDL_Window* sdl_window() {
     return sdl_window_;

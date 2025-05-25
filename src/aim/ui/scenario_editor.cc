@@ -9,6 +9,7 @@
 
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/camera.h"
@@ -667,15 +668,12 @@ class ScenarioEditorScreen : public UiScreen {
         auto last_size = ImGui::GetItemRectSize();
 
         ImGui::SameLine();
-        {
-          auto mat_icon = app_->font_manager()->UseMaterialIcons();
-          std::string cancel_icon = "\xEE\x97\x89";
-          if (ImGui::Button(cancel_icon.c_str(), ImVec2(0, last_size.y))) {
-            remove_at_i = i;
-          }
+        if (ImGui::Button(kIconCancel)) {
+          remove_at_i = i;
         }
       }
-      if (ImGui::Button("Add##Order")) {
+      std::string icon = "\xEE\x97\x89";
+      if (ImGui::Button(std::format("Add{}##Order", icon).c_str())) {
         order_list->Add(0);
       }
       if (remove_at_i >= 0) {
@@ -1114,12 +1112,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##PulseCheckbox", &has_growth);
     ImGui::SameLine();
-    {
-      auto mat_icon = app_->font_manager()->UseMaterialIcons();
-      std::string help_icon = "\xEE\xA2\x87";
-      // std::string help_icon = "\xEE\x83\x86";
-      ImGui::TextDisabled(help_icon.c_str());
-    }
+    ImGui::TextDisabled(kIconHelp);
     if (ImGui::BeginItemTooltip()) {
       ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
       ImGui::Text(
