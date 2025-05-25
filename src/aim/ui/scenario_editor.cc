@@ -166,23 +166,28 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::End();
 
     if (ImGui::Begin("Scenario")) {
-      ImGui::Indent();
-      DrawScenarioTypeEditor(char_size);
-      ImGui::Unindent();
-    }
-    ImGui::End();
+      if (ImGui::BeginTabBar("ScenarioTabs")) {
+        if (ImGui::BeginTabItem("Definition")) {
+          ImGui::Indent();
+          DrawScenarioTypeEditor(char_size);
+          ImGui::Unindent();
+          ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Targets")) {
+          ImGui::Indent();
+          DrawTargetEditor(char_size);
+          ImGui::Unindent();
+          ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Room")) {
+          ImGui::Indent();
+          DrawRoomEditor(char_size);
+          ImGui::Unindent();
+          ImGui::EndTabItem();
+        }
 
-    if (ImGui::Begin("Targets")) {
-      ImGui::Indent();
-      DrawTargetEditor(char_size);
-      ImGui::Unindent();
-    }
-    ImGui::End();
-
-    if (ImGui::Begin("Room")) {
-      ImGui::Indent();
-      DrawRoomEditor(char_size);
-      ImGui::Unindent();
+        ImGui::EndTabBar();
+      }
     }
     ImGui::End();
 
@@ -742,7 +747,7 @@ class ScenarioEditorScreen : public UiScreen {
     bool is_y = length->type_case() == RegionLength::kYPercentValue;
     bool is_percent = is_x || is_y;
 
-    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::SetNextItemWidth(char_x_ * 9);
     if (is_percent) {
       float value = is_x ? length->x_percent_value() : length->y_percent_value();
       value *= 100;
@@ -784,7 +789,7 @@ class ScenarioEditorScreen : public UiScreen {
         }
       }
 
-      ImGui::PushItemWidth(char_x_ * 12);
+      ImGui::PushItemWidth(char_x_ * 7);
       const char* x_str = "width";
       const char* y_str = "height";
       if (ImGui::BeginCombo("##XYCombo", is_x ? x_str : y_str, 0)) {
