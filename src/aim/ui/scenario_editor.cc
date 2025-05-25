@@ -130,59 +130,63 @@ class ScenarioEditorScreen : public UiScreen {
     char_size_ = char_size;
     char_x_ = char_size_.x;
 
-    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 7);
+    if (ImGui::Begin("Details")) {
+      ImGui::SimpleDropdown(
+          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 7);
 
-    ImGui::PushItemWidth(char_x_ * 7);
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 40);
-    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+      ImGui::PushItemWidth(char_x_ * 7);
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 40);
+      ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
-    float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
-    ImGui::Text("Duration");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
-    def_.set_duration_seconds(duration_seconds);
+      float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
+      ImGui::Text("Duration");
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 12);
+      ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
+      def_.set_duration_seconds(duration_seconds);
 
-    if (ImGui::TreeNodeEx("Scenario", ImGuiTreeNodeFlags_DefaultOpen)) {
-      ImGui::Indent();
-      DrawScenarioTypeEditor(char_size);
-      ImGui::Unindent();
-      ImGui::TreePop();
-    }
+      if (ImGui::Button("Play")) {
+        start_scenario_ = true;
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("View Json")) {
+        SetErrorMessage(MessageToJson(def_, 6));
+      }
 
-    if (ImGui::TreeNodeEx("Targets", ImGuiTreeNodeFlags_DefaultOpen)) {
-      ImGui::Indent();
-      DrawTargetEditor(char_size);
-      ImGui::Unindent();
-      ImGui::TreePop();
-    }
-
-    if (ImGui::TreeNode("Room")) {
-      ImGui::Indent();
-      DrawRoomEditor(char_size);
-      ImGui::Unindent();
-      ImGui::TreePop();
-    }
-
-    if (ImGui::Button("Play")) {
-      start_scenario_ = true;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("View Json")) {
-      SetErrorMessage(MessageToJson(def_, 6));
-    }
-
-    if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
-      if (SaveScenario()) {
-        app_->scenario_manager()->LoadScenariosFromDisk();
+      if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
+        if (SaveScenario()) {
+          app_->scenario_manager()->LoadScenariosFromDisk();
+          ScreenDone();
+        }
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Cancel")) {
         ScreenDone();
       }
     }
-    ImGui::SameLine();
-    if (ImGui::Button("Cancel")) {
-      ScreenDone();
+    ImGui::End();
+
+    if (ImGui::Begin("Scenario")) {
+      ImGui::Indent();
+      DrawScenarioTypeEditor(char_size);
+      ImGui::Unindent();
     }
+    ImGui::End();
+
+    if (ImGui::Begin("Targets")) {
+      ImGui::Indent();
+      DrawTargetEditor(char_size);
+      ImGui::Unindent();
+    }
+    ImGui::End();
+
+    if (ImGui::Begin("Room")) {
+      ImGui::Indent();
+      DrawRoomEditor(char_size);
+      ImGui::Unindent();
+    }
+    ImGui::End();
 
     bool show_error_popup = error_popup_message_.size() > 0;
     if (show_error_popup) {
