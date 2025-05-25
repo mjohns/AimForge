@@ -30,6 +30,22 @@ bool FontManager::LoadFonts() {
     return false;
   }
 
+  // See https://github.com/ocornut/imgui/issues/3247
+  static const ImWchar icons_ranges[] = {0xE005, 0xFFFF, 0};
+  ImFontConfig icons_config;
+  icons_config.MergeMode = true;
+  icons_config.PixelSnapH = true;
+  icons_config.GlyphOffset.y = 4;
+
+
+  material_icons_font_ = io.Fonts->AddFontFromFileTTF(
+      material_icons_path.string().c_str(), default_font_size(), &icons_config, icons_ranges);
+  if (material_icons_font_ == nullptr) {
+    Logger::get()->error("Unable to load material icons font from: {}",
+                         material_icons_path.string());
+    return false;
+  }
+
   large_font_ = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), large_font_size());
   if (large_font_ == nullptr) {
     Logger::get()->error("Unable to load large font from: {}", font_path.string());
@@ -63,19 +79,6 @@ bool FontManager::LoadFonts() {
     return false;
   }
 
-  // See https://github.com/ocornut/imgui/issues/3247
-  static const ImWchar icons_ranges[] = {0xE005, 0xFFFF, 0};
-  ImFontConfig icons_config;
-  icons_config.MergeMode = true;
-  icons_config.PixelSnapH = true;
-
-  material_icons_font_ = io.Fonts->AddFontFromFileTTF(
-      material_icons_path.string().c_str(), medium_font_size() * 0.85, &icons_config, icons_ranges);
-  if (material_icons_font_ == nullptr) {
-    Logger::get()->error("Unable to load material icons font from: {}",
-                         material_icons_path.string());
-    return false;
-  }
 
   return true;
 }

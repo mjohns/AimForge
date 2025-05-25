@@ -333,8 +333,7 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     }
     ImGui::End();
 
-    ImVec4 clear_color = ImVec4(0.7f, 0.7f, 0.7f, 1.00f);
-    app_->Render(clear_color);
+    app_->Render();
 
     if (scenario_to_start.size() > 0) {
       return NavigationEvent::StartScenario(scenario_to_start);
