@@ -7,6 +7,9 @@
 namespace aim {
 
 std::vector<std::string> GetSearchWords(const std::string& text) {
+  if (text.size() == 0) {
+    return {};
+  }
   std::vector<absl::string_view> search_words = absl::StrSplit(text, ' ');
   std::vector<std::string> result;
   for (auto& part : search_words) {

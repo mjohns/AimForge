@@ -52,6 +52,9 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
 
     if (ImGui::BeginChild("ScenarioContent")) {
       auto search_words = GetSearchWords(search_text_);
+      if (search_words.size() > 0) {
+        expand_all_ = 2;
+      }
       if (type == ScenarioBrowserType::RECENT) {
         MaybeLoadRecentScenarioIds();
         PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
@@ -68,6 +71,12 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       }
     }
     ImGui::EndChild();
+    if (expand_all_ > 0) {
+      expand_all_--;
+    }
+    if (collapse_all_ > 0) {
+      collapse_all_--;
+    }
   }
 
  private:
@@ -91,8 +100,26 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       }
     }
     for (auto& node : nodes) {
+      auto id = loop_id.Get();
       if (!node->scenario.has_value()) {
+        if (expand_all_ > 0) {
+          ImGui::SetNextItemOpen(true);
+        }
+        if (collapse_all_ > 0) {
+          ImGui::SetNextItemOpen(false);
+        }
         bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+        const char* popup_id = "ScenarioBundleMenu";
+        if (ImGui::BeginPopupContextItem(popup_id)) {
+          if (ImGui::Selectable("Collapse all")) {
+            collapse_all_ = 2;
+          }
+          if (ImGui::Selectable("Expand all")) {
+            expand_all_ = 2;
+          }
+          ImGui::EndPopup();
+        }
+        ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
         if (node_opened) {
           DrawScenarioNodes(node->child_nodes, search_words, result);
           ImGui::TreePop();
@@ -111,7 +138,8 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     if (ImGui::Button(scenario.id().c_str())) {
       result->scenario_to_start = scenario.id();
     }
-    if (ImGui::BeginPopupContextItem("scenario_item_menu")) {
+    const char* popup_id = "ScenarioItemMenu";
+    if (ImGui::BeginPopupContextItem(popup_id)) {
       if (current_playlist_run != nullptr) {
         std::string playlist_name = current_playlist_run->playlist.name.full_name();
         std::string add_text = std::format("Add to \"{}\"", playlist_name);
@@ -140,7 +168,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       */
       ImGui::EndPopup();
     }
-    ImGui::OpenPopupOnItemClick("scenario_item_menu", ImGuiPopupFlags_MouseButtonRight);
+    ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
   }
 
   void MaybeLoadRecentScenarioIds() {
@@ -164,6 +192,10 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
 
   std::vector<std::string> recent_scenario_ids_;
   u64 recent_scenario_load_time_micros_ = 0;
+
+  // If greater than 0 will expand/collapse all. Will be decremented each render loop.
+  int expand_all_ = 0;
+  int collapse_all_ = 0;
 };
 
 }  // namespace
