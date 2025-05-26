@@ -15,9 +15,7 @@ enum class AppScreen {
   PLAYLISTS,
   STATS,
   EXIT,
-  CURRENT_SCENARIO,
   RECENT_SCENARIOS,
-  CURRENT_PLAYLIST
 };
 
 enum class ScenarioRunOption { NONE, RUN, RESUME };

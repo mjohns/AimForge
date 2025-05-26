@@ -22,6 +22,7 @@ static const char* kIconHome = "\xEE\xA2\x8A";
 static const char* kIconPlayCircle = "\xEE\x87\x84";
 static const char* kIconPlayArrow = "\xEE\x80\xB7";
 static const char* kIconArrowForward = "\xEE\x97\x88";
+static const char* kIconEdit = "\xEE\x8F\x89";
 
 
 }  // namespace aim
