@@ -113,6 +113,9 @@ void ScenarioManager::LoadScenariosFromDisk() {
 }
 
 std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id) {
+  if (scenario_id.size() == 0) {
+    return {};
+  }
   return GetScenario(scenario_id, 1);
 }
 

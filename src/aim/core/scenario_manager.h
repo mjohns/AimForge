@@ -37,6 +37,24 @@ class ScenarioManager {
 
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id);
 
+  std::optional<ScenarioItem> GetCurrentScenario() {
+    return GetScenario(current_scenario_.value_or(""));
+  }
+
+  void ClearCurrentScenario() {
+    current_scenario_ = {};
+  }
+
+  bool SetCurrentScenario(const std::string& scenario_id) {
+    bool is_valid = GetScenario(scenario_id).has_value();
+    if (is_valid) {
+      current_scenario_ = scenario_id;
+    } else {
+      current_scenario_ = {};
+    }
+    return is_valid;
+  }
+
   const std::vector<ScenarioItem>& scenarios() const {
     return scenarios_;
   }
@@ -58,6 +76,8 @@ class ScenarioManager {
   std::vector<ScenarioItem> scenarios_;
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   FileSystem* fs_;
+
+  std::optional<std::string> current_scenario_;
 };
 
 }  // namespace aim
