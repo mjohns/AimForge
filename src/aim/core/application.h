@@ -47,7 +47,7 @@ class Application {
   static std::unique_ptr<Application> Create();
 
   void NewImGuiFrame();
-  bool BeginFullscreenWindow();
+  bool BeginFullscreenWindow(const std::string& id = "Fullscreen");
 
   bool StartRender(RenderContext* render_context);
   void FinishRender(RenderContext* render_context);
