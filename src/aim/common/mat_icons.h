@@ -19,5 +19,9 @@ static const char* kIconMenu = "\xEE\x97\x92";
 static const char* kIconSettings = "\xEE\xA2\xB8";
 static const char* kIconSearch = "\xEE\xA2\xB6";
 static const char* kIconHome = "\xEE\xA2\x8A";
+static const char* kIconPlayCircle = "\xEE\x87\x84";
+static const char* kIconPlayArrow = "\xEE\x80\xB7";
+static const char* kIconArrowForward = "\xEE\x97\x88";
+
 
 }  // namespace aim

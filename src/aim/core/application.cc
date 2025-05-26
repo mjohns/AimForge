@@ -204,6 +204,9 @@ int Application::Initialize() {
   imgui_ini_filename_ = file_system_->GetUserDataPath("imgui.ini").string();
   io.IniFilename = imgui_ini_filename_.c_str();
 
+  ImGuiStyle& style = ImGui::GetStyle();
+  style.WindowRounding = 6;
+
   font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
   if (!font_manager_->LoadFonts()) {
     logger_->error("Failed to load fonts");
@@ -249,7 +252,7 @@ void Application::Render(ImVec4 clear_color) {
 
     // This is mandatory: call Imgui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
     // buffer!
-    Imgui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
+    ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
 
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
@@ -292,7 +295,7 @@ bool Application::StartRender(RenderContext* render_context) {
 
   // This is mandatory: call Imgui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
   // buffer!
-  Imgui_ImplSDLGPU3_PrepareDrawData(draw_data, render_context->command_buffer);
+  ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, render_context->command_buffer);
 
   return true;
 }
