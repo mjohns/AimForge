@@ -48,11 +48,11 @@ class PlaylistEditorComponent : public UiComponent {
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text(bundle_name_);
     ImGui::SameLine();
-    ImGui::PushItemWidth(400);
+    ImGui::SetNextItemWidth(400);
     ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
-    ImGui::PopItemWidth();
 
     ImGui::Spacing();
     ImGui::Spacing();
@@ -273,6 +273,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
       return false;
     }
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("%s", playlist_name.c_str());
     ImGui::SameLine();
     if (ImGui::Button(kIconEdit)) {
