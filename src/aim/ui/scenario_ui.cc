@@ -11,8 +11,6 @@
 namespace aim {
 namespace {
 
-const char* kDeleteConfirmationPopup = "DELETE_CONFIRMATION_POPUP";
-
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;
@@ -59,16 +57,15 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
         ImGui::LoopId loop_id;
         for (const std::string& scenario_id : recent_scenario_ids_) {
-          auto id = loop_id.Get();
+          auto lid = loop_id.Get();
           auto scenario = app_->scenario_manager()->GetScenario(scenario_id);
           if (scenario.has_value()) {
             DrawScenarioListItem(*scenario, search_words, current_playlist_run, result);
           }
         }
-        return;
+      } else {
+        DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words, result);
       }
-
-      DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words, result);
     }
     ImGui::EndChild();
   }
