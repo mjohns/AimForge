@@ -22,7 +22,7 @@ namespace aim {
 namespace {
 
 const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
-    {Room::kSimpleRoom, "Simple"},
+    {Room::kSimpleRoom, "Box"},
     {Room::kCylinderRoom, "Cylinder"},
     {Room::kBarrelRoom, "Barrel"},
 };
@@ -123,12 +123,17 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
  protected:
+  bool DisableFullscreenWindow() override {
+    return true;
+  }
+
   void DrawScreen() override {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_size_ = char_size;
     char_x_ = char_size_.x;
 
     if (ImGui::Begin("Details")) {
+      notification_popup_.Draw();
       ImGui::SimpleDropdown(
           "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 7);
 
@@ -484,8 +489,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Text("Min distance");
     ImGui::SameLine();
-    ImGui::HelpMarker("Minimum distance between targets.");
-    ImGui::SameLine();
 
     bool use_min = s->has_min_distance();
     float min_value = s->min_distance();
@@ -498,11 +501,10 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       s->clear_min_distance();
     }
+    ImGui::SameLine();
+    ImGui::HelpMarker("Minimum distance between targets.");
 
     ImGui::Text("Fixed distance");
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "New target will be placed at a fixed distance from the last target that was added.");
     ImGui::SameLine();
     bool use_fixed = s->has_fixed_distance_from_last_target();
     ImGui::Checkbox("##FixedDistanceCheck", &use_fixed);
@@ -520,6 +522,9 @@ class ScenarioEditorScreen : public UiScreen {
       s->clear_fixed_distance_from_last_target();
       s->clear_fixed_distance_jitter();
     }
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "New target will be placed at a fixed distance from the last target that was added.");
   }
 
   void DrawTargetRegion(TargetRegion* region) {
@@ -1035,11 +1040,11 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Newest target is ghost");
     ImGui::SameLine();
-    ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
-    ImGui::SameLine();
     bool is_ghost = t->newest_target_is_ghost();
     ImGui::Checkbox("##IsGhost", &is_ghost);
     t->set_newest_target_is_ghost(is_ghost);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
 
     if (t->profiles_size() == 0) {
       t->add_profiles();
@@ -1107,11 +1112,11 @@ class ScenarioEditorScreen : public UiScreen {
     bool has_growth = profile->target_radius_growth_time_seconds() > 0;
     ImGui::Text("Pulse");
     ImGui::SameLine();
+    ImGui::Checkbox("##PulseCheckbox", &has_growth);
+    ImGui::SameLine();
     ImGui::HelpMarker(
         "Target will grow to a certain size over some duration. If it is not killed by "
         "then, it will be removed.");
-    ImGui::SameLine();
-    ImGui::Checkbox("##PulseCheckbox", &has_growth);
     if (has_growth) {
       ImGui::Indent();
       ImGui::Text("Time seconds");
@@ -1139,10 +1144,10 @@ class ScenarioEditorScreen : public UiScreen {
     if (def_.shot_type().type_case() == ShotType::kTrackingKill) {
       ImGui::Text("Health");
       ImGui::SameLine();
-      ImGui::HelpMarker("The amount of time in seconds to kill the target.");
-      ImGui::SameLine();
       JitteredValueInput(
           "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.1, 0.5, "%.1f");
+      ImGui::SameLine();
+      ImGui::HelpMarker("The amount of time in seconds to kill the target.");
     } else {
       health_seconds = 0;
     }

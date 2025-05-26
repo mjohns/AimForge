@@ -211,8 +211,9 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
     timer_.OnStartRender();
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
-    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
+    app_->NewImGuiFrame();
+    app_->BeginFullscreenWindow();
+    DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info());
 
     ImGui::Text("%s", id_.c_str());
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
@@ -442,8 +443,9 @@ NavigationEvent Scenario::ResumeInternal() {
     current_times_.render_start = timer_.GetElapsedMicros();
     auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
 
-    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
-    DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info(), draw_list);
+    app_->NewImGuiFrame();
+    app_->BeginFullscreenWindow();
+    DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info());
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);

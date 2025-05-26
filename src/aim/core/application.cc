@@ -201,13 +201,16 @@ int Application::Initialize() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
+  imgui_ini_filename_ = file_system_->GetUserDataPath("imgui.ini").string();
+  io.IniFilename = imgui_ini_filename_.c_str();
+
   font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
   if (!font_manager_->LoadFonts()) {
     logger_->error("Failed to load fonts");
     return -1;
   }
 
-  //ImGui::StyleColorsDark();
+  // ImGui::StyleColorsDark();
   ImGui::StyleColorsClassic();
 
   // Setup Platform/Renderer backends
@@ -312,24 +315,21 @@ void Application::FinishRender(RenderContext* render_context) {
   SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
 }
 
-ImDrawList* Application::StartFullscreenImguiFrame() {
-  // Start the Dear ImGui frame
+void Application::NewImGuiFrame() {
   ImGui_ImplSDLGPU3_NewFrame();
   ImGui_ImplSDL3_NewFrame();
   ImGui::NewFrame();
+}
 
-  // Get the drawing list and calculate center position
-  // Create fullscreen window
+bool Application::BeginFullscreenWindow() {
   ImGui::SetNextWindowPos(ImVec2(0, 0));
   ImGui::SetNextWindowSize(ImVec2((float)window_width_, (float)window_height_));
-  ImGui::Begin("Fullscreen",
-               nullptr,
-               ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
-                   ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
-                   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
-  ImDrawList* draw_list = ImGui::GetWindowDrawList();
-  draw_list->Flags |= ImDrawListFlags_AntiAliasedFill | ImDrawListFlags_AntiAliasedLines;
-  return draw_list;
+  return ImGui::Begin("Fullscreen",
+                      nullptr,
+                      ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+                          ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
+                          ImGuiWindowFlags_NoScrollbar);
+  // ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
 }
 
 void Application::EnableVsync() {

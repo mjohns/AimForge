@@ -276,7 +276,7 @@ class ThemeEditorScreen : public UiScreen {
     Crosshair crosshair;
     crosshair.mutable_dot()->set_draw_outline(true);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    DrawCrosshair(crosshair, 25, current_theme_, app_->screen_info(), draw_list);
+    DrawCrosshair(crosshair, 25, current_theme_, app_->screen_info());
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}

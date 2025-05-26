@@ -40,9 +40,15 @@ NavigationEvent UiScreen::Run() {
       return *return_value_;
     }
 
-    app_->StartFullscreenImguiFrame();
-    DrawScreen();
-    ImGui::End();
+    app_->NewImGuiFrame();
+    if (DisableFullscreenWindow()) {
+      DrawScreen();
+    } else {
+      if (app_->BeginFullscreenWindow()) {
+        DrawScreen();
+      }
+      ImGui::End();
+    }
 
     Render();
 
