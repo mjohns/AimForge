@@ -275,7 +275,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
 
     ImGui::Text("%s", playlist_name.c_str());
     ImGui::SameLine();
-    if (ImGui::Button("Edit")) {
+    if (ImGui::Button(kIconEdit)) {
       showing_editor_ = true;
     }
     return PlaylistRunComponent(
