@@ -40,6 +40,12 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##ScenarioSearchInput", kIconSearch, &search_text_);
+    if (search_text_.size() > 0) {
+      ImGui::SameLine();
+      if (ImGui::Button(kIconCancel)) {
+        search_text_ = "";
+      }
+    }
     ImGui::SameLine();
     if (ImGui::Button(kIconRefresh)) {
       result->reload_scenarios = true;

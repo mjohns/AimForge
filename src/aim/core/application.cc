@@ -324,10 +324,10 @@ void Application::NewImGuiFrame() {
   ImGui::NewFrame();
 }
 
-bool Application::BeginFullscreenWindow() {
+bool Application::BeginFullscreenWindow(const std::string& id) {
   ImGui::SetNextWindowPos(ImVec2(0, 0));
   ImGui::SetNextWindowSize(ImVec2((float)window_width_, (float)window_height_));
-  return ImGui::Begin("Fullscreen",
+  return ImGui::Begin(id.c_str(),
                       nullptr,
                       ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
                           ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |

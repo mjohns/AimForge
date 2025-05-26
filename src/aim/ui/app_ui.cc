@@ -82,7 +82,7 @@ class AppUiImpl : public AppUi {
       }
 
       app_->NewImGuiFrame();
-      if (app_->BeginFullscreenWindow()) {
+      if (app_->BeginFullscreenWindow("MainScreen")) {
         DrawScreen();
       }
       ImGui::End();
@@ -221,12 +221,12 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawScreen() {
+    ImGui::IdGuard cid("HomePage");
     ScreenInfo screen = app_->screen_info();
 
-    float navigation_column_width = screen.width * 0.15;
-
     // TODO: Improve appearance of top bar.
-    ImGui::BeginChild("Header", ImVec2(-ImGui::GetFrameHeightWithSpacing(), screen.height * 0.06));
+    int large_font_size = app_->font_manager()->large_font_size();
+    ImGui::BeginChild("Header", ImVec2(0, large_font_size * 1.3));
     if (logo_texture_ && logo_texture_->is_loaded()) {
       int size = app_->font_manager()->large_font_size();
       ImGui::Image(logo_texture_->GetImTextureId(),
@@ -263,70 +263,77 @@ class AppUiImpl : public AppUi {
     */
     ImGui::EndChild();
 
-    ImGui::Columns(2, "NavigationContentColumns", false);
-    ImGui::SetColumnWidth(0, navigation_column_width);
-    ImGui::BeginChild("Navigation", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable |
+                            ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV |
+                            ImGuiTableFlags_ContextMenuInBody;
 
-    if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
-      app_screen_ = AppScreen::SCENARIOS;
-    }
-    if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
-      app_screen_ = AppScreen::PLAYLISTS;
-    }
-    PlaylistRun* playlist_run = app_->playlist_manager()->GetCurrentRun();
-    if (playlist_run != nullptr) {
-      std::string playlist_label = std::format("  > {}", playlist_run->playlist.name.full_name());
-      if (ImGui::Selectable(playlist_label.c_str(), app_screen_ == AppScreen::CURRENT_PLAYLIST)) {
-        app_screen_ = AppScreen::CURRENT_PLAYLIST;
+    if (ImGui::BeginTable("MainColumns", 2, flags)) {
+      ImGui::TableNextColumn();
+
+      // ImGui::SetColumnWidth(0, navigation_column_width);
+
+      if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
+        app_screen_ = AppScreen::SCENARIOS;
       }
-    }
-
-    bool node_opened = ImGui::TreeNode("Recent");
-    if (node_opened) {
-      if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
-        app_screen_ = AppScreen::RECENT_SCENARIOS;
+      if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
+        app_screen_ = AppScreen::PLAYLISTS;
       }
-      ImGui::TreePop();
-    }
+      /*
+      PlaylistRun* playlist_run = app_->playlist_manager()->GetCurrentRun();
+      if (playlist_run != nullptr) {
+        std::string playlist_label = std::format("  > {}", playlist_run->playlist.name.full_name());
+        if (ImGui::Selectable(playlist_label.c_str(), app_screen_ == AppScreen::CURRENT_PLAYLIST)) {
+          app_screen_ = AppScreen::CURRENT_PLAYLIST;
+        }
+      }
 
-    ImGui::Spacing();
-    ImGui::Spacing();
+      bool node_opened = ImGui::TreeNode("Recent");
+      if (node_opened) {
+        if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
+          app_screen_ = AppScreen::RECENT_SCENARIOS;
+        }
+        ImGui::TreePop();
+      }
+      */
 
-    if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
-      screen_to_show_ = CreateSettingsScreen(app_, GetCurrentScenarioId());
-    }
-    if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
-      screen_to_show_ = CreateThemeEditorScreen(app_);
-    }
+      if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
+        screen_to_show_ = CreateSettingsScreen(app_, GetCurrentScenarioId());
+      }
+      if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
+        screen_to_show_ = CreateThemeEditorScreen(app_);
+      }
 
-    // ImGui::SetCursorPosY(screen.height * 0.5);
-    if (ImGui::Selectable("Exit", app_screen_ == AppScreen::EXIT)) {
-      app_screen_ = AppScreen::EXIT;
-      // Show a screen to confirm?
-      throw ApplicationExitException();
-    }
+      // ImGui::SetCursorPosY(screen.height * 0.5);
+      if (ImGui::Selectable("Exit", app_screen_ == AppScreen::EXIT)) {
+        app_screen_ = AppScreen::EXIT;
+        // Show a screen to confirm?
+        throw ApplicationExitException();
+      }
 
-    ImGui::EndChild();
-    ImGui::NextColumn();
+      ImGui::TableNextColumn();
 
-    ImGui::BeginChild("Content");
+      ImGui::BeginChild("PrimaryContent");
 
-    if (app_screen_ == AppScreen::SCENARIOS) {
-      DrawScenariosScreen(ScenarioBrowserType::FULL);
-    }
-    if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
-      DrawScenariosScreen(ScenarioBrowserType::RECENT);
-    }
+      if (app_screen_ == AppScreen::SCENARIOS) {
+        DrawScenariosScreen(ScenarioBrowserType::FULL);
+      }
+      if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
+        DrawScenariosScreen(ScenarioBrowserType::RECENT);
+      }
 
-    if (app_screen_ == AppScreen::CURRENT_PLAYLIST) {
-      DrawCurrentPlaylistScreen();
-    }
-    if (app_screen_ == AppScreen::PLAYLISTS) {
-      DrawPlaylistsScreen();
-    }
+      if (app_screen_ == AppScreen::CURRENT_PLAYLIST) {
+        DrawCurrentPlaylistScreen();
+      }
+      if (app_screen_ == AppScreen::PLAYLISTS) {
+        DrawPlaylistsScreen();
+      }
 
-    // ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::EndChild();
+      // ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+      ImGui::EndChild();
+
+      ImGui::TableNextColumn();
+      ImGui::EndTable();
+    }
   }
 
   void DrawCurrentScenarioScreen() {
