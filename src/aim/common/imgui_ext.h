@@ -286,4 +286,19 @@ static void HelpTooltip(const std::string& text) {
   }
 }
 
+static void DrawItemBounds() {
+  ImVec2 rect_min = ImGui::GetItemRectMin();
+  ImVec2 rect_max = ImGui::GetItemRectMax();
+
+  ImDrawList* draw_list = ImGui::GetWindowDrawList();
+  draw_list->AddLine(ImVec2(rect_min.x, rect_min.y),
+                     ImVec2(rect_max.x, rect_min.y),
+                     ImGui::GetColorU32(ImGuiCol_DragDropTarget),
+                     2.0f);
+  draw_list->AddLine(ImVec2(rect_min.x, rect_max.y),
+                     ImVec2(rect_max.x, rect_max.y),
+                     ImGui::GetColorU32(ImGuiCol_DragDropTarget),
+                     2.0f);
+}
+
 }  // namespace ImGui
