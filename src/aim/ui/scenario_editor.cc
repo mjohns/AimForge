@@ -128,6 +128,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawScreen() override {
+    ImGui::IdGuard cid("ScenarioEditor");
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_size_ = char_size;
     char_x_ = char_size_.x;
