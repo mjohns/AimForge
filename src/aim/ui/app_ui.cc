@@ -39,7 +39,7 @@ class AppUiImpl : public AppUi {
     }
     auto last_scenario = app_->history_db()->GetRecentViews(RecentViewType::SCENARIO, 1);
     if (last_scenario.size() > 0) {
-      current_scenario_ = app_->scenario_manager()->GetScenario(last_scenario[0].id);
+      app_->scenario_manager()->SetCurrentScenario(last_scenario[0].id);
     }
   }
 
@@ -51,46 +51,10 @@ class AppUiImpl : public AppUi {
         screen_to_show_ = {};
       }
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
-        if (current_scenario_.has_value()) {
-          auto updated_scenario = app_->scenario_manager()->GetScenario(current_scenario_->id());
-          if (updated_scenario.has_value()) {
-            current_scenario_ = updated_scenario;
-          }
-          app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO, current_scenario_->id());
-          CreateScenarioParams params;
-          params.id = current_scenario_->id();
-          params.def = current_scenario_->def;
-          current_running_scenario_ = CreateScenario(params, app_);
-          // TODO: Error dialog for invalid scenarios.
-          if (current_running_scenario_) {
-            auto nav_event = current_running_scenario_->Run();
-            if (nav_event.IsRestartLastScenario()) {
-              scenario_run_option_ = ScenarioRunOption::RUN;
-              continue;
-            }
-            if (nav_event.type == NavigationEventType::START_SCENARIO) {
-              auto maybe_scenario = app_->scenario_manager()->GetScenario(nav_event.scenario_id);
-              if (maybe_scenario.has_value()) {
-                current_scenario_ = maybe_scenario;
-                scenario_run_option_ = ScenarioRunOption::RUN;
-                continue;
-              }
-            }
-            if (nav_event.type == NavigationEventType::EDIT_SCENARIO) {
-              ScenarioEditorOptions opts;
-              opts.scenario_id = nav_event.scenario_id;
-              screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
-              continue;
-            }
-            if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
-              if (HandlePlaylistNext()) {
-                continue;
-              }
-            }
-            app_->EnableVsync();
-            SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-          }
-        }
+        RunCurrentScenario();
+        app_->EnableVsync();
+        SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+        continue;
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
         if (current_running_scenario_) {
@@ -139,7 +103,59 @@ class AppUiImpl : public AppUi {
     }
   }
 
+  void RunCurrentScenario() {
+    // TODO: Error dialog for invalid scenarios.
+    scenario_run_option_ = ScenarioRunOption::NONE;
+    if (!GetCurrentScenario().has_value()) {
+      return;
+    }
+    ScenarioItem current_scenario = *GetCurrentScenario();
+    app_->history_db()->UpdateRecentView(RecentViewType::SCENARIO, current_scenario.id());
+    CreateScenarioParams params;
+    params.id = current_scenario.id();
+    params.def = current_scenario.def;
+    current_running_scenario_ = CreateScenario(params, app_);
+    if (!current_running_scenario_) {
+      // TODO: Error dialog for invalid scenarios.
+      return;
+    }
+    auto nav_event = current_running_scenario_->Run();
+    if (nav_event.IsRestartLastScenario()) {
+      scenario_run_option_ = ScenarioRunOption::RUN;
+      return;
+    }
+    if (nav_event.type == NavigationEventType::START_SCENARIO) {
+      if (app_->scenario_manager()->SetCurrentScenario(nav_event.scenario_id)) {
+        scenario_run_option_ = ScenarioRunOption::RUN;
+      }
+      // TODO: Error
+      return;
+    }
+    if (nav_event.type == NavigationEventType::EDIT_SCENARIO) {
+      ScenarioEditorOptions opts;
+      opts.scenario_id = nav_event.scenario_id;
+      screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
+      return;
+    }
+    if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
+      HandlePlaylistNext();
+      return;
+    }
+  }
+
  private:
+  std::optional<ScenarioItem> GetCurrentScenario() {
+    return app_->scenario_manager()->GetCurrentScenario();
+  }
+
+  std::string GetCurrentScenarioId() {
+    auto scenario = app_->scenario_manager()->GetCurrentScenario();
+    if (scenario.has_value()) {
+      return scenario->id();
+    }
+    return "";
+  }
+
   void OnEvent(const SDL_Event& event) {
     Settings settings = app_->settings_manager()->GetCurrentSettings();
     if (IsMappableKeyDownEvent(event)) {
@@ -148,9 +164,10 @@ class AppUiImpl : public AppUi {
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
       if (KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
-        if (current_scenario_.has_value()) {
+        auto current_scenario = GetCurrentScenario();
+        if (current_scenario.has_value()) {
           ScenarioEditorOptions opts;
-          opts.scenario_id = current_scenario_->id();
+          opts.scenario_id = current_scenario->id();
           screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
         }
       }
@@ -191,11 +208,9 @@ class AppUiImpl : public AppUi {
       }
       run->current_index = next_index;
       auto scenario_id = run->progress_list[next_index].item.scenario();
-      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
-      if (!maybe_scenario.has_value()) {
+      if (!app_->scenario_manager()->SetCurrentScenario(scenario_id)) {
         return false;
       }
-      current_scenario_ = maybe_scenario;
       scenario_run_option_ = ScenarioRunOption::RUN;
       return true;
     }
@@ -225,6 +240,7 @@ class AppUiImpl : public AppUi {
       ImGui::Text("AimForge");
     }
 
+    /*
     if (current_scenario_.has_value()) {
       auto font = app_->font_manager()->UseMedium();
       ImGui::SameLine();
@@ -244,6 +260,7 @@ class AppUiImpl : public AppUi {
         }
       }
     }
+    */
     ImGui::EndChild();
 
     ImGui::Columns(2, "NavigationContentColumns", false);
@@ -252,12 +269,6 @@ class AppUiImpl : public AppUi {
 
     if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
-    }
-    if (current_scenario_.has_value()) {
-      std::string scenario_label = std::format("  > {}", current_scenario_->id());
-      if (ImGui::Selectable(scenario_label.c_str(), app_screen_ == AppScreen::CURRENT_SCENARIO)) {
-        app_screen_ = AppScreen::CURRENT_SCENARIO;
-      }
     }
     if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
@@ -282,8 +293,7 @@ class AppUiImpl : public AppUi {
     ImGui::Spacing();
 
     if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
-      screen_to_show_ =
-          CreateSettingsScreen(app_, current_scenario_.has_value() ? current_scenario_->id() : "");
+      screen_to_show_ = CreateSettingsScreen(app_, GetCurrentScenarioId());
     }
     if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
       screen_to_show_ = CreateThemeEditorScreen(app_);
@@ -301,13 +311,6 @@ class AppUiImpl : public AppUi {
 
     ImGui::BeginChild("Content");
 
-    if (app_screen_ == AppScreen::CURRENT_SCENARIO) {
-      if (!current_scenario_.has_value()) {
-        app_screen_ = AppScreen::SCENARIOS;
-      } else {
-        DrawCurrentScenarioScreen();
-      }
-    }
     if (app_screen_ == AppScreen::SCENARIOS) {
       DrawScenariosScreen(ScenarioBrowserType::FULL);
     }
@@ -342,8 +345,9 @@ class AppUiImpl : public AppUi {
     ScenarioBrowserResult result;
     scenario_browser_component_->Show(type, &result);
     if (result.scenario_to_start.size() > 0) {
-      current_scenario_ = app_->scenario_manager()->GetScenario(result.scenario_to_start);
-      scenario_run_option_ = ScenarioRunOption::RUN;
+      if (app_->scenario_manager()->SetCurrentScenario(result.scenario_to_start)) {
+        scenario_run_option_ = ScenarioRunOption::RUN;
+      }
     }
     if (result.scenario_to_edit.size() > 0) {
       ScenarioEditorOptions opts;
@@ -383,9 +387,7 @@ class AppUiImpl : public AppUi {
     }
     std::string scenario_id;
     if (playlist_component_->Show(run->playlist.name.full_name(), &scenario_id)) {
-      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
-      if (maybe_scenario.has_value()) {
-        current_scenario_ = *maybe_scenario;
+      if (app_->scenario_manager()->SetCurrentScenario(scenario_id)) {
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
     }
@@ -396,12 +398,10 @@ class AppUiImpl : public AppUi {
   Application* app_;
   Stopwatch timer_;
 
-  std::optional<ScenarioItem> current_scenario_;
   std::unique_ptr<Scenario> current_running_scenario_;
-  std::unique_ptr<Texture> logo_texture_;
-
   std::unique_ptr<UiScreen> screen_to_show_;
 
+  std::unique_ptr<Texture> logo_texture_;
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component_;
