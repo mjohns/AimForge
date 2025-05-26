@@ -232,6 +232,7 @@ class ScenarioEditorScreen : public UiScreen {
       return false;
     }
 
+    app_->scenario_manager()->SetCurrentScenario(name_.full_name());
     return true;
   }
 

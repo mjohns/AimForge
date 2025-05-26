@@ -57,21 +57,10 @@ class AppUiImpl : public AppUi {
         continue;
       }
       if (scenario_run_option_ == ScenarioRunOption::RESUME) {
-        if (current_running_scenario_) {
-          auto nav_event = current_running_scenario_->Resume();
-          // TODO: share this nav_event handling between run and resume.
-          if (nav_event.IsRestartLastScenario()) {
-            scenario_run_option_ = ScenarioRunOption::RUN;
-            continue;
-          }
-          if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
-            if (HandlePlaylistNext()) {
-              continue;
-            }
-          }
-          app_->EnableVsync();
-          SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
-        }
+        ResumeCurrentScenario();
+        app_->EnableVsync();
+        SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+        continue;
       }
 
       scenario_run_option_ = ScenarioRunOption::NONE;
@@ -104,7 +93,6 @@ class AppUiImpl : public AppUi {
   }
 
   void RunCurrentScenario() {
-    // TODO: Error dialog for invalid scenarios.
     scenario_run_option_ = ScenarioRunOption::NONE;
     if (!GetCurrentScenario().has_value()) {
       return;
@@ -120,6 +108,18 @@ class AppUiImpl : public AppUi {
       return;
     }
     auto nav_event = current_running_scenario_->Run();
+    HandleScenarioRunResult(nav_event);
+  }
+
+  void ResumeCurrentScenario() {
+    scenario_run_option_ = ScenarioRunOption::NONE;
+    if (current_running_scenario_) {
+      auto nav_event = current_running_scenario_->Resume();
+      HandleScenarioRunResult(nav_event);
+    }
+  }
+
+  void HandleScenarioRunResult(NavigationEvent nav_event) {
     if (nav_event.IsRestartLastScenario()) {
       scenario_run_option_ = ScenarioRunOption::RUN;
       return;
