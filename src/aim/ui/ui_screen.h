@@ -26,6 +26,10 @@ class UiScreen {
   virtual void Resume();
   virtual void Render();
 
+  virtual bool DisableFullscreenWindow() {
+    return false;
+  }
+
   void ScreenDone(NavigationEvent nav_event = NavigationEvent::Done()) {
     return_value_ = nav_event;
   }

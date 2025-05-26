@@ -46,7 +46,8 @@ class Application {
 
   static std::unique_ptr<Application> Create();
 
-  ImDrawList* StartFullscreenImguiFrame();
+  void NewImGuiFrame();
+  bool BeginFullscreenWindow();
 
   bool StartRender(RenderContext* render_context);
   void FinishRender(RenderContext* render_context);
@@ -155,6 +156,7 @@ class Application {
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
   u64 component_id_counter_ = 1;
+  std::string imgui_ini_filename_;
 };
 
 }  // namespace aim

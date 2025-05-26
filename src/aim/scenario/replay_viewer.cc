@@ -114,9 +114,9 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
     timer.OnStartRender();
     auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
 
-    ImDrawList* draw_list = app->StartFullscreenImguiFrame();
-
-    DrawCrosshair(crosshair, crosshair_size, theme, screen, draw_list);
+    app->NewImGuiFrame();
+    app->BeginFullscreenWindow();
+    DrawCrosshair(crosshair, crosshair_size, theme, screen);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);

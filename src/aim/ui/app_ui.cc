@@ -128,8 +128,10 @@ class AppUiImpl : public AppUi {
         }
       }
 
-      app_->StartFullscreenImguiFrame();
-      DrawScreen();
+      app_->NewImGuiFrame();
+      if (app_->BeginFullscreenWindow()) {
+        DrawScreen();
+      }
       ImGui::End();
 
       app_->Render();

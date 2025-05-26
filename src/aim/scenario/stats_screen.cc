@@ -197,7 +197,8 @@ NavigationEvent StatsScreen::Run(Replay* replay) {
     float width = screen.width * 0.3;
     float x_start = (screen.width - width) * 0.5;
 
-    ImDrawList* draw_list = app_->StartFullscreenImguiFrame();
+    app_->NewImGuiFrame();
+    app_->BeginFullscreenWindow();
 
     ImGui::Columns(2, "StatsColumns", false);
 

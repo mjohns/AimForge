@@ -45,8 +45,8 @@ void DrawPlusWithLengths(float horizontal_length,
 void DrawCrosshair(const Crosshair& crosshair,
                    float crosshair_size,
                    const Theme& theme,
-                   const ScreenInfo& screen,
-                   ImDrawList* draw_list) {
+                   const ScreenInfo& screen) {
+  ImDrawList* draw_list = ImGui::GetWindowDrawList();
   ImU32 main_color = ToImCol32(theme.crosshair().color());
   ImU32 outline_color = ToImCol32(theme.crosshair().outline_color());
   if (crosshair.has_dot()) {
