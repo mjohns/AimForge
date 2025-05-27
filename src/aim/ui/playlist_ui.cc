@@ -310,25 +310,30 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##PlaylistSearchInput", "Search..", &playlist_search_text_);
+    ImGui::InputTextWithHint("##PlaylistSearchInput", kIconSearch, &playlist_search_text_);
     ImGui::SameLine();
 
-    if (ImGui::Button("Reload Playlists")) {
-      app_->playlist_manager()->LoadPlaylistsFromDisk();
+    if (ImGui::Button(kIconRefresh)) {
+      result->reload_playlists = true;
     }
+    ImGui::HelpTooltip("Reload playlists from disk.");
     ImGui::Spacing();
     ImGui::Spacing();
+
+    ImGui::BeginChild("PlaylistsContent");
 
     std::optional<Playlist> copy_playlist;
     auto search_words = GetSearchWords(playlist_search_text_);
     ImGui::LoopId loop_id;
+    // TODO: group by bundle + collapse/expand all
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
       auto id_guard = loop_id.Get();
       if (StringMatchesSearch(playlist.name.full_name(), search_words)) {
         if (ImGui::Button(playlist.name.full_name().c_str())) {
           result->open_playlist = playlist;
         }
-        if (ImGui::BeginPopupContextItem("playlist_item_menu")) {
+        const char* menu_id = "PlaylistItemMenu";
+        if (ImGui::BeginPopupContextItem(menu_id)) {
           if (ImGui::Selectable("Copy")) {
             copy_playlist = playlist;
           }
@@ -338,15 +343,11 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
           }
           ImGui::EndPopup();
         }
-        ImGui::OpenPopupOnItemClick("playlist_item_menu", ImGuiPopupFlags_MouseButtonRight);
+        ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
       }
     }
 
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-    if (ImGui::Button("Create new playlist")) {
-    }
+    ImGui::EndChild();
 
     if (copy_playlist.has_value()) {
       auto playlist = *copy_playlist;
