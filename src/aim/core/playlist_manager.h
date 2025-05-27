@@ -54,6 +54,10 @@ class PlaylistManager {
     return GetRun(current_playlist_name_);
   }
 
+  const std::string& current_playlist_name() const {
+    return current_playlist_name_;
+  }
+
   // Don't hold onto the pointer for long periods of time as it could be invalidated.
   PlaylistRun* GetRun(const std::string& name);
 

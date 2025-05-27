@@ -154,7 +154,7 @@ class PlaylistEditorComponent : public UiComponent {
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
     ImGui::SameLine();
-    if (ImGui::Button("Clear")) {
+    if (ImGui::Button(kIconCancel)) {
       scenario_search_text_ = "";
     }
     if (scenario_search_text_.size() > 0) {
@@ -328,8 +328,10 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
     // TODO: group by bundle + collapse/expand all
     for (const auto& playlist : app_->playlist_manager()->playlists()) {
       auto id_guard = loop_id.Get();
-      if (StringMatchesSearch(playlist.name.full_name(), search_words)) {
-        if (ImGui::Button(playlist.name.full_name().c_str())) {
+      std::string name = playlist.name.full_name();
+      if (StringMatchesSearch(name, search_words)) {
+        bool is_selected = name == app_->playlist_manager()->current_playlist_name();
+        if (ImGui::Selectable(name.c_str(), is_selected)) {
           result->open_playlist = playlist;
         }
         const char* menu_id = "PlaylistItemMenu";
@@ -338,8 +340,7 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
             copy_playlist = playlist;
           }
           if (ImGui::Selectable("Delete")) {
-            delete_confirmation_dialog_.NotifyOpen(
-                std::format("Delete \"{}\"?", playlist.name.full_name()), playlist);
+            delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", name), playlist);
           }
           ImGui::EndPopup();
         }

@@ -64,11 +64,6 @@ class SettingsScreen : public UiScreen {
       ImGui::Spacing();
     }
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("DPI");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 10);
-    ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("cm/360");
@@ -80,6 +75,12 @@ class SettingsScreen : public UiScreen {
                               5,
                               "%.0f",
                               char_size.x * 9);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("DPI");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 10);
+    ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Metronome BPM");
