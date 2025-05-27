@@ -271,7 +271,7 @@ class AppUiImpl : public AppUi {
 
       // ImGui::SetColumnWidth(0, navigation_column_width);
 
-      if (ImGui::Selectable(std::format("{} Scenarios", kIconFilterCenterFocus).c_str(),
+      if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
                             app_screen_ == AppScreen::SCENARIOS)) {
         app_screen_ = AppScreen::SCENARIOS;
       }
@@ -288,7 +288,11 @@ class AppUiImpl : public AppUi {
         screen_to_show_ = CreateThemeEditorScreen(app_);
       }
 
-      // ImGui::SetCursorPosY(screen.height * 0.5);
+      // Place exit at bottom
+      float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
+      float content_region_avail_height = ImGui::GetContentRegionAvail().y;
+      float bottom_target_y = ImGui::GetCursorPosY() + content_region_avail_height - item_height;
+      ImGui::SetCursorPosY(bottom_target_y);
       if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(),
                             app_screen_ == AppScreen::EXIT)) {
         app_screen_ = AppScreen::EXIT;

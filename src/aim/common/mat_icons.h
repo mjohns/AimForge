@@ -28,6 +28,7 @@ static const char* kIconPalette = "\xEE\x90\x8A";
 static const char* kIconList = "\xEE\xA2\x96";
 static const char* kIconTarget = "\xEE\x9C\x99";
 static const char* kIconFilterCenterFocus = "\xEE\x8F\x9C";
+static const char* kIconCenterFocusWeak = "\xEE\x8E\xB5";
 
 
 
