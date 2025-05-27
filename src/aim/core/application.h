@@ -14,6 +14,7 @@
 #include "aim/audio/sound_manager.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
+#include "aim/common/random.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/playlist_manager.h"
@@ -73,6 +74,10 @@ class Application {
 
   std::mt19937* random_generator() {
     return &random_generator_;
+  }
+
+  Random& rand() {
+    return rand_;
   }
 
   SoundManager* sound_manager() {
@@ -142,6 +147,7 @@ class Application {
   int window_pixel_height_ = -1;
 
   std::mt19937 random_generator_;
+  Random rand_;
 
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsDb> stats_db_;
