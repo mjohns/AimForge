@@ -50,6 +50,13 @@ WHERE ScenarioId = ?
 ORDER BY StatsId ASC LIMIT 5000;
 )AIMS";
 
+const char* kGetMostRecentRunIdSql = R"AIMS(
+SELECT StatsId
+FROM Stats
+WHERE ScenarioId = ?
+ORDER BY StatsId DESC LIMIT 1;
+)AIMS";
+
 }  // namespace
 
 StatsDb::StatsDb(const std::filesystem::path& db_path) {
@@ -97,6 +104,25 @@ std::vector<StatsRow> StatsDb::GetStats(const std::string& scenario_id) {
 
   sqlite3_finalize(stmt);
   return all_stats;
+}
+
+u64 StatsDb::GetLatestRunId(const std::string& scenario_id) {
+  sqlite3_stmt* stmt;
+
+  int rc = sqlite3_prepare_v2(db_, kGetMostRecentRunIdSql, -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+    return {};
+  }
+  BindString(stmt, 1, scenario_id);
+
+  u64 run_id = 0;
+  while (sqlite3_step(stmt) == SQLITE_ROW) {
+    run_id = sqlite3_column_int64(stmt, 0);
+  }
+
+  sqlite3_finalize(stmt);
+  return run_id;
 }
 
 void StatsDb::AddStats(const std::string& scenario_id, StatsRow* row) {

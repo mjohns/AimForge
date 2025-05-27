@@ -14,6 +14,9 @@ struct ScenarioBrowserResult {
   std::string scenario_to_edit;
   std::string scenario_to_edit_copy;
   bool reload_scenarios = false;
+
+  std::string scenario_stats_to_view;
+  u64 run_id;
 };
 
 enum ScenarioBrowserType {

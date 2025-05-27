@@ -163,6 +163,10 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         CopyScenario(scenario);
         result->reload_scenarios = true;
       }
+      if (ImGui::Selectable("View latest run")) {
+        result->scenario_stats_to_view = scenario.id();
+        result->run_id = app_->stats_db()->GetLatestRunId(scenario.id());
+      }
       if (ImGui::Selectable("Delete")) {
         delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", scenario.id()),
                                                scenario.id());
