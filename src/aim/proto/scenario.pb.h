@@ -1744,6 +1744,9 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     kWeightFieldNumber = 1,
     kAngleFieldNumber = 4,
     kAngleJitterFieldNumber = 5,
+    kPauseSecondsFieldNumber = 7,
+    kPauseSecondsJitterFieldNumber = 8,
+    kRandomDirectionAfterPauseFieldNumber = 9,
   };
   // string description = 6;
   bool has_description() const;
@@ -1825,13 +1828,46 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_angle_jitter(float value);
 
   public:
+  // float pause_seconds = 7;
+  bool has_pause_seconds() const;
+  void clear_pause_seconds() ;
+  float pause_seconds() const;
+  void set_pause_seconds(float value);
+
+  private:
+  float _internal_pause_seconds() const;
+  void _internal_set_pause_seconds(float value);
+
+  public:
+  // float pause_seconds_jitter = 8;
+  bool has_pause_seconds_jitter() const;
+  void clear_pause_seconds_jitter() ;
+  float pause_seconds_jitter() const;
+  void set_pause_seconds_jitter(float value);
+
+  private:
+  float _internal_pause_seconds_jitter() const;
+  void _internal_set_pause_seconds_jitter(float value);
+
+  public:
+  // bool random_direction_after_pause = 9;
+  bool has_random_direction_after_pause() const;
+  void clear_random_direction_after_pause() ;
+  bool random_direction_after_pause() const;
+  void set_random_direction_after_pause(bool value);
+
+  private:
+  bool _internal_random_direction_after_pause() const;
+  void _internal_set_random_direction_after_pause(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallStrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 2,
-      41, 2>
+      4, 9, 2,
+      49, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -1856,6 +1892,9 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     float weight_;
     float angle_;
     float angle_jitter_;
+    float pause_seconds_;
+    float pause_seconds_jitter_;
+    bool random_direction_after_pause_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -12692,6 +12731,90 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
 
   _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.max_distance)
+}
+
+// float pause_seconds = 7;
+inline bool WallStrafeProfile::has_pause_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_pause_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline float WallStrafeProfile::pause_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_seconds)
+  return _internal_pause_seconds();
+}
+inline void WallStrafeProfile::set_pause_seconds(float value) {
+  _internal_set_pause_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_seconds)
+}
+inline float WallStrafeProfile::_internal_pause_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pause_seconds_;
+}
+inline void WallStrafeProfile::_internal_set_pause_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_seconds_ = value;
+}
+
+// float pause_seconds_jitter = 8;
+inline bool WallStrafeProfile::has_pause_seconds_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_pause_seconds_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_seconds_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline float WallStrafeProfile::pause_seconds_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_seconds_jitter)
+  return _internal_pause_seconds_jitter();
+}
+inline void WallStrafeProfile::set_pause_seconds_jitter(float value) {
+  _internal_set_pause_seconds_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_seconds_jitter)
+}
+inline float WallStrafeProfile::_internal_pause_seconds_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pause_seconds_jitter_;
+}
+inline void WallStrafeProfile::_internal_set_pause_seconds_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_seconds_jitter_ = value;
+}
+
+// bool random_direction_after_pause = 9;
+inline bool WallStrafeProfile::has_random_direction_after_pause() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_random_direction_after_pause() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.random_direction_after_pause_ = false;
+  _impl_._has_bits_[0] &= ~0x00000100u;
+}
+inline bool WallStrafeProfile::random_direction_after_pause() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.random_direction_after_pause)
+  return _internal_random_direction_after_pause();
+}
+inline void WallStrafeProfile::set_random_direction_after_pause(bool value) {
+  _internal_set_random_direction_after_pause(value);
+  _impl_._has_bits_[0] |= 0x00000100u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.random_direction_after_pause)
+}
+inline bool WallStrafeProfile::_internal_random_direction_after_pause() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.random_direction_after_pause_;
+}
+inline void WallStrafeProfile::_internal_set_random_direction_after_pause(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.random_direction_after_pause_ = value;
 }
 
 // float angle = 4;
