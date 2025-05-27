@@ -27,6 +27,7 @@
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/screens.h"
 #include "aim/scenario/types/scenario_types.h"
+#include "aim/ui/stats_screen.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -34,6 +35,10 @@ namespace {
 constexpr const u16 kReplayFps = 240;
 constexpr const u64 kTargetRenderFps = 615;
 constexpr const u64 kClickDebounceMicros = 3 * 1000;
+
+NavigationEvent GoToStatsScreen(std::string scenario_id, u64 run_id, Application* app) {
+  return NavigationEvent::ShowScreen([=]() { return CreateStatsScreen(scenario_id, run_id, app); });
+}
 
 }  // namespace
 
@@ -279,8 +284,7 @@ NavigationEvent Scenario::Resume() {
 
 NavigationEvent Scenario::ResumeInternal() {
   if (is_done_) {
-    StatsScreen stats_screen(id_, stats_id_, app_, perf_stats_);
-    return stats_screen.Run(replay_);
+    return GoToStatsScreen(id_, stats_id_, app_);
   }
 
   RefreshState();
@@ -528,8 +532,7 @@ NavigationEvent Scenario::ResumeInternal() {
   }
 
   app_->AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
-  StatsScreen stats_screen(id_, stats_row.stats_id, app_, perf_stats_);
-  return stats_screen.Run(replay_);
+  return GoToStatsScreen(id_, stats_id_, app_);
 }
 
 ShotType::TypeCase Scenario::GetShotType() {

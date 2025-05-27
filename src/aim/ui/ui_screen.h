@@ -31,7 +31,7 @@ class UiScreen {
   }
 
   void ScreenDone(NavigationEvent nav_event = NavigationEvent::Done()) {
-    return_value_ = nav_event;
+    return_value_ = std::move(nav_event);
   }
 
   Application* app_ = nullptr;

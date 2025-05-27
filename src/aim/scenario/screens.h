@@ -9,22 +9,6 @@
 
 namespace aim {
 
-class StatsScreen {
- public:
-  StatsScreen(std::string scenario_id,
-              i64 stats_id,
-              Application* app,
-              RunPerformanceStats perf_stats);
-
-  NavigationEvent Run(Replay* replay);
-
- private:
-  std::string scenario_id_;
-  i64 stats_id_;
-  Application* app_;
-  RunPerformanceStats perf_stats_;
-};
-
 enum class QuickSettingsType { DEFAULT, METRONOME };
 
 std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_id,

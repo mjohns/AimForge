@@ -2,6 +2,8 @@
 
 namespace aim {
 
+class UiScreen;
+
 enum class NavigationEventType {
   RESTART_LAST_SCENARIO,
   PLAYLIST_NEXT,
@@ -39,6 +41,13 @@ struct NavigationEvent {
     return Create(NavigationEventType::PLAYLIST_NEXT);
   }
 
+  template <typename Fn>
+  static NavigationEvent ShowScreen(Fn&& create_screen) {
+    NavigationEvent event = Done();
+    event.next_screen = create_screen;
+    return event;
+  }
+
   bool IsDone() const {
     return type == NavigationEventType::DONE;
   }
@@ -53,6 +62,7 @@ struct NavigationEvent {
 
   NavigationEventType type = NavigationEventType::DONE;
   std::string scenario_id;
+  std::function<std::unique_ptr<UiScreen>()> next_screen;
 };
 
 }  // namespace aim

@@ -206,6 +206,7 @@ int Application::Initialize() {
 
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 6;
+  // style.Colors.
 
   font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
   if (!font_manager_->LoadFonts()) {
@@ -215,6 +216,7 @@ int Application::Initialize() {
 
   // ImGui::StyleColorsDark();
   ImGui::StyleColorsClassic();
+  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
 
   // Setup Platform/Renderer backends
   ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);

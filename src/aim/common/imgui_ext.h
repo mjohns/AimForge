@@ -301,4 +301,13 @@ static void DrawItemBounds() {
                      2.0f);
 }
 
+static void SetCursorAtBottom(float item_height = -1) {
+  if (item_height < 0) {
+    item_height = ImGui::GetFrameHeight();
+  }
+  float content_region_avail_height = ImGui::GetContentRegionAvail().y;
+  float bottom_target_y = ImGui::GetCursorPosY() + content_region_avail_height - item_height;
+  ImGui::SetCursorPosY(bottom_target_y);
+}
+
 }  // namespace ImGui
