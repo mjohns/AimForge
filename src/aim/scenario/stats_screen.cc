@@ -30,36 +30,6 @@ void RenderScore(const StatsRow& stats, Application* app) {
   }
 }
 
-void DumpHistogram(const TimeHistogram& h) {
-  if (h.bucket_100 > 0) {
-    ImGui::TextFmt("1-100: {}", h.bucket_100);
-  }
-  if (h.bucket_300 > 0) {
-    ImGui::TextFmt("100-300: {}", h.bucket_300);
-  }
-  if (h.bucket_500 > 0) {
-    ImGui::TextFmt("300-500: {}", h.bucket_500);
-  }
-  if (h.bucket_700 > 0) {
-    ImGui::TextFmt("500-700: {}", h.bucket_700);
-  }
-  if (h.bucket_1000 > 0) {
-    ImGui::TextFmt("700-1000: {}", h.bucket_1000);
-  }
-  if (h.bucket_1500 > 0) {
-    ImGui::TextFmt("1000-1500: {}", h.bucket_1500);
-  }
-  if (h.bucket_2000 > 0) {
-    ImGui::TextFmt("1500-2000: {}", h.bucket_2000);
-  }
-  if (h.bucket_3000 > 0) {
-    ImGui::TextFmt("2000-3000: {}", h.bucket_3000);
-  }
-  if (h.bucket_5000 > 0) {
-    ImGui::TextFmt("3000-5000: {}", h.bucket_5000);
-  }
-}
-
 std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
   int found_max_index = -1;
   float max_score = 0;

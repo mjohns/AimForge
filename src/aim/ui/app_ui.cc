@@ -268,54 +268,24 @@ class AppUiImpl : public AppUi {
 
     if (ImGui::BeginTable("MainColumns", 3, flags)) {
       ImGui::TableNextColumn();
-
-      // ImGui::SetColumnWidth(0, navigation_column_width);
-
-      if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
-                            app_screen_ == AppScreen::SCENARIOS)) {
-        app_screen_ = AppScreen::SCENARIOS;
-      }
-      if (ImGui::Selectable(std::format("{} Playlists", kIconList).c_str(),
-                            app_screen_ == AppScreen::PLAYLISTS)) {
-        app_screen_ = AppScreen::PLAYLISTS;
-      }
-      if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(),
-                            app_screen_ == AppScreen::SETTINGS)) {
-        screen_to_show_ = CreateSettingsScreen(app_, GetCurrentScenarioId());
-      }
-      if (ImGui::Selectable(std::format("{} Themes", kIconPalette).c_str(),
-                            app_screen_ == AppScreen::THEMES)) {
-        screen_to_show_ = CreateThemeEditorScreen(app_);
-      }
-
-      // Place exit at bottom
-      float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
-      float content_region_avail_height = ImGui::GetContentRegionAvail().y;
-      float bottom_target_y = ImGui::GetCursorPosY() + content_region_avail_height - item_height;
-      ImGui::SetCursorPosY(bottom_target_y);
-      if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(),
-                            app_screen_ == AppScreen::EXIT)) {
-        app_screen_ = AppScreen::EXIT;
-        // Show a screen to confirm?
-        throw ApplicationExitException();
-      }
+      DrawLeftNav();
 
       ImGui::TableNextColumn();
 
-      ImGui::BeginChild("PrimaryContent");
+      if (ImGui::BeginChild("PrimaryContent")) {
+        if (app_screen_ == AppScreen::SCENARIOS) {
+          DrawScenariosScreen(ScenarioBrowserType::FULL);
+        }
+        if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
+          DrawScenariosScreen(ScenarioBrowserType::RECENT);
+        }
 
-      if (app_screen_ == AppScreen::SCENARIOS) {
-        DrawScenariosScreen(ScenarioBrowserType::FULL);
-      }
-      if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
-        DrawScenariosScreen(ScenarioBrowserType::RECENT);
-      }
+        if (app_screen_ == AppScreen::PLAYLISTS) {
+          DrawPlaylistsScreen();
+        }
 
-      if (app_screen_ == AppScreen::PLAYLISTS) {
-        DrawPlaylistsScreen();
+        // ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
       }
-
-      // ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
       ImGui::EndChild();
 
       ImGui::TableNextColumn();
@@ -325,6 +295,37 @@ class AppUiImpl : public AppUi {
       }
 
       ImGui::EndTable();
+    }
+  }
+
+  void DrawLeftNav() {
+    if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
+                          app_screen_ == AppScreen::SCENARIOS)) {
+      app_screen_ = AppScreen::SCENARIOS;
+    }
+    if (ImGui::Selectable(std::format("{} Playlists", kIconList).c_str(),
+                          app_screen_ == AppScreen::PLAYLISTS)) {
+      app_screen_ = AppScreen::PLAYLISTS;
+    }
+    if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(),
+                          app_screen_ == AppScreen::SETTINGS)) {
+      screen_to_show_ = CreateSettingsScreen(app_, GetCurrentScenarioId());
+    }
+    if (ImGui::Selectable(std::format("{} Themes", kIconPalette).c_str(),
+                          app_screen_ == AppScreen::THEMES)) {
+      screen_to_show_ = CreateThemeEditorScreen(app_);
+    }
+
+    // Place exit at bottom
+    float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
+    float content_region_avail_height = ImGui::GetContentRegionAvail().y;
+    float bottom_target_y = ImGui::GetCursorPosY() + content_region_avail_height - item_height;
+    ImGui::SetCursorPosY(bottom_target_y);
+    if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(),
+                          app_screen_ == AppScreen::EXIT)) {
+      app_screen_ = AppScreen::EXIT;
+      // Show a screen to confirm?
+      throw ApplicationExitException();
     }
   }
 
