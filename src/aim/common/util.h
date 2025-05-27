@@ -65,10 +65,6 @@ std::string MaybeIntToString(float value, int decimal_places = 1);
 float ParseFloat(const std::string& text);
 float GetJitteredValue(float base_value, float jitter, std::mt19937* random_generator);
 
-// Even chance of true or false.
-bool FlipCoin(std::mt19937* random_generator);
-float GetRandInRange(float min, float max, std::mt19937* random_generator);
-
 template <typename T>
 bool IsValidIndex(const T& list, int i) {
   return i >= 0 && i < list.size();

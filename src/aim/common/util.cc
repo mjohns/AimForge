@@ -190,17 +190,6 @@ float FirstNonZero(float v1, float v2) {
   return v1 != 0 ? v1 : v2;
 }
 
-bool FlipCoin(std::mt19937* random_generator) {
-  auto dist = std::uniform_real_distribution<float>(0, 1);
-  float roll = dist(*random_generator);
-  return roll > 0.5;
-}
-
-float GetRandInRange(float min, float max, std::mt19937* random_generator) {
-  auto dist = std::uniform_real_distribution<float>(min, max);
-  return dist(*random_generator);
-}
-
 i32 FloatColorTo255(float value) {
   i32 result = 255 * value;
   if (result < 0) {
