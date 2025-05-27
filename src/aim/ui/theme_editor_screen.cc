@@ -34,7 +34,8 @@ struct StoredColorEditor {
     }
     ImGui::IdGuard cid(id);
 
-    ImGui::TextFmt("{}", label);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(label);
     ImGui::SameLine();
     StoredRgb c = ToStoredRgb(*stored_color);
     color[0] = c.r() / 255.0;
@@ -115,6 +116,7 @@ struct WallAppearanceEditor {
                               texture_names,
                               char_size.x * 20);
 
+        ImGui::AlignTextToFramePadding();
         ImGui::Text("Scale");
         ImGui::SameLine();
         ImGui::SetNextItemWidth(char_size.x * 9);
@@ -127,6 +129,7 @@ struct WallAppearanceEditor {
         }
       }
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Mix percent");
       ImGui::SameLine();
       ImGui::SetNextItemWidth(char_size.x * 9);
@@ -189,6 +192,7 @@ class ThemeEditorScreen : public UiScreen {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Theme");
     ImGui::SameLine();
     if (ImGui::SimpleDropdown(
@@ -197,23 +201,27 @@ class ThemeEditorScreen : public UiScreen {
       app_->history_db()->UpdateRecentView(RecentViewType::THEME, current_theme_name_);
     }
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Targets");
     ImGui::Indent();
     target_color_.Draw(char_size);
     ghost_target_color_.Draw(char_size);
     ImGui::Unindent();
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::Indent();
     crosshair_color_.Draw(char_size);
     crosshair_outline_color_.Draw(char_size);
     ImGui::Unindent();
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Health bar");
     HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
     ImGui::Indent();
     health_color_.Draw(char_size);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Health alpha");
     ImGui::SameLine();
     bool has_health_alpha = health_bar.has_health_alpha();
@@ -228,6 +236,7 @@ class ThemeEditorScreen : public UiScreen {
 
     health_background_color_.Draw(char_size);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Background alpha");
     ImGui::SameLine();
     bool has_background_alpha = health_bar.has_background_alpha();
@@ -246,6 +255,7 @@ class ThemeEditorScreen : public UiScreen {
     }
     ImGui::Unindent();
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Walls");
     ImGui::Indent();
     front_.Draw("Front", texture_names_, char_size);
