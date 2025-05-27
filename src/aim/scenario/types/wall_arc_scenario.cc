@@ -27,10 +27,10 @@ namespace {
 class WallArcScenario : public BaseScenario {
  public:
   explicit WallArcScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     auto arc = params.def.wall_arc_def();
-    width_ = GetRegionLength(arc.width(), wall_);
-    height_ = GetRegionLength(arc.height(), wall_);
+    width_ = wall_.GetRegionLength(arc.width());
+    height_ = wall_.GetRegionLength(arc.height() );
 
     if (arc.control_height() != 0) {
       control_.y = arc.control_height();

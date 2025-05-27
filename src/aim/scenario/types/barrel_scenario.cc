@@ -28,7 +28,7 @@ class BarrelScenario : public BaseScenario {
  public:
   explicit BarrelScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app), room_radius_(params.def.room().barrel_room().radius()) {
-    Wall wall = GetWallForRoom(def_.room());
+    Wall wall = Wall::ForRoom(def_.room());
     TargetPlacementStrategy strat = params.def.barrel_def().target_placement_strategy();
     if (!params.def.barrel_def().has_target_placement_strategy()) {
       strat.set_min_distance(15);

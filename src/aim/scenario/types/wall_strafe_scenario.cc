@@ -28,14 +28,14 @@ namespace {
 class WallStrafeScenario : public BaseScenario {
  public:
   explicit WallStrafeScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     auto d = params.def.wall_strafe_def();
-    float width = d.has_width() ? GetRegionLength(d.width(), wall_) : 0.85 * wall_.width;
+    float width = d.has_width() ? wall_.GetRegionLength(d.width()) : 0.85 * wall_.width;
     min_x_ = -0.5 * width;
     max_x_ = 0.5 * width;
 
-    float height = d.has_height() ? GetRegionLength(d.height(), wall_) : 0.85 * wall_.height;
-    float starting_y = GetRegionLength(d.y(), wall_);
+    float height = d.has_height() ? wall_.GetRegionLength(d.height()) : 0.85 * wall_.height;
+    float starting_y = wall_.GetRegionLength(d.y());
     min_y_ = (-0.5 * height) + starting_y;
     max_y_ = (0.5 * height) + starting_y;
 
@@ -114,11 +114,11 @@ class WallStrafeScenario : public BaseScenario {
   void ChangeDirection(const glm::vec2& current_pos) {
     WallStrafeProfile profile = GetNextProfile();
     strafe_number_++;
-    float min_strafe_distance = GetRegionLength(profile.min_distance(), wall_);
+    float min_strafe_distance = wall_.GetRegionLength(profile.min_distance());
     if (min_strafe_distance <= 0) {
       min_strafe_distance = 30;
     }
-    float max_strafe_distance = GetRegionLength(profile.max_distance(), wall_);
+    float max_strafe_distance = wall_.GetRegionLength(profile.max_distance());
     if (max_strafe_distance <= 0) {
       max_strafe_distance = 100;
     }

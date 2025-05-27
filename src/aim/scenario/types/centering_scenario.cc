@@ -29,7 +29,7 @@ constexpr const float kStartMovingDelaySeconds = 0.2;
 class CenteringScenario : public BaseScenario {
  public:
   explicit CenteringScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     TargetPlacementStrategy strat = params.def.centering_def().target_placement_strategy();
     if (!params.def.centering_def().has_target_placement_strategy()) {
       strat.set_min_distance(50);
@@ -123,14 +123,14 @@ class CenteringScenario : public BaseScenario {
       // Point will alternate between the wall point and a point from the target placer.
       bool is_wall_point = current_index_ % 2 == 0;
       if (is_wall_point) {
-        return GetRegionVec2(def_.centering_def().wall_points(0), wall_);
+        return wall_.GetRegionVec2(def_.centering_def().wall_points(0));
       } else {
         return wall_target_placer_->GetNextPosition();
       }
     }
     if (def_.centering_def().wall_points_size() > 1) {
       int i = current_index_ % def_.centering_def().wall_points_size();
-      return GetRegionVec2(def_.centering_def().wall_points(i), wall_);
+      return wall_.GetRegionVec2(def_.centering_def().wall_points(i));
     }
 
     return wall_target_placer_->GetNextPosition();
