@@ -64,11 +64,13 @@ class SettingsScreen : public UiScreen {
       ImGui::Spacing();
     }
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("DPI");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_x_ * 10);
     ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("cm/360");
     ImGui::SameLine();
     ImGui::InputJitteredFloat("CmPer360",
@@ -79,35 +81,42 @@ class SettingsScreen : public UiScreen {
                               "%.0f",
                               char_size.x * 9);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_size.x * 9);
     ImGui::InputFloat("##MetronomeBpm", &settings_updater_.metronome_bpm, 1, 5, "%.0f");
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Theme");
     ImGui::SameLine();
 
     ImGui::SimpleDropdown(
         "ThemeDropdown", &settings_updater_.theme_name, theme_names_, char_size.x * 20);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::SameLine();
     ImGui::SimpleDropdown(
         "CrosshairDropdown", &settings_updater_.crosshair_name, crosshair_names_, char_size.x * 15);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair Size");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_size.x * 9);
     ImGui::InputFloat("##CrosshairSize", &settings_updater_.crosshair_size, 0.1, 1, "%.1f");
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Disable \"Click to Start\"");
     ImGui::SameLine();
     ImGui::Checkbox("##disable_click_to_start", &settings_updater_.disable_click_to_start);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Auto Hold Tracking");
     ImGui::SameLine();
     ImGui::Checkbox("##auto_hold_tracking", &settings_updater_.auto_hold_tracking);
 
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Show health bars");
     ImGui::SameLine();
     bool show_health_bars = settings_updater_.health_bar.show();
@@ -116,12 +125,14 @@ class SettingsScreen : public UiScreen {
     if (show_health_bars) {
       ImGui::Indent();
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Only damaged");
       ImGui::SameLine();
       bool only_damaged = settings_updater_.health_bar.only_damaged();
       ImGui::Checkbox("##HealthBarDamaged", &only_damaged);
       settings_updater_.health_bar.set_only_damaged(only_damaged);
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Width");
       ImGui::SameLine();
       float bar_width = FirstGreaterThanZero(settings_updater_.health_bar.width(), 6);
@@ -132,6 +143,7 @@ class SettingsScreen : public UiScreen {
       }
       settings_updater_.health_bar.set_width(bar_width);
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Height");
       ImGui::SameLine();
       float bar_height = FirstGreaterThanZero(settings_updater_.health_bar.height(), 1.5);
@@ -142,6 +154,7 @@ class SettingsScreen : public UiScreen {
       }
       settings_updater_.health_bar.set_height(bar_height);
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Height above target");
       ImGui::SameLine();
       float height_above =
@@ -162,6 +175,7 @@ class SettingsScreen : public UiScreen {
     ImGui::Text("Keybinds");
     ImGui::Indent();
     for (KeybindItem& item : keybind_items_) {
+      ImGui::AlignTextToFramePadding();
       ImGui::Text(item.label);
       float entry_width = char_size.x * 10;
       ImGui::SameLine();

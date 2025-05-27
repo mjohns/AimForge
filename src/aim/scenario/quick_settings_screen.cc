@@ -86,6 +86,7 @@ class QuickSettingsScreen : public UiScreen {
       // ImGui::SetCursorPos(ImVec2(x_start, y_start));
 
       ImGui::Spacing();
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("cm/360");
       ImGui::SameLine();
       ImGui::InputJitteredFloat("CmPer360",
@@ -100,20 +101,24 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Theme");
       ImGui::SameLine();
       ImGui::SimpleDropdown("ThemeDropdown", &updater_.theme_name, theme_names_, char_size.x * 20);
       ImGui::PushItemWidth(char_size.x * 20);
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Crosshair");
       ImGui::SameLine();
       ImGui::SimpleDropdown(
           "CrosshairDropdown", &updater_.crosshair_name, crosshair_names_, char_size.x * 15);
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Auto Hold Tracking");
       ImGui::SameLine();
       ImGui::Checkbox("##AutoHoldTracking", &updater_.auto_hold_tracking);
 
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("Show health bars");
       ImGui::SameLine();
       bool show_health_bars = updater_.health_bar.show();
