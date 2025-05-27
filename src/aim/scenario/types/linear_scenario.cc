@@ -72,7 +72,7 @@ class LinearScenario : public BaseScenario {
             def_.linear_def().angle(), def_.linear_def().angle_jitter(), app_->random_generator()));
     InOutDirection in_out = def_.linear_def().direction();
     if (in_out == InOutDirection::RANDOM) {
-      in_out = FlipCoin(app_->random_generator()) ? InOutDirection::IN : InOutDirection::OUT;
+      in_out = app_->rand().FlipCoin() ? InOutDirection::IN : InOutDirection::OUT;
     }
     if (in_out == InOutDirection::OUT) {
       // Away from center

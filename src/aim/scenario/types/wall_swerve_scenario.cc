@@ -69,7 +69,7 @@ class WallSwerveScenario : public BaseScenario {
       if (info.target == nullptr) {
         // Initialize this newly encountered target.
         info.target = target;
-        info.first_left = FlipCoin(app_->random_generator());
+        info.first_left = app_->rand().FlipCoin();
         info.origin = *target->wall_position;
         SetNextGoalPosition(info);
         target->wall_direction = glm::normalize(info.goal_position - info.origin);
@@ -107,13 +107,13 @@ class WallSwerveScenario : public BaseScenario {
   void SetNextGoalPosition(TargetInfo& info) {
     float max_x = GetRegionLength(swerve_.width(), wall_);
     float spread = GetRegionLength(swerve_.spread(), wall_) / 2.0;
-    float x = GetRandInRange(0, max_x, app_->random_generator()) + spread;
+    float x = app_->rand().GetInRange(0, max_x) + spread;
     if (info.IsGoingLeft()) {
       x *= -1;
     }
 
     float max_y = GetRegionLength(swerve_.height(), wall_);
-    float y = GetRandInRange(0, max_y, app_->random_generator());
+    float y = app_->rand().GetInRange(0, max_y);
     y -= (max_y / 2.0);
 
     info.goal_position.x = info.origin.x + x;

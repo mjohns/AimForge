@@ -21,8 +21,8 @@ class Random {
     return dist(random_generator_);
   }
 
-  bool FlipCoin() {
-    return Get() > 0.5;
+  bool FlipCoin(float true_chance = 0.5) {
+    return Get(1.0) < true_chance;
   }
 
   float GetJittered(float base_value, float jitter) {
