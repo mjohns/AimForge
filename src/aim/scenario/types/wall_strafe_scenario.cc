@@ -47,7 +47,7 @@ class WallStrafeScenario : public BaseScenario {
 
     last_direction_change_position_ = glm::vec2(0, starting_y);
 
-    if (FlipCoin(app_->random_generator())) {
+    if (app_->rand().FlipCoin()) {
       direction_ = glm::vec2(-1, 0);
     } else {
       direction_ = glm::vec2(1, 0);
@@ -122,12 +122,10 @@ class WallStrafeScenario : public BaseScenario {
     if (max_strafe_distance <= 0) {
       max_strafe_distance = 100;
     }
-    auto dist = std::uniform_real_distribution<float>(min_strafe_distance, max_strafe_distance);
-    float distance = dist(*app_->random_generator());
+    float distance = app_->rand().GetInRange(min_strafe_distance, max_strafe_distance);
 
     glm::vec2 new_direction;
-    float angle =
-        abs(GetJitteredValue(profile.angle(), profile.angle_jitter(), app_->random_generator()));
+    float angle = abs(app_->rand().GetJittered(profile.angle(), profile.angle_jitter()));
     angle = glm::clamp(angle, 0.f, 45.f);
     if (current_pos.y >= max_y_) {
       angle *= -1;
@@ -135,7 +133,7 @@ class WallStrafeScenario : public BaseScenario {
       // Keep angle positive
     } else {
       // 50/50 strafe up or down
-      if (FlipCoin(app_->random_generator())) {
+      if (app_->rand().FlipCoin()) {
         angle *= -1;
       }
     }
