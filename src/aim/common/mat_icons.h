@@ -23,6 +23,12 @@ static const char* kIconPlayCircle = "\xEE\x87\x84";
 static const char* kIconPlayArrow = "\xEE\x80\xB7";
 static const char* kIconArrowForward = "\xEE\x97\x88";
 static const char* kIconEdit = "\xEE\x8F\x89";
+static const char* kIconLogout = "\xEE\xA6\xBA";
+static const char* kIconPalette = "\xEE\x90\x8A";
+static const char* kIconList = "\xEE\xA2\x96";
+static const char* kIconTarget = "\xEE\x9C\x99";
+static const char* kIconFilterCenterFocus = "\xEE\x8F\x9C";
+
 
 
 }  // namespace aim
