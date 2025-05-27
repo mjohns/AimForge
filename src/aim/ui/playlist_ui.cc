@@ -120,14 +120,15 @@ class PlaylistEditorComponent : public UiComponent {
         still_dragging = true;
       }
 
-      if (ImGui::BeginPopupContextItem("item_menu")) {
+      const char* item_menu = "PlaylistItemMenu";
+      if (ImGui::BeginPopupContextItem(item_menu)) {
         if (ImGui::Selectable("Copy")) {
           scenario_items_.push_back(item);
         }
         if (ImGui::Selectable("Delete")) remove_i = i;
         ImGui::EndPopup();
       }
-      ImGui::OpenPopupOnItemClick("item_menu", ImGuiPopupFlags_MouseButtonRight);
+      ImGui::OpenPopupOnItemClick(item_menu, ImGuiPopupFlags_MouseButtonRight);
 
       ImGui::SameLine();
       u32 num_plays = item.num_plays();
@@ -376,13 +377,20 @@ bool PlaylistRunComponent(const std::string& id,
     ImGui::IdGuard id(i);
     PlaylistItemProgress& progress = playlist_run->progress_list[i];
     PlaylistItem item = playlist_run->playlist.def.items(i);
-    if (ImGui::Button(item.scenario().c_str())) {
+    float width = std::min(ImGui::GetContentRegionAvail().x, 600.0f);
+    float right = ImGui::GetCursorPosX() + width;
+    ImGui::SetNextItemWidth(width);
+    if (ImGui::Selectable(item.scenario().c_str(), i == playlist_run->current_index)) {
       selected = true;
       playlist_run->current_index = i;
       *scenario_to_start = item.scenario();
     }
+
     ImGui::SameLine();
     std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
+
+    float len = ImGui::CalcTextSize(progress_text.c_str()).x;
+    ImGui::SetCursorPosX(right - len);
     ImGui::Text(progress_text);
   }
   return selected;
