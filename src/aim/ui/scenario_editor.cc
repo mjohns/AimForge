@@ -409,11 +409,14 @@ class ScenarioEditorScreen : public UiScreen {
       w.add_profiles();
     }
 
-    DrawProfileList("ProfileList",
+    ImGui::Text("Strafe profiles");
+    ImGui::Indent();
+    DrawProfileList("StrafeProfileList",
                     "Profile",
                     w.mutable_profile_order(),
                     w.mutable_profiles(),
                     std::bind_front(&ScenarioEditorScreen::DrawWallStrafeProfile, this));
+    ImGui::Unindent();
 
     ImGui::Spacing();
 
@@ -504,12 +507,16 @@ class ScenarioEditorScreen : public UiScreen {
       s->add_regions();
     }
 
+    ImGui::Text("Target locations");
+    ImGui::Indent();
     DrawProfileList("RegionList",
                     "Region",
                     s->mutable_region_order(),
                     s->mutable_regions(),
                     std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this));
+    ImGui::Unindent();
 
+    ImGui::Spacing();
     ImGui::Spacing();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Min distance");
@@ -683,6 +690,10 @@ class ScenarioEditorScreen : public UiScreen {
     bool use_order = order_list->size() > 0;
     ImGui::SameLine();
     ImGui::Checkbox("##UseOrder", &use_order);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Specify the order in which profiles should be selected. 0, 1 means alternate between "
+        "first and second profile");
     if (use_order) {
       ImGui::Indent();
       if (order_list->size() == 0) {
@@ -724,6 +735,13 @@ class ScenarioEditorScreen : public UiScreen {
     int move_up_i = -1;
     int move_down_i = -1;
     int copy_i = -1;
+
+    float total_weight = 0;
+    for (int i = 0; i < profile_list->size(); ++i) {
+      auto* p = &profile_list->at(i);
+      total_weight += p->weight();
+    }
+
     for (int i = 0; i < profile_list->size(); ++i) {
       ImGui::IdGuard lid(type_name, i);
       auto* p = &profile_list->at(i);
@@ -766,6 +784,12 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::SetNextItemWidth(char_x_ * 10);
         ImGui::InputInt("##WeightInput", &weight, 1, 5);
         p->set_weight(weight);
+
+        if (total_weight > 0) {
+          ImGui::SameLine();
+          float weight_percent = (weight / total_weight) * 100;
+          ImGui::TextDisabled("%.0f%%", weight_percent);
+        }
       } else {
         p->clear_weight();
       }
@@ -1113,11 +1137,14 @@ class ScenarioEditorScreen : public UiScreen {
       t->add_profiles();
     }
 
+    ImGui::Text("Target profiles");
+    ImGui::Indent();
     DrawProfileList("ProfileList",
                     "Profile",
                     t->mutable_target_order(),
                     t->mutable_profiles(),
                     std::bind_front(&ScenarioEditorScreen::DrawTargetProfile, this));
+    ImGui::Unindent();
 
     if (ImGui::TreeNode("Advanced")) {
       ImGui::AlignTextToFramePadding();
