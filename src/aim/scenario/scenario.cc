@@ -25,8 +25,8 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
-#include "aim/scenario/screens.h"
 #include "aim/scenario/types/scenario_types.h"
+#include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/ui_screen.h"
 

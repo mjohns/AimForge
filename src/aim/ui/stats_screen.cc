@@ -1,18 +1,12 @@
 #include "stats_screen.h"
 
-#include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
-#include <implot.h>
 
 #include <fstream>
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
-#include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
-#include "aim/scenario/replay_viewer.h"
-#include "aim/scenario/scenario.h"
-#include "aim/scenario/screens.h"
 #include "aim/ui/playlist_ui.h"
 
 namespace aim {
