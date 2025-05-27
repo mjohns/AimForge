@@ -679,6 +679,10 @@ class ScenarioEditorScreen : public UiScreen {
     JitteredValueInput("DepthInput", &depth, &depth_jitter, 1, 5, "%.0f");
     region->set_depth(depth);
     region->set_depth_jitter(depth_jitter);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The distance away from the wall towards the camera. The greater the value, the further it "
+        "is from the wall.");
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Offset");
@@ -1182,7 +1186,11 @@ class ScenarioEditorScreen : public UiScreen {
       float new_target_delay = t->new_target_delay_seconds();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##NewTargetDelay", &new_target_delay, 0.1, 0.1, "%.2f");
-      t->set_new_target_delay_seconds(new_target_delay);
+      if (new_target_delay > 0) {
+        t->set_new_target_delay_seconds(new_target_delay);
+      } else {
+        t->clear_new_target_delay_seconds();
+      }
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Remove target after seconds");
@@ -1190,7 +1198,11 @@ class ScenarioEditorScreen : public UiScreen {
       float remove_after = t->remove_target_after_seconds();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##RemoveAfterDelay", &remove_after, 0.1, 0.1, "%.2f");
-      t->set_remove_target_after_seconds(remove_after);
+      if (remove_after > 0) {
+        t->set_remove_target_after_seconds(remove_after);
+      } else {
+        t->clear_remove_target_after_seconds();
+      }
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Stagger initial targets seconds");
@@ -1198,7 +1210,11 @@ class ScenarioEditorScreen : public UiScreen {
       float stagger = t->stagger_initial_targets_seconds();
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##StaggerDelay", &stagger, 0.1, 0.1, "%.2f");
-      t->set_stagger_initial_targets_seconds(stagger);
+      if (stagger > 0) {
+        t->set_stagger_initial_targets_seconds(stagger);
+      } else {
+        t->clear_stagger_initial_targets_seconds();
+      }
 
       ImGui::TreePop();
     }
