@@ -64,7 +64,6 @@ class SettingsScreen : public UiScreen {
       ImGui::Spacing();
     }
 
-
     ImGui::AlignTextToFramePadding();
     ImGui::Text("cm/360");
     ImGui::SameLine();

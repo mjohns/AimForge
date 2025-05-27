@@ -47,8 +47,10 @@ class AppUiImpl : public AppUi {
     timer_.Start();
     while (true) {
       if (screen_to_show_) {
-        screen_to_show_->Run();
+        auto nav_event = screen_to_show_->Run();
         screen_to_show_ = {};
+        HandleNavEventResult(nav_event);
+        continue;
       }
       if (scenario_run_option_ == ScenarioRunOption::RUN) {
         RunCurrentScenario();
@@ -108,18 +110,22 @@ class AppUiImpl : public AppUi {
       return;
     }
     auto nav_event = current_running_scenario_->Run();
-    HandleScenarioRunResult(nav_event);
+    HandleNavEventResult(nav_event);
   }
 
   void ResumeCurrentScenario() {
     scenario_run_option_ = ScenarioRunOption::NONE;
     if (current_running_scenario_) {
       auto nav_event = current_running_scenario_->Resume();
-      HandleScenarioRunResult(nav_event);
+      HandleNavEventResult(nav_event);
     }
   }
 
-  void HandleScenarioRunResult(NavigationEvent nav_event) {
+  void HandleNavEventResult(const NavigationEvent& nav_event) {
+    if (nav_event.next_screen) {
+      screen_to_show_ = nav_event.next_screen();
+      return;
+    }
     if (nav_event.IsRestartLastScenario()) {
       scenario_run_option_ = ScenarioRunOption::RUN;
       return;
@@ -317,10 +323,8 @@ class AppUiImpl : public AppUi {
     }
 
     // Place exit at bottom
-    float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
-    float content_region_avail_height = ImGui::GetContentRegionAvail().y;
-    float bottom_target_y = ImGui::GetCursorPosY() + content_region_avail_height - item_height;
-    ImGui::SetCursorPosY(bottom_target_y);
+    // float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
+    ImGui::SetCursorAtBottom();
     if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(),
                           app_screen_ == AppScreen::EXIT)) {
       app_screen_ = AppScreen::EXIT;

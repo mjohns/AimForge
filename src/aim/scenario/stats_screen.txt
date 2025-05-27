@@ -30,10 +30,10 @@ void RenderScore(const StatsRow& stats, Application* app) {
   }
 }
 
-std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, size_t max_index) {
+StatsRow GetHighScore(const std::vector<StatsRow>& all_stats) {
   int found_max_index = -1;
-  float max_score = 0;
-  for (int i = 0; i < std::min(max_index, all_stats.size()); ++i) {
+  float max_score = -1000000;
+  for (int i = 0; i < all_stats.size(); ++i) {
     auto& stats = all_stats[i];
     if (stats.score >= max_score) {
       found_max_index = i;
@@ -43,7 +43,7 @@ std::optional<StatsRow> GetHighScore(const std::vector<StatsRow>& all_stats, siz
   if (found_max_index >= 0) {
     return all_stats[found_max_index];
   }
-  return {};
+  return all_stats[0];
 }
 
 std::vector<float> GetHighScoresOverTime(const std::vector<StatsRow>& all_stats) {
