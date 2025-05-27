@@ -271,31 +271,26 @@ class AppUiImpl : public AppUi {
 
       // ImGui::SetColumnWidth(0, navigation_column_width);
 
-      if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::SCENARIOS)) {
+      if (ImGui::Selectable(std::format("{} Scenarios", kIconFilterCenterFocus).c_str(),
+                            app_screen_ == AppScreen::SCENARIOS)) {
         app_screen_ = AppScreen::SCENARIOS;
       }
-      if (ImGui::Selectable("Playlists", app_screen_ == AppScreen::PLAYLISTS)) {
+      if (ImGui::Selectable(std::format("{} Playlists", kIconList).c_str(),
+                            app_screen_ == AppScreen::PLAYLISTS)) {
         app_screen_ = AppScreen::PLAYLISTS;
       }
-      /*
-      bool node_opened = ImGui::TreeNode("Recent");
-      if (node_opened) {
-        if (ImGui::Selectable("Scenarios", app_screen_ == AppScreen::RECENT_SCENARIOS)) {
-          app_screen_ = AppScreen::RECENT_SCENARIOS;
-        }
-        ImGui::TreePop();
-      }
-      */
-
-      if (ImGui::Selectable("Settings", app_screen_ == AppScreen::SETTINGS)) {
+      if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(),
+                            app_screen_ == AppScreen::SETTINGS)) {
         screen_to_show_ = CreateSettingsScreen(app_, GetCurrentScenarioId());
       }
-      if (ImGui::Selectable("Themes", app_screen_ == AppScreen::THEMES)) {
+      if (ImGui::Selectable(std::format("{} Themes", kIconPalette).c_str(),
+                            app_screen_ == AppScreen::THEMES)) {
         screen_to_show_ = CreateThemeEditorScreen(app_);
       }
 
       // ImGui::SetCursorPosY(screen.height * 0.5);
-      if (ImGui::Selectable("Exit", app_screen_ == AppScreen::EXIT)) {
+      if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(),
+                            app_screen_ == AppScreen::EXIT)) {
         app_screen_ = AppScreen::EXIT;
         // Show a screen to confirm?
         throw ApplicationExitException();
