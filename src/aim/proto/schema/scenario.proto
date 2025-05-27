@@ -148,6 +148,7 @@ message ShotType {
 }
 
 message ScenarioDef {
+  string description = 1;
   float duration_seconds = 2;
   Room room = 3;
   TargetDef target_def = 5;
