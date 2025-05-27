@@ -209,7 +209,8 @@ glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
                                       const Room& room,
                                       float depth) {
   // Make sure the target does not clip through wall and use depth if greater.
-  depth = std::max(target_radius + 0.5f, depth);
+  // Min depth is 4.
+  depth = std::max(depth, std::max(target_radius + 0.5f, 4.0f));
 
   glm::vec3 world_position;
   world_position.z = wall_position.y;

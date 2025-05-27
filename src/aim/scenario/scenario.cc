@@ -222,7 +222,9 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
 
     ImGui::Text("%s", id_.c_str());
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
+    if (settings_.metronome_bpm() > 0) {
+      ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
+    }
     ImGui::Text("theme: %s", settings_.theme_name().c_str());
     ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
 
