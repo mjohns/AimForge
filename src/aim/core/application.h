@@ -10,11 +10,12 @@
 #include <optional>
 #include <random>
 #include <stdexcept>
+#include <unordered_map>
 
 #include "aim/audio/sound_manager.h"
+#include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
-#include "aim/common/random.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/playlist_manager.h"
@@ -124,6 +125,12 @@ class Application {
     return component_id_counter_++;
   }
 
+  std::optional<RunPerformanceStats> GetPerformanceStats(const std::string& scenario_id,
+                                                         u64 run_id);
+  void AddPerformanceStats(const std::string& scenario_id,
+                           u64 run_id,
+                           const RunPerformanceStats& stats);
+
   void EnableVsync();
   void DisableVsync();
 
@@ -163,6 +170,8 @@ class Application {
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
   u64 component_id_counter_ = 1;
   std::string imgui_ini_filename_;
+
+  std::unordered_map<std::string, RunPerformanceStats> perf_stats_;
 };
 
 }  // namespace aim

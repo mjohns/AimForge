@@ -527,6 +527,7 @@ NavigationEvent Scenario::ResumeInternal() {
     }
   }
 
+  app_->AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
   StatsScreen stats_screen(id_, stats_row.stats_id, app_, perf_stats_);
   return stats_screen.Run(replay_);
 }
