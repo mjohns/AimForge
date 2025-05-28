@@ -280,6 +280,8 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     if (ImGui::Button(kIconEdit)) {
       showing_editor_ = true;
     }
+    ImGui::Spacing();
+    ImGui::Spacing();
     return PlaylistRunComponent(
         "PlaylistRun", playlist_manager_->GetCurrentRun(), scenario_to_start);
   }

@@ -229,8 +229,6 @@ message WallStrafeProfile {
   // If this profile is chosen the target will pause for the specified amount of time.
   float pause_seconds = 7;
   float pause_seconds_jitter = 8;
-  // After the pause, it may continue in the same direction it was going when it paused.
-  bool random_direction_after_pause = 9;
 
   // Angle to strafe at. In range 0-45. Will choose between strafing up or down at this angle
   // evenly.
