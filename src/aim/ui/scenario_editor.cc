@@ -175,21 +175,22 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Begin("Scenario")) {
       if (ImGui::BeginTabBar("ScenarioTabs")) {
         if (ImGui::BeginTabItem("Definition")) {
-          ImGui::Indent();
           DrawScenarioTypeEditor(char_size);
-          ImGui::Unindent();
           ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Targets")) {
-          ImGui::Indent();
           DrawTargetEditor(char_size);
-          ImGui::Unindent();
           ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Room")) {
-          ImGui::Indent();
           DrawRoomEditor(char_size);
-          ImGui::Unindent();
+          ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Description")) {
+          ImGui::InputTextMultiline("##DescriptionInput",
+                                    def_.mutable_description(),
+                                    ImGui::GetContentRegionAvail(),
+                                    ImGuiInputTextFlags_AllowTabInput);
           ImGui::EndTabItem();
         }
 
