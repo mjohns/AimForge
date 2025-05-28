@@ -51,6 +51,10 @@ Application::~Application() {
     SDL_WaitForGPUIdle(gpu_device_);
   }
 
+  auto implot_ctx = ImPlot::GetCurrentContext();
+  if (implot_ctx != nullptr) {
+    ImPlot::DestroyContext(implot_ctx);
+  }
   ImGui_ImplSDLGPU3_Shutdown();
   ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
@@ -195,7 +199,7 @@ int Application::Initialize() {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  // ImPlot::CreateContext();
+  ImPlot::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
   (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls

@@ -1,11 +1,13 @@
 #include "stats_screen.h"
 
 #include <imgui.h>
+#include <implot.h>
 
 #include <fstream>
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
 #include "aim/ui/playlist_ui.h"
 
@@ -27,6 +29,7 @@ struct StatsInfo {
   std::vector<StatsRow> all_stats;
   StatsRow stats;
   StatsRow previous_high_score_stats;
+  std::vector<double> scores;
 };
 
 class StatsScreen : public UiScreen {
@@ -64,7 +67,21 @@ class StatsScreen : public UiScreen {
     }
 
     if (ImGui::Begin("Stats")) {
-      DrawStats();
+      if (info_.all_stats.size() > 1) {
+        if (ImGui::BeginTabBar("StatsTabBar")) {
+          if (ImGui::BeginTabItem("Current run")) {
+            DrawStats();
+            ImGui::EndTabItem();
+          }
+          if (ImGui::BeginTabItem("History")) {
+            DrawHistory();
+            ImGui::EndTabItem();
+          }
+          ImGui::EndTabBar();
+        }
+      } else {
+        DrawStats();
+      }
     }
     ImGui::End();
   }
@@ -150,6 +167,18 @@ class StatsScreen : public UiScreen {
     }
   }
 
+  void DrawHistory() {
+    if (ImPlot::BeginPlot("Scores")) {
+      // ImPlot::SetupAxisLimits(ImAxis_X1,0,1.0);
+      // ImPlot::SetupAxisLimits(ImAxis_Y1,0,1.6);
+      ImPlotAxisFlags flags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;
+      ImPlot::SetupAxes("Run", "Score", flags, flags);
+      ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+      ImPlot::PlotStems("##Scores", &info_.scores[0], info_.scores.size());
+      ImPlot::EndPlot();
+    }
+  }
+
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
     if (IsEscapeKeyDown(event)) {
       ScreenDone(NavigationEvent::Done());
@@ -173,6 +202,7 @@ class StatsScreen : public UiScreen {
   bool GetStatsInfo(StatsInfo* info) {
     auto all_stats = app_->stats_db()->GetStats(scenario_id_);
     info->all_stats.reserve(all_stats.size());
+    info->scores.reserve(all_stats.size());
 
     if (all_stats.size() == 0) {
       return false;
@@ -184,6 +214,7 @@ class StatsScreen : public UiScreen {
     for (int i = 0; i < all_stats.size(); ++i) {
       StatsRow& stats = all_stats[i];
       info->all_stats.push_back(stats);
+      info->scores.push_back(stats.score);
 
       if (stats.stats_id == run_id_) {
         info->stats = stats;
