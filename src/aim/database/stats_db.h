@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/simple_types.h"
+
 namespace aim {
 
 struct StatsRow {
@@ -25,6 +27,8 @@ class StatsDb {
   void AddStats(const std::string& scenario_id, StatsRow* row);
 
   std::vector<StatsRow> GetStats(const std::string& scenario_id);
+
+  u64 GetLatestRunId(const std::string& scenario_id);
 
   StatsDb(const StatsDb&) = delete;
   StatsDb(StatsDb&&) = default;

@@ -15,6 +15,7 @@
 #include "aim/ui/scenario_editor.h"
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/settings_screen.h"
+#include "aim/ui/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/ui_screen.h"
 
@@ -352,6 +353,9 @@ class AppUiImpl : public AppUi {
       if (app_->scenario_manager()->SetCurrentScenario(result.scenario_to_start)) {
         scenario_run_option_ = ScenarioRunOption::RUN;
       }
+    }
+    if (result.scenario_stats_to_view.size() > 0) {
+      screen_to_show_ = CreateStatsScreen(result.scenario_stats_to_view, result.run_id, app_);
     }
     if (result.scenario_to_edit.size() > 0) {
       ScenarioEditorOptions opts;
