@@ -22,6 +22,12 @@
 namespace aim {
 namespace {
 
+void Line() {
+  ImGui::Spacing();
+  ImGui::Separator();
+  ImGui::Spacing();
+}
+
 const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kSimpleRoom, "Box"},
     {Room::kCylinderRoom, "Cylinder"},
@@ -259,6 +265,8 @@ class ScenarioEditorScreen : public UiScreen {
 
     DrawShotTypeEditor(char_size);
 
+    Line();
+
     if (scenario_type == ScenarioDef::kStaticDef) {
       DrawStaticEditor();
     }
@@ -297,37 +305,38 @@ class ScenarioEditorScreen : public UiScreen {
         "DirectionTypeDropdown", &direction_type, kInOutDirections, char_x_ * 20);
     d.set_direction(direction_type);
 
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial target location");
     ImGui::Indent();
     DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
     ImGui::Unindent();
 
-    if (ImGui::TreeNode("Advanced")) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Override wall width");
-      ImGui::SameLine();
-      bool has_width = d.has_width();
-      float width = FirstGreaterThanZero(d.width(), 100);
-      OptionalInputFloat("WidthOverride", &has_width, &width, 10, 20, "%.0f");
-      if (has_width) {
-        d.set_width(width);
-      } else {
-        d.clear_width();
-      }
+    Line();
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Override wall height");
-      ImGui::SameLine();
-      bool has_height = d.has_height();
-      float height = FirstGreaterThanZero(d.height(), 100);
-      OptionalInputFloat("HeightOverride", &has_height, &height, 10, 20, "%.0f");
-      if (has_height) {
-        d.set_height(height);
-      } else {
-        d.clear_height();
-      }
-      ImGui::TreePop();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Override wall width");
+    ImGui::SameLine();
+    bool has_width = d.has_width();
+    float width = FirstGreaterThanZero(d.width(), 100);
+    OptionalInputFloat("WidthOverride", &has_width, &width, 10, 20, "%.0f");
+    if (has_width) {
+      d.set_width(width);
+    } else {
+      d.clear_width();
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Override wall height");
+    ImGui::SameLine();
+    bool has_height = d.has_height();
+    float height = FirstGreaterThanZero(d.height(), 100);
+    OptionalInputFloat("HeightOverride", &has_height, &height, 10, 20, "%.0f");
+    if (has_height) {
+      d.set_height(height);
+    } else {
+      d.clear_height();
     }
   }
 
@@ -360,6 +369,8 @@ class ScenarioEditorScreen : public UiScreen {
       region->mutable_diameter()->set_x_percent_value(0.92);
       region->mutable_inner_diameter()->set_x_percent_value(0.6);
     }
+
+    Line();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial target location");
@@ -409,6 +420,8 @@ class ScenarioEditorScreen : public UiScreen {
       w.add_profiles();
     }
 
+    Line();
+
     ImGui::Text("Strafe profiles");
     ImGui::Indent();
     DrawProfileList("StrafeProfileList",
@@ -419,6 +432,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Unindent();
 
     ImGui::Spacing();
+
+    Line();
 
     float acceleration = w.acceleration();
     ImGui::AlignTextToFramePadding();
@@ -431,6 +446,8 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       w.set_acceleration(acceleration);
     }
+    ImGui::SameLine();
+    ImGui::HelpMarker("The target will accelearte in and out of changes of direction");
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {
@@ -499,6 +516,8 @@ class ScenarioEditorScreen : public UiScreen {
     DrawRegionVec2Editor("Point2", c.mutable_wall_points(1));
     ImGui::Unindent();
 
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Orient pill");
     ImGui::SameLine();
@@ -509,6 +528,10 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       c.clear_orient_pill();
     }
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Orient the pill based on the start and end position. For a vertical centering "
+        "scenario this would turn the pill horizontal.");
   }
 
   void DrawStaticEditor() {
@@ -1082,43 +1105,45 @@ class ScenarioEditorScreen : public UiScreen {
       }
     }
 
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Camera position");
     ImGui::SameLine();
     VectorEditor("CameraPositionVector", room.mutable_camera_position(), char_size);
 
-    if (ImGui::TreeNode("Advanced")) {
-      bool has_camera_up = room.has_camera_up();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Set camera up");
+    bool has_camera_up = room.has_camera_up();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Set camera up");
+    ImGui::SameLine();
+    ImGui::Checkbox("##CameraUp", &has_camera_up);
+    if (has_camera_up) {
       ImGui::SameLine();
-      ImGui::Checkbox("##CameraUp", &has_camera_up);
-      if (has_camera_up) {
-        ImGui::SameLine();
-        if (IsZero(room.camera_up())) {
-          room.mutable_camera_up()->set_z(1);
-        }
-        VectorEditor("CameraUpVector", room.mutable_camera_up(), char_size);
-      } else {
-        room.clear_camera_up();
+      if (IsZero(room.camera_up())) {
+        room.mutable_camera_up()->set_z(1);
       }
+      VectorEditor("CameraUpVector", room.mutable_camera_up(), char_size);
+    } else {
+      room.clear_camera_up();
+    }
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Define up for the camera (usually the z axis). This allows you to rotate the entire "
+        "scenario. (1, 0, 1) would be a 45 degree rotation.");
 
-      bool has_camera_front = room.has_camera_front();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Set camera front");
+    bool has_camera_front = room.has_camera_front();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Set camera front");
+    ImGui::SameLine();
+    ImGui::Checkbox("##CameraFront", &has_camera_front);
+    if (has_camera_front) {
       ImGui::SameLine();
-      ImGui::Checkbox("##CameraFront", &has_camera_front);
-      if (has_camera_front) {
-        ImGui::SameLine();
-        if (IsZero(room.camera_front())) {
-          room.mutable_camera_front()->set_y(1);
-        }
-        VectorEditor("CameraFrontVector", room.mutable_camera_front(), char_size);
-      } else {
-        room.clear_camera_front();
+      if (IsZero(room.camera_front())) {
+        room.mutable_camera_front()->set_y(1);
       }
-
-      ImGui::TreePop();
+      VectorEditor("CameraFrontVector", room.mutable_camera_front(), char_size);
+    } else {
+      room.clear_camera_front();
     }
   }
 
@@ -1137,7 +1162,25 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputInt("##NumberEntry", &num_targets, 1, 1);
     t->set_num_targets(num_targets);
 
+    if (t->profiles_size() == 0) {
+      t->add_profiles();
+    }
+
+    Line();
+
+    ImGui::Text("Target profiles");
+    ImGui::Indent();
+    DrawProfileList("ProfileList",
+                    "Profile",
+                    t->mutable_target_order(),
+                    t->mutable_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawTargetProfile, this));
+    ImGui::Unindent();
+
+    Line();
+
     ImGui::AlignTextToFramePadding();
+
     ImGui::Text("Remove closest target on miss");
     ImGui::SameLine();
     bool remove_closest = t->remove_closest_on_miss();
@@ -1153,57 +1196,42 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
 
-    if (t->profiles_size() == 0) {
-      t->add_profiles();
+    Line();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("New target delay seconds");
+    ImGui::SameLine();
+    float new_target_delay = t->new_target_delay_seconds();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##NewTargetDelay", &new_target_delay, 0.1, 0.1, "%.2f");
+    if (new_target_delay > 0) {
+      t->set_new_target_delay_seconds(new_target_delay);
+    } else {
+      t->clear_new_target_delay_seconds();
     }
 
-    ImGui::Text("Target profiles");
-    ImGui::Indent();
-    DrawProfileList("ProfileList",
-                    "Profile",
-                    t->mutable_target_order(),
-                    t->mutable_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawTargetProfile, this));
-    ImGui::Unindent();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Remove target after seconds");
+    ImGui::SameLine();
+    float remove_after = t->remove_target_after_seconds();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##RemoveAfterDelay", &remove_after, 0.1, 0.1, "%.2f");
+    if (remove_after > 0) {
+      t->set_remove_target_after_seconds(remove_after);
+    } else {
+      t->clear_remove_target_after_seconds();
+    }
 
-    if (ImGui::TreeNode("Advanced")) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("New target delay seconds");
-      ImGui::SameLine();
-      float new_target_delay = t->new_target_delay_seconds();
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##NewTargetDelay", &new_target_delay, 0.1, 0.1, "%.2f");
-      if (new_target_delay > 0) {
-        t->set_new_target_delay_seconds(new_target_delay);
-      } else {
-        t->clear_new_target_delay_seconds();
-      }
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Remove target after seconds");
-      ImGui::SameLine();
-      float remove_after = t->remove_target_after_seconds();
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##RemoveAfterDelay", &remove_after, 0.1, 0.1, "%.2f");
-      if (remove_after > 0) {
-        t->set_remove_target_after_seconds(remove_after);
-      } else {
-        t->clear_remove_target_after_seconds();
-      }
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Stagger initial targets seconds");
-      ImGui::SameLine();
-      float stagger = t->stagger_initial_targets_seconds();
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##StaggerDelay", &stagger, 0.1, 0.1, "%.2f");
-      if (stagger > 0) {
-        t->set_stagger_initial_targets_seconds(stagger);
-      } else {
-        t->clear_stagger_initial_targets_seconds();
-      }
-
-      ImGui::TreePop();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Stagger initial targets seconds");
+    ImGui::SameLine();
+    float stagger = t->stagger_initial_targets_seconds();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##StaggerDelay", &stagger, 0.1, 0.1, "%.2f");
+    if (stagger > 0) {
+      t->set_stagger_initial_targets_seconds(stagger);
+    } else {
+      t->clear_stagger_initial_targets_seconds();
     }
   }
 
