@@ -428,21 +428,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputFloat("##AccelerationInput", &acceleration, 5, 20, "%.0f");
     if (acceleration <= 0) {
       w.clear_acceleration();
-      w.clear_deceleration();
     } else {
       w.set_acceleration(acceleration);
-
-      bool has_decel = w.deceleration() > 0;
-      float deceleration = w.deceleration();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Different deceleration");
-      ImGui::SameLine();
-      OptionalInputFloat("##DecelerationInput", &has_decel, &deceleration, 5, 20, "%.0f");
-      if (has_decel) {
-        w.set_deceleration(ClampPositive(deceleration));
-      } else {
-        w.clear_deceleration();
-      }
     }
   }
 

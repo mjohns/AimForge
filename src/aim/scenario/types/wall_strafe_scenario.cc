@@ -39,11 +39,7 @@ class WallStrafeScenario : public BaseScenario {
     min_y_ = (-0.5 * height) + starting_y;
     max_y_ = (0.5 * height) + starting_y;
 
-    acceleration_ = d.acceleration();
-    deceleration_ = d.deceleration();
-    if (deceleration_ <= 0) {
-      deceleration_ = acceleration_;
-    }
+    acceleration_ = abs(d.acceleration());
 
     last_direction_change_position_ = glm::vec2(0, starting_y);
 
@@ -91,37 +87,58 @@ class WallStrafeScenario : public BaseScenario {
     }
 
     float distance = glm::length(*target->wall_position - last_direction_change_position_);
-    bool should_turn = distance > current_target_travel_distance_;
-    if (acceleration_ > 0) {
-      float delta_seconds = now_seconds - target->last_update_time_seconds;
-      if (should_turn) {
-        // Decelerate until we reach 0 speed and then change direction.
-        target->speed -= delta_seconds * deceleration_;
-        if (target->speed <= 0) {
-          target->speed = 0;
-          ChangeDirection(*target->wall_position);
-          target->wall_direction = direction_;
-        }
-      } else {
-        // Maybe continue accelerating to max velocity
-        target->speed += delta_seconds * acceleration_;
-        if (target->speed > max_velocity_) {
-          target->speed = max_velocity_;
-        }
-      }
-      target_manager_.UpdateTargetPositions(now_seconds);
-    } else {
+    if (acceleration_ <= 0) {
       // No accel/decel. Instant turn.
+      bool should_turn = distance > current_target_travel_distance_;
       if (should_turn) {
         ChangeDirection(*target->wall_position);
         target->wall_direction = direction_;
       }
       target_manager_.UpdateTargetPositions(now_seconds);
+      return;
     }
+
+    // Handle acceleration/deceleration.
+
+    bool going_left = target->wall_direction->x < 0;
+    bool too_far_left = going_left && target->wall_position->x <= min_x_;
+    bool too_far_right = !going_left && target->wall_position->x >= max_x_;
+    bool turn_now = too_far_left || too_far_right || (is_stopping_ && target->speed <= 0);
+    if (turn_now) {
+      target->speed = 0;
+      ChangeDirection(*target->wall_position);
+      target->wall_direction = direction_;
+      target_manager_.UpdateTargetPositions(now_seconds);
+      return;
+    }
+
+    if (!is_stopping_) {
+      // Should we be stopping?
+      float stop_distance = (target->speed * target->speed) / (2 * acceleration_);
+      bool should_start_turn = (distance + stop_distance) > current_target_travel_distance_;
+      if (should_start_turn) {
+        is_stopping_ = true;
+      }
+    }
+
+    float delta_seconds = now_seconds - target->last_update_time_seconds;
+    if (is_stopping_) {
+      target->speed -= delta_seconds * acceleration_;
+      if (target->speed < 0) {
+        target->speed = 0;
+      }
+    } else {
+      target->speed += delta_seconds * acceleration_;
+      if (target->speed > max_velocity_) {
+        target->speed = max_velocity_;
+      }
+    }
+    target_manager_.UpdateTargetPositions(now_seconds);
   }
 
  private:
   void ChangeDirection(const glm::vec2& current_pos) {
+    is_stopping_ = false;
     WallStrafeProfile profile = GetNextProfile();
     strafe_number_++;
     if (profile.pause_seconds() > 0) {
@@ -190,7 +207,7 @@ class WallStrafeScenario : public BaseScenario {
 
   float max_velocity_;
   float acceleration_;
-  float deceleration_;
+  bool is_stopping_ = false;
 
   glm::vec2 last_direction_change_position_;
   glm::vec2 direction_;
