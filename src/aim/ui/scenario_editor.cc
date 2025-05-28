@@ -12,6 +12,7 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
+#include "aim/common/wall.h"
 #include "aim/core/camera.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
@@ -875,10 +876,13 @@ class ScenarioEditorScreen : public UiScreen {
       }
 
       ImGui::PopItemWidth();
-      // TODO: Display evaluated value based on room.
+
+      ImGui::SameLine();
+      float evaluated_length = Wall::ForRoom(def_.room()).GetRegionLength(*length);
+      ImGui::TextDisabled(MaybeIntToString(evaluated_length, 1).c_str());
     } else {
       if (!length->has_value()) {
-        length->set_value(0);
+        length->set_value(Wall::ForRoom(def_.room()).GetRegionLength(*length));
       }
     }
   }
