@@ -35,7 +35,7 @@ const std::vector<std::pair<InOutDirection, std::string>> kInOutDirections{
 };
 
 const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
-    {ShotType::kClickSingle, "Single"},
+    {ShotType::kClickSingle, "Click"},
     {ShotType::kTrackingInvincible, "Tracking"},
     {ShotType::kTrackingKill, "Tracking kill"},
     {ShotType::kPoke, "Poke"},
