@@ -37,7 +37,6 @@ bool FontManager::LoadFonts() {
   icons_config.PixelSnapH = true;
   icons_config.GlyphOffset.y = 4;
 
-
   material_icons_font_ = io.Fonts->AddFontFromFileTTF(
       material_icons_path.string().c_str(), default_font_size(), &icons_config, icons_ranges);
   if (material_icons_font_ == nullptr) {
@@ -78,7 +77,6 @@ bool FontManager::LoadFonts() {
     Logger::get()->error("Unable to load medium bold font from: {}", bold_font_path.string());
     return false;
   }
-
 
   return true;
 }
