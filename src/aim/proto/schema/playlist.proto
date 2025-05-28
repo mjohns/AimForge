@@ -4,6 +4,7 @@ package aim;
 
 message PlaylistDef {
   repeated PlaylistItem items = 1;
+  string description = 2;
 }
 
 message PlaylistItem {

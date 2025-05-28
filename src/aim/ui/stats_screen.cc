@@ -158,6 +158,7 @@ class StatsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Text("Total runs: %d", all_stats.size());
     }
+    DrawHistory();
     ImGui::SetCursorAtBottom();
     if (ImGui::Button("Restart")) {
       ScreenDone(NavigationEvent::StartScenario(scenario_id_));
@@ -169,7 +170,7 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawHistory() {
-    if (ImPlot::BeginPlot("Scores")) {
+    if (ImPlot::BeginPlot(std::format("##Scores_{}", scenario_id_).c_str())) {
       // ImPlot::SetupAxisLimits(ImAxis_X1,0,1.0);
       // ImPlot::SetupAxisLimits(ImAxis_Y1,0,1.6);
       float max_score = info_.previous_high_score_stats.score;

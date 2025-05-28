@@ -253,8 +253,6 @@ message WallStrafeScenarioDef {
   repeated int32 profile_order = 5;
 
   float acceleration = 6;
-  // Defaults to acceleration if not set. Must also specify acceleration.
-  float deceleration = 7;
 }
 
 message WallArcScenarioDef {
