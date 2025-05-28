@@ -18,6 +18,13 @@ static void TextFmt(const std::format_string<_Types...> fmt, _Types&&... args) {
   Text("%s", message.c_str());
 }
 
+// ImGui::TextDisabled but taking same arguments as std::format to product the text.
+template <class... _Types>
+static void TextDisabledFmt(const std::format_string<_Types...> fmt, _Types&&... args) {
+  std::string message = std::format(fmt, std::forward<_Types>(args)...);
+  TextDisabled("%s", message.c_str());
+}
+
 static void Text(const std::string& val) {
   Text("%s", val.c_str());
 }
