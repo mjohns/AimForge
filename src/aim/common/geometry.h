@@ -7,6 +7,7 @@
 #include <random>
 
 #include "aim/common/simple_types.h"
+#include "aim/common/wall.h"
 
 namespace aim {
 

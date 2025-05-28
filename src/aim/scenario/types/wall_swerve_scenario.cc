@@ -45,7 +45,7 @@ struct TargetInfo {
 class WallSwerveScenario : public BaseScenario {
  public:
   explicit WallSwerveScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     swerve_ = params.def.wall_swerve_def();
     if (swerve_.has_origin_strategy()) {
       origin_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, app_);
@@ -105,14 +105,14 @@ class WallSwerveScenario : public BaseScenario {
 
  private:
   void SetNextGoalPosition(TargetInfo& info) {
-    float max_x = GetRegionLength(swerve_.width(), wall_);
-    float spread = GetRegionLength(swerve_.spread(), wall_) / 2.0;
+    float max_x = wall_.GetRegionLength(swerve_.width());
+    float spread = wall_.GetRegionLength(swerve_.spread()) / 2.0;
     float x = app_->rand().GetInRange(0, max_x) + spread;
     if (info.IsGoingLeft()) {
       x *= -1;
     }
 
-    float max_y = GetRegionLength(swerve_.height(), wall_);
+    float max_y = wall_.GetRegionLength(swerve_.height());
     float y = app_->rand().GetInRange(0, max_y);
     y -= (max_y / 2.0);
 

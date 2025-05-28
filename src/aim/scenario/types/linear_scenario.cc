@@ -39,7 +39,7 @@ void EnsurePositive(float& val) {
 class LinearScenario : public BaseScenario {
  public:
   explicit LinearScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(GetWallForRoom(params.def.room())) {
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     float width = def_.linear_def().width();
     if (width > 0 && width < wall_.width) {
       wall_.width = width;

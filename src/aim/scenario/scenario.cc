@@ -268,7 +268,7 @@ NavigationEvent Scenario::RunWaitingScreenAndThenStart() {
   }
 
   // Scenario has started.
-  SDL_Delay(300);
+  SDL_Delay(100);
   has_started_ = true;
   Initialize();
   return ResumeInternal();

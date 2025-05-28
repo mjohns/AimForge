@@ -83,15 +83,13 @@ class StatsScreen : public UiScreen {
     }
     {
       auto font = app_->font_manager()->UseLarge();
-      ImGui::AlignTextToFramePadding();
       ImGui::Text(scenario_id_);
     }
     ImGui::Spacing();
     ImGui::Spacing();
     if (percent_diff > 0) {
       auto font = app_->font_manager()->UseDefault();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("NEW HIGH SCORE!");
+      ImGui::Button("NEW HIGH SCORE");
     }
     {
       auto font = app_->font_manager()->UseLarge();
@@ -104,19 +102,20 @@ class StatsScreen : public UiScreen {
       auto font = app_->font_manager()->UseLarge();
       std::string percent_diff_str = MaybeIntToString(abs(percent_diff) * 100, 1);
       ImGui::SameLine();
-      ImGui::Text(" ");
-      ImGui::SameLine();
-      std::string diff_text = std::format("{}{}%", percent_diff < 0 ? "-" : "+", percent_diff_str);
+      std::string plus_minus = percent_diff < 0 ? "-" : "+";
+      std::string diff_text = std::format("{}{}%", plus_minus, percent_diff_str);
       ImGui::Button(diff_text.c_str());
       ImGui::SameLine();
       std::string abs_diff_str = MaybeIntToString(abs(diff), 2);
-      ImGui::TextFmt("({})", abs_diff_str);
+      ImGui::TextFmt("({}{})", plus_minus, abs_diff_str);
     }
 
     std::string hit_percent = GetHitPercentageString(stats);
     if (hit_percent.size() > 0) {
       ImGui::Text(hit_percent);
     }
+    ImGui::TextFmt("cm/360: {}", MaybeIntToString(stats.cm_per_360));
+
     if (has_previous_high_score) {
       std::string time_ago;
       auto maybe_time = ParseTimestampStringAsMicros(info_.previous_high_score_stats.timestamp);
@@ -125,18 +124,20 @@ class StatsScreen : public UiScreen {
         ImGui::Spacing();
         ImGui::Spacing();
         ImGui::Spacing();
-        ImGui::AlignTextToFramePadding();
         ImGui::Text("Previous High Score %s", time_ago.c_str());
         ImGui::Text(MaybeIntToString(info_.previous_high_score_stats.score, 2));
         hit_percent = GetHitPercentageString(stats);
         if (hit_percent.size() > 0) {
           ImGui::SameLine();
-          ImGui::Text(hit_percent);
+          ImGui::TextFmt("- {}", hit_percent);
         }
+        ImGui::TextFmt("cm/360: {}", MaybeIntToString(info_.previous_high_score_stats.cm_per_360));
       }
     }
     if (all_stats.size() > 1) {
-      ImGui::AlignTextToFramePadding();
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Spacing();
       ImGui::Text("Total runs: %d", all_stats.size());
     }
     ImGui::SetCursorAtBottom();

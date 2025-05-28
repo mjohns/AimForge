@@ -22,11 +22,6 @@ struct Rgb {
   int b = 0;
 };
 
-struct Wall {
-  float width;
-  float height;
-};
-
 struct Cylinder {
   glm::vec3 position{};
   glm::vec3 up{};
