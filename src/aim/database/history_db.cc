@@ -9,6 +9,7 @@
 
 #include "aim/common/log.h"
 #include "aim/common/times.h"
+#include "aim/common/util.h"
 #include "aim/database/sqlite_util.h"
 
 namespace aim {
@@ -115,6 +116,17 @@ std::vector<RecentView> HistoryDb::GetRecentViews(RecentViewType t, int limit) {
 
   sqlite3_finalize(stmt);
   return views;
+}
+
+std::vector<std::string> HistoryDb::GetRecentUniqueNames(RecentViewType t, int limit) {
+  auto views = GetRecentViews(t, limit);
+  std::vector<std::string> result;
+  for (auto& view : views) {
+    if (!VectorContains(result, view.id)) {
+      result.push_back(view.id);
+    }
+  }
+  return result;
 }
 
 }  // namespace aim

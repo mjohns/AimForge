@@ -153,6 +153,21 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
           app_->playlist_manager()->AddScenarioToPlaylist(playlist_name, scenario.id());
         }
       }
+      if (ImGui::BeginMenu("Add to")) {
+        MaybeLoadRecentPlaylists();
+        ImGui::LoopId playlist_loop_id;
+        std::string selected_playlist;
+        for (auto& playlist_name : recent_playlist_names_) {
+          auto id = playlist_loop_id.Get();
+          if (ImGui::MenuItem(playlist_name.c_str())) {
+            selected_playlist = playlist_name;
+          }
+        }
+        if (selected_playlist.size() > 0) {
+          app_->playlist_manager()->AddScenarioToPlaylist(selected_playlist, scenario.id());
+        }
+        ImGui::EndMenu();
+      }
       if (ImGui::Selectable("Edit")) {
         result->scenario_to_edit = scenario.id();
       }
@@ -186,13 +201,17 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     float delta_seconds = (now_micros - recent_scenario_load_time_micros_) / 1000000.0;
     if (delta_seconds > 5) {
       recent_scenario_load_time_micros_ = now_micros;
-      auto recent_scenarios = app_->history_db()->GetRecentViews(RecentViewType::SCENARIO, 50);
-      recent_scenario_ids_.clear();
-      for (auto& s : recent_scenarios) {
-        if (!VectorContains(recent_scenario_ids_, s.id)) {
-          recent_scenario_ids_.push_back(s.id);
-        }
-      }
+      recent_scenario_ids_ = app_->history_db()->GetRecentUniqueNames(RecentViewType::SCENARIO, 50);
+    }
+  }
+
+  void MaybeLoadRecentPlaylists() {
+    u64 now_micros = GetNowMicros();
+    float delta_seconds = (now_micros - recent_playlist_load_time_micros_) / 1000000.0;
+    if (delta_seconds > 5) {
+      recent_playlist_load_time_micros_ = now_micros;
+      recent_playlist_names_ =
+          app_->history_db()->GetRecentUniqueNames(RecentViewType::PLAYLIST, 8);
     }
   }
 
@@ -206,6 +225,9 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
   // If greater than 0 will expand/collapse all. Will be decremented each render loop.
   int expand_all_ = 0;
   int collapse_all_ = 0;
+
+  std::vector<std::string> recent_playlist_names_;
+  u64 recent_playlist_load_time_micros_ = 0;
 };
 
 }  // namespace

@@ -23,6 +23,7 @@ class HistoryDb {
   void UpdateRecentView(RecentViewType t, const std::string& id);
 
   std::vector<RecentView> GetRecentViews(RecentViewType t, int limit);
+  std::vector<std::string> GetRecentUniqueNames(RecentViewType t, int limit);
 
   HistoryDb(const HistoryDb&) = delete;
   HistoryDb(HistoryDb&&) = default;
