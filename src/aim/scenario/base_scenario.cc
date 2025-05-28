@@ -58,7 +58,7 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     HandleClickHits(data);
   }
   std::vector<u16> targets_to_remove;
-  if (def_.target_def().has_remove_target_after_seconds()) {
+  if (def_.target_def().remove_target_after_seconds() > 0) {
     for (const Target& target : target_manager_.GetTargets()) {
       if (target.ShouldDraw() && target.remove_after_time_seconds < timer_.GetElapsedSeconds()) {
         if (ShouldCountPartialKills()) {
@@ -253,11 +253,11 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
     target.is_ghost = true;
   }
 
-  if (def_.target_def().has_new_target_delay_seconds()) {
+  if (def_.target_def().new_target_delay_seconds() > 0) {
     target_manager_.RemoveTarget(old_target_id);
     RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
       Target new_target = target;
-      if (def_.target_def().has_remove_target_after_seconds()) {
+      if (def_.target_def().remove_target_after_seconds() > 0) {
         new_target.remove_after_time_seconds =
             timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();
       }
@@ -266,7 +266,7 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
     });
   } else {
     target_manager_.RemoveTarget(old_target_id);
-    if (def_.target_def().has_remove_target_after_seconds()) {
+    if (def_.target_def().remove_target_after_seconds() > 0) {
       target.remove_after_time_seconds =
           timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();
     }
