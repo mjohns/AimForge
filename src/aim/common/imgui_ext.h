@@ -317,4 +317,10 @@ static void SetCursorAtBottom(float item_height = -1) {
   ImGui::SetCursorPosY(bottom_target_y);
 }
 
+static void SetCursorAtRight(float item_width) {
+  float available = ImGui::GetContentRegionAvail().x;
+  float target_x = ImGui::GetCursorPosX() + available - item_width;
+  ImGui::SetCursorPosX(target_x);
+}
+
 }  // namespace ImGui
