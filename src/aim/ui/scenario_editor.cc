@@ -447,15 +447,35 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Min distance");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("MinDistance", /*default_to_x=*/true, p->mutable_min_distance());
+    bool is_pause = p->pause_seconds() > 0;
+
+    if (!is_pause) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Min distance");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("MinDistance", /*default_to_x=*/true, p->mutable_min_distance());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Max distance");
+      ImGui::SameLine();
+      DrawRegionLengthEditor("MaxDistance", /*default_to_x=*/true, p->mutable_max_distance());
+    }
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Max distance");
+    ImGui::Text("Pause for seconds");
     ImGui::SameLine();
-    DrawRegionLengthEditor("MaxDistance", /*default_to_x=*/true, p->mutable_max_distance());
+    ImGui::Checkbox("##PauseCheck", &is_pause);
+    if (is_pause) {
+      float pause_seconds = FirstGreaterThanZero(p->pause_seconds(), 0.5);
+      float jitter = p->pause_seconds_jitter();
+      ImGui::SameLine();
+      JitteredValueInput("PauseSecondsInput", &pause_seconds, &jitter, 0.1, 1, "%.1f");
+      p->set_pause_seconds(pause_seconds);
+      p->set_pause_seconds_jitter(jitter);
+    } else {
+      p->clear_pause_seconds();
+      p->clear_pause_seconds_jitter();
+    }
   }
 
   void DrawCenteringEditor() {

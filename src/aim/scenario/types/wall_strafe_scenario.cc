@@ -80,6 +80,16 @@ class WallStrafeScenario : public BaseScenario {
       return;
     }
 
+    if (pause_until_time_ > 0) {
+      bool should_unpause = now_seconds >= pause_until_time_;
+      if (!should_unpause) {
+        target->last_update_time_seconds = now_seconds;
+        return;
+      }
+      pause_until_time_ = -1;
+      ChangeDirection(*target->wall_position);
+    }
+
     float distance = glm::length(*target->wall_position - last_direction_change_position_);
     bool should_turn = distance > current_target_travel_distance_;
     if (acceleration_ > 0) {
@@ -114,6 +124,12 @@ class WallStrafeScenario : public BaseScenario {
   void ChangeDirection(const glm::vec2& current_pos) {
     WallStrafeProfile profile = GetNextProfile();
     strafe_number_++;
+    if (profile.pause_seconds() > 0) {
+      float pause_time =
+          app_->rand().GetJittered(profile.pause_seconds(), profile.pause_seconds_jitter());
+      pause_until_time_ = timer_.GetElapsedSeconds() + pause_time;
+      return;
+    }
     float min_strafe_distance = wall_.GetRegionLength(profile.min_distance());
     if (min_strafe_distance <= 0) {
       min_strafe_distance = 30;
@@ -179,6 +195,8 @@ class WallStrafeScenario : public BaseScenario {
   glm::vec2 last_direction_change_position_;
   glm::vec2 direction_;
   float current_target_travel_distance_;
+
+  float pause_until_time_ = -1;
 };
 
 }  // namespace
