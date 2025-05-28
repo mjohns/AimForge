@@ -30,6 +30,7 @@ struct StatsInfo {
   StatsRow stats;
   StatsRow previous_high_score_stats;
   std::vector<double> scores;
+  float min_score = 0;
 };
 
 class StatsScreen : public UiScreen {
@@ -171,8 +172,16 @@ class StatsScreen : public UiScreen {
     if (ImPlot::BeginPlot("Scores")) {
       // ImPlot::SetupAxisLimits(ImAxis_X1,0,1.0);
       // ImPlot::SetupAxisLimits(ImAxis_Y1,0,1.6);
-      ImPlotAxisFlags flags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;
-      ImPlot::SetupAxes("Run", "Score", flags, flags);
+      float max_score = info_.previous_high_score_stats.score;
+      float score_range = max_score - info_.min_score;
+      bool has_score_range = score_range > 0;
+      ImPlotAxisFlags autofit_flags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;
+      ImPlot::SetupAxes("Run", "Score", autofit_flags, has_score_range ? 0 : autofit_flags);
+      if (has_score_range) {
+        float padding = score_range * 0.15;
+        ImPlot::SetupAxisLimits(
+            ImAxis_Y1, ClampPositive(info_.min_score - padding), max_score + padding);
+      }
       ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
       ImPlot::PlotStems("##Scores", &info_.scores[0], info_.scores.size());
       ImPlot::EndPlot();
@@ -211,6 +220,7 @@ class StatsScreen : public UiScreen {
     int found_max_index = -1;
     float max_score = -100000;
     bool found_stats = false;
+    info->min_score = 1000000;
     for (int i = 0; i < all_stats.size(); ++i) {
       StatsRow& stats = all_stats[i];
       info->all_stats.push_back(stats);
@@ -225,6 +235,9 @@ class StatsScreen : public UiScreen {
       if (stats.score >= max_score) {
         found_max_index = i;
         max_score = stats.score;
+      }
+      if (stats.score < info->min_score) {
+        info->min_score = stats.score;
       }
     }
 
