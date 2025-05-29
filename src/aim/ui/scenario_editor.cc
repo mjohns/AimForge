@@ -48,6 +48,12 @@ const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::TYPE_NOT_SET, "Default"},
 };
 
+const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
+    ScenarioDef::kWallStrafeDef,
+    ScenarioDef::kCenteringDef,
+    ScenarioDef::kWallArcDef,
+};
+
 const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kStaticDef, "Static"},
     {ScenarioDef::kCenteringDef, "Centering"},
@@ -263,7 +269,11 @@ class ScenarioEditorScreen : public UiScreen {
     auto scenario_type = def_.type_case();
     ImGui::SimpleTypeDropdown("ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
 
-    DrawShotTypeEditor(char_size);
+    if (VectorContains(kSingleTargetTrackingTypes, scenario_type)) {
+      def_.mutable_shot_type()->set_tracking_invincible(true);
+    } else {
+      DrawShotTypeEditor(char_size);
+    }
 
     Line();
 
@@ -1150,6 +1160,22 @@ class ScenarioEditorScreen : public UiScreen {
   void DrawTargetEditor(const ImVec2& char_size) {
     ImGui::IdGuard cid("TargetEditor");
     TargetDef* t = def_.mutable_target_def();
+
+    bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, def_.type_case());
+    if (is_single_target_tracking) {
+      t->set_num_targets(1);
+      if (t->profiles_size() == 0) {
+        t->add_profiles();
+      }
+      if (t->profiles_size() > 1) {
+        TargetProfile first_profile = t->profiles(0);
+        t->clear_profiles();
+        *t->add_profiles() = first_profile;
+      }
+
+      DrawTargetProfile(t->mutable_profiles(0));
+      return;
+    }
 
     int num_targets = t->num_targets();
     if (num_targets <= 0) {
