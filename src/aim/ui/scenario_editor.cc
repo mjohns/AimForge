@@ -480,6 +480,22 @@ class ScenarioEditorScreen : public UiScreen {
     p->set_angle(angle);
     p->set_angle_jitter(angle_jitter);
 
+    bool has_speed_override = p->has_speed_override();
+    float speed_override = p->speed_override();
+    if (!p->has_speed_override()) {
+        // Default to a teleport like value.
+      speed_override = 400;
+    }
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Speed override");
+    ImGui::SameLine();
+    OptionalInputFloat("SpeedOverrideInput", &has_speed_override, &speed_override, 5, 30, "%.0f");
+    if (has_speed_override && speed_override > 0) {
+      p->set_speed_override(speed_override);
+    } else {
+      p->clear_speed_override();
+    }
+
     bool is_pause = p->pause_at_end_chance() > 0;
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Pause at end");

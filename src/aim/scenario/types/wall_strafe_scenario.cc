@@ -40,6 +40,7 @@ class WallStrafeScenario : public BaseScenario {
     max_y_ = (0.5 * height) + starting_y;
 
     acceleration_ = abs(d.acceleration());
+    original_acceleration_ = acceleration_;
 
     last_direction_change_position_ = glm::vec2(0, starting_y);
 
@@ -61,6 +62,7 @@ class WallStrafeScenario : public BaseScenario {
     target->wall_position = last_direction_change_position_;
     target->wall_direction = direction_;
     max_velocity_ = target->speed;
+    original_max_velocity_ = target->speed;
   }
 
   void UpdateTargetPositions() override {
@@ -103,7 +105,6 @@ class WallStrafeScenario : public BaseScenario {
     bool too_far_right = !going_left && target->wall_position->x >= max_x_;
     bool turn_now = too_far_left || too_far_right || (is_stopping_ && target->speed <= 0);
     if (turn_now) {
-      target->speed = 0;
       ChangeTargetDirection(target);
       target_manager_.UpdateTargetPositions(now_seconds);
       return;
@@ -148,6 +149,12 @@ class WallStrafeScenario : public BaseScenario {
       }
     }
 
+    acceleration_ = original_acceleration_;
+    if (profile.has_acceleartion_override()) {
+      acceleration_ = profile.acceleartion_override();
+    }
+    max_velocity_ = FirstGreaterThanZero(profile.speed_override(), original_max_velocity_);
+
     float min_strafe_distance = wall_.GetRegionLength(profile.min_distance());
     if (min_strafe_distance <= 0) {
       min_strafe_distance = 30;
@@ -191,12 +198,19 @@ class WallStrafeScenario : public BaseScenario {
   }
 
   void ChangeTargetDirection(Target* target) {
-    ChangeDirectionNoTargetUpdate(*target->wall_position);
-    target->wall_direction = direction_;
     if (pause_at_next_direction_change_) {
       paused_until_time_ = timer_.GetElapsedSeconds() + pause_for_seconds_;
       pause_at_next_direction_change_ = false;
       pause_for_seconds_ = 0;
+    }
+
+    ChangeDirectionNoTargetUpdate(*target->wall_position);
+    target->wall_direction = direction_;
+
+    if (acceleration_ > 0) {
+      target->speed = 0;
+    } else {
+      target->speed = max_velocity_;
     }
   }
 
@@ -218,6 +232,10 @@ class WallStrafeScenario : public BaseScenario {
 
   float max_velocity_;
   float acceleration_;
+
+  float original_max_velocity_;
+  float original_acceleration_;
+
   bool is_stopping_ = false;
 
   glm::vec2 last_direction_change_position_;
