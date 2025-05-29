@@ -47,23 +47,11 @@ class SettingsScreen : public UiScreen {
   }
 
  protected:
-  void DrawScreen() override {
-    const ScreenInfo& screen = app_->screen_info();
-    ImGui::Columns(2, "SettingsColumns", false);
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-    char_x_ = char_size.x;
+  bool DisableFullscreenWindow() override {
+    return true;
+  }
 
-    float left_width = screen.width * 0.15;
-    ImGui::SetColumnWidth(0, left_width);
-    ImGui::NextColumn();
-
-    {
-      auto font = app_->font_manager()->UseLarge();
-      ImGui::Text("Settings");
-      ImGui::Spacing();
-      ImGui::Spacing();
-    }
-
+  void DrawSettings() {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("cm/360");
     ImGui::SameLine();
@@ -73,7 +61,7 @@ class SettingsScreen : public UiScreen {
                               1,
                               5,
                               "%.0f",
-                              char_size.x * 9);
+                              char_x_ * 9);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("DPI");
@@ -84,7 +72,7 @@ class SettingsScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Metronome BPM");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 9);
+    ImGui::SetNextItemWidth(char_x_ * 9);
     ImGui::InputFloat("##MetronomeBpm", &settings_updater_.metronome_bpm, 1, 5, "%.0f");
 
     ImGui::AlignTextToFramePadding();
@@ -92,18 +80,18 @@ class SettingsScreen : public UiScreen {
     ImGui::SameLine();
 
     ImGui::SimpleDropdown(
-        "ThemeDropdown", &settings_updater_.theme_name, theme_names_, char_size.x * 20);
+        "ThemeDropdown", &settings_updater_.theme_name, theme_names_, char_x_ * 20);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::SameLine();
     ImGui::SimpleDropdown(
-        "CrosshairDropdown", &settings_updater_.crosshair_name, crosshair_names_, char_size.x * 15);
+        "CrosshairDropdown", &settings_updater_.crosshair_name, crosshair_names_, char_x_ * 15);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair Size");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 9);
+    ImGui::SetNextItemWidth(char_x_ * 9);
     ImGui::InputFloat("##CrosshairSize", &settings_updater_.crosshair_size, 0.1, 1, "%.1f");
 
     ImGui::AlignTextToFramePadding();
@@ -174,10 +162,15 @@ class SettingsScreen : public UiScreen {
 
     ImGui::Text("Keybinds");
     ImGui::Indent();
+    DrawKeybinds();
+    ImGui::Unindent();
+  }
+
+  void DrawKeybinds() {
     for (KeybindItem& item : keybind_items_) {
       ImGui::AlignTextToFramePadding();
       ImGui::Text(item.label);
-      float entry_width = char_size.x * 10;
+      float entry_width = char_x_ * 10;
       ImGui::SameLine();
       KeyMappingEntry(&item, 1, entry_width);
       ImGui::SameLine();
@@ -187,13 +180,27 @@ class SettingsScreen : public UiScreen {
       ImGui::SameLine();
       KeyMappingEntry(&item, 4, entry_width);
     }
-    ImGui::Unindent();
+  }
 
-    ImGui::Spacing();
-    ImGui::Spacing();
+  void DrawScreen() override {
+    ImGui::IdGuard cid("SettingsScreen");
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    char_x_ = char_size.x;
 
+    if (ImGui::Begin("Settings")) {
+      DrawSettings();
+    }
+    ImGui::End();
+
+    if (ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoTitleBar)) {
+      DrawControls();
+    }
+    ImGui::End();
+  }
+
+  void DrawControls() {
     {
-      ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
+      ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
         settings_updater_.SaveIfChangesMade(scenario_id_);
         ScreenDone();
