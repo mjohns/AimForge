@@ -442,6 +442,7 @@ class PlaylistDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kItemsFieldNumber = 1,
+    kDescriptionFieldNumber = 2,
   };
   // repeated .aim.PlaylistItem items = 1;
   int items_size() const;
@@ -460,13 +461,30 @@ class PlaylistDef final : public ::google::protobuf::Message
   const ::aim::PlaylistItem& items(int index) const;
   ::aim::PlaylistItem* add_items();
   const ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>& items() const;
+  // string description = 2;
+  bool has_description() const;
+  void clear_description() ;
+  const std::string& description() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  std::string* mutable_description();
+  PROTOBUF_NODISCARD std::string* release_description();
+  void set_allocated_description(std::string* value);
+
+  private:
+  const std::string& _internal_description() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_description(
+      const std::string& value);
+  std::string* _internal_mutable_description();
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.PlaylistDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 1, 1,
-      0, 2>
+      1, 2, 1,
+      35, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -483,8 +501,10 @@ class PlaylistDef final : public ::google::protobuf::Message
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const PlaylistDef& from_msg);
-    ::google::protobuf::RepeatedPtrField< ::aim::PlaylistItem > items_;
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::PlaylistItem > items_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -554,6 +574,75 @@ inline ::google::protobuf::RepeatedPtrField<::aim::PlaylistItem>*
 PlaylistDef::_internal_mutable_items() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.items_;
+}
+
+// string description = 2;
+inline bool PlaylistDef::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void PlaylistDef::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& PlaylistDef::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.PlaylistDef.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void PlaylistDef::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.PlaylistDef.description)
+}
+inline std::string* PlaylistDef::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.PlaylistDef.description)
+  return _s;
+}
+inline const std::string& PlaylistDef::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void PlaylistDef::_internal_set_description(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* PlaylistDef::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* PlaylistDef::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.PlaylistDef.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void PlaylistDef::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.PlaylistDef.description)
 }
 
 // -------------------------------------------------------------------
