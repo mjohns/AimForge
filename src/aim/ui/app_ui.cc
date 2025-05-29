@@ -45,7 +45,6 @@ class AppUiImpl : public AppUi {
   }
 
   void Run() override {
-    timer_.Start();
     while (true) {
       if (screen_to_show_) {
         auto nav_event = screen_to_show_->Run();
@@ -231,7 +230,6 @@ class AppUiImpl : public AppUi {
     ImGui::IdGuard cid("HomePage");
     ScreenInfo screen = app_->screen_info();
 
-    // TODO: Improve appearance of top bar.
     int large_font_size = app_->font_manager()->large_font_size();
     ImGui::BeginChild("Header", ImVec2(0, large_font_size * 1.3));
     if (logo_texture_ && logo_texture_->is_loaded()) {
@@ -247,27 +245,6 @@ class AppUiImpl : public AppUi {
       ImGui::Text("AimForge");
     }
 
-    /*
-    if (current_scenario_.has_value()) {
-      auto font = app_->font_manager()->UseMedium();
-      ImGui::SameLine();
-      ImGui::SetCursorPosX(navigation_column_width);
-      ImVec2 sz = ImVec2(0.0f, 0.0f);
-      if (current_running_scenario_) {
-        if (ImGui::Button("Resume", sz)) {
-          scenario_run_option_ = ScenarioRunOption::RESUME;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Restart", sz)) {
-          scenario_run_option_ = ScenarioRunOption::RUN;
-        }
-      } else {
-        if (ImGui::Button("Play", sz)) {
-          scenario_run_option_ = ScenarioRunOption::RUN;
-        }
-      }
-    }
-    */
     ImGui::EndChild();
 
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable |
@@ -403,7 +380,6 @@ class AppUiImpl : public AppUi {
   AppScreen app_screen_ = AppScreen::SCENARIOS;
   ScenarioRunOption scenario_run_option_ = ScenarioRunOption::NONE;
   Application* app_;
-  Stopwatch timer_;
 
   std::unique_ptr<Scenario> current_running_scenario_;
   std::unique_ptr<UiScreen> screen_to_show_;

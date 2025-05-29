@@ -226,16 +226,20 @@ message WallStrafeProfile {
   RegionLength min_distance = 2;
   RegionLength max_distance = 3;
 
-  // If this profile is chosen the target will pause for the specified amount of time.
-  float pause_seconds = 7;
-  float pause_seconds_jitter = 8;
-
   // Angle to strafe at. In range 0-45. Will choose between strafing up or down at this angle
   // evenly.
   float angle = 4;
   float angle_jitter = 5;
 
   string description = 6;
+
+  float pause_at_end_chance = 7;
+  float pause_seconds = 8;
+  float pause_seconds_jitter = 9;
+
+  // Allows increasing to very high value to create a teleport like effect.
+  float speed_override = 10;
+  float acceleartion_override = 11;
 }
 
 message WallStrafeScenarioDef {

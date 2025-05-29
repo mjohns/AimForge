@@ -461,34 +461,47 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {
-    bool is_pause = p->pause_seconds() > 0;
-
-    if (!is_pause) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Min distance");
-      ImGui::SameLine();
-      DrawRegionLengthEditor("MinDistance", /*default_to_x=*/true, p->mutable_min_distance());
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Max distance");
-      ImGui::SameLine();
-      DrawRegionLengthEditor("MaxDistance", /*default_to_x=*/true, p->mutable_max_distance());
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Angle");
-      ImGui::SameLine();
-      float angle = p->angle();
-      float angle_jitter = p->angle_jitter();
-      JitteredValueInput("AngleInput", &angle, &angle_jitter, 1, 3, "%.0f");
-      p->set_angle(angle);
-      p->set_angle_jitter(angle_jitter);
-    }
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Min distance");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("MinDistance", /*default_to_x=*/true, p->mutable_min_distance());
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Pause for seconds");
+    ImGui::Text("Max distance");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("MaxDistance", /*default_to_x=*/true, p->mutable_max_distance());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Angle");
+    ImGui::SameLine();
+    float angle = p->angle();
+    float angle_jitter = p->angle_jitter();
+    JitteredValueInput("AngleInput", &angle, &angle_jitter, 1, 3, "%.0f");
+    p->set_angle(angle);
+    p->set_angle_jitter(angle_jitter);
+
+    bool is_pause = p->pause_at_end_chance() > 0;
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Pause at end");
     ImGui::SameLine();
     ImGui::Checkbox("##PauseCheck", &is_pause);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Specify a probability that the target will stop for a certain duration at the end of this "
+        "strafe before changing direction.");
     if (is_pause) {
+      ImGui::Indent();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Percent chance");
+      float chance = FirstGreaterThanZero(p->pause_at_end_chance() * 100, 50);
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 8);
+      ImGui::InputFloat("##PauseChance", &chance, 5, 15, "%.0f");
+      chance = glm::clamp(chance, 0.0f, 100.0f);
+      p->set_pause_at_end_chance(chance / 100.0f);
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Pause seconds");
       float pause_seconds = FirstGreaterThanZero(p->pause_seconds(), 0.5);
       float jitter = p->pause_seconds_jitter();
       ImGui::SameLine();
@@ -498,6 +511,7 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       p->clear_pause_seconds();
       p->clear_pause_seconds_jitter();
+      p->clear_pause_at_end_chance();
     }
   }
 
