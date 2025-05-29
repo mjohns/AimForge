@@ -144,7 +144,7 @@ class StatsScreen : public UiScreen {
         ImGui::Spacing();
         ImGui::Text("Previous High Score %s", time_ago.c_str());
         ImGui::Text(MaybeIntToString(info_.previous_high_score_stats.score, 2));
-        hit_percent = GetHitPercentageString(stats);
+        hit_percent = GetHitPercentageString(info_.previous_high_score_stats);
         if (hit_percent.size() > 0) {
           ImGui::SameLine();
           ImGui::TextFmt("- {}", hit_percent);
