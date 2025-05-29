@@ -84,6 +84,9 @@ class WallStrafeScenario : public BaseScenario {
       }
       pause_until_time_ = -1;
       ChangeDirection(*target->wall_position);
+      target->wall_direction = direction_;
+      target_manager_.UpdateTargetPositions(now_seconds);
+      return;
     }
 
     float distance = glm::length(*target->wall_position - last_direction_change_position_);
@@ -100,7 +103,7 @@ class WallStrafeScenario : public BaseScenario {
 
     // Handle acceleration/deceleration.
 
-    bool going_left = target->wall_direction->x < 0;
+    bool going_left = direction_.x < 0;
     bool too_far_left = going_left && target->wall_position->x <= min_x_;
     bool too_far_right = !going_left && target->wall_position->x >= max_x_;
     bool turn_now = too_far_left || too_far_right || (is_stopping_ && target->speed <= 0);
