@@ -10,6 +10,7 @@
 #include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
 #include "aim/ui/playlist_ui.h"
+#include "aim/ui/quick_settings_screen.h"
 
 namespace aim {
 namespace {
@@ -45,6 +46,19 @@ class StatsScreen : public UiScreen {
  protected:
   bool DisableFullscreenWindow() override {
     return true;
+  }
+
+  void OnTickStart() override {
+    if (show_settings_.has_value()) {
+      NavigationEvent nav_event;
+      nav_event =
+          CreateQuickSettingsScreen(scenario_id_, *show_settings_, show_settings_release_key_, app_)
+              ->Run();
+      if (nav_event.IsNotDone()) {
+        ScreenDone(nav_event);
+      }
+      show_settings_ = {};
+    }
   }
 
   void DrawScreen() override {
@@ -205,6 +219,14 @@ class StatsScreen : public UiScreen {
       if (KeyMappingMatchesEvent(event_name, settings.keybinds().next_scenario())) {
         ScreenDone(NavigationEvent::PlaylistNext());
       }
+      if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_settings())) {
+        show_settings_ = QuickSettingsType::DEFAULT;
+        show_settings_release_key_ = event_name;
+      }
+      if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_metronome())) {
+        show_settings_ = QuickSettingsType::METRONOME;
+        show_settings_release_key_ = event_name;
+      }
     }
   }
 
@@ -257,6 +279,9 @@ class StatsScreen : public UiScreen {
   u64 run_id_;
   StatsInfo info_;
   bool is_valid_ = false;
+
+  std::optional<QuickSettingsType> show_settings_;
+  std::string show_settings_release_key_;
 };
 
 }  // namespace
