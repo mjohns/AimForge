@@ -24,7 +24,7 @@ constexpr const float kDefaultDpi = 800;
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
   crosshair.set_name("default");
-  crosshair.mutable_dot()->set_draw_outline(true);
+  crosshair.add_layers()->mutable_dot()->set_outline_thickness(1);
   return crosshair;
 }
 
@@ -46,6 +46,14 @@ Settings GetDefaultSettings() {
   binds->mutable_edit_scenario()->set_mapping1("U");
 
   return settings;
+}
+
+SavedCrosshairs GetSavedCrosshairs(const Settings& settings) {
+  SavedCrosshairs saved_crosshairs;
+  for (const Crosshair& crosshair : settings.saved_crosshairs()) {
+    *saved_crosshairs.add_crosshairs() = crosshair;
+  }
+  return saved_crosshairs;
 }
 
 }  // namespace
@@ -366,6 +374,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     auto_hold_tracking = current_settings->auto_hold_tracking();
     keybinds = current_settings->keybinds();
     health_bar = current_settings->health_bar();
+    saved_crosshairs = GetSavedCrosshairs(*current_settings);
   }
 }
 
@@ -401,9 +410,13 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
     current_settings->set_auto_hold_tracking(auto_hold_tracking);
     settings_manager_->MarkDirty();
   }
-  if (!google::protobuf::util::MessageDifferencer::Equivalent(current_settings->keybinds(),
-                                                              keybinds)) {
-    *current_settings->mutable_keybinds() = keybinds;
+  auto original_saved_crosshairs = GetSavedCrosshairs(*current_settings);
+  if (!google::protobuf::util::MessageDifferencer::Equivalent(original_saved_crosshairs,
+                                                              saved_crosshairs)) {
+    current_settings->clear_saved_crosshairs();
+    for (const Crosshair& c : saved_crosshairs.crosshairs()) {
+      *current_settings->add_saved_crosshairs() = c;
+    }
     settings_manager_->MarkDirty();
   }
   if (metronome_bpm >= 0 && current_settings->metronome_bpm() != metronome_bpm) {

@@ -104,6 +104,7 @@ struct SettingsUpdater {
   bool auto_hold_tracking = false;
   HealthBarSettings health_bar;
   Keybinds keybinds;
+  SavedCrosshairs saved_crosshairs;
 
  private:
   SettingsManager* settings_manager_;

@@ -1,17 +1,147 @@
 #include "settings_screen.h"
 
-#include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
 #include <format>
+#include <functional>
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
+#include "aim/graphics/crosshair.h"
 
 namespace aim {
 namespace {
+
+template <typename T>
+struct FieldFunctions {
+  FieldFunctions(std::function<T()> get,
+                 std::function<void(T)> set,
+                 std::function<void()> clear,
+                 std::function<bool()> has)
+      : get(std::move(get)), set(std::move(set)), clear(std::move(clear)), has(std::move(has)) {}
+
+  std::function<T()> get;
+  std::function<void(T)> set;
+  std::function<void()> clear;
+  std::function<bool()> has;
+};
+
+struct InputFloatParams {
+  InputFloatParams(const std::string& name, FieldFunctions<float> field_functions)
+      : name(name), field_functions(field_functions) {}
+
+  InputFloatParams& set_precision(int decimal_places) {
+    if (decimal_places == 1) {
+      format = "%.1f";
+    } else if (decimal_places == 2) {
+      format = "%.2f";
+    } else if (decimal_places == 3) {
+      format = "%.2f";
+    } else {
+      format = "%.0f";
+    }
+    return *this;
+  }
+
+  InputFloatParams& set_step(float step, float fast_step) {
+    this->step = step;
+    this->fast_step = fast_step;
+    return *this;
+  }
+
+  InputFloatParams& set_width(float width) {
+    this->width = width;
+    return *this;
+  }
+
+  InputFloatParams& set_default(float default_value) {
+    this->default_value = default_value;
+    return *this;
+  }
+
+  InputFloatParams& set_zero_is_unset() {
+    this->zero_is_unset = true;
+    return *this;
+  }
+
+  InputFloatParams& set_range(float min, float max) {
+    min_value = min;
+    max_value = max;
+    return *this;
+  }
+
+  InputFloatParams& set_min(float min) {
+    min_value = min;
+    return *this;
+  }
+
+  InputFloatParams& set_id(const std::string& id) {
+    this->id = id;
+    return *this;
+  }
+
+  std::string name;
+  std::string id;
+  FieldFunctions<float> field_functions;
+  float step = 1;
+  float fast_step = 5;
+  const char* format = "%.0f";
+  float width = -1;
+  std::optional<float> default_value;
+
+  std::optional<float> min_value;
+  std::optional<float> max_value;
+  bool zero_is_unset = false;
+};
+
+#define FIELD_FUNCTIONS(T, instance, ProtoClass, field_name)                          \
+  FieldFunctions<##T>(std::bind_front(&##ProtoClass::##field_name, ##instance),       \
+                      std::bind_front(&##ProtoClass::set_##field_name, ##instance),   \
+                      std::bind_front(&##ProtoClass::clear_##field_name, ##instance), \
+                      std::bind_front(&##ProtoClass::has_##field_name, ##instance))
+
+void InputFloat(InputFloatParams& params) {
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text(params.name);
+  ImGui::SameLine();
+  float value = params.field_functions.get();
+  if (params.default_value.has_value() && !params.field_functions.has()) {
+    value = *params.default_value;
+  }
+  if (params.width > 0) {
+    ImGui::SetNextItemWidth(params.width);
+  }
+  std::string id = params.id.size() > 0 ? params.id : std::format("##Input{}", params.name);
+  ImGui::InputFloat(id.c_str(), &value, params.step, params.fast_step, params.format);
+
+  if (params.min_value.has_value()) {
+    if (value < *params.min_value) {
+      value = *params.min_value;
+    }
+  }
+  if (params.max_value.has_value()) {
+    if (value > *params.max_value) {
+      value = *params.max_value;
+    }
+  }
+
+  if (params.zero_is_unset) {
+    if (value > 0) {
+      params.field_functions.set(value);
+    } else {
+      params.field_functions.clear();
+    }
+  } else {
+    params.field_functions.set(value);
+  }
+}
+
+const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTypes{
+    {CrosshairLayer::kDot, "Dot"},
+    {CrosshairLayer::kPlus, "Plus"},
+};
 
 struct KeybindItem {
   std::string label;
@@ -192,6 +322,11 @@ class SettingsScreen : public UiScreen {
     }
     ImGui::End();
 
+    if (ImGui::Begin("Crosshairs")) {
+      DrawSavedCrosshairsEditor();
+    }
+    ImGui::End();
+
     if (ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoTitleBar)) {
       DrawControls();
     }
@@ -213,6 +348,143 @@ class SettingsScreen : public UiScreen {
         ScreenDone();
       }
     }
+  }
+
+  void DrawSavedCrosshairsEditor() {
+    ImGui::LoopId loop_id;
+    for (Crosshair& c : *settings_updater_.saved_crosshairs.mutable_crosshairs()) {
+      loop_id.Get();
+      DrawCrosshairEditor(c);
+    }
+  }
+
+  void DrawCrosshairEditor(Crosshair& c) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Name");
+    ImGui::SameLine();
+    ImGui::InputText("##NameInput", c.mutable_name());
+
+    if (c.layers_size() == 0) {
+      c.add_layers();
+    }
+
+    ImGui::Text("Layers");
+    ImGui::Indent();
+    ImGui::LoopId loop_id;
+    for (CrosshairLayer& l : *c.mutable_layers()) {
+      auto id = loop_id.Get();
+      DrawCrosshairLayerEditor(l);
+    }
+    ImGui::Unindent();
+
+    // Draw the crosshair
+    ImVec2 current_pos = ImGui::GetCursorScreenPos();
+    ImVec2 available = ImGui::GetContentRegionAvail();
+
+    float height_spacing = ImGui::GetFrameHeight() * 2;
+    ImVec2 center = current_pos;
+    center.x += (available.x / 2.0f);
+    center.y += height_spacing;
+
+    Theme theme;
+    *theme.mutable_crosshair()->mutable_color() = ToStoredColor(0.9);
+    *theme.mutable_crosshair()->mutable_outline_color() = ToStoredColor(0);
+
+    float w = available.x * 0.9;
+    ImVec2 back_min = center;
+    ImVec2 back_max = center;
+
+    back_min.x -= w / 2.0;
+    back_max.x += w / 2.0;
+
+    back_min.y -= height_spacing;
+    back_max.y += height_spacing;
+
+    ImGui::GetWindowDrawList()->AddRectFilled(back_min, back_max, ToImCol32(ToStoredColor(0.3)));
+    DrawCrosshair(c, 30, theme, center);
+  }
+
+  void DrawCrosshairLayerEditor(CrosshairLayer& l) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Type");
+    ImGui::SameLine();
+    CrosshairLayer::TypeCase type = l.type_case();
+    if (type == CrosshairLayer::TYPE_NOT_SET) {
+      type = CrosshairLayer::kDot;
+    }
+    ImGui::SimpleTypeDropdown("CrosshairType", &type, kCrosshairTypes, char_x_ * 12);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Scale");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    float scale = l.scale();
+    ImGui::InputFloat("##ScaleInput", &scale, 0.05, 0.2, "%.2f");
+    if (scale > 0) {
+      l.set_scale(scale);
+    } else {
+      l.clear_scale();
+    }
+
+    if (type == CrosshairLayer::kDot) {
+      DrawCrosshairDotEditor(l.mutable_dot());
+    }
+    if (type == CrosshairLayer::kPlus) {
+      DrawCrosshairPlusEditor(l.mutable_plus());
+    }
+  }
+
+  void DrawCrosshairDotEditor(DotCrosshair* c) {
+    InputFloatParams outline_thickness("Outline thickness",
+                                       FIELD_FUNCTIONS(float, c, DotCrosshair, outline_thickness));
+    outline_thickness.set_step(0.5, 1)
+        .set_precision(1)
+        .set_width(char_x_ * 8)
+        .set_default(1.5)
+        .set_min(0);
+    InputFloat(outline_thickness);
+  }
+
+  void DrawCrosshairPlusEditor(PlusCrosshair* c) {
+    ImGui::IdGuard cid("PlusCrosshair");
+
+    InputFloatParams horizontal_size("Horizontal size",
+                                     FIELD_FUNCTIONS(float, c, PlusCrosshair, horizontal_size));
+    horizontal_size.set_step(0.1, 0.5)
+        .set_precision(1)
+        .set_width(char_x_ * 8)
+        .set_default(1)
+        .set_min(0);
+    InputFloat(horizontal_size);
+
+    InputFloatParams vertical_size("Vertical size",
+                                   FIELD_FUNCTIONS(float, c, PlusCrosshair, vertical_size));
+    vertical_size.set_step(0.1, 0.5)
+        .set_precision(1)
+        .set_width(char_x_ * 8)
+        .set_default(1)
+        .set_min(0);
+    InputFloat(vertical_size);
+
+    InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, PlusCrosshair, thickness));
+    thickness.set_step(0.05, 0.15)
+        .set_precision(2)
+        .set_width(char_x_ * 10)
+        .set_min(0.1)
+        .set_default(1);
+    InputFloat(thickness);
+
+    InputFloatParams outline_thickness("Outline thickness",
+                                       FIELD_FUNCTIONS(float, c, PlusCrosshair, outline_thickness));
+    outline_thickness.set_step(0.1, 0.5)
+        .set_precision(1)
+        .set_width(char_x_ * 8)
+        .set_zero_is_unset();
+    InputFloat(outline_thickness);
+
+    InputFloatParams rounding("Rounding", FIELD_FUNCTIONS(float, c, PlusCrosshair, rounding));
+    rounding.set_step(0.5, 1).set_precision(1).set_width(char_x_ * 8).set_min(0);
+    InputFloat(rounding);
   }
 
   void OptionalInputFloat(const std::string& id,
