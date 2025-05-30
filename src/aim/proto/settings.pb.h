@@ -1407,21 +1407,9 @@ class CircleCrosshair final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kRadiusFieldNumber = 1,
-    kThicknessFieldNumber = 2,
+    kThicknessFieldNumber = 1,
   };
-  // float radius = 1;
-  bool has_radius() const;
-  void clear_radius() ;
-  float radius() const;
-  void set_radius(float value);
-
-  private:
-  float _internal_radius() const;
-  void _internal_set_radius(float value);
-
-  public:
-  // float thickness = 2;
+  // float thickness = 1;
   bool has_thickness() const;
   void clear_thickness() ;
   float thickness() const;
@@ -1437,7 +1425,7 @@ class CircleCrosshair final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 0,
+      0, 1, 0,
       0, 2>
       _table_;
 
@@ -1457,7 +1445,6 @@ class CircleCrosshair final : public ::google::protobuf::Message
                           const CircleCrosshair& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    float radius_;
     float thickness_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -3428,43 +3415,15 @@ inline void PlusCrosshair::_internal_set_horizontal_gap_size(float value) {
 
 // CircleCrosshair
 
-// float radius = 1;
-inline bool CircleCrosshair::has_radius() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void CircleCrosshair::clear_radius() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.radius_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline float CircleCrosshair::radius() const {
-  // @@protoc_insertion_point(field_get:aim.CircleCrosshair.radius)
-  return _internal_radius();
-}
-inline void CircleCrosshair::set_radius(float value) {
-  _internal_set_radius(value);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.CircleCrosshair.radius)
-}
-inline float CircleCrosshair::_internal_radius() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.radius_;
-}
-inline void CircleCrosshair::_internal_set_radius(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.radius_ = value;
-}
-
-// float thickness = 2;
+// float thickness = 1;
 inline bool CircleCrosshair::has_thickness() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
 inline void CircleCrosshair::clear_thickness() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.thickness_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline float CircleCrosshair::thickness() const {
   // @@protoc_insertion_point(field_get:aim.CircleCrosshair.thickness)
@@ -3472,7 +3431,7 @@ inline float CircleCrosshair::thickness() const {
 }
 inline void CircleCrosshair::set_thickness(float value) {
   _internal_set_thickness(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   // @@protoc_insertion_point(field_set:aim.CircleCrosshair.thickness)
 }
 inline float CircleCrosshair::_internal_thickness() const {
