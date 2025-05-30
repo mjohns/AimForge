@@ -108,6 +108,10 @@ class SettingsScreen : public UiScreen {
                           .set_width(char_x_ * 9),
                       PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
 
+    ImGui::InputBool(ImGui::InputBoolParams("DisablePerScenarioSettings")
+                         .set_label("Disable per scenario settings"),
+                     PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
+
     ImGui::InputBool(
         ImGui::InputBoolParams("DisableClickToStart").set_label("Disable \"Click to Start\""),
         PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start));

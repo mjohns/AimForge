@@ -49,7 +49,7 @@ std::string RecentViewTypeToString(RecentViewType t) {
     case RecentViewType::CROSSHAIR:
       return "Crosshair";
   }
-  assert(false);
+  return "UnknownViewType";
 }
 
 }  // namespace

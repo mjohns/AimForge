@@ -269,6 +269,9 @@ float SettingsManager::GetDpi() {
 }
 
 Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scenario_id) {
+  if (settings_.disable_per_scenario_settings()) {
+    return settings_;
+  }
   auto it = scenario_settings_cache_.find(scenario_id);
   ScenarioSettings scenario_settings;
   if (it != scenario_settings_cache_.end()) {
@@ -335,7 +338,7 @@ bool SettingsManager::MaybeFlushToDisk(const std::string& scenario_id) {
   return false;
 }
 void SettingsManager::FlushToDisk(const std::string& scenario_id) {
-  if (scenario_id.size() > 0) {
+  if (scenario_id.size() > 0 && !settings_.disable_per_scenario_settings()) {
     ScenarioSettings scenario_settings;
     scenario_settings.set_crosshair_size(settings_.crosshair_size());
     scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
