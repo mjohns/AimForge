@@ -94,18 +94,7 @@ struct SettingsUpdater {
 
   void SaveIfChangesMade(const std::string& scenario_id);
 
-  float cm_per_360;
-  float cm_per_360_jitter;
-  std::string theme_name;
-  float metronome_bpm;
-  float crosshair_size;
-  std::string crosshair_name;
-  float dpi;
-  bool disable_click_to_start = false;
-  bool auto_hold_tracking = false;
-  HealthBarSettings health_bar;
-  Keybinds keybinds;
-  SavedCrosshairs saved_crosshairs;
+  Settings settings;
 
  private:
   SettingsManager* settings_manager_;
