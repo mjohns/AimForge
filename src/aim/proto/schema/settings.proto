@@ -23,8 +23,7 @@ message PlusCrosshair {
 }
 
 message CircleCrosshair {
-    float radius = 1;
-    float thickness = 2;
+    float thickness = 1;
 }
 
 message ImageCrosshair {

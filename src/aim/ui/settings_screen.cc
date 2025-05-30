@@ -141,6 +141,7 @@ void InputFloat(InputFloatParams& params) {
 const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTypes{
     {CrosshairLayer::kDot, "Dot"},
     {CrosshairLayer::kPlus, "Plus"},
+    {CrosshairLayer::kCircle, "Circle"},
 };
 
 struct KeybindItem {
@@ -432,6 +433,9 @@ class SettingsScreen : public UiScreen {
     if (type == CrosshairLayer::kPlus) {
       DrawCrosshairPlusEditor(l.mutable_plus());
     }
+    if (type == CrosshairLayer::kCircle) {
+      DrawCrosshairCircleEditor(l.mutable_circle());
+    }
   }
 
   void DrawCrosshairDotEditor(DotCrosshair* c) {
@@ -443,6 +447,16 @@ class SettingsScreen : public UiScreen {
         .set_default(1.5)
         .set_min(0);
     InputFloat(outline_thickness);
+  }
+
+  void DrawCrosshairCircleEditor(CircleCrosshair* c) {
+    InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, CircleCrosshair, thickness));
+    thickness.set_step(0.5, 1)
+        .set_precision(1)
+        .set_width(char_x_ * 8)
+        .set_default(1.5)
+        .set_min(0.1);
+    InputFloat(thickness);
   }
 
   void DrawCrosshairPlusEditor(PlusCrosshair* c) {

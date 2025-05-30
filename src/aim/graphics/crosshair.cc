@@ -76,6 +76,13 @@ void DrawCrosshairLayer(const CrosshairLayer& layer,
     return;
   }
 
+  if (layer.has_circle()) {
+    float radius = crosshair_size / 4.0f;
+    float thickness = FirstGreaterThanZero(layer.circle().thickness(), 1.5);
+    draw_list->AddCircle(center, radius, main_color, 0, thickness);
+    return;
+  }
+
   if (layer.has_plus()) {
     const PlusCrosshair& plus = layer.plus();
     float base_length = crosshair_size * 0.55f;
