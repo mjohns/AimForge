@@ -440,17 +440,17 @@ class SettingsScreen : public UiScreen {
     }
     ImGui::SimpleTypeDropdown("CrosshairType", &type, kCrosshairTypes, char_x_ * 12);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Scale");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    float scale = l.scale();
-    ImGui::InputFloat("##ScaleInput", &scale, 0.05, 0.2, "%.2f");
-    if (scale > 0) {
-      l.set_scale(scale);
-    } else {
-      l.clear_scale();
-    }
+    InputFloatParams scale("Scale", FIELD_FUNCTIONS(float, &l, CrosshairLayer, scale));
+    scale.set_step(0.05, 0.2).set_precision(2).set_width(char_x_ * 12).set_default(1).set_min(0.01);
+    InputFloat(scale);
+
+    InputFloatParams alpha("Opacity", FIELD_FUNCTIONS(float, &l, CrosshairLayer, alpha));
+    alpha.set_step(0.02, 0.2)
+        .set_precision(2)
+        .set_width(char_x_ * 12)
+        .set_default(1)
+        .set_range(0.01, 1);
+    InputFloat(alpha);
 
     if (type == CrosshairLayer::kDot) {
       DrawCrosshairDotEditor(l.mutable_dot());
@@ -475,6 +475,8 @@ class SettingsScreen : public UiScreen {
   }
 
   void DrawCrosshairCircleEditor(CircleCrosshair* c) {
+    ImGui::IdGuard cid("CircleCrosshair");
+
     InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, CircleCrosshair, thickness));
     thickness.set_step(0.5, 1)
         .set_precision(1)
@@ -482,6 +484,13 @@ class SettingsScreen : public UiScreen {
         .set_default(1.5)
         .set_min(0.1);
     InputFloat(thickness);
+
+    bool use_outline_color = c->use_outline_color();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Use outline color");
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseOutline", &use_outline_color);
+    c->set_use_outline_color(use_outline_color);
   }
 
   void DrawCrosshairPlusEditor(PlusCrosshair* c) {
@@ -506,19 +515,12 @@ class SettingsScreen : public UiScreen {
     InputFloat(vertical_size);
 
     InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, PlusCrosshair, thickness));
-    thickness.set_step(0.1, 1)
-        .set_precision(1)
-        .set_width(char_x_ * 10)
-        .set_min(0.1)
-        .set_default(1);
+    thickness.set_step(0.1, 1).set_precision(1).set_width(char_x_ * 10).set_min(0.1).set_default(1);
     InputFloat(thickness);
 
     InputFloatParams outline_thickness("Outline thickness",
                                        FIELD_FUNCTIONS(float, c, PlusCrosshair, outline_thickness));
-    outline_thickness.set_step(0.1, 1)
-        .set_precision(1)
-        .set_width(char_x_ * 8)
-        .set_zero_is_unset();
+    outline_thickness.set_step(0.1, 1).set_precision(1).set_width(char_x_ * 8).set_zero_is_unset();
     InputFloat(outline_thickness);
 
     InputFloatParams rounding("Rounding", FIELD_FUNCTIONS(float, c, PlusCrosshair, rounding));

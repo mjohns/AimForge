@@ -1408,6 +1408,7 @@ class CircleCrosshair final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kThicknessFieldNumber = 1,
+    kUseOutlineColorFieldNumber = 2,
   };
   // float thickness = 1;
   bool has_thickness() const;
@@ -1420,12 +1421,23 @@ class CircleCrosshair final : public ::google::protobuf::Message
   void _internal_set_thickness(float value);
 
   public:
+  // bool use_outline_color = 2;
+  bool has_use_outline_color() const;
+  void clear_use_outline_color() ;
+  bool use_outline_color() const;
+  void set_use_outline_color(bool value);
+
+  private:
+  bool _internal_use_outline_color() const;
+  void _internal_set_use_outline_color(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.CircleCrosshair)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      0, 1, 0,
+      1, 2, 0,
       0, 2>
       _table_;
 
@@ -1446,6 +1458,7 @@ class CircleCrosshair final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     float thickness_;
+    bool use_outline_color_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3441,6 +3454,34 @@ inline float CircleCrosshair::_internal_thickness() const {
 inline void CircleCrosshair::_internal_set_thickness(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.thickness_ = value;
+}
+
+// bool use_outline_color = 2;
+inline bool CircleCrosshair::has_use_outline_color() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void CircleCrosshair::clear_use_outline_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.use_outline_color_ = false;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline bool CircleCrosshair::use_outline_color() const {
+  // @@protoc_insertion_point(field_get:aim.CircleCrosshair.use_outline_color)
+  return _internal_use_outline_color();
+}
+inline void CircleCrosshair::set_use_outline_color(bool value) {
+  _internal_set_use_outline_color(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.CircleCrosshair.use_outline_color)
+}
+inline bool CircleCrosshair::_internal_use_outline_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.use_outline_color_;
+}
+inline void CircleCrosshair::_internal_set_use_outline_color(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.use_outline_color_ = value;
 }
 
 // -------------------------------------------------------------------
