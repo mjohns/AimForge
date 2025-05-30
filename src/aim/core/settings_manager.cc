@@ -21,13 +21,6 @@ namespace aim {
 namespace {
 constexpr const float kDefaultDpi = 800;
 
-Crosshair GetDefaultCrosshair() {
-  Crosshair crosshair;
-  crosshair.set_name("default");
-  crosshair.add_layers()->mutable_dot()->set_outline_thickness(1);
-  return crosshair;
-}
-
 Settings GetDefaultSettings() {
   Settings settings;
   settings.set_dpi(kDefaultDpi);
@@ -465,6 +458,13 @@ HealthBarAppearance GetDefaultHealthBarAppearance() {
 
   *h.mutable_health_color() = ToStoredColor(0.3);
   return h;
+}
+
+Crosshair GetDefaultCrosshair() {
+  Crosshair crosshair;
+  crosshair.set_name("default");
+  crosshair.add_layers()->mutable_dot()->set_outline_thickness(1);
+  return crosshair;
 }
 
 }  // namespace aim

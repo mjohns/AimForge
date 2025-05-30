@@ -28,6 +28,7 @@ bool IsMappableKeyUpEvent(const SDL_Event& event);
 bool IsEscapeKeyDown(const SDL_Event& event);
 
 Theme GetDefaultTheme();
+Crosshair GetDefaultCrosshair();
 HealthBarAppearance GetDefaultHealthBarAppearance();
 
 struct ThemeCacheEntry {

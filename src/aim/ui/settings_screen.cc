@@ -352,11 +352,36 @@ class SettingsScreen : public UiScreen {
   }
 
   void DrawSavedCrosshairsEditor() {
-    ImGui::LoopId loop_id;
-    for (Crosshair& c : *settings_updater_.saved_crosshairs.mutable_crosshairs()) {
-      loop_id.Get();
-      DrawCrosshairEditor(c);
+    if (settings_updater_.saved_crosshairs.crosshairs_size() == 0) {
+      *settings_updater_.saved_crosshairs.add_crosshairs() = GetDefaultCrosshair();
     }
+    std::vector<std::string> names;
+    for (Crosshair& c : *settings_updater_.saved_crosshairs.mutable_crosshairs()) {
+      names.push_back(c.name());
+    }
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Crosshair");
+    edit_crosshair_index_ = ClampIndex(names, edit_crosshair_index_);
+    ImGui::SameLine();
+    std::string selected_name = names[edit_crosshair_index_];
+    ImGui::SimpleDropdown(
+        "CrosshairDropdown", &selected_name, names, char_x_ * 15, &edit_crosshair_index_);
+    ImGui::SameLine();
+    if (ImGui::Button(kIconAdd)) {
+      auto c = GetDefaultCrosshair();
+      c.set_name("New crosshair");
+      *settings_updater_.saved_crosshairs.add_crosshairs() = c;
+      edit_crosshair_index_ = settings_updater_.saved_crosshairs.crosshairs_size() - 1;
+    }
+    ImGui::HelpTooltip("Add a new saved crosshair");
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    DrawCrosshairEditor(
+        *settings_updater_.saved_crosshairs.mutable_crosshairs(edit_crosshair_index_));
   }
 
   void DrawCrosshairEditor(Crosshair& c) {
@@ -481,8 +506,8 @@ class SettingsScreen : public UiScreen {
     InputFloat(vertical_size);
 
     InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, PlusCrosshair, thickness));
-    thickness.set_step(0.05, 0.15)
-        .set_precision(2)
+    thickness.set_step(0.1, 1)
+        .set_precision(1)
         .set_width(char_x_ * 10)
         .set_min(0.1)
         .set_default(1);
@@ -490,7 +515,7 @@ class SettingsScreen : public UiScreen {
 
     InputFloatParams outline_thickness("Outline thickness",
                                        FIELD_FUNCTIONS(float, c, PlusCrosshair, outline_thickness));
-    outline_thickness.set_step(0.1, 0.5)
+    outline_thickness.set_step(0.1, 1)
         .set_precision(1)
         .set_width(char_x_ * 8)
         .set_zero_is_unset();
@@ -582,6 +607,8 @@ class SettingsScreen : public UiScreen {
   std::function<void(const SDL_Event&)> capture_key_fn_;
   std::vector<KeybindItem> keybind_items_;
   float char_x_ = 0;
+
+  int edit_crosshair_index_ = 0;
 };
 }  // namespace
 
