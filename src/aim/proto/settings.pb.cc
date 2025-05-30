@@ -177,7 +177,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr CircleCrosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        thickness_{0} {}
+        thickness_{0},
+        use_outline_color_{false} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR CircleCrosshair::CircleCrosshair(::_pbi::ConstantInitialized)
@@ -437,7 +438,9 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::CircleCrosshair, _impl_.thickness_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircleCrosshair, _impl_.use_outline_color_),
         0,
+        1,
         PROTOBUF_FIELD_OFFSET(::aim::ImageCrosshair, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ImageCrosshair, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -612,16 +615,16 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, 9, -1, sizeof(::aim::DotCrosshair)},
         {10, 25, -1, sizeof(::aim::PlusCrosshair)},
-        {32, 41, -1, sizeof(::aim::CircleCrosshair)},
-        {42, 51, -1, sizeof(::aim::ImageCrosshair)},
-        {52, 69, -1, sizeof(::aim::CrosshairLayer)},
-        {77, 87, -1, sizeof(::aim::Crosshair)},
-        {89, 102, -1, sizeof(::aim::HealthBarSettings)},
-        {107, -1, -1, sizeof(::aim::SavedCrosshairs)},
-        {116, 136, -1, sizeof(::aim::Settings)},
-        {148, 164, -1, sizeof(::aim::ScenarioSettings)},
-        {172, 184, -1, sizeof(::aim::KeyMapping)},
-        {188, 203, -1, sizeof(::aim::Keybinds)},
+        {32, 42, -1, sizeof(::aim::CircleCrosshair)},
+        {44, 53, -1, sizeof(::aim::ImageCrosshair)},
+        {54, 71, -1, sizeof(::aim::CrosshairLayer)},
+        {79, 89, -1, sizeof(::aim::Crosshair)},
+        {91, 104, -1, sizeof(::aim::HealthBarSettings)},
+        {109, -1, -1, sizeof(::aim::SavedCrosshairs)},
+        {118, 138, -1, sizeof(::aim::Settings)},
+        {150, 166, -1, sizeof(::aim::ScenarioSettings)},
+        {174, 186, -1, sizeof(::aim::KeyMapping)},
+        {190, 205, -1, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
@@ -645,47 +648,47 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "rizontal_size\030\002 \001(\002\022\025\n\rvertical_size\030\003 \001"
     "(\002\022\021\n\tthickness\030\004 \001(\002\022\031\n\021outline_thickne"
     "ss\030\005 \001(\002\022\031\n\021vertical_gap_size\030\006 \001(\002\022\033\n\023h"
-    "orizontal_gap_size\030\007 \001(\002\"$\n\017CircleCrossh"
-    "air\022\021\n\tthickness\030\001 \001(\002\"#\n\016ImageCrosshair"
-    "\022\021\n\tfile_name\030\001 \001(\t\"\246\002\n\016CrosshairLayer\022("
-    "\n\016override_color\030\001 \001(\0132\020.aim.StoredColor"
-    "\0220\n\026override_outline_color\030\002 \001(\0132\020.aim.S"
-    "toredColor\022\r\n\005scale\030\003 \001(\002\022\r\n\005alpha\030\004 \001(\002"
-    "\022 \n\003dot\030\n \001(\0132\021.aim.DotCrosshairH\000\022\"\n\004pl"
-    "us\030\013 \001(\0132\022.aim.PlusCrosshairH\000\022$\n\005image\030"
-    "\014 \001(\0132\023.aim.ImageCrosshairH\000\022&\n\006circle\030\r"
-    " \001(\0132\024.aim.CircleCrosshairH\000B\006\n\004type\">\n\t"
-    "Crosshair\022\014\n\004name\030\001 \001(\t\022#\n\006layers\030\002 \003(\0132"
-    "\023.aim.CrosshairLayer\"s\n\021HealthBarSetting"
-    "s\022\014\n\004show\030\001 \001(\010\022\024\n\014only_damaged\030\002 \001(\010\022\016\n"
-    "\006height\030\003 \001(\002\022\r\n\005width\030\004 \001(\002\022\033\n\023height_a"
-    "bove_target\030\005 \001(\002\"5\n\017SavedCrosshairs\022\"\n\n"
-    "crosshairs\030\001 \003(\0132\016.aim.Crosshair\"\334\002\n\010Set"
-    "tings\022\013\n\003dpi\030\001 \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\031"
-    "\n\021cm_per_360_jitter\030\013 \001(\002\022\022\n\ntheme_name\030"
-    "\003 \001(\t\022\025\n\rmetronome_bpm\030\004 \001(\002\022\026\n\016crosshai"
-    "r_size\030\005 \001(\002\022\036\n\026current_crosshair_name\030\006"
-    " \001(\t\022(\n\020saved_crosshairs\030\007 \003(\0132\016.aim.Cro"
-    "sshair\022\036\n\026disable_click_to_start\030\010 \001(\010\022\037"
-    "\n\010keybinds\030\t \001(\0132\r.aim.Keybinds\022\032\n\022auto_"
-    "hold_tracking\030\n \001(\010\022*\n\nhealth_bar\030\014 \001(\0132"
-    "\026.aim.HealthBarSettings\"\344\001\n\020ScenarioSett"
-    "ings\022\022\n\ncm_per_360\030\001 \001(\002\022\031\n\021cm_per_360_j"
-    "itter\030\006 \001(\002\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rmetro"
-    "nome_bpm\030\003 \001(\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026"
-    "\n\016crosshair_name\030\005 \001(\t\022\032\n\022auto_hold_trac"
-    "king\030\007 \001(\010\022*\n\nhealth_bar\030\010 \001(\0132\026.aim.Hea"
-    "lthBarSettings\"T\n\nKeyMapping\022\020\n\010mapping1"
-    "\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001"
-    "(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fir"
-    "e\030\001 \001(\0132\017.aim.KeyMapping\022)\n\020restart_scen"
-    "ario\030\002 \001(\0132\017.aim.KeyMapping\022&\n\rnext_scen"
-    "ario\030\003 \001(\0132\017.aim.KeyMapping\022\'\n\016quick_set"
-    "tings\030\004 \001(\0132\017.aim.KeyMapping\022.\n\025adjust_c"
-    "rosshair_size\030\005 \001(\0132\017.aim.KeyMapping\022(\n\017"
-    "quick_metronome\030\006 \001(\0132\017.aim.KeyMapping\022&"
-    "\n\redit_scenario\030\007 \001(\0132\017.aim.KeyMappingb\010"
-    "editionsp\350\007"
+    "orizontal_gap_size\030\007 \001(\002\"\?\n\017CircleCrossh"
+    "air\022\021\n\tthickness\030\001 \001(\002\022\031\n\021use_outline_co"
+    "lor\030\002 \001(\010\"#\n\016ImageCrosshair\022\021\n\tfile_name"
+    "\030\001 \001(\t\"\246\002\n\016CrosshairLayer\022(\n\016override_co"
+    "lor\030\001 \001(\0132\020.aim.StoredColor\0220\n\026override_"
+    "outline_color\030\002 \001(\0132\020.aim.StoredColor\022\r\n"
+    "\005scale\030\003 \001(\002\022\r\n\005alpha\030\004 \001(\002\022 \n\003dot\030\n \001(\013"
+    "2\021.aim.DotCrosshairH\000\022\"\n\004plus\030\013 \001(\0132\022.ai"
+    "m.PlusCrosshairH\000\022$\n\005image\030\014 \001(\0132\023.aim.I"
+    "mageCrosshairH\000\022&\n\006circle\030\r \001(\0132\024.aim.Ci"
+    "rcleCrosshairH\000B\006\n\004type\">\n\tCrosshair\022\014\n\004"
+    "name\030\001 \001(\t\022#\n\006layers\030\002 \003(\0132\023.aim.Crossha"
+    "irLayer\"s\n\021HealthBarSettings\022\014\n\004show\030\001 \001"
+    "(\010\022\024\n\014only_damaged\030\002 \001(\010\022\016\n\006height\030\003 \001(\002"
+    "\022\r\n\005width\030\004 \001(\002\022\033\n\023height_above_target\030\005"
+    " \001(\002\"5\n\017SavedCrosshairs\022\"\n\ncrosshairs\030\001 "
+    "\003(\0132\016.aim.Crosshair\"\334\002\n\010Settings\022\013\n\003dpi\030"
+    "\001 \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\031\n\021cm_per_360_"
+    "jitter\030\013 \001(\002\022\022\n\ntheme_name\030\003 \001(\t\022\025\n\rmetr"
+    "onome_bpm\030\004 \001(\002\022\026\n\016crosshair_size\030\005 \001(\002\022"
+    "\036\n\026current_crosshair_name\030\006 \001(\t\022(\n\020saved"
+    "_crosshairs\030\007 \003(\0132\016.aim.Crosshair\022\036\n\026dis"
+    "able_click_to_start\030\010 \001(\010\022\037\n\010keybinds\030\t "
+    "\001(\0132\r.aim.Keybinds\022\032\n\022auto_hold_tracking"
+    "\030\n \001(\010\022*\n\nhealth_bar\030\014 \001(\0132\026.aim.HealthB"
+    "arSettings\"\344\001\n\020ScenarioSettings\022\022\n\ncm_pe"
+    "r_360\030\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022"
+    "\n\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001("
+    "\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crosshair_n"
+    "ame\030\005 \001(\t\022\032\n\022auto_hold_tracking\030\007 \001(\010\022*\n"
+    "\nhealth_bar\030\010 \001(\0132\026.aim.HealthBarSetting"
+    "s\"T\n\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010map"
+    "ping2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping"
+    "4\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim"
+    ".KeyMapping\022)\n\020restart_scenario\030\002 \001(\0132\017."
+    "aim.KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017."
+    "aim.KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017"
+    ".aim.KeyMapping\022.\n\025adjust_crosshair_size"
+    "\030\005 \001(\0132\017.aim.KeyMapping\022(\n\017quick_metrono"
+    "me\030\006 \001(\0132\017.aim.KeyMapping\022&\n\redit_scenar"
+    "io\030\007 \001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_settings_2eproto_deps[1] =
     {
@@ -695,7 +698,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1851,
+    1878,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -1311,7 +1314,12 @@ inline PROTOBUF_NDEBUG_INLINE CircleCrosshair::Impl_::Impl_(
 
 inline void CircleCrosshair::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.thickness_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, thickness_),
+           0,
+           offsetof(Impl_, use_outline_color_) -
+               offsetof(Impl_, thickness_) +
+               sizeof(Impl_::use_outline_color_));
 }
 CircleCrosshair::~CircleCrosshair() {
   // @@protoc_insertion_point(destructor:aim.CircleCrosshair)
@@ -1360,15 +1368,15 @@ const ::google::protobuf::internal::ClassData* CircleCrosshair::GetClassData() c
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 0, 2> CircleCrosshair::_table_ = {
+const ::_pbi::TcParseTable<1, 2, 0, 0, 2> CircleCrosshair::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_._has_bits_),
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
+    2,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -1378,6 +1386,9 @@ const ::_pbi::TcParseTable<0, 1, 0, 0, 2> CircleCrosshair::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::CircleCrosshair>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
+    // bool use_outline_color = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(CircleCrosshair, _impl_.use_outline_color_), 1>(),
+     {16, 1, 0, PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_.use_outline_color_)}},
     // float thickness = 1;
     {::_pbi::TcParser::FastF32S1,
      {13, 0, 0, PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_.thickness_)}},
@@ -1387,6 +1398,9 @@ const ::_pbi::TcParseTable<0, 1, 0, 0, 2> CircleCrosshair::_table_ = {
     // float thickness = 1;
     {PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_.thickness_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // bool use_outline_color = 2;
+    {PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_.use_outline_color_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }},
   // no aux_entries
   {{
@@ -1400,7 +1414,12 @@ PROTOBUF_NOINLINE void CircleCrosshair::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.thickness_ = 0;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.thickness_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.use_outline_color_) -
+        reinterpret_cast<char*>(&_impl_.thickness_)) + sizeof(_impl_.use_outline_color_));
+  }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -1428,6 +1447,13 @@ PROTOBUF_NOINLINE void CircleCrosshair::Clear() {
                 1, this_._internal_thickness(), target);
           }
 
+          // bool use_outline_color = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                2, this_._internal_use_outline_color(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1451,11 +1477,16 @@ PROTOBUF_NOINLINE void CircleCrosshair::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-           {
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
             // float thickness = 1;
-            cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
+            }
+            // bool use_outline_color = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 2;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -1471,8 +1502,13 @@ void CircleCrosshair::MergeImpl(::google::protobuf::MessageLite& to_msg, const :
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    _this->_impl_.thickness_ = from._impl_.thickness_;
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.thickness_ = from._impl_.thickness_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.use_outline_color_ = from._impl_.use_outline_color_;
+    }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
@@ -1490,7 +1526,12 @@ void CircleCrosshair::InternalSwap(CircleCrosshair* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-        swap(_impl_.thickness_, other->_impl_.thickness_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_.use_outline_color_)
+      + sizeof(CircleCrosshair::_impl_.use_outline_color_)
+      - PROTOBUF_FIELD_OFFSET(CircleCrosshair, _impl_.thickness_)>(
+          reinterpret_cast<char*>(&_impl_.thickness_),
+          reinterpret_cast<char*>(&other->_impl_.thickness_));
 }
 
 ::google::protobuf::Metadata CircleCrosshair::GetMetadata() const {

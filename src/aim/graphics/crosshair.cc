@@ -67,7 +67,7 @@ void DrawCrosshairLayer(const CrosshairLayer& layer,
   }
 
   ImDrawList* draw_list = ImGui::GetWindowDrawList();
-  //draw_list->Flags
+  // draw_list->Flags
 
   if (layer.has_dot()) {
     float radius = crosshair_size / 4.0f;
@@ -81,7 +81,11 @@ void DrawCrosshairLayer(const CrosshairLayer& layer,
   if (layer.has_circle()) {
     float radius = crosshair_size / 4.0f;
     float thickness = FirstGreaterThanZero(layer.circle().thickness(), 1.5);
-    draw_list->AddCircle(center, radius, main_color, 0, thickness);
+    draw_list->AddCircle(center,
+                         radius,
+                         layer.circle().use_outline_color() ? outline_color : main_color,
+                         0,
+                         thickness);
     return;
   }
 
