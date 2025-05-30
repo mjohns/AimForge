@@ -375,6 +375,16 @@ class SettingsScreen : public UiScreen {
     }
     ImGui::HelpTooltip("Add a new saved crosshair");
 
+    if (names.size() > 1) {
+      ImGui::SameLine();
+      if (ImGui::Button(kIconCancel)) {
+        auto* crosshairs = settings_updater_.saved_crosshairs.mutable_crosshairs();
+        crosshairs->erase(crosshairs->begin() + edit_crosshair_index_);
+        edit_crosshair_index_ = 0;
+      }
+      ImGui::HelpTooltip("Delete current crosshair");
+    }
+
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Separator();
