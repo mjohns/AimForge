@@ -221,6 +221,8 @@ int Application::Initialize() {
   // ImGui::StyleColorsDark();
   ImGui::StyleColorsClassic();
   style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
+  style.AntiAliasedLines = true;
+  style.AntiAliasedFill = true;
 
   // Setup Platform/Renderer backends
   ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);

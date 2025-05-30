@@ -110,7 +110,8 @@ static void InputJitteredFloat(const std::string& id,
 static bool SimpleDropdown(const std::string& id,
                            std::string* value,
                            const std::vector<std::string>& values,
-                           float input_width = -1) {
+                           float input_width = -1,
+                           int* selected_index = nullptr) {
   ImGui::IdGuard cid(id);
   if (input_width > 0) {
     ImGui::PushItemWidth(input_width);
@@ -118,13 +119,16 @@ static bool SimpleDropdown(const std::string& id,
   bool item_was_selected = false;
   ImGuiComboFlags combo_flags = 0;
   if (ImGui::BeginCombo("##Combo", value->c_str(), combo_flags)) {
-    ImGui::LoopId loop_id;
-    for (const auto& item : values) {
-      auto id = loop_id.Get();
+    for (int i = 0; i < values.size(); ++i) {
+      ImGui::IdGuard lid(i);
+      const auto& item = values[i];
       bool is_selected = item == *value;
       if (ImGui::Selectable(item.c_str(), is_selected)) {
         *value = item;
         item_was_selected = true;
+        if (selected_index != nullptr) {
+          *selected_index = i;
+        }
       }
       if (is_selected) {
         ImGui::SetItemDefaultFocus();

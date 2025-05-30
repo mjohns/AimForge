@@ -11,6 +11,7 @@ namespace aim {
 static const char* kIconHelp = "\xEE\xA2\x87";
 static const char* kIconInfo = "\xEE\xA2\x8E";
 static const char* kIconCancel = "\xEE\x97\x89";
+static const char* kIconAdd = "\xEE\x85\x85";
 static const char* kIconClose = "\xEE\x97\x8D";
 static const char* kIconDelete = "\xEE\xA1\xB2";
 static const char* kIconMoreVert = "\xEE\x97\x94";
