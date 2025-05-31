@@ -247,10 +247,11 @@ class AppUiImpl : public AppUi {
 
     ImGui::EndChild();
 
-    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable |
-                            ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV;
+    ImGuiTableFlags main_column_flags = ImGuiTableFlags_SizingStretchProp |
+                                        ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter |
+                                        ImGuiTableFlags_BordersV;
 
-    if (ImGui::BeginTable("MainColumns", 3, flags)) {
+    if (ImGui::BeginTable("MainColumns", 2, main_column_flags)) {
       ImGui::TableNextColumn();
       DrawLeftNav();
 
@@ -260,23 +261,11 @@ class AppUiImpl : public AppUi {
         if (app_screen_ == AppScreen::SCENARIOS) {
           DrawScenariosScreen(ScenarioBrowserType::FULL);
         }
-        if (app_screen_ == AppScreen::RECENT_SCENARIOS) {
-          DrawScenariosScreen(ScenarioBrowserType::RECENT);
-        }
-
         if (app_screen_ == AppScreen::PLAYLISTS) {
           DrawPlaylistsScreen();
         }
-
-        // ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
       }
       ImGui::EndChild();
-
-      ImGui::TableNextColumn();
-
-      if (app_screen_ == AppScreen::PLAYLISTS) {
-        DrawCurrentPlaylistScreen();
-      }
 
       ImGui::EndTable();
     }
@@ -303,9 +292,7 @@ class AppUiImpl : public AppUi {
     // Place exit at bottom
     // float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
     ImGui::SetCursorAtBottom();
-    if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(),
-                          app_screen_ == AppScreen::EXIT)) {
-      app_screen_ = AppScreen::EXIT;
+    if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
       // Show a screen to confirm?
       throw ApplicationExitException();
     }
@@ -351,15 +338,30 @@ class AppUiImpl : public AppUi {
   }
 
   void DrawPlaylistsScreen() {
-    PlaylistListResult result;
-    playlist_list_component_->Show(&result);
-    if (result.open_playlist.has_value()) {
-      auto playlist = *result.open_playlist;
-      app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
-      app_->playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
-    }
-    if (result.reload_playlists) {
-      app_->playlist_manager()->LoadPlaylistsFromDisk();
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+    ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV;
+
+    if (ImGui::BeginTable("PlaylistColumns", 3, flags)) {
+      ImGui::TableNextColumn();
+
+      if (ImGui::BeginChild("Playlists")) {
+        PlaylistListResult result;
+        playlist_list_component_->Show(&result);
+        if (result.open_playlist.has_value()) {
+          auto playlist = *result.open_playlist;
+          app_->history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
+          app_->playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
+        }
+        if (result.reload_playlists) {
+          app_->playlist_manager()->LoadPlaylistsFromDisk();
+        }
+      }
+      ImGui::EndChild();
+
+      ImGui::TableNextColumn();
+      DrawCurrentPlaylistScreen();
+
+      ImGui::EndTable();
     }
   }
 
@@ -377,7 +379,7 @@ class AppUiImpl : public AppUi {
     }
   }
 
-  AppScreen app_screen_ = AppScreen::SCENARIOS;
+  AppScreen app_screen_ = AppScreen::PLAYLISTS;
   ScenarioRunOption scenario_run_option_ = ScenarioRunOption::NONE;
   Application* app_;
 
