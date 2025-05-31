@@ -2780,6 +2780,7 @@ class Settings final : public ::google::protobuf::Message
     kCrosshairSizeFieldNumber = 5,
     kDisableClickToStartFieldNumber = 8,
     kAutoHoldTrackingFieldNumber = 10,
+    kDisablePerScenarioSettingsFieldNumber = 13,
     kCmPer360JitterFieldNumber = 11,
   };
   // repeated .aim.Crosshair saved_crosshairs = 7;
@@ -2929,6 +2930,17 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_auto_hold_tracking(bool value);
 
   public:
+  // bool disable_per_scenario_settings = 13;
+  bool has_disable_per_scenario_settings() const;
+  void clear_disable_per_scenario_settings() ;
+  bool disable_per_scenario_settings() const;
+  void set_disable_per_scenario_settings(bool value);
+
+  private:
+  bool _internal_disable_per_scenario_settings() const;
+  void _internal_set_disable_per_scenario_settings(bool value);
+
+  public:
   // float cm_per_360_jitter = 11;
   bool has_cm_per_360_jitter() const;
   void clear_cm_per_360_jitter() ;
@@ -2945,7 +2957,7 @@ class Settings final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 12, 3,
+      4, 13, 3,
       61, 2>
       _table_;
 
@@ -2976,6 +2988,7 @@ class Settings final : public ::google::protobuf::Message
     float crosshair_size_;
     bool disable_click_to_start_;
     bool auto_hold_tracking_;
+    bool disable_per_scenario_settings_;
     float cm_per_360_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -4505,13 +4518,13 @@ inline void Settings::_internal_set_cm_per_360(float value) {
 
 // float cm_per_360_jitter = 11;
 inline bool Settings::has_cm_per_360_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
   return value;
 }
 inline void Settings::clear_cm_per_360_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000400u;
+  _impl_._has_bits_[0] &= ~0x00000800u;
 }
 inline float Settings::cm_per_360_jitter() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360_jitter)
@@ -4519,7 +4532,7 @@ inline float Settings::cm_per_360_jitter() const {
 }
 inline void Settings::set_cm_per_360_jitter(float value) {
   _internal_set_cm_per_360_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000400u;
+  _impl_._has_bits_[0] |= 0x00000800u;
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360_jitter)
 }
 inline float Settings::_internal_cm_per_360_jitter() const {
@@ -5020,6 +5033,34 @@ inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* value) 
 
   _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.health_bar)
+}
+
+// bool disable_per_scenario_settings = 13;
+inline bool Settings::has_disable_per_scenario_settings() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  return value;
+}
+inline void Settings::clear_disable_per_scenario_settings() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.disable_per_scenario_settings_ = false;
+  _impl_._has_bits_[0] &= ~0x00000400u;
+}
+inline bool Settings::disable_per_scenario_settings() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.disable_per_scenario_settings)
+  return _internal_disable_per_scenario_settings();
+}
+inline void Settings::set_disable_per_scenario_settings(bool value) {
+  _internal_set_disable_per_scenario_settings(value);
+  _impl_._has_bits_[0] |= 0x00000400u;
+  // @@protoc_insertion_point(field_set:aim.Settings.disable_per_scenario_settings)
+}
+inline bool Settings::_internal_disable_per_scenario_settings() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.disable_per_scenario_settings_;
+}
+inline void Settings::_internal_set_disable_per_scenario_settings(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.disable_per_scenario_settings_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -343,6 +343,7 @@ inline constexpr Settings::Impl_::Impl_(
         crosshair_size_{0},
         disable_click_to_start_{false},
         auto_hold_tracking_{false},
+        disable_per_scenario_settings_{false},
         cm_per_360_jitter_{0} {}
 
 template <typename>
@@ -535,9 +536,10 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.keybinds_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.auto_hold_tracking_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.health_bar_),
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.disable_per_scenario_settings_),
         4,
         5,
-        10,
+        11,
         0,
         6,
         7,
@@ -547,6 +549,7 @@ const ::uint32_t
         2,
         9,
         3,
+        10,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -621,10 +624,10 @@ static const ::_pbi::MigrationSchema
         {79, 89, -1, sizeof(::aim::Crosshair)},
         {91, 104, -1, sizeof(::aim::HealthBarSettings)},
         {109, -1, -1, sizeof(::aim::SavedCrosshairs)},
-        {118, 138, -1, sizeof(::aim::Settings)},
-        {150, 166, -1, sizeof(::aim::ScenarioSettings)},
-        {174, 186, -1, sizeof(::aim::KeyMapping)},
-        {190, 205, -1, sizeof(::aim::Keybinds)},
+        {118, 139, -1, sizeof(::aim::Settings)},
+        {152, 168, -1, sizeof(::aim::ScenarioSettings)},
+        {176, 188, -1, sizeof(::aim::KeyMapping)},
+        {192, 207, -1, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
@@ -664,7 +667,7 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "(\010\022\024\n\014only_damaged\030\002 \001(\010\022\016\n\006height\030\003 \001(\002"
     "\022\r\n\005width\030\004 \001(\002\022\033\n\023height_above_target\030\005"
     " \001(\002\"5\n\017SavedCrosshairs\022\"\n\ncrosshairs\030\001 "
-    "\003(\0132\016.aim.Crosshair\"\334\002\n\010Settings\022\013\n\003dpi\030"
+    "\003(\0132\016.aim.Crosshair\"\203\003\n\010Settings\022\013\n\003dpi\030"
     "\001 \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\031\n\021cm_per_360_"
     "jitter\030\013 \001(\002\022\022\n\ntheme_name\030\003 \001(\t\022\025\n\rmetr"
     "onome_bpm\030\004 \001(\002\022\026\n\016crosshair_size\030\005 \001(\002\022"
@@ -673,22 +676,23 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "able_click_to_start\030\010 \001(\010\022\037\n\010keybinds\030\t "
     "\001(\0132\r.aim.Keybinds\022\032\n\022auto_hold_tracking"
     "\030\n \001(\010\022*\n\nhealth_bar\030\014 \001(\0132\026.aim.HealthB"
-    "arSettings\"\344\001\n\020ScenarioSettings\022\022\n\ncm_pe"
-    "r_360\030\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022"
-    "\n\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001("
-    "\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crosshair_n"
-    "ame\030\005 \001(\t\022\032\n\022auto_hold_tracking\030\007 \001(\010\022*\n"
-    "\nhealth_bar\030\010 \001(\0132\026.aim.HealthBarSetting"
-    "s\"T\n\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010map"
-    "ping2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping"
-    "4\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim"
-    ".KeyMapping\022)\n\020restart_scenario\030\002 \001(\0132\017."
-    "aim.KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017."
-    "aim.KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017"
-    ".aim.KeyMapping\022.\n\025adjust_crosshair_size"
-    "\030\005 \001(\0132\017.aim.KeyMapping\022(\n\017quick_metrono"
-    "me\030\006 \001(\0132\017.aim.KeyMapping\022&\n\redit_scenar"
-    "io\030\007 \001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
+    "arSettings\022%\n\035disable_per_scenario_setti"
+    "ngs\030\r \001(\010\"\344\001\n\020ScenarioSettings\022\022\n\ncm_per"
+    "_360\030\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n"
+    "\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002"
+    "\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crosshair_na"
+    "me\030\005 \001(\t\022\032\n\022auto_hold_tracking\030\007 \001(\010\022*\n\n"
+    "health_bar\030\010 \001(\0132\026.aim.HealthBarSettings"
+    "\"T\n\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapp"
+    "ing2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4"
+    "\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim."
+    "KeyMapping\022)\n\020restart_scenario\030\002 \001(\0132\017.a"
+    "im.KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.a"
+    "im.KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017."
+    "aim.KeyMapping\022.\n\025adjust_crosshair_size\030"
+    "\005 \001(\0132\017.aim.KeyMapping\022(\n\017quick_metronom"
+    "e\030\006 \001(\0132\017.aim.KeyMapping\022&\n\redit_scenari"
+    "o\030\007 \001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_settings_2eproto_deps[1] =
     {
@@ -698,7 +702,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1878,
+    1917,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -3380,15 +3384,15 @@ const ::google::protobuf::internal::ClassData* Settings::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 12, 3, 61, 2> Settings::_table_ = {
+const ::_pbi::TcParseTable<4, 13, 3, 61, 2> Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
-    12, 120,  // max_field_number, fast_idx_mask
+    13, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294963200,  // skipmap
+    4294959104,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    12,  // num_field_entries
+    13,  // num_field_entries
     3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -3431,11 +3435,13 @@ const ::_pbi::TcParseTable<4, 12, 3, 61, 2> Settings::_table_ = {
      {80, 9, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.auto_hold_tracking_)}},
     // float cm_per_360_jitter = 11;
     {::_pbi::TcParser::FastF32S1,
-     {93, 10, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_jitter_)}},
+     {93, 11, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_jitter_)}},
     // .aim.HealthBarSettings health_bar = 12;
     {::_pbi::TcParser::FastMtS1,
      {98, 3, 2, PROTOBUF_FIELD_OFFSET(Settings, _impl_.health_bar_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // bool disable_per_scenario_settings = 13;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_per_scenario_settings_), 10>(),
+     {104, 10, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
@@ -3472,11 +3478,14 @@ const ::_pbi::TcParseTable<4, 12, 3, 61, 2> Settings::_table_ = {
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.auto_hold_tracking_), _Internal::kHasBitsOffset + 9, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // float cm_per_360_jitter = 11;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_jitter_), _Internal::kHasBitsOffset + 10, 0,
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_jitter_), _Internal::kHasBitsOffset + 11, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.HealthBarSettings health_bar = 12;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.health_bar_), _Internal::kHasBitsOffset + 3, 2,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool disable_per_scenario_settings = 13;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_), _Internal::kHasBitsOffset + 10, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Crosshair>()},
     {::_pbi::TcParser::GetTable<::aim::Keybinds>()},
@@ -3519,7 +3528,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
         reinterpret_cast<char*>(&_impl_.crosshair_size_) -
         reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.crosshair_size_));
   }
-  if (cached_has_bits & 0x00000700u) {
+  if (cached_has_bits & 0x00000f00u) {
     ::memset(&_impl_.disable_click_to_start_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.cm_per_360_jitter_) -
         reinterpret_cast<char*>(&_impl_.disable_click_to_start_)) + sizeof(_impl_.cm_per_360_jitter_));
@@ -3621,7 +3630,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
           }
 
           // float cm_per_360_jitter = 11;
-          if (cached_has_bits & 0x00000400u) {
+          if (cached_has_bits & 0x00000800u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 11, this_._internal_cm_per_360_jitter(), target);
@@ -3632,6 +3641,13 @@ PROTOBUF_NOINLINE void Settings::Clear() {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 12, *this_._impl_.health_bar_, this_._impl_.health_bar_->GetCachedSize(), target,
                 stream);
+          }
+
+          // bool disable_per_scenario_settings = 13;
+          if (cached_has_bits & 0x00000400u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                13, this_._internal_disable_per_scenario_settings(), target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -3706,7 +3722,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
               total_size += 5;
             }
           }
-          if (cached_has_bits & 0x00000700u) {
+          if (cached_has_bits & 0x00000f00u) {
             // bool disable_click_to_start = 8;
             if (cached_has_bits & 0x00000100u) {
               total_size += 2;
@@ -3715,8 +3731,12 @@ PROTOBUF_NOINLINE void Settings::Clear() {
             if (cached_has_bits & 0x00000200u) {
               total_size += 2;
             }
-            // float cm_per_360_jitter = 11;
+            // bool disable_per_scenario_settings = 13;
             if (cached_has_bits & 0x00000400u) {
+              total_size += 2;
+            }
+            // float cm_per_360_jitter = 11;
+            if (cached_has_bits & 0x00000800u) {
               total_size += 5;
             }
           }
@@ -3774,7 +3794,7 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
       _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
     }
   }
-  if (cached_has_bits & 0x00000700u) {
+  if (cached_has_bits & 0x00000f00u) {
     if (cached_has_bits & 0x00000100u) {
       _this->_impl_.disable_click_to_start_ = from._impl_.disable_click_to_start_;
     }
@@ -3782,6 +3802,9 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
       _this->_impl_.auto_hold_tracking_ = from._impl_.auto_hold_tracking_;
     }
     if (cached_has_bits & 0x00000400u) {
+      _this->_impl_.disable_per_scenario_settings_ = from._impl_.disable_per_scenario_settings_;
+    }
+    if (cached_has_bits & 0x00000800u) {
       _this->_impl_.cm_per_360_jitter_ = from._impl_.cm_per_360_jitter_;
     }
   }
