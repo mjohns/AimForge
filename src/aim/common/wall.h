@@ -13,7 +13,7 @@ struct Wall {
   float width;
   float height;
 
-float GetRegionLength(const RegionLength& r) const;
+  float GetRegionLength(const RegionLength& r) const;
   glm::vec2 GetRegionVec2(const RegionVec2& v) const;
 };
 

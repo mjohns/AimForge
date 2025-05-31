@@ -30,7 +30,7 @@ class WallArcScenario : public BaseScenario {
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     auto arc = params.def.wall_arc_def();
     width_ = wall_.GetRegionLength(arc.width());
-    height_ = wall_.GetRegionLength(arc.height() );
+    height_ = wall_.GetRegionLength(arc.height());
 
     if (arc.control_height() != 0) {
       control_.y = arc.control_height();

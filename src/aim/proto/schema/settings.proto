@@ -23,12 +23,12 @@ message PlusCrosshair {
 }
 
 message CircleCrosshair {
-    float thickness = 1;
-    bool use_outline_color = 2;
+  float thickness = 1;
+  bool use_outline_color = 2;
 }
 
 message ImageCrosshair {
-   string file_name = 1;
+  string file_name = 1;
 }
 
 message CrosshairLayer {

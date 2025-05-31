@@ -129,7 +129,6 @@ class QuickSettingsScreen : public UiScreen {
         }
       }
 
-
       ImGui::Spacing();
       if (ImGui::Button("0", button_sz)) {
         updater_.settings.clear_metronome_bpm();
