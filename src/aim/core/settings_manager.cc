@@ -356,79 +356,34 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* h
     : settings_manager_(settings_manager), history_db_(history_db) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (current_settings != nullptr) {
-    cm_per_360 = current_settings->cm_per_360();
-    cm_per_360_jitter = current_settings->cm_per_360_jitter();
-    theme_name = current_settings->theme_name();
-    metronome_bpm = current_settings->metronome_bpm();
-    dpi = current_settings->dpi();
-    crosshair_size = current_settings->crosshair_size();
-    crosshair_name = current_settings->current_crosshair_name();
-    disable_click_to_start = current_settings->disable_click_to_start();
-    auto_hold_tracking = current_settings->auto_hold_tracking();
-    keybinds = current_settings->keybinds();
-    health_bar = current_settings->health_bar();
-    saved_crosshairs = GetSavedCrosshairs(*current_settings);
+    settings = *current_settings;
   }
 }
 
 void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
-  if (cm_per_360 > 0) {
-    current_settings->set_cm_per_360(cm_per_360);
-    settings_manager_->MarkDirty();
+  if (current_settings == nullptr) {
+    Logger::get()->warn("No settings available at save time");
+    return;
   }
-  if (cm_per_360_jitter != current_settings->cm_per_360_jitter()) {
-    current_settings->set_cm_per_360_jitter(cm_per_360_jitter);
-    settings_manager_->MarkDirty();
+  if (google::protobuf::util::MessageDifferencer::Equivalent(*current_settings, settings)) {
+    return;
   }
+  std::string theme_name = settings.theme_name();
   if (current_settings->theme_name() != theme_name) {
-    current_settings->set_theme_name(theme_name);
-    settings_manager_->MarkDirty();
     if (theme_name.size() > 0) {
       history_db_->UpdateRecentView(RecentViewType::THEME, theme_name);
     }
   }
+  std::string crosshair_name = settings.current_crosshair_name();
   if (current_settings->current_crosshair_name() != crosshair_name) {
-    current_settings->set_current_crosshair_name(crosshair_name);
-    settings_manager_->MarkDirty();
     if (crosshair_name.size() > 0) {
       history_db_->UpdateRecentView(RecentViewType::CROSSHAIR, crosshair_name);
     }
   }
-  if (current_settings->disable_click_to_start() != disable_click_to_start) {
-    current_settings->set_disable_click_to_start(disable_click_to_start);
-    settings_manager_->MarkDirty();
-  }
-  if (current_settings->auto_hold_tracking() != auto_hold_tracking) {
-    current_settings->set_auto_hold_tracking(auto_hold_tracking);
-    settings_manager_->MarkDirty();
-  }
-  auto original_saved_crosshairs = GetSavedCrosshairs(*current_settings);
-  if (!google::protobuf::util::MessageDifferencer::Equivalent(original_saved_crosshairs,
-                                                              saved_crosshairs)) {
-    current_settings->clear_saved_crosshairs();
-    for (const Crosshair& c : saved_crosshairs.crosshairs()) {
-      *current_settings->add_saved_crosshairs() = c;
-    }
-    settings_manager_->MarkDirty();
-  }
-  if (metronome_bpm >= 0 && current_settings->metronome_bpm() != metronome_bpm) {
-    current_settings->set_metronome_bpm(metronome_bpm);
-    settings_manager_->MarkDirty();
-  }
-  if (dpi >= 0 && current_settings->dpi() != dpi) {
-    current_settings->set_dpi(dpi);
-    settings_manager_->MarkDirty();
-  }
-  if (crosshair_size >= 0 && current_settings->crosshair_size() != crosshair_size) {
-    current_settings->set_crosshair_size(crosshair_size);
-    settings_manager_->MarkDirty();
-  }
-  if (!google::protobuf::util::MessageDifferencer::Equivalent(health_bar,
-                                                              current_settings->health_bar())) {
-    *current_settings->mutable_health_bar() = health_bar;
-    settings_manager_->MarkDirty();
-  }
+
+  *current_settings = settings;
+  settings_manager_->MarkDirty();
   settings_manager_->MaybeFlushToDisk(scenario_id);
   settings_manager_->MaybeInvalidateThemeCache();
 }

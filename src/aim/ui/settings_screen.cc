@@ -31,7 +31,7 @@ class SettingsScreen : public UiScreen {
  public:
   SettingsScreen(Application* app, const std::string& scenario_id)
       : UiScreen(app),
-        settings_updater_(app->settings_manager(), app->history_db()),
+        updater_(app->settings_manager(), app->history_db()),
         mgr_(app->settings_manager()),
         scenario_id_(scenario_id) {
     theme_names_ = app->settings_manager()->ListThemes();
@@ -44,13 +44,14 @@ class SettingsScreen : public UiScreen {
     }
 
     keybind_items_ = {
-        {"Fire", settings_updater_.keybinds.mutable_fire()},
-        {"Restart Scenario", settings_updater_.keybinds.mutable_restart_scenario()},
-        {"Next Scenario", settings_updater_.keybinds.mutable_next_scenario()},
-        {"Edit Scenario", settings_updater_.keybinds.mutable_edit_scenario()},
-        {"Quick Settings", settings_updater_.keybinds.mutable_quick_settings()},
-        {"Quick Metronome", settings_updater_.keybinds.mutable_quick_metronome()},
-        {"Adjust Crosshair Size", settings_updater_.keybinds.mutable_adjust_crosshair_size()},
+        {"Fire", updater_.settings.mutable_keybinds()->mutable_fire()},
+        {"Restart Scenario", updater_.settings.mutable_keybinds()->mutable_restart_scenario()},
+        {"Next Scenario", updater_.settings.mutable_keybinds()->mutable_next_scenario()},
+        {"Edit Scenario", updater_.settings.mutable_keybinds()->mutable_edit_scenario()},
+        {"Quick Settings", updater_.settings.mutable_keybinds()->mutable_quick_settings()},
+        {"Quick Metronome", updater_.settings.mutable_keybinds()->mutable_quick_metronome()},
+        {"Adjust Crosshair Size",
+         updater_.settings.mutable_keybinds()->mutable_adjust_crosshair_size()},
     };
   }
 
@@ -60,107 +61,99 @@ class SettingsScreen : public UiScreen {
   }
 
   void DrawSettings() {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("cm/360");
-    ImGui::SameLine();
-    ImGui::InputJitteredFloat("CmPer360",
-                              &settings_updater_.cm_per_360,
-                              &settings_updater_.cm_per_360_jitter,
-                              1,
-                              5,
-                              "%.0f",
-                              char_x_ * 9);
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
+                                  .set_label("cm/360")
+                                  .set_step(1, 5)
+                                  .set_width(char_x_ * 9)
+                                  .set_min(1)
+                                  .set_default(35),
+                              PROTO_JITTERED_FIELD(Settings, &updater_.settings, cm_per_360));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("DPI");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 10);
-    ImGui::InputFloat("##DPI", &settings_updater_.dpi, 100, 200, "%.0f");
+    ImGui::InputFloat(ImGui::InputFloatParams("Dpi")
+                          .set_label("DPI")
+                          .set_step(100, 200)
+                          .set_width(char_x_ * 10)
+                          .set_min(100)
+                          .set_default(800),
+                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, dpi));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Metronome BPM");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 9);
-    ImGui::InputFloat("##MetronomeBpm", &settings_updater_.metronome_bpm, 1, 5, "%.0f");
+    ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
+                          .set_label("Metronome BPM")
+                          .set_min(0)
+                          .set_zero_is_unset()
+                          .set_step(1, 5)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Theme");
     ImGui::SameLine();
-
     ImGui::SimpleDropdown(
-        "ThemeDropdown", &settings_updater_.theme_name, theme_names_, char_x_ * 20);
+        "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_x_ * 20);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::SameLine();
-    ImGui::SimpleDropdown(
-        "CrosshairDropdown", &settings_updater_.crosshair_name, crosshair_names_, char_x_ * 15);
+    ImGui::SimpleDropdown("CrosshairDropdown",
+                          updater_.settings.mutable_current_crosshair_name(),
+                          crosshair_names_,
+                          char_x_ * 15);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Crosshair Size");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 9);
-    ImGui::InputFloat("##CrosshairSize", &settings_updater_.crosshair_size, 0.1, 1, "%.1f");
+    ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")
+                          .set_label("Crosshair size")
+                          .set_min(0.1)
+                          .set_step(0.1, 1)
+                          .set_precision(1)
+                          .set_default(15)
+                          .set_width(char_x_ * 9),
+                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Disable \"Click to Start\"");
-    ImGui::SameLine();
-    ImGui::Checkbox("##disable_click_to_start", &settings_updater_.disable_click_to_start);
+    ImGui::InputBool(
+        ImGui::InputBoolParams("DisableClickToStart").set_label("Disable \"Click to Start\""),
+        PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Auto Hold Tracking");
-    ImGui::SameLine();
-    ImGui::Checkbox("##auto_hold_tracking", &settings_updater_.auto_hold_tracking);
+    ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
+                     PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Show health bars");
-    ImGui::SameLine();
-    bool show_health_bars = settings_updater_.health_bar.show();
-    ImGui::Checkbox("##HealthBarCheckbox", &show_health_bars);
-    settings_updater_.health_bar.set_show(show_health_bars);
-    if (show_health_bars) {
+    ImGui::InputBool(
+        ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
+        PROTO_BOOL_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), show));
+    if (updater_.settings.health_bar().show()) {
       ImGui::Indent();
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Only damaged");
-      ImGui::SameLine();
-      bool only_damaged = settings_updater_.health_bar.only_damaged();
-      ImGui::Checkbox("##HealthBarDamaged", &only_damaged);
-      settings_updater_.health_bar.set_only_damaged(only_damaged);
+      ImGui::InputBool(
+          ImGui::InputBoolParams("OnlyDamaged").set_label("Only damaged"),
+          PROTO_BOOL_FIELD(
+              HealthBarSettings, updater_.settings.mutable_health_bar(), only_damaged));
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Width");
-      ImGui::SameLine();
-      float bar_width = FirstGreaterThanZero(settings_updater_.health_bar.width(), 6);
-      ImGui::SetNextItemWidth(char_x_ * 9);
-      ImGui::InputFloat("##HealthBarWidth", &bar_width, 0.1, 1, "%.1f");
-      if (bar_width <= 0) {
-        bar_width = 0.1;
-      }
-      settings_updater_.health_bar.set_width(bar_width);
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Height");
-      ImGui::SameLine();
-      float bar_height = FirstGreaterThanZero(settings_updater_.health_bar.height(), 1.5);
-      ImGui::SetNextItemWidth(char_x_ * 9);
-      ImGui::InputFloat("##HealthBarHeight", &bar_height, 0.1, 1, "%.1f");
-      if (bar_height <= 0) {
-        bar_height = 0.1;
-      }
-      settings_updater_.health_bar.set_height(bar_height);
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Height above target");
-      ImGui::SameLine();
-      float height_above =
-          FirstGreaterThanZero(settings_updater_.health_bar.height_above_target(), 0.6);
-      ImGui::SetNextItemWidth(char_x_ * 9);
-      ImGui::InputFloat("##HeightAbove", &height_above, 0.1, 1, "%.1f");
-      if (height_above <= 0) {
-        height_above = 0.1;
-      }
-      settings_updater_.health_bar.set_height_above_target(height_above);
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("HealthBarWidth")
+              .set_label("Width")
+              .set_min(0.1)
+              .set_step(0.1, 1)
+              .set_precision(1)
+              .set_default(6)
+              .set_width(char_x_ * 9),
+          PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), width));
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("HealthBarHeight")
+              .set_label("Height")
+              .set_min(0.1)
+              .set_step(0.1, 1)
+              .set_precision(1)
+              .set_default(1.5)
+              .set_width(char_x_ * 9),
+          PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), height));
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("HealthBarHeightAboveTarget")
+              .set_label("Height above target")
+              .set_min(0.1)
+              .set_step(0.1, 1)
+              .set_precision(1)
+              .set_default(0.6)
+              .set_width(char_x_ * 9),
+          PROTO_FLOAT_FIELD(
+              HealthBarSettings, updater_.settings.mutable_health_bar(), height_above_target));
 
       ImGui::Unindent();
     }
@@ -215,7 +208,7 @@ class SettingsScreen : public UiScreen {
     {
       ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
-        settings_updater_.SaveIfChangesMade(scenario_id_);
+        updater_.SaveIfChangesMade(scenario_id_);
         ScreenDone();
       }
     }
@@ -229,11 +222,11 @@ class SettingsScreen : public UiScreen {
   }
 
   void DrawSavedCrosshairsEditor() {
-    if (settings_updater_.saved_crosshairs.crosshairs_size() == 0) {
-      *settings_updater_.saved_crosshairs.add_crosshairs() = GetDefaultCrosshair();
+    if (updater_.settings.saved_crosshairs_size() == 0) {
+      *updater_.settings.add_saved_crosshairs() = GetDefaultCrosshair();
     }
     std::vector<std::string> names;
-    for (Crosshair& c : *settings_updater_.saved_crosshairs.mutable_crosshairs()) {
+    for (Crosshair& c : *updater_.settings.mutable_saved_crosshairs()) {
       names.push_back(c.name());
     }
     ImGui::AlignTextToFramePadding();
@@ -247,15 +240,15 @@ class SettingsScreen : public UiScreen {
     if (ImGui::Button(kIconAdd)) {
       auto c = GetDefaultCrosshair();
       c.set_name("New crosshair");
-      *settings_updater_.saved_crosshairs.add_crosshairs() = c;
-      edit_crosshair_index_ = settings_updater_.saved_crosshairs.crosshairs_size() - 1;
+      *updater_.settings.add_saved_crosshairs() = c;
+      edit_crosshair_index_ = updater_.settings.saved_crosshairs_size() - 1;
     }
     ImGui::HelpTooltip("Add a new saved crosshair");
 
     if (names.size() > 1) {
       ImGui::SameLine();
       if (ImGui::Button(kIconCancel)) {
-        auto* crosshairs = settings_updater_.saved_crosshairs.mutable_crosshairs();
+        auto* crosshairs = updater_.settings.mutable_saved_crosshairs();
         crosshairs->erase(crosshairs->begin() + edit_crosshair_index_);
         edit_crosshair_index_ = 0;
       }
@@ -267,8 +260,7 @@ class SettingsScreen : public UiScreen {
     ImGui::Separator();
     ImGui::Spacing();
     ImGui::Spacing();
-    DrawCrosshairEditor(
-        *settings_updater_.saved_crosshairs.mutable_crosshairs(edit_crosshair_index_));
+    DrawCrosshairEditor(*updater_.settings.mutable_saved_crosshairs(edit_crosshair_index_));
   }
 
   void DrawCrosshairEditor(Crosshair& c) {
@@ -501,7 +493,7 @@ class SettingsScreen : public UiScreen {
   }
 
  private:
-  SettingsUpdater settings_updater_;
+  SettingsUpdater updater_;
   SettingsManager* mgr_;
   std::vector<std::string> theme_names_;
   std::vector<std::string> crosshair_names_;

@@ -37,10 +37,10 @@ class QuickSettingsScreen : public UiScreen {
     if (event.type == SDL_EVENT_MOUSE_WHEEL) {
       if (event.wheel.y != 0) {
         if (type_ == QuickSettingsType::DEFAULT) {
-          updater_.cm_per_360 += event.wheel.y;
+          updater_.settings.set_cm_per_360(updater_.settings.cm_per_360() + event.wheel.y);
         }
         if (type_ == QuickSettingsType::METRONOME) {
-          updater_.metronome_bpm += event.wheel.y;
+          updater_.settings.set_metronome_bpm(updater_.settings.metronome_bpm() + event.wheel.y);
         }
       }
     }
@@ -65,7 +65,6 @@ class QuickSettingsScreen : public UiScreen {
 
     float center_gap = 10;
 
-    // ImGui::SetCursorPos(ImVec2(x_start, y_start));
     ImGui::SetCursorPosY(screen.height * 0.3);
 
     ImVec2 button_sz = ImVec2((width - center_gap) / 2.0, 40);
@@ -75,28 +74,22 @@ class QuickSettingsScreen : public UiScreen {
         std::string sens1 = std::format("{}", i);
         std::string sens2 = std::format("{}", i + 5);
         if (ImGui::Button(sens1.c_str(), button_sz)) {
-          updater_.cm_per_360 = i;
+          updater_.settings.set_cm_per_360(i);
         }
         ImGui::SameLine();
-        // ImGui::SetCursorPos(ImVec2(x_start, y_start));
         if (ImGui::Button(sens2.c_str(), button_sz)) {
-          updater_.cm_per_360 = i + 5;
+          updater_.settings.set_cm_per_360(i + 5);
         }
       }
 
-      // ImGui::SetCursorPos(ImVec2(x_start, y_start));
-
       ImGui::Spacing();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("cm/360");
-      ImGui::SameLine();
-      ImGui::InputJitteredFloat("CmPer360",
-                                &updater_.cm_per_360,
-                                &updater_.cm_per_360_jitter,
-                                1,
-                                5,
-                                "%.0f",
-                                char_size.x * 9);
+      ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
+                                    .set_label("cm/360")
+                                    .set_step(1, 5)
+                                    .set_width(char_size.x * 9)
+                                    .set_min(1)
+                                    .set_default(35),
+                                PROTO_JITTERED_FIELD(Settings, &updater_.settings, cm_per_360));
 
       ImGui::Spacing();
       ImGui::Spacing();
@@ -105,26 +98,22 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Theme");
       ImGui::SameLine();
-      ImGui::SimpleDropdown("ThemeDropdown", &updater_.theme_name, theme_names_, char_size.x * 20);
-      ImGui::PushItemWidth(char_size.x * 20);
+      ImGui::SimpleDropdown(
+          "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_size.x * 20);
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Crosshair");
       ImGui::SameLine();
-      ImGui::SimpleDropdown(
-          "CrosshairDropdown", &updater_.crosshair_name, crosshair_names_, char_size.x * 15);
+      ImGui::SimpleDropdown("CrosshairDropdown",
+                            updater_.settings.mutable_current_crosshair_name(),
+                            crosshair_names_,
+                            char_size.x * 15);
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Auto Hold Tracking");
-      ImGui::SameLine();
-      ImGui::Checkbox("##AutoHoldTracking", &updater_.auto_hold_tracking);
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Show health bars");
-      ImGui::SameLine();
-      bool show_health_bars = updater_.health_bar.show();
-      ImGui::Checkbox("##ShowHealthBars", &show_health_bars);
-      updater_.health_bar.set_show(show_health_bars);
+      ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+      ImGui::InputBool(
+          ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
+          PROTO_BOOL_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), show));
     }
 
     if (type_ == QuickSettingsType::METRONOME) {
@@ -132,24 +121,27 @@ class QuickSettingsScreen : public UiScreen {
         std::string bpm1 = std::format("{}", i);
         std::string bpm2 = std::format("{}", i + 5);
         if (ImGui::Button(bpm1.c_str(), button_sz)) {
-          updater_.metronome_bpm = i;
+          updater_.settings.set_metronome_bpm(i);
         }
         ImGui::SameLine();
-        // ImGui::SetCursorPos(ImVec2(x_start, y_start));
         if (ImGui::Button(bpm2.c_str(), button_sz)) {
-          updater_.metronome_bpm = i + 5;
+          updater_.settings.set_metronome_bpm(i + 5);
         }
       }
 
-      // ImGui::SetCursorPos(ImVec2(x_start, y_start));
 
       ImGui::Spacing();
       if (ImGui::Button("0", button_sz)) {
-        updater_.metronome_bpm = 0;
+        updater_.settings.clear_metronome_bpm();
       }
       ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_size.x * 9);
-      ImGui::InputFloat("##MetronomeBpm", &updater_.metronome_bpm, 1, 5, "%.0f");
+      ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
+                            .set_label("BPM")
+                            .set_min(0)
+                            .set_zero_is_unset()
+                            .set_step(1, 5)
+                            .set_width(char_size.x * 9),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
     }
   }
 

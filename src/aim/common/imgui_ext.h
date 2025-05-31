@@ -381,6 +381,11 @@ struct InputFloatParams {
     return *this;
   }
 
+  InputFloatParams& set_id(const std::string& id) {
+    this->id = id;
+    return *this;
+  }
+
   std::string id;
   std::string label;
 
@@ -400,8 +405,8 @@ static void InputFloat(const InputFloatParams& params, aim::Field<float> field) 
   if (params.label.size() > 0) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text(params.label);
+    ImGui::SameLine();
   }
-  ImGui::SameLine();
   float value = field.get();
   if (params.default_value.has_value() && !field.has()) {
     value = *params.default_value;
@@ -431,6 +436,43 @@ static void InputFloat(const InputFloatParams& params, aim::Field<float> field) 
   } else {
     field.set(value);
   }
+}
+
+static void InputJitteredFloat(const InputFloatParams& params, aim::JitteredField<float> field) {
+  InputFloat(params, field.value);
+
+  ImGui::SameLine();
+  ImGui::Text("+/-");
+
+  auto jitter_params = params;
+  jitter_params.set_id(params.id + "JitterInput").set_label("").set_min(0);
+  ImGui::SameLine();
+  InputFloat(jitter_params, field.jitter);
+}
+
+struct InputBoolParams {
+  explicit InputBoolParams(const std::string& id) : id(id) {}
+
+  InputBoolParams& set_label(const std::string& label) {
+    this->label = label;
+    return *this;
+  }
+
+  std::string id;
+  std::string label;
+};
+
+static void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
+  IdGuard cid(params.id);
+  if (params.label.size() > 0) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(params.label);
+    ImGui::SameLine();
+  }
+
+  bool value = field.get();
+  ImGui::Checkbox("##Checkbox", &value);
+  field.set(value);
 }
 
 }  // namespace ImGui
