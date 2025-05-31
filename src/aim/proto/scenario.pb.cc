@@ -798,6 +798,8 @@ inline constexpr ScenarioDef::Impl_::Impl_(
         shot_type_{nullptr},
         duration_seconds_{0},
         accuracy_penalty_modifier_{0},
+        start_score_{0},
+        end_score_{0},
         type_{},
         _oneof_case_{} {}
 
@@ -1072,6 +1074,8 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.overrides_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.shot_type_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.accuracy_penalty_modifier_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.start_score_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.end_score_),
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
@@ -1088,6 +1092,8 @@ const ::uint32_t
         4,
         5,
         7,
+        8,
+        9,
         ~0u,
         ~0u,
         ~0u,
@@ -1350,19 +1356,19 @@ static const ::_pbi::MigrationSchema
         {174, 187, -1, sizeof(::aim::TargetPlacementStrategy)},
         {192, 204, -1, sizeof(::aim::ScenarioReferenceOverrides)},
         {208, 223, -1, sizeof(::aim::ShotType)},
-        {229, 253, -1, sizeof(::aim::ScenarioDef)},
-        {268, 277, -1, sizeof(::aim::StaticScenarioDef)},
-        {278, 289, -1, sizeof(::aim::CenteringScenarioDef)},
-        {292, 303, -1, sizeof(::aim::BarrelScenarioDef)},
-        {306, 320, -1, sizeof(::aim::LinearScenarioDef)},
-        {326, 345, -1, sizeof(::aim::WallStrafeProfile)},
-        {356, 370, -1, sizeof(::aim::WallStrafeScenarioDef)},
-        {376, 390, -1, sizeof(::aim::WallArcScenarioDef)},
-        {396, 409, -1, sizeof(::aim::WallSwerveScenarioDef)},
-        {414, 427, -1, sizeof(::aim::WallWanderScenarioDef)},
-        {432, 448, -1, sizeof(::aim::TargetDef)},
-        {456, 467, -1, sizeof(::aim::PillTargetDef)},
-        {470, 492, -1, sizeof(::aim::TargetProfile)},
+        {229, 255, -1, sizeof(::aim::ScenarioDef)},
+        {272, 281, -1, sizeof(::aim::StaticScenarioDef)},
+        {282, 293, -1, sizeof(::aim::CenteringScenarioDef)},
+        {296, 307, -1, sizeof(::aim::BarrelScenarioDef)},
+        {310, 324, -1, sizeof(::aim::LinearScenarioDef)},
+        {330, 349, -1, sizeof(::aim::WallStrafeProfile)},
+        {360, 374, -1, sizeof(::aim::WallStrafeScenarioDef)},
+        {380, 394, -1, sizeof(::aim::WallArcScenarioDef)},
+        {400, 413, -1, sizeof(::aim::WallSwerveScenarioDef)},
+        {418, 431, -1, sizeof(::aim::WallWanderScenarioDef)},
+        {436, 452, -1, sizeof(::aim::TargetDef)},
+        {460, 471, -1, sizeof(::aim::PillTargetDef)},
+        {474, 496, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1445,22 +1451,23 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\001 \001(\010H\000\022\027\n\rtracking_kill\030\002 \001(\010H\000\022\035\n\023trac"
     "king_invincible\030\003 \001(\010H\000\022\026\n\014click_single\030"
     "\004 \001(\010H\000\022\036\n\026poke_kill_time_seconds\030\n \001(\002\022"
-    "\030\n\020no_partial_kills\030\013 \001(\010B\006\n\004type\"\352\004\n\013Sc"
+    "\030\n\020no_partial_kills\030\013 \001(\010B\006\n\004type\"\222\005\n\013Sc"
     "enarioDef\022\023\n\013description\030\001 \001(\t\022\030\n\020durati"
     "on_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Roo"
     "m\022\"\n\ntarget_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n"
     "\treference\030\006 \001(\t\0222\n\toverrides\030\007 \001(\0132\037.ai"
     "m.ScenarioReferenceOverrides\022 \n\tshot_typ"
     "e\030\010 \001(\0132\r.aim.ShotType\022!\n\031accuracy_penal"
-    "ty_modifier\030\t \001(\002\022,\n\nstatic_def\030\n \001(\0132\026."
+    "ty_modifier\030\t \001(\002\022\023\n\013start_score\030\n \001(\002\022\021"
+    "\n\tend_score\030\013 \001(\002\022,\n\nstatic_def\030\036 \001(\0132\026."
     "aim.StaticScenarioDefH\000\0222\n\rcentering_def"
-    "\030\013 \001(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nb"
-    "arrel_def\030\014 \001(\0132\026.aim.BarrelScenarioDefH"
-    "\000\022,\n\nlinear_def\030\r \001(\0132\026.aim.LinearScenar"
-    "ioDefH\000\0225\n\017wall_strafe_def\030\016 \001(\0132\032.aim.W"
-    "allStrafeScenarioDefH\000\022/\n\014wall_arc_def\030\017"
+    "\030\037 \001(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nb"
+    "arrel_def\030  \001(\0132\026.aim.BarrelScenarioDefH"
+    "\000\022,\n\nlinear_def\030! \001(\0132\026.aim.LinearScenar"
+    "ioDefH\000\0225\n\017wall_strafe_def\030\" \001(\0132\032.aim.W"
+    "allStrafeScenarioDefH\000\022/\n\014wall_arc_def\030#"
     " \001(\0132\027.aim.WallArcScenarioDefH\000\0225\n\017wall_"
-    "swerve_def\030\020 \001(\0132\032.aim.WallSwerveScenari"
+    "swerve_def\030$ \001(\0132\032.aim.WallSwerveScenari"
     "oDefH\000B\006\n\004type\"T\n\021StaticScenarioDef\022\?\n\031t"
     "arget_placement_strategy\030\001 \001(\0132\034.aim.Tar"
     "getPlacementStrategy\"\222\001\n\024CenteringScenar"
@@ -1534,7 +1541,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    5187,
+    5227,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -6800,9 +6807,9 @@ ScenarioDef::ScenarioDef(
                offsetof(Impl_, duration_seconds_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, duration_seconds_),
-           offsetof(Impl_, accuracy_penalty_modifier_) -
+           offsetof(Impl_, end_score_) -
                offsetof(Impl_, duration_seconds_) +
-               sizeof(Impl_::accuracy_penalty_modifier_));
+               sizeof(Impl_::end_score_));
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -6845,9 +6852,9 @@ inline void ScenarioDef::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, room_),
            0,
-           offsetof(Impl_, accuracy_penalty_modifier_) -
+           offsetof(Impl_, end_score_) -
                offsetof(Impl_, room_) +
-               sizeof(Impl_::accuracy_penalty_modifier_));
+               sizeof(Impl_::end_score_));
 }
 ScenarioDef::~ScenarioDef() {
   // @@protoc_insertion_point(destructor:aim.ScenarioDef)
@@ -6973,15 +6980,15 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 15, 11, 52, 2> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<4, 17, 11, 60, 7> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    16, 120,  // max_field_number, fast_idx_mask
+    36, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294901768,  // skipmap
+    536868872,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    15,  // num_field_entries
+    17,  // num_field_entries
     11,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -7017,13 +7024,19 @@ const ::_pbi::TcParseTable<4, 15, 11, 52, 2> ScenarioDef::_table_ = {
     // float accuracy_penalty_modifier = 9;
     {::_pbi::TcParser::FastF32S1,
      {77, 7, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.accuracy_penalty_modifier_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // float start_score = 10;
+    {::_pbi::TcParser::FastF32S1,
+     {85, 8, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.start_score_)}},
+    // float end_score = 11;
+    {::_pbi::TcParser::FastF32S1,
+     {93, 9, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.end_score_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
+    33, 0, 1,
+    65520, 13,
     65535, 65535
   }}, {{
     // string description = 1;
@@ -7050,25 +7063,31 @@ const ::_pbi::TcParseTable<4, 15, 11, 52, 2> ScenarioDef::_table_ = {
     // float accuracy_penalty_modifier = 9;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.accuracy_penalty_modifier_), _Internal::kHasBitsOffset + 7, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.StaticScenarioDef static_def = 10;
+    // float start_score = 10;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.start_score_), _Internal::kHasBitsOffset + 8, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float end_score = 11;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.end_score_), _Internal::kHasBitsOffset + 9, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.StaticScenarioDef static_def = 30;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.static_def_), _Internal::kOneofCaseOffset + 0, 4,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.CenteringScenarioDef centering_def = 11;
+    // .aim.CenteringScenarioDef centering_def = 31;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.centering_def_), _Internal::kOneofCaseOffset + 0, 5,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.BarrelScenarioDef barrel_def = 12;
+    // .aim.BarrelScenarioDef barrel_def = 32;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.barrel_def_), _Internal::kOneofCaseOffset + 0, 6,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.LinearScenarioDef linear_def = 13;
+    // .aim.LinearScenarioDef linear_def = 33;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.linear_def_), _Internal::kOneofCaseOffset + 0, 7,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.WallStrafeScenarioDef wall_strafe_def = 14;
+    // .aim.WallStrafeScenarioDef wall_strafe_def = 34;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.wall_strafe_def_), _Internal::kOneofCaseOffset + 0, 8,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.WallArcScenarioDef wall_arc_def = 15;
+    // .aim.WallArcScenarioDef wall_arc_def = 35;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.wall_arc_def_), _Internal::kOneofCaseOffset + 0, 9,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.WallSwerveScenarioDef wall_swerve_def = 16;
+    // .aim.WallSwerveScenarioDef wall_swerve_def = 36;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.wall_swerve_def_), _Internal::kOneofCaseOffset + 0, 10,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
@@ -7084,7 +7103,7 @@ const ::_pbi::TcParseTable<4, 15, 11, 52, 2> ScenarioDef::_table_ = {
     {::_pbi::TcParser::GetTable<::aim::WallArcScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::WallSwerveScenarioDef>()},
   }}, {{
-    "\17\13\0\0\0\11\0\0\0\0\0\0\0\0\0\0"
+    "\17\13\0\0\0\11\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "aim.ScenarioDef"
     "description"
     "reference"
@@ -7127,6 +7146,11 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
     ::memset(&_impl_.duration_seconds_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.accuracy_penalty_modifier_) -
         reinterpret_cast<char*>(&_impl_.duration_seconds_)) + sizeof(_impl_.accuracy_penalty_modifier_));
+  }
+  if (cached_has_bits & 0x00000300u) {
+    ::memset(&_impl_.start_score_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.end_score_) -
+        reinterpret_cast<char*>(&_impl_.start_score_)) + sizeof(_impl_.end_score_));
   }
   clear_type();
   _impl_._has_bits_.Clear();
@@ -7207,46 +7231,60 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                 9, this_._internal_accuracy_penalty_modifier(), target);
           }
 
+          // float start_score = 10;
+          if (cached_has_bits & 0x00000100u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                10, this_._internal_start_score(), target);
+          }
+
+          // float end_score = 11;
+          if (cached_has_bits & 0x00000200u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                11, this_._internal_end_score(), target);
+          }
+
           switch (this_.type_case()) {
             case kStaticDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  10, *this_._impl_.type_.static_def_, this_._impl_.type_.static_def_->GetCachedSize(), target,
+                  30, *this_._impl_.type_.static_def_, this_._impl_.type_.static_def_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kCenteringDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  11, *this_._impl_.type_.centering_def_, this_._impl_.type_.centering_def_->GetCachedSize(), target,
+                  31, *this_._impl_.type_.centering_def_, this_._impl_.type_.centering_def_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kBarrelDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  12, *this_._impl_.type_.barrel_def_, this_._impl_.type_.barrel_def_->GetCachedSize(), target,
+                  32, *this_._impl_.type_.barrel_def_, this_._impl_.type_.barrel_def_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kLinearDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  13, *this_._impl_.type_.linear_def_, this_._impl_.type_.linear_def_->GetCachedSize(), target,
+                  33, *this_._impl_.type_.linear_def_, this_._impl_.type_.linear_def_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kWallStrafeDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  14, *this_._impl_.type_.wall_strafe_def_, this_._impl_.type_.wall_strafe_def_->GetCachedSize(), target,
+                  34, *this_._impl_.type_.wall_strafe_def_, this_._impl_.type_.wall_strafe_def_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kWallArcDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  15, *this_._impl_.type_.wall_arc_def_, this_._impl_.type_.wall_arc_def_->GetCachedSize(), target,
+                  35, *this_._impl_.type_.wall_arc_def_, this_._impl_.type_.wall_arc_def_->GetCachedSize(), target,
                   stream);
               break;
             }
             case kWallSwerveDef: {
               target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                  16, *this_._impl_.type_.wall_swerve_def_, this_._impl_.type_.wall_swerve_def_->GetCachedSize(), target,
+                  36, *this_._impl_.type_.wall_swerve_def_, this_._impl_.type_.wall_swerve_def_->GetCachedSize(), target,
                   stream);
               break;
             }
@@ -7318,44 +7356,54 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
               total_size += 5;
             }
           }
+          if (cached_has_bits & 0x00000300u) {
+            // float start_score = 10;
+            if (cached_has_bits & 0x00000100u) {
+              total_size += 5;
+            }
+            // float end_score = 11;
+            if (cached_has_bits & 0x00000200u) {
+              total_size += 5;
+            }
+          }
           switch (this_.type_case()) {
-            // .aim.StaticScenarioDef static_def = 10;
+            // .aim.StaticScenarioDef static_def = 30;
             case kStaticDef: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.static_def_);
               break;
             }
-            // .aim.CenteringScenarioDef centering_def = 11;
+            // .aim.CenteringScenarioDef centering_def = 31;
             case kCenteringDef: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.centering_def_);
               break;
             }
-            // .aim.BarrelScenarioDef barrel_def = 12;
+            // .aim.BarrelScenarioDef barrel_def = 32;
             case kBarrelDef: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.barrel_def_);
               break;
             }
-            // .aim.LinearScenarioDef linear_def = 13;
+            // .aim.LinearScenarioDef linear_def = 33;
             case kLinearDef: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.linear_def_);
               break;
             }
-            // .aim.WallStrafeScenarioDef wall_strafe_def = 14;
+            // .aim.WallStrafeScenarioDef wall_strafe_def = 34;
             case kWallStrafeDef: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.wall_strafe_def_);
               break;
             }
-            // .aim.WallArcScenarioDef wall_arc_def = 15;
+            // .aim.WallArcScenarioDef wall_arc_def = 35;
             case kWallArcDef: {
-              total_size += 1 +
+              total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.wall_arc_def_);
               break;
             }
-            // .aim.WallSwerveScenarioDef wall_swerve_def = 16;
+            // .aim.WallSwerveScenarioDef wall_swerve_def = 36;
             case kWallSwerveDef: {
               total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.wall_swerve_def_);
@@ -7427,6 +7475,14 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
     }
     if (cached_has_bits & 0x00000080u) {
       _this->_impl_.accuracy_penalty_modifier_ = from._impl_.accuracy_penalty_modifier_;
+    }
+  }
+  if (cached_has_bits & 0x00000300u) {
+    if (cached_has_bits & 0x00000100u) {
+      _this->_impl_.start_score_ = from._impl_.start_score_;
+    }
+    if (cached_has_bits & 0x00000200u) {
+      _this->_impl_.end_score_ = from._impl_.end_score_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -7528,8 +7584,8 @@ void ScenarioDef::InternalSwap(ScenarioDef* PROTOBUF_RESTRICT other) {
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.description_, &other->_impl_.description_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.reference_, &other->_impl_.reference_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.accuracy_penalty_modifier_)
-      + sizeof(ScenarioDef::_impl_.accuracy_penalty_modifier_)
+      PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.end_score_)
+      + sizeof(ScenarioDef::_impl_.end_score_)
       - PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.room_)>(
           reinterpret_cast<char*>(&_impl_.room_),
           reinterpret_cast<char*>(&other->_impl_.room_));

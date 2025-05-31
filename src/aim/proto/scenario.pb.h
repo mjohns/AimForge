@@ -6921,13 +6921,13 @@ class ScenarioDef final : public ::google::protobuf::Message
     return *internal_default_instance();
   }
   enum TypeCase {
-    kStaticDef = 10,
-    kCenteringDef = 11,
-    kBarrelDef = 12,
-    kLinearDef = 13,
-    kWallStrafeDef = 14,
-    kWallArcDef = 15,
-    kWallSwerveDef = 16,
+    kStaticDef = 30,
+    kCenteringDef = 31,
+    kBarrelDef = 32,
+    kLinearDef = 33,
+    kWallStrafeDef = 34,
+    kWallArcDef = 35,
+    kWallSwerveDef = 36,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -7029,13 +7029,15 @@ class ScenarioDef final : public ::google::protobuf::Message
     kShotTypeFieldNumber = 8,
     kDurationSecondsFieldNumber = 2,
     kAccuracyPenaltyModifierFieldNumber = 9,
-    kStaticDefFieldNumber = 10,
-    kCenteringDefFieldNumber = 11,
-    kBarrelDefFieldNumber = 12,
-    kLinearDefFieldNumber = 13,
-    kWallStrafeDefFieldNumber = 14,
-    kWallArcDefFieldNumber = 15,
-    kWallSwerveDefFieldNumber = 16,
+    kStartScoreFieldNumber = 10,
+    kEndScoreFieldNumber = 11,
+    kStaticDefFieldNumber = 30,
+    kCenteringDefFieldNumber = 31,
+    kBarrelDefFieldNumber = 32,
+    kLinearDefFieldNumber = 33,
+    kWallStrafeDefFieldNumber = 34,
+    kWallArcDefFieldNumber = 35,
+    kWallSwerveDefFieldNumber = 36,
   };
   // string description = 1;
   bool has_description() const;
@@ -7153,7 +7155,29 @@ class ScenarioDef final : public ::google::protobuf::Message
   void _internal_set_accuracy_penalty_modifier(float value);
 
   public:
-  // .aim.StaticScenarioDef static_def = 10;
+  // float start_score = 10;
+  bool has_start_score() const;
+  void clear_start_score() ;
+  float start_score() const;
+  void set_start_score(float value);
+
+  private:
+  float _internal_start_score() const;
+  void _internal_set_start_score(float value);
+
+  public:
+  // float end_score = 11;
+  bool has_end_score() const;
+  void clear_end_score() ;
+  float end_score() const;
+  void set_end_score(float value);
+
+  private:
+  float _internal_end_score() const;
+  void _internal_set_end_score(float value);
+
+  public:
+  // .aim.StaticScenarioDef static_def = 30;
   bool has_static_def() const;
   private:
   bool _internal_has_static_def() const;
@@ -7172,7 +7196,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::StaticScenarioDef* _internal_mutable_static_def();
 
   public:
-  // .aim.CenteringScenarioDef centering_def = 11;
+  // .aim.CenteringScenarioDef centering_def = 31;
   bool has_centering_def() const;
   private:
   bool _internal_has_centering_def() const;
@@ -7191,7 +7215,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::CenteringScenarioDef* _internal_mutable_centering_def();
 
   public:
-  // .aim.BarrelScenarioDef barrel_def = 12;
+  // .aim.BarrelScenarioDef barrel_def = 32;
   bool has_barrel_def() const;
   private:
   bool _internal_has_barrel_def() const;
@@ -7210,7 +7234,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::BarrelScenarioDef* _internal_mutable_barrel_def();
 
   public:
-  // .aim.LinearScenarioDef linear_def = 13;
+  // .aim.LinearScenarioDef linear_def = 33;
   bool has_linear_def() const;
   private:
   bool _internal_has_linear_def() const;
@@ -7229,7 +7253,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::LinearScenarioDef* _internal_mutable_linear_def();
 
   public:
-  // .aim.WallStrafeScenarioDef wall_strafe_def = 14;
+  // .aim.WallStrafeScenarioDef wall_strafe_def = 34;
   bool has_wall_strafe_def() const;
   private:
   bool _internal_has_wall_strafe_def() const;
@@ -7248,7 +7272,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::WallStrafeScenarioDef* _internal_mutable_wall_strafe_def();
 
   public:
-  // .aim.WallArcScenarioDef wall_arc_def = 15;
+  // .aim.WallArcScenarioDef wall_arc_def = 35;
   bool has_wall_arc_def() const;
   private:
   bool _internal_has_wall_arc_def() const;
@@ -7267,7 +7291,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::WallArcScenarioDef* _internal_mutable_wall_arc_def();
 
   public:
-  // .aim.WallSwerveScenarioDef wall_swerve_def = 16;
+  // .aim.WallSwerveScenarioDef wall_swerve_def = 36;
   bool has_wall_swerve_def() const;
   private:
   bool _internal_has_wall_swerve_def() const;
@@ -7302,8 +7326,8 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 15, 11,
-      52, 2>
+      4, 17, 11,
+      60, 7>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -7330,6 +7354,8 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::ShotType* shot_type_;
     float duration_seconds_;
     float accuracy_penalty_modifier_;
+    float start_score_;
+    float end_score_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -11287,7 +11313,63 @@ inline void ScenarioDef::_internal_set_accuracy_penalty_modifier(float value) {
   _impl_.accuracy_penalty_modifier_ = value;
 }
 
-// .aim.StaticScenarioDef static_def = 10;
+// float start_score = 10;
+inline bool ScenarioDef::has_start_score() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  return value;
+}
+inline void ScenarioDef::clear_start_score() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_score_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000100u;
+}
+inline float ScenarioDef::start_score() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.start_score)
+  return _internal_start_score();
+}
+inline void ScenarioDef::set_start_score(float value) {
+  _internal_set_start_score(value);
+  _impl_._has_bits_[0] |= 0x00000100u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioDef.start_score)
+}
+inline float ScenarioDef::_internal_start_score() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.start_score_;
+}
+inline void ScenarioDef::_internal_set_start_score(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_score_ = value;
+}
+
+// float end_score = 11;
+inline bool ScenarioDef::has_end_score() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  return value;
+}
+inline void ScenarioDef::clear_end_score() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.end_score_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000200u;
+}
+inline float ScenarioDef::end_score() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.end_score)
+  return _internal_end_score();
+}
+inline void ScenarioDef::set_end_score(float value) {
+  _internal_set_end_score(value);
+  _impl_._has_bits_[0] |= 0x00000200u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioDef.end_score)
+}
+inline float ScenarioDef::_internal_end_score() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.end_score_;
+}
+inline void ScenarioDef::_internal_set_end_score(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.end_score_ = value;
+}
+
+// .aim.StaticScenarioDef static_def = 30;
 inline bool ScenarioDef::has_static_def() const {
   return type_case() == kStaticDef;
 }
@@ -11366,7 +11448,7 @@ inline ::aim::StaticScenarioDef* ScenarioDef::mutable_static_def() ABSL_ATTRIBUT
   return _msg;
 }
 
-// .aim.CenteringScenarioDef centering_def = 11;
+// .aim.CenteringScenarioDef centering_def = 31;
 inline bool ScenarioDef::has_centering_def() const {
   return type_case() == kCenteringDef;
 }
@@ -11445,7 +11527,7 @@ inline ::aim::CenteringScenarioDef* ScenarioDef::mutable_centering_def() ABSL_AT
   return _msg;
 }
 
-// .aim.BarrelScenarioDef barrel_def = 12;
+// .aim.BarrelScenarioDef barrel_def = 32;
 inline bool ScenarioDef::has_barrel_def() const {
   return type_case() == kBarrelDef;
 }
@@ -11524,7 +11606,7 @@ inline ::aim::BarrelScenarioDef* ScenarioDef::mutable_barrel_def() ABSL_ATTRIBUT
   return _msg;
 }
 
-// .aim.LinearScenarioDef linear_def = 13;
+// .aim.LinearScenarioDef linear_def = 33;
 inline bool ScenarioDef::has_linear_def() const {
   return type_case() == kLinearDef;
 }
@@ -11603,7 +11685,7 @@ inline ::aim::LinearScenarioDef* ScenarioDef::mutable_linear_def() ABSL_ATTRIBUT
   return _msg;
 }
 
-// .aim.WallStrafeScenarioDef wall_strafe_def = 14;
+// .aim.WallStrafeScenarioDef wall_strafe_def = 34;
 inline bool ScenarioDef::has_wall_strafe_def() const {
   return type_case() == kWallStrafeDef;
 }
@@ -11682,7 +11764,7 @@ inline ::aim::WallStrafeScenarioDef* ScenarioDef::mutable_wall_strafe_def() ABSL
   return _msg;
 }
 
-// .aim.WallArcScenarioDef wall_arc_def = 15;
+// .aim.WallArcScenarioDef wall_arc_def = 35;
 inline bool ScenarioDef::has_wall_arc_def() const {
   return type_case() == kWallArcDef;
 }
@@ -11761,7 +11843,7 @@ inline ::aim::WallArcScenarioDef* ScenarioDef::mutable_wall_arc_def() ABSL_ATTRI
   return _msg;
 }
 
-// .aim.WallSwerveScenarioDef wall_swerve_def = 16;
+// .aim.WallSwerveScenarioDef wall_swerve_def = 36;
 inline bool ScenarioDef::has_wall_swerve_def() const {
   return type_case() == kWallSwerveDef;
 }

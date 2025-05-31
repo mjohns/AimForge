@@ -164,6 +164,25 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
       def_.set_duration_seconds(duration_seconds);
 
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Score range");
+      ImGui::SameLine();
+      ImGui::InputFloat(ImGui::InputFloatParams("StartScore")
+                            .set_zero_is_unset()
+                            .set_step(0.1, 2)
+                            .set_precision(2)
+                            .set_width(char_x_ * 12),
+                        PROTO_FLOAT_FIELD(ScenarioDef, &def_, start_score));
+      ImGui::SameLine();
+      ImGui::Text("to");
+      ImGui::SameLine();
+      ImGui::InputFloat(ImGui::InputFloatParams("EndScore")
+                            .set_zero_is_unset()
+                            .set_step(0.1, 2)
+                            .set_precision(2)
+                            .set_width(char_x_ * 12),
+                        PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
+
       if (ImGui::Button("Play")) {
         start_scenario_ = true;
       }

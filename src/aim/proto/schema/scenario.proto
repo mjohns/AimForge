@@ -163,14 +163,18 @@ message ScenarioDef {
   // from the score.
   float accuracy_penalty_modifier = 9;
 
+  // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.
+  float start_score = 10;
+  float end_score = 11;
+
   oneof type {
-    StaticScenarioDef static_def = 10;
-    CenteringScenarioDef centering_def = 11;
-    BarrelScenarioDef barrel_def = 12;
-    LinearScenarioDef linear_def = 13;
-    WallStrafeScenarioDef wall_strafe_def = 14;
-    WallArcScenarioDef wall_arc_def = 15;
-    WallSwerveScenarioDef wall_swerve_def = 16;
+    StaticScenarioDef static_def = 30;
+    CenteringScenarioDef centering_def = 31;
+    BarrelScenarioDef barrel_def = 32;
+    LinearScenarioDef linear_def = 33;
+    WallStrafeScenarioDef wall_strafe_def = 34;
+    WallArcScenarioDef wall_arc_def = 35;
+    WallSwerveScenarioDef wall_swerve_def = 36;
   }
 }
 
