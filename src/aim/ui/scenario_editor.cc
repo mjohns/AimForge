@@ -109,25 +109,25 @@ class ScenarioEditorScreen : public UiScreen {
  public:
   explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application* app)
       : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
-    projection_ = GetPerspectiveTransformation(app_->screen_info());
-    auto themes = app_->settings_manager()->ListThemes();
+    projection_ = GetPerspectiveTransformation(app_.screen_info());
+    auto themes = app_.settings_manager()->ListThemes();
     if (themes.size() > 0) {
-      theme_ = app_->settings_manager()->GetTheme(themes[0]);
+      theme_ = app_.settings_manager()->GetTheme(themes[0]);
     } else {
       theme_ = GetDefaultTheme();
     }
-    settings_ = app_->settings_manager()->GetCurrentSettings();
+    settings_ = app_.settings_manager()->GetCurrentSettings();
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app->file_system()->GetBundleNames();
 
-    auto initial_scenario = app_->scenario_manager()->GetScenario(opts.scenario_id);
+    auto initial_scenario = app_.scenario_manager()->GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->def;
       name_ = initial_scenario->name;
       if (opts.is_new_copy) {
         std::string final_name = MakeUniqueName(
             name_.relative_name() + " Copy",
-            app_->scenario_manager()->GetAllRelativeNamesInBundle(name_.bundle_name()));
+            app_.scenario_manager()->GetAllRelativeNamesInBundle(name_.bundle_name()));
         *name_.mutable_relative_name() = final_name;
       } else {
         original_name_ = initial_scenario->name;
@@ -193,13 +193,13 @@ class ScenarioEditorScreen : public UiScreen {
 
       if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
         if (SaveScenario()) {
-          app_->scenario_manager()->LoadScenariosFromDisk();
-          ScreenDone();
+          app_.scenario_manager()->LoadScenariosFromDisk();
+          PopSelf();
         }
       }
       ImGui::SameLine();
       if (ImGui::Button("Cancel")) {
-        ScreenDone();
+        PopSelf();
       }
     }
     ImGui::End();
@@ -241,7 +241,7 @@ class ScenarioEditorScreen : public UiScreen {
       return false;
     }
 
-    auto& mgr = *app_->scenario_manager();
+    auto& mgr = *app_.scenario_manager();
 
     bool is_new_file =
         !original_name_.has_value() || original_name_->full_name() != name_.full_name();
@@ -267,7 +267,7 @@ class ScenarioEditorScreen : public UiScreen {
       return false;
     }
 
-    app_->scenario_manager()->SetCurrentScenario(name_.full_name());
+    app_.scenario_manager()->SetCurrentScenario(name_.full_name());
     return true;
   }
 
@@ -1456,8 +1456,8 @@ class ScenarioEditorScreen : public UiScreen {
     RenderContext ctx;
     Stopwatch stopwatch;
     FrameTimes frame_times;
-    if (app_->StartRender(&ctx)) {
-      app_->renderer()->DrawScenario(projection_,
+    if (app_.StartRender(&ctx)) {
+      app_.renderer()->DrawScenario(projection_,
                                      def_.room(),
                                      theme_,
                                      settings_.health_bar(),
@@ -1466,11 +1466,12 @@ class ScenarioEditorScreen : public UiScreen {
                                      &ctx,
                                      stopwatch,
                                      &frame_times);
-      app_->FinishRender(&ctx);
+      app_.FinishRender(&ctx);
     }
   }
 
   void OnTickStart() override {
+      /*
     if (!start_scenario_) {
       return;
     }
@@ -1481,8 +1482,9 @@ class ScenarioEditorScreen : public UiScreen {
     params.id = name_.full_name();
     params.force_start_immediately = true;
     CreateScenario(params, app_)->Run();
-    app_->EnableVsync();
-    SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+    app_.EnableVsync();
+    SDL_SetWindowRelativeMouseMode(app_.sdl_window(), false);
+    */
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
@@ -1493,7 +1495,7 @@ class ScenarioEditorScreen : public UiScreen {
       std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
       if (KeyMappingMatchesEvent(
               event_name,
-              app_->settings_manager()->GetCurrentSettings().keybinds().restart_scenario())) {
+              app_.settings_manager()->GetCurrentSettings().keybinds().restart_scenario())) {
         start_scenario_ = true;
       }
     }

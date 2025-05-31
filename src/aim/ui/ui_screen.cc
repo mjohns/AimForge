@@ -9,66 +9,39 @@
 
 namespace aim {
 
-NavigationEvent UiScreen::Run() {
-  Resume();
+void UiScreen::OnTickStart() {
+  if (!app_.has_input_focus()) {
+    SDL_Delay(250);
+  }
+}
 
-  while (true) {
-    if (return_value_.has_value()) {
-      return *return_value_;
-    }
-    if (!app_->has_input_focus()) {
-      SDL_Delay(250);
-    }
-
-    OnTickStart();
-    if (return_value_.has_value()) {
-      return *return_value_;
-    }
-
-    SDL_Event event;
-    ImGuiIO& io = ImGui::GetIO();
-    while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL3_ProcessEvent(&event);
-      if (event.type == SDL_EVENT_QUIT) {
-        throw ApplicationExitException();
-      }
-      OnEvent(event, io.WantTextInput);
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        OnKeyDown(event, io.WantTextInput);
-      }
-      if (event.type == SDL_EVENT_KEY_UP) {
-        OnKeyUp(event, io.WantTextInput);
-      }
-    }
-    if (return_value_.has_value()) {
-      return *return_value_;
-    }
-
-    app_->NewImGuiFrame();
-    if (DisableFullscreenWindow()) {
+void UiScreen::OnTick() {
+  app_.NewImGuiFrame();
+  if (DisableFullscreenWindow()) {
+    DrawScreen();
+  } else {
+    if (app_.BeginFullscreenWindow()) {
       DrawScreen();
-    } else {
-      if (app_->BeginFullscreenWindow()) {
-        DrawScreen();
-      }
-      ImGui::End();
     }
-
-    Render();
-
-    SDL_Delay(6);
+    ImGui::End();
   }
 
-  return NavigationEvent::Done();
+  Render();
+  SDL_Delay(6);
 }
 
 void UiScreen::Render() {
-  app_->Render();
+  app_.Render();
 }
 
-void UiScreen::Resume() {
-  app_->EnableVsync();
-  SDL_SetWindowRelativeMouseMode(app_->sdl_window(), false);
+void UiScreen::OnAttach() {
+  app_.EnableVsync();
+  SDL_SetWindowRelativeMouseMode(app_.sdl_window(), false);
+  OnAttachUi();
+}
+
+void UiScreen::OnDetach() {
+  OnDetachUi();
 }
 
 }  // namespace aim

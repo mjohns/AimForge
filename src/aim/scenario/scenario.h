@@ -9,6 +9,7 @@
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/screen.h"
 #include "aim/core/metronome.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/perf.h"
@@ -18,6 +19,13 @@
 #include "aim/scenario/scenario_timer.h"
 
 namespace aim {
+
+enum ScenarioRunState {
+    NOT_STARTED,
+    WAITING_FOR_CLICK_TO_START,
+    RUNNING,
+    DONE,
+};
 
 struct CreateScenarioParams {
   std::string id;
@@ -45,21 +53,24 @@ struct DelayedTask {
   float run_time_seconds;
 };
 
-class Scenario {
+class Scenario : public Screen {
  public:
   Scenario(const CreateScenarioParams& params, Application* app);
   virtual ~Scenario() {}
 
-  NavigationEvent Run();
-  NavigationEvent Resume();
-
   bool is_done() const {
-    return is_done_;
+    return run_state_ == ScenarioRunState::DONE;
   }
 
+  void OnEvent(const SDL_Event& event, bool user_is_typing) override;
+  void OnTick() override;
+  void OnTickStart() override;
+
  protected:
+  void OnAttach() override;
+
   virtual void Initialize() {}
-  virtual void OnEvent(const SDL_Event& event) {}
+  virtual void OnScenarioEvent(const SDL_Event& event) {}
   virtual void UpdateState(UpdateStateData* data) = 0;
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
@@ -97,7 +108,6 @@ class Scenario {
 
   std::string id_;
   ScenarioDef def_;
-  Application* app_;
   ScenarioStats stats_;
   std::unique_ptr<Metronome> metronome_;
   ScenarioTimer timer_;
@@ -110,17 +120,20 @@ class Scenario {
   Replay* replay_ = nullptr;
   Theme theme_;
   bool has_started_ = false;
+  ScenarioRunState run_state_ = ScenarioRunState::NOT_STARTED;
 
  private:
+  void OnRunningTick();
+  void OnWaitingTick();
+
   void RefreshState();
   bool ShouldAutoHold();
 
-  NavigationEvent RunWaitingScreenAndThenStart();
-  NavigationEvent ResumeInternal();
   void DoneAdjustingCrosshairSize();
 
-  NavigationEvent PauseAndReturn();
+  void PauseAndPopSelf();
   void UpdatePerfStats();
+  void HandleScenarioDone();
 
   u64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
@@ -140,6 +153,12 @@ class Scenario {
   FrameTimes current_times_;
   RunPerformanceStats perf_stats_;
   bool force_start_immediately_ = false;
+  bool is_adjusting_crosshair_ = false;
+  bool save_crosshair_ = false;
+  bool initialized_ = false;
+  u64 last_click_time_micros_ = 0;
+  UpdateStateData update_data_;
+  u64 loop_count_ = 0;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);

@@ -46,13 +46,13 @@ class QuickSettingsScreen : public UiScreen {
     }
     if (IsMappableKeyUpEvent(event) && KeyNameMatchesEvent(event, release_key_)) {
       updater_.SaveIfChangesMade(scenario_id_);
-      ScreenDone();
+      PopSelf();
     }
   }
 
  protected:
   void DrawScreen() override {
-    const ScreenInfo& screen = app_->screen_info();
+    const ScreenInfo& screen = app_.screen_info();
     ImGui::Columns(3, "SettingsColumns", false);
 
     float width = screen.width * 0.5;

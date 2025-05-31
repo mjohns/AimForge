@@ -44,7 +44,7 @@ class WallStrafeScenario : public BaseScenario {
 
     last_direction_change_position_ = glm::vec2(0, starting_y);
 
-    if (app_->rand().FlipCoin()) {
+    if (app_.rand().FlipCoin()) {
       direction_ = glm::vec2(-1, 0);
     } else {
       direction_ = glm::vec2(1, 0);
@@ -140,9 +140,9 @@ class WallStrafeScenario : public BaseScenario {
     WallStrafeProfile profile = GetNextProfile();
     strafe_number_++;
 
-    if (profile.pause_at_end_chance() > 0 && app_->rand().FlipCoin(profile.pause_at_end_chance())) {
+    if (profile.pause_at_end_chance() > 0 && app_.rand().FlipCoin(profile.pause_at_end_chance())) {
       float pause_time =
-          app_->rand().GetJittered(profile.pause_seconds(), profile.pause_seconds_jitter());
+          app_.rand().GetJittered(profile.pause_seconds(), profile.pause_seconds_jitter());
       if (pause_time > 0) {
         pause_at_next_direction_change_ = true;
         pause_for_seconds_ = pause_time;
@@ -163,10 +163,10 @@ class WallStrafeScenario : public BaseScenario {
     if (max_strafe_distance <= 0) {
       max_strafe_distance = 100;
     }
-    float distance = app_->rand().GetInRange(min_strafe_distance, max_strafe_distance);
+    float distance = app_.rand().GetInRange(min_strafe_distance, max_strafe_distance);
 
     glm::vec2 new_direction;
-    float angle = abs(app_->rand().GetJittered(profile.angle(), profile.angle_jitter()));
+    float angle = abs(app_.rand().GetJittered(profile.angle(), profile.angle_jitter()));
     angle = glm::clamp(angle, 0.f, 45.f);
     if (current_pos.y >= max_y_) {
       angle *= -1;
@@ -174,7 +174,7 @@ class WallStrafeScenario : public BaseScenario {
       // Keep angle positive
     } else {
       // 50/50 strafe up or down
-      if (app_->rand().FlipCoin()) {
+      if (app_.rand().FlipCoin()) {
         angle *= -1;
       }
     }
@@ -217,7 +217,7 @@ class WallStrafeScenario : public BaseScenario {
   WallStrafeProfile GetNextProfile() {
     auto d = def_.wall_strafe_def();
     auto maybe_profile =
-        SelectProfile(d.profile_order(), d.profiles(), strafe_number_, app_->random_generator());
+        SelectProfile(d.profile_order(), d.profiles(), strafe_number_, app_.random_generator());
     WallStrafeProfile fallback;
     return maybe_profile.value_or(fallback);
   }

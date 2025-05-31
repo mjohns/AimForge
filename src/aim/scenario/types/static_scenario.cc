@@ -28,7 +28,7 @@ class StaticScenario : public BaseScenario {
  public:
   explicit StaticScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app) {
-    wall_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, app_);
+    wall_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, &app_);
   }
 
  protected:

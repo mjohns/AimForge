@@ -100,7 +100,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
   if (data->is_click_held) {
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (!tracking_sound_) {
-      tracking_sound_ = std::make_unique<TrackingSound>(app_);
+      tracking_sound_ = std::make_unique<TrackingSound>(&app_);
     }
     stats_.shot_stopwatch.Start();
     if (maybe_hit_target_id.has_value()) {
@@ -126,7 +126,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
           } else {
             if (is_hitting_this_target && target.notify_at_health_seconds > 0 &&
                 target.notify_at_health_seconds >= health_left) {
-              app_->sound_manager()->PlayNotifyBeforeKillSound();
+              app_.sound_manager()->PlayNotifyBeforeKillSound();
               target.notify_at_health_seconds = 0;
             }
             if (target.radius_at_kill.has_value()) {
