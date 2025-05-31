@@ -6,6 +6,7 @@
 #include <functional>
 #include <optional>
 
+#include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
@@ -13,130 +14,6 @@
 
 namespace aim {
 namespace {
-
-template <typename T>
-struct FieldFunctions {
-  FieldFunctions(std::function<T()> get,
-                 std::function<void(T)> set,
-                 std::function<void()> clear,
-                 std::function<bool()> has)
-      : get(std::move(get)), set(std::move(set)), clear(std::move(clear)), has(std::move(has)) {}
-
-  std::function<T()> get;
-  std::function<void(T)> set;
-  std::function<void()> clear;
-  std::function<bool()> has;
-};
-
-struct InputFloatParams {
-  InputFloatParams(const std::string& name, FieldFunctions<float> field_functions)
-      : name(name), field_functions(field_functions) {}
-
-  InputFloatParams& set_precision(int decimal_places) {
-    if (decimal_places == 1) {
-      format = "%.1f";
-    } else if (decimal_places == 2) {
-      format = "%.2f";
-    } else if (decimal_places == 3) {
-      format = "%.2f";
-    } else {
-      format = "%.0f";
-    }
-    return *this;
-  }
-
-  InputFloatParams& set_step(float step, float fast_step) {
-    this->step = step;
-    this->fast_step = fast_step;
-    return *this;
-  }
-
-  InputFloatParams& set_width(float width) {
-    this->width = width;
-    return *this;
-  }
-
-  InputFloatParams& set_default(float default_value) {
-    this->default_value = default_value;
-    return *this;
-  }
-
-  InputFloatParams& set_zero_is_unset() {
-    this->zero_is_unset = true;
-    return *this;
-  }
-
-  InputFloatParams& set_range(float min, float max) {
-    min_value = min;
-    max_value = max;
-    return *this;
-  }
-
-  InputFloatParams& set_min(float min) {
-    min_value = min;
-    return *this;
-  }
-
-  InputFloatParams& set_id(const std::string& id) {
-    this->id = id;
-    return *this;
-  }
-
-  std::string name;
-  std::string id;
-  FieldFunctions<float> field_functions;
-  float step = 1;
-  float fast_step = 5;
-  const char* format = "%.0f";
-  float width = -1;
-  std::optional<float> default_value;
-
-  std::optional<float> min_value;
-  std::optional<float> max_value;
-  bool zero_is_unset = false;
-};
-
-#define FIELD_FUNCTIONS(T, instance, ProtoClass, field_name)                          \
-  FieldFunctions<##T>(std::bind_front(&##ProtoClass::##field_name, ##instance),       \
-                      std::bind_front(&##ProtoClass::set_##field_name, ##instance),   \
-                      std::bind_front(&##ProtoClass::clear_##field_name, ##instance), \
-                      std::bind_front(&##ProtoClass::has_##field_name, ##instance))
-
-void InputFloat(InputFloatParams& params) {
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text(params.name);
-  ImGui::SameLine();
-  float value = params.field_functions.get();
-  if (params.default_value.has_value() && !params.field_functions.has()) {
-    value = *params.default_value;
-  }
-  if (params.width > 0) {
-    ImGui::SetNextItemWidth(params.width);
-  }
-  std::string id = params.id.size() > 0 ? params.id : std::format("##Input{}", params.name);
-  ImGui::InputFloat(id.c_str(), &value, params.step, params.fast_step, params.format);
-
-  if (params.min_value.has_value()) {
-    if (value < *params.min_value) {
-      value = *params.min_value;
-    }
-  }
-  if (params.max_value.has_value()) {
-    if (value > *params.max_value) {
-      value = *params.max_value;
-    }
-  }
-
-  if (params.zero_is_unset) {
-    if (value > 0) {
-      params.field_functions.set(value);
-    } else {
-      params.field_functions.clear();
-    }
-  } else {
-    params.field_functions.set(value);
-  }
-}
 
 const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTypes{
     {CrosshairLayer::kDot, "Dot"},
@@ -450,17 +327,23 @@ class SettingsScreen : public UiScreen {
     }
     ImGui::SimpleTypeDropdown("CrosshairType", &type, kCrosshairTypes, char_x_ * 12);
 
-    InputFloatParams scale("Scale", FIELD_FUNCTIONS(float, &l, CrosshairLayer, scale));
-    scale.set_step(0.05, 0.2).set_precision(2).set_width(char_x_ * 12).set_default(1).set_min(0.01);
-    InputFloat(scale);
+    ImGui::InputFloat(ImGui::InputFloatParams("ScaleInput")
+                          .set_label("Scale")
+                          .set_step(0.05, 0.2)
+                          .set_precision(2)
+                          .set_width(char_x_ * 12)
+                          .set_default(1)
+                          .set_min(0.01),
+                      PROTO_FLOAT_FIELD(CrosshairLayer, &l, scale));
 
-    InputFloatParams alpha("Opacity", FIELD_FUNCTIONS(float, &l, CrosshairLayer, alpha));
-    alpha.set_step(0.02, 0.2)
-        .set_precision(2)
-        .set_width(char_x_ * 12)
-        .set_default(1)
-        .set_range(0.01, 1);
-    InputFloat(alpha);
+    ImGui::InputFloat(ImGui::InputFloatParams("OpacityInput")
+                          .set_label("Opacity")
+                          .set_step(0.02, 0.2)
+                          .set_precision(2)
+                          .set_width(char_x_ * 12)
+                          .set_default(1)
+                          .set_range(0.01, 1),
+                      PROTO_FLOAT_FIELD(CrosshairLayer, &l, alpha));
 
     if (type == CrosshairLayer::kDot) {
       DrawCrosshairDotEditor(l.mutable_dot());
@@ -474,26 +357,26 @@ class SettingsScreen : public UiScreen {
   }
 
   void DrawCrosshairDotEditor(DotCrosshair* c) {
-    InputFloatParams outline_thickness("Outline thickness",
-                                       FIELD_FUNCTIONS(float, c, DotCrosshair, outline_thickness));
-    outline_thickness.set_step(0.5, 1)
-        .set_precision(1)
-        .set_width(char_x_ * 8)
-        .set_default(1.5)
-        .set_min(0);
-    InputFloat(outline_thickness);
+    ImGui::InputFloat(ImGui::InputFloatParams("OutlineThicknessInput")
+                          .set_label("Outline thickness")
+                          .set_step(0.5, 1)
+                          .set_precision(1)
+                          .set_width(char_x_ * 8)
+                          .set_default(1.5)
+                          .set_min(0),
+                      PROTO_FLOAT_FIELD(DotCrosshair, c, outline_thickness));
   }
 
   void DrawCrosshairCircleEditor(CircleCrosshair* c) {
     ImGui::IdGuard cid("CircleCrosshair");
 
-    InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, CircleCrosshair, thickness));
-    thickness.set_step(0.5, 1)
-        .set_precision(1)
-        .set_width(char_x_ * 8)
-        .set_default(1.5)
-        .set_min(0.1);
-    InputFloat(thickness);
+    ImGui::InputFloat(ImGui::InputFloatParams("Thickness")
+                          .set_step(0.5, 1)
+                          .set_precision(1)
+                          .set_width(char_x_ * 8)
+                          .set_default(1.5)
+                          .set_min(0.1),
+                      PROTO_FLOAT_FIELD(CircleCrosshair, c, thickness));
 
     bool use_outline_color = c->use_outline_color();
     ImGui::AlignTextToFramePadding();
@@ -506,36 +389,44 @@ class SettingsScreen : public UiScreen {
   void DrawCrosshairPlusEditor(PlusCrosshair* c) {
     ImGui::IdGuard cid("PlusCrosshair");
 
-    InputFloatParams horizontal_size("Horizontal size",
-                                     FIELD_FUNCTIONS(float, c, PlusCrosshair, horizontal_size));
-    horizontal_size.set_step(0.1, 0.5)
-        .set_precision(1)
-        .set_width(char_x_ * 8)
-        .set_default(1)
-        .set_min(0);
-    InputFloat(horizontal_size);
+    ImGui::InputFloat(ImGui::InputFloatParams("Horizontal size")
+                          .set_step(0.1, 0.5)
+                          .set_precision(1)
+                          .set_width(char_x_ * 8)
+                          .set_default(1)
+                          .set_min(0),
 
-    InputFloatParams vertical_size("Vertical size",
-                                   FIELD_FUNCTIONS(float, c, PlusCrosshair, vertical_size));
-    vertical_size.set_step(0.1, 0.5)
-        .set_precision(1)
-        .set_width(char_x_ * 8)
-        .set_default(1)
-        .set_min(0);
-    InputFloat(vertical_size);
+                      PROTO_FLOAT_FIELD(PlusCrosshair, c, horizontal_size));
 
-    InputFloatParams thickness("Thickness", FIELD_FUNCTIONS(float, c, PlusCrosshair, thickness));
-    thickness.set_step(0.1, 1).set_precision(1).set_width(char_x_ * 10).set_min(0.1).set_default(1);
-    InputFloat(thickness);
+    ImGui::InputFloat(ImGui::InputFloatParams("Vertical size")
+                          .set_step(0.1, 0.5)
+                          .set_precision(1)
+                          .set_width(char_x_ * 8)
+                          .set_default(1)
+                          .set_min(0),
+                      PROTO_FLOAT_FIELD(PlusCrosshair, c, vertical_size));
 
-    InputFloatParams outline_thickness("Outline thickness",
-                                       FIELD_FUNCTIONS(float, c, PlusCrosshair, outline_thickness));
-    outline_thickness.set_step(0.1, 1).set_precision(1).set_width(char_x_ * 8).set_zero_is_unset();
-    InputFloat(outline_thickness);
+    ImGui::InputFloat(ImGui::InputFloatParams("Thickness")
+                          .set_step(0.1, 1)
+                          .set_precision(1)
+                          .set_width(char_x_ * 10)
+                          .set_min(0.1)
+                          .set_default(1),
+                      PROTO_FLOAT_FIELD(PlusCrosshair, c, thickness));
 
-    InputFloatParams rounding("Rounding", FIELD_FUNCTIONS(float, c, PlusCrosshair, rounding));
-    rounding.set_step(0.5, 1).set_precision(1).set_width(char_x_ * 8).set_min(0);
-    InputFloat(rounding);
+    ImGui::InputFloat(ImGui::InputFloatParams("Outline thickness")
+                          .set_step(0.1, 1)
+                          .set_precision(1)
+                          .set_width(char_x_ * 8)
+                          .set_zero_is_unset(),
+                      PROTO_FLOAT_FIELD(PlusCrosshair, c, outline_thickness));
+
+    ImGui::InputFloat(ImGui::InputFloatParams("Rounding")
+                          .set_step(0.5, 1)
+                          .set_precision(1)
+                          .set_width(char_x_ * 8)
+                          .set_min(0),
+                      PROTO_FLOAT_FIELD(PlusCrosshair, c, rounding));
   }
 
   void OptionalInputFloat(const std::string& id,

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/field.h"
 #include "aim/common/mat_icons.h"
 
 namespace ImGui {
@@ -325,6 +326,111 @@ static void SetCursorAtRight(float item_width) {
   float available = ImGui::GetContentRegionAvail().x;
   float target_x = ImGui::GetCursorPosX() + available - item_width;
   ImGui::SetCursorPosX(target_x);
+}
+
+struct InputFloatParams {
+  explicit InputFloatParams(const std::string& id) : id(id) {}
+
+  InputFloatParams& set_precision(int decimal_places) {
+    if (decimal_places == 1) {
+      format = "%.1f";
+    } else if (decimal_places == 2) {
+      format = "%.2f";
+    } else if (decimal_places == 3) {
+      format = "%.2f";
+    } else {
+      format = "%.0f";
+    }
+    return *this;
+  }
+
+  InputFloatParams& set_step(float step, float fast_step) {
+    this->step = step;
+    this->fast_step = fast_step;
+    return *this;
+  }
+
+  InputFloatParams& set_width(float width) {
+    this->width = width;
+    return *this;
+  }
+
+  InputFloatParams& set_default(float default_value) {
+    this->default_value = default_value;
+    return *this;
+  }
+
+  InputFloatParams& set_zero_is_unset() {
+    this->zero_is_unset = true;
+    return *this;
+  }
+
+  InputFloatParams& set_range(float min, float max) {
+    min_value = min;
+    max_value = max;
+    return *this;
+  }
+
+  InputFloatParams& set_min(float min) {
+    min_value = min;
+    return *this;
+  }
+
+  InputFloatParams& set_label(const std::string& label) {
+    this->label = label;
+    return *this;
+  }
+
+  std::string id;
+  std::string label;
+
+  float step = 1;
+  float fast_step = 5;
+  const char* format = "%.0f";
+  float width = -1;
+  std::optional<float> default_value;
+
+  std::optional<float> min_value;
+  std::optional<float> max_value;
+  bool zero_is_unset = false;
+};
+
+static void InputFloat(const InputFloatParams& params, aim::Field<float> field) {
+  IdGuard cid(params.id);
+  if (params.label.size() > 0) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(params.label);
+  }
+  ImGui::SameLine();
+  float value = field.get();
+  if (params.default_value.has_value() && !field.has()) {
+    value = *params.default_value;
+  }
+  if (params.width > 0) {
+    ImGui::SetNextItemWidth(params.width);
+  }
+  ImGui::InputFloat("##ValueInput", &value, params.step, params.fast_step, params.format);
+
+  if (params.min_value.has_value()) {
+    if (value < *params.min_value) {
+      value = *params.min_value;
+    }
+  }
+  if (params.max_value.has_value()) {
+    if (value > *params.max_value) {
+      value = *params.max_value;
+    }
+  }
+
+  if (params.zero_is_unset) {
+    if (value > 0) {
+      field.set(value);
+    } else {
+      field.clear();
+    }
+  } else {
+    field.set(value);
+  }
 }
 
 }  // namespace ImGui

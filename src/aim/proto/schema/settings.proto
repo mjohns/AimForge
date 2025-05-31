@@ -84,6 +84,8 @@ message Settings {
   bool auto_hold_tracking = 10;
 
   HealthBarSettings health_bar = 12;
+
+  bool disable_per_scenario_settings = 13;
 }
 
 message ScenarioSettings {
