@@ -41,6 +41,15 @@ class StatsScreen : public UiScreen {
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
     }
+    auto scenario = app->scenario_manager()->GetScenario(scenario_id);
+    if (scenario) {
+      float start_score = scenario->def.start_score();
+      float end_score = scenario->def.end_score();
+      if (start_score > 0 && end_score > 0) {
+        start_score_ = start_score;
+        end_score_ = end_score;
+      }
+    }
   }
 
  protected:
@@ -101,6 +110,24 @@ class StatsScreen : public UiScreen {
     ImGui::End();
   }
 
+  float GetScoreLevel(float score) {
+    float num_levels = 5;
+    float strict_range = end_score_ - start_score_;
+    float level_size = strict_range / num_levels;
+
+    // Give a rating of 0 if you are one bucket below the start_score.
+    float zero_score = start_score_ - level_size;
+    float adjusted_score = score - zero_score;
+    float wide_range = end_score_ - zero_score;
+
+    float percent = adjusted_score / wide_range;
+    return ClampPositive(num_levels * percent);
+  }
+
+  bool HasScoreLevels() {
+    return start_score_ > 0;
+  }
+
   void DrawStats() {
     StatsRow stats = info_.stats;
     const auto& all_stats = info_.all_stats;
@@ -115,7 +142,12 @@ class StatsScreen : public UiScreen {
     }
     {
       auto font = app_->font_manager()->UseLarge();
+      ImGui::AlignTextToFramePadding();
       ImGui::Text(scenario_id_);
+      if (HasScoreLevels()) {
+        ImGui::SameLine();
+        ImGui::Button(MaybeIntToString(GetScoreLevel(stats.score), 2).c_str());
+      }
     }
     ImGui::Spacing();
     ImGui::Spacing();
@@ -279,6 +311,9 @@ class StatsScreen : public UiScreen {
   u64 run_id_;
   StatsInfo info_;
   bool is_valid_ = false;
+
+  float start_score_ = -1;
+  float end_score_ = -1;
 
   std::optional<QuickSettingsType> show_settings_;
   std::string show_settings_release_key_;

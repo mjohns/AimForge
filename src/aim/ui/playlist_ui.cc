@@ -175,7 +175,6 @@ class PlaylistEditorComponent : public UiComponent {
               item.set_scenario(scenario.id());
               item.set_num_plays(1);
               scenario_items_.push_back(item);
-              scenario_search_text_ = "";
             }
           }
         }
