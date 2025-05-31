@@ -213,14 +213,14 @@ class SettingsScreen : public UiScreen {
       ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
         updater_.SaveIfChangesMade(scenario_id_);
-        ScreenDone();
+        PopSelf();
       }
     }
     {
       ImGui::SameLine();
       ImVec2 sz = ImVec2(0, 0.0f);
       if (ImGui::Button("Cancel", sz)) {
-        ScreenDone();
+        PopSelf();
       }
     }
   }

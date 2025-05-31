@@ -1,11 +1,12 @@
 #include "aim/core/application.h"
-#include "aim/ui/app_ui.h"
+#include "aim/ui/home_screen.h"
 
 int main(int, char**) {
   using namespace aim;
   try {
     auto app = Application::Create();
-    CreateAppUi(app.get())->Run();
+    app->PushScreen(CreateHomeScreen(app.get()));
+    app->RunMainLoop();
   } catch (ApplicationExitException e) {
     return 0;
   }

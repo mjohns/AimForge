@@ -48,7 +48,7 @@ class WallSwerveScenario : public BaseScenario {
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     swerve_ = params.def.wall_swerve_def();
     if (swerve_.has_origin_strategy()) {
-      origin_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, app_);
+      origin_target_placer_ = CreateWallTargetPlacer(params.def, &target_manager_, &app_);
     }
     if (swerve_.has_turn_rate()) {
       turn_rate_ = swerve_.turn_rate();
@@ -69,7 +69,7 @@ class WallSwerveScenario : public BaseScenario {
       if (info.target == nullptr) {
         // Initialize this newly encountered target.
         info.target = target;
-        info.first_left = app_->rand().FlipCoin();
+        info.first_left = app_.rand().FlipCoin();
         info.origin = *target->wall_position;
         SetNextGoalPosition(info);
         target->wall_direction = glm::normalize(info.goal_position - info.origin);
@@ -107,13 +107,13 @@ class WallSwerveScenario : public BaseScenario {
   void SetNextGoalPosition(TargetInfo& info) {
     float max_x = wall_.GetRegionLength(swerve_.width());
     float spread = wall_.GetRegionLength(swerve_.spread()) / 2.0;
-    float x = app_->rand().GetInRange(0, max_x) + spread;
+    float x = app_.rand().GetInRange(0, max_x) + spread;
     if (info.IsGoingLeft()) {
       x *= -1;
     }
 
     float max_y = wall_.GetRegionLength(swerve_.height());
-    float y = app_->rand().GetInRange(0, max_y);
+    float y = app_.rand().GetInRange(0, max_y);
     y -= (max_y / 2.0);
 
     info.goal_position.x = info.origin.x + x;

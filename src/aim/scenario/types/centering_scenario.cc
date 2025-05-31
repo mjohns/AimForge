@@ -38,7 +38,7 @@ class CenteringScenario : public BaseScenario {
       region->mutable_y_length()->set_y_percent_value(0.9);
       region->mutable_inner_x_length()->set_x_percent_value(0.55);
     }
-    wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, app_);
+    wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, &app_);
 
     current_start_ = GetNextPosition();
     glm::vec2 next_point = GetNextPosition();

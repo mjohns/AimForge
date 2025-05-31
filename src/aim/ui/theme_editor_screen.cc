@@ -165,7 +165,7 @@ class ThemeEditorScreen : public UiScreen {
       UpdateCurrentTheme(theme_names_[0]);
     }
 
-    projection_ = GetPerspectiveTransformation(app_->screen_info());
+    projection_ = GetPerspectiveTransformation(app_.screen_info());
     CameraParams cameraParams(default_room_);
     Camera camera(cameraParams);
     look_at_ = camera.GetLookAt();
@@ -188,7 +188,7 @@ class ThemeEditorScreen : public UiScreen {
 
  protected:
   void DrawScreen() override {
-    const ScreenInfo& screen = app_->screen_info();
+    const ScreenInfo& screen = app_.screen_info();
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
 
@@ -198,7 +198,7 @@ class ThemeEditorScreen : public UiScreen {
     if (ImGui::SimpleDropdown(
             "ThemeDropdown", &current_theme_name_, theme_names_, char_size.x * 20)) {
       UpdateCurrentTheme(current_theme_name_);
-      app_->history_db()->UpdateRecentView(RecentViewType::THEME, current_theme_name_);
+      app_.history_db()->UpdateRecentView(RecentViewType::THEME, current_theme_name_);
     }
 
     ImGui::AlignTextToFramePadding();
@@ -271,15 +271,15 @@ class ThemeEditorScreen : public UiScreen {
     {
       ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
-        app_->settings_manager()->SaveThemeToDisk(current_theme_name_, current_theme_);
-        ScreenDone();
+        app_.settings_manager()->SaveThemeToDisk(current_theme_name_, current_theme_);
+        PopSelf();
       }
     }
     {
       ImGui::SameLine();
       ImVec2 sz = ImVec2(0, 0.0f);
       if (ImGui::Button("Cancel", sz)) {
-        ScreenDone();
+        PopSelf();
       }
     }
 
@@ -287,7 +287,7 @@ class ThemeEditorScreen : public UiScreen {
     crosshair.add_layers()->mutable_dot()->set_outline_thickness(2);
 
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    DrawCrosshair(crosshair, 25, current_theme_, app_->screen_info().center);
+    DrawCrosshair(crosshair, 25, current_theme_, app_.screen_info().center);
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
@@ -296,12 +296,12 @@ class ThemeEditorScreen : public UiScreen {
     RenderContext ctx;
     Stopwatch stopwatch;
     FrameTimes frame_times;
-    if (app_->StartRender(&ctx)) {
+    if (app_.StartRender(&ctx)) {
       HealthBarSettings health_bar;
       health_bar.set_show(true);
       health_bar.set_width(8);
       health_bar.set_height(2);
-      app_->renderer()->DrawScenario(projection_,
+      app_.renderer()->DrawScenario(projection_,
                                      default_room_,
                                      current_theme_,
                                      health_bar,
@@ -310,14 +310,14 @@ class ThemeEditorScreen : public UiScreen {
                                      &ctx,
                                      stopwatch,
                                      &frame_times);
-      app_->FinishRender(&ctx);
+      app_.FinishRender(&ctx);
     }
   }
 
  private:
   void UpdateCurrentTheme(const std::string& theme_name) {
     current_theme_name_ = theme_name;
-    current_theme_ = app_->settings_manager()->GetTheme(current_theme_name_);
+    current_theme_ = app_.settings_manager()->GetTheme(current_theme_name_);
 
     crosshair_color_.stored_color = current_theme_.mutable_crosshair()->mutable_color();
     crosshair_outline_color_.stored_color =

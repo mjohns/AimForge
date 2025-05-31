@@ -36,7 +36,7 @@ class BarrelScenario : public BaseScenario {
       region->mutable_diameter()->set_x_percent_value(0.92);
       region->mutable_inner_diameter()->set_x_percent_value(0.6);
     }
-    wall_target_placer_ = CreateWallTargetPlacer(wall, strat, &target_manager_, app_);
+    wall_target_placer_ = CreateWallTargetPlacer(wall, strat, &target_manager_, &app_);
   }
 
  protected:
@@ -48,7 +48,7 @@ class BarrelScenario : public BaseScenario {
     glm::vec2 direction_pos = GetRandomPositionInCircle(
         0,
         FirstNonZero(def_.barrel_def().direction_radius_percent(), 0.45f) * room_radius_,
-        app_->random_generator());
+        app_.random_generator());
 
     // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
     glm::vec2 direction = glm::normalize(direction_pos - pos2);
@@ -65,7 +65,7 @@ class BarrelScenario : public BaseScenario {
       if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
         // Need to change direction.
         glm::vec2 new_direction_pos =
-            GetRandomPositionInCircle(0, 0.5 * room_radius_, app_->random_generator());
+            GetRandomPositionInCircle(0, 0.5 * room_radius_, app_.random_generator());
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
         t->wall_direction = new_direction;
         // Make sure this is added before the new position is actually set on the target.

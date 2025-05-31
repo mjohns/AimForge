@@ -38,6 +38,7 @@ void AimAbslLogSink::Send(const absl::LogEntry& entry) {
 Application::Application() {
   std::random_device rd;
   random_generator_ = std::mt19937(rd());
+  state_ = std::make_unique<ApplicationState>();
 }
 
 Application::~Application() {
@@ -382,6 +383,63 @@ std::unique_ptr<Application> Application::Create() {
   }
   application->logger()->flush();
   return application;
+}
+
+std::shared_ptr<Screen> Application::PopScreen() {
+  if (screen_stack_.size() == 0) {
+    return {};
+  }
+  std::shared_ptr<Screen> screen = screen_stack_.back();
+  screen_stack_.pop_back();
+  screen->EnsureDetached();
+  return screen;
+}
+
+bool Application::is_on_home_screen() const {
+  return screen_stack_.size() <= 1;
+}
+
+void Application::PushScreen(std::shared_ptr<Screen> screen) {
+  screen_stack_.push_back(std::move(screen));
+}
+
+void Application::RunMainLoop() {
+  bool running = true;
+  while (running) {
+    if (screen_stack_.size() == 0) {
+      return;
+    }
+    std::shared_ptr<Screen> current_screen = screen_stack_.back();
+    for (int i = 0; i < screen_stack_.size() - 1; ++i) {
+      screen_stack_[i]->EnsureDetached();
+    }
+    current_screen->EnsureAttached();
+    current_screen->OnTickStart();
+
+    if (current_screen->should_continue()) {
+      SDL_Event event;
+      ImGuiIO& io = ImGui::GetIO();
+      while (SDL_PollEvent(&event)) {
+        ImGui_ImplSDL3_ProcessEvent(&event);
+        if (event.type == SDL_EVENT_QUIT) {
+          return;
+        }
+        current_screen->OnEvent(event, io.WantTextInput);
+        if (event.type == SDL_EVENT_KEY_DOWN) {
+          current_screen->OnKeyDown(event, io.WantTextInput);
+        }
+        if (event.type == SDL_EVENT_KEY_UP) {
+          current_screen->OnKeyUp(event, io.WantTextInput);
+        }
+      }
+    }
+
+    if (current_screen->should_continue()) {
+      current_screen->OnTick();
+    }
+
+    current_screen->UpdateScreenStack();
+  }
 }
 
 }  // namespace aim

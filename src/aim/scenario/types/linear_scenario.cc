@@ -50,7 +50,7 @@ class LinearScenario : public BaseScenario {
     }
     if (params.def.linear_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
-          wall_, params.def.linear_def().target_placement_strategy(), &target_manager_, app_);
+          wall_, params.def.linear_def().target_placement_strategy(), &target_manager_, &app_);
     } else {
       TargetPlacementStrategy strat;
       strat.set_min_distance(15);
@@ -58,7 +58,7 @@ class LinearScenario : public BaseScenario {
       region->mutable_x_length()->set_x_percent_value(0.9);
       region->mutable_y_length()->set_y_percent_value(0.9);
       region->mutable_inner_x_length()->set_x_percent_value(0.55);
-      wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, app_);
+      wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, &app_);
     }
   }
 
@@ -69,10 +69,10 @@ class LinearScenario : public BaseScenario {
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
         GetJitteredValue(
-            def_.linear_def().angle(), def_.linear_def().angle_jitter(), app_->random_generator()));
+            def_.linear_def().angle(), def_.linear_def().angle_jitter(), app_.random_generator()));
     InOutDirection in_out = def_.linear_def().direction();
     if (in_out == InOutDirection::RANDOM) {
-      in_out = app_->rand().FlipCoin() ? InOutDirection::IN : InOutDirection::OUT;
+      in_out = app_.rand().FlipCoin() ? InOutDirection::IN : InOutDirection::OUT;
     }
     if (in_out == InOutDirection::OUT) {
       // Away from center

@@ -16,10 +16,12 @@
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
+#include "aim/core/application_state.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/core/screen.h"
 #include "aim/core/settings_manager.h"
 #include "aim/database/history_db.h"
 #include "aim/database/settings_db.h"
@@ -47,6 +49,11 @@ class Application {
   ~Application();
 
   static std::unique_ptr<Application> Create();
+  void RunMainLoop();
+
+  std::shared_ptr<Screen> PopScreen();
+  void PushScreen(std::shared_ptr<Screen> screen);
+  bool is_on_home_screen() const;
 
   void NewImGuiFrame();
   bool BeginFullscreenWindow(const std::string& id = "Fullscreen");
@@ -121,6 +128,10 @@ class Application {
     return logger_.get();
   };
 
+  ApplicationState& state() {
+    return *state_.get();
+  }
+
   u64 GetNextComponentId() {
     return component_id_counter_++;
   }
@@ -172,6 +183,9 @@ class Application {
   std::string imgui_ini_filename_;
 
   std::unordered_map<std::string, RunPerformanceStats> perf_stats_;
+
+  std::vector<std::shared_ptr<Screen>> screen_stack_;
+  std::unique_ptr<ApplicationState> state_;
 };
 
 }  // namespace aim
