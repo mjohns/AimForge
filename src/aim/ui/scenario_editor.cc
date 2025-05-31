@@ -502,7 +502,7 @@ class ScenarioEditorScreen : public UiScreen {
     bool has_speed_override = p->has_speed_override();
     float speed_override = p->speed_override();
     if (!p->has_speed_override()) {
-        // Default to a teleport like value.
+      // Default to a teleport like value.
       speed_override = 400;
     }
     ImGui::AlignTextToFramePadding();
