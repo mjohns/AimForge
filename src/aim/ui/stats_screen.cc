@@ -9,6 +9,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
+#include "aim/core/perf.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
 
@@ -41,6 +42,7 @@ class StatsScreen : public UiScreen {
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
     }
+    performance_stats_ = app->GetPerformanceStats(scenario_id, run_id);
     auto scenario = app->scenario_manager()->GetScenario(scenario_id);
     if (scenario) {
       float start_score = scenario->def.start_score();
@@ -101,6 +103,12 @@ class StatsScreen : public UiScreen {
             DrawHistory();
             ImGui::EndTabItem();
           }
+          if (performance_stats_) {
+            if (ImGui::BeginTabItem("Perf")) {
+              DrawPerformanceStats();
+              ImGui::EndTabItem();
+            }
+          }
           ImGui::EndTabBar();
         }
       } else {
@@ -126,6 +134,45 @@ class StatsScreen : public UiScreen {
 
   bool HasScoreLevels() {
     return start_score_ > 0;
+  }
+
+  void DrawPerformanceStats() {
+    auto& worst_times_ = performance_stats_->worst_times;
+    ImGui::TextFmt("Worst frame n={}", worst_times_.frame_number);
+    ImGui::TextFmt("Total time: {:.2f}ms", (worst_times_.end - worst_times_.start) / 1000.0);
+    ImGui::TextFmt("Events time: {:.2f}ms",
+                   (worst_times_.events_end - worst_times_.events_start) / 1000.0);
+    ImGui::TextFmt("Update time: {:.2f}ms",
+                   (worst_times_.update_end - worst_times_.update_start) / 1000.0);
+    if (worst_times_.render_start > 0) {
+      ImGui::TextFmt("Render time: {:.2f}ms",
+                     (worst_times_.render_end - worst_times_.render_start) / 1000.0);
+      ImGui::TextFmt("Render room time: {:.2f}ms",
+                     (worst_times_.render_room_end - worst_times_.render_room_start) / 1000.0);
+      ImGui::TextFmt(
+          "Render targets time: {:.2f}ms",
+          (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
+      ImGui::TextFmt("Render imgui time: {:.2f}ms",
+                     (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
+
+      ImGui::Spacing();
+      ImGui::Separator();
+      ImGui::Spacing();
+
+      ImGui::Text("Total Times");
+      ImGui::Indent();
+      DumpHistogram(performance_stats_->total_time_histogram);
+      ImGui::Unindent();
+
+      ImGui::Spacing();
+      ImGui::Separator();
+      ImGui::Spacing();
+
+      ImGui::Text("Render Times");
+      ImGui::Indent();
+      DumpHistogram(performance_stats_->render_time_histogram);
+      ImGui::Unindent();
+    }
   }
 
   void DrawStats() {
@@ -317,6 +364,7 @@ class StatsScreen : public UiScreen {
 
   std::optional<QuickSettingsType> show_settings_;
   std::string show_settings_release_key_;
+  std::optional<RunPerformanceStats> performance_stats_;
 };
 
 }  // namespace
