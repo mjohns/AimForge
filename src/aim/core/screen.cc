@@ -40,7 +40,7 @@ void Screen::UpdateScreenStack() {
 
   if (next_screen_) {
     app_.PushScreen(std::move(next_screen_));
-    next_screen_ = nullptr;
+    next_screen_ = {};
   }
 }
 
