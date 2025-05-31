@@ -100,6 +100,10 @@ bool Scenario::ShouldAutoHold() {
 }
 
 void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
+  if (event.type == SDL_EVENT_MOUSE_MOTION) {
+    camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
+  }
+
   if (is_adjusting_crosshair_) {
     if (event.type == SDL_EVENT_MOUSE_WHEEL) {
       if (event.wheel.y != 0) {
@@ -256,6 +260,7 @@ void Scenario::OnTickStart() {
   if (run_state_ == ScenarioRunState::NOT_STARTED) {
     if (settings_.disable_click_to_start() || force_start_immediately_) {
       run_state_ = ScenarioRunState::RUNNING;
+      timer_.ResumeRun();
     } else {
       run_state_ = ScenarioRunState::WAITING_FOR_CLICK_TO_START;
     }
