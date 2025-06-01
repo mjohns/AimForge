@@ -134,29 +134,27 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
 
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().edit_scenario())) {
       ReturnHome();
-      /*
       ScenarioEditorOptions opts;
-      opts.scenario_id
-      PushNextScreen(
-      return NavigationEvent::EditScenario(id_);
-      */
+      opts.scenario_id = id_;
+      PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
     }
-    /*
+    if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
+      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+      PopSelf();
+    }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
-      show_settings = QuickSettingsType::DEFAULT;
-      show_settings_release_key = event_name;
+      PushNextScreen(CreateQuickSettingsScreen(id_, QuickSettingsType::DEFAULT, event_name, &app_));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
-      show_settings = QuickSettingsType::METRONOME;
-      show_settings_release_key = event_name;
+      PushNextScreen(
+          CreateQuickSettingsScreen(id_, QuickSettingsType::METRONOME, event_name, &app_));
     }
-    */
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
       is_adjusting_crosshair_ = true;
     }
   }
   if (IsEscapeKeyDown(event)) {
-    PauseAndPopSelf();
+    PopSelf();
   }
   if (IsMappableKeyUpEvent(event)) {
     std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
@@ -236,6 +234,11 @@ void Scenario::OnAttach() {
   }
 }
 
+void Scenario::OnDetach() {
+  timer_.PauseRun();
+  OnPause();
+}
+
 void Scenario::OnTickStart() {
   update_data_ = {};
 
@@ -244,7 +247,7 @@ void Scenario::OnTickStart() {
     return;
   }
   if (!app_.has_input_focus()) {
-    PauseAndPopSelf();
+    PopSelf();
     return;
   }
   if (run_state_ == ScenarioRunState::DONE) {
@@ -567,12 +570,6 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     }
   }
   return target;
-}
-
-void Scenario::PauseAndPopSelf() {
-  timer_.PauseRun();
-  OnPause();
-  PopSelf();
 }
 
 void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) {
