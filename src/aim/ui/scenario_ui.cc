@@ -143,9 +143,16 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     }
     auto current_scenario = app_->scenario_manager()->GetCurrentScenario();
     std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
-    if (ImGui::Selectable(scenario.id().c_str(), current_scenario_id == scenario.id())) {
-      result->scenario_to_start = scenario.id();
+    if (ImGui::Selectable(scenario.id().c_str(),
+                          current_scenario_id == scenario.id(),
+                          ImGuiSelectableFlags_AllowDoubleClick)) {
+      if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+        result->scenario_to_start = scenario.id();
+      } else {
+        app_->scenario_manager()->SetCurrentScenario(scenario.id());
+      }
     }
+
     const char* popup_id = "ScenarioItemMenu";
     if (ImGui::BeginPopupContextItem(popup_id)) {
       if (current_playlist_run != nullptr) {
