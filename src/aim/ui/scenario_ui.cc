@@ -100,13 +100,13 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
     ImGui::LoopId loop_id;
     for (auto& node : nodes) {
-      auto id = loop_id.Get();
+      auto id = loop_id.Get("ScenarioItem");
       if (node->scenario.has_value()) {
         DrawScenarioListItem(*node->scenario, search_words, current_playlist_run, result);
       }
     }
     for (auto& node : nodes) {
-      auto id = loop_id.Get();
+      auto id = loop_id.Get("BundleItem");
       if (!node->scenario.has_value()) {
         if (expand_all_ > 0) {
           ImGui::SetNextItemOpen(true);
@@ -114,7 +114,6 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         if (collapse_all_ > 0) {
           ImGui::SetNextItemOpen(false);
         }
-        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
         const char* popup_id = "ScenarioBundleMenu";
         if (ImGui::BeginPopupContextItem(popup_id)) {
           if (ImGui::Selectable("Collapse all")) {
@@ -125,6 +124,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
           }
           ImGui::EndPopup();
         }
+        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
         ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
         if (node_opened) {
           DrawScenarioNodes(node->child_nodes, search_words, result);
