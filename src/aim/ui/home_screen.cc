@@ -118,6 +118,13 @@ class HomeScreen : public UiScreen {
   }
   */
   void DrawScreen() override {
+    if (app_.BeginFullscreenWindow()) {
+      DrawScreenInternal();
+    }
+    ImGui::End();
+  }
+
+  void DrawScreenInternal() {
     ImGui::IdGuard cid("HomePage");
     ScreenInfo screen = app_.screen_info();
 
@@ -165,21 +172,17 @@ class HomeScreen : public UiScreen {
       ImGui::EndTable();
     }
   }
+
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
     Settings settings = app_.settings_manager()->GetCurrentSettings();
+    if (user_is_typing) {
+      return;
+    }
     if (IsMappableKeyDownEvent(event)) {
-      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
-        state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-      }
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
-        auto current_scenario = GetCurrentScenario();
-        if (current_scenario.has_value()) {
-          ScenarioEditorOptions opts;
-          opts.scenario_id = current_scenario->id();
-          PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
-        }
-      }
+      auto current_scenario = GetCurrentScenario();
+      std::string scenario_id = current_scenario ? current_scenario->id() : "";
+      HandleDefaultScenarioEvents(event, user_is_typing, scenario_id);
+
       if (event.key.key == SDLK_ESCAPE) {
         state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
       }

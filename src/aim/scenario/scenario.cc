@@ -33,13 +33,10 @@
 
 namespace aim {
 namespace {
+
 constexpr const u16 kReplayFps = 240;
 constexpr const u64 kTargetRenderFps = 615;
 constexpr const u64 kClickDebounceMicros = 3 * 1000;
-
-NavigationEvent GoToStatsScreen(std::string scenario_id, u64 run_id, Application* app) {
-  return NavigationEvent::ShowScreen([=]() { return CreateStatsScreen(scenario_id, run_id, app); });
-}
 
 }  // namespace
 
@@ -100,7 +97,7 @@ bool Scenario::ShouldAutoHold() {
 }
 
 void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
-  if (event.type == SDL_EVENT_MOUSE_MOTION) {
+  if (event.type == SDL_EVENT_MOUSE_MOTION && run_state_ == ScenarioRunState::RUNNING) {
     camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
   }
 
@@ -128,7 +125,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
           }
         }
       } else if (run_state_ == WAITING_FOR_CLICK_TO_START) {
-        run_state_ = ScenarioRunState::RUNNING;
+        update_data_.has_click = true;
       }
     }
 
@@ -173,54 +170,6 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
   if (run_state_ == ScenarioRunState::RUNNING) {
     OnScenarioEvent(event);
   }
-  /*
-    if (IsMappableKeyDownEvent(event)) {
-      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-      if (!ShouldAutoHold()) {
-        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-          u64 now_micros = timer_.GetElapsedMicros();
-          if (now_micros - last_click_time_micros > kClickDebounceMicros) {
-            update_data.has_click = true;
-            last_click_time_micros = now_micros;
-          }
-          is_click_held_ = true;
-        }
-      }
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
-        return NavigationEvent::RestartLastScenario();
-      }
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().edit_scenario())) {
-        return NavigationEvent::EditScenario(id_);
-      }
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
-        show_settings = QuickSettingsType::DEFAULT;
-        show_settings_release_key = event_name;
-      }
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
-        show_settings = QuickSettingsType::METRONOME;
-        show_settings_release_key = event_name;
-      }
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
-        is_adjusting_crosshair = true;
-      }
-    }
-    if (IsEscapeKeyDown(event)) {
-      return PauseAndReturn();
-    }
-    if (IsMappableKeyUpEvent(event)) {
-      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
-        is_adjusting_crosshair = false;
-        save_crosshair = true;
-      }
-      if (!ShouldAutoHold()) {
-        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-          update_data.has_click_up = true;
-          is_click_held_ = false;
-        }
-      }
-    }
-    */
 }
 
 void Scenario::OnAttach() {
@@ -269,21 +218,92 @@ void Scenario::OnTickStart() {
     }
   }
 
-  if (run_state_ == ScenarioRunState::RUNNING && !initialized_) {
-    Initialize();
-    initialized_ = true;
+  if (run_state_ == ScenarioRunState::RUNNING) {
+    if (!initialized_) {
+      Initialize();
+      initialized_ = true;
+    }
+    current_times_.events_start = timer_.GetElapsedMicros();
   }
-  // start => current_times_.events_end = timer_.GetElapsedMicros();
 }
 
 void Scenario::OnTick() {
   if (run_state_ == ScenarioRunState::RUNNING) {
     OnRunningTick();
-  } else if (run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START) {
-    void OnWaitingTick();
+    return;
+  }
+  if (run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START) {
+    OnWaitingForClickTick();
   }
 }
-void Scenario::OnWaitingTick() {}
+
+void Scenario::OnWaitingForClickTick() {
+  if (update_data_.has_click) {
+    run_state_ = ScenarioRunState::RUNNING;
+    timer_.ResumeRun();
+    return;
+  }
+  look_at_ = camera_.GetLookAt();
+  timer_.OnStartFrame();
+  bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
+  if (!do_render) {
+    return;
+  }
+  timer_.OnStartRender();
+  auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
+
+  app_.NewImGuiFrame();
+  app_.BeginFullscreenWindow();
+  DrawCrosshair(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+
+  ImGui::Text("%s", id_.c_str());
+  ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+  if (settings_.metronome_bpm() > 0) {
+    ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
+  }
+  ImGui::Text("theme: %s", settings_.theme_name().c_str());
+  ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
+
+  ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
+  {
+    auto bold = app_.font_manager()->UseLargeBold();
+    std::string message = "Click to Start";
+    ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+    ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+    ImGui::SetCursorPosY(app_.screen_info().center.y - text_size.y * 1.75);
+    ImGui::Text(message);
+  }
+
+  ImVec2 text_size = ImGui::CalcTextSize(id_.c_str());
+  ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+  ImGui::SetCursorPosY(app_.screen_info().center.y + text_size.y * 1);
+  ImGui::Text("%s", id_.c_str());
+
+  std::string message = std::format("cm/360: {}", MaybeIntToString(effective_cm_per_360_, 1));
+  text_size = ImGui::CalcTextSize(message.c_str());
+  ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+  ImGui::SetCursorPosY(app_.screen_info().center.y + text_size.y * 2);
+  ImGui::Text("%s", message.c_str());
+
+  ImGui::PopStyleColor();
+  ImGui::End();
+
+  RenderContext ctx;
+  if (app_.StartRender(&ctx)) {
+    app_.renderer()->DrawScenario(projection_,
+                                  def_.room(),
+                                  theme_,
+                                  settings_.health_bar(),
+                                  target_manager_.GetTargets(),
+                                  look_at_,
+                                  &ctx,
+                                  timer_.run_stopwatch(),
+                                  &current_times_);
+    current_times_.render_imgui_start = timer_.GetElapsedMicros();
+    app_.FinishRender(&ctx);
+    current_times_.render_imgui_end = timer_.GetElapsedMicros();
+  }
+}
 
 void Scenario::OnRunningTick() {
   current_times_.events_end = timer_.GetElapsedMicros();
@@ -609,85 +629,4 @@ std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, App
   return {};
 }
 
-/*
-  look_at_ = camera_.GetLookAt();
-  timer_.StartLoop();
-
-  timer_.OnStartFrame();
-
-  SDL_Event event;
-  UpdateStateData update_data;
-  while (SDL_PollEvent(&event)) {
-    ImGui_ImplSDL3_ProcessEvent(&event);
-    if (event.type == SDL_EVENT_QUIT) {
-      throw ApplicationExitException();
-    }
-  }
-
-  bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
-  if (!do_render) {
-    continue;
-  }
-
-  timer_.OnStartRender();
-  auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
-
-  app_->NewImGuiFrame();
-  app_->BeginFullscreenWindow();
-  DrawCrosshair(crosshair_, crosshair_size_, theme_, app_->screen_info().center);
-
-  ImGui::Text("%s", id_.c_str());
-  ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-  if (settings_.metronome_bpm() > 0) {
-    ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
-  }
-  ImGui::Text("theme: %s", settings_.theme_name().c_str());
-  ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
-
-  ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
-  {
-    auto bold = app_->font_manager()->UseLargeBold();
-    std::string message = "Click to Start";
-    ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
-    ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
-    ImGui::SetCursorPosY(app_->screen_info().center.y - text_size.y * 1.75);
-    ImGui::Text(message);
-  }
-
-  ImVec2 text_size = ImGui::CalcTextSize(id_.c_str());
-  ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
-  ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 1);
-  ImGui::Text("%s", id_.c_str());
-
-  std::string message = std::format("cm/360: {}", MaybeIntToString(effective_cm_per_360_, 1));
-  text_size = ImGui::CalcTextSize(message.c_str());
-  ImGui::SetCursorPosX(app_->screen_info().center.x - text_size.x * 0.5);
-  ImGui::SetCursorPosY(app_->screen_info().center.y + text_size.y * 2);
-  ImGui::Text("%s", message.c_str());
-
-  ImGui::PopStyleColor();
-  ImGui::End();
-
-  RenderContext ctx;
-  if (app_->StartRender(&ctx)) {
-    app_->renderer()->DrawScenario(projection_,
-                                   def_.room(),
-                                   theme_,
-                                   settings_.health_bar(),
-                                   target_manager_.GetTargets(),
-                                   look_at_,
-                                   &ctx,
-                                   timer_.run_stopwatch(),
-                                   &current_times_);
-    current_times_.render_imgui_start = timer_.GetElapsedMicros();
-    app_->FinishRender(&ctx);
-    current_times_.render_imgui_end = timer_.GetElapsedMicros();
-  }
-}
-
-// Scenario has started.
-has_started_ = true;
-Initialize();
-return ResumeInternal();
-*/
 }  // namespace aim

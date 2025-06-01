@@ -136,10 +136,6 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
  protected:
-  bool DisableFullscreenWindow() override {
-    return true;
-  }
-
   void DrawScreen() override {
     ImGui::IdGuard cid("ScenarioEditor");
     ImVec2 char_size = ImGui::CalcTextSize("A");
