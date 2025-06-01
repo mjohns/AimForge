@@ -72,6 +72,10 @@ struct LoopId {
     return IdGuard(++i);
   }
 
+  IdGuard Get(const std::string& prefix) {
+    return IdGuard(prefix, ++i);
+  }
+
   int i = -1;
 };
 
