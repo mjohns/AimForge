@@ -5,8 +5,8 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
-#include "aim/core/tracking_sound.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/tracking_sound.h"
 
 namespace aim {
 

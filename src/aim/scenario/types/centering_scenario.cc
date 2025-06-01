@@ -13,7 +13,7 @@
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/target.h"
-#include "aim/core/tracking_sound.h"
+#include "aim/scenario/tracking_sound.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"

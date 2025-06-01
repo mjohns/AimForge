@@ -18,7 +18,6 @@
 namespace aim {
 
 std::string GetMouseButtonName(u8 button);
-
 std::string GetKeyNameForEvent(const SDL_Event& event);
 bool KeyNameMatchesEvent(const SDL_Event& event, const std::string& name);
 bool KeyMappingMatchesEvent(const SDL_Event& event, const KeyMapping& mapping);
