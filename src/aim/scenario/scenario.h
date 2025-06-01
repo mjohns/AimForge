@@ -9,9 +9,9 @@
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/screen.h"
 #include "aim/core/metronome.h"
 #include "aim/core/perf.h"
-#include "aim/core/screen.h"
 #include "aim/core/target.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/scenario.pb.h"
@@ -20,16 +20,17 @@
 namespace aim {
 
 enum ScenarioRunState {
-  NOT_STARTED,
-  WAITING_FOR_CLICK_TO_START,
-  RUNNING,
-  DONE,
+    NOT_STARTED,
+    WAITING_FOR_CLICK_TO_START,
+    RUNNING,
+    DONE,
 };
 
 struct CreateScenarioParams {
   std::string id;
   ScenarioDef def;
   bool force_start_immediately = false;
+  bool from_scenario_editor = false;
 };
 
 struct ScenarioStats {
@@ -158,6 +159,7 @@ class Scenario : public Screen {
   u64 last_click_time_micros_ = 0;
   UpdateStateData update_data_;
   u64 loop_count_ = 0;
+  bool from_scenario_editor_;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);
