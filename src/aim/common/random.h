@@ -10,6 +10,8 @@ class Random {
     std::random_device rd;
     random_generator_ = std::mt19937(rd());
   }
+  Random(const Random&) = delete;
+  Random& operator=(const Random&) = delete;
 
   float Get(float max = 1.0) {
     auto dist = std::uniform_real_distribution<float>(0, max);

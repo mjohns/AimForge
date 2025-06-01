@@ -242,35 +242,56 @@ class HomeScreen : public UiScreen {
   }
 
   void DrawScenariosScreen(ScenarioBrowserType type) {
-    ScenarioBrowserResult result;
-    scenario_browser_component_->Show(type, &result);
-    if (result.scenario_to_start.size() > 0) {
-      if (app_.scenario_manager()->SetCurrentScenario(result.scenario_to_start)) {
-        state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+
+    if (ImGui::BeginTable("ScenarioColumns", 2, flags)) {
+      ImGui::TableNextColumn();
+
+      ScenarioBrowserResult result;
+      scenario_browser_component_->Show(type, &result);
+      if (result.scenario_to_start.size() > 0) {
+        if (app_.scenario_manager()->SetCurrentScenario(result.scenario_to_start)) {
+          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+        }
       }
-    }
-    if (result.scenario_stats_to_view.size() > 0) {
-      PushNextScreen(CreateStatsScreen(result.scenario_stats_to_view, result.run_id, &app_));
-    }
-    if (result.scenario_to_edit.size() > 0) {
-      ScenarioEditorOptions opts;
-      opts.scenario_id = result.scenario_to_edit;
-      PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
-    }
-    if (result.scenario_to_edit_copy.size() > 0) {
-      ScenarioEditorOptions opts;
-      opts.scenario_id = result.scenario_to_edit_copy;
-      opts.is_new_copy = true;
-      PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
-    }
-    if (result.reload_scenarios) {
-      app_.scenario_manager()->LoadScenariosFromDisk();
+      if (result.scenario_stats_to_view.size() > 0) {
+        PushNextScreen(CreateStatsScreen(result.scenario_stats_to_view, result.run_id, &app_));
+      }
+      if (result.scenario_to_edit.size() > 0) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = result.scenario_to_edit;
+        PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+      }
+      if (result.scenario_to_edit_copy.size() > 0) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = result.scenario_to_edit_copy;
+        opts.is_new_copy = true;
+        PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+      }
+      if (result.reload_scenarios) {
+        app_.scenario_manager()->LoadScenariosFromDisk();
+      }
+
+      ImGui::TableNextColumn();
+      auto current_scenario = app_.scenario_manager()->GetCurrentScenario();
+      if (current_scenario) {
+        ImGui::Text(current_scenario->id());
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+        
+        ImGui::Indent();
+        ImGui::Text(current_scenario->def.description());
+        ImGui::Unindent();
+      }
+
+      ImGui::EndTable();
     }
   }
 
   void DrawPlaylistsScreen() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
-    ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV;
 
     if (ImGui::BeginTable("PlaylistColumns", 3, flags)) {
       ImGui::TableNextColumn();

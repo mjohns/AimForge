@@ -141,7 +141,9 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     if (!StringMatchesSearch(scenario.id(), search_words)) {
       return;
     }
-    if (ImGui::Button(scenario.id().c_str())) {
+    auto current_scenario = app_->scenario_manager()->GetCurrentScenario();
+    std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
+    if (ImGui::Selectable(scenario.id().c_str(), current_scenario_id == scenario.id())) {
       result->scenario_to_start = scenario.id();
     }
     const char* popup_id = "ScenarioItemMenu";
