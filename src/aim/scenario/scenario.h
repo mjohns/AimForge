@@ -125,7 +125,7 @@ class Scenario : public Screen {
 
  private:
   void OnRunningTick();
-  void OnWaitingTick();
+  void OnWaitingForClickTick();
 
   void RefreshState();
   bool ShouldAutoHold();

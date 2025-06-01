@@ -56,10 +56,6 @@ class SettingsScreen : public UiScreen {
   }
 
  protected:
-  bool DisableFullscreenWindow() override {
-    return true;
-  }
-
   void DrawSettings() {
     ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
                                   .set_label("cm/360")

@@ -24,9 +24,9 @@ class UiScreen : public Screen {
   void OnAttach() override;
   void OnDetach() override;
 
-  virtual bool DisableFullscreenWindow() {
-    return false;
-  }
+  void HandleDefaultScenarioEvents(const SDL_Event& event,
+                                   bool user_is_typing,
+                                   const std::string& scenario_id);
 };
 
 }  // namespace aim

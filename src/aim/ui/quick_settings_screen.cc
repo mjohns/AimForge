@@ -52,6 +52,13 @@ class QuickSettingsScreen : public UiScreen {
 
  protected:
   void DrawScreen() override {
+    if (app_.BeginFullscreenWindow()) {
+      DrawScreenInternal();
+    }
+    ImGui::End();
+  }
+
+  void DrawScreenInternal() {
     const ScreenInfo& screen = app_.screen_info();
     ImGui::Columns(3, "SettingsColumns", false);
 

@@ -31,6 +31,10 @@ class Screen {
   void ReturnHome();
   void PushNextScreen(std::shared_ptr<Screen> next_screen);
 
+  Application& app() {
+    return app_;
+  }
+
  protected:
   virtual void OnAttach() {}
   virtual void OnDetach() {}

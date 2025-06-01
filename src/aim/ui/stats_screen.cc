@@ -55,24 +55,6 @@ class StatsScreen : public UiScreen {
   }
 
  protected:
-  bool DisableFullscreenWindow() override {
-    return true;
-  }
-
-  /*
-  void OnTickStart() override {
-    if (show_settings_.has_value()) {
-      NavigationEvent nav_event;
-      nav_event =
-          CreateQuickSettingsScreen(scenario_id_, *show_settings_, show_settings_release_key_, app_)
-              ->Run();
-      if (nav_event.IsNotDone()) {
-        ScreenDone(nav_event);
-      }
-      show_settings_ = {};
-    }
-  }
-  */
 
   void DrawScreen() override {
     ImGui::IdGuard cid("StatsScreen");
@@ -88,7 +70,7 @@ class StatsScreen : public UiScreen {
       if (ImGui::Begin("Playlist")) {
         std::string scenario_to_start;
         if (PlaylistRunComponent("PlaylistRun", playlist_run, &scenario_to_start)) {
-            // Set start scenario state.
+          // Set start scenario state.
           ReturnHome();
           // ScreenDone(NavigationEvent::StartScenario(scenario_to_start));
         }
@@ -258,11 +240,11 @@ class StatsScreen : public UiScreen {
     DrawHistory();
     ImGui::SetCursorAtBottom();
     if (ImGui::Button("Restart")) {
-     // ScreenDone(NavigationEvent::StartScenario(scenario_id_));
+      // ScreenDone(NavigationEvent::StartScenario(scenario_id_));
     }
     ImGui::SameLine();
     if (ImGui::Button("Next")) {
-      //ScreenDone(NavigationEvent::PlaylistNext());
+      // ScreenDone(NavigationEvent::PlaylistNext());
     }
   }
 
@@ -290,27 +272,7 @@ class StatsScreen : public UiScreen {
     if (IsEscapeKeyDown(event)) {
       PopSelf();
     }
-    if (IsMappableKeyDownEvent(event)) {
-      auto settings = app_.settings_manager()->GetCurrentSettingsForScenario(scenario_id_);
-      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
-    //    ScreenDone(NavigationEvent::RestartLastScenario());
-      }
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
-     //   ScreenDone(NavigationEvent::EditScenario(scenario_id_));
-      }
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().next_scenario())) {
-      //  ScreenDone(NavigationEvent::PlaylistNext());
-      }
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_settings())) {
-        show_settings_ = QuickSettingsType::DEFAULT;
-        show_settings_release_key_ = event_name;
-      }
-      if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_metronome())) {
-        show_settings_ = QuickSettingsType::METRONOME;
-        show_settings_release_key_ = event_name;
-      }
-    }
+    HandleDefaultScenarioEvents(event, user_is_typing, scenario_id_);
   }
 
  private:
