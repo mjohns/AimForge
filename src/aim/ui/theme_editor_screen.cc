@@ -301,14 +301,14 @@ class ThemeEditorScreen : public UiScreen {
       health_bar.set_width(8);
       health_bar.set_height(2);
       app_.renderer()->DrawScenario(projection_,
-                                     default_room_,
-                                     current_theme_,
-                                     health_bar,
-                                     target_manager_.GetTargets(),
-                                     look_at_,
-                                     &ctx,
-                                     stopwatch,
-                                     &frame_times);
+                                    default_room_,
+                                    current_theme_,
+                                    health_bar,
+                                    target_manager_.GetTargets(),
+                                    look_at_,
+                                    &ctx,
+                                    stopwatch,
+                                    &frame_times);
       app_.FinishRender(&ctx);
     }
   }

@@ -1453,33 +1453,33 @@ class ScenarioEditorScreen : public UiScreen {
     FrameTimes frame_times;
     if (app_.StartRender(&ctx)) {
       app_.renderer()->DrawScenario(projection_,
-                                     def_.room(),
-                                     theme_,
-                                     settings_.health_bar(),
-                                     target_manager_.GetTargets(),
-                                     look_at,
-                                     &ctx,
-                                     stopwatch,
-                                     &frame_times);
+                                    def_.room(),
+                                    theme_,
+                                    settings_.health_bar(),
+                                    target_manager_.GetTargets(),
+                                    look_at,
+                                    &ctx,
+                                    stopwatch,
+                                    &frame_times);
       app_.FinishRender(&ctx);
     }
   }
 
   void OnTickStart() override {
-      /*
-    if (!start_scenario_) {
-      return;
-    }
-    start_scenario_ = false;
-    CreateScenarioParams params;
-    params.def = def_;
-    params.def.set_duration_seconds(1000000);
-    params.id = name_.full_name();
-    params.force_start_immediately = true;
-    CreateScenario(params, app_)->Run();
-    app_.EnableVsync();
-    SDL_SetWindowRelativeMouseMode(app_.sdl_window(), false);
-    */
+    /*
+  if (!start_scenario_) {
+    return;
+  }
+  start_scenario_ = false;
+  CreateScenarioParams params;
+  params.def = def_;
+  params.def.set_duration_seconds(1000000);
+  params.id = name_.full_name();
+  params.force_start_immediately = true;
+  CreateScenario(params, app_)->Run();
+  app_.EnableVsync();
+  SDL_SetWindowRelativeMouseMode(app_.sdl_window(), false);
+  */
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {

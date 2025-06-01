@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "aim/core/screen.h"
 
@@ -21,8 +21,8 @@ class ApplicationState {
   ApplicationState(const ApplicationState&) = delete;
   ApplicationState& operator=(const ApplicationState&) = delete;
 
-  //std::string current_scenario_id;
-  //std::string current_playlist_id;
+  // std::string current_scenario_id;
+  // std::string current_playlist_id;
   std::shared_ptr<Screen> current_running_scenario;
   std::optional<ScenarioRunOption> scenario_run_option;
 };
