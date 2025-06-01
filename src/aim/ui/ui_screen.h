@@ -4,7 +4,6 @@
 #include <optional>
 
 #include "aim/core/application.h"
-#include "aim/core/navigation_event.h"
 
 namespace aim {
 

@@ -88,35 +88,6 @@ class HomeScreen : public UiScreen {
     }
   }
 
-  /*
-  void HandleNavEventResult(const NavigationEvent& nav_event) {
-    if (nav_event.next_screen) {
-      screen_to_show_ = nav_event.next_screen();
-      return;
-    }
-    if (nav_event.IsRestartLastScenario()) {
-      scenario_run_option_ = ScenarioRunOption::RUN;
-      return;
-    }
-    if (nav_event.type == NavigationEventType::START_SCENARIO) {
-      if (app_.scenario_manager()->SetCurrentScenario(nav_event.scenario_id)) {
-        scenario_run_option_ = ScenarioRunOption::RUN;
-      }
-      // TODO: Error
-      return;
-    }
-    if (nav_event.type == NavigationEventType::EDIT_SCENARIO) {
-      ScenarioEditorOptions opts;
-      opts.scenario_id = nav_event.scenario_id;
-      screen_to_show_ = CreateScenarioEditorScreen(opts, app_);
-      return;
-    }
-    if (nav_event.type == NavigationEventType::PLAYLIST_NEXT) {
-      HandlePlaylistNext();
-      return;
-    }
-  }
-  */
   void DrawScreen() override {
     if (app_.BeginFullscreenWindow()) {
       DrawScreenInternal();

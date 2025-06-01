@@ -55,7 +55,6 @@ class StatsScreen : public UiScreen {
   }
 
  protected:
-
   void DrawScreen() override {
     ImGui::IdGuard cid("StatsScreen");
 
@@ -71,8 +70,9 @@ class StatsScreen : public UiScreen {
         std::string scenario_to_start;
         if (PlaylistRunComponent("PlaylistRun", playlist_run, &scenario_to_start)) {
           // Set start scenario state.
+          app_.scenario_manager()->SetCurrentScenario(scenario_to_start);
+          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
           ReturnHome();
-          // ScreenDone(NavigationEvent::StartScenario(scenario_to_start));
         }
       }
       ImGui::End();
@@ -240,11 +240,14 @@ class StatsScreen : public UiScreen {
     DrawHistory();
     ImGui::SetCursorAtBottom();
     if (ImGui::Button("Restart")) {
-      // ScreenDone(NavigationEvent::StartScenario(scenario_id_));
+      app_.scenario_manager()->SetCurrentScenario(scenario_id_);
+      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+      ReturnHome();
     }
     ImGui::SameLine();
     if (ImGui::Button("Next")) {
-      // ScreenDone(NavigationEvent::PlaylistNext());
+      state_.scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
+      ReturnHome();
     }
   }
 

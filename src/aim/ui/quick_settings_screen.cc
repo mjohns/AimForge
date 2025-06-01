@@ -7,7 +7,6 @@
 #include <optional>
 
 #include "aim/common/util.h"
-#include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/ui_screen.h"
 
