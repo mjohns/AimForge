@@ -299,9 +299,7 @@ void Scenario::OnWaitingForClickTick() {
                                   &ctx,
                                   timer_.run_stopwatch(),
                                   &current_times_);
-    current_times_.render_imgui_start = timer_.GetElapsedMicros();
     app_.FinishRender(&ctx);
-    current_times_.render_imgui_end = timer_.GetElapsedMicros();
   }
 }
 
