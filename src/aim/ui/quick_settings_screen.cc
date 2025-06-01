@@ -8,6 +8,7 @@
 
 #include "aim/common/util.h"
 #include "aim/core/settings_manager.h"
+#include "aim/ui/settings_screen.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -50,6 +51,13 @@ class QuickSettingsScreen : public UiScreen {
   }
 
  protected:
+  void OnAttachUi() override {
+    if (went_to_settings_) {
+      // Returned from full settings so just exit quick settings too.
+      PopSelf();
+    }
+  }
+
   void DrawScreen() override {
     if (app_.BeginFullscreenWindow()) {
       DrawScreenInternal();
@@ -59,6 +67,10 @@ class QuickSettingsScreen : public UiScreen {
 
   void DrawScreenInternal() {
     const ScreenInfo& screen = app_.screen_info();
+    if (ImGui::Button(std::format("{} Settings", kIconSettings))) {
+      PushNextScreen(CreateSettingsScreen(&app_, scenario_id_));
+      went_to_settings_ = true;
+    }
     ImGui::Columns(3, "SettingsColumns", false);
 
     float width = screen.width * 0.5;
@@ -158,6 +170,7 @@ class QuickSettingsScreen : public UiScreen {
   std::vector<std::string> theme_names_;
   std::vector<std::string> crosshair_names_;
   std::string release_key_;
+  bool went_to_settings_ = false;
 };
 
 }  // namespace
