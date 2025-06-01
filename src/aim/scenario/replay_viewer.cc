@@ -18,7 +18,7 @@ bool CompareEventsByTime(const ReplayEvent& lhs, const ReplayEvent& rhs) {
 
 }  // namespace
 
-NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
+void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
   Theme theme = app->settings_manager()->GetCurrentTheme();
   Settings settings = app->settings_manager()->GetCurrentSettings();
   Crosshair crosshair = app->settings_manager()->GetCurrentCrosshair();
@@ -49,7 +49,8 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-          return NavigationEvent::Done();
+      //    return NavigationEvent::Done();
+          return;
         }
       }
     }
@@ -58,7 +59,8 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
     uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     int pitch_yaws_index = replay_frame_number * 2;
     if (pitch_yaws_index + 1 >= replay.pitch_yaws_size()) {
-      return NavigationEvent::Done();
+      //return NavigationEvent::Done();
+      return;
     }
 
     camera.UpdatePitch(replay.pitch_yaws(pitch_yaws_index));
@@ -137,7 +139,6 @@ NavigationEvent ReplayViewer::PlayReplay(const Replay& replay, Application* app)
       app->FinishRender(&ctx);
     }
   }
-  return NavigationEvent::Done();
 }
 
 }  // namespace aim

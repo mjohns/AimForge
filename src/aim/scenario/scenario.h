@@ -11,7 +11,6 @@
 #include "aim/core/camera.h"
 #include "aim/core/screen.h"
 #include "aim/core/metronome.h"
-#include "aim/core/navigation_event.h"
 #include "aim/core/perf.h"
 #include "aim/core/target.h"
 #include "aim/proto/replay.pb.h"

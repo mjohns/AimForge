@@ -9,7 +9,6 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/util.h"
 #include "aim/core/camera.h"
-#include "aim/core/navigation_event.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 
