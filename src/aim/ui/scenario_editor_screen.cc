@@ -59,6 +59,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
     {ScenarioDef::kBarrelDef, "Barrel"},
     {ScenarioDef::kLinearDef, "Linear"},
+    {ScenarioDef::kWallArcDef, "Wall Arc"},
 };
 
 const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
@@ -306,6 +307,51 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kBarrelDef) {
       DrawBarrelEditor();
     }
+    if (scenario_type == ScenarioDef::kWallArcDef) {
+      DrawWallArcEditor();
+    }
+  }
+
+  void DrawWallArcEditor() {
+    ImGui::IdGuard cid("WallArcEditor");
+    WallArcScenarioDef& d = *def_.mutable_wall_arc_def();
+
+    ImGui::InputFloat(ImGui::InputFloatParams("Duration")
+                          .set_label("Duration seconds")
+                          .set_step(0.1, 2)
+                          .set_min(0.2)
+                          .set_precision(1)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(WallArcScenarioDef, &d, duration));
+
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams("ControlHeight")
+                                  .set_label("Control height")
+                                  .set_step(0.1, 2)
+                                  .set_precision(1)
+                                  .set_default(1)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(WallArcScenarioDef, &d, control_height));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). "
+        "The specified height is for the control point (1, height). See "
+        "https://www.desmos.com/calculator/scz7zhonfw");
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Width", /*default_to_x=*/true, d.mutable_width());
+    ImGui::SameLine();
+    ImGui::HelpMarker("The arc will be stretched over the specified width");
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Height", /*default_to_x=*/true, d.mutable_height());
+
+    ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
+                     PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));
   }
 
   void DrawLinearEditor() {
@@ -1465,33 +1511,24 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void OnTickStart() override {
-    /*
-  if (!start_scenario_) {
-    return;
-  }
-  start_scenario_ = false;
-  CreateScenarioParams params;
-  params.def = def_;
-  params.def.set_duration_seconds(1000000);
-  params.id = name_.full_name();
-  params.force_start_immediately = true;
-  CreateScenario(params, app_)->Run();
-  app_.EnableVsync();
-  SDL_SetWindowRelativeMouseMode(app_.sdl_window(), false);
-  */
-  }
-
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
     if (user_is_typing) {
       return;
     }
     if (IsMappableKeyDownEvent(event)) {
       std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-      if (KeyMappingMatchesEvent(
-              event_name,
-              app_.settings_manager()->GetCurrentSettings().keybinds().restart_scenario())) {
-        start_scenario_ = true;
+      bool is_restart = KeyMappingMatchesEvent(
+          event_name, app_.settings_manager()->GetCurrentSettings().keybinds().restart_scenario());
+      bool is_next = KeyMappingMatchesEvent(
+          event_name, app_.settings_manager()->GetCurrentSettings().keybinds().next_scenario());
+      if (is_restart || is_next) {
+        CreateScenarioParams params;
+        params.def = def_;
+        params.def.set_duration_seconds(1000000);
+        params.id = name_.full_name();
+        params.force_start_immediately = true;
+        params.from_scenario_editor = true;
+        PushNextScreen(CreateScenario(params, &app_));
       }
     }
   }

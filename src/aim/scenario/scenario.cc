@@ -47,7 +47,8 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       timer_(kReplayFps),
       camera_(Camera(CameraParams(params.def.room()))),
       target_manager_(params.def.room()),
-      force_start_immediately_(params.force_start_immediately) {
+      force_start_immediately_(params.force_start_immediately),
+      from_scenario_editor_(params.from_scenario_editor) {
   theme_ = app->settings_manager()->GetCurrentTheme();
   max_render_age_micros_ = (1 / (float)(kTargetRenderFps + 1)) * 1000 * 1000;
 
@@ -130,10 +131,14 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
     }
 
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().edit_scenario())) {
-      ReturnHome();
-      ScenarioEditorOptions opts;
-      opts.scenario_id = id_;
-      PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+      if (from_scenario_editor_) {
+          PopSelf();
+      } else {
+        ReturnHome();
+        ScenarioEditorOptions opts;
+        opts.scenario_id = id_;
+        PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+      }
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
       state_.scenario_run_option = ScenarioRunOption::START_CURRENT;

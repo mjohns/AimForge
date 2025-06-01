@@ -85,9 +85,8 @@ class WallArcScenario : public BaseScenario {
 
     if (last_times_across_ != full_times_across) {
       last_times_across_ = full_times_across;
-      control_.y = GetJitteredValue(def_.wall_arc_def().control_height(),
-                                    def_.wall_arc_def().control_height_jitter(),
-                                    app_.random_generator());
+      control_.y = app_.rand().GetJittered(def_.wall_arc_def().control_height(),
+                                           def_.wall_arc_def().control_height_jitter());
     }
 
     float partial_time_across = times_across - full_times_across;
