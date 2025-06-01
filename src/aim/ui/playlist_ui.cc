@@ -301,16 +301,16 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
   UiScreen* screen_;
 };
 
-class PlaylistListComponentImpl : public UiComponent, public PlaylistListComponent {
+class PlaylistListComponentImpl : public PlaylistListComponent {
  public:
   explicit PlaylistListComponentImpl(UiScreen* screen)
-      : UiComponent(screen->app()), playlist_manager_(screen->app()->playlist_manager()) {}
+      : playlist_manager_(screen->app()->playlist_manager()),
+        screen_(screen),
+        app_(screen->app()) {}
 
   void Show(PlaylistListResult* result) override {
-    auto cid = GetComponentIdGuard();
-
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      app_->playlist_manager()->DeletePlaylist(playlist.name);
+      screen_->app()->playlist_manager()->DeletePlaylist(playlist.name);
       result->reload_playlists = true;
     });
 
@@ -370,6 +370,8 @@ class PlaylistListComponentImpl : public UiComponent, public PlaylistListCompone
   ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
   std::string playlist_search_text_;
   PlaylistManager* playlist_manager_;
+  UiScreen* screen_;
+  Application* app_;
 };
 
 }  // namespace
