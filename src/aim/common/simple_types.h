@@ -7,6 +7,12 @@
 
 namespace aim {
 
+#define AIM_NO_COPY(ClassName)                     \
+  ClassName(const ClassName&) = delete;            \
+  ClassName(ClassName&&) = delete;                 \
+  ClassName& operator=(const ClassName&) = delete; \
+  ClassName& operator=(ClassName&&) = delete;
+
 using u32 = uint32_t;
 using u64 = uint64_t;
 using u16 = uint16_t;
