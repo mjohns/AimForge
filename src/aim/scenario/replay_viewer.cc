@@ -49,7 +49,7 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
       if (event.type == SDL_EVENT_KEY_DOWN) {
         SDL_Keycode keycode = event.key.key;
         if (keycode == SDLK_ESCAPE) {
-      //    return NavigationEvent::Done();
+          //    return NavigationEvent::Done();
           return;
         }
       }
@@ -59,7 +59,7 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
     uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     int pitch_yaws_index = replay_frame_number * 2;
     if (pitch_yaws_index + 1 >= replay.pitch_yaws_size()) {
-      //return NavigationEvent::Done();
+      // return NavigationEvent::Done();
       return;
     }
 
