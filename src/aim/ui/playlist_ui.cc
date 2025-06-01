@@ -6,6 +6,7 @@
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
+#include "aim/ui/scenario_editor.h"
 
 namespace aim {
 namespace {
@@ -246,8 +247,10 @@ class PlaylistEditorComponent : public UiComponent {
 
 class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
  public:
-  explicit PlaylistComponentImpl(Application* app)
-      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
+  explicit PlaylistComponentImpl(UiScreen* screen)
+      : UiComponent(screen->app()),
+        playlist_manager_(screen->app()->playlist_manager()),
+        screen_(screen) {}
 
   bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
     auto cid = GetComponentIdGuard();
@@ -281,8 +284,8 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     }
     ImGui::Spacing();
     ImGui::Spacing();
-    return PlaylistRunComponent(
-        "PlaylistRun", playlist_manager_->GetCurrentRun(), scenario_to_start);
+    PlaylistRunComponent2("PlaylistRun", playlist_manager_->GetCurrentRun(), screen_);
+    return false;
   }
 
  private:
@@ -295,12 +298,13 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
   bool showing_editor_ = false;
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
+  UiScreen* screen_;
 };
 
 class PlaylistListComponentImpl : public UiComponent, public PlaylistListComponent {
  public:
-  explicit PlaylistListComponentImpl(Application* app)
-      : UiComponent(app), playlist_manager_(app->playlist_manager()) {}
+  explicit PlaylistListComponentImpl(UiScreen* screen)
+      : UiComponent(screen->app()), playlist_manager_(screen->app()->playlist_manager()) {}
 
   void Show(PlaylistListResult* result) override {
     auto cid = GetComponentIdGuard();
@@ -397,12 +401,54 @@ bool PlaylistRunComponent(const std::string& id,
   return selected;
 }
 
-std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(Application* app) {
-  return std::make_unique<PlaylistComponentImpl>(app);
+void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Screen* screen) {
+  ImGui::IdGuard cid(id);
+  for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
+    ImGui::IdGuard id(i);
+    PlaylistItemProgress& progress = playlist_run->progress_list[i];
+    PlaylistItem item = playlist_run->playlist.def.items(i);
+    float width = std::min(ImGui::GetContentRegionAvail().x, 600.0f);
+    float right = ImGui::GetCursorPosX() + width;
+    ImGui::SetNextItemWidth(width);
+    if (ImGui::Selectable(item.scenario().c_str(), i == playlist_run->current_index)) {
+      playlist_run->current_index = i;
+      screen->state()->scenario_run_option = ScenarioRunOption::START_CURRENT;
+      screen->app()->scenario_manager()->SetCurrentScenario(item.scenario());
+      screen->ReturnHome();
+    }
+
+    const char* popup_id = "ScenarioItemMenu";
+    if (ImGui::BeginPopupContextItem(popup_id)) {
+      if (ImGui::Selectable("Edit")) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = item.scenario();
+        screen->PushNextScreen(CreateScenarioEditorScreen(opts, screen->app()));
+      }
+      if (ImGui::Selectable("Edit new copy")) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = item.scenario();
+        opts.is_new_copy = true;
+        screen->PushNextScreen(CreateScenarioEditorScreen(opts, screen->app()));
+      }
+      ImGui::EndPopup();
+    }
+    ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+
+    ImGui::SameLine();
+    std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
+
+    float len = ImGui::CalcTextSize(progress_text.c_str()).x;
+    ImGui::SetCursorPosX(right - len);
+    ImGui::Text(progress_text);
+  }
 }
 
-std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(Application* app) {
-  return std::make_unique<PlaylistListComponentImpl>(app);
+std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen) {
+  return std::make_unique<PlaylistComponentImpl>(screen);
+}
+
+std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(UiScreen* screen) {
+  return std::make_unique<PlaylistListComponentImpl>(screen);
 }
 
 }  // namespace aim

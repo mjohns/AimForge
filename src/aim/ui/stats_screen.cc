@@ -68,12 +68,7 @@ class StatsScreen : public UiScreen {
     if (playlist_run != nullptr) {
       if (ImGui::Begin("Playlist")) {
         std::string scenario_to_start;
-        if (PlaylistRunComponent("PlaylistRun", playlist_run, &scenario_to_start)) {
-          // Set start scenario state.
-          app_.scenario_manager()->SetCurrentScenario(scenario_to_start);
-          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-          ReturnHome();
-        }
+        PlaylistRunComponent2("PlaylistRun", playlist_run, this);
       }
       ImGui::End();
     }
