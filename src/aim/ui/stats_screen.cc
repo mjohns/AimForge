@@ -42,7 +42,7 @@ class StatsScreen : public UiScreen {
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
     }
-    performance_stats_ = app->GetPerformanceStats(scenario_id, run_id);
+    performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
     auto scenario = app->scenario_manager()->GetScenario(scenario_id);
     if (scenario) {
       float start_score = scenario->def.start_score();

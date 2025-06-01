@@ -444,7 +444,7 @@ void Scenario::HandleScenarioDone() {
     }
   }
 
-  app_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
+  state_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
   PopSelf();
   PushNextScreen(CreateStatsScreen(id_, stats_id_, &app_));
 }

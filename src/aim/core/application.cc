@@ -360,27 +360,6 @@ void Application::DisableVsync() {
       gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 }
 
-std::optional<RunPerformanceStats> Application::GetPerformanceStats(const std::string& scenario_id,
-                                                                    u64 run_id) {
-  std::string key = std::format("{}{}", scenario_id, run_id);
-  for (auto& entry : perf_stats_) {
-    if (entry.first == key) {
-      return entry.second;
-    }
-  }
-  return {};
-}
-
-void Application::AddPerformanceStats(const std::string& scenario_id,
-                                      u64 run_id,
-                                      const RunPerformanceStats& stats) {
-  if (perf_stats_.size() > 5000) {
-    perf_stats_.clear();
-  }
-  std::string key = std::format("{}{}", scenario_id, run_id);
-  perf_stats_[key] = stats;
-}
-
 std::unique_ptr<Application> Application::Create() {
   auto application = std::unique_ptr<Application>(new Application());
   int rc = application->Initialize();
