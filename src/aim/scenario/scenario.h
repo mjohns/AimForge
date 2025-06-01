@@ -68,6 +68,7 @@ class Scenario : public Screen {
 
  protected:
   void OnAttach() override;
+  void OnDetach() override;
 
   virtual void Initialize() {}
   virtual void OnScenarioEvent(const SDL_Event& event) {}
@@ -131,7 +132,6 @@ class Scenario : public Screen {
 
   void DoneAdjustingCrosshairSize();
 
-  void PauseAndPopSelf();
   void UpdatePerfStats();
   void HandleScenarioDone();
 
