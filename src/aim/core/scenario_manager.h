@@ -31,6 +31,8 @@ struct ScenarioNode {
 class ScenarioManager {
  public:
   explicit ScenarioManager(FileSystem* fs);
+  ScenarioManager(const ScenarioManager&) = delete;
+  ScenarioManager& operator=(const ScenarioManager&) = delete;
 
   void LoadScenariosFromDisk();
   std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);
