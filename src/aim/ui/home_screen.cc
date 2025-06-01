@@ -32,8 +32,8 @@ class HomeScreen : public UiScreen {
   explicit HomeScreen(Application* app) : UiScreen(app) {
     logo_texture_ = std::make_unique<Texture>(
         app->file_system()->GetBasePath("resources/images/logo.png"), app->gpu_device());
-    playlist_component_ = CreatePlaylistComponent(app);
-    playlist_list_component_ = CreatePlaylistListComponent(app);
+    playlist_component_ = CreatePlaylistComponent(this);
+    playlist_list_component_ = CreatePlaylistListComponent(this);
     scenario_browser_component_ = CreateScenarioBrowserComponent(app);
 
     auto last_playlist = app_.history_db()->GetRecentViews(RecentViewType::PLAYLIST, 1);
