@@ -180,7 +180,7 @@ class ScenarioEditorScreen : public UiScreen {
                         PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
 
       if (ImGui::Button("Play")) {
-        start_scenario_ = true;
+        PlayScenario();
       }
       ImGui::SameLine();
       if (ImGui::Button("View Json")) {
@@ -1522,18 +1522,22 @@ class ScenarioEditorScreen : public UiScreen {
       bool is_next = KeyMappingMatchesEvent(
           event_name, app_.settings_manager()->GetCurrentSettings().keybinds().next_scenario());
       if (is_restart || is_next) {
-        CreateScenarioParams params;
-        params.def = def_;
-        params.def.set_duration_seconds(1000000);
-        params.id = name_.full_name();
-        params.force_start_immediately = true;
-        params.from_scenario_editor = true;
-        PushNextScreen(CreateScenario(params, &app_));
+        PlayScenario();
       }
     }
   }
 
  private:
+  void PlayScenario() {
+    CreateScenarioParams params;
+    params.def = def_;
+    params.def.set_duration_seconds(1000000);
+    params.id = name_.full_name();
+    params.force_start_immediately = true;
+    params.from_scenario_editor = true;
+    PushNextScreen(CreateScenario(params, &app_));
+  }
+
   ScenarioDef def_;
   TargetManager target_manager_;
   glm::mat4 projection_;
@@ -1541,7 +1545,6 @@ class ScenarioEditorScreen : public UiScreen {
   float char_x_ = 0;
   ImVec2 char_size_{};
 
-  bool start_scenario_ = false;
   std::vector<std::string> bundle_names_;
   std::optional<ResourceName> original_name_;
   ResourceName name_;
