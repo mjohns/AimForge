@@ -30,6 +30,10 @@ static void Text(const std::string& val) {
   Text("%s", val.c_str());
 }
 
+static bool Button(const std::string& label, const ImVec2& size = ImVec2(0, 0)) {
+  return Button(label.c_str(), size);
+}
+
 struct IdGuard {
   IdGuard(std::string id) {
     ImGui::PushID(id.c_str());

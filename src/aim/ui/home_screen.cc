@@ -6,6 +6,7 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+#include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
 #include "aim/common/util.h"
 #include "aim/graphics/textures.h"
@@ -277,10 +278,24 @@ class HomeScreen : public UiScreen {
       if (current_scenario) {
         ImGui::Text(current_scenario->id());
 
+        if (state_.current_running_scenario) {
+          if (ImGui::Button(std::format("{} Resume", kIconPlayArrow))) {
+            state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
+          }
+          ImGui::SameLine();
+          if (ImGui::Button(std::format("{} Restart", kIconRefresh))) {
+            state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+          }
+        } else {
+          if (ImGui::Button(std::format("{} Play", kIconPlayArrow))) {
+            state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+          }
+        }
+
         ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
-        
+
         ImGui::Indent();
         ImGui::Text(current_scenario->def.description());
         ImGui::Unindent();
