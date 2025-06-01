@@ -27,7 +27,7 @@
 #include "aim/scenario/scenario_timer.h"
 #include "aim/scenario/types/scenario_types.h"
 #include "aim/ui/quick_settings_screen.h"
-#include "aim/ui/scenario_editor.h"
+#include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/ui_screen.h"
 

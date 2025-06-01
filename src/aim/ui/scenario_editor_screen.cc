@@ -1,4 +1,4 @@
-#include "scenario_editor.h"
+#include "scenario_editor_screen.h"
 
 #include <backends/imgui_impl_sdl3.h>
 #include <misc/cpp/imgui_stdlib.h>

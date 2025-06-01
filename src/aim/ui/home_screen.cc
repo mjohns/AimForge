@@ -13,7 +13,7 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/playlist_ui.h"
-#include "aim/ui/scenario_editor.h"
+#include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/stats_screen.h"
@@ -112,7 +112,42 @@ class HomeScreen : public UiScreen {
     }
     {
       auto font = app_.font_manager()->UseLargeBold();
+      ImGui::AlignTextToFramePadding();
       ImGui::Text("AimForge");
+    }
+
+    auto current_scenario = app_.scenario_manager()->GetCurrentScenario();
+    if (current_scenario) {
+      auto font = app_.font_manager()->UseMedium();
+      float available_height = ImGui::GetContentRegionAvail().y + ImGui::GetCursorPosY();
+      float button_height = ImGui::GetFrameHeight();
+
+      ImGui::SameLine();
+      float y_off = (available_height - button_height) / 2.0f;
+      if (y_off > 0) {
+        //ImGui::Dummy(ImVec2(0, y_off));
+          // TODO: This vertical centering is not working.
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + y_off);
+      }
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("                ");
+      if (state_.current_running_scenario) {
+        ImGui::SameLine();
+        if (ImGui::Button(std::format("{} Resume", kIconPlayArrow))) {
+          state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(std::format("{} Restart", kIconRefresh))) {
+          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+        }
+      } else {
+        ImGui::SameLine();
+        if (ImGui::Button(std::format("{} Play", kIconPlayArrow))) {
+          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+        }
+      }
+      ImGui::SameLine();
+      ImGui::Text(current_scenario->id());
     }
 
     ImGui::EndChild();
