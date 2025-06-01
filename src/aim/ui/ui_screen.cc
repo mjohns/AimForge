@@ -7,7 +7,7 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/quick_settings_screen.h"
-#include "aim/ui/scenario_editor.h"
+#include "aim/ui/scenario_editor_screen.h"
 
 namespace aim {
 

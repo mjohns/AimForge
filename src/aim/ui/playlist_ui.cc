@@ -6,7 +6,7 @@
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
-#include "aim/ui/scenario_editor.h"
+#include "aim/ui/scenario_editor_screen.h"
 
 namespace aim {
 namespace {
