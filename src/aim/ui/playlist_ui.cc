@@ -162,9 +162,9 @@ class PlaylistEditorComponent : public UiComponent {
     if (scenario_search_text_.size() > 0) {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
-      for (int i = 0; i < app_->scenario_manager()->scenarios().size(); ++i) {
+      for (int i = 0; i < app_->scenario_manager().scenarios().size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
-        const auto& scenario = app_->scenario_manager()->scenarios()[i];
+        const auto& scenario = app_->scenario_manager().scenarios()[i];
         if (StringMatchesSearch(scenario.id(), search_words, /*empty_matches=*/false)) {
           bool already_in_playlist =
               std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
@@ -388,7 +388,7 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
     if (ImGui::Selectable(item.scenario().c_str(), i == playlist_run->current_index)) {
       playlist_run->current_index = i;
       screen->state()->scenario_run_option = ScenarioRunOption::START_CURRENT;
-      screen->app()->scenario_manager()->SetCurrentScenario(item.scenario());
+      screen->app()->scenario_manager().SetCurrentScenario(item.scenario());
       screen->ReturnHome();
     }
 

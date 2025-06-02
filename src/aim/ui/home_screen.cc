@@ -47,7 +47,7 @@ class HomeScreen : public UiScreen {
     }
     auto last_scenario = app_.history_manager().GetRecentViews(RecentViewType::SCENARIO, 1);
     if (last_scenario.size() > 0) {
-      app_.scenario_manager()->SetCurrentScenario(last_scenario[0].id);
+      app_.scenario_manager().SetCurrentScenario(last_scenario[0].id);
     }
   }
 
@@ -117,7 +117,7 @@ class HomeScreen : public UiScreen {
       ImGui::Text("AimForge");
     }
 
-    auto current_scenario = app_.scenario_manager()->GetCurrentScenario();
+    auto current_scenario = app_.scenario_manager().GetCurrentScenario();
     if (current_scenario) {
       auto font = app_.font_manager()->UseMedium();
       float available_height = ImGui::GetContentRegionAvail().y + ImGui::GetCursorPosY();
@@ -199,11 +199,11 @@ class HomeScreen : public UiScreen {
 
  private:
   std::optional<ScenarioItem> GetCurrentScenario() {
-    return app_.scenario_manager()->GetCurrentScenario();
+    return app_.scenario_manager().GetCurrentScenario();
   }
 
   std::string GetCurrentScenarioId() {
-    auto scenario = app_.scenario_manager()->GetCurrentScenario();
+    auto scenario = app_.scenario_manager().GetCurrentScenario();
     if (scenario.has_value()) {
       return scenario->id();
     }
@@ -241,7 +241,7 @@ class HomeScreen : public UiScreen {
       }
       run->current_index = next_index;
       auto scenario_id = run->progress_list[next_index].item.scenario();
-      if (!app_.scenario_manager()->SetCurrentScenario(scenario_id)) {
+      if (!app_.scenario_manager().SetCurrentScenario(scenario_id)) {
         return false;
       }
       state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
@@ -287,7 +287,7 @@ class HomeScreen : public UiScreen {
       ScenarioBrowserResult result;
       scenario_browser_component_->Show(type, &result);
       if (result.scenario_to_start.size() > 0) {
-        if (app_.scenario_manager()->SetCurrentScenario(result.scenario_to_start)) {
+        if (app_.scenario_manager().SetCurrentScenario(result.scenario_to_start)) {
           state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
         }
       }
@@ -306,11 +306,11 @@ class HomeScreen : public UiScreen {
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
       if (result.reload_scenarios) {
-        app_.scenario_manager()->LoadScenariosFromDisk();
+        app_.scenario_manager().LoadScenariosFromDisk();
       }
 
       ImGui::TableNextColumn();
-      auto current_scenario = app_.scenario_manager()->GetCurrentScenario();
+      auto current_scenario = app_.scenario_manager().GetCurrentScenario();
       if (current_scenario) {
         ImGui::Text(current_scenario->id());
 
@@ -376,7 +376,7 @@ class HomeScreen : public UiScreen {
     }
     std::string scenario_id;
     if (playlist_component_->Show(run->playlist.name.full_name(), &scenario_id)) {
-      if (app_.scenario_manager()->SetCurrentScenario(scenario_id)) {
+      if (app_.scenario_manager().SetCurrentScenario(scenario_id)) {
         state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       }
     }

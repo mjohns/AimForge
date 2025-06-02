@@ -14,7 +14,7 @@ namespace {
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;
-  for (const ScenarioItem& s : app->scenario_manager()->scenarios()) {
+  for (const ScenarioItem& s : app->scenario_manager().scenarios()) {
     if (s.name.bundle_name() == bundle_name) {
       names.push_back(s.name.relative_name());
     }
@@ -30,9 +30,9 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     auto cid = GetComponentIdGuard();
 
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
-      auto maybe_scenario = app_->scenario_manager()->GetScenario(scenario_id);
+      auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
-        app_->scenario_manager()->DeleteScenario(maybe_scenario->name);
+        app_->scenario_manager().DeleteScenario(maybe_scenario->name);
         result->reload_scenarios = true;
       }
     });
@@ -65,13 +65,13 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         ImGui::LoopId loop_id;
         for (const std::string& scenario_id : app_->history_manager().recent_scenario_ids()) {
           auto lid = loop_id.Get();
-          auto scenario = app_->scenario_manager()->GetScenario(scenario_id);
+          auto scenario = app_->scenario_manager().GetScenario(scenario_id);
           if (scenario.has_value()) {
             DrawScenarioListItem(*scenario, search_words, current_playlist_run, result);
           }
         }
       } else {
-        DrawScenarioNodes(app_->scenario_manager()->scenario_nodes(), search_words, result);
+        DrawScenarioNodes(app_->scenario_manager().scenario_nodes(), search_words, result);
       }
     }
     ImGui::EndChild();
@@ -85,11 +85,10 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
 
  private:
   void CopyScenario(const ScenarioItem& item) {
-    auto& mgr = *app_->scenario_manager();
     std::vector<std::string> taken_names =
         GetAllRelativeNamesInBundle(item.name.bundle_name(), app_);
     std::string final_name = MakeUniqueName(item.name.relative_name() + " Copy", taken_names);
-    mgr.SaveScenario(ResourceName(item.name.bundle_name(), final_name), item.def);
+    app_->scenario_manager().SaveScenario(ResourceName(item.name.bundle_name(), final_name), item.def);
   }
 
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
@@ -139,7 +138,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     if (!StringMatchesSearch(scenario.id(), search_words)) {
       return;
     }
-    auto current_scenario = app_->scenario_manager()->GetCurrentScenario();
+    auto current_scenario = app_->scenario_manager().GetCurrentScenario();
     std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
     if (ImGui::Selectable(scenario.id().c_str(),
                           current_scenario_id == scenario.id(),
@@ -147,7 +146,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
         result->scenario_to_start = scenario.id();
       } else {
-        app_->scenario_manager()->SetCurrentScenario(scenario.id());
+        app_->scenario_manager().SetCurrentScenario(scenario.id());
       }
     }
     const char* popup_id = "ScenarioItemMenu";
@@ -197,7 +196,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       }
       /*
       if (ImGui::Selectable("Open file")) {
-        app_->scenario_manager()->OpenFile(node->scenario->name);
+        app_->scenario_manager().OpenFile(node->scenario->name);
       }
       */
       ImGui::EndPopup();

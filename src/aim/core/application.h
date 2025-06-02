@@ -112,8 +112,8 @@ class Application {
     return settings_manager_.get();
   }
 
-  ScenarioManager* scenario_manager() {
-    return scenario_manager_.get();
+  ScenarioManager& scenario_manager() {
+    return *scenario_manager_;
   }
 
   PlaylistManager& playlist_manager() {
