@@ -116,8 +116,8 @@ class Application {
     return scenario_manager_.get();
   }
 
-  PlaylistManager* playlist_manager() {
-    return playlist_manager_.get();
+  PlaylistManager& playlist_manager() {
+    return *playlist_manager_;
   }
 
   HistoryManager& history_manager() {

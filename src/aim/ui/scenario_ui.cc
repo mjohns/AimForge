@@ -61,7 +61,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         expand_all_ = 2;
       }
       if (type == ScenarioBrowserType::RECENT) {
-        PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
+        PlaylistRun* current_playlist_run = app_->playlist_manager().GetCurrentRun();
         ImGui::LoopId loop_id;
         for (const std::string& scenario_id : app_->history_manager().recent_scenario_ids()) {
           auto lid = loop_id.Get();
@@ -95,7 +95,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
                          const std::vector<std::string>& search_words,
                          ScenarioBrowserResult* result) {
-    PlaylistRun* current_playlist_run = app_->playlist_manager()->GetCurrentRun();
+    PlaylistRun* current_playlist_run = app_->playlist_manager().GetCurrentRun();
     ImGui::LoopId loop_id;
     for (auto& node : nodes) {
       auto id = loop_id.Get("ScenarioItem");
@@ -156,7 +156,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         std::string playlist_name = current_playlist_run->playlist.name.full_name();
         std::string add_text = std::format("Add to \"{}\"", playlist_name);
         if (ImGui::Selectable(add_text.c_str())) {
-          app_->playlist_manager()->AddScenarioToPlaylist(playlist_name, scenario.id());
+          app_->playlist_manager().AddScenarioToPlaylist(playlist_name, scenario.id());
         }
       }
       if (ImGui::BeginMenu("Add to")) {
@@ -173,7 +173,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
           playlist_count++;
         }
         if (selected_playlist.size() > 0) {
-          app_->playlist_manager()->AddScenarioToPlaylist(selected_playlist, scenario.id());
+          app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.id());
         }
         ImGui::EndMenu();
       }

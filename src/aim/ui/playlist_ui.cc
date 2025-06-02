@@ -16,7 +16,7 @@ const char* kDeleteConfirmationPopup = "DELETE_CONFIRMATION_POPUP";
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;
-  for (const Playlist& playlist : app->playlist_manager()->playlists()) {
+  for (const Playlist& playlist : app->playlist_manager().playlists()) {
     if (playlist.name.bundle_name() == bundle_name) {
       names.push_back(playlist.name.relative_name());
     }
@@ -33,7 +33,7 @@ class PlaylistEditorComponent : public UiComponent {
  public:
   explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
       : UiComponent(app), playlist_manager_(app->playlist_manager()) {
-    PlaylistRun* run = playlist_manager_->GetRun(playlist_name);
+    PlaylistRun* run = playlist_manager_.GetRun(playlist_name);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.name.relative_name();
       original_playlist_name_ = run->playlist.name;
@@ -223,19 +223,19 @@ class PlaylistEditorComponent : public UiComponent {
       // Need to move file.
       std::vector<std::string> taken_names = GetAllRelativeNamesInBundle(bundle_name_, app_);
       final_name.set(bundle_name_, MakeUniqueName(new_playlist_name_, taken_names));
-      if (!playlist_manager_->RenamePlaylist(original_playlist_name_, final_name)) {
+      if (!playlist_manager_.RenamePlaylist(original_playlist_name_, final_name)) {
         return false;
       }
-      PlaylistRun* current_run = playlist_manager_->GetCurrentRun();
+      PlaylistRun* current_run = playlist_manager_.GetCurrentRun();
       if (current_run != nullptr && current_run->playlist.name == original_playlist_name_) {
-        playlist_manager_->SetCurrentPlaylist(final_name.full_name());
+        playlist_manager_.SetCurrentPlaylist(final_name.full_name());
       }
     }
 
-    return playlist_manager_->SavePlaylist(final_name, playlist);
+    return playlist_manager_.SavePlaylist(final_name, playlist);
   }
 
-  PlaylistManager* playlist_manager_;
+  PlaylistManager& playlist_manager_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
   ResourceName original_playlist_name_;
@@ -270,7 +270,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
         editor_component_ = {};
         showing_editor_ = false;
         if (editor_result.playlist_updated) {
-          playlist_manager_->LoadPlaylistsFromDisk();
+          playlist_manager_.LoadPlaylistsFromDisk();
         }
       }
       return false;
@@ -284,7 +284,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     }
     ImGui::Spacing();
     ImGui::Spacing();
-    PlaylistRunComponent2("PlaylistRun", playlist_manager_->GetCurrentRun(), screen_);
+    PlaylistRunComponent2("PlaylistRun", playlist_manager_.GetCurrentRun(), screen_);
     return false;
   }
 
@@ -294,7 +294,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     showing_editor_ = false;
   }
 
-  PlaylistManager* playlist_manager_;
+  PlaylistManager& playlist_manager_;
   bool showing_editor_ = false;
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
@@ -310,7 +310,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      screen_->app()->playlist_manager()->DeletePlaylist(playlist.name);
+      screen_->app()->playlist_manager().DeletePlaylist(playlist.name);
       result->reload_playlists = true;
     });
 
@@ -332,11 +332,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     auto search_words = GetSearchWords(playlist_search_text_);
     ImGui::LoopId loop_id;
     // TODO: group by bundle + collapse/expand all
-    for (const auto& playlist : app_->playlist_manager()->playlists()) {
+    for (const auto& playlist : app_->playlist_manager().playlists()) {
       auto id_guard = loop_id.Get();
       std::string name = playlist.name.full_name();
       if (StringMatchesSearch(name, search_words)) {
-        bool is_selected = name == app_->playlist_manager()->current_playlist_name();
+        bool is_selected = name == app_->playlist_manager().current_playlist_name();
         if (ImGui::Selectable(name.c_str(), is_selected)) {
           result->open_playlist = playlist;
         }
@@ -360,16 +360,16 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       auto playlist = *copy_playlist;
       auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), app_);
       std::string new_name = MakeUniqueName(playlist.name.relative_name() + " Copy", taken_names);
-      app_->playlist_manager()->SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
+      app_->playlist_manager().SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
                                              playlist.def);
-      app_->playlist_manager()->LoadPlaylistsFromDisk();
+      app_->playlist_manager().LoadPlaylistsFromDisk();
     }
   }
 
  private:
   ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
   std::string playlist_search_text_;
-  PlaylistManager* playlist_manager_;
+  PlaylistManager& playlist_manager_;
   UiScreen* screen_;
   Application* app_;
 };
@@ -418,7 +418,7 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
           }
         }
         if (selected_playlist.size() > 0) {
-          screen->app()->playlist_manager()->AddScenarioToPlaylist(selected_playlist,
+          screen->app()->playlist_manager().AddScenarioToPlaylist(selected_playlist,
                                                                    item.scenario());
         }
         ImGui::EndMenu();

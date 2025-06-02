@@ -42,7 +42,7 @@ class HomeScreen : public UiScreen {
     if (last_playlist.size() > 0) {
       std::string name = last_playlist[0].id;
       if (name.size() > 0) {
-        app_.playlist_manager()->SetCurrentPlaylist(name);
+        app_.playlist_manager().SetCurrentPlaylist(name);
       }
     }
     auto last_scenario = app_.history_manager().GetRecentViews(RecentViewType::SCENARIO, 1);
@@ -211,7 +211,7 @@ class HomeScreen : public UiScreen {
   }
 
   bool HandlePlaylistNext() {
-    PlaylistRun* run = app_.playlist_manager()->GetCurrentRun();
+    PlaylistRun* run = app_.playlist_manager().GetCurrentRun();
     if (run == nullptr) {
       state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       return true;
@@ -353,10 +353,10 @@ class HomeScreen : public UiScreen {
         if (result.open_playlist.has_value()) {
           auto playlist = *result.open_playlist;
           app_.history_manager().UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
-          app_.playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
+          app_.playlist_manager().SetCurrentPlaylist(playlist.name.full_name());
         }
         if (result.reload_playlists) {
-          app_.playlist_manager()->LoadPlaylistsFromDisk();
+          app_.playlist_manager().LoadPlaylistsFromDisk();
         }
       }
       ImGui::EndChild();
@@ -370,7 +370,7 @@ class HomeScreen : public UiScreen {
 
   void DrawCurrentPlaylistScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
-    PlaylistRun* run = app_.playlist_manager()->GetCurrentRun();
+    PlaylistRun* run = app_.playlist_manager().GetCurrentRun();
     if (run == nullptr) {
       return;
     }
