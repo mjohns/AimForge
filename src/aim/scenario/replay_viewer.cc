@@ -19,9 +19,9 @@ bool CompareEventsByTime(const ReplayEvent& lhs, const ReplayEvent& rhs) {
 }  // namespace
 
 void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
-  Theme theme = app->settings_manager()->GetCurrentTheme();
-  Settings settings = app->settings_manager()->GetCurrentSettings();
-  Crosshair crosshair = app->settings_manager()->GetCurrentCrosshair();
+  Theme theme = app->settings_manager().GetCurrentTheme();
+  Settings settings = app->settings_manager().GetCurrentSettings();
+  Crosshair crosshair = app->settings_manager().GetCurrentCrosshair();
   float crosshair_size = settings.crosshair_size();
 
   ScreenInfo screen = app->screen_info();

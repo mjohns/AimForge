@@ -108,8 +108,8 @@ class Application {
     return file_system_.get();
   }
 
-  SettingsManager* settings_manager() {
-    return settings_manager_.get();
+  SettingsManager& settings_manager() {
+    return *settings_manager_;
   }
 
   ScenarioManager& scenario_manager() {

@@ -22,12 +22,11 @@ class QuickSettingsScreen : public UiScreen {
                                const std::string& release_key)
       : UiScreen(app),
         scenario_id_(scenario_id),
-        mgr_(app->settings_manager()),
-        updater_(app->settings_manager(), &app->history_manager()),
+        updater_(app->settings_manager().CreateUpdater()),
         type_(type),
         release_key_(release_key) {
-    theme_names_ = app->settings_manager()->ListThemes();
-    Settings settings = mgr_->GetCurrentSettings();
+    theme_names_ = app->settings_manager().ListThemes();
+    Settings settings = app->settings_manager().GetCurrentSettings();
     for (auto& c : settings.saved_crosshairs()) {
       crosshair_names_.push_back(c.name());
     }
@@ -164,7 +163,6 @@ class QuickSettingsScreen : public UiScreen {
 
  private:
   std::string scenario_id_;
-  SettingsManager* mgr_ = nullptr;
   SettingsUpdater updater_;
   QuickSettingsType type_;
   std::vector<std::string> theme_names_;

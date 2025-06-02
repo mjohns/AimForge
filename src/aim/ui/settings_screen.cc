@@ -30,14 +30,13 @@ class SettingsScreen : public UiScreen {
  public:
   SettingsScreen(Application* app, const std::string& scenario_id)
       : UiScreen(app),
-        updater_(app->settings_manager(), &app->history_manager()),
-        mgr_(app->settings_manager()),
+        updater_(app->settings_manager().CreateUpdater()),
         scenario_id_(scenario_id) {
-    theme_names_ = app->settings_manager()->ListThemes();
+    theme_names_ = app->settings_manager().ListThemes();
     // Always try to save when exiting settings screen.
-    app->settings_manager()->MarkDirty();
+    app->settings_manager().MarkDirty();
 
-    Settings settings = mgr_->GetCurrentSettings();
+    Settings settings = app_.settings_manager().GetCurrentSettings();
     for (auto& c : settings.saved_crosshairs()) {
       crosshair_names_.push_back(c.name());
     }
@@ -493,7 +492,6 @@ class SettingsScreen : public UiScreen {
 
  private:
   SettingsUpdater updater_;
-  SettingsManager* mgr_;
   std::vector<std::string> theme_names_;
   std::vector<std::string> crosshair_names_;
   const std::string scenario_id_;

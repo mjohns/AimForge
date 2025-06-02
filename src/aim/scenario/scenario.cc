@@ -49,7 +49,7 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       target_manager_(params.def.room()),
       force_start_immediately_(params.force_start_immediately),
       from_scenario_editor_(params.from_scenario_editor) {
-  theme_ = app->settings_manager()->GetCurrentTheme();
+  theme_ = app->settings_manager().GetCurrentTheme();
   max_render_age_micros_ = (1 / (float)(kTargetRenderFps + 1)) * 1000 * 1000;
 
   if (ShouldRecordReplay()) {
@@ -60,10 +60,10 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
 }
 
 void Scenario::RefreshState() {
-  settings_ = app_.settings_manager()->GetCurrentSettingsForScenario(id_);
+  settings_ = app_.settings_manager().GetCurrentSettingsForScenario(id_);
   projection_ = GetPerspectiveTransformation(app_.screen_info());
 
-  float dpi = app_.settings_manager()->GetDpi();
+  float dpi = app_.settings_manager().GetDpi();
   metronome_ = std::make_unique<Metronome>(settings_.metronome_bpm(), &app_);
 
   bool needs_sens_update = effective_cm_per_360_ == 0 ||
@@ -81,9 +81,9 @@ void Scenario::RefreshState() {
 
   radians_per_dot_ = CmPer360ToRadiansPerDot(effective_cm_per_360_, dpi);
   is_click_held_ = false;
-  crosshair_ = app_.settings_manager()->GetCurrentCrosshair();
+  crosshair_ = app_.settings_manager().GetCurrentCrosshair();
   crosshair_size_ = settings_.crosshair_size();
-  theme_ = app_.settings_manager()->GetCurrentTheme();
+  theme_ = app_.settings_manager().GetCurrentTheme();
   if (ShouldAutoHold()) {
     is_click_held_ = true;
   }
@@ -475,12 +475,12 @@ void Scenario::UpdatePerfStats() {
 }
 
 void Scenario::DoneAdjustingCrosshairSize() {
-  Settings* current_settings = app_.settings_manager()->GetMutableCurrentSettings();
+  Settings* current_settings = app_.settings_manager().GetMutableCurrentSettings();
   if (current_settings != nullptr) {
     if (crosshair_size_ != current_settings->crosshair_size()) {
       current_settings->set_crosshair_size(crosshair_size_);
-      app_.settings_manager()->MarkDirty();
-      app_.settings_manager()->MaybeFlushToDisk(id_);
+      app_.settings_manager().MarkDirty();
+      app_.settings_manager().MaybeFlushToDisk(id_);
       RefreshState();
     }
   }

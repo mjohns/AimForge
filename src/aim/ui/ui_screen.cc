@@ -45,7 +45,7 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
     return;
   }
 
-  auto settings = app_.settings_manager()->GetCurrentSettingsForScenario(scenario_id);
+  auto settings = app_.settings_manager().GetCurrentSettingsForScenario(scenario_id);
   std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
   if (scenario_id.size() > 0 &&
       KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {

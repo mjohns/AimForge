@@ -425,4 +425,8 @@ Crosshair GetDefaultCrosshair() {
   return crosshair;
 }
 
+SettingsUpdater SettingsManager::CreateUpdater() {
+  return SettingsUpdater(this, history_manager_);
+}
+
 }  // namespace aim
