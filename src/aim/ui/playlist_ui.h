@@ -11,11 +11,6 @@
 
 namespace aim {
 
-// Returns whether a scenario was selected to start from the playlist.
-bool PlaylistRunComponent(const std::string& id,
-                          PlaylistRun* playlist_run,
-                          std::string* scenario_to_start);
-
 void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Screen* screen);
 
 class PlaylistComponent {
