@@ -156,10 +156,10 @@ Room GetDefaultRoom() {
 
 class ThemeEditorScreen : public UiScreen {
  public:
-  explicit ThemeEditorScreen(Application* app)
+  explicit ThemeEditorScreen(Application& app)
       : UiScreen(app), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
-    texture_names_ = app->settings_manager().ListTextures();
-    theme_names_ = app->settings_manager().ListThemes();
+    texture_names_ = app.settings_manager().ListTextures();
+    theme_names_ = app.settings_manager().ListThemes();
     if (theme_names_.size() > 0) {
       UpdateCurrentTheme(theme_names_[0]);
     }
@@ -368,7 +368,7 @@ class ThemeEditorScreen : public UiScreen {
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app) {
-  return std::make_unique<ThemeEditorScreen>(app);
+  return std::make_unique<ThemeEditorScreen>(*app);
 }
 
 }  // namespace aim

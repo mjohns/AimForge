@@ -6,7 +6,7 @@
 
 namespace aim {
 
-Screen::Screen(Application* app) : app_(*app), state_(app->state()) {}
+Screen::Screen(Application& app) : app_(app), state_(app.state()) {}
 
 void Screen::PopSelf() {
   popped_self_ = true;

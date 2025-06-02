@@ -11,7 +11,7 @@ class ApplicationState;
 
 class Screen {
  public:
-  Screen(Application* app);
+  Screen(Application& app);
   virtual ~Screen() {}
 
   void EnsureAttached();
@@ -32,12 +32,12 @@ class Screen {
   void ReturnHome();
   void PushNextScreen(std::shared_ptr<Screen> next_screen);
 
-  Application* app() {
-    return &app_;
+  Application& app() {
+    return app_;
   }
 
-  ApplicationState* state() {
-    return &state_;
+  ApplicationState& state() {
+    return state_;
   }
 
  protected:

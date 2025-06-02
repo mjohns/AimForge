@@ -247,9 +247,9 @@ class PlaylistEditorComponent : public UiComponent {
 
 class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
  public:
-  explicit PlaylistComponentImpl(UiScreen* screen)
-      : UiComponent(screen->app()),
-        playlist_manager_(screen->app()->playlist_manager()),
+  explicit PlaylistComponentImpl(UiScreen& screen)
+      : UiComponent(&screen.app()),
+        playlist_manager_(screen.app().playlist_manager()),
         screen_(screen) {}
 
   bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
@@ -284,7 +284,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     }
     ImGui::Spacing();
     ImGui::Spacing();
-    PlaylistRunComponent2("PlaylistRun", playlist_manager_.GetCurrentRun(), screen_);
+    PlaylistRunComponent("PlaylistRun", playlist_manager_.GetCurrentRun(), screen_);
     return false;
   }
 
@@ -298,19 +298,19 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
   bool showing_editor_ = false;
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
-  UiScreen* screen_;
+  UiScreen& screen_;
 };
 
 class PlaylistListComponentImpl : public PlaylistListComponent {
  public:
-  explicit PlaylistListComponentImpl(UiScreen* screen)
-      : playlist_manager_(screen->app()->playlist_manager()),
+  explicit PlaylistListComponentImpl(UiScreen& screen)
+      : playlist_manager_(screen.app().playlist_manager()),
         screen_(screen),
-        app_(screen->app()) {}
+        app_(screen.app()) {}
 
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      screen_->app()->playlist_manager().DeletePlaylist(playlist.name);
+      screen_.app().playlist_manager().DeletePlaylist(playlist.name);
       result->reload_playlists = true;
     });
 
@@ -332,11 +332,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     auto search_words = GetSearchWords(playlist_search_text_);
     ImGui::LoopId loop_id;
     // TODO: group by bundle + collapse/expand all
-    for (const auto& playlist : app_->playlist_manager().playlists()) {
+    for (const auto& playlist : app_.playlist_manager().playlists()) {
       auto id_guard = loop_id.Get();
       std::string name = playlist.name.full_name();
       if (StringMatchesSearch(name, search_words)) {
-        bool is_selected = name == app_->playlist_manager().current_playlist_name();
+        bool is_selected = name == app_.playlist_manager().current_playlist_name();
         if (ImGui::Selectable(name.c_str(), is_selected)) {
           result->open_playlist = playlist;
         }
@@ -358,11 +358,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
     if (copy_playlist.has_value()) {
       auto playlist = *copy_playlist;
-      auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), app_);
+      auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), &app_);
       std::string new_name = MakeUniqueName(playlist.name.relative_name() + " Copy", taken_names);
-      app_->playlist_manager().SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
+      app_.playlist_manager().SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
                                              playlist.def);
-      app_->playlist_manager().LoadPlaylistsFromDisk();
+      app_.playlist_manager().LoadPlaylistsFromDisk();
     }
   }
 
@@ -370,13 +370,13 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
   std::string playlist_search_text_;
   PlaylistManager& playlist_manager_;
-  UiScreen* screen_;
-  Application* app_;
+  UiScreen& screen_;
+  Application& app_;
 };
 
 }  // namespace
 
-void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Screen* screen) {
+void PlaylistRunComponent(const std::string& id, PlaylistRun* playlist_run, Screen& screen) {
   ImGui::IdGuard cid(id);
   for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
     ImGui::IdGuard id(i);
@@ -387,9 +387,9 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
     ImGui::SetNextItemWidth(width);
     if (ImGui::Selectable(item.scenario().c_str(), i == playlist_run->current_index)) {
       playlist_run->current_index = i;
-      screen->state()->scenario_run_option = ScenarioRunOption::START_CURRENT;
-      screen->app()->scenario_manager().SetCurrentScenario(item.scenario());
-      screen->ReturnHome();
+      screen.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+      screen.app().scenario_manager().SetCurrentScenario(item.scenario());
+      screen.ReturnHome();
     }
 
     const char* popup_id = "ScenarioItemMenu";
@@ -397,18 +397,18 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
       if (ImGui::Selectable("Edit")) {
         ScenarioEditorOptions opts;
         opts.scenario_id = item.scenario();
-        screen->PushNextScreen(CreateScenarioEditorScreen(opts, screen->app()));
+        screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
       }
       if (ImGui::Selectable("Edit new copy")) {
         ScenarioEditorOptions opts;
         opts.scenario_id = item.scenario();
         opts.is_new_copy = true;
-        screen->PushNextScreen(CreateScenarioEditorScreen(opts, screen->app()));
+        screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
       }
       if (ImGui::BeginMenu("Add to")) {
         std::string selected_playlist;
         int playlist_count = 0;
-        const auto& recent_playlists = screen->app()->history_manager().recent_playlists();
+        const auto& recent_playlists = screen.app().history_manager().recent_playlists();
         for (int i = 0; i < std::min<int>(6, recent_playlists.size()); ++i) {
           const std::string& playlist_name = recent_playlists[i];
           ImGui::IdGuard playlist_id(playlist_name, i);
@@ -418,7 +418,7 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
           }
         }
         if (selected_playlist.size() > 0) {
-          screen->app()->playlist_manager().AddScenarioToPlaylist(selected_playlist,
+          screen.app().playlist_manager().AddScenarioToPlaylist(selected_playlist,
                                                                    item.scenario());
         }
         ImGui::EndMenu();
@@ -437,11 +437,11 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
 }
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen) {
-  return std::make_unique<PlaylistComponentImpl>(screen);
+  return std::make_unique<PlaylistComponentImpl>(*screen);
 }
 
 std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(UiScreen* screen) {
-  return std::make_unique<PlaylistListComponentImpl>(screen);
+  return std::make_unique<PlaylistListComponentImpl>(*screen);
 }
 
 }  // namespace aim

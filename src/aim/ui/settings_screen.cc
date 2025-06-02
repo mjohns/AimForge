@@ -28,13 +28,13 @@ struct KeybindItem {
 
 class SettingsScreen : public UiScreen {
  public:
-  SettingsScreen(Application* app, const std::string& scenario_id)
+  SettingsScreen(Application& app, const std::string& scenario_id)
       : UiScreen(app),
-        updater_(app->settings_manager().CreateUpdater()),
+        updater_(app.settings_manager().CreateUpdater()),
         scenario_id_(scenario_id) {
-    theme_names_ = app->settings_manager().ListThemes();
+    theme_names_ = app.settings_manager().ListThemes();
     // Always try to save when exiting settings screen.
-    app->settings_manager().MarkDirty();
+    app.settings_manager().MarkDirty();
 
     Settings settings = app_.settings_manager().GetCurrentSettings();
     for (auto& c : settings.saved_crosshairs()) {
@@ -506,7 +506,7 @@ class SettingsScreen : public UiScreen {
 
 std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app,
                                                const std::string& current_scenario_id) {
-  return std::make_unique<SettingsScreen>(app, current_scenario_id);
+  return std::make_unique<SettingsScreen>(*app, current_scenario_id);
 }
 
 }  // namespace aim

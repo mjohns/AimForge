@@ -38,7 +38,7 @@ struct StatsInfo {
 class StatsScreen : public UiScreen {
  public:
   StatsScreen(std::string scenario_id, i64 run_id, Application* app)
-      : UiScreen(app), scenario_id_(scenario_id), run_id_(run_id) {
+      : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
     }
@@ -68,7 +68,7 @@ class StatsScreen : public UiScreen {
     if (playlist_run != nullptr) {
       if (ImGui::Begin("Playlist")) {
         std::string scenario_to_start;
-        PlaylistRunComponent2("PlaylistRun", playlist_run, this);
+        PlaylistRunComponent("PlaylistRun", playlist_run, *this);
       }
       ImGui::End();
     }
