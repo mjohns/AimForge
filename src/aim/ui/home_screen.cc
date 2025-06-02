@@ -38,6 +38,7 @@ class HomeScreen : public UiScreen {
     scenario_browser_component_ = CreateScenarioBrowserComponent(app);
 
     auto last_playlist = app_.history_manager().GetRecentViews(RecentViewType::PLAYLIST, 1);
+
     if (last_playlist.size() > 0) {
       std::string name = last_playlist[0].id;
       if (name.size() > 0) {
