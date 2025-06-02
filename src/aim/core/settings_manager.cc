@@ -152,11 +152,12 @@ absl::Status SettingsManager::Initialize() {
   return absl::OkStatus();
 }
 
-std::vector<std::string> SettingsManager::ListCrosshairNames() {
+std::vector<std::string> SettingsManager::ListCrosshairNames(Settings* new_settings) {
   auto recent_crosshairs = history_manager_->GetRecentUniqueNames(RecentViewType::CROSSHAIR, 10);
 
   std::vector<std::string> valid_crosshair_names;
-  for (const auto& c : settings_.saved_crosshairs()) {
+  Settings* settings_to_use = new_settings != nullptr ? new_settings : &settings_;
+  for (const auto& c : settings_to_use->saved_crosshairs()) {
     valid_crosshair_names.push_back(c.name());
   }
 
