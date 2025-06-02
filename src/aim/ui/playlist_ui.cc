@@ -402,8 +402,9 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run,
   ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
 }
 
-void PlaylistRunComponent(const std::string& id, PlaylistRun* playlist_run, Screen& screen) {
+void PlaylistRunComponent(const std::string& id, PlaylistRun* run, Screen& screen) {
   ImGui::IdGuard cid(id);
+  const PlaylistDef& playlist = run->playlist.def;
   ImGuiTableFlags flags = ImGuiTableFlags_RowBg;
   std::string sample_progress_text = "00/00";
   float progress_width = ImGui::CalcTextSize(sample_progress_text.c_str()).x;
@@ -414,21 +415,43 @@ void PlaylistRunComponent(const std::string& id, PlaylistRun* playlist_run, Scre
   ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
   ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, progress_width);
 
-  for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
+  std::vector<float> score_levels;
+  bool has_score_level = false;
+  for (const auto& item : playlist.items()) {
+    auto stats = screen.app().stats_manager().GetAggregateStats(item.scenario());
+    float level = 0;
+    if (stats.total_runs > 0) {
+      auto scenario = screen.app().scenario_manager().GetScenario(item.scenario());
+      if (scenario) {
+        level = GetScenarioScoreLevel(
+            stats.high_score_stats.score, scenario->def.start_score(), scenario->def.end_score());
+        if (level > 0) {
+          has_score_level = true;
+        }
+      }
+    }
+    score_levels.push_back(level);
+  }
+
+  for (int i = 0; i < playlist.items_size(); ++i) {
     ImGui::TableNextRow();
     ImGui::IdGuard id(i);
-    PlaylistItemProgress& progress = playlist_run->progress_list[i];
-    PlaylistItem item = playlist_run->playlist.def.items(i);
-    bool is_selected = i == playlist_run->current_index;
+    PlaylistItemProgress& progress = run->progress_list[i];
+    PlaylistItem item = playlist.items(i);
+    bool is_selected = i == run->current_index;
 
     ImGui::TableNextColumn();
-    if (ImGui::Selectable(item.scenario().c_str(), is_selected)) {
-      playlist_run->current_index = i;
+    std::string label = item.scenario();
+    if (score_levels[i] > 0) {
+      label = std::format("{} -- {}", label, MaybeIntToString(score_levels[i], 1));
+    }
+    if (ImGui::Selectable(label.c_str(), is_selected)) {
+      run->current_index = i;
       screen.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
       screen.app().scenario_manager().SetCurrentScenario(item.scenario());
       screen.ReturnHome();
     }
-    PlaylistRunRightClickMenu(item.scenario(), playlist_run, screen);
+    PlaylistRunRightClickMenu(item.scenario(), run, screen);
 
     ImGui::TableNextColumn();
     std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
