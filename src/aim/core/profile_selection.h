@@ -5,6 +5,7 @@
 #include <optional>
 #include <random>
 
+#include "aim/common/random.h"
 #include "aim/common/util.h"
 
 namespace aim {
@@ -13,7 +14,7 @@ template <typename T>
 std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& orders,
                                const google::protobuf::RepeatedPtrField<T>& profiles,
                                int n,
-                               std::mt19937* random) {
+                               Random& rand) {
   if (profiles.size() == 0) {
     return {};
   }
@@ -32,8 +33,7 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
     total_weight += profile.weight();
   }
 
-  auto dist = std::uniform_real_distribution<float>(0, total_weight);
-  float roll = dist(*random);
+  float roll = rand.Get(total_weight);
   float used_weight = 0;
   for (const auto& profile : profiles) {
     used_weight += profile.weight();

@@ -68,8 +68,7 @@ class LinearScenario : public BaseScenario {
 
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
-        GetJitteredValue(
-            def_.linear_def().angle(), def_.linear_def().angle_jitter(), app_.random_generator()));
+        app_.rand().GetJittered(def_.linear_def().angle(), def_.linear_def().angle_jitter()));
     InOutDirection in_out = def_.linear_def().direction();
     if (in_out == InOutDirection::RANDOM) {
       in_out = app_.rand().FlipCoin() ? InOutDirection::IN : InOutDirection::OUT;

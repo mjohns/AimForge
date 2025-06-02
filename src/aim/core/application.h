@@ -81,10 +81,6 @@ class Application {
     return ScreenInfo(window_width_, window_height_);
   }
 
-  std::mt19937* random_generator() {
-    return &random_generator_;
-  }
-
   Random& rand() {
     return rand_;
   }
@@ -159,7 +155,6 @@ class Application {
   int window_pixel_width_ = -1;
   int window_pixel_height_ = -1;
 
-  std::mt19937 random_generator_;
   Random rand_;
 
   std::unique_ptr<SoundManager> sound_manager_;

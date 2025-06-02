@@ -5,6 +5,7 @@
 #include <random>
 #include <vector>
 
+#include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
 #include "aim/core/camera.h"
@@ -89,7 +90,7 @@ class TargetManager {
   Target* GetMutableMostRecentlyAddedTarget();
   std::vector<Target*> GetMutableVisibleTargets();
 
-  TargetProfile GetTargetProfile(const TargetDef& def, std::mt19937* random);
+  TargetProfile GetTargetProfile(const TargetDef& def, Random& rand);
 
   void MarkAllAsNonGhost();
 

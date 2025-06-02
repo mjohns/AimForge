@@ -177,15 +177,6 @@ float ParseFloat(const std::string& text) {
   return strtod(text.c_str(), nullptr);
 }
 
-float GetJitteredValue(float base_value, float jitter, std::mt19937* random_generator) {
-  if (jitter > 0) {
-    auto dist = std::uniform_real_distribution<float>(-1, 1);
-    float mult = dist(*random_generator);
-    return base_value + jitter * mult;
-  }
-  return base_value;
-}
-
 float FirstNonZero(float v1, float v2) {
   return v1 != 0 ? v1 : v2;
 }

@@ -217,7 +217,7 @@ class WallStrafeScenario : public BaseScenario {
   WallStrafeProfile GetNextProfile() {
     auto d = def_.wall_strafe_def();
     auto maybe_profile =
-        SelectProfile(d.profile_order(), d.profiles(), strafe_number_, app_.random_generator());
+        SelectProfile(d.profile_order(), d.profiles(), strafe_number_, app_.rand());
     WallStrafeProfile fallback;
     return maybe_profile.value_or(fallback);
   }
