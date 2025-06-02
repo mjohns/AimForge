@@ -29,11 +29,10 @@ struct EditorResult {
   bool editor_closed = false;
 };
 
-class PlaylistEditorComponent : public UiComponent {
+class PlaylistEditorComponent {
  public:
-  explicit PlaylistEditorComponent(Application* app, const std::string& playlist_name)
-      : UiComponent(app), playlist_manager_(app->playlist_manager()) {
-    PlaylistRun* run = playlist_manager_.GetRun(playlist_name);
+  explicit PlaylistEditorComponent(Application& app, const std::string& playlist_name) : app_(app) {
+    PlaylistRun* run = app.playlist_manager().GetRun(playlist_name);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.name.relative_name();
       original_playlist_name_ = run->playlist.name;
@@ -45,7 +44,7 @@ class PlaylistEditorComponent : public UiComponent {
   }
 
   void Show(EditorResult* result) {
-    auto cid = GetComponentIdGuard();
+    ImGui::IdGuard cid("PlaylistEditor");
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
 
@@ -61,18 +60,16 @@ class PlaylistEditorComponent : public UiComponent {
     int remove_i = -1;
     bool still_dragging = false;
     for (int i = 0; i < scenario_items_.size(); ++i) {
+      ImGui::IdGuard lid("PlaylistItem", i);
       PlaylistItem& item = scenario_items_[i];
       const std::string& scenario_name = item.scenario();
-      std::string item_label =
-          std::format("{}###Component{}PlaylistEditorItem{}", scenario_name, component_id_, i);
-      ImGui::IdGuard id("PlaylistItem", i);
 
       if (i == dragging_i_) {
         ImGui::BeginDisabled();
-        ImGui::Button(item_label.c_str());
+        ImGui::Button(scenario_name);
         ImGui::EndDisabled();
       } else {
-        ImGui::Button(item_label.c_str());
+        ImGui::Button(scenario_name);
       }
       if (ImGui::BeginDragDropSource()) {
         ImGui::SetDragDropPayload("PLAYLIST_ITEM_TYPE", &i, sizeof(int));
@@ -162,9 +159,9 @@ class PlaylistEditorComponent : public UiComponent {
     if (scenario_search_text_.size() > 0) {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
-      for (int i = 0; i < app_->scenario_manager().scenarios().size(); ++i) {
+      for (int i = 0; i < app_.scenario_manager().scenarios().size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
-        const auto& scenario = app_->scenario_manager().scenarios()[i];
+        const auto& scenario = app_.scenario_manager().scenarios()[i];
         if (StringMatchesSearch(scenario.id(), search_words, /*empty_matches=*/false)) {
           bool already_in_playlist =
               std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
@@ -221,21 +218,21 @@ class PlaylistEditorComponent : public UiComponent {
     bool name_changed = final_name != original_playlist_name_;
     if (name_changed) {
       // Need to move file.
-      std::vector<std::string> taken_names = GetAllRelativeNamesInBundle(bundle_name_, app_);
+      std::vector<std::string> taken_names = GetAllRelativeNamesInBundle(bundle_name_, &app_);
       final_name.set(bundle_name_, MakeUniqueName(new_playlist_name_, taken_names));
-      if (!playlist_manager_.RenamePlaylist(original_playlist_name_, final_name)) {
+      if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_, final_name)) {
         return false;
       }
-      PlaylistRun* current_run = playlist_manager_.GetCurrentRun();
+      PlaylistRun* current_run = app_.playlist_manager().GetCurrentRun();
       if (current_run != nullptr && current_run->playlist.name == original_playlist_name_) {
-        playlist_manager_.SetCurrentPlaylist(final_name.full_name());
+        app_.playlist_manager().SetCurrentPlaylist(final_name.full_name());
       }
     }
 
-    return playlist_manager_.SavePlaylist(final_name, playlist);
+    return app_.playlist_manager().SavePlaylist(final_name, playlist);
   }
 
-  PlaylistManager& playlist_manager_;
+  Application& app_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
   ResourceName original_playlist_name_;
@@ -245,15 +242,12 @@ class PlaylistEditorComponent : public UiComponent {
   std::string new_playlist_name_;
 };
 
-class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
+class PlaylistComponentImpl : public PlaylistComponent {
  public:
-  explicit PlaylistComponentImpl(UiScreen& screen)
-      : UiComponent(&screen.app()),
-        playlist_manager_(screen.app().playlist_manager()),
-        screen_(screen) {}
+  explicit PlaylistComponentImpl(UiScreen& screen) : app_(screen.app()), screen_(screen) {}
 
   bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
-    auto cid = GetComponentIdGuard();
+    ImGui::IdGuard cid("PlaylistComponent");
 
     if (playlist_name != current_playlist_name_) {
       current_playlist_name_ = playlist_name;
@@ -270,7 +264,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
         editor_component_ = {};
         showing_editor_ = false;
         if (editor_result.playlist_updated) {
-          playlist_manager_.LoadPlaylistsFromDisk();
+          app_.playlist_manager().LoadPlaylistsFromDisk();
         }
       }
       return false;
@@ -284,7 +278,7 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     }
     ImGui::Spacing();
     ImGui::Spacing();
-    PlaylistRunComponent("PlaylistRun", playlist_manager_.GetCurrentRun(), screen_);
+    PlaylistRunComponent("PlaylistRun", app_.playlist_manager().GetCurrentRun(), screen_);
     return false;
   }
 
@@ -294,19 +288,17 @@ class PlaylistComponentImpl : public UiComponent, public PlaylistComponent {
     showing_editor_ = false;
   }
 
-  PlaylistManager& playlist_manager_;
   bool showing_editor_ = false;
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
   UiScreen& screen_;
+  Application& app_;
 };
 
 class PlaylistListComponentImpl : public PlaylistListComponent {
  public:
   explicit PlaylistListComponentImpl(UiScreen& screen)
-      : playlist_manager_(screen.app().playlist_manager()),
-        screen_(screen),
-        app_(screen.app()) {}
+      : screen_(screen), app_(screen.app()) {}
 
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
@@ -361,7 +353,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), &app_);
       std::string new_name = MakeUniqueName(playlist.name.relative_name() + " Copy", taken_names);
       app_.playlist_manager().SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
-                                             playlist.def);
+                                           playlist.def);
       app_.playlist_manager().LoadPlaylistsFromDisk();
     }
   }
@@ -369,7 +361,6 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
  private:
   ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
   std::string playlist_search_text_;
-  PlaylistManager& playlist_manager_;
   UiScreen& screen_;
   Application& app_;
 };
@@ -418,8 +409,7 @@ void PlaylistRunComponent(const std::string& id, PlaylistRun* playlist_run, Scre
           }
         }
         if (selected_playlist.size() > 0) {
-          screen.app().playlist_manager().AddScenarioToPlaylist(selected_playlist,
-                                                                   item.scenario());
+          screen.app().playlist_manager().AddScenarioToPlaylist(selected_playlist, item.scenario());
         }
         ImGui::EndMenu();
       }
