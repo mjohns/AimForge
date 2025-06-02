@@ -33,13 +33,11 @@ class SettingsScreen : public UiScreen {
         updater_(app.settings_manager().CreateUpdater()),
         scenario_id_(scenario_id) {
     theme_names_ = app.settings_manager().ListThemes();
+    crosshair_names_ = app_.settings_manager().ListCrosshairNames();
     // Always try to save when exiting settings screen.
     app.settings_manager().MarkDirty();
 
     Settings settings = app_.settings_manager().GetCurrentSettings();
-    for (auto& c : settings.saved_crosshairs()) {
-      crosshair_names_.push_back(c.name());
-    }
 
     keybind_items_ = {
         {"Fire", updater_.settings.mutable_keybinds()->mutable_fire()},

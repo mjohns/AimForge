@@ -72,6 +72,7 @@ class SettingsManager {
   Theme GetTheme(const std::string& theme_name);
   Theme GetCurrentTheme();
 
+  std::vector<std::string> ListCrosshairNames();
   std::vector<std::string> ListThemes();
   std::vector<std::string> ListTextures();
   void SaveThemeToDisk(const std::string& theme_name, const Theme& theme);

@@ -152,6 +152,29 @@ absl::Status SettingsManager::Initialize() {
   return absl::OkStatus();
 }
 
+std::vector<std::string> SettingsManager::ListCrosshairNames() {
+  auto recent_crosshairs = history_manager_->GetRecentUniqueNames(RecentViewType::CROSSHAIR, 10);
+
+  std::vector<std::string> valid_crosshair_names;
+  for (const auto& c : settings_.saved_crosshairs()) {
+    valid_crosshair_names.push_back(c.name());
+  }
+
+  std::vector<std::string> names;
+  for (auto& crosshair_name : recent_crosshairs) {
+    if (VectorContains(valid_crosshair_names, crosshair_name)) {
+      names.push_back(crosshair_name);
+    }
+  }
+
+  for (auto& crosshair_name : valid_crosshair_names) {
+    if (!VectorContains(names, crosshair_name)) {
+      names.push_back(crosshair_name);
+    }
+  }
+  return names;
+}
+
 std::vector<std::string> SettingsManager::ListThemes() {
   auto recent_themes = history_manager_->GetRecentViews(RecentViewType::THEME, 20);
 
