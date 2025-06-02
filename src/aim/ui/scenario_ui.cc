@@ -114,6 +114,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         if (collapse_all_ > 0) {
           ImGui::SetNextItemOpen(false);
         }
+        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
         const char* popup_id = "ScenarioBundleMenu";
         if (ImGui::BeginPopupContextItem(popup_id)) {
           if (ImGui::Selectable("Collapse all")) {
@@ -124,7 +125,6 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
           }
           ImGui::EndPopup();
         }
-        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
         ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
         if (node_opened) {
           DrawScenarioNodes(node->child_nodes, search_words, result);
@@ -140,6 +140,17 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
                             ScenarioBrowserResult* result) {
     if (!StringMatchesSearch(scenario.id(), search_words)) {
       return;
+    }
+    auto current_scenario = app_->scenario_manager()->GetCurrentScenario();
+    std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
+    if (ImGui::Selectable(scenario.id().c_str(),
+                          current_scenario_id == scenario.id(),
+                          ImGuiSelectableFlags_AllowDoubleClick)) {
+      if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+        result->scenario_to_start = scenario.id();
+      } else {
+        app_->scenario_manager()->SetCurrentScenario(scenario.id());
+      }
     }
     const char* popup_id = "ScenarioItemMenu";
     if (ImGui::BeginPopupContextItem(popup_id)) {
@@ -190,18 +201,6 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       */
       ImGui::EndPopup();
     }
-
-    auto current_scenario = app_->scenario_manager()->GetCurrentScenario();
-    std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
-    if (ImGui::Selectable(scenario.id().c_str(),
-                          current_scenario_id == scenario.id(),
-                          ImGuiSelectableFlags_AllowDoubleClick)) {
-      if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-        result->scenario_to_start = scenario.id();
-      } else {
-        app_->scenario_manager()->SetCurrentScenario(scenario.id());
-      }
-    }
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
     /*
     if (ImGui::IsItemHovered()) {
@@ -211,7 +210,6 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       }
     }
     */
-
   }
 
   void MaybeLoadRecentScenarioIds() {
@@ -219,7 +217,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     float delta_seconds = (now_micros - recent_scenario_load_time_micros_) / 1000000.0;
     if (delta_seconds > 5) {
       recent_scenario_load_time_micros_ = now_micros;
-      recent_scenario_ids_ = app_->history_db()->GetRecentUniqueNames(RecentViewType::SCENARIO, 50);
+      recent_scenario_ids_ = app_->history_manager().GetRecentUniqueNames(RecentViewType::SCENARIO, 50);
     }
   }
 
@@ -229,7 +227,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     if (delta_seconds > 5) {
       recent_playlist_load_time_micros_ = now_micros;
       recent_playlist_names_ =
-          app_->history_db()->GetRecentUniqueNames(RecentViewType::PLAYLIST, 8);
+          app_->history_manager().GetRecentUniqueNames(RecentViewType::PLAYLIST, 8);
     }
   }
 

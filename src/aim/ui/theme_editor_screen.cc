@@ -197,7 +197,7 @@ class ThemeEditorScreen : public UiScreen {
     if (ImGui::SimpleDropdown(
             "ThemeDropdown", &current_theme_name_, theme_names_, char_size.x * 20)) {
       UpdateCurrentTheme(current_theme_name_);
-      app_.history_db()->UpdateRecentView(RecentViewType::THEME, current_theme_name_);
+      app_.history_manager().UpdateRecentView(RecentViewType::THEME, current_theme_name_);
     }
 
     ImGui::AlignTextToFramePadding();

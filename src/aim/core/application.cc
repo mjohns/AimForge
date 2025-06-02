@@ -115,14 +115,14 @@ int Application::Initialize() {
 
   stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("settings.db"));
-  history_db_ = std::make_unique<HistoryDb>(file_system_->GetUserDataPath("history.db"));
 
+  history_manager_ = std::make_unique<HistoryManager>(file_system_.get());
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
                                         file_system_->GetUserDataPath("resources/themes"),
                                         file_system_->GetUserDataPath("resources/textures"),
                                         settings_db_.get(),
-                                        history_db_.get());
+                                        history_manager_.get());
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
     logger_->error("Loading settings failed: {}", settings_status.message());

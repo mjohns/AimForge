@@ -23,7 +23,7 @@ class QuickSettingsScreen : public UiScreen {
       : UiScreen(app),
         scenario_id_(scenario_id),
         mgr_(app->settings_manager()),
-        updater_(app->settings_manager(), app->history_db()),
+        updater_(app->settings_manager(), &app->history_manager()),
         type_(type),
         release_key_(release_key) {
     theme_names_ = app->settings_manager()->ListThemes();

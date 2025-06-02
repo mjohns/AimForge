@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "aim/common/resource_name.h"
+#include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/proto/scenario.pb.h"
 
@@ -31,8 +32,7 @@ struct ScenarioNode {
 class ScenarioManager {
  public:
   explicit ScenarioManager(FileSystem* fs);
-  ScenarioManager(const ScenarioManager&) = delete;
-  ScenarioManager& operator=(const ScenarioManager&) = delete;
+  AIM_NO_COPY(ScenarioManager);
 
   void LoadScenariosFromDisk();
   std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);

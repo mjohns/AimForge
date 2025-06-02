@@ -121,12 +121,12 @@ SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
                                  const std::filesystem::path& theme_dir,
                                  const std::filesystem::path& texture_dir,
                                  SettingsDb* settings_db,
-                                 HistoryDb* history_db)
+                                 HistoryManager* history_manager)
     : settings_path_(settings_path),
       theme_dir_(theme_dir),
       texture_dir_(texture_dir),
       settings_db_(settings_db),
-      history_db_(history_db) {}
+      history_manager_(history_manager) {}
 
 SettingsManager::~SettingsManager() {
   if (needs_save_) {
@@ -153,7 +153,7 @@ absl::Status SettingsManager::Initialize() {
 }
 
 std::vector<std::string> SettingsManager::ListThemes() {
-  auto recent_themes = history_db_->GetRecentViews(RecentViewType::THEME, 20);
+  auto recent_themes = history_manager_->GetRecentViews(RecentViewType::THEME, 20);
 
   std::vector<std::string> all_theme_names;
   for (const auto& entry : std::filesystem::directory_iterator(theme_dir_)) {
@@ -355,8 +355,8 @@ void SettingsManager::FlushToDisk(const std::string& scenario_id) {
   }
 }
 
-SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryDb* history_db)
-    : settings_manager_(settings_manager), history_db_(history_db) {
+SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryManager* history_manager)
+    : settings_manager_(settings_manager), history_manager_(history_manager) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (current_settings != nullptr) {
     settings = *current_settings;
@@ -375,13 +375,13 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   std::string theme_name = settings.theme_name();
   if (current_settings->theme_name() != theme_name) {
     if (theme_name.size() > 0) {
-      history_db_->UpdateRecentView(RecentViewType::THEME, theme_name);
+      history_manager_->UpdateRecentView(RecentViewType::THEME, theme_name);
     }
   }
   std::string crosshair_name = settings.current_crosshair_name();
   if (current_settings->current_crosshair_name() != crosshair_name) {
     if (crosshair_name.size() > 0) {
-      history_db_->UpdateRecentView(RecentViewType::CROSSHAIR, crosshair_name);
+      history_manager_->UpdateRecentView(RecentViewType::CROSSHAIR, crosshair_name);
     }
   }
 

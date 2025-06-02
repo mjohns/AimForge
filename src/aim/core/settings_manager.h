@@ -10,7 +10,7 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
-#include "aim/database/history_db.h"
+#include "aim/core/history_manager.h"
 #include "aim/database/settings_db.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -42,7 +42,7 @@ class SettingsManager {
                            const std::filesystem::path& theme_dir,
                            const std::filesystem::path& texture_dir,
                            SettingsDb* settings_db,
-                           HistoryDb* history_db);
+                           HistoryManager* history_manager);
   ~SettingsManager();
 
   absl::Status Initialize();
@@ -84,12 +84,12 @@ class SettingsManager {
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
   std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
   SettingsDb* settings_db_;
-  HistoryDb* history_db_;
+  HistoryManager* history_manager_;
 };
 
 struct SettingsUpdater {
  public:
-  explicit SettingsUpdater(SettingsManager* settings_manager, HistoryDb* history_db);
+  explicit SettingsUpdater(SettingsManager* settings_manager, HistoryManager* history_manager);
 
   void SaveIfChangesMade(const std::string& scenario_id);
 
@@ -97,7 +97,7 @@ struct SettingsUpdater {
 
  private:
   SettingsManager* settings_manager_;
-  HistoryDb* history_db_;
+  HistoryManager* history_manager_;
 };
 
 }  // namespace aim

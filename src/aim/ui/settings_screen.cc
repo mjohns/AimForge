@@ -30,7 +30,7 @@ class SettingsScreen : public UiScreen {
  public:
   SettingsScreen(Application* app, const std::string& scenario_id)
       : UiScreen(app),
-        updater_(app->settings_manager(), app->history_db()),
+        updater_(app->settings_manager(), &app->history_manager()),
         mgr_(app->settings_manager()),
         scenario_id_(scenario_id) {
     theme_names_ = app->settings_manager()->ListThemes();
