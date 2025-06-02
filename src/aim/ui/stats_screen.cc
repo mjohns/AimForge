@@ -40,19 +40,11 @@ class StatsScreen : public UiScreen {
  public:
   StatsScreen(std::string scenario_id, i64 run_id, Application* app)
       : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
+    scenario_ = app->scenario_manager().GetScenario(scenario_id);
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
     }
     performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
-    auto scenario = app->scenario_manager().GetScenario(scenario_id);
-    if (scenario) {
-      float start_score = scenario->def.start_score();
-      float end_score = scenario->def.end_score();
-      if (start_score > 0 && end_score > 0) {
-        start_score_ = start_score;
-        end_score_ = end_score;
-      }
-    }
   }
 
  protected:
@@ -101,11 +93,10 @@ class StatsScreen : public UiScreen {
   }
 
   float GetScoreLevel(float score) {
-    return GetScenarioScoreLevel(score, start_score_, end_score_);
-  }
-
-  bool HasScoreLevels() {
-    return start_score_ > 0;
+    if (!scenario_) {
+      return 0;
+    }
+    return GetScenarioScoreLevel(score, scenario_->def);
   }
 
   void DrawPerformanceStats() {
@@ -163,9 +154,10 @@ class StatsScreen : public UiScreen {
       auto font = app_.font_manager().UseLarge();
       ImGui::AlignTextToFramePadding();
       ImGui::Text(scenario_id_);
-      if (HasScoreLevels()) {
+      float score_level = GetScoreLevel(stats.score);
+      if (score_level > 0) {
         ImGui::SameLine();
-        ImGui::Button(MaybeIntToString(GetScoreLevel(stats.score), 2).c_str());
+        ImGui::Button(MaybeIntToString(score_level, 2).c_str());
       }
     }
     ImGui::Spacing();
@@ -314,8 +306,7 @@ class StatsScreen : public UiScreen {
   StatsInfo info_;
   bool is_valid_ = false;
 
-  float start_score_ = -1;
-  float end_score_ = -1;
+  std::optional<ScenarioItem> scenario_;
 
   std::optional<QuickSettingsType> show_settings_;
   std::string show_settings_release_key_;

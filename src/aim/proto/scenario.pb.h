@@ -6563,9 +6563,10 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
   enum : int {
     kWallPointsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
-    kAngleLengthFieldNumber = 5,
+    kAngleLengthFieldNumber = 6,
     kOrientPillFieldNumber = 3,
     kAngleFieldNumber = 4,
+    kAngleJitterFieldNumber = 5,
   };
   // repeated .aim.RegionVec2 wall_points = 1;
   int wall_points_size() const;
@@ -6599,7 +6600,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
 
   public:
-  // .aim.RegionLength angle_length = 5;
+  // .aim.RegionLength angle_length = 6;
   bool has_angle_length() const;
   void clear_angle_length() ;
   const ::aim::RegionLength& angle_length() const;
@@ -6636,12 +6637,23 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
   void _internal_set_angle(float value);
 
   public:
+  // float angle_jitter = 5;
+  bool has_angle_jitter() const;
+  void clear_angle_jitter() ;
+  float angle_jitter() const;
+  void set_angle_jitter(float value);
+
+  private:
+  float _internal_angle_jitter() const;
+  void _internal_set_angle_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.CenteringScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 3,
+      3, 6, 3,
       0, 2>
       _table_;
 
@@ -6666,6 +6678,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* angle_length_;
     bool orient_pill_;
     float angle_;
+    float angle_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -12266,7 +12279,35 @@ inline void CenteringScenarioDef::_internal_set_angle(float value) {
   _impl_.angle_ = value;
 }
 
-// .aim.RegionLength angle_length = 5;
+// float angle_jitter = 5;
+inline bool CenteringScenarioDef::has_angle_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void CenteringScenarioDef::clear_angle_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float CenteringScenarioDef::angle_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.angle_jitter)
+  return _internal_angle_jitter();
+}
+inline void CenteringScenarioDef::set_angle_jitter(float value) {
+  _internal_set_angle_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.angle_jitter)
+}
+inline float CenteringScenarioDef::_internal_angle_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.angle_jitter_;
+}
+inline void CenteringScenarioDef::_internal_set_angle_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.angle_jitter_ = value;
+}
+
+// .aim.RegionLength angle_length = 6;
 inline bool CenteringScenarioDef::has_angle_length() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.angle_length_ != nullptr);

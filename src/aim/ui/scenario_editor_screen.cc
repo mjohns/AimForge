@@ -600,14 +600,18 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Use angle");
     ImGui::SameLine();
     ImGui::Checkbox("##AngleCheckbox", &use_angle);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Specify just the angle of movement and how far to travel. Typically used with Barrel "
+        "rooms.");
 
     if (use_angle) {
       ImGui::Indent();
-      ImGui::InputFloat(ImGui::InputFloatParams("Angle")
-                            .set_label("Angle degrees")
-                            .set_step(1, 5)
-                            .set_width(char_x_ * 12),
-                        PROTO_FLOAT_FIELD(CenteringScenarioDef, &c, angle));
+      ImGui::InputJitteredFloat(ImGui::InputFloatParams("Angle")
+                                    .set_label("Angle degrees")
+                                    .set_step(1, 5)
+                                    .set_width(char_x_ * 12),
+                                PROTO_JITTERED_FIELD(CenteringScenarioDef, &c, angle));
       DrawRegionLengthEditor("Length", /*default_to_x=*/true, c.mutable_angle_length());
       ImGui::Unindent();
       c.clear_target_placement_strategy();
