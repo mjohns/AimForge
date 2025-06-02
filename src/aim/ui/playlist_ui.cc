@@ -376,33 +376,6 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
 }  // namespace
 
-bool PlaylistRunComponent(const std::string& id,
-                          PlaylistRun* playlist_run,
-                          std::string* scenario_to_start) {
-  bool selected = false;
-  for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
-    ImGui::IdGuard id(i);
-    PlaylistItemProgress& progress = playlist_run->progress_list[i];
-    PlaylistItem item = playlist_run->playlist.def.items(i);
-    float width = std::min(ImGui::GetContentRegionAvail().x, 600.0f);
-    float right = ImGui::GetCursorPosX() + width;
-    ImGui::SetNextItemWidth(width);
-    if (ImGui::Selectable(item.scenario().c_str(), i == playlist_run->current_index)) {
-      selected = true;
-      playlist_run->current_index = i;
-      *scenario_to_start = item.scenario();
-    }
-
-    ImGui::SameLine();
-    std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());
-
-    float len = ImGui::CalcTextSize(progress_text.c_str()).x;
-    ImGui::SetCursorPosX(right - len);
-    ImGui::Text(progress_text);
-  }
-  return selected;
-}
-
 void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Screen* screen) {
   ImGui::IdGuard cid(id);
   for (int i = 0; i < playlist_run->playlist.def.items_size(); ++i) {
@@ -431,6 +404,24 @@ void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Scr
         opts.scenario_id = item.scenario();
         opts.is_new_copy = true;
         screen->PushNextScreen(CreateScenarioEditorScreen(opts, screen->app()));
+      }
+      if (ImGui::BeginMenu("Add to")) {
+        std::string selected_playlist;
+        int playlist_count = 0;
+        const auto& recent_playlists = screen->app()->history_manager().recent_playlists();
+        for (int i = 0; i < std::min<int>(6, recent_playlists.size()); ++i) {
+          const std::string& playlist_name = recent_playlists[i];
+          ImGui::IdGuard playlist_id(playlist_name, i);
+          if (playlist_run->playlist.name.full_name() != playlist_name &&
+              ImGui::MenuItem(playlist_name.c_str())) {
+            selected_playlist = playlist_name;
+          }
+        }
+        if (selected_playlist.size() > 0) {
+          screen->app()->playlist_manager()->AddScenarioToPlaylist(selected_playlist,
+                                                                   item.scenario());
+        }
+        ImGui::EndMenu();
       }
       ImGui::EndPopup();
     }
