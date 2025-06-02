@@ -37,14 +37,14 @@ class HomeScreen : public UiScreen {
     playlist_list_component_ = CreatePlaylistListComponent(this);
     scenario_browser_component_ = CreateScenarioBrowserComponent(app);
 
-    auto last_playlist = app_.history_db()->GetRecentViews(RecentViewType::PLAYLIST, 1);
+    auto last_playlist = app_.history_manager().GetRecentViews(RecentViewType::PLAYLIST, 1);
     if (last_playlist.size() > 0) {
       std::string name = last_playlist[0].id;
       if (name.size() > 0) {
         app_.playlist_manager()->SetCurrentPlaylist(name);
       }
     }
-    auto last_scenario = app_.history_db()->GetRecentViews(RecentViewType::SCENARIO, 1);
+    auto last_scenario = app_.history_manager().GetRecentViews(RecentViewType::SCENARIO, 1);
     if (last_scenario.size() > 0) {
       app_.scenario_manager()->SetCurrentScenario(last_scenario[0].id);
     }
@@ -71,7 +71,7 @@ class HomeScreen : public UiScreen {
       return;
     }
     ScenarioItem current_scenario = *GetCurrentScenario();
-    app_.history_db()->UpdateRecentView(RecentViewType::SCENARIO, current_scenario.id());
+    app_.history_manager().UpdateRecentView(RecentViewType::SCENARIO, current_scenario.id());
     CreateScenarioParams params;
     params.id = current_scenario.id();
     params.def = current_scenario.def;
@@ -127,7 +127,7 @@ class HomeScreen : public UiScreen {
       if (y_off > 0) {
         //ImGui::Dummy(ImVec2(0, y_off));
           // TODO: This vertical centering is not working.
-        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + y_off);
+        //ImGui::SetCursorPosY(ImGui::GetCursorPosY() + y_off);
       }
       ImGui::AlignTextToFramePadding();
       ImGui::Text("                ");
@@ -351,7 +351,7 @@ class HomeScreen : public UiScreen {
         playlist_list_component_->Show(&result);
         if (result.open_playlist.has_value()) {
           auto playlist = *result.open_playlist;
-          app_.history_db()->UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
+          app_.history_manager().UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
           app_.playlist_manager()->SetCurrentPlaylist(playlist.name.full_name());
         }
         if (result.reload_playlists) {

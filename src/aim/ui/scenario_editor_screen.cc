@@ -145,7 +145,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Begin("Details")) {
       notification_popup_.Draw();
       ImGui::SimpleDropdown(
-          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 7);
+          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
 
       ImGui::PushItemWidth(char_x_ * 7);
       ImGui::SameLine();

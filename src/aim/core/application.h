@@ -19,11 +19,11 @@
 #include "aim/core/application_state.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
+#include "aim/core/history_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/screen.h"
 #include "aim/core/settings_manager.h"
-#include "aim/database/history_db.h"
 #include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
@@ -100,10 +100,6 @@ class Application {
     return stats_db_.get();
   }
 
-  HistoryDb* history_db() {
-    return history_db_.get();
-  }
-
   Renderer* renderer() {
     return renderer_.get();
   }
@@ -124,6 +120,10 @@ class Application {
     return playlist_manager_.get();
   }
 
+  HistoryManager& history_manager() {
+    return *history_manager_;
+  }
+
   spdlog::logger* logger() {
     return logger_.get();
   };
@@ -135,7 +135,6 @@ class Application {
   u64 GetNextComponentId() {
     return component_id_counter_++;
   }
-
 
   void EnableVsync();
   void DisableVsync();
@@ -165,7 +164,7 @@ class Application {
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsDb> stats_db_;
   std::unique_ptr<SettingsDb> settings_db_;
-  std::unique_ptr<HistoryDb> history_db_;
+  std::unique_ptr<HistoryManager> history_manager_;
   std::unique_ptr<Renderer> renderer_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<SettingsManager> settings_manager_;
