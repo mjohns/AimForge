@@ -191,6 +191,10 @@ message CenteringScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 2;
 
   bool orient_pill = 3;
+
+  // Goes between two points at the specifed number of degress for the given length.
+  float angle = 4;
+  RegionLength angle_length  = 5;
 }
 
 message BarrelScenarioDef {

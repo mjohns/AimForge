@@ -8,18 +8,19 @@
 #include <memory>
 #include <random>
 
+#include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/target.h"
-#include "aim/scenario/tracking_sound.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
+#include "aim/scenario/tracking_sound.h"
 
 namespace aim {
 namespace {
@@ -31,7 +32,8 @@ class CenteringScenario : public BaseScenario {
   explicit CenteringScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     TargetPlacementStrategy strat = params.def.centering_def().target_placement_strategy();
-    if (!params.def.centering_def().has_target_placement_strategy()) {
+    const CenteringScenarioDef& c = def_.centering_def();
+    if (!c.has_target_placement_strategy()) {
       strat.set_min_distance(50);
       RectangleTargetRegion* region = strat.add_regions()->mutable_rectangle();
       region->mutable_x_length()->set_x_percent_value(0.9);
@@ -39,6 +41,16 @@ class CenteringScenario : public BaseScenario {
       region->mutable_inner_x_length()->set_x_percent_value(0.55);
     }
     wall_target_placer_ = CreateWallTargetPlacer(wall_, strat, &target_manager_, &app_);
+
+    if (c.has_angle()) {
+      glm::vec2 basis(wall_.GetRegionLength(c.angle_length()) / 2.0, 0);
+      wall_points_.push_back(RotateDegrees(basis, c.angle() + 180));
+      wall_points_.push_back(RotateDegrees(basis, c.angle()));
+    } else {
+      for (const auto& p : c.wall_points()) {
+        wall_points_.push_back(wall_.GetRegionVec2(p));
+      }
+    }
 
     current_start_ = GetNextPosition();
     glm::vec2 next_point = GetNextPosition();
@@ -119,18 +131,18 @@ class CenteringScenario : public BaseScenario {
   }
 
   glm::vec2 GetNextPositionNoIncrement() {
-    if (def_.centering_def().wall_points_size() == 1) {
+    if (wall_points_.size() == 1) {
       // Point will alternate between the wall point and a point from the target placer.
       bool is_wall_point = current_index_ % 2 == 0;
       if (is_wall_point) {
-        return wall_.GetRegionVec2(def_.centering_def().wall_points(0));
+        return wall_points_[0];
       } else {
         return wall_target_placer_->GetNextPosition();
       }
     }
-    if (def_.centering_def().wall_points_size() > 1) {
-      int i = current_index_ % def_.centering_def().wall_points_size();
-      return wall_.GetRegionVec2(def_.centering_def().wall_points(i));
+    if (wall_points_.size() > 1) {
+      int i = current_index_ % wall_points_.size();
+      return wall_points_[i];
     }
 
     return wall_target_placer_->GetNextPosition();
@@ -142,6 +154,7 @@ class CenteringScenario : public BaseScenario {
 
   int current_index_ = 0;
 
+  std::vector<glm::vec2> wall_points_;
   std::unique_ptr<WallTargetPlacer> wall_target_placer_;
   Wall wall_;
 };
