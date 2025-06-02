@@ -10,6 +10,7 @@
 #include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
 #include "aim/core/perf.h"
+#include "aim/core/stats_manager.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
 
@@ -100,17 +101,7 @@ class StatsScreen : public UiScreen {
   }
 
   float GetScoreLevel(float score) {
-    float num_levels = 5;
-    float strict_range = end_score_ - start_score_;
-    float level_size = strict_range / num_levels;
-
-    // Give a rating of 0 if you are one bucket below the start_score.
-    float zero_score = start_score_ - level_size;
-    float adjusted_score = score - zero_score;
-    float wide_range = end_score_ - zero_score;
-
-    float percent = adjusted_score / wide_range;
-    return ClampPositive(num_levels * percent);
+    return GetScenarioScoreLevel(score, start_score_, end_score_);
   }
 
   bool HasScoreLevels() {

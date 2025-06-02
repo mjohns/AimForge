@@ -127,6 +127,11 @@ int Application::Initialize() {
     return -1;
   }
 
+  // Prime aggregate stats cache for all recent scenarios.
+  for (const std::string& scenario_id : history_manager_->recent_scenario_ids()) {
+    stats_manager_->GetAggregateStats(scenario_id);
+  }
+
   scenario_manager_ = std::make_unique<ScenarioManager>(file_system_.get());
   scenario_manager_->LoadScenariosFromDisk();
 
@@ -188,9 +193,9 @@ int Application::Initialize() {
   float window_pixel_density = SDL_GetWindowPixelDensity(sdl_window_);
   window_pixel_width_ = window_width_ * window_pixel_density;
   window_pixel_height_ = window_height_ * window_pixel_density;
-  logger_->info("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
-                window_display_scale,
-                window_pixel_density);
+  logger_->debug("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
+                 window_display_scale,
+                 window_pixel_density);
 
   // SDL_ShowWindow(sdl_window_);
 
@@ -237,7 +242,7 @@ int Application::Initialize() {
   init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
   ImGui_ImplSDLGPU3_Init(&init_info);
 
-  logger_->info("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
+  logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   return 0;
 }
 
