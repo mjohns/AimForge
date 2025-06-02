@@ -101,10 +101,10 @@ class HomeScreen : public UiScreen {
     ImGui::IdGuard cid("HomePage");
     ScreenInfo screen = app_.screen_info();
 
-    int large_font_size = app_.font_manager()->large_font_size();
+    int large_font_size = app_.font_manager().large_font_size();
     ImGui::BeginChild("Header", ImVec2(0, large_font_size * 1.3));
     if (logo_texture_ && logo_texture_->is_loaded()) {
-      int size = app_.font_manager()->large_font_size();
+      int size = app_.font_manager().large_font_size();
       ImGui::Image(logo_texture_->GetImTextureId(),
                    ImVec2(size + 2, size + 2),
                    ImVec2(0.0f, 0.0f),
@@ -112,14 +112,14 @@ class HomeScreen : public UiScreen {
       ImGui::SameLine();
     }
     {
-      auto font = app_.font_manager()->UseLargeBold();
+      auto font = app_.font_manager().UseLargeBold();
       ImGui::AlignTextToFramePadding();
       ImGui::Text("AimForge");
     }
 
     auto current_scenario = app_.scenario_manager().GetCurrentScenario();
     if (current_scenario) {
-      auto font = app_.font_manager()->UseMedium();
+      auto font = app_.font_manager().UseMedium();
       float available_height = ImGui::GetContentRegionAvail().y + ImGui::GetCursorPosY();
       float button_height = ImGui::GetFrameHeight();
 

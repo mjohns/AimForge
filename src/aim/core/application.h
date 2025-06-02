@@ -20,6 +20,7 @@
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/history_manager.h"
+#include "aim/core/stats_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/screen.h"
@@ -92,12 +93,8 @@ class Application {
     return sound_manager_.get();
   }
 
-  FontManager* font_manager() {
-    return font_manager_.get();
-  }
-
-  StatsDb* stats_db() {
-    return stats_db_.get();
+  StatsManager& stats_manager() {
+    return *stats_manager_;
   }
 
   Renderer* renderer() {
@@ -106,6 +103,10 @@ class Application {
 
   FileSystem* file_system() {
     return file_system_.get();
+  }
+
+  FontManager& font_manager() {
+    return *font_manager_;
   }
 
   SettingsManager& settings_manager() {
@@ -162,12 +163,12 @@ class Application {
   Random rand_;
 
   std::unique_ptr<SoundManager> sound_manager_;
-  std::unique_ptr<StatsDb> stats_db_;
+  std::unique_ptr<StatsManager> stats_manager_;
+  std::unique_ptr<SettingsManager> settings_manager_;
   std::unique_ptr<SettingsDb> settings_db_;
   std::unique_ptr<HistoryManager> history_manager_;
   std::unique_ptr<Renderer> renderer_;
   std::unique_ptr<FileSystem> file_system_;
-  std::unique_ptr<SettingsManager> settings_manager_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
   std::unique_ptr<FontManager> font_manager_;

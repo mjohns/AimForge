@@ -271,7 +271,7 @@ void Scenario::OnWaitingForClickTick() {
 
   ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
   {
-    auto bold = app_.font_manager()->UseLargeBold();
+    auto bold = app_.font_manager().UseLargeBold();
     std::string message = "Click to Start";
     ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
     ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
@@ -432,7 +432,7 @@ void Scenario::HandleScenarioDone() {
   stats_row.num_hits = stats_.num_hits;
   stats_row.num_shots = stats_.num_shots;
   stats_row.score = score;
-  app_.stats_db()->AddStats(id_, &stats_row);
+  app_.stats_manager().AddStats(id_, &stats_row);
 
   stats_id_ = stats_row.stats_id;
 

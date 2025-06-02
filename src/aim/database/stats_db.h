@@ -23,17 +23,13 @@ class StatsDb {
  public:
   explicit StatsDb(const std::filesystem::path& db_path);
   ~StatsDb();
+  AIM_NO_COPY(StatsDb);
 
   void AddStats(const std::string& scenario_id, StatsRow* row);
 
   std::vector<StatsRow> GetStats(const std::string& scenario_id);
 
   u64 GetLatestRunId(const std::string& scenario_id);
-
-  StatsDb(const StatsDb&) = delete;
-  StatsDb(StatsDb&&) = default;
-  StatsDb& operator=(StatsDb other) = delete;
-  StatsDb& operator=(StatsDb&& other) = delete;
 
  private:
   sqlite3* db_ = nullptr;
