@@ -63,7 +63,7 @@ class StatsScreen : public UiScreen {
       return;
     }
 
-    PlaylistRun* playlist_run = app_.playlist_manager()->GetCurrentRun();
+    PlaylistRun* playlist_run = app_.playlist_manager().GetCurrentRun();
     std::string scenario_to_start;
     if (playlist_run != nullptr) {
       if (ImGui::Begin("Playlist")) {
