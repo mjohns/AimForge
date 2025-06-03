@@ -24,6 +24,24 @@ std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_n
   return names;
 }
 
+struct CopyPlaylistOptions {
+  std::string remove_prefix;
+  std::string add_prefix;
+  bool deep_copy;
+};
+
+bool CopyPlaylist(Playlist source,
+                  const ResourceName& new_name,
+                  const CopyPlaylistOptions& opts,
+                  Application& app) {
+  // Copy all scenarios if necessary.
+  auto taken_names = GetAllRelativeNamesInBundle(new_name.bundle_name(), &app);
+  std::string new_relative_name = MakeUniqueName(new_name.relative_name(), taken_names);
+  app.playlist_manager().SavePlaylist(ResourceName(new_name.bundle_name(), new_relative_name),
+                                      source.def);
+  return true;
+}
+
 struct EditorResult {
   bool playlist_updated = false;
   bool editor_closed = false;
@@ -305,6 +323,10 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       result->reload_playlists = true;
     });
 
+    if (copy_dialog_.Draw(app_)) {
+      result->reload_playlists = true;
+    }
+
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##PlaylistSearchInput", kIconSearch, &playlist_search_text_);
@@ -319,7 +341,6 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
     ImGui::BeginChild("PlaylistsContent");
 
-    std::optional<Playlist> copy_playlist;
     auto search_words = GetSearchWords(playlist_search_text_);
     ImGui::LoopId loop_id;
     // TODO: group by bundle + collapse/expand all
@@ -334,7 +355,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
         const char* menu_id = "PlaylistItemMenu";
         if (ImGui::BeginPopupContextItem(menu_id)) {
           if (ImGui::Selectable("Copy")) {
-            copy_playlist = playlist;
+            copy_dialog_.NotifyOpen(playlist);
           }
           if (ImGui::Selectable("Delete")) {
             delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", name), playlist);
@@ -346,15 +367,6 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     }
 
     ImGui::EndChild();
-
-    if (copy_playlist.has_value()) {
-      auto playlist = *copy_playlist;
-      auto taken_names = GetAllRelativeNamesInBundle(playlist.name.bundle_name(), &app_);
-      std::string new_name = MakeUniqueName(playlist.name.relative_name() + " Copy", taken_names);
-      app_.playlist_manager().SavePlaylist(ResourceName(playlist.name.bundle_name(), new_name),
-                                           playlist.def);
-      app_.playlist_manager().LoadPlaylistsFromDisk();
-    }
   }
 
  private:
@@ -362,6 +374,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   std::string playlist_search_text_;
   UiScreen& screen_;
   Application& app_;
+  CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
 };
 
 }  // namespace
@@ -466,6 +479,92 @@ std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen) {
 
 std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(UiScreen* screen) {
   return std::make_unique<PlaylistListComponentImpl>(*screen);
+}
+
+bool CopyPlaylistDialog::Draw(Application& app) {
+  ImGui::IdGuard cid("CopyPlaylistDialogContent");
+  bool did_copy = false;
+  bool show_popup = source_.has_value();
+  if (show_popup) {
+    ImGui::SetNextWindowPos(
+        ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal(id_.c_str(),
+                               &show_popup,
+                               ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                   ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+      ImGui::TextFmt("Copy \"{}\" to", source_->name.full_name());
+      ImGui::SimpleDropdown("BundlePicker",
+                            new_name_.mutable_bundle_name(),
+                            bundle_names_,
+                            ImGui::GetFrameHeight() * 9);
+      ImGui::SameLine();
+      ImGui::InputText("##RelativeNameInput", new_name_.mutable_relative_name());
+
+      ImGui::Indent();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Make new copies of all scenarios");
+      ImGui::SameLine();
+      ImGui::Checkbox("##DeepCopy", &deep_copy_);
+
+      if (deep_copy_) {
+        ImGui::Indent();
+
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Add name prefix*");
+        ImGui::SameLine();
+        ImGui::InputText("##AddPrefix", &add_prefix_);
+        ImGui::SameLine();
+        ImGui::HelpMarker(
+            "Adds the following prefix to all newly created scenario names after the bundle name");
+
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Remove name prefix");
+        ImGui::SameLine();
+        ImGui::InputText("##RemovePrefix", &remove_prefix_);
+        ImGui::SameLine();
+        ImGui::HelpMarker("Strips the following prefix from the name of scenarios being copied");
+
+        ImGui::Unindent();
+      }
+
+      ImGui::Unindent();
+      bool cant_copy = deep_copy_ && add_prefix_.size() == 0;
+      if (cant_copy) {
+        ImGui::BeginDisabled();
+      }
+      if (ImGui::Button("Copy")) {
+        // Do copy
+        CopyPlaylistOptions opts;
+        opts.add_prefix = add_prefix_;
+        opts.remove_prefix = remove_prefix_;
+        opts.deep_copy = deep_copy_;
+        CopyPlaylist(*source_, new_name_, opts, app);
+        did_copy = true;
+        ImGui::CloseCurrentPopup();
+        source_ = {};
+      }
+      if (cant_copy) {
+        ImGui::EndDisabled();
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Cancel")) {
+        source_ = {};
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
+  }
+  if (open_) {
+    ImGui::OpenPopup(id_.c_str());
+    open_ = false;
+    deep_copy_ = false;
+    remove_prefix_;
+    add_prefix_;
+    bundle_names_ = app.file_system()->GetBundleNames();
+    new_name_ = source_->name;
+    *new_name_.mutable_relative_name() += " Copy";
+  }
+  return did_copy;
 }
 
 }  // namespace aim
