@@ -169,7 +169,7 @@ class StatsScreen : public UiScreen {
       percent_diff = diff / previous_high_score;
     }
     {
-      auto font = app_.font_manager()->UseLarge();
+      auto font = app_.font_manager().UseLarge();
       ImGui::AlignTextToFramePadding();
       ImGui::Text(scenario_id_);
       if (HasScoreLevels()) {
@@ -180,18 +180,18 @@ class StatsScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
     if (percent_diff > 0) {
-      auto font = app_.font_manager()->UseDefault();
+      auto font = app_.font_manager().UseDefault();
       ImGui::Button("NEW HIGH SCORE");
     }
     {
-      auto font = app_.font_manager()->UseLarge();
+      auto font = app_.font_manager().UseLarge();
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Score:");
       ImGui::SameLine();
       ImGui::Text(MaybeIntToString(stats.score, 2).c_str());
     }
     if (has_previous_high_score) {
-      auto font = app_.font_manager()->UseLarge();
+      auto font = app_.font_manager().UseLarge();
       std::string percent_diff_str = MaybeIntToString(abs(percent_diff) * 100, 1);
       ImGui::SameLine();
       std::string plus_minus = percent_diff < 0 ? "-" : "+";
@@ -275,7 +275,7 @@ class StatsScreen : public UiScreen {
 
  private:
   bool GetStatsInfo(StatsInfo* info) {
-    auto all_stats = app_.stats_db()->GetStats(scenario_id_);
+    auto all_stats = app_.stats_manager().GetStats(scenario_id_);
     info->all_stats.reserve(all_stats.size());
     info->scores.reserve(all_stats.size());
 

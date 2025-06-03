@@ -60,7 +60,7 @@ class SettingsManager {
                            SettingsDb* settings_db,
                            HistoryManager* history_manager);
   ~SettingsManager();
-  AIM_NO_COPY(SettingsManager)
+  AIM_NO_COPY(SettingsManager);
 
   absl::Status Initialize();
 

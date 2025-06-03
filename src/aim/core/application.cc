@@ -113,9 +113,9 @@ int Application::Initialize() {
     absl::AddLogSink(absl_log_sink_.get());
   }
 
-  stats_db_ = std::make_unique<StatsDb>(file_system_->GetUserDataPath("stats.db"));
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("settings.db"));
 
+  stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
   history_manager_ = std::make_unique<HistoryManager>(file_system_.get());
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),

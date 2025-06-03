@@ -188,7 +188,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
       }
       if (ImGui::Selectable("View latest run")) {
         result->scenario_stats_to_view = scenario.id();
-        result->run_id = app_->stats_db()->GetLatestRunId(scenario.id());
+        result->run_id = app_->stats_manager().GetLatestRunId(scenario.id());
       }
       if (ImGui::Selectable("Delete")) {
         delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", scenario.id()),

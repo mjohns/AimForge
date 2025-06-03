@@ -11,7 +11,7 @@ namespace aim {
   ClassName(const ClassName&) = delete;            \
   ClassName(ClassName&&) = delete;                 \
   ClassName& operator=(const ClassName&) = delete; \
-  ClassName& operator=(ClassName&&) = delete;
+  ClassName& operator=(ClassName&&) = delete
 
 using u32 = uint32_t;
 using u64 = uint64_t;
