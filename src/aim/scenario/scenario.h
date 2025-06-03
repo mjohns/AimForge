@@ -124,6 +124,14 @@ class Scenario : public Screen {
   ScenarioRunState run_state_ = ScenarioRunState::NOT_STARTED;
 
  private:
+  bool is_running() {
+    return run_state_ == ScenarioRunState::RUNNING;
+  }
+
+  bool is_waiting_for_click_to_start() {
+    return run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START;
+  }
+
   void OnRunningTick();
   void OnWaitingForClickTick();
 

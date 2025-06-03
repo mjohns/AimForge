@@ -98,7 +98,7 @@ bool Scenario::ShouldAutoHold() {
 }
 
 void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
-  if (event.type == SDL_EVENT_MOUSE_MOTION && run_state_ == ScenarioRunState::RUNNING) {
+  if (event.type == SDL_EVENT_MOUSE_MOTION && is_running()) {
     camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
   }
 
@@ -114,7 +114,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
     std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
 
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-      if (run_state_ == ScenarioRunState::RUNNING) {
+      if (is_running()) {
         if (!ShouldAutoHold()) {
           if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
             u64 now_micros = timer_.GetElapsedMicros();
@@ -140,7 +140,8 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
     }
-    if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
+    if (!is_waiting_for_click_to_start() &&
+        KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
       state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       PopSelf();
     }
@@ -164,7 +165,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
       is_adjusting_crosshair_ = false;
       save_crosshair_ = true;
     }
-    if (run_state_ == ScenarioRunState::RUNNING && !ShouldAutoHold()) {
+    if (is_running() && !ShouldAutoHold()) {
       if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
         update_data_.has_click_up = true;
         is_click_held_ = false;
@@ -172,7 +173,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
     }
   }
 
-  if (run_state_ == ScenarioRunState::RUNNING) {
+  if (is_running()) {
     OnScenarioEvent(event);
   }
 }
@@ -183,7 +184,7 @@ void Scenario::OnAttach() {
   RefreshState();
   timer_.StartLoop();
   // if running
-  if (run_state_ == ScenarioRunState::RUNNING) {
+  if (is_running()) {
     timer_.ResumeRun();
   }
 }
@@ -223,7 +224,7 @@ void Scenario::OnTickStart() {
     }
   }
 
-  if (run_state_ == ScenarioRunState::RUNNING) {
+  if (is_running()) {
     if (!initialized_) {
       Initialize();
       initialized_ = true;
@@ -233,7 +234,7 @@ void Scenario::OnTickStart() {
 }
 
 void Scenario::OnTick() {
-  if (run_state_ == ScenarioRunState::RUNNING) {
+  if (is_running()) {
     OnRunningTick();
     return;
   }
