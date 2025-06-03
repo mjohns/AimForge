@@ -5,7 +5,7 @@
 namespace aim {
 namespace {
 
-const int kCachedRecentNamesSize = 120;
+const int kCachedRecentNamesSize = 240;
 
 }  // namespace
 

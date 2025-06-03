@@ -11,6 +11,14 @@
 
 namespace aim {
 
+float GetScenarioScoreLevel(float score, float start_score, float end_score);
+
+struct AggregateScenarioStats {
+  StatsRow high_score_stats;
+  StatsRow last_run_stats;
+  int total_runs;
+};
+
 class StatsManager {
  public:
   explicit StatsManager(FileSystem* fs);
@@ -22,8 +30,13 @@ class StatsManager {
 
   u64 GetLatestRunId(const std::string& scenario_id);
 
+  AggregateScenarioStats GetAggregateStats(const std::string& scenario_id);
+
  private:
+  AggregateScenarioStats GetAggregateStatsFromDb(const std::string& scenario_id);
+
   std::unique_ptr<StatsDb> stats_db_;
+  std::unordered_map<std::string, AggregateScenarioStats> stats_cache_;
 };
 
 }  // namespace aim
