@@ -594,27 +594,48 @@ class ScenarioEditorScreen : public UiScreen {
   void DrawCenteringEditor() {
     ImGui::IdGuard cid("CenteringEditor");
     CenteringScenarioDef& c = *def_.mutable_centering_def();
-    if (c.wall_points_size() > 2 || c.has_target_placement_strategy()) {
-      ImGui::Text("Unsupported editable features");
-      return;
-    }
 
-    // Ensure two wall points.
-    while (c.wall_points_size() < 2) {
-      c.add_wall_points();
-    }
-
+    bool use_angle = c.has_angle();
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Point 1");
-    ImGui::Indent();
-    DrawRegionVec2Editor("Point1", c.mutable_wall_points(0));
-    ImGui::Unindent();
+    ImGui::Text("Use angle");
+    ImGui::SameLine();
+    ImGui::Checkbox("##AngleCheckbox", &use_angle);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Point 2");
-    ImGui::Indent();
-    DrawRegionVec2Editor("Point2", c.mutable_wall_points(1));
-    ImGui::Unindent();
+    if (use_angle) {
+      ImGui::Indent();
+      ImGui::InputFloat(ImGui::InputFloatParams("Angle")
+                            .set_label("Angle degrees")
+                            .set_step(1, 5)
+                            .set_width(char_x_ * 12),
+                        PROTO_FLOAT_FIELD(CenteringScenarioDef, &c, angle));
+      DrawRegionLengthEditor("Length", /*default_to_x=*/true, c.mutable_angle_length());
+      ImGui::Unindent();
+      c.clear_target_placement_strategy();
+      c.clear_wall_points();
+    } else {
+      c.clear_angle();
+      c.clear_angle_length();
+      if (c.wall_points_size() > 2 || c.has_target_placement_strategy()) {
+        ImGui::Text("Unsupported editable features");
+        return;
+      }
+      // Ensure two wall points.
+      while (c.wall_points_size() < 2) {
+        c.add_wall_points();
+      }
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Point 1");
+      ImGui::Indent();
+      DrawRegionVec2Editor("Point1", c.mutable_wall_points(0));
+      ImGui::Unindent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Point 2");
+      ImGui::Indent();
+      DrawRegionVec2Editor("Point2", c.mutable_wall_points(1));
+      ImGui::Unindent();
+    }
 
     Line();
 

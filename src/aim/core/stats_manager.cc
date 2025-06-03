@@ -1,5 +1,6 @@
 #include "stats_manager.h"
 
+#include <glm/ext/scalar_common.hpp>
 #include <memory>
 
 #include "aim/common/util.h"
@@ -71,7 +72,7 @@ float GetScenarioScoreLevel(float score, float start_score, float end_score) {
   float wide_range = end_score - zero_score;
 
   float percent = adjusted_score / wide_range;
-  return ClampPositive(num_levels * percent);
+  return glm::clamp<float>(num_levels * percent, 0, num_levels + 1);
 }
 
 }  // namespace aim
