@@ -120,14 +120,21 @@ static bool SimpleDropdown(const std::string& id,
                            std::string* value,
                            const std::vector<std::string>& values,
                            float input_width = -1,
-                           int* selected_index = nullptr) {
+                           int* selected_index = nullptr,
+                           bool* opened = nullptr) {
   ImGui::IdGuard cid(id);
   if (input_width > 0) {
     ImGui::PushItemWidth(input_width);
   }
   bool item_was_selected = false;
   ImGuiComboFlags combo_flags = 0;
+  if (opened != nullptr) {
+    *opened = false;
+  }
   if (ImGui::BeginCombo("##Combo", value->c_str(), combo_flags)) {
+    if (opened != nullptr) {
+      *opened = true;
+    }
     for (int i = 0; i < values.size(); ++i) {
       ImGui::IdGuard lid(i);
       const auto& item = values[i];

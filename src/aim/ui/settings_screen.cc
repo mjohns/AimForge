@@ -29,9 +29,7 @@ struct KeybindItem {
 class SettingsScreen : public UiScreen {
  public:
   SettingsScreen(Application& app, const std::string& scenario_id)
-      : UiScreen(app),
-        updater_(app.settings_manager().CreateUpdater()),
-        scenario_id_(scenario_id) {
+      : UiScreen(app), updater_(app.settings_manager().CreateUpdater()), scenario_id_(scenario_id) {
     theme_names_ = app.settings_manager().ListThemes();
     crosshair_names_ = app_.settings_manager().ListCrosshairNames();
     // Always try to save when exiting settings screen.
@@ -86,10 +84,16 @@ class SettingsScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::SameLine();
+    bool crosshair_opened = false;
     ImGui::SimpleDropdown("CrosshairDropdown",
                           updater_.settings.mutable_current_crosshair_name(),
                           crosshair_names_,
-                          char_x_ * 15);
+                          char_x_ * 15,
+                          nullptr,
+                          &crosshair_opened);
+    if (crosshair_opened) {
+      crosshair_names_ = app_.settings_manager().ListCrosshairNames(&updater_.settings);
+    }
 
     ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")
                           .set_label("Crosshair size")
