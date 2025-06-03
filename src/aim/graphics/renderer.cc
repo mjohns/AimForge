@@ -458,7 +458,7 @@ class RendererImpl : public Renderer {
     {
       // Floor wall
       glm::mat4 model(1.f);
-      model = glm::translate(model, glm::vec3(0, 0, -0.5 * height));
+      model = glm::translate(model, glm::vec3(0, 0, -0.505 * height));
       model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
       DrawWall(
@@ -468,7 +468,7 @@ class RendererImpl : public Renderer {
     {
       // Top wall
       glm::mat4 model(1.f);
-      model = glm::translate(model, glm::vec3(0, 0, 0.5 * height));
+      model = glm::translate(model, glm::vec3(0, 0, 0.505 * height));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
       DrawWall(
