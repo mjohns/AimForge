@@ -1,5 +1,6 @@
 #include "playlist_ui.h"
 
+#include <absl/strings/strip.h>
 #include <imgui.h>
 
 #include <algorithm>
@@ -31,14 +32,45 @@ struct CopyPlaylistOptions {
 };
 
 bool CopyPlaylist(Playlist source,
-                  const ResourceName& new_name,
+                  ResourceName new_playlist_name,
                   const CopyPlaylistOptions& opts,
                   Application& app) {
   // Copy all scenarios if necessary.
-  auto taken_names = GetAllRelativeNamesInBundle(new_name.bundle_name(), &app);
-  std::string new_relative_name = MakeUniqueName(new_name.relative_name(), taken_names);
-  app.playlist_manager().SavePlaylist(ResourceName(new_name.bundle_name(), new_relative_name),
-                                      source.def);
+  auto taken_names = GetAllRelativeNamesInBundle(new_playlist_name.bundle_name(), &app);
+  *new_playlist_name.mutable_relative_name() =
+      MakeUniqueName(new_playlist_name.relative_name(), taken_names);
+
+  PlaylistDef dest = source.def;
+  if (opts.deep_copy) {
+    dest.clear_items();
+    for (const auto& source_item : source.def.items()) {
+      auto source_scenario = app.scenario_manager().GetScenario(source_item.scenario());
+      if (!source_scenario) {
+        // Skip invalid scenarios.
+        continue;
+      }
+      ResourceName new_scenario_name = source_scenario->name;
+      *new_scenario_name.mutable_bundle_name() = new_playlist_name.bundle_name();
+
+      std::string* relative_name = new_scenario_name.mutable_relative_name();
+      if (opts.remove_prefix.size() > 0) {
+        *relative_name = absl::StripLeadingAsciiWhitespace(
+            absl::StripPrefix(*relative_name, opts.remove_prefix));
+      }
+      if (opts.add_prefix.size() > 0) {
+        *relative_name = std::format("{} {}", opts.add_prefix, *relative_name);
+      }
+
+      auto maybe_final_scenario_name = app.scenario_manager().SaveScenarioWithUniqueName(
+          new_scenario_name, source_scenario->def);
+      if (maybe_final_scenario_name) {
+        PlaylistItem item = source_item;
+        item.set_scenario(maybe_final_scenario_name->full_name());
+        *dest.add_items() = item;
+      }
+    }
+  }
+  app.playlist_manager().SavePlaylist(new_playlist_name, dest);
   return true;
 }
 

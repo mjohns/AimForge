@@ -63,6 +63,9 @@ class ScenarioManager {
   }
 
   bool SaveScenario(const ResourceName& name, const ScenarioDef& def);
+  // Return the name the scenario was saved with if successful.
+  std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
+                                                         const ScenarioDef& def);
   bool DeleteScenario(const ResourceName& name);
   bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name);
 
