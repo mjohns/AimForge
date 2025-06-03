@@ -12,6 +12,8 @@
 
 namespace aim {
 
+class PlaylistManager;
+
 struct ScenarioItem {
   ResourceName name;
   ScenarioDef def;
@@ -31,7 +33,7 @@ struct ScenarioNode {
 
 class ScenarioManager {
  public:
-  explicit ScenarioManager(FileSystem* fs);
+  explicit ScenarioManager(FileSystem* fs, PlaylistManager* playlist_manager);
   AIM_NO_COPY(ScenarioManager);
 
   void LoadScenariosFromDisk();
@@ -73,6 +75,7 @@ class ScenarioManager {
   std::vector<ScenarioItem> scenarios_;
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   FileSystem* fs_;
+  PlaylistManager* playlist_manager_;
 
   std::string current_scenario_id_;
 };
