@@ -36,6 +36,22 @@ struct ThemeCacheEntry {
   std::filesystem::file_time_type last_modified_time;
 };
 
+class SettingsManager;
+
+struct SettingsUpdater {
+ public:
+  explicit SettingsUpdater(SettingsManager* settings_manager, HistoryManager* history_manager);
+
+  void SaveIfChangesMade(const std::string& scenario_id);
+
+  Settings settings;
+
+ private:
+  SettingsManager* settings_manager_;
+  HistoryManager* history_manager_;
+};
+
+
 class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,
@@ -44,6 +60,7 @@ class SettingsManager {
                            SettingsDb* settings_db,
                            HistoryManager* history_manager);
   ~SettingsManager();
+  AIM_NO_COPY(SettingsManager)
 
   absl::Status Initialize();
 
@@ -68,10 +85,7 @@ class SettingsManager {
 
   void MaybeInvalidateThemeCache();
 
-  SettingsManager(const SettingsManager&) = delete;
-  SettingsManager(SettingsManager&&) = default;
-  SettingsManager& operator=(SettingsManager other) = delete;
-  SettingsManager& operator=(SettingsManager&& other) = delete;
+  SettingsUpdater CreateUpdater();
 
  private:
   Theme GetThemeNoReferenceFollow(const std::string& theme_name);
@@ -84,19 +98,6 @@ class SettingsManager {
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
   std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
   SettingsDb* settings_db_;
-  HistoryManager* history_manager_;
-};
-
-struct SettingsUpdater {
- public:
-  explicit SettingsUpdater(SettingsManager* settings_manager, HistoryManager* history_manager);
-
-  void SaveIfChangesMade(const std::string& scenario_id);
-
-  Settings settings;
-
- private:
-  SettingsManager* settings_manager_;
   HistoryManager* history_manager_;
 };
 

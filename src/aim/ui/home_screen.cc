@@ -182,7 +182,7 @@ class HomeScreen : public UiScreen {
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
-    Settings settings = app_.settings_manager()->GetCurrentSettings();
+    Settings settings = app_.settings_manager().GetCurrentSettings();
     if (user_is_typing) {
       return;
     }

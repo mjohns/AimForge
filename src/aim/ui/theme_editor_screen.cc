@@ -158,8 +158,8 @@ class ThemeEditorScreen : public UiScreen {
  public:
   explicit ThemeEditorScreen(Application* app)
       : UiScreen(app), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
-    texture_names_ = app->settings_manager()->ListTextures();
-    theme_names_ = app->settings_manager()->ListThemes();
+    texture_names_ = app->settings_manager().ListTextures();
+    theme_names_ = app->settings_manager().ListThemes();
     if (theme_names_.size() > 0) {
       UpdateCurrentTheme(theme_names_[0]);
     }
@@ -270,7 +270,7 @@ class ThemeEditorScreen : public UiScreen {
     {
       ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
-        app_.settings_manager()->SaveThemeToDisk(current_theme_name_, current_theme_);
+        app_.settings_manager().SaveThemeToDisk(current_theme_name_, current_theme_);
         PopSelf();
       }
     }
@@ -316,7 +316,7 @@ class ThemeEditorScreen : public UiScreen {
  private:
   void UpdateCurrentTheme(const std::string& theme_name) {
     current_theme_name_ = theme_name;
-    current_theme_ = app_.settings_manager()->GetTheme(current_theme_name_);
+    current_theme_ = app_.settings_manager().GetTheme(current_theme_name_);
 
     crosshair_color_.stored_color = current_theme_.mutable_crosshair()->mutable_color();
     crosshair_outline_color_.stored_color =

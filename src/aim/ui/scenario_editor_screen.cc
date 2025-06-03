@@ -110,13 +110,13 @@ class ScenarioEditorScreen : public UiScreen {
   explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application* app)
       : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
     projection_ = GetPerspectiveTransformation(app_.screen_info());
-    auto themes = app_.settings_manager()->ListThemes();
+    auto themes = app_.settings_manager().ListThemes();
     if (themes.size() > 0) {
-      theme_ = app_.settings_manager()->GetTheme(themes[0]);
+      theme_ = app_.settings_manager().GetTheme(themes[0]);
     } else {
       theme_ = GetDefaultTheme();
     }
-    settings_ = app_.settings_manager()->GetCurrentSettings();
+    settings_ = app_.settings_manager().GetCurrentSettings();
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app->file_system()->GetBundleNames();
 
@@ -1518,9 +1518,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (IsMappableKeyDownEvent(event)) {
       std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
       bool is_restart = KeyMappingMatchesEvent(
-          event_name, app_.settings_manager()->GetCurrentSettings().keybinds().restart_scenario());
+          event_name, app_.settings_manager().GetCurrentSettings().keybinds().restart_scenario());
       bool is_next = KeyMappingMatchesEvent(
-          event_name, app_.settings_manager()->GetCurrentSettings().keybinds().next_scenario());
+          event_name, app_.settings_manager().GetCurrentSettings().keybinds().next_scenario());
       if (is_restart || is_next) {
         PlayScenario();
       }
