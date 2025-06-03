@@ -158,7 +158,7 @@ class HomeScreen : public UiScreen {
                                         ImGuiTableFlags_BordersV;
 
     if (ImGui::BeginTable("MainColumns", 2, main_column_flags)) {
-      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, ImGui::GetFontSize() * 12);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, ImGui::GetFontSize() * 12);
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableNextRow();
 
