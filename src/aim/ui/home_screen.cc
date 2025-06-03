@@ -359,6 +359,7 @@ class HomeScreen : public UiScreen {
         }
         if (result.reload_playlists) {
           app_.playlist_manager().LoadPlaylistsFromDisk();
+          app_.scenario_manager().LoadScenariosFromDisk();
         }
       }
       ImGui::EndChild();

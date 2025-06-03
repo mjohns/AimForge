@@ -180,6 +180,15 @@ bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& 
   return WriteJsonMessageToFile(*path, def);
 }
 
+std::optional<ResourceName> ScenarioManager::SaveScenarioWithUniqueName(const ResourceName& name_in,
+                                                                        const ScenarioDef& def) {
+  ResourceName name = name_in;
+  *name.mutable_relative_name() =
+      MakeUniqueName(name.relative_name(), GetAllRelativeNamesInBundle(name.bundle_name()));
+  bool saved = SaveScenario(name, def);
+  return saved ? name : std::optional<ResourceName>{};
+}
+
 bool ScenarioManager::DeleteScenario(const ResourceName& name) {
   auto path = GetScenarioPath(fs_, name);
   if (!path.has_value()) {
