@@ -75,6 +75,8 @@ class PlaylistManager {
   bool DeletePlaylist(const ResourceName& name);
   bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);
 
+  void RenameScenarioInAllPlaylists(const std::string& old_name, const std::string& new_name);
+
  private:
   PlaylistRun* GetOptionalExistingRun(const std::string& name);
   PlaylistRun InitializeRun(const Playlist& playlist);

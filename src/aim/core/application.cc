@@ -132,11 +132,12 @@ int Application::Initialize() {
     stats_manager_->GetAggregateStats(scenario_id);
   }
 
-  scenario_manager_ = std::make_unique<ScenarioManager>(file_system_.get());
-  scenario_manager_->LoadScenariosFromDisk();
-
   playlist_manager_ = std::make_unique<PlaylistManager>(file_system_.get());
   playlist_manager_->LoadPlaylistsFromDisk();
+
+  scenario_manager_ =
+      std::make_unique<ScenarioManager>(file_system_.get(), playlist_manager_.get());
+  scenario_manager_->LoadScenariosFromDisk();
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
     logger_->error("SDL_mixer OGG init failed: {}", SDL_GetError());

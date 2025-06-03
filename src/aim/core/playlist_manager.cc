@@ -85,6 +85,24 @@ bool PlaylistManager::RenamePlaylist(const ResourceName& old_name, const Resourc
   return true;
 }
 
+void PlaylistManager::RenameScenarioInAllPlaylists(const std::string& old_name,
+                                                   const std::string& new_name) {
+  for (Playlist playlist : playlists_) {
+    bool changed = false;
+    PlaylistDef def = playlist.def;
+    for (auto& item : *def.mutable_items()) {
+      if (item.scenario() == old_name) {
+        changed = true;
+        item.set_scenario(new_name);
+      }
+    }
+
+    if (changed) {
+      SavePlaylist(playlist.name, def);
+    }
+  }
+}
+
 void PlaylistManager::LoadPlaylistsFromDisk() {
   playlists_.clear();
   for (BundleInfo& bundle : fs_->GetBundles()) {

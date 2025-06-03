@@ -126,9 +126,9 @@ class HomeScreen : public UiScreen {
       ImGui::SameLine();
       float y_off = (available_height - button_height) / 2.0f;
       if (y_off > 0) {
-        //ImGui::Dummy(ImVec2(0, y_off));
-          // TODO: This vertical centering is not working.
-        //ImGui::SetCursorPosY(ImGui::GetCursorPosY() + y_off);
+        // ImGui::Dummy(ImVec2(0, y_off));
+        //  TODO: This vertical centering is not working.
+        // ImGui::SetCursorPosY(ImGui::GetCursorPosY() + y_off);
       }
       ImGui::AlignTextToFramePadding();
       ImGui::Text("                ");
@@ -307,6 +307,7 @@ class HomeScreen : public UiScreen {
       }
       if (result.reload_scenarios) {
         app_.scenario_manager().LoadScenariosFromDisk();
+        app_.playlist_manager().LoadPlaylistsFromDisk();
       }
 
       ImGui::TableNextColumn();
@@ -352,7 +353,8 @@ class HomeScreen : public UiScreen {
         playlist_list_component_->Show(&result);
         if (result.open_playlist.has_value()) {
           auto playlist = *result.open_playlist;
-          app_.history_manager().UpdateRecentView(RecentViewType::PLAYLIST, playlist.name.full_name());
+          app_.history_manager().UpdateRecentView(RecentViewType::PLAYLIST,
+                                                  playlist.name.full_name());
           app_.playlist_manager().SetCurrentPlaylist(playlist.name.full_name());
         }
         if (result.reload_playlists) {

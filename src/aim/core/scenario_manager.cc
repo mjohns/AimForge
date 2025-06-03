@@ -13,6 +13,7 @@
 #include "aim/common/log.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
+#include "aim/core/playlist_manager.h"
 
 namespace aim {
 namespace {
@@ -91,7 +92,8 @@ std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
 
 }  // namespace
 
-ScenarioManager::ScenarioManager(FileSystem* fs) : fs_(fs) {}
+ScenarioManager::ScenarioManager(FileSystem* fs, PlaylistManager* playlist_manager)
+    : fs_(fs), playlist_manager_(playlist_manager) {}
 
 std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
     const std::string& bundle_name) {
@@ -196,6 +198,7 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
     return false;
   }
   std::filesystem::rename(*old_path, *new_path);
+  playlist_manager_->RenameScenarioInAllPlaylists(old_name.full_name(), new_name.full_name());
   return true;
 }
 
