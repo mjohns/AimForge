@@ -147,7 +147,6 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SimpleDropdown(
           "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
 
-      ImGui::PushItemWidth(char_x_ * 7);
       ImGui::SameLine();
       ImGui::SetNextItemWidth(char_x_ * 40);
       ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
