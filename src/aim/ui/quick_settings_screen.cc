@@ -17,16 +17,16 @@ namespace {
 class QuickSettingsScreen : public UiScreen {
  public:
   explicit QuickSettingsScreen(const std::string& scenario_id,
-                               Application* app,
+                               Application& app,
                                QuickSettingsType type,
                                const std::string& release_key)
       : UiScreen(app),
         scenario_id_(scenario_id),
-        updater_(app->settings_manager().CreateUpdater()),
+        updater_(app.settings_manager().CreateUpdater()),
         type_(type),
         release_key_(release_key) {
-    theme_names_ = app->settings_manager().ListThemes();
-    Settings settings = app->settings_manager().GetCurrentSettings();
+    theme_names_ = app.settings_manager().ListThemes();
+    Settings settings = app.settings_manager().GetCurrentSettings();
     for (auto& c : settings.saved_crosshairs()) {
       crosshair_names_.push_back(c.name());
     }
@@ -177,7 +177,7 @@ std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_
                                                     QuickSettingsType type,
                                                     const std::string& release_key,
                                                     Application* app) {
-  return std::make_unique<QuickSettingsScreen>(scenario_id, app, type, release_key);
+  return std::make_unique<QuickSettingsScreen>(scenario_id, *app, type, release_key);
 }
 
 }  // namespace aim

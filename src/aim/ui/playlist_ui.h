@@ -11,7 +11,7 @@
 
 namespace aim {
 
-void PlaylistRunComponent2(const std::string& id, PlaylistRun* playlist_run, Screen* screen);
+void PlaylistRunComponent(const std::string& id, PlaylistRun* playlist_run, Screen& screen);
 
 class PlaylistComponent {
  public:

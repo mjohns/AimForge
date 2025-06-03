@@ -41,7 +41,7 @@ constexpr const u64 kClickDebounceMicros = 3 * 1000;
 }  // namespace
 
 Scenario::Scenario(const CreateScenarioParams& params, Application* app)
-    : Screen(app),
+    : Screen(*app),
       id_(params.id),
       def_(params.def),
       timer_(kReplayFps),

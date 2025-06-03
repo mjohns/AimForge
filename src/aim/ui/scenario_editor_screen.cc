@@ -107,7 +107,7 @@ void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
 
 class ScenarioEditorScreen : public UiScreen {
  public:
-  explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application* app)
+  explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application& app)
       : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
     projection_ = GetPerspectiveTransformation(app_.screen_info());
     auto themes = app_.settings_manager().ListThemes();
@@ -118,7 +118,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
     settings_ = app_.settings_manager().GetCurrentSettings();
     *def_.mutable_room() = GetDefaultSimpleRoom();
-    bundle_names_ = app->file_system()->GetBundleNames();
+    bundle_names_ = app_.file_system()->GetBundleNames();
 
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
@@ -1557,7 +1557,7 @@ class ScenarioEditorScreen : public UiScreen {
 
 std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const ScenarioEditorOptions& options,
                                                      Application* app) {
-  return std::make_unique<ScenarioEditorScreen>(options, app);
+  return std::make_unique<ScenarioEditorScreen>(options, *app);
 }
 
 }  // namespace aim

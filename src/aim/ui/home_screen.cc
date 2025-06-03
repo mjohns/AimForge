@@ -30,12 +30,12 @@ enum class AppScreen {
 
 class HomeScreen : public UiScreen {
  public:
-  explicit HomeScreen(Application* app) : UiScreen(app) {
+  explicit HomeScreen(Application& app) : UiScreen(app) {
     logo_texture_ = std::make_unique<Texture>(
-        app->file_system()->GetBasePath("resources/images/logo.png"), app->gpu_device());
+        app.file_system()->GetBasePath("resources/images/logo.png"), app.gpu_device());
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
-    scenario_browser_component_ = CreateScenarioBrowserComponent(app);
+    scenario_browser_component_ = CreateScenarioBrowserComponent(&app);
 
     auto last_playlist = app_.history_manager().GetRecentViews(RecentViewType::PLAYLIST, 1);
 
@@ -393,7 +393,7 @@ class HomeScreen : public UiScreen {
 }  // namespace
 
 std::shared_ptr<Screen> CreateHomeScreen(Application* app) {
-  return std::make_shared<HomeScreen>(app);
+  return std::make_shared<HomeScreen>(*app);
 }
 
 }  // namespace aim

@@ -9,7 +9,7 @@ namespace aim {
 
 class UiScreen : public Screen {
  public:
-  UiScreen(Application* app) : Screen(app) {}
+  UiScreen(Application& app) : Screen(app) {}
   virtual ~UiScreen() {}
 
  protected:
