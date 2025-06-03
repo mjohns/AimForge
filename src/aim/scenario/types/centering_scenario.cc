@@ -44,8 +44,9 @@ class CenteringScenario : public BaseScenario {
 
     if (c.has_angle()) {
       glm::vec2 basis(wall_.GetRegionLength(c.angle_length()) / 2.0, 0);
-      wall_points_.push_back(RotateDegrees(basis, c.angle() + 180));
-      wall_points_.push_back(RotateDegrees(basis, c.angle()));
+      float angle = app_.rand().GetJittered(c.angle(), c.angle_jitter());
+      wall_points_.push_back(RotateDegrees(basis, angle + 180));
+      wall_points_.push_back(RotateDegrees(basis, angle));
     } else {
       for (const auto& p : c.wall_points()) {
         wall_points_.push_back(wall_.GetRegionVec2(p));

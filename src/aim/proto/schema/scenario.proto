@@ -194,7 +194,8 @@ message CenteringScenarioDef {
 
   // Goes between two points at the specifed number of degress for the given length.
   float angle = 4;
-  RegionLength angle_length  = 5;
+  float angle_jitter = 5;
+  RegionLength angle_length  = 6;
 }
 
 message BarrelScenarioDef {

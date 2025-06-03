@@ -8,10 +8,11 @@
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/database/stats_db.h"
+#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
-float GetScenarioScoreLevel(float score, float start_score, float end_score);
+float GetScenarioScoreLevel(float score, const ScenarioDef& def);
 
 struct AggregateScenarioStats {
   StatsRow high_score_stats;
