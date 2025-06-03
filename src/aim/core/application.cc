@@ -36,8 +36,6 @@ void AimAbslLogSink::Send(const absl::LogEntry& entry) {
 }
 
 Application::Application() {
-  std::random_device rd;
-  random_generator_ = std::mt19937(rd());
   state_ = std::make_unique<ApplicationState>();
 }
 

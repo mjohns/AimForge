@@ -10,18 +10,15 @@
 
 namespace aim {
 
-glm::vec2 GetRandomPositionOnWall(const Wall& wall, std::mt19937* random_generator) {
-  auto dist = std::uniform_real_distribution<float>(-0.5f, 0.5f);
-  return glm::vec2(dist(*random_generator) * wall.width, dist(*random_generator) * wall.height);
+glm::vec2 GetRandomPositionOnWall(const Wall& wall, Random& rand) {
+  return glm::vec2(rand.GetInRange(-0.5, 0.5) * wall.width,
+                   rand.GetInRange(-0.5, 0.5) * wall.height);
 }
 
-glm::vec2 GetRandomPositionInEllipse(float radius_x,
-                                     float radius_y,
-                                     std::mt19937* random_generator) {
+glm::vec2 GetRandomPositionInEllipse(float radius_x, float radius_y, Random& rand) {
   auto dist = std::uniform_real_distribution<float>(0, 1.0f);
-  float r = sqrt(dist(*random_generator));
-  auto dist_degrees = std::uniform_real_distribution<float>(0, 360);
-  float rotate_radians = glm::radians(dist_degrees(*random_generator));
+  float r = sqrt(rand.GetInRange(0, 1));
+  float rotate_radians = glm::radians(rand.GetInRange(0, 360));
 
   double x = r * std::cos(rotate_radians);
   double y = r * std::sin(rotate_radians);
@@ -29,38 +26,30 @@ glm::vec2 GetRandomPositionInEllipse(float radius_x,
   return glm::vec2(x * radius_x, y * radius_y);
 }
 
-glm::vec2 GetRandomPositionOnCircle(float radius, std::mt19937* random_generator) {
+glm::vec2 GetRandomPositionOnCircle(float radius, Random& rand) {
   if (radius <= 0) {
     return glm::vec2(0);
   }
   auto dist_degrees = std::uniform_real_distribution<float>(0, 360);
-  float rotate_radians = glm::radians(dist_degrees(*random_generator));
+  float rotate_radians = glm::radians(rand.GetInRange(0, 360));
   double x = radius * std::cos(rotate_radians);
   double y = radius * std::sin(rotate_radians);
   return glm::vec2(x, y);
 }
 
-glm::vec2 GetRandomPositionInCircle(float min_radius,
-                                    float max_radius,
-                                    std::mt19937* random_generator) {
+glm::vec2 GetRandomPositionInCircle(float min_radius, float max_radius, Random& rand) {
   auto dist_radius = std::uniform_real_distribution<float>(min_radius, max_radius);
-  return GetRandomPositionOnCircle(dist_radius(*random_generator), random_generator);
+  return GetRandomPositionOnCircle(rand.GetInRange(min_radius, max_radius), rand);
 }
 
-glm::vec2 GetRandomPositionInRectangle(float width, float height, std::mt19937* random_generator) {
-  auto dist = std::uniform_real_distribution<float>(-0.5, 0.5);
-  float px = dist(*random_generator);
-  float py = dist(*random_generator);
-  return glm::vec2(px * width, py * height);
+glm::vec2 GetRandomPositionInRectangle(float width, float height, Random& rand) {
+  return glm::vec2(rand.GetInRange(-0.5, 0.5) * width, rand.GetInRange(-0.5, 0.5) * height);
 }
 
-glm::vec2 GetRandomPositionInRectangle(float width,
-                                       float height,
-                                       float inner_width,
-                                       float inner_height,
-                                       std::mt19937* random_generator) {
+glm::vec2 GetRandomPositionInRectangle(
+    float width, float height, float inner_width, float inner_height, Random& rand) {
   if (inner_height <= 0 && inner_width <= 0) {
-    return GetRandomPositionInRectangle(width, height, random_generator);
+    return GetRandomPositionInRectangle(width, height, rand);
   }
   if (inner_height <= 0) {
     inner_height = height;
@@ -78,11 +67,9 @@ glm::vec2 GetRandomPositionInRectangle(float width,
   float top_area = top_width * top_height;
   float side_area = side_width * side_height;
   float top_percent = top_area / (top_area + side_area);
-  auto dist = std::uniform_real_distribution<float>(0, 1);
-  float roll = dist(*random_generator);
-  if (roll <= top_percent) {
+  if (rand.FlipCoin(top_percent)) {
     // Place in top.
-    glm::vec2 p = GetRandomPositionInRectangle(top_width, top_height, random_generator);
+    glm::vec2 p = GetRandomPositionInRectangle(top_width, top_height, rand);
     if (p.y < 0) {
       p.y -= (inner_height * 0.5);
     } else {
@@ -91,7 +78,7 @@ glm::vec2 GetRandomPositionInRectangle(float width,
     return p;
   } else {
     // Place on side.
-    glm::vec2 p = GetRandomPositionInRectangle(side_width, side_height, random_generator);
+    glm::vec2 p = GetRandomPositionInRectangle(side_width, side_height, rand);
     if (p.x < 0) {
       p.x -= (inner_width * 0.5);
     } else {

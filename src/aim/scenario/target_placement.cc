@@ -62,8 +62,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
   std::optional<TargetRegion> GetRegionToUse(int counter) {
-    return SelectProfile(
-        strategy_.region_order(), strategy_.regions(), counter, app_->random_generator());
+    return SelectProfile(strategy_.region_order(), strategy_.regions(), counter, app_->rand());
   }
 
   // Returns an x/z pair where to place the target on the wall.
@@ -78,14 +77,13 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     float x_offset = wall_.GetRegionLength(region.x_offset());
     float y_offset = wall_.GetRegionLength(region.y_offset());
 
-    float z = ClampPositive(
-        GetJitteredValue(region.depth(), region.depth_jitter(), app_->random_generator()));
+    float z = ClampPositive(app_->rand().GetJittered(region.depth(), region.depth_jitter()));
 
     if (region.has_ellipse()) {
       glm::vec2 pos =
           GetRandomPositionInEllipse(0.5 * wall_.GetRegionLength(region.ellipse().x_diameter()),
                                      0.5 * wall_.GetRegionLength(region.ellipse().y_diameter()),
-                                     app_->random_generator());
+                                     app_->rand());
       pos.x += x_offset;
       pos.y += y_offset;
       return glm::vec3(pos, z);
@@ -94,7 +92,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       glm::vec2 pos =
           GetRandomPositionInCircle(0.5 * wall_.GetRegionLength(region.circle().inner_diameter()),
                                     0.5 * wall_.GetRegionLength(region.circle().diameter()),
-                                    app_->random_generator());
+                                    app_->rand());
       pos.x += x_offset;
       pos.y += y_offset;
       return glm::vec3(pos, z);
@@ -105,7 +103,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
                                                  wall_.GetRegionLength(rect.y_length()),
                                                  wall_.GetRegionLength(rect.inner_x_length()),
                                                  wall_.GetRegionLength(rect.inner_y_length()),
-                                                 app_->random_generator());
+                                                 app_->rand());
     pos.x += x_offset;
     pos.y += y_offset;
     return glm::vec3(pos, z);
@@ -116,9 +114,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     if (most_recent_target == nullptr) {
       return point;
     }
-    float distance = GetJitteredValue(strategy_.fixed_distance_from_last_target(),
-                                      strategy_.fixed_distance_jitter(),
-                                      app_->random_generator());
+    float distance = app_->rand().GetJittered(strategy_.fixed_distance_from_last_target(),
+                                              strategy_.fixed_distance_jitter());
     // This can't just drop the y component and take x,z from world position because for cylinder
     // walls we wrap the flat wall around the circle.
     glm::vec2 dir = glm::normalize(point - *most_recent_target->wall_position);

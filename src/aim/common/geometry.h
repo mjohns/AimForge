@@ -7,30 +7,24 @@
 #include <random>
 
 #include "aim/common/simple_types.h"
+#include "aim/common/random.h"
 #include "aim/common/wall.h"
 
 namespace aim {
 
-glm::vec2 GetRandomPositionInEllipse(float radius_x,
-                                     float radius_y,
-                                     std::mt19937* random_generator);
+glm::vec2 GetRandomPositionInEllipse(float radius_x, float radius_y, Random& rand);
 
 // Center of the rectangle is at (0, 0)
-glm::vec2 GetRandomPositionInRectangle(float width, float height, std::mt19937* random_generator);
+glm::vec2 GetRandomPositionInRectangle(float width, float height, Random& rand);
 
-glm::vec2 GetRandomPositionInRectangle(float width,
-                                       float height,
-                                       float inner_width,
-                                       float inner_height,
-                                       std::mt19937* random_generator);
+glm::vec2 GetRandomPositionInRectangle(
+    float width, float height, float inner_width, float inner_height, Random& rand);
 
-glm::vec2 GetRandomPositionInCircle(float min_radius,
-                                    float max_radius,
-                                    std::mt19937* random_generator);
+glm::vec2 GetRandomPositionInCircle(float min_radius, float max_radius, Random& rand);
 
-glm::vec2 GetRandomPositionOnWall(const Wall& wall, std::mt19937* random_generator);
+glm::vec2 GetRandomPositionOnWall(const Wall& wall, Random& rand);
 
-glm::vec2 GetRandomPositionOnCircle(float radius, std::mt19937* random_generator);
+glm::vec2 GetRandomPositionOnCircle(float radius, Random& rand);
 
 bool IsPointInEllipse(const glm::vec2& point, float x_radius, float y_radius);
 bool IsPointInCircle(const glm::vec2& point, float radius);

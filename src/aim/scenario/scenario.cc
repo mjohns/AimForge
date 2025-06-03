@@ -132,7 +132,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
 
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().edit_scenario())) {
       if (from_scenario_editor_) {
-          PopSelf();
+        PopSelf();
       } else {
         ReturnHome();
         ScenarioEditorOptions opts;
@@ -553,7 +553,7 @@ void Scenario::PlayKillSound() {
 }
 
 TargetProfile Scenario::GetNextTargetProfile() {
-  return target_manager_.GetTargetProfile(def_.target_def(), app_.random_generator());
+  return target_manager_.GetTargetProfile(def_.target_def(), app_.rand());
 }
 
 Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
