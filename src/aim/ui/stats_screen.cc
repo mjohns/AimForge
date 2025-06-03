@@ -43,7 +43,7 @@ class StatsScreen : public UiScreen {
       is_valid_ = true;
     }
     performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
-    auto scenario = app->scenario_manager()->GetScenario(scenario_id);
+    auto scenario = app->scenario_manager().GetScenario(scenario_id);
     if (scenario) {
       float start_score = scenario->def.start_score();
       float end_score = scenario->def.end_score();
@@ -235,7 +235,7 @@ class StatsScreen : public UiScreen {
     DrawHistory();
     ImGui::SetCursorAtBottom();
     if (ImGui::Button("Restart")) {
-      app_.scenario_manager()->SetCurrentScenario(scenario_id_);
+      app_.scenario_manager().SetCurrentScenario(scenario_id_);
       state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       ReturnHome();
     }
