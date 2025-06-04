@@ -31,6 +31,8 @@ struct ScenarioNode {
   std::vector<std::unique_ptr<ScenarioNode>> child_nodes;
 };
 
+ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original_def);
+
 class ScenarioManager {
  public:
   explicit ScenarioManager(FileSystem* fs, PlaylistManager* playlist_manager);

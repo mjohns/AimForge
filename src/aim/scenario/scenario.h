@@ -62,6 +62,18 @@ class Scenario : public Screen {
     return run_state_ == ScenarioRunState::DONE;
   }
 
+  bool is_running() {
+    return run_state_ == ScenarioRunState::RUNNING;
+  }
+
+  bool is_waiting_for_click_to_start() {
+    return run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START;
+  }
+
+  const std::string& scenario_id() {
+    return id_;
+  }
+
   void OnEvent(const SDL_Event& event, bool user_is_typing) override;
   void OnTick() override;
   void OnTickStart() override;
@@ -124,14 +136,6 @@ class Scenario : public Screen {
   ScenarioRunState run_state_ = ScenarioRunState::NOT_STARTED;
 
  private:
-  bool is_running() {
-    return run_state_ == ScenarioRunState::RUNNING;
-  }
-
-  bool is_waiting_for_click_to_start() {
-    return run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START;
-  }
-
   void OnRunningTick();
   void OnWaitingForClickTick();
 

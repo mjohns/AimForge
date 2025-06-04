@@ -102,7 +102,9 @@ std::optional<std::string> StripLevelSuffix(const std::string& scenario_name) {
 // scenario browser.
 std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioItem>& scenarios) {
   std::unordered_map<std::string, int> prefix_count_map;
+  std::unordered_set<std::string> scenario_names;
   for (const ScenarioItem& s : scenarios) {
+    scenario_names.insert(s.id());
     auto maybe_prefix = StripLevelSuffix(s.id());
     if (maybe_prefix) {
       prefix_count_map[*maybe_prefix]++;
@@ -110,7 +112,7 @@ std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioIte
   }
   std::vector<std::string> prefixes;
   for (auto& entry : prefix_count_map) {
-    if (entry.second > 4) {
+    if (entry.second > 4 && !scenario_names.contains(entry.first)) {
       prefixes.push_back(entry.first);
     }
   }
@@ -191,25 +193,56 @@ std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scen
   ScenarioItem resolved = *referenced_scenario;
   resolved.name = scenario->name;
   if (scenario->def.has_overrides()) {
-    ScenarioReferenceOverrides overrides = scenario->def.overrides();
-    if (overrides.has_duration_seconds()) {
-      resolved.def.set_duration_seconds(overrides.duration_seconds());
-    }
-    if (overrides.has_num_targets()) {
-      resolved.def.mutable_target_def()->set_num_targets(overrides.num_targets());
-    }
-    if (overrides.has_target_radius_multiplier()) {
-      for (auto& profile : *resolved.def.mutable_target_def()->mutable_profiles()) {
-        profile.set_target_radius(profile.target_radius() * overrides.target_radius_multiplier());
+    ScenarioOverrides overrides = scenario->def.overrides();
+    if (!resolved.def.has_overrides()) {
+      *resolved.def.mutable_overrides() = overrides;
+    } else {
+      // Merge the overrides together.
+      ScenarioOverrides& merged = *resolved.def.mutable_overrides();
+      if (overrides.has_duration_seconds()) {
+        merged.set_duration_seconds(overrides.duration_seconds());
       }
-    }
-    if (overrides.has_speed_multiplier()) {
-      for (auto& profile : *resolved.def.mutable_target_def()->mutable_profiles()) {
-        profile.set_speed(profile.speed() * overrides.speed_multiplier());
+      if (overrides.has_num_targets()) {
+        merged.set_num_targets(overrides.num_targets());
+      }
+      if (overrides.has_target_radius_multiplier()) {
+        merged.set_target_radius_multiplier(overrides.target_radius_multiplier() *
+                                            merged.target_radius_multiplier());
+      }
+      if (overrides.has_speed_multiplier()) {
+        merged.set_speed_multiplier(overrides.speed_multiplier() * merged.speed_multiplier());
       }
     }
   }
   return resolved;
+}
+
+ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
+  if (!original.has_overrides()) {
+    return original;
+  }
+  ScenarioDef result = original;
+  result.clear_overrides();
+
+  const ScenarioOverrides& overrides = original.overrides();
+
+  if (overrides.has_duration_seconds()) {
+    result.set_duration_seconds(overrides.duration_seconds());
+  }
+  if (overrides.has_num_targets()) {
+    result.mutable_target_def()->set_num_targets(overrides.num_targets());
+  }
+  if (overrides.has_target_radius_multiplier()) {
+    for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
+      profile.set_target_radius(profile.target_radius() * overrides.target_radius_multiplier());
+    }
+  }
+  if (overrides.has_speed_multiplier()) {
+    for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
+      profile.set_speed(profile.speed() * overrides.speed_multiplier());
+    }
+  }
+  return result;
 }
 
 std::optional<ScenarioItem> ScenarioManager::GetScenarioNoReferenceFollow(

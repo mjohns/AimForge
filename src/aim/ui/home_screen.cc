@@ -210,47 +210,47 @@ class HomeScreen : public UiScreen {
     return "";
   }
 
-  bool HandlePlaylistNext() {
+  void HandlePlaylistNext() {
     PlaylistRun* run = app_.playlist_manager().GetCurrentRun();
     if (run == nullptr) {
-      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-      return true;
+      RunCurrentScenario();
+      return;
     }
     PlaylistItemProgress* progress = run->GetMutableCurrentPlaylistItemProgress();
     if (progress == nullptr) {
-      return false;
+      return;
     }
-    if (progress->IsDone()) {
-      int next_index = run->current_index + 1;
-      if (!IsValidIndex(run->progress_list, next_index)) {
-        bool found_pending_item = false;
-        // Check to see if any previous item in the list is not done
-        for (int i = 0; i < run->progress_list.size(); ++i) {
-          if (!run->progress_list[i].IsDone()) {
-            next_index = i;
-            found_pending_item = true;
-            break;
-          }
-        }
-
-        if (!found_pending_item) {
-          // Playlist is done.
-          app_screen_ = AppScreen::PLAYLISTS;
-          return false;
-        }
-      }
-      run->current_index = next_index;
-      auto scenario_id = run->progress_list[next_index].item.scenario();
-      if (!app_.scenario_manager().SetCurrentScenario(scenario_id)) {
-        return false;
-      }
-      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-      return true;
+    if (!progress->IsDone()) {
+      // Still more attempts needed.
+      RunCurrentScenario();
+      return;
     }
 
-    // Still more attempts needed.
-    state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-    return true;
+    // Try to find next item in scenario to do.
+    int next_index = run->current_index + 1;
+    if (!IsValidIndex(run->progress_list, next_index)) {
+      bool found_pending_item = false;
+      // Check to see if any previous item in the list is not done
+      for (int i = 0; i < run->progress_list.size(); ++i) {
+        if (!run->progress_list[i].IsDone()) {
+          next_index = i;
+          found_pending_item = true;
+          break;
+        }
+      }
+
+      if (!found_pending_item) {
+        // Playlist is done.
+        app_screen_ = AppScreen::PLAYLISTS;
+        return;
+      }
+    }
+    run->current_index = next_index;
+    auto scenario_id = run->progress_list[next_index].item.scenario();
+    if (!app_.scenario_manager().SetCurrentScenario(scenario_id)) {
+      return;
+    }
+    RunCurrentScenario();
   }
 
   void DrawLeftNav() {

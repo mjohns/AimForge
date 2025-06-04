@@ -22,7 +22,7 @@ float GetScoreLevel(float score, float start_score, float end_score) {
   float wide_range = end_score - zero_score;
 
   float percent = adjusted_score / wide_range;
-  return glm::clamp<float>(num_levels * percent, 0, num_levels + 1);
+  return glm::clamp<float>(num_levels * percent, 0, num_levels + 0.9);
 }
 
 }  // namespace

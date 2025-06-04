@@ -121,10 +121,10 @@ message TargetPlacementStrategy {
   float fixed_distance_jitter = 5;
 }
 
-message ScenarioReferenceOverrides {
+message ScenarioOverrides {
   float duration_seconds = 1;
-  float target_radius_multiplier = 2;
-  int32 num_targets = 3;
+  int32 num_targets = 2;
+  float target_radius_multiplier = 3;
   float speed_multiplier = 4;
 }
 
@@ -155,7 +155,7 @@ message ScenarioDef {
 
   // This scenario is a reference to another scenario with the id changed.
   string reference = 6;
-  ScenarioReferenceOverrides overrides = 7;
+  ScenarioOverrides overrides = 7;
 
   ShotType shot_type = 8;
 

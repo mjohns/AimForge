@@ -77,7 +77,8 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     std::vector<std::string> taken_names =
         app_->scenario_manager().GetAllRelativeNamesInBundle(item.name.bundle_name());
     std::string final_name = MakeUniqueName(item.name.relative_name() + " Copy", taken_names);
-    app_->scenario_manager().SaveScenario(ResourceName(item.name.bundle_name(), final_name), item.def);
+    app_->scenario_manager().SaveScenario(ResourceName(item.name.bundle_name(), final_name),
+                                          item.def);
   }
 
   void DrawScenarioNodes(const std::vector<std::unique_ptr<ScenarioNode>>& nodes,
@@ -86,14 +87,10 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
     PlaylistRun* current_playlist_run = app_->playlist_manager().GetCurrentRun();
     ImGui::LoopId loop_id;
     for (auto& node : nodes) {
-      auto id = loop_id.Get("ScenarioItem");
+      auto id = loop_id.Get("ScenarioNodeItem");
       if (node->scenario.has_value()) {
         DrawScenarioListItem(*node->scenario, search_words, current_playlist_run, result);
-      }
-    }
-    for (auto& node : nodes) {
-      auto id = loop_id.Get("BundleItem");
-      if (!node->scenario.has_value()) {
+      } else {
         if (expand_all_ > 0) {
           ImGui::SetNextItemOpen(true);
         }
