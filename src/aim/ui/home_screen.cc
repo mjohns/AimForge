@@ -269,8 +269,15 @@ class HomeScreen : public UiScreen {
       PushNextScreen(CreateThemeEditorScreen(&app_));
     }
 
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
+
     // Place exit at bottom
-    // float item_height = ImGui::GetItemRectMax().y - ImGui::GetItemRectMin().y;
+    // float
     ImGui::SetCursorAtBottom();
     if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
       // Show a screen to confirm?

@@ -97,7 +97,8 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         if (collapse_all_ > 0) {
           ImGui::SetNextItemOpen(false);
         }
-        bool node_opened = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+        bool node_opened = ImGui::TreeNodeEx(
+            node->name.c_str(), node->name == "AF" ? ImGuiTreeNodeFlags_DefaultOpen : 0);
         const char* popup_id = "ScenarioBundleMenu";
         if (ImGui::BeginPopupContextItem(popup_id)) {
           if (ImGui::Selectable("Collapse all")) {
@@ -176,26 +177,17 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         result->scenario_stats_to_view = scenario.id();
         result->run_id = app_->stats_manager().GetLatestRunId(scenario.id());
       }
+      if (ImGui::Selectable("Generate levels")) {
+        app_->scenario_manager().GenerateScenarioLevels(scenario.id(), scenario.def.overrides(), 5);
+        result->reload_scenarios = true;
+      }
       if (ImGui::Selectable("Delete")) {
         delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", scenario.id()),
                                                scenario.id());
       }
-      /*
-      if (ImGui::Selectable("Open file")) {
-        app_->scenario_manager().OpenFile(node->scenario->name);
-      }
-      */
       ImGui::EndPopup();
     }
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
-    /*
-    if (ImGui::IsItemHovered()) {
-      ImGui::SameLine();
-      if (ImGui::Button(kIconMoreVert)) {
-        ImGui::OpenPopup(popup_id);
-      }
-    }
-    */
   }
 
   std::string search_text_;

@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "aim/common/resource_name.h"
@@ -57,6 +58,10 @@ class ScenarioManager {
     current_scenario_id_ = "";
   }
 
+  void GenerateScenarioLevels(const std::string& starting_scenario_id,
+                              const ScenarioOverrides& overrides,
+                              int num_levels);
+
   bool SetCurrentScenario(const std::string& scenario_id) {
     current_scenario_id_ = scenario_id;
     return GetScenario(scenario_id).has_value();
@@ -84,6 +89,7 @@ class ScenarioManager {
       const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names);
 
   std::vector<ScenarioItem> scenarios_;
+  std::unordered_map<std::string, ScenarioItem> scenario_map_;
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
