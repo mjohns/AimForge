@@ -1,6 +1,5 @@
 #include "scenario_manager.h"
 
-#include <absl/strings/strip.h>
 #ifdef _WIN32
 #include <Windows.h>
 #include <shellapi.h>
@@ -9,6 +8,9 @@
 #include <memory>
 #include <vector>
 
+#include "absl/strings/str_split.h"
+#include "absl/strings/string_view.h"
+#include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
@@ -60,8 +62,8 @@ std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
   return scenarios;
 }
 
-ScenarioNode* GetOrCreateBundleNode(std::vector<std::unique_ptr<ScenarioNode>>* nodes,
-                                    const std::string& name) {
+ScenarioNode* GetOrCreateNamedNode(std::vector<std::unique_ptr<ScenarioNode>>* nodes,
+                                   const std::string& name) {
   for (auto& node : *nodes) {
     if (node->name == name) {
       return node.get();
@@ -75,16 +77,64 @@ ScenarioNode* GetOrCreateBundleNode(std::vector<std::unique_ptr<ScenarioNode>>* 
   return result;
 }
 
+std::optional<std::string> StripLevelSuffix(const std::string& scenario_name) {
+  std::vector<std::string_view> words =
+      absl::StrSplit(scenario_name, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
+  if (words.empty()) {
+    return {};
+  }
+  std::string_view suffix = words.back();
+  if (suffix.length() <= 1 || suffix[0] != 'L') {
+    return {};
+  }
+  float level;
+  if (!absl::SimpleAtof(suffix.substr(1), &level)) {
+    return {};
+  }
+
+  std::string_view stripped =
+      absl::StripTrailingAsciiWhitespace(absl::StripSuffix(scenario_name, suffix));
+  return std::string(stripped);
+}
+
+// Returns a list of scenario prefixes that should be grouped together in the UI.
+// This allows grouping all of the scenarios ending in L00, L01, L02.1 etc in the
+// scenario browser.
+std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioItem>& scenarios) {
+  std::unordered_map<std::string, int> prefix_count_map;
+  for (const ScenarioItem& s : scenarios) {
+    auto maybe_prefix = StripLevelSuffix(s.id());
+    if (maybe_prefix) {
+      prefix_count_map[*maybe_prefix]++;
+    }
+  }
+  std::vector<std::string> prefixes;
+  for (auto& entry : prefix_count_map) {
+    if (entry.second > 4) {
+      prefixes.push_back(entry.first);
+    }
+  }
+  return prefixes;
+}
+
 std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
     const std::vector<ScenarioItem>& scenarios) {
   std::vector<std::unique_ptr<ScenarioNode>> nodes;
+  auto prefixes = GetScenarioSharedPrefixes(scenarios);
   for (const ScenarioItem& item : scenarios) {
-    ScenarioNode* bundle = GetOrCreateBundleNode(&nodes, item.name.bundle_name());
+    ScenarioNode* bundle = GetOrCreateNamedNode(&nodes, item.name.bundle_name());
 
     auto scenario_node = std::make_unique<ScenarioNode>();
     scenario_node->scenario = item;
     scenario_node->name = item.id();
-    bundle->child_nodes.emplace_back(std::move(scenario_node));
+
+    auto maybe_prefix = StripLevelSuffix(item.id());
+    if (maybe_prefix && VectorContains(prefixes, *maybe_prefix)) {
+      ScenarioNode* prefix_node = GetOrCreateNamedNode(&bundle->child_nodes, *maybe_prefix);
+      prefix_node->child_nodes.emplace_back(std::move(scenario_node));
+    } else {
+      bundle->child_nodes.emplace_back(std::move(scenario_node));
+    }
   }
 
   return nodes;

@@ -11,17 +11,6 @@
 namespace aim {
 namespace {
 
-std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
-                                                     Application* app) {
-  std::vector<std::string> names;
-  for (const ScenarioItem& s : app->scenario_manager().scenarios()) {
-    if (s.name.bundle_name() == bundle_name) {
-      names.push_back(s.name.relative_name());
-    }
-  }
-  return names;
-}
-
 class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserComponent {
  public:
   explicit ScenarioBrowserComponentImpl(Application* app) : UiComponent(app) {}
@@ -86,7 +75,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
  private:
   void CopyScenario(const ScenarioItem& item) {
     std::vector<std::string> taken_names =
-        GetAllRelativeNamesInBundle(item.name.bundle_name(), app_);
+        app_->scenario_manager().GetAllRelativeNamesInBundle(item.name.bundle_name());
     std::string final_name = MakeUniqueName(item.name.relative_name() + " Copy", taken_names);
     app_->scenario_manager().SaveScenario(ResourceName(item.name.bundle_name(), final_name), item.def);
   }
