@@ -54,6 +54,7 @@ std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
       Logger::get()->warn("Unable to read scenario {}", entry.path().string());
       continue;
     }
+    item.unevaluated_def = item.def;
     scenarios.push_back(item);
   }
   std::sort(scenarios.begin(),
@@ -163,56 +164,62 @@ void ScenarioManager::LoadScenariosFromDisk() {
   for (BundleInfo& bundle : fs_->GetBundles()) {
     PushBackAll(&scenarios_, LoadScenarios(bundle.name, bundle.path / "scenarios"));
   }
+
+  // Now evaluate all references.
+  for (ScenarioItem& item : scenarios_) {
+    auto evaluated_scenario = GetEvaluatedScenario(item.id());
+    if (evaluated_scenario) {
+      item.def = evaluated_scenario->def;
+    } else {
+      item.has_invalid_reference = true;
+    }
+  }
+
   scenario_nodes_ = GetTopLevelNodes(scenarios_);
 }
 
 std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id) {
-  if (scenario_id.size() == 0) {
-    return {};
+  for (const auto& scenario : scenarios_) {
+    if (scenario.id() == scenario_id) {
+      return scenario;
+    }
   }
-  return GetScenario(scenario_id, 1);
+  return {};
 }
 
-std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id,
-                                                         int depth) {
-  if (depth > 20) {
+std::optional<ScenarioItem> ScenarioManager::GetEvaluatedScenario(const std::string& scenario_id) {
+  std::unordered_set<std::string> visited_scenario_names;
+  return GetEvaluatedScenario(scenario_id, &visited_scenario_names);
+}
+
+std::optional<ScenarioItem> ScenarioManager::GetEvaluatedScenario(
+    const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names) {
+  bool added = visited_scenario_names->insert(scenario_id).second;
+  if (!added) {
+    Logger::get()->warn("Scenario cycle detected reading {}", scenario_id);
     return {};
   }
-  auto scenario = GetScenarioNoReferenceFollow(scenario_id);
-  if (!scenario.has_value()) {
+  auto maybe_scenario = GetScenario(scenario_id);
+  if (!maybe_scenario) {
     return {};
   }
-  if (!scenario->def.has_reference()) {
+  ScenarioItem scenario = *maybe_scenario;
+  if (!scenario.def.has_reference_def()) {
+    scenario.def = ApplyScenarioOverrides(scenario.def);
     return scenario;
   }
-  auto referenced_scenario = GetScenario(scenario->def.reference(), depth + 1);
-  if (!referenced_scenario.has_value()) {
+
+  auto referenced_scenario =
+      GetEvaluatedScenario(scenario.def.reference_def().scenario_id(), visited_scenario_names);
+  if (!referenced_scenario) {
     return {};
   }
 
   ScenarioItem resolved = *referenced_scenario;
-  resolved.name = scenario->name;
-  if (scenario->def.has_overrides()) {
-    ScenarioOverrides overrides = scenario->def.overrides();
-    if (!resolved.def.has_overrides()) {
-      *resolved.def.mutable_overrides() = overrides;
-    } else {
-      // Merge the overrides together.
-      ScenarioOverrides& merged = *resolved.def.mutable_overrides();
-      if (overrides.has_duration_seconds()) {
-        merged.set_duration_seconds(overrides.duration_seconds());
-      }
-      if (overrides.has_num_targets()) {
-        merged.set_num_targets(overrides.num_targets());
-      }
-      if (overrides.has_target_radius_multiplier()) {
-        merged.set_target_radius_multiplier(overrides.target_radius_multiplier() *
-                                            merged.target_radius_multiplier());
-      }
-      if (overrides.has_speed_multiplier()) {
-        merged.set_speed_multiplier(overrides.speed_multiplier() * merged.speed_multiplier());
-      }
-    }
+  resolved.name = scenario.name;
+  if (scenario.def.has_overrides()) {
+    *resolved.def.mutable_overrides() = scenario.def.overrides();
+    resolved.def = ApplyScenarioOverrides(resolved.def);
   }
   return resolved;
 }
@@ -243,16 +250,6 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     }
   }
   return result;
-}
-
-std::optional<ScenarioItem> ScenarioManager::GetScenarioNoReferenceFollow(
-    const std::string& scenario_id) {
-  for (const auto& scenario : scenarios_) {
-    if (scenario.id() == scenario_id) {
-      return scenario;
-    }
-  }
-  return {};
 }
 
 bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& def) {
