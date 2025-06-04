@@ -401,6 +401,11 @@ struct InputFloatParams {
     return *this;
   }
 
+  InputFloatParams& set_is_optional() {
+    is_optional = true;
+    return *this;
+  }
+
   std::string id;
   std::string label;
 
@@ -413,6 +418,7 @@ struct InputFloatParams {
   std::optional<float> min_value;
   std::optional<float> max_value;
   bool zero_is_unset = false;
+  bool is_optional = false;
 };
 
 static void InputFloat(const InputFloatParams& params, aim::Field<float> field) {
@@ -422,6 +428,16 @@ static void InputFloat(const InputFloatParams& params, aim::Field<float> field) 
     ImGui::Text(params.label);
     ImGui::SameLine();
   }
+  if (params.is_optional) {
+    bool has_field = field.has();
+    ImGui::Checkbox("##HasField", &has_field);
+    ImGui::SameLine();
+    if (!has_field) {
+      field.clear();
+      return;
+    }
+  }
+
   float value = field.get();
   if (params.default_value.has_value() && !field.has()) {
     value = *params.default_value;
