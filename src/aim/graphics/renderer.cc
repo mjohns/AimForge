@@ -299,7 +299,7 @@ class RendererImpl : public Renderer {
                     FrameTimes* times) override {
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
-    target_info.clear_color = SDL_FColor{0.7, 0.7, 0.7, 1.0};
+    target_info.clear_color = SDL_FColor{0, 0, 0, 1.0};
     target_info.load_op = SDL_GPU_LOADOP_CLEAR;
 
     target_info.texture = msaa_render_texture_;
@@ -526,7 +526,7 @@ class RendererImpl : public Renderer {
                       const Theme& theme,
                       const BarrelRoom& room,
                       RenderContext* ctx) {
-    float quad_scale = room.radius() * 2.1;
+    float quad_scale = room.radius() * 100;
 
     {
       // Front wall
@@ -551,7 +551,8 @@ class RendererImpl : public Renderer {
 
     {
       glm::mat4 model(1.f);
-      model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0));
+      // Leave a little gap between the wall and the barrel to prevent any z-fighting.
+      model = glm::translate(model, glm::vec3(0, -0.51 * kMaxDistance, 0));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(room.radius(), room.radius(), kMaxDistance));
       DrawWall(view_projection * model,
