@@ -334,6 +334,7 @@ class ScenarioEditorScreen : public UiScreen {
             .set_min(0.01)
             .set_precision(2)
             .set_default(1)
+            .set_is_optional()
             .set_width(char_x_ * 10),
         PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), target_radius_multiplier));
 
@@ -344,6 +345,7 @@ class ScenarioEditorScreen : public UiScreen {
             .set_min(0.01)
             .set_precision(2)
             .set_default(1)
+            .set_is_optional()
             .set_width(char_x_ * 10),
         PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), speed_multiplier));
 
