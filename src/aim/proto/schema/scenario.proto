@@ -179,7 +179,7 @@ message ScenarioDef {
 
 // This scenario extends the specified scenario optionally specifying overrides to tweak settings.
 message ReferenceScenarioDef {
-    string scenario_id = 1;
+  string scenario_id = 1;
 }
 
 message StaticScenarioDef {
@@ -199,7 +199,7 @@ message CenteringScenarioDef {
   // Goes between two points at the specifed number of degress for the given length.
   float angle = 4;
   float angle_jitter = 5;
-  RegionLength angle_length  = 6;
+  RegionLength angle_length = 6;
 }
 
 message BarrelScenarioDef {
@@ -368,8 +368,8 @@ message TargetProfile {
   float target_radius_growth_time_seconds = 12;
   float target_radius_growth_size = 13;
 
-  // The rate for health to regen if a target with health is not killed. 1 means to regen at the same rate as health is taken away.
-  // So 2 means regen twice as fast as it is killed.
+  // The rate for health to regen if a target with health is not killed. 1 means to regen at the
+  // same rate as health is taken away. So 2 means regen twice as fast as it is killed.
   float health_regen_rate = 14;
 
   // Defaults to spehere if no more specific type is specified.

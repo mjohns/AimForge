@@ -51,7 +51,6 @@ struct SettingsUpdater {
   HistoryManager* history_manager_;
 };
 
-
 class SettingsManager {
  public:
   explicit SettingsManager(const std::filesystem::path& settings_path,

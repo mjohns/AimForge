@@ -3,9 +3,9 @@
 #include <sqlite3.h>
 
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <vector>
-#include <optional>
 
 #include "aim/proto/settings.pb.h"
 

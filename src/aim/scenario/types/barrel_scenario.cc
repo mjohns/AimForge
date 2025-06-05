@@ -64,8 +64,7 @@ class BarrelScenario : public BaseScenario {
       glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*t, now_seconds);
       if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
         // Need to change direction.
-        glm::vec2 new_direction_pos =
-            GetRandomPositionInCircle(0, 0.5 * room_radius_, app_.rand());
+        glm::vec2 new_direction_pos = GetRandomPositionInCircle(0, 0.5 * room_radius_, app_.rand());
         glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
         t->wall_direction = new_direction;
         // Make sure this is added before the new position is actually set on the target.
