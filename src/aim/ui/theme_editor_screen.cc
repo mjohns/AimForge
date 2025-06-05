@@ -173,13 +173,13 @@ class ThemeEditorScreen : public UiScreen {
     t.radius = 3;
     t.wall_position = glm::vec2(20, 20);
     t.health_seconds = 3;
-    t.hit_timer.AddElapsedSeconds(1);
+    t.AddTestDamage();
 
     Target g = t;
     g.is_ghost = true;
     g.wall_position = glm::vec2(20, -20);
     g.health_seconds = 3;
-    g.hit_timer.AddElapsedSeconds(1);
+    g.AddTestDamage();
 
     target_manager_.AddTarget(t);
     target_manager_.AddTarget(g);

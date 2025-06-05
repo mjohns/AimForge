@@ -368,6 +368,10 @@ message TargetProfile {
   float target_radius_growth_time_seconds = 12;
   float target_radius_growth_size = 13;
 
+  // The rate for health to regen if a target with health is not killed. 1 means to regen at the same rate as health is taken away.
+  // So 2 means regen twice as fast as it is killed.
+  float health_regen_rate = 14;
+
   // Defaults to spehere if no more specific type is specified.
   oneof type {
     PillTargetDef pill = 10;

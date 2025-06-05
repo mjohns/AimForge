@@ -594,6 +594,7 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
       target.pill_wall_up = ToVec2(profile.pill().wall_up());
     }
   }
+  target.health_regen_rate = profile.health_regen_rate();
   return target;
 }
 

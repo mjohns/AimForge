@@ -682,7 +682,7 @@ class RendererImpl : public Renderer {
         } else {
           DrawSphere(view_projection, target.position, target.radius, color, ctx);
           if (health_bar_settings.show() && target.health_seconds > 0) {
-            bool is_damaged = target.hit_timer.GetElapsedMicros() > 0;
+            bool is_damaged = target.GetHealthPercent() < 1;
             if (!health_bar_settings.only_damaged() || is_damaged) {
               float width = FirstGreaterThanZero(health_bar_settings.width(), 6);
               float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
@@ -708,9 +708,7 @@ class RendererImpl : public Renderer {
               transform = glm::scale(transform, glm::vec3(width, 1, height));
               transform = view_projection * transform;
 
-              health_bar.health_percent =
-                  (target.health_seconds - target.hit_timer.GetElapsedSeconds()) /
-                  target.health_seconds;
+              health_bar.health_percent = target.GetHealthPercent();
             }
           }
         }
