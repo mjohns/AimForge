@@ -178,7 +178,8 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
         result->run_id = app_->stats_manager().GetLatestRunId(scenario.id());
       }
       if (ImGui::Selectable("Generate levels")) {
-        app_->scenario_manager().GenerateScenarioLevels(scenario.id(), scenario.def.overrides(), 5);
+        app_->scenario_manager().GenerateScenarioLevels(
+            scenario.id(), scenario.unevaluated_def.overrides(), 5);
         result->reload_scenarios = true;
       }
       if (ImGui::Selectable("Delete")) {

@@ -90,6 +90,7 @@ class SettingsManager {
 
  private:
   Theme GetThemeNoReferenceFollow(const std::string& theme_name);
+  void WriteScenarioSettings(const std::string& scenario_id);
 
   std::filesystem::path settings_path_;
   Settings settings_;

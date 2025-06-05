@@ -431,11 +431,11 @@ static void InputFloat(const InputFloatParams& params, aim::Field<float> field) 
   if (params.is_optional) {
     bool has_field = field.has();
     ImGui::Checkbox("##HasField", &has_field);
-    ImGui::SameLine();
     if (!has_field) {
       field.clear();
       return;
     }
+    ImGui::SameLine();
   }
 
   float value = field.get();

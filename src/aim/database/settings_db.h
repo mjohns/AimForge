@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <string>
 #include <vector>
+#include <optional>
 
 #include "aim/proto/settings.pb.h"
 
@@ -17,7 +18,7 @@ class SettingsDb {
 
   void UpdateScenarioSettings(const std::string& scenario_id, const ScenarioSettings& settings);
 
-  ScenarioSettings GetScenarioSettings(const std::string& scenario_id);
+  std::optional<ScenarioSettings> GetScenarioSettings(const std::string& scenario_id);
 
   SettingsDb(const SettingsDb&) = delete;
   SettingsDb(SettingsDb&&) = default;
