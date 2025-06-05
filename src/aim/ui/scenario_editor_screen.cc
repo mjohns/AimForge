@@ -1488,8 +1488,23 @@ class ScenarioEditorScreen : public UiScreen {
           "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.1, 0.5, "%.1f");
       ImGui::SameLine();
       ImGui::HelpMarker("The amount of time in seconds to kill the target.");
+
+      ImGui::InputFloat(ImGui::InputFloatParams("TargetRadiusAtill")
+                            .set_label("Target radius at kill")
+                            .set_step(0.1, 0.5)
+                            .set_min(0.1)
+                            .set_precision(1)
+                            .set_default(profile->target_radius())
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_at_kill));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "The radius of the target will change to the specified value incrementally based on how "
+          "much health remains");
     } else {
       health_seconds = 0;
+      profile->clear_target_radius_at_kill();
     }
     if (health_seconds > 0) {
       profile->set_health_seconds(health_seconds);
