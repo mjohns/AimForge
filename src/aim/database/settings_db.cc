@@ -82,7 +82,7 @@ void SettingsDb::UpdateScenarioSettings(const std::string& scenario_id,
   sqlite3_finalize(stmt);
 }
 
-ScenarioSettings SettingsDb::GetScenarioSettings(const std::string& scenario_id) {
+std::optional<ScenarioSettings> SettingsDb::GetScenarioSettings(const std::string& scenario_id) {
   sqlite3_stmt* stmt;
   int rc = sqlite3_prepare_v2(db_, kGetScenarioSettingsSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
@@ -91,21 +91,24 @@ ScenarioSettings SettingsDb::GetScenarioSettings(const std::string& scenario_id)
   }
   BindString(stmt, 1, scenario_id);
 
-  ScenarioSettings settings;
+  std::optional<ScenarioSettings> maybe_settings;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
     std::string json_text(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
 
     google::protobuf::json::ParseOptions opts;
     opts.ignore_unknown_fields = true;
     opts.case_insensitive_enum_parsing = true;
+    ScenarioSettings settings;
     auto status = google::protobuf::util::JsonStringToMessage(json_text, &settings, opts);
-    if (!status.ok()) {
+    if (status.ok()) {
+      maybe_settings = settings;
+    } else {
       Logger::get()->warn("Unable to parse settings json ({}): {}", status.message(), json_text);
     }
   }
 
   sqlite3_finalize(stmt);
-  return settings;
+  return maybe_settings;
 }
 
 }  // namespace aim

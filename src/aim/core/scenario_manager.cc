@@ -166,6 +166,9 @@ void ScenarioManager::LoadScenariosFromDisk() {
   for (BundleInfo& bundle : fs_->GetBundles()) {
     PushBackAll(&scenarios_, LoadScenarios(bundle.name, bundle.path / "scenarios"));
   }
+  for (ScenarioItem& item : scenarios_) {
+    scenario_map_[item.id()] = item;
+  }
 
   // Now evaluate all references.
   for (ScenarioItem& item : scenarios_) {

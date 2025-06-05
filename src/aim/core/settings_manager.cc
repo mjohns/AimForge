@@ -293,16 +293,22 @@ float SettingsManager::GetDpi() {
 }
 
 Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scenario_id) {
-  if (settings_.disable_per_scenario_settings()) {
+  if (settings_.disable_per_scenario_settings() || scenario_id.size() == 0) {
     return settings_;
   }
   auto it = scenario_settings_cache_.find(scenario_id);
   ScenarioSettings scenario_settings;
+  bool missing_scenario_settings = false;
   if (it != scenario_settings_cache_.end()) {
     scenario_settings = it->second;
   } else {
-    scenario_settings = settings_db_->GetScenarioSettings(scenario_id);
-    scenario_settings_cache_[scenario_id] = scenario_settings;
+    auto maybe_scenario_settings = settings_db_->GetScenarioSettings(scenario_id);
+    if (maybe_scenario_settings) {
+      scenario_settings = *maybe_scenario_settings;
+      scenario_settings_cache_[scenario_id] = scenario_settings;
+    } else {
+      missing_scenario_settings = true;
+    }
   }
 
   if (scenario_settings.has_cm_per_360()) {
@@ -329,6 +335,11 @@ Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scena
   if (scenario_settings.has_health_bar()) {
     *settings_.mutable_health_bar() = scenario_settings.health_bar();
   }
+
+  if (missing_scenario_settings) {
+    WriteScenarioSettings(scenario_id);
+  }
+
   return settings_;
 }
 
@@ -361,7 +372,8 @@ bool SettingsManager::MaybeFlushToDisk(const std::string& scenario_id) {
   }
   return false;
 }
-void SettingsManager::FlushToDisk(const std::string& scenario_id) {
+
+void SettingsManager::WriteScenarioSettings(const std::string& scenario_id) {
   if (scenario_id.size() > 0 && !settings_.disable_per_scenario_settings()) {
     ScenarioSettings scenario_settings;
     scenario_settings.set_crosshair_size(settings_.crosshair_size());
@@ -374,6 +386,10 @@ void SettingsManager::FlushToDisk(const std::string& scenario_id) {
     settings_db_->UpdateScenarioSettings(scenario_id, scenario_settings);
     scenario_settings_cache_[scenario_id] = scenario_settings;
   }
+}
+
+void SettingsManager::FlushToDisk(const std::string& scenario_id) {
+  WriteScenarioSettings(scenario_id);
   if (WriteJsonMessageToFile(settings_path_, settings_)) {
     needs_save_ = false;
   }
