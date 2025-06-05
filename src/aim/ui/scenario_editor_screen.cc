@@ -60,6 +60,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kBarrelDef, "Barrel"},
     {ScenarioDef::kLinearDef, "Linear"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
+    {ScenarioDef::kReferenceDef, "Reference"},
 };
 
 const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
@@ -122,7 +123,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
-      def_ = initial_scenario->def;
+      def_ = initial_scenario->unevaluated_def;
       name_ = initial_scenario->name;
       if (opts.is_new_copy) {
         std::string final_name = MakeUniqueName(
@@ -310,6 +311,43 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kWallArcDef) {
       DrawWallArcEditor();
     }
+    if (scenario_type == ScenarioDef::kReferenceDef) {
+      DrawReferenceEditor();
+    }
+  }
+
+  void DrawReferenceEditor() {
+    ImGui::IdGuard cid("ReferenceEditor");
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Scenario");
+    ImGui::SameLine();
+    ImGui::InputText("##ScenarioReference", def_.mutable_reference_def()->mutable_scenario_id());
+
+    ImGui::Text("Overrides");
+    ImGui::Indent();
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("TargetRadiusMult")
+            .set_label("Target radius multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), target_radius_multiplier));
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("SpeedMult")
+            .set_label("Speed multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), speed_multiplier));
+
+    ImGui::Unindent();
   }
 
   void DrawWallArcEditor() {
@@ -1555,7 +1593,21 @@ class ScenarioEditorScreen : public UiScreen {
  private:
   void PlayScenario() {
     CreateScenarioParams params;
-    params.def = def_;
+    if (def_.has_reference_def()) {
+      auto base_scenario =
+          app_.scenario_manager().GetEvaluatedScenario(def_.reference_def().scenario_id());
+      if (!base_scenario) {
+        SetErrorMessage(std::format("Unable to find referenced scenario \"{}\"",
+                                    def_.reference_def().scenario_id()));
+        return;
+      }
+      params.def = base_scenario->def;
+      if (def_.has_overrides()) {
+        *params.def.mutable_overrides() = def_.overrides();
+      }
+    } else {
+      params.def = def_;
+    }
     params.def.set_duration_seconds(1000000);
     params.id = name_.full_name();
     params.force_start_immediately = true;

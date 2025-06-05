@@ -153,8 +153,6 @@ message ScenarioDef {
   Room room = 3;
   TargetDef target_def = 5;
 
-  // This scenario is a reference to another scenario with the id changed.
-  string reference = 6;
   ScenarioOverrides overrides = 7;
 
   ShotType shot_type = 8;
@@ -175,7 +173,13 @@ message ScenarioDef {
     WallStrafeScenarioDef wall_strafe_def = 34;
     WallArcScenarioDef wall_arc_def = 35;
     WallSwerveScenarioDef wall_swerve_def = 36;
+    ReferenceScenarioDef reference_def = 37;
   }
+}
+
+// This scenario extends the specified scenario optionally specifying overrides to tweak settings.
+message ReferenceScenarioDef {
+    string scenario_id = 1;
 }
 
 message StaticScenarioDef {

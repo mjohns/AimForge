@@ -17,6 +17,9 @@ class PlaylistManager;
 struct ScenarioItem {
   ResourceName name;
   ScenarioDef def;
+  ScenarioDef unevaluated_def;
+
+  bool has_invalid_reference = false;
 
   std::string id() const {
     return name.full_name();
@@ -42,6 +45,9 @@ class ScenarioManager {
   std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);
 
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id);
+
+  // Gets the scenario following any references and applying all overrides.
+  std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id);
 
   std::optional<ScenarioItem> GetCurrentScenario() {
     return GetScenario(current_scenario_id_);
@@ -74,8 +80,8 @@ class ScenarioManager {
   void OpenFile(const ResourceName& name);
 
  private:
-  std::optional<ScenarioItem> GetScenario(const std::string& scenario_id, int depth);
-  std::optional<ScenarioItem> GetScenarioNoReferenceFollow(const std::string& scenario_id);
+  std::optional<ScenarioItem> GetEvaluatedScenario(
+      const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names);
 
   std::vector<ScenarioItem> scenarios_;
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
