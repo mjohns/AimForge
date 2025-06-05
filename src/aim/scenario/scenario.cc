@@ -20,6 +20,7 @@
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/metronome.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
@@ -611,7 +612,9 @@ void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) 
   task.run_time_seconds = timer_.GetElapsedSeconds() + delay_seconds;
 }
 
-std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app) {
+std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params, Application* app) {
+  CreateScenarioParams params = unevaluated_params;
+  params.def = ApplyScenarioOverrides(params.def);
   switch (params.def.type_case()) {
     case ScenarioDef::kStaticDef:
       return CreateStaticScenario(params, app);

@@ -81,16 +81,16 @@ struct ShotTypeDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ShotTypeDefaultTypeInternal _ShotType_default_instance_;
 
-inline constexpr ScenarioReferenceOverrides::Impl_::Impl_(
+inline constexpr ScenarioOverrides::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         duration_seconds_{0},
-        target_radius_multiplier_{0},
         num_targets_{0},
+        target_radius_multiplier_{0},
         speed_multiplier_{0} {}
 
 template <typename>
-PROTOBUF_CONSTEXPR ScenarioReferenceOverrides::ScenarioReferenceOverrides(::_pbi::ConstantInitialized)
+PROTOBUF_CONSTEXPR ScenarioOverrides::ScenarioOverrides(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
@@ -98,16 +98,16 @@ PROTOBUF_CONSTEXPR ScenarioReferenceOverrides::ScenarioReferenceOverrides(::_pbi
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
-struct ScenarioReferenceOverridesDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR ScenarioReferenceOverridesDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~ScenarioReferenceOverridesDefaultTypeInternal() {}
+struct ScenarioOverridesDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ScenarioOverridesDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ScenarioOverridesDefaultTypeInternal() {}
   union {
-    ScenarioReferenceOverrides _instance;
+    ScenarioOverrides _instance;
   };
 };
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ScenarioReferenceOverridesDefaultTypeInternal _ScenarioReferenceOverrides_default_instance_;
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ScenarioOverridesDefaultTypeInternal _ScenarioOverrides_default_instance_;
 
 inline constexpr RegionLength::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -1024,18 +1024,18 @@ const ::uint32_t
         0,
         1,
         2,
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _internal_metadata_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
         ~0u,  // no _weak_field_map_
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.duration_seconds_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.target_radius_multiplier_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.num_targets_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioReferenceOverrides, _impl_.speed_multiplier_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _impl_.duration_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _impl_.num_targets_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _impl_.target_radius_multiplier_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _impl_.speed_multiplier_),
         0,
         1,
         2,
@@ -1363,7 +1363,7 @@ static const ::_pbi::MigrationSchema
         {150, 160, -1, sizeof(::aim::EllipseTargetRegion)},
         {162, 172, -1, sizeof(::aim::CircleTargetRegion)},
         {174, 187, -1, sizeof(::aim::TargetPlacementStrategy)},
-        {192, 204, -1, sizeof(::aim::ScenarioReferenceOverrides)},
+        {192, 204, -1, sizeof(::aim::ScenarioOverrides)},
         {208, 223, -1, sizeof(::aim::ShotType)},
         {229, 255, -1, sizeof(::aim::ScenarioDef)},
         {272, 281, -1, sizeof(::aim::StaticScenarioDef)},
@@ -1392,7 +1392,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_EllipseTargetRegion_default_instance_._instance,
     &::aim::_CircleTargetRegion_default_instance_._instance,
     &::aim::_TargetPlacementStrategy_default_instance_._instance,
-    &::aim::_ScenarioReferenceOverrides_default_instance_._instance,
+    &::aim::_ScenarioOverrides_default_instance_._instance,
     &::aim::_ShotType_default_instance_._instance,
     &::aim::_ScenarioDef_default_instance_._instance,
     &::aim::_StaticScenarioDef_default_instance_._instance,
@@ -1453,96 +1453,96 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "gion\022\024\n\014region_order\030\002 \003(\005\022\024\n\014min_distan"
     "ce\030\003 \001(\002\022\'\n\037fixed_distance_from_last_tar"
     "get\030\004 \001(\002\022\035\n\025fixed_distance_jitter\030\005 \001(\002"
-    "\"\207\001\n\032ScenarioReferenceOverrides\022\030\n\020durat"
-    "ion_seconds\030\001 \001(\002\022 \n\030target_radius_multi"
-    "plier\030\002 \001(\002\022\023\n\013num_targets\030\003 \001(\005\022\030\n\020spee"
-    "d_multiplier\030\004 \001(\002\"\254\001\n\010ShotType\022\016\n\004poke\030"
-    "\001 \001(\010H\000\022\027\n\rtracking_kill\030\002 \001(\010H\000\022\035\n\023trac"
-    "king_invincible\030\003 \001(\010H\000\022\026\n\014click_single\030"
-    "\004 \001(\010H\000\022\036\n\026poke_kill_time_seconds\030\n \001(\002\022"
-    "\030\n\020no_partial_kills\030\013 \001(\010B\006\n\004type\"\222\005\n\013Sc"
-    "enarioDef\022\023\n\013description\030\001 \001(\t\022\030\n\020durati"
-    "on_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Roo"
-    "m\022\"\n\ntarget_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n"
-    "\treference\030\006 \001(\t\0222\n\toverrides\030\007 \001(\0132\037.ai"
-    "m.ScenarioReferenceOverrides\022 \n\tshot_typ"
-    "e\030\010 \001(\0132\r.aim.ShotType\022!\n\031accuracy_penal"
-    "ty_modifier\030\t \001(\002\022\023\n\013start_score\030\n \001(\002\022\021"
-    "\n\tend_score\030\013 \001(\002\022,\n\nstatic_def\030\036 \001(\0132\026."
-    "aim.StaticScenarioDefH\000\0222\n\rcentering_def"
-    "\030\037 \001(\0132\031.aim.CenteringScenarioDefH\000\022,\n\nb"
-    "arrel_def\030  \001(\0132\026.aim.BarrelScenarioDefH"
-    "\000\022,\n\nlinear_def\030! \001(\0132\026.aim.LinearScenar"
-    "ioDefH\000\0225\n\017wall_strafe_def\030\" \001(\0132\032.aim.W"
-    "allStrafeScenarioDefH\000\022/\n\014wall_arc_def\030#"
-    " \001(\0132\027.aim.WallArcScenarioDefH\000\0225\n\017wall_"
-    "swerve_def\030$ \001(\0132\032.aim.WallSwerveScenari"
-    "oDefH\000B\006\n\004type\"T\n\021StaticScenarioDef\022\?\n\031t"
-    "arget_placement_strategy\030\001 \001(\0132\034.aim.Tar"
-    "getPlacementStrategy\"\340\001\n\024CenteringScenar"
-    "ioDef\022$\n\013wall_points\030\001 \003(\0132\017.aim.RegionV"
-    "ec2\022\?\n\031target_placement_strategy\030\002 \001(\0132\034"
-    ".aim.TargetPlacementStrategy\022\023\n\013orient_p"
-    "ill\030\003 \001(\010\022\r\n\005angle\030\004 \001(\002\022\024\n\014angle_jitter"
-    "\030\005 \001(\002\022\'\n\014angle_length\030\006 \001(\0132\021.aim.Regio"
-    "nLength\"\236\001\n\021BarrelScenarioDef\022\?\n\031target_"
-    "placement_strategy\030\001 \001(\0132\034.aim.TargetPla"
-    "cementStrategy\022 \n\030direction_radius_perce"
-    "nt\030\002 \001(\002\022&\n\tdirection\030\003 \001(\0162\023.aim.InOutD"
-    "irection\"\300\001\n\021LinearScenarioDef\022\r\n\005angle\030"
-    "\001 \001(\002\022\024\n\014angle_jitter\030\002 \001(\002\022\r\n\005width\030\003 \001"
-    "(\002\022\016\n\006height\030\004 \001(\002\022\?\n\031target_placement_s"
-    "trategy\030\005 \001(\0132\034.aim.TargetPlacementStrat"
-    "egy\022&\n\tdirection\030\006 \001(\0162\023.aim.InOutDirect"
-    "ion\"\270\002\n\021WallStrafeProfile\022\016\n\006weight\030\001 \001("
-    "\002\022\'\n\014min_distance\030\002 \001(\0132\021.aim.RegionLeng"
-    "th\022\'\n\014max_distance\030\003 \001(\0132\021.aim.RegionLen"
-    "gth\022\r\n\005angle\030\004 \001(\002\022\024\n\014angle_jitter\030\005 \001(\002"
-    "\022\023\n\013description\030\006 \001(\t\022\033\n\023pause_at_end_ch"
-    "ance\030\007 \001(\002\022\025\n\rpause_seconds\030\010 \001(\002\022\034\n\024pau"
-    "se_seconds_jitter\030\t \001(\002\022\026\n\016speed_overrid"
-    "e\030\n \001(\002\022\035\n\025acceleartion_override\030\013 \001(\002\"\321"
-    "\001\n\025WallStrafeScenarioDef\022 \n\005width\030\001 \001(\0132"
-    "\021.aim.RegionLength\022!\n\006height\030\002 \001(\0132\021.aim"
-    ".RegionLength\022\034\n\001y\030\003 \001(\0132\021.aim.RegionLen"
-    "gth\022(\n\010profiles\030\004 \003(\0132\026.aim.WallStrafePr"
-    "ofile\022\025\n\rprofile_order\030\005 \003(\005\022\024\n\014accelera"
-    "tion\030\006 \001(\002\"\273\001\n\022WallArcScenarioDef\022 \n\005wid"
-    "th\030\001 \001(\0132\021.aim.RegionLength\022!\n\006height\030\002 "
-    "\001(\0132\021.aim.RegionLength\022\020\n\010duration\030\003 \001(\002"
-    "\022\026\n\016control_height\030\004 \001(\002\022\035\n\025control_heig"
-    "ht_jitter\030\005 \001(\002\022\027\n\017start_on_ground\030\006 \001(\010"
-    "\"\311\001\n\025WallSwerveScenarioDef\0225\n\017origin_str"
+    "\"~\n\021ScenarioOverrides\022\030\n\020duration_second"
+    "s\030\001 \001(\002\022\023\n\013num_targets\030\002 \001(\005\022 \n\030target_r"
+    "adius_multiplier\030\003 \001(\002\022\030\n\020speed_multipli"
+    "er\030\004 \001(\002\"\254\001\n\010ShotType\022\016\n\004poke\030\001 \001(\010H\000\022\027\n"
+    "\rtracking_kill\030\002 \001(\010H\000\022\035\n\023tracking_invin"
+    "cible\030\003 \001(\010H\000\022\026\n\014click_single\030\004 \001(\010H\000\022\036\n"
+    "\026poke_kill_time_seconds\030\n \001(\002\022\030\n\020no_part"
+    "ial_kills\030\013 \001(\010B\006\n\004type\"\211\005\n\013ScenarioDef\022"
+    "\023\n\013description\030\001 \001(\t\022\030\n\020duration_seconds"
+    "\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarge"
+    "t_def\030\005 \001(\0132\016.aim.TargetDef\022\021\n\treference"
+    "\030\006 \001(\t\022)\n\toverrides\030\007 \001(\0132\026.aim.Scenario"
+    "Overrides\022 \n\tshot_type\030\010 \001(\0132\r.aim.ShotT"
+    "ype\022!\n\031accuracy_penalty_modifier\030\t \001(\002\022\023"
+    "\n\013start_score\030\n \001(\002\022\021\n\tend_score\030\013 \001(\002\022,"
+    "\n\nstatic_def\030\036 \001(\0132\026.aim.StaticScenarioD"
+    "efH\000\0222\n\rcentering_def\030\037 \001(\0132\031.aim.Center"
+    "ingScenarioDefH\000\022,\n\nbarrel_def\030  \001(\0132\026.a"
+    "im.BarrelScenarioDefH\000\022,\n\nlinear_def\030! \001"
+    "(\0132\026.aim.LinearScenarioDefH\000\0225\n\017wall_str"
+    "afe_def\030\" \001(\0132\032.aim.WallStrafeScenarioDe"
+    "fH\000\022/\n\014wall_arc_def\030# \001(\0132\027.aim.WallArcS"
+    "cenarioDefH\000\0225\n\017wall_swerve_def\030$ \001(\0132\032."
+    "aim.WallSwerveScenarioDefH\000B\006\n\004type\"T\n\021S"
+    "taticScenarioDef\022\?\n\031target_placement_str"
     "ategy\030\001 \001(\0132\034.aim.TargetPlacementStrateg"
-    "y\022!\n\006height\030\002 \001(\0132\021.aim.RegionLength\022 \n\005"
-    "width\030\003 \001(\0132\021.aim.RegionLength\022!\n\006spread"
-    "\030\004 \001(\0132\021.aim.RegionLength\022\021\n\tturn_rate\030\005"
-    " \001(\002\"\323\001\n\025WallWanderScenarioDef\022\?\n\031target"
-    "_placement_strategy\030\001 \001(\0132\034.aim.TargetPl"
-    "acementStrategy\022!\n\006height\030\002 \001(\0132\021.aim.Re"
-    "gionLength\022 \n\005width\030\003 \001(\0132\021.aim.RegionLe"
-    "ngth\022!\n\006spread\030\004 \001(\0132\021.aim.RegionLength\022"
-    "\021\n\tturn_rate\030\005 \001(\002\"\214\002\n\tTargetDef\022$\n\010prof"
-    "iles\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013num_ta"
-    "rgets\030\002 \001(\005\022\036\n\026remove_closest_on_miss\030\003 "
-    "\001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_targ"
-    "et_is_ghost\030\005 \001(\010\022 \n\030new_target_delay_se"
-    "conds\030\006 \001(\002\022#\n\033remove_target_after_secon"
-    "ds\030\007 \001(\002\022\'\n\037stagger_initial_targets_seco"
-    "nds\030\010 \001(\002\"^\n\rPillTargetDef\022\016\n\006height\030\001 \001"
-    "(\002\022\033\n\002up\030\002 \001(\0132\017.aim.StoredVec3\022 \n\007wall_"
-    "up\030\003 \001(\0132\017.aim.StoredVec2\"\371\002\n\rTargetProf"
-    "ile\022\016\n\006weight\030\001 \001(\002\022\025\n\rtarget_radius\030\002 \001"
-    "(\002\022\034\n\024target_radius_jitter\030\003 \001(\002\022\r\n\005spee"
-    "d\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016health_"
-    "seconds\030\006 \001(\002\022\035\n\025health_seconds_jitter\030\007"
-    " \001(\002\022\035\n\025target_radius_at_kill\030\010 \001(\002\022\031\n\021t"
-    "arget_hit_radius\030\t \001(\002\022\023\n\013description\030\013 "
-    "\001(\t\022)\n!target_radius_growth_time_seconds"
-    "\030\014 \001(\002\022!\n\031target_radius_growth_size\030\r \001("
-    "\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n"
-    "\004type*-\n\016InOutDirection\022\006\n\002IN\020\000\022\007\n\003OUT\020\001"
-    "\022\n\n\006RANDOM\020\002b\010editionsp\350\007"
+    "y\"\340\001\n\024CenteringScenarioDef\022$\n\013wall_point"
+    "s\030\001 \003(\0132\017.aim.RegionVec2\022\?\n\031target_place"
+    "ment_strategy\030\002 \001(\0132\034.aim.TargetPlacemen"
+    "tStrategy\022\023\n\013orient_pill\030\003 \001(\010\022\r\n\005angle\030"
+    "\004 \001(\002\022\024\n\014angle_jitter\030\005 \001(\002\022\'\n\014angle_len"
+    "gth\030\006 \001(\0132\021.aim.RegionLength\"\236\001\n\021BarrelS"
+    "cenarioDef\022\?\n\031target_placement_strategy\030"
+    "\001 \001(\0132\034.aim.TargetPlacementStrategy\022 \n\030d"
+    "irection_radius_percent\030\002 \001(\002\022&\n\tdirecti"
+    "on\030\003 \001(\0162\023.aim.InOutDirection\"\300\001\n\021Linear"
+    "ScenarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitt"
+    "er\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022"
+    "\?\n\031target_placement_strategy\030\005 \001(\0132\034.aim"
+    ".TargetPlacementStrategy\022&\n\tdirection\030\006 "
+    "\001(\0162\023.aim.InOutDirection\"\270\002\n\021WallStrafeP"
+    "rofile\022\016\n\006weight\030\001 \001(\002\022\'\n\014min_distance\030\002"
+    " \001(\0132\021.aim.RegionLength\022\'\n\014max_distance\030"
+    "\003 \001(\0132\021.aim.RegionLength\022\r\n\005angle\030\004 \001(\002\022"
+    "\024\n\014angle_jitter\030\005 \001(\002\022\023\n\013description\030\006 \001"
+    "(\t\022\033\n\023pause_at_end_chance\030\007 \001(\002\022\025\n\rpause"
+    "_seconds\030\010 \001(\002\022\034\n\024pause_seconds_jitter\030\t"
+    " \001(\002\022\026\n\016speed_override\030\n \001(\002\022\035\n\025accelear"
+    "tion_override\030\013 \001(\002\"\321\001\n\025WallStrafeScenar"
+    "ioDef\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022"
+    "!\n\006height\030\002 \001(\0132\021.aim.RegionLength\022\034\n\001y\030"
+    "\003 \001(\0132\021.aim.RegionLength\022(\n\010profiles\030\004 \003"
+    "(\0132\026.aim.WallStrafeProfile\022\025\n\rprofile_or"
+    "der\030\005 \003(\005\022\024\n\014acceleration\030\006 \001(\002\"\273\001\n\022Wall"
+    "ArcScenarioDef\022 \n\005width\030\001 \001(\0132\021.aim.Regi"
+    "onLength\022!\n\006height\030\002 \001(\0132\021.aim.RegionLen"
+    "gth\022\020\n\010duration\030\003 \001(\002\022\026\n\016control_height\030"
+    "\004 \001(\002\022\035\n\025control_height_jitter\030\005 \001(\002\022\027\n\017"
+    "start_on_ground\030\006 \001(\010\"\311\001\n\025WallSwerveScen"
+    "arioDef\0225\n\017origin_strategy\030\001 \001(\0132\034.aim.T"
+    "argetPlacementStrategy\022!\n\006height\030\002 \001(\0132\021"
+    ".aim.RegionLength\022 \n\005width\030\003 \001(\0132\021.aim.R"
+    "egionLength\022!\n\006spread\030\004 \001(\0132\021.aim.Region"
+    "Length\022\021\n\tturn_rate\030\005 \001(\002\"\323\001\n\025WallWander"
+    "ScenarioDef\022\?\n\031target_placement_strategy"
+    "\030\001 \001(\0132\034.aim.TargetPlacementStrategy\022!\n\006"
+    "height\030\002 \001(\0132\021.aim.RegionLength\022 \n\005width"
+    "\030\003 \001(\0132\021.aim.RegionLength\022!\n\006spread\030\004 \001("
+    "\0132\021.aim.RegionLength\022\021\n\tturn_rate\030\005 \001(\002\""
+    "\214\002\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.Ta"
+    "rgetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remo"
+    "ve_closest_on_miss\030\003 \001(\010\022\024\n\014target_order"
+    "\030\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\022 "
+    "\n\030new_target_delay_seconds\030\006 \001(\002\022#\n\033remo"
+    "ve_target_after_seconds\030\007 \001(\002\022\'\n\037stagger"
+    "_initial_targets_seconds\030\010 \001(\002\"^\n\rPillTa"
+    "rgetDef\022\016\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.ai"
+    "m.StoredVec3\022 \n\007wall_up\030\003 \001(\0132\017.aim.Stor"
+    "edVec2\"\371\002\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002"
+    "\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_radius"
+    "_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_ji"
+    "tter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025he"
+    "alth_seconds_jitter\030\007 \001(\002\022\035\n\025target_radi"
+    "us_at_kill\030\010 \001(\002\022\031\n\021target_hit_radius\030\t "
+    "\001(\002\022\023\n\013description\030\013 \001(\t\022)\n!target_radiu"
+    "s_growth_time_seconds\030\014 \001(\002\022!\n\031target_ra"
+    "dius_growth_size\030\r \001(\002\022\"\n\004pill\030\n \001(\0132\022.a"
+    "im.PillTargetDefH\000B\006\n\004type*-\n\016InOutDirec"
+    "tion\022\006\n\002IN\020\000\022\007\n\003OUT\020\001\022\n\n\006RANDOM\020\002b\010editi"
+    "onsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1552,7 +1552,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    5305,
+    5286,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -5943,34 +5943,34 @@ void TargetPlacementStrategy::InternalSwap(TargetPlacementStrategy* PROTOBUF_RES
 }
 // ===================================================================
 
-class ScenarioReferenceOverrides::_Internal {
+class ScenarioOverrides::_Internal {
  public:
   using HasBits =
-      decltype(std::declval<ScenarioReferenceOverrides>()._impl_._has_bits_);
+      decltype(std::declval<ScenarioOverrides>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_._has_bits_);
+      8 * PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_._has_bits_);
 };
 
-ScenarioReferenceOverrides::ScenarioReferenceOverrides(::google::protobuf::Arena* arena)
+ScenarioOverrides::ScenarioOverrides(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.ScenarioReferenceOverrides)
+  // @@protoc_insertion_point(arena_constructor:aim.ScenarioOverrides)
 }
-ScenarioReferenceOverrides::ScenarioReferenceOverrides(
-    ::google::protobuf::Arena* arena, const ScenarioReferenceOverrides& from)
-    : ScenarioReferenceOverrides(arena) {
+ScenarioOverrides::ScenarioOverrides(
+    ::google::protobuf::Arena* arena, const ScenarioOverrides& from)
+    : ScenarioOverrides(arena) {
   MergeFrom(from);
 }
-inline PROTOBUF_NDEBUG_INLINE ScenarioReferenceOverrides::Impl_::Impl_(
+inline PROTOBUF_NDEBUG_INLINE ScenarioOverrides::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : _cached_size_{0} {}
 
-inline void ScenarioReferenceOverrides::SharedCtor(::_pb::Arena* arena) {
+inline void ScenarioOverrides::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, duration_seconds_),
@@ -5979,56 +5979,56 @@ inline void ScenarioReferenceOverrides::SharedCtor(::_pb::Arena* arena) {
                offsetof(Impl_, duration_seconds_) +
                sizeof(Impl_::speed_multiplier_));
 }
-ScenarioReferenceOverrides::~ScenarioReferenceOverrides() {
-  // @@protoc_insertion_point(destructor:aim.ScenarioReferenceOverrides)
+ScenarioOverrides::~ScenarioOverrides() {
+  // @@protoc_insertion_point(destructor:aim.ScenarioOverrides)
   SharedDtor(*this);
 }
-inline void ScenarioReferenceOverrides::SharedDtor(MessageLite& self) {
-  ScenarioReferenceOverrides& this_ = static_cast<ScenarioReferenceOverrides&>(self);
+inline void ScenarioOverrides::SharedDtor(MessageLite& self) {
+  ScenarioOverrides& this_ = static_cast<ScenarioOverrides&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.~Impl_();
 }
 
-inline void* ScenarioReferenceOverrides::PlacementNew_(const void*, void* mem,
+inline void* ScenarioOverrides::PlacementNew_(const void*, void* mem,
                                         ::google::protobuf::Arena* arena) {
-  return ::new (mem) ScenarioReferenceOverrides(arena);
+  return ::new (mem) ScenarioOverrides(arena);
 }
-constexpr auto ScenarioReferenceOverrides::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(ScenarioReferenceOverrides),
-                                            alignof(ScenarioReferenceOverrides));
+constexpr auto ScenarioOverrides::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(ScenarioOverrides),
+                                            alignof(ScenarioOverrides));
 }
 PROTOBUF_CONSTINIT
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull ScenarioReferenceOverrides::_class_data_ = {
+const ::google::protobuf::internal::ClassDataFull ScenarioOverrides::_class_data_ = {
     ::google::protobuf::internal::ClassData{
-        &_ScenarioReferenceOverrides_default_instance_._instance,
+        &_ScenarioOverrides_default_instance_._instance,
         &_table_.header,
         nullptr,  // OnDemandRegisterArenaDtor
         nullptr,  // IsInitialized
-        &ScenarioReferenceOverrides::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<ScenarioReferenceOverrides>(),
+        &ScenarioOverrides::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<ScenarioOverrides>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        &ScenarioReferenceOverrides::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<ScenarioReferenceOverrides>(), &ScenarioReferenceOverrides::ByteSizeLong,
-            &ScenarioReferenceOverrides::_InternalSerialize,
+        &ScenarioOverrides::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<ScenarioOverrides>(), &ScenarioOverrides::ByteSizeLong,
+            &ScenarioOverrides::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_._cached_size_),
+        PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_._cached_size_),
         false,
     },
-    &ScenarioReferenceOverrides::kDescriptorMethods,
+    &ScenarioOverrides::kDescriptorMethods,
     &descriptor_table_scenario_2eproto,
     nullptr,  // tracker
 };
-const ::google::protobuf::internal::ClassData* ScenarioReferenceOverrides::GetClassData() const {
+const ::google::protobuf::internal::ClassData* ScenarioOverrides::GetClassData() const {
   ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
   ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 0, 0, 2> ScenarioReferenceOverrides::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 0, 0, 2> ScenarioOverrides::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_._has_bits_),
     0, // no _extensions_
     4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
@@ -6041,35 +6041,35 @@ const ::_pbi::TcParseTable<2, 4, 0, 0, 2> ScenarioReferenceOverrides::_table_ = 
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::ScenarioReferenceOverrides>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::ScenarioOverrides>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     // float speed_multiplier = 4;
     {::_pbi::TcParser::FastF32S1,
-     {37, 3, 0, PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.speed_multiplier_)}},
+     {37, 3, 0, PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.speed_multiplier_)}},
     // float duration_seconds = 1;
     {::_pbi::TcParser::FastF32S1,
-     {13, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.duration_seconds_)}},
-    // float target_radius_multiplier = 2;
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.duration_seconds_)}},
+    // int32 num_targets = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioOverrides, _impl_.num_targets_), 1>(),
+     {16, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.num_targets_)}},
+    // float target_radius_multiplier = 3;
     {::_pbi::TcParser::FastF32S1,
-     {21, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.target_radius_multiplier_)}},
-    // int32 num_targets = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioReferenceOverrides, _impl_.num_targets_), 2>(),
-     {24, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.num_targets_)}},
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.target_radius_multiplier_)}},
   }}, {{
     65535, 65535
   }}, {{
     // float duration_seconds = 1;
-    {PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 0, 0,
+    {PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.duration_seconds_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float target_radius_multiplier = 2;
-    {PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.target_radius_multiplier_), _Internal::kHasBitsOffset + 1, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // int32 num_targets = 3;
-    {PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.num_targets_), _Internal::kHasBitsOffset + 2, 0,
+    // int32 num_targets = 2;
+    {PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.num_targets_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // float target_radius_multiplier = 3;
+    {PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.target_radius_multiplier_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float speed_multiplier = 4;
-    {PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.speed_multiplier_), _Internal::kHasBitsOffset + 3, 0,
+    {PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.speed_multiplier_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
@@ -6077,8 +6077,8 @@ const ::_pbi::TcParseTable<2, 4, 0, 0, 2> ScenarioReferenceOverrides::_table_ = 
   }},
 };
 
-PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.ScenarioReferenceOverrides)
+PROTOBUF_NOINLINE void ScenarioOverrides::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.ScenarioOverrides)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -6095,17 +6095,17 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* ScenarioReferenceOverrides::_InternalSerialize(
+        ::uint8_t* ScenarioOverrides::_InternalSerialize(
             const MessageLite& base, ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const ScenarioReferenceOverrides& this_ = static_cast<const ScenarioReferenceOverrides&>(base);
+          const ScenarioOverrides& this_ = static_cast<const ScenarioOverrides&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* ScenarioReferenceOverrides::_InternalSerialize(
+        ::uint8_t* ScenarioOverrides::_InternalSerialize(
             ::uint8_t* target,
             ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const ScenarioReferenceOverrides& this_ = *this;
+          const ScenarioOverrides& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.ScenarioReferenceOverrides)
+          // @@protoc_insertion_point(serialize_to_array_start:aim.ScenarioOverrides)
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
@@ -6117,18 +6117,18 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
                 1, this_._internal_duration_seconds(), target);
           }
 
-          // float target_radius_multiplier = 2;
+          // int32 num_targets = 2;
           if (cached_has_bits & 0x00000002u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                2, this_._internal_target_radius_multiplier(), target);
+            target = ::google::protobuf::internal::WireFormatLite::
+                WriteInt32ToArrayWithField<2>(
+                    stream, this_._internal_num_targets(), target);
           }
 
-          // int32 num_targets = 3;
+          // float target_radius_multiplier = 3;
           if (cached_has_bits & 0x00000004u) {
-            target = ::google::protobuf::internal::WireFormatLite::
-                WriteInt32ToArrayWithField<3>(
-                    stream, this_._internal_num_targets(), target);
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_target_radius_multiplier(), target);
           }
 
           // float speed_multiplier = 4;
@@ -6143,18 +6143,18 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
                     this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
           }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.ScenarioReferenceOverrides)
+          // @@protoc_insertion_point(serialize_to_array_end:aim.ScenarioOverrides)
           return target;
         }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t ScenarioReferenceOverrides::ByteSizeLong(const MessageLite& base) {
-          const ScenarioReferenceOverrides& this_ = static_cast<const ScenarioReferenceOverrides&>(base);
+        ::size_t ScenarioOverrides::ByteSizeLong(const MessageLite& base) {
+          const ScenarioOverrides& this_ = static_cast<const ScenarioOverrides&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t ScenarioReferenceOverrides::ByteSizeLong() const {
-          const ScenarioReferenceOverrides& this_ = *this;
+        ::size_t ScenarioOverrides::ByteSizeLong() const {
+          const ScenarioOverrides& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.ScenarioReferenceOverrides)
+          // @@protoc_insertion_point(message_byte_size_start:aim.ScenarioOverrides)
           ::size_t total_size = 0;
 
           ::uint32_t cached_has_bits = 0;
@@ -6168,14 +6168,14 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
             if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
-            // float target_radius_multiplier = 2;
+            // int32 num_targets = 2;
             if (cached_has_bits & 0x00000002u) {
-              total_size += 5;
-            }
-            // int32 num_targets = 3;
-            if (cached_has_bits & 0x00000004u) {
               total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
                   this_._internal_num_targets());
+            }
+            // float target_radius_multiplier = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
             }
             // float speed_multiplier = 4;
             if (cached_has_bits & 0x00000008u) {
@@ -6186,10 +6186,10 @@ PROTOBUF_NOINLINE void ScenarioReferenceOverrides::Clear() {
                                                      &this_._impl_._cached_size_);
         }
 
-void ScenarioReferenceOverrides::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<ScenarioReferenceOverrides*>(&to_msg);
-  auto& from = static_cast<const ScenarioReferenceOverrides&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.ScenarioReferenceOverrides)
+void ScenarioOverrides::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<ScenarioOverrides*>(&to_msg);
+  auto& from = static_cast<const ScenarioOverrides&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.ScenarioOverrides)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -6200,10 +6200,10 @@ void ScenarioReferenceOverrides::MergeImpl(::google::protobuf::MessageLite& to_m
       _this->_impl_.duration_seconds_ = from._impl_.duration_seconds_;
     }
     if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.target_radius_multiplier_ = from._impl_.target_radius_multiplier_;
+      _this->_impl_.num_targets_ = from._impl_.num_targets_;
     }
     if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.num_targets_ = from._impl_.num_targets_;
+      _this->_impl_.target_radius_multiplier_ = from._impl_.target_radius_multiplier_;
     }
     if (cached_has_bits & 0x00000008u) {
       _this->_impl_.speed_multiplier_ = from._impl_.speed_multiplier_;
@@ -6213,27 +6213,27 @@ void ScenarioReferenceOverrides::MergeImpl(::google::protobuf::MessageLite& to_m
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void ScenarioReferenceOverrides::CopyFrom(const ScenarioReferenceOverrides& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.ScenarioReferenceOverrides)
+void ScenarioOverrides::CopyFrom(const ScenarioOverrides& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.ScenarioOverrides)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 
-void ScenarioReferenceOverrides::InternalSwap(ScenarioReferenceOverrides* PROTOBUF_RESTRICT other) {
+void ScenarioOverrides::InternalSwap(ScenarioOverrides* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.speed_multiplier_)
-      + sizeof(ScenarioReferenceOverrides::_impl_.speed_multiplier_)
-      - PROTOBUF_FIELD_OFFSET(ScenarioReferenceOverrides, _impl_.duration_seconds_)>(
+      PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.speed_multiplier_)
+      + sizeof(ScenarioOverrides::_impl_.speed_multiplier_)
+      - PROTOBUF_FIELD_OFFSET(ScenarioOverrides, _impl_.duration_seconds_)>(
           reinterpret_cast<char*>(&_impl_.duration_seconds_),
           reinterpret_cast<char*>(&other->_impl_.duration_seconds_));
 }
 
-::google::protobuf::Metadata ScenarioReferenceOverrides::GetMetadata() const {
+::google::protobuf::Metadata ScenarioOverrides::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================
@@ -6808,7 +6808,7 @@ ScenarioDef::ScenarioDef(
   _impl_.target_def_ = (cached_has_bits & 0x00000008u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetDef>(
                               arena, *from._impl_.target_def_)
                         : nullptr;
-  _impl_.overrides_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::ScenarioReferenceOverrides>(
+  _impl_.overrides_ = (cached_has_bits & 0x00000010u) ? ::google::protobuf::Message::CopyConstruct<::aim::ScenarioOverrides>(
                               arena, *from._impl_.overrides_)
                         : nullptr;
   _impl_.shot_type_ = (cached_has_bits & 0x00000020u) ? ::google::protobuf::Message::CopyConstruct<::aim::ShotType>(
@@ -7026,7 +7026,7 @@ const ::_pbi::TcParseTable<4, 17, 11, 60, 7> ScenarioDef::_table_ = {
     // string reference = 6;
     {::_pbi::TcParser::FastUS1,
      {50, 1, 0, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.reference_)}},
-    // .aim.ScenarioReferenceOverrides overrides = 7;
+    // .aim.ScenarioOverrides overrides = 7;
     {::_pbi::TcParser::FastMtS1,
      {58, 4, 2, PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.overrides_)}},
     // .aim.ShotType shot_type = 8;
@@ -7065,7 +7065,7 @@ const ::_pbi::TcParseTable<4, 17, 11, 60, 7> ScenarioDef::_table_ = {
     // string reference = 6;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.reference_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // .aim.ScenarioReferenceOverrides overrides = 7;
+    // .aim.ScenarioOverrides overrides = 7;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.overrides_), _Internal::kHasBitsOffset + 4, 2,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.ShotType shot_type = 8;
@@ -7104,7 +7104,7 @@ const ::_pbi::TcParseTable<4, 17, 11, 60, 7> ScenarioDef::_table_ = {
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::TargetDef>()},
-    {::_pbi::TcParser::GetTable<::aim::ScenarioReferenceOverrides>()},
+    {::_pbi::TcParser::GetTable<::aim::ScenarioOverrides>()},
     {::_pbi::TcParser::GetTable<::aim::ShotType>()},
     {::_pbi::TcParser::GetTable<::aim::StaticScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>()},
@@ -7221,7 +7221,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
             target = stream->WriteStringMaybeAliased(6, _s, target);
           }
 
-          // .aim.ScenarioReferenceOverrides overrides = 7;
+          // .aim.ScenarioOverrides overrides = 7;
           if (cached_has_bits & 0x00000010u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 7, *this_._impl_.overrides_, this_._impl_.overrides_->GetCachedSize(), target,
@@ -7348,7 +7348,7 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.target_def_);
             }
-            // .aim.ScenarioReferenceOverrides overrides = 7;
+            // .aim.ScenarioOverrides overrides = 7;
             if (cached_has_bits & 0x00000010u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.overrides_);
@@ -7467,7 +7467,7 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
       ABSL_DCHECK(from._impl_.overrides_ != nullptr);
       if (_this->_impl_.overrides_ == nullptr) {
         _this->_impl_.overrides_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::ScenarioReferenceOverrides>(arena, *from._impl_.overrides_);
+            ::google::protobuf::Message::CopyConstruct<::aim::ScenarioOverrides>(arena, *from._impl_.overrides_);
       } else {
         _this->_impl_.overrides_->MergeFrom(*from._impl_.overrides_);
       }
