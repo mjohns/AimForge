@@ -259,7 +259,8 @@ void Target::StopAllTimers() {
 
 void Target::StartHitTimer() {
   regen_timer_.Stop();
-  if (hit_timer_.GetElapsedSeconds() - regen_timer_.GetElapsedSeconds() < 0) {
+  if (health_regen_rate > 0 &&
+      hit_timer_.GetElapsedSeconds() - regen_timer_.GetElapsedSeconds() < 0) {
     // Reset the timers as health regenerated past 0.
     regen_timer_ = Stopwatch();
     hit_timer_ = Stopwatch();
