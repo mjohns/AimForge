@@ -78,7 +78,8 @@ ScenarioNode* GetOrCreateNamedNode(std::vector<std::unique_ptr<ScenarioNode>>* n
   return result;
 }
 
-std::optional<std::string> StripLevelSuffix(const std::string& scenario_name) {
+std::optional<std::string> StripLevelSuffix(const std::string& scenario_name,
+                                            float* level_out = nullptr) {
   std::vector<std::string_view> words =
       absl::StrSplit(scenario_name, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
   if (words.empty()) {
@@ -89,7 +90,7 @@ std::optional<std::string> StripLevelSuffix(const std::string& scenario_name) {
     return {};
   }
   float level;
-  if (!absl::SimpleAtof(suffix.substr(1), &level)) {
+  if (!absl::SimpleAtof(suffix.substr(1), level_out != nullptr ? level_out : &level)) {
     return {};
   }
 
@@ -161,6 +162,7 @@ std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
 
 void ScenarioManager::LoadScenariosFromDisk() {
   scenarios_.clear();
+  scenario_map_.clear();
   for (BundleInfo& bundle : fs_->GetBundles()) {
     PushBackAll(&scenarios_, LoadScenarios(bundle.name, bundle.path / "scenarios"));
   }
@@ -173,16 +175,16 @@ void ScenarioManager::LoadScenariosFromDisk() {
     } else {
       item.has_invalid_reference = true;
     }
+    scenario_map_[item.id()] = item;
   }
 
   scenario_nodes_ = GetTopLevelNodes(scenarios_);
 }
 
 std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id) {
-  for (const auto& scenario : scenarios_) {
-    if (scenario.id() == scenario_id) {
-      return scenario;
-    }
+  auto it = scenario_map_.find(scenario_id);
+  if (it != scenario_map_.end()) {
+    return it->second;
   }
   return {};
 }
@@ -297,6 +299,39 @@ void ScenarioManager::OpenFile(const ResourceName& name) {
     // #ifdef _WIN32
     // auto rc = ShellExecuteW(NULL, L"explore", maybe_path->c_str(), NULL, NULL, SW_SHOWNORMAL);
     // #endif
+  }
+}
+
+void ScenarioManager::GenerateScenarioLevels(const std::string& starting_scenario_id,
+                                             const ScenarioOverrides& overrides,
+                                             int num_levels) {
+  auto starting_scenario = GetScenario(starting_scenario_id);
+  if (!starting_scenario) {
+    return;
+  }
+  float starting_level = 0;
+  auto base_name = StripLevelSuffix(starting_scenario->name.relative_name(), &starting_level);
+  if (!base_name) {
+    return;
+  }
+  std::string bundle_name = starting_scenario->name.bundle_name();
+  ResourceName prev = starting_scenario->name;
+  int current_level = starting_level;
+  for (int i = 0; i < num_levels; ++i) {
+    current_level++;
+    std::string relative_name = current_level < 10
+                                    ? std::format("{} L0{}", *base_name, current_level)
+                                    : std::format("{} L{}", *base_name, current_level);
+    ResourceName next(bundle_name, relative_name);
+    if (GetScenario(next.full_name()).has_value()) {
+      return;
+    }
+    ScenarioDef def;
+    def.mutable_reference_def()->set_scenario_id(prev.full_name());
+    *def.mutable_overrides() = overrides;
+    if (!SaveScenario(next, def)) {
+      return;
+    }
   }
 }
 

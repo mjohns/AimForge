@@ -18,10 +18,19 @@ void UiScreen::OnTickStart() {
 }
 
 void UiScreen::OnTick() {
+  Stopwatch tick_timer;
+  tick_timer.Start();
+
   app_.NewImGuiFrame();
   DrawScreen();
   Render();
-  SDL_Delay(6);
+
+  u64 elapsed = tick_timer.GetElapsedMicros();
+  u64 elapsed_ms = elapsed / 1000;
+  int to_sleep = 6 - elapsed_ms;
+  if (to_sleep > 0) {
+    SDL_Delay(to_sleep);
+  }
 }
 
 void UiScreen::Render() {
