@@ -43,7 +43,7 @@ Application::~Application() {
   // Clear anything holding onto screens before shutting down SDL.
   screen_stack_.clear();
   if (state_) {
-    state_->current_running_scenario = {};
+    scenario_manager_->ClearCurrentScenario();
   }
 
   if (logger_) {
