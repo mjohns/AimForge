@@ -1584,6 +1584,20 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       profile->clear_pill();
     }
+
+    ImGui::InputFloat(ImGui::InputFloatParams("HitRadiusMultiplier")
+                          .set_label("Hit radius multiplier")
+                          .set_step(0.1, 0.5)
+                          .set_min(0.1)
+                          .set_precision(1)
+                          .set_default(1)
+                          .set_is_optional()
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TargetProfile, profile, target_hit_radius_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Updates the target's hit radius to not match the visuals. To make the hit box twice as "
+        "large use a value of 2.");
   }
 
   void JitteredValueInput(const std::string& id,
