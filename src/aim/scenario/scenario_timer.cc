@@ -2,7 +2,7 @@
 
 namespace aim {
 
-ScenarioTimer::ScenarioTimer(uint16_t replay_fps) : replay_fps_(replay_fps) {
+ScenarioTimer::ScenarioTimer(int replay_fps) : replay_fps_(replay_fps) {
   float replay_seconds_per_frame = 1 / (float)replay_fps;
   replay_micros_per_frame_ = replay_seconds_per_frame * 1000000;
 
@@ -17,7 +17,7 @@ void ScenarioTimer::StartLoop() {
 }
 
 void ScenarioTimer::OnStartFrame() {
-  uint64_t new_replay_frame_number = run_stopwatch_.GetElapsedMicros() / replay_micros_per_frame_;
+  i64 new_replay_frame_number = run_stopwatch_.GetElapsedMicros() / replay_micros_per_frame_;
   is_new_replay_frame_ = new_replay_frame_number != replay_frame_number_;
   replay_frame_number_ = new_replay_frame_number;
 
@@ -33,7 +33,7 @@ void ScenarioTimer::OnEndRender() {
   render_end_time_micros_ = frame_stopwatch_.GetElapsedMicros();
 }
 
-uint64_t ScenarioTimer::LastFrameRenderStartedMicrosAgo() {
+i64 ScenarioTimer::LastFrameRenderStartedMicrosAgo() {
   return frame_stopwatch_.GetElapsedMicros() - render_start_time_micros_;
 }
 

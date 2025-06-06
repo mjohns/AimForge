@@ -404,8 +404,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). "
-        "The specified height is for the control point (1, height). See "
-        "https://www.desmos.com/calculator/scz7zhonfw");
+        "The specified height is for the control point (1, height).");
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
@@ -417,7 +416,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Height");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Height", /*default_to_x=*/true, d.mutable_height());
+    DrawRegionLengthEditor("Height", /*default_to_x=*/false, d.mutable_height());
 
     ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
                      PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));

@@ -293,6 +293,15 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
   }
   std::filesystem::rename(*old_path, *new_path);
   playlist_manager_->RenameScenarioInAllPlaylists(old_name.full_name(), new_name.full_name());
+
+  // Fix any references to the renamed scenario.
+  for (const ScenarioItem& item : scenarios_) {
+    if (item.def.reference_def().scenario_id() == old_name.full_name()) {
+      ScenarioDef new_def = item.def;
+      new_def.mutable_reference_def()->set_scenario_id(new_name.full_name());
+      SaveScenario(item.name, new_def);
+    }
+  }
   return true;
 }
 

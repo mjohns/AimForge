@@ -9,7 +9,7 @@ namespace aim {
 
 class ScenarioTimer {
  public:
-  explicit ScenarioTimer(uint16_t replay_fps);
+  explicit ScenarioTimer(int replay_fps);
 
   void StartLoop();
 
@@ -30,11 +30,11 @@ class ScenarioTimer {
     return run_stopwatch_.GetElapsedSeconds();
   }
 
-  u64 GetElapsedMicros() {
+  i64 GetElapsedMicros() {
     return run_stopwatch_.GetElapsedMicros();
   }
 
-  u64 GetReplayFrameNumber() {
+  i64 GetReplayFrameNumber() {
     return has_started_run_ ? replay_frame_number_ : 0;
   }
 
@@ -50,7 +50,7 @@ class ScenarioTimer {
     return run_stopwatch_;
   }
 
-  u64 LastFrameRenderStartedMicrosAgo();
+  i64 LastFrameRenderStartedMicrosAgo();
 
  private:
   // Stopwatch tracking render time. Can be reset each time scenario resumes.
@@ -58,17 +58,17 @@ class ScenarioTimer {
   // Stopwatch mapping to the time the user would see in the UI.
   Stopwatch run_stopwatch_;
 
-  u16 replay_fps_;
-  u64 replay_micros_per_frame_;
+  int replay_fps_;
+  i64 replay_micros_per_frame_;
 
-  u64 previous_frame_start_time_micros_;
-  u64 frame_start_time_micros_;
+  i64 previous_frame_start_time_micros_;
+  i64 frame_start_time_micros_;
 
-  u64 replay_frame_number_;
+  i64 replay_frame_number_;
   bool is_new_replay_frame_;
 
-  u64 render_start_time_micros_ = 0;
-  u64 render_end_time_micros_ = 0;
+  i64 render_start_time_micros_ = 0;
+  i64 render_end_time_micros_ = 0;
 
   bool has_started_run_ = false;
 };

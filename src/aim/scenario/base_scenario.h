@@ -34,7 +34,7 @@ class BaseScenario : public Scenario {
   bool ShouldCountPartialKills();
 
   std::optional<u16> current_poke_target_id_;
-  u64 current_poke_start_time_micros_ = 0;
+  i64 current_poke_start_time_micros_ = 0;
 
   std::unique_ptr<TrackingSound> tracking_sound_;
 };

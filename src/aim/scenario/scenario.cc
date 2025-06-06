@@ -35,9 +35,9 @@
 namespace aim {
 namespace {
 
-constexpr const u16 kReplayFps = 240;
-constexpr const u64 kTargetRenderFps = 615;
-constexpr const u64 kClickDebounceMicros = 3 * 1000;
+constexpr const i16 kReplayFps = 240;
+constexpr const int kTargetRenderFps = 615;
+constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
 }  // namespace
 
@@ -118,7 +118,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
       if (is_running()) {
         if (!ShouldAutoHold()) {
           if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-            u64 now_micros = timer_.GetElapsedMicros();
+            i64 now_micros = timer_.GetElapsedMicros();
             if (now_micros - last_click_time_micros_ > kClickDebounceMicros) {
               update_data_.has_click = true;
               last_click_time_micros_ = now_micros;
