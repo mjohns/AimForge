@@ -76,17 +76,18 @@ class HomeScreen : public UiScreen {
     CreateScenarioParams params;
     params.id = current_scenario.id();
     params.def = current_scenario.def;
-    state_.current_running_scenario = CreateScenario(params, &app_);
-    if (!state_.current_running_scenario) {
+    std::shared_ptr<Screen> running_scenario = CreateScenario(params, &app_);
+    if (!running_scenario) {
       // TODO: Error dialog for invalid scenarios.
       return;
     }
-    PushNextScreen(state_.current_running_scenario);
+    app_.scenario_manager().SetCurrentRunningScenario(running_scenario);
+    PushNextScreen(running_scenario);
   }
 
   void ResumeCurrentScenario() {
-    if (state_.current_running_scenario) {
-      PushNextScreen(state_.current_running_scenario);
+    if (app_.scenario_manager().has_running_scenario()) {
+      PushNextScreen(app_.scenario_manager().GetCurrentRunningScenario());
     }
   }
 
@@ -132,7 +133,7 @@ class HomeScreen : public UiScreen {
       }
       ImGui::AlignTextToFramePadding();
       ImGui::Text("                ");
-      if (state_.current_running_scenario) {
+      if (app_.scenario_manager().has_running_scenario()) {
         ImGui::SameLine();
         if (ImGui::Button(std::format("{} Resume", kIconPlayArrow))) {
           state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
@@ -322,7 +323,7 @@ class HomeScreen : public UiScreen {
       if (current_scenario) {
         ImGui::Text(current_scenario->id());
 
-        if (state_.current_running_scenario) {
+        if (app_.scenario_manager().has_running_scenario()) {
           if (ImGui::Button(std::format("{} Resume", kIconPlayArrow))) {
             state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
           }

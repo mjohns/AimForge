@@ -9,6 +9,7 @@
 #include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
+#include "aim/core/screen.h"
 #include "aim/proto/scenario.pb.h"
 
 namespace aim {
@@ -56,6 +57,7 @@ class ScenarioManager {
 
   void ClearCurrentScenario() {
     current_scenario_id_ = "";
+    current_running_scenario_ = {};
   }
 
   void GenerateScenarioLevels(const std::string& starting_scenario_id,
@@ -63,6 +65,9 @@ class ScenarioManager {
                               int num_levels);
 
   bool SetCurrentScenario(const std::string& scenario_id) {
+    if (scenario_id != current_scenario_id_) {
+      current_running_scenario_ = {};
+    }
     current_scenario_id_ = scenario_id;
     return GetScenario(scenario_id).has_value();
   }
@@ -84,6 +89,18 @@ class ScenarioManager {
 
   void OpenFile(const ResourceName& name);
 
+  bool has_running_scenario() const {
+    return current_running_scenario_ != nullptr;
+  }
+
+  std::shared_ptr<Screen> GetCurrentRunningScenario() {
+    return current_running_scenario_;
+  }
+
+  void SetCurrentRunningScenario(std::shared_ptr<Screen> scenario) {
+    current_running_scenario_ = std::move(scenario);
+  }
+
  private:
   std::optional<ScenarioItem> GetEvaluatedScenario(
       const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names);
@@ -93,6 +110,7 @@ class ScenarioManager {
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
+  std::shared_ptr<Screen> current_running_scenario_;
 
   std::string current_scenario_id_;
 };

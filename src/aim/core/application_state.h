@@ -24,9 +24,6 @@ class ApplicationState {
   ApplicationState(const ApplicationState&) = delete;
   ApplicationState& operator=(const ApplicationState&) = delete;
 
-  // std::string current_scenario_id;
-  // std::string current_playlist_id;
-  std::shared_ptr<Screen> current_running_scenario;
   std::optional<ScenarioRunOption> scenario_run_option;
 
   std::optional<RunPerformanceStats> GetPerformanceStats(const std::string& scenario_id,
