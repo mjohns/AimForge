@@ -318,11 +318,12 @@ class ScenarioEditorScreen : public UiScreen {
 
   void DrawReferenceEditor() {
     ImGui::IdGuard cid("ReferenceEditor");
+    ReferenceScenarioDef& r = *def_.mutable_reference_def();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Scenario");
     ImGui::SameLine();
-    ImGui::InputText("##ScenarioReference", def_.mutable_reference_def()->mutable_scenario_id());
+    ImGui::InputText("##ScenarioReference", r.mutable_scenario_id());
 
     ImGui::Text("Overrides");
     ImGui::Indent();
@@ -350,6 +351,20 @@ class ScenarioEditorScreen : public UiScreen {
         PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), speed_multiplier));
 
     ImGui::Unindent();
+
+    if (ImGui::Button("Bake")) {
+      auto parent = app_.scenario_manager().GetEvaluatedScenario(r.scenario_id());
+      if (parent) {
+        auto overrides = def_.overrides();
+        def_ = parent->def;
+        *def_.mutable_overrides() = overrides;
+        def_ = ApplyScenarioOverrides(def_);
+      } else {
+        SetErrorMessage(std::format("Referenced scenario \"{}\" is invalid.", r.scenario_id()));
+      }
+    }
+    ImGui::SameLine();
+    ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
   }
 
   void DrawWallArcEditor() {
