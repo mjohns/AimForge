@@ -118,26 +118,29 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
             stats_.num_hits++;
             PlayKillSound();
             AddNewTargetDuringRun(target.id);
-          } else {
-            /*
-          if (is_hitting_this_target && target.notify_at_health_seconds > 0 &&
-              target.notify_at_health_seconds >= health_left) {
-            app_.sound_manager()->PlayNotifyBeforeKillSound();
-            target.notify_at_health_seconds = 0;
           }
-          */
-            if (target.radius_at_kill.has_value()) {
-              float radius_diff =
-                  target.radius_at_kill->start_radius - target.radius_at_kill->end_radius;
-              target.radius = target.radius_at_kill->end_radius + health_percent * radius_diff;
-            }
-          }
+          /*
+        if (is_hitting_this_target && target.notify_at_health_seconds > 0 &&
+            target.notify_at_health_seconds >= health_left) {
+          app_.sound_manager()->PlayNotifyBeforeKillSound();
+          target.notify_at_health_seconds = 0;
+        }
+        */
         }
       }
     }
     tracking_sound_->DoTick(maybe_hit_target_id.has_value());
   } else {
     TrackingHoldDone();
+  }
+  if (GetShotType() == ShotType::kTrackingKill) {
+    for (Target& target : target_manager_.GetMutableTargets()) {
+      if (target.health_seconds > 0 && target.radius_at_kill.has_value()) {
+        float radius_diff = target.radius_at_kill->start_radius - target.radius_at_kill->end_radius;
+        float health_percent = target.GetHealthPercent();
+        target.radius = target.radius_at_kill->end_radius + health_percent * radius_diff;
+      }
+    }
   }
 }
 
