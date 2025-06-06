@@ -613,7 +613,8 @@ void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) 
   task.run_time_seconds = timer_.GetElapsedSeconds() + delay_seconds;
 }
 
-std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params, Application* app) {
+std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params,
+                                         Application* app) {
   CreateScenarioParams params = unevaluated_params;
   params.def = ApplyScenarioOverrides(params.def);
   switch (params.def.type_case()) {
