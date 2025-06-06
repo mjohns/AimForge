@@ -2782,6 +2782,7 @@ class Settings final : public ::google::protobuf::Message
     kAutoHoldTrackingFieldNumber = 10,
     kDisablePerScenarioSettingsFieldNumber = 13,
     kCmPer360JitterFieldNumber = 11,
+    kMaxRenderFpsFieldNumber = 14,
   };
   // repeated .aim.Crosshair saved_crosshairs = 7;
   int saved_crosshairs_size() const;
@@ -2952,12 +2953,23 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_cm_per_360_jitter(float value);
 
   public:
+  // float max_render_fps = 14;
+  bool has_max_render_fps() const;
+  void clear_max_render_fps() ;
+  float max_render_fps() const;
+  void set_max_render_fps(float value);
+
+  private:
+  float _internal_max_render_fps() const;
+  void _internal_set_max_render_fps(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 13, 3,
+      4, 14, 3,
       61, 2>
       _table_;
 
@@ -2990,6 +3002,7 @@ class Settings final : public ::google::protobuf::Message
     bool auto_hold_tracking_;
     bool disable_per_scenario_settings_;
     float cm_per_360_jitter_;
+    float max_render_fps_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5061,6 +5074,34 @@ inline bool Settings::_internal_disable_per_scenario_settings() const {
 inline void Settings::_internal_set_disable_per_scenario_settings(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_per_scenario_settings_ = value;
+}
+
+// float max_render_fps = 14;
+inline bool Settings::has_max_render_fps() const {
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
+  return value;
+}
+inline void Settings::clear_max_render_fps() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.max_render_fps_ = 0;
+  _impl_._has_bits_[0] &= ~0x00001000u;
+}
+inline float Settings::max_render_fps() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.max_render_fps)
+  return _internal_max_render_fps();
+}
+inline void Settings::set_max_render_fps(float value) {
+  _internal_set_max_render_fps(value);
+  _impl_._has_bits_[0] |= 0x00001000u;
+  // @@protoc_insertion_point(field_set:aim.Settings.max_render_fps)
+}
+inline float Settings::_internal_max_render_fps() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.max_render_fps_;
+}
+inline void Settings::_internal_set_max_render_fps(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.max_render_fps_ = value;
 }
 
 // -------------------------------------------------------------------

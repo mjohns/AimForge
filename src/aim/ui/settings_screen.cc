@@ -67,6 +67,18 @@ class SettingsScreen : public UiScreen {
                           .set_default(800),
                       PROTO_FLOAT_FIELD(Settings, &updater_.settings, dpi));
 
+    ImGui::InputFloat(ImGui::InputFloatParams("Fps")
+                          .set_label("Max render fps")
+                          .set_step(10, 100)
+                          .set_width(char_x_ * 10)
+                          .set_range(60, 1000)
+                          .set_default(500),
+                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, max_render_fps));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The max fps for rendering. Don't set too high as additional time rendering will take away "
+        "from time to perform state updates and poll mouse events");
+
     ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
                           .set_label("Metronome BPM")
                           .set_min(0)

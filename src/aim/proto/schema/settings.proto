@@ -86,6 +86,8 @@ message Settings {
   HealthBarSettings health_bar = 12;
 
   bool disable_per_scenario_settings = 13;
+
+  float max_render_fps = 14;
 }
 
 message ScenarioSettings {
