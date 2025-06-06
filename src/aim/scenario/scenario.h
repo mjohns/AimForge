@@ -147,7 +147,7 @@ class Scenario : public Screen {
   void UpdatePerfStats();
   void HandleScenarioDone();
 
-  u64 num_state_updates_ = 0;
+  i64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
   float radians_per_dot_;
   Crosshair crosshair_;
@@ -160,7 +160,7 @@ class Scenario : public Screen {
   i64 stats_id_ = 0;
   bool is_done_ = false;
   std::vector<DelayedTask> delayed_tasks_;
-  u64 max_render_age_micros_;
+  i64 max_render_age_micros_;
 
   FrameTimes current_times_;
   RunPerformanceStats perf_stats_;
@@ -168,9 +168,9 @@ class Scenario : public Screen {
   bool is_adjusting_crosshair_ = false;
   bool save_crosshair_ = false;
   bool initialized_ = false;
-  u64 last_click_time_micros_ = 0;
+  i64 last_click_time_micros_ = 0;
   UpdateStateData update_data_;
-  u64 loop_count_ = 0;
+  i64 loop_count_ = 0;
   bool from_scenario_editor_;
 };
 

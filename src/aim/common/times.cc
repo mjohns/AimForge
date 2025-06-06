@@ -48,7 +48,7 @@ void Stopwatch::AddElapsedSeconds(float value) {
       std::chrono::duration_cast<std::chrono::steady_clock::duration>(seconds);
 }
 
-uint64_t Stopwatch::GetElapsedMicros() const {
+i64 Stopwatch::GetElapsedMicros() const {
   auto elapsed = GetElapsed();
   return std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
 }
@@ -62,7 +62,7 @@ float Stopwatch::GetElapsedSeconds() const {
 TimedInvoker::TimedInvoker(TimedInvokerParams params, std::function<void()> fn)
     : params_(params), fn_(std::move(fn)) {}
 
-void TimedInvoker::MaybeInvoke(uint64_t now_micros) {
+void TimedInvoker::MaybeInvoke(i64 now_micros) {
   if (!initialized_) {
     if (params_.initial_delay_micros == 0) {
       this->Invoke(now_micros);
@@ -79,15 +79,15 @@ void TimedInvoker::MaybeInvoke(uint64_t now_micros) {
   }
 }
 
-void TimedInvoker::Invoke(uint64_t now_micros) {
+void TimedInvoker::Invoke(i64 now_micros) {
   last_invoke_time_micros_ = now_micros;
   if (fn_) {
     fn_();
   }
 }
 
-std::string GetHowLongAgoString(u64 start, u64 end) {
-  u64 duration_micros = start > end ? start - end : end - start;
+std::string GetHowLongAgoString(i64 start, i64 end) {
+  i64 duration_micros = start > end ? start - end : end - start;
   auto duration = std::chrono::microseconds(duration_micros);
 
   {
@@ -122,7 +122,7 @@ std::string GetHowLongAgoString(u64 start, u64 end) {
   return "Just now";
 }
 
-std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
+std::optional<i64> ParseTimestampStringAsMicros(const std::string& timestamp) {
   absl::Time out;
   std::string err;
   if (!absl::ParseTime(absl::RFC3339_full, timestamp, &out, &err)) {
@@ -132,7 +132,7 @@ std::optional<u64> ParseTimestampStringAsMicros(const std::string& timestamp) {
   return absl::ToUnixMicros(out);
 }
 
-u64 GetNowMicros() {
+i64 GetNowMicros() {
   auto now = std::chrono::system_clock::now();
   return std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
 }
