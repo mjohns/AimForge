@@ -234,4 +234,41 @@ glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
   return world_position;
 }
 
+float Target::GetHealthPercent() const {
+  if (health_seconds <= 0) {
+    return 1;
+  }
+  float regen_penalty_seconds = 0;
+  if (health_regen_rate > 0) {
+    regen_penalty_seconds = regen_timer_.GetElapsedSeconds() * health_regen_rate;
+  }
+  float elapsed_seconds = ClampPositive(hit_timer_.GetElapsedSeconds() - regen_penalty_seconds);
+  float value = (health_seconds - elapsed_seconds) / health_seconds;
+  return glm::clamp<float>(value, 0, 1);
+}
+
+void Target::StopHitTimer() {
+  hit_timer_.Stop();
+  regen_timer_.Start();
+}
+
+void Target::StopAllTimers() {
+  hit_timer_.Stop();
+  regen_timer_.Stop();
+}
+
+void Target::StartHitTimer() {
+  regen_timer_.Stop();
+  if (hit_timer_.GetElapsedSeconds() - regen_timer_.GetElapsedSeconds() < 0) {
+    // Reset the timers as health regenerated past 0.
+    regen_timer_ = Stopwatch();
+    hit_timer_ = Stopwatch();
+  }
+  hit_timer_.Start();
+}
+
+void Target::AddTestDamage() {
+  hit_timer_.AddElapsedSeconds(1);
+}
+
 }  // namespace aim

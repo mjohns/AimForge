@@ -4870,6 +4870,7 @@ class TargetProfile final : public ::google::protobuf::Message
     kTargetHitRadiusFieldNumber = 9,
     kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
     kTargetRadiusGrowthSizeFieldNumber = 13,
+    kHealthRegenRateFieldNumber = 14,
     kPillFieldNumber = 10,
   };
   // string description = 11;
@@ -5010,6 +5011,17 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_target_radius_growth_size(float value);
 
   public:
+  // float health_regen_rate = 14;
+  bool has_health_regen_rate() const;
+  void clear_health_regen_rate() ;
+  float health_regen_rate() const;
+  void set_health_regen_rate(float value);
+
+  private:
+  float _internal_health_regen_rate() const;
+  void _internal_set_health_regen_rate(float value);
+
+  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -5039,7 +5051,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 13, 1,
+      4, 14, 1,
       45, 2>
       _table_;
 
@@ -5071,6 +5083,7 @@ class TargetProfile final : public ::google::protobuf::Message
     float target_hit_radius_;
     float target_radius_growth_time_seconds_;
     float target_radius_growth_size_;
+    float health_regen_rate_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -15989,6 +16002,34 @@ inline float TargetProfile::_internal_target_radius_growth_size() const {
 inline void TargetProfile::_internal_set_target_radius_growth_size(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_size_ = value;
+}
+
+// float health_regen_rate = 14;
+inline bool TargetProfile::has_health_regen_rate() const {
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_health_regen_rate() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_regen_rate_ = 0;
+  _impl_._has_bits_[0] &= ~0x00001000u;
+}
+inline float TargetProfile::health_regen_rate() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_regen_rate)
+  return _internal_health_regen_rate();
+}
+inline void TargetProfile::set_health_regen_rate(float value) {
+  _internal_set_health_regen_rate(value);
+  _impl_._has_bits_[0] |= 0x00001000u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_regen_rate)
+}
+inline float TargetProfile::_internal_health_regen_rate() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_regen_rate_;
+}
+inline void TargetProfile::_internal_set_health_regen_rate(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_regen_rate_ = value;
 }
 
 // .aim.PillTargetDef pill = 10;

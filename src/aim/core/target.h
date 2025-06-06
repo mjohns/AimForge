@@ -48,9 +48,15 @@ struct Target {
   glm::vec3 pill_up{0, 0, 1};
   std::optional<glm::vec2> pill_wall_up;
 
-  Stopwatch hit_timer;
+  float GetHealthPercent() const;
+  void StopHitTimer();
+  void StartHitTimer();
+  void StopAllTimers();
+  void AddTestDamage();
+
   float notify_at_health_seconds = 0;
   float health_seconds = 0;
+  float health_regen_rate = 0;
   std::optional<RadiusAtKill> radius_at_kill{};
 
   std::optional<TargetGrowthInfo> growth_info{};
@@ -64,6 +70,10 @@ struct Target {
   bool ShouldDraw() const {
     return !hidden;
   }
+
+ private:
+  Stopwatch hit_timer_;
+  Stopwatch regen_timer_;
 };
 
 glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,

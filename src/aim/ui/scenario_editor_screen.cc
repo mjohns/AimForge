@@ -1489,6 +1489,20 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       ImGui::HelpMarker("The amount of time in seconds to kill the target.");
 
+      ImGui::InputFloat(ImGui::InputFloatParams("HealthRegenRate")
+                            .set_label("Health regen rate")
+                            .set_step(0.1, 0.5)
+                            .set_min(0.1)
+                            .set_precision(1)
+                            .set_default(1)
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(TargetProfile, profile, health_regen_rate));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "The rate health is regenerated if you switch off target before killing. 1 means regen "
+          "at same rate as health is taken away for hits.");
+
       ImGui::InputFloat(ImGui::InputFloatParams("TargetRadiusAtill")
                             .set_label("Target radius at kill")
                             .set_step(0.1, 0.5)
