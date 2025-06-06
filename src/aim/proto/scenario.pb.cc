@@ -554,7 +554,7 @@ inline constexpr TargetProfile::Impl_::Impl_(
         health_seconds_{0},
         health_seconds_jitter_{0},
         target_radius_at_kill_{0},
-        target_hit_radius_{0},
+        target_hit_radius_multiplier_{0},
         target_radius_growth_time_seconds_{0},
         target_radius_growth_size_{0},
         health_regen_rate_{0},
@@ -1363,7 +1363,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.health_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.health_seconds_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_at_kill_),
-        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_hit_radius_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_hit_radius_multiplier_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.description_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_growth_time_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_growth_size_),
@@ -1572,18 +1572,19 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "nitial_targets_seconds\030\010 \001(\002\"^\n\rPillTarg"
     "etDef\022\016\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.aim."
     "StoredVec3\022 \n\007wall_up\030\003 \001(\0132\017.aim.Stored"
-    "Vec2\"\224\003\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002\022\025"
+    "Vec2\"\237\003\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002\022\025"
     "\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_radius_j"
     "itter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitt"
     "er\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025heal"
     "th_seconds_jitter\030\007 \001(\002\022\035\n\025target_radius"
-    "_at_kill\030\010 \001(\002\022\031\n\021target_hit_radius\030\t \001("
-    "\002\022\023\n\013description\030\013 \001(\t\022)\n!target_radius_"
-    "growth_time_seconds\030\014 \001(\002\022!\n\031target_radi"
-    "us_growth_size\030\r \001(\002\022\031\n\021health_regen_rat"
-    "e\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDe"
-    "fH\000B\006\n\004type*-\n\016InOutDirection\022\006\n\002IN\020\000\022\007\n"
-    "\003OUT\020\001\022\n\n\006RANDOM\020\002b\010editionsp\350\007"
+    "_at_kill\030\010 \001(\002\022$\n\034target_hit_radius_mult"
+    "iplier\030\t \001(\002\022\023\n\013description\030\013 \001(\t\022)\n!tar"
+    "get_radius_growth_time_seconds\030\014 \001(\002\022!\n\031"
+    "target_radius_growth_size\030\r \001(\002\022\031\n\021healt"
+    "h_regen_rate\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.P"
+    "illTargetDefH\000B\006\n\004type*-\n\016InOutDirection"
+    "\022\006\n\002IN\020\000\022\007\n\003OUT\020\001\022\n\n\006RANDOM\020\002b\010editionsp"
+    "\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1593,7 +1594,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    5391,
+    5402,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -12397,9 +12398,9 @@ const ::_pbi::TcParseTable<4, 14, 1, 45, 2> TargetProfile::_table_ = {
     // float target_radius_at_kill = 8;
     {::_pbi::TcParser::FastF32S1,
      {69, 8, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_)}},
-    // float target_hit_radius = 9;
+    // float target_hit_radius_multiplier = 9;
     {::_pbi::TcParser::FastF32S1,
-     {77, 9, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_)}},
+     {77, 9, 0, PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_multiplier_)}},
     {::_pbi::TcParser::MiniParse, {}},
     // string description = 11;
     {::_pbi::TcParser::FastUS1,
@@ -12441,8 +12442,8 @@ const ::_pbi::TcParseTable<4, 14, 1, 45, 2> TargetProfile::_table_ = {
     // float target_radius_at_kill = 8;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_), _Internal::kHasBitsOffset + 8, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float target_hit_radius = 9;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_), _Internal::kHasBitsOffset + 9, 0,
+    // float target_hit_radius_multiplier = 9;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_multiplier_), _Internal::kHasBitsOffset + 9, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.PillTargetDef pill = 10;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.type_.pill_), _Internal::kOneofCaseOffset + 0, 0,
@@ -12566,11 +12567,11 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
                 8, this_._internal_target_radius_at_kill(), target);
           }
 
-          // float target_hit_radius = 9;
+          // float target_hit_radius_multiplier = 9;
           if (cached_has_bits & 0x00000200u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                9, this_._internal_target_hit_radius(), target);
+                9, this_._internal_target_hit_radius_multiplier(), target);
           }
 
           // .aim.PillTargetDef pill = 10;
@@ -12674,7 +12675,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
             if (cached_has_bits & 0x00000100u) {
               total_size += 5;
             }
-            // float target_hit_radius = 9;
+            // float target_hit_radius_multiplier = 9;
             if (cached_has_bits & 0x00000200u) {
               total_size += 5;
             }
@@ -12747,7 +12748,7 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
       _this->_impl_.target_radius_at_kill_ = from._impl_.target_radius_at_kill_;
     }
     if (cached_has_bits & 0x00000200u) {
-      _this->_impl_.target_hit_radius_ = from._impl_.target_hit_radius_;
+      _this->_impl_.target_hit_radius_multiplier_ = from._impl_.target_hit_radius_multiplier_;
     }
     if (cached_has_bits & 0x00000400u) {
       _this->_impl_.target_radius_growth_time_seconds_ = from._impl_.target_radius_growth_time_seconds_;

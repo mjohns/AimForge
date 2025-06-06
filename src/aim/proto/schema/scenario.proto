@@ -358,9 +358,8 @@ message TargetProfile {
   // Target will shrink from target_radius to this value based on health amount.
   float target_radius_at_kill = 8;
 
-  // Optional. If specified this radius will be used to determine whether the target is hit instead
-  // of target_radius.
-  float target_hit_radius = 9;
+  // Optional. If specified the actual radius will modified by this to determine hits.
+  float target_hit_radius_multiplier = 9;
 
   string description = 11;
 

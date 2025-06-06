@@ -4867,7 +4867,7 @@ class TargetProfile final : public ::google::protobuf::Message
     kHealthSecondsFieldNumber = 6,
     kHealthSecondsJitterFieldNumber = 7,
     kTargetRadiusAtKillFieldNumber = 8,
-    kTargetHitRadiusFieldNumber = 9,
+    kTargetHitRadiusMultiplierFieldNumber = 9,
     kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
     kTargetRadiusGrowthSizeFieldNumber = 13,
     kHealthRegenRateFieldNumber = 14,
@@ -4978,15 +4978,15 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_target_radius_at_kill(float value);
 
   public:
-  // float target_hit_radius = 9;
-  bool has_target_hit_radius() const;
-  void clear_target_hit_radius() ;
-  float target_hit_radius() const;
-  void set_target_hit_radius(float value);
+  // float target_hit_radius_multiplier = 9;
+  bool has_target_hit_radius_multiplier() const;
+  void clear_target_hit_radius_multiplier() ;
+  float target_hit_radius_multiplier() const;
+  void set_target_hit_radius_multiplier(float value);
 
   private:
-  float _internal_target_hit_radius() const;
-  void _internal_set_target_hit_radius(float value);
+  float _internal_target_hit_radius_multiplier() const;
+  void _internal_set_target_hit_radius_multiplier(float value);
 
   public:
   // float target_radius_growth_time_seconds = 12;
@@ -5080,7 +5080,7 @@ class TargetProfile final : public ::google::protobuf::Message
     float health_seconds_;
     float health_seconds_jitter_;
     float target_radius_at_kill_;
-    float target_hit_radius_;
+    float target_hit_radius_multiplier_;
     float target_radius_growth_time_seconds_;
     float target_radius_growth_size_;
     float health_regen_rate_;
@@ -15851,32 +15851,32 @@ inline void TargetProfile::_internal_set_target_radius_at_kill(float value) {
   _impl_.target_radius_at_kill_ = value;
 }
 
-// float target_hit_radius = 9;
-inline bool TargetProfile::has_target_hit_radius() const {
+// float target_hit_radius_multiplier = 9;
+inline bool TargetProfile::has_target_hit_radius_multiplier() const {
   bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
-inline void TargetProfile::clear_target_hit_radius() {
+inline void TargetProfile::clear_target_hit_radius_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_hit_radius_ = 0;
+  _impl_.target_hit_radius_multiplier_ = 0;
   _impl_._has_bits_[0] &= ~0x00000200u;
 }
-inline float TargetProfile::target_hit_radius() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_hit_radius)
-  return _internal_target_hit_radius();
+inline float TargetProfile::target_hit_radius_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_hit_radius_multiplier)
+  return _internal_target_hit_radius_multiplier();
 }
-inline void TargetProfile::set_target_hit_radius(float value) {
-  _internal_set_target_hit_radius(value);
+inline void TargetProfile::set_target_hit_radius_multiplier(float value) {
+  _internal_set_target_hit_radius_multiplier(value);
   _impl_._has_bits_[0] |= 0x00000200u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_hit_radius)
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_hit_radius_multiplier)
 }
-inline float TargetProfile::_internal_target_hit_radius() const {
+inline float TargetProfile::_internal_target_hit_radius_multiplier() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.target_hit_radius_;
+  return _impl_.target_hit_radius_multiplier_;
 }
-inline void TargetProfile::_internal_set_target_hit_radius(float value) {
+inline void TargetProfile::_internal_set_target_hit_radius_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_hit_radius_ = value;
+  _impl_.target_hit_radius_multiplier_ = value;
 }
 
 // string description = 11;
