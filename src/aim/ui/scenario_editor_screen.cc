@@ -1462,7 +1462,6 @@ class ScenarioEditorScreen : public UiScreen {
     profile->set_target_radius(target_radius);
     profile->set_target_radius_jitter(radius_jitter);
 
-    // TODO: target_hit_radius
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Speed");
@@ -1476,6 +1475,32 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       profile->clear_speed();
       profile->clear_speed_jitter();
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Use pill shape");
+    ImGui::SameLine();
+    bool use_pill = profile->has_pill();
+    ImGui::Checkbox("##UsePill", &use_pill);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Switch from sphere target to a pill (capsule) shaped target.");
+    if (use_pill) {
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Height");
+      ImGui::SameLine();
+      float height = profile->pill().height();
+      if (height <= 0) {
+        height = 20;
+      }
+      ImGui::SetNextItemWidth(char_x_ * 12);
+      ImGui::InputFloat("##PillHeightEntry", &height, 0.1, 1, "%.1f");
+      profile->mutable_pill()->set_height(height);
+
+      ImGui::Unindent();
+    } else {
+      profile->clear_pill();
     }
 
     bool has_growth = profile->target_radius_growth_time_seconds() > 0;
@@ -1559,30 +1584,6 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       profile->clear_health_seconds();
       profile->clear_health_seconds_jitter();
-    }
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Pill");
-    ImGui::SameLine();
-    bool use_pill = profile->has_pill();
-    ImGui::Checkbox("##UsePill", &use_pill);
-    if (use_pill) {
-      ImGui::Indent();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Height");
-      ImGui::SameLine();
-      float height = profile->pill().height();
-      if (height <= 0) {
-        height = 20;
-      }
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##PillHeightEntry", &height, 0.1, 1, "%.1f");
-      profile->mutable_pill()->set_height(height);
-
-      ImGui::Unindent();
-    } else {
-      profile->clear_pill();
     }
 
     ImGui::InputFloat(ImGui::InputFloatParams("HitRadiusMultiplier")
