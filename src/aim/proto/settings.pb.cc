@@ -344,7 +344,8 @@ inline constexpr Settings::Impl_::Impl_(
         disable_click_to_start_{false},
         auto_hold_tracking_{false},
         disable_per_scenario_settings_{false},
-        cm_per_360_jitter_{0} {}
+        cm_per_360_jitter_{0},
+        max_render_fps_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR Settings::Settings(::_pbi::ConstantInitialized)
@@ -537,6 +538,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.auto_hold_tracking_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.health_bar_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.disable_per_scenario_settings_),
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.max_render_fps_),
         4,
         5,
         11,
@@ -550,6 +552,7 @@ const ::uint32_t
         9,
         3,
         10,
+        12,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -624,10 +627,10 @@ static const ::_pbi::MigrationSchema
         {79, 89, -1, sizeof(::aim::Crosshair)},
         {91, 104, -1, sizeof(::aim::HealthBarSettings)},
         {109, -1, -1, sizeof(::aim::SavedCrosshairs)},
-        {118, 139, -1, sizeof(::aim::Settings)},
-        {152, 168, -1, sizeof(::aim::ScenarioSettings)},
-        {176, 188, -1, sizeof(::aim::KeyMapping)},
-        {192, 207, -1, sizeof(::aim::Keybinds)},
+        {118, 140, -1, sizeof(::aim::Settings)},
+        {154, 170, -1, sizeof(::aim::ScenarioSettings)},
+        {178, 190, -1, sizeof(::aim::KeyMapping)},
+        {194, 209, -1, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
@@ -667,7 +670,7 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "(\010\022\024\n\014only_damaged\030\002 \001(\010\022\016\n\006height\030\003 \001(\002"
     "\022\r\n\005width\030\004 \001(\002\022\033\n\023height_above_target\030\005"
     " \001(\002\"5\n\017SavedCrosshairs\022\"\n\ncrosshairs\030\001 "
-    "\003(\0132\016.aim.Crosshair\"\203\003\n\010Settings\022\013\n\003dpi\030"
+    "\003(\0132\016.aim.Crosshair\"\233\003\n\010Settings\022\013\n\003dpi\030"
     "\001 \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\031\n\021cm_per_360_"
     "jitter\030\013 \001(\002\022\022\n\ntheme_name\030\003 \001(\t\022\025\n\rmetr"
     "onome_bpm\030\004 \001(\002\022\026\n\016crosshair_size\030\005 \001(\002\022"
@@ -677,22 +680,23 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\001(\0132\r.aim.Keybinds\022\032\n\022auto_hold_tracking"
     "\030\n \001(\010\022*\n\nhealth_bar\030\014 \001(\0132\026.aim.HealthB"
     "arSettings\022%\n\035disable_per_scenario_setti"
-    "ngs\030\r \001(\010\"\344\001\n\020ScenarioSettings\022\022\n\ncm_per"
-    "_360\030\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n"
-    "\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002"
-    "\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crosshair_na"
-    "me\030\005 \001(\t\022\032\n\022auto_hold_tracking\030\007 \001(\010\022*\n\n"
-    "health_bar\030\010 \001(\0132\026.aim.HealthBarSettings"
-    "\"T\n\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapp"
-    "ing2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4"
-    "\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim."
-    "KeyMapping\022)\n\020restart_scenario\030\002 \001(\0132\017.a"
-    "im.KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.a"
-    "im.KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017."
-    "aim.KeyMapping\022.\n\025adjust_crosshair_size\030"
-    "\005 \001(\0132\017.aim.KeyMapping\022(\n\017quick_metronom"
-    "e\030\006 \001(\0132\017.aim.KeyMapping\022&\n\redit_scenari"
-    "o\030\007 \001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
+    "ngs\030\r \001(\010\022\026\n\016max_render_fps\030\016 \001(\002\"\344\001\n\020Sc"
+    "enarioSettings\022\022\n\ncm_per_360\030\001 \001(\002\022\031\n\021cm"
+    "_per_360_jitter\030\006 \001(\002\022\022\n\ntheme_name\030\002 \001("
+    "\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016crosshair_si"
+    "ze\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t\022\032\n\022auto"
+    "_hold_tracking\030\007 \001(\010\022*\n\nhealth_bar\030\010 \001(\013"
+    "2\026.aim.HealthBarSettings\"T\n\nKeyMapping\022\020"
+    "\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010ma"
+    "pping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010Keybi"
+    "nds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMapping\022)\n\020re"
+    "start_scenario\030\002 \001(\0132\017.aim.KeyMapping\022&\n"
+    "\rnext_scenario\030\003 \001(\0132\017.aim.KeyMapping\022\'\n"
+    "\016quick_settings\030\004 \001(\0132\017.aim.KeyMapping\022."
+    "\n\025adjust_crosshair_size\030\005 \001(\0132\017.aim.KeyM"
+    "apping\022(\n\017quick_metronome\030\006 \001(\0132\017.aim.Ke"
+    "yMapping\022&\n\redit_scenario\030\007 \001(\0132\017.aim.Ke"
+    "yMappingb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_settings_2eproto_deps[1] =
     {
@@ -702,7 +706,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1917,
+    1941,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -3298,9 +3302,9 @@ Settings::Settings(
                offsetof(Impl_, dpi_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, dpi_),
-           offsetof(Impl_, cm_per_360_jitter_) -
+           offsetof(Impl_, max_render_fps_) -
                offsetof(Impl_, dpi_) +
-               sizeof(Impl_::cm_per_360_jitter_));
+               sizeof(Impl_::max_render_fps_));
 
   // @@protoc_insertion_point(copy_constructor:aim.Settings)
 }
@@ -3317,9 +3321,9 @@ inline void Settings::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, keybinds_),
            0,
-           offsetof(Impl_, cm_per_360_jitter_) -
+           offsetof(Impl_, max_render_fps_) -
                offsetof(Impl_, keybinds_) +
-               sizeof(Impl_::cm_per_360_jitter_));
+               sizeof(Impl_::max_render_fps_));
 }
 Settings::~Settings() {
   // @@protoc_insertion_point(destructor:aim.Settings)
@@ -3384,15 +3388,15 @@ const ::google::protobuf::internal::ClassData* Settings::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 13, 3, 61, 2> Settings::_table_ = {
+const ::_pbi::TcParseTable<4, 14, 3, 61, 2> Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
-    13, 120,  // max_field_number, fast_idx_mask
+    14, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294959104,  // skipmap
+    4294950912,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    13,  // num_field_entries
+    14,  // num_field_entries
     3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -3442,7 +3446,9 @@ const ::_pbi::TcParseTable<4, 13, 3, 61, 2> Settings::_table_ = {
     // bool disable_per_scenario_settings = 13;
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_per_scenario_settings_), 10>(),
      {104, 10, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // float max_render_fps = 14;
+    {::_pbi::TcParser::FastF32S1,
+     {117, 12, 0, PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_)}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
@@ -3486,6 +3492,9 @@ const ::_pbi::TcParseTable<4, 13, 3, 61, 2> Settings::_table_ = {
     // bool disable_per_scenario_settings = 13;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_), _Internal::kHasBitsOffset + 10, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // float max_render_fps = 14;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_), _Internal::kHasBitsOffset + 12, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Crosshair>()},
     {::_pbi::TcParser::GetTable<::aim::Keybinds>()},
@@ -3528,10 +3537,10 @@ PROTOBUF_NOINLINE void Settings::Clear() {
         reinterpret_cast<char*>(&_impl_.crosshair_size_) -
         reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.crosshair_size_));
   }
-  if (cached_has_bits & 0x00000f00u) {
+  if (cached_has_bits & 0x00001f00u) {
     ::memset(&_impl_.disable_click_to_start_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.cm_per_360_jitter_) -
-        reinterpret_cast<char*>(&_impl_.disable_click_to_start_)) + sizeof(_impl_.cm_per_360_jitter_));
+        reinterpret_cast<char*>(&_impl_.max_render_fps_) -
+        reinterpret_cast<char*>(&_impl_.disable_click_to_start_)) + sizeof(_impl_.max_render_fps_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -3650,6 +3659,13 @@ PROTOBUF_NOINLINE void Settings::Clear() {
                 13, this_._internal_disable_per_scenario_settings(), target);
           }
 
+          // float max_render_fps = 14;
+          if (cached_has_bits & 0x00001000u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                14, this_._internal_max_render_fps(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -3722,7 +3738,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
               total_size += 5;
             }
           }
-          if (cached_has_bits & 0x00000f00u) {
+          if (cached_has_bits & 0x00001f00u) {
             // bool disable_click_to_start = 8;
             if (cached_has_bits & 0x00000100u) {
               total_size += 2;
@@ -3737,6 +3753,10 @@ PROTOBUF_NOINLINE void Settings::Clear() {
             }
             // float cm_per_360_jitter = 11;
             if (cached_has_bits & 0x00000800u) {
+              total_size += 5;
+            }
+            // float max_render_fps = 14;
+            if (cached_has_bits & 0x00001000u) {
               total_size += 5;
             }
           }
@@ -3794,7 +3814,7 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
       _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
     }
   }
-  if (cached_has_bits & 0x00000f00u) {
+  if (cached_has_bits & 0x00001f00u) {
     if (cached_has_bits & 0x00000100u) {
       _this->_impl_.disable_click_to_start_ = from._impl_.disable_click_to_start_;
     }
@@ -3806,6 +3826,9 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
     }
     if (cached_has_bits & 0x00000800u) {
       _this->_impl_.cm_per_360_jitter_ = from._impl_.cm_per_360_jitter_;
+    }
+    if (cached_has_bits & 0x00001000u) {
+      _this->_impl_.max_render_fps_ = from._impl_.max_render_fps_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -3830,8 +3853,8 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT other) {
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.theme_name_, &other->_impl_.theme_name_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.current_crosshair_name_, &other->_impl_.current_crosshair_name_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_jitter_)
-      + sizeof(Settings::_impl_.cm_per_360_jitter_)
+      PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_)
+      + sizeof(Settings::_impl_.max_render_fps_)
       - PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_)>(
           reinterpret_cast<char*>(&_impl_.keybinds_),
           reinterpret_cast<char*>(&other->_impl_.keybinds_));

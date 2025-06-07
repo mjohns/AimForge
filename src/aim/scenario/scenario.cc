@@ -36,7 +36,7 @@ namespace aim {
 namespace {
 
 constexpr const i16 kReplayFps = 240;
-constexpr const int kTargetRenderFps = 615;
+constexpr const int kDefaultTargetRenderFps = 300;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
 }  // namespace
@@ -51,7 +51,6 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       force_start_immediately_(params.force_start_immediately),
       from_scenario_editor_(params.from_scenario_editor) {
   theme_ = app->settings_manager().GetCurrentTheme();
-  max_render_age_micros_ = (1 / (float)(kTargetRenderFps + 1)) * 1000 * 1000;
 
   if (ShouldRecordReplay()) {
     replay_ = google::protobuf::Arena::Create<Replay>(&replay_arena_);
@@ -62,6 +61,8 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
 
 void Scenario::RefreshState() {
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(id_);
+  float render_fps = FirstGreaterThanZero(settings_.max_render_fps(), kDefaultTargetRenderFps);
+  max_render_age_micros_ = (1 / (float)(render_fps + 1)) * 1000 * 1000;
   projection_ = GetPerspectiveTransformation(app_.screen_info());
 
   float dpi = app_.settings_manager().GetDpi();
