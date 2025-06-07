@@ -4,6 +4,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
@@ -69,10 +70,14 @@ class PlaylistManager {
     return playlists_;
   }
 
+  std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const;
+
   void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
 
   bool SavePlaylist(const ResourceName& name, const PlaylistDef& def);
+
   bool DeletePlaylist(const ResourceName& name);
+
   bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);
 
   void RenameScenarioInAllPlaylists(const std::string& old_name, const std::string& new_name);
@@ -85,6 +90,7 @@ class PlaylistManager {
   std::filesystem::path base_dir_;
   std::filesystem::path user_dir_;
   std::vector<Playlist> playlists_;
+  std::unordered_map<std::string, Playlist> playlist_map_;
   FileSystem* fs_;
   std::unordered_map<std::string, std::unique_ptr<PlaylistRun>> playlist_run_map_;
 };

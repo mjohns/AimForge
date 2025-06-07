@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "aim/core/playlist_manager.h"
+
 namespace aim {
 namespace {
 
@@ -9,8 +11,9 @@ const int kCachedRecentNamesSize = 240;
 
 }  // namespace
 
-HistoryManager::HistoryManager(FileSystem* fs)
-    : history_db_(std::make_unique<HistoryDb>(fs->GetUserDataPath("history.db"))) {}
+HistoryManager::HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager)
+    : history_db_(std::make_unique<HistoryDb>(fs->GetUserDataPath("history.db"))),
+      playlist_manager_(playlist_manager) {}
 
 void HistoryManager::UpdateRecentView(RecentViewType t, const std::string& id) {
   if (t == RecentViewType::SCENARIO) {
@@ -40,7 +43,14 @@ void HistoryManager::MaybeReloadScenarios() {
 void HistoryManager::MaybeReloadPlaylists() {
   if (playlists_need_reload_) {
     playlists_need_reload_ = false;
-    recent_playlists_ = GetRecentUniqueNames(RecentViewType::PLAYLIST, kCachedRecentNamesSize);
+    auto candidates = GetRecentUniqueNames(RecentViewType::PLAYLIST, kCachedRecentNamesSize);
+    recent_playlists_.clear();
+    for (const std::string& name : candidates) {
+      auto playlist = playlist_manager_->GetPlaylist(name);
+      if (playlist) {
+        recent_playlists_.push_back(name);
+      }
+    }
   }
 }
 
