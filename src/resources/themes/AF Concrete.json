@@ -1,0 +1,63 @@
+{
+  "backAppearance": {},
+  "crosshair": {
+    "color": {
+      "hex": "#000000"
+    },
+    "outlineColor": {
+      "hex": "#000000"
+    }
+  },
+  "floorAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.49999997,
+    "texture": {
+      "scale": 2.00000048,
+      "textureName": "AF Concrete.jpg"
+    }
+  },
+  "frontAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.440000027,
+    "texture": {
+      "scale": 2,
+      "textureName": "AF Concrete.jpg"
+    }
+  },
+  "ghostTargetColor": {
+    "hex": "#a3a3a3"
+  },
+  "healthBar": {
+    "backgroundAlpha": 0.599999964,
+    "backgroundColor": {
+      "b": 180,
+      "g": 180,
+      "r": 180
+    },
+    "healthColor": {
+      "b": 211,
+      "g": 211,
+      "r": 213
+    }
+  },
+  "name": "Concrete Moon",
+  "roofAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.42,
+    "texture": {
+      "scale": 2.00000048,
+      "textureName": "AF Concrete.jpg"
+    }
+  },
+  "sideAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.530000031,
+    "texture": {
+      "scale": 2.00000048,
+      "textureName": "AF Concrete.jpg"
+    }
+  },
+  "targetColor": {
+    "hex": "#FFFFFF"
+  }
+}

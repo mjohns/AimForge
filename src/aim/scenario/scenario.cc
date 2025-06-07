@@ -36,7 +36,7 @@ namespace aim {
 namespace {
 
 constexpr const i16 kReplayFps = 240;
-constexpr const int kDefaultTargetRenderFps = 300;
+constexpr const int kDefaultTargetRenderFps = 600;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
 }  // namespace

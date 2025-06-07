@@ -184,10 +184,8 @@ int Application::Initialize() {
     logger_->error("Couldn't open audio: {}", SDL_GetError());
     return 1;
   }
-  // Prefer sounds in the user sounds folder.
   std::vector<std::filesystem::path> sound_dirs = {
       file_system_->GetUserDataPath("resources/sounds"),
-      file_system_->GetBasePath("resources/sounds"),
   };
   sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
 
