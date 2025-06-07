@@ -21,6 +21,10 @@ std::optional<std::filesystem::path> GetPlaylistPath(FileSystem* fs, const Resou
   if (!maybe_bundle.has_value()) {
     return {};
   }
+  std::filesystem::path playlist_dir = maybe_bundle->path / "playlists";
+  if (!std::filesystem::exists(playlist_dir)) {
+    std::filesystem::create_directory(playlist_dir);
+  }
   return GetPlaylistPath(maybe_bundle->path, resource.relative_name());
 }
 
