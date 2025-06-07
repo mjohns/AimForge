@@ -27,7 +27,7 @@ void UiScreen::OnTick() {
 
   i64 elapsed = tick_timer.GetElapsedMicros();
   i64 elapsed_ms = elapsed / 1000;
-  int to_sleep = 6 - elapsed_ms;
+  int to_sleep = 7 - elapsed_ms;
   if (to_sleep > 0) {
     SDL_Delay(to_sleep);
   }

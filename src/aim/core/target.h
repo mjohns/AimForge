@@ -32,7 +32,7 @@ struct Target {
   float wall_depth = 0;
   float radius = 1.0f;
   float height = 3.0f;
-  float hit_radius = -1.0f;
+  float hit_radius_multiplier = 1.0f;
 
   float speed = 0;
   std::optional<glm::vec3> direction;

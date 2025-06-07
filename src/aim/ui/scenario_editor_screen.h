@@ -13,6 +13,7 @@ namespace aim {
 struct ScenarioEditorOptions {
   std::string scenario_id;
   bool is_new_copy = false;
+  std::string add_to_playlist;
 };
 
 std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const ScenarioEditorOptions& options,

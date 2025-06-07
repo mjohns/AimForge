@@ -109,7 +109,9 @@ void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
 class ScenarioEditorScreen : public UiScreen {
  public:
   explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application& app)
-      : UiScreen(app), target_manager_(GetDefaultSimpleRoom()) {
+      : UiScreen(app),
+        target_manager_(GetDefaultSimpleRoom()),
+        add_to_playlist_(opts.add_to_playlist) {
     projection_ = GetPerspectiveTransformation(app_.screen_info());
     auto themes = app_.settings_manager().ListThemes();
     if (themes.size() > 0) {
@@ -274,6 +276,9 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     app_.scenario_manager().SetCurrentScenario(name_.full_name());
+    if (add_to_playlist_.size() > 0) {
+      app_.playlist_manager().AddScenarioToPlaylist(add_to_playlist_, name_.full_name());
+    }
     return true;
   }
 
@@ -1685,6 +1690,8 @@ class ScenarioEditorScreen : public UiScreen {
   std::optional<ResourceName> original_name_;
   ResourceName name_;
   Settings settings_;
+
+  std::string add_to_playlist_;
 
   ImGui::NotificationPopup notification_popup_{"Notification"};
 };

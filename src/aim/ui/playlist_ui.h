@@ -54,6 +54,7 @@ class CopyPlaylistDialog {
   bool open_ = false;
 
   bool deep_copy_ = false;
+  bool as_references_ = false;
   std::string remove_prefix_;
   std::string add_prefix_;
   std::vector<std::string> bundle_names_;

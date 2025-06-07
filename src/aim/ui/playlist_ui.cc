@@ -28,7 +28,8 @@ std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_n
 struct CopyPlaylistOptions {
   std::string remove_prefix;
   std::string add_prefix;
-  bool deep_copy;
+  bool deep_copy = false;
+  bool as_references = false;
 };
 
 bool CopyPlaylist(Playlist source,
@@ -61,8 +62,14 @@ bool CopyPlaylist(Playlist source,
         *relative_name = std::format("{} {}", opts.add_prefix, *relative_name);
       }
 
-      auto maybe_final_scenario_name = app.scenario_manager().SaveScenarioWithUniqueName(
-          new_scenario_name, source_scenario->def);
+      ScenarioDef new_def;
+      if (opts.as_references) {
+        new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
+      } else {
+        new_def = source_scenario->def;
+      }
+      auto maybe_final_scenario_name =
+          app.scenario_manager().SaveScenarioWithUniqueName(new_scenario_name, new_def);
       if (maybe_final_scenario_name) {
         PlaylistItem item = source_item;
         item.set_scenario(maybe_final_scenario_name->full_name());
@@ -81,7 +88,10 @@ struct EditorResult {
 
 class PlaylistEditorComponent {
  public:
-  explicit PlaylistEditorComponent(Application& app, const std::string& playlist_name) : app_(app) {
+  explicit PlaylistEditorComponent(Application& app,
+                                   Screen& screen,
+                                   const std::string& playlist_name)
+      : app_(app), screen_(screen) {
     PlaylistRun* run = app.playlist_manager().GetRun(playlist_name);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.name.relative_name();
@@ -173,7 +183,14 @@ class PlaylistEditorComponent {
         if (ImGui::Selectable("Copy")) {
           scenario_items_.push_back(item);
         }
-        if (ImGui::Selectable("Delete")) remove_i = i;
+        if (ImGui::Selectable("Delete")) {
+          remove_i = i;
+        }
+        if (ImGui::Selectable("Edit")) {
+          ScenarioEditorOptions opts;
+          opts.scenario_id = item.scenario();
+          screen_.PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+        }
         ImGui::EndPopup();
       }
       ImGui::OpenPopupOnItemClick(item_menu, ImGuiPopupFlags_MouseButtonRight);
@@ -283,6 +300,7 @@ class PlaylistEditorComponent {
   }
 
   Application& app_;
+  Screen& screen_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
   ResourceName original_playlist_name_;
@@ -306,7 +324,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     if (showing_editor_) {
       if (!editor_component_) {
-        editor_component_ = std::make_unique<PlaylistEditorComponent>(app_, playlist_name);
+        editor_component_ = std::make_unique<PlaylistEditorComponent>(app_, screen_, playlist_name);
       }
       EditorResult editor_result;
       editor_component_->Show(&editor_result);
@@ -423,6 +441,13 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run,
       ScenarioEditorOptions opts;
       opts.scenario_id = scenario_id;
       opts.is_new_copy = true;
+      screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+    }
+    if (ImGui::Selectable("Add new copy")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_id = scenario_id;
+      opts.is_new_copy = true;
+      opts.add_to_playlist = run->playlist.name.full_name();
       screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
     }
     if (ImGui::BeginMenu("Add to")) {
@@ -542,6 +567,15 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         ImGui::Indent();
 
         ImGui::AlignTextToFramePadding();
+        ImGui::Text("As references");
+        ImGui::SameLine();
+        ImGui::Checkbox("##AsReferences", &as_references_);
+        ImGui::SameLine();
+        ImGui::HelpMarker(
+            "Versions in new playlist will have a different name (stats, settings, ..), but will "
+            "change when the underlying scenario changes.");
+
+        ImGui::AlignTextToFramePadding();
         ImGui::Text("Add name prefix*");
         ImGui::SameLine();
         ImGui::InputText("##AddPrefix", &add_prefix_);
@@ -570,6 +604,7 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         opts.add_prefix = add_prefix_;
         opts.remove_prefix = remove_prefix_;
         opts.deep_copy = deep_copy_;
+        opts.as_references = deep_copy_ && as_references_;
         CopyPlaylist(*source_, new_name_, opts, app);
         did_copy = true;
         ImGui::CloseCurrentPopup();
