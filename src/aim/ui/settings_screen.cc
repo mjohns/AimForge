@@ -76,7 +76,7 @@ class SettingsScreen : public UiScreen {
                       PROTO_FLOAT_FIELD(Settings, &updater_.settings, max_render_fps));
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "The max fps for rendering. Don't set too high as additional time rendering will take away "
+        "Don't set too high above refresh rate as additional time rendering will take away "
         "from time to perform state updates and poll mouse events");
 
     ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
