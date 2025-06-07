@@ -28,6 +28,7 @@ Settings GetDefaultSettings() {
   *settings.add_saved_crosshairs() = GetDefaultCrosshair();
   settings.set_current_crosshair_name("Dot");
   settings.set_crosshair_size(15);
+  settings.mutable_health_bar()->set_show(true);
 
   Keybinds* binds = settings.mutable_keybinds();
   binds->mutable_fire()->set_mapping1("Left Click");

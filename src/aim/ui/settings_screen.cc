@@ -22,9 +22,16 @@ const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTy
 
 struct KeybindItem {
   std::string label;
+  std::string help_text;
   KeyMapping* mapping;
   int is_capturing_index = 0;
 };
+
+const char* kQuickSettingsHelpText =
+    "Hold the key to bring up a settings menu which will close when the key is released. Scroll "
+    "wheel can be used to adjust mouse sensitivity.";
+const char* kAdjustCrosshairSizeHelpText =
+    "Hold the key to enable using the scroll wheel to adjust crosshair size.";
 
 class SettingsScreen : public UiScreen {
  public:
@@ -38,13 +45,16 @@ class SettingsScreen : public UiScreen {
     Settings settings = app_.settings_manager().GetCurrentSettings();
 
     keybind_items_ = {
-        {"Fire", updater_.settings.mutable_keybinds()->mutable_fire()},
-        {"Restart Scenario", updater_.settings.mutable_keybinds()->mutable_restart_scenario()},
-        {"Next Scenario", updater_.settings.mutable_keybinds()->mutable_next_scenario()},
-        {"Edit Scenario", updater_.settings.mutable_keybinds()->mutable_edit_scenario()},
-        {"Quick Settings", updater_.settings.mutable_keybinds()->mutable_quick_settings()},
-        {"Quick Metronome", updater_.settings.mutable_keybinds()->mutable_quick_metronome()},
+        {"Fire", "", updater_.settings.mutable_keybinds()->mutable_fire()},
+        {"Restart Scenario", "", updater_.settings.mutable_keybinds()->mutable_restart_scenario()},
+        {"Next Scenario", "", updater_.settings.mutable_keybinds()->mutable_next_scenario()},
+        {"Edit Scenario", "", updater_.settings.mutable_keybinds()->mutable_edit_scenario()},
+        {"Quick Settings",
+         kQuickSettingsHelpText,
+         updater_.settings.mutable_keybinds()->mutable_quick_settings()},
+        {"Quick Metronome", "", updater_.settings.mutable_keybinds()->mutable_quick_metronome()},
         {"Adjust Crosshair Size",
+         kAdjustCrosshairSizeHelpText,
          updater_.settings.mutable_keybinds()->mutable_adjust_crosshair_size()},
     };
   }
@@ -191,6 +201,12 @@ class SettingsScreen : public UiScreen {
     for (KeybindItem& item : keybind_items_) {
       ImGui::AlignTextToFramePadding();
       ImGui::Text(item.label);
+
+      if (item.help_text.size() > 0) {
+        ImGui::SameLine();
+        ImGui::HelpMarker(item.help_text);
+      }
+
       float entry_width = char_x_ * 10;
       ImGui::SameLine();
       KeyMappingEntry(&item, 1, entry_width);
