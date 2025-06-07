@@ -29,9 +29,13 @@ class StatsManager {
 
   std::vector<StatsRow> GetStats(const std::string& scenario_id);
 
-  u64 GetLatestRunId(const std::string& scenario_id);
+  i64 GetLatestRunId(const std::string& scenario_id);
 
   AggregateScenarioStats GetAggregateStats(const std::string& scenario_id);
+
+  void DeleteAllStats(const std::string& scenario_id);
+  void CopyAllStats(const std::string& from_scenario_id, const std::string& to_scenario_id);
+  void DeleteStats(const std::string& scenario_id, i64 run_id);
 
  private:
   AggregateScenarioStats GetAggregateStatsFromDb(const std::string& scenario_id);

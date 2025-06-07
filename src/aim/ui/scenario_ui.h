@@ -16,7 +16,7 @@ struct ScenarioBrowserResult {
   bool reload_scenarios = false;
 
   std::string scenario_stats_to_view;
-  u64 run_id;
+  i64 run_id;
 };
 
 enum ScenarioBrowserType {
