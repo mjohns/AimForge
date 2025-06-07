@@ -13,7 +13,7 @@
     "mixPercent": 0.559999943,
     "texture": {
       "scale": 2.5,
-      "textureName": "Brick.jpg"
+      "textureName": "AF Brick.jpg"
     }
   },
   "frontAppearance": {
@@ -21,7 +21,7 @@
     "mixPercent": 0.4,
     "texture": {
       "scale": 1.3,
-      "textureName": "Brick.jpg"
+      "textureName": "AF Brick.jpg"
     }
   },
   "ghostTargetColor": {
@@ -48,7 +48,7 @@
     "mixPercent": 0.42,
     "texture": {
       "scale": 2.5,
-      "textureName": "Brick.jpg"
+      "textureName": "AF Brick.jpg"
     }
   },
   "sideAppearance": {
@@ -56,7 +56,7 @@
     "mixPercent": 0.64,
     "texture": {
       "scale": 2.5,
-      "textureName": "Brick.jpg"
+      "textureName": "AF Brick.jpg"
     }
   },
   "targetColor": {

@@ -475,9 +475,15 @@ static void InputJitteredFloat(const InputFloatParams& params, aim::JitteredFiel
   ImGui::SameLine();
   ImGui::Text("+/-");
 
-  auto jitter_params = params;
-  jitter_params.set_id(params.id + "JitterInput").set_label("").set_min(0);
   ImGui::SameLine();
+
+  InputFloatParams jitter_params(params.id + "JitterInput");
+  jitter_params.set_label("")
+      .set_min(0)
+      .set_step(params.step, params.fast_step)
+      .set_width(params.width);
+  jitter_params.format = params.format;
+
   InputFloat(jitter_params, field.jitter);
 }
 

@@ -12,10 +12,10 @@
   },
   "floorAppearance": {
     "mixColor": {},
-    "mixPercent": 0.430000067,
+    "mixPercent": 0.410000056,
     "texture": {
       "scale": 1.19999981,
-      "textureName": "finnish_grey.jpg"
+      "textureName": "AF Stone.jpg"
     }
   },
   "frontAppearance": {
@@ -27,11 +27,11 @@
     "mixPercent": 0.299999863,
     "texture": {
       "scale": 1.19999969,
-      "textureName": "finnish_grey.jpg"
+      "textureName": "AF Stone.jpg"
     }
   },
   "ghostTargetColor": {
-    "hex": "#a48c8c"
+    "hex": "#787878"
   },
   "healthBar": {
     "backgroundAlpha": 0.8,
@@ -46,13 +46,13 @@
       "r": 185
     }
   },
-  "name": "FinnishGrey",
+  "name": "Stone",
   "roofAppearance": {
     "mixColor": {},
     "mixPercent": 0.399999917,
     "texture": {
       "scale": 1.19999981,
-      "textureName": "finnish_grey.jpg"
+      "textureName": "AF Stone.jpg"
     }
   },
   "sideAppearance": {
@@ -60,7 +60,7 @@
     "mixPercent": 0.339999974,
     "texture": {
       "scale": 1.19999981,
-      "textureName": "finnish_grey.jpg"
+      "textureName": "AF Stone.jpg"
     }
   },
   "targetColor": {
