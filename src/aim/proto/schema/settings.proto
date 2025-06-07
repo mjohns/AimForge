@@ -93,10 +93,14 @@ message Settings {
 }
 
 message SoundSettings {
-    string hit= 1;
-    string kill= 2;
-    string metronome= 3;
-    string shoot= 4;
+  // Percent value from 0 to 1.
+  float master_volume_level = 1;
+
+  string hit = 10;
+  string kill = 11;
+  string metronome = 12;
+  string shoot = 13;
+
 }
 
 message ScenarioSettings {

@@ -2,8 +2,8 @@
 
 #include <optional>
 
-#include "aim/common/times.h"
 #include "aim/common/simple_types.h"
+#include "aim/common/times.h"
 #include "aim/core/application.h"
 
 namespace aim {

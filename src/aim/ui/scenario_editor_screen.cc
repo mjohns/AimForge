@@ -1462,7 +1462,6 @@ class ScenarioEditorScreen : public UiScreen {
     profile->set_target_radius(target_radius);
     profile->set_target_radius_jitter(radius_jitter);
 
-
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Speed");
     ImGui::SameLine();
