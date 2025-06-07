@@ -103,4 +103,11 @@ void StatsManager::DeleteStats(const std::string& scenario_id, i64 run_id) {
   stats_db_->DeleteStats(scenario_id, run_id);
 }
 
+void StatsManager::RenameScenario(const std::string& old_scenario_id,
+                                  const std::string& new_scenario_id) {
+  stats_db_->RenameScenario(old_scenario_id, new_scenario_id);
+  stats_cache_.erase(old_scenario_id);
+  stats_cache_.erase(new_scenario_id);
+}
+
 }  // namespace aim
