@@ -67,6 +67,11 @@ class StatsScreen : public UiScreen {
     }
 
     if (ImGui::Begin("Stats")) {
+      delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
+        app_.stats_manager().DeleteAllStats(scenario_id);
+        PopSelf();
+      });
+
       if (info_.all_stats.size() > 1) {
         if (ImGui::BeginTabBar("StatsTabBar")) {
           if (ImGui::BeginTabItem("Current run")) {
@@ -74,6 +79,10 @@ class StatsScreen : public UiScreen {
             ImGui::EndTabItem();
           }
           if (ImGui::BeginTabItem("History")) {
+            if (ImGui::Button("Clear history")) {
+              delete_history_confirmation_dialog_.NotifyOpen(
+                  std::format("Delete history for \"{}\"?", scenario_id_), scenario_id_);
+            }
             DrawHistory();
             ImGui::EndTabItem();
           }
@@ -302,7 +311,7 @@ class StatsScreen : public UiScreen {
   }
 
   std::string scenario_id_;
-  u64 run_id_;
+  i64 run_id_;
   StatsInfo info_;
   bool is_valid_ = false;
 
@@ -311,12 +320,14 @@ class StatsScreen : public UiScreen {
   std::optional<QuickSettingsType> show_settings_;
   std::string show_settings_release_key_;
   std::optional<RunPerformanceStats> performance_stats_;
+  ImGui::ConfirmationDialog<std::string> delete_history_confirmation_dialog_{
+      "DeleteHistoryConfirmationDialog"};
 };
 
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_id,
-                                            u64 run_id,
+                                            i64 run_id,
                                             Application* app) {
   return std::make_unique<StatsScreen>(scenario_id, run_id, app);
 }

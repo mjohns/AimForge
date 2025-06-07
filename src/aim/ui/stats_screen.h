@@ -9,7 +9,7 @@
 namespace aim {
 
 std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_id,
-                                            u64 run_id,
+                                            i64 run_id,
                                             Application* app);
 
 }  // namespace aim

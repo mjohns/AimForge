@@ -40,7 +40,7 @@ std::vector<StatsRow> StatsManager::GetStats(const std::string& scenario_id) {
   return stats_db_->GetStats(scenario_id);
 }
 
-u64 StatsManager::GetLatestRunId(const std::string& scenario_id) {
+i64 StatsManager::GetLatestRunId(const std::string& scenario_id) {
   return stats_db_->GetLatestRunId(scenario_id);
 }
 
@@ -87,6 +87,20 @@ float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
     return GetScoreLevel(score, def.duration_seconds() * 0.399, def.duration_seconds() * 0.75);
   }
   return 0;
+}
+
+void StatsManager::DeleteAllStats(const std::string& scenario_id) {
+  stats_db_->DeleteAllStats(scenario_id);
+  stats_cache_.erase(scenario_id);
+}
+
+void StatsManager::CopyAllStats(const std::string& from_scenario_id,
+                                const std::string& to_scenario_id) {
+  stats_db_->CopyAllStats(from_scenario_id, to_scenario_id);
+}
+
+void StatsManager::DeleteStats(const std::string& scenario_id, i64 run_id) {
+  stats_db_->DeleteStats(scenario_id, run_id);
 }
 
 }  // namespace aim

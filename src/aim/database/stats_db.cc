@@ -57,6 +57,10 @@ WHERE ScenarioId = ?
 ORDER BY StatsId DESC LIMIT 1;
 )AIMS";
 
+const char* kDeleteAllStatsForScenarioSql = R"AIMS(
+DELETE FROM Stats WHERE ScenarioId = ?;
+)AIMS";
+
 }  // namespace
 
 StatsDb::StatsDb(const std::filesystem::path& db_path) {
@@ -106,7 +110,7 @@ std::vector<StatsRow> StatsDb::GetStats(const std::string& scenario_id) {
   return all_stats;
 }
 
-u64 StatsDb::GetLatestRunId(const std::string& scenario_id) {
+i64 StatsDb::GetLatestRunId(const std::string& scenario_id) {
   sqlite3_stmt* stmt;
 
   int rc = sqlite3_prepare_v2(db_, kGetMostRecentRunIdSql, -1, &stmt, nullptr);
@@ -116,7 +120,7 @@ u64 StatsDb::GetLatestRunId(const std::string& scenario_id) {
   }
   BindString(stmt, 1, scenario_id);
 
-  u64 run_id = 0;
+  i64 run_id = 0;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
     run_id = sqlite3_column_int64(stmt, 0);
   }
@@ -151,5 +155,24 @@ void StatsDb::AddStats(const std::string& scenario_id, StatsRow* row) {
   row->stats_id = sqlite3_last_insert_rowid(db_);
   return;
 }
+
+void StatsDb::DeleteAllStats(const std::string& scenario_id) {
+  sqlite3_stmt* stmt;
+  int rc = sqlite3_prepare_v2(db_, kDeleteAllStatsForScenarioSql, -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+    return;
+  }
+  BindString(stmt, 1, scenario_id);
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    Logger::get()->warn("Failed to delete stats for {}: {}", scenario_id, sqlite3_errmsg(db_));
+  }
+  sqlite3_finalize(stmt);
+}
+
+void StatsDb::CopyAllStats(const std::string& from_scenario_id, const std::string& to_scenario_id) {
+}
+void StatsDb::DeleteStats(const std::string& scenario_id, i64 run_id) {}
 
 }  // namespace aim
