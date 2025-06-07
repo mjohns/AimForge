@@ -12,7 +12,7 @@ namespace aim {
 namespace {
 
 constexpr const char* kOrgName = "";
-constexpr const char* kAppName = "AimForge";
+constexpr const char* kAppName = "AimForge4";
 
 }  // namespace
 
@@ -39,7 +39,11 @@ std::vector<std::string> FileSystem::GetBundleNames() {
 
 std::vector<BundleInfo> FileSystem::GetBundles() {
   std::vector<BundleInfo> bundles;
-  for (const auto& entry : std::filesystem::directory_iterator(GetUserDataPath("bundles"))) {
+  auto bundles_dir = GetUserDataPath("bundles");
+  if (!std::filesystem::exists(bundles_dir) || !std::filesystem::is_directory(bundles_dir)) {
+    return {};
+  }
+  for (const auto& entry : std::filesystem::directory_iterator(bundles_dir)) {
     if (!std::filesystem::is_directory(entry)) {
       continue;
     }

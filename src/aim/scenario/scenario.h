@@ -134,6 +134,7 @@ class Scenario : public Screen {
   Theme theme_;
   bool has_started_ = false;
   ScenarioRunState run_state_ = ScenarioRunState::NOT_STARTED;
+  Settings settings_;
 
  private:
   void OnRunningTick();
@@ -156,7 +157,6 @@ class Scenario : public Screen {
   float cm_per_360_jitter_ = 0;
   float effective_cm_per_360_ = 0;
   bool is_click_held_ = false;
-  Settings settings_;
   i64 stats_id_ = 0;
   bool is_done_ = false;
   std::vector<DelayedTask> delayed_tasks_;

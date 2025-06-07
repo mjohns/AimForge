@@ -26,7 +26,7 @@ Settings GetDefaultSettings() {
   settings.set_dpi(kDefaultDpi);
   settings.set_cm_per_360(45);
   *settings.add_saved_crosshairs() = GetDefaultCrosshair();
-  settings.set_current_crosshair_name("default");
+  settings.set_current_crosshair_name("Dot");
   settings.set_crosshair_size(15);
 
   Keybinds* binds = settings.mutable_keybinds();
@@ -37,6 +37,12 @@ Settings GetDefaultSettings() {
   binds->mutable_adjust_crosshair_size()->set_mapping1("C");
   binds->mutable_quick_settings()->set_mapping1("S");
   binds->mutable_edit_scenario()->set_mapping1("U");
+
+  SoundSettings* sounds = settings.mutable_sound();
+  sounds->set_hit("AF Hit.ogg");
+  sounds->set_metronome("AF Metronome.ogg");
+  sounds->set_shoot("AF Shoot.ogg");
+  sounds->set_kill("AF Kill.ogg");
 
   return settings;
 }
@@ -178,6 +184,9 @@ std::vector<std::string> SettingsManager::ListCrosshairNames(Settings* new_setti
 
 std::vector<std::string> SettingsManager::ListThemes() {
   auto recent_themes = history_manager_->GetRecentViews(RecentViewType::THEME, 20);
+  if (!std::filesystem::exists(theme_dir_) || !std::filesystem::is_directory(theme_dir_)) {
+    return {};
+  }
 
   std::vector<std::string> all_theme_names;
   for (const auto& entry : std::filesystem::directory_iterator(theme_dir_)) {
@@ -460,7 +469,7 @@ HealthBarAppearance GetDefaultHealthBarAppearance() {
 
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
-  crosshair.set_name("default");
+  crosshair.set_name("Dot");
   crosshair.add_layers()->mutable_dot()->set_outline_thickness(1);
   return crosshair;
 }

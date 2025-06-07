@@ -61,12 +61,14 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
 
 void Scenario::RefreshState() {
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(id_);
+  app_.sound_manager()->LoadSounds(settings_);
   float render_fps = FirstGreaterThanZero(settings_.max_render_fps(), kDefaultTargetRenderFps);
   max_render_age_micros_ = (1 / (float)(render_fps + 1)) * 1000 * 1000;
   projection_ = GetPerspectiveTransformation(app_.screen_info());
 
   float dpi = app_.settings_manager().GetDpi();
-  metronome_ = std::make_unique<Metronome>(settings_.metronome_bpm(), &app_);
+  metronome_ =
+      std::make_unique<Metronome>(settings_.metronome_bpm(), settings_.sound().metronome(), &app_);
 
   bool needs_sens_update = effective_cm_per_360_ == 0 ||
                            cm_per_360_base_ != settings_.cm_per_360() ||
@@ -543,16 +545,16 @@ void Scenario::AddMoveLinearTargetEvent(const Target& target,
                                         float distance_per_second) {}
 
 void Scenario::PlayShootSound() {
-  app_.sound_manager()->PlayShootSound();
+  app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
   AddShotFiredEvent();
 }
 
 void Scenario::PlayMissSound() {
-  app_.sound_manager()->PlayShootSound();
+  app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
 }
 
 void Scenario::PlayKillSound() {
-  app_.sound_manager()->PlayKillSound();
+  app_.sound_manager()->PlayKillSound(settings_.sound().kill());
 }
 
 TargetProfile Scenario::GetNextTargetProfile() {

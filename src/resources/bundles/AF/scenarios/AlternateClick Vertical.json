@@ -1,0 +1,77 @@
+{
+  "description": "Alternate clicks focusing on vertical movement.",
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 20,
+      "regionOrder": [
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.3
+            },
+            "yLength": {
+              "yPercentValue": 0.1
+            }
+          },
+          "xOffset": {
+            "value": 0
+          },
+          "yOffset": {
+            "yPercentValue": 0.2
+          }
+        },
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.3
+            },
+            "yLength": {
+              "yPercentValue": 0.1
+            }
+          },
+          "xOffset": {
+            "value": 0
+          },
+          "yOffset": {
+            "yPercentValue": -0.2
+          }
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "newestTargetIsGhost": true,
+    "numTargets": 2,
+    "profiles": [
+      {
+        "targetRadius": 1.5
+      }
+    ],
+    "removeClosestOnMiss": true
+  }
+}

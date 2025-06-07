@@ -3,10 +3,9 @@
 namespace aim {
 namespace {
 
-constexpr int kKillChannel = 1;
+constexpr int kHitChannel = 1;
 constexpr int kShootChannel = 2;
 constexpr int kMetronomeChannel = 3;
-constexpr int kHitChannel = 4;
 
 std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound_dirs,
                                  const std::string& name) {
@@ -23,65 +22,55 @@ std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound
 }  // namespace
 
 SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
-    : sound_dirs_(sound_dirs) {
-  std::string kill_sound_name = "kill_confirmed.ogg";
-  std::string notify_before_kill_sound_name = "short_bass.wav";
-  std::string shoot_sound_name = "shoot.ogg";
-  std::string metronome_sound_name = "metronome.ogg";
-  std::string hit_sound_name = "body_shot.ogg";
+    : sound_dirs_(sound_dirs) {}
 
-  auto kill_sound = LoadSound(sound_dirs_, kill_sound_name);
-  auto notify_before_kill_sound = LoadSound(sound_dirs_, notify_before_kill_sound_name);
-  auto shoot_sound = LoadSound(sound_dirs_, shoot_sound_name);
-  auto metronome_sound = LoadSound(sound_dirs, metronome_sound_name);
-  auto hit_sound = LoadSound(sound_dirs, hit_sound_name);
-
-  kill_sound_ = kill_sound.get();
-  shoot_sound_ = shoot_sound.get();
-  metronome_sound_ = metronome_sound.get();
-  hit_sound_ = hit_sound.get();
-  // TODO: Make it easier to use same file for multiple sounds.
-  notify_before_kill_sound_ = kill_sound.get();
-
-  sound_cache_[kill_sound_name] = std::move(kill_sound);
-  sound_cache_[shoot_sound_name] = std::move(shoot_sound);
-  sound_cache_[metronome_sound_name] = std::move(metronome_sound);
-  sound_cache_[hit_sound_name] = std::move(hit_sound);
-  sound_cache_[notify_before_kill_sound_name] = std::move(notify_before_kill_sound);
+void SoundManager::LoadSounds(const Settings& settings) {
+  const SoundSettings& s = settings.sound();
+  std::vector<std::string> sounds{
+      s.hit(),
+      s.kill(),
+      s.metronome(),
+      s.shoot(),
+  };
+  for (const std::string& name : sounds) {
+    if (name.size() == 0) {
+      continue;
+    }
+    auto it = sound_cache_.find(name);
+    if (it == sound_cache_.end()) {
+      std::unique_ptr<Sound> sound = LoadSound(sound_dirs_, name);
+      sound_cache_[name] = std::move(sound);
+    }
+  }
 }
 
-SoundManager& SoundManager::PlayKillSound() {
-  if (kill_sound_ != nullptr) {
-    kill_sound_->Play(kKillChannel);
-  }
+SoundManager& SoundManager::PlayKillSound(const std::string& name) {
+  PlaySound(name, -1);
   return *this;
 }
 
-SoundManager& SoundManager::PlayHitSound() {
-  if (hit_sound_ != nullptr) {
-    hit_sound_->Play(kKillChannel);
+void SoundManager::PlaySound(const std::string& name, int channel) {
+  auto it = sound_cache_.find(name);
+  if (it != sound_cache_.end()) {
+    Sound* sound = it->second.get();
+    if (sound != nullptr) {
+      sound->Play(channel);
+    }
   }
+}
+
+SoundManager& SoundManager::PlayHitSound(const std::string& name) {
+  PlaySound(name, kHitChannel);
   return *this;
 }
 
-SoundManager& SoundManager::PlayNotifyBeforeKillSound() {
-  if (notify_before_kill_sound_ != nullptr) {
-    notify_before_kill_sound_->Play(kHitChannel);
-  }
+SoundManager& SoundManager::PlayShootSound(const std::string& name) {
+  PlaySound(name, kShootChannel);
   return *this;
 }
 
-SoundManager& SoundManager::PlayShootSound() {
-  if (shoot_sound_ != nullptr) {
-    shoot_sound_->Play(kShootChannel);
-  }
-  return *this;
-}
-
-SoundManager& SoundManager::PlayMetronomeSound() {
-  if (metronome_sound_ != nullptr) {
-    metronome_sound_->Play(kMetronomeChannel);
-  }
+SoundManager& SoundManager::PlayMetronomeSound(const std::string& name) {
+  PlaySound(name, kMetronomeChannel);
   return *this;
 }
 

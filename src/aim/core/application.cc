@@ -22,6 +22,37 @@
 #include "aim/common/util.h"
 
 namespace aim {
+namespace {
+const char* kImguiIniFile = "imgui.ini";
+
+void CopyInitialDirIfNotExists(const std::string& dir_name,
+                               const std::string& dest_dir,
+                               FileSystem* fs) {
+  auto user_path = fs->GetUserDataPath(dest_dir);
+  if (!std::filesystem::exists(user_path)) {
+    auto base_path = fs->GetBasePath("resources/" + dir_name);
+    if (std::filesystem::exists(base_path)) {
+      std::filesystem::copy(base_path, user_path, std::filesystem::copy_options::recursive);
+    }
+  }
+}
+
+void InitializeAimForgeFolder(FileSystem* fs) {
+  auto ini_path = fs->GetUserDataPath(kImguiIniFile);
+  if (!std::filesystem::exists(ini_path)) {
+    auto initial_ini_path = fs->GetBasePath("resources/imgui.ini");
+    if (std::filesystem::exists(initial_ini_path)) {
+      std::filesystem::copy(initial_ini_path, ini_path);
+    }
+  }
+  std::filesystem::create_directory(fs->GetUserDataPath("resources"));
+  CopyInitialDirIfNotExists("bundles", "bundles", fs);
+  CopyInitialDirIfNotExists("themes", "resources/themes", fs);
+  CopyInitialDirIfNotExists("textures", "resources/textures", fs);
+  CopyInitialDirIfNotExists("sounds", "resources/sounds", fs);
+}
+
+}  // namespace
 
 void AimAbslLogSink::Send(const absl::LogEntry& entry) {
   auto message = entry.text_message();
@@ -110,6 +141,7 @@ int Application::Initialize() {
     absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);
     absl::AddLogSink(absl_log_sink_.get());
   }
+  InitializeAimForgeFolder(file_system_.get());
 
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("settings.db"));
 
@@ -216,7 +248,7 @@ int Application::Initialize() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
-  imgui_ini_filename_ = file_system_->GetUserDataPath("imgui.ini").string();
+  imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
   io.IniFilename = imgui_ini_filename_.c_str();
 
   ImGuiStyle& style = ImGui::GetStyle();
@@ -242,6 +274,8 @@ int Application::Initialize() {
   init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
   init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
   ImGui_ImplSDLGPU3_Init(&init_info);
+
+  sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
   logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   return 0;

@@ -88,6 +88,15 @@ message Settings {
   bool disable_per_scenario_settings = 13;
 
   float max_render_fps = 14;
+
+  SoundSettings sound = 15;
+}
+
+message SoundSettings {
+    string hit= 1;
+    string kill= 2;
+    string metronome= 3;
+    string shoot= 4;
 }
 
 message ScenarioSettings {

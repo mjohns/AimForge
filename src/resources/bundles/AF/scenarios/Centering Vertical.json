@@ -1,0 +1,54 @@
+{
+  "centeringDef": {
+    "wallPoints": [
+      {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": -75
+        }
+      },
+      {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 75
+        }
+      }
+    ]
+  },
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 200,
+      "width": 120
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 10,
+          "wallUp": {
+            "x": 1
+          }
+        },
+        "speed": 38,
+        "speedJitter": 0,
+        "targetRadius": 1.30000007,
+        "targetRadiusJitter": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "durationSeconds": 60,
+  "room": {
+    "cylinderRoom": {
+      "height": 150,
+      "radius": 100,
+      "sideAngleDegrees": 40,
+      "width": 320
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 15
+        },
+        "speed": 100,
+        "speedJitter": 0,
+        "targetRadius": 4,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "wallStrafeDef": {
+    "height": {
+      "yPercentValue": 0.85
+    },
+    "profiles": [
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "Long",
+        "maxDistance": {
+          "value": 72.6000061
+        },
+        "minDistance": {
+          "value": 67.6
+        },
+        "weight": 9
+      },
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "Short",
+        "maxDistance": {
+          "value": 74
+        },
+        "minDistance": {
+          "value": 68.8
+        },
+        "pauseAtEndChance": 1,
+        "pauseSeconds": 0.800000072,
+        "pauseSecondsJitter": 0,
+        "speedOverride": 400,
+        "weight": 2
+      }
+    ],
+    "width": {
+      "xPercentValue": 0.7
+    }
+  }
+}

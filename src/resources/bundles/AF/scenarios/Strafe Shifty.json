@@ -1,0 +1,76 @@
+{
+  "durationSeconds": 60,
+  "room": {
+    "cylinderRoom": {
+      "height": 150,
+      "radius": 100,
+      "sideAngleDegrees": 40,
+      "width": 320
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 15
+        },
+        "speed": 100,
+        "speedJitter": 0,
+        "targetRadius": 4,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "wallStrafeDef": {
+    "height": {
+      "yPercentValue": 0.85
+    },
+    "profiles": [
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "Default Strafe",
+        "maxDistance": {
+          "xPercentValue": 0.26000005
+        },
+        "minDistance": {
+          "xPercentValue": 0.14
+        },
+        "weight": 4
+      },
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "Quick Strafe",
+        "maxDistance": {
+          "xPercentValue": 0.18
+        },
+        "minDistance": {
+          "xPercentValue": 0.12
+        },
+        "weight": 3
+      },
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "Long Strafe (Punish predict)",
+        "maxDistance": {
+          "xPercentValue": 0.37
+        },
+        "minDistance": {
+          "xPercentValue": 0.37
+        },
+        "weight": 1
+      }
+    ],
+    "width": {
+      "xPercentValue": 0.85
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "backAppearance": {
+    "color": {}
+  },
+  "crosshair": {
+    "color": {
+      "hex": "#6aff00"
+    },
+    "outlineColor": {
+      "hex": "#000000"
+    }
+  },
+  "floorAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.430000067,
+    "texture": {
+      "scale": 1.19999981,
+      "textureName": "finnish_grey.jpg"
+    }
+  },
+  "frontAppearance": {
+    "mixColor": {
+      "b": 117,
+      "g": 117,
+      "r": 117
+    },
+    "mixPercent": 0.299999863,
+    "texture": {
+      "scale": 1.19999969,
+      "textureName": "finnish_grey.jpg"
+    }
+  },
+  "ghostTargetColor": {
+    "hex": "#a48c8c"
+  },
+  "healthBar": {
+    "backgroundAlpha": 0.8,
+    "backgroundColor": {
+      "b": 191,
+      "g": 191,
+      "r": 191
+    },
+    "healthColor": {
+      "b": 108,
+      "g": 108,
+      "r": 185
+    }
+  },
+  "name": "FinnishGrey",
+  "roofAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.399999917,
+    "texture": {
+      "scale": 1.19999981,
+      "textureName": "finnish_grey.jpg"
+    }
+  },
+  "sideAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.339999974,
+    "texture": {
+      "scale": 1.19999981,
+      "textureName": "finnish_grey.jpg"
+    }
+  },
+  "targetColor": {
+    "hex": "#000000"
+  }
+}

@@ -95,7 +95,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
   if (data->is_click_held) {
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (!tracking_sound_) {
-      tracking_sound_ = std::make_unique<TrackingSound>(&app_);
+      tracking_sound_ = std::make_unique<TrackingSound>(settings_.sound(), &app_);
     }
     stats_.shot_stopwatch.Start();
     if (maybe_hit_target_id.has_value()) {

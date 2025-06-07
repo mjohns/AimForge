@@ -1,0 +1,54 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 150
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 10
+        },
+        "speed": 62,
+        "speedJitter": 0,
+        "targetRadius": 1.30000007,
+        "targetRadiusJitter": 0
+      }
+    ]
+  },
+  "wallStrafeDef": {
+    "acceleration": 65,
+    "height": {
+      "value": 10
+    },
+    "profiles": [
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "",
+        "maxDistance": {
+          "xPercentValue": 1
+        },
+        "minDistance": {
+          "xPercentValue": 1
+        }
+      }
+    ],
+    "width": {
+      "value": 120
+    }
+  }
+}
