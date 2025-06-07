@@ -30,6 +30,10 @@ std::optional<std::filesystem::path> GetScenarioPath(FileSystem* fs, const Resou
   if (!maybe_bundle.has_value()) {
     return {};
   }
+  std::filesystem::path scenario_dir = maybe_bundle->path / "scenarios";
+  if (!std::filesystem::exists(scenario_dir)) {
+    std::filesystem::create_directory(scenario_dir);
+  }
   return GetScenarioPath(maybe_bundle->path, resource.relative_name());
 }
 
