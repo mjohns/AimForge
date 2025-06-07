@@ -1,0 +1,42 @@
+{
+  "centeringDef": {
+    "wallPoints": [
+      {
+        "x": {
+          "value": -80
+        }
+      },
+      {
+        "x": {
+          "value": 80
+        }
+      }
+    ]
+  },
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 200
+    }
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "pill": {
+          "height": 10
+        },
+        "speed": 53,
+        "speedJitter": 0,
+        "targetRadius": 1.30000007,
+        "targetRadiusJitter": 0
+      }
+    ]
+  }
+}

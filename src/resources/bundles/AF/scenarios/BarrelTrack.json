@@ -1,0 +1,57 @@
+{
+  "barrelDef": {
+    "directionRadiusPercent": 0.65,
+    "targetPlacementStrategy": {
+      "minDistance": 15,
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "value": 2
+            },
+            "yLength": {
+              "value": 2
+            }
+          },
+          "xOffset": {
+            "value": -20
+          },
+          "yOffset": {
+            "value": 0
+          }
+        }
+      ]
+    }
+  },
+  "durationSeconds": 60,
+  "room": {
+    "barrelRoom": {
+      "radius": 60
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "description": "",
+        "speed": 59,
+        "speedJitter": 0,
+        "targetRadius": 2.00000024,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  }
+}

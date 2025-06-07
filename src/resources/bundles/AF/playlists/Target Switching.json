@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "AF StaticTs"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF ShrinkTs"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF BarrelTs"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF LinearTs"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF ShrinkTs Regen"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "AF AlternateClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF AlternateClick Vertical"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF SnakeClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF StaticClick 3ts"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF MicroClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF StaticPulse"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF ReflexClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF ClusterClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF AlternateClick Wide"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF StaticClick 2ts"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF StaticPoke 3ts"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF StaticPoke 2ts"
+    }
+  ]
+}

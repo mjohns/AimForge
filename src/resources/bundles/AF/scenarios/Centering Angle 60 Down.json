@@ -1,0 +1,35 @@
+{
+  "centeringDef": {
+    "angle": -60,
+    "angleJitter": 0,
+    "angleLength": {
+      "xPercentValue": 0.96999985
+    },
+    "orientPill": true
+  },
+  "durationSeconds": 60,
+  "room": {
+    "barrelRoom": {
+      "radius": 95
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "speed": 70,
+        "speedJitter": 0,
+        "targetRadius": 2.2,
+        "targetRadiusJitter": 0
+      }
+    ]
+  }
+}

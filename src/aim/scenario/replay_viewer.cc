@@ -102,10 +102,10 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
     }
 
     if (has_shot) {
-      app->sound_manager()->PlayShootSound();
+      app->sound_manager()->PlayShootSound(settings.sound().shoot());
     }
     if (has_kill) {
-      app->sound_manager()->PlayKillSound();
+      app->sound_manager()->PlayKillSound(settings.sound().kill());
     }
 
     bool do_render = force_render || timer.LastFrameRenderStartedMicrosAgo() > 2500;

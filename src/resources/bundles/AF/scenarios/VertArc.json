@@ -1,0 +1,40 @@
+{
+  "durationSeconds": 60,
+  "endScore": 45,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": -45
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "startScore": 25,
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "targetRadius": 2,
+        "targetRadiusJitter": 0
+      }
+    ]
+  },
+  "wallArcDef": {
+    "controlHeight": 2,
+    "controlHeightJitter": 0,
+    "duration": 2.20000052,
+    "height": {
+      "value": 94.6000061
+    },
+    "startOnGround": true,
+    "width": {
+      "value": 70
+    }
+  }
+}

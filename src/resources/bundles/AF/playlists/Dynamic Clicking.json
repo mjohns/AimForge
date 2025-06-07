@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "AF BarrelClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF LinearClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF BarrelPulse"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF FireworkClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF WaterfallClick"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF WaterfallPulse"
+    }
+  ]
+}

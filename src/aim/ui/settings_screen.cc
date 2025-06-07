@@ -177,6 +177,14 @@ class SettingsScreen : public UiScreen {
     ImGui::Indent();
     DrawKeybinds();
     ImGui::Unindent();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    ImGui::Text("Sounds");
+    ImGui::Indent();
+    DrawSounds();
+    ImGui::Unindent();
   }
 
   void DrawKeybinds() {
@@ -193,6 +201,30 @@ class SettingsScreen : public UiScreen {
       ImGui::SameLine();
       KeyMappingEntry(&item, 4, entry_width);
     }
+  }
+
+  void DrawSounds() {
+    SoundSettings& s = *updater_.settings.mutable_sound();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Shoot");
+    ImGui::SameLine();
+    ImGui::InputText("##ShootSound", s.mutable_shoot());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Hit");
+    ImGui::SameLine();
+    ImGui::InputText("##HitSound", s.mutable_hit());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Kill");
+    ImGui::SameLine();
+    ImGui::InputText("##KillSound", s.mutable_kill());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Metronome");
+    ImGui::SameLine();
+    ImGui::InputText("##MetronomeSound", s.mutable_metronome());
   }
 
   void DrawScreen() override {

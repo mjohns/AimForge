@@ -13,7 +13,7 @@ class Sound {
   static std::unique_ptr<Sound> Load(const std::filesystem::path& sound_path);
   ~Sound();
 
-  void Play(int channel);
+  void Play(int channel = -1);
 
   Sound(const Sound&) = delete;
   Sound(Sound&&) = default;

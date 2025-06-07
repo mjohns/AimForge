@@ -1,0 +1,68 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Vertical"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering 180"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Arc Shallow"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF GlideTrack"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Always Left"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Always Right"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Look Down"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Look Up"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Strafe"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Angle 60"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Angle 60 Down"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Angle 90"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Always Right Angle 20"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Always Left Angle 20"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Accel"
+    }
+  ]
+}

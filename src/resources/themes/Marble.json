@@ -1,0 +1,69 @@
+{
+  "backAppearance": {
+    "color": {}
+  },
+  "crosshair": {
+    "color": {
+      "hex": "#FFAC1C"
+    },
+    "outlineColor": {
+      "hex": "#000000"
+    }
+  },
+  "floorAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.530000091,
+    "texture": {
+      "scale": 0.899999738,
+      "textureName": "white_marble.jpg"
+    }
+  },
+  "frontAppearance": {
+    "mixColor": {
+      "b": 117,
+      "g": 117,
+      "r": 117
+    },
+    "mixPercent": 0.479999959,
+    "texture": {
+      "scale": 0.899999619,
+      "textureName": "white_marble.jpg"
+    }
+  },
+  "ghostTargetColor": {
+    "hex": "#c2c2c8"
+  },
+  "healthBar": {
+    "backgroundAlpha": 0.8,
+    "backgroundColor": {
+      "b": 191,
+      "g": 191,
+      "r": 191
+    },
+    "healthColor": {
+      "b": 149,
+      "g": 149,
+      "r": 202
+    }
+  },
+  "name": "CloudyMarble",
+  "roofAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.399999917,
+    "texture": {
+      "scale": 0.899999738,
+      "textureName": "white_marble.jpg"
+    }
+  },
+  "sideAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.339999974,
+    "texture": {
+      "scale": 0.899999738,
+      "textureName": "white_marble.jpg"
+    }
+  },
+  "targetColor": {
+    "hex": "#000000"
+  }
+}

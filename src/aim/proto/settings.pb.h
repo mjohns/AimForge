@@ -89,6 +89,9 @@ extern ScenarioSettingsDefaultTypeInternal _ScenarioSettings_default_instance_;
 class Settings;
 struct SettingsDefaultTypeInternal;
 extern SettingsDefaultTypeInternal _Settings_default_instance_;
+class SoundSettings;
+struct SoundSettingsDefaultTypeInternal;
+extern SoundSettingsDefaultTypeInternal _SoundSettings_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -100,6 +103,261 @@ namespace aim {
 // ===================================================================
 
 
+// -------------------------------------------------------------------
+
+class SoundSettings final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.SoundSettings) */ {
+ public:
+  inline SoundSettings() : SoundSettings(nullptr) {}
+  ~SoundSettings() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(SoundSettings* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(SoundSettings));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR SoundSettings(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline SoundSettings(const SoundSettings& from) : SoundSettings(nullptr, from) {}
+  inline SoundSettings(SoundSettings&& from) noexcept
+      : SoundSettings(nullptr, std::move(from)) {}
+  inline SoundSettings& operator=(const SoundSettings& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SoundSettings& operator=(SoundSettings&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SoundSettings& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SoundSettings* internal_default_instance() {
+    return reinterpret_cast<const SoundSettings*>(
+        &_SoundSettings_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 9;
+  friend void swap(SoundSettings& a, SoundSettings& b) { a.Swap(&b); }
+  inline void Swap(SoundSettings* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SoundSettings* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SoundSettings* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<SoundSettings>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const SoundSettings& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const SoundSettings& from) { SoundSettings::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(SoundSettings* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.SoundSettings"; }
+
+ protected:
+  explicit SoundSettings(::google::protobuf::Arena* arena);
+  SoundSettings(::google::protobuf::Arena* arena, const SoundSettings& from);
+  SoundSettings(::google::protobuf::Arena* arena, SoundSettings&& from) noexcept
+      : SoundSettings(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kHitFieldNumber = 1,
+    kKillFieldNumber = 2,
+    kMetronomeFieldNumber = 3,
+    kShootFieldNumber = 4,
+  };
+  // string hit = 1;
+  bool has_hit() const;
+  void clear_hit() ;
+  const std::string& hit() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_hit(Arg_&& arg, Args_... args);
+  std::string* mutable_hit();
+  PROTOBUF_NODISCARD std::string* release_hit();
+  void set_allocated_hit(std::string* value);
+
+  private:
+  const std::string& _internal_hit() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_hit(
+      const std::string& value);
+  std::string* _internal_mutable_hit();
+
+  public:
+  // string kill = 2;
+  bool has_kill() const;
+  void clear_kill() ;
+  const std::string& kill() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_kill(Arg_&& arg, Args_... args);
+  std::string* mutable_kill();
+  PROTOBUF_NODISCARD std::string* release_kill();
+  void set_allocated_kill(std::string* value);
+
+  private:
+  const std::string& _internal_kill() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_kill(
+      const std::string& value);
+  std::string* _internal_mutable_kill();
+
+  public:
+  // string metronome = 3;
+  bool has_metronome() const;
+  void clear_metronome() ;
+  const std::string& metronome() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_metronome(Arg_&& arg, Args_... args);
+  std::string* mutable_metronome();
+  PROTOBUF_NODISCARD std::string* release_metronome();
+  void set_allocated_metronome(std::string* value);
+
+  private:
+  const std::string& _internal_metronome() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_metronome(
+      const std::string& value);
+  std::string* _internal_mutable_metronome();
+
+  public:
+  // string shoot = 4;
+  bool has_shoot() const;
+  void clear_shoot() ;
+  const std::string& shoot() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_shoot(Arg_&& arg, Args_... args);
+  std::string* mutable_shoot();
+  PROTOBUF_NODISCARD std::string* release_shoot();
+  void set_allocated_shoot(std::string* value);
+
+  private:
+  const std::string& _internal_shoot() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_shoot(
+      const std::string& value);
+  std::string* _internal_mutable_shoot();
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.SoundSettings)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 0,
+      47, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const SoundSettings& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr hit_;
+    ::google::protobuf::internal::ArenaStringPtr kill_;
+    ::google::protobuf::internal::ArenaStringPtr metronome_;
+    ::google::protobuf::internal::ArenaStringPtr shoot_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_settings_2eproto;
+};
 // -------------------------------------------------------------------
 
 class PlusCrosshair final : public ::google::protobuf::Message
@@ -431,7 +689,7 @@ class KeyMapping final : public ::google::protobuf::Message
     return reinterpret_cast<const KeyMapping*>(
         &_KeyMapping_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(KeyMapping& a, KeyMapping& b) { a.Swap(&b); }
   inline void Swap(KeyMapping* other) {
     if (other == this) return;
@@ -1525,7 +1783,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
     return reinterpret_cast<const ScenarioSettings*>(
         &_ScenarioSettings_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 10;
   friend void swap(ScenarioSettings& a, ScenarioSettings& b) { a.Swap(&b); }
   inline void Swap(ScenarioSettings* other) {
     if (other == this) return;
@@ -1824,7 +2082,7 @@ class Keybinds final : public ::google::protobuf::Message
     return reinterpret_cast<const Keybinds*>(
         &_Keybinds_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 11;
+  static constexpr int kIndexInFileMessages = 12;
   friend void swap(Keybinds& a, Keybinds& b) { a.Swap(&b); }
   inline void Swap(Keybinds* other) {
     if (other == this) return;
@@ -2774,6 +3032,7 @@ class Settings final : public ::google::protobuf::Message
     kCurrentCrosshairNameFieldNumber = 6,
     kKeybindsFieldNumber = 9,
     kHealthBarFieldNumber = 12,
+    kSoundFieldNumber = 15,
     kDpiFieldNumber = 1,
     kCmPer360FieldNumber = 2,
     kMetronomeBpmFieldNumber = 4,
@@ -2863,6 +3122,21 @@ class Settings final : public ::google::protobuf::Message
   private:
   const ::aim::HealthBarSettings& _internal_health_bar() const;
   ::aim::HealthBarSettings* _internal_mutable_health_bar();
+
+  public:
+  // .aim.SoundSettings sound = 15;
+  bool has_sound() const;
+  void clear_sound() ;
+  const ::aim::SoundSettings& sound() const;
+  PROTOBUF_NODISCARD ::aim::SoundSettings* release_sound();
+  ::aim::SoundSettings* mutable_sound();
+  void set_allocated_sound(::aim::SoundSettings* value);
+  void unsafe_arena_set_allocated_sound(::aim::SoundSettings* value);
+  ::aim::SoundSettings* unsafe_arena_release_sound();
+
+  private:
+  const ::aim::SoundSettings& _internal_sound() const;
+  ::aim::SoundSettings* _internal_mutable_sound();
 
   public:
   // float dpi = 1;
@@ -2969,7 +3243,7 @@ class Settings final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 14, 3,
+      4, 15, 4,
       61, 2>
       _table_;
 
@@ -2994,6 +3268,7 @@ class Settings final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr current_crosshair_name_;
     ::aim::Keybinds* keybinds_;
     ::aim::HealthBarSettings* health_bar_;
+    ::aim::SoundSettings* sound_;
     float dpi_;
     float cm_per_360_;
     float metronome_bpm_;
@@ -4475,13 +4750,13 @@ SavedCrosshairs::_internal_mutable_crosshairs() {
 
 // float dpi = 1;
 inline bool Settings::has_dpi() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void Settings::clear_dpi() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.dpi_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float Settings::dpi() const {
   // @@protoc_insertion_point(field_get:aim.Settings.dpi)
@@ -4489,7 +4764,7 @@ inline float Settings::dpi() const {
 }
 inline void Settings::set_dpi(float value) {
   _internal_set_dpi(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.Settings.dpi)
 }
 inline float Settings::_internal_dpi() const {
@@ -4503,13 +4778,13 @@ inline void Settings::_internal_set_dpi(float value) {
 
 // float cm_per_360 = 2;
 inline bool Settings::has_cm_per_360() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void Settings::clear_cm_per_360() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float Settings::cm_per_360() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360)
@@ -4517,7 +4792,7 @@ inline float Settings::cm_per_360() const {
 }
 inline void Settings::set_cm_per_360(float value) {
   _internal_set_cm_per_360(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360)
 }
 inline float Settings::_internal_cm_per_360() const {
@@ -4531,13 +4806,13 @@ inline void Settings::_internal_set_cm_per_360(float value) {
 
 // float cm_per_360_jitter = 11;
 inline bool Settings::has_cm_per_360_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
   return value;
 }
 inline void Settings::clear_cm_per_360_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000800u;
+  _impl_._has_bits_[0] &= ~0x00001000u;
 }
 inline float Settings::cm_per_360_jitter() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360_jitter)
@@ -4545,7 +4820,7 @@ inline float Settings::cm_per_360_jitter() const {
 }
 inline void Settings::set_cm_per_360_jitter(float value) {
   _internal_set_cm_per_360_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000800u;
+  _impl_._has_bits_[0] |= 0x00001000u;
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360_jitter)
 }
 inline float Settings::_internal_cm_per_360_jitter() const {
@@ -4628,13 +4903,13 @@ inline void Settings::set_allocated_theme_name(std::string* value) {
 
 // float metronome_bpm = 4;
 inline bool Settings::has_metronome_bpm() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void Settings::clear_metronome_bpm() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float Settings::metronome_bpm() const {
   // @@protoc_insertion_point(field_get:aim.Settings.metronome_bpm)
@@ -4642,7 +4917,7 @@ inline float Settings::metronome_bpm() const {
 }
 inline void Settings::set_metronome_bpm(float value) {
   _internal_set_metronome_bpm(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.Settings.metronome_bpm)
 }
 inline float Settings::_internal_metronome_bpm() const {
@@ -4656,13 +4931,13 @@ inline void Settings::_internal_set_metronome_bpm(float value) {
 
 // float crosshair_size = 5;
 inline bool Settings::has_crosshair_size() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void Settings::clear_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.crosshair_size_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float Settings::crosshair_size() const {
   // @@protoc_insertion_point(field_get:aim.Settings.crosshair_size)
@@ -4670,7 +4945,7 @@ inline float Settings::crosshair_size() const {
 }
 inline void Settings::set_crosshair_size(float value) {
   _internal_set_crosshair_size(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.Settings.crosshair_size)
 }
 inline float Settings::_internal_crosshair_size() const {
@@ -4802,13 +5077,13 @@ Settings::_internal_mutable_saved_crosshairs() {
 
 // bool disable_click_to_start = 8;
 inline bool Settings::has_disable_click_to_start() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void Settings::clear_disable_click_to_start() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_click_to_start_ = false;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline bool Settings::disable_click_to_start() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_click_to_start)
@@ -4816,7 +5091,7 @@ inline bool Settings::disable_click_to_start() const {
 }
 inline void Settings::set_disable_click_to_start(bool value) {
   _internal_set_disable_click_to_start(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.Settings.disable_click_to_start)
 }
 inline bool Settings::_internal_disable_click_to_start() const {
@@ -4926,13 +5201,13 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* value) {
 
 // bool auto_hold_tracking = 10;
 inline bool Settings::has_auto_hold_tracking() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
 inline void Settings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
-  _impl_._has_bits_[0] &= ~0x00000200u;
+  _impl_._has_bits_[0] &= ~0x00000400u;
 }
 inline bool Settings::auto_hold_tracking() const {
   // @@protoc_insertion_point(field_get:aim.Settings.auto_hold_tracking)
@@ -4940,7 +5215,7 @@ inline bool Settings::auto_hold_tracking() const {
 }
 inline void Settings::set_auto_hold_tracking(bool value) {
   _internal_set_auto_hold_tracking(value);
-  _impl_._has_bits_[0] |= 0x00000200u;
+  _impl_._has_bits_[0] |= 0x00000400u;
   // @@protoc_insertion_point(field_set:aim.Settings.auto_hold_tracking)
 }
 inline bool Settings::_internal_auto_hold_tracking() const {
@@ -5050,13 +5325,13 @@ inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* value) 
 
 // bool disable_per_scenario_settings = 13;
 inline bool Settings::has_disable_per_scenario_settings() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
   return value;
 }
 inline void Settings::clear_disable_per_scenario_settings() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_per_scenario_settings_ = false;
-  _impl_._has_bits_[0] &= ~0x00000400u;
+  _impl_._has_bits_[0] &= ~0x00000800u;
 }
 inline bool Settings::disable_per_scenario_settings() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_per_scenario_settings)
@@ -5064,7 +5339,7 @@ inline bool Settings::disable_per_scenario_settings() const {
 }
 inline void Settings::set_disable_per_scenario_settings(bool value) {
   _internal_set_disable_per_scenario_settings(value);
-  _impl_._has_bits_[0] |= 0x00000400u;
+  _impl_._has_bits_[0] |= 0x00000800u;
   // @@protoc_insertion_point(field_set:aim.Settings.disable_per_scenario_settings)
 }
 inline bool Settings::_internal_disable_per_scenario_settings() const {
@@ -5078,13 +5353,13 @@ inline void Settings::_internal_set_disable_per_scenario_settings(bool value) {
 
 // float max_render_fps = 14;
 inline bool Settings::has_max_render_fps() const {
-  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00002000u) != 0;
   return value;
 }
 inline void Settings::clear_max_render_fps() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.max_render_fps_ = 0;
-  _impl_._has_bits_[0] &= ~0x00001000u;
+  _impl_._has_bits_[0] &= ~0x00002000u;
 }
 inline float Settings::max_render_fps() const {
   // @@protoc_insertion_point(field_get:aim.Settings.max_render_fps)
@@ -5092,7 +5367,7 @@ inline float Settings::max_render_fps() const {
 }
 inline void Settings::set_max_render_fps(float value) {
   _internal_set_max_render_fps(value);
-  _impl_._has_bits_[0] |= 0x00001000u;
+  _impl_._has_bits_[0] |= 0x00002000u;
   // @@protoc_insertion_point(field_set:aim.Settings.max_render_fps)
 }
 inline float Settings::_internal_max_render_fps() const {
@@ -5102,6 +5377,382 @@ inline float Settings::_internal_max_render_fps() const {
 inline void Settings::_internal_set_max_render_fps(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.max_render_fps_ = value;
+}
+
+// .aim.SoundSettings sound = 15;
+inline bool Settings::has_sound() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.sound_ != nullptr);
+  return value;
+}
+inline void Settings::clear_sound() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.sound_ != nullptr) _impl_.sound_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline const ::aim::SoundSettings& Settings::_internal_sound() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::SoundSettings* p = _impl_.sound_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::SoundSettings&>(::aim::_SoundSettings_default_instance_);
+}
+inline const ::aim::SoundSettings& Settings::sound() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Settings.sound)
+  return _internal_sound();
+}
+inline void Settings::unsafe_arena_set_allocated_sound(::aim::SoundSettings* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.sound_);
+  }
+  _impl_.sound_ = reinterpret_cast<::aim::SoundSettings*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000010u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000010u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.sound)
+}
+inline ::aim::SoundSettings* Settings::release_sound() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000010u;
+  ::aim::SoundSettings* released = _impl_.sound_;
+  _impl_.sound_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::SoundSettings* Settings::unsafe_arena_release_sound() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Settings.sound)
+
+  _impl_._has_bits_[0] &= ~0x00000010u;
+  ::aim::SoundSettings* temp = _impl_.sound_;
+  _impl_.sound_ = nullptr;
+  return temp;
+}
+inline ::aim::SoundSettings* Settings::_internal_mutable_sound() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.sound_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::SoundSettings>(GetArena());
+    _impl_.sound_ = reinterpret_cast<::aim::SoundSettings*>(p);
+  }
+  return _impl_.sound_;
+}
+inline ::aim::SoundSettings* Settings::mutable_sound() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000010u;
+  ::aim::SoundSettings* _msg = _internal_mutable_sound();
+  // @@protoc_insertion_point(field_mutable:aim.Settings.sound)
+  return _msg;
+}
+inline void Settings::set_allocated_sound(::aim::SoundSettings* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.sound_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000010u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000010u;
+  }
+
+  _impl_.sound_ = reinterpret_cast<::aim::SoundSettings*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Settings.sound)
+}
+
+// -------------------------------------------------------------------
+
+// SoundSettings
+
+// string hit = 1;
+inline bool SoundSettings::has_hit() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void SoundSettings::clear_hit() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.hit_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& SoundSettings::hit() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.SoundSettings.hit)
+  return _internal_hit();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void SoundSettings::set_hit(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.hit_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.SoundSettings.hit)
+}
+inline std::string* SoundSettings::mutable_hit() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_hit();
+  // @@protoc_insertion_point(field_mutable:aim.SoundSettings.hit)
+  return _s;
+}
+inline const std::string& SoundSettings::_internal_hit() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.hit_.Get();
+}
+inline void SoundSettings::_internal_set_hit(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.hit_.Set(value, GetArena());
+}
+inline std::string* SoundSettings::_internal_mutable_hit() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.hit_.Mutable( GetArena());
+}
+inline std::string* SoundSettings::release_hit() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.SoundSettings.hit)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.hit_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.hit_.Set("", GetArena());
+  }
+  return released;
+}
+inline void SoundSettings::set_allocated_hit(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.hit_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.hit_.IsDefault()) {
+    _impl_.hit_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.hit)
+}
+
+// string kill = 2;
+inline bool SoundSettings::has_kill() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void SoundSettings::clear_kill() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.kill_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& SoundSettings::kill() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.SoundSettings.kill)
+  return _internal_kill();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void SoundSettings::set_kill(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_.kill_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.SoundSettings.kill)
+}
+inline std::string* SoundSettings::mutable_kill() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_kill();
+  // @@protoc_insertion_point(field_mutable:aim.SoundSettings.kill)
+  return _s;
+}
+inline const std::string& SoundSettings::_internal_kill() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.kill_.Get();
+}
+inline void SoundSettings::_internal_set_kill(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_.kill_.Set(value, GetArena());
+}
+inline std::string* SoundSettings::_internal_mutable_kill() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  return _impl_.kill_.Mutable( GetArena());
+}
+inline std::string* SoundSettings::release_kill() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.SoundSettings.kill)
+  if ((_impl_._has_bits_[0] & 0x00000002u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  auto* released = _impl_.kill_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.kill_.Set("", GetArena());
+  }
+  return released;
+}
+inline void SoundSettings::set_allocated_kill(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  _impl_.kill_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.kill_.IsDefault()) {
+    _impl_.kill_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.kill)
+}
+
+// string metronome = 3;
+inline bool SoundSettings::has_metronome() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void SoundSettings::clear_metronome() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.metronome_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const std::string& SoundSettings::metronome() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.SoundSettings.metronome)
+  return _internal_metronome();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void SoundSettings::set_metronome(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_.metronome_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.SoundSettings.metronome)
+}
+inline std::string* SoundSettings::mutable_metronome() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_metronome();
+  // @@protoc_insertion_point(field_mutable:aim.SoundSettings.metronome)
+  return _s;
+}
+inline const std::string& SoundSettings::_internal_metronome() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.metronome_.Get();
+}
+inline void SoundSettings::_internal_set_metronome(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_.metronome_.Set(value, GetArena());
+}
+inline std::string* SoundSettings::_internal_mutable_metronome() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  return _impl_.metronome_.Mutable( GetArena());
+}
+inline std::string* SoundSettings::release_metronome() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.SoundSettings.metronome)
+  if ((_impl_._has_bits_[0] & 0x00000004u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  auto* released = _impl_.metronome_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.metronome_.Set("", GetArena());
+  }
+  return released;
+}
+inline void SoundSettings::set_allocated_metronome(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  _impl_.metronome_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.metronome_.IsDefault()) {
+    _impl_.metronome_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.metronome)
+}
+
+// string shoot = 4;
+inline bool SoundSettings::has_shoot() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void SoundSettings::clear_shoot() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.shoot_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline const std::string& SoundSettings::shoot() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.SoundSettings.shoot)
+  return _internal_shoot();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void SoundSettings::set_shoot(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_.shoot_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.SoundSettings.shoot)
+}
+inline std::string* SoundSettings::mutable_shoot() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_shoot();
+  // @@protoc_insertion_point(field_mutable:aim.SoundSettings.shoot)
+  return _s;
+}
+inline const std::string& SoundSettings::_internal_shoot() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.shoot_.Get();
+}
+inline void SoundSettings::_internal_set_shoot(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_.shoot_.Set(value, GetArena());
+}
+inline std::string* SoundSettings::_internal_mutable_shoot() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  return _impl_.shoot_.Mutable( GetArena());
+}
+inline std::string* SoundSettings::release_shoot() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.SoundSettings.shoot)
+  if ((_impl_._has_bits_[0] & 0x00000008u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  auto* released = _impl_.shoot_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.shoot_.Set("", GetArena());
+  }
+  return released;
+}
+inline void SoundSettings::set_allocated_shoot(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  _impl_.shoot_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.shoot_.IsDefault()) {
+    _impl_.shoot_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.shoot)
 }
 
 // -------------------------------------------------------------------

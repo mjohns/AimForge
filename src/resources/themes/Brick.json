@@ -1,0 +1,65 @@
+{
+  "backAppearance": {},
+  "crosshair": {
+    "color": {
+      "hex": "#289ec6"
+    },
+    "outlineColor": {
+      "hex": "#000000"
+    }
+  },
+  "floorAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.559999943,
+    "texture": {
+      "scale": 2.5,
+      "textureName": "Brick.jpg"
+    }
+  },
+  "frontAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.4,
+    "texture": {
+      "scale": 1.3,
+      "textureName": "Brick.jpg"
+    }
+  },
+  "ghostTargetColor": {
+    "hex": "#c9c0c4",
+    "multiplier": 0.75000006
+  },
+  "healthBar": {
+    "backgroundAlpha": 0.62,
+    "backgroundColor": {
+      "b": 27,
+      "g": 37,
+      "r": 63
+    },
+    "healthAlpha": 0.850000143,
+    "healthColor": {
+      "b": 164,
+      "g": 184,
+      "r": 196
+    }
+  },
+  "name": "Brick",
+  "roofAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.42,
+    "texture": {
+      "scale": 2.5,
+      "textureName": "Brick.jpg"
+    }
+  },
+  "sideAppearance": {
+    "mixColor": {},
+    "mixPercent": 0.64,
+    "texture": {
+      "scale": 2.5,
+      "textureName": "Brick.jpg"
+    }
+  },
+  "targetColor": {
+    "hex": "#fdf6e3"
+  }
+}
