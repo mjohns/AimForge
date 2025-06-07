@@ -112,6 +112,10 @@ void PlaylistManager::LoadPlaylistsFromDisk() {
   for (BundleInfo& bundle : fs_->GetBundles()) {
     PushBackAll(&playlists_, LoadPlaylists(bundle.name, bundle.path / "playlists"));
   }
+  playlist_map_.clear();
+  for (const Playlist& playlist : playlists_) {
+    playlist_map_[playlist.name.full_name()] = playlist;
+  }
   playlist_run_map_.clear();
 }
 
@@ -170,6 +174,14 @@ PlaylistRun PlaylistManager::InitializeRun(const Playlist& playlist) {
     run.progress_list.push_back(progress);
   }
   return run;
+}
+
+std::optional<Playlist> PlaylistManager::GetPlaylist(const std::string& playlist_name) const {
+  auto it = playlist_map_.find(playlist_name);
+  if (it != playlist_map_.end()) {
+    return it->second;
+  }
+  return {};
 }
 
 }  // namespace aim

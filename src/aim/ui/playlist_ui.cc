@@ -310,6 +310,11 @@ class PlaylistEditorComponent {
   std::string new_playlist_name_;
 };
 
+enum PlaylistViewType {
+  RECENT,
+  ALL,
+};
+
 class PlaylistComponentImpl : public PlaylistComponent {
  public:
   explicit PlaylistComponentImpl(UiScreen& screen) : app_(screen.app()), screen_(screen) {}
@@ -365,7 +370,11 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
 class PlaylistListComponentImpl : public PlaylistListComponent {
  public:
-  explicit PlaylistListComponentImpl(UiScreen& screen) : screen_(screen), app_(screen.app()) {}
+  explicit PlaylistListComponentImpl(UiScreen& screen) : screen_(screen), app_(screen.app()) {
+    if (app_.history_manager().recent_playlists().size() == 0) {
+      view_type_ = PlaylistViewType::ALL;
+    }
+  }
 
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
@@ -386,6 +395,12 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       result->reload_playlists = true;
     }
     ImGui::HelpTooltip("Reload playlists from disk.");
+    ImGui::SimpleTypeDropdown("##PlaylistViewType",
+                              &view_type_,
+                              {
+                                  {PlaylistViewType::RECENT, "Recent"},
+                                  {PlaylistViewType::ALL, "All"},
+                              });
     ImGui::Spacing();
     ImGui::Spacing();
 
@@ -393,30 +408,52 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
     auto search_words = GetSearchWords(playlist_search_text_);
     ImGui::LoopId loop_id;
-    // TODO: group by bundle + collapse/expand all
-    for (const auto& playlist : app_.playlist_manager().playlists()) {
-      auto id_guard = loop_id.Get();
-      std::string name = playlist.name.full_name();
-      if (StringMatchesSearch(name, search_words)) {
-        bool is_selected = name == app_.playlist_manager().current_playlist_name();
-        if (ImGui::Selectable(name.c_str(), is_selected)) {
-          result->open_playlist = playlist;
+
+    if (view_type_ == PlaylistViewType::RECENT) {
+      for (const std::string& name : app_.history_manager().recent_playlists()) {
+        auto id_guard = loop_id.Get();
+        if (StringMatchesSearch(name, search_words)) {
+          DrawPlaylistItem(name, result);
         }
-        const char* menu_id = "PlaylistItemMenu";
-        if (ImGui::BeginPopupContextItem(menu_id)) {
-          if (ImGui::Selectable("Copy")) {
-            copy_dialog_.NotifyOpen(playlist);
-          }
-          if (ImGui::Selectable("Delete")) {
-            delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", name), playlist);
-          }
-          ImGui::EndPopup();
+      }
+    } else {
+      for (const auto& playlist : app_.playlist_manager().playlists()) {
+        auto id_guard = loop_id.Get();
+        std::string name = playlist.name.full_name();
+        if (StringMatchesSearch(name, search_words)) {
+          DrawPlaylistItem(name, result);
         }
-        ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
       }
     }
 
     ImGui::EndChild();
+  }
+
+  void DrawPlaylistItem(const std::string& playlist_name, PlaylistListResult* result) {
+    if (ImGui::Button(playlist_name.c_str())) {
+      auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
+      if (playlist) {
+        result->open_playlist = *playlist;
+      }
+    }
+    const char* menu_id = "PlaylistItemMenu";
+    if (ImGui::BeginPopupContextItem(menu_id)) {
+      if (ImGui::Selectable("Copy")) {
+        auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
+        if (playlist) {
+          copy_dialog_.NotifyOpen(*playlist);
+        }
+      }
+      if (ImGui::Selectable("Delete")) {
+        auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
+        if (playlist) {
+          delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
+                                                 *playlist);
+        }
+      }
+      ImGui::EndPopup();
+    }
+    ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
   }
 
  private:
@@ -425,6 +462,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   UiScreen& screen_;
   Application& app_;
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
+  PlaylistViewType view_type_ = PlaylistViewType::RECENT;
 };
 
 }  // namespace

@@ -56,6 +56,7 @@ bool FontManager::LoadFonts() {
     Logger::get()->error("Unable to load medium font from: {}", font_path.string());
     return false;
   }
+  icons_config.GlyphOffset.y = 6;
   io.Fonts->AddFontFromFileTTF(
       material_icons_path.string().c_str(), medium_font_size(), &icons_config, icons_ranges);
 

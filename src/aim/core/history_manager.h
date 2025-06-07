@@ -11,9 +11,11 @@
 
 namespace aim {
 
+class PlaylistManager;
+
 class HistoryManager {
  public:
-  explicit HistoryManager(FileSystem* fs);
+  HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager);
   AIM_NO_COPY(HistoryManager);
 
   void UpdateRecentView(RecentViewType t, const std::string& id);
@@ -34,6 +36,7 @@ class HistoryManager {
   std::vector<std::string> recent_playlists_;
   bool scenarios_need_reload_ = true;
   bool playlists_need_reload_ = true;
+  PlaylistManager* playlist_manager_;
 };
 
 }  // namespace aim
