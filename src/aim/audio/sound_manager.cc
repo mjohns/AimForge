@@ -1,5 +1,7 @@
 #include "sound_manager.h"
 
+#include "glm/common.hpp"
+
 namespace aim {
 namespace {
 
@@ -26,6 +28,10 @@ SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
 
 void SoundManager::LoadSounds(const Settings& settings) {
   const SoundSettings& s = settings.sound();
+  if (s.has_master_volume_level()) {
+    float level = glm::clamp<float>(s.master_volume_level(), 0, 1);
+    Mix_MasterVolume(level * MIX_MAX_VOLUME);
+  }
   std::vector<std::string> sounds{
       s.hit(),
       s.kill(),

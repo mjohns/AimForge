@@ -40,7 +40,8 @@ inline constexpr SoundSettings::Impl_::Impl_(
             ::_pbi::ConstantInitialized()),
         shoot_(
             &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()) {}
+            ::_pbi::ConstantInitialized()),
+        master_volume_level_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR SoundSettings::SoundSettings(::_pbi::ConstantInitialized)
@@ -600,10 +601,12 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.master_volume_level_),
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.hit_),
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.kill_),
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.metronome_),
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.shoot_),
+        4,
         0,
         1,
         2,
@@ -683,10 +686,10 @@ static const ::_pbi::MigrationSchema
         {91, 104, -1, sizeof(::aim::HealthBarSettings)},
         {109, -1, -1, sizeof(::aim::SavedCrosshairs)},
         {118, 141, -1, sizeof(::aim::Settings)},
-        {156, 168, -1, sizeof(::aim::SoundSettings)},
-        {172, 188, -1, sizeof(::aim::ScenarioSettings)},
-        {196, 208, -1, sizeof(::aim::KeyMapping)},
-        {212, 227, -1, sizeof(::aim::Keybinds)},
+        {156, 169, -1, sizeof(::aim::SoundSettings)},
+        {174, 190, -1, sizeof(::aim::ScenarioSettings)},
+        {198, 210, -1, sizeof(::aim::KeyMapping)},
+        {214, 229, -1, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
@@ -738,25 +741,26 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\030\n \001(\010\022*\n\nhealth_bar\030\014 \001(\0132\026.aim.HealthB"
     "arSettings\022%\n\035disable_per_scenario_setti"
     "ngs\030\r \001(\010\022\026\n\016max_render_fps\030\016 \001(\002\022!\n\005sou"
-    "nd\030\017 \001(\0132\022.aim.SoundSettings\"L\n\rSoundSet"
-    "tings\022\013\n\003hit\030\001 \001(\t\022\014\n\004kill\030\002 \001(\t\022\021\n\tmetr"
-    "onome\030\003 \001(\t\022\r\n\005shoot\030\004 \001(\t\"\344\001\n\020ScenarioS"
-    "ettings\022\022\n\ncm_per_360\030\001 \001(\002\022\031\n\021cm_per_36"
-    "0_jitter\030\006 \001(\002\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rme"
-    "tronome_bpm\030\003 \001(\002\022\026\n\016crosshair_size\030\004 \001("
-    "\002\022\026\n\016crosshair_name\030\005 \001(\t\022\032\n\022auto_hold_t"
-    "racking\030\007 \001(\010\022*\n\nhealth_bar\030\010 \001(\0132\026.aim."
-    "HealthBarSettings\"T\n\nKeyMapping\022\020\n\010mappi"
-    "ng1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010mapping3\030"
-    "\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004"
-    "fire\030\001 \001(\0132\017.aim.KeyMapping\022)\n\020restart_s"
-    "cenario\030\002 \001(\0132\017.aim.KeyMapping\022&\n\rnext_s"
-    "cenario\030\003 \001(\0132\017.aim.KeyMapping\022\'\n\016quick_"
-    "settings\030\004 \001(\0132\017.aim.KeyMapping\022.\n\025adjus"
-    "t_crosshair_size\030\005 \001(\0132\017.aim.KeyMapping\022"
-    "(\n\017quick_metronome\030\006 \001(\0132\017.aim.KeyMappin"
-    "g\022&\n\redit_scenario\030\007 \001(\0132\017.aim.KeyMappin"
-    "gb\010editionsp\350\007"
+    "nd\030\017 \001(\0132\022.aim.SoundSettings\"i\n\rSoundSet"
+    "tings\022\033\n\023master_volume_level\030\001 \001(\002\022\013\n\003hi"
+    "t\030\n \001(\t\022\014\n\004kill\030\013 \001(\t\022\021\n\tmetronome\030\014 \001(\t"
+    "\022\r\n\005shoot\030\r \001(\t\"\344\001\n\020ScenarioSettings\022\022\n\n"
+    "cm_per_360\030\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 "
+    "\001(\002\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm"
+    "\030\003 \001(\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crossh"
+    "air_name\030\005 \001(\t\022\032\n\022auto_hold_tracking\030\007 \001"
+    "(\010\022*\n\nhealth_bar\030\010 \001(\0132\026.aim.HealthBarSe"
+    "ttings\"T\n\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020"
+    "\n\010mapping2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010ma"
+    "pping4\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132"
+    "\017.aim.KeyMapping\022)\n\020restart_scenario\030\002 \001"
+    "(\0132\017.aim.KeyMapping\022&\n\rnext_scenario\030\003 \001"
+    "(\0132\017.aim.KeyMapping\022\'\n\016quick_settings\030\004 "
+    "\001(\0132\017.aim.KeyMapping\022.\n\025adjust_crosshair"
+    "_size\030\005 \001(\0132\017.aim.KeyMapping\022(\n\017quick_me"
+    "tronome\030\006 \001(\0132\017.aim.KeyMapping\022&\n\redit_s"
+    "cenario\030\007 \001(\0132\017.aim.KeyMappingb\010editions"
+    "p\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_settings_2eproto_deps[1] =
     {
@@ -766,7 +770,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    2054,
+    2083,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -4000,6 +4004,7 @@ SoundSettings::SoundSettings(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  _impl_.master_volume_level_ = from._impl_.master_volume_level_;
 
   // @@protoc_insertion_point(copy_constructor:aim.SoundSettings)
 }
@@ -4014,6 +4019,7 @@ inline PROTOBUF_NDEBUG_INLINE SoundSettings::Impl_::Impl_(
 
 inline void SoundSettings::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.master_volume_level_ = {};
 }
 SoundSettings::~SoundSettings() {
   // @@protoc_insertion_point(destructor:aim.SoundSettings)
@@ -4066,15 +4072,15 @@ const ::google::protobuf::internal::ClassData* SoundSettings::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 0, 47, 2> SoundSettings::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 0, 47, 2> SoundSettings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_._has_bits_),
     0, // no _extensions_
-    4, 24,  // max_field_number, fast_idx_mask
+    13, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967280,  // skipmap
+    4294959614,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
+    5,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -4084,37 +4090,46 @@ const ::_pbi::TcParseTable<2, 4, 0, 47, 2> SoundSettings::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::SoundSettings>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // string shoot = 4;
+    {::_pbi::TcParser::MiniParse, {}},
+    // float master_volume_level = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 4, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.master_volume_level_)}},
+    // string hit = 10;
     {::_pbi::TcParser::FastUS1,
-     {34, 3, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.shoot_)}},
-    // string hit = 1;
+     {82, 0, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.hit_)}},
+    // string kill = 11;
     {::_pbi::TcParser::FastUS1,
-     {10, 0, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.hit_)}},
-    // string kill = 2;
+     {90, 1, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.kill_)}},
+    // string metronome = 12;
     {::_pbi::TcParser::FastUS1,
-     {18, 1, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.kill_)}},
-    // string metronome = 3;
+     {98, 2, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.metronome_)}},
+    // string shoot = 13;
     {::_pbi::TcParser::FastUS1,
-     {26, 2, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.metronome_)}},
+     {106, 3, 0, PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.shoot_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
-    // string hit = 1;
+    // float master_volume_level = 1;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.master_volume_level_), _Internal::kHasBitsOffset + 4, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // string hit = 10;
     {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.hit_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // string kill = 2;
+    // string kill = 11;
     {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.kill_), _Internal::kHasBitsOffset + 1, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // string metronome = 3;
+    // string metronome = 12;
     {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.metronome_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // string shoot = 4;
+    // string shoot = 13;
     {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.shoot_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }},
   // no aux_entries
   {{
-    "\21\3\4\11\5\0\0\0"
+    "\21\0\3\4\11\5\0\0"
     "aim.SoundSettings"
     "hit"
     "kill"
@@ -4145,6 +4160,7 @@ PROTOBUF_NOINLINE void SoundSettings::Clear() {
       _impl_.shoot_.ClearNonDefaultToEmpty();
     }
   }
+  _impl_.master_volume_level_ = 0;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -4165,36 +4181,43 @@ PROTOBUF_NOINLINE void SoundSettings::Clear() {
           (void)cached_has_bits;
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // string hit = 1;
+          // float master_volume_level = 1;
+          if (cached_has_bits & 0x00000010u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_master_volume_level(), target);
+          }
+
+          // string hit = 10;
           if (cached_has_bits & 0x00000001u) {
             const std::string& _s = this_._internal_hit();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.SoundSettings.hit");
-            target = stream->WriteStringMaybeAliased(1, _s, target);
+            target = stream->WriteStringMaybeAliased(10, _s, target);
           }
 
-          // string kill = 2;
+          // string kill = 11;
           if (cached_has_bits & 0x00000002u) {
             const std::string& _s = this_._internal_kill();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.SoundSettings.kill");
-            target = stream->WriteStringMaybeAliased(2, _s, target);
+            target = stream->WriteStringMaybeAliased(11, _s, target);
           }
 
-          // string metronome = 3;
+          // string metronome = 12;
           if (cached_has_bits & 0x00000004u) {
             const std::string& _s = this_._internal_metronome();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.SoundSettings.metronome");
-            target = stream->WriteStringMaybeAliased(3, _s, target);
+            target = stream->WriteStringMaybeAliased(12, _s, target);
           }
 
-          // string shoot = 4;
+          // string shoot = 13;
           if (cached_has_bits & 0x00000008u) {
             const std::string& _s = this_._internal_shoot();
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.SoundSettings.shoot");
-            target = stream->WriteStringMaybeAliased(4, _s, target);
+            target = stream->WriteStringMaybeAliased(13, _s, target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -4222,26 +4245,30 @@ PROTOBUF_NOINLINE void SoundSettings::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000000fu) {
-            // string hit = 1;
+          if (cached_has_bits & 0x0000001fu) {
+            // string hit = 10;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_hit());
             }
-            // string kill = 2;
+            // string kill = 11;
             if (cached_has_bits & 0x00000002u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_kill());
             }
-            // string metronome = 3;
+            // string metronome = 12;
             if (cached_has_bits & 0x00000004u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_metronome());
             }
-            // string shoot = 4;
+            // string shoot = 13;
             if (cached_has_bits & 0x00000008u) {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_shoot());
+            }
+            // float master_volume_level = 1;
+            if (cached_has_bits & 0x00000010u) {
+              total_size += 5;
             }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -4257,7 +4284,7 @@ void SoundSettings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_set_hit(from._internal_hit());
     }
@@ -4269,6 +4296,9 @@ void SoundSettings::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
     }
     if (cached_has_bits & 0x00000008u) {
       _this->_internal_set_shoot(from._internal_shoot());
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _this->_impl_.master_volume_level_ = from._impl_.master_volume_level_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -4293,6 +4323,7 @@ void SoundSettings::InternalSwap(SoundSettings* PROTOBUF_RESTRICT other) {
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.kill_, &other->_impl_.kill_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.metronome_, &other->_impl_.metronome_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.shoot_, &other->_impl_.shoot_, arena);
+        swap(_impl_.master_volume_level_, other->_impl_.master_volume_level_);
 }
 
 ::google::protobuf::Metadata SoundSettings::GetMetadata() const {

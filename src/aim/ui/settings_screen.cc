@@ -223,6 +223,16 @@ class SettingsScreen : public UiScreen {
     SoundSettings& s = *updater_.settings.mutable_sound();
 
     ImGui::AlignTextToFramePadding();
+    ImGui::Text("Volume level");
+    ImGui::SameLine();
+    float volume_level = 1;
+    if (s.has_master_volume_level()) {
+      volume_level = s.master_volume_level();
+    }
+    ImGui::SliderFloat("##VolumeLevel", &volume_level, 0, 1, "%.2f");
+    s.set_master_volume_level(volume_level);
+
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("Shoot");
     ImGui::SameLine();
     ImGui::InputText("##ShootSound", s.mutable_shoot());

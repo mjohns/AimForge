@@ -251,12 +251,13 @@ class SoundSettings final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kHitFieldNumber = 1,
-    kKillFieldNumber = 2,
-    kMetronomeFieldNumber = 3,
-    kShootFieldNumber = 4,
+    kHitFieldNumber = 10,
+    kKillFieldNumber = 11,
+    kMetronomeFieldNumber = 12,
+    kShootFieldNumber = 13,
+    kMasterVolumeLevelFieldNumber = 1,
   };
-  // string hit = 1;
+  // string hit = 10;
   bool has_hit() const;
   void clear_hit() ;
   const std::string& hit() const;
@@ -273,7 +274,7 @@ class SoundSettings final : public ::google::protobuf::Message
   std::string* _internal_mutable_hit();
 
   public:
-  // string kill = 2;
+  // string kill = 11;
   bool has_kill() const;
   void clear_kill() ;
   const std::string& kill() const;
@@ -290,7 +291,7 @@ class SoundSettings final : public ::google::protobuf::Message
   std::string* _internal_mutable_kill();
 
   public:
-  // string metronome = 3;
+  // string metronome = 12;
   bool has_metronome() const;
   void clear_metronome() ;
   const std::string& metronome() const;
@@ -307,7 +308,7 @@ class SoundSettings final : public ::google::protobuf::Message
   std::string* _internal_mutable_metronome();
 
   public:
-  // string shoot = 4;
+  // string shoot = 13;
   bool has_shoot() const;
   void clear_shoot() ;
   const std::string& shoot() const;
@@ -324,12 +325,23 @@ class SoundSettings final : public ::google::protobuf::Message
   std::string* _internal_mutable_shoot();
 
   public:
+  // float master_volume_level = 1;
+  bool has_master_volume_level() const;
+  void clear_master_volume_level() ;
+  float master_volume_level() const;
+  void set_master_volume_level(float value);
+
+  private:
+  float _internal_master_volume_level() const;
+  void _internal_set_master_volume_level(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.SoundSettings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 0,
+      3, 5, 0,
       47, 2>
       _table_;
 
@@ -353,6 +365,7 @@ class SoundSettings final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr kill_;
     ::google::protobuf::internal::ArenaStringPtr metronome_;
     ::google::protobuf::internal::ArenaStringPtr shoot_;
+    float master_volume_level_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5479,7 +5492,35 @@ inline void Settings::set_allocated_sound(::aim::SoundSettings* value) {
 
 // SoundSettings
 
-// string hit = 1;
+// float master_volume_level = 1;
+inline bool SoundSettings::has_master_volume_level() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void SoundSettings::clear_master_volume_level() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.master_volume_level_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float SoundSettings::master_volume_level() const {
+  // @@protoc_insertion_point(field_get:aim.SoundSettings.master_volume_level)
+  return _internal_master_volume_level();
+}
+inline void SoundSettings::set_master_volume_level(float value) {
+  _internal_set_master_volume_level(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.SoundSettings.master_volume_level)
+}
+inline float SoundSettings::_internal_master_volume_level() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.master_volume_level_;
+}
+inline void SoundSettings::_internal_set_master_volume_level(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.master_volume_level_ = value;
+}
+
+// string hit = 10;
 inline bool SoundSettings::has_hit() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -5548,7 +5589,7 @@ inline void SoundSettings::set_allocated_hit(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.hit)
 }
 
-// string kill = 2;
+// string kill = 11;
 inline bool SoundSettings::has_kill() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
@@ -5617,7 +5658,7 @@ inline void SoundSettings::set_allocated_kill(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.kill)
 }
 
-// string metronome = 3;
+// string metronome = 12;
 inline bool SoundSettings::has_metronome() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
@@ -5686,7 +5727,7 @@ inline void SoundSettings::set_allocated_metronome(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.metronome)
 }
 
-// string shoot = 4;
+// string shoot = 13;
 inline bool SoundSettings::has_shoot() const {
   bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
