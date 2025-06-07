@@ -34,7 +34,9 @@ class StatsDb {
   void RenameScenario(const std::string& old_scenario_id, const std::string& new_scenario_id);
 
   void DeleteAllStats(const std::string& scenario_id);
+
   void CopyAllStats(const std::string& from_scenario_id, const std::string& to_scenario_id);
+
   void DeleteStats(const std::string& scenario_id, i64 run_id);
 
  private:

@@ -15,6 +15,7 @@
 namespace aim {
 
 class PlaylistManager;
+class StatsManager;
 
 struct ScenarioItem {
   ResourceName name;
@@ -40,7 +41,7 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original_def);
 
 class ScenarioManager {
  public:
-  explicit ScenarioManager(FileSystem* fs, PlaylistManager* playlist_manager);
+  ScenarioManager(FileSystem* fs, PlaylistManager* playlist_manager, StatsManager* stats_manager);
   AIM_NO_COPY(ScenarioManager);
 
   void LoadScenariosFromDisk();
@@ -110,6 +111,7 @@ class ScenarioManager {
   std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
+  StatsManager* stats_manager_;
   std::shared_ptr<Screen> current_running_scenario_;
 
   std::string current_scenario_id_;
