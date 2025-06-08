@@ -92,20 +92,6 @@ Room GetDefaultBarrelRoom() {
   return r;
 }
 
-void VectorEditor(const std::string& id, StoredVec3* v, ImVec2 char_size) {
-  float values[3];
-  values[0] = v->x();
-  values[1] = v->y();
-  values[2] = v->z();
-
-  ImGui::SetNextItemWidth(char_size.x * 20);
-  ImGui::InputFloat3(std::format("###{}_vector_input", id).c_str(), values, "%.1f");
-
-  v->set_x(values[0]);
-  v->set_y(values[1]);
-  v->set_z(values[2]);
-}
-
 class ScenarioEditorScreen : public UiScreen {
  public:
   explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application& app)
@@ -139,20 +125,31 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
  protected:
+  void DrawNameEditor() {
+    notification_popup_.Draw();
+    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
+
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 40);
+    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+  }
+
   void DrawScreen() override {
     ImGui::IdGuard cid("ScenarioEditor");
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_size_ = char_size;
     char_x_ = char_size_.x;
 
-    if (ImGui::Begin("Details")) {
-      notification_popup_.Draw();
-      ImGui::SimpleDropdown(
-          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
+    if (editing_room_) {
+      if (ImGui::Begin("Room")) {
+        DrawRoomEditor();
+        ImGui::End();
+        return;
+      }
+    }
 
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 40);
-      ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+    if (ImGui::Begin("Details", nullptr, ImGuiWindowFlags_NoTitleBar)) {
+      DrawNameEditor();
 
       float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
       ImGui::AlignTextToFramePadding();
@@ -161,6 +158,10 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SetNextItemWidth(char_x_ * 12);
       ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
       def_.set_duration_seconds(duration_seconds);
+
+      if (ImGui::Button("Edit room")) {
+        editing_room_ = true;
+      }
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Score range");
@@ -211,10 +212,6 @@ class ScenarioEditorScreen : public UiScreen {
         }
         if (ImGui::BeginTabItem("Targets")) {
           DrawTargetEditor(char_size);
-          ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Room")) {
-          DrawRoomEditor(char_size);
           ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Description")) {
@@ -636,7 +633,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Checkbox("##PauseCheck", &is_pause);
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "Specify a probability that the target will stop for a certain duration at the end of this "
+        "Specify a probability that the target will stop for a certain duration at the end of "
+        "this "
         "strafe before changing direction.");
     if (is_pause) {
       ImGui::Indent();
@@ -889,7 +887,8 @@ class ScenarioEditorScreen : public UiScreen {
     region->set_depth_jitter(depth_jitter);
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "The distance away from the wall towards the camera. The greater the value, the further it "
+        "The distance away from the wall towards the camera. The greater the value, the further "
+        "it "
         "is from the wall.");
 
     ImGui::AlignTextToFramePadding();
@@ -1187,7 +1186,49 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawRoomEditor(const ImVec2& char_size) {
+  void VectorEditor(const std::string& id, StoredVec3* v) {
+    float values[3];
+    values[0] = v->x();
+    values[1] = v->y();
+    values[2] = v->z();
+
+    ImGui::SetNextItemWidth(char_x_ * 20);
+    ImGui::InputFloat3(std::format("###{}_vector_input", id).c_str(), values, "%.1f");
+
+    v->set_x(values[0]);
+    v->set_y(values[1]);
+    v->set_z(values[2]);
+  }
+
+  void DrawRoomEditor() {
+    DrawNameEditor();
+    if (ImGui::Button("Back")) {
+      editing_room_ = false;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Play")) {
+      PlayScenario();
+    }
+
+    if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
+      if (SaveScenario()) {
+        app_.scenario_manager().LoadScenariosFromDisk();
+        app_.playlist_manager().LoadPlaylistsFromDisk();
+        PopSelf();
+      }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      PopSelf();
+    }
+    Line();
+    if (ImGui::BeginChild("RoomContent")) {
+      DrawRoomEditorContent();
+    }
+    ImGui::EndChild();
+  }
+
+  void DrawRoomEditorContent() {
     ImGui::IdGuard cid("RoomEditor");
     Room& room = *def_.mutable_room();
 
@@ -1308,7 +1349,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Camera position");
     ImGui::SameLine();
-    VectorEditor("CameraPositionVector", room.mutable_camera_position(), char_size);
+    VectorEditor("CameraPositionVector", room.mutable_camera_position());
 
     bool has_camera_up = room.has_camera_up();
     ImGui::AlignTextToFramePadding();
@@ -1320,7 +1361,7 @@ class ScenarioEditorScreen : public UiScreen {
       if (IsZero(room.camera_up())) {
         room.mutable_camera_up()->set_z(1);
       }
-      VectorEditor("CameraUpVector", room.mutable_camera_up(), char_size);
+      VectorEditor("CameraUpVector", room.mutable_camera_up());
     } else {
       room.clear_camera_up();
     }
@@ -1339,7 +1380,7 @@ class ScenarioEditorScreen : public UiScreen {
       if (IsZero(room.camera_front())) {
         room.mutable_camera_front()->set_y(1);
       }
-      VectorEditor("CameraFrontVector", room.mutable_camera_front(), char_size);
+      VectorEditor("CameraFrontVector", room.mutable_camera_front());
     } else {
       room.clear_camera_front();
     }
@@ -1571,7 +1612,8 @@ class ScenarioEditorScreen : public UiScreen {
                         PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_at_kill));
       ImGui::SameLine();
       ImGui::HelpMarker(
-          "The radius of the target will change to the specified value incrementally based on how "
+          "The radius of the target will change to the specified value incrementally based on "
+          "how "
           "much health remains");
     } else {
       health_seconds = 0;
@@ -1708,6 +1750,8 @@ class ScenarioEditorScreen : public UiScreen {
   std::string add_to_playlist_;
 
   ImGui::NotificationPopup notification_popup_{"Notification"};
+
+  bool editing_room_ = false;
 };
 
 }  // namespace
