@@ -129,10 +129,6 @@ class Application {
     return *state_.get();
   }
 
-  u64 GetNextComponentId() {
-    return component_id_counter_++;
-  }
-
   void EnableVsync();
   void DisableVsync();
 
@@ -169,7 +165,6 @@ class Application {
   std::unique_ptr<FontManager> font_manager_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
-  u64 component_id_counter_ = 1;
   std::string imgui_ini_filename_;
 
   std::vector<std::shared_ptr<Screen>> screen_stack_;

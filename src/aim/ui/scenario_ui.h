@@ -5,7 +5,6 @@
 #include <string>
 
 #include "aim/core/application.h"
-#include "aim/ui/ui_component.h"
 
 namespace aim {
 

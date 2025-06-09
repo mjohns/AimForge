@@ -11,12 +11,12 @@
 namespace aim {
 namespace {
 
-class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserComponent {
+class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
  public:
-  explicit ScenarioBrowserComponentImpl(Application* app) : UiComponent(app) {}
+  explicit ScenarioBrowserComponentImpl(Application* app) : app_(app) {}
 
   void Show(ScenarioBrowserType type, ScenarioBrowserResult* result) override {
-    auto cid = GetComponentIdGuard();
+    ImGui::IdGuard cid("ScenarioBrowserComponent");
 
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
@@ -198,6 +198,7 @@ class ScenarioBrowserComponentImpl : public UiComponent, public ScenarioBrowserC
   // If greater than 0 will expand/collapse all. Will be decremented each render loop.
   int expand_all_ = 0;
   int collapse_all_ = 0;
+  Application* app_;
 };
 
 }  // namespace
