@@ -18,6 +18,7 @@
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
+#include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -268,6 +269,9 @@ class HomeScreen : public UiScreen {
     }
     if (ImGui::Selectable(std::format("{} Themes", kIconPalette).c_str(), false)) {
       PushNextScreen(CreateThemeEditorScreen(&app_));
+    }
+    if (ImGui::Selectable(std::format("{} Crosshairs", kIconMyLocation).c_str(), false)) {
+      PushNextScreen(CreateCrosshairEditorScreen(&app_));
     }
 
     ImGui::Spacing();

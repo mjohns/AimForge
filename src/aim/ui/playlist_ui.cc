@@ -290,6 +290,7 @@ class PlaylistEditorComponent {
       if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_, final_name)) {
         return false;
       }
+      app_.history_manager().UpdateRecentView(RecentViewType::PLAYLIST, final_name.full_name());
       PlaylistRun* current_run = app_.playlist_manager().GetCurrentRun();
       if (current_run != nullptr && current_run->playlist.name == original_playlist_name_) {
         app_.playlist_manager().SetCurrentPlaylist(final_name.full_name());

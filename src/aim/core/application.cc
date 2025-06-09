@@ -152,6 +152,7 @@ int Application::Initialize() {
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
                                         file_system_->GetUserDataPath("resources/themes"),
                                         file_system_->GetUserDataPath("resources/textures"),
+                                        file_system_->GetUserDataPath("resources/crosshairs"),
                                         settings_db_.get(),
                                         history_manager_.get());
   auto settings_status = settings_manager_->Initialize();

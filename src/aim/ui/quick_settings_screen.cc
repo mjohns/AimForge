@@ -26,7 +26,7 @@ class QuickSettingsScreen : public UiScreen {
         type_(type),
         release_key_(release_key) {
     theme_names_ = app.settings_manager().ListThemes();
-    crosshair_names_ = app_.settings_manager().ListCrosshairNames();
+    crosshair_names_ = app_.settings_manager().ListCrosshairs();
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {

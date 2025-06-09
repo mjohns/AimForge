@@ -38,7 +38,7 @@ class SettingsScreen : public UiScreen {
   SettingsScreen(Application& app, const std::string& scenario_id)
       : UiScreen(app), updater_(app.settings_manager().CreateUpdater()), scenario_id_(scenario_id) {
     theme_names_ = app.settings_manager().ListThemes();
-    crosshair_names_ = app_.settings_manager().ListCrosshairNames();
+    crosshair_names_ = app_.settings_manager().ListCrosshairs();
     // Always try to save when exiting settings screen.
     app.settings_manager().MarkDirty();
 
@@ -114,7 +114,7 @@ class SettingsScreen : public UiScreen {
                           nullptr,
                           &crosshair_opened);
     if (crosshair_opened) {
-      crosshair_names_ = app_.settings_manager().ListCrosshairNames(&updater_.settings);
+      crosshair_names_ = app_.settings_manager().ListCrosshairs();
     }
 
     ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")
@@ -263,10 +263,12 @@ class SettingsScreen : public UiScreen {
     }
     ImGui::End();
 
+    /*
     if (ImGui::Begin("Crosshairs")) {
       DrawSavedCrosshairsEditor();
     }
     ImGui::End();
+    */
 
     if (ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoTitleBar)) {
       DrawControls();
@@ -289,206 +291,6 @@ class SettingsScreen : public UiScreen {
         PopSelf();
       }
     }
-  }
-
-  void DrawSavedCrosshairsEditor() {
-    if (updater_.settings.saved_crosshairs_size() == 0) {
-      *updater_.settings.add_saved_crosshairs() = GetDefaultCrosshair();
-    }
-    std::vector<std::string> names;
-    for (Crosshair& c : *updater_.settings.mutable_saved_crosshairs()) {
-      names.push_back(c.name());
-    }
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Crosshair");
-    edit_crosshair_index_ = ClampIndex(names, edit_crosshair_index_);
-    ImGui::SameLine();
-    std::string selected_name = names[edit_crosshair_index_];
-    ImGui::SimpleDropdown(
-        "CrosshairDropdown", &selected_name, names, char_x_ * 15, &edit_crosshair_index_);
-    ImGui::SameLine();
-    if (ImGui::Button(kIconAdd)) {
-      auto c = GetDefaultCrosshair();
-      c.set_name("New crosshair");
-      *updater_.settings.add_saved_crosshairs() = c;
-      edit_crosshair_index_ = updater_.settings.saved_crosshairs_size() - 1;
-    }
-    ImGui::HelpTooltip("Add a new saved crosshair");
-
-    if (names.size() > 1) {
-      ImGui::SameLine();
-      if (ImGui::Button(kIconCancel)) {
-        auto* crosshairs = updater_.settings.mutable_saved_crosshairs();
-        crosshairs->erase(crosshairs->begin() + edit_crosshair_index_);
-        edit_crosshair_index_ = 0;
-      }
-      ImGui::HelpTooltip("Delete current crosshair");
-    }
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    DrawCrosshairEditor(*updater_.settings.mutable_saved_crosshairs(edit_crosshair_index_));
-  }
-
-  void DrawCrosshairEditor(Crosshair& c) {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Name");
-    ImGui::SameLine();
-    ImGui::InputText("##NameInput", c.mutable_name());
-
-    if (c.layers_size() == 0) {
-      c.add_layers();
-    }
-
-    ImGui::Text("Layers");
-    ImGui::Indent();
-    ImGui::LoopId loop_id;
-    for (CrosshairLayer& l : *c.mutable_layers()) {
-      auto id = loop_id.Get();
-      DrawCrosshairLayerEditor(l);
-    }
-    ImGui::Unindent();
-
-    // Draw the crosshair
-    ImVec2 current_pos = ImGui::GetCursorScreenPos();
-    ImVec2 available = ImGui::GetContentRegionAvail();
-
-    float height_spacing = ImGui::GetFrameHeight() * 2;
-    ImVec2 center = current_pos;
-    center.x += (available.x / 2.0f);
-    center.y += height_spacing;
-
-    Theme theme;
-    *theme.mutable_crosshair()->mutable_color() = ToStoredColor(0.9);
-    *theme.mutable_crosshair()->mutable_outline_color() = ToStoredColor(0);
-
-    float w = available.x * 0.9;
-    ImVec2 back_min = center;
-    ImVec2 back_max = center;
-
-    back_min.x -= w / 2.0;
-    back_max.x += w / 2.0;
-
-    back_min.y -= height_spacing;
-    back_max.y += height_spacing;
-
-    ImGui::GetWindowDrawList()->AddRectFilled(back_min, back_max, ToImCol32(ToStoredColor(0.3)));
-    DrawCrosshair(c, 30, theme, center);
-  }
-
-  void DrawCrosshairLayerEditor(CrosshairLayer& l) {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Type");
-    ImGui::SameLine();
-    CrosshairLayer::TypeCase type = l.type_case();
-    if (type == CrosshairLayer::TYPE_NOT_SET) {
-      type = CrosshairLayer::kDot;
-    }
-    ImGui::SimpleTypeDropdown("CrosshairType", &type, kCrosshairTypes, char_x_ * 12);
-
-    ImGui::InputFloat(ImGui::InputFloatParams("ScaleInput")
-                          .set_label("Scale")
-                          .set_step(0.05, 0.2)
-                          .set_precision(2)
-                          .set_width(char_x_ * 12)
-                          .set_default(1)
-                          .set_min(0.01),
-                      PROTO_FLOAT_FIELD(CrosshairLayer, &l, scale));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("OpacityInput")
-                          .set_label("Opacity")
-                          .set_step(0.02, 0.2)
-                          .set_precision(2)
-                          .set_width(char_x_ * 12)
-                          .set_default(1)
-                          .set_range(0.01, 1),
-                      PROTO_FLOAT_FIELD(CrosshairLayer, &l, alpha));
-
-    if (type == CrosshairLayer::kDot) {
-      DrawCrosshairDotEditor(l.mutable_dot());
-    }
-    if (type == CrosshairLayer::kPlus) {
-      DrawCrosshairPlusEditor(l.mutable_plus());
-    }
-    if (type == CrosshairLayer::kCircle) {
-      DrawCrosshairCircleEditor(l.mutable_circle());
-    }
-  }
-
-  void DrawCrosshairDotEditor(DotCrosshair* c) {
-    ImGui::InputFloat(ImGui::InputFloatParams("OutlineThicknessInput")
-                          .set_label("Outline thickness")
-                          .set_step(0.5, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
-                          .set_default(1.5)
-                          .set_min(0),
-                      PROTO_FLOAT_FIELD(DotCrosshair, c, outline_thickness));
-  }
-
-  void DrawCrosshairCircleEditor(CircleCrosshair* c) {
-    ImGui::IdGuard cid("CircleCrosshair");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Thickness")
-                          .set_step(0.5, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
-                          .set_default(1.5)
-                          .set_min(0.1),
-                      PROTO_FLOAT_FIELD(CircleCrosshair, c, thickness));
-
-    bool use_outline_color = c->use_outline_color();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Use outline color");
-    ImGui::SameLine();
-    ImGui::Checkbox("##UseOutline", &use_outline_color);
-    c->set_use_outline_color(use_outline_color);
-  }
-
-  void DrawCrosshairPlusEditor(PlusCrosshair* c) {
-    ImGui::IdGuard cid("PlusCrosshair");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Horizontal size")
-                          .set_step(0.1, 0.5)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
-                          .set_default(1)
-                          .set_min(0),
-
-                      PROTO_FLOAT_FIELD(PlusCrosshair, c, horizontal_size));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Vertical size")
-                          .set_step(0.1, 0.5)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
-                          .set_default(1)
-                          .set_min(0),
-                      PROTO_FLOAT_FIELD(PlusCrosshair, c, vertical_size));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Thickness")
-                          .set_step(0.1, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 10)
-                          .set_min(0.1)
-                          .set_default(1),
-                      PROTO_FLOAT_FIELD(PlusCrosshair, c, thickness));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Outline thickness")
-                          .set_step(0.1, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
-                          .set_zero_is_unset(),
-                      PROTO_FLOAT_FIELD(PlusCrosshair, c, outline_thickness));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Rounding")
-                          .set_step(0.5, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
-                          .set_min(0),
-                      PROTO_FLOAT_FIELD(PlusCrosshair, c, rounding));
   }
 
   void OptionalInputFloat(const std::string& id,

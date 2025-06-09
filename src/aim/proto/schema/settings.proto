@@ -1,56 +1,6 @@
 edition = "2023";
 
-import "common.proto";
-
 package aim;
-
-message DotCrosshair {
-  float outline_thickness = 4;
-}
-
-message PlusCrosshair {
-  float rounding = 1;
-  // Defaults to 1. Multiplier added in addition to crosshair size. Set to 0 to remove horizontal
-  // bar.
-  float horizontal_size = 2;
-  // Defaults to 1. Multiplier added in addition to crosshair size. Set to 0 to remove vertical bar.
-  float vertical_size = 3;
-  float thickness = 4;
-  float outline_thickness = 5;
-
-  float vertical_gap_size = 6;
-  float horizontal_gap_size = 7;
-}
-
-message CircleCrosshair {
-  float thickness = 1;
-  bool use_outline_color = 2;
-}
-
-message ImageCrosshair {
-  string file_name = 1;
-}
-
-message CrosshairLayer {
-  // Override colors from themes.
-  StoredColor override_color = 1;
-  StoredColor override_outline_color = 2;
-
-  float scale = 3;
-  float alpha = 4;
-
-  oneof type {
-    DotCrosshair dot = 10;
-    PlusCrosshair plus = 11;
-    ImageCrosshair image = 12;
-    CircleCrosshair circle = 13;
-  }
-}
-
-message Crosshair {
-  string name = 1;
-  repeated CrosshairLayer layers = 2;
-}
 
 message HealthBarSettings {
   bool show = 1;
@@ -58,10 +8,6 @@ message HealthBarSettings {
   float height = 3;
   float width = 4;
   float height_above_target = 5;
-}
-
-message SavedCrosshairs {
-  repeated Crosshair crosshairs = 1;
 }
 
 message Settings {
@@ -74,7 +20,6 @@ message Settings {
 
   float crosshair_size = 5;
   string current_crosshair_name = 6;
-  repeated Crosshair saved_crosshairs = 7;
 
   bool disable_click_to_start = 8;
 

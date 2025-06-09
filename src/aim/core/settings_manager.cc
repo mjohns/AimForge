@@ -25,8 +25,7 @@ Settings GetDefaultSettings() {
   Settings settings;
   settings.set_dpi(kDefaultDpi);
   settings.set_cm_per_360(45);
-  *settings.add_saved_crosshairs() = GetDefaultCrosshair();
-  settings.set_current_crosshair_name("Dot");
+  settings.set_current_crosshair_name("AF Dot");
   settings.set_crosshair_size(15);
   settings.mutable_health_bar()->set_show(true);
 
@@ -46,14 +45,6 @@ Settings GetDefaultSettings() {
   sounds->set_kill("AF Kill.ogg");
 
   return settings;
-}
-
-SavedCrosshairs GetSavedCrosshairs(const Settings& settings) {
-  SavedCrosshairs saved_crosshairs;
-  for (const Crosshair& crosshair : settings.saved_crosshairs()) {
-    *saved_crosshairs.add_crosshairs() = crosshair;
-  }
-  return saved_crosshairs;
 }
 
 }  // namespace
@@ -127,11 +118,13 @@ bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& map
 SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
                                  const std::filesystem::path& theme_dir,
                                  const std::filesystem::path& texture_dir,
+                                 const std::filesystem::path& crosshair_dir,
                                  SettingsDb* settings_db,
                                  HistoryManager* history_manager)
     : settings_path_(settings_path),
       theme_dir_(theme_dir),
       texture_dir_(texture_dir),
+      crosshair_dir_(crosshair_dir),
       settings_db_(settings_db),
       history_manager_(history_manager) {}
 
@@ -159,13 +152,19 @@ absl::Status SettingsManager::Initialize() {
   return absl::OkStatus();
 }
 
-std::vector<std::string> SettingsManager::ListCrosshairNames(Settings* new_settings) {
+std::vector<std::string> SettingsManager::ListCrosshairs() {
   auto recent_crosshairs = history_manager_->GetRecentUniqueNames(RecentViewType::CROSSHAIR, 10);
+  if (!std::filesystem::exists(crosshair_dir_) || !std::filesystem::is_directory(crosshair_dir_)) {
+    return {};
+  }
 
   std::vector<std::string> valid_crosshair_names;
-  Settings* settings_to_use = new_settings != nullptr ? new_settings : &settings_;
-  for (const auto& c : settings_to_use->saved_crosshairs()) {
-    valid_crosshair_names.push_back(c.name());
+  for (const auto& entry : std::filesystem::directory_iterator(crosshair_dir_)) {
+    std::string filename = entry.path().filename().string();
+    if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
+      std::string name(absl::StripSuffix(filename, ".json"));
+      valid_crosshair_names.push_back(name);
+    }
   }
 
   std::vector<std::string> names;
@@ -222,6 +221,52 @@ std::vector<std::string> SettingsManager::ListTextures() {
     }
   }
   return texture_names;
+}
+
+Crosshair SettingsManager::GetCrosshair(const std::string& name) {
+  auto it = crosshair_cache_.find(name);
+  if (it != crosshair_cache_.end()) {
+    return it->second;
+  }
+
+  auto path = crosshair_dir_ / std::format("{}.json", name);
+  Crosshair crosshair = GetDefaultCrosshair();
+  if (std::filesystem::exists(path)) {
+    if (!ReadJsonMessageFromFile(path, &crosshair)) {
+      Logger::get()->warn("Unable to parse crosshair json file for {}", name);
+      crosshair = GetDefaultCrosshair();
+    }
+  }
+
+  // Cache invalid entries too with the default value.
+  crosshair_cache_[name] = crosshair;
+  return crosshair;
+}
+
+bool SettingsManager::CrosshairExists(const std::string& name) {
+  return std::filesystem::exists(GetCrosshairPath(name));
+}
+
+bool SettingsManager::SaveCrosshair(const std::string& name, const Crosshair& crosshair) {
+  bool saved = WriteJsonMessageToFile(GetCrosshairPath(name), crosshair);
+  if (saved) {
+    crosshair_cache_[name] = crosshair;
+  }
+  return saved;
+}
+
+std::filesystem::path SettingsManager::GetCrosshairPath(const std::string& name) {
+  return crosshair_dir_ / std::format("{}.json", name);
+}
+
+bool SettingsManager::DeleteCrosshair(const std::string& name) {
+  return std::filesystem::remove(GetCrosshairPath(name));
+}
+
+void SettingsManager::RenameCrosshair(const std::string& old_name, const std::string& new_name) {
+  std::filesystem::rename(GetCrosshairPath(old_name), GetCrosshairPath(new_name));
+  crosshair_cache_.erase(old_name);
+  crosshair_cache_.erase(new_name);
 }
 
 Theme SettingsManager::GetTheme(const std::string& theme_name) {
@@ -363,12 +408,7 @@ Settings* SettingsManager::GetMutableCurrentSettings() {
 
 Crosshair SettingsManager::GetCurrentCrosshair() {
   Settings settings = GetCurrentSettings();
-  for (const Crosshair& crosshair : settings.saved_crosshairs()) {
-    if (crosshair.name() == settings.current_crosshair_name()) {
-      return crosshair;
-    }
-  }
-  return GetDefaultCrosshair();
+  return GetCrosshair(settings.current_crosshair_name());
 }
 
 void SettingsManager::MarkDirty() {

@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 
-#include "aim/proto/settings.pb.h"
+#include "aim/proto/crosshair.pb.h"
 #include "aim/proto/theme.pb.h"
 
 namespace aim {

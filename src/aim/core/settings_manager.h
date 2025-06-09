@@ -1,17 +1,17 @@
 #pragma once
 
-#include <SDL3/SDL.h>
-#include <absl/status/status.h>
-
 #include <filesystem>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "SDL3/SDL.h"
+#include "absl/status/status.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
 #include "aim/core/history_manager.h"
 #include "aim/database/settings_db.h"
+#include "aim/proto/crosshair.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
 
@@ -56,6 +56,7 @@ class SettingsManager {
   explicit SettingsManager(const std::filesystem::path& settings_path,
                            const std::filesystem::path& theme_dir,
                            const std::filesystem::path& texture_dir,
+                           const std::filesystem::path& crosshair_dir,
                            SettingsDb* settings_db,
                            HistoryManager* history_manager);
   ~SettingsManager();
@@ -71,7 +72,13 @@ class SettingsManager {
   Theme GetTheme(const std::string& theme_name);
   Theme GetCurrentTheme();
 
-  std::vector<std::string> ListCrosshairNames(Settings* new_settings = nullptr);
+  Crosshair GetCrosshair(const std::string& name);
+  bool CrosshairExists(const std::string& name);
+  bool SaveCrosshair(const std::string& name, const Crosshair& crosshair);
+  bool DeleteCrosshair(const std::string& name);
+  void RenameCrosshair(const std::string& old_name, const std::string& new_name);
+
+  std::vector<std::string> ListCrosshairs();
   std::vector<std::string> ListThemes();
   std::vector<std::string> ListTextures();
   void SaveThemeToDisk(const std::string& theme_name, const Theme& theme);
@@ -90,14 +97,17 @@ class SettingsManager {
  private:
   Theme GetThemeNoReferenceFollow(const std::string& theme_name);
   void WriteScenarioSettings(const std::string& scenario_id);
+  std::filesystem::path GetCrosshairPath(const std::string& name);
 
   std::filesystem::path settings_path_;
   Settings settings_;
   bool needs_save_ = false;
   std::filesystem::path theme_dir_;
   std::filesystem::path texture_dir_;
+  std::filesystem::path crosshair_dir_;
   std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
   std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
+  std::unordered_map<std::string, Crosshair> crosshair_cache_;
   SettingsDb* settings_db_;
   HistoryManager* history_manager_;
 };
