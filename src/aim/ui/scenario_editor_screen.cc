@@ -137,7 +137,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawTopBar() {
-    float width = char_x_ * 80;
+    float width = char_x_ * 70;
     float middle = app_.screen_info().width / 2.0;
     ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
     ImGui::SetNextWindowSize(ImVec2(width, -1));
@@ -161,7 +161,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
     ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+    if (ImGui::Button(std::format("{} Save", kIconSave), ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
         app_.scenario_manager().LoadScenariosFromDisk();
         app_.playlist_manager().LoadPlaylistsFromDisk();

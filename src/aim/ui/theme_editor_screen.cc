@@ -15,6 +15,7 @@
 namespace aim {
 namespace {
 
+const float kBackgroundAlpha = 0.4;
 constexpr const char* kSolidColorItem = "Solid color";
 constexpr const char* kTextureItem = "Texture";
 
@@ -94,55 +95,52 @@ struct WallAppearanceEditor {
     ImGui::IdGuard cid(id);
 
     ImGui::SetNextItemWidth(char_size.x * 20);
-    bool opened = ImGui::TreeNode(header.c_str());
-    if (opened) {
-      std::string selected_type = kSolidColorItem;
-      if (appearance->has_texture()) {
-        selected_type = kTextureItem;
-      }
+    ImGui::Text(header);
+    ImGui::Indent();
+    std::string selected_type = kSolidColorItem;
+    if (appearance->has_texture()) {
+      selected_type = kTextureItem;
+    }
 
-      std::vector<std::string> types = {kSolidColorItem, kTextureItem};
-      ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_size.x * 20);
+    std::vector<std::string> types = {kSolidColorItem, kTextureItem};
+    ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_size.x * 20);
 
-      if (selected_type == kSolidColorItem) {
-        color_editor.stored_color = appearance->mutable_color();
-        color_editor.Draw(char_size);
-      }
-      if (selected_type == kTextureItem) {
-        WallTexture* texture = appearance->mutable_texture();
-        ImGui::SimpleDropdown("TextureNameDropdown",
-                              texture->mutable_texture_name(),
-                              texture_names,
-                              char_size.x * 20);
-
-        ImGui::AlignTextToFramePadding();
-        ImGui::Text("Scale");
-        ImGui::SameLine();
-        ImGui::SetNextItemWidth(char_size.x * 9);
-        float scale = texture->scale();
-        ImGui::InputFloat("##TextureScale", &scale, 0.1, 1, "%.1f");
-        if (scale > 0) {
-          texture->set_scale(scale);
-        } else {
-          texture->clear_scale();
-        }
-      }
+    if (selected_type == kSolidColorItem) {
+      color_editor.stored_color = appearance->mutable_color();
+      color_editor.Draw(char_size);
+    }
+    if (selected_type == kTextureItem) {
+      WallTexture* texture = appearance->mutable_texture();
+      ImGui::SimpleDropdown(
+          "TextureNameDropdown", texture->mutable_texture_name(), texture_names, char_size.x * 20);
 
       ImGui::AlignTextToFramePadding();
-      ImGui::Text("Mix percent");
+      ImGui::Text("Scale");
       ImGui::SameLine();
       ImGui::SetNextItemWidth(char_size.x * 9);
-      float mix_percent = appearance->mix_percent();
-      ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.2f");
-      if (mix_percent > 0) {
-        appearance->set_mix_percent(mix_percent);
-        mix_color_editor.stored_color = appearance->mutable_mix_color();
-        mix_color_editor.Draw(char_size);
+      float scale = texture->scale();
+      ImGui::InputFloat("##TextureScale", &scale, 0.1, 1, "%.1f");
+      if (scale > 0) {
+        texture->set_scale(scale);
       } else {
-        appearance->clear_mix_percent();
+        texture->clear_scale();
       }
-      ImGui::TreePop();
     }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Mix percent");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_size.x * 9);
+    float mix_percent = appearance->mix_percent();
+    ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.2f");
+    if (mix_percent > 0) {
+      appearance->set_mix_percent(mix_percent);
+      mix_color_editor.stored_color = appearance->mutable_mix_color();
+      mix_color_editor.Draw(char_size);
+    } else {
+      appearance->clear_mix_percent();
+    }
+    ImGui::Unindent();
   }
 };
 
@@ -186,10 +184,50 @@ class ThemeEditorScreen : public UiScreen {
   }
 
  protected:
+  void DrawTopBar() {
+    float width = char_x_ * 13;
+    float middle = app_.screen_info().width / 2.0;
+    // ImGui::SetNextWindowBgAlpha();
+    ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
+    ImGui::SetNextWindowSize(ImVec2(width, -1));
+    ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+      app_.settings_manager().SaveThemeToDisk(current_theme_name_, current_theme_);
+      PopSelf();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      PopSelf();
+    }
+
+    ImGui::End();
+  }
+
+  void Line() {
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::Spacing();
+  }
+
   void DrawScreen() override {
     const ScreenInfo& screen = app_.screen_info();
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
+
+    DrawTopBar();
+
+    float width = char_x_ * 40;
+    float height = app_.screen_info().height * 0.95;
+    ImGui::SetNextWindowBgAlpha(kBackgroundAlpha);
+    ImGui::SetNextWindowPos(ImVec2(char_x_ * 0.3, (app_.screen_info().height - height) / 2.0));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    ImGui::Begin("ThemeEditor",
+                 nullptr,
+                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+                     ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Theme");
@@ -200,6 +238,8 @@ class ThemeEditorScreen : public UiScreen {
       app_.history_manager().UpdateRecentView(RecentViewType::THEME, current_theme_name_);
     }
 
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Targets");
     ImGui::Indent();
@@ -207,12 +247,16 @@ class ThemeEditorScreen : public UiScreen {
     ghost_target_color_.Draw(char_size);
     ImGui::Unindent();
 
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::Indent();
     crosshair_color_.Draw(char_size);
     crosshair_outline_color_.Draw(char_size);
     ImGui::Unindent();
+
+    Line();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Health bar");
@@ -254,6 +298,8 @@ class ThemeEditorScreen : public UiScreen {
     }
     ImGui::Unindent();
 
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Walls");
     ImGui::Indent();
@@ -267,26 +313,22 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
 
-    {
-      ImVec2 sz = ImVec2(char_size.x * 14, 0.0f);
-      if (ImGui::Button("Save", sz)) {
-        app_.settings_manager().SaveThemeToDisk(current_theme_name_, current_theme_);
-        PopSelf();
-      }
-    }
-    {
-      ImGui::SameLine();
-      ImVec2 sz = ImVec2(0, 0.0f);
-      if (ImGui::Button("Cancel", sz)) {
-        PopSelf();
-      }
-    }
-
     Crosshair crosshair;
     crosshair.add_layers()->mutable_dot()->set_outline_thickness(2);
 
+    ImGui::End();
+
+    ImGui::SetNextWindowPos(
+        ImVec2(app_.screen_info().center.x - 30, app_.screen_info().center.y - 30));
+    ImGui::SetNextWindowSize(ImVec2(60, 60));
+    ImGui::SetNextWindowBgAlpha(0);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::Begin(
+        "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     DrawCrosshair(crosshair, 25, current_theme_, app_.screen_info().center);
+    ImGui::End();
+    ImGui::PopStyleVar();
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
@@ -365,6 +407,7 @@ class ThemeEditorScreen : public UiScreen {
 
   float char_x_;
 };
+
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app) {
