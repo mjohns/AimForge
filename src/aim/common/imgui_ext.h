@@ -5,6 +5,7 @@
 
 #include <format>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "aim/common/field.h"
@@ -341,6 +342,11 @@ static void SetCursorAtRight(float item_width) {
   float available = ImGui::GetContentRegionAvail().x;
   float target_x = ImGui::GetCursorPosX() + available - item_width;
   ImGui::SetCursorPosX(target_x);
+}
+
+static void SetButtonCursorAtRight(const std::string& text) {
+  float size = ImGui::CalcTextSize(text.c_str()).x;
+  SetCursorAtRight(size + 2.0f * ImGui::GetStyle().FramePadding.x);
 }
 
 struct InputFloatParams {

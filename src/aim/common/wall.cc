@@ -30,7 +30,7 @@ glm::vec2 Wall::GetRegionVec2(const RegionVec2& v) const {
 }
 
 Wall Wall::ForRoom(const Room& room) {
-  Wall wall;
+  Wall wall{};
   if (room.has_cylinder_room()) {
     if (room.cylinder_room().width_perimeter_percent() > 0) {
       wall.width = room.cylinder_room().width_perimeter_percent() * glm::two_pi<float>() *

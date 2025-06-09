@@ -7,6 +7,7 @@
 #include <functional>
 #include <optional>
 
+#include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
@@ -134,18 +135,58 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
   }
 
+  void DrawTopBar() {
+    float width = char_x_ * 80;
+    float middle = app_.screen_info().width / 2.0;
+    ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
+    ImGui::SetNextWindowSize(ImVec2(width, -1));
+    if (!ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
+      ImGui::End();
+      return;
+    }
+
+    if (ImGui::Button(kIconPlayCircle)) {
+      PlayScenario();
+    }
+    ImGui::SameLine();
+    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
+
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 40);
+    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+
+    ImGui::SameLine();
+    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+      if (SaveScenario()) {
+        app_.scenario_manager().LoadScenariosFromDisk();
+        app_.playlist_manager().LoadPlaylistsFromDisk();
+        PopSelf();
+      }
+    }
+    ImGui::SameLine();
+    ImGui::SetButtonCursorAtRight("Cancel");
+    if (ImGui::Button("Cancel")) {
+      PopSelf();
+    }
+
+    ImGui::End();
+  }
+
   void DrawScreen() override {
     ImGui::IdGuard cid("ScenarioEditor");
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_size_ = char_size;
     char_x_ = char_size_.x;
 
+    DrawTopBar();
+
+    if (def_.room().type_case() == Room::TYPE_NOT_SET) {
+      *def_.mutable_room() = GetDefaultSimpleRoom();
+    }
+
     if (editing_room_) {
-      if (ImGui::Begin("Room")) {
-        DrawRoomEditor();
-        ImGui::End();
-        return;
-      }
+      DrawRoomEditor();
+      return;
     }
 
     if (ImGui::Begin("Details", nullptr, ImGuiWindowFlags_NoTitleBar)) {
@@ -188,18 +229,6 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       if (ImGui::Button("View Json")) {
         SetErrorMessage(MessageToJson(def_, 6));
-      }
-
-      if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
-        if (SaveScenario()) {
-          app_.scenario_manager().LoadScenariosFromDisk();
-          app_.playlist_manager().LoadPlaylistsFromDisk();
-          PopSelf();
-        }
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("Cancel")) {
-        PopSelf();
       }
     }
     ImGui::End();
@@ -1186,56 +1215,41 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void VectorEditor(const std::string& id, StoredVec3* v) {
-    float values[3];
-    values[0] = v->x();
-    values[1] = v->y();
-    values[2] = v->z();
+  void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v) {
+    ImGui::IdGuard cid(params.id);
 
-    ImGui::SetNextItemWidth(char_x_ * 20);
-    ImGui::InputFloat3(std::format("###{}_vector_input", id).c_str(), values, "%.1f");
+    ImGui::InputFloat(params.set_label("X").set_id("##XInput"),
+                      PROTO_FLOAT_FIELD(StoredVec3, v, x));
 
-    v->set_x(values[0]);
-    v->set_y(values[1]);
-    v->set_z(values[2]);
+    ImGui::InputFloat(params.set_label("Y").set_id("##YInput"),
+                      PROTO_FLOAT_FIELD(StoredVec3, v, y));
+
+    ImGui::InputFloat(params.set_label("Z").set_id("##ZInput"),
+                      PROTO_FLOAT_FIELD(StoredVec3, v, z));
   }
 
   void DrawRoomEditor() {
-    DrawNameEditor();
-    if (ImGui::Button("Back")) {
+    ImGui::IdGuard cid("RoomEditor");
+    ImGui::SetNextWindowBgAlpha(0.6f);
+    float width = char_x_ * 25;
+    float height = app_.screen_info().height * 0.75;
+
+    ImGui::SetNextWindowPos(ImVec2(char_x_ * 0.3, (app_.screen_info().height - height) / 2.0));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    if (!ImGui::Begin("Room", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
+      ImGui::End();
+      return;
+    }
+
+    if (ImGui::Button(std::format("{} Back to editor", kIconArrowBack))) {
       editing_room_ = false;
     }
-    ImGui::SameLine();
-    if (ImGui::Button("Play")) {
-      PlayScenario();
-    }
 
-    if (ImGui::Button("Save", ImVec2(char_x_ * 14, 0))) {
-      if (SaveScenario()) {
-        app_.scenario_manager().LoadScenariosFromDisk();
-        app_.playlist_manager().LoadPlaylistsFromDisk();
-        PopSelf();
-      }
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Cancel")) {
-      PopSelf();
-    }
     Line();
-    if (ImGui::BeginChild("RoomContent")) {
-      DrawRoomEditorContent();
-    }
-    ImGui::EndChild();
-  }
 
-  void DrawRoomEditorContent() {
-    ImGui::IdGuard cid("RoomEditor");
     Room& room = *def_.mutable_room();
 
     ImGuiComboFlags combo_flags = 0;
-    if (room.type_case() == Room::TYPE_NOT_SET) {
-      room = GetDefaultSimpleRoom();
-    }
 
     auto type = room.type_case();
     if (ImGui::SimpleTypeDropdown("RoomTypeDropdown", &type, kRoomTypes, char_x_ * 15)) {
@@ -1335,10 +1349,11 @@ class ScenarioEditorScreen : public UiScreen {
         }
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Side angle degrees");
-        ImGui::SameLine();
+        ImGui::Indent();
         ImGui::SetNextItemWidth(char_x_ * 12);
         ImGui::InputFloat("##SideAngle", &side_angle, 1, 1, "%.0f");
         room.mutable_cylinder_room()->set_side_angle_degrees(side_angle);
+        ImGui::Unindent();
       } else {
         room.mutable_cylinder_room()->clear_side_angle_degrees();
       }
@@ -1348,20 +1363,31 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Camera position");
-    ImGui::SameLine();
-    VectorEditor("CameraPositionVector", room.mutable_camera_position());
+    ImGui::Indent();
+    VectorEditor(ImGui::InputFloatParams("CameraPositionVector")
+                     .set_precision(0)
+                     .set_step(1, 10)
+                     .set_width(char_x_ * 10),
+                 room.mutable_camera_position());
+    ImGui::Unindent();
 
+    ImGui::Spacing();
     bool has_camera_up = room.has_camera_up();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Set camera up");
     ImGui::SameLine();
     ImGui::Checkbox("##CameraUp", &has_camera_up);
     if (has_camera_up) {
-      ImGui::SameLine();
       if (IsZero(room.camera_up())) {
         room.mutable_camera_up()->set_z(1);
       }
-      VectorEditor("CameraUpVector", room.mutable_camera_up());
+      ImGui::Indent();
+      VectorEditor(ImGui::InputFloatParams("CameraUpVector")
+                       .set_precision(1)
+                       .set_step(0.1, 1)
+                       .set_width(char_x_ * 10),
+                   room.mutable_camera_up());
+      ImGui::Unindent();
     } else {
       room.clear_camera_up();
     }
@@ -1370,20 +1396,28 @@ class ScenarioEditorScreen : public UiScreen {
         "Define up for the camera (usually the z axis). This allows you to rotate the entire "
         "scenario. (1, 0, 1) would be a 45 degree rotation.");
 
+    ImGui::Spacing();
     bool has_camera_front = room.has_camera_front();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Set camera front");
     ImGui::SameLine();
     ImGui::Checkbox("##CameraFront", &has_camera_front);
     if (has_camera_front) {
-      ImGui::SameLine();
       if (IsZero(room.camera_front())) {
         room.mutable_camera_front()->set_y(1);
       }
-      VectorEditor("CameraFrontVector", room.mutable_camera_front());
+      ImGui::Indent();
+      VectorEditor(ImGui::InputFloatParams("CameraFrontVector")
+                       .set_precision(1)
+                       .set_step(0.1, 1)
+                       .set_width(char_x_ * 10),
+                   room.mutable_camera_front());
+      ImGui::Unindent();
     } else {
       room.clear_camera_front();
     }
+
+    ImGui::End();
   }
 
   void DrawTargetEditor(const ImVec2& char_size) {

@@ -10,8 +10,8 @@ namespace aim {
 struct Wall {
   static Wall ForRoom(const Room& room);
 
-  float width;
-  float height;
+  float width = 0;
+  float height = 0;
 
   float GetRegionLength(const RegionLength& r) const;
   glm::vec2 GetRegionVec2(const RegionVec2& v) const;
