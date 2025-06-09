@@ -30,6 +30,7 @@ file(COPY resources/fonts DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/textures DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/images DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/sounds DESTINATION "${OUTPUT_DIR}")
+file(COPY resources/crosshairs DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/imgui.ini DESTINATION "${OUTPUT_DIR}")
 
 file(COPY aim/graphics/shaders/compiled DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders")

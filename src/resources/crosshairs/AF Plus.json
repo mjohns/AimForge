@@ -1,0 +1,15 @@
+{
+  "layers": [
+    {
+      "alpha": 1,
+      "plus": {
+        "horizontalSize": 1,
+        "outlineThickness": 1.20000017,
+        "rounding": 1.5,
+        "thickness": 1,
+        "verticalSize": 1
+      },
+      "scale": 1
+    }
+  ],
+}

@@ -1,0 +1,12 @@
+{
+  "layers": [
+    {
+      "alpha": 1,
+      "circle": {
+        "thickness": 1.5,
+        "useOutlineColor": false
+      },
+      "scale": 1
+    }
+  ]
+}

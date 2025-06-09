@@ -50,6 +50,7 @@ void InitializeAimForgeFolder(FileSystem* fs) {
   CopyInitialDirIfNotExists("themes", "resources/themes", fs);
   CopyInitialDirIfNotExists("textures", "resources/textures", fs);
   CopyInitialDirIfNotExists("sounds", "resources/sounds", fs);
+  CopyInitialDirIfNotExists("crosshairs", "resources/crosshairs", fs);
 }
 
 }  // namespace
