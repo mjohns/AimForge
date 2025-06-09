@@ -177,30 +177,33 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::End();
   }
 
-  void DrawMainEditor(float start_y, float end_y) {
-    float width = app_.screen_info().width * 0.85;
-    float height = end_y - start_y;
-
-    ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0, start_y));
-    ImGui::SetNextWindowSize(ImVec2(width, height));
-
-    if (!ImGui::Begin(
-            "MainEditor", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
-      ImGui::End();
-      return;
+  void DrawDescriptionEditor() {
+    if (ImGui::Button(std::format("{} Back to editor", kIconArrowBack))) {
+      editing_description_ = false;
     }
+    ImGui::InputTextMultiline("##DescriptionInput",
+                              def_.mutable_description(),
+                              ImGui::GetContentRegionAvail(),
+                              ImGuiInputTextFlags_AllowTabInput);
+  }
+
+  void DrawMainEditor() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (ImGui::BeginTable("MainEditorColumns", 3, flags)) {
+      // TODO: make each column default size to 1/3
       ImGui::TableNextColumn();
+      DrawDetailsEditor();
+
       ImGui::TableNextColumn();
+      ImGui::BeginChild("SecondColumnContainer", ImVec2(0, 0));
       DrawScenarioTypeEditor();
+      ImGui::EndChild();
+
       ImGui::TableNextColumn();
       DrawTargetEditor();
 
       ImGui::EndTable();
     }
-
-    ImGui::End();
   }
 
   void DrawScreen() override {
@@ -224,12 +227,26 @@ class ScenarioEditorScreen : public UiScreen {
     float editor_start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 1;
     float editor_end_y = app_.screen_info().height - padding;
 
-    if (def_.has_reference_def()) {
-      DrawReferenceEditor(editor_start_y, editor_end_y);
+    if (editing_description_) {
+      if (BeginMainWindow("DescriptionEditor", 0.6)) {
+        DrawDescriptionEditor();
+      }
+      ImGui::End();
       return;
     }
 
-    DrawMainEditor(editor_start_y, editor_end_y);
+    if (def_.has_reference_def()) {
+      if (BeginMainWindow("ReferenceEditor", 0.6)) {
+        DrawReferenceEditor();
+      }
+      ImGui::End();
+      return;
+    }
+
+    if (BeginMainWindow("MainEditor", 0.9)) {
+      DrawMainEditor();
+    }
+    ImGui::End();
 
     /*
     if (ImGui::Begin("Details", nullptr, ImGuiWindowFlags_NoTitleBar)) {
@@ -310,6 +327,61 @@ class ScenarioEditorScreen : public UiScreen {
 
     notification_popup_.Draw();
     */
+  }
+
+  void DrawDetailsEditor() {
+    float duration_seconds = FirstGreaterThanZero(def_.duration_seconds(), 60);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Duration");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 12);
+    ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
+    def_.set_duration_seconds(duration_seconds);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Score range");
+    ImGui::SameLine();
+    ImGui::InputFloat(ImGui::InputFloatParams("StartScore")
+                          .set_zero_is_unset()
+                          .set_step(0.1, 2)
+                          .set_precision(2)
+                          .set_width(char_x_ * 12),
+                      PROTO_FLOAT_FIELD(ScenarioDef, &def_, start_score));
+    ImGui::SameLine();
+    ImGui::Text("to");
+    ImGui::SameLine();
+    ImGui::InputFloat(ImGui::InputFloatParams("EndScore")
+                          .set_zero_is_unset()
+                          .set_step(0.1, 2)
+                          .set_precision(2)
+                          .set_width(char_x_ * 12),
+                      PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
+
+    Line();
+
+    ImGui::Text("Overrides");
+    ImGui::Indent();
+    DrawOverridesEditor();
+    if (ImGui::Button("Bake")) {
+      def_ = ApplyScenarioOverrides(def_);
+    }
+    ImGui::SameLine();
+    ImGui::HelpMarker("Apply and remove the overrides.");
+    ImGui::Unindent();
+
+    Line();
+
+    if (ImGui::Button("Edit room")) {
+      editing_room_ = true;
+    }
+
+    if (ImGui::Button("Edit description")) {
+      editing_description_ = true;
+    }
+
+    if (ImGui::Button("View Json")) {
+      SetErrorMessage(MessageToJson(def_, 6));
+    }
   }
 
   // Returns whether the screen should close
@@ -422,18 +494,20 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawReferenceEditor(float start_y, float end_y) {
-    float width = app_.screen_info().width * 0.6;
+  bool BeginMainWindow(const std::string& name, float width_multiple) {
+    float padding = char_x_ * 0.3;
+    float start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 1;
+    float end_y = app_.screen_info().height - padding;
+    float width = app_.screen_info().width * width_multiple;
     float height = end_y - start_y;
 
     ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0, start_y));
     ImGui::SetNextWindowSize(ImVec2(width, height));
-    if (!ImGui::Begin(
-            "ReferenceEditor", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
-      ImGui::End();
-      return;
-    }
+    return ImGui::Begin(
+        name.c_str(), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+  }
 
+  void DrawReferenceEditor() {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Scenario type");
     ImGui::SameLine();
@@ -443,7 +517,6 @@ class ScenarioEditorScreen : public UiScreen {
     InitializeScenarioType(scenario_type);
 
     if (scenario_type != ScenarioDef::kReferenceDef) {
-      ImGui::End();
       return;
     }
 
@@ -510,8 +583,6 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::SameLine();
     ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
-
-    ImGui::End();
   }
 
   void DrawOverridesEditor() {
@@ -1930,6 +2001,7 @@ class ScenarioEditorScreen : public UiScreen {
   ImGui::NotificationPopup notification_popup_{"Notification"};
 
   bool editing_room_ = false;
+  bool editing_description_ = false;
 };
 
 }  // namespace
