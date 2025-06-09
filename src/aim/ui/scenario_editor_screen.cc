@@ -536,6 +536,18 @@ class ScenarioEditorScreen : public UiScreen {
             .set_is_optional()
             .set_width(char_x_ * 10),
         PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), speed_multiplier));
+
+    if (def_.has_reference_def()) {
+      // Allow overriding full set of fields for references.
+      ImGui::InputInt(ImGui::InputIntParams("NumberOfTargets")
+                          .set_label("Number of targets")
+                          .set_step(1, 2)
+                          .set_min(1)
+                          .set_default(1)
+                          .set_is_optional()
+                          .set_width(char_x_ * 10),
+                      PROTO_INT_FIELD(ScenarioOverrides, def_.mutable_overrides(), num_targets));
+    }
   }
 
   void DrawWallArcEditor() {

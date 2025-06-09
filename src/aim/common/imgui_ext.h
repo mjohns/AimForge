@@ -518,4 +518,116 @@ static void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
   field.set(value);
 }
 
+struct InputIntParams {
+  explicit InputIntParams(const std::string& id) : id(id) {}
+
+  InputIntParams& set_step(int step, int fast_step) {
+    this->step = step;
+    this->fast_step = fast_step;
+    return *this;
+  }
+
+  InputIntParams& set_width(float width) {
+    this->width = width;
+    return *this;
+  }
+
+  InputIntParams& set_default(int default_value) {
+    this->default_value = default_value;
+    return *this;
+  }
+
+  InputIntParams& set_zero_is_unset() {
+    this->zero_is_unset = true;
+    return *this;
+  }
+
+  InputIntParams& set_range(int min, int max) {
+    min_value = min;
+    max_value = max;
+    return *this;
+  }
+
+  InputIntParams& set_min(int min) {
+    min_value = min;
+    return *this;
+  }
+
+  InputIntParams& set_label(const std::string& label) {
+    this->label = label;
+    return *this;
+  }
+
+  InputIntParams& set_id(const std::string& id) {
+    this->id = id;
+    return *this;
+  }
+
+  InputIntParams& set_is_optional() {
+    is_optional = true;
+    return *this;
+  }
+
+  std::string id;
+  std::string label;
+
+  int step = 1;
+  int fast_step = 5;
+  float width = -1;
+  std::optional<int> default_value;
+
+  std::optional<int> min_value;
+  std::optional<int> max_value;
+  bool zero_is_unset = false;
+  bool is_optional = false;
+};
+
+static void InputInt(const InputIntParams& params, aim::Field<int> field) {
+  IdGuard cid(params.id);
+  if (params.label.size() > 0) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(params.label);
+    ImGui::SameLine();
+  }
+  if (params.is_optional) {
+    bool has_field = field.has();
+    ImGui::Checkbox("##HasField", &has_field);
+    if (!has_field) {
+      field.clear();
+      return;
+    }
+    ImGui::SameLine();
+  }
+
+  int value = field.get();
+  if (params.default_value.has_value() && !field.has()) {
+    value = *params.default_value;
+  }
+  if (params.width > 0) {
+    ImGui::SetNextItemWidth(params.width);
+  }
+  ImGui::InputInt("##ValueInput", &value, params.step, params.fast_step);
+
+  if (params.min_value.has_value()) {
+    if (value < *params.min_value) {
+      value = *params.min_value;
+    }
+  }
+  if (params.max_value.has_value()) {
+    if (value > *params.max_value) {
+      value = *params.max_value;
+    }
+  }
+
+  if (params.zero_is_unset) {
+    if (value > 0) {
+      field.set(value);
+    } else {
+      field.clear();
+    }
+  } else {
+    field.set(value);
+  }
+}
+
 }  // namespace ImGui

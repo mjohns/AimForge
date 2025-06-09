@@ -252,13 +252,27 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     result.mutable_target_def()->set_num_targets(overrides.num_targets());
   }
   if (overrides.has_target_radius_multiplier()) {
+    float mult = overrides.target_radius_multiplier();
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
-      profile.set_target_radius(profile.target_radius() * overrides.target_radius_multiplier());
+      profile.set_target_radius(profile.target_radius() * mult);
+      if (profile.has_target_radius_at_kill()) {
+        profile.set_target_radius_at_kill(profile.target_radius_at_kill() * mult);
+      }
+      if (profile.has_target_radius_growth_size()) {
+        profile.set_target_radius_growth_size(profile.target_radius_growth_size() * mult);
+      }
     }
   }
   if (overrides.has_speed_multiplier()) {
+    float mult = overrides.speed_multiplier();
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
-      profile.set_speed(profile.speed() * overrides.speed_multiplier());
+      profile.set_speed(profile.speed() * mult);
+    }
+    if (original.has_wall_arc_def()) {
+      if (mult > 0) {
+        // Faster speed means shorter duration. Multiplier 2 should be duration 1/2.
+        result.mutable_wall_arc_def()->set_duration(original.wall_arc_def().duration() / mult);
+      }
     }
   }
   return result;

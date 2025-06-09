@@ -36,6 +36,8 @@ struct JitteredField {
   PROTO_FIELD(float, ProtoClass, instance, field_name)
 #define PROTO_BOOL_FIELD(ProtoClass, instance, field_name) \
   PROTO_FIELD(bool, ProtoClass, instance, field_name)
+#define PROTO_INT_FIELD(ProtoClass, instance, field_name) \
+  PROTO_FIELD(int, ProtoClass, instance, field_name)
 #define PROTO_STRING_FIELD(ProtoClass, instance, field_name) \
   PROTO_FIELD(std::string, ProtoClass, instance, field_name)
 
