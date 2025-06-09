@@ -12,6 +12,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/resource_name.h"
+#include "aim/common/search.h"
 #include "aim/common/util.h"
 #include "aim/common/wall.h"
 #include "aim/core/camera.h"
@@ -145,9 +146,13 @@ class ScenarioEditorScreen : public UiScreen {
       return;
     }
 
+    notification_popup_.Draw();
+
     if (ImGui::Button(kIconPlayCircle)) {
       PlayScenario();
     }
+    ImGui::HelpTooltip("Try playing the edited version of the scenario.");
+
     ImGui::SameLine();
     ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
 
@@ -172,6 +177,32 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::End();
   }
 
+  void DrawMainEditor(float start_y, float end_y) {
+    float width = app_.screen_info().width * 0.85;
+    float height = end_y - start_y;
+
+    ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0, start_y));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+
+    if (!ImGui::Begin(
+            "MainEditor", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
+      ImGui::End();
+      return;
+    }
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+    if (ImGui::BeginTable("MainEditorColumns", 3, flags)) {
+      ImGui::TableNextColumn();
+      ImGui::TableNextColumn();
+      DrawScenarioTypeEditor();
+      ImGui::TableNextColumn();
+      DrawTargetEditor();
+
+      ImGui::EndTable();
+    }
+
+    ImGui::End();
+  }
+
   void DrawScreen() override {
     ImGui::IdGuard cid("ScenarioEditor");
     ImVec2 char_size = ImGui::CalcTextSize("A");
@@ -189,6 +220,18 @@ class ScenarioEditorScreen : public UiScreen {
       return;
     }
 
+    float padding = char_x_ * 0.3;
+    float editor_start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 1;
+    float editor_end_y = app_.screen_info().height - padding;
+
+    if (def_.has_reference_def()) {
+      DrawReferenceEditor(editor_start_y, editor_end_y);
+      return;
+    }
+
+    DrawMainEditor(editor_start_y, editor_end_y);
+
+    /*
     if (ImGui::Begin("Details", nullptr, ImGuiWindowFlags_NoTitleBar)) {
       DrawNameEditor();
 
@@ -236,11 +279,11 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Begin("Scenario")) {
       if (ImGui::BeginTabBar("ScenarioTabs")) {
         if (ImGui::BeginTabItem("Definition")) {
-          DrawScenarioTypeEditor(char_size);
+          DrawScenarioTypeEditor();
           ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Targets")) {
-          DrawTargetEditor(char_size);
+          DrawTargetEditor();
           ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Description")) {
@@ -266,6 +309,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::End();
 
     notification_popup_.Draw();
+    */
   }
 
   // Returns whether the screen should close
@@ -312,7 +356,7 @@ class ScenarioEditorScreen : public UiScreen {
     notification_popup_.NotifyOpen(msg);
   }
 
-  void DrawScenarioTypeEditor(const ImVec2& char_size) {
+  void DrawScenarioTypeEditor() {
     ImGui::IdGuard cid("ScenarioTypeEditor");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Scenario type");
@@ -324,11 +368,12 @@ class ScenarioEditorScreen : public UiScreen {
 
     auto scenario_type = def_.type_case();
     ImGui::SimpleTypeDropdown("ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
+    InitializeScenarioType(scenario_type);
 
     if (VectorContains(kSingleTargetTrackingTypes, scenario_type)) {
       def_.mutable_shot_type()->set_tracking_invincible(true);
     } else {
-      DrawShotTypeEditor(char_size);
+      DrawShotTypeEditor();
     }
 
     Line();
@@ -351,19 +396,98 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kWallArcDef) {
       DrawWallArcEditor();
     }
+  }
+
+  void InitializeScenarioType(ScenarioDef::TypeCase scenario_type) {
+    if (scenario_type == ScenarioDef::kStaticDef) {
+      def_.mutable_static_def();
+    }
+    if (scenario_type == ScenarioDef::kCenteringDef) {
+      def_.mutable_centering_def();
+    }
+    if (scenario_type == ScenarioDef::kWallStrafeDef) {
+      def_.mutable_wall_strafe_def();
+    }
+    if (scenario_type == ScenarioDef::kLinearDef) {
+      def_.mutable_linear_def();
+    }
+    if (scenario_type == ScenarioDef::kBarrelDef) {
+      def_.mutable_barrel_def();
+    }
+    if (scenario_type == ScenarioDef::kWallArcDef) {
+      def_.mutable_wall_arc_def();
+    }
     if (scenario_type == ScenarioDef::kReferenceDef) {
-      DrawReferenceEditor();
+      def_.mutable_reference_def();
     }
   }
 
-  void DrawReferenceEditor() {
-    ImGui::IdGuard cid("ReferenceEditor");
-    ReferenceScenarioDef& r = *def_.mutable_reference_def();
+  void DrawReferenceEditor(float start_y, float end_y) {
+    float width = app_.screen_info().width * 0.6;
+    float height = end_y - start_y;
 
+    ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0, start_y));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    if (!ImGui::Begin(
+            "ReferenceEditor", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
+      ImGui::End();
+      return;
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Scenario type");
+    ImGui::SameLine();
+
+    auto scenario_type = def_.type_case();
+    ImGui::SimpleTypeDropdown("ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
+    InitializeScenarioType(scenario_type);
+
+    if (scenario_type != ScenarioDef::kReferenceDef) {
+      ImGui::End();
+      return;
+    }
+
+    Line();
+
+    // Make sure only the appropriate fields are set on the def.
+    ScenarioDef old_def = def_;
+
+    def_ = {};
+    def_.set_description(old_def.description());
+    *def_.mutable_overrides() = old_def.overrides();
+    *def_.mutable_reference_def() = old_def.reference_def();
+
+    ReferenceScenarioDef& r = *def_.mutable_reference_def();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Scenario");
     ImGui::SameLine();
+    ImGui::HelpMarker("The name of the scenario to reference");
+    ImGui::SameLine();
     ImGui::InputText("##ScenarioReference", r.mutable_scenario_id());
+
+    if (r.scenario_id().size() > 0) {
+      auto matching_scenario = app_.scenario_manager().GetScenario(r.scenario_id());
+      if (!matching_scenario) {
+        // Show search results for scenarios.
+        int num_matches = 0;
+        auto search_words = GetSearchWords(r.scenario_id());
+        ImGui::Indent();
+        for (const auto& scenario : app_.scenario_manager().scenarios()) {
+          if (StringMatchesSearch(scenario.id(), search_words)) {
+            num_matches++;
+            if (ImGui::Button(scenario.id())) {
+              r.set_scenario_id(scenario.id());
+            }
+          }
+        }
+        if (num_matches == 0) {
+          ImGui::Text("No matching scenarios found");
+        }
+        ImGui::Unindent();
+      }
+    }
+
+    Line();
 
     ImGui::Text("Overrides");
     ImGui::Indent();
@@ -386,6 +510,8 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::SameLine();
     ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
+
+    ImGui::End();
   }
 
   void DrawOverridesEditor() {
@@ -616,7 +742,7 @@ class ScenarioEditorScreen : public UiScreen {
       w.set_acceleration(acceleration);
     }
     ImGui::SameLine();
-    ImGui::HelpMarker("The target will accelearte in and out of changes of direction");
+    ImGui::HelpMarker("The target will accelerate in and out of changes of direction");
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {
@@ -766,6 +892,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawTargetPlacementStrategyEditor(const std::string& id, TargetPlacementStrategy* s) {
+    auto strat = s->DebugString();
     ImGui::IdGuard cid(id);
     if (s->regions_size() == 0) {
       s->add_regions();
@@ -1192,7 +1319,7 @@ class ScenarioEditorScreen : public UiScreen {
     DrawRegionLengthEditor("Y" + id, /*default_to_x=*/false, v->mutable_y(), /*is_point=*/true);
   }
 
-  void DrawShotTypeEditor(const ImVec2& char_size) {
+  void DrawShotTypeEditor() {
     ImGui::IdGuard cid("ShotTypeEditor");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Shot type");
@@ -1230,7 +1357,7 @@ class ScenarioEditorScreen : public UiScreen {
 
   void DrawRoomEditor() {
     ImGui::IdGuard cid("RoomEditor");
-    ImGui::SetNextWindowBgAlpha(0.6f);
+    ImGui::SetNextWindowBgAlpha(0.4f);
     float width = char_x_ * 25;
     float height = app_.screen_info().height * 0.75;
 
@@ -1420,7 +1547,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::End();
   }
 
-  void DrawTargetEditor(const ImVec2& char_size) {
+  void DrawTargetEditor() {
     ImGui::IdGuard cid("TargetEditor");
     TargetDef* t = def_.mutable_target_def();
 
@@ -1706,6 +1833,11 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void Render() override {
+    if (!editing_room_) {
+      UiScreen::Render();
+      return;
+    }
+
     target_manager_.UpdateRoom(def_.room());
     CameraParams camera_params(def_.room());
     Camera camera(camera_params);
