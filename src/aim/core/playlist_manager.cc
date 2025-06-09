@@ -1,9 +1,8 @@
 #include "playlist_manager.h"
 
-#include <absl/strings/strip.h>
-
 #include <filesystem>
 
+#include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"

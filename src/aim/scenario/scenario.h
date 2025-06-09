@@ -1,10 +1,6 @@
 #pragma once
 
-#include <google/protobuf/arena.h>
-
 #include <functional>
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
 #include <optional>
 
 #include "aim/core/application.h"
@@ -16,6 +12,9 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario_timer.h"
+#include "glm/mat4x4.hpp"
+#include "glm/vec3.hpp"
+#include "google/protobuf/arena.h"
 
 namespace aim {
 

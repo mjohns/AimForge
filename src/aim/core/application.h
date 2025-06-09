@@ -1,10 +1,6 @@
 #pragma once
 
-#include <SDL3/SDL.h>
-#include <absl/log/log.h>
-#include <absl/log/log_sink.h>
 #include <imgui.h>
-#include <spdlog/spdlog.h>
 
 #include <memory>
 #include <optional>
@@ -12,6 +8,9 @@
 #include <stdexcept>
 #include <unordered_map>
 
+#include "SDL3/SDL.h"
+#include "absl/log/log.h"
+#include "absl/log/log_sink.h"
 #include "aim/audio/sound_manager.h"
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
@@ -28,6 +27,7 @@
 #include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/renderer.h"
+#include "spdlog/spdlog.h"
 
 namespace aim {
 

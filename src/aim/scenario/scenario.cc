@@ -1,18 +1,15 @@
 #include "scenario.h"
 
-#include <SDL3/SDL.h>
-#include <absl/strings/ascii.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <imgui.h>
 
 #include <algorithm>
 #include <format>
 #include <fstream>
-#include <glm/mat4x4.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 #include <memory>
 
+#include "SDL3/SDL.h"
+#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
@@ -31,6 +28,9 @@
 #include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/ui_screen.h"
+#include "glm/mat4x4.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace aim {
 namespace {

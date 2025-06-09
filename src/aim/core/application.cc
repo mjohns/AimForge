@@ -1,25 +1,25 @@
 #include "application.h"
 
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#include <absl/log/log.h>
-#include <absl/log/log_sink.h>
-#include <absl/log/log_sink_registry.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_sdlgpu3.h>
 #include <imgui.h>
 #include <implot.h>
-#include <spdlog/sinks/rotating_file_sink.h>
-#include <spdlog/spdlog.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <memory>
 
+#include "SDL3/SDL.h"
+#include "SDL3_image/SDL_image.h"
+#include "SDL3_mixer/SDL_mixer.h"
+#include "absl/log/log.h"
+#include "absl/log/log_sink.h"
+#include "absl/log/log_sink_registry.h"
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/spdlog.h"
 
 namespace aim {
 namespace {

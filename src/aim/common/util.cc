@@ -1,26 +1,26 @@
 #include "util.h"
 
-#include <absl/strings/ascii.h>
-#include <google/protobuf/message.h>
 #include <imgui.h>
 #include <stdlib.h>
 
 #include <algorithm>
 #include <format>
 #include <functional>
-#include <glm/ext/scalar_common.hpp>
-#include <glm/trigonometric.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 #include <memory>
 #include <optional>
 #include <random>
 #include <string>
 #include <vector>
 
+#include "absl/strings/ascii.h"
 #include "aim/common/simple_types.h"
 #include "aim/proto/common.pb.h"
+#include "glm/ext/scalar_common.hpp"
+#include "glm/trigonometric.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
+#include "google/protobuf/message.h"
 
 namespace aim {
 namespace {

@@ -1,21 +1,20 @@
 #include "settings_manager.h"
 
-#include <SDL3/SDL.h>
-#include <absl/status/status.h>
-#include <absl/strings/ascii.h>
-#include <absl/strings/strip.h>
-#include <google/protobuf/json/json.h>
-#include <google/protobuf/util/json_util.h>
-#include <google/protobuf/util/message_differencer.h>
-#include <nlohmann/json.h>
-
 #include <fstream>
 
+#include "SDL3/SDL.h"
+#include "absl/status/status.h"
+#include "absl/strings/ascii.h"
+#include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
+#include "google/protobuf/json/json.h"
+#include "google/protobuf/util/json_util.h"
+#include "google/protobuf/util/message_differencer.h"
+#include "nlohmann/json.h"
 
 namespace aim {
 namespace {

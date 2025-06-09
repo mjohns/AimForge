@@ -1,9 +1,8 @@
 #pragma once
 
-#include <absl/strings/string_view.h>
-
 #include <format>
 #include <string>
+#include <string_view>
 
 namespace aim {
 
@@ -17,7 +16,7 @@ class ResourceName {
     *this = ResourceName(std::move(bundle_name), std::move(relative_name));
   }
 
-  void set(std::string bundle_name, absl::string_view relative_name) {
+  void set(std::string bundle_name, std::string_view relative_name) {
     *this = ResourceName(std::move(bundle_name), std::string(relative_name));
   }
 

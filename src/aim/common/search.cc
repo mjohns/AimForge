@@ -1,8 +1,9 @@
 #include "search.h"
 
-#include <absl/strings/ascii.h>
-#include <absl/strings/str_split.h>
-#include <absl/strings/string_view.h>
+#include <string_view>
+
+#include "absl/strings/ascii.h"
+#include "absl/strings/str_split.h"
 
 namespace aim {
 namespace {
@@ -48,7 +49,7 @@ std::vector<std::string> GetSearchWords(const std::string& text) {
   if (text.size() == 0) {
     return {};
   }
-  std::vector<absl::string_view> search_words = absl::StrSplit(text, ' ');
+  std::vector<std::string_view> search_words = absl::StrSplit(text, ' ');
   std::vector<std::string> result;
   for (auto& part : search_words) {
     result.push_back(absl::AsciiStrToLower(part));
@@ -63,7 +64,7 @@ bool StringMatchesSearch(const std::string& input,
     return empty_matches;
   }
 
-  std::vector<absl::string_view> base_input_words = absl::StrSplit(input, ' ');
+  std::vector<std::string_view> base_input_words = absl::StrSplit(input, ' ');
   std::vector<std::string> input_words;
   for (auto& word : base_input_words) {
     input_words.push_back(absl::AsciiStrToLower(word));

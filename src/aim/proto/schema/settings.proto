@@ -45,7 +45,6 @@ message SoundSettings {
   string kill = 11;
   string metronome = 12;
   string shoot = 13;
-
 }
 
 message ScenarioSettings {
