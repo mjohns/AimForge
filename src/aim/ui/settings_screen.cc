@@ -9,16 +9,10 @@
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/core/settings_manager.h"
-#include "aim/graphics/crosshair.h"
+#include "aim/ui/crosshair_editor_screen.h"
 
 namespace aim {
 namespace {
-
-const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTypes{
-    {CrosshairLayer::kDot, "Dot"},
-    {CrosshairLayer::kPlus, "Plus"},
-    {CrosshairLayer::kCircle, "Circle"},
-};
 
 struct KeybindItem {
   std::string label;
@@ -112,6 +106,10 @@ class SettingsScreen : public UiScreen {
                           &crosshair_opened);
     if (crosshair_opened) {
       crosshair_names_ = app_.settings_manager().ListCrosshairs();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Edit crosshairs")) {
+      PushNextScreen(CreateCrosshairEditorScreen(&app_));
     }
 
     ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")

@@ -253,6 +253,7 @@ int Application::Initialize() {
 
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 6;
+  style.FrameRounding = 4;
   // style.Colors.
 
   font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
