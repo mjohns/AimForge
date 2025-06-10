@@ -10,6 +10,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/crosshair_editor_screen.h"
+#include "aim/ui/theme_editor_screen.h"
 
 namespace aim {
 namespace {
@@ -93,6 +94,10 @@ class SettingsScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::SimpleDropdown(
         "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_x_ * 20);
+    ImGui::SameLine();
+    if (ImGui::Button("Edit themes")) {
+      PushNextScreen(CreateThemeEditorScreen(&app_));
+    }
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");

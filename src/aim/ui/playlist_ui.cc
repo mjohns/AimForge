@@ -388,12 +388,14 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##PlaylistSearchInput", kIconSearch, &playlist_search_text_);
-    ImGui::SameLine();
-
-    if (ImGui::Button(kIconRefresh)) {
-      result->reload_playlists = true;
+    if (playlist_search_text_.size() > 0) {
+      ImGui::SameLine();
+      if (ImGui::Button(kIconCancel)) {
+        playlist_search_text_ = "";
+      }
     }
-    ImGui::HelpTooltip("Reload playlists from disk.");
+
+    ImGui::SetNextItemWidth(char_size.x * 8);
     ImGui::SimpleTypeDropdown("##PlaylistViewType",
                               &view_type_,
                               {
@@ -461,7 +463,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   UiScreen& screen_;
   Application& app_;
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
-  PlaylistViewType view_type_ = PlaylistViewType::RECENT;
+  PlaylistViewType view_type_ = PlaylistViewType::ALL;
 };
 
 }  // namespace
