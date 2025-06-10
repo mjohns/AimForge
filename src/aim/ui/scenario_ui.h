@@ -29,6 +29,8 @@ class ScenarioBrowserComponent {
 
   // Returns whether to open an individual playlist.
   virtual void Show(ScenarioBrowserType type, ScenarioBrowserResult* result) = 0;
+
+  virtual void Reload() = 0;
 };
 
 std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(Application* app);

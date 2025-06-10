@@ -99,6 +99,10 @@ class HomeScreen : public UiScreen {
     ImGui::End();
   }
 
+  void OnAttachUi() override {
+    scenario_browser_component_->Reload();
+  }
+
   void DrawScreenInternal() {
     ImGui::IdGuard cid("HomePage");
     ScreenInfo screen = app_.screen_info();
@@ -320,6 +324,7 @@ class HomeScreen : public UiScreen {
       if (result.reload_scenarios) {
         app_.scenario_manager().LoadScenariosFromDisk();
         app_.playlist_manager().LoadPlaylistsFromDisk();
+        scenario_browser_component_->Reload();
       }
 
       ImGui::TableNextColumn();

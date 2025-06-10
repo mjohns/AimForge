@@ -1,20 +1,22 @@
 {
   "durationSeconds": 60,
+  "endScore": 45,
   "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
       "y": -100,
-      "z": -20
+      "z": 35
     },
     "simpleRoom": {
-      "height": 100,
-      "width": 260
+      "height": 150,
+      "width": 170
     }
   },
   "shotType": {
     "trackingInvincible": true
   },
+  "startScore": 25,
   "targetDef": {
     "numTargets": 1,
     "profiles": [
@@ -25,15 +27,15 @@
     ]
   },
   "wallArcDef": {
-    "controlHeight": 2,
+    "controlHeight": -2,
     "controlHeightJitter": 0,
-    "duration": 2.10000062,
+    "duration": 2.20000052,
     "height": {
-      "yPercentValue": 0.5
+      "xPercentValue": 0.72
     },
     "startOnGround": true,
     "width": {
-      "xPercentValue": 0.799999833
+      "value": 1
     }
   }
 }

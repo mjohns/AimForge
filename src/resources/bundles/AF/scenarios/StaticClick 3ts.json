@@ -1,5 +1,7 @@
 {
   "durationSeconds": 60,
+  "endScore": 138,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -14,6 +16,7 @@
   "shotType": {
     "clickSingle": true
   },
+  "startScore": 112,
   "staticDef": {
     "targetPlacementStrategy": {
       "minDistance": 20,

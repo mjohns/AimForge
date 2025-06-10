@@ -56,6 +56,10 @@ class ScenarioManager {
     return GetScenario(current_scenario_id_);
   }
 
+  const std::string& GetCurrentScenarioId() {
+    return current_scenario_id_;
+  }
+
   void ClearCurrentScenario() {
     current_scenario_id_ = "";
     current_running_scenario_ = {};

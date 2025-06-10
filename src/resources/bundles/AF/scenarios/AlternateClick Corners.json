@@ -1,0 +1,105 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 140,
+      "width": 165
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 43,
+      "regions": [
+        {
+          "circle": {
+            "diameter": {
+              "value": 23.5
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Top Right",
+          "weight": 1,
+          "xOffset": {
+            "xPercentValue": 0.34
+          },
+          "yOffset": {
+            "yPercentValue": 0.34
+          }
+        },
+        {
+          "circle": {
+            "diameter": {
+              "value": 24
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Top Left",
+          "weight": 1,
+          "xOffset": {
+            "xPercentValue": -0.34
+          },
+          "yOffset": {
+            "yPercentValue": 0.34
+          }
+        },
+        {
+          "circle": {
+            "diameter": {
+              "value": 24
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Bottom Left",
+          "weight": 1,
+          "xOffset": {
+            "xPercentValue": -0.34
+          },
+          "yOffset": {
+            "yPercentValue": -0.34
+          }
+        },
+        {
+          "circle": {
+            "diameter": {
+              "value": 24
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Bottom Right",
+          "weight": 1,
+          "xOffset": {
+            "xPercentValue": 0.34
+          },
+          "yOffset": {
+            "yPercentValue": -0.34
+          }
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "newestTargetIsGhost": true,
+    "numTargets": 2,
+    "profiles": [
+      {
+        "description": "",
+        "targetRadius": 1.5,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": true
+  }
+}
