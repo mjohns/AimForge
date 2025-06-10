@@ -39,9 +39,6 @@ class SettingsScreen : public UiScreen {
       : UiScreen(app), updater_(app.settings_manager().CreateUpdater()), scenario_id_(scenario_id) {
     theme_names_ = app.settings_manager().ListThemes();
     crosshair_names_ = app_.settings_manager().ListCrosshairs();
-    // Always try to save when exiting settings screen.
-    app.settings_manager().MarkDirty();
-
     Settings settings = app_.settings_manager().GetCurrentSettings();
 
     keybind_items_ = {
@@ -263,13 +260,6 @@ class SettingsScreen : public UiScreen {
     }
     ImGui::End();
 
-    /*
-    if (ImGui::Begin("Crosshairs")) {
-      DrawSavedCrosshairsEditor();
-    }
-    ImGui::End();
-    */
-
     if (ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoTitleBar)) {
       DrawControls();
     }
@@ -280,6 +270,7 @@ class SettingsScreen : public UiScreen {
     {
       ImVec2 sz = ImVec2(char_x_ * 14, 0.0f);
       if (ImGui::Button("Save", sz)) {
+        app_.settings_manager().MarkDirty();
         updater_.SaveIfChangesMade(scenario_id_);
         PopSelf();
       }

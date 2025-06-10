@@ -12,8 +12,6 @@
 namespace aim {
 namespace {
 
-const char* kDeleteConfirmationPopup = "DELETE_CONFIRMATION_POPUP";
-
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;

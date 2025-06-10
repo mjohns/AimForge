@@ -37,6 +37,10 @@ class CrosshairEditorScreen : public UiScreen {
     BeginMainWindow("CrosshairEditor");
     notification_popup_.Draw();
     if (current_crosshair_name_.size() == 0) {
+      delete_confirmation_dialog_.Draw("Delete", [=](const std::string& to_delete) {
+        app_.settings_manager().DeleteCrosshair(to_delete);
+        LoadCrosshairList();
+      });
       DrawCrosshairListEditor();
     } else {
       DrawCrosshairEditor();
@@ -88,6 +92,7 @@ class CrosshairEditorScreen : public UiScreen {
       OpenNewCrosshair();
     }
     Line();
+    ImGui::BeginChild("CrosshairListContent");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshairs");
     ImGui::Indent();
@@ -105,9 +110,8 @@ class CrosshairEditorScreen : public UiScreen {
           OpenExistingCrosshair(crosshair_name);
         }
         if (ImGui::Selectable("Delete")) {
-          // TODO: confirmation
-          app_.settings_manager().DeleteCrosshair(crosshair_name);
-          LoadCrosshairList();
+          delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", crosshair_name),
+                                                 crosshair_name);
         }
         ImGui::EndPopup();
       }
@@ -116,6 +120,7 @@ class CrosshairEditorScreen : public UiScreen {
       // Draw the crosshair too?
     }
     ImGui::Unindent();
+    ImGui::EndChild();
   }
 
   void Line() {
@@ -353,6 +358,7 @@ class CrosshairEditorScreen : public UiScreen {
   std::string current_crosshair_name_;
   bool is_new_crosshair_ = false;
   ImGui::NotificationPopup notification_popup_{"Notification"};
+  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
 };
 
 }  // namespace
