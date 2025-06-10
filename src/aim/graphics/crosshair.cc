@@ -10,6 +10,8 @@ void DrawPlusWithLengths(float horizontal_length,
                          float vertical_length,
                          float thickness,
                          float rounding,
+                         float horizontal_gap_length,
+                         float vertical_gap_length,
                          ImU32 color,
                          const ImVec2& center,
                          ImDrawList* draw_list) {
@@ -23,7 +25,23 @@ void DrawPlusWithLengths(float horizontal_length,
     horizontal_upper_left.y = center.y - thickness;
     horizontal_bottom_right.y = center.y + thickness;
 
-    draw_list->AddRectFilled(horizontal_upper_left, horizontal_bottom_right, color, rounding);
+    if (horizontal_gap_length > 0) {
+      // Draw left side.
+      ImVec2 center_bottom_left;
+      center_bottom_left.x = center.x - horizontal_gap_length;
+      center_bottom_left.y = horizontal_bottom_right.y;
+      horizontal_upper_left.x -= horizontal_gap_length;
+      draw_list->AddRectFilled(horizontal_upper_left, center_bottom_left, color, rounding);
+
+      // Draw right side.
+      ImVec2 center_upper_right;
+      center_upper_right.x = center.x + horizontal_gap_length;
+      center_upper_right.y = horizontal_upper_left.y;
+      horizontal_bottom_right.x += horizontal_gap_length;
+      draw_list->AddRectFilled(center_upper_right, horizontal_bottom_right, color, rounding);
+    } else {
+      draw_list->AddRectFilled(horizontal_upper_left, horizontal_bottom_right, color, rounding);
+    }
   }
 
   if (vertical_length > 0) {
@@ -36,7 +54,23 @@ void DrawPlusWithLengths(float horizontal_length,
     vertical_upper_left.y = center.y - vertical_length;
     vertical_bottom_right.y = center.y + vertical_length;
 
-    draw_list->AddRectFilled(vertical_upper_left, vertical_bottom_right, color, rounding);
+    if (vertical_gap_length > 0) {
+      // Draw top.
+      ImVec2 upper_bottom_right;
+      upper_bottom_right.x = vertical_bottom_right.x;
+      upper_bottom_right.y = center.y - vertical_gap_length;
+      vertical_upper_left.y -= vertical_gap_length;
+      draw_list->AddRectFilled(vertical_upper_left, upper_bottom_right, color, rounding);
+
+      // Draw bottom.
+      ImVec2 bottom_upper_left;
+      bottom_upper_left.x = vertical_upper_left.x;
+      bottom_upper_left.y = center.y + vertical_gap_length;
+      vertical_bottom_right.y += vertical_gap_length;
+      draw_list->AddRectFilled(bottom_upper_left, vertical_bottom_right, color, rounding);
+    } else {
+      draw_list->AddRectFilled(vertical_upper_left, vertical_bottom_right, color, rounding);
+    }
   }
 }
 
@@ -102,12 +136,16 @@ void DrawCrosshairLayer(const CrosshairLayer& layer,
     if (plus.has_vertical_size()) {
       vertical_length *= plus.vertical_size();
     }
+    float vertical_gap_length = (plus.vertical_gap_size() * base_length) / 2.0;
+    float horizontal_gap_length = (plus.horizontal_gap_size() * base_length) / 2.0;
 
     if (plus.outline_thickness() > 0) {
       DrawPlusWithLengths(horizontal_length,
                           vertical_length,
                           thickness,
                           plus.rounding(),
+                          horizontal_gap_length,
+                          vertical_gap_length,
                           outline_color,
                           center,
                           draw_list);
@@ -115,12 +153,22 @@ void DrawCrosshairLayer(const CrosshairLayer& layer,
       horizontal_length -= outline_size;
       vertical_length -= outline_size;
       thickness -= outline_size;
+      if (horizontal_gap_length > 0) {
+        horizontal_gap_length += outline_size;
+        horizontal_length -= outline_size;
+      }
+      if (vertical_gap_length > 0) {
+        vertical_gap_length += outline_size;
+        vertical_length -= outline_size;
+      }
     }
 
     DrawPlusWithLengths(horizontal_length,
                         vertical_length,
                         thickness,
                         plus.rounding(),
+                        horizontal_gap_length,
+                        vertical_gap_length,
                         main_color,
                         center,
                         draw_list);
