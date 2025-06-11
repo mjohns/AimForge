@@ -85,24 +85,34 @@ class WallWanderScenario : public BaseScenario {
       float max_y = (wall_.height * 0.5) - (target->radius * 1.2);
       float min_y = -1 * max_y;
 
+      float push_percent = 0.f;
+
       if (current_pos.x >= max_x) {
         // Too far right.
         EnsureNegative(&direction.x);
+        PushTowardsCenter(&direction, glm::vec2(-1, 0), push_percent);
+        UpdateTurn(info, now, true);
       }
 
       if (current_pos.x <= min_x) {
         // Too far left.
         EnsurePositive(&direction.x);
+        PushTowardsCenter(&direction, glm::vec2(1, 0), push_percent);
+        UpdateTurn(info, now, true);
       }
 
       if (current_pos.y >= max_y) {
         // Too high.
         EnsureNegative(&direction.y);
+        PushTowardsCenter(&direction, glm::vec2(0, -1), push_percent);
+        UpdateTurn(info, now, true);
       }
 
       if (current_pos.y <= min_y) {
         // Too low.
         EnsurePositive(&direction.y);
+        PushTowardsCenter(&direction, glm::vec2(0, 1), push_percent);
+        UpdateTurn(info, now, true);
       }
 
       // Turn the target towards goal.
@@ -133,14 +143,23 @@ class WallWanderScenario : public BaseScenario {
     target_manager_.UpdateTargetPositions(now);
   }
 
+  void PushTowardsCenter(glm::vec2* direction, glm::vec2 out, float percent) {
+    glm::vec2 diff = (out - *direction) * percent;
+
+    *direction = *direction + diff;
+  }
+
  private:
-  void UpdateTurn(TargetInfo& info, float now_seconds) {
+  void UpdateTurn(TargetInfo& info, float now_seconds, bool is_bounce = false) {
     info.last_turn_time = now_seconds;
     float duration =
         std::max<float>(app_.rand().GetJittered(w_.turn_time(), w_.turn_time_jitter()), 0.3f);
     info.next_turn_time = now_seconds + duration;
     float next_turn_rate =
         ClampPositive(app_.rand().GetJittered(w_.turn_rate(), w_.turn_rate_jitter()));
+    if (is_bounce) {
+      next_turn_rate *= 0.2;
+    }
     info.turn_rate = 0;
     info.is_accelerating = true;
     info.max_turn_rate = next_turn_rate;
