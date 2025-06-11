@@ -19,6 +19,7 @@
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/history_manager.h"
+#include "aim/core/labels_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/screen.h"
@@ -121,6 +122,10 @@ class Application {
     return *history_manager_;
   }
 
+  LabelsManager& labels_manager() {
+    return *labels_manager_;
+  }
+
   spdlog::logger* logger() {
     return logger_.get();
   };
@@ -156,6 +161,7 @@ class Application {
   std::unique_ptr<SoundManager> sound_manager_;
   std::unique_ptr<StatsManager> stats_manager_;
   std::unique_ptr<SettingsManager> settings_manager_;
+  std::unique_ptr<LabelsManager> labels_manager_;
   std::unique_ptr<SettingsDb> settings_db_;
   std::unique_ptr<HistoryManager> history_manager_;
   std::unique_ptr<Renderer> renderer_;

@@ -149,6 +149,7 @@ int Application::Initialize() {
   stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
   playlist_manager_ = std::make_unique<PlaylistManager>(file_system_.get());
   history_manager_ = std::make_unique<HistoryManager>(file_system_.get(), playlist_manager_.get());
+  labels_manager_ = std::make_unique<LabelsManager>(file_system_.get());
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
                                         file_system_->GetUserDataPath("resources/themes"),
