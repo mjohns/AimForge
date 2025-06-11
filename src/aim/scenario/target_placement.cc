@@ -138,12 +138,4 @@ std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const Wall& wall,
   return std::make_unique<WallTargetPlacerImpl>(wall, strategy, target_manager, app);
 }
 
-std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const ScenarioDef& def,
-                                                         TargetManager* target_manager,
-                                                         Application* app) {
-  Wall wall = Wall::ForRoom(def.room());
-  return CreateWallTargetPlacer(
-      wall, def.static_def().target_placement_strategy(), target_manager, app);
-}
-
 }  // namespace aim

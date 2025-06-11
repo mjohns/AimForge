@@ -20,10 +20,6 @@ class WallTargetPlacer {
   virtual glm::vec3 GetNextPosition(int counter) = 0;
 };
 
-std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const ScenarioDef& def,
-                                                         TargetManager* target_manager,
-                                                         Application* app);
-
 std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const Wall& wall,
                                                          const TargetPlacementStrategy& strategy,
                                                          TargetManager* target_manager,
