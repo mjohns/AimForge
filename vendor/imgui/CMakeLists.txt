@@ -1,27 +1,28 @@
 add_library(imgui STATIC
-  imconfig.h
-  imgui.cpp
-  imgui.h
-  imgui_draw.cpp
-  imgui_internal.h
-  imgui_tables.cpp
-  imgui_widgets.cpp
-  imstb_rectpack.h
-  imstb_textedit.h
-  imstb_truetype.h
-  imgui_demo.cpp
-  misc/cpp/imgui_stdlib.h
-  misc/cpp/imgui_stdlib.cpp
-  backends/imgui_impl_sdl3.h
-  backends/imgui_impl_sdl3.cpp
-  backends/imgui_impl_sdl3.cpp
-  backends/imgui_impl_sdlgpu3_shaders.h
-  backends/imgui_impl_sdlgpu3.h
-  backends/imgui_impl_sdlgpu3.cpp
-  backends/imgui_impl_opengl3.h
-  backends/imgui_impl_opengl3.cpp)
+  imgui/imconfig.h
+  imgui/imgui.cpp
+  imgui/imgui.h
+  imgui/imgui_draw.cpp
+  imgui/imgui_internal.h
+  imgui/imgui_tables.cpp
+  imgui/imgui_widgets.cpp
+  imgui/imstb_rectpack.h
+  imgui/imstb_textedit.h
+  imgui/imstb_truetype.h
+  imgui/imgui_demo.cpp
+  imgui/misc/cpp/imgui_stdlib.h
+  imgui/misc/cpp/imgui_stdlib.cpp
+  imgui/backends/imgui_impl_sdl3.h
+  imgui/backends/imgui_impl_sdl3.cpp
+  imgui/backends/imgui_impl_sdl3.cpp
+  imgui/backends/imgui_impl_sdlgpu3_shaders.h
+  imgui/backends/imgui_impl_sdlgpu3.h
+  imgui/backends/imgui_impl_sdlgpu3.cpp
+  imgui/backends/imgui_impl_opengl3.h
+  imgui/backends/imgui_impl_opengl3.cpp)
 
 target_include_directories(imgui PUBLIC .)
+target_include_directories(imgui PUBLIC imgui)
 target_compile_features(imgui PRIVATE cxx_std_20)
 
 target_link_libraries(imgui PUBLIC SDL3::SDL3)

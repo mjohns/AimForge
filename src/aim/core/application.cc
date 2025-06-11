@@ -1,8 +1,5 @@
 #include "application.h"
 
-#include <backends/imgui_impl_sdl3.h>
-#include <backends/imgui_impl_sdlgpu3.h>
-#include <imgui.h>
 #include <implot.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +15,9 @@
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
+#include "imgui/backends/imgui_impl_sdl3.h"
+#include "imgui/backends/imgui_impl_sdlgpu3.h"
+#include "imgui/imgui.h"
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/spdlog.h"
 

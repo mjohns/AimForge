@@ -1,6 +1,5 @@
 #pragma once
 
-#include <imgui.h>
 #include <stdlib.h>
 
 #include <algorithm>
@@ -18,6 +17,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "google/protobuf/message.h"
+#include "imgui/imgui.h"
 
 namespace aim {
 

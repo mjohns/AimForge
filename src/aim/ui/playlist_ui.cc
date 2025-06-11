@@ -1,13 +1,12 @@
 #include "playlist_ui.h"
 
-#include <imgui.h>
-
 #include <algorithm>
 
 #include "absl/strings/strip.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
 #include "aim/ui/scenario_editor_screen.h"
+#include "imgui.h"
 
 namespace aim {
 namespace {
