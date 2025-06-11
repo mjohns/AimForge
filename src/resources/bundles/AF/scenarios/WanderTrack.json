@@ -1,0 +1,38 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 120,
+      "width": 170
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "description": "",
+        "speed": 20,
+        "speedJitter": 0,
+        "targetRadius": 2.30000019,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "wallWanderDef": {
+    "turnRate": 300,
+    "turnRateJitter": 70,
+    "turnTime": 2.19999981,
+    "turnTimeJitter": 0.499999911
+  }
+}

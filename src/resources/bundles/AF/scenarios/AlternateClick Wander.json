@@ -1,0 +1,81 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -100,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 150,
+      "width": 170
+    }
+  },
+  "targetDef": {
+    "newestTargetIsGhost": true,
+    "numTargets": 2,
+    "profiles": [
+      {
+        "description": "",
+        "speed": 12,
+        "speedJitter": 0,
+        "targetRadius": 2.30000019,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": true
+  },
+  "wallWanderDef": {
+    "targetPlacementStrategy": {
+      "regionOrder": [
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Left",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.100000054
+            },
+            "yLength": {
+              "yPercentValue": 0.4
+            }
+          },
+          "xOffset": {
+            "xPercentValue": -0.300000072
+          },
+          "yOffset": {
+            "value": 0
+          }
+        },
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Right",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.100000031
+            },
+            "yLength": {
+              "yPercentValue": 0.4
+            }
+          },
+          "xOffset": {
+            "value": 30
+          },
+          "yOffset": {
+            "value": 0
+          }
+        }
+      ]
+    },
+    "turnRate": 300,
+    "turnRateJitter": 70,
+    "turnTime": 2.19999981,
+    "turnTimeJitter": 0.499999911
+  }
+}
