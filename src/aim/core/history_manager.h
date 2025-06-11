@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "aim/common/simple_types.h"
+#include "aim/common/object_type.h"
 #include "aim/core/file_system.h"
 #include "aim/database/history_db.h"
 
@@ -18,10 +19,10 @@ class HistoryManager {
   HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager);
   AIM_NO_COPY(HistoryManager);
 
-  void UpdateRecentView(RecentViewType t, const std::string& id);
-  std::vector<RecentView> GetRecentViews(RecentViewType t, int limit);
+  void UpdateRecentView(ObjectType t, const std::string& id);
+  std::vector<RecentView> GetRecentViews(ObjectType t, int limit);
 
-  std::vector<std::string> GetRecentUniqueNames(RecentViewType t, int limit);
+  std::vector<std::string> GetRecentUniqueNames(ObjectType t, int limit);
 
   const std::vector<std::string>& recent_scenario_ids();
   const std::vector<std::string>& recent_playlists();

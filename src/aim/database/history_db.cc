@@ -8,6 +8,7 @@
 #include <string>
 
 #include "aim/common/log.h"
+#include "aim/common/object_type.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/database/sqlite_util.h"
@@ -38,20 +39,6 @@ ORDER BY Timestamp DESC
 LIMIT ?;
 )AIMS";
 
-std::string RecentViewTypeToString(RecentViewType t) {
-  switch (t) {
-    case RecentViewType::PLAYLIST:
-      return "Playlist";
-    case RecentViewType::SCENARIO:
-      return "Scenario";
-    case RecentViewType::THEME:
-      return "Theme";
-    case RecentViewType::CROSSHAIR:
-      return "Crosshair";
-  }
-  return "UnknownViewType";
-}
-
 }  // namespace
 
 HistoryDb::HistoryDb(const std::filesystem::path& db_path) {
@@ -74,7 +61,7 @@ HistoryDb::~HistoryDb() {
   }
 }
 
-void HistoryDb::UpdateRecentView(RecentViewType t, const std::string& id) {
+void HistoryDb::UpdateRecentView(ObjectType t, const std::string& id) {
   sqlite3_stmt* stmt;
   int rc = sqlite3_prepare_v2(db_, kInsertRecentViewsSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
@@ -82,7 +69,7 @@ void HistoryDb::UpdateRecentView(RecentViewType t, const std::string& id) {
     return;
   }
 
-  std::string type_string = RecentViewTypeToString(t);
+  std::string type_string = ObjectTypeToString(t);
   std::string timestamp = GetNowString();
 
   BindString(stmt, 1, type_string);
@@ -94,7 +81,7 @@ void HistoryDb::UpdateRecentView(RecentViewType t, const std::string& id) {
   sqlite3_finalize(stmt);
 }
 
-std::vector<RecentView> HistoryDb::GetRecentViews(RecentViewType t, int limit) {
+std::vector<RecentView> HistoryDb::GetRecentViews(ObjectType t, int limit) {
   sqlite3_stmt* stmt;
   int rc = sqlite3_prepare_v2(db_, kGetRecentViewsForTypeSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
@@ -102,7 +89,7 @@ std::vector<RecentView> HistoryDb::GetRecentViews(RecentViewType t, int limit) {
     return {};
   }
 
-  std::string type_string = RecentViewTypeToString(t);
+  std::string type_string = ObjectTypeToString(t);
   BindString(stmt, 1, type_string);
   sqlite3_bind_int(stmt, 2, limit);
 
@@ -118,7 +105,7 @@ std::vector<RecentView> HistoryDb::GetRecentViews(RecentViewType t, int limit) {
   return views;
 }
 
-std::vector<std::string> HistoryDb::GetRecentUniqueNames(RecentViewType t, int limit) {
+std::vector<std::string> HistoryDb::GetRecentUniqueNames(ObjectType t, int limit) {
   auto views = GetRecentViews(t, limit);
   std::vector<std::string> result;
   for (auto& view : views) {

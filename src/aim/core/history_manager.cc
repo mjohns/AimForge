@@ -15,35 +15,35 @@ HistoryManager::HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager
     : history_db_(std::make_unique<HistoryDb>(fs->GetUserDataPath("history.db"))),
       playlist_manager_(playlist_manager) {}
 
-void HistoryManager::UpdateRecentView(RecentViewType t, const std::string& id) {
-  if (t == RecentViewType::SCENARIO) {
+void HistoryManager::UpdateRecentView(ObjectType t, const std::string& id) {
+  if (t == ObjectType::SCENARIO) {
     scenarios_need_reload_ = true;
   }
-  if (t == RecentViewType::PLAYLIST) {
+  if (t == ObjectType::PLAYLIST) {
     playlists_need_reload_ = true;
   }
   return history_db_->UpdateRecentView(t, id);
 }
 
-std::vector<RecentView> HistoryManager::GetRecentViews(RecentViewType t, int limit) {
+std::vector<RecentView> HistoryManager::GetRecentViews(ObjectType t, int limit) {
   return history_db_->GetRecentViews(t, limit);
 }
 
-std::vector<std::string> HistoryManager::GetRecentUniqueNames(RecentViewType t, int limit) {
+std::vector<std::string> HistoryManager::GetRecentUniqueNames(ObjectType t, int limit) {
   return history_db_->GetRecentUniqueNames(t, limit);
 }
 
 void HistoryManager::MaybeReloadScenarios() {
   if (scenarios_need_reload_) {
     scenarios_need_reload_ = false;
-    recent_scenario_ids_ = GetRecentUniqueNames(RecentViewType::SCENARIO, kCachedRecentNamesSize);
+    recent_scenario_ids_ = GetRecentUniqueNames(ObjectType::SCENARIO, kCachedRecentNamesSize);
   }
 }
 
 void HistoryManager::MaybeReloadPlaylists() {
   if (playlists_need_reload_) {
     playlists_need_reload_ = false;
-    auto candidates = GetRecentUniqueNames(RecentViewType::PLAYLIST, kCachedRecentNamesSize);
+    auto candidates = GetRecentUniqueNames(ObjectType::PLAYLIST, kCachedRecentNamesSize);
     recent_playlists_.clear();
     for (const std::string& name : candidates) {
       auto playlist = playlist_manager_->GetPlaylist(name);

@@ -6,11 +6,10 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/object_type.h"
 #include "aim/common/simple_types.h"
 
 namespace aim {
-
-enum class RecentViewType { SCENARIO, PLAYLIST, THEME, CROSSHAIR };
 
 struct RecentView {
   std::string id;
@@ -23,10 +22,10 @@ class HistoryDb {
   ~HistoryDb();
   AIM_NO_COPY(HistoryDb);
 
-  void UpdateRecentView(RecentViewType t, const std::string& id);
+  void UpdateRecentView(ObjectType t, const std::string& id);
 
-  std::vector<RecentView> GetRecentViews(RecentViewType t, int limit);
-  std::vector<std::string> GetRecentUniqueNames(RecentViewType t, int limit);
+  std::vector<RecentView> GetRecentViews(ObjectType t, int limit);
+  std::vector<std::string> GetRecentUniqueNames(ObjectType t, int limit);
 
  private:
   sqlite3* db_ = nullptr;

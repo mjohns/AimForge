@@ -338,7 +338,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     app_.scenario_manager().SetCurrentScenario(name_.full_name());
-    app_.history_manager().UpdateRecentView(RecentViewType::SCENARIO, name_.full_name());
+    app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, name_.full_name());
     if (add_to_playlist_.size() > 0) {
       app_.playlist_manager().AddScenarioToPlaylist(add_to_playlist_, name_.full_name());
     }

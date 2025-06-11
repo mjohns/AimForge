@@ -152,7 +152,7 @@ absl::Status SettingsManager::Initialize() {
 }
 
 std::vector<std::string> SettingsManager::ListCrosshairs() {
-  auto recent_crosshairs = history_manager_->GetRecentUniqueNames(RecentViewType::CROSSHAIR, 10);
+  auto recent_crosshairs = history_manager_->GetRecentUniqueNames(ObjectType::CROSSHAIR, 10);
   if (!std::filesystem::exists(crosshair_dir_) || !std::filesystem::is_directory(crosshair_dir_)) {
     return {};
   }
@@ -182,7 +182,7 @@ std::vector<std::string> SettingsManager::ListCrosshairs() {
 }
 
 std::vector<std::string> SettingsManager::ListThemes() {
-  auto recent_themes = history_manager_->GetRecentViews(RecentViewType::THEME, 20);
+  auto recent_themes = history_manager_->GetRecentViews(ObjectType::THEME, 20);
   if (!std::filesystem::exists(theme_dir_) || !std::filesystem::is_directory(theme_dir_)) {
     return {};
   }
@@ -464,13 +464,13 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
   std::string theme_name = settings.theme_name();
   if (current_settings->theme_name() != theme_name) {
     if (theme_name.size() > 0) {
-      history_manager_->UpdateRecentView(RecentViewType::THEME, theme_name);
+      history_manager_->UpdateRecentView(ObjectType::THEME, theme_name);
     }
   }
   std::string crosshair_name = settings.current_crosshair_name();
   if (current_settings->current_crosshair_name() != crosshair_name) {
     if (crosshair_name.size() > 0) {
-      history_manager_->UpdateRecentView(RecentViewType::CROSSHAIR, crosshair_name);
+      history_manager_->UpdateRecentView(ObjectType::CROSSHAIR, crosshair_name);
     }
   }
 
