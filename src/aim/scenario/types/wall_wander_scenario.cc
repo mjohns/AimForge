@@ -85,7 +85,7 @@ class WallWanderScenario : public BaseScenario {
       float max_y = (wall_.height * 0.5) - (target->radius * 1.2);
       float min_y = -1 * max_y;
 
-      float push_percent = 0.f;
+      float push_percent = 0.8f;
 
       if (current_pos.x >= max_x) {
         // Too far right.
@@ -127,17 +127,15 @@ class WallWanderScenario : public BaseScenario {
       if (info.is_accelerating) {
         info.turn_rate += delta_seconds * info.turn_rate_accel;
       } else {
-        info.turn_rate -= delta_seconds * info.turn_rate_accel;
+        info.turn_rate = ClampPositive(info.turn_rate - delta_seconds * info.turn_rate_accel);
       }
 
       float angle_to_turn = delta_seconds * info.turn_rate;
       if (info.is_negative_turn) {
         angle_to_turn *= -1;
       }
-      if (angle_to_turn != 0) {
-        glm::vec2 new_direction = RotateDegrees(*target->wall_direction, angle_to_turn);
-        target->wall_direction = new_direction;
-      }
+      glm::vec2 new_direction = RotateDegrees(*target->wall_direction, angle_to_turn);
+      target->wall_direction = new_direction;
     }
 
     target_manager_.UpdateTargetPositions(now);
@@ -145,20 +143,23 @@ class WallWanderScenario : public BaseScenario {
 
   void PushTowardsCenter(glm::vec2* direction, glm::vec2 out, float percent) {
     glm::vec2 diff = (out - *direction) * percent;
-
     *direction = *direction + diff;
   }
 
  private:
   void UpdateTurn(TargetInfo& info, float now_seconds, bool is_bounce = false) {
-    info.last_turn_time = now_seconds;
     float duration =
         std::max<float>(app_.rand().GetJittered(w_.turn_time(), w_.turn_time_jitter()), 0.3f);
+    if (is_bounce) {
+      duration = 0.5;
+    }
+
+    info.last_turn_time = now_seconds;
     info.next_turn_time = now_seconds + duration;
     float next_turn_rate =
         ClampPositive(app_.rand().GetJittered(w_.turn_rate(), w_.turn_rate_jitter()));
     if (is_bounce) {
-      next_turn_rate *= 0.2;
+      next_turn_rate *= 0.4;
     }
     info.turn_rate = 0;
     info.is_accelerating = true;

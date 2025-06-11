@@ -414,6 +414,14 @@ void Scenario::HandleScenarioDone() {
       score = stats_.hit_stopwatch.GetElapsedSeconds();
       break;
     }
+    case ShotType::kTrackingKill: {
+      // Make sure to take the score from num hits before changing hits/shots to tracking on/off
+      // time so that percentage shows up like for normal tracking invincible scenarios.
+      score = stats_.num_hits;
+      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
+      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
+      break;
+    }
     case ShotType::kClickSingle: {
       // Default clicking scoring
       float hit_percent = stats_.num_hits / stats_.num_shots;
@@ -425,10 +433,8 @@ void Scenario::HandleScenarioDone() {
       score = stats_.num_hits * (1 - accuracy_penalty);
       break;
     }
-    case ShotType::kTrackingKill:
     case ShotType::kPoke:
     default:
-      score = stats_.num_hits;
       break;
   }
 
