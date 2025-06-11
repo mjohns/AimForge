@@ -13,6 +13,7 @@ namespace {
 
 enum ScenarioViewType {
   RECENT,
+  STARRED,
   ALL,
 };
 
@@ -52,6 +53,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
                                                        &view_type_,
                                                        {
                                                            {ScenarioViewType::RECENT, "Recent"},
+                                                           {ScenarioViewType::STARRED, "Starred"},
                                                            {ScenarioViewType::ALL, "All"},
                                                        });
     if (view_type_changed) {
@@ -166,6 +168,19 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       ImGui::EndPopup();
     }
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+
+    ImGui::SameLine();
+    if (app_->labels_manager().IsStarred(ObjectType::SCENARIO, scenario.id())) {
+      if (ImGui::Selectable(kIconStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        app_->labels_manager().UnstarItem(ObjectType::SCENARIO, scenario.id());
+        UpdateFilteredScenarios();
+      }
+    } else {
+      if (ImGui::Selectable(kIconStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        app_->labels_manager().StarItem(ObjectType::SCENARIO, scenario.id());
+        // UpdateFilteredScenarios(); Is this necessary? You can't click this from the starred list.
+      }
+    }
   }
 
   bool ShouldUpdateFilteredScenarios() {
@@ -177,16 +192,23 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     filtered_scenario_ids_.clear();
     filtered_scenario_ids_.reserve(app_->scenario_manager().scenarios().size());
 
-    if (view_type_ == ScenarioViewType::ALL) {
-      for (const ScenarioItem& scenario : app_->scenario_manager().scenarios()) {
-        if (StringMatchesSearch(scenario.id(), search_words)) {
-          filtered_scenario_ids_.push_back(scenario.id());
+    if (view_type_ == ScenarioViewType::STARRED) {
+      auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
+      for (const std::string& scenario_id : items->items) {
+        if (StringMatchesSearch(scenario_id, search_words)) {
+          filtered_scenario_ids_.push_back(scenario_id);
         }
       }
-    } else {
+    } else if (view_type_ == ScenarioViewType::RECENT) {
       for (const std::string& scenario_id : app_->history_manager().recent_scenario_ids()) {
         if (StringMatchesSearch(scenario_id, search_words)) {
           filtered_scenario_ids_.push_back(scenario_id);
+        }
+      }
+    } else {
+      for (const ScenarioItem& scenario : app_->scenario_manager().scenarios()) {
+        if (StringMatchesSearch(scenario.id(), search_words)) {
+          filtered_scenario_ids_.push_back(scenario.id());
         }
       }
     }

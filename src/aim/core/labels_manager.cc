@@ -51,6 +51,18 @@ std::shared_ptr<LabeledItems> LabelsManager::ListLabeledItems(const std::string&
   return items;
 }
 
+bool LabelsManager::HasLabel(const std::string& label,
+                             ObjectType type,
+                             const std::string& object_id) {
+  auto& items_by_label = labeled_items_cache_[type];
+  auto it = items_by_label.find(label);
+  if (it == items_by_label.end()) {
+    return ListLabeledItems(label, type)->has(object_id);
+  }
+
+  return it->second->has(object_id);
+}
+
 void LabelsManager::StarItem(ObjectType type, const std::string& object_id) {
   AddLabeledItem(kStarredLabel, type, object_id);
 }
@@ -60,7 +72,7 @@ void LabelsManager::UnstarItem(ObjectType type, const std::string& object_id) {
 }
 
 bool LabelsManager::IsStarred(ObjectType type, const std::string& object_id) {
-  return ListStarredItems(type)->has(object_id);
+  return HasLabel(kStarredLabel, type, object_id);
 }
 
 std::shared_ptr<LabeledItems> LabelsManager::ListStarredItems(ObjectType type) {

@@ -31,12 +31,12 @@ class LabelsManager {
 
   void AddLabeledItem(const std::string& label, ObjectType type, const std::string& object_id);
   void RemoveLabeledItem(const std::string& label, ObjectType type, const std::string& object_id);
+  bool HasLabel(const std::string& label, ObjectType type, const std::string& object_id);
 
   std::shared_ptr<LabeledItems> ListLabeledItems(const std::string& label, ObjectType type);
 
   void StarItem(ObjectType type, const std::string& object_id);
-  void UnstarItem(
-      ObjectType type, const std::string& object_id);
+  void UnstarItem(ObjectType type, const std::string& object_id);
   bool IsStarred(ObjectType type, const std::string& object_id);
   std::shared_ptr<LabeledItems> ListStarredItems(ObjectType type);
 
