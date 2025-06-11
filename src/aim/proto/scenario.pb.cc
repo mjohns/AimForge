@@ -475,6 +475,33 @@ struct CircleTargetRegionDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CircleTargetRegionDefaultTypeInternal _CircleTargetRegion_default_instance_;
 
+inline constexpr CircleScenarioDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        radius_{nullptr},
+        start_degrees_{0},
+        rotate_clockwise_{false} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR CircleScenarioDef::CircleScenarioDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct CircleScenarioDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CircleScenarioDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CircleScenarioDefDefaultTypeInternal() {}
+  union {
+    CircleScenarioDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CircleScenarioDefDefaultTypeInternal _CircleScenarioDef_default_instance_;
+
 inline constexpr WallStrafeScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -1082,6 +1109,7 @@ const ::uint32_t
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
         5,
@@ -1092,6 +1120,7 @@ const ::uint32_t
         6,
         7,
         8,
+        ~0u,
         ~0u,
         ~0u,
         ~0u,
@@ -1120,6 +1149,20 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::StaticScenarioDef, _impl_.target_placement_strategy_),
         0,
+        PROTOBUF_FIELD_OFFSET(::aim::CircleScenarioDef, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircleScenarioDef, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::CircleScenarioDef, _impl_.radius_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircleScenarioDef, _impl_.start_degrees_),
+        PROTOBUF_FIELD_OFFSET(::aim::CircleScenarioDef, _impl_.rotate_clockwise_),
+        0,
+        1,
+        2,
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::CenteringScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1355,19 +1398,20 @@ static const ::_pbi::MigrationSchema
         {174, 187, -1, sizeof(::aim::TargetPlacementStrategy)},
         {192, 204, -1, sizeof(::aim::ScenarioOverrides)},
         {208, 223, -1, sizeof(::aim::ShotType)},
-        {229, 255, -1, sizeof(::aim::ScenarioDef)},
-        {272, 281, -1, sizeof(::aim::ReferenceScenarioDef)},
-        {282, 291, -1, sizeof(::aim::StaticScenarioDef)},
-        {292, 306, -1, sizeof(::aim::CenteringScenarioDef)},
-        {312, 323, -1, sizeof(::aim::BarrelScenarioDef)},
-        {326, 340, -1, sizeof(::aim::LinearScenarioDef)},
-        {346, 365, -1, sizeof(::aim::WallStrafeProfile)},
-        {376, 390, -1, sizeof(::aim::WallStrafeScenarioDef)},
-        {396, 410, -1, sizeof(::aim::WallArcScenarioDef)},
-        {416, 429, -1, sizeof(::aim::WallWanderScenarioDef)},
-        {434, 450, -1, sizeof(::aim::TargetDef)},
-        {458, 469, -1, sizeof(::aim::PillTargetDef)},
-        {472, 495, -1, sizeof(::aim::TargetProfile)},
+        {229, 256, -1, sizeof(::aim::ScenarioDef)},
+        {274, 283, -1, sizeof(::aim::ReferenceScenarioDef)},
+        {284, 293, -1, sizeof(::aim::StaticScenarioDef)},
+        {294, 305, -1, sizeof(::aim::CircleScenarioDef)},
+        {308, 322, -1, sizeof(::aim::CenteringScenarioDef)},
+        {328, 339, -1, sizeof(::aim::BarrelScenarioDef)},
+        {342, 356, -1, sizeof(::aim::LinearScenarioDef)},
+        {362, 381, -1, sizeof(::aim::WallStrafeProfile)},
+        {392, 406, -1, sizeof(::aim::WallStrafeScenarioDef)},
+        {412, 426, -1, sizeof(::aim::WallArcScenarioDef)},
+        {432, 445, -1, sizeof(::aim::WallWanderScenarioDef)},
+        {450, 466, -1, sizeof(::aim::TargetDef)},
+        {474, 485, -1, sizeof(::aim::PillTargetDef)},
+        {488, 511, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1387,6 +1431,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_ScenarioDef_default_instance_._instance,
     &::aim::_ReferenceScenarioDef_default_instance_._instance,
     &::aim::_StaticScenarioDef_default_instance_._instance,
+    &::aim::_CircleScenarioDef_default_instance_._instance,
     &::aim::_CenteringScenarioDef_default_instance_._instance,
     &::aim::_BarrelScenarioDef_default_instance_._instance,
     &::aim::_LinearScenarioDef_default_instance_._instance,
@@ -1450,7 +1495,7 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\rtracking_kill\030\002 \001(\010H\000\022\035\n\023tracking_invin"
     "cible\030\003 \001(\010H\000\022\026\n\014click_single\030\004 \001(\010H\000\022\036\n"
     "\026poke_kill_time_seconds\030\n \001(\002\022\030\n\020no_part"
-    "ial_kills\030\013 \001(\010B\006\n\004type\"\252\005\n\013ScenarioDef\022"
+    "ial_kills\030\013 \001(\010B\006\n\004type\"\330\005\n\013ScenarioDef\022"
     "\023\n\013description\030\001 \001(\t\022\030\n\020duration_seconds"
     "\030\002 \001(\002\022\027\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarge"
     "t_def\030\005 \001(\0132\016.aim.TargetDef\022)\n\toverrides"
@@ -1467,69 +1512,72 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\030# \001(\0132\027.aim.WallArcScenarioDefH\000\0225\n\017wal"
     "l_wander_def\030$ \001(\0132\032.aim.WallWanderScena"
     "rioDefH\000\0222\n\rreference_def\030% \001(\0132\031.aim.Re"
-    "ferenceScenarioDefH\000B\006\n\004type\"+\n\024Referenc"
-    "eScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\"T\n\021Sta"
-    "ticScenarioDef\022\?\n\031target_placement_strat"
-    "egy\030\001 \001(\0132\034.aim.TargetPlacementStrategy\""
-    "\340\001\n\024CenteringScenarioDef\022$\n\013wall_points\030"
-    "\001 \003(\0132\017.aim.RegionVec2\022\?\n\031target_placeme"
-    "nt_strategy\030\002 \001(\0132\034.aim.TargetPlacementS"
-    "trategy\022\023\n\013orient_pill\030\003 \001(\010\022\r\n\005angle\030\004 "
-    "\001(\002\022\024\n\014angle_jitter\030\005 \001(\002\022\'\n\014angle_lengt"
-    "h\030\006 \001(\0132\021.aim.RegionLength\"\236\001\n\021BarrelSce"
-    "narioDef\022\?\n\031target_placement_strategy\030\001 "
-    "\001(\0132\034.aim.TargetPlacementStrategy\022 \n\030dir"
-    "ection_radius_percent\030\002 \001(\002\022&\n\tdirection"
-    "\030\003 \001(\0162\023.aim.InOutDirection\"\300\001\n\021LinearSc"
-    "enarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitter"
-    "\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022\?\n"
-    "\031target_placement_strategy\030\005 \001(\0132\034.aim.T"
-    "argetPlacementStrategy\022&\n\tdirection\030\006 \001("
-    "\0162\023.aim.InOutDirection\"\270\002\n\021WallStrafePro"
-    "file\022\016\n\006weight\030\001 \001(\002\022\'\n\014min_distance\030\002 \001"
-    "(\0132\021.aim.RegionLength\022\'\n\014max_distance\030\003 "
-    "\001(\0132\021.aim.RegionLength\022\r\n\005angle\030\004 \001(\002\022\024\n"
-    "\014angle_jitter\030\005 \001(\002\022\023\n\013description\030\006 \001(\t"
-    "\022\033\n\023pause_at_end_chance\030\007 \001(\002\022\025\n\rpause_s"
-    "econds\030\010 \001(\002\022\034\n\024pause_seconds_jitter\030\t \001"
-    "(\002\022\026\n\016speed_override\030\n \001(\002\022\035\n\025accelearti"
-    "on_override\030\013 \001(\002\"\321\001\n\025WallStrafeScenario"
+    "ferenceScenarioDefH\000\022,\n\ncircle_def\030& \001(\013"
+    "2\026.aim.CircleScenarioDefH\000B\006\n\004type\"+\n\024Re"
+    "ferenceScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\""
+    "T\n\021StaticScenarioDef\022\?\n\031target_placement"
+    "_strategy\030\001 \001(\0132\034.aim.TargetPlacementStr"
+    "ategy\"g\n\021CircleScenarioDef\022!\n\006radius\030\001 \001"
+    "(\0132\021.aim.RegionLength\022\025\n\rstart_degrees\030\002"
+    " \001(\002\022\030\n\020rotate_clockwise\030\003 \001(\010\"\340\001\n\024Cente"
+    "ringScenarioDef\022$\n\013wall_points\030\001 \003(\0132\017.a"
+    "im.RegionVec2\022\?\n\031target_placement_strate"
+    "gy\030\002 \001(\0132\034.aim.TargetPlacementStrategy\022\023"
+    "\n\013orient_pill\030\003 \001(\010\022\r\n\005angle\030\004 \001(\002\022\024\n\014an"
+    "gle_jitter\030\005 \001(\002\022\'\n\014angle_length\030\006 \001(\0132\021"
+    ".aim.RegionLength\"\236\001\n\021BarrelScenarioDef\022"
+    "\?\n\031target_placement_strategy\030\001 \001(\0132\034.aim"
+    ".TargetPlacementStrategy\022 \n\030direction_ra"
+    "dius_percent\030\002 \001(\002\022&\n\tdirection\030\003 \001(\0162\023."
+    "aim.InOutDirection\"\300\001\n\021LinearScenarioDef"
+    "\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitter\030\002 \001(\002\022\r\n"
+    "\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022\?\n\031target_p"
+    "lacement_strategy\030\005 \001(\0132\034.aim.TargetPlac"
+    "ementStrategy\022&\n\tdirection\030\006 \001(\0162\023.aim.I"
+    "nOutDirection\"\270\002\n\021WallStrafeProfile\022\016\n\006w"
+    "eight\030\001 \001(\002\022\'\n\014min_distance\030\002 \001(\0132\021.aim."
+    "RegionLength\022\'\n\014max_distance\030\003 \001(\0132\021.aim"
+    ".RegionLength\022\r\n\005angle\030\004 \001(\002\022\024\n\014angle_ji"
+    "tter\030\005 \001(\002\022\023\n\013description\030\006 \001(\t\022\033\n\023pause"
+    "_at_end_chance\030\007 \001(\002\022\025\n\rpause_seconds\030\010 "
+    "\001(\002\022\034\n\024pause_seconds_jitter\030\t \001(\002\022\026\n\016spe"
+    "ed_override\030\n \001(\002\022\035\n\025acceleartion_overri"
+    "de\030\013 \001(\002\"\321\001\n\025WallStrafeScenarioDef\022 \n\005wi"
+    "dth\030\001 \001(\0132\021.aim.RegionLength\022!\n\006height\030\002"
+    " \001(\0132\021.aim.RegionLength\022\034\n\001y\030\003 \001(\0132\021.aim"
+    ".RegionLength\022(\n\010profiles\030\004 \003(\0132\026.aim.Wa"
+    "llStrafeProfile\022\025\n\rprofile_order\030\005 \003(\005\022\024"
+    "\n\014acceleration\030\006 \001(\002\"\273\001\n\022WallArcScenario"
     "Def\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n"
-    "\006height\030\002 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\003 "
-    "\001(\0132\021.aim.RegionLength\022(\n\010profiles\030\004 \003(\013"
-    "2\026.aim.WallStrafeProfile\022\025\n\rprofile_orde"
-    "r\030\005 \003(\005\022\024\n\014acceleration\030\006 \001(\002\"\273\001\n\022WallAr"
-    "cScenarioDef\022 \n\005width\030\001 \001(\0132\021.aim.Region"
-    "Length\022!\n\006height\030\002 \001(\0132\021.aim.RegionLengt"
-    "h\022\020\n\010duration\030\003 \001(\002\022\026\n\016control_height\030\004 "
-    "\001(\002\022\035\n\025control_height_jitter\030\005 \001(\002\022\027\n\017st"
-    "art_on_ground\030\006 \001(\010\"\262\001\n\025WallWanderScenar"
-    "ioDef\022\?\n\031target_placement_strategy\030\001 \001(\013"
-    "2\034.aim.TargetPlacementStrategy\022\021\n\tturn_t"
-    "ime\030\002 \001(\002\022\030\n\020turn_time_jitter\030\003 \001(\002\022\021\n\tt"
-    "urn_rate\030\004 \001(\002\022\030\n\020turn_rate_jitter\030\005 \001(\002"
-    "\"\214\002\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.T"
-    "argetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026rem"
-    "ove_closest_on_miss\030\003 \001(\010\022\024\n\014target_orde"
-    "r\030\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\022"
-    " \n\030new_target_delay_seconds\030\006 \001(\002\022#\n\033rem"
-    "ove_target_after_seconds\030\007 \001(\002\022\'\n\037stagge"
-    "r_initial_targets_seconds\030\010 \001(\002\"^\n\rPillT"
-    "argetDef\022\016\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.a"
-    "im.StoredVec3\022 \n\007wall_up\030\003 \001(\0132\017.aim.Sto"
-    "redVec2\"\237\003\n\rTargetProfile\022\016\n\006weight\030\001 \001("
-    "\002\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_radiu"
-    "s_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_j"
-    "itter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025h"
-    "ealth_seconds_jitter\030\007 \001(\002\022\035\n\025target_rad"
-    "ius_at_kill\030\010 \001(\002\022$\n\034target_hit_radius_m"
-    "ultiplier\030\t \001(\002\022\023\n\013description\030\013 \001(\t\022)\n!"
-    "target_radius_growth_time_seconds\030\014 \001(\002\022"
-    "!\n\031target_radius_growth_size\030\r \001(\002\022\031\n\021he"
-    "alth_regen_rate\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022.ai"
-    "m.PillTargetDefH\000B\006\n\004type*-\n\016InOutDirect"
-    "ion\022\006\n\002IN\020\000\022\007\n\003OUT\020\001\022\n\n\006RANDOM\020\002b\010editio"
-    "nsp\350\007"
+    "\006height\030\002 \001(\0132\021.aim.RegionLength\022\020\n\010dura"
+    "tion\030\003 \001(\002\022\026\n\016control_height\030\004 \001(\002\022\035\n\025co"
+    "ntrol_height_jitter\030\005 \001(\002\022\027\n\017start_on_gr"
+    "ound\030\006 \001(\010\"\262\001\n\025WallWanderScenarioDef\022\?\n\031"
+    "target_placement_strategy\030\001 \001(\0132\034.aim.Ta"
+    "rgetPlacementStrategy\022\021\n\tturn_time\030\002 \001(\002"
+    "\022\030\n\020turn_time_jitter\030\003 \001(\002\022\021\n\tturn_rate\030"
+    "\004 \001(\002\022\030\n\020turn_rate_jitter\030\005 \001(\002\"\214\002\n\tTarg"
+    "etDef\022$\n\010profiles\030\001 \003(\0132\022.aim.TargetProf"
+    "ile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remove_close"
+    "st_on_miss\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036"
+    "\n\026newest_target_is_ghost\030\005 \001(\010\022 \n\030new_ta"
+    "rget_delay_seconds\030\006 \001(\002\022#\n\033remove_targe"
+    "t_after_seconds\030\007 \001(\002\022\'\n\037stagger_initial"
+    "_targets_seconds\030\010 \001(\002\"^\n\rPillTargetDef\022"
+    "\016\n\006height\030\001 \001(\002\022\033\n\002up\030\002 \001(\0132\017.aim.Stored"
+    "Vec3\022 \n\007wall_up\030\003 \001(\0132\017.aim.StoredVec2\"\237"
+    "\003\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002\022\025\n\rtarg"
+    "et_radius\030\002 \001(\002\022\034\n\024target_radius_jitter\030"
+    "\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001"
+    "(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025health_sec"
+    "onds_jitter\030\007 \001(\002\022\035\n\025target_radius_at_ki"
+    "ll\030\010 \001(\002\022$\n\034target_hit_radius_multiplier"
+    "\030\t \001(\002\022\023\n\013description\030\013 \001(\t\022)\n!target_ra"
+    "dius_growth_time_seconds\030\014 \001(\002\022!\n\031target"
+    "_radius_growth_size\030\r \001(\002\022\031\n\021health_rege"
+    "n_rate\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTar"
+    "getDefH\000B\006\n\004type*-\n\016InOutDirection\022\006\n\002IN"
+    "\020\000\022\007\n\003OUT\020\001\022\n\n\006RANDOM\020\002b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1539,13 +1587,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    5165,
+    5316,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    27,
+    28,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -6769,6 +6817,19 @@ void ScenarioDef::set_allocated_reference_def(::aim::ReferenceScenarioDef* refer
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.reference_def)
 }
+void ScenarioDef::set_allocated_circle_def(::aim::CircleScenarioDef* circle_def) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (circle_def) {
+    ::google::protobuf::Arena* submessage_arena = circle_def->GetArena();
+    if (message_arena != submessage_arena) {
+      circle_def = ::google::protobuf::internal::GetOwnedMessage(message_arena, circle_def, submessage_arena);
+    }
+    set_has_circle_def();
+    _impl_.type_.circle_def_ = circle_def;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.circle_def)
+}
 ScenarioDef::ScenarioDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -6846,6 +6907,9 @@ ScenarioDef::ScenarioDef(
         break;
       case kReferenceDef:
         _impl_.type_.reference_def_ = ::google::protobuf::Message::CopyConstruct<::aim::ReferenceScenarioDef>(arena, *from._impl_.type_.reference_def_);
+        break;
+      case kCircleDef:
+        _impl_.type_.circle_def_ = ::google::protobuf::Message::CopyConstruct<::aim::CircleScenarioDef>(arena, *from._impl_.type_.circle_def_);
         break;
   }
 
@@ -6955,6 +7019,14 @@ void ScenarioDef::clear_type() {
       }
       break;
     }
+    case kCircleDef: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.circle_def_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.circle_def_);
+      }
+      break;
+    }
     case TYPE_NOT_SET: {
       break;
     }
@@ -6999,16 +7071,16 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 17, 12, 51, 7> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<4, 18, 13, 51, 7> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    37, 120,  // max_field_number, fast_idx_mask
+    38, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
     536868904,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    17,  // num_field_entries
-    12,  // num_aux_entries
+    18,  // num_field_entries
+    13,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -7053,7 +7125,7 @@ const ::_pbi::TcParseTable<4, 17, 12, 51, 7> ScenarioDef::_table_ = {
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     33, 0, 1,
-    65504, 12,
+    65472, 12,
     65535, 65535
   }}, {{
     // string description = 1;
@@ -7107,6 +7179,9 @@ const ::_pbi::TcParseTable<4, 17, 12, 51, 7> ScenarioDef::_table_ = {
     // .aim.ReferenceScenarioDef reference_def = 37;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.reference_def_), _Internal::kOneofCaseOffset + 0, 11,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.CircleScenarioDef circle_def = 38;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.circle_def_), _Internal::kOneofCaseOffset + 0, 12,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::TargetDef>()},
@@ -7120,6 +7195,7 @@ const ::_pbi::TcParseTable<4, 17, 12, 51, 7> ScenarioDef::_table_ = {
     {::_pbi::TcParser::GetTable<::aim::WallArcScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::WallWanderScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::ReferenceScenarioDef>()},
+    {::_pbi::TcParser::GetTable<::aim::CircleScenarioDef>()},
   }}, {{
     "\17\13\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "aim.ScenarioDef"
@@ -7296,6 +7372,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                   stream);
               break;
             }
+            case kCircleDef: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  38, *this_._impl_.type_.circle_def_, this_._impl_.type_.circle_def_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
             default:
               break;
           }
@@ -7416,6 +7498,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
             case kReferenceDef: {
               total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.reference_def_);
+              break;
+            }
+            // .aim.CircleScenarioDef circle_def = 38;
+            case kCircleDef: {
+              total_size += 2 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.circle_def_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -7570,6 +7658,15 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
               ::google::protobuf::Message::CopyConstruct<::aim::ReferenceScenarioDef>(arena, *from._impl_.type_.reference_def_);
         } else {
           _this->_impl_.type_.reference_def_->MergeFrom(from._internal_reference_def());
+        }
+        break;
+      }
+      case kCircleDef: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.circle_def_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::CircleScenarioDef>(arena, *from._impl_.type_.circle_def_);
+        } else {
+          _this->_impl_.type_.circle_def_->MergeFrom(from._internal_circle_def());
         }
         break;
       }
@@ -8101,6 +8198,322 @@ void StaticScenarioDef::InternalSwap(StaticScenarioDef* PROTOBUF_RESTRICT other)
 }
 
 ::google::protobuf::Metadata StaticScenarioDef::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class CircleScenarioDef::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<CircleScenarioDef>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_._has_bits_);
+};
+
+CircleScenarioDef::CircleScenarioDef(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.CircleScenarioDef)
+}
+inline PROTOBUF_NDEBUG_INLINE CircleScenarioDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::CircleScenarioDef& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+CircleScenarioDef::CircleScenarioDef(
+    ::google::protobuf::Arena* arena,
+    const CircleScenarioDef& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  CircleScenarioDef* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.radius_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(
+                              arena, *from._impl_.radius_)
+                        : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, start_degrees_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, start_degrees_),
+           offsetof(Impl_, rotate_clockwise_) -
+               offsetof(Impl_, start_degrees_) +
+               sizeof(Impl_::rotate_clockwise_));
+
+  // @@protoc_insertion_point(copy_constructor:aim.CircleScenarioDef)
+}
+inline PROTOBUF_NDEBUG_INLINE CircleScenarioDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void CircleScenarioDef::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, radius_),
+           0,
+           offsetof(Impl_, rotate_clockwise_) -
+               offsetof(Impl_, radius_) +
+               sizeof(Impl_::rotate_clockwise_));
+}
+CircleScenarioDef::~CircleScenarioDef() {
+  // @@protoc_insertion_point(destructor:aim.CircleScenarioDef)
+  SharedDtor(*this);
+}
+inline void CircleScenarioDef::SharedDtor(MessageLite& self) {
+  CircleScenarioDef& this_ = static_cast<CircleScenarioDef&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  delete this_._impl_.radius_;
+  this_._impl_.~Impl_();
+}
+
+inline void* CircleScenarioDef::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) CircleScenarioDef(arena);
+}
+constexpr auto CircleScenarioDef::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(CircleScenarioDef),
+                                            alignof(CircleScenarioDef));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull CircleScenarioDef::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_CircleScenarioDef_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &CircleScenarioDef::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<CircleScenarioDef>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &CircleScenarioDef::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<CircleScenarioDef>(), &CircleScenarioDef::ByteSizeLong,
+            &CircleScenarioDef::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_._cached_size_),
+        false,
+    },
+    &CircleScenarioDef::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* CircleScenarioDef::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> CircleScenarioDef::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::CircleScenarioDef>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .aim.RegionLength radius = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.radius_)}},
+    // float start_degrees = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.start_degrees_)}},
+    // bool rotate_clockwise = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(CircleScenarioDef, _impl_.rotate_clockwise_), 2>(),
+     {24, 2, 0, PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.rotate_clockwise_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .aim.RegionLength radius = 1;
+    {PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.radius_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // float start_degrees = 2;
+    {PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.start_degrees_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // bool rotate_clockwise = 3;
+    {PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.rotate_clockwise_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
+  }}, {{
+  }},
+};
+
+PROTOBUF_NOINLINE void CircleScenarioDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.CircleScenarioDef)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.radius_ != nullptr);
+    _impl_.radius_->Clear();
+  }
+  if (cached_has_bits & 0x00000006u) {
+    ::memset(&_impl_.start_degrees_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.rotate_clockwise_) -
+        reinterpret_cast<char*>(&_impl_.start_degrees_)) + sizeof(_impl_.rotate_clockwise_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* CircleScenarioDef::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const CircleScenarioDef& this_ = static_cast<const CircleScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* CircleScenarioDef::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const CircleScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.CircleScenarioDef)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // .aim.RegionLength radius = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                1, *this_._impl_.radius_, this_._impl_.radius_->GetCachedSize(), target,
+                stream);
+          }
+
+          // float start_degrees = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_start_degrees(), target);
+          }
+
+          // bool rotate_clockwise = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                3, this_._internal_rotate_clockwise(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.CircleScenarioDef)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t CircleScenarioDef::ByteSizeLong(const MessageLite& base) {
+          const CircleScenarioDef& this_ = static_cast<const CircleScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t CircleScenarioDef::ByteSizeLong() const {
+          const CircleScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.CircleScenarioDef)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000007u) {
+            // .aim.RegionLength radius = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.radius_);
+            }
+            // float start_degrees = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // bool rotate_clockwise = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 2;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void CircleScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<CircleScenarioDef*>(&to_msg);
+  auto& from = static_cast<const CircleScenarioDef&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.CircleScenarioDef)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(from._impl_.radius_ != nullptr);
+      if (_this->_impl_.radius_ == nullptr) {
+        _this->_impl_.radius_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(arena, *from._impl_.radius_);
+      } else {
+        _this->_impl_.radius_->MergeFrom(*from._impl_.radius_);
+      }
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.start_degrees_ = from._impl_.start_degrees_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.rotate_clockwise_ = from._impl_.rotate_clockwise_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CircleScenarioDef::CopyFrom(const CircleScenarioDef& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.CircleScenarioDef)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void CircleScenarioDef::InternalSwap(CircleScenarioDef* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.rotate_clockwise_)
+      + sizeof(CircleScenarioDef::_impl_.rotate_clockwise_)
+      - PROTOBUF_FIELD_OFFSET(CircleScenarioDef, _impl_.radius_)>(
+          reinterpret_cast<char*>(&_impl_.radius_),
+          reinterpret_cast<char*>(&other->_impl_.radius_));
+}
+
+::google::protobuf::Metadata CircleScenarioDef::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================

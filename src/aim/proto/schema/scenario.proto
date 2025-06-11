@@ -174,6 +174,7 @@ message ScenarioDef {
     WallArcScenarioDef wall_arc_def = 35;
     WallWanderScenarioDef wall_wander_def = 36;
     ReferenceScenarioDef reference_def = 37;
+    CircleScenarioDef circle_def = 38;
   }
 }
 
@@ -184,6 +185,13 @@ message ReferenceScenarioDef {
 
 message StaticScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 1;
+}
+
+message CircleScenarioDef {
+    RegionLength radius = 1;
+    // The starting point in degrees. 0 degrees is straight to the right and it rotates counter clockwise.
+    float start_degrees = 2;
+    bool rotate_clockwise = 3;
 }
 
 message CenteringScenarioDef {

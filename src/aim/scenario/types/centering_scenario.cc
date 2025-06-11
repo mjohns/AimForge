@@ -1,13 +1,7 @@
-#include <SDL3/SDL.h>
-#include <imgui.h>
-
-#include <glm/mat4x4.hpp>
-#include <glm/trigonometric.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 #include <memory>
 #include <random>
 
+#include "SDL3/SDL.h"
 #include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
@@ -21,11 +15,14 @@
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
 #include "aim/scenario/tracking_sound.h"
+#include "glm/mat4x4.hpp"
+#include "glm/trigonometric.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "imgui.h"
 
 namespace aim {
 namespace {
-
-constexpr const float kStartMovingDelaySeconds = 0.2;
 
 class CenteringScenario : public BaseScenario {
  public:

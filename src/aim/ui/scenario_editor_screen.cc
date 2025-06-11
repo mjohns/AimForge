@@ -53,6 +53,7 @@ const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
     ScenarioDef::kWallStrafeDef,
     ScenarioDef::kCenteringDef,
     ScenarioDef::kWallArcDef,
+    ScenarioDef::kCircleDef,
 };
 
 const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
@@ -63,6 +64,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kLinearDef, "Linear"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kWallWanderDef, "Wall Wander"},
+    {ScenarioDef::kCircleDef, "Circle"},
     {ScenarioDef::kReferenceDef, "Reference"},
 };
 
@@ -361,11 +363,16 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     auto scenario_type = def_.type_case();
-    ImGui::SimpleTypeDropdown("ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
+    bool is_new_type = ImGui::SimpleTypeDropdown(
+        "ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
     InitializeScenarioType(scenario_type);
 
     if (VectorContains(kSingleTargetTrackingTypes, scenario_type)) {
       def_.mutable_shot_type()->set_tracking_invincible(true);
+      if (is_new_type) {
+        def_.clear_target_def();
+
+      }
     } else {
       DrawShotTypeEditor();
     }
@@ -392,6 +399,9 @@ class ScenarioEditorScreen : public UiScreen {
     }
     if (scenario_type == ScenarioDef::kWallWanderDef) {
       DrawWallWanderEditor();
+    }
+    if (scenario_type == ScenarioDef::kCircleDef) {
+      DrawCircleEditor();
     }
   }
 
@@ -585,6 +595,28 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
                      PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));
+  }
+
+  void DrawCircleEditor() {
+    ImGui::IdGuard cid("CircleEditor");
+    CircleScenarioDef& d = *def_.mutable_circle_def();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Radius");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Radius", /*default_to_x=*/true, d.mutable_radius());
+
+    ImGui::InputFloat(ImGui::InputFloatParams("StartDegrees")
+                          .set_label("Start degrees")
+                          .set_step(5, 30)
+                          .set_precision(0)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(CircleScenarioDef, &d, start_degrees));
+    ImGui::SameLine();
+    ImGui::HelpMarker("0 degrees starts at 3 o'clock and rotates counter clockwise.");
+
+    ImGui::InputBool(ImGui::InputBoolParams("Clockwise").set_label("Clockwise"),
+                     PROTO_BOOL_FIELD(CircleScenarioDef, &d, rotate_clockwise));
   }
 
   void DrawWallWanderEditor() {
@@ -1604,7 +1636,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (is_single_target_tracking) {
       t->set_num_targets(1);
       if (t->profiles_size() == 0) {
-        t->add_profiles();
+        t->add_profiles()->set_speed(40);
       }
       if (t->profiles_size() > 1) {
         TargetProfile first_profile = t->profiles(0);

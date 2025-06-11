@@ -641,6 +641,8 @@ std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated
       return CreateWallArcScenario(params, app);
     case ScenarioDef::kWallWanderDef:
       return CreateWallWanderScenario(params, app);
+    case ScenarioDef::kCircleDef:
+      return CreateCircleScenario(params, app);
     default:
       break;
   }
