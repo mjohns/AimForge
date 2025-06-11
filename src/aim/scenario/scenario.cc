@@ -633,8 +633,8 @@ std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated
       return CreateWallStrafeScenario(params, app);
     case ScenarioDef::kWallArcDef:
       return CreateWallArcScenario(params, app);
-    case ScenarioDef::kWallSwerveDef:
-      return CreateWallSwerveScenario(params, app);
+    case ScenarioDef::kWallWanderDef:
+      return CreateWallWanderScenario(params, app);
     default:
       break;
   }

@@ -24,18 +24,6 @@
 namespace aim {
 namespace {
 
-void EnsureNegative(float& val) {
-  if (val > 0) {
-    val *= -1;
-  }
-}
-
-void EnsurePositive(float& val) {
-  if (val < 0) {
-    val *= -1;
-  }
-}
-
 class LinearScenario : public BaseScenario {
  public:
   explicit LinearScenario(const CreateScenarioParams& params, Application* app)
@@ -76,26 +64,26 @@ class LinearScenario : public BaseScenario {
     if (in_out == InOutDirection::OUT) {
       // Away from center
       if (pos.x < 0) {
-        EnsureNegative(direction.x);
+        EnsureNegative(&direction.x);
       } else {
-        EnsurePositive(direction.x);
+        EnsurePositive(&direction.x);
       }
       if (pos.y < 0) {
-        EnsureNegative(direction.y);
+        EnsureNegative(&direction.y);
       } else {
-        EnsurePositive(direction.y);
+        EnsurePositive(&direction.y);
       }
     } else {
       // Towards center
       if (pos.x > 0) {
-        EnsureNegative(direction.x);
+        EnsureNegative(&direction.x);
       } else {
-        EnsurePositive(direction.x);
+        EnsurePositive(&direction.x);
       }
       if (pos.y > 0) {
-        EnsureNegative(direction.y);
+        EnsureNegative(&direction.y);
       } else {
-        EnsurePositive(direction.y);
+        EnsurePositive(&direction.y);
       }
     }
 
@@ -115,24 +103,25 @@ class LinearScenario : public BaseScenario {
       float max_y = (wall_.height * 0.5) - (t->radius * 1.2);
       float min_y = -1 * max_y;
 
+      glm::vec2& direction = *t->wall_direction;
       if (new_position.x >= max_x) {
         // Too far right.
-        EnsureNegative((*t->wall_direction).x);
+        EnsureNegative(&direction.x);
       }
 
       if (new_position.x <= min_x) {
         // Too far left.
-        EnsurePositive((*t->wall_direction).x);
+        EnsurePositive(&direction.x);
       }
 
       if (new_position.y >= max_y) {
         // Too high.
-        EnsureNegative((*t->wall_direction).y);
+        EnsureNegative(&direction.y);
       }
 
       if (new_position.y <= min_y) {
         // Too low.
-        EnsurePositive((*t->wall_direction).y);
+        EnsurePositive(&direction.y);
       }
     }
     target_manager_.UpdateTargetPositions(now_seconds);

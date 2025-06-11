@@ -132,9 +132,6 @@ extern WallStrafeProfileDefaultTypeInternal _WallStrafeProfile_default_instance_
 class WallStrafeScenarioDef;
 struct WallStrafeScenarioDefDefaultTypeInternal;
 extern WallStrafeScenarioDefDefaultTypeInternal _WallStrafeScenarioDef_default_instance_;
-class WallSwerveScenarioDef;
-struct WallSwerveScenarioDefDefaultTypeInternal;
-extern WallSwerveScenarioDefDefaultTypeInternal _WallSwerveScenarioDef_default_instance_;
 class WallWanderScenarioDef;
 struct WallWanderScenarioDefDefaultTypeInternal;
 extern WallWanderScenarioDefDefaultTypeInternal _WallWanderScenarioDef_default_instance_;
@@ -3480,7 +3477,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 26;
+  static constexpr int kIndexInFileMessages = 25;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -4771,7 +4768,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 27;
+  static constexpr int kIndexInFileMessages = 26;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -5414,7 +5411,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 25;
+  static constexpr int kIndexInFileMessages = 24;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -5711,7 +5708,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 24;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* other) {
     if (other == this) return;
@@ -5799,10 +5796,10 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kTargetPlacementStrategyFieldNumber = 1,
-    kHeightFieldNumber = 2,
-    kWidthFieldNumber = 3,
-    kSpreadFieldNumber = 4,
-    kTurnRateFieldNumber = 5,
+    kTurnTimeFieldNumber = 2,
+    kTurnTimeJitterFieldNumber = 3,
+    kTurnRateFieldNumber = 4,
+    kTurnRateJitterFieldNumber = 5,
   };
   // .aim.TargetPlacementStrategy target_placement_strategy = 1;
   bool has_target_placement_strategy() const;
@@ -5819,52 +5816,29 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
 
   public:
-  // .aim.RegionLength height = 2;
-  bool has_height() const;
-  void clear_height() ;
-  const ::aim::RegionLength& height() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_height();
-  ::aim::RegionLength* mutable_height();
-  void set_allocated_height(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_height(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_height();
+  // float turn_time = 2;
+  bool has_turn_time() const;
+  void clear_turn_time() ;
+  float turn_time() const;
+  void set_turn_time(float value);
 
   private:
-  const ::aim::RegionLength& _internal_height() const;
-  ::aim::RegionLength* _internal_mutable_height();
+  float _internal_turn_time() const;
+  void _internal_set_turn_time(float value);
 
   public:
-  // .aim.RegionLength width = 3;
-  bool has_width() const;
-  void clear_width() ;
-  const ::aim::RegionLength& width() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_width();
-  ::aim::RegionLength* mutable_width();
-  void set_allocated_width(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_width(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_width();
+  // float turn_time_jitter = 3;
+  bool has_turn_time_jitter() const;
+  void clear_turn_time_jitter() ;
+  float turn_time_jitter() const;
+  void set_turn_time_jitter(float value);
 
   private:
-  const ::aim::RegionLength& _internal_width() const;
-  ::aim::RegionLength* _internal_mutable_width();
+  float _internal_turn_time_jitter() const;
+  void _internal_set_turn_time_jitter(float value);
 
   public:
-  // .aim.RegionLength spread = 4;
-  bool has_spread() const;
-  void clear_spread() ;
-  const ::aim::RegionLength& spread() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_spread();
-  ::aim::RegionLength* mutable_spread();
-  void set_allocated_spread(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_spread(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_spread();
-
-  private:
-  const ::aim::RegionLength& _internal_spread() const;
-  ::aim::RegionLength* _internal_mutable_spread();
-
-  public:
-  // float turn_rate = 5;
+  // float turn_rate = 4;
   bool has_turn_rate() const;
   void clear_turn_rate() ;
   float turn_rate() const;
@@ -5875,12 +5849,23 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   void _internal_set_turn_rate(float value);
 
   public:
+  // float turn_rate_jitter = 5;
+  bool has_turn_rate_jitter() const;
+  void clear_turn_rate_jitter() ;
+  float turn_rate_jitter() const;
+  void set_turn_rate_jitter(float value);
+
+  private:
+  float _internal_turn_rate_jitter() const;
+  void _internal_set_turn_rate_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallWanderScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 4,
+      3, 5, 1,
       0, 2>
       _table_;
 
@@ -5901,270 +5886,10 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
-    ::aim::RegionLength* height_;
-    ::aim::RegionLength* width_;
-    ::aim::RegionLength* spread_;
+    float turn_time_;
+    float turn_time_jitter_;
     float turn_rate_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_scenario_2eproto;
-};
-// -------------------------------------------------------------------
-
-class WallSwerveScenarioDef final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.WallSwerveScenarioDef) */ {
- public:
-  inline WallSwerveScenarioDef() : WallSwerveScenarioDef(nullptr) {}
-  ~WallSwerveScenarioDef() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(WallSwerveScenarioDef* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallSwerveScenarioDef));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR WallSwerveScenarioDef(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline WallSwerveScenarioDef(const WallSwerveScenarioDef& from) : WallSwerveScenarioDef(nullptr, from) {}
-  inline WallSwerveScenarioDef(WallSwerveScenarioDef&& from) noexcept
-      : WallSwerveScenarioDef(nullptr, std::move(from)) {}
-  inline WallSwerveScenarioDef& operator=(const WallSwerveScenarioDef& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline WallSwerveScenarioDef& operator=(WallSwerveScenarioDef&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const WallSwerveScenarioDef& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const WallSwerveScenarioDef* internal_default_instance() {
-    return reinterpret_cast<const WallSwerveScenarioDef*>(
-        &_WallSwerveScenarioDef_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 23;
-  friend void swap(WallSwerveScenarioDef& a, WallSwerveScenarioDef& b) { a.Swap(&b); }
-  inline void Swap(WallSwerveScenarioDef* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(WallSwerveScenarioDef* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  WallSwerveScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<WallSwerveScenarioDef>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const WallSwerveScenarioDef& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const WallSwerveScenarioDef& from) { WallSwerveScenarioDef::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(WallSwerveScenarioDef* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.WallSwerveScenarioDef"; }
-
- protected:
-  explicit WallSwerveScenarioDef(::google::protobuf::Arena* arena);
-  WallSwerveScenarioDef(::google::protobuf::Arena* arena, const WallSwerveScenarioDef& from);
-  WallSwerveScenarioDef(::google::protobuf::Arena* arena, WallSwerveScenarioDef&& from) noexcept
-      : WallSwerveScenarioDef(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kOriginStrategyFieldNumber = 1,
-    kHeightFieldNumber = 2,
-    kWidthFieldNumber = 3,
-    kSpreadFieldNumber = 4,
-    kTurnRateFieldNumber = 5,
-  };
-  // .aim.TargetPlacementStrategy origin_strategy = 1;
-  bool has_origin_strategy() const;
-  void clear_origin_strategy() ;
-  const ::aim::TargetPlacementStrategy& origin_strategy() const;
-  PROTOBUF_NODISCARD ::aim::TargetPlacementStrategy* release_origin_strategy();
-  ::aim::TargetPlacementStrategy* mutable_origin_strategy();
-  void set_allocated_origin_strategy(::aim::TargetPlacementStrategy* value);
-  void unsafe_arena_set_allocated_origin_strategy(::aim::TargetPlacementStrategy* value);
-  ::aim::TargetPlacementStrategy* unsafe_arena_release_origin_strategy();
-
-  private:
-  const ::aim::TargetPlacementStrategy& _internal_origin_strategy() const;
-  ::aim::TargetPlacementStrategy* _internal_mutable_origin_strategy();
-
-  public:
-  // .aim.RegionLength height = 2;
-  bool has_height() const;
-  void clear_height() ;
-  const ::aim::RegionLength& height() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_height();
-  ::aim::RegionLength* mutable_height();
-  void set_allocated_height(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_height(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_height();
-
-  private:
-  const ::aim::RegionLength& _internal_height() const;
-  ::aim::RegionLength* _internal_mutable_height();
-
-  public:
-  // .aim.RegionLength width = 3;
-  bool has_width() const;
-  void clear_width() ;
-  const ::aim::RegionLength& width() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_width();
-  ::aim::RegionLength* mutable_width();
-  void set_allocated_width(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_width(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_width();
-
-  private:
-  const ::aim::RegionLength& _internal_width() const;
-  ::aim::RegionLength* _internal_mutable_width();
-
-  public:
-  // .aim.RegionLength spread = 4;
-  bool has_spread() const;
-  void clear_spread() ;
-  const ::aim::RegionLength& spread() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_spread();
-  ::aim::RegionLength* mutable_spread();
-  void set_allocated_spread(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_spread(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_spread();
-
-  private:
-  const ::aim::RegionLength& _internal_spread() const;
-  ::aim::RegionLength* _internal_mutable_spread();
-
-  public:
-  // float turn_rate = 5;
-  bool has_turn_rate() const;
-  void clear_turn_rate() ;
-  float turn_rate() const;
-  void set_turn_rate(float value);
-
-  private:
-  float _internal_turn_rate() const;
-  void _internal_set_turn_rate(float value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.WallSwerveScenarioDef)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 4,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const WallSwerveScenarioDef& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::TargetPlacementStrategy* origin_strategy_;
-    ::aim::RegionLength* height_;
-    ::aim::RegionLength* width_;
-    ::aim::RegionLength* spread_;
-    float turn_rate_;
+    float turn_rate_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -7184,7 +6909,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kLinearDef = 33,
     kWallStrafeDef = 34,
     kWallArcDef = 35,
-    kWallSwerveDef = 36,
+    kWallWanderDef = 36,
     kReferenceDef = 37,
     TYPE_NOT_SET = 0,
   };
@@ -7294,7 +7019,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kLinearDefFieldNumber = 33,
     kWallStrafeDefFieldNumber = 34,
     kWallArcDefFieldNumber = 35,
-    kWallSwerveDefFieldNumber = 36,
+    kWallWanderDefFieldNumber = 36,
     kReferenceDefFieldNumber = 37,
   };
   // string description = 1;
@@ -7532,23 +7257,23 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::WallArcScenarioDef* _internal_mutable_wall_arc_def();
 
   public:
-  // .aim.WallSwerveScenarioDef wall_swerve_def = 36;
-  bool has_wall_swerve_def() const;
+  // .aim.WallWanderScenarioDef wall_wander_def = 36;
+  bool has_wall_wander_def() const;
   private:
-  bool _internal_has_wall_swerve_def() const;
+  bool _internal_has_wall_wander_def() const;
 
   public:
-  void clear_wall_swerve_def() ;
-  const ::aim::WallSwerveScenarioDef& wall_swerve_def() const;
-  PROTOBUF_NODISCARD ::aim::WallSwerveScenarioDef* release_wall_swerve_def();
-  ::aim::WallSwerveScenarioDef* mutable_wall_swerve_def();
-  void set_allocated_wall_swerve_def(::aim::WallSwerveScenarioDef* value);
-  void unsafe_arena_set_allocated_wall_swerve_def(::aim::WallSwerveScenarioDef* value);
-  ::aim::WallSwerveScenarioDef* unsafe_arena_release_wall_swerve_def();
+  void clear_wall_wander_def() ;
+  const ::aim::WallWanderScenarioDef& wall_wander_def() const;
+  PROTOBUF_NODISCARD ::aim::WallWanderScenarioDef* release_wall_wander_def();
+  ::aim::WallWanderScenarioDef* mutable_wall_wander_def();
+  void set_allocated_wall_wander_def(::aim::WallWanderScenarioDef* value);
+  void unsafe_arena_set_allocated_wall_wander_def(::aim::WallWanderScenarioDef* value);
+  ::aim::WallWanderScenarioDef* unsafe_arena_release_wall_wander_def();
 
   private:
-  const ::aim::WallSwerveScenarioDef& _internal_wall_swerve_def() const;
-  ::aim::WallSwerveScenarioDef* _internal_mutable_wall_swerve_def();
+  const ::aim::WallWanderScenarioDef& _internal_wall_wander_def() const;
+  ::aim::WallWanderScenarioDef* _internal_mutable_wall_wander_def();
 
   public:
   // .aim.ReferenceScenarioDef reference_def = 37;
@@ -7581,7 +7306,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_linear_def();
   void set_has_wall_strafe_def();
   void set_has_wall_arc_def();
-  void set_has_wall_swerve_def();
+  void set_has_wall_wander_def();
   void set_has_reference_def();
   inline bool has_type() const;
   inline void clear_has_type();
@@ -7625,7 +7350,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::LinearScenarioDef* linear_def_;
       ::aim::WallStrafeScenarioDef* wall_strafe_def_;
       ::aim::WallArcScenarioDef* wall_arc_def_;
-      ::aim::WallSwerveScenarioDef* wall_swerve_def_;
+      ::aim::WallWanderScenarioDef* wall_wander_def_;
       ::aim::ReferenceScenarioDef* reference_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
@@ -12035,82 +11760,82 @@ inline ::aim::WallArcScenarioDef* ScenarioDef::mutable_wall_arc_def() ABSL_ATTRI
   return _msg;
 }
 
-// .aim.WallSwerveScenarioDef wall_swerve_def = 36;
-inline bool ScenarioDef::has_wall_swerve_def() const {
-  return type_case() == kWallSwerveDef;
+// .aim.WallWanderScenarioDef wall_wander_def = 36;
+inline bool ScenarioDef::has_wall_wander_def() const {
+  return type_case() == kWallWanderDef;
 }
-inline bool ScenarioDef::_internal_has_wall_swerve_def() const {
-  return type_case() == kWallSwerveDef;
+inline bool ScenarioDef::_internal_has_wall_wander_def() const {
+  return type_case() == kWallWanderDef;
 }
-inline void ScenarioDef::set_has_wall_swerve_def() {
-  _impl_._oneof_case_[0] = kWallSwerveDef;
+inline void ScenarioDef::set_has_wall_wander_def() {
+  _impl_._oneof_case_[0] = kWallWanderDef;
 }
-inline void ScenarioDef::clear_wall_swerve_def() {
+inline void ScenarioDef::clear_wall_wander_def() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kWallSwerveDef) {
+  if (type_case() == kWallWanderDef) {
     if (GetArena() == nullptr) {
-      delete _impl_.type_.wall_swerve_def_;
+      delete _impl_.type_.wall_wander_def_;
     } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.wall_swerve_def_);
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.wall_wander_def_);
     }
     clear_has_type();
   }
 }
-inline ::aim::WallSwerveScenarioDef* ScenarioDef::release_wall_swerve_def() {
-  // @@protoc_insertion_point(field_release:aim.ScenarioDef.wall_swerve_def)
-  if (type_case() == kWallSwerveDef) {
+inline ::aim::WallWanderScenarioDef* ScenarioDef::release_wall_wander_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.wall_wander_def)
+  if (type_case() == kWallWanderDef) {
     clear_has_type();
-    auto* temp = _impl_.type_.wall_swerve_def_;
+    auto* temp = _impl_.type_.wall_wander_def_;
     if (GetArena() != nullptr) {
       temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
     }
-    _impl_.type_.wall_swerve_def_ = nullptr;
+    _impl_.type_.wall_wander_def_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::aim::WallSwerveScenarioDef& ScenarioDef::_internal_wall_swerve_def() const {
-  return type_case() == kWallSwerveDef ? *_impl_.type_.wall_swerve_def_ : reinterpret_cast<::aim::WallSwerveScenarioDef&>(::aim::_WallSwerveScenarioDef_default_instance_);
+inline const ::aim::WallWanderScenarioDef& ScenarioDef::_internal_wall_wander_def() const {
+  return type_case() == kWallWanderDef ? *_impl_.type_.wall_wander_def_ : reinterpret_cast<::aim::WallWanderScenarioDef&>(::aim::_WallWanderScenarioDef_default_instance_);
 }
-inline const ::aim::WallSwerveScenarioDef& ScenarioDef::wall_swerve_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ScenarioDef.wall_swerve_def)
-  return _internal_wall_swerve_def();
+inline const ::aim::WallWanderScenarioDef& ScenarioDef::wall_wander_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.wall_wander_def)
+  return _internal_wall_wander_def();
 }
-inline ::aim::WallSwerveScenarioDef* ScenarioDef::unsafe_arena_release_wall_swerve_def() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.wall_swerve_def)
-  if (type_case() == kWallSwerveDef) {
+inline ::aim::WallWanderScenarioDef* ScenarioDef::unsafe_arena_release_wall_wander_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.wall_wander_def)
+  if (type_case() == kWallWanderDef) {
     clear_has_type();
-    auto* temp = _impl_.type_.wall_swerve_def_;
-    _impl_.type_.wall_swerve_def_ = nullptr;
+    auto* temp = _impl_.type_.wall_wander_def_;
+    _impl_.type_.wall_wander_def_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void ScenarioDef::unsafe_arena_set_allocated_wall_swerve_def(::aim::WallSwerveScenarioDef* value) {
+inline void ScenarioDef::unsafe_arena_set_allocated_wall_wander_def(::aim::WallWanderScenarioDef* value) {
   // We rely on the oneof clear method to free the earlier contents
   // of this oneof. We can directly use the pointer we're given to
   // set the new value.
   clear_type();
   if (value) {
-    set_has_wall_swerve_def();
-    _impl_.type_.wall_swerve_def_ = value;
+    set_has_wall_wander_def();
+    _impl_.type_.wall_wander_def_ = value;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.wall_swerve_def)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.wall_wander_def)
 }
-inline ::aim::WallSwerveScenarioDef* ScenarioDef::_internal_mutable_wall_swerve_def() {
-  if (type_case() != kWallSwerveDef) {
+inline ::aim::WallWanderScenarioDef* ScenarioDef::_internal_mutable_wall_wander_def() {
+  if (type_case() != kWallWanderDef) {
     clear_type();
-    set_has_wall_swerve_def();
-    _impl_.type_.wall_swerve_def_ =
-        ::google::protobuf::Message::DefaultConstruct<::aim::WallSwerveScenarioDef>(GetArena());
+    set_has_wall_wander_def();
+    _impl_.type_.wall_wander_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::WallWanderScenarioDef>(GetArena());
   }
-  return _impl_.type_.wall_swerve_def_;
+  return _impl_.type_.wall_wander_def_;
 }
-inline ::aim::WallSwerveScenarioDef* ScenarioDef::mutable_wall_swerve_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::aim::WallSwerveScenarioDef* _msg = _internal_mutable_wall_swerve_def();
-  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.wall_swerve_def)
+inline ::aim::WallWanderScenarioDef* ScenarioDef::mutable_wall_wander_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::WallWanderScenarioDef* _msg = _internal_mutable_wall_wander_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.wall_wander_def)
   return _msg;
 }
 
@@ -14313,422 +14038,6 @@ inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
 
 // -------------------------------------------------------------------
 
-// WallSwerveScenarioDef
-
-// .aim.TargetPlacementStrategy origin_strategy = 1;
-inline bool WallSwerveScenarioDef::has_origin_strategy() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.origin_strategy_ != nullptr);
-  return value;
-}
-inline void WallSwerveScenarioDef::clear_origin_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.origin_strategy_ != nullptr) _impl_.origin_strategy_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const ::aim::TargetPlacementStrategy& WallSwerveScenarioDef::_internal_origin_strategy() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::TargetPlacementStrategy* p = _impl_.origin_strategy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
-}
-inline const ::aim::TargetPlacementStrategy& WallSwerveScenarioDef::origin_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallSwerveScenarioDef.origin_strategy)
-  return _internal_origin_strategy();
-}
-inline void WallSwerveScenarioDef::unsafe_arena_set_allocated_origin_strategy(::aim::TargetPlacementStrategy* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.origin_strategy_);
-  }
-  _impl_.origin_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallSwerveScenarioDef.origin_strategy)
-}
-inline ::aim::TargetPlacementStrategy* WallSwerveScenarioDef::release_origin_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::TargetPlacementStrategy* released = _impl_.origin_strategy_;
-  _impl_.origin_strategy_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::TargetPlacementStrategy* WallSwerveScenarioDef::unsafe_arena_release_origin_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallSwerveScenarioDef.origin_strategy)
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::TargetPlacementStrategy* temp = _impl_.origin_strategy_;
-  _impl_.origin_strategy_ = nullptr;
-  return temp;
-}
-inline ::aim::TargetPlacementStrategy* WallSwerveScenarioDef::_internal_mutable_origin_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.origin_strategy_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
-    _impl_.origin_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
-  }
-  return _impl_.origin_strategy_;
-}
-inline ::aim::TargetPlacementStrategy* WallSwerveScenarioDef::mutable_origin_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_origin_strategy();
-  // @@protoc_insertion_point(field_mutable:aim.WallSwerveScenarioDef.origin_strategy)
-  return _msg;
-}
-inline void WallSwerveScenarioDef::set_allocated_origin_strategy(::aim::TargetPlacementStrategy* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.origin_strategy_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-
-  _impl_.origin_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallSwerveScenarioDef.origin_strategy)
-}
-
-// .aim.RegionLength height = 2;
-inline bool WallSwerveScenarioDef::has_height() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.height_ != nullptr);
-  return value;
-}
-inline void WallSwerveScenarioDef::clear_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.height_ != nullptr) _impl_.height_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline const ::aim::RegionLength& WallSwerveScenarioDef::_internal_height() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.height_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
-}
-inline const ::aim::RegionLength& WallSwerveScenarioDef::height() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallSwerveScenarioDef.height)
-  return _internal_height();
-}
-inline void WallSwerveScenarioDef::unsafe_arena_set_allocated_height(::aim::RegionLength* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.height_);
-  }
-  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallSwerveScenarioDef.height)
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::release_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::RegionLength* released = _impl_.height_;
-  _impl_.height_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::unsafe_arena_release_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallSwerveScenarioDef.height)
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::RegionLength* temp = _impl_.height_;
-  _impl_.height_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::_internal_mutable_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.height_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.height_;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::mutable_height() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  ::aim::RegionLength* _msg = _internal_mutable_height();
-  // @@protoc_insertion_point(field_mutable:aim.WallSwerveScenarioDef.height)
-  return _msg;
-}
-inline void WallSwerveScenarioDef::set_allocated_height(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.height_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-
-  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallSwerveScenarioDef.height)
-}
-
-// .aim.RegionLength width = 3;
-inline bool WallSwerveScenarioDef::has_width() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.width_ != nullptr);
-  return value;
-}
-inline void WallSwerveScenarioDef::clear_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.width_ != nullptr) _impl_.width_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline const ::aim::RegionLength& WallSwerveScenarioDef::_internal_width() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.width_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
-}
-inline const ::aim::RegionLength& WallSwerveScenarioDef::width() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallSwerveScenarioDef.width)
-  return _internal_width();
-}
-inline void WallSwerveScenarioDef::unsafe_arena_set_allocated_width(::aim::RegionLength* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.width_);
-  }
-  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallSwerveScenarioDef.width)
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::release_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000004u;
-  ::aim::RegionLength* released = _impl_.width_;
-  _impl_.width_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::unsafe_arena_release_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallSwerveScenarioDef.width)
-
-  _impl_._has_bits_[0] &= ~0x00000004u;
-  ::aim::RegionLength* temp = _impl_.width_;
-  _impl_.width_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::_internal_mutable_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.width_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.width_;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::mutable_width() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000004u;
-  ::aim::RegionLength* _msg = _internal_mutable_width();
-  // @@protoc_insertion_point(field_mutable:aim.WallSwerveScenarioDef.width)
-  return _msg;
-}
-inline void WallSwerveScenarioDef::set_allocated_width(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.width_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000004u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
-  }
-
-  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallSwerveScenarioDef.width)
-}
-
-// .aim.RegionLength spread = 4;
-inline bool WallSwerveScenarioDef::has_spread() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.spread_ != nullptr);
-  return value;
-}
-inline void WallSwerveScenarioDef::clear_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.spread_ != nullptr) _impl_.spread_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline const ::aim::RegionLength& WallSwerveScenarioDef::_internal_spread() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.spread_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
-}
-inline const ::aim::RegionLength& WallSwerveScenarioDef::spread() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallSwerveScenarioDef.spread)
-  return _internal_spread();
-}
-inline void WallSwerveScenarioDef::unsafe_arena_set_allocated_spread(::aim::RegionLength* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.spread_);
-  }
-  _impl_.spread_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000008u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallSwerveScenarioDef.spread)
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::release_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000008u;
-  ::aim::RegionLength* released = _impl_.spread_;
-  _impl_.spread_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::unsafe_arena_release_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallSwerveScenarioDef.spread)
-
-  _impl_._has_bits_[0] &= ~0x00000008u;
-  ::aim::RegionLength* temp = _impl_.spread_;
-  _impl_.spread_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::_internal_mutable_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.spread_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.spread_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.spread_;
-}
-inline ::aim::RegionLength* WallSwerveScenarioDef::mutable_spread() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000008u;
-  ::aim::RegionLength* _msg = _internal_mutable_spread();
-  // @@protoc_insertion_point(field_mutable:aim.WallSwerveScenarioDef.spread)
-  return _msg;
-}
-inline void WallSwerveScenarioDef::set_allocated_spread(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.spread_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000008u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
-  }
-
-  _impl_.spread_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallSwerveScenarioDef.spread)
-}
-
-// float turn_rate = 5;
-inline bool WallSwerveScenarioDef::has_turn_rate() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
-  return value;
-}
-inline void WallSwerveScenarioDef::clear_turn_rate() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_rate_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
-}
-inline float WallSwerveScenarioDef::turn_rate() const {
-  // @@protoc_insertion_point(field_get:aim.WallSwerveScenarioDef.turn_rate)
-  return _internal_turn_rate();
-}
-inline void WallSwerveScenarioDef::set_turn_rate(float value) {
-  _internal_set_turn_rate(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.WallSwerveScenarioDef.turn_rate)
-}
-inline float WallSwerveScenarioDef::_internal_turn_rate() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.turn_rate_;
-}
-inline void WallSwerveScenarioDef::_internal_set_turn_rate(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_rate_ = value;
-}
-
-// -------------------------------------------------------------------
-
 // WallWanderScenarioDef
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 1;
@@ -14827,303 +14136,71 @@ inline void WallWanderScenarioDef::set_allocated_target_placement_strategy(::aim
   // @@protoc_insertion_point(field_set_allocated:aim.WallWanderScenarioDef.target_placement_strategy)
 }
 
-// .aim.RegionLength height = 2;
-inline bool WallWanderScenarioDef::has_height() const {
+// float turn_time = 2;
+inline bool WallWanderScenarioDef::has_turn_time() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.height_ != nullptr);
   return value;
 }
-inline void WallWanderScenarioDef::clear_height() {
+inline void WallWanderScenarioDef::clear_turn_time() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.height_ != nullptr) _impl_.height_->Clear();
+  _impl_.turn_time_ = 0;
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline const ::aim::RegionLength& WallWanderScenarioDef::_internal_height() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.height_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+inline float WallWanderScenarioDef::turn_time() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_time)
+  return _internal_turn_time();
 }
-inline const ::aim::RegionLength& WallWanderScenarioDef::height() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.height)
-  return _internal_height();
-}
-inline void WallWanderScenarioDef::unsafe_arena_set_allocated_height(::aim::RegionLength* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.height_);
-  }
-  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallWanderScenarioDef.height)
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::release_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::RegionLength* released = _impl_.height_;
-  _impl_.height_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::unsafe_arena_release_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallWanderScenarioDef.height)
-
-  _impl_._has_bits_[0] &= ~0x00000002u;
-  ::aim::RegionLength* temp = _impl_.height_;
-  _impl_.height_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::_internal_mutable_height() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.height_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.height_;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::mutable_height() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline void WallWanderScenarioDef::set_turn_time(float value) {
+  _internal_set_turn_time(value);
   _impl_._has_bits_[0] |= 0x00000002u;
-  ::aim::RegionLength* _msg = _internal_mutable_height();
-  // @@protoc_insertion_point(field_mutable:aim.WallWanderScenarioDef.height)
-  return _msg;
+  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_time)
 }
-inline void WallWanderScenarioDef::set_allocated_height(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
+inline float WallWanderScenarioDef::_internal_turn_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.turn_time_;
+}
+inline void WallWanderScenarioDef::_internal_set_turn_time(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.height_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000002u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
-  }
-
-  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallWanderScenarioDef.height)
+  _impl_.turn_time_ = value;
 }
 
-// .aim.RegionLength width = 3;
-inline bool WallWanderScenarioDef::has_width() const {
+// float turn_time_jitter = 3;
+inline bool WallWanderScenarioDef::has_turn_time_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.width_ != nullptr);
   return value;
 }
-inline void WallWanderScenarioDef::clear_width() {
+inline void WallWanderScenarioDef::clear_turn_time_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.width_ != nullptr) _impl_.width_->Clear();
+  _impl_.turn_time_jitter_ = 0;
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline const ::aim::RegionLength& WallWanderScenarioDef::_internal_width() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.width_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+inline float WallWanderScenarioDef::turn_time_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_time_jitter)
+  return _internal_turn_time_jitter();
 }
-inline const ::aim::RegionLength& WallWanderScenarioDef::width() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.width)
-  return _internal_width();
-}
-inline void WallWanderScenarioDef::unsafe_arena_set_allocated_width(::aim::RegionLength* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.width_);
-  }
-  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallWanderScenarioDef.width)
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::release_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000004u;
-  ::aim::RegionLength* released = _impl_.width_;
-  _impl_.width_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::unsafe_arena_release_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallWanderScenarioDef.width)
-
-  _impl_._has_bits_[0] &= ~0x00000004u;
-  ::aim::RegionLength* temp = _impl_.width_;
-  _impl_.width_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::_internal_mutable_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.width_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.width_;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::mutable_width() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline void WallWanderScenarioDef::set_turn_time_jitter(float value) {
+  _internal_set_turn_time_jitter(value);
   _impl_._has_bits_[0] |= 0x00000004u;
-  ::aim::RegionLength* _msg = _internal_mutable_width();
-  // @@protoc_insertion_point(field_mutable:aim.WallWanderScenarioDef.width)
-  return _msg;
+  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_time_jitter)
 }
-inline void WallWanderScenarioDef::set_allocated_width(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.width_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000004u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
-  }
-
-  _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallWanderScenarioDef.width)
-}
-
-// .aim.RegionLength spread = 4;
-inline bool WallWanderScenarioDef::has_spread() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.spread_ != nullptr);
-  return value;
-}
-inline void WallWanderScenarioDef::clear_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.spread_ != nullptr) _impl_.spread_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline const ::aim::RegionLength& WallWanderScenarioDef::_internal_spread() const {
+inline float WallWanderScenarioDef::_internal_turn_time_jitter() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.spread_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+  return _impl_.turn_time_jitter_;
 }
-inline const ::aim::RegionLength& WallWanderScenarioDef::spread() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.spread)
-  return _internal_spread();
-}
-inline void WallWanderScenarioDef::unsafe_arena_set_allocated_spread(::aim::RegionLength* value) {
+inline void WallWanderScenarioDef::_internal_set_turn_time_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.spread_);
-  }
-  _impl_.spread_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000008u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallWanderScenarioDef.spread)
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::release_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000008u;
-  ::aim::RegionLength* released = _impl_.spread_;
-  _impl_.spread_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::unsafe_arena_release_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallWanderScenarioDef.spread)
-
-  _impl_._has_bits_[0] &= ~0x00000008u;
-  ::aim::RegionLength* temp = _impl_.spread_;
-  _impl_.spread_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::_internal_mutable_spread() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.spread_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.spread_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.spread_;
-}
-inline ::aim::RegionLength* WallWanderScenarioDef::mutable_spread() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000008u;
-  ::aim::RegionLength* _msg = _internal_mutable_spread();
-  // @@protoc_insertion_point(field_mutable:aim.WallWanderScenarioDef.spread)
-  return _msg;
-}
-inline void WallWanderScenarioDef::set_allocated_spread(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.spread_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000008u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
-  }
-
-  _impl_.spread_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallWanderScenarioDef.spread)
+  _impl_.turn_time_jitter_ = value;
 }
 
-// float turn_rate = 5;
+// float turn_rate = 4;
 inline bool WallWanderScenarioDef::has_turn_rate() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void WallWanderScenarioDef::clear_turn_rate() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.turn_rate_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float WallWanderScenarioDef::turn_rate() const {
   // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_rate)
@@ -15131,7 +14208,7 @@ inline float WallWanderScenarioDef::turn_rate() const {
 }
 inline void WallWanderScenarioDef::set_turn_rate(float value) {
   _internal_set_turn_rate(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_rate)
 }
 inline float WallWanderScenarioDef::_internal_turn_rate() const {
@@ -15141,6 +14218,34 @@ inline float WallWanderScenarioDef::_internal_turn_rate() const {
 inline void WallWanderScenarioDef::_internal_set_turn_rate(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.turn_rate_ = value;
+}
+
+// float turn_rate_jitter = 5;
+inline bool WallWanderScenarioDef::has_turn_rate_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void WallWanderScenarioDef::clear_turn_rate_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_rate_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float WallWanderScenarioDef::turn_rate_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_rate_jitter)
+  return _internal_turn_rate_jitter();
+}
+inline void WallWanderScenarioDef::set_turn_rate_jitter(float value) {
+  _internal_set_turn_rate_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_rate_jitter)
+}
+inline float WallWanderScenarioDef::_internal_turn_rate_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.turn_rate_jitter_;
+}
+inline void WallWanderScenarioDef::_internal_set_turn_rate_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_rate_jitter_ = value;
 }
 
 // -------------------------------------------------------------------

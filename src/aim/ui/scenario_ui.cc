@@ -163,6 +163,9 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
               scenario.id(), scenario.unevaluated_def.overrides(), 5);
           result->reload_scenarios = true;
         }
+        if (ImGui::MenuItem("Reload")) {
+          result->reload_scenarios = true;
+        }
         ImGui::EndMenu();
       }
       ImGui::EndPopup();

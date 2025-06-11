@@ -20,7 +20,7 @@ std::unique_ptr<Scenario> CreateWallStrafeScenario(const CreateScenarioParams& p
                                                    Application* app);
 std::unique_ptr<Scenario> CreateWallArcScenario(const CreateScenarioParams& params,
                                                 Application* app);
-std::unique_ptr<Scenario> CreateWallSwerveScenario(const CreateScenarioParams& params,
+std::unique_ptr<Scenario> CreateWallWanderScenario(const CreateScenarioParams& params,
                                                    Application* app);
 
 }  // namespace aim

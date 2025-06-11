@@ -172,7 +172,7 @@ message ScenarioDef {
     LinearScenarioDef linear_def = 33;
     WallStrafeScenarioDef wall_strafe_def = 34;
     WallArcScenarioDef wall_arc_def = 35;
-    WallSwerveScenarioDef wall_swerve_def = 36;
+    WallWanderScenarioDef wall_wander_def = 36;
     ReferenceScenarioDef reference_def = 37;
   }
 }
@@ -290,24 +290,14 @@ message WallArcScenarioDef {
   bool start_on_ground = 6;
 }
 
-message WallSwerveScenarioDef {
-  TargetPlacementStrategy origin_strategy = 1;
-
-  RegionLength height = 2;
-  RegionLength width = 3;
-  RegionLength spread = 4;
-
-  float turn_rate = 5;
-}
-
 message WallWanderScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 1;
 
-  RegionLength height = 2;
-  RegionLength width = 3;
-  RegionLength spread = 4;
+  float turn_time = 2;
+  float turn_time_jitter = 3;
 
-  float turn_rate = 5;
+  float turn_rate = 4;
+  float turn_rate_jitter = 5;
 }
 
 message TargetDef {

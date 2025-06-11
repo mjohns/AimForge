@@ -166,4 +166,16 @@ static float ClampPositive(float val) {
   return val > 0 ? val : 0.0f;
 }
 
+static void EnsureNegative(float* val) {
+  if (*val > 0) {
+    *val *= -1;
+  }
+}
+
+static void EnsurePositive(float* val) {
+  if (*val < 0) {
+    *val *= -1;
+  }
+}
+
 }  // namespace aim

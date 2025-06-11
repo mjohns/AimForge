@@ -62,6 +62,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kBarrelDef, "Barrel"},
     {ScenarioDef::kLinearDef, "Linear"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
+    {ScenarioDef::kWallWanderDef, "Wall Wander"},
     {ScenarioDef::kReferenceDef, "Reference"},
 };
 
@@ -389,6 +390,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kWallArcDef) {
       DrawWallArcEditor();
     }
+    if (scenario_type == ScenarioDef::kWallWanderDef) {
+      DrawWallWanderEditor();
+    }
   }
 
   void InitializeScenarioType(ScenarioDef::TypeCase scenario_type) {
@@ -581,6 +585,47 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
                      PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));
+  }
+
+  void DrawWallWanderEditor() {
+    ImGui::IdGuard cid("WallWanderEditor");
+    WallWanderScenarioDef& d = *def_.mutable_wall_wander_def();
+
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams("TimeBetweenTurns")
+                                  .set_label("Time between turns")
+                                  .set_step(0.1, 2)
+                                  .set_min(0.2)
+                                  .set_precision(1)
+                                  .set_default(2)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(WallWanderScenarioDef, &d, turn_time));
+    ImGui::SameLine();
+    ImGui::HelpMarker("The amount of time to turn in a single direction before switching.");
+
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams("TurnRate")
+                                  .set_label("Turn rate")
+                                  .set_step(10, 30)
+                                  .set_default(300)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(WallWanderScenarioDef, &d, turn_rate));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The number of degrees to turn per second. The turn rate will accelerate smoothly between "
+        "turns base on turn time.");
+    Line();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Initial target location");
+    bool has_location = d.has_target_placement_strategy();
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseInitial", &has_location);
+    if (has_location) {
+      ImGui::Indent();
+      DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
+      ImGui::Unindent();
+    } else {
+      d.clear_target_placement_strategy();
+    }
   }
 
   void DrawLinearEditor() {
