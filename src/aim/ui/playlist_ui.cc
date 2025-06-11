@@ -373,6 +373,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   explicit PlaylistListComponentImpl(UiScreen& screen) : screen_(screen), app_(screen.app()) {
     if (app_.history_manager().recent_playlists().size() == 0) {
       view_type_ = PlaylistViewType::ALL;
+    } else {
+      std::string current_playlist_name = app_.history_manager().recent_playlists()[0];
+      if (app_.labels_manager().IsStarred(ObjectType::PLAYLIST, current_playlist_name)) {
+        view_type_ = PlaylistViewType::STARRED;
+      }
     }
   }
 

@@ -60,6 +60,9 @@ LabelsDb::~LabelsDb() {
 void LabelsDb::AddLabeledItem(const std::string& label,
                               ObjectType type,
                               const std::string& object_id) {
+  if (label.size() == 0 || object_id.size() == 0) {
+    return;
+  }
   sqlite3_stmt* stmt;
   int rc = sqlite3_prepare_v2(db_, kInsertLabeledItemSql, -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
