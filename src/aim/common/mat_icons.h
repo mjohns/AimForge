@@ -34,5 +34,7 @@ static const char* kIconCenterFocusWeak = "\xEE\x8E\xB5";
 static const char* kIconSave = "\xEE\x85\xA1";
 // static const char* kIconPointScan = "\xEF\x9C\x8C";
 static const char* kIconMyLocation = "\xEE\x95\x9C";
+static const char* kIconStar = "\xEE\xA0\xB8";
+static const char* kIconStarOutline = "\xEF\x81\xAF";
 
 }  // namespace aim

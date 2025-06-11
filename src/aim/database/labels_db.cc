@@ -89,6 +89,7 @@ void LabelsDb::RemoveLabeledItem(const std::string& label,
   BindString(stmt, 1, label);
   std::string type_string = ObjectTypeToString(type);
   BindString(stmt, 2, type_string);
+  BindString(stmt, 3, object_id);
   rc = sqlite3_step(stmt);
   if (rc != SQLITE_DONE) {
     Logger::get()->warn("Failed to delete labeled item for {}: {}", label, sqlite3_errmsg(db_));
@@ -110,7 +111,7 @@ std::vector<std::string> LabelsDb::ListLabeledItems(const std::string& label, Ob
 
   std::vector<std::string> ids;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
-    std::string id = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+    std::string id = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
     ids.push_back(id);
   }
 

@@ -7,6 +7,12 @@
 
 namespace aim {
 
+namespace {
+
+const char* kStarredLabel = "starred";
+
+}  // namespace
+
 LabelsManager::LabelsManager(FileSystem* fs)
     : labels_db_(std::make_unique<LabelsDb>(fs->GetUserDataPath("labels.db"))) {}
 
@@ -14,16 +20,20 @@ void LabelsManager::AddLabeledItem(const std::string& label,
                                    ObjectType type,
                                    const std::string& object_id) {
   labels_db_->AddLabeledItem(label, type, object_id);
+  auto& items_by_label = labeled_items_cache_[type];
+  items_by_label.erase(label);
 }
 
 void LabelsManager::RemoveLabeledItem(const std::string& label,
                                       ObjectType type,
                                       const std::string& object_id) {
   labels_db_->RemoveLabeledItem(label, type, object_id);
+  auto& items_by_label = labeled_items_cache_[type];
+  items_by_label.erase(label);
 }
 
-std::shared_ptr<std::vector<std::string>> LabelsManager::ListLabeledItems(const std::string& label,
-                                                                          ObjectType type) {
+std::shared_ptr<LabeledItems> LabelsManager::ListLabeledItems(const std::string& label,
+                                                              ObjectType type) {
   auto& items_by_label = labeled_items_cache_[type];
 
   auto it = items_by_label.find(label);
@@ -31,10 +41,30 @@ std::shared_ptr<std::vector<std::string>> LabelsManager::ListLabeledItems(const 
     return it->second;
   }
 
-  std::shared_ptr<std::vector<std::string>> items =
-      std::make_shared<std::vector<std::string>>(labels_db_->ListLabeledItems(label, type));
+  std::shared_ptr<LabeledItems> items = std::make_shared<LabeledItems>();
+  items->items = labels_db_->ListLabeledItems(label, type);
+  std::sort(items->items.begin(), items->items.end());
+  for (const std::string& id : items->items) {
+    items->item_set.insert(id);
+  }
   items_by_label[label] = items;
   return items;
+}
+
+void LabelsManager::StarItem(ObjectType type, const std::string& object_id) {
+  AddLabeledItem(kStarredLabel, type, object_id);
+}
+
+void LabelsManager::UnstarItem(ObjectType type, const std::string& object_id) {
+  RemoveLabeledItem(kStarredLabel, type, object_id);
+}
+
+bool LabelsManager::IsStarred(ObjectType type, const std::string& object_id) {
+  return ListStarredItems(type)->has(object_id);
+}
+
+std::shared_ptr<LabeledItems> LabelsManager::ListStarredItems(ObjectType type) {
+  return ListLabeledItems(kStarredLabel, type);
 }
 
 }  // namespace aim

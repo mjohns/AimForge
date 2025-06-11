@@ -312,6 +312,7 @@ class PlaylistEditorComponent {
 enum PlaylistViewType {
   RECENT,
   ALL,
+  STARRED,
 };
 
 class PlaylistComponentImpl : public PlaylistComponent {
@@ -400,6 +401,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
                               &view_type_,
                               {
                                   {PlaylistViewType::RECENT, "Recent"},
+                                  {PlaylistViewType::STARRED, "Starred"},
                                   {PlaylistViewType::ALL, "All"},
                               });
     ImGui::Spacing();
@@ -412,6 +414,14 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
     if (view_type_ == PlaylistViewType::RECENT) {
       for (const std::string& name : app_.history_manager().recent_playlists()) {
+        auto id_guard = loop_id.Get();
+        if (StringMatchesSearch(name, search_words)) {
+          DrawPlaylistItem(name, result);
+        }
+      }
+    } else if (view_type_ == PlaylistViewType::STARRED) {
+      auto items = app_.labels_manager().ListStarredItems(ObjectType::PLAYLIST);
+      for (const std::string& name : items->items) {
         auto id_guard = loop_id.Get();
         if (StringMatchesSearch(name, search_words)) {
           DrawPlaylistItem(name, result);
@@ -455,6 +465,17 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       ImGui::EndPopup();
     }
     ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
+
+    ImGui::SameLine();
+    if (app_.labels_manager().IsStarred(ObjectType::PLAYLIST, playlist_name)) {
+      if (ImGui::Selectable(kIconStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        app_.labels_manager().UnstarItem(ObjectType::PLAYLIST, playlist_name);
+      }
+    } else {
+      if (ImGui::Selectable(kIconStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        app_.labels_manager().StarItem(ObjectType::PLAYLIST, playlist_name);
+      }
+    }
   }
 
  private:
