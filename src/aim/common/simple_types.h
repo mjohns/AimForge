@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "glm/vec3.hpp"
-#include "imgui/imgui.h"
+#include "imgui.h"
 
 namespace aim {
 

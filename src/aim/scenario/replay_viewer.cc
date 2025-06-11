@@ -118,7 +118,7 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
 
     app->NewImGuiFrame();
     app->BeginFullscreenWindow();
-    DrawCrosshair(crosshair, crosshair_size, theme, screen.center);
+    app->crosshair_manager().Draw(crosshair, crosshair_size, theme, screen.center);
 
     float elapsed_seconds = timer.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);

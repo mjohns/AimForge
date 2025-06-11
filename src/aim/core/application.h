@@ -1,7 +1,5 @@
 #pragma once
 
-#include <imgui.h>
-
 #include <memory>
 #include <optional>
 #include <random>
@@ -27,7 +25,9 @@
 #include "aim/core/stats_manager.h"
 #include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
+#include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
+#include "imgui.h"
 #include "spdlog/spdlog.h"
 
 namespace aim {
@@ -126,6 +126,10 @@ class Application {
     return *labels_manager_;
   }
 
+  CrosshairManager& crosshair_manager() {
+    return *crosshair_manager_;
+  }
+
   spdlog::logger* logger() {
     return logger_.get();
   };
@@ -165,6 +169,7 @@ class Application {
   std::unique_ptr<SettingsDb> settings_db_;
   std::unique_ptr<HistoryManager> history_manager_;
   std::unique_ptr<Renderer> renderer_;
+  std::unique_ptr<CrosshairManager> crosshair_manager_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;

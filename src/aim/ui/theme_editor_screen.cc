@@ -323,7 +323,7 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Begin(
         "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    DrawCrosshair(crosshair, 25, current_theme_, app_.screen_info().center);
+    app_.crosshair_manager().Draw(crosshair, 25, current_theme_, app_.screen_info().center);
     ImGui::End();
     ImGui::PopStyleVar();
   }

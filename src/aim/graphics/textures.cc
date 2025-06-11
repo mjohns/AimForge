@@ -118,6 +118,8 @@ Texture* TextureManager::GetTexture(const std::string& name) {
       return result;
     }
   }
+  // Cache empty pointer so we don't keep trying to read invalid textures.
+  texture_cache_[name] = {};
   return nullptr;
 }
 

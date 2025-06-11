@@ -229,7 +229,7 @@ class CrosshairEditorScreen : public UiScreen {
     back_max.y += height_spacing;
 
     ImGui::GetWindowDrawList()->AddRectFilled(back_min, back_max, ToImCol32(ToStoredColor(0.3)));
-    DrawCrosshair(c, 30, theme, center);
+    app_.crosshair_manager().Draw(c, 30, theme, center);
   }
 
   void DrawCrosshairLayerEditor(CrosshairLayer& l) {

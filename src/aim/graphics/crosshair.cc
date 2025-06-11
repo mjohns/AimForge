@@ -76,10 +76,23 @@ void DrawPlusWithLengths(float horizontal_length,
 
 }  // namespace
 
-void DrawCrosshairLayer(const CrosshairLayer& layer,
-                        float crosshair_size,
-                        const Theme& theme,
-                        const ImVec2& center) {
+CrosshairManager::CrosshairManager(const std::filesystem::path& crosshair_dir,
+                                   SDL_GPUDevice* gpu_device)
+    : texture_manager_({crosshair_dir}, gpu_device) {}
+
+void CrosshairManager::Draw(const Crosshair& crosshair,
+                            float crosshair_size,
+                            const Theme& theme,
+                            const ImVec2& center) {
+  for (auto& layer : crosshair.layers()) {
+    DrawLayer(layer, crosshair_size, theme, center);
+  }
+}
+
+void CrosshairManager::DrawLayer(const CrosshairLayer& layer,
+                                 float crosshair_size,
+                                 const Theme& theme,
+                                 const ImVec2& center) {
   StoredRgb main_rgb = ToStoredRgb(theme.crosshair().color());
   if (layer.has_override_color()) {
     main_rgb = ToStoredRgb(layer.override_color());
@@ -176,15 +189,6 @@ void DrawCrosshairLayer(const CrosshairLayer& layer,
   }
 
   // Handle other crosshair types.
-}
-
-void DrawCrosshair(const Crosshair& crosshair,
-                   float crosshair_size,
-                   const Theme& theme,
-                   const ImVec2& center) {
-  for (auto& layer : crosshair.layers()) {
-    DrawCrosshairLayer(layer, crosshair_size, theme, center);
-  }
 }
 
 }  // namespace aim

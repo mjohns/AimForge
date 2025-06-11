@@ -1,6 +1,5 @@
 #include "application.h"
 
-#include <implot.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,9 +14,10 @@
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
+#include "imgui.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 #include "imgui/backends/imgui_impl_sdlgpu3.h"
-#include "imgui/imgui.h"
+#include "implot.h"
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/spdlog.h"
 
@@ -97,6 +97,9 @@ Application::~Application() {
   ImGui::DestroyContext();
 
   if (gpu_device_ != nullptr) {
+    if (crosshair_manager_) {
+      crosshair_manager_ = {};
+    }
     if (renderer_) {
       renderer_->Cleanup();
     }
@@ -238,6 +241,8 @@ int Application::Initialize() {
       file_system_->GetBasePath("resources/textures"),
   };
   std::filesystem::path shader_dir = file_system_->GetBasePath("shaders/compiled");
+  crosshair_manager_ = std::make_unique<CrosshairManager>(
+      file_system_->GetUserDataPath("resources/crosshairs"), gpu_device_);
   renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
 
   // Setup Dear ImGui context

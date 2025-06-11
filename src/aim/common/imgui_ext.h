@@ -7,7 +7,7 @@
 
 #include "aim/common/field.h"
 #include "aim/common/mat_icons.h"
-#include "imgui/imgui.h"
+#include "imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace ImGui {

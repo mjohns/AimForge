@@ -264,7 +264,7 @@ void Scenario::OnWaitingForClickTick() {
 
   app_.NewImGuiFrame();
   app_.BeginFullscreenWindow();
-  DrawCrosshair(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+  app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
   ImGui::Text("%s", id_.c_str());
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
@@ -369,7 +369,7 @@ void Scenario::OnRunningTick() {
 
   app_.NewImGuiFrame();
   app_.BeginFullscreenWindow();
-  DrawCrosshair(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+  app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
   float elapsed_seconds = timer_.GetElapsedSeconds();
   ImGui::Text("time: %.1f", elapsed_seconds);

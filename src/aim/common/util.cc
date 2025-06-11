@@ -20,7 +20,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "google/protobuf/message.h"
-#include "imgui/imgui.h"
+#include "imgui.h"
 
 namespace aim {
 namespace {
