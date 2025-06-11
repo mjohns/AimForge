@@ -109,6 +109,9 @@ void CrosshairManager::DrawLayer(const CrosshairLayer& layer,
   ImU32 main_color = ToImCol32(main_rgb, alpha);
   ImU32 outline_color = ToImCol32(outline_rgb, alpha);
 
+  glm::vec3 main_color3 = ToVec3(main_rgb);
+  ImVec4 main_color4(main_color3.r, main_color3.g, main_color3.b, alpha / 255.0f);
+
   if (layer.scale() > 0) {
     crosshair_size *= layer.scale();
   }
@@ -185,6 +188,25 @@ void CrosshairManager::DrawLayer(const CrosshairLayer& layer,
                         main_color,
                         center,
                         draw_list);
+    return;
+  }
+
+  if (layer.has_image()) {
+    Texture* texture = texture_manager_.GetTexture(layer.image().file_name());
+    if (texture != nullptr) {
+      float mult = (crosshair_size / 15.0f);
+      float width = texture->width() * mult;
+      float height = texture->height() * mult;
+      ImVec2 old_pos = ImGui::GetCursorScreenPos();
+      ImGui::SetCursorScreenPos(ImVec2(center.x - (width / 2.0), center.y - (height / 2.0)));
+      ImGui::ImageWithBg(texture->GetImTextureId(),
+                         ImVec2(width, height),
+                         ImVec2(0.0f, 0.0f),
+                         ImVec2(1.0f, 1.0f),
+                         ImVec4(0, 0, 0, 0),
+                         main_color4);
+      ImGui::SetCursorScreenPos(old_pos);
+    }
     return;
   }
 

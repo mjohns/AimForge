@@ -23,6 +23,7 @@ namespace aim {
 
 glm::vec3 ToVec3(const StoredVec3& v);
 glm::vec3 ToVec3(const StoredColor& c);
+glm::vec3 ToVec3(const StoredRgb& c);
 glm::vec2 ToVec2(const StoredVec2& v);
 StoredVec3 ToStoredVec3(float x, float y, float z);
 

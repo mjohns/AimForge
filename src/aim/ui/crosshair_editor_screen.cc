@@ -20,6 +20,7 @@ const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTy
     {CrosshairLayer::kDot, "Dot"},
     {CrosshairLayer::kPlus, "Plus"},
     {CrosshairLayer::kCircle, "Circle"},
+    {CrosshairLayer::kImage, "Image"},
 };
 
 class CrosshairEditorScreen : public UiScreen {
@@ -266,6 +267,9 @@ class CrosshairEditorScreen : public UiScreen {
     if (type == CrosshairLayer::kPlus) {
       DrawCrosshairPlusEditor(l.mutable_plus());
     }
+    if (type == CrosshairLayer::kImage) {
+      DrawCrosshairImageEditor(l.mutable_image());
+    }
     if (type == CrosshairLayer::kCircle) {
       DrawCrosshairCircleEditor(l.mutable_circle());
     }
@@ -300,6 +304,13 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::Checkbox("##UseOutline", &use_outline_color);
     c->set_use_outline_color(use_outline_color);
+  }
+
+  void DrawCrosshairImageEditor(ImageCrosshair* c) {
+    ImGui::IdGuard cid("ImageCrosshair");
+    ImGui::Text("File name");
+    ImGui::SameLine();
+    ImGui::InputText("##FileNameINput", c->mutable_file_name());
   }
 
   void DrawCrosshairPlusEditor(PlusCrosshair* c) {

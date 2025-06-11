@@ -147,6 +147,10 @@ ImU32 ToImCol32(const StoredColor& c) {
 
 glm::vec3 ToVec3(const StoredColor& c) {
   StoredRgb v = ToStoredRgb(c);
+  return ToVec3(v);
+}
+
+glm::vec3 ToVec3(const StoredRgb& v) {
   return glm::vec3(
       (float)v.r() / kMaxRgbValue, (float)v.g() / kMaxRgbValue, (float)v.b() / kMaxRgbValue);
 }
