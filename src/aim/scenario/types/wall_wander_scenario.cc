@@ -76,51 +76,7 @@ class WallWanderScenario : public BaseScenario {
       }
 
       // Reflect at walls.
-      glm::vec2 current_pos = *target->wall_position;
-      glm::vec2& direction = *target->wall_direction;
-      float push_percent = 0.8f;
-      if (def_.room().has_barrel_room()) {
-        float distance_from_center = glm::length(current_pos);
-        if ((distance_from_center + target->radius * 1.02) > def_.room().barrel_room().radius()) {
-          direction *= -1;
-          PushTowardsCenter(&direction, glm::normalize(current_pos * -1.0f), push_percent);
-          UpdateTurn(info, now, true);
-        }
-      } else {
-        float max_x = (wall_.width * 0.5) - (target->radius * 1.2);
-        float min_x = -1 * max_x;
-
-        float max_y = (wall_.height * 0.5) - (target->radius * 1.2);
-        float min_y = -1 * max_y;
-
-        if (current_pos.x >= max_x) {
-          // Too far right.
-          EnsureNegative(&direction.x);
-          PushTowardsCenter(&direction, glm::vec2(-1, 0), push_percent);
-          UpdateTurn(info, now, true);
-        }
-
-        if (current_pos.x <= min_x) {
-          // Too far left.
-          EnsurePositive(&direction.x);
-          PushTowardsCenter(&direction, glm::vec2(1, 0), push_percent);
-          UpdateTurn(info, now, true);
-        }
-
-        if (current_pos.y >= max_y) {
-          // Too high.
-          EnsureNegative(&direction.y);
-          PushTowardsCenter(&direction, glm::vec2(0, -1), push_percent);
-          UpdateTurn(info, now, true);
-        }
-
-        if (current_pos.y <= min_y) {
-          // Too low.
-          EnsurePositive(&direction.y);
-          PushTowardsCenter(&direction, glm::vec2(0, 1), push_percent);
-          UpdateTurn(info, now, true);
-        }
-      }
+      HandleWallHits(target, info, now);
 
       float delta_seconds = now - info.last_turn_time;
       info.last_turn_time = now;
@@ -145,6 +101,54 @@ class WallWanderScenario : public BaseScenario {
     }
 
     target_manager_.UpdateTargetPositions(now);
+  }
+
+  void HandleWallHits(Target* target, TargetInfo& info, float now) {
+    glm::vec2 current_pos = *target->wall_position;
+    glm::vec2& direction = *target->wall_direction;
+    float push_percent = 0.8f;
+    if (def_.room().has_barrel_room()) {
+      float distance_from_center = glm::length(current_pos);
+      if ((distance_from_center + target->radius * 1.02) > def_.room().barrel_room().radius()) {
+        direction *= -1;
+        PushTowardsCenter(&direction, glm::normalize(current_pos * -1.0f), push_percent);
+        UpdateTurn(info, now, true);
+      }
+    } else {
+      float max_x = (wall_.width * 0.5) - (target->radius * 1.2);
+      float min_x = -1 * max_x;
+
+      float max_y = (wall_.height * 0.5) - (target->radius * 1.2);
+      float min_y = -1 * max_y;
+
+      if (current_pos.x >= max_x) {
+        // Too far right.
+        EnsureNegative(&direction.x);
+        PushTowardsCenter(&direction, glm::vec2(-1, 0), push_percent);
+        UpdateTurn(info, now, true);
+      }
+
+      if (current_pos.x <= min_x) {
+        // Too far left.
+        EnsurePositive(&direction.x);
+        PushTowardsCenter(&direction, glm::vec2(1, 0), push_percent);
+        UpdateTurn(info, now, true);
+      }
+
+      if (current_pos.y >= max_y) {
+        // Too high.
+        EnsureNegative(&direction.y);
+        PushTowardsCenter(&direction, glm::vec2(0, -1), push_percent);
+        UpdateTurn(info, now, true);
+      }
+
+      if (current_pos.y <= min_y) {
+        // Too low.
+        EnsurePositive(&direction.y);
+        PushTowardsCenter(&direction, glm::vec2(0, 1), push_percent);
+        UpdateTurn(info, now, true);
+      }
+    }
   }
 
   void PushTowardsCenter(glm::vec2* direction, glm::vec2 out, float percent) {
