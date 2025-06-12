@@ -64,4 +64,23 @@ class CopyPlaylistDialog {
   std::optional<Playlist> source_;
 };
 
+class AddPlaylistDialog {
+ public:
+  explicit AddPlaylistDialog(const std::string& id) : id_(id) {}
+
+  void NotifyOpen() {
+    open_ = true;
+  }
+
+  bool Draw(Application& app);
+
+ private:
+  bool open_ = false;
+  bool is_open_ = false;
+
+  ResourceName name_;
+  std::vector<std::string> bundle_names_;
+  std::string id_;
+};
+
 }  // namespace aim

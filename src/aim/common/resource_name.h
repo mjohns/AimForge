@@ -12,10 +12,6 @@ class ResourceName {
   ResourceName(std::string bundle_name, std::string relative_name)
       : bundle_name_(std::move(bundle_name)), relative_name_(std::move(relative_name)) {}
 
-  void set(std::string bundle_name, std::string relative_name) {
-    *this = ResourceName(std::move(bundle_name), std::move(relative_name));
-  }
-
   void set(std::string bundle_name, std::string_view relative_name) {
     *this = ResourceName(std::move(bundle_name), std::string(relative_name));
   }

@@ -390,6 +390,9 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     if (copy_dialog_.Draw(app_)) {
       result->reload_playlists = true;
     }
+    if (add_dialog_.Draw(app_)) {
+      result->reload_playlists = true;
+    }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
@@ -409,6 +412,10 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
                                   {PlaylistViewType::STARRED, "Starred"},
                                   {PlaylistViewType::ALL, "All"},
                               });
+    ImGui::SameLine();
+    if (ImGui::Button(std::format("{} Add", kIconAdd))) {
+      add_dialog_.NotifyOpen();
+    }
     ImGui::Spacing();
     ImGui::Spacing();
 
@@ -489,6 +496,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   UiScreen& screen_;
   Application& app_;
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
+  AddPlaylistDialog add_dialog_{"AddPlaylistDialog"};
   PlaylistViewType view_type_ = PlaylistViewType::ALL;
 };
 
@@ -697,6 +705,48 @@ bool CopyPlaylistDialog::Draw(Application& app) {
     *new_name_.mutable_relative_name() += " Copy";
   }
   return did_copy;
+}
+
+bool AddPlaylistDialog::Draw(Application& app) {
+  ImGui::IdGuard cid("AddPlaylistDialogContent");
+  bool did_add = false;
+  if (is_open_) {
+    ImGui::SetNextWindowPos(
+        ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal(id_.c_str(),
+                               &is_open_,
+                               ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                   ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+      ImGui::SimpleDropdown(
+          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, ImGui::GetFrameHeight() * 9);
+      ImGui::SameLine();
+      ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+
+      if (ImGui::Button("Add")) {
+        auto taken_names = GetAllRelativeNamesInBundle(name_.bundle_name(), &app);
+        *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
+        app.playlist_manager().SavePlaylist(name_, PlaylistDef());
+        app.playlist_manager().SetCurrentPlaylist(name_.full_name());
+        did_add = true;
+        ImGui::CloseCurrentPopup();
+        is_open_ = false;
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Cancel")) {
+        is_open_ = false;
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
+  }
+  if (open_) {
+    ImGui::OpenPopup(id_.c_str());
+    open_ = false;
+    is_open_ = true;
+    bundle_names_ = app.file_system()->GetBundleNames();
+    name_.set("USER", "New playlist");
+  }
+  return did_add;
 }
 
 }  // namespace aim
