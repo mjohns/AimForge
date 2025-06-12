@@ -628,10 +628,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker("Distance away from the wall");
   }
 
-  void DrawWallWanderEditor() {
-    ImGui::IdGuard cid("WallWanderEditor");
-    WallWanderScenarioDef& d = *def_.mutable_wall_wander_def();
-
+  void DrawWallWanderProfile(WallWanderProfile* p) {
     ImGui::InputJitteredFloat(ImGui::InputFloatParams("TimeBetweenTurns")
                                   .set_label("Time between turns")
                                   .set_step(0.1, 2)
@@ -639,7 +636,7 @@ class ScenarioEditorScreen : public UiScreen {
                                   .set_precision(1)
                                   .set_default(2)
                                   .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(WallWanderScenarioDef, &d, turn_time));
+                              PROTO_JITTERED_FIELD(WallWanderProfile, p, turn_time));
     ImGui::SameLine();
     ImGui::HelpMarker("The amount of time to turn in a single direction before switching.");
 
@@ -647,12 +644,31 @@ class ScenarioEditorScreen : public UiScreen {
                                   .set_label("Turn rate")
                                   .set_step(10, 30)
                                   .set_default(300)
+                                  .set_min(0)
                                   .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(WallWanderScenarioDef, &d, turn_rate));
+                              PROTO_JITTERED_FIELD(WallWanderProfile, p, turn_rate));
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The number of degrees to turn per second. The turn rate will accelerate smoothly between "
         "turns base on turn time.");
+  }
+
+  void DrawWallWanderEditor() {
+    ImGui::IdGuard cid("WallWanderEditor");
+    WallWanderScenarioDef& d = *def_.mutable_wall_wander_def();
+
+    if (d.profiles_size() == 0) {
+      d.add_profiles();
+    }
+    ImGui::Text("Wander profiles");
+    ImGui::Indent();
+    DrawProfileList("WanderProfileList",
+                    "Profile",
+                    d.mutable_profile_order(),
+                    d.mutable_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawWallWanderProfile, this));
+    ImGui::Unindent();
+
     Line();
 
     ImGui::AlignTextToFramePadding();

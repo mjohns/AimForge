@@ -1,16 +1,15 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include <SDL3/SDL.h>
-#include <imgui.h>
-
 #include <memory>
 #include <random>
 
+#include "SDL3/SDL.h"
 #include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
+#include "aim/core/profile_selection.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
@@ -23,6 +22,7 @@
 #include "glm/trigonometric.hpp"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
+#include "imgui.h"
 
 namespace aim {
 namespace {
@@ -40,6 +40,8 @@ struct TargetInfo {
   // Whether the angle of rotation should be multiplied by -1.
   float is_negative_turn = false;
   bool is_accelerating = false;
+
+  int turn_number = 0;
 };
 
 class WallWanderScenario : public BaseScenario {
@@ -158,9 +160,19 @@ class WallWanderScenario : public BaseScenario {
   }
 
  private:
+  WallWanderProfile GetNextProfile(int turn_number) {
+    auto maybe_profile = SelectProfile(w_.profile_order(), w_.profiles(), turn_number, app_.rand());
+    WallWanderProfile fallback;
+    fallback.set_turn_rate(40);
+    fallback.set_turn_time(2);
+    return maybe_profile.value_or(fallback);
+  }
+
   void UpdateTurn(TargetInfo& info, float now_seconds, bool is_bounce = false) {
-    float duration =
-        std::max<float>(app_.rand().GetJittered(w_.turn_time(), w_.turn_time_jitter()), 0.3f);
+    WallWanderProfile profile = GetNextProfile(info.turn_number);
+    info.turn_number++;
+    float duration = std::max<float>(
+        app_.rand().GetJittered(profile.turn_time(), profile.turn_time_jitter()), 0.3f);
     if (is_bounce) {
       duration = 0.5;
     }
@@ -168,7 +180,7 @@ class WallWanderScenario : public BaseScenario {
     info.last_turn_time = now_seconds;
     info.next_turn_time = now_seconds + duration;
     float next_turn_rate =
-        ClampPositive(app_.rand().GetJittered(w_.turn_rate(), w_.turn_rate_jitter()));
+        ClampPositive(app_.rand().GetJittered(profile.turn_rate(), profile.turn_rate_jitter()));
     if (is_bounce) {
       next_turn_rate *= 0.4;
     }

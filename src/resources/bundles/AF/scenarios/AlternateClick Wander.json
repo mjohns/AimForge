@@ -27,6 +27,15 @@
     "removeClosestOnMiss": true
   },
   "wallWanderDef": {
+    "profiles": [
+      {
+        "description": "",
+        "turnRate": 300,
+        "turnRateJitter": 70,
+        "turnTime": 2.19999981,
+        "turnTimeJitter": 0.5
+      }
+    ],
     "targetPlacementStrategy": {
       "regionOrder": [
         0,
@@ -72,10 +81,6 @@
           }
         }
       ]
-    },
-    "turnRate": 300,
-    "turnRateJitter": 70,
-    "turnTime": 2.19999981,
-    "turnTimeJitter": 0.499999911
+    }
   }
 }

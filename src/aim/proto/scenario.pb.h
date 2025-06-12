@@ -135,6 +135,9 @@ extern WallStrafeProfileDefaultTypeInternal _WallStrafeProfile_default_instance_
 class WallStrafeScenarioDef;
 struct WallStrafeScenarioDefDefaultTypeInternal;
 extern WallStrafeScenarioDefDefaultTypeInternal _WallStrafeScenarioDef_default_instance_;
+class WallWanderProfile;
+struct WallWanderProfileDefaultTypeInternal;
+extern WallWanderProfileDefaultTypeInternal _WallWanderProfile_default_instance_;
 class WallWanderScenarioDef;
 struct WallWanderScenarioDefDefaultTypeInternal;
 extern WallWanderScenarioDefDefaultTypeInternal _WallWanderScenarioDef_default_instance_;
@@ -183,6 +186,269 @@ inline bool InOutDirection_Parse(absl::string_view name, InOutDirection* value) 
 // ===================================================================
 
 
+// -------------------------------------------------------------------
+
+class WallWanderProfile final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.WallWanderProfile) */ {
+ public:
+  inline WallWanderProfile() : WallWanderProfile(nullptr) {}
+  ~WallWanderProfile() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(WallWanderProfile* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WallWanderProfile));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR WallWanderProfile(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline WallWanderProfile(const WallWanderProfile& from) : WallWanderProfile(nullptr, from) {}
+  inline WallWanderProfile(WallWanderProfile&& from) noexcept
+      : WallWanderProfile(nullptr, std::move(from)) {}
+  inline WallWanderProfile& operator=(const WallWanderProfile& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WallWanderProfile& operator=(WallWanderProfile&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WallWanderProfile& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const WallWanderProfile* internal_default_instance() {
+    return reinterpret_cast<const WallWanderProfile*>(
+        &_WallWanderProfile_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 24;
+  friend void swap(WallWanderProfile& a, WallWanderProfile& b) { a.Swap(&b); }
+  inline void Swap(WallWanderProfile* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WallWanderProfile* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WallWanderProfile* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<WallWanderProfile>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const WallWanderProfile& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const WallWanderProfile& from) { WallWanderProfile::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(WallWanderProfile* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.WallWanderProfile"; }
+
+ protected:
+  explicit WallWanderProfile(::google::protobuf::Arena* arena);
+  WallWanderProfile(::google::protobuf::Arena* arena, const WallWanderProfile& from);
+  WallWanderProfile(::google::protobuf::Arena* arena, WallWanderProfile&& from) noexcept
+      : WallWanderProfile(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kDescriptionFieldNumber = 6,
+    kWeightFieldNumber = 1,
+    kTurnTimeFieldNumber = 2,
+    kTurnTimeJitterFieldNumber = 3,
+    kTurnRateFieldNumber = 4,
+    kTurnRateJitterFieldNumber = 5,
+  };
+  // string description = 6;
+  bool has_description() const;
+  void clear_description() ;
+  const std::string& description() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  std::string* mutable_description();
+  PROTOBUF_NODISCARD std::string* release_description();
+  void set_allocated_description(std::string* value);
+
+  private:
+  const std::string& _internal_description() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_description(
+      const std::string& value);
+  std::string* _internal_mutable_description();
+
+  public:
+  // float weight = 1;
+  bool has_weight() const;
+  void clear_weight() ;
+  float weight() const;
+  void set_weight(float value);
+
+  private:
+  float _internal_weight() const;
+  void _internal_set_weight(float value);
+
+  public:
+  // float turn_time = 2;
+  bool has_turn_time() const;
+  void clear_turn_time() ;
+  float turn_time() const;
+  void set_turn_time(float value);
+
+  private:
+  float _internal_turn_time() const;
+  void _internal_set_turn_time(float value);
+
+  public:
+  // float turn_time_jitter = 3;
+  bool has_turn_time_jitter() const;
+  void clear_turn_time_jitter() ;
+  float turn_time_jitter() const;
+  void set_turn_time_jitter(float value);
+
+  private:
+  float _internal_turn_time_jitter() const;
+  void _internal_set_turn_time_jitter(float value);
+
+  public:
+  // float turn_rate = 4;
+  bool has_turn_rate() const;
+  void clear_turn_rate() ;
+  float turn_rate() const;
+  void set_turn_rate(float value);
+
+  private:
+  float _internal_turn_rate() const;
+  void _internal_set_turn_rate(float value);
+
+  public:
+  // float turn_rate_jitter = 5;
+  bool has_turn_rate_jitter() const;
+  void clear_turn_rate_jitter() ;
+  float turn_rate_jitter() const;
+  void set_turn_rate_jitter(float value);
+
+  private:
+  float _internal_turn_rate_jitter() const;
+  void _internal_set_turn_rate_jitter(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.WallWanderProfile)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 6, 0,
+      41, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const WallWanderProfile& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
+    float weight_;
+    float turn_time_;
+    float turn_time_jitter_;
+    float turn_rate_;
+    float turn_rate_jitter_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
 // -------------------------------------------------------------------
 
 class SimpleRoom final : public ::google::protobuf::Message
@@ -3480,7 +3746,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 26;
+  static constexpr int kIndexInFileMessages = 27;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -5006,7 +5272,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 27;
+  static constexpr int kIndexInFileMessages = 28;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -5649,7 +5915,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 25;
+  static constexpr int kIndexInFileMessages = 26;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -5946,7 +6212,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 24;
+  static constexpr int kIndexInFileMessages = 25;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* other) {
     if (other == this) return;
@@ -6033,12 +6299,45 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
+    kProfilesFieldNumber = 2,
+    kProfileOrderFieldNumber = 3,
     kTargetPlacementStrategyFieldNumber = 1,
-    kTurnTimeFieldNumber = 2,
-    kTurnTimeJitterFieldNumber = 3,
-    kTurnRateFieldNumber = 4,
-    kTurnRateJitterFieldNumber = 5,
   };
+  // repeated .aim.WallWanderProfile profiles = 2;
+  int profiles_size() const;
+  private:
+  int _internal_profiles_size() const;
+
+  public:
+  void clear_profiles() ;
+  ::aim::WallWanderProfile* mutable_profiles(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>* mutable_profiles();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>& _internal_profiles() const;
+  ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>* _internal_mutable_profiles();
+  public:
+  const ::aim::WallWanderProfile& profiles(int index) const;
+  ::aim::WallWanderProfile* add_profiles();
+  const ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>& profiles() const;
+  // repeated int32 profile_order = 3;
+  int profile_order_size() const;
+  private:
+  int _internal_profile_order_size() const;
+
+  public:
+  void clear_profile_order() ;
+  ::int32_t profile_order(int index) const;
+  void set_profile_order(int index, ::int32_t value);
+  void add_profile_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* mutable_profile_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_profile_order();
+
+  public:
   // .aim.TargetPlacementStrategy target_placement_strategy = 1;
   bool has_target_placement_strategy() const;
   void clear_target_placement_strategy() ;
@@ -6054,56 +6353,12 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
 
   public:
-  // float turn_time = 2;
-  bool has_turn_time() const;
-  void clear_turn_time() ;
-  float turn_time() const;
-  void set_turn_time(float value);
-
-  private:
-  float _internal_turn_time() const;
-  void _internal_set_turn_time(float value);
-
-  public:
-  // float turn_time_jitter = 3;
-  bool has_turn_time_jitter() const;
-  void clear_turn_time_jitter() ;
-  float turn_time_jitter() const;
-  void set_turn_time_jitter(float value);
-
-  private:
-  float _internal_turn_time_jitter() const;
-  void _internal_set_turn_time_jitter(float value);
-
-  public:
-  // float turn_rate = 4;
-  bool has_turn_rate() const;
-  void clear_turn_rate() ;
-  float turn_rate() const;
-  void set_turn_rate(float value);
-
-  private:
-  float _internal_turn_rate() const;
-  void _internal_set_turn_rate(float value);
-
-  public:
-  // float turn_rate_jitter = 5;
-  bool has_turn_rate_jitter() const;
-  void clear_turn_rate_jitter() ;
-  float turn_rate_jitter() const;
-  void set_turn_rate_jitter(float value);
-
-  private:
-  float _internal_turn_rate_jitter() const;
-  void _internal_set_turn_rate_jitter(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.WallWanderScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 1,
+      2, 3, 2,
       0, 2>
       _table_;
 
@@ -6123,11 +6378,10 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
                           const WallWanderScenarioDef& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::WallWanderProfile > profiles_;
+    ::google::protobuf::RepeatedField<::int32_t> profile_order_;
+    ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
-    float turn_time_;
-    float turn_time_jitter_;
-    float turn_rate_;
-    float turn_rate_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -14562,6 +14816,219 @@ inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
 
 // -------------------------------------------------------------------
 
+// WallWanderProfile
+
+// float weight = 1;
+inline bool WallWanderProfile::has_weight() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_weight() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.weight_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float WallWanderProfile::weight() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.weight)
+  return _internal_weight();
+}
+inline void WallWanderProfile::set_weight(float value) {
+  _internal_set_weight(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.weight)
+}
+inline float WallWanderProfile::_internal_weight() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.weight_;
+}
+inline void WallWanderProfile::_internal_set_weight(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.weight_ = value;
+}
+
+// float turn_time = 2;
+inline bool WallWanderProfile::has_turn_time() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_turn_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_time_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float WallWanderProfile::turn_time() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.turn_time)
+  return _internal_turn_time();
+}
+inline void WallWanderProfile::set_turn_time(float value) {
+  _internal_set_turn_time(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.turn_time)
+}
+inline float WallWanderProfile::_internal_turn_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.turn_time_;
+}
+inline void WallWanderProfile::_internal_set_turn_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_time_ = value;
+}
+
+// float turn_time_jitter = 3;
+inline bool WallWanderProfile::has_turn_time_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_turn_time_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_time_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float WallWanderProfile::turn_time_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.turn_time_jitter)
+  return _internal_turn_time_jitter();
+}
+inline void WallWanderProfile::set_turn_time_jitter(float value) {
+  _internal_set_turn_time_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.turn_time_jitter)
+}
+inline float WallWanderProfile::_internal_turn_time_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.turn_time_jitter_;
+}
+inline void WallWanderProfile::_internal_set_turn_time_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_time_jitter_ = value;
+}
+
+// float turn_rate = 4;
+inline bool WallWanderProfile::has_turn_rate() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_turn_rate() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_rate_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float WallWanderProfile::turn_rate() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.turn_rate)
+  return _internal_turn_rate();
+}
+inline void WallWanderProfile::set_turn_rate(float value) {
+  _internal_set_turn_rate(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.turn_rate)
+}
+inline float WallWanderProfile::_internal_turn_rate() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.turn_rate_;
+}
+inline void WallWanderProfile::_internal_set_turn_rate(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_rate_ = value;
+}
+
+// float turn_rate_jitter = 5;
+inline bool WallWanderProfile::has_turn_rate_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_turn_rate_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_rate_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float WallWanderProfile::turn_rate_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.turn_rate_jitter)
+  return _internal_turn_rate_jitter();
+}
+inline void WallWanderProfile::set_turn_rate_jitter(float value) {
+  _internal_set_turn_rate_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.turn_rate_jitter)
+}
+inline float WallWanderProfile::_internal_turn_rate_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.turn_rate_jitter_;
+}
+inline void WallWanderProfile::_internal_set_turn_rate_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.turn_rate_jitter_ = value;
+}
+
+// string description = 6;
+inline bool WallWanderProfile::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& WallWanderProfile::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void WallWanderProfile::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.description)
+}
+inline std::string* WallWanderProfile::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.WallWanderProfile.description)
+  return _s;
+}
+inline const std::string& WallWanderProfile::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void WallWanderProfile::_internal_set_description(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* WallWanderProfile::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* WallWanderProfile::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallWanderProfile.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void WallWanderProfile::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.WallWanderProfile.description)
+}
+
+// -------------------------------------------------------------------
+
 // WallWanderScenarioDef
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 1;
@@ -14660,116 +15127,98 @@ inline void WallWanderScenarioDef::set_allocated_target_placement_strategy(::aim
   // @@protoc_insertion_point(field_set_allocated:aim.WallWanderScenarioDef.target_placement_strategy)
 }
 
-// float turn_time = 2;
-inline bool WallWanderScenarioDef::has_turn_time() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
+// repeated .aim.WallWanderProfile profiles = 2;
+inline int WallWanderScenarioDef::_internal_profiles_size() const {
+  return _internal_profiles().size();
 }
-inline void WallWanderScenarioDef::clear_turn_time() {
+inline int WallWanderScenarioDef::profiles_size() const {
+  return _internal_profiles_size();
+}
+inline void WallWanderScenarioDef::clear_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_time_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_.profiles_.Clear();
 }
-inline float WallWanderScenarioDef::turn_time() const {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_time)
-  return _internal_turn_time();
+inline ::aim::WallWanderProfile* WallWanderScenarioDef::mutable_profiles(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:aim.WallWanderScenarioDef.profiles)
+  return _internal_mutable_profiles()->Mutable(index);
 }
-inline void WallWanderScenarioDef::set_turn_time(float value) {
-  _internal_set_turn_time(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_time)
+inline ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>* WallWanderScenarioDef::mutable_profiles()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.WallWanderScenarioDef.profiles)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_profiles();
 }
-inline float WallWanderScenarioDef::_internal_turn_time() const {
+inline const ::aim::WallWanderProfile& WallWanderScenarioDef::profiles(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.profiles)
+  return _internal_profiles().Get(index);
+}
+inline ::aim::WallWanderProfile* WallWanderScenarioDef::add_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::aim::WallWanderProfile* _add = _internal_mutable_profiles()->Add();
+  // @@protoc_insertion_point(field_add:aim.WallWanderScenarioDef.profiles)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>& WallWanderScenarioDef::profiles() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.WallWanderScenarioDef.profiles)
+  return _internal_profiles();
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>&
+WallWanderScenarioDef::_internal_profiles() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.turn_time_;
+  return _impl_.profiles_;
 }
-inline void WallWanderScenarioDef::_internal_set_turn_time(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_time_ = value;
+inline ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>*
+WallWanderScenarioDef::_internal_mutable_profiles() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.profiles_;
 }
 
-// float turn_time_jitter = 3;
-inline bool WallWanderScenarioDef::has_turn_time_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
+// repeated int32 profile_order = 3;
+inline int WallWanderScenarioDef::_internal_profile_order_size() const {
+  return _internal_profile_order().size();
 }
-inline void WallWanderScenarioDef::clear_turn_time_jitter() {
+inline int WallWanderScenarioDef::profile_order_size() const {
+  return _internal_profile_order_size();
+}
+inline void WallWanderScenarioDef::clear_profile_order() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_time_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_.profile_order_.Clear();
 }
-inline float WallWanderScenarioDef::turn_time_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_time_jitter)
-  return _internal_turn_time_jitter();
+inline ::int32_t WallWanderScenarioDef::profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.profile_order)
+  return _internal_profile_order().Get(index);
 }
-inline void WallWanderScenarioDef::set_turn_time_jitter(float value) {
-  _internal_set_turn_time_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_time_jitter)
+inline void WallWanderScenarioDef::set_profile_order(int index, ::int32_t value) {
+  _internal_mutable_profile_order()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.profile_order)
 }
-inline float WallWanderScenarioDef::_internal_turn_time_jitter() const {
+inline void WallWanderScenarioDef::add_profile_order(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_profile_order()->Add(value);
+  // @@protoc_insertion_point(field_add:aim.WallWanderScenarioDef.profile_order)
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>& WallWanderScenarioDef::profile_order() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.WallWanderScenarioDef.profile_order)
+  return _internal_profile_order();
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* WallWanderScenarioDef::mutable_profile_order()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.WallWanderScenarioDef.profile_order)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_profile_order();
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>&
+WallWanderScenarioDef::_internal_profile_order() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.turn_time_jitter_;
+  return _impl_.profile_order_;
 }
-inline void WallWanderScenarioDef::_internal_set_turn_time_jitter(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_time_jitter_ = value;
-}
-
-// float turn_rate = 4;
-inline bool WallWanderScenarioDef::has_turn_rate() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  return value;
-}
-inline void WallWanderScenarioDef::clear_turn_rate() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_rate_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline float WallWanderScenarioDef::turn_rate() const {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_rate)
-  return _internal_turn_rate();
-}
-inline void WallWanderScenarioDef::set_turn_rate(float value) {
-  _internal_set_turn_rate(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_rate)
-}
-inline float WallWanderScenarioDef::_internal_turn_rate() const {
+inline ::google::protobuf::RepeatedField<::int32_t>* WallWanderScenarioDef::_internal_mutable_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.turn_rate_;
-}
-inline void WallWanderScenarioDef::_internal_set_turn_rate(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_rate_ = value;
-}
-
-// float turn_rate_jitter = 5;
-inline bool WallWanderScenarioDef::has_turn_rate_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
-  return value;
-}
-inline void WallWanderScenarioDef::clear_turn_rate_jitter() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_rate_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
-}
-inline float WallWanderScenarioDef::turn_rate_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.turn_rate_jitter)
-  return _internal_turn_rate_jitter();
-}
-inline void WallWanderScenarioDef::set_turn_rate_jitter(float value) {
-  _internal_set_turn_rate_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.turn_rate_jitter)
-}
-inline float WallWanderScenarioDef::_internal_turn_rate_jitter() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.turn_rate_jitter_;
-}
-inline void WallWanderScenarioDef::_internal_set_turn_rate_jitter(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.turn_rate_jitter_ = value;
+  return &_impl_.profile_order_;
 }
 
 // -------------------------------------------------------------------

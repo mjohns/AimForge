@@ -2,18 +2,17 @@
   "durationSeconds": 60,
   "overrides": {},
   "room": {
+    "barrelRoom": {
+      "radius": 75
+    },
     "cameraPosition": {
       "x": 0,
       "y": -100,
       "z": 0
-    },
-    "simpleRoom": {
-      "height": 150,
-      "width": 170
     }
   },
   "shotType": {
-    "trackingKill": true
+    "clickSingle": true
   },
   "targetDef": {
     "newestTargetIsGhost": false,
@@ -21,41 +20,40 @@
     "profiles": [
       {
         "description": "",
-        "healthSeconds": 0.6,
-        "healthSecondsJitter": 0,
-        "speed": 12,
+        "speed": 39,
         "speedJitter": 0,
-        "targetRadius": 2.30000019,
+        "targetRadius": 1.40000033,
+        "targetRadiusGrowthSize": 5.00000143,
+        "targetRadiusGrowthTimeSeconds": 2.69999933,
         "targetRadiusJitter": 0
       }
     ],
-    "removeClosestOnMiss": false
+    "removeClosestOnMiss": false,
+    "staggerInitialTargetsSeconds": 0.2
   },
   "wallWanderDef": {
     "targetPlacementStrategy": {
+      "minDistance": 43,
       "regions": [
         {
+          "circle": {
+            "diameter": {
+              "xPercentValue": 0.639999866
+            }
+          },
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
-          "rectangle": {
-            "xLength": {
-              "xPercentValue": 0.599999905
-            },
-            "yLength": {
-              "yPercentValue": 0.599999905
-            }
-          }
+          "description": ""
         }
       ]
     },
     "profiles": [
       {
         "description": "",
-        "turnRate": 300,
-        "turnRateJitter": 70,
-        "turnTime": 2.2,
-        "turnTimeJitter": 0.5
+        "turnRate": 160,
+        "turnRateJitter": 40,
+        "turnTime": 2.5,
+        "turnTimeJitter": 0.8
       }
     ]
   }

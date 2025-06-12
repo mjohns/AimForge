@@ -1,0 +1,36 @@
+{
+  "circleDef": {
+    "depth": 13,
+    "radius": {
+      "xPercentValue": 0.47
+    },
+    "rotateClockwise": true,
+    "startDegrees": 0
+  },
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "barrelRoom": {
+      "radius": 120
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -69,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "speed": 71,
+        "speedJitter": 0,
+        "targetRadius": 2.49999952,
+        "targetRadiusJitter": 0
+      }
+    ]
+  }
+}

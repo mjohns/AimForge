@@ -21,7 +21,7 @@
     "profiles": [
       {
         "description": "",
-        "speed": 20,
+        "speed": 32,
         "speedJitter": 0,
         "targetRadius": 2.30000019,
         "targetRadiusJitter": 0
@@ -30,9 +30,23 @@
     "removeClosestOnMiss": false
   },
   "wallWanderDef": {
-    "turnRate": 300,
-    "turnRateJitter": 70,
-    "turnTime": 2.19999981,
-    "turnTimeJitter": 0.499999911
+    "profiles": [
+      {
+        "description": "",
+        "turnRate": 150,
+        "turnRateJitter": 40,
+        "turnTime": 2.6,
+        "turnTimeJitter": 1.2,
+        "weight": 2
+      },
+      {
+        "description": "Straighter",
+        "turnRate": 20,
+        "turnRateJitter": 10,
+        "turnTime": 0.499999672,
+        "turnTimeJitter": 0,
+        "weight": 1
+      }
+    ]
   }
 }

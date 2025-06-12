@@ -67,6 +67,10 @@
     {
       "numPlays": 1,
       "scenario": "AF VertArc"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "AF Centering Circle Clockwise"
     }
   ]
 }
