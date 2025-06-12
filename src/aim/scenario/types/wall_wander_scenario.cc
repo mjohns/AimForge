@@ -55,8 +55,8 @@ class WallWanderScenario : public BaseScenario {
 
  protected:
   void FillInNewTarget(Target* target) override {
-    glm::vec2 pos = target_placer_ ? target_placer_->GetNextPosition() : glm::vec2(0, 0);
-    target->wall_position = pos;
+    glm::vec3 pos = target_placer_ ? target_placer_->GetNextPosition() : glm::vec3(0, 0, 0);
+    target->SetWallPosition(pos, def_.room());
   }
 
   void UpdateTargetPositions() override {
