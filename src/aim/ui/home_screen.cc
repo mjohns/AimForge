@@ -370,7 +370,8 @@ class HomeScreen : public UiScreen {
         playlist_list_component_->Show(&result);
         if (result.open_playlist.has_value()) {
           auto playlist = *result.open_playlist;
-          app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, playlist.name.full_name());
+          app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST,
+                                                  playlist.name.full_name());
           app_.playlist_manager().SetCurrentPlaylist(playlist.name.full_name());
         }
         if (result.reload_playlists) {

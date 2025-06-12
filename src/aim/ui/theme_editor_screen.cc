@@ -284,9 +284,9 @@ class ThemeEditorScreen : public UiScreen {
       OpenNewTheme();
     }
     Line();
-    ImGui::BeginChild("CrosshairListContent");
+    ImGui::BeginChild("ThemesListContent");
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Crosshairs");
+    ImGui::Text("Themes");
     ImGui::Indent();
     for (const std::string& name : theme_names_) {
       auto lid = loop_id.Get();
@@ -394,7 +394,7 @@ class ThemeEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Color");
       ImGui::SameLine();
-      DrawStoredColorEditor("Color", appearance->mutable_color());
+      ImGui::InputStoredColor("##Color", appearance->mutable_color(), char_x_);
     }
     if (selected_type == kTextureItem) {
       WallTexture* texture = appearance->mutable_texture();

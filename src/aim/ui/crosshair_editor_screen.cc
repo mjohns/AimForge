@@ -176,6 +176,7 @@ class CrosshairEditorScreen : public UiScreen {
     Line();
 
     Crosshair& c = crosshair_;
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Name");
     ImGui::SameLine();
@@ -230,44 +231,84 @@ class CrosshairEditorScreen : public UiScreen {
   }
 
   void DrawCrosshairLayerEditor(CrosshairLayer& l) {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Type");
-    ImGui::SameLine();
-    CrosshairLayer::TypeCase type = l.type_case();
-    if (type == CrosshairLayer::TYPE_NOT_SET) {
-      type = CrosshairLayer::kDot;
-    }
-    ImGui::SimpleTypeDropdown("CrosshairType", &type, kCrosshairTypes, char_x_ * 12);
+    if (ImGui::BeginTable("CrosshairLayerColumns", 2)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 30);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableNextRow();
 
-    ImGui::InputFloat(ImGui::InputFloatParams("ScaleInput")
-                          .set_label("Scale")
-                          .set_step(0.05, 0.2)
-                          .set_precision(2)
-                          .set_width(char_x_ * 12)
-                          .set_default(1)
-                          .set_min(0.01),
-                      PROTO_FLOAT_FIELD(CrosshairLayer, &l, scale));
+      ImGui::TableNextColumn();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Type");
+      ImGui::SameLine();
+      CrosshairLayer::TypeCase type = l.type_case();
+      if (type == CrosshairLayer::TYPE_NOT_SET) {
+        type = CrosshairLayer::kDot;
+      }
+      ImGui::SimpleTypeDropdown("CrosshairType", &type, kCrosshairTypes, char_x_ * 12);
 
-    ImGui::InputFloat(ImGui::InputFloatParams("OpacityInput")
-                          .set_label("Opacity")
-                          .set_step(0.02, 0.2)
-                          .set_precision(2)
-                          .set_width(char_x_ * 12)
-                          .set_default(1)
-                          .set_range(0.01, 1),
-                      PROTO_FLOAT_FIELD(CrosshairLayer, &l, alpha));
+      ImGui::InputFloat(ImGui::InputFloatParams("ScaleInput")
+                            .set_label("Scale")
+                            .set_step(0.05, 0.2)
+                            .set_precision(2)
+                            .set_width(char_x_ * 12)
+                            .set_default(1)
+                            .set_min(0.01),
+                        PROTO_FLOAT_FIELD(CrosshairLayer, &l, scale));
 
-    if (type == CrosshairLayer::kDot) {
-      DrawCrosshairDotEditor(l.mutable_dot());
-    }
-    if (type == CrosshairLayer::kPlus) {
-      DrawCrosshairPlusEditor(l.mutable_plus());
-    }
-    if (type == CrosshairLayer::kImage) {
-      DrawCrosshairImageEditor(l.mutable_image());
-    }
-    if (type == CrosshairLayer::kCircle) {
-      DrawCrosshairCircleEditor(l.mutable_circle());
+      ImGui::InputFloat(ImGui::InputFloatParams("OpacityInput")
+                            .set_label("Opacity")
+                            .set_step(0.02, 0.2)
+                            .set_precision(2)
+                            .set_width(char_x_ * 12)
+                            .set_default(1)
+                            .set_range(0.01, 1),
+                        PROTO_FLOAT_FIELD(CrosshairLayer, &l, alpha));
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      bool has_color = l.has_override_color();
+      ImGui::SameLine();
+      ImGui::Checkbox("##HasColor", &has_color);
+      ImGui::SameLine();
+      ImGui::HelpMarker("Override the color defined by the theme.");
+      if (has_color) {
+        ImGui::SameLine();
+        ImGui::InputStoredColor("##Color", l.mutable_override_color(), char_x_);
+      } else {
+        l.clear_override_color();
+      }
+
+      bool supports_outlines = type != CrosshairLayer::kImage;
+      if (supports_outlines) {
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Outline color");
+        bool has_outline_color = l.has_override_outline_color();
+        ImGui::SameLine();
+        ImGui::Checkbox("##HasOutlineColor", &has_outline_color);
+        if (has_outline_color) {
+          ImGui::SameLine();
+          ImGui::InputStoredColor("##OutlineColor", l.mutable_override_outline_color(), char_x_);
+        } else {
+          l.clear_override_outline_color();
+        }
+      } else {
+        l.clear_override_outline_color();
+      }
+
+      ImGui::TableNextColumn();
+      if (type == CrosshairLayer::kDot) {
+        DrawCrosshairDotEditor(l.mutable_dot());
+      }
+      if (type == CrosshairLayer::kPlus) {
+        DrawCrosshairPlusEditor(l.mutable_plus());
+      }
+      if (type == CrosshairLayer::kImage) {
+        DrawCrosshairImageEditor(l.mutable_image());
+      }
+      if (type == CrosshairLayer::kCircle) {
+        DrawCrosshairCircleEditor(l.mutable_circle());
+      }
+      ImGui::EndTable();
     }
   }
 
