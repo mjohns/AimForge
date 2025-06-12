@@ -153,7 +153,7 @@ class WallWanderScenario : public BaseScenario {
 
   void PushTowardsCenter(glm::vec2* direction, glm::vec2 out, float percent) {
     glm::vec2 diff = (out - *direction) * percent;
-    *direction = *direction + diff;
+    *direction = glm::normalize(*direction + diff);
   }
 
  private:
