@@ -4222,6 +4222,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
     kRadiusFieldNumber = 1,
     kStartDegreesFieldNumber = 2,
     kRotateClockwiseFieldNumber = 3,
+    kDepthFieldNumber = 4,
   };
   // .aim.RegionLength radius = 1;
   bool has_radius() const;
@@ -4260,12 +4261,23 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   void _internal_set_rotate_clockwise(bool value);
 
   public:
+  // float depth = 4;
+  bool has_depth() const;
+  void clear_depth() ;
+  float depth() const;
+  void set_depth(float value);
+
+  private:
+  float _internal_depth() const;
+  void _internal_set_depth(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.CircleScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 1,
+      2, 4, 1,
       0, 2>
       _table_;
 
@@ -4288,6 +4300,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* radius_;
     float start_degrees_;
     bool rotate_clockwise_;
+    float depth_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -12581,6 +12594,34 @@ inline bool CircleScenarioDef::_internal_rotate_clockwise() const {
 inline void CircleScenarioDef::_internal_set_rotate_clockwise(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.rotate_clockwise_ = value;
+}
+
+// float depth = 4;
+inline bool CircleScenarioDef::has_depth() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void CircleScenarioDef::clear_depth() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float CircleScenarioDef::depth() const {
+  // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.depth)
+  return _internal_depth();
+}
+inline void CircleScenarioDef::set_depth(float value) {
+  _internal_set_depth(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.depth)
+}
+inline float CircleScenarioDef::_internal_depth() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.depth_;
+}
+inline void CircleScenarioDef::_internal_set_depth(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.depth_ = value;
 }
 
 // -------------------------------------------------------------------

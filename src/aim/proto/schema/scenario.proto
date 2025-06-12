@@ -193,6 +193,7 @@ message CircleScenarioDef {
   // clockwise.
   float start_degrees = 2;
   bool rotate_clockwise = 3;
+  float depth = 4;
 }
 
 message CenteringScenarioDef {

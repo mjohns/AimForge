@@ -47,6 +47,7 @@ class CircleScenario : public BaseScenario {
   void FillInNewTarget(Target* target) override {
     // This should only be called once during initialize.
     target->wall_position = initial_position_;
+    target->wall_depth = c_.depth();
 
     // Maybe orient the pill to point with the radius as an option?
   }

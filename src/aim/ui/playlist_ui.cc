@@ -76,6 +76,7 @@ bool CopyPlaylist(Playlist source,
   }
   app.playlist_manager().SavePlaylist(new_playlist_name, dest);
   app.playlist_manager().SetCurrentPlaylist(new_playlist_name.full_name());
+  app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_playlist_name.full_name());
   return true;
 }
 
@@ -727,6 +728,7 @@ bool AddPlaylistDialog::Draw(Application& app) {
         *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
         app.playlist_manager().SavePlaylist(name_, PlaylistDef());
         app.playlist_manager().SetCurrentPlaylist(name_.full_name());
+        app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
         did_add = true;
         ImGui::CloseCurrentPopup();
         is_open_ = false;

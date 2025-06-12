@@ -616,6 +616,16 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::InputBool(ImGui::InputBoolParams("Clockwise").set_label("Clockwise"),
                      PROTO_BOOL_FIELD(CircleScenarioDef, &d, rotate_clockwise));
+
+    ImGui::InputFloat(ImGui::InputFloatParams("Depth")
+                          .set_label("Depth")
+                          .set_step(1, 10)
+                          .set_precision(0)
+                          .set_is_optional()
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(CircleScenarioDef, &d, depth));
+    ImGui::SameLine();
+    ImGui::HelpMarker("Distance away from the wall");
   }
 
   void DrawWallWanderEditor() {
