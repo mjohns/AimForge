@@ -35,7 +35,15 @@ void BaseScenario::Initialize() {
     float stagger_seconds = def_.target_def().stagger_initial_targets_seconds();
     if (stagger_seconds > 0) {
       RunAfterSeconds(i * stagger_seconds, [=]() {
-        Target new_target = target_manager_.AddTarget(target);
+        Target new_target = target;
+        if (new_target.growth_info) {
+          new_target.growth_info->start_time_seconds = timer_.GetElapsedSeconds();
+        }
+        if (def_.target_def().remove_target_after_seconds() > 0) {
+          new_target.remove_after_time_seconds =
+              timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();
+        }
+        new_target = target_manager_.AddTarget(new_target);
         AddNewTargetEvent(new_target);
       });
     } else {
@@ -259,6 +267,9 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
     target_manager_.RemoveTarget(old_target_id);
     RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
       Target new_target = target;
+      if (new_target.growth_info) {
+        new_target.growth_info->start_time_seconds = timer_.GetElapsedSeconds();
+      }
       if (def_.target_def().remove_target_after_seconds() > 0) {
         new_target.remove_after_time_seconds =
             timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();

@@ -66,6 +66,7 @@ class WallWanderScenario : public BaseScenario {
       if (info.target_id == 0) {
         info.target_id = target->id;
         // Initialize this newly encountered target.
+        info.is_negative_turn = app_.rand().FlipCoin();
         target->wall_direction =
             glm::normalize(RotateDegrees(glm::vec2(1, 0), app_.rand().Get(360)));
         UpdateTurn(info, now);
