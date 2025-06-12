@@ -16,131 +16,6 @@ const float kBackgroundAlpha = 0.4;
 constexpr const char* kSolidColorItem = "Solid color";
 constexpr const char* kTextureItem = "Texture";
 
-struct StoredColorEditor {
-  StoredColorEditor(std::string label, std::string id) : label(label), id(id) {}
-
-  std::string label;
-  std::string id;
-  StoredColor* stored_color = nullptr;
-  float color[3];
-  float multiplier = 0;
-
-  void Draw(const ImVec2& char_size) {
-    if (stored_color == nullptr) {
-      return;
-    }
-    ImGui::IdGuard cid(id);
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text(label);
-    ImGui::SameLine();
-    StoredRgb c = ToStoredRgb(*stored_color);
-    color[0] = c.r() / 255.0;
-    color[1] = c.g() / 255.0;
-    color[2] = c.b() / 255.0;
-    if (ImGui::ColorEdit3(
-            "##ColorEditor", color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
-      StoredRgb result = FloatToStoredRgb(color[0], color[1], color[2]);
-      if (stored_color->has_hex()) {
-        stored_color->set_hex(ToHexString(result));
-        stored_color->clear_r();
-        stored_color->clear_b();
-        stored_color->clear_g();
-      } else {
-        stored_color->set_r(result.r());
-        stored_color->set_g(result.g());
-        stored_color->set_b(result.b());
-      }
-    }
-
-    multiplier = stored_color->multiplier();
-    ImGui::SameLine();
-    ImGui::Text("multiplier");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 9);
-    ImGui::InputFloat("##MultiplierInput", &multiplier, 0.01, 0.2, "%.2f");
-    if (multiplier > 0) {
-      stored_color->set_multiplier(multiplier);
-    } else {
-      stored_color->clear_multiplier();
-    }
-  }
-};
-
-struct WallAppearanceEditor {
-  WallAppearanceEditor(std::string label, std::string id)
-      : label(label),
-        id(id),
-        color_editor("Color", "ColorEditor" + id),
-        mix_color_editor("MixColor", "MixColorEditor" + id) {}
-
-  std::string label;
-  std::string id;
-  WallAppearance* appearance = nullptr;
-
-  StoredColorEditor color_editor;
-  StoredColorEditor mix_color_editor;
-
-  std::string texture_name;
-
-  void Draw(const std::string& header,
-            const std::vector<std::string>& texture_names,
-            const ImVec2& char_size) {
-    if (appearance == nullptr) {
-      return;
-    }
-    ImGui::IdGuard cid(id);
-
-    ImGui::SetNextItemWidth(char_size.x * 20);
-    ImGui::Text(header);
-    ImGui::Indent();
-    std::string selected_type = kSolidColorItem;
-    if (appearance->has_texture()) {
-      selected_type = kTextureItem;
-    }
-
-    std::vector<std::string> types = {kSolidColorItem, kTextureItem};
-    ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_size.x * 20);
-
-    if (selected_type == kSolidColorItem) {
-      color_editor.stored_color = appearance->mutable_color();
-      color_editor.Draw(char_size);
-    }
-    if (selected_type == kTextureItem) {
-      WallTexture* texture = appearance->mutable_texture();
-      ImGui::SimpleDropdown(
-          "TextureNameDropdown", texture->mutable_texture_name(), texture_names, char_size.x * 20);
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Scale");
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_size.x * 9);
-      float scale = texture->scale();
-      ImGui::InputFloat("##TextureScale", &scale, 0.1, 1, "%.1f");
-      if (scale > 0) {
-        texture->set_scale(scale);
-      } else {
-        texture->clear_scale();
-      }
-    }
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Mix percent");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 9);
-    float mix_percent = appearance->mix_percent();
-    ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.2f");
-    if (mix_percent > 0) {
-      appearance->set_mix_percent(mix_percent);
-      mix_color_editor.stored_color = appearance->mutable_mix_color();
-      mix_color_editor.Draw(char_size);
-    } else {
-      appearance->clear_mix_percent();
-    }
-    ImGui::Unindent();
-  }
-};
-
 Room GetDefaultRoom() {
   Room r;
   r.mutable_simple_room()->set_height(130);
@@ -326,11 +201,11 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Walls");
     ImGui::Indent();
-    front_.Draw("Front", texture_names_, char_size);
-    sides_.Draw("Sides", texture_names_, char_size);
-    roof_.Draw("Roof", texture_names_, char_size);
-    floor_.Draw("Floor", texture_names_, char_size);
-    back_.Draw("Back", texture_names_, char_size);
+    DrawWallAppearanceEditor("Front", current_theme_.mutable_front_appearance());
+    DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
+    DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
+    DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
+    DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
     ImGui::Unindent();
 
     ImGui::Spacing();
@@ -378,7 +253,7 @@ class ThemeEditorScreen : public UiScreen {
     }
 
     ImGui::SameLine();
-    ImGui::Text(kIconEmergency);
+    ImGui::Text(kIconClose);
     ImGui::HelpTooltip("Multiply color by value");
 
     ImGui::SameLine();
@@ -389,6 +264,62 @@ class ThemeEditorScreen : public UiScreen {
                           .set_width(char_x_ * 10)
                           .set_zero_is_unset(),
                       PROTO_FLOAT_FIELD(StoredColor, stored_color, multiplier));
+  }
+
+  void DrawWallAppearanceEditor(const std::string& header, WallAppearance* appearance) {
+    ImGui::IdGuard cid("WallAppearance" + header);
+
+    ImGui::SetNextItemWidth(char_x_ * 20);
+    ImGui::Text(header);
+    ImGui::Indent();
+    std::string selected_type = kSolidColorItem;
+    if (appearance->has_texture()) {
+      selected_type = kTextureItem;
+    }
+
+    std::vector<std::string> types = {kSolidColorItem, kTextureItem};
+    ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_x_ * 20);
+
+    if (selected_type == kSolidColorItem) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("Color", appearance->mutable_color());
+    }
+    if (selected_type == kTextureItem) {
+      WallTexture* texture = appearance->mutable_texture();
+      ImGui::SimpleDropdown(
+          "TextureNameDropdown", texture->mutable_texture_name(), texture_names_, char_x_ * 20);
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Scale");
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 9);
+      float scale = texture->scale();
+      ImGui::InputFloat("##TextureScale", &scale, 0.1, 1, "%.1f");
+      if (scale > 0) {
+        texture->set_scale(scale);
+      } else {
+        texture->clear_scale();
+      }
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Mix percent");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 9);
+    float mix_percent = appearance->mix_percent();
+    ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.2f");
+    if (mix_percent > 0) {
+      appearance->set_mix_percent(mix_percent);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Mix color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("MixColor", appearance->mutable_mix_color());
+    } else {
+      appearance->clear_mix_percent();
+    }
+    ImGui::Unindent();
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
@@ -419,12 +350,6 @@ class ThemeEditorScreen : public UiScreen {
   void UpdateCurrentTheme(const std::string& theme_name) {
     current_theme_name_ = theme_name;
     current_theme_ = app_.settings_manager().GetTheme(current_theme_name_);
-
-    front_.appearance = current_theme_.mutable_front_appearance();
-    sides_.appearance = current_theme_.mutable_side_appearance();
-    back_.appearance = current_theme_.mutable_back_appearance();
-    floor_.appearance = current_theme_.mutable_floor_appearance();
-    roof_.appearance = current_theme_.mutable_roof_appearance();
   }
 
   Room default_room_;
@@ -435,12 +360,6 @@ class ThemeEditorScreen : public UiScreen {
 
   Theme current_theme_;
   LookAtInfo look_at_;
-
-  WallAppearanceEditor front_{"Front", "FrontEditor"};
-  WallAppearanceEditor sides_{"Sides", "SidesEditor"};
-  WallAppearanceEditor roof_{"Roof", "RoofEditor"};
-  WallAppearanceEditor floor_{"Floor", "FloorEditor"};
-  WallAppearanceEditor back_{"Back", "BackEditor"};
 
   std::vector<std::string> texture_names_;
 

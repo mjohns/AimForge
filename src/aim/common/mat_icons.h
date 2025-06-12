@@ -32,11 +32,13 @@ static const char* kIconTarget = "\xEE\x9C\x99";
 static const char* kIconFilterCenterFocus = "\xEE\x8F\x9C";
 static const char* kIconCenterFocusWeak = "\xEE\x8E\xB5";
 static const char* kIconSave = "\xEE\x85\xA1";
-// static const char* kIconPointScan = "\xEF\x9C\x8C";
 static const char* kIconMyLocation = "\xEE\x95\x9C";
 static const char* kIconStar = "\xEE\xA0\xB8";
 static const char* kIconStarOutline = "\xEF\x81\xAF";
-//static const char* kIconAsterisk = "\xEF\x94\xA5";
 static const char* kIconEmergency = "\xEE\x87\xAB";
+
+// static const char* kIconPointScan = "\xEF\x9C\x8C";
+// static const char* kIconCloseSmall = "\xEF\x94\x88";
+// static const char* kIconAsterisk = "\xEF\x94\xA5";
 
 }  // namespace aim
