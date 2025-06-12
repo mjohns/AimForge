@@ -371,7 +371,6 @@ class ScenarioEditorScreen : public UiScreen {
       def_.mutable_shot_type()->set_tracking_invincible(true);
       if (is_new_type) {
         def_.clear_target_def();
-
       }
     } else {
       DrawShotTypeEditor();

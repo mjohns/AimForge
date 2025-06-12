@@ -188,10 +188,11 @@ message StaticScenarioDef {
 }
 
 message CircleScenarioDef {
-    RegionLength radius = 1;
-    // The starting point in degrees. 0 degrees is straight to the right and it rotates counter clockwise.
-    float start_degrees = 2;
-    bool rotate_clockwise = 3;
+  RegionLength radius = 1;
+  // The starting point in degrees. 0 degrees is straight to the right and it rotates counter
+  // clockwise.
+  float start_degrees = 2;
+  bool rotate_clockwise = 3;
 }
 
 message CenteringScenarioDef {

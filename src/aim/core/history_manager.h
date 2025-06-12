@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "aim/common/simple_types.h"
 #include "aim/common/object_type.h"
+#include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/database/history_db.h"
 
