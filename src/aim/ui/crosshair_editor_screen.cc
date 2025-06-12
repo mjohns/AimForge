@@ -135,16 +135,16 @@ class CrosshairEditorScreen : public UiScreen {
   bool SaveCurrentCrosshair() {
     bool crosshair_exists = app_.settings_manager().CrosshairExists(current_crosshair_name_);
     bool is_rename = !is_new_crosshair_ && current_crosshair_name_ != original_crosshair_name_;
-    if (is_new_crosshair_ && is_rename) {
+    if (is_new_crosshair_ || is_rename) {
       if (crosshair_exists) {
         notification_popup_.NotifyOpen(
             std::format("Crosshair \"{}\" already exists", current_crosshair_name_));
         return false;
       }
+    }
 
-      if (is_rename) {
-        app_.settings_manager().RenameCrosshair(original_crosshair_name_, current_crosshair_name_);
-      }
+    if (is_rename) {
+      app_.settings_manager().RenameCrosshair(original_crosshair_name_, current_crosshair_name_);
     }
 
     if (!app_.settings_manager().SaveCrosshair(current_crosshair_name_, crosshair_)) {
@@ -185,11 +185,7 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::SameLine();
     if (ImGui::Button(std::format("{} Save", kIconSave))) {
       if (SaveCurrentCrosshair()) {
-        app_.scenario_manager().LoadScenariosFromDisk();
-        app_.playlist_manager().LoadPlaylistsFromDisk();
         BackToCrosshairList();
-      } else {
-        notification_popup_.NotifyOpen("Unable to save crosshair");
       }
     }
 

@@ -246,6 +246,10 @@ bool SettingsManager::CrosshairExists(const std::string& name) {
   return std::filesystem::exists(GetCrosshairPath(name));
 }
 
+bool SettingsManager::ThemeExists(const std::string& name) {
+  return std::filesystem::exists(GetThemePath(name));
+}
+
 bool SettingsManager::SaveCrosshair(const std::string& name, const Crosshair& crosshair) {
   bool saved = WriteJsonMessageToFile(GetCrosshairPath(name), crosshair);
   if (saved) {
@@ -256,6 +260,10 @@ bool SettingsManager::SaveCrosshair(const std::string& name, const Crosshair& cr
 
 std::filesystem::path SettingsManager::GetCrosshairPath(const std::string& name) {
   return crosshair_dir_ / std::format("{}.json", name);
+}
+
+std::filesystem::path SettingsManager::GetThemePath(const std::string& name) {
+  return theme_dir_ / std::format("{}.json", name);
 }
 
 bool SettingsManager::DeleteCrosshair(const std::string& name) {
@@ -318,10 +326,22 @@ Theme SettingsManager::GetCurrentTheme() {
   return GetTheme(settings->theme_name());
 }
 
-void SettingsManager::SaveThemeToDisk(const std::string& theme_name, const Theme& theme) {
-  const std::filesystem::path full_path = theme_dir_ / std::format("{}.json", theme_name);
-  WriteJsonMessageToFile(full_path, theme);
-  theme_cache_.erase(theme_name);
+bool SettingsManager::SaveTheme(const std::string& theme_name, const Theme& theme) {
+  bool saved = WriteJsonMessageToFile(GetThemePath(theme_name), theme);
+  if (saved) {
+    theme_cache_.erase(theme_name);
+  }
+  return saved;
+}
+
+bool SettingsManager::DeleteTheme(const std::string& name) {
+  return std::filesystem::remove(GetThemePath(name));
+}
+
+void SettingsManager::RenameTheme(const std::string& old_name, const std::string& new_name) {
+  std::filesystem::rename(GetThemePath(old_name), GetThemePath(new_name));
+  theme_cache_.erase(old_name);
+  theme_cache_.erase(new_name);
 }
 
 void SettingsManager::MaybeInvalidateThemeCache() {

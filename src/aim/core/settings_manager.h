@@ -71,6 +71,10 @@ class SettingsManager {
 
   Theme GetTheme(const std::string& theme_name);
   Theme GetCurrentTheme();
+  bool ThemeExists(const std::string& name);
+  bool SaveTheme(const std::string& name, const Theme& crosshair);
+  bool DeleteTheme(const std::string& name);
+  void RenameTheme(const std::string& old_name, const std::string& new_name);
 
   Crosshair GetCrosshair(const std::string& name);
   bool CrosshairExists(const std::string& name);
@@ -81,7 +85,6 @@ class SettingsManager {
   std::vector<std::string> ListCrosshairs();
   std::vector<std::string> ListThemes();
   std::vector<std::string> ListTextures();
-  void SaveThemeToDisk(const std::string& theme_name, const Theme& theme);
 
   Crosshair GetCurrentCrosshair();
 
@@ -98,6 +101,7 @@ class SettingsManager {
   Theme GetThemeNoReferenceFollow(const std::string& theme_name);
   void WriteScenarioSettings(const std::string& scenario_id);
   std::filesystem::path GetCrosshairPath(const std::string& name);
+  std::filesystem::path GetThemePath(const std::string& name);
 
   std::filesystem::path settings_path_;
   Settings settings_;

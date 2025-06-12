@@ -29,10 +29,7 @@ class ThemeEditorScreen : public UiScreen {
   explicit ThemeEditorScreen(Application& app)
       : UiScreen(app), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
     texture_names_ = app.settings_manager().ListTextures();
-    theme_names_ = app.settings_manager().ListThemes();
-    if (theme_names_.size() > 0) {
-      UpdateCurrentTheme(theme_names_[0]);
-    }
+    LoadThemeList();
 
     projection_ = GetPerspectiveTransformation(app_.screen_info());
     CameraParams cameraParams(default_room_);
@@ -57,7 +54,7 @@ class ThemeEditorScreen : public UiScreen {
 
  protected:
   void DrawTopBar() {
-    float width = char_x_ * 13;
+    float width = char_x_ * 13.6;
     float middle = app_.screen_info().width / 2.0;
     // ImGui::SetNextWindowBgAlpha();
     ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
@@ -65,12 +62,13 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 
     if (ImGui::Button(std::format("{} Save", kIconSave))) {
-      app_.settings_manager().SaveThemeToDisk(current_theme_name_, current_theme_);
-      PopSelf();
+      if (SaveCurrentTheme()) {
+        BackToThemeList();
+      }
     }
     ImGui::SameLine();
-    if (ImGui::Button("Cancel")) {
-      PopSelf();
+    if (ImGui::Button(std::format("{} Back", kIconArrowBack))) {
+      BackToThemeList();
     }
 
     ImGui::End();
@@ -84,10 +82,58 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Spacing();
   }
 
+  bool SaveCurrentTheme() {
+    bool theme_exists = app_.settings_manager().ThemeExists(current_theme_name_);
+    bool is_rename = !is_new_theme_ && current_theme_name_ != original_theme_name_;
+    if (is_new_theme_ || is_rename) {
+      if (theme_exists) {
+        notification_popup_.NotifyOpen(
+            std::format("Theme \"{}\" already exists", current_theme_name_));
+        return false;
+      }
+    }
+
+    if (is_rename) {
+      app_.settings_manager().RenameTheme(original_theme_name_, current_theme_name_);
+    }
+
+    if (!app_.settings_manager().SaveTheme(current_theme_name_, current_theme_)) {
+      notification_popup_.NotifyOpen(
+          std::format("Unable to save theme \"{}\"", current_theme_name_));
+      return false;
+    }
+    LoadThemeList();
+    return true;
+  }
+
+  bool BeginMainWindow(const std::string& name) {
+    float width = app_.screen_info().width * 0.6;
+    float height = app_.screen_info().height * 0.8;
+
+    ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0,
+                                   (app_.screen_info().height - height) / 2.0));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    return ImGui::Begin(
+        name.c_str(), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+  }
+
   void DrawScreen() override {
     const ScreenInfo& screen = app_.screen_info();
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
+
+    if (current_theme_name_.size() == 0) {
+      BeginMainWindow("ThemeList");
+      notification_popup_.Draw();
+      delete_confirmation_dialog_.Draw("Delete", [=](const std::string& to_delete) {
+        app_.settings_manager().DeleteTheme(to_delete);
+        LoadThemeList();
+      });
+      DrawThemeListEditor();
+
+      ImGui::End();
+      return;
+    }
 
     DrawTopBar();
 
@@ -100,15 +146,13 @@ class ThemeEditorScreen : public UiScreen {
                  nullptr,
                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
                      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    notification_popup_.Draw();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Theme");
     ImGui::SameLine();
-    if (ImGui::SimpleDropdown(
-            "ThemeDropdown", &current_theme_name_, theme_names_, char_size.x * 20)) {
-      UpdateCurrentTheme(current_theme_name_);
-      app_.history_manager().UpdateRecentView(ObjectType::THEME, current_theme_name_);
-    }
+    ImGui::SetNextItemWidth(char_x_ * 20);
+    ImGui::InputText("##NameInput", &current_theme_name_);
 
     Line();
 
@@ -229,6 +273,72 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::PopStyleVar();
   }
 
+  void DrawThemeListEditor() {
+    ImGui::IdGuard cid("ThemeListEditor");
+    ImGui::LoopId loop_id;
+    if (ImGui::Button(std::format("{} Back", kIconArrowBack))) {
+      PopSelf();
+    }
+    Line();
+    if (ImGui::Button(std::format("{} New theme", kIconAdd))) {
+      OpenNewTheme();
+    }
+    Line();
+    ImGui::BeginChild("CrosshairListContent");
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Crosshairs");
+    ImGui::Indent();
+    for (const std::string& name : theme_names_) {
+      auto lid = loop_id.Get();
+      if (ImGui::Button(name)) {
+        OpenExistingTheme(name);
+      }
+      const char* popup_id = "ThemeItemMenu";
+      if (ImGui::BeginPopupContextItem(popup_id)) {
+        if (ImGui::Selectable("Copy")) {
+          OpenThemeCopy(name);
+        }
+        if (ImGui::Selectable("Edit")) {
+          OpenExistingTheme(name);
+        }
+        if (ImGui::Selectable("Delete")) {
+          delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", name), name);
+        }
+        ImGui::EndPopup();
+      }
+      ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+    }
+    ImGui::Unindent();
+    ImGui::EndChild();
+  }
+
+  void OpenExistingTheme(const std::string& name) {
+    current_theme_name_ = name;
+    original_theme_name_ = name;
+    is_new_theme_ = false;
+    current_theme_ = app_.settings_manager().GetTheme(name);
+  }
+
+  void OpenThemeCopy(const std::string& name) {
+    current_theme_name_ = MakeUniqueName(name + " Copy", theme_names_);
+    original_theme_name_ = current_theme_name_;
+    is_new_theme_ = true;
+    current_theme_ = app_.settings_manager().GetTheme(name);
+  }
+
+  void OpenNewTheme() {
+    current_theme_name_ = MakeUniqueName("New theme", theme_names_);
+    original_theme_name_ = current_theme_name_;
+    is_new_theme_ = true;
+    current_theme_ = GetDefaultTheme();
+  }
+
+  void BackToThemeList() {
+    current_theme_ = {};
+    current_theme_name_ = "";
+    is_new_theme_ = false;
+  }
+
   void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
     ImGui::IdGuard cid(id);
 
@@ -325,6 +435,11 @@ class ThemeEditorScreen : public UiScreen {
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
 
   void Render() override {
+    if (current_theme_name_.size() == 0) {
+      UiScreen::Render();
+      return;
+    }
+
     RenderContext ctx;
     Stopwatch stopwatch;
     FrameTimes frame_times;
@@ -352,18 +467,30 @@ class ThemeEditorScreen : public UiScreen {
     current_theme_ = app_.settings_manager().GetTheme(current_theme_name_);
   }
 
+  void LoadThemeList() {
+    theme_names_ = app_.settings_manager().ListThemes();
+    std::sort(theme_names_.begin(),
+              theme_names_.end(),
+              [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
+  }
+
   Room default_room_;
   TargetManager target_manager_;
-  std::vector<std::string> theme_names_;
-  std::string current_theme_name_;
   glm::mat4 projection_;
-
-  Theme current_theme_;
   LookAtInfo look_at_;
 
+  std::vector<std::string> theme_names_;
   std::vector<std::string> texture_names_;
 
+  Theme current_theme_;
+  std::string original_theme_name_;
+  std::string current_theme_name_;
+  bool is_new_theme_ = false;
+
   float char_x_;
+
+  ImGui::NotificationPopup notification_popup_{"Notification"};
+  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
 };
 
 }  // namespace

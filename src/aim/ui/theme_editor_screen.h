@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 #include "aim/core/application.h"
 #include "aim/ui/ui_screen.h"
