@@ -396,6 +396,11 @@ struct InputFloatParams {
     return *this;
   }
 
+  InputFloatParams& set_max(float max) {
+    max_value = max;
+    return *this;
+  }
+
   InputFloatParams& set_label(const std::string& label) {
     this->label = label;
     return *this;

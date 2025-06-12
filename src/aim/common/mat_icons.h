@@ -36,5 +36,7 @@ static const char* kIconSave = "\xEE\x85\xA1";
 static const char* kIconMyLocation = "\xEE\x95\x9C";
 static const char* kIconStar = "\xEE\xA0\xB8";
 static const char* kIconStarOutline = "\xEF\x81\xAF";
+//static const char* kIconAsterisk = "\xEF\x94\xA5";
+static const char* kIconEmergency = "\xEE\x87\xAB";
 
 }  // namespace aim

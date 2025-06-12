@@ -240,8 +240,17 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Targets");
     ImGui::Indent();
-    target_color_.Draw(char_size);
-    ghost_target_color_.Draw(char_size);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Color");
+    ImGui::SameLine();
+    DrawStoredColorEditor("TargetColor", current_theme_.mutable_target_color());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Ghost color");
+    ImGui::SameLine();
+    DrawStoredColorEditor("GhostTargetColor", current_theme_.mutable_ghost_target_color());
+
     ImGui::Unindent();
 
     Line();
@@ -249,8 +258,18 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshair");
     ImGui::Indent();
-    crosshair_color_.Draw(char_size);
-    crosshair_outline_color_.Draw(char_size);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Color");
+    ImGui::SameLine();
+    DrawStoredColorEditor("CrosshairColor", current_theme_.mutable_crosshair()->mutable_color());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Outline color");
+    ImGui::SameLine();
+    DrawStoredColorEditor("OutlineCrosshairColor",
+                          current_theme_.mutable_crosshair()->mutable_outline_color());
+
     ImGui::Unindent();
 
     Line();
@@ -259,7 +278,11 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Text("Health bar");
     HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
     ImGui::Indent();
-    health_color_.Draw(char_size);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Health color");
+    ImGui::SameLine();
+    DrawStoredColorEditor("HealthColor", health_bar.mutable_health_color());
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Health alpha");
@@ -274,7 +297,10 @@ class ThemeEditorScreen : public UiScreen {
       health_bar.clear_health_alpha();
     }
 
-    health_background_color_.Draw(char_size);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Background color");
+    ImGui::SameLine();
+    DrawStoredColorEditor("HealthBackgroundColor", health_bar.mutable_background_color());
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Background alpha");
@@ -328,6 +354,43 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::PopStyleVar();
   }
 
+  void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
+    ImGui::IdGuard cid(id);
+
+    float color[3];
+    StoredRgb c = ToStoredRgb(*stored_color);
+    color[0] = c.r() / 255.0;
+    color[1] = c.g() / 255.0;
+    color[2] = c.b() / 255.0;
+    if (ImGui::ColorEdit3(
+            "##ColorEditor", color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
+      StoredRgb result = FloatToStoredRgb(color[0], color[1], color[2]);
+      if (stored_color->has_hex()) {
+        stored_color->set_hex(ToHexString(result));
+        stored_color->clear_r();
+        stored_color->clear_b();
+        stored_color->clear_g();
+      } else {
+        stored_color->set_r(result.r());
+        stored_color->set_g(result.g());
+        stored_color->set_b(result.b());
+      }
+    }
+
+    ImGui::SameLine();
+    ImGui::Text(kIconEmergency);
+    ImGui::HelpTooltip("Multiply color by value");
+
+    ImGui::SameLine();
+    ImGui::InputFloat(ImGui::InputFloatParams("ColorMultiplier")
+                          .set_step(0.01, 0.2)
+                          .set_precision(2)
+                          .set_max(2)
+                          .set_width(char_x_ * 10)
+                          .set_zero_is_unset(),
+                      PROTO_FLOAT_FIELD(StoredColor, stored_color, multiplier));
+  }
+
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
 
   void Render() override {
@@ -357,17 +420,6 @@ class ThemeEditorScreen : public UiScreen {
     current_theme_name_ = theme_name;
     current_theme_ = app_.settings_manager().GetTheme(current_theme_name_);
 
-    crosshair_color_.stored_color = current_theme_.mutable_crosshair()->mutable_color();
-    crosshair_outline_color_.stored_color =
-        current_theme_.mutable_crosshair()->mutable_outline_color();
-
-    target_color_.stored_color = current_theme_.mutable_target_color();
-    ghost_target_color_.stored_color = current_theme_.mutable_ghost_target_color();
-
-    health_color_.stored_color = current_theme_.mutable_health_bar()->mutable_health_color();
-    health_background_color_.stored_color =
-        current_theme_.mutable_health_bar()->mutable_background_color();
-
     front_.appearance = current_theme_.mutable_front_appearance();
     sides_.appearance = current_theme_.mutable_side_appearance();
     back_.appearance = current_theme_.mutable_back_appearance();
@@ -383,16 +435,6 @@ class ThemeEditorScreen : public UiScreen {
 
   Theme current_theme_;
   LookAtInfo look_at_;
-
-  StoredColorEditor target_color_{"Target color", "TargetColorEditor"};
-  StoredColorEditor ghost_target_color_{"Ghost target color", "GhostTargetColorEditor"};
-
-  StoredColorEditor crosshair_color_{"Crosshair color", "CrosshairColorEditor"};
-  StoredColorEditor crosshair_outline_color_{"Crosshair outline color",
-                                             "CrosshairOutlineColorEditor"};
-
-  StoredColorEditor health_color_{"Health color", "HealthColorEditor"};
-  StoredColorEditor health_background_color_{"Background color", "HealthBackgroundColorEditor"};
 
   WallAppearanceEditor front_{"Front", "FrontEditor"};
   WallAppearanceEditor sides_{"Sides", "SidesEditor"};
