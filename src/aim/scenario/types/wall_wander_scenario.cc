@@ -174,16 +174,13 @@ class WallWanderScenario : public BaseScenario {
     float duration = std::max<float>(
         app_.rand().GetJittered(profile.turn_time(), profile.turn_time_jitter()), 0.3f);
     if (is_bounce) {
-      duration = 0.5;
+      duration = 0.4;
     }
 
     info.last_turn_time = now_seconds;
     info.next_turn_time = now_seconds + duration;
     float next_turn_rate =
         ClampPositive(app_.rand().GetJittered(profile.turn_rate(), profile.turn_rate_jitter()));
-    if (is_bounce) {
-      next_turn_rate *= 0.4;
-    }
     info.turn_rate = 0;
     info.is_accelerating = true;
     info.max_turn_rate = next_turn_rate;
