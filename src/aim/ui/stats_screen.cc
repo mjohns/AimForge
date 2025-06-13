@@ -16,6 +16,7 @@
 
 namespace aim {
 namespace {
+constexpr i64 kDayMicros = 86400000000;
 
 std::string GetHitPercentageString(const StatsRow& stats) {
   if (stats.num_shots > 0) {
@@ -32,9 +33,34 @@ struct StatsInfo {
   std::vector<StatsRow> all_stats;
   StatsRow stats;
   StatsRow previous_high_score_stats;
+  std::optional<StatsRow> day_ago_high_score_stats;
+  std::optional<StatsRow> week_ago_high_score_stats;
+  std::optional<StatsRow> month_ago_high_score_stats;
   std::vector<double> scores;
   float min_score = 0;
 };
+
+struct StatsComparison {
+  float score_diff = 0;
+  float score_diff_percent = 0;
+  std::string score_diff_percent_string;
+  std::string score_diff_string;
+};
+
+StatsComparison GetStatsComparison(const StatsRow& current_stats,
+                                   const StatsRow& comparison_stats) {
+  StatsComparison r;
+  r.score_diff = current_stats.score - comparison_stats.score;
+  r.score_diff_percent = r.score_diff / comparison_stats.score;
+
+  std::string percent_diff_str = MaybeIntToString(abs(r.score_diff_percent) * 100, 1);
+  std::string plus_minus = r.score_diff_percent < 0 ? "-" : "+";
+
+  r.score_diff_percent_string = std::format("{}{}%", plus_minus, percent_diff_str);
+  std::string abs_diff_str = MaybeIntToString(abs(r.score_diff), 2);
+  r.score_diff_string = std::format("{}{}", plus_minus, abs_diff_str);
+  return r;
+}
 
 class StatsScreen : public UiScreen {
  public:
@@ -48,6 +74,77 @@ class StatsScreen : public UiScreen {
   }
 
  protected:
+  void DrawStatsTable() {
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg;
+    if (ImGui::BeginTable("StatsTable", 6, flags)) {
+      ImGui::TableSetupColumn("Compare to", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("Diff", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("Accuracy", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("CM/360", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableHeadersRow();
+
+      DrawStatsTableRow("Current", info_.stats, info_.stats);
+      if (info_.all_stats.size() > 1) {
+        std::string high_score_name = "Current high";
+        if (info_.stats.score >= info_.previous_high_score_stats.score) {
+          high_score_name = "Previous high";
+        }
+        DrawStatsTableRow(high_score_name, info_.stats, info_.previous_high_score_stats);
+
+        if (info_.day_ago_high_score_stats) {
+          DrawStatsTableRow("Day ago high", info_.stats, *info_.day_ago_high_score_stats);
+        }
+        if (info_.week_ago_high_score_stats) {
+          DrawStatsTableRow("Week ago high", info_.stats, *info_.week_ago_high_score_stats);
+        }
+        if (info_.month_ago_high_score_stats) {
+          DrawStatsTableRow("Month ago high", info_.stats, *info_.month_ago_high_score_stats);
+        }
+      }
+
+      ImGui::EndTable();
+    }
+  }
+
+  void DrawStatsTableRow(const std::string& name,
+                         const StatsRow& current_stats,
+                         const StatsRow& comparison_stats) {
+    ImGui::TableNextRow();
+
+    ImGui::TableNextColumn();
+    ImGui::Text(name);
+
+    auto comparison = GetStatsComparison(current_stats, comparison_stats);
+
+    // Percent diff
+    ImGui::TableNextColumn();
+    ImGui::Text(comparison.score_diff_percent_string);
+
+    // Score
+    ImGui::TableNextColumn();
+    ImGui::TextFmt(
+        "{} ({})", MaybeIntToString(comparison_stats.score, 2), comparison.score_diff_string);
+
+    // Accuracy
+    ImGui::TableNextColumn();
+    ImGui::Text(GetHitPercentageString(comparison_stats));
+
+    // cm/360
+    ImGui::TableNextColumn();
+    ImGui::Text(MaybeIntToString(comparison_stats.cm_per_360));
+
+    // time
+    ImGui::TableNextColumn();
+    std::string time_ago;
+    auto maybe_time = ParseTimestampStringAsMicros(comparison_stats.timestamp);
+    if (maybe_time) {
+      ImGui::Text(GetHowLongAgoString(*maybe_time, GetNowMicros()));
+      ImGui::HelpTooltip(comparison_stats.timestamp);
+    }
+  }
+
   void DrawScreen() override {
     ImGui::IdGuard cid("StatsScreen");
 
@@ -153,11 +250,12 @@ class StatsScreen : public UiScreen {
     float previous_high_score = info_.previous_high_score_stats.score;
     bool has_previous_high_score = all_stats.size() > 0 && previous_high_score > 0;
 
-    float diff = 0;
     float percent_diff = 0;
+    std::string percent_diff_string;
     if (has_previous_high_score) {
-      diff = stats.score - previous_high_score;
-      percent_diff = diff / previous_high_score;
+      auto comparison = GetStatsComparison(info_.stats, info_.previous_high_score_stats);
+      percent_diff = comparison.score_diff_percent;
+      percent_diff_string = comparison.score_diff_percent_string;
     }
     {
       auto font = app_.font_manager().UseLarge();
@@ -184,47 +282,31 @@ class StatsScreen : public UiScreen {
     }
     if (has_previous_high_score) {
       auto font = app_.font_manager().UseLarge();
-      std::string percent_diff_str = MaybeIntToString(abs(percent_diff) * 100, 1);
       ImGui::SameLine();
-      std::string plus_minus = percent_diff < 0 ? "-" : "+";
-      std::string diff_text = std::format("{}{}%", plus_minus, percent_diff_str);
-      ImGui::Button(diff_text.c_str());
-      ImGui::SameLine();
-      std::string abs_diff_str = MaybeIntToString(abs(diff), 2);
-      ImGui::TextFmt("({}{})", plus_minus, abs_diff_str);
+      ImGui::Button(percent_diff_string);
     }
 
-    std::string hit_percent = GetHitPercentageString(stats);
-    if (hit_percent.size() > 0) {
-      ImGui::Text(hit_percent);
-    }
-    ImGui::TextFmt("cm/360: {}", MaybeIntToString(stats.cm_per_360));
-
-    if (has_previous_high_score) {
-      std::string time_ago;
-      auto maybe_time = ParseTimestampStringAsMicros(info_.previous_high_score_stats.timestamp);
-      if (maybe_time) {
-        time_ago = std::format("({})", GetHowLongAgoString(*maybe_time, GetNowMicros()));
-        ImGui::Spacing();
-        ImGui::Spacing();
-        ImGui::Spacing();
-        ImGui::Text("Previous High Score %s", time_ago.c_str());
-        ImGui::Text(MaybeIntToString(info_.previous_high_score_stats.score, 2));
-        hit_percent = GetHitPercentageString(info_.previous_high_score_stats);
-        if (hit_percent.size() > 0) {
-          ImGui::SameLine();
-          ImGui::TextFmt("- {}", hit_percent);
-        }
-        ImGui::TextFmt("cm/360: {}", MaybeIntToString(info_.previous_high_score_stats.cm_per_360));
+    {
+      auto font = app_.font_manager().UseMedium();
+      std::string hit_percent = GetHitPercentageString(stats);
+      if (hit_percent.size() > 0) {
+        ImGui::Text(hit_percent);
       }
     }
+
+    /*
     if (all_stats.size() > 1) {
       ImGui::Spacing();
       ImGui::Spacing();
       ImGui::Spacing();
       ImGui::Text("Total runs: %d", all_stats.size());
     }
-    DrawHistory();
+    */
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    DrawStatsTable();
+    // DrawHistory();
     ImGui::SetCursorAtBottom();
     if (ImGui::Button("Restart")) {
       app_.scenario_manager().SetCurrentScenario(scenario_id_);
@@ -275,6 +357,15 @@ class StatsScreen : public UiScreen {
       return false;
     }
 
+    i64 step = kDayMicros;
+    i64 now_micros = GetNowMicros();
+    i64 day_ago_micros = now_micros - kDayMicros;
+    i64 week_ago_micros = now_micros - (kDayMicros * 7);
+    i64 month_ago_micros = now_micros - (kDayMicros * 30);
+
+    int found_max_week_ago_index = -1;
+    int found_max_day_ago_index = -1;
+    int found_max_month_ago_index = -1;
     int found_max_index = -1;
     float max_score = -100000;
     bool found_stats = false;
@@ -290,8 +381,27 @@ class StatsScreen : public UiScreen {
         break;
       }
 
+      auto maybe_time = ParseTimestampStringAsMicros(stats.timestamp);
+      bool is_over_week_ago = false;
+      bool is_over_day_ago = false;
+      bool is_over_month_ago = false;
+      if (maybe_time) {
+        is_over_month_ago = *maybe_time < month_ago_micros;
+        is_over_week_ago = *maybe_time < week_ago_micros;
+        is_over_day_ago = *maybe_time < day_ago_micros;
+      }
+
       if (stats.score >= max_score) {
         found_max_index = i;
+        if (is_over_week_ago) {
+          found_max_week_ago_index = i;
+        }
+        if (is_over_month_ago) {
+          found_max_month_ago_index = i;
+        }
+        if (is_over_day_ago) {
+          found_max_day_ago_index = i;
+        }
         max_score = stats.score;
       }
       if (stats.score < info->min_score) {
@@ -305,6 +415,15 @@ class StatsScreen : public UiScreen {
 
     if (found_max_index >= 0) {
       info->previous_high_score_stats = all_stats[found_max_index];
+    }
+    if (found_max_month_ago_index >= 0) {
+      info->month_ago_high_score_stats = all_stats[found_max_month_ago_index];
+    }
+    if (found_max_week_ago_index >= 0) {
+      info->week_ago_high_score_stats = all_stats[found_max_week_ago_index];
+    }
+    if (found_max_day_ago_index >= 0) {
+      info->day_ago_high_score_stats = all_stats[found_max_day_ago_index];
     }
 
     return true;
