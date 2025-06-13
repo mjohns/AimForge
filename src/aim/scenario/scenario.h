@@ -55,7 +55,7 @@ struct DelayedTask {
 class Scenario : public Screen {
  public:
   Scenario(const CreateScenarioParams& params, Application* app);
-  virtual ~Scenario() {}
+  virtual ~Scenario();
 
   bool is_done() const {
     return run_state_ == ScenarioRunState::DONE;
@@ -147,6 +147,8 @@ class Scenario : public Screen {
   void UpdatePerfStats();
   void HandleScenarioDone();
 
+  void FlushPlayTime();
+
   i64 num_state_updates_ = 0;
   float state_updates_per_second_ = 0;
   float radians_per_dot_;
@@ -171,6 +173,7 @@ class Scenario : public Screen {
   UpdateStateData update_data_;
   i64 loop_count_ = 0;
   bool from_scenario_editor_;
+  bool play_time_flushed_ = false;
 };
 
 std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);

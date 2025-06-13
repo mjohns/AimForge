@@ -41,6 +41,27 @@ constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
 }  // namespace
 
+Scenario::~Scenario() {
+  FlushPlayTime();
+}
+
+void Scenario::FlushPlayTime() {
+  if (play_time_flushed_) {
+    return;
+  }
+  play_time_flushed_ = true;
+  float elapsed = timer_.GetElapsedSeconds();
+  if (elapsed > 0) {
+    PlayTime p;
+    p.scenario_id = id_;
+    p.duration_seconds = elapsed;
+    p.is_complete_run = is_done();
+    p.shot_type = GetShotType();
+    p.cm_per_360 = effective_cm_per_360_;
+    app_.play_time_manager().AddPlayTime(p);
+  }
+}
+
 Scenario::Scenario(const CreateScenarioParams& params, Application* app)
     : Screen(*app),
       id_(params.id),
@@ -461,6 +482,7 @@ void Scenario::HandleScenarioDone() {
   }
 
   state_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
+  FlushPlayTime();
   PopSelf();
   PushNextScreen(CreateStatsScreen(id_, stats_id_, &app_));
 }

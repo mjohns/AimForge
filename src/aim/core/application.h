@@ -19,6 +19,7 @@
 #include "aim/core/history_manager.h"
 #include "aim/core/labels_manager.h"
 #include "aim/core/playlist_manager.h"
+#include "aim/core/play_time_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/screen.h"
 #include "aim/core/settings_manager.h"
@@ -92,6 +93,10 @@ class Application {
 
   StatsManager& stats_manager() {
     return *stats_manager_;
+  }
+
+  PlayTimeManager& play_time_manager() {
+    return *play_time_manager_;
   }
 
   Renderer* renderer() {
@@ -173,6 +178,7 @@ class Application {
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
+  std::unique_ptr<PlayTimeManager> play_time_manager_;
   std::unique_ptr<FontManager> font_manager_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
