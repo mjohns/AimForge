@@ -53,169 +53,184 @@ class SettingsScreen : public UiScreen {
 
  protected:
   void DrawSettings() {
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
-                                  .set_label("cm/360")
-                                  .set_step(1, 5)
-                                  .set_width(char_x_ * 9)
-                                  .set_min(1)
-                                  .set_default(35),
-                              PROTO_JITTERED_FIELD(Settings, &updater_.settings, cm_per_360));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Dpi")
-                          .set_label("DPI")
-                          .set_step(100, 200)
-                          .set_width(char_x_ * 10)
-                          .set_min(100)
-                          .set_default(800),
-                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, dpi));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Fps")
-                          .set_label("Max render fps")
-                          .set_is_optional()
-                          .set_step(10, 100)
-                          .set_width(char_x_ * 10)
-                          .set_range(60, 1000),
-                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, max_render_fps));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Don't set too high above refresh rate as additional time rendering will take away "
-        "from time to perform state updates and poll mouse events");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
-                          .set_label("Metronome BPM")
-                          .set_min(0)
-                          .set_zero_is_unset()
-                          .set_step(1, 5)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Theme");
-    ImGui::SameLine();
-    ImGui::SimpleDropdown(
-        "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_x_ * 20);
-    ImGui::SameLine();
-    if (ImGui::Button("Edit themes")) {
-      PushNextScreen(CreateThemeEditorScreen(&app_));
+    if (!ImGui::BeginTabBar("SettingsTabBar")) {
+      return;
     }
+    if (ImGui::BeginTabItem("Settings")) {
+      ImGui::Spacing();
+      ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
+                                    .set_label("cm/360")
+                                    .set_step(1, 5)
+                                    .set_width(char_x_ * 9)
+                                    .set_min(1)
+                                    .set_default(35),
+                                PROTO_JITTERED_FIELD(Settings, &updater_.settings, cm_per_360));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Crosshair");
-    ImGui::SameLine();
-    bool crosshair_opened = false;
-    ImGui::SimpleDropdown("CrosshairDropdown",
-                          updater_.settings.mutable_current_crosshair_name(),
-                          crosshair_names_,
-                          char_x_ * 15,
-                          nullptr,
-                          &crosshair_opened);
-    if (crosshair_opened) {
-      crosshair_names_ = app_.settings_manager().ListCrosshairs();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Edit crosshairs")) {
-      PushNextScreen(CreateCrosshairEditorScreen(&app_));
-    }
+      ImGui::InputFloat(ImGui::InputFloatParams("Dpi")
+                            .set_label("DPI")
+                            .set_step(100, 200)
+                            .set_width(char_x_ * 10)
+                            .set_min(100)
+                            .set_default(800),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, dpi));
 
-    ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")
-                          .set_label("Crosshair size")
-                          .set_min(0.1)
-                          .set_step(0.1, 1)
-                          .set_precision(1)
-                          .set_default(15)
-                          .set_width(char_x_ * 9),
-                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
+      ImGui::InputFloat(ImGui::InputFloatParams("Fps")
+                            .set_label("Max render fps")
+                            .set_is_optional()
+                            .set_step(10, 100)
+                            .set_width(char_x_ * 10)
+                            .set_range(60, 1000),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, max_render_fps));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Don't set too high above refresh rate as additional time rendering will take away "
+          "from time to perform state updates and poll mouse events");
 
-    ImGui::InputBool(ImGui::InputBoolParams("DisablePerScenarioSettings")
-                         .set_label("Disable per scenario settings"),
-                     PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
+      ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
+                            .set_label("Metronome BPM")
+                            .set_min(0)
+                            .set_zero_is_unset()
+                            .set_step(1, 5)
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
 
-    ImGui::InputBool(
-        ImGui::InputBoolParams("DisableClickToStart").set_label("Disable \"Click to Start\""),
-        PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start));
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Theme");
+      ImGui::SameLine();
+      ImGui::SimpleDropdown(
+          "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_x_ * 20);
+      ImGui::SameLine();
+      if (ImGui::Button("Edit themes")) {
+        PushNextScreen(CreateThemeEditorScreen(&app_));
+      }
 
-    ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
-                     PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Crosshair");
+      ImGui::SameLine();
+      bool crosshair_opened = false;
+      ImGui::SimpleDropdown("CrosshairDropdown",
+                            updater_.settings.mutable_current_crosshair_name(),
+                            crosshair_names_,
+                            char_x_ * 15,
+                            nullptr,
+                            &crosshair_opened);
+      if (crosshair_opened) {
+        crosshair_names_ = app_.settings_manager().ListCrosshairs();
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Edit crosshairs")) {
+        PushNextScreen(CreateCrosshairEditorScreen(&app_));
+      }
 
-    ImGui::InputBool(
-        ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
-        PROTO_BOOL_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), show));
-    if (updater_.settings.health_bar().show()) {
-      ImGui::Indent();
+      ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")
+                            .set_label("Crosshair size")
+                            .set_min(0.1)
+                            .set_step(0.1, 1)
+                            .set_precision(1)
+                            .set_default(15)
+                            .set_width(char_x_ * 9),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
 
       ImGui::InputBool(
-          ImGui::InputBoolParams("OnlyDamaged").set_label("Only damaged"),
-          PROTO_BOOL_FIELD(
-              HealthBarSettings, updater_.settings.mutable_health_bar(), only_damaged));
+          ImGui::InputBoolParams("DisablePerScenarioSettings")
+              .set_label("Disable per scenario settings"),
+          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
 
-      ImGui::InputFloat(
-          ImGui::InputFloatParams("HealthBarWidth")
-              .set_label("Width")
-              .set_min(0.1)
-              .set_step(0.1, 1)
-              .set_precision(1)
-              .set_default(6)
-              .set_width(char_x_ * 9),
-          PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), width));
-      ImGui::InputFloat(
-          ImGui::InputFloatParams("HealthBarHeight")
-              .set_label("Height")
-              .set_min(0.1)
-              .set_step(0.1, 1)
-              .set_precision(1)
-              .set_default(1.5)
-              .set_width(char_x_ * 9),
-          PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), height));
-      ImGui::InputFloat(
-          ImGui::InputFloatParams("HealthBarHeightAboveTarget")
-              .set_label("Height above target")
-              .set_min(0.1)
-              .set_step(0.1, 1)
-              .set_precision(1)
-              .set_default(0.6)
-              .set_width(char_x_ * 9),
-          PROTO_FLOAT_FIELD(
-              HealthBarSettings, updater_.settings.mutable_health_bar(), height_above_target));
+      ImGui::InputBool(
+          ImGui::InputBoolParams("DisableClickToStart").set_label("Disable \"Click to Start\""),
+          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start));
 
-      ImGui::Unindent();
+      ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+
+      ImGui::InputBool(
+          ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
+          PROTO_BOOL_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), show));
+      if (updater_.settings.health_bar().show()) {
+        ImGui::Indent();
+
+        ImGui::InputBool(
+            ImGui::InputBoolParams("OnlyDamaged").set_label("Only damaged"),
+            PROTO_BOOL_FIELD(
+                HealthBarSettings, updater_.settings.mutable_health_bar(), only_damaged));
+
+        ImGui::InputFloat(
+            ImGui::InputFloatParams("HealthBarWidth")
+                .set_label("Width")
+                .set_min(0.1)
+                .set_step(0.1, 1)
+                .set_precision(1)
+                .set_default(6)
+                .set_width(char_x_ * 9),
+            PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), width));
+        ImGui::InputFloat(
+            ImGui::InputFloatParams("HealthBarHeight")
+                .set_label("Height")
+                .set_min(0.1)
+                .set_step(0.1, 1)
+                .set_precision(1)
+                .set_default(1.5)
+                .set_width(char_x_ * 9),
+            PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), height));
+        ImGui::InputFloat(
+            ImGui::InputFloatParams("HealthBarHeightAboveTarget")
+                .set_label("Height above target")
+                .set_min(0.1)
+                .set_step(0.1, 1)
+                .set_precision(1)
+                .set_default(0.6)
+                .set_width(char_x_ * 9),
+            PROTO_FLOAT_FIELD(
+                HealthBarSettings, updater_.settings.mutable_health_bar(), height_above_target));
+
+        ImGui::Unindent();
+      }
+
+      ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Keybinds")) {
+      ImGui::Spacing();
+      DrawKeybinds();
+      ImGui::EndTabItem();
     }
 
-    ImGui::Spacing();
-    ImGui::Spacing();
+    if (ImGui::BeginTabItem("Sounds")) {
+      ImGui::Spacing();
+      DrawSounds();
+      ImGui::EndTabItem();
+    }
 
-    ImGui::Text("Keybinds");
-    ImGui::Indent();
-    DrawKeybinds();
-    ImGui::Unindent();
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-
-    ImGui::Text("Sounds");
-    ImGui::Indent();
-    DrawSounds();
-    ImGui::Unindent();
+    ImGui::EndTabBar();
   }
 
   void DrawKeybinds() {
-    for (KeybindItem& item : keybind_items_) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(item.label);
+    if (ImGui::BeginTable("KeybindsColumns", 2)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 20);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
-      if (item.help_text.size() > 0) {
+      for (KeybindItem& item : keybind_items_) {
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text(item.label);
+
+        if (item.help_text.size() > 0) {
+          ImGui::SameLine();
+          ImGui::HelpMarker(item.help_text);
+        }
+
+        ImGui::TableNextColumn();
+        float entry_width = char_x_ * 10;
         ImGui::SameLine();
-        ImGui::HelpMarker(item.help_text);
+        KeyMappingEntry(&item, 1, entry_width);
+        ImGui::SameLine();
+        KeyMappingEntry(&item, 2, entry_width);
+        ImGui::SameLine();
+        KeyMappingEntry(&item, 3, entry_width);
+        ImGui::SameLine();
+        KeyMappingEntry(&item, 4, entry_width);
       }
-
-      float entry_width = char_x_ * 10;
-      ImGui::SameLine();
-      KeyMappingEntry(&item, 1, entry_width);
-      ImGui::SameLine();
-      KeyMappingEntry(&item, 2, entry_width);
-      ImGui::SameLine();
-      KeyMappingEntry(&item, 3, entry_width);
-      ImGui::SameLine();
-      KeyMappingEntry(&item, 4, entry_width);
+      ImGui::EndTable();
     }
   }
 
@@ -232,25 +247,42 @@ class SettingsScreen : public UiScreen {
     ImGui::SliderFloat("##VolumeLevel", &volume_level, 0, 1, "%.2f");
     s.set_master_volume_level(volume_level);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Shoot");
-    ImGui::SameLine();
-    ImGui::InputText("##ShootSound", s.mutable_shoot());
+    Line();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Hit");
-    ImGui::SameLine();
-    ImGui::InputText("##HitSound", s.mutable_hit());
+    if (ImGui::BeginTable("SoundsColumns", 2)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 15);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Kill");
-    ImGui::SameLine();
-    ImGui::InputText("##KillSound", s.mutable_kill());
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Shoot");
+      ImGui::TableNextColumn();
+      ImGui::InputText("##ShootSound", s.mutable_shoot());
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Metronome");
-    ImGui::SameLine();
-    ImGui::InputText("##MetronomeSound", s.mutable_metronome());
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Hit");
+      ImGui::TableNextColumn();
+      ImGui::InputText("##HitSound", s.mutable_hit());
+
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Kill");
+      ImGui::TableNextColumn();
+      ImGui::InputText("##KillSound", s.mutable_kill());
+
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Metronome");
+      ImGui::TableNextColumn();
+      ImGui::InputText("##MetronomeSound", s.mutable_metronome());
+
+      ImGui::EndTable();
+    }
   }
 
   void DrawScreen() override {
@@ -258,13 +290,10 @@ class SettingsScreen : public UiScreen {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
 
-    if (ImGui::Begin("Settings")) {
-      DrawSettings();
-    }
-    ImGui::End();
+    DrawTopBar();
 
-    if (ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoTitleBar)) {
-      DrawControls();
+    if (BeginMainWindow("MainWindow", 0.8)) {
+      DrawSettings();
     }
     ImGui::End();
   }
@@ -359,6 +388,50 @@ class SettingsScreen : public UiScreen {
   }
 
  private:
+  void DrawTopBar() {
+    float width = char_x_ * 12.9;
+    float middle = app_.screen_info().width / 2.0;
+    // ImGui::SetNextWindowBgAlpha();
+    ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
+    ImGui::SetNextWindowSize(ImVec2(width, -1));
+    ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+    float start_x = ImGui::GetCursorPosX();
+
+    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+      app_.settings_manager().MarkDirty();
+      updater_.SaveIfChangesMade(scenario_id_);
+      PopSelf();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      PopSelf();
+    }
+
+    ImGui::End();
+  }
+
+  bool BeginMainWindow(const std::string& name, float width_multiple) {
+    float padding = char_x_ * 0.3;
+    float start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 0.9;
+    float end_y = app_.screen_info().height - padding;
+    float width = app_.screen_info().width * width_multiple;
+    float height = end_y - start_y;
+
+    ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0, start_y));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    return ImGui::Begin(
+        name.c_str(), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+  }
+
+  void Line() {
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::Spacing();
+  }
+
   SettingsUpdater updater_;
   std::vector<std::string> theme_names_;
   std::vector<std::string> crosshair_names_;
