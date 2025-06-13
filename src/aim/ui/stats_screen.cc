@@ -18,6 +18,11 @@ namespace aim {
 namespace {
 constexpr i64 kDayMicros = 86400000000;
 
+const std::unordered_map<std::string, std::vector<std::string>> kComparisonMap = {
+    {"SMOOTH Centering L1", {"SMOOTH Centering L2", "SMOOTH Centering L3"}},
+    {"SMOOTH Centering L2", {"SMOOTH Centering L1", "SMOOTH Centering L3"}},
+};
+
 std::string GetHitPercentageString(const StatsRow& stats) {
   if (stats.num_shots > 0) {
     float hit_percent = stats.num_hits / stats.num_shots;
@@ -101,6 +106,14 @@ class StatsScreen : public UiScreen {
         }
         if (info_.month_ago_high_score_stats) {
           DrawStatsTableRow("Month ago high", info_.stats, *info_.month_ago_high_score_stats);
+        }
+      }
+
+      std::vector<std::string> compare_to_scenarios = GetCompareToList();
+      for (const std::string& scenario : compare_to_scenarios) {
+        auto compare_stats = app_.stats_manager().GetAggregateStats(scenario);
+        if (compare_stats.total_runs > 0) {
+          DrawStatsTableRow(scenario, info_.stats, compare_stats.high_score_stats);
         }
       }
 
@@ -348,6 +361,14 @@ class StatsScreen : public UiScreen {
   }
 
  private:
+  std::vector<std::string> GetCompareToList() {
+    auto it = kComparisonMap.find(scenario_id_);
+    if (it == kComparisonMap.end()) {
+      return {};
+    }
+    return it->second;
+  }
+
   bool GetStatsInfo(StatsInfo* info) {
     auto all_stats = app_.stats_manager().GetStats(scenario_id_);
     info->all_stats.reserve(all_stats.size());
