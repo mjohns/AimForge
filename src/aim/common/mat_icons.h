@@ -36,6 +36,7 @@ static const char* kIconMyLocation = "\xEE\x95\x9C";
 static const char* kIconStar = "\xEE\xA0\xB8";
 static const char* kIconStarOutline = "\xEF\x81\xAF";
 static const char* kIconEmergency = "\xEE\x87\xAB";
+static const char* kIconContentCopy = "\xEE\x85\x8D";
 
 // static const char* kIconPointScan = "\xEF\x9C\x8C";
 // static const char* kIconCloseSmall = "\xEF\x94\x88";

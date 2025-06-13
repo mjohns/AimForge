@@ -46,7 +46,6 @@ const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kTrackingInvincible, "Tracking"},
     {ShotType::kTrackingKill, "Tracking kill"},
     {ShotType::kPoke, "Poke"},
-    {ShotType::TYPE_NOT_SET, "Default"},
 };
 
 const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
@@ -118,6 +117,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->unevaluated_def;
       name_ = initial_scenario->name;
+      if (opts.force_bundle_name.size() > 0) {
+        *name_.mutable_bundle_name() = opts.force_bundle_name;
+      }
       if (opts.is_new_copy) {
         std::string final_name = MakeUniqueName(
             name_.relative_name() + " Copy",
@@ -164,7 +166,10 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
     ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Save", kIconSave), ImVec2(char_x_ * 8, 0))) {
+    bool is_new_scenario = !original_name_.has_value();
+    std::string save_text =
+        is_new_scenario ? std::format("{} Create", kIconAdd) : std::format("{} Update", kIconSave);
+    if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
         app_.scenario_manager().LoadScenariosFromDisk();
         app_.playlist_manager().LoadPlaylistsFromDisk();
@@ -300,6 +305,17 @@ class ScenarioEditorScreen : public UiScreen {
 
     if (ImGui::Button("Edit description")) {
       editing_description_ = true;
+    }
+
+    Line();
+
+    if (original_name_.has_value()) {
+      if (ImGui::Button("Make changes in new copy")) {
+        original_name_ = {};
+        *name_.mutable_relative_name() = name_.relative_name() + " Copy";
+      }
+      ImGui::HelpTooltip(
+          "Save the current changes in a new copy of the scenario leaving the original unchanged.");
     }
 
     if (ImGui::Button("View Json")) {
@@ -632,7 +648,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputJitteredFloat(ImGui::InputFloatParams("TimeBetweenTurns")
                                   .set_label("Time between turns")
                                   .set_step(0.1, 2)
-                                  .set_min(0.2)
+                                  .set_min(0.1)
                                   .set_precision(1)
                                   .set_default(2)
                                   .set_width(char_x_ * 10),
@@ -1659,7 +1675,6 @@ class ScenarioEditorScreen : public UiScreen {
 
     bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, def_.type_case());
     if (is_single_target_tracking) {
-      t->set_num_targets(1);
       if (t->profiles_size() == 0) {
         t->add_profiles()->set_speed(40);
       }
@@ -1668,6 +1683,14 @@ class ScenarioEditorScreen : public UiScreen {
         t->clear_profiles();
         *t->add_profiles() = first_profile;
       }
+
+      TargetProfile p = t->profiles(0);
+      p.clear_health_regen_rate();
+      p.clear_health_seconds();
+
+      t->Clear();
+      *t->add_profiles() = p;
+      t->set_num_targets(1);
 
       DrawTargetProfile(t->mutable_profiles(0));
       return;

@@ -7,6 +7,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
+#include "aim/ui/scenario_editor_screen.h"
 
 namespace aim {
 namespace {
@@ -131,7 +132,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         int playlist_count = 0;
         for (auto& playlist_name : app_->history_manager().recent_playlists()) {
           auto id = playlist_loop_id.Get();
-          if (playlist_count < 10) {
+          if (playlist_count < 15) {
             if (ImGui::MenuItem(playlist_name.c_str())) {
               selected_playlist = playlist_name;
             }
@@ -140,6 +141,27 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         }
         if (selected_playlist.size() > 0) {
           app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.id());
+        }
+        ImGui::EndMenu();
+      }
+      if (ImGui::BeginMenu("Add copy to")) {
+        ImGui::LoopId playlist_loop_id;
+        std::string selected_playlist;
+        int playlist_count = 0;
+        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
+          auto id = playlist_loop_id.Get();
+          if (playlist_count < 15) {
+            if (ImGui::MenuItem(playlist_name.c_str())) {
+              selected_playlist = playlist_name;
+              ScenarioEditorOptions opts;
+              opts.scenario_id = scenario.id();
+              opts.is_new_copy = true;
+              opts.add_to_playlist = playlist_name;
+              opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
+              app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
+            }
+          }
+          playlist_count++;
         }
         ImGui::EndMenu();
       }

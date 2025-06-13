@@ -54,9 +54,12 @@ class Application {
   static std::unique_ptr<Application> Create();
   void RunMainLoop();
 
-  std::shared_ptr<Screen> PopScreen();
-  void PushScreen(std::shared_ptr<Screen> screen);
+  // Should only be called using methods in Screen
+  std::shared_ptr<Screen> PopScreenInternal();
+  void PushScreenInternal(std::shared_ptr<Screen> screen);
+
   bool is_on_home_screen() const;
+  std::shared_ptr<Screen> GetCurrentScreen();
 
   void NewImGuiFrame();
   bool BeginFullscreenWindow(const std::string& id = "Fullscreen");

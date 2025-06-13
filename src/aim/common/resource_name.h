@@ -12,6 +12,19 @@ class ResourceName {
   ResourceName(std::string bundle_name, std::string relative_name)
       : bundle_name_(std::move(bundle_name)), relative_name_(std::move(relative_name)) {}
 
+  static ResourceName Parse(const std::string& full_name) {
+    size_t first_space = full_name.find(' ');
+    if (first_space == std::string::npos) {
+      return ResourceName(full_name, "");
+    }
+
+    std::string bundle_name = full_name.substr(0, first_space);
+    if (first_space + 1 >= full_name.size()) {
+      return ResourceName(bundle_name, "");
+    }
+    return ResourceName(bundle_name, full_name.substr(first_space + 1));
+  }
+
   void set(std::string bundle_name, std::string_view relative_name) {
     *this = ResourceName(std::move(bundle_name), std::string(relative_name));
   }

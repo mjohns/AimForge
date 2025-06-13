@@ -20,8 +20,6 @@ class Screen {
   bool should_continue() const;
 
   virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
-  virtual void OnKeyDown(const SDL_Event& event, bool user_is_typing) {}
-  virtual void OnKeyUp(const SDL_Event& event, bool user_is_typing) {}
 
   // Called before event processing.
   virtual void OnTickStart() {}

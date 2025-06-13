@@ -416,7 +416,7 @@ std::unique_ptr<Application> Application::Create() {
   return application;
 }
 
-std::shared_ptr<Screen> Application::PopScreen() {
+std::shared_ptr<Screen> Application::PopScreenInternal() {
   if (screen_stack_.size() == 0) {
     return {};
   }
@@ -430,7 +430,11 @@ bool Application::is_on_home_screen() const {
   return screen_stack_.size() <= 1;
 }
 
-void Application::PushScreen(std::shared_ptr<Screen> screen) {
+std::shared_ptr<Screen> Application::GetCurrentScreen() {
+  return screen_stack_.size() > 0 ? screen_stack_.back() : nullptr;
+}
+
+void Application::PushScreenInternal(std::shared_ptr<Screen> screen) {
   screen_stack_.push_back(std::move(screen));
 }
 
@@ -456,12 +460,6 @@ void Application::RunMainLoop() {
           return;
         }
         current_screen->OnEvent(event, io.WantTextInput);
-        if (event.type == SDL_EVENT_KEY_DOWN) {
-          current_screen->OnKeyDown(event, io.WantTextInput);
-        }
-        if (event.type == SDL_EVENT_KEY_UP) {
-          current_screen->OnKeyUp(event, io.WantTextInput);
-        }
       }
     }
 

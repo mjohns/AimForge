@@ -27,10 +27,10 @@ void Screen::UpdateScreenStack() {
       if (i > 2000) {
         break;
       }
-      app_.PopScreen();
+      app_.PopScreenInternal();
     }
   } else if (popped_self_) {
-    auto top = app_.PopScreen();
+    auto top = app_.PopScreenInternal();
     assert(top);
     assert(top.get() == this);
   }
@@ -39,7 +39,7 @@ void Screen::UpdateScreenStack() {
   return_home_ = false;
 
   if (next_screen_) {
-    app_.PushScreen(std::move(next_screen_));
+    app_.PushScreenInternal(std::move(next_screen_));
     next_screen_ = {};
   }
 }

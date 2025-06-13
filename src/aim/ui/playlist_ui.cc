@@ -216,7 +216,7 @@ class PlaylistEditorComponent {
     ImGui::Spacing();
     ImGui::Text("Add scenario");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 30);
+    ImGui::SetNextItemWidth(char_size.x * 18);
     ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
     ImGui::SameLine();
     if (ImGui::Button(kIconCancel)) {
@@ -522,6 +522,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run,
       opts.scenario_id = scenario_id;
       opts.is_new_copy = true;
       opts.add_to_playlist = run->playlist.name.full_name();
+      opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
       screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
     }
     if (ImGui::BeginMenu("Add to")) {
