@@ -194,14 +194,44 @@ class CrosshairEditorScreen : public UiScreen {
       c.add_layers();
     }
 
-    ImGui::Text("Layers");
-    ImGui::Indent();
-    ImGui::LoopId loop_id;
-    for (CrosshairLayer& l : *c.mutable_layers()) {
-      auto id = loop_id.Get();
+    int remove_at_i = -1;
+    int move_up_i = -1;
+    int move_down_i = -1;
+    int copy_i = -1;
+    for (int i = 0; i < c.layers_size(); ++i) {
+      ImGui::IdGuard lid("Layer", i);
+      const char* item_menu_id = "layer_item_menu";
+      if (ImGui::BeginPopupContextItem(item_menu_id)) {
+        if (ImGui::Selectable("Move up")) {
+          move_up_i = i;
+        }
+        if (ImGui::Selectable("Move down")) {
+          move_down_i = i;
+        }
+        if (ImGui::Selectable("Copy")) {
+          copy_i = i;
+        }
+        if (ImGui::Selectable("Delete")) {
+          remove_at_i = i;
+        }
+        ImGui::EndPopup();
+      }
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::TextFmt("Layer {}", i + 1);
+      ImGui::SameLine();
+      if (ImGui::Selectable(kIconMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        ImGui::OpenPopup(item_menu_id);
+      }
+      CrosshairLayer& l = *c.mutable_layers(i);
+      ImGui::Indent();
       DrawCrosshairLayerEditor(l);
+      ImGui::Unindent();
     }
-    ImGui::Unindent();
+
+    if (ImGui::Button(std::format("{} layer", kIconAdd))) {
+      c.add_layers();
+    }
 
     // Draw the crosshair
     ImVec2 current_pos = ImGui::GetCursorScreenPos();
@@ -228,6 +258,23 @@ class CrosshairEditorScreen : public UiScreen {
 
     ImGui::GetWindowDrawList()->AddRectFilled(back_min, back_max, ToImCol32(ToStoredColor(0.3)));
     app_.crosshair_manager().Draw(c, 30, theme, center);
+
+    auto* list = c.mutable_layers();
+    if (remove_at_i >= 0) {
+      list->erase(list->begin() + remove_at_i);
+    } else if (move_up_i > 0) {
+      int i1 = move_up_i;
+      int i2 = move_up_i - 1;
+      std::swap((*list)[i1], (*list)[i2]);
+    } else if (move_down_i >= 0) {
+      int i1 = move_down_i;
+      int i2 = move_down_i + 1;
+      if (i2 < list->size()) {
+        std::swap((*list)[i1], (*list)[i2]);
+      }
+    } else if (copy_i >= 0) {
+      *list->Add() = (*list)[copy_i];
+    }
   }
 
   void DrawCrosshairLayerEditor(CrosshairLayer& l) {
