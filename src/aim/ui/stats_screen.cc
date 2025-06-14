@@ -73,7 +73,7 @@ class StatsScreen : public UiScreen {
       : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
     scenario_ = app->scenario_manager().GetScenario(scenario_id);
     if (scenario_) {
-      reference_scenario_id_ = scenario_->def.reference_def().scenario_id();
+      reference_scenario_id_ = scenario_->unevaluated_def.reference_def().scenario_id();
     }
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
