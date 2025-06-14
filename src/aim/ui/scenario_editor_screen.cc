@@ -633,6 +633,29 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputBool(ImGui::InputBoolParams("Clockwise").set_label("Clockwise"),
                      PROTO_BOOL_FIELD(CircleScenarioDef, &d, rotate_clockwise));
 
+    Line();
+
+    ImGui::InputFloat(ImGui::InputFloatParams("StretchY")
+                          .set_label("Stretch Y")
+                          .set_step(0.05, 0.1)
+                          .set_precision(2)
+                          .set_default(0.8)
+                          .set_min(0.1)
+                          .set_is_optional()
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(CircleScenarioDef, &d, stretch_y));
+    ImGui::InputFloat(ImGui::InputFloatParams("StretchX")
+                          .set_label("Stretch X")
+                          .set_step(0.05, 0.1)
+                          .set_precision(2)
+                          .set_default(0.8)
+                          .set_min(0.1)
+                          .set_is_optional()
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(CircleScenarioDef, &d, stretch_x));
+
+    Line();
+
     ImGui::InputFloat(ImGui::InputFloatParams("Depth")
                           .set_label("Depth")
                           .set_step(1, 10)

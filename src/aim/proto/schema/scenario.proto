@@ -194,6 +194,9 @@ message CircleScenarioDef {
   float start_degrees = 2;
   bool rotate_clockwise = 3;
   float depth = 4;
+
+  float stretch_y = 5;
+  float stretch_x = 6;
 }
 
 message CenteringScenarioDef {

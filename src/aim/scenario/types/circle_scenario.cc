@@ -34,6 +34,17 @@ class CircleScenario : public BaseScenario {
     circumference_ = radius_ * glm::two_pi<float>();
 
     initial_position_ = RotateDegrees(glm::vec2(1, 0) * radius_, c_.start_degrees());
+    // This value should not be stretched.
+    current_circle_position_ = initial_position_;
+
+    float stretch_y = def_.circle_def().stretch_y();
+    if (stretch_y > 0) {
+      initial_position_.y *= stretch_y;
+    }
+    float stretch_x = def_.circle_def().stretch_x();
+    if (stretch_x > 0) {
+      initial_position_.x *= stretch_x;
+    }
 
     glm::vec3 look_at_pos = WallPositionToWorldPosition(initial_position_, 2.0f, params.def.room());
     camera_.SetPitchYawLookingAtPoint(look_at_pos);
@@ -77,13 +88,25 @@ class CircleScenario : public BaseScenario {
       degrees *= -1;
     }
 
-    glm::vec2 current_position = *target->wall_position;
-    target->SetWallPosition(glm::vec3(RotateDegrees(current_position, degrees), target->wall_depth),
-                            def_.room());
+    glm::vec2 new_position = RotateDegrees(current_circle_position_, degrees);
+    current_circle_position_ = new_position;
+
+    float stretch_y = def_.circle_def().stretch_y();
+    if (stretch_y > 0) {
+      new_position.y *= stretch_y;
+    }
+    float stretch_x = def_.circle_def().stretch_x();
+    if (stretch_x > 0) {
+      new_position.x *= stretch_x;
+    }
+    target->SetWallPosition(glm::vec3(new_position, target->wall_depth), def_.room());
   }
+
+
 
  private:
   glm::vec2 initial_position_;
+  glm::vec2 current_circle_position_;
   float radius_;
   float circumference_;
   Wall wall_;
