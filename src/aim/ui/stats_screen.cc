@@ -72,6 +72,9 @@ class StatsScreen : public UiScreen {
   StatsScreen(std::string scenario_id, i64 run_id, Application* app)
       : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
     scenario_ = app->scenario_manager().GetScenario(scenario_id);
+    if (scenario_) {
+      reference_scenario_id_ = scenario_->def.reference_def().scenario_id();
+    }
     if (GetStatsInfo(&info_)) {
       is_valid_ = true;
     }
@@ -362,6 +365,14 @@ class StatsScreen : public UiScreen {
 
  private:
   std::vector<std::string> GetCompareToList() {
+    std::vector<std::string> result = GetPartialCompareToListFromMap();
+    if (reference_scenario_id_.size() > 0) {
+      result.push_back(reference_scenario_id_);
+    }
+    return result;
+  }
+
+  std::vector<std::string> GetPartialCompareToListFromMap() {
     auto it = kComparisonMap.find(scenario_id_);
     if (it == kComparisonMap.end()) {
       return {};
@@ -456,6 +467,7 @@ class StatsScreen : public UiScreen {
   bool is_valid_ = false;
 
   std::optional<ScenarioItem> scenario_;
+  std::string reference_scenario_id_;
 
   std::optional<QuickSettingsType> show_settings_;
   std::string show_settings_release_key_;

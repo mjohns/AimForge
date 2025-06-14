@@ -129,21 +129,12 @@ class CenteringScenario : public BaseScenario {
   }
 
   glm::vec2 GetNextPositionNoIncrement() {
-    if (wall_points_.size() == 1) {
-      // Point will alternate between the wall point and a point from the target placer.
-      bool is_wall_point = current_index_ % 2 == 0;
-      if (is_wall_point) {
-        return wall_points_[0];
-      } else {
-        return wall_target_placer_->GetNextPosition();
-      }
-    }
     if (wall_points_.size() > 1) {
       int i = current_index_ % wall_points_.size();
       return wall_points_[i];
     }
 
-    return wall_target_placer_->GetNextPosition();
+    return wall_target_placer_->GetNextPosition(current_index_);
   }
 
   glm::vec2 current_start_;

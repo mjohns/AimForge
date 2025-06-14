@@ -943,15 +943,38 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::IdGuard cid("CenteringEditor");
     CenteringScenarioDef& c = *def_.mutable_centering_def();
 
-    bool use_angle = c.has_angle();
+    const char* kPoints = "Points";
+    const char* kAngle = "Angle";
+    const char* kTargetPlacement = "Point regions";
+
+    std::string type = kPoints;
+    if (c.has_angle()) {
+      type = kAngle;
+    } else if (c.has_target_placement_strategy()) {
+      type = kTargetPlacement;
+    }
+
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Use angle");
+    ImGui::Text("Type");
     ImGui::SameLine();
-    ImGui::Checkbox("##AngleCheckbox", &use_angle);
+    ImGui::SimpleDropdown("##TypeDrop", &type, {kPoints, kAngle, kTargetPlacement}, char_x_ * 13);
+
     ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Specify just the angle of movement and how far to travel. Typically used with Barrel "
-        "rooms.");
+
+    bool use_angle = type == kAngle;
+    bool use_target_placement = type == kTargetPlacement;
+    bool use_points = !use_angle && !use_target_placement;
+
+    if (!use_angle) {
+      c.clear_angle();
+      c.clear_angle_length();
+    }
+    if (!use_target_placement) {
+      c.clear_target_placement_strategy();
+    }
+    if (!use_points) {
+      c.clear_wall_points();
+    }
 
     if (use_angle) {
       ImGui::Indent();
@@ -960,17 +983,14 @@ class ScenarioEditorScreen : public UiScreen {
                                     .set_step(1, 5)
                                     .set_width(char_x_ * 12),
                                 PROTO_JITTERED_FIELD(CenteringScenarioDef, &c, angle));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Specify just the angle of movement and how far to travel. Typically used with Barrel "
+          "rooms.");
       DrawRegionLengthEditor("Length", /*default_to_x=*/true, c.mutable_angle_length());
       ImGui::Unindent();
-      c.clear_target_placement_strategy();
-      c.clear_wall_points();
-    } else {
-      c.clear_angle();
-      c.clear_angle_length();
-      if (c.wall_points_size() > 2 || c.has_target_placement_strategy()) {
-        ImGui::Text("Unsupported editable features");
-        return;
-      }
+    }
+    if (use_points) {
       // Ensure two wall points.
       while (c.wall_points_size() < 2) {
         c.add_wall_points();
@@ -987,24 +1007,56 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Indent();
       DrawRegionVec2Editor("Point2", c.mutable_wall_points(1));
       ImGui::Unindent();
+
+      int remove_at_i = -1;
+      for (int i = 2; i < c.wall_points_size(); ++i) {
+        ImGui::IdGuard lid("ExtraPoint", i);
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextFmt("Point {}", i + 1);
+        ImGui::SameLine();
+        if (ImGui::Button(kIconCancel)) {
+          remove_at_i = i;
+        }
+        ImGui::Indent();
+        DrawRegionVec2Editor("##PointEditor", c.mutable_wall_points(i));
+        ImGui::Unindent();
+      }
+
+      ImGui::Spacing();
+      if (ImGui::Button("Add point")) {
+        c.add_wall_points();
+      }
+
+      if (remove_at_i > 0) {
+        c.mutable_wall_points()->erase(c.mutable_wall_points()->begin() + remove_at_i);
+      }
     }
 
-    Line();
+    if (use_target_placement) {
+      DrawTargetPlacementStrategyEditor(
+          "WaypointsEditor", c.mutable_target_placement_strategy(), /*support_depth=*/false);
+    }
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Orient pill");
-    ImGui::SameLine();
-    bool orient_pill = c.orient_pill();
-    ImGui::Checkbox("##OrientPillCheck", &orient_pill);
-    if (orient_pill) {
-      c.set_orient_pill(true);
-    } else {
+    if (use_target_placement) {
       c.clear_orient_pill();
+    } else {
+      Line();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Orient pill");
+      ImGui::SameLine();
+      bool orient_pill = c.orient_pill();
+      ImGui::Checkbox("##OrientPillCheck", &orient_pill);
+      if (orient_pill) {
+        c.set_orient_pill(true);
+      } else {
+        c.clear_orient_pill();
+      }
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Orient the pill based on the start and end position. For a vertical centering "
+          "scenario this would turn the pill horizontal.");
     }
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Orient the pill based on the start and end position. For a vertical centering "
-        "scenario this would turn the pill horizontal.");
   }
 
   void DrawStaticEditor() {
@@ -1013,7 +1065,9 @@ class ScenarioEditorScreen : public UiScreen {
         "Placement", def_.mutable_static_def()->mutable_target_placement_strategy());
   }
 
-  void DrawTargetPlacementStrategyEditor(const std::string& id, TargetPlacementStrategy* s) {
+  void DrawTargetPlacementStrategyEditor(const std::string& id,
+                                         TargetPlacementStrategy* s,
+                                         bool support_depth = true) {
     auto strat = s->DebugString();
     ImGui::IdGuard cid(id);
     if (s->regions_size() == 0) {
@@ -1026,7 +1080,7 @@ class ScenarioEditorScreen : public UiScreen {
                     "Region",
                     s->mutable_region_order(),
                     s->mutable_regions(),
-                    std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this));
+                    std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this, support_depth));
     ImGui::Unindent();
 
     ImGui::Spacing();
@@ -1073,7 +1127,7 @@ class ScenarioEditorScreen : public UiScreen {
         "New target will be placed at a fixed distance from the last target that was added.");
   }
 
-  void DrawTargetRegion(TargetRegion* region) {
+  void DrawTargetRegion(bool support_depth, TargetRegion* region) {
     if (region->type_case() == TargetRegion::TYPE_NOT_SET) {
       region->mutable_rectangle();
     }
@@ -1155,19 +1209,23 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Depth");
-    ImGui::SameLine();
-    float depth = region->depth();
-    float depth_jitter = region->depth_jitter();
-    JitteredValueInput("DepthInput", &depth, &depth_jitter, 1, 5, "%.0f");
-    region->set_depth(depth);
-    region->set_depth_jitter(depth_jitter);
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "The distance away from the wall towards the camera. The greater the value, the further "
-        "it "
-        "is from the wall.");
+    if (support_depth) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Depth");
+      ImGui::SameLine();
+      float depth = region->depth();
+      float depth_jitter = region->depth_jitter();
+      JitteredValueInput("DepthInput", &depth, &depth_jitter, 1, 5, "%.0f");
+      region->set_depth(depth);
+      region->set_depth_jitter(depth_jitter);
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "The distance away from the wall towards the camera. The greater the value, the further "
+          "it is from the wall.");
+    } else {
+      region->clear_depth();
+      region->clear_depth_jitter();
+    }
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Offset");
