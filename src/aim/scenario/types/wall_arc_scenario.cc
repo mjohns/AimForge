@@ -120,8 +120,7 @@ class WallArcScenario : public BaseScenario {
 
   // Integrate the distance of the spline so we can estimate speed.
   float GetSplineDistance(float scale_y) {
-    //  A thousand steps.
-    float step_size = 0.001;
+    float step_size = 0.0005;
     float t = 0;
     float total_distance = 0;
     while (true) {
