@@ -271,7 +271,7 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     if (original.has_wall_arc_def()) {
       if (mult > 0) {
         // Faster speed means shorter duration. Multiplier 2 should be duration 1/2.
-        result.mutable_wall_arc_def()->set_duration(original.wall_arc_def().duration() / mult);
+        //result.mutable_wall_arc_def()->set_duration(original.wall_arc_def().duration() / mult);
       }
     }
   }

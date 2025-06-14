@@ -575,22 +575,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::IdGuard cid("WallArcEditor");
     WallArcScenarioDef& d = *def_.mutable_wall_arc_def();
 
-    ImGui::InputFloat(ImGui::InputFloatParams("Duration")
-                          .set_label("Duration seconds")
+    ImGui::InputFloat(ImGui::InputFloatParams("ControlHeight")
+                          .set_label("Control height")
                           .set_step(0.1, 2)
-                          .set_min(0.2)
                           .set_precision(1)
-                          .set_default(1)
+                          .set_default(2)
+                          .set_min(0.1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(WallArcScenarioDef, &d, duration));
-
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams("ControlHeight")
-                                  .set_label("Control height")
-                                  .set_step(0.1, 2)
-                                  .set_precision(1)
-                                  .set_default(1)
-                                  .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(WallArcScenarioDef, &d, control_height));
+                      PROTO_FLOAT_FIELD(WallArcScenarioDef, &d, control_height));
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). "
@@ -607,6 +599,23 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Height");
     ImGui::SameLine();
     DrawRegionLengthEditor("Height", /*default_to_x=*/false, d.mutable_height());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height range");
+    ImGui::SameLine();
+    bool use_range = d.has_height_jitter();
+    ImGui::Checkbox("##UseRange", &use_range);
+    if (use_range) {
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Height range", /*default_to_x=*/false, d.mutable_height_jitter());
+    } else {
+      d.clear_height_jitter();
+    }
+
+    ImGui::InputBool(ImGui::InputBoolParams("Reflect").set_label("Reflect"),
+                     PROTO_BOOL_FIELD(WallArcScenarioDef, &d, reflect));
+    ImGui::SameLine();
+    ImGui::HelpMarker("Turn the arc upside down.");
 
     ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
                      PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));

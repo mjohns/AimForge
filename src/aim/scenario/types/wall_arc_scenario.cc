@@ -1,14 +1,7 @@
-#include <SDL3/SDL.h>
-#include <imgui.h>
-
-#include <glm/gtc/constants.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/trigonometric.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 #include <memory>
 #include <random>
 
+#include "SDL3/SDL.h"
 #include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
@@ -20,6 +13,12 @@
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
+#include "glm/gtc/constants.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/trigonometric.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "imgui.h"
 
 namespace aim {
 namespace {
@@ -32,25 +31,18 @@ class WallArcScenario : public BaseScenario {
     width_ = wall_.GetRegionLength(arc.width());
     height_ = wall_.GetRegionLength(arc.height());
 
-    if (arc.control_height() != 0) {
-      control_.y = arc.control_height();
-    }
-
-    if (arc.has_duration()) {
-      arc_duration_seconds_ = arc.duration();
-    }
+    control_.y = FirstGreaterThanZero(arc.control_height(), 2.0f);
 
     spline_scale_x_ = width_ / abs(start_.x - end_.x);
-    spline_scale_y_ = height_ / abs(GetSplinePoint(0.5).y);
 
     wall_start_.x = -0.5 * width_;
 
     float target_radius = GetNextTargetProfile().target_radius();
     float start_height_mult = arc.start_on_ground() ? (wall_.height - target_radius) : height_;
-    if (control_.y > 0) {
-      wall_start_.y = -0.5 * start_height_mult;
-    } else {
+    if (arc.reflect()) {
       wall_start_.y = 0.5 * start_height_mult;
+    } else {
+      wall_start_.y = -0.5 * start_height_mult;
     }
 
     // Look at start position
@@ -65,6 +57,7 @@ class WallArcScenario : public BaseScenario {
 
   void FillInNewTarget(Target* target) override {
     target->wall_position = wall_start_;
+    StartNewTimeAcross(target->speed);
   }
 
   void UpdateTargetPositions() override {
@@ -80,45 +73,86 @@ class WallArcScenario : public BaseScenario {
     }
 
     float now_seconds = timer_.GetElapsedSeconds();
-    float times_across = now_seconds / arc_duration_seconds_;
-    int full_times_across = (int)times_across;
+    float delta_seconds = now_seconds - last_update_time_;
+    last_update_time_ = now_seconds;
 
-    if (last_times_across_ != full_times_across) {
-      last_times_across_ = full_times_across;
-      control_.y = app_.rand().GetJittered(def_.wall_arc_def().control_height(),
-                                           def_.wall_arc_def().control_height_jitter());
+    float scaled_t_step = delta_seconds / current_time_to_travel_spline_;
+
+    float next_t = current_t_ + scaled_t_step;
+
+    bool should_turn = false;
+    if (next_t > 1) {
+      should_turn = true;
+      next_t = 1;
+    }
+    current_t_ = next_t;
+
+    bool going_right = times_across_ % 2 == 0;
+    if (!going_right) {
+      next_t = 1 - next_t;
     }
 
-    float partial_time_across = times_across - full_times_across;
-    if (full_times_across % 2 != 0) {
-      partial_time_across = 1 - partial_time_across;
-    }
-
-    auto point = wall_start_ + GetWallScaledPoint(partial_time_across);
+    auto point = wall_start_ + GetWallScaledPoint(next_t, current_scale_y_);
     target->wall_position = point;
     target->position = WallPositionToWorldPosition(point, target->radius, def_.room());
+
+    if (should_turn) {
+      StartNewTimeAcross(target->speed);
+    }
   }
 
  private:
-  // Start is always at 0,0.
-  glm::vec2 GetWallScaledPoint(float t) {
-    glm::vec2 spline_point = GetSplinePoint(t) - start_;
-    float x = spline_point.x * spline_scale_x_;
-    float y = spline_point.y * spline_scale_y_;
-    return glm::vec2(x, y);
+  void StartNewTimeAcross(float speed) {
+    float height = app_.rand().GetJittered(
+        height_, wall_.GetRegionLength(def_.wall_arc_def().height_jitter()));
+    times_across_++;
+
+    current_t_ = 0;
+    current_scale_y_ = height / abs(GetSplinePoint(0.5).y);
+    current_time_to_travel_spline_ = GetTimeToTravelSpline(current_scale_y_, speed);
+    last_update_time_ = timer_.GetElapsedSeconds();
   }
 
-  glm::vec2 GetSplinePointWithReflection(float t) {
-    bool is_reflected = t > 0.5;
-    t *= 2;
+  // The time it would take to cross the spline at the given speed.
+  float GetTimeToTravelSpline(float scale_y, float speed) {
+    return GetSplineDistance(scale_y) / speed;
+  }
 
-    if (!is_reflected) {
-      return GetSplinePoint(t);
+  // Integrate the distance of the spline so we can estimate speed.
+  float GetSplineDistance(float scale_y) {
+    //  A thousand steps.
+    float step_size = 0.001;
+    float t = 0;
+    float total_distance = 0;
+    while (true) {
+      glm::vec2 start = GetWallScaledPoint(t, scale_y);
+
+      t += step_size;
+      bool done = false;
+      if (t >= 1.0f) {
+        t = 1.0;
+        done = true;
+      }
+
+      glm::vec2 end = GetWallScaledPoint(t, scale_y);
+
+      total_distance += glm::length(end - start);
+      if (done) {
+        break;
+      }
     }
-    t = 2 - t;
-    auto p = GetSplinePoint(t);
-    float x_offset = end_.x - p.x;
-    return glm::vec2(end_.x + x_offset, p.y);
+    return total_distance;
+  }
+
+  // Start is always at 0,0.
+  glm::vec2 GetWallScaledPoint(float t, float scale_y) {
+    glm::vec2 spline_point = GetSplinePoint(t) - start_;
+    float x = spline_point.x * spline_scale_x_;
+    float y = spline_point.y * scale_y;
+    if (def_.wall_arc_def().reflect()) {
+      y *= -1;
+    }
+    return glm::vec2(x, y);
   }
 
   glm::vec2 GetSplinePoint(float t) {
@@ -131,6 +165,12 @@ class WallArcScenario : public BaseScenario {
 
   float arc_duration_seconds_ = 4;
 
+  int times_across_ = 0;
+  float current_t_ = 0;
+  float current_scale_y_ = 0;
+  float current_time_to_travel_spline_ = 0;
+  float last_update_time_ = 0;
+
   glm::vec2 wall_start_;
 
   // https://www.desmos.com/calculator/scz7zhonfw
@@ -139,7 +179,6 @@ class WallArcScenario : public BaseScenario {
   glm::vec2 end_{2, 0};
 
   float spline_scale_x_;
-  float spline_scale_y_;
 
   int last_times_across_ = 0;
 };
