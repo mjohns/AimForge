@@ -443,7 +443,8 @@ void Scenario::HandleScenarioDone() {
       stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
       break;
     }
-    case ShotType::kClickSingle: {
+    case ShotType::kClickSingle: 
+    case ShotType::kClickMulti: {
       // Default clicking scoring
       float hit_percent = stats_.num_hits / stats_.num_shots;
       // float duration_modifier = 60.0f / def_.duration_seconds();
