@@ -1575,6 +1575,20 @@ class ScenarioEditorScreen : public UiScreen {
         def_.mutable_shot_type()->set_poke(true);
       }
     }
+    if (type == ShotType::kPoke) {
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("PokeKillTime")
+              .set_label("Poke kill time")
+              .set_step(0.01, 0.1)
+              .set_min(0.01)
+              .set_precision(2)
+              .set_default(0.05)
+              .set_is_optional()
+              .set_width(char_x_ * 10),
+          PROTO_FLOAT_FIELD(ShotType, def_.mutable_shot_type(), poke_kill_time_seconds));
+    } else {
+      def_.mutable_shot_type()->clear_poke_kill_time_seconds();
+    }
   }
 
   void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v) {

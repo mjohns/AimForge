@@ -198,9 +198,10 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
         // Has enough time elapsed to kill target?
         i64 now_micros = timer_.GetElapsedMicros();
         i64 age_micros = now_micros - current_poke_start_time_micros_;
-        i64 min_age_micros = def_.shot_type().has_poke_kill_time_seconds()
-                                 ? def_.shot_type().poke_kill_time_seconds()
-                                 : kPokeBallKillTimeSeconds * 1000000;
+        i64 min_age_micros = (def_.shot_type().has_poke_kill_time_seconds()
+                                  ? def_.shot_type().poke_kill_time_seconds()
+                                  : kPokeBallKillTimeSeconds) *
+                             1000000;
         if (age_micros >= min_age_micros) {
           stats_.num_hits++;
           stats_.num_shots++;
