@@ -87,7 +87,7 @@ class WallArcScenario : public BaseScenario {
     }
     current_t_ = next_t;
 
-    bool going_right = times_across_ % 2 == 0;
+    bool going_right = times_across_ % 2 != 0;
     if (!going_right) {
       next_t = 1 - next_t;
     }

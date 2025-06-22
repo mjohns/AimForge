@@ -79,12 +79,12 @@ class QuickSettingsScreen : public UiScreen {
 
     float center_gap = 10;
 
-    ImGui::SetCursorPosY(screen.height * 0.3);
+    ImGui::SetCursorPosY(screen.height * 0.25);
 
     ImVec2 button_sz = ImVec2((width - center_gap) / 2.0, 40);
 
     if (type_ == QuickSettingsType::DEFAULT) {
-      for (int i = 20; i <= 70; i += 10) {
+      for (int i = 10; i <= 90; i += 10) {
         std::string sens1 = std::format("{}", i);
         std::string sens2 = std::format("{}", i + 5);
         if (ImGui::Button(sens1.c_str(), button_sz)) {

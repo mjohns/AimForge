@@ -40,6 +40,8 @@ std::string ShotTypeToString(ShotType::TypeCase type) {
   switch (type) {
     case ShotType::kClickSingle:
       return "Click";
+    case ShotType::kClickMulti:
+      return "MultiClick";
     case ShotType::kPoke:
       return "Poke";
     case ShotType::kTrackingInvincible:

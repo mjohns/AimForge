@@ -399,7 +399,7 @@ class StatsScreen : public UiScreen {
     int found_max_day_ago_index = -1;
     int found_max_month_ago_index = -1;
     int found_max_index = -1;
-    float max_score = -100000;
+    float max_score = 0;
     bool found_stats = false;
     info->min_score = 1000000;
     for (int i = 0; i < all_stats.size(); ++i) {
@@ -423,7 +423,7 @@ class StatsScreen : public UiScreen {
         is_over_day_ago = *maybe_time < day_ago_micros;
       }
 
-      if (stats.score >= max_score) {
+      if (stats.score >= max_score && stats.score > 0) {
         found_max_index = i;
         if (is_over_week_ago) {
           found_max_week_ago_index = i;
