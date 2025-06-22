@@ -235,6 +235,11 @@ glm::vec3 WallPositionToWorldPosition(const glm::vec2& wall_position,
 }
 
 float Target::GetHealthPercent() const {
+  if (health_clicks >= 0) {
+    float remaining_clicks = health_clicks - click_count;
+    return remaining_clicks / (float)health_clicks;
+  }
+
   if (health_seconds <= 0) {
     return 1;
   }

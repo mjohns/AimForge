@@ -46,6 +46,7 @@ const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kTrackingInvincible, "Tracking"},
     {ShotType::kTrackingKill, "Tracking kill"},
     {ShotType::kPoke, "Poke"},
+    {ShotType::kClickMulti, "Multi click"},
 };
 
 const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
@@ -1565,6 +1566,9 @@ class ScenarioEditorScreen : public UiScreen {
       if (type == ShotType::kClickSingle) {
         def_.mutable_shot_type()->set_click_single(true);
       }
+      if (type == ShotType::kClickMulti) {
+        def_.mutable_shot_type()->set_click_multi(true);
+      }
       if (type == ShotType::kTrackingInvincible) {
         def_.mutable_shot_type()->set_tracking_invincible(true);
       }
@@ -1823,6 +1827,8 @@ class ScenarioEditorScreen : public UiScreen {
       TargetProfile p = t->profiles(0);
       p.clear_health_regen_rate();
       p.clear_health_seconds();
+      p.clear_health_clicks();
+      p.clear_health_clicks_regen();
 
       t->Clear();
       *t->add_profiles() = p;
@@ -2026,7 +2032,32 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::HelpMarker(
           "The rate health is regenerated if you switch off target before killing. 1 means regen "
           "at same rate as health is taken away for hits.");
+    } else {
+      health_seconds = 0;
+    }
+    if (health_seconds > 0) {
+      profile->set_health_seconds(health_seconds);
+      profile->set_health_seconds_jitter(health_seconds_jitter);
+    } else {
+      profile->clear_health_seconds();
+      profile->clear_health_seconds_jitter();
+    }
 
+    if (def_.shot_type().type_case() == ShotType::kClickMulti) {
+      ImGui::InputInt(ImGui::InputIntParams("ClickCount")
+                          .set_label("Health clicks")
+                          .set_step(1, 2)
+                          .set_min(2)
+                          .set_default(2)
+                          .set_width(char_x_ * 10),
+                      PROTO_INT_FIELD(TargetProfile, profile, health_clicks));
+    } else {
+      profile->clear_health_clicks();
+      profile->clear_health_clicks_regen();
+    }
+
+    if (def_.shot_type().type_case() == ShotType::kClickMulti ||
+        def_.shot_type().type_case() == ShotType::kTrackingKill) {
       ImGui::InputFloat(ImGui::InputFloatParams("TargetRadiusAtill")
                             .set_label("Target radius at kill")
                             .set_step(0.1, 0.5)
@@ -2039,18 +2070,9 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       ImGui::HelpMarker(
           "The radius of the target will change to the specified value incrementally based on "
-          "how "
-          "much health remains");
+          "how much health remains");
     } else {
-      health_seconds = 0;
       profile->clear_target_radius_at_kill();
-    }
-    if (health_seconds > 0) {
-      profile->set_health_seconds(health_seconds);
-      profile->set_health_seconds_jitter(health_seconds_jitter);
-    } else {
-      profile->clear_health_seconds();
-      profile->clear_health_seconds_jitter();
     }
 
     ImGui::InputFloat(ImGui::InputFloatParams("HitRadiusMultiplier")

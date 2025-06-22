@@ -732,6 +732,7 @@ class ShotType final : public ::google::protobuf::Message
     kTrackingKill = 2,
     kTrackingInvincible = 3,
     kClickSingle = 4,
+    kClickMulti = 5,
     TYPE_NOT_SET = 0,
   };
   static inline const ShotType* internal_default_instance() {
@@ -831,6 +832,7 @@ class ShotType final : public ::google::protobuf::Message
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
     kClickSingleFieldNumber = 4,
+    kClickMultiFieldNumber = 5,
   };
   // float poke_kill_time_seconds = 10;
   bool has_poke_kill_time_seconds() const;
@@ -898,6 +900,17 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_click_single(bool value);
 
   public:
+  // bool click_multi = 5;
+  bool has_click_multi() const;
+  void clear_click_multi() ;
+  bool click_multi() const;
+  void set_click_multi(bool value);
+
+  private:
+  bool _internal_click_multi() const;
+  void _internal_set_click_multi(bool value);
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ShotType)
@@ -907,11 +920,12 @@ class ShotType final : public ::google::protobuf::Message
   void set_has_tracking_kill();
   void set_has_tracking_invincible();
   void set_has_click_single();
+  void set_has_click_multi();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 6, 0,
+      1, 7, 0,
       0, 2>
       _table_;
 
@@ -940,6 +954,7 @@ class ShotType final : public ::google::protobuf::Message
       bool tracking_kill_;
       bool tracking_invincible_;
       bool click_single_;
+      bool click_multi_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -5631,6 +5646,8 @@ class TargetProfile final : public ::google::protobuf::Message
     kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
     kTargetRadiusGrowthSizeFieldNumber = 13,
     kHealthRegenRateFieldNumber = 14,
+    kHealthClicksFieldNumber = 15,
+    kHealthClicksRegenFieldNumber = 16,
     kPillFieldNumber = 10,
   };
   // string description = 11;
@@ -5782,6 +5799,28 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_health_regen_rate(float value);
 
   public:
+  // int32 health_clicks = 15;
+  bool has_health_clicks() const;
+  void clear_health_clicks() ;
+  ::int32_t health_clicks() const;
+  void set_health_clicks(::int32_t value);
+
+  private:
+  ::int32_t _internal_health_clicks() const;
+  void _internal_set_health_clicks(::int32_t value);
+
+  public:
+  // int32 health_clicks_regen = 16;
+  bool has_health_clicks_regen() const;
+  void clear_health_clicks_regen() ;
+  ::int32_t health_clicks_regen() const;
+  void set_health_clicks_regen(::int32_t value);
+
+  private:
+  ::int32_t _internal_health_clicks_regen() const;
+  void _internal_set_health_clicks_regen(::int32_t value);
+
+  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -5811,8 +5850,8 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 14, 1,
-      45, 2>
+      4, 16, 1,
+      53, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -5844,6 +5883,8 @@ class TargetProfile final : public ::google::protobuf::Message
     float target_radius_growth_time_seconds_;
     float target_radius_growth_size_;
     float health_regen_rate_;
+    ::int32_t health_clicks_;
+    ::int32_t health_clicks_regen_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -11449,6 +11490,39 @@ inline bool ShotType::_internal_click_single() const {
   return false;
 }
 
+// bool click_multi = 5;
+inline bool ShotType::has_click_multi() const {
+  return type_case() == kClickMulti;
+}
+inline void ShotType::set_has_click_multi() {
+  _impl_._oneof_case_[0] = kClickMulti;
+}
+inline void ShotType::clear_click_multi() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kClickMulti) {
+    _impl_.type_.click_multi_ = false;
+    clear_has_type();
+  }
+}
+inline bool ShotType::click_multi() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.click_multi)
+  return _internal_click_multi();
+}
+inline void ShotType::set_click_multi(bool value) {
+  if (type_case() != kClickMulti) {
+    clear_type();
+    set_has_click_multi();
+  }
+  _impl_.type_.click_multi_ = value;
+  // @@protoc_insertion_point(field_set:aim.ShotType.click_multi)
+}
+inline bool ShotType::_internal_click_multi() const {
+  if (type_case() == kClickMulti) {
+    return _impl_.type_.click_multi_;
+  }
+  return false;
+}
+
 // float poke_kill_time_seconds = 10;
 inline bool ShotType::has_poke_kill_time_seconds() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
@@ -16817,6 +16891,62 @@ inline float TargetProfile::_internal_health_regen_rate() const {
 inline void TargetProfile::_internal_set_health_regen_rate(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_regen_rate_ = value;
+}
+
+// int32 health_clicks = 15;
+inline bool TargetProfile::has_health_clicks() const {
+  bool value = (_impl_._has_bits_[0] & 0x00002000u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_health_clicks() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_clicks_ = 0;
+  _impl_._has_bits_[0] &= ~0x00002000u;
+}
+inline ::int32_t TargetProfile::health_clicks() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_clicks)
+  return _internal_health_clicks();
+}
+inline void TargetProfile::set_health_clicks(::int32_t value) {
+  _internal_set_health_clicks(value);
+  _impl_._has_bits_[0] |= 0x00002000u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_clicks)
+}
+inline ::int32_t TargetProfile::_internal_health_clicks() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_clicks_;
+}
+inline void TargetProfile::_internal_set_health_clicks(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_clicks_ = value;
+}
+
+// int32 health_clicks_regen = 16;
+inline bool TargetProfile::has_health_clicks_regen() const {
+  bool value = (_impl_._has_bits_[0] & 0x00004000u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_health_clicks_regen() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_clicks_regen_ = 0;
+  _impl_._has_bits_[0] &= ~0x00004000u;
+}
+inline ::int32_t TargetProfile::health_clicks_regen() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_clicks_regen)
+  return _internal_health_clicks_regen();
+}
+inline void TargetProfile::set_health_clicks_regen(::int32_t value) {
+  _internal_set_health_clicks_regen(value);
+  _impl_._has_bits_[0] |= 0x00004000u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_clicks_regen)
+}
+inline ::int32_t TargetProfile::_internal_health_clicks_regen() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_clicks_regen_;
+}
+inline void TargetProfile::_internal_set_health_clicks_regen(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_clicks_regen_ = value;
 }
 
 // .aim.PillTargetDef pill = 10;

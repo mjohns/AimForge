@@ -35,6 +35,7 @@ struct CreateScenarioParams {
 struct ScenarioStats {
   double num_hits = 0;
   double num_shots = 0;
+  double num_kills = 0;
   Stopwatch hit_stopwatch;
   Stopwatch shot_stopwatch;
 };

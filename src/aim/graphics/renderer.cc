@@ -681,7 +681,7 @@ class RendererImpl : public Renderer {
               view_projection, c.position + c.up * (c.height * -0.5f), target.radius, color, ctx);
         } else {
           DrawSphere(view_projection, target.position, target.radius, color, ctx);
-          if (health_bar_settings.show() && target.health_seconds > 0) {
+          if (health_bar_settings.show() && target.HasHealth()) {
             bool is_damaged = target.GetHealthPercent() < 1;
             if (!health_bar_settings.only_damaged() || is_damaged) {
               float width = FirstGreaterThanZero(health_bar_settings.width(), 6);

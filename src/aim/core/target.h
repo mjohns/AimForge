@@ -59,6 +59,14 @@ struct Target {
   float health_regen_rate = 0;
   std::optional<RadiusAtKill> radius_at_kill{};
 
+  int health_clicks = -1;
+  int health_clicks_regen = 0;
+  int click_count = 0;
+
+  bool HasHealth() const {
+    return health_seconds > 0 || health_clicks > 0;
+  }
+
   std::optional<TargetGrowthInfo> growth_info{};
 
   void SetWallPosition(const glm::vec3& p, const Room& room);

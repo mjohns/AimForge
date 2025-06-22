@@ -124,6 +124,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
           float health_percent = target.GetHealthPercent();
           if (health_percent <= 0) {
             stats_.num_hits++;
+            stats_.num_kills++;
             PlayKillSound();
             AddNewTargetDuringRun(target.id);
           }
@@ -205,6 +206,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
         if (age_micros >= min_age_micros) {
           stats_.num_hits++;
           stats_.num_shots++;
+          stats_.num_kills++;
           PlayKillSound();
           data->force_render = true;
 
@@ -230,16 +232,37 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       PlayShootSound();
       if (maybe_hit_target_id.has_value()) {
-        stats_.num_hits++;
-        PlayKillSound();
-        data->force_render = true;
-
-        auto hit_target_id = *maybe_hit_target_id;
-        AddNewTargetDuringRun(hit_target_id);
+        if (GetShotType() == ShotType::kClickMulti) {
+          Target* hit_target = target_manager_.GetMutableTarget(*maybe_hit_target_id);
+          stats_.num_hits++;
+          hit_target->click_count++;
+          if (hit_target->radius_at_kill.has_value()) {
+            float radius_diff =
+                hit_target->radius_at_kill->start_radius - hit_target->radius_at_kill->end_radius;
+            float health_percent = hit_target->GetHealthPercent();
+            hit_target->radius =
+                hit_target->radius_at_kill->end_radius + health_percent * radius_diff;
+          }
+          if (hit_target->click_count >= hit_target->health_clicks) {
+            stats_.num_kills++;
+            PlayKillSound();
+            data->force_render = true;
+            auto hit_target_id = *maybe_hit_target_id;
+            AddNewTargetDuringRun(hit_target_id);
+          }
+        } else {
+          stats_.num_hits++;
+          stats_.num_kills++;
+          PlayKillSound();
+          data->force_render = true;
+          auto hit_target_id = *maybe_hit_target_id;
+          AddNewTargetDuringRun(hit_target_id);
+        }
 
       } else {
         // Missed shot
         if (def_.target_def().remove_closest_on_miss()) {
+          // TODO(mjohns): Count partial kill for multi click?
           std::optional<u16> target_id_to_remove =
               target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
           if (target_id_to_remove.has_value()) {

@@ -137,8 +137,10 @@ message ShotType {
     bool tracking_kill = 2;
     // A single target will be tracked and the total time on target will be the score.
     bool tracking_invincible = 3;
-    // Target take a single click to kill.
+    // Target takes a single click to kill.
     bool click_single = 4;
+    // Targets take multiple clicks to kill where the number of clicks is specified on the target.
+    bool click_multi = 5;
   }
   // If unset defaults to 0.05 (50 millis)
   float poke_kill_time_seconds = 10;
@@ -391,6 +393,11 @@ message TargetProfile {
   // The rate for health to regen if a target with health is not killed. 1 means to regen at the
   // same rate as health is taken away. So 2 means regen twice as fast as it is killed.
   float health_regen_rate = 14;
+
+  // For multi click, the number of clicks to kill the target.
+  int32 health_clicks = 15;
+  // For a miss, how many clicks health is restored.
+  int32 health_clicks_regen = 16;
 
   // Defaults to spehere if no more specific type is specified.
   oneof type {
