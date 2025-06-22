@@ -1589,6 +1589,15 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       def_.mutable_shot_type()->clear_poke_kill_time_seconds();
     }
+
+    if (type == ShotType::kTrackingKill) {
+      ImGui::InputBool(ImGui::InputBoolParams("NoPartialKills")
+                           .set_label("No partial kills")
+                           .set_false_is_unset(),
+                       PROTO_BOOL_FIELD(ShotType, def_.mutable_shot_type(), no_partial_kills));
+    } else {
+      def_.mutable_shot_type()->clear_no_partial_kills();
+    }
   }
 
   void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v) {

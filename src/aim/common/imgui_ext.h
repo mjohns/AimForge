@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "aim/common/field.h"
-#include "aim/common/util.h"
 #include "aim/common/mat_icons.h"
+#include "aim/common/util.h"
 #include "aim/proto/common.pb.h"
 #include "imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
@@ -507,8 +507,14 @@ struct InputBoolParams {
     return *this;
   }
 
+  InputBoolParams& set_false_is_unset() {
+    false_is_unset = true;
+    return *this;
+  }
+
   std::string id;
   std::string label;
+  bool false_is_unset = false;
 };
 
 static void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
@@ -521,7 +527,15 @@ static void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
 
   bool value = field.get();
   ImGui::Checkbox("##Checkbox", &value);
-  field.set(value);
+  if (params.false_is_unset) {
+    if (value) {
+      field.set(value);
+    } else {
+      field.clear();
+    }
+  } else {
+    field.set(value);
+  }
 }
 
 struct InputIntParams {
