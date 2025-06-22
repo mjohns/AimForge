@@ -1,0 +1,119 @@
+#include <memory>
+#include <random>
+
+#include "SDL3/SDL.h"
+#include "aim/common/geometry.h"
+#include "aim/common/times.h"
+#include "aim/common/util.h"
+#include "aim/core/application.h"
+#include "aim/core/camera.h"
+#include "aim/proto/common.pb.h"
+#include "aim/proto/replay.pb.h"
+#include "aim/proto/settings.pb.h"
+#include "aim/scenario/base_scenario.h"
+#include "aim/scenario/scenario.h"
+#include "aim/scenario/target_placement.h"
+#include "glm/gtc/constants.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/trigonometric.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "imgui.h"
+
+namespace aim {
+namespace {
+
+class SineScenario : public BaseScenario {
+ public:
+  explicit SineScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+    d_ = params.def.sine_def();
+
+    height_ = wall_.GetRegionLength(d_.height());
+    float width = wall_.GetRegionLength(d_.width());
+
+    x_scale_ = width / glm::two_pi<float>();
+    sine_length_ = GetSineLength(height_, x_scale_);
+    t_speed_ = glm::two_pi<float>() / sine_length_;
+  }
+
+ protected:
+  ShotType::TypeCase GetDefaultShotType() override {
+    return ShotType::kTrackingInvincible;
+  }
+
+  void FillInNewTarget(Target* target) override {
+    target->wall_position = wall_start_;
+  }
+
+  void UpdateTargetPositions() override {
+    // Determine if the target needs to change direction
+    Target* target = nullptr;
+    for (Target* t : target_manager_.GetMutableVisibleTargets()) {
+      target = t;
+      break;
+    }
+
+    if (target == nullptr) {
+      return;
+    }
+
+    float now_seconds = timer_.GetElapsedSeconds();
+    float delta_seconds = now_seconds - last_update_time_;
+    last_update_time_ = now_seconds;
+
+    float next_t = current_t_ + (delta_seconds * t_speed_ * target->speed);
+    current_t_ = next_t;
+
+    float direction_mult = d_.going_left() ? -1.0 : 1.0;
+    glm::vec2 sine_point(direction_mult * x_scale_ * next_t, height_ * sin(next_t));
+
+    auto point = wall_start_ + sine_point;
+    target->wall_position = point;
+    target->position = WallPositionToWorldPosition(point, target->radius, def_.room());
+  }
+
+ private:
+  float GetSineLength(float height, float x_scale) {
+    constexpr const float kStep = glm::half_pi<float>() / 2000.0f;
+    float distance = 0;
+
+    glm::vec2 prev(0, 0);
+    float t = kStep;
+    while (true) {
+      bool done = false;
+      if (t >= glm::half_pi<float>()) {
+        done = true;
+        t = glm::half_pi<float>();
+      }
+      glm::vec2 next(x_scale * t, height * sin(t));
+      distance += glm::length(next - prev);
+      if (done) {
+        break;
+      }
+      prev = next;
+      t += kStep;
+    }
+
+    return distance * 4;
+  }
+
+  Wall wall_;
+  glm::vec2 wall_start_{0, 0};
+  float last_update_time_ = 0;
+  float current_t_ = 0;
+
+  float height_ = 20;
+  float x_scale_;
+  float sine_length_ = 0;
+  float t_speed_ = 0;
+  SineScenarioDef d_;
+};
+
+}  // namespace
+
+std::unique_ptr<Scenario> CreateSineScenario(const CreateScenarioParams& params, Application* app) {
+  return std::make_unique<SineScenario>(params, app);
+}
+
+}  // namespace aim

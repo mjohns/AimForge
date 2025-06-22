@@ -53,6 +53,7 @@ const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
     ScenarioDef::kCenteringDef,
     ScenarioDef::kWallArcDef,
     ScenarioDef::kCircleDef,
+    ScenarioDef::kSineDef,
 };
 
 const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
@@ -64,6 +65,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kWallWanderDef, "Wall Wander"},
     {ScenarioDef::kCircleDef, "Circle"},
+    {ScenarioDef::kSineDef, "Sine"},
     {ScenarioDef::kReferenceDef, "Reference"},
 };
 
@@ -418,6 +420,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kCircleDef) {
       DrawCircleEditor();
     }
+    if (scenario_type == ScenarioDef::kSineDef) {
+      DrawSineEditor();
+    }
   }
 
   void InitializeScenarioType(ScenarioDef::TypeCase scenario_type) {
@@ -619,6 +624,24 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
                      PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));
+  }
+
+  void DrawSineEditor() {
+    ImGui::IdGuard cid("SineEditor");
+    SineScenarioDef& d = *def_.mutable_sine_def();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Height", /*default_to_x=*/false, d.mutable_height());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Width", /*default_to_x=*/true, d.mutable_width());
+
+    ImGui::InputBool(ImGui::InputBoolParams("GoingRight").set_label("Going left"),
+                     PROTO_BOOL_FIELD(SineScenarioDef, &d, going_left));
   }
 
   void DrawCircleEditor() {

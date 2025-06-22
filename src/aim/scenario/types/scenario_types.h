@@ -24,5 +24,7 @@ std::unique_ptr<Scenario> CreateWallWanderScenario(const CreateScenarioParams& p
                                                    Application* app);
 std::unique_ptr<Scenario> CreateCircleScenario(const CreateScenarioParams& params,
                                                Application* app);
+std::unique_ptr<Scenario> CreateSineScenario(const CreateScenarioParams& params,
+                                               Application* app);
 
 }  // namespace aim

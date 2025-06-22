@@ -175,6 +175,7 @@ message ScenarioDef {
     WallWanderScenarioDef wall_wander_def = 36;
     ReferenceScenarioDef reference_def = 37;
     CircleScenarioDef circle_def = 38;
+    SineScenarioDef sine_def = 39;
   }
 }
 
@@ -245,6 +246,12 @@ message LinearScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 5;
 
   InOutDirection direction = 6;
+}
+
+message SineScenarioDef {
+  RegionLength height = 1;
+  RegionLength width = 2;
+  bool going_left = 3;
 }
 
 message WallStrafeProfile {
