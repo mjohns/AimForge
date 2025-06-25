@@ -343,6 +343,8 @@ class WallWanderProfile final : public ::google::protobuf::Message
     kTurnTimeJitterFieldNumber = 3,
     kTurnRateFieldNumber = 4,
     kTurnRateJitterFieldNumber = 5,
+    kNextProfileFieldNumber = 7,
+    kMinSelectionGapFieldNumber = 8,
   };
   // string description = 6;
   bool has_description() const;
@@ -416,13 +418,35 @@ class WallWanderProfile final : public ::google::protobuf::Message
   void _internal_set_turn_rate_jitter(float value);
 
   public:
+  // int32 next_profile = 7;
+  bool has_next_profile() const;
+  void clear_next_profile() ;
+  ::int32_t next_profile() const;
+  void set_next_profile(::int32_t value);
+
+  private:
+  ::int32_t _internal_next_profile() const;
+  void _internal_set_next_profile(::int32_t value);
+
+  public:
+  // int32 min_selection_gap = 8;
+  bool has_min_selection_gap() const;
+  void clear_min_selection_gap() ;
+  ::int32_t min_selection_gap() const;
+  void set_min_selection_gap(::int32_t value);
+
+  private:
+  ::int32_t _internal_min_selection_gap() const;
+  void _internal_set_min_selection_gap(::int32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallWanderProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 0,
-      41, 2>
+      3, 8, 0,
+      49, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -447,6 +471,8 @@ class WallWanderProfile final : public ::google::protobuf::Message
     float turn_time_jitter_;
     float turn_rate_;
     float turn_rate_jitter_;
+    ::int32_t next_profile_;
+    ::int32_t min_selection_gap_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2234,6 +2260,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     kPauseSecondsJitterFieldNumber = 9,
     kSpeedOverrideFieldNumber = 10,
     kAcceleartionOverrideFieldNumber = 11,
+    kNextProfileFieldNumber = 12,
+    kMinSelectionGapFieldNumber = 13,
   };
   // string description = 6;
   bool has_description() const;
@@ -2370,12 +2398,34 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_acceleartion_override(float value);
 
   public:
+  // int32 next_profile = 12;
+  bool has_next_profile() const;
+  void clear_next_profile() ;
+  ::int32_t next_profile() const;
+  void set_next_profile(::int32_t value);
+
+  private:
+  ::int32_t _internal_next_profile() const;
+  void _internal_set_next_profile(::int32_t value);
+
+  public:
+  // int32 min_selection_gap = 13;
+  bool has_min_selection_gap() const;
+  void clear_min_selection_gap() ;
+  ::int32_t min_selection_gap() const;
+  void set_min_selection_gap(::int32_t value);
+
+  private:
+  ::int32_t _internal_min_selection_gap() const;
+  void _internal_set_min_selection_gap(::int32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallStrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 11, 2,
+      4, 13, 2,
       49, 2>
       _table_;
 
@@ -2406,6 +2456,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     float pause_seconds_jitter_;
     float speed_override_;
     float acceleartion_override_;
+    ::int32_t next_profile_;
+    ::int32_t min_selection_gap_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5289,6 +5341,8 @@ class TargetRegion final : public ::google::protobuf::Message
     kWeightFieldNumber = 1,
     kDepthFieldNumber = 7,
     kDepthJitterFieldNumber = 8,
+    kNextProfileFieldNumber = 10,
+    kMinSelectionGapFieldNumber = 11,
     kRectangleFieldNumber = 4,
     kEllipseFieldNumber = 5,
     kCircleFieldNumber = 6,
@@ -5373,6 +5427,28 @@ class TargetRegion final : public ::google::protobuf::Message
   void _internal_set_depth_jitter(float value);
 
   public:
+  // int32 next_profile = 10;
+  bool has_next_profile() const;
+  void clear_next_profile() ;
+  ::int32_t next_profile() const;
+  void set_next_profile(::int32_t value);
+
+  private:
+  ::int32_t _internal_next_profile() const;
+  void _internal_set_next_profile(::int32_t value);
+
+  public:
+  // int32 min_selection_gap = 11;
+  bool has_min_selection_gap() const;
+  void clear_min_selection_gap() ;
+  ::int32_t min_selection_gap() const;
+  void set_min_selection_gap(::int32_t value);
+
+  private:
+  ::int32_t _internal_min_selection_gap() const;
+  void _internal_set_min_selection_gap(::int32_t value);
+
+  public:
   // .aim.RectangleTargetRegion rectangle = 4;
   bool has_rectangle() const;
   private:
@@ -5442,7 +5518,7 @@ class TargetRegion final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 9, 5,
+      4, 11, 5,
       44, 2>
       _table_;
 
@@ -5468,6 +5544,8 @@ class TargetRegion final : public ::google::protobuf::Message
     float weight_;
     float depth_;
     float depth_jitter_;
+    ::int32_t next_profile_;
+    ::int32_t min_selection_gap_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -5648,6 +5726,8 @@ class TargetProfile final : public ::google::protobuf::Message
     kHealthRegenRateFieldNumber = 14,
     kHealthClicksFieldNumber = 15,
     kHealthClicksRegenFieldNumber = 16,
+    kNextProfileFieldNumber = 17,
+    kMinSelectionGapFieldNumber = 18,
     kPillFieldNumber = 10,
   };
   // string description = 11;
@@ -5821,6 +5901,28 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_health_clicks_regen(::int32_t value);
 
   public:
+  // int32 next_profile = 17;
+  bool has_next_profile() const;
+  void clear_next_profile() ;
+  ::int32_t next_profile() const;
+  void set_next_profile(::int32_t value);
+
+  private:
+  ::int32_t _internal_next_profile() const;
+  void _internal_set_next_profile(::int32_t value);
+
+  public:
+  // int32 min_selection_gap = 18;
+  bool has_min_selection_gap() const;
+  void clear_min_selection_gap() ;
+  ::int32_t min_selection_gap() const;
+  void set_min_selection_gap(::int32_t value);
+
+  private:
+  ::int32_t _internal_min_selection_gap() const;
+  void _internal_set_min_selection_gap(::int32_t value);
+
+  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -5850,7 +5952,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 16, 1,
+      5, 18, 1,
       53, 2>
       _table_;
 
@@ -5885,6 +5987,8 @@ class TargetProfile final : public ::google::protobuf::Message
     float health_regen_rate_;
     ::int32_t health_clicks_;
     ::int32_t health_clicks_regen_;
+    ::int32_t next_profile_;
+    ::int32_t min_selection_gap_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -9711,6 +9815,62 @@ inline float TargetRegion::_internal_weight() const {
 inline void TargetRegion::_internal_set_weight(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.weight_ = value;
+}
+
+// int32 next_profile = 10;
+inline bool TargetRegion::has_next_profile() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void TargetRegion::clear_next_profile() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline ::int32_t TargetRegion::next_profile() const {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.next_profile)
+  return _internal_next_profile();
+}
+inline void TargetRegion::set_next_profile(::int32_t value) {
+  _internal_set_next_profile(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.TargetRegion.next_profile)
+}
+inline ::int32_t TargetRegion::_internal_next_profile() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.next_profile_;
+}
+inline void TargetRegion::_internal_set_next_profile(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = value;
+}
+
+// int32 min_selection_gap = 11;
+inline bool TargetRegion::has_min_selection_gap() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void TargetRegion::clear_min_selection_gap() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline ::int32_t TargetRegion::min_selection_gap() const {
+  // @@protoc_insertion_point(field_get:aim.TargetRegion.min_selection_gap)
+  return _internal_min_selection_gap();
+}
+inline void TargetRegion::set_min_selection_gap(::int32_t value) {
+  _internal_set_min_selection_gap(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.TargetRegion.min_selection_gap)
+}
+inline ::int32_t TargetRegion::_internal_min_selection_gap() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.min_selection_gap_;
+}
+inline void TargetRegion::_internal_set_min_selection_gap(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = value;
 }
 
 // .aim.RegionLength x_offset = 2;
@@ -14350,6 +14510,62 @@ inline void WallStrafeProfile::_internal_set_weight(float value) {
   _impl_.weight_ = value;
 }
 
+// int32 next_profile = 12;
+inline bool WallStrafeProfile::has_next_profile() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_next_profile() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000800u;
+}
+inline ::int32_t WallStrafeProfile::next_profile() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.next_profile)
+  return _internal_next_profile();
+}
+inline void WallStrafeProfile::set_next_profile(::int32_t value) {
+  _internal_set_next_profile(value);
+  _impl_._has_bits_[0] |= 0x00000800u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.next_profile)
+}
+inline ::int32_t WallStrafeProfile::_internal_next_profile() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.next_profile_;
+}
+inline void WallStrafeProfile::_internal_set_next_profile(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = value;
+}
+
+// int32 min_selection_gap = 13;
+inline bool WallStrafeProfile::has_min_selection_gap() const {
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_min_selection_gap() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = 0;
+  _impl_._has_bits_[0] &= ~0x00001000u;
+}
+inline ::int32_t WallStrafeProfile::min_selection_gap() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.min_selection_gap)
+  return _internal_min_selection_gap();
+}
+inline void WallStrafeProfile::set_min_selection_gap(::int32_t value) {
+  _internal_set_min_selection_gap(value);
+  _impl_._has_bits_[0] |= 0x00001000u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.min_selection_gap)
+}
+inline ::int32_t WallStrafeProfile::_internal_min_selection_gap() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.min_selection_gap_;
+}
+inline void WallStrafeProfile::_internal_set_min_selection_gap(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = value;
+}
+
 // .aim.RegionLength min_distance = 2;
 inline bool WallStrafeProfile::has_min_distance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
@@ -15629,6 +15845,62 @@ inline void WallWanderProfile::_internal_set_weight(float value) {
   _impl_.weight_ = value;
 }
 
+// int32 next_profile = 7;
+inline bool WallWanderProfile::has_next_profile() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_next_profile() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline ::int32_t WallWanderProfile::next_profile() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.next_profile)
+  return _internal_next_profile();
+}
+inline void WallWanderProfile::set_next_profile(::int32_t value) {
+  _internal_set_next_profile(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.next_profile)
+}
+inline ::int32_t WallWanderProfile::_internal_next_profile() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.next_profile_;
+}
+inline void WallWanderProfile::_internal_set_next_profile(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = value;
+}
+
+// int32 min_selection_gap = 8;
+inline bool WallWanderProfile::has_min_selection_gap() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void WallWanderProfile::clear_min_selection_gap() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline ::int32_t WallWanderProfile::min_selection_gap() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderProfile.min_selection_gap)
+  return _internal_min_selection_gap();
+}
+inline void WallWanderProfile::set_min_selection_gap(::int32_t value) {
+  _internal_set_min_selection_gap(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderProfile.min_selection_gap)
+}
+inline ::int32_t WallWanderProfile::_internal_min_selection_gap() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.min_selection_gap_;
+}
+inline void WallWanderProfile::_internal_set_min_selection_gap(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = value;
+}
+
 // float turn_time = 2;
 inline bool WallWanderProfile::has_turn_time() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
@@ -16514,6 +16786,62 @@ inline float TargetProfile::_internal_weight() const {
 inline void TargetProfile::_internal_set_weight(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.weight_ = value;
+}
+
+// int32 next_profile = 17;
+inline bool TargetProfile::has_next_profile() const {
+  bool value = (_impl_._has_bits_[0] & 0x00008000u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_next_profile() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = 0;
+  _impl_._has_bits_[0] &= ~0x00008000u;
+}
+inline ::int32_t TargetProfile::next_profile() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.next_profile)
+  return _internal_next_profile();
+}
+inline void TargetProfile::set_next_profile(::int32_t value) {
+  _internal_set_next_profile(value);
+  _impl_._has_bits_[0] |= 0x00008000u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.next_profile)
+}
+inline ::int32_t TargetProfile::_internal_next_profile() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.next_profile_;
+}
+inline void TargetProfile::_internal_set_next_profile(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = value;
+}
+
+// int32 min_selection_gap = 18;
+inline bool TargetProfile::has_min_selection_gap() const {
+  bool value = (_impl_._has_bits_[0] & 0x00010000u) != 0;
+  return value;
+}
+inline void TargetProfile::clear_min_selection_gap() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = 0;
+  _impl_._has_bits_[0] &= ~0x00010000u;
+}
+inline ::int32_t TargetProfile::min_selection_gap() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.min_selection_gap)
+  return _internal_min_selection_gap();
+}
+inline void TargetProfile::set_min_selection_gap(::int32_t value) {
+  _internal_set_min_selection_gap(value);
+  _impl_._has_bits_[0] |= 0x00010000u;
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.min_selection_gap)
+}
+inline ::int32_t TargetProfile::_internal_min_selection_gap() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.min_selection_gap_;
+}
+inline void TargetProfile::_internal_set_min_selection_gap(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = value;
 }
 
 // float target_radius = 2;

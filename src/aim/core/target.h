@@ -1,6 +1,5 @@
 #pragma once
 
-#include <glm/vec3.hpp>
 #include <optional>
 #include <random>
 #include <vector>
@@ -9,7 +8,9 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
 #include "aim/core/camera.h"
+#include "aim/core/profile_selection.h"
 #include "aim/proto/scenario.pb.h"
+#include "glm/vec3.hpp"
 
 namespace aim {
 
@@ -137,6 +138,7 @@ class TargetManager {
   u16 target_id_counter_ = 0;
   std::vector<Target> targets_;
   Room room_;
+  ProfileSelectionContext selection_context_;
 };
 
 }  // namespace aim

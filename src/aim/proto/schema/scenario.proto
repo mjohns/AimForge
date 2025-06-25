@@ -67,6 +67,10 @@ message RegionVec3 {
 
 message TargetRegion {
   float weight = 1;
+  int32 next_profile = 10;
+  // 1 means that 1 other profile must be selected before this one can be selected again.
+  // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
+  int32 min_selection_gap = 11;
 
   // (0, 0) is the center of the wall.
   RegionLength x_offset = 2;
@@ -258,6 +262,11 @@ message SineScenarioDef {
 
 message WallStrafeProfile {
   float weight = 1;
+  int32 next_profile = 12;
+  // 1 means that 1 other profile must be selected before this one can be selected again.
+  // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
+  int32 min_selection_gap = 13;
+
   RegionLength min_distance = 2;
   RegionLength max_distance = 3;
 
@@ -314,6 +323,10 @@ message WallArcScenarioDef {
 
 message WallWanderProfile {
   float weight = 1;
+  int32 next_profile = 7;
+  // 1 means that 1 other profile must be selected before this one can be selected again.
+  // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
+  int32 min_selection_gap = 8;
 
   float turn_time = 2;
   float turn_time_jitter = 3;
@@ -368,6 +381,10 @@ message TargetProfile {
   // Proportional weight used to select this profile. If the weight of this profile is 2 and the
   // other is 1, then this profile will be used 2/3 of the time.
   float weight = 1;
+  int32 next_profile = 17;
+  // 1 means that 1 other profile must be selected before this one can be selected again.
+  // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
+  int32 min_selection_gap = 18;
 
   float target_radius = 2;
   float target_radius_jitter = 3;

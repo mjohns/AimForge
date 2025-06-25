@@ -138,7 +138,6 @@ class WallStrafeScenario : public BaseScenario {
   void ChangeDirectionNoTargetUpdate(const glm::vec2& current_pos) {
     is_stopping_ = false;
     WallStrafeProfile profile = GetNextProfile();
-    strafe_number_++;
 
     if (profile.pause_at_end_chance() > 0 && app_.rand().FlipCoin(profile.pause_at_end_chance())) {
       float pause_time =
@@ -217,7 +216,7 @@ class WallStrafeScenario : public BaseScenario {
   WallStrafeProfile GetNextProfile() {
     auto d = def_.wall_strafe_def();
     auto maybe_profile =
-        SelectProfile(d.profile_order(), d.profiles(), strafe_number_, app_.rand());
+        SelectProfile(d.profile_order(), d.profiles(), &selection_context_, app_.rand());
     WallStrafeProfile fallback;
     return maybe_profile.value_or(fallback);
   }
@@ -227,8 +226,6 @@ class WallStrafeScenario : public BaseScenario {
   float max_x_;
   float min_y_;
   float max_y_;
-
-  int strafe_number_ = 0;
 
   float max_velocity_;
   float acceleration_;
@@ -246,6 +243,7 @@ class WallStrafeScenario : public BaseScenario {
   float pause_for_seconds_ = 0;
 
   float paused_until_time_ = -1;
+  ProfileSelectionContext selection_context_;
 };
 
 }  // namespace

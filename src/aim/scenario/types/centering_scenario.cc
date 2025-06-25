@@ -134,7 +134,7 @@ class CenteringScenario : public BaseScenario {
       return wall_points_[i];
     }
 
-    return wall_target_placer_->GetNextPosition(current_index_);
+    return wall_target_placer_->GetNextPosition();
   }
 
   glm::vec2 current_start_;

@@ -41,7 +41,7 @@ struct TargetInfo {
   float is_negative_turn = false;
   bool is_accelerating = false;
 
-  int turn_number = 0;
+  ProfileSelectionContext selection_context;
 };
 
 class WallWanderScenario : public BaseScenario {
@@ -160,8 +160,8 @@ class WallWanderScenario : public BaseScenario {
   }
 
  private:
-  WallWanderProfile GetNextProfile(int turn_number) {
-    auto maybe_profile = SelectProfile(w_.profile_order(), w_.profiles(), turn_number, app_.rand());
+  WallWanderProfile GetNextProfile(ProfileSelectionContext* context) {
+    auto maybe_profile = SelectProfile(w_.profile_order(), w_.profiles(), context, app_.rand());
     WallWanderProfile fallback;
     fallback.set_turn_rate(40);
     fallback.set_turn_time(2);
@@ -169,8 +169,7 @@ class WallWanderScenario : public BaseScenario {
   }
 
   void UpdateTurn(TargetInfo& info, float now_seconds, bool is_bounce = false) {
-    WallWanderProfile profile = GetNextProfile(info.turn_number);
-    info.turn_number++;
+    WallWanderProfile profile = GetNextProfile(&info.selection_context);
     float duration = std::max<float>(
         app_.rand().GetJittered(profile.turn_time(), profile.turn_time_jitter()), 0.3f);
     if (is_bounce) {

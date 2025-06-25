@@ -22,14 +22,17 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       : wall_(wall), strategy_(strategy), target_manager_(target_manager), app_(app) {}
 
   glm::vec3 GetNextPosition() override {
-    return GetNextPosition(target_manager_->GetTargetIdCounter());
+    return GetNextPosition(&selection_context_);
   }
 
-  glm::vec3 GetNextPosition(int counter) override {
+  glm::vec3 GetNextPosition(ProfileSelectionContext* context) override {
     glm::vec3 candidate_pos;
     float min_distance = strategy_.min_distance();
+    ProfileSelectionContext original_context = *context;
     for (int i = 0; i < 200; ++i) {
-      candidate_pos = GetNewCandidateTargetPosition(counter);
+      // Reset this so that the counter only increments once even if the candidates are invalid.
+      *context = original_context;
+      candidate_pos = GetNewCandidateTargetPosition(context);
       if (strategy_.has_fixed_distance_from_last_target()) {
         // Scale the candidate to the correct distance.
         candidate_pos = glm::vec3(GetFixedDistanceAdjustedPoint(candidate_pos), candidate_pos.z);
@@ -61,13 +64,13 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     return true;
   }
 
-  std::optional<TargetRegion> GetRegionToUse(int counter) {
-    return SelectProfile(strategy_.region_order(), strategy_.regions(), counter, app_->rand());
+  std::optional<TargetRegion> GetRegionToUse(ProfileSelectionContext* context) {
+    return SelectProfile(strategy_.region_order(), strategy_.regions(), context, app_->rand());
   }
 
   // Returns an x/z pair where to place the target on the wall.
-  glm::vec3 GetNewCandidateTargetPosition(int counter) {
-    auto maybe_region = GetRegionToUse(counter);
+  glm::vec3 GetNewCandidateTargetPosition(ProfileSelectionContext* context) {
+    auto maybe_region = GetRegionToUse(context);
     if (!maybe_region.has_value()) {
       app_->logger()->warn("Unable to find target region");
       return glm::vec3(0);
@@ -127,6 +130,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   TargetPlacementStrategy strategy_;
   TargetManager* target_manager_;
   Application* app_;
+  ProfileSelectionContext selection_context_;
 };
 
 }  // namespace

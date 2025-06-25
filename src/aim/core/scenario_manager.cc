@@ -366,6 +366,7 @@ void ScenarioManager::GenerateScenarioLevels(const std::string& starting_scenari
     if (!SaveScenario(next, def)) {
       return;
     }
+    prev = next;
   }
 }
 

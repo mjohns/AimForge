@@ -1422,8 +1422,21 @@ class ScenarioEditorScreen : public UiScreen {
           float weight_percent = (weight / total_weight) * 100;
           ImGui::TextDisabled("%.0f%%", weight_percent);
         }
+
+        ImGui::InputInt(ImGui::InputIntParams("NextProfile")
+                            .set_label("Next profile")
+                            .set_step(1, 2)
+                            .set_min(1)
+                            .set_default(1)
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_INT_FIELD(T, p, next_profile));
+        ImGui::SameLine();
+        ImGui::HelpMarker("If this profile is selected, always select the specified profile next.");
+
       } else {
         p->clear_weight();
+        p->clear_next_profile();
       }
 
       draw_profile_fn(&profile_list->at(i));
@@ -1931,7 +1944,7 @@ class ScenarioEditorScreen : public UiScreen {
       target_radius = 2;
     }
     float radius_jitter = profile->target_radius_jitter();
-    JitteredValueInput("TargetRadiusInput", &target_radius, &radius_jitter, 0.1, 0.3, "%.1f");
+    JitteredValueInput("TargetRadiusInput", &target_radius, &radius_jitter, 0.1, 0.3, "%.2f");
     profile->set_target_radius(target_radius);
     profile->set_target_radius_jitter(radius_jitter);
 

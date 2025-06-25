@@ -15,11 +15,20 @@ class Random {
   AIM_NO_COPY(Random);
 
   float Get(float max = 1.0) {
+    if (max <= 0) {
+      return 0;
+    }
     auto dist = std::uniform_real_distribution<float>(0, max);
     return dist(random_generator_);
   }
 
   float GetInRange(float min, float max) {
+    if (min == max) {
+      return min;
+    }
+    if (min > max) {
+      std::swap(min, max);
+    }
     auto dist = std::uniform_real_distribution<float>(min, max);
     return dist(random_generator_);
   }
