@@ -443,7 +443,7 @@ void Scenario::HandleScenarioDone() {
       stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
       break;
     }
-    case ShotType::kClickSingle: 
+    case ShotType::kClickSingle:
     case ShotType::kClickMulti: {
       // Default clicking scoring
       float hit_percent = stats_.num_hits / stats_.num_shots;
@@ -456,6 +456,8 @@ void Scenario::HandleScenarioDone() {
       break;
     }
     case ShotType::kPoke:
+      score = stats_.num_kills;
+      break;
     default:
       break;
   }
