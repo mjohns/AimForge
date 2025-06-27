@@ -102,8 +102,6 @@ class CircleScenario : public BaseScenario {
     target->SetWallPosition(glm::vec3(new_position, target->wall_depth), def_.room());
   }
 
-
-
  private:
   glm::vec2 initial_position_;
   glm::vec2 current_circle_position_;
