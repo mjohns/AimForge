@@ -37,7 +37,16 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
   if (context->next_index.has_value()) {
     int i = ClampIndex(profiles, *context->next_index);
     context->next_index = {};
-    return profiles[i];
+
+    const T& profile = profiles[i];
+
+    if (profile.has_next_profile()) {
+      context->next_index = profile.next_profile();
+    }
+    if (profile.has_min_selection_gap()) {
+      context->rate_limited_indices[i] = profile.min_selection_gap();
+    }
+    return profile;
   }
 
   float total_weight = 0;
@@ -49,25 +58,28 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
 
   float roll = rand.Get(total_weight);
   float used_weight = 0;
+  std::optional<T> selected_profile;
   for (int i = 0; i < profiles.size(); ++i) {
     if (context->rate_limited_indices[i] > 0) {
       context->rate_limited_indices[i]--;
       continue;
     }
-    const T& profile = profiles[i];
-    used_weight += profile.weight();
-    if (used_weight >= roll) {
-      if (profile.has_next_profile()) {
-        context->next_index = profile.next_profile();
+    if (!selected_profile.has_value()) {
+      const T& profile = profiles[i];
+      used_weight += profile.weight();
+      if (used_weight >= roll) {
+        if (profile.has_next_profile()) {
+          context->next_index = profile.next_profile();
+        }
+        if (profile.has_min_selection_gap()) {
+          context->rate_limited_indices[i] = profile.min_selection_gap();
+        }
+        selected_profile = profile;
       }
-      if (profile.has_min_selection_gap()) {
-        context->rate_limited_indices[i] = profile.min_selection_gap();
-      }
-      return profile;
     }
   }
 
-  return profiles[0];
+  return selected_profile.value_or(profiles[0]);
 }
 
 }  // namespace aim

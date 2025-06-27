@@ -1434,6 +1434,19 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::SameLine();
         ImGui::HelpMarker("If this profile is selected, always select the specified profile next.");
 
+        ImGui::InputInt(ImGui::InputIntParams("MinSelectionGap")
+                            .set_label("Selection gap")
+                            .set_step(1, 2)
+                            .set_min(1)
+                            .set_default(2)
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_INT_FIELD(T, p, min_selection_gap));
+        ImGui::SameLine();
+        ImGui::HelpMarker(
+            "Limit how frequently the profile can be selected. A value of 2 means that 2 other "
+            "profiles must be selected before this one can be chosen again.");
+
       } else {
         p->clear_weight();
         p->clear_next_profile();
