@@ -12,7 +12,7 @@ const int kCachedRecentNamesSize = 240;
 }  // namespace
 
 HistoryManager::HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager)
-    : history_db_(std::make_unique<HistoryDb>(fs->GetUserDataPath("history.db"))),
+    : history_db_(std::make_unique<HistoryDb>(fs->GetUserDataPath("db/history.db"))),
       playlist_manager_(playlist_manager) {}
 
 void HistoryManager::UpdateRecentView(ObjectType t, const std::string& id) {

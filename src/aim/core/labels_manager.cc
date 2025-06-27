@@ -14,7 +14,7 @@ const char* kStarredLabel = "starred";
 }  // namespace
 
 LabelsManager::LabelsManager(FileSystem* fs)
-    : labels_db_(std::make_unique<LabelsDb>(fs->GetUserDataPath("labels.db"))) {}
+    : labels_db_(std::make_unique<LabelsDb>(fs->GetUserDataPath("db/labels.db"))) {}
 
 void LabelsManager::AddLabeledItem(const std::string& label,
                                    ObjectType type,

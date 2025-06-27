@@ -28,7 +28,7 @@ float GetScoreLevel(float score, float start_score, float end_score) {
 }  // namespace
 
 StatsManager::StatsManager(FileSystem* fs)
-    : stats_db_(std::make_unique<StatsDb>(fs->GetUserDataPath("stats.db"))) {}
+    : stats_db_(std::make_unique<StatsDb>(fs->GetUserDataPath("db/stats.db"))) {}
 
 void StatsManager::AddStats(const std::string& scenario_id, StatsRow* row) {
   stats_db_->AddStats(scenario_id, row);
