@@ -12,15 +12,23 @@
 namespace aim {
 namespace {
 
-enum ScenarioViewType {
-  RECENT,
-  STARRED,
-  ALL,
+const char* kScenarioViewTypeKey = "ScenarioViewType";
+
+enum class ScenarioViewType : int {
+  RECENT = 1,
+  STARRED = 2,
+  ALL = 3,
 };
 
 class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
  public:
   explicit ScenarioBrowserComponentImpl(Application* app) : app_(app) {
+    auto maybe_initial_view_type = app_->local_store().GetInt(kScenarioViewTypeKey);
+    if (maybe_initial_view_type) {
+      view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
+    } else {
+      view_type_ = ScenarioViewType::ALL;
+    }
     UpdateFilteredScenarios();
   }
 
@@ -58,6 +66,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
                                                            {ScenarioViewType::ALL, "All"},
                                                        });
     if (view_type_changed) {
+      app_->local_store().PutInt(kScenarioViewTypeKey, (int)view_type_);
       UpdateFilteredScenarios();
     }
 

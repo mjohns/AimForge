@@ -24,9 +24,11 @@
 namespace aim {
 namespace {
 
-enum class AppScreen {
-  SCENARIOS,
-  PLAYLISTS,
+const char* kSelectedAppScreenKey = "SelectedAppScreen";
+
+enum class AppScreen : int {
+  SCENARIOS = 1,
+  PLAYLISTS = 2,
 };
 
 class HomeScreen : public UiScreen {
@@ -37,6 +39,11 @@ class HomeScreen : public UiScreen {
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
     scenario_browser_component_ = CreateScenarioBrowserComponent(&app);
+
+    auto selected_app_screen = app_.local_store().GetInt(kSelectedAppScreenKey);
+    if (selected_app_screen) {
+      app_screen_ = static_cast<AppScreen>(*selected_app_screen);
+    }
 
     auto last_playlist = app_.history_manager().GetRecentViews(ObjectType::PLAYLIST, 1);
 
@@ -247,7 +254,6 @@ class HomeScreen : public UiScreen {
 
       if (!found_pending_item) {
         // Playlist is done.
-        app_screen_ = AppScreen::PLAYLISTS;
         return;
       }
     }
@@ -260,6 +266,7 @@ class HomeScreen : public UiScreen {
   }
 
   void DrawLeftNav() {
+    AppScreen original_app_screen = app_screen_;
     if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
                           app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
@@ -276,6 +283,10 @@ class HomeScreen : public UiScreen {
     }
     if (ImGui::Selectable(std::format("{} Crosshairs", kIconMyLocation).c_str(), false)) {
       PushNextScreen(CreateCrosshairEditorScreen(&app_));
+    }
+
+    if (original_app_screen != app_screen_) {
+      app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
     ImGui::Spacing();
