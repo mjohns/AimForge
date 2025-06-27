@@ -18,8 +18,9 @@
 #include "aim/core/font_manager.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/labels_manager.h"
-#include "aim/core/playlist_manager.h"
+#include "aim/core/local_store.h"
 #include "aim/core/play_time_manager.h"
+#include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/screen.h"
 #include "aim/core/settings_manager.h"
@@ -134,6 +135,10 @@ class Application {
     return *labels_manager_;
   }
 
+  LocalStore& local_store() {
+    return *local_store_;
+  }
+
   CrosshairManager& crosshair_manager() {
     return *crosshair_manager_;
   }
@@ -183,6 +188,7 @@ class Application {
   std::unique_ptr<PlaylistManager> playlist_manager_;
   std::unique_ptr<PlayTimeManager> play_time_manager_;
   std::unique_ptr<FontManager> font_manager_;
+  std::unique_ptr<LocalStore> local_store_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
   std::string imgui_ini_filename_;

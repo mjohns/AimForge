@@ -147,6 +147,7 @@ int Application::Initialize() {
   }
   InitializeAimForgeFolder(file_system_.get());
 
+  local_store_ = std::make_unique<LocalStore>(file_system_.get());
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("db/settings.db"));
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(file_system_.get());

@@ -11,6 +11,8 @@
 namespace aim {
 namespace {
 
+const char* kPlaylistViewTypeKey = "PlaylistViewType";
+
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;
@@ -310,10 +312,10 @@ class PlaylistEditorComponent {
   std::string new_playlist_name_;
 };
 
-enum PlaylistViewType {
-  RECENT,
-  ALL,
-  STARRED,
+enum class PlaylistViewType : int {
+  RECENT = 1,
+  ALL = 2,
+  STARRED = 3,
 };
 
 class PlaylistComponentImpl : public PlaylistComponent {
@@ -372,13 +374,11 @@ class PlaylistComponentImpl : public PlaylistComponent {
 class PlaylistListComponentImpl : public PlaylistListComponent {
  public:
   explicit PlaylistListComponentImpl(UiScreen& screen) : screen_(screen), app_(screen.app()) {
-    if (app_.history_manager().recent_playlists().size() == 0) {
-      view_type_ = PlaylistViewType::ALL;
+    auto maybe_initial_view_type = app_.local_store().GetInt(kPlaylistViewTypeKey);
+    if (maybe_initial_view_type) {
+      view_type_ = static_cast<PlaylistViewType>(*maybe_initial_view_type);
     } else {
-      std::string current_playlist_name = app_.history_manager().recent_playlists()[0];
-      if (app_.labels_manager().IsStarred(ObjectType::PLAYLIST, current_playlist_name)) {
-        view_type_ = PlaylistViewType::STARRED;
-      }
+      view_type_ = PlaylistViewType::ALL;
     }
   }
 
@@ -406,13 +406,15 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     }
 
     ImGui::SetNextItemWidth(char_size.x * 8);
-    ImGui::SimpleTypeDropdown("##PlaylistViewType",
-                              &view_type_,
-                              {
-                                  {PlaylistViewType::RECENT, "Recent"},
-                                  {PlaylistViewType::STARRED, "Starred"},
-                                  {PlaylistViewType::ALL, "All"},
-                              });
+    if (ImGui::SimpleTypeDropdown("##PlaylistViewType",
+                                  &view_type_,
+                                  {
+                                      {PlaylistViewType::RECENT, "Recent"},
+                                      {PlaylistViewType::STARRED, "Starred"},
+                                      {PlaylistViewType::ALL, "All"},
+                                  })) {
+      app_.local_store().PutInt(kPlaylistViewTypeKey, (int)view_type_);
+    }
     ImGui::SameLine();
     if (ImGui::Button(std::format("{} Add", kIconAdd))) {
       add_dialog_.NotifyOpen();
