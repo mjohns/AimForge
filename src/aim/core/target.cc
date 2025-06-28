@@ -203,6 +203,7 @@ std::vector<u16> TargetManager::visible_target_ids() const {
 }
 
 TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, Random& rand) {
+  selection_context_.counter = target_id_counter_;
   auto maybe_profile = SelectProfile(def.target_order(), def.profiles(), &selection_context_, rand);
   if (maybe_profile.has_value()) {
     return *maybe_profile;
@@ -289,6 +290,13 @@ void Target::StartHitTimer() {
 
 void Target::AddTestDamage() {
   hit_timer_.AddElapsedSeconds(1);
+}
+
+glm::vec3 Target::GetWallPosition3() {
+  if (!wall_position.has_value()) {
+    return glm::vec3(0.0f);
+  }
+  return glm::vec3(wall_position->x, wall_position->y, wall_depth);
 }
 
 }  // namespace aim

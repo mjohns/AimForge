@@ -741,6 +741,32 @@ struct TargetPlacementStrategyDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetPlacementStrategyDefaultTypeInternal _TargetPlacementStrategy_default_instance_;
 
+inline constexpr WaypointScenarioDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        target_placement_strategy_{nullptr},
+        start_in_center_{false} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR WaypointScenarioDef::WaypointScenarioDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct WaypointScenarioDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WaypointScenarioDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~WaypointScenarioDefDefaultTypeInternal() {}
+  union {
+    WaypointScenarioDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WaypointScenarioDefDefaultTypeInternal _WaypointScenarioDef_default_instance_;
+
 inline constexpr WallWanderScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -1186,6 +1212,7 @@ const ::uint32_t
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioDef, _impl_.type_),
         0,
         5,
@@ -1196,6 +1223,7 @@ const ::uint32_t
         6,
         7,
         8,
+        ~0u,
         ~0u,
         ~0u,
         ~0u,
@@ -1265,6 +1293,18 @@ const ::uint32_t
         2,
         3,
         4,
+        1,
+        PROTOBUF_FIELD_OFFSET(::aim::WaypointScenarioDef, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::WaypointScenarioDef, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::WaypointScenarioDef, _impl_.target_placement_strategy_),
+        PROTOBUF_FIELD_OFFSET(::aim::WaypointScenarioDef, _impl_.start_in_center_),
+        0,
         1,
         PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::BarrelScenarioDef, _internal_metadata_),
@@ -1523,22 +1563,23 @@ static const ::_pbi::MigrationSchema
         {178, 191, -1, sizeof(::aim::TargetPlacementStrategy)},
         {196, 208, -1, sizeof(::aim::ScenarioOverrides)},
         {212, 228, -1, sizeof(::aim::ShotType)},
-        {235, 263, -1, sizeof(::aim::ScenarioDef)},
-        {282, 291, -1, sizeof(::aim::ReferenceScenarioDef)},
-        {292, 301, -1, sizeof(::aim::StaticScenarioDef)},
-        {302, 316, -1, sizeof(::aim::CircleScenarioDef)},
-        {322, 336, -1, sizeof(::aim::CenteringScenarioDef)},
-        {342, 353, -1, sizeof(::aim::BarrelScenarioDef)},
-        {356, 370, -1, sizeof(::aim::LinearScenarioDef)},
-        {376, 387, -1, sizeof(::aim::SineScenarioDef)},
-        {390, 411, -1, sizeof(::aim::WallStrafeProfile)},
-        {424, 438, -1, sizeof(::aim::WallStrafeScenarioDef)},
-        {444, 458, -1, sizeof(::aim::WallArcScenarioDef)},
-        {464, 480, -1, sizeof(::aim::WallWanderProfile)},
-        {488, 499, -1, sizeof(::aim::WallWanderScenarioDef)},
-        {502, 518, -1, sizeof(::aim::TargetDef)},
-        {526, 535, -1, sizeof(::aim::PillTargetDef)},
-        {536, 563, -1, sizeof(::aim::TargetProfile)},
+        {235, 264, -1, sizeof(::aim::ScenarioDef)},
+        {284, 293, -1, sizeof(::aim::ReferenceScenarioDef)},
+        {294, 303, -1, sizeof(::aim::StaticScenarioDef)},
+        {304, 318, -1, sizeof(::aim::CircleScenarioDef)},
+        {324, 338, -1, sizeof(::aim::CenteringScenarioDef)},
+        {344, 354, -1, sizeof(::aim::WaypointScenarioDef)},
+        {356, 367, -1, sizeof(::aim::BarrelScenarioDef)},
+        {370, 384, -1, sizeof(::aim::LinearScenarioDef)},
+        {390, 401, -1, sizeof(::aim::SineScenarioDef)},
+        {404, 425, -1, sizeof(::aim::WallStrafeProfile)},
+        {438, 452, -1, sizeof(::aim::WallStrafeScenarioDef)},
+        {458, 472, -1, sizeof(::aim::WallArcScenarioDef)},
+        {478, 494, -1, sizeof(::aim::WallWanderProfile)},
+        {502, 513, -1, sizeof(::aim::WallWanderScenarioDef)},
+        {516, 532, -1, sizeof(::aim::TargetDef)},
+        {540, 549, -1, sizeof(::aim::PillTargetDef)},
+        {550, 577, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1560,6 +1601,7 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_StaticScenarioDef_default_instance_._instance,
     &::aim::_CircleScenarioDef_default_instance_._instance,
     &::aim::_CenteringScenarioDef_default_instance_._instance,
+    &::aim::_WaypointScenarioDef_default_instance_._instance,
     &::aim::_BarrelScenarioDef_default_instance_._instance,
     &::aim::_LinearScenarioDef_default_instance_._instance,
     &::aim::_SineScenarioDef_default_instance_._instance,
@@ -1626,7 +1668,7 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ing_invincible\030\003 \001(\010H\000\022\026\n\014click_single\030\004"
     " \001(\010H\000\022\025\n\013click_multi\030\005 \001(\010H\000\022\036\n\026poke_ki"
     "ll_time_seconds\030\n \001(\002\022\030\n\020no_partial_kill"
-    "s\030\013 \001(\010B\006\n\004type\"\202\006\n\013ScenarioDef\022\023\n\013descr"
+    "s\030\013 \001(\010B\006\n\004type\"\264\006\n\013ScenarioDef\022\023\n\013descr"
     "iption\030\001 \001(\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027"
     "\n\004room\030\003 \001(\0132\t.aim.Room\022\"\n\ntarget_def\030\005 "
     "\001(\0132\016.aim.TargetDef\022)\n\toverrides\030\007 \001(\0132\026"
@@ -1645,82 +1687,86 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\0222\n\rreference_def\030% \001(\0132\031.aim.ReferenceS"
     "cenarioDefH\000\022,\n\ncircle_def\030& \001(\0132\026.aim.C"
     "ircleScenarioDefH\000\022(\n\010sine_def\030\' \001(\0132\024.a"
-    "im.SineScenarioDefH\000B\006\n\004type\"+\n\024Referenc"
-    "eScenarioDef\022\023\n\013scenario_id\030\001 \001(\t\"T\n\021Sta"
-    "ticScenarioDef\022\?\n\031target_placement_strat"
-    "egy\030\001 \001(\0132\034.aim.TargetPlacementStrategy\""
-    "\234\001\n\021CircleScenarioDef\022!\n\006radius\030\001 \001(\0132\021."
-    "aim.RegionLength\022\025\n\rstart_degrees\030\002 \001(\002\022"
-    "\030\n\020rotate_clockwise\030\003 \001(\010\022\r\n\005depth\030\004 \001(\002"
-    "\022\021\n\tstretch_y\030\005 \001(\002\022\021\n\tstretch_x\030\006 \001(\002\"\340"
-    "\001\n\024CenteringScenarioDef\022$\n\013wall_points\030\001"
-    " \003(\0132\017.aim.RegionVec2\022\?\n\031target_placemen"
-    "t_strategy\030\002 \001(\0132\034.aim.TargetPlacementSt"
-    "rategy\022\023\n\013orient_pill\030\003 \001(\010\022\r\n\005angle\030\004 \001"
-    "(\002\022\024\n\014angle_jitter\030\005 \001(\002\022\'\n\014angle_length"
-    "\030\006 \001(\0132\021.aim.RegionLength\"\236\001\n\021BarrelScen"
-    "arioDef\022\?\n\031target_placement_strategy\030\001 \001"
-    "(\0132\034.aim.TargetPlacementStrategy\022 \n\030dire"
-    "ction_radius_percent\030\002 \001(\002\022&\n\tdirection\030"
-    "\003 \001(\0162\023.aim.InOutDirection\"\300\001\n\021LinearSce"
-    "narioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitter\030"
-    "\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022\?\n\031"
-    "target_placement_strategy\030\005 \001(\0132\034.aim.Ta"
-    "rgetPlacementStrategy\022&\n\tdirection\030\006 \001(\016"
-    "2\023.aim.InOutDirection\"j\n\017SineScenarioDef"
-    "\022!\n\006height\030\001 \001(\0132\021.aim.RegionLength\022 \n\005w"
-    "idth\030\002 \001(\0132\021.aim.RegionLength\022\022\n\ngoing_l"
-    "eft\030\003 \001(\010\"\351\002\n\021WallStrafeProfile\022\016\n\006weigh"
-    "t\030\001 \001(\002\022\024\n\014next_profile\030\014 \001(\005\022\031\n\021min_sel"
-    "ection_gap\030\r \001(\005\022\'\n\014min_distance\030\002 \001(\0132\021"
-    ".aim.RegionLength\022\'\n\014max_distance\030\003 \001(\0132"
-    "\021.aim.RegionLength\022\r\n\005angle\030\004 \001(\002\022\024\n\014ang"
-    "le_jitter\030\005 \001(\002\022\023\n\013description\030\006 \001(\t\022\033\n\023"
-    "pause_at_end_chance\030\007 \001(\002\022\025\n\rpause_secon"
-    "ds\030\010 \001(\002\022\034\n\024pause_seconds_jitter\030\t \001(\002\022\026"
-    "\n\016speed_override\030\n \001(\002\022\035\n\025acceleration_o"
-    "verride\030\013 \001(\002\"\321\001\n\025WallStrafeScenarioDef\022"
-    " \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006hei"
-    "ght\030\002 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\003 \001(\0132"
-    "\021.aim.RegionLength\022(\n\010profiles\030\004 \003(\0132\026.a"
-    "im.WallStrafeProfile\022\025\n\rprofile_order\030\005 "
-    "\003(\005\022\024\n\014acceleration\030\006 \001(\002\"\305\001\n\022WallArcSce"
-    "narioDef\022 \n\005width\030\001 \001(\0132\021.aim.RegionLeng"
-    "th\022!\n\006height\030\002 \001(\0132\021.aim.RegionLength\022(\n"
-    "\rheight_jitter\030\003 \001(\0132\021.aim.RegionLength\022"
-    "\026\n\016control_height\030\004 \001(\002\022\027\n\017start_on_grou"
-    "nd\030\005 \001(\010\022\017\n\007reflect\030\006 \001(\010\"\303\001\n\021WallWander"
-    "Profile\022\016\n\006weight\030\001 \001(\002\022\024\n\014next_profile\030"
-    "\007 \001(\005\022\031\n\021min_selection_gap\030\010 \001(\005\022\021\n\tturn"
-    "_time\030\002 \001(\002\022\030\n\020turn_time_jitter\030\003 \001(\002\022\021\n"
-    "\tturn_rate\030\004 \001(\002\022\030\n\020turn_rate_jitter\030\005 \001"
-    "(\002\022\023\n\013description\030\006 \001(\t\"\231\001\n\025WallWanderSc"
-    "enarioDef\022\?\n\031target_placement_strategy\030\001"
-    " \001(\0132\034.aim.TargetPlacementStrategy\022(\n\010pr"
-    "ofiles\030\002 \003(\0132\026.aim.WallWanderProfile\022\025\n\r"
-    "profile_order\030\003 \003(\005\"\214\002\n\tTargetDef\022$\n\010pro"
-    "files\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013num_t"
-    "argets\030\002 \001(\005\022\036\n\026remove_closest_on_miss\030\003"
-    " \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_tar"
-    "get_is_ghost\030\005 \001(\010\022 \n\030new_target_delay_s"
-    "econds\030\006 \001(\002\022#\n\033remove_target_after_seco"
-    "nds\030\007 \001(\002\022\'\n\037stagger_initial_targets_sec"
-    "onds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006height\030\001 "
-    "\001(\002\"\204\004\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002\022\024\n"
-    "\014next_profile\030\021 \001(\005\022\031\n\021min_selection_gap"
-    "\030\022 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_"
-    "radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014sp"
-    "eed_jitter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002"
-    "\022\035\n\025health_seconds_jitter\030\007 \001(\002\022\035\n\025targe"
-    "t_radius_at_kill\030\010 \001(\002\022$\n\034target_hit_rad"
-    "ius_multiplier\030\t \001(\002\022\023\n\013description\030\013 \001("
-    "\t\022)\n!target_radius_growth_time_seconds\030\014"
-    " \001(\002\022!\n\031target_radius_growth_size\030\r \001(\002\022"
-    "\031\n\021health_regen_rate\030\016 \001(\002\022\025\n\rhealth_cli"
-    "cks\030\017 \001(\005\022\033\n\023health_clicks_regen\030\020 \001(\005\022\""
-    "\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004ty"
-    "pe*-\n\016InOutDirection\022\006\n\002IN\020\000\022\007\n\003OUT\020\001\022\n\n"
-    "\006RANDOM\020\002b\010editionsp\350\007"
+    "im.SineScenarioDefH\000\0220\n\014waypoint_def\030( \001"
+    "(\0132\030.aim.WaypointScenarioDefH\000B\006\n\004type\"+"
+    "\n\024ReferenceScenarioDef\022\023\n\013scenario_id\030\001 "
+    "\001(\t\"T\n\021StaticScenarioDef\022\?\n\031target_place"
+    "ment_strategy\030\001 \001(\0132\034.aim.TargetPlacemen"
+    "tStrategy\"\234\001\n\021CircleScenarioDef\022!\n\006radiu"
+    "s\030\001 \001(\0132\021.aim.RegionLength\022\025\n\rstart_degr"
+    "ees\030\002 \001(\002\022\030\n\020rotate_clockwise\030\003 \001(\010\022\r\n\005d"
+    "epth\030\004 \001(\002\022\021\n\tstretch_y\030\005 \001(\002\022\021\n\tstretch"
+    "_x\030\006 \001(\002\"\340\001\n\024CenteringScenarioDef\022$\n\013wal"
+    "l_points\030\001 \003(\0132\017.aim.RegionVec2\022\?\n\031targe"
+    "t_placement_strategy\030\002 \001(\0132\034.aim.TargetP"
+    "lacementStrategy\022\023\n\013orient_pill\030\003 \001(\010\022\r\n"
+    "\005angle\030\004 \001(\002\022\024\n\014angle_jitter\030\005 \001(\002\022\'\n\014an"
+    "gle_length\030\006 \001(\0132\021.aim.RegionLength\"o\n\023W"
+    "aypointScenarioDef\022\?\n\031target_placement_s"
+    "trategy\030\001 \001(\0132\034.aim.TargetPlacementStrat"
+    "egy\022\027\n\017start_in_center\030\002 \001(\010\"\236\001\n\021BarrelS"
+    "cenarioDef\022\?\n\031target_placement_strategy\030"
+    "\001 \001(\0132\034.aim.TargetPlacementStrategy\022 \n\030d"
+    "irection_radius_percent\030\002 \001(\002\022&\n\tdirecti"
+    "on\030\003 \001(\0162\023.aim.InOutDirection\"\300\001\n\021Linear"
+    "ScenarioDef\022\r\n\005angle\030\001 \001(\002\022\024\n\014angle_jitt"
+    "er\030\002 \001(\002\022\r\n\005width\030\003 \001(\002\022\016\n\006height\030\004 \001(\002\022"
+    "\?\n\031target_placement_strategy\030\005 \001(\0132\034.aim"
+    ".TargetPlacementStrategy\022&\n\tdirection\030\006 "
+    "\001(\0162\023.aim.InOutDirection\"j\n\017SineScenario"
+    "Def\022!\n\006height\030\001 \001(\0132\021.aim.RegionLength\022 "
+    "\n\005width\030\002 \001(\0132\021.aim.RegionLength\022\022\n\ngoin"
+    "g_left\030\003 \001(\010\"\351\002\n\021WallStrafeProfile\022\016\n\006we"
+    "ight\030\001 \001(\002\022\024\n\014next_profile\030\014 \001(\005\022\031\n\021min_"
+    "selection_gap\030\r \001(\005\022\'\n\014min_distance\030\002 \001("
+    "\0132\021.aim.RegionLength\022\'\n\014max_distance\030\003 \001"
+    "(\0132\021.aim.RegionLength\022\r\n\005angle\030\004 \001(\002\022\024\n\014"
+    "angle_jitter\030\005 \001(\002\022\023\n\013description\030\006 \001(\t\022"
+    "\033\n\023pause_at_end_chance\030\007 \001(\002\022\025\n\rpause_se"
+    "conds\030\010 \001(\002\022\034\n\024pause_seconds_jitter\030\t \001("
+    "\002\022\026\n\016speed_override\030\n \001(\002\022\035\n\025acceleratio"
+    "n_override\030\013 \001(\002\"\321\001\n\025WallStrafeScenarioD"
+    "ef\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006"
+    "height\030\002 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\003 \001"
+    "(\0132\021.aim.RegionLength\022(\n\010profiles\030\004 \003(\0132"
+    "\026.aim.WallStrafeProfile\022\025\n\rprofile_order"
+    "\030\005 \003(\005\022\024\n\014acceleration\030\006 \001(\002\"\305\001\n\022WallArc"
+    "ScenarioDef\022 \n\005width\030\001 \001(\0132\021.aim.RegionL"
+    "ength\022!\n\006height\030\002 \001(\0132\021.aim.RegionLength"
+    "\022(\n\rheight_jitter\030\003 \001(\0132\021.aim.RegionLeng"
+    "th\022\026\n\016control_height\030\004 \001(\002\022\027\n\017start_on_g"
+    "round\030\005 \001(\010\022\017\n\007reflect\030\006 \001(\010\"\303\001\n\021WallWan"
+    "derProfile\022\016\n\006weight\030\001 \001(\002\022\024\n\014next_profi"
+    "le\030\007 \001(\005\022\031\n\021min_selection_gap\030\010 \001(\005\022\021\n\tt"
+    "urn_time\030\002 \001(\002\022\030\n\020turn_time_jitter\030\003 \001(\002"
+    "\022\021\n\tturn_rate\030\004 \001(\002\022\030\n\020turn_rate_jitter\030"
+    "\005 \001(\002\022\023\n\013description\030\006 \001(\t\"\231\001\n\025WallWande"
+    "rScenarioDef\022\?\n\031target_placement_strateg"
+    "y\030\001 \001(\0132\034.aim.TargetPlacementStrategy\022(\n"
+    "\010profiles\030\002 \003(\0132\026.aim.WallWanderProfile\022"
+    "\025\n\rprofile_order\030\003 \003(\005\"\214\002\n\tTargetDef\022$\n\010"
+    "profiles\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013nu"
+    "m_targets\030\002 \001(\005\022\036\n\026remove_closest_on_mis"
+    "s\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_"
+    "target_is_ghost\030\005 \001(\010\022 \n\030new_target_dela"
+    "y_seconds\030\006 \001(\002\022#\n\033remove_target_after_s"
+    "econds\030\007 \001(\002\022\'\n\037stagger_initial_targets_"
+    "seconds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006height"
+    "\030\001 \001(\002\"\204\004\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002"
+    "\022\024\n\014next_profile\030\021 \001(\005\022\031\n\021min_selection_"
+    "gap\030\022 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024targ"
+    "et_radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n"
+    "\014speed_jitter\030\005 \001(\002\022\026\n\016health_seconds\030\006 "
+    "\001(\002\022\035\n\025health_seconds_jitter\030\007 \001(\002\022\035\n\025ta"
+    "rget_radius_at_kill\030\010 \001(\002\022$\n\034target_hit_"
+    "radius_multiplier\030\t \001(\002\022\023\n\013description\030\013"
+    " \001(\t\022)\n!target_radius_growth_time_second"
+    "s\030\014 \001(\002\022!\n\031target_radius_growth_size\030\r \001"
+    "(\002\022\031\n\021health_regen_rate\030\016 \001(\002\022\025\n\rhealth_"
+    "clicks\030\017 \001(\005\022\033\n\023health_clicks_regen\030\020 \001("
+    "\005\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n"
+    "\004type*-\n\016InOutDirection\022\006\n\002IN\020\000\022\007\n\003OUT\020\001"
+    "\022\n\n\006RANDOM\020\002b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1730,13 +1776,13 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    5862,
+    6025,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
     descriptor_table_scenario_2eproto_deps,
     1,
-    30,
+    31,
     schemas,
     file_default_instances,
     TableStruct_scenario_2eproto::offsets,
@@ -7051,6 +7097,19 @@ void ScenarioDef::set_allocated_sine_def(::aim::SineScenarioDef* sine_def) {
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.sine_def)
 }
+void ScenarioDef::set_allocated_waypoint_def(::aim::WaypointScenarioDef* waypoint_def) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (waypoint_def) {
+    ::google::protobuf::Arena* submessage_arena = waypoint_def->GetArena();
+    if (message_arena != submessage_arena) {
+      waypoint_def = ::google::protobuf::internal::GetOwnedMessage(message_arena, waypoint_def, submessage_arena);
+    }
+    set_has_waypoint_def();
+    _impl_.type_.waypoint_def_ = waypoint_def;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.waypoint_def)
+}
 ScenarioDef::ScenarioDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -7134,6 +7193,9 @@ ScenarioDef::ScenarioDef(
         break;
       case kSineDef:
         _impl_.type_.sine_def_ = ::google::protobuf::Message::CopyConstruct<::aim::SineScenarioDef>(arena, *from._impl_.type_.sine_def_);
+        break;
+      case kWaypointDef:
+        _impl_.type_.waypoint_def_ = ::google::protobuf::Message::CopyConstruct<::aim::WaypointScenarioDef>(arena, *from._impl_.type_.waypoint_def_);
         break;
   }
 
@@ -7259,6 +7321,14 @@ void ScenarioDef::clear_type() {
       }
       break;
     }
+    case kWaypointDef: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.waypoint_def_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.waypoint_def_);
+      }
+      break;
+    }
     case TYPE_NOT_SET: {
       break;
     }
@@ -7303,16 +7373,16 @@ const ::google::protobuf::internal::ClassData* ScenarioDef::GetClassData() const
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 19, 14, 51, 7> ScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<4, 20, 15, 51, 7> ScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    39, 120,  // max_field_number, fast_idx_mask
+    40, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
     536868904,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    19,  // num_field_entries
-    14,  // num_aux_entries
+    20,  // num_field_entries
+    15,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -7357,7 +7427,7 @@ const ::_pbi::TcParseTable<4, 19, 14, 51, 7> ScenarioDef::_table_ = {
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     33, 0, 1,
-    65408, 12,
+    65280, 12,
     65535, 65535
   }}, {{
     // string description = 1;
@@ -7417,6 +7487,9 @@ const ::_pbi::TcParseTable<4, 19, 14, 51, 7> ScenarioDef::_table_ = {
     // .aim.SineScenarioDef sine_def = 39;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.sine_def_), _Internal::kOneofCaseOffset + 0, 13,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.WaypointScenarioDef waypoint_def = 40;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.waypoint_def_), _Internal::kOneofCaseOffset + 0, 14,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Room>()},
     {::_pbi::TcParser::GetTable<::aim::TargetDef>()},
@@ -7432,6 +7505,7 @@ const ::_pbi::TcParseTable<4, 19, 14, 51, 7> ScenarioDef::_table_ = {
     {::_pbi::TcParser::GetTable<::aim::ReferenceScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::CircleScenarioDef>()},
     {::_pbi::TcParser::GetTable<::aim::SineScenarioDef>()},
+    {::_pbi::TcParser::GetTable<::aim::WaypointScenarioDef>()},
   }}, {{
     "\17\13\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "aim.ScenarioDef"
@@ -7620,6 +7694,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                   stream);
               break;
             }
+            case kWaypointDef: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  40, *this_._impl_.type_.waypoint_def_, this_._impl_.type_.waypoint_def_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
             default:
               break;
           }
@@ -7752,6 +7832,12 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
             case kSineDef: {
               total_size += 2 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.sine_def_);
+              break;
+            }
+            // .aim.WaypointScenarioDef waypoint_def = 40;
+            case kWaypointDef: {
+              total_size += 2 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.waypoint_def_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -7924,6 +8010,15 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goo
               ::google::protobuf::Message::CopyConstruct<::aim::SineScenarioDef>(arena, *from._impl_.type_.sine_def_);
         } else {
           _this->_impl_.type_.sine_def_->MergeFrom(from._internal_sine_def());
+        }
+        break;
+      }
+      case kWaypointDef: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.waypoint_def_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::WaypointScenarioDef>(arena, *from._impl_.type_.waypoint_def_);
+        } else {
+          _this->_impl_.type_.waypoint_def_->MergeFrom(from._internal_waypoint_def());
         }
         break;
       }
@@ -9252,6 +9347,291 @@ void CenteringScenarioDef::InternalSwap(CenteringScenarioDef* PROTOBUF_RESTRICT 
 }
 
 ::google::protobuf::Metadata CenteringScenarioDef::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class WaypointScenarioDef::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<WaypointScenarioDef>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_._has_bits_);
+};
+
+WaypointScenarioDef::WaypointScenarioDef(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.WaypointScenarioDef)
+}
+inline PROTOBUF_NDEBUG_INLINE WaypointScenarioDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from, const ::aim::WaypointScenarioDef& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+WaypointScenarioDef::WaypointScenarioDef(
+    ::google::protobuf::Arena* arena,
+    const WaypointScenarioDef& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  WaypointScenarioDef* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.target_placement_strategy_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(
+                              arena, *from._impl_.target_placement_strategy_)
+                        : nullptr;
+  _impl_.start_in_center_ = from._impl_.start_in_center_;
+
+  // @@protoc_insertion_point(copy_constructor:aim.WaypointScenarioDef)
+}
+inline PROTOBUF_NDEBUG_INLINE WaypointScenarioDef::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void WaypointScenarioDef::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, target_placement_strategy_),
+           0,
+           offsetof(Impl_, start_in_center_) -
+               offsetof(Impl_, target_placement_strategy_) +
+               sizeof(Impl_::start_in_center_));
+}
+WaypointScenarioDef::~WaypointScenarioDef() {
+  // @@protoc_insertion_point(destructor:aim.WaypointScenarioDef)
+  SharedDtor(*this);
+}
+inline void WaypointScenarioDef::SharedDtor(MessageLite& self) {
+  WaypointScenarioDef& this_ = static_cast<WaypointScenarioDef&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  delete this_._impl_.target_placement_strategy_;
+  this_._impl_.~Impl_();
+}
+
+inline void* WaypointScenarioDef::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) WaypointScenarioDef(arena);
+}
+constexpr auto WaypointScenarioDef::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(WaypointScenarioDef),
+                                            alignof(WaypointScenarioDef));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull WaypointScenarioDef::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_WaypointScenarioDef_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &WaypointScenarioDef::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<WaypointScenarioDef>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &WaypointScenarioDef::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<WaypointScenarioDef>(), &WaypointScenarioDef::ByteSizeLong,
+            &WaypointScenarioDef::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_._cached_size_),
+        false,
+    },
+    &WaypointScenarioDef::kDescriptorMethods,
+    &descriptor_table_scenario_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* WaypointScenarioDef::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2> WaypointScenarioDef::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::WaypointScenarioDef>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // bool start_in_center = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(WaypointScenarioDef, _impl_.start_in_center_), 1>(),
+     {16, 1, 0, PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_.start_in_center_)}},
+    // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_.target_placement_strategy_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+    {PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool start_in_center = 2;
+    {PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_.start_in_center_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
+  }}, {{
+  }},
+};
+
+PROTOBUF_NOINLINE void WaypointScenarioDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.WaypointScenarioDef)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
+    _impl_.target_placement_strategy_->Clear();
+  }
+  _impl_.start_in_center_ = false;
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* WaypointScenarioDef::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const WaypointScenarioDef& this_ = static_cast<const WaypointScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* WaypointScenarioDef::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const WaypointScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.WaypointScenarioDef)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                1, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
+                stream);
+          }
+
+          // bool start_in_center = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteBoolToArray(
+                2, this_._internal_start_in_center(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.WaypointScenarioDef)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t WaypointScenarioDef::ByteSizeLong(const MessageLite& base) {
+          const WaypointScenarioDef& this_ = static_cast<const WaypointScenarioDef&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t WaypointScenarioDef::ByteSizeLong() const {
+          const WaypointScenarioDef& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.WaypointScenarioDef)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000003u) {
+            // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.target_placement_strategy_);
+            }
+            // bool start_in_center = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 2;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void WaypointScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<WaypointScenarioDef*>(&to_msg);
+  auto& from = static_cast<const WaypointScenarioDef&>(from_msg);
+  ::google::protobuf::Arena* arena = _this->GetArena();
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.WaypointScenarioDef)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
+      if (_this->_impl_.target_placement_strategy_ == nullptr) {
+        _this->_impl_.target_placement_strategy_ =
+            ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(arena, *from._impl_.target_placement_strategy_);
+      } else {
+        _this->_impl_.target_placement_strategy_->MergeFrom(*from._impl_.target_placement_strategy_);
+      }
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.start_in_center_ = from._impl_.start_in_center_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void WaypointScenarioDef::CopyFrom(const WaypointScenarioDef& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.WaypointScenarioDef)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void WaypointScenarioDef::InternalSwap(WaypointScenarioDef* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_.start_in_center_)
+      + sizeof(WaypointScenarioDef::_impl_.start_in_center_)
+      - PROTOBUF_FIELD_OFFSET(WaypointScenarioDef, _impl_.target_placement_strategy_)>(
+          reinterpret_cast<char*>(&_impl_.target_placement_strategy_),
+          reinterpret_cast<char*>(&other->_impl_.target_placement_strategy_));
+}
+
+::google::protobuf::Metadata WaypointScenarioDef::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================

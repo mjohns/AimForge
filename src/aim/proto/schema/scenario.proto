@@ -182,6 +182,7 @@ message ScenarioDef {
     ReferenceScenarioDef reference_def = 37;
     CircleScenarioDef circle_def = 38;
     SineScenarioDef sine_def = 39;
+    WaypointScenarioDef waypoint_def = 40;
   }
 }
 
@@ -220,6 +221,11 @@ message CenteringScenarioDef {
   float angle = 4;
   float angle_jitter = 5;
   RegionLength angle_length = 6;
+}
+
+message WaypointScenarioDef {
+  TargetPlacementStrategy target_placement_strategy = 1;
+  bool start_in_center = 2;
 }
 
 message BarrelScenarioDef {

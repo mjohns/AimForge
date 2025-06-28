@@ -652,6 +652,8 @@ std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated
       return CreateCircleScenario(params, app);
     case ScenarioDef::kSineDef:
       return CreateSineScenario(params, app);
+    case ScenarioDef::kWaypointDef:
+      return CreateWaypointScenario(params, app);
     default:
       break;
   }

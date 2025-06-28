@@ -144,6 +144,9 @@ extern WallWanderProfileDefaultTypeInternal _WallWanderProfile_default_instance_
 class WallWanderScenarioDef;
 struct WallWanderScenarioDefDefaultTypeInternal;
 extern WallWanderScenarioDefDefaultTypeInternal _WallWanderScenarioDef_default_instance_;
+class WaypointScenarioDef;
+struct WaypointScenarioDefDefaultTypeInternal;
+extern WaypointScenarioDefDefaultTypeInternal _WaypointScenarioDef_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -250,7 +253,7 @@ class WallWanderProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderProfile*>(
         &_WallWanderProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 25;
+  static constexpr int kIndexInFileMessages = 26;
   friend void swap(WallWanderProfile& a, WallWanderProfile& b) { a.Swap(&b); }
   inline void Swap(WallWanderProfile* other) {
     if (other == this) return;
@@ -1713,7 +1716,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 28;
+  static constexpr int kIndexInFileMessages = 29;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -2354,7 +2357,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const WallStrafeProfile*>(
         &_WallStrafeProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 22;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(WallStrafeProfile& a, WallStrafeProfile& b) { a.Swap(&b); }
   inline void Swap(WallStrafeProfile* other) {
     if (other == this) return;
@@ -2716,7 +2719,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallArcScenarioDef*>(
         &_WallArcScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 24;
+  static constexpr int kIndexInFileMessages = 25;
   friend void swap(WallArcScenarioDef& a, WallArcScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallArcScenarioDef* other) {
     if (other == this) return;
@@ -2989,7 +2992,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 29;
+  static constexpr int kIndexInFileMessages = 30;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -3426,7 +3429,7 @@ class SineScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const SineScenarioDef*>(
         &_SineScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 21;
+  static constexpr int kIndexInFileMessages = 22;
   friend void swap(SineScenarioDef& a, SineScenarioDef& b) { a.Swap(&b); }
   inline void Swap(SineScenarioDef* other) {
     if (other == this) return;
@@ -5366,7 +5369,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallStrafeScenarioDef*>(
         &_WallStrafeScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 23;
+  static constexpr int kIndexInFileMessages = 24;
   friend void swap(WallStrafeScenarioDef& a, WallStrafeScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallStrafeScenarioDef* other) {
     if (other == this) return;
@@ -6027,7 +6030,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 27;
+  static constexpr int kIndexInFileMessages = 28;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -6523,6 +6526,215 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class WaypointScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.WaypointScenarioDef) */ {
+ public:
+  inline WaypointScenarioDef() : WaypointScenarioDef(nullptr) {}
+  ~WaypointScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(WaypointScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(WaypointScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR WaypointScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline WaypointScenarioDef(const WaypointScenarioDef& from) : WaypointScenarioDef(nullptr, from) {}
+  inline WaypointScenarioDef(WaypointScenarioDef&& from) noexcept
+      : WaypointScenarioDef(nullptr, std::move(from)) {}
+  inline WaypointScenarioDef& operator=(const WaypointScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WaypointScenarioDef& operator=(WaypointScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WaypointScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const WaypointScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const WaypointScenarioDef*>(
+        &_WaypointScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 19;
+  friend void swap(WaypointScenarioDef& a, WaypointScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(WaypointScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WaypointScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WaypointScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<WaypointScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const WaypointScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const WaypointScenarioDef& from) { WaypointScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(WaypointScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.WaypointScenarioDef"; }
+
+ protected:
+  explicit WaypointScenarioDef(::google::protobuf::Arena* arena);
+  WaypointScenarioDef(::google::protobuf::Arena* arena, const WaypointScenarioDef& from);
+  WaypointScenarioDef(::google::protobuf::Arena* arena, WaypointScenarioDef&& from) noexcept
+      : WaypointScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kTargetPlacementStrategyFieldNumber = 1,
+    kStartInCenterFieldNumber = 2,
+  };
+  // .aim.TargetPlacementStrategy target_placement_strategy = 1;
+  bool has_target_placement_strategy() const;
+  void clear_target_placement_strategy() ;
+  const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
+  PROTOBUF_NODISCARD ::aim::TargetPlacementStrategy* release_target_placement_strategy();
+  ::aim::TargetPlacementStrategy* mutable_target_placement_strategy();
+  void set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
+  void unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
+  ::aim::TargetPlacementStrategy* unsafe_arena_release_target_placement_strategy();
+
+  private:
+  const ::aim::TargetPlacementStrategy& _internal_target_placement_strategy() const;
+  ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
+
+  public:
+  // bool start_in_center = 2;
+  bool has_start_in_center() const;
+  void clear_start_in_center() ;
+  bool start_in_center() const;
+  void set_start_in_center(bool value);
+
+  private:
+  bool _internal_start_in_center() const;
+  void _internal_set_start_in_center(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.WaypointScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      1, 2, 1,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const WaypointScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::TargetPlacementStrategy* target_placement_strategy_;
+    bool start_in_center_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class WallWanderScenarioDef final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.WallWanderScenarioDef) */ {
  public:
@@ -6582,7 +6794,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 26;
+  static constexpr int kIndexInFileMessages = 27;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* other) {
     if (other == this) return;
@@ -7014,7 +7226,7 @@ class LinearScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const LinearScenarioDef*>(
         &_LinearScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 20;
+  static constexpr int kIndexInFileMessages = 21;
   friend void swap(LinearScenarioDef& a, LinearScenarioDef& b) { a.Swap(&b); }
   inline void Swap(LinearScenarioDef* other) {
     if (other == this) return;
@@ -7546,7 +7758,7 @@ class BarrelScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const BarrelScenarioDef*>(
         &_BarrelScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 19;
+  static constexpr int kIndexInFileMessages = 20;
   friend void swap(BarrelScenarioDef& a, BarrelScenarioDef& b) { a.Swap(&b); }
   inline void Swap(BarrelScenarioDef* other) {
     if (other == this) return;
@@ -7775,6 +7987,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kReferenceDef = 37,
     kCircleDef = 38,
     kSineDef = 39,
+    kWaypointDef = 40,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -7887,6 +8100,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kReferenceDefFieldNumber = 37,
     kCircleDefFieldNumber = 38,
     kSineDefFieldNumber = 39,
+    kWaypointDefFieldNumber = 40,
   };
   // string description = 1;
   bool has_description() const;
@@ -8199,6 +8413,25 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::SineScenarioDef* _internal_mutable_sine_def();
 
   public:
+  // .aim.WaypointScenarioDef waypoint_def = 40;
+  bool has_waypoint_def() const;
+  private:
+  bool _internal_has_waypoint_def() const;
+
+  public:
+  void clear_waypoint_def() ;
+  const ::aim::WaypointScenarioDef& waypoint_def() const;
+  PROTOBUF_NODISCARD ::aim::WaypointScenarioDef* release_waypoint_def();
+  ::aim::WaypointScenarioDef* mutable_waypoint_def();
+  void set_allocated_waypoint_def(::aim::WaypointScenarioDef* value);
+  void unsafe_arena_set_allocated_waypoint_def(::aim::WaypointScenarioDef* value);
+  ::aim::WaypointScenarioDef* unsafe_arena_release_waypoint_def();
+
+  private:
+  const ::aim::WaypointScenarioDef& _internal_waypoint_def() const;
+  ::aim::WaypointScenarioDef* _internal_mutable_waypoint_def();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ScenarioDef)
@@ -8214,11 +8447,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_reference_def();
   void set_has_circle_def();
   void set_has_sine_def();
+  void set_has_waypoint_def();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 19, 14,
+      4, 20, 15,
       51, 7>
       _table_;
 
@@ -8260,6 +8494,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::ReferenceScenarioDef* reference_def_;
       ::aim::CircleScenarioDef* circle_def_;
       ::aim::SineScenarioDef* sine_def_;
+      ::aim::WaypointScenarioDef* waypoint_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -13073,6 +13308,85 @@ inline ::aim::SineScenarioDef* ScenarioDef::mutable_sine_def() ABSL_ATTRIBUTE_LI
   return _msg;
 }
 
+// .aim.WaypointScenarioDef waypoint_def = 40;
+inline bool ScenarioDef::has_waypoint_def() const {
+  return type_case() == kWaypointDef;
+}
+inline bool ScenarioDef::_internal_has_waypoint_def() const {
+  return type_case() == kWaypointDef;
+}
+inline void ScenarioDef::set_has_waypoint_def() {
+  _impl_._oneof_case_[0] = kWaypointDef;
+}
+inline void ScenarioDef::clear_waypoint_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kWaypointDef) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.waypoint_def_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.waypoint_def_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::WaypointScenarioDef* ScenarioDef::release_waypoint_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.waypoint_def)
+  if (type_case() == kWaypointDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.waypoint_def_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.waypoint_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::WaypointScenarioDef& ScenarioDef::_internal_waypoint_def() const {
+  return type_case() == kWaypointDef ? *_impl_.type_.waypoint_def_ : reinterpret_cast<::aim::WaypointScenarioDef&>(::aim::_WaypointScenarioDef_default_instance_);
+}
+inline const ::aim::WaypointScenarioDef& ScenarioDef::waypoint_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.waypoint_def)
+  return _internal_waypoint_def();
+}
+inline ::aim::WaypointScenarioDef* ScenarioDef::unsafe_arena_release_waypoint_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.waypoint_def)
+  if (type_case() == kWaypointDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.waypoint_def_;
+    _impl_.type_.waypoint_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_waypoint_def(::aim::WaypointScenarioDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_waypoint_def();
+    _impl_.type_.waypoint_def_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.waypoint_def)
+}
+inline ::aim::WaypointScenarioDef* ScenarioDef::_internal_mutable_waypoint_def() {
+  if (type_case() != kWaypointDef) {
+    clear_type();
+    set_has_waypoint_def();
+    _impl_.type_.waypoint_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::WaypointScenarioDef>(GetArena());
+  }
+  return _impl_.type_.waypoint_def_;
+}
+inline ::aim::WaypointScenarioDef* ScenarioDef::mutable_waypoint_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::WaypointScenarioDef* _msg = _internal_mutable_waypoint_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.waypoint_def)
+  return _msg;
+}
+
 inline bool ScenarioDef::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -13822,6 +14136,134 @@ inline void CenteringScenarioDef::set_allocated_angle_length(::aim::RegionLength
 
   _impl_.angle_length_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.CenteringScenarioDef.angle_length)
+}
+
+// -------------------------------------------------------------------
+
+// WaypointScenarioDef
+
+// .aim.TargetPlacementStrategy target_placement_strategy = 1;
+inline bool WaypointScenarioDef::has_target_placement_strategy() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
+  return value;
+}
+inline void WaypointScenarioDef::clear_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::TargetPlacementStrategy& WaypointScenarioDef::_internal_target_placement_strategy() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
+}
+inline const ::aim::TargetPlacementStrategy& WaypointScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WaypointScenarioDef.target_placement_strategy)
+  return _internal_target_placement_strategy();
+}
+inline void WaypointScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+  }
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WaypointScenarioDef.target_placement_strategy)
+}
+inline ::aim::TargetPlacementStrategy* WaypointScenarioDef::release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::TargetPlacementStrategy* WaypointScenarioDef::unsafe_arena_release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WaypointScenarioDef.target_placement_strategy)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  return temp;
+}
+inline ::aim::TargetPlacementStrategy* WaypointScenarioDef::_internal_mutable_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
+    _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
+  }
+  return _impl_.target_placement_strategy_;
+}
+inline ::aim::TargetPlacementStrategy* WaypointScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
+  // @@protoc_insertion_point(field_mutable:aim.WaypointScenarioDef.target_placement_strategy)
+  return _msg;
+}
+inline void WaypointScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.target_placement_strategy_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WaypointScenarioDef.target_placement_strategy)
+}
+
+// bool start_in_center = 2;
+inline bool WaypointScenarioDef::has_start_in_center() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void WaypointScenarioDef::clear_start_in_center() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_in_center_ = false;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline bool WaypointScenarioDef::start_in_center() const {
+  // @@protoc_insertion_point(field_get:aim.WaypointScenarioDef.start_in_center)
+  return _internal_start_in_center();
+}
+inline void WaypointScenarioDef::set_start_in_center(bool value) {
+  _internal_set_start_in_center(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.WaypointScenarioDef.start_in_center)
+}
+inline bool WaypointScenarioDef::_internal_start_in_center() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.start_in_center_;
+}
+inline void WaypointScenarioDef::_internal_set_start_in_center(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_in_center_ = value;
 }
 
 // -------------------------------------------------------------------

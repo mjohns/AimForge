@@ -53,6 +53,7 @@ struct Target {
   glm::vec3 position{};
   std::optional<glm::vec2> wall_position;
   float wall_depth = 0;
+  glm::vec3 GetWallPosition3();
   float radius = 1.0f;
   float height = 3.0f;
   float hit_radius_multiplier = 1.0f;

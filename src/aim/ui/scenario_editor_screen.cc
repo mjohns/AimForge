@@ -63,6 +63,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kLinearDef, "Linear"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kWallWanderDef, "Wall Wander"},
+    {ScenarioDef::kWaypointDef, "Waypoint"},
     {ScenarioDef::kCircleDef, "Circle"},
     {ScenarioDef::kSineDef, "Sine"},
     {ScenarioDef::kReferenceDef, "Reference"},
@@ -78,14 +79,14 @@ Room GetDefaultSimpleRoom() {
   Room r;
   r.mutable_simple_room()->set_height(130);
   r.mutable_simple_room()->set_width(150);
-  *r.mutable_camera_position() = ToStoredVec3(0, -100, 0);
+  *r.mutable_camera_position() = ToStoredVec3(0, -200, 0);
   return r;
 }
 
 Room GetDefaultCylinderRoom() {
   Room r;
   r.mutable_cylinder_room()->set_height(130);
-  r.mutable_cylinder_room()->set_radius(100);
+  r.mutable_cylinder_room()->set_radius(200);
   r.mutable_cylinder_room()->set_width(150);
   return r;
 }
@@ -93,8 +94,24 @@ Room GetDefaultCylinderRoom() {
 Room GetDefaultBarrelRoom() {
   Room r;
   r.mutable_barrel_room()->set_radius(75);
-  *r.mutable_camera_position() = ToStoredVec3(0, -100, 0);
+  *r.mutable_camera_position() = ToStoredVec3(0, -200, 0);
   return r;
+}
+
+TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
+  if (def.has_static_def()) {
+    return def.static_def().target_placement_strategy();
+  }
+  if (def.has_waypoint_def()) {
+    return def.waypoint_def().target_placement_strategy();
+  }
+  if (def.has_linear_def()) {
+    return def.linear_def().target_placement_strategy();
+  }
+  if (def.has_wall_wander_def()) {
+    return def.wall_wander_def().target_placement_strategy();
+  }
+  return {};
 }
 
 class ScenarioEditorScreen : public UiScreen {
@@ -398,6 +415,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kStaticDef) {
       DrawStaticEditor();
     }
+    if (scenario_type == ScenarioDef::kWaypointDef) {
+      DrawWaypointEditor();
+    }
     if (scenario_type == ScenarioDef::kCenteringDef) {
       DrawCenteringEditor();
     }
@@ -425,8 +445,12 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void InitializeScenarioType(ScenarioDef::TypeCase scenario_type) {
+    auto target_placement = GetTargetPlacementStrategy(def_);
     if (scenario_type == ScenarioDef::kStaticDef) {
-      def_.mutable_static_def();
+      *def_.mutable_static_def()->mutable_target_placement_strategy() = target_placement;
+    }
+    if (scenario_type == ScenarioDef::kWaypointDef) {
+      *def_.mutable_waypoint_def()->mutable_target_placement_strategy() = target_placement;
     }
     if (scenario_type == ScenarioDef::kCenteringDef) {
       def_.mutable_centering_def();
@@ -435,7 +459,7 @@ class ScenarioEditorScreen : public UiScreen {
       def_.mutable_wall_strafe_def();
     }
     if (scenario_type == ScenarioDef::kLinearDef) {
-      def_.mutable_linear_def();
+      *def_.mutable_linear_def()->mutable_target_placement_strategy() = target_placement;
     }
     if (scenario_type == ScenarioDef::kBarrelDef) {
       def_.mutable_barrel_def();
@@ -1117,6 +1141,12 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::IdGuard cid("StaticEditor");
     DrawTargetPlacementStrategyEditor(
         "Placement", def_.mutable_static_def()->mutable_target_placement_strategy());
+  }
+
+  void DrawWaypointEditor() {
+    ImGui::IdGuard cid("WaypointEditor");
+    DrawTargetPlacementStrategyEditor(
+        "Placement", def_.mutable_waypoint_def()->mutable_target_placement_strategy());
   }
 
   void DrawTargetPlacementStrategyEditor(const std::string& id,
