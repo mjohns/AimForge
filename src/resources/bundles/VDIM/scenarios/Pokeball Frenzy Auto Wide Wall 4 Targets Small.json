@@ -1,0 +1,66 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 220,
+      "width": 440
+    }
+  },
+  "shotType": {
+    "poke": true,
+    "pokeKillTimeSeconds": 0.07
+  },
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 45,
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "ellipse": {
+            "xDiameter": {
+              "xPercentValue": 0.75
+            },
+            "yDiameter": {
+              "yPercentValue": 0.44
+            }
+          },
+          "weight": 2
+        },
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.75
+            },
+            "yLength": {
+              "yPercentValue": 0.679999948
+            }
+          },
+          "weight": 1
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "description": "",
+        "targetRadius": 1.74,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 200,
+      "width": 200
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "staticDef": {
+    "targetPlacementStrategy": {
+      "minDistance": 20,
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "ellipse": {
+            "xDiameter": {
+              "xPercentValue": 0.6
+            },
+            "yDiameter": {
+              "yPercentValue": 0.32
+            }
+          },
+          "weight": 1
+        },
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Outside Rect",
+          "rectangle": {
+            "innerXLength": {
+              "xPercentValue": 0.549999952
+            },
+            "innerYLength": {
+              "yPercentValue": 0.549999952
+            },
+            "xLength": {
+              "xPercentValue": 0.85
+            },
+            "yLength": {
+              "yPercentValue": 0.85
+            }
+          },
+          "weight": 2
+        },
+        {
+          "circle": {
+            "diameter": {
+              "yPercentValue": 0.7
+            },
+            "innerDiameter": {
+              "yPercentValue": 0.55
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "Mid Circle",
+          "weight": 2
+        }
+      ]
+    }
+  },
+  "targetDef": {
+    "newTargetDelaySeconds": 0.3,
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "description": "",
+        "targetRadius": 2.99999905,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": true,
+    "removeTargetAfterSeconds": 0.55
+  }
+}

@@ -4,11 +4,11 @@
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -122,
+      "y": -200,
       "z": 0
     },
     "simpleRoom": {
-      "height": 150,
+      "height": 120,
       "width": 210
     }
   },
@@ -17,24 +17,24 @@
   },
   "targetDef": {
     "newestTargetIsGhost": false,
-    "numTargets": 6,
+    "numTargets": 2,
     "profiles": [
       {
         "description": "",
-        "speed": 18,
+        "speed": 4,
         "speedJitter": 0,
-        "targetRadius": 2.30000019,
+        "targetRadius": 1.25,
         "targetRadiusJitter": 0
       }
     ],
-    "removeClosestOnMiss": true
+    "removeClosestOnMiss": false
   },
   "wallWanderDef": {
     "profiles": [
       {
         "description": "",
-        "turnRate": 160,
-        "turnRateJitter": 100,
+        "turnRate": 300,
+        "turnRateJitter": 80,
         "turnTime": 2.19999981,
         "turnTimeJitter": 0.6
       }
@@ -43,15 +43,15 @@
       "minDistance": 43,
       "regions": [
         {
-          "depth": 38,
-          "depthJitter": 15,
+          "depth": 0,
+          "depthJitter": 0,
           "description": "",
           "rectangle": {
             "xLength": {
-              "xPercentValue": 0.599999905
+              "xPercentValue": 0.799999833
             },
             "yLength": {
-              "yPercentValue": 0.48
+              "yPercentValue": 0.799999833
             }
           }
         }

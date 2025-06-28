@@ -8,22 +8,22 @@
       "z": 0
     },
     "simpleRoom": {
-      "height": 120,
+      "height": 150,
       "width": 170
     }
   },
   "shotType": {
-    "trackingInvincible": true
+    "clickSingle": true
   },
   "targetDef": {
     "newestTargetIsGhost": false,
-    "numTargets": 1,
+    "numTargets": 3,
     "profiles": [
       {
         "description": "",
-        "speed": 35,
+        "speed": 1,
         "speedJitter": 0,
-        "targetRadius": 2.30000019,
+        "targetRadius": 1.30000031,
         "targetRadiusJitter": 0
       }
     ],
@@ -33,20 +33,25 @@
     "profiles": [
       {
         "description": "",
-        "turnRate": 200,
-        "turnRateJitter": 60,
-        "turnTime": 2.69999981,
-        "turnTimeJitter": 0.499999911,
-        "weight": 2
-      },
-      {
-        "description": "",
-        "turnRate": 80,
-        "turnRateJitter": 10,
-        "turnTime": 0.999999762,
-        "turnTimeJitter": 0,
-        "weight": 1
+        "turnRate": 300,
+        "turnRateJitter": 70,
+        "turnTime": 2.2,
+        "turnTimeJitter": 0.5
       }
-    ]
+    ],
+    "targetPlacementStrategy": {
+      "regions": [
+        {
+          "circle": {
+            "diameter": {
+              "value": 15
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "description": ""
+        }
+      ]
+    }
   }
 }

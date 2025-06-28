@@ -27,7 +27,7 @@
         "targetRadiusJitter": 0
       }
     ],
-    "removeClosestOnMiss": false
+    "removeClosestOnMiss": true
   },
   "wallWanderDef": {
     "profiles": [

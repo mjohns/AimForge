@@ -31,12 +31,12 @@
   "wallArcDef": {
     "controlHeight": 2,
     "height": {
-      "value": 94.6000061
+      "xPercentValue": 0.72
     },
     "reflect": false,
     "startOnGround": true,
     "width": {
-      "value": 70
+      "value": 1
     }
   }
 }

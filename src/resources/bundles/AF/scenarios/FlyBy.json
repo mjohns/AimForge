@@ -1,0 +1,78 @@
+{
+  "centeringDef": {
+    "targetPlacementStrategy": {
+      "regionOrder": [
+        0,
+        1
+      ],
+      "regions": [
+        {
+          "description": "Left",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.04
+            },
+            "yLength": {
+              "yPercentValue": 0.799999833
+            }
+          },
+          "xOffset": {
+            "xPercentValue": -0.48
+          },
+          "yOffset": {
+            "value": 0
+          }
+        },
+        {
+          "description": "Right",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.04
+            },
+            "yLength": {
+              "yPercentValue": 0.799999833
+            }
+          },
+          "xOffset": {
+            "xPercentValue": 0.48
+          },
+          "yOffset": {
+            "value": 0
+          }
+        }
+      ]
+    }
+  },
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -50,
+      "z": 0
+    },
+    "cameraUp": {
+      "x": 0,
+      "y": 0,
+      "z": 1
+    },
+    "simpleRoom": {
+      "height": 140,
+      "width": 170
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "numTargets": 1,
+    "profiles": [
+      {
+        "speed": 88,
+        "speedJitter": 0,
+        "targetRadius": 2.00000048,
+        "targetRadiusJitter": 0
+      }
+    ]
+  }
+}

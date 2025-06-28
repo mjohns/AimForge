@@ -36,7 +36,7 @@
     }
   },
   "shotType": {
-    "clickSingle": true
+    "trackingKill": true
   },
   "targetDef": {
     "newestTargetIsGhost": false,
@@ -44,12 +44,14 @@
     "profiles": [
       {
         "description": "",
+        "healthSeconds": 0.6,
+        "healthSecondsJitter": 0,
         "speed": 48,
         "speedJitter": 0,
-        "targetRadius": 1.8,
+        "targetRadius": 2.19999981,
         "targetRadiusJitter": 1.49011612e-08
       }
     ],
-    "removeClosestOnMiss": true
+    "removeClosestOnMiss": false
   }
 }

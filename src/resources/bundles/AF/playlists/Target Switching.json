@@ -10,11 +10,11 @@
     },
     {
       "numPlays": 1,
-      "scenario": "AF BarrelTs"
+      "scenario": "AF BarrelSwitch"
     },
     {
       "numPlays": 1,
-      "scenario": "AF LinearTs"
+      "scenario": "AF LinearSwitch"
     },
     {
       "numPlays": 1,

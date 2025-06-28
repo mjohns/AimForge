@@ -26,6 +26,8 @@
     "numTargets": 1,
     "profiles": [
       {
+        "speed": 128,
+        "speedJitter": 0,
         "targetRadius": 2,
         "targetRadiusJitter": 0
       }
@@ -33,11 +35,10 @@
   },
   "wallArcDef": {
     "controlHeight": 2,
-    "controlHeightJitter": 0,
-    "duration": 2.20000052,
     "height": {
       "xPercentValue": 0.72
     },
+    "reflect": false,
     "startOnGround": true,
     "width": {
       "value": 1

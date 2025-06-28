@@ -2,21 +2,21 @@
   "durationSeconds": 60,
   "linearDef": {
     "angle": 0,
-    "angleJitter": 11,
-    "direction": "IN",
+    "angleJitter": 0,
+    "direction": "RANDOM",
     "targetPlacementStrategy": {
       "minDistance": 50,
       "regions": [
         {
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": 65,
+          "depthJitter": 61,
           "description": "",
           "rectangle": {
             "xLength": {
-              "value": 50
+              "xPercentValue": 0.829999864
             },
             "yLength": {
-              "value": 69
+              "yPercentValue": 0.799999833
             }
           }
         }
@@ -27,12 +27,12 @@
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -250,
       "z": 0
     },
     "simpleRoom": {
-      "height": 130,
-      "width": 150
+      "height": 80,
+      "width": 200
     }
   },
   "shotType": {
@@ -40,16 +40,16 @@
   },
   "targetDef": {
     "newestTargetIsGhost": false,
-    "numTargets": 4,
+    "numTargets": 2,
     "profiles": [
       {
         "description": "",
-        "speed": 48,
+        "speed": 21,
         "speedJitter": 0,
-        "targetRadius": 1.8,
+        "targetRadius": 1.39999986,
         "targetRadiusJitter": 1.49011612e-08
       }
     ],
-    "removeClosestOnMiss": true
+    "removeClosestOnMiss": false
   }
 }

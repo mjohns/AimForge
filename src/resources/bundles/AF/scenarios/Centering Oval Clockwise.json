@@ -1,42 +1,36 @@
 {
+  "circleDef": {
+    "radius": {
+      "xPercentValue": 0.4
+    },
+    "rotateClockwise": true,
+    "startDegrees": 0,
+    "stretchY": 0.599999964
+  },
   "durationSeconds": 60,
-  "endScore": 45,
   "overrides": {},
   "room": {
+    "barrelRoom": {
+      "radius": 65
+    },
     "cameraPosition": {
       "x": 0,
       "y": -100,
-      "z": -45
-    },
-    "simpleRoom": {
-      "height": 150,
-      "width": 170
+      "z": 0
     }
   },
   "shotType": {
     "trackingInvincible": true
   },
-  "startScore": 25,
   "targetDef": {
     "numTargets": 1,
     "profiles": [
       {
-        "speed": 128,
+        "speed": 57,
         "speedJitter": 0,
         "targetRadius": 2,
         "targetRadiusJitter": 0
       }
     ]
-  },
-  "wallArcDef": {
-    "controlHeight": 2,
-    "height": {
-      "value": 94.6000061
-    },
-    "reflect": false,
-    "startOnGround": true,
-    "width": {
-      "value": 70
-    }
   }
 }
