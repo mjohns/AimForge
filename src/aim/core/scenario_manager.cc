@@ -68,21 +68,6 @@ std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
   return scenarios;
 }
 
-ScenarioNode* GetOrCreateNamedNode(std::vector<std::unique_ptr<ScenarioNode>>* nodes,
-                                   const std::string& name) {
-  for (auto& node : *nodes) {
-    if (node->name == name) {
-      return node.get();
-    }
-  }
-
-  auto node = std::make_unique<ScenarioNode>();
-  node->name = name;
-  ScenarioNode* result = node.get();
-  nodes->push_back(std::move(node));
-  return result;
-}
-
 std::optional<std::string> StripLevelSuffix(const std::string& scenario_name,
                                             float* level_out = nullptr) {
   std::vector<std::string_view> words =
@@ -126,29 +111,6 @@ std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioIte
   return prefixes;
 }
 
-std::vector<std::unique_ptr<ScenarioNode>> GetTopLevelNodes(
-    const std::vector<ScenarioItem>& scenarios) {
-  std::vector<std::unique_ptr<ScenarioNode>> nodes;
-  auto prefixes = GetScenarioSharedPrefixes(scenarios);
-  for (const ScenarioItem& item : scenarios) {
-    ScenarioNode* bundle = GetOrCreateNamedNode(&nodes, item.name.bundle_name());
-
-    auto scenario_node = std::make_unique<ScenarioNode>();
-    scenario_node->scenario = item;
-    scenario_node->name = item.id();
-
-    auto maybe_prefix = StripLevelSuffix(item.id());
-    if (maybe_prefix && VectorContains(prefixes, *maybe_prefix)) {
-      ScenarioNode* prefix_node = GetOrCreateNamedNode(&bundle->child_nodes, *maybe_prefix);
-      prefix_node->child_nodes.emplace_back(std::move(scenario_node));
-    } else {
-      bundle->child_nodes.emplace_back(std::move(scenario_node));
-    }
-  }
-
-  return nodes;
-}
-
 }  // namespace
 
 ScenarioManager::ScenarioManager(FileSystem* fs,
@@ -187,8 +149,6 @@ void ScenarioManager::LoadScenariosFromDisk() {
     }
     scenario_map_[item.id()] = item;
   }
-
-  scenario_nodes_ = GetTopLevelNodes(scenarios_);
 }
 
 std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id) {

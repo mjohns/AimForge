@@ -29,14 +29,6 @@ struct ScenarioItem {
   }
 };
 
-// Nodes to represent the scenarios as a tree that can be rendered by ImGui
-struct ScenarioNode {
-  // Either name or scenario will be specified. If scenario is set, this is a leaf node.
-  std::string name;
-  std::optional<ScenarioItem> scenario;
-  std::vector<std::unique_ptr<ScenarioNode>> child_nodes;
-};
-
 ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original_def);
 
 class ScenarioManager {
@@ -81,10 +73,6 @@ class ScenarioManager {
     return scenarios_;
   }
 
-  const std::vector<std::unique_ptr<ScenarioNode>>& scenario_nodes() const {
-    return scenario_nodes_;
-  }
-
   bool SaveScenario(const ResourceName& name, const ScenarioDef& def);
   // Return the name the scenario was saved with if successful.
   std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
@@ -112,7 +100,6 @@ class ScenarioManager {
 
   std::vector<ScenarioItem> scenarios_;
   std::unordered_map<std::string, ScenarioItem> scenario_map_;
-  std::vector<std::unique_ptr<ScenarioNode>> scenario_nodes_;
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   StatsManager* stats_manager_;
