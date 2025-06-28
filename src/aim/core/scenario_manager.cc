@@ -26,6 +26,12 @@ std::filesystem::path GetScenarioPath(const std::filesystem::path& bundle_path,
   return bundle_path / "scenarios" / (name + ".json");
 }
 
+void SortScenarios(std::vector<ScenarioItem>* scenarios) {
+  std::sort(scenarios->begin(),
+            scenarios->end(),
+            [](const ScenarioItem& lhs, const ScenarioItem& rhs) { return lhs.id() < rhs.id(); });
+}
+
 std::optional<std::filesystem::path> GetScenarioPath(FileSystem* fs, const ResourceName& resource) {
   auto maybe_bundle = fs->GetBundle(resource.bundle_name());
   if (!maybe_bundle.has_value()) {
@@ -62,9 +68,8 @@ std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
     item.unevaluated_def = item.def;
     scenarios.push_back(item);
   }
-  std::sort(scenarios.begin(),
-            scenarios.end(),
-            [](const ScenarioItem& lhs, const ScenarioItem& rhs) { return lhs.id() < rhs.id(); });
+
+  SortScenarios(&scenarios);
   return scenarios;
 }
 
@@ -243,7 +248,28 @@ bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& 
   if (!path.has_value()) {
     return false;
   }
-  return WriteJsonMessageToFile(*path, def);
+  bool saved = 
+  WriteJsonMessageToFile(*path, def);
+  if (saved) {
+    // UpdatedCachedScenario(name.full_name()
+  }
+  return saved;
+}
+
+void ScenarioManager::UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item) {
+  for (ScenarioItem& old_item : scenarios_) {
+    if (old_item.name.full_name() == name) {
+      old_item = new_item;
+    }
+  }
+  bool name_changed = name != new_item.name.full_name();
+  if (name_changed) {
+    SortScenarios(&scenarios_);
+    scenario_map_.erase(name);
+    scenario_map_[new_item.name.full_name()] = new_item;
+  } else {
+    scenario_map_[name] = new_item;
+  }
 }
 
 std::optional<ResourceName> ScenarioManager::SaveScenarioWithUniqueName(const ResourceName& name_in,
