@@ -291,7 +291,7 @@ inline constexpr WallStrafeProfile::Impl_::Impl_(
         pause_seconds_{0},
         pause_seconds_jitter_{0},
         speed_override_{0},
-        acceleartion_override_{0},
+        acceleration_override_{0},
         next_profile_{0},
         min_selection_gap_{0} {}
 
@@ -1334,7 +1334,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.pause_seconds_),
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.pause_seconds_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.speed_override_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.acceleartion_override_),
+        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.acceleration_override_),
         3,
         11,
         12,
@@ -1678,7 +1678,7 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "le_jitter\030\005 \001(\002\022\023\n\013description\030\006 \001(\t\022\033\n\023"
     "pause_at_end_chance\030\007 \001(\002\022\025\n\rpause_secon"
     "ds\030\010 \001(\002\022\034\n\024pause_seconds_jitter\030\t \001(\002\022\026"
-    "\n\016speed_override\030\n \001(\002\022\035\n\025acceleartion_o"
+    "\n\016speed_override\030\n \001(\002\022\035\n\025acceleration_o"
     "verride\030\013 \001(\002\"\321\001\n\025WallStrafeScenarioDef\022"
     " \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006hei"
     "ght\030\002 \001(\0132\021.aim.RegionLength\022\034\n\001y\030\003 \001(\0132"
@@ -10443,9 +10443,9 @@ const ::_pbi::TcParseTable<4, 13, 2, 49, 2> WallStrafeProfile::_table_ = {
     // float speed_override = 10;
     {::_pbi::TcParser::FastF32S1,
      {85, 9, 0, PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.speed_override_)}},
-    // float acceleartion_override = 11;
+    // float acceleration_override = 11;
     {::_pbi::TcParser::FastF32S1,
-     {93, 10, 0, PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleartion_override_)}},
+     {93, 10, 0, PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleration_override_)}},
     // int32 next_profile = 12;
     {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(WallStrafeProfile, _impl_.next_profile_), 11>(),
      {96, 11, 0, PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.next_profile_)}},
@@ -10487,8 +10487,8 @@ const ::_pbi::TcParseTable<4, 13, 2, 49, 2> WallStrafeProfile::_table_ = {
     // float speed_override = 10;
     {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.speed_override_), _Internal::kHasBitsOffset + 9, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float acceleartion_override = 11;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleartion_override_), _Internal::kHasBitsOffset + 10, 0,
+    // float acceleration_override = 11;
+    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleration_override_), _Internal::kHasBitsOffset + 10, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // int32 next_profile = 12;
     {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.next_profile_), _Internal::kHasBitsOffset + 11, 0,
@@ -10628,11 +10628,11 @@ PROTOBUF_NOINLINE void WallStrafeProfile::Clear() {
                 10, this_._internal_speed_override(), target);
           }
 
-          // float acceleartion_override = 11;
+          // float acceleration_override = 11;
           if (cached_has_bits & 0x00000400u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                11, this_._internal_acceleartion_override(), target);
+                11, this_._internal_acceleration_override(), target);
           }
 
           // int32 next_profile = 12;
@@ -10720,7 +10720,7 @@ PROTOBUF_NOINLINE void WallStrafeProfile::Clear() {
             if (cached_has_bits & 0x00000200u) {
               total_size += 5;
             }
-            // float acceleartion_override = 11;
+            // float acceleration_override = 11;
             if (cached_has_bits & 0x00000400u) {
               total_size += 5;
             }
@@ -10795,7 +10795,7 @@ void WallStrafeProfile::MergeImpl(::google::protobuf::MessageLite& to_msg, const
       _this->_impl_.speed_override_ = from._impl_.speed_override_;
     }
     if (cached_has_bits & 0x00000400u) {
-      _this->_impl_.acceleartion_override_ = from._impl_.acceleartion_override_;
+      _this->_impl_.acceleration_override_ = from._impl_.acceleration_override_;
     }
     if (cached_has_bits & 0x00000800u) {
       _this->_impl_.next_profile_ = from._impl_.next_profile_;

@@ -10,7 +10,8 @@ BasicWallMovementController::BasicWallMovementController() {}
 BasicWallMovementController::BasicWallMovementController(float speed, const glm::vec2& direction)
     : speed_(speed), direction_(glm::normalize(direction)), original_speed_(speed) {}
 
-BasicWallMovementController::BasicWallMovementController(float speed) : speed_(speed) {}
+BasicWallMovementController::BasicWallMovementController(float speed)
+    : speed_(speed), original_speed_(speed) {}
 
 BasicWallMovementController::~BasicWallMovementController() {}
 

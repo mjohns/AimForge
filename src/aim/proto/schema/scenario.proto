@@ -283,7 +283,7 @@ message WallStrafeProfile {
 
   // Allows increasing to very high value to create a teleport like effect.
   float speed_override = 10;
-  float acceleartion_override = 11;
+  float acceleration_override = 11;
 }
 
 message WallStrafeScenarioDef {

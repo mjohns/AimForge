@@ -1,48 +1,105 @@
-#include <SDL3/SDL.h>
-#include <imgui.h>
 
-#include <glm/gtc/constants.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/trigonometric.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 #include <memory>
-#include <random>
 
 #include "aim/common/geometry.h"
-#include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
-#include "aim/core/camera.h"
 #include "aim/core/profile_selection.h"
-#include "aim/proto/common.pb.h"
-#include "aim/proto/replay.pb.h"
-#include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
+#include "aim/scenario/basic_movement_controller.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace aim {
 namespace {
 
-class WallStrafeScenario : public BaseScenario {
+struct StrafeBounds {
+  float min_x;
+  float max_x;
+  float min_y;
+  float max_y;
+};
+
+class StrafeMovementController : public BasicWallMovementController {
  public:
-  explicit WallStrafeScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
-    auto d = params.def.wall_strafe_def();
+  StrafeMovementController(float speed, Wall wall, ScenarioDef def, Application& app)
+      : BasicWallMovementController(speed), wall_(wall), def_(def), app_(app) {}
+
+ protected:
+  void UpdateDirectionAndSpeed(Target& t, float delta_seconds) override {
+    glm::vec2& pos = *t.wall_position;
+    MaybeInitialize(pos);
+    if (paused_until_time_ > 0) {
+      bool should_unpause = GetNowSeconds() >= paused_until_time_;
+      if (!should_unpause) {
+        return;
+      }
+      paused_until_time_ = -1;
+    }
+
+    float distance = glm::length(pos - last_direction_change_position_);
+    if (acceleration_ <= 0) {
+      // No accel/decel. Instant turn.
+      bool should_turn = distance > current_target_travel_distance_;
+      if (should_turn) {
+        ChangeTargetDirection(&t);
+      }
+      return;
+    }
+
+    // Handle acceleration/deceleration.
+
+    bool going_left = direction_.x < 0;
+    bool too_far_left = going_left && pos.x <= bounds_.min_x;
+    bool too_far_right = !going_left && pos.x >= bounds_.max_x;
+    bool turn_now = too_far_left || too_far_right || (is_stopping_ && speed_ <= 0);
+    if (turn_now) {
+      ChangeTargetDirection(&t);
+      return;
+    }
+
+    if (!is_stopping_) {
+      // Should we be stopping?
+      float stop_distance = (speed_ * speed_) / (2 * acceleration_);
+      bool should_start_turn = (distance + stop_distance) > current_target_travel_distance_;
+      if (should_start_turn) {
+        is_stopping_ = true;
+      }
+    }
+
+    if (is_stopping_) {
+      speed_ = ClampPositive(speed_ - delta_seconds * acceleration_);
+    } else {
+      speed_ += delta_seconds * acceleration_;
+      if (speed_ > max_velocity_) {
+        speed_ = max_velocity_;
+      }
+    }
+  }
+
+ private:
+  void MaybeInitialize(const glm::vec2& pos) {
+    if (initialized_) {
+      return;
+    }
+    initialized_ = true;
+
+    auto d = def_.wall_strafe_def();
     float width = d.has_width() ? wall_.GetRegionLength(d.width()) : 0.85 * wall_.width;
-    min_x_ = -0.5 * width;
-    max_x_ = 0.5 * width;
+    bounds_.min_x = -0.5 * width;
+    bounds_.max_x = 0.5 * width;
 
     float height = d.has_height() ? wall_.GetRegionLength(d.height()) : 0.85 * wall_.height;
-    float starting_y = wall_.GetRegionLength(d.y());
-    min_y_ = (-0.5 * height) + starting_y;
-    max_y_ = (0.5 * height) + starting_y;
+    float starting_y = pos.y;
+    bounds_.min_y = (-0.5 * height) + starting_y;
+    bounds_.max_y = (0.5 * height) + starting_y;
 
     acceleration_ = abs(d.acceleration());
     original_acceleration_ = acceleration_;
 
-    last_direction_change_position_ = glm::vec2(0, starting_y);
+    last_direction_change_position_ = pos;
 
     if (app_.rand().FlipCoin()) {
       direction_ = glm::vec2(-1, 0);
@@ -53,88 +110,6 @@ class WallStrafeScenario : public BaseScenario {
     ChangeDirectionNoTargetUpdate(last_direction_change_position_);
   }
 
- protected:
-  ShotType::TypeCase GetDefaultShotType() override {
-    return ShotType::kTrackingInvincible;
-  }
-
-  void FillInNewTarget(Target* target) override {
-    target->wall_position = last_direction_change_position_;
-    target->wall_direction = direction_;
-    max_velocity_ = target->speed;
-    original_max_velocity_ = target->speed;
-  }
-
-  void UpdateTargetPositions() override {
-    float now_seconds = timer_.GetElapsedSeconds();
-    // Determine if the target needs to change direction
-    Target* target = nullptr;
-    for (Target* t : target_manager_.GetMutableVisibleTargets()) {
-      target = t;
-      break;
-    }
-
-    if (target == nullptr) {
-      return;
-    }
-
-    if (paused_until_time_ > 0) {
-      bool should_unpause = now_seconds >= paused_until_time_;
-      if (!should_unpause) {
-        target->last_update_time_seconds = now_seconds;
-        return;
-      }
-      paused_until_time_ = -1;
-    }
-
-    float distance = glm::length(*target->wall_position - last_direction_change_position_);
-    if (acceleration_ <= 0) {
-      // No accel/decel. Instant turn.
-      bool should_turn = distance > current_target_travel_distance_;
-      if (should_turn) {
-        ChangeTargetDirection(target);
-      }
-      target_manager_.UpdateTargetPositions(now_seconds);
-      return;
-    }
-
-    // Handle acceleration/deceleration.
-
-    bool going_left = direction_.x < 0;
-    bool too_far_left = going_left && target->wall_position->x <= min_x_;
-    bool too_far_right = !going_left && target->wall_position->x >= max_x_;
-    bool turn_now = too_far_left || too_far_right || (is_stopping_ && target->speed <= 0);
-    if (turn_now) {
-      ChangeTargetDirection(target);
-      target_manager_.UpdateTargetPositions(now_seconds);
-      return;
-    }
-
-    if (!is_stopping_) {
-      // Should we be stopping?
-      float stop_distance = (target->speed * target->speed) / (2 * acceleration_);
-      bool should_start_turn = (distance + stop_distance) > current_target_travel_distance_;
-      if (should_start_turn) {
-        is_stopping_ = true;
-      }
-    }
-
-    float delta_seconds = now_seconds - target->last_update_time_seconds;
-    if (is_stopping_) {
-      target->speed -= delta_seconds * acceleration_;
-      if (target->speed < 0) {
-        target->speed = 0;
-      }
-    } else {
-      target->speed += delta_seconds * acceleration_;
-      if (target->speed > max_velocity_) {
-        target->speed = max_velocity_;
-      }
-    }
-    target_manager_.UpdateTargetPositions(now_seconds);
-  }
-
- private:
   void ChangeDirectionNoTargetUpdate(const glm::vec2& current_pos) {
     is_stopping_ = false;
     WallStrafeProfile profile = GetNextProfile();
@@ -149,10 +124,10 @@ class WallStrafeScenario : public BaseScenario {
     }
 
     acceleration_ = original_acceleration_;
-    if (profile.has_acceleartion_override()) {
-      acceleration_ = profile.acceleartion_override();
+    if (profile.has_acceleration_override()) {
+      acceleration_ = profile.acceleration_override();
     }
-    max_velocity_ = FirstGreaterThanZero(profile.speed_override(), original_max_velocity_);
+    max_velocity_ = FirstGreaterThanZero(profile.speed_override(), original_speed_);
 
     float min_strafe_distance = wall_.GetRegionLength(profile.min_distance());
     if (min_strafe_distance <= 0) {
@@ -167,9 +142,9 @@ class WallStrafeScenario : public BaseScenario {
     glm::vec2 new_direction;
     float angle = abs(app_.rand().GetJittered(profile.angle(), profile.angle_jitter()));
     angle = glm::clamp(angle, 0.f, 45.f);
-    if (current_pos.y >= max_y_) {
+    if (current_pos.y >= bounds_.max_y) {
       angle *= -1;
-    } else if (current_pos.y <= min_y_) {
+    } else if (current_pos.y <= bounds_.min_y) {
       // Keep angle positive
     } else {
       // 50/50 strafe up or down
@@ -184,8 +159,8 @@ class WallStrafeScenario : public BaseScenario {
     }
 
     glm::vec2 end_pos = current_pos + distance * new_direction;
-    end_pos.x = glm::clamp(end_pos.x, min_x_, max_x_);
-    end_pos.y = glm::clamp(end_pos.y, min_y_, max_y_);
+    end_pos.x = glm::clamp(end_pos.x, bounds_.min_x, bounds_.max_x);
+    end_pos.y = glm::clamp(end_pos.y, bounds_.min_y, bounds_.max_y);
 
     // Recalculate distance and direction
     direction_ = end_pos - current_pos;
@@ -198,18 +173,17 @@ class WallStrafeScenario : public BaseScenario {
 
   void ChangeTargetDirection(Target* target) {
     if (pause_at_next_direction_change_) {
-      paused_until_time_ = timer_.GetElapsedSeconds() + pause_for_seconds_;
+      paused_until_time_ = GetNowSeconds() + pause_for_seconds_;
       pause_at_next_direction_change_ = false;
       pause_for_seconds_ = 0;
     }
 
     ChangeDirectionNoTargetUpdate(*target->wall_position);
-    target->wall_direction = direction_;
 
     if (acceleration_ > 0) {
-      target->speed = 0;
+      speed_ = 0;
     } else {
-      target->speed = max_velocity_;
+      speed_ = original_speed_;
     }
   }
 
@@ -222,10 +196,10 @@ class WallStrafeScenario : public BaseScenario {
   }
 
   Wall wall_;
-  float min_x_;
-  float max_x_;
-  float min_y_;
-  float max_y_;
+  ScenarioDef def_;
+  Application& app_;
+
+  StrafeBounds bounds_;
 
   float max_velocity_;
   float acceleration_;
@@ -236,7 +210,6 @@ class WallStrafeScenario : public BaseScenario {
   bool is_stopping_ = false;
 
   glm::vec2 last_direction_change_position_;
-  glm::vec2 direction_;
   float current_target_travel_distance_;
 
   float pause_at_next_direction_change_ = false;
@@ -244,6 +217,34 @@ class WallStrafeScenario : public BaseScenario {
 
   float paused_until_time_ = -1;
   ProfileSelectionContext selection_context_;
+
+  bool initialized_ = false;
+};
+
+class WallStrafeScenario : public BaseScenario {
+ public:
+  explicit WallStrafeScenario(const CreateScenarioParams& params, Application* app)
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {}
+
+ protected:
+  ShotType::TypeCase GetDefaultShotType() override {
+    return ShotType::kTrackingInvincible;
+  }
+
+  void FillInNewTarget(Target* target) override {
+    float starting_y = wall_.GetRegionLength(def_.wall_strafe_def().y());
+    glm::vec3 pos(0, starting_y, 0);
+    target->SetWallPosition(pos, def_.room());
+    target->movement_controller =
+        std::make_shared<StrafeMovementController>(target->speed, wall_, def_, app_);
+  }
+
+  void UpdateTargetPositions() override {
+    target_manager_.UpdateTargetPositions(timer_.GetElapsedSeconds());
+  }
+
+ private:
+  Wall wall_;
 };
 
 }  // namespace

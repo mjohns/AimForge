@@ -1,6 +1,7 @@
 {
   "description": "",
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -10,7 +11,7 @@
     "cylinderRoom": {
       "height": 240,
       "hideSides": false,
-      "radius": 100,
+      "radius": 200,
       "sideAngleDegrees": 65,
       "widthPerimeterPercent": 0.599999964
     }
@@ -19,7 +20,6 @@
     "trackingInvincible": true
   },
   "targetDef": {
-    "newestTargetIsGhost": false,
     "numTargets": 1,
     "profiles": [
       {
@@ -32,8 +32,7 @@
         "targetRadius": 1.80000019,
         "targetRadiusJitter": 0
       }
-    ],
-    "removeClosestOnMiss": false
+    ]
   },
   "wallStrafeDef": {
     "acceleration": 133,

@@ -2451,7 +2451,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     kPauseSecondsFieldNumber = 8,
     kPauseSecondsJitterFieldNumber = 9,
     kSpeedOverrideFieldNumber = 10,
-    kAcceleartionOverrideFieldNumber = 11,
+    kAccelerationOverrideFieldNumber = 11,
     kNextProfileFieldNumber = 12,
     kMinSelectionGapFieldNumber = 13,
   };
@@ -2579,15 +2579,15 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_speed_override(float value);
 
   public:
-  // float acceleartion_override = 11;
-  bool has_acceleartion_override() const;
-  void clear_acceleartion_override() ;
-  float acceleartion_override() const;
-  void set_acceleartion_override(float value);
+  // float acceleration_override = 11;
+  bool has_acceleration_override() const;
+  void clear_acceleration_override() ;
+  float acceleration_override() const;
+  void set_acceleration_override(float value);
 
   private:
-  float _internal_acceleartion_override() const;
-  void _internal_set_acceleartion_override(float value);
+  float _internal_acceleration_override() const;
+  void _internal_set_acceleration_override(float value);
 
   public:
   // int32 next_profile = 12;
@@ -2647,7 +2647,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     float pause_seconds_;
     float pause_seconds_jitter_;
     float speed_override_;
-    float acceleartion_override_;
+    float acceleration_override_;
     ::int32_t next_profile_;
     ::int32_t min_selection_gap_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -14961,32 +14961,32 @@ inline void WallStrafeProfile::_internal_set_speed_override(float value) {
   _impl_.speed_override_ = value;
 }
 
-// float acceleartion_override = 11;
-inline bool WallStrafeProfile::has_acceleartion_override() const {
+// float acceleration_override = 11;
+inline bool WallStrafeProfile::has_acceleration_override() const {
   bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
-inline void WallStrafeProfile::clear_acceleartion_override() {
+inline void WallStrafeProfile::clear_acceleration_override() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleartion_override_ = 0;
+  _impl_.acceleration_override_ = 0;
   _impl_._has_bits_[0] &= ~0x00000400u;
 }
-inline float WallStrafeProfile::acceleartion_override() const {
-  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.acceleartion_override)
-  return _internal_acceleartion_override();
+inline float WallStrafeProfile::acceleration_override() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.acceleration_override)
+  return _internal_acceleration_override();
 }
-inline void WallStrafeProfile::set_acceleartion_override(float value) {
-  _internal_set_acceleartion_override(value);
+inline void WallStrafeProfile::set_acceleration_override(float value) {
+  _internal_set_acceleration_override(value);
   _impl_._has_bits_[0] |= 0x00000400u;
-  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.acceleartion_override)
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.acceleration_override)
 }
-inline float WallStrafeProfile::_internal_acceleartion_override() const {
+inline float WallStrafeProfile::_internal_acceleration_override() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.acceleartion_override_;
+  return _impl_.acceleration_override_;
 }
-inline void WallStrafeProfile::_internal_set_acceleartion_override(float value) {
+inline void WallStrafeProfile::_internal_set_acceleration_override(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleartion_override_ = value;
+  _impl_.acceleration_override_ = value;
 }
 
 // -------------------------------------------------------------------

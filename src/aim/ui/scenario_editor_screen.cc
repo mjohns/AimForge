@@ -1,8 +1,5 @@
 #include "scenario_editor_screen.h"
 
-#include <backends/imgui_impl_sdl3.h>
-#include <misc/cpp/imgui_stdlib.h>
-
 #include <format>
 #include <functional>
 #include <optional>
@@ -19,6 +16,7 @@
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/scenario.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {
