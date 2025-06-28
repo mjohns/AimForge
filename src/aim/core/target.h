@@ -54,16 +54,12 @@ struct Target {
   std::optional<glm::vec2> wall_position;
   float wall_depth = 0;
   glm::vec3 GetWallPosition3();
+
   float radius = 1.0f;
-  float height = 3.0f;
   float hit_radius_multiplier = 1.0f;
 
   std::shared_ptr<MovementController> movement_controller;
-
   float speed = 0;
-  std::optional<glm::vec3> direction;
-  std::optional<glm::vec2> wall_direction;
-  float last_update_time_seconds = 0;
 
   float remove_after_time_seconds = -1;
 
@@ -72,6 +68,7 @@ struct Target {
 
   bool is_pill = false;
   glm::vec3 pill_up{0, 0, 1};
+  float height = 3.0f;
 
   float GetHealthPercent() const;
   void StopHitTimer();
@@ -128,8 +125,6 @@ class TargetManager {
   }
 
   void UpdateTargetPositions(float now_seconds);
-  glm::vec3 GetUpdatedPosition(const Target& target, float now_seconds);
-  glm::vec2 GetUpdatedWallPosition(const Target& target, float now_seconds);
 
   Target* GetMutableTarget(u16 target_id);
   Target* GetMutableMostRecentlyAddedTarget();

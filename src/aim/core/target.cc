@@ -99,35 +99,7 @@ void TargetManager::UpdateTargetPositions(float now_seconds) {
     if (t.movement_controller) {
       t.movement_controller->DoTick(t, room_, now_seconds);
     }
-    if (t.direction.has_value()) {
-      t.position = GetUpdatedPosition(t, now_seconds);
-    }
-    if (t.wall_direction.has_value()) {
-      t.wall_position = GetUpdatedWallPosition(t, now_seconds);
-      t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_, t.wall_depth);
-    }
-    t.last_update_time_seconds = now_seconds;
   }
-}
-
-glm::vec3 TargetManager::GetUpdatedPosition(const Target& target, float now_seconds) {
-  if (target.direction.has_value()) {
-    float delta_seconds = now_seconds - target.last_update_time_seconds;
-    return target.position + (*target.direction * (delta_seconds * target.speed));
-  }
-  return target.position;
-}
-
-glm::vec2 TargetManager::GetUpdatedWallPosition(const Target& in, float now_seconds) {
-  Target target = in;
-  if (!target.wall_position.has_value()) {
-    target.wall_position = glm::vec2(0.f);
-  }
-  if (target.wall_direction.has_value()) {
-    float delta_seconds = now_seconds - target.last_update_time_seconds;
-    return *target.wall_position + (*target.wall_direction * (delta_seconds * target.speed));
-  }
-  return *target.wall_position;
 }
 
 std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,

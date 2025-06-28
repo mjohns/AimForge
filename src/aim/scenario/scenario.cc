@@ -579,7 +579,6 @@ TargetProfile Scenario::GetNextTargetProfile() {
 
 Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   Target target;
-  target.last_update_time_seconds = timer_.GetElapsedSeconds();
   target.radius = app_.rand().GetJittered(profile.target_radius(), profile.target_radius_jitter());
   if (profile.target_hit_radius_multiplier() > 0) {
     target.hit_radius_multiplier = profile.target_hit_radius_multiplier();
@@ -592,7 +591,7 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   }
   if (profile.target_radius_growth_time_seconds() > 0) {
     TargetGrowthInfo growth_info;
-    growth_info.start_time_seconds = target.last_update_time_seconds;
+    growth_info.start_time_seconds = timer_.GetElapsedSeconds();
     growth_info.grow_time_seconds = profile.target_radius_growth_time_seconds();
     growth_info.end_radius = profile.target_radius_growth_size();
     growth_info.start_radius = target.radius;

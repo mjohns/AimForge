@@ -59,8 +59,6 @@ class CircleScenario : public BaseScenario {
     // This should only be called once during initialize.
     target->wall_position = initial_position_;
     target->wall_depth = c_.depth();
-
-    // Maybe orient the pill to point with the radius as an option?
   }
 
   void UpdateTargetPositions() override {
@@ -75,8 +73,8 @@ class CircleScenario : public BaseScenario {
       return;
     }
 
-    float delta_seconds = now_seconds - target->last_update_time_seconds;
-    target->last_update_time_seconds = now_seconds;
+    float delta_seconds = now_seconds - last_update_time_;
+    last_update_time_ = now_seconds;
 
     float desired_distance = target->speed * delta_seconds;
 
@@ -103,6 +101,7 @@ class CircleScenario : public BaseScenario {
   }
 
  private:
+  float last_update_time_ = 0;
   glm::vec2 initial_position_;
   glm::vec2 current_circle_position_;
   float radius_;
