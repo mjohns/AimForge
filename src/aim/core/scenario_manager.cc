@@ -248,8 +248,7 @@ bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& 
   if (!path.has_value()) {
     return false;
   }
-  bool saved = 
-  WriteJsonMessageToFile(*path, def);
+  bool saved = WriteJsonMessageToFile(*path, def);
   if (saved) {
     // UpdatedCachedScenario(name.full_name()
   }

@@ -2,17 +2,15 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include <SDL3/SDL.h>
-
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/vector_angle.hpp>
-#include <glm/mat4x4.hpp>
-
+#include "SDL3/SDL.h"
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/graphics/shapes.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/vector_angle.hpp"
+#include "glm/mat4x4.hpp"
 
 namespace aim {
 namespace {

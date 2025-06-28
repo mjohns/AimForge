@@ -1,14 +1,14 @@
 #pragma once
 
-#include <glm/mat4x4.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 #include <optional>
 #include <random>
 
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/wall.h"
+#include "glm/mat4x4.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace aim {
 
