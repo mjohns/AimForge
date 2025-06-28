@@ -56,10 +56,10 @@
     "profiles": [
       {
         "description": "",
-        "targetRadius": 2.49999952,
+        "targetRadius": 2.69999933,
         "targetRadiusJitter": 0
       }
     ],
-    "removeClosestOnMiss": false
+    "removeClosestOnMiss": true
   }
 }

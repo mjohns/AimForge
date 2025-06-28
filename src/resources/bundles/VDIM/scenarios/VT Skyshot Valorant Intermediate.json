@@ -3,7 +3,7 @@
   "linearDef": {
     "angle": 0,
     "angleJitter": 0,
-    "direction": "RANDOM",
+    "direction": "IN",
     "targetPlacementStrategy": {
       "minDistance": 50,
       "regions": [
@@ -13,7 +13,7 @@
           "description": "",
           "rectangle": {
             "xLength": {
-              "xPercentValue": 0.829999864
+              "xPercentValue": 0.889999866
             },
             "yLength": {
               "yPercentValue": 0.799999833

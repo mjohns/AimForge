@@ -17,7 +17,7 @@
   },
   "staticDef": {
     "targetPlacementStrategy": {
-      "minDistance": 20,
+      "minDistance": 17,
       "regions": [
         {
           "depth": 0,

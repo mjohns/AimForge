@@ -36,12 +36,11 @@
     }
   },
   "shotType": {
-    "poke": true,
-    "pokeKillTimeSeconds": 0.07
+    "clickSingle": true
   },
   "targetDef": {
     "newestTargetIsGhost": false,
-    "numTargets": 12,
+    "numTargets": 14,
     "profiles": [
       {
         "description": "Big",

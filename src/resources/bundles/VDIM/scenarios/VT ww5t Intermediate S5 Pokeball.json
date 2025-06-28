@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "endScore": 180,
   "overrides": {},
   "room": {
     "cameraPosition": {
@@ -20,7 +19,6 @@
     "poke": true,
     "pokeKillTimeSeconds": 0.08
   },
-  "startScore": 140,
   "staticDef": {
     "targetPlacementStrategy": {
       "minDistance": 27,
