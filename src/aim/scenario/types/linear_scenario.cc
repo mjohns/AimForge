@@ -1,28 +1,59 @@
-#include <SDL3/SDL.h>
-#include <imgui.h>
-
-#include <glm/gtc/constants.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/trigonometric.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 #include <memory>
-#include <random>
 
 #include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
-#include "aim/core/camera.h"
-#include "aim/proto/common.pb.h"
-#include "aim/proto/replay.pb.h"
-#include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
+#include "aim/scenario/basic_movement_controller.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace aim {
 namespace {
+
+class LinearMovementController : public BasicWallMovementController {
+ public:
+  LinearMovementController(float speed, const glm::vec2& direction, Wall wall)
+      : BasicWallMovementController(speed, direction), wall_(wall) {}
+
+ protected:
+  void UpdateDirectionAndSpeed(Target& t, float delta_seconds) override {
+    glm::vec2 new_position = *t.wall_position;
+
+    float max_x = (wall_.width * 0.5) - (t.radius * 1.2);
+    float min_x = -1 * max_x;
+
+    float max_y = (wall_.height * 0.5) - (t.radius * 1.2);
+    float min_y = -1 * max_y;
+
+    if (new_position.x >= max_x) {
+      // Too far right.
+      EnsureNegative(&direction_.x);
+    }
+
+    if (new_position.x <= min_x) {
+      // Too far left.
+      EnsurePositive(&direction_.x);
+    }
+
+    if (new_position.y >= max_y) {
+      // Too high.
+      EnsureNegative(&direction_.y);
+    }
+
+    if (new_position.y <= min_y) {
+      // Too low.
+      EnsurePositive(&direction_.y);
+    }
+  }
+
+ private:
+  Wall wall_;
+  bool direction_initialized_ = false;
+};
 
 class LinearScenario : public BaseScenario {
  public:
@@ -53,6 +84,7 @@ class LinearScenario : public BaseScenario {
  protected:
   void FillInNewTarget(Target* target) override {
     glm::vec3 pos = wall_target_placer_->GetNextPosition();
+    target->SetWallPosition(pos, def_.room());
 
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
@@ -87,44 +119,12 @@ class LinearScenario : public BaseScenario {
       }
     }
 
-    target->SetWallPosition(pos, def_.room());
-    target->wall_direction = direction;
+    target->movement_controller =
+        std::make_shared<LinearMovementController>(target->speed, direction, wall_);
   }
 
   void UpdateTargetPositions() override {
-    float now_seconds = timer_.GetElapsedSeconds();
-    // Determine if the targets need to change direction.
-    for (Target* t : target_manager_.GetMutableVisibleTargets()) {
-      glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*t, now_seconds);
-
-      float max_x = (wall_.width * 0.5) - (t->radius * 1.2);
-      float min_x = -1 * max_x;
-
-      float max_y = (wall_.height * 0.5) - (t->radius * 1.2);
-      float min_y = -1 * max_y;
-
-      glm::vec2& direction = *t->wall_direction;
-      if (new_position.x >= max_x) {
-        // Too far right.
-        EnsureNegative(&direction.x);
-      }
-
-      if (new_position.x <= min_x) {
-        // Too far left.
-        EnsurePositive(&direction.x);
-      }
-
-      if (new_position.y >= max_y) {
-        // Too high.
-        EnsureNegative(&direction.y);
-      }
-
-      if (new_position.y <= min_y) {
-        // Too low.
-        EnsurePositive(&direction.y);
-      }
-    }
-    target_manager_.UpdateTargetPositions(now_seconds);
+    target_manager_.UpdateTargetPositions(timer_.GetElapsedSeconds());
   }
 
  private:

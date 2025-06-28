@@ -316,13 +316,6 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
   } else {
     AddRemoveTargetEvent(old_target_id);
   }
-
-  if (target.wall_direction.has_value()) {
-    AddMoveLinearTargetEvent(target, *target.wall_direction, target.speed);
-  }
-  if (target.direction.has_value()) {
-    AddMoveLinearTargetEvent(target, *target.direction, target.speed);
-  }
 }
 
 }  // namespace aim

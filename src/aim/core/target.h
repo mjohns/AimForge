@@ -26,6 +26,28 @@ struct TargetGrowthInfo {
   float end_radius;
 };
 
+struct Target;
+
+class MovementController {
+ public:
+  MovementController();
+  virtual ~MovementController() {}
+
+  void DoTick(Target& t, const Room& room, float now_seconds);
+
+ protected:
+  virtual void UpdatePosition(Target& t, const Room& room, float delta_seconds) = 0;
+
+  float GetNowSeconds() {
+    return now_seconds_;
+  }
+
+  float last_update_time_seconds_ = -1;
+
+ private:
+  float now_seconds_ = 0;
+};
+
 struct Target {
   u16 id = 0;
   glm::vec3 position{};
@@ -34,6 +56,8 @@ struct Target {
   float radius = 1.0f;
   float height = 3.0f;
   float hit_radius_multiplier = 1.0f;
+
+  std::shared_ptr<MovementController> movement_controller;
 
   float speed = 0;
   std::optional<glm::vec3> direction;
@@ -47,14 +71,12 @@ struct Target {
 
   bool is_pill = false;
   glm::vec3 pill_up{0, 0, 1};
-  std::optional<glm::vec2> pill_wall_up;
 
   float GetHealthPercent() const;
   void StopHitTimer();
   void StartHitTimer();
   void StopAllTimers();
   void AddTestDamage();
-  void MaybeResetTimersForRegen();
 
   float notify_at_health_seconds = 0;
   float health_seconds = 0;
@@ -82,6 +104,8 @@ struct Target {
   }
 
  private:
+  void MaybeResetTimersForRegen();
+
   Stopwatch hit_timer_;
   Stopwatch regen_timer_;
 };

@@ -18,64 +18,68 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
+#include "aim/scenario/basic_movement_controller.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
 
 namespace aim {
 namespace {
 
+class BarrelMovementController : public BasicWallMovementController {
+ public:
+  BarrelMovementController(float speed, const ScenarioDef& def, Application& app)
+      : BasicWallMovementController(speed), def_(def), app_(app) {}
+
+ protected:
+  void UpdateDirectionAndSpeed(Target& t, float delta_seconds) override {
+    float room_radius = def_.room().barrel_room().radius();
+
+    if (!direction_initialized_ ||
+        !IsPointInCircle(*t.wall_position, room_radius - (t.radius * 0.5))) {
+      // Need to change direction back into barrel.
+      glm::vec2 new_direction_pos = GetRandomPositionInCircle(
+          0,
+          FirstNonZero(def_.barrel_def().direction_radius_percent(), 0.45f) * room_radius,
+          app_.rand());
+      direction_ = glm::normalize(new_direction_pos - *t.wall_position);
+      direction_initialized_ = true;
+    }
+  }
+
+ private:
+  ScenarioDef def_;
+  Application& app_;
+  bool direction_initialized_ = false;
+};
+
 class BarrelScenario : public BaseScenario {
  public:
   explicit BarrelScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), room_radius_(params.def.room().barrel_room().radius()) {
+      : BaseScenario(params, app) {
     Wall wall = Wall::ForRoom(def_.room());
     TargetPlacementStrategy strat = params.def.barrel_def().target_placement_strategy();
     if (!params.def.barrel_def().has_target_placement_strategy()) {
       strat.set_min_distance(15);
       CircleTargetRegion* region = strat.add_regions()->mutable_circle();
       region->mutable_diameter()->set_x_percent_value(0.92);
-      region->mutable_inner_diameter()->set_x_percent_value(0.6);
+      region->mutable_inner_diameter()->set_x_percent_value(0.7);
     }
     wall_target_placer_ = CreateWallTargetPlacer(wall, strat, &target_manager_, &app_);
   }
 
  protected:
   void FillInNewTarget(Target* target) override {
-    // Get position on wall (not too close in ellipse etc.)
-    // Get movement direction vector and speed.
     glm::vec3 pos = wall_target_placer_->GetNextPosition();
-    glm::vec2 pos2 = pos;
-    glm::vec2 direction_pos = GetRandomPositionInCircle(
-        0,
-        FirstNonZero(def_.barrel_def().direction_radius_percent(), 0.45f) * room_radius_,
-        app_.rand());
-
-    // Target will be heading from outside ring through somewhere in the middle x % of the barrel.
-    glm::vec2 direction = glm::normalize(direction_pos - pos2);
-
     target->SetWallPosition(pos, def_.room());
-    target->wall_direction = direction;
+    target->movement_controller =
+        std::make_shared<BarrelMovementController>(target->speed, def_, app_);
   }
 
   void UpdateTargetPositions() override {
-    float now_seconds = timer_.GetElapsedSeconds();
-    // Determine if the targets need to change direction.
-    for (Target* t : target_manager_.GetMutableVisibleTargets()) {
-      glm::vec2 new_position = target_manager_.GetUpdatedWallPosition(*t, now_seconds);
-      if (!IsPointInCircle(new_position, room_radius_ - (t->radius * 0.5))) {
-        // Need to change direction.
-        glm::vec2 new_direction_pos = GetRandomPositionInCircle(0, 0.5 * room_radius_, app_.rand());
-        glm::vec2 new_direction = glm::normalize(new_direction_pos - new_position);
-        t->wall_direction = new_direction;
-        // Make sure this is added before the new position is actually set on the target.
-        AddMoveLinearTargetEvent(*t, *t->wall_direction, t->speed);
-      }
-    }
-    target_manager_.UpdateTargetPositions(now_seconds);
+    target_manager_.UpdateTargetPositions(timer_.GetElapsedSeconds());
   }
 
  private:
-  const float room_radius_;
   std::unique_ptr<WallTargetPlacer> wall_target_placer_;
 };
 

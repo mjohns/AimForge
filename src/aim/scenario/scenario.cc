@@ -560,21 +560,6 @@ void Scenario::AddShotFiredEvent() {
   *event->mutable_shot_fired() = ShotFiredEvent();
 }
 
-void Scenario::AddMoveLinearTargetEvent(const Target& target,
-                                        const glm::vec2& direction,
-                                        float distance_per_second) {
-  if (!replay_) {
-    return;
-  }
-  // Translate from 2d direction on static wall.
-  glm::vec3 dir3(direction.x, 0, direction.y);
-  AddMoveLinearTargetEvent(target, dir3, distance_per_second);
-}
-
-void Scenario::AddMoveLinearTargetEvent(const Target& target,
-                                        const glm::vec3& direction,
-                                        float distance_per_second) {}
-
 void Scenario::PlayShootSound() {
   app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
   AddShotFiredEvent();
@@ -624,12 +609,6 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   if (profile.has_pill()) {
     target.is_pill = true;
     target.height = profile.pill().height();
-    if (profile.pill().has_up()) {
-      target.pill_up = ToVec3(profile.pill().up());
-    }
-    if (profile.pill().has_wall_up()) {
-      target.pill_wall_up = ToVec2(profile.pill().wall_up());
-    }
   }
   target.health_regen_rate = profile.health_regen_rate();
   return target;

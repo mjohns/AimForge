@@ -196,6 +196,31 @@ struct ReferenceScenarioDefDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ReferenceScenarioDefDefaultTypeInternal _ReferenceScenarioDef_default_instance_;
 
+inline constexpr PillTargetDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        height_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR PillTargetDef::PillTargetDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct PillTargetDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PillTargetDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PillTargetDefDefaultTypeInternal() {}
+  union {
+    PillTargetDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PillTargetDefDefaultTypeInternal _PillTargetDef_default_instance_;
+
 inline constexpr CylinderRoom::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -319,6 +344,51 @@ struct WallArcScenarioDefDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallArcScenarioDefDefaultTypeInternal _WallArcScenarioDef_default_instance_;
+
+inline constexpr TargetProfile::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        description_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        weight_{0},
+        target_radius_{0},
+        target_radius_jitter_{0},
+        speed_{0},
+        speed_jitter_{0},
+        health_seconds_{0},
+        health_seconds_jitter_{0},
+        target_radius_at_kill_{0},
+        target_hit_radius_multiplier_{0},
+        target_radius_growth_time_seconds_{0},
+        target_radius_growth_size_{0},
+        health_regen_rate_{0},
+        health_clicks_{0},
+        health_clicks_regen_{0},
+        next_profile_{0},
+        min_selection_gap_{0},
+        type_{},
+        _oneof_case_{} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR TargetProfile::TargetProfile(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct TargetProfileDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TargetProfileDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TargetProfileDefaultTypeInternal() {}
+  union {
+    TargetProfile _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
 
 inline constexpr SineScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -458,33 +528,6 @@ struct RectangleTargetRegionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RectangleTargetRegionDefaultTypeInternal _RectangleTargetRegion_default_instance_;
-
-inline constexpr PillTargetDef::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        up_{nullptr},
-        wall_up_{nullptr},
-        height_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR PillTargetDef::PillTargetDef(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct PillTargetDefDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR PillTargetDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~PillTargetDefDefaultTypeInternal() {}
-  union {
-    PillTargetDef _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PillTargetDefDefaultTypeInternal _PillTargetDef_default_instance_;
 
 inline constexpr EllipseTargetRegion::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -635,81 +678,6 @@ struct TargetRegionDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetRegionDefaultTypeInternal _TargetRegion_default_instance_;
 
-inline constexpr TargetProfile::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        description_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        weight_{0},
-        target_radius_{0},
-        target_radius_jitter_{0},
-        speed_{0},
-        speed_jitter_{0},
-        health_seconds_{0},
-        health_seconds_jitter_{0},
-        target_radius_at_kill_{0},
-        target_hit_radius_multiplier_{0},
-        target_radius_growth_time_seconds_{0},
-        target_radius_growth_size_{0},
-        health_regen_rate_{0},
-        health_clicks_{0},
-        health_clicks_regen_{0},
-        next_profile_{0},
-        min_selection_gap_{0},
-        type_{},
-        _oneof_case_{} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR TargetProfile::TargetProfile(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct TargetProfileDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TargetProfileDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TargetProfileDefaultTypeInternal() {}
-  union {
-    TargetProfile _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
-
-inline constexpr TargetPlacementStrategy::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        regions_{},
-        region_order_{},
-        _region_order_cached_byte_size_{0},
-        min_distance_{0},
-        fixed_distance_from_last_target_{0},
-        fixed_distance_jitter_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR TargetPlacementStrategy::TargetPlacementStrategy(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct TargetPlacementStrategyDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TargetPlacementStrategyDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TargetPlacementStrategyDefaultTypeInternal() {}
-  union {
-    TargetPlacementStrategy _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetPlacementStrategyDefaultTypeInternal _TargetPlacementStrategy_default_instance_;
-
 inline constexpr TargetDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -742,6 +710,36 @@ struct TargetDefDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetDefDefaultTypeInternal _TargetDef_default_instance_;
+
+inline constexpr TargetPlacementStrategy::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        regions_{},
+        region_order_{},
+        _region_order_cached_byte_size_{0},
+        min_distance_{0},
+        fixed_distance_from_last_target_{0},
+        fixed_distance_jitter_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR TargetPlacementStrategy::TargetPlacementStrategy(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct TargetPlacementStrategyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TargetPlacementStrategyDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TargetPlacementStrategyDefaultTypeInternal() {}
+  union {
+    TargetPlacementStrategy _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TargetPlacementStrategyDefaultTypeInternal _TargetPlacementStrategy_default_instance_;
 
 inline constexpr WallWanderScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -1461,11 +1459,7 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _impl_.height_),
-        PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _impl_.up_),
-        PROTOBUF_FIELD_OFFSET(::aim::PillTargetDef, _impl_.wall_up_),
-        2,
         0,
-        1,
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1543,8 +1537,8 @@ static const ::_pbi::MigrationSchema
         {464, 480, -1, sizeof(::aim::WallWanderProfile)},
         {488, 499, -1, sizeof(::aim::WallWanderScenarioDef)},
         {502, 518, -1, sizeof(::aim::TargetDef)},
-        {526, 537, -1, sizeof(::aim::PillTargetDef)},
-        {540, 567, -1, sizeof(::aim::TargetProfile)},
+        {526, 535, -1, sizeof(::aim::PillTargetDef)},
+        {536, 563, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1711,24 +1705,22 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "get_is_ghost\030\005 \001(\010\022 \n\030new_target_delay_s"
     "econds\030\006 \001(\002\022#\n\033remove_target_after_seco"
     "nds\030\007 \001(\002\022\'\n\037stagger_initial_targets_sec"
-    "onds\030\010 \001(\002\"^\n\rPillTargetDef\022\016\n\006height\030\001 "
-    "\001(\002\022\033\n\002up\030\002 \001(\0132\017.aim.StoredVec3\022 \n\007wall"
-    "_up\030\003 \001(\0132\017.aim.StoredVec2\"\204\004\n\rTargetPro"
-    "file\022\016\n\006weight\030\001 \001(\002\022\024\n\014next_profile\030\021 \001"
-    "(\005\022\031\n\021min_selection_gap\030\022 \001(\005\022\025\n\rtarget_"
-    "radius\030\002 \001(\002\022\034\n\024target_radius_jitter\030\003 \001"
-    "(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022"
-    "\026\n\016health_seconds\030\006 \001(\002\022\035\n\025health_second"
-    "s_jitter\030\007 \001(\002\022\035\n\025target_radius_at_kill\030"
-    "\010 \001(\002\022$\n\034target_hit_radius_multiplier\030\t "
-    "\001(\002\022\023\n\013description\030\013 \001(\t\022)\n!target_radiu"
-    "s_growth_time_seconds\030\014 \001(\002\022!\n\031target_ra"
-    "dius_growth_size\030\r \001(\002\022\031\n\021health_regen_r"
-    "ate\030\016 \001(\002\022\025\n\rhealth_clicks\030\017 \001(\005\022\033\n\023heal"
-    "th_clicks_regen\030\020 \001(\005\022\"\n\004pill\030\n \001(\0132\022.ai"
-    "m.PillTargetDefH\000B\006\n\004type*-\n\016InOutDirect"
-    "ion\022\006\n\002IN\020\000\022\007\n\003OUT\020\001\022\n\n\006RANDOM\020\002b\010editio"
-    "nsp\350\007"
+    "onds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006height\030\001 "
+    "\001(\002\"\204\004\n\rTargetProfile\022\016\n\006weight\030\001 \001(\002\022\024\n"
+    "\014next_profile\030\021 \001(\005\022\031\n\021min_selection_gap"
+    "\030\022 \001(\005\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_"
+    "radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014sp"
+    "eed_jitter\030\005 \001(\002\022\026\n\016health_seconds\030\006 \001(\002"
+    "\022\035\n\025health_seconds_jitter\030\007 \001(\002\022\035\n\025targe"
+    "t_radius_at_kill\030\010 \001(\002\022$\n\034target_hit_rad"
+    "ius_multiplier\030\t \001(\002\022\023\n\013description\030\013 \001("
+    "\t\022)\n!target_radius_growth_time_seconds\030\014"
+    " \001(\002\022!\n\031target_radius_growth_size\030\r \001(\002\022"
+    "\031\n\021health_regen_rate\030\016 \001(\002\022\025\n\rhealth_cli"
+    "cks\030\017 \001(\005\022\033\n\023health_clicks_regen\030\020 \001(\005\022\""
+    "\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B\006\n\004ty"
+    "pe*-\n\016InOutDirection\022\006\n\002IN\020\000\022\007\n\003OUT\020\001\022\n\n"
+    "\006RANDOM\020\002b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1738,7 +1730,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    5925,
+    5862,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -12882,16 +12874,6 @@ class PillTargetDef::_Internal {
       8 * PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_._has_bits_);
 };
 
-void PillTargetDef::clear_up() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.up_ != nullptr) _impl_.up_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-void PillTargetDef::clear_wall_up() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.wall_up_ != nullptr) _impl_.wall_up_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
 PillTargetDef::PillTargetDef(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -12901,35 +12883,10 @@ PillTargetDef::PillTargetDef(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:aim.PillTargetDef)
 }
-inline PROTOBUF_NDEBUG_INLINE PillTargetDef::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
-    const Impl_& from, const ::aim::PillTargetDef& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0} {}
-
 PillTargetDef::PillTargetDef(
-    ::google::protobuf::Arena* arena,
-    const PillTargetDef& from)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  PillTargetDef* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.up_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(
-                              arena, *from._impl_.up_)
-                        : nullptr;
-  _impl_.wall_up_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(
-                              arena, *from._impl_.wall_up_)
-                        : nullptr;
-  _impl_.height_ = from._impl_.height_;
-
-  // @@protoc_insertion_point(copy_constructor:aim.PillTargetDef)
+    ::google::protobuf::Arena* arena, const PillTargetDef& from)
+    : PillTargetDef(arena) {
+  MergeFrom(from);
 }
 inline PROTOBUF_NDEBUG_INLINE PillTargetDef::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
@@ -12938,12 +12895,7 @@ inline PROTOBUF_NDEBUG_INLINE PillTargetDef::Impl_::Impl_(
 
 inline void PillTargetDef::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, up_),
-           0,
-           offsetof(Impl_, height_) -
-               offsetof(Impl_, up_) +
-               sizeof(Impl_::height_));
+  _impl_.height_ = {};
 }
 PillTargetDef::~PillTargetDef() {
   // @@protoc_insertion_point(destructor:aim.PillTargetDef)
@@ -12953,8 +12905,6 @@ inline void PillTargetDef::SharedDtor(MessageLite& self) {
   PillTargetDef& this_ = static_cast<PillTargetDef&>(self);
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  delete this_._impl_.up_;
-  delete this_._impl_.wall_up_;
   this_._impl_.~Impl_();
 }
 
@@ -12994,17 +12944,17 @@ const ::google::protobuf::internal::ClassData* PillTargetDef::GetClassData() con
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 2, 0, 2> PillTargetDef::_table_ = {
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> PillTargetDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    1, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    2,  // num_aux_entries
-    offsetof(decltype(_table_), aux_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
@@ -13012,32 +12962,18 @@ const ::_pbi::TcParseTable<2, 3, 2, 0, 2> PillTargetDef::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::PillTargetDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
     // float height = 1;
     {::_pbi::TcParser::FastF32S1,
-     {13, 2, 0, PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_)}},
-    // .aim.StoredVec3 up = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 0, 0, PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.up_)}},
-    // .aim.StoredVec2 wall_up = 3;
-    {::_pbi::TcParser::FastMtS1,
-     {26, 1, 1, PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.wall_up_)}},
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_)}},
   }}, {{
     65535, 65535
   }}, {{
     // float height = 1;
-    {PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_), _Internal::kHasBitsOffset + 2, 0,
+    {PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.StoredVec3 up = 2;
-    {PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.up_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.StoredVec2 wall_up = 3;
-    {PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.wall_up_), _Internal::kHasBitsOffset + 1, 1,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-  }}, {{
-    {::_pbi::TcParser::GetTable<::aim::StoredVec3>()},
-    {::_pbi::TcParser::GetTable<::aim::StoredVec2>()},
-  }}, {{
+  }},
+  // no aux_entries
+  {{
   }},
 };
 
@@ -13048,17 +12984,6 @@ PROTOBUF_NOINLINE void PillTargetDef::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      ABSL_DCHECK(_impl_.up_ != nullptr);
-      _impl_.up_->Clear();
-    }
-    if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(_impl_.wall_up_ != nullptr);
-      _impl_.wall_up_->Clear();
-    }
-  }
   _impl_.height_ = 0;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -13081,24 +13006,10 @@ PROTOBUF_NOINLINE void PillTargetDef::Clear() {
 
           cached_has_bits = this_._impl_._has_bits_[0];
           // float height = 1;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000001u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 1, this_._internal_height(), target);
-          }
-
-          // .aim.StoredVec3 up = 2;
-          if (cached_has_bits & 0x00000001u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.up_, this_._impl_.up_->GetCachedSize(), target,
-                stream);
-          }
-
-          // .aim.StoredVec2 wall_up = 3;
-          if (cached_has_bits & 0x00000002u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                3, *this_._impl_.wall_up_, this_._impl_.wall_up_->GetCachedSize(), target,
-                stream);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -13124,21 +13035,10 @@ PROTOBUF_NOINLINE void PillTargetDef::Clear() {
           // Prevent compiler warnings about cached_has_bits being unused
           (void)cached_has_bits;
 
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-          cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
-            // .aim.StoredVec3 up = 2;
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.up_);
-            }
-            // .aim.StoredVec2 wall_up = 3;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.wall_up_);
-            }
+           {
             // float height = 1;
-            if (cached_has_bits & 0x00000004u) {
+            cached_has_bits = this_._impl_._has_bits_[0];
+            if (cached_has_bits & 0x00000001u) {
               total_size += 5;
             }
           }
@@ -13149,35 +13049,14 @@ PROTOBUF_NOINLINE void PillTargetDef::Clear() {
 void PillTargetDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
   auto* const _this = static_cast<PillTargetDef*>(&to_msg);
   auto& from = static_cast<const PillTargetDef&>(from_msg);
-  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:aim.PillTargetDef)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
-    if (cached_has_bits & 0x00000001u) {
-      ABSL_DCHECK(from._impl_.up_ != nullptr);
-      if (_this->_impl_.up_ == nullptr) {
-        _this->_impl_.up_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec3>(arena, *from._impl_.up_);
-      } else {
-        _this->_impl_.up_->MergeFrom(*from._impl_.up_);
-      }
-    }
-    if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(from._impl_.wall_up_ != nullptr);
-      if (_this->_impl_.wall_up_ == nullptr) {
-        _this->_impl_.wall_up_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::StoredVec2>(arena, *from._impl_.wall_up_);
-      } else {
-        _this->_impl_.wall_up_->MergeFrom(*from._impl_.wall_up_);
-      }
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.height_ = from._impl_.height_;
-    }
+  if (cached_has_bits & 0x00000001u) {
+    _this->_impl_.height_ = from._impl_.height_;
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
@@ -13195,12 +13074,7 @@ void PillTargetDef::InternalSwap(PillTargetDef* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.height_)
-      + sizeof(PillTargetDef::_impl_.height_)
-      - PROTOBUF_FIELD_OFFSET(PillTargetDef, _impl_.up_)>(
-          reinterpret_cast<char*>(&_impl_.up_),
-          reinterpret_cast<char*>(&other->_impl_.up_));
+        swap(_impl_.height_, other->_impl_.height_);
 }
 
 ::google::protobuf::Metadata PillTargetDef::GetMetadata() const {

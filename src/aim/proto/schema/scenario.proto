@@ -373,8 +373,6 @@ message TargetDef {
 
 message PillTargetDef {
   float height = 1;
-  StoredVec3 up = 2;
-  StoredVec2 wall_up = 3;
 }
 
 message TargetProfile {

@@ -1,6 +1,6 @@
 {
   "barrelDef": {
-    "directionRadiusPercent": 0.45,
+    "directionRadiusPercent": 0.3,
     "targetPlacementStrategy": {
       "minDistance": 15,
       "regions": [
@@ -10,7 +10,7 @@
               "xPercentValue": 0.92
             },
             "innerDiameter": {
-              "xPercentValue": 0.6
+              "xPercentValue": 0.76
             }
           },
           "depth": 0,
@@ -21,13 +21,14 @@
     }
   },
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 75
     },
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     }
   },

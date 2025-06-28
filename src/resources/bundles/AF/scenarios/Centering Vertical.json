@@ -1,5 +1,6 @@
 {
   "centeringDef": {
+    "orientPill": true,
     "wallPoints": [
       {
         "x": {
@@ -20,10 +21,11 @@
     ]
   },
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     },
     "simpleRoom": {
@@ -39,10 +41,7 @@
     "profiles": [
       {
         "pill": {
-          "height": 10,
-          "wallUp": {
-            "x": 1
-          }
+          "height": 10
         },
         "speed": 38,
         "speedJitter": 0,

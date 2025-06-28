@@ -105,12 +105,6 @@ class Scenario : public Screen {
   void AddKillTargetEvent(u16 target_id);
   void AddRemoveTargetEvent(u16 target_id);
   void AddShotFiredEvent();
-  void AddMoveLinearTargetEvent(const Target& target,
-                                const glm::vec3& direction,
-                                float distance_per_second);
-  void AddMoveLinearTargetEvent(const Target& target,
-                                const glm::vec2& direction,
-                                float distance_per_second);
 
   void PlayShootSound();
   void PlayMissSound();

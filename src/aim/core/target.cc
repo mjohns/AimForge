@@ -19,13 +19,6 @@ Target TargetManager::AddTarget(Target t) {
   if (t.wall_position.has_value()) {
     t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room_, t.wall_depth);
   }
-  if (t.pill_wall_up.has_value()) {
-    glm::vec3 world_start =
-        WallPositionToWorldPosition(glm::vec2(0, 0), t.radius, room_, t.wall_depth);
-    glm::vec3 world_end =
-        WallPositionToWorldPosition(*t.pill_wall_up, t.radius, room_, t.wall_depth);
-    t.pill_up = glm::normalize(world_end - world_start);
-  }
   if (t.id == 0) {
     auto new_id = ++target_id_counter_;
     t.id = new_id;
@@ -88,8 +81,24 @@ void TargetManager::MarkAllAsNonGhost() {
   }
 }
 
+MovementController::MovementController() {}
+
+void MovementController::DoTick(Target& t, const Room& room, float now_seconds) {
+  now_seconds_ = now_seconds;
+  if (last_update_time_seconds_ < 0) {
+    last_update_time_seconds_ = now_seconds;
+    return;
+  }
+  float delta_seconds = now_seconds - last_update_time_seconds_;
+  UpdatePosition(t, room, delta_seconds);
+  last_update_time_seconds_ = now_seconds;
+}
+
 void TargetManager::UpdateTargetPositions(float now_seconds) {
   for (Target& t : targets_) {
+    if (t.movement_controller) {
+      t.movement_controller->DoTick(t, room_, now_seconds);
+    }
     if (t.direction.has_value()) {
       t.position = GetUpdatedPosition(t, now_seconds);
     }
