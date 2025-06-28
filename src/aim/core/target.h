@@ -54,6 +54,7 @@ struct Target {
   void StartHitTimer();
   void StopAllTimers();
   void AddTestDamage();
+  void MaybeResetTimersForRegen();
 
   float notify_at_health_seconds = 0;
   float health_seconds = 0;

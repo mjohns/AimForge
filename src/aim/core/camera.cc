@@ -68,9 +68,13 @@ void Camera::SetPitchYawLookingAtPoint(const glm::vec3& look_at_pos) {
   UpdatePitchYaw(pitch_yaw);
 }
 
-glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float fov) {
-  return glm::perspective(
-      glm::radians(fov), (float)screen.width / (float)screen.height, 0.1f, 2000.0f);
+glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen, float horizontal_fov_degrees) {
+  float aspect_ratio = (float)screen.width / (float)screen.height;
+  float horizontal_fov = glm::radians(horizontal_fov_degrees);
+  float tan_half_horizontal_fov = glm::tan(horizontal_fov / 2.0f);
+  float tan_half_vertical_fov = tan_half_horizontal_fov / aspect_ratio;
+  float vertical_fov = 2.0f * glm::atan(tan_half_vertical_fov);
+  return glm::perspective(vertical_fov, aspect_ratio, 0.1f, 2000.0f);
 }
 
 LookAtInfo Camera::GetLookAt() {

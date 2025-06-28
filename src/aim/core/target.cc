@@ -255,6 +255,7 @@ float Target::GetHealthPercent() const {
 void Target::StopHitTimer() {
   hit_timer_.Stop();
   regen_timer_.Start();
+  MaybeResetTimersForRegen();
 }
 
 void Target::StopAllTimers() {
@@ -262,14 +263,18 @@ void Target::StopAllTimers() {
   regen_timer_.Stop();
 }
 
-void Target::StartHitTimer() {
-  regen_timer_.Stop();
+void Target::MaybeResetTimersForRegen() {
   if (health_regen_rate > 0 &&
-      hit_timer_.GetElapsedSeconds() - regen_timer_.GetElapsedSeconds() < 0) {
+      hit_timer_.GetElapsedSeconds() - (health_regen_rate * regen_timer_.GetElapsedSeconds()) < 0) {
     // Reset the timers as health regenerated past 0.
     regen_timer_ = Stopwatch();
     hit_timer_ = Stopwatch();
   }
+}
+
+void Target::StartHitTimer() {
+  regen_timer_.Stop();
+  MaybeResetTimersForRegen();
   hit_timer_.Start();
 }
 
