@@ -1,6 +1,5 @@
 {
   "centeringDef": {
-    "orientPill": true,
     "wallPoints": [
       {
         "x": {
@@ -40,9 +39,6 @@
     "numTargets": 1,
     "profiles": [
       {
-        "pill": {
-          "height": 10
-        },
         "speed": 38,
         "speedJitter": 0,
         "targetRadius": 1.30000007,

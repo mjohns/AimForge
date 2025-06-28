@@ -6268,6 +6268,247 @@ class TargetDef final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class CenteringScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.CenteringScenarioDef) */ {
+ public:
+  inline CenteringScenarioDef() : CenteringScenarioDef(nullptr) {}
+  ~CenteringScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CenteringScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CenteringScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CenteringScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline CenteringScenarioDef(const CenteringScenarioDef& from) : CenteringScenarioDef(nullptr, from) {}
+  inline CenteringScenarioDef(CenteringScenarioDef&& from) noexcept
+      : CenteringScenarioDef(nullptr, std::move(from)) {}
+  inline CenteringScenarioDef& operator=(const CenteringScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CenteringScenarioDef& operator=(CenteringScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CenteringScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CenteringScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const CenteringScenarioDef*>(
+        &_CenteringScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 18;
+  friend void swap(CenteringScenarioDef& a, CenteringScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(CenteringScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CenteringScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CenteringScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CenteringScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CenteringScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CenteringScenarioDef& from) { CenteringScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CenteringScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.CenteringScenarioDef"; }
+
+ protected:
+  explicit CenteringScenarioDef(::google::protobuf::Arena* arena);
+  CenteringScenarioDef(::google::protobuf::Arena* arena, const CenteringScenarioDef& from);
+  CenteringScenarioDef(::google::protobuf::Arena* arena, CenteringScenarioDef&& from) noexcept
+      : CenteringScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kWallPointsFieldNumber = 1,
+    kAngleLengthFieldNumber = 6,
+    kAngleFieldNumber = 4,
+    kAngleJitterFieldNumber = 5,
+  };
+  // repeated .aim.RegionVec2 wall_points = 1;
+  int wall_points_size() const;
+  private:
+  int _internal_wall_points_size() const;
+
+  public:
+  void clear_wall_points() ;
+  ::aim::RegionVec2* mutable_wall_points(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>* mutable_wall_points();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>& _internal_wall_points() const;
+  ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>* _internal_mutable_wall_points();
+  public:
+  const ::aim::RegionVec2& wall_points(int index) const;
+  ::aim::RegionVec2* add_wall_points();
+  const ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>& wall_points() const;
+  // .aim.RegionLength angle_length = 6;
+  bool has_angle_length() const;
+  void clear_angle_length() ;
+  const ::aim::RegionLength& angle_length() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_angle_length();
+  ::aim::RegionLength* mutable_angle_length();
+  void set_allocated_angle_length(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_angle_length(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_angle_length();
+
+  private:
+  const ::aim::RegionLength& _internal_angle_length() const;
+  ::aim::RegionLength* _internal_mutable_angle_length();
+
+  public:
+  // float angle = 4;
+  bool has_angle() const;
+  void clear_angle() ;
+  float angle() const;
+  void set_angle(float value);
+
+  private:
+  float _internal_angle() const;
+  void _internal_set_angle(float value);
+
+  public:
+  // float angle_jitter = 5;
+  bool has_angle_jitter() const;
+  void clear_angle_jitter() ;
+  float angle_jitter() const;
+  void set_angle_jitter(float value);
+
+  private:
+  float _internal_angle_jitter() const;
+  void _internal_set_angle_jitter(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.CenteringScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 4, 2,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const CenteringScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::RegionVec2 > wall_points_;
+    ::aim::RegionLength* angle_length_;
+    float angle_;
+    float angle_jitter_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class TargetPlacementStrategy final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.TargetPlacementStrategy) */ {
  public:
@@ -7421,277 +7662,6 @@ class LinearScenarioDef final : public ::google::protobuf::Message
     float width_;
     float height_;
     int direction_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_scenario_2eproto;
-};
-// -------------------------------------------------------------------
-
-class CenteringScenarioDef final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.CenteringScenarioDef) */ {
- public:
-  inline CenteringScenarioDef() : CenteringScenarioDef(nullptr) {}
-  ~CenteringScenarioDef() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(CenteringScenarioDef* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(CenteringScenarioDef));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR CenteringScenarioDef(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline CenteringScenarioDef(const CenteringScenarioDef& from) : CenteringScenarioDef(nullptr, from) {}
-  inline CenteringScenarioDef(CenteringScenarioDef&& from) noexcept
-      : CenteringScenarioDef(nullptr, std::move(from)) {}
-  inline CenteringScenarioDef& operator=(const CenteringScenarioDef& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline CenteringScenarioDef& operator=(CenteringScenarioDef&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const CenteringScenarioDef& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const CenteringScenarioDef* internal_default_instance() {
-    return reinterpret_cast<const CenteringScenarioDef*>(
-        &_CenteringScenarioDef_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 18;
-  friend void swap(CenteringScenarioDef& a, CenteringScenarioDef& b) { a.Swap(&b); }
-  inline void Swap(CenteringScenarioDef* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(CenteringScenarioDef* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  CenteringScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<CenteringScenarioDef>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const CenteringScenarioDef& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const CenteringScenarioDef& from) { CenteringScenarioDef::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(CenteringScenarioDef* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.CenteringScenarioDef"; }
-
- protected:
-  explicit CenteringScenarioDef(::google::protobuf::Arena* arena);
-  CenteringScenarioDef(::google::protobuf::Arena* arena, const CenteringScenarioDef& from);
-  CenteringScenarioDef(::google::protobuf::Arena* arena, CenteringScenarioDef&& from) noexcept
-      : CenteringScenarioDef(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kWallPointsFieldNumber = 1,
-    kTargetPlacementStrategyFieldNumber = 2,
-    kAngleLengthFieldNumber = 6,
-    kOrientPillFieldNumber = 3,
-    kAngleFieldNumber = 4,
-    kAngleJitterFieldNumber = 5,
-  };
-  // repeated .aim.RegionVec2 wall_points = 1;
-  int wall_points_size() const;
-  private:
-  int _internal_wall_points_size() const;
-
-  public:
-  void clear_wall_points() ;
-  ::aim::RegionVec2* mutable_wall_points(int index);
-  ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>* mutable_wall_points();
-
-  private:
-  const ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>& _internal_wall_points() const;
-  ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>* _internal_mutable_wall_points();
-  public:
-  const ::aim::RegionVec2& wall_points(int index) const;
-  ::aim::RegionVec2* add_wall_points();
-  const ::google::protobuf::RepeatedPtrField<::aim::RegionVec2>& wall_points() const;
-  // .aim.TargetPlacementStrategy target_placement_strategy = 2;
-  bool has_target_placement_strategy() const;
-  void clear_target_placement_strategy() ;
-  const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
-  PROTOBUF_NODISCARD ::aim::TargetPlacementStrategy* release_target_placement_strategy();
-  ::aim::TargetPlacementStrategy* mutable_target_placement_strategy();
-  void set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
-  void unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
-  ::aim::TargetPlacementStrategy* unsafe_arena_release_target_placement_strategy();
-
-  private:
-  const ::aim::TargetPlacementStrategy& _internal_target_placement_strategy() const;
-  ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
-
-  public:
-  // .aim.RegionLength angle_length = 6;
-  bool has_angle_length() const;
-  void clear_angle_length() ;
-  const ::aim::RegionLength& angle_length() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_angle_length();
-  ::aim::RegionLength* mutable_angle_length();
-  void set_allocated_angle_length(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_angle_length(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_angle_length();
-
-  private:
-  const ::aim::RegionLength& _internal_angle_length() const;
-  ::aim::RegionLength* _internal_mutable_angle_length();
-
-  public:
-  // bool orient_pill = 3;
-  bool has_orient_pill() const;
-  void clear_orient_pill() ;
-  bool orient_pill() const;
-  void set_orient_pill(bool value);
-
-  private:
-  bool _internal_orient_pill() const;
-  void _internal_set_orient_pill(bool value);
-
-  public:
-  // float angle = 4;
-  bool has_angle() const;
-  void clear_angle() ;
-  float angle() const;
-  void set_angle(float value);
-
-  private:
-  float _internal_angle() const;
-  void _internal_set_angle(float value);
-
-  public:
-  // float angle_jitter = 5;
-  bool has_angle_jitter() const;
-  void clear_angle_jitter() ;
-  float angle_jitter() const;
-  void set_angle_jitter(float value);
-
-  private:
-  float _internal_angle_jitter() const;
-  void _internal_set_angle_jitter(float value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.CenteringScenarioDef)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 3,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const CenteringScenarioDef& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::RepeatedPtrField< ::aim::RegionVec2 > wall_points_;
-    ::aim::TargetPlacementStrategy* target_placement_strategy_;
-    ::aim::RegionLength* angle_length_;
-    bool orient_pill_;
-    float angle_;
-    float angle_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -13862,139 +13832,15 @@ CenteringScenarioDef::_internal_mutable_wall_points() {
   return &_impl_.wall_points_;
 }
 
-// .aim.TargetPlacementStrategy target_placement_strategy = 2;
-inline bool CenteringScenarioDef::has_target_placement_strategy() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
-  return value;
-}
-inline void CenteringScenarioDef::clear_target_placement_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const ::aim::TargetPlacementStrategy& CenteringScenarioDef::_internal_target_placement_strategy() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
-}
-inline const ::aim::TargetPlacementStrategy& CenteringScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.target_placement_strategy)
-  return _internal_target_placement_strategy();
-}
-inline void CenteringScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
-  }
-  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.CenteringScenarioDef.target_placement_strategy)
-}
-inline ::aim::TargetPlacementStrategy* CenteringScenarioDef::release_target_placement_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
-  _impl_.target_placement_strategy_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::TargetPlacementStrategy* CenteringScenarioDef::unsafe_arena_release_target_placement_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.CenteringScenarioDef.target_placement_strategy)
-
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
-  _impl_.target_placement_strategy_ = nullptr;
-  return temp;
-}
-inline ::aim::TargetPlacementStrategy* CenteringScenarioDef::_internal_mutable_target_placement_strategy() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.target_placement_strategy_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
-    _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
-  }
-  return _impl_.target_placement_strategy_;
-}
-inline ::aim::TargetPlacementStrategy* CenteringScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
-  // @@protoc_insertion_point(field_mutable:aim.CenteringScenarioDef.target_placement_strategy)
-  return _msg;
-}
-inline void CenteringScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.target_placement_strategy_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-
-  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.CenteringScenarioDef.target_placement_strategy)
-}
-
-// bool orient_pill = 3;
-inline bool CenteringScenarioDef::has_orient_pill() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void CenteringScenarioDef::clear_orient_pill() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.orient_pill_ = false;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline bool CenteringScenarioDef::orient_pill() const {
-  // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.orient_pill)
-  return _internal_orient_pill();
-}
-inline void CenteringScenarioDef::set_orient_pill(bool value) {
-  _internal_set_orient_pill(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.orient_pill)
-}
-inline bool CenteringScenarioDef::_internal_orient_pill() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.orient_pill_;
-}
-inline void CenteringScenarioDef::_internal_set_orient_pill(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.orient_pill_ = value;
-}
-
 // float angle = 4;
 inline bool CenteringScenarioDef::has_angle() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline void CenteringScenarioDef::clear_angle() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline float CenteringScenarioDef::angle() const {
   // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.angle)
@@ -14002,7 +13848,7 @@ inline float CenteringScenarioDef::angle() const {
 }
 inline void CenteringScenarioDef::set_angle(float value) {
   _internal_set_angle(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.angle)
 }
 inline float CenteringScenarioDef::_internal_angle() const {
@@ -14016,13 +13862,13 @@ inline void CenteringScenarioDef::_internal_set_angle(float value) {
 
 // float angle_jitter = 5;
 inline bool CenteringScenarioDef::has_angle_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void CenteringScenarioDef::clear_angle_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline float CenteringScenarioDef::angle_jitter() const {
   // @@protoc_insertion_point(field_get:aim.CenteringScenarioDef.angle_jitter)
@@ -14030,7 +13876,7 @@ inline float CenteringScenarioDef::angle_jitter() const {
 }
 inline void CenteringScenarioDef::set_angle_jitter(float value) {
   _internal_set_angle_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.CenteringScenarioDef.angle_jitter)
 }
 inline float CenteringScenarioDef::_internal_angle_jitter() const {
@@ -14044,14 +13890,14 @@ inline void CenteringScenarioDef::_internal_set_angle_jitter(float value) {
 
 // .aim.RegionLength angle_length = 6;
 inline bool CenteringScenarioDef::has_angle_length() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.angle_length_ != nullptr);
   return value;
 }
 inline void CenteringScenarioDef::clear_angle_length() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.angle_length_ != nullptr) _impl_.angle_length_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline const ::aim::RegionLength& CenteringScenarioDef::_internal_angle_length() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -14069,16 +13915,16 @@ inline void CenteringScenarioDef::unsafe_arena_set_allocated_angle_length(::aim:
   }
   _impl_.angle_length_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000001u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000001u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.CenteringScenarioDef.angle_length)
 }
 inline ::aim::RegionLength* CenteringScenarioDef::release_angle_length() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
   ::aim::RegionLength* released = _impl_.angle_length_;
   _impl_.angle_length_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -14098,7 +13944,7 @@ inline ::aim::RegionLength* CenteringScenarioDef::unsafe_arena_release_angle_len
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.CenteringScenarioDef.angle_length)
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
   ::aim::RegionLength* temp = _impl_.angle_length_;
   _impl_.angle_length_ = nullptr;
   return temp;
@@ -14112,7 +13958,7 @@ inline ::aim::RegionLength* CenteringScenarioDef::_internal_mutable_angle_length
   return _impl_.angle_length_;
 }
 inline ::aim::RegionLength* CenteringScenarioDef::mutable_angle_length() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000001u;
   ::aim::RegionLength* _msg = _internal_mutable_angle_length();
   // @@protoc_insertion_point(field_mutable:aim.CenteringScenarioDef.angle_length)
   return _msg;
@@ -14129,9 +13975,9 @@ inline void CenteringScenarioDef::set_allocated_angle_length(::aim::RegionLength
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000001u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000001u;
   }
 
   _impl_.angle_length_ = reinterpret_cast<::aim::RegionLength*>(value);

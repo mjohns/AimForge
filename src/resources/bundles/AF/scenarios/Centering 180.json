@@ -21,6 +21,7 @@
   },
   "durationSeconds": 60,
   "endScore": 45,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -30,7 +31,7 @@
     "cylinderRoom": {
       "height": 100,
       "hideSides": false,
-      "radius": 100,
+      "radius": 200,
       "sideAngleDegrees": 65,
       "widthPerimeterPercent": 0.6
     }

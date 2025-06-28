@@ -1023,35 +1023,24 @@ class ScenarioEditorScreen : public UiScreen {
 
     const char* kPoints = "Points";
     const char* kAngle = "Angle";
-    const char* kTargetPlacement = "Point regions";
 
     std::string type = kPoints;
     if (c.has_angle()) {
       type = kAngle;
-    } else if (c.has_target_placement_strategy()) {
-      type = kTargetPlacement;
     }
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Type");
     ImGui::SameLine();
-    ImGui::SimpleDropdown("##TypeDrop", &type, {kPoints, kAngle, kTargetPlacement}, char_x_ * 13);
-
-    ImGui::SameLine();
+    ImGui::SimpleDropdown("##TypeDrop", &type, {kPoints, kAngle}, char_x_ * 13);
 
     bool use_angle = type == kAngle;
-    bool use_target_placement = type == kTargetPlacement;
-    bool use_points = !use_angle && !use_target_placement;
 
-    if (!use_angle) {
+    if (use_angle) {
+      c.clear_wall_points();
+    } else {
       c.clear_angle();
       c.clear_angle_length();
-    }
-    if (!use_target_placement) {
-      c.clear_target_placement_strategy();
-    }
-    if (!use_points) {
-      c.clear_wall_points();
     }
 
     if (use_angle) {
@@ -1067,8 +1056,7 @@ class ScenarioEditorScreen : public UiScreen {
           "rooms.");
       DrawRegionLengthEditor("Length", /*default_to_x=*/true, c.mutable_angle_length());
       ImGui::Unindent();
-    }
-    if (use_points) {
+    } else {
       // Ensure two wall points.
       while (c.wall_points_size() < 2) {
         c.add_wall_points();
@@ -1108,32 +1096,6 @@ class ScenarioEditorScreen : public UiScreen {
       if (remove_at_i > 0) {
         c.mutable_wall_points()->erase(c.mutable_wall_points()->begin() + remove_at_i);
       }
-    }
-
-    if (use_target_placement) {
-      DrawTargetPlacementStrategyEditor(
-          "WaypointsEditor", c.mutable_target_placement_strategy(), /*support_depth=*/false);
-    }
-
-    if (use_target_placement) {
-      c.clear_orient_pill();
-    } else {
-      Line();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Orient pill");
-      ImGui::SameLine();
-      bool orient_pill = c.orient_pill();
-      ImGui::Checkbox("##OrientPillCheck", &orient_pill);
-      if (orient_pill) {
-        c.set_orient_pill(true);
-      } else {
-        c.clear_orient_pill();
-      }
-      ImGui::SameLine();
-      ImGui::HelpMarker(
-          "Orient the pill based on the start and end position. For a vertical centering "
-          "scenario this would turn the pill horizontal.");
     }
   }
 
