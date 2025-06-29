@@ -1353,6 +1353,12 @@ class ScenarioEditorScreen : public UiScreen {
         if (ImGui::Button(kIconCancel)) {
           remove_at_i = i;
         }
+
+        auto& profile = profile_list->at(number);
+        if (profile.description().size() > 0) {
+          ImGui::SameLine();
+          ImGui::TextDisabled(profile.description().c_str());
+        }
       }
       if (ImGui::Button("Add##Order")) {
         order_list->Add(0);

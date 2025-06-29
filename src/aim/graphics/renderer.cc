@@ -43,7 +43,7 @@ glm::vec3 GetSolidColor(const WallAppearance& appearance) {
 }
 
 constexpr const int kQuadNumVertices = 6;
-constexpr const float kMaxDistance = 500.0f;
+constexpr const float kMaxDistance = 1500.0f;
 
 SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
                           const std::filesystem::path& shader_dir,

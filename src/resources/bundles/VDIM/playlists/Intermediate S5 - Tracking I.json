@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "VDIM SYW (Smooth Your Wrist) Truly FIXED"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Centering II 180 Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Wide Angle Tracking Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM tamTargetSwitch Smooth Intermediate"
+    }
+  ]
+}
