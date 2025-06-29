@@ -48,7 +48,6 @@ const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
 };
 
 const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
-    ScenarioDef::kWallStrafeDef,
     ScenarioDef::kCenteringDef,
     ScenarioDef::kWallArcDef,
     ScenarioDef::kCircleDef,
@@ -110,6 +109,9 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   }
   if (def.has_wall_wander_def()) {
     return def.wall_wander_def().target_placement_strategy();
+  }
+  if (def.has_wall_strafe_def()) {
+    return def.wall_strafe_def().target_placement_strategy();
   }
   return {};
 }
@@ -456,7 +458,10 @@ class ScenarioEditorScreen : public UiScreen {
       def_.mutable_centering_def();
     }
     if (scenario_type == ScenarioDef::kWallStrafeDef) {
-      def_.mutable_wall_strafe_def();
+      auto* wall_strafe = def_.mutable_wall_strafe_def();
+      if (target_placement.regions_size() > 0) {
+        *wall_strafe->mutable_target_placement_strategy() = target_placement;
+      }
     }
     if (scenario_type == ScenarioDef::kLinearDef) {
       *def_.mutable_linear_def()->mutable_target_placement_strategy() = target_placement;
@@ -943,6 +948,14 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::SameLine();
     ImGui::HelpMarker("The target will accelerate in and out of changes of direction");
+
+    Line();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Initial target location");
+    ImGui::Indent();
+    DrawTargetPlacementStrategyEditor("Placement", w.mutable_target_placement_strategy());
+    ImGui::Unindent();
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {

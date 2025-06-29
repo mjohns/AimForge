@@ -92,9 +92,8 @@ class StrafeMovementController : public BasicWallMovementController {
     bounds_.max_x = 0.5 * width;
 
     float height = d.has_height() ? wall_.GetRegionLength(d.height()) : 0.85 * wall_.height;
-    float starting_y = pos.y;
-    bounds_.min_y = (-0.5 * height) + starting_y;
-    bounds_.max_y = (0.5 * height) + starting_y;
+    bounds_.min_y = (-0.5 * height);
+    bounds_.max_y = (0.5 * height);
 
     acceleration_ = abs(d.acceleration());
     original_acceleration_ = acceleration_;
@@ -224,7 +223,13 @@ class StrafeMovementController : public BasicWallMovementController {
 class WallStrafeScenario : public BaseScenario {
  public:
   explicit WallStrafeScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {}
+      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+    auto& d = params.def.wall_strafe_def();
+    if (d.has_target_placement_strategy()) {
+      target_placer_ =
+          CreateWallTargetPlacer(wall_, d.target_placement_strategy(), &target_manager_, &app_);
+    }
+  }
 
  protected:
   ShotType::TypeCase GetDefaultShotType() override {
@@ -234,6 +239,9 @@ class WallStrafeScenario : public BaseScenario {
   void FillInNewTarget(Target* target) override {
     float starting_y = wall_.GetRegionLength(def_.wall_strafe_def().y());
     glm::vec3 pos(0, starting_y, 0);
+    if (target_placer_) {
+      pos = target_placer_->GetNextPosition();
+    }
     target->SetWallPosition(pos, def_.room());
     target->movement_controller =
         std::make_shared<StrafeMovementController>(target->speed, wall_, def_, app_);
@@ -245,6 +253,7 @@ class WallStrafeScenario : public BaseScenario {
 
  private:
   Wall wall_;
+  std::unique_ptr<WallTargetPlacer> target_placer_;
 };
 
 }  // namespace

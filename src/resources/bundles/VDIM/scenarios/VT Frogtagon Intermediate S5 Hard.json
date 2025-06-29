@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 1.1,
+    "targetRadiusMultiplier": 0.9
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Frogtagon Intermediate S5"
+  }
+}

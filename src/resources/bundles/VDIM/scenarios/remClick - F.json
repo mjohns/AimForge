@@ -1,0 +1,110 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 120,
+      "width": 230
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "description": "",
+        "speed": 58,
+        "speedJitter": 0,
+        "targetRadius": 2.59999967,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "wallStrafeDef": {
+    "acceleration": 213,
+    "height": {
+      "yPercentValue": 0.9
+    },
+    "profiles": [
+      {
+        "angle": 0,
+        "angleJitter": 13,
+        "description": "Little Verticality",
+        "maxDistance": {
+          "xPercentValue": 0.4
+        },
+        "minDistance": {
+          "xPercentValue": 0.230000108
+        },
+        "weight": 5
+      },
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "description": "Flat Mid",
+        "maxDistance": {
+          "xPercentValue": 0.43
+        },
+        "minDistance": {
+          "xPercentValue": 0.26000005
+        },
+        "weight": 11
+      },
+      {
+        "angle": 20,
+        "angleJitter": 0,
+        "description": "Bigger Vert Down",
+        "maxDistance": {
+          "xPercentValue": 0.4
+        },
+        "minDistance": {
+          "xPercentValue": 0.3
+        },
+        "weight": 2
+      },
+      {
+        "angle": -20,
+        "angleJitter": 0,
+        "description": "Bigger Vert Up",
+        "maxDistance": {
+          "xPercentValue": 0.4
+        },
+        "minDistance": {
+          "xPercentValue": 0.3
+        },
+        "weight": 1
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": 62,
+      "regions": [
+        {
+          "depth": 36,
+          "depthJitter": 35,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.799999833
+            },
+            "yLength": {
+              "yPercentValue": 0.799999833
+            }
+          }
+        }
+      ]
+    },
+    "width": {
+      "xPercentValue": 0.9
+    }
+  }
+}

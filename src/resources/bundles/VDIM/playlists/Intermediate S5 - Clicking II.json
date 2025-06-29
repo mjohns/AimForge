@@ -1,0 +1,48 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Tamspeed 2bpes"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM cAt purrClick Normal"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM remClick - F"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VPP AdjustSwitch Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM dev1T Static Click"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM CG Adjust Click Micro 2T"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Frogswitch Intermediate S5"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Frogtagon Intermediate S5 2 Targets"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Frogtagon Intermediate S5 Clusters"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Frogtagon Intermediate S5 Hard"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Frogtagon Intermediate S5"
+    }
+  ]
+}

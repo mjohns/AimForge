@@ -1,0 +1,9 @@
+{
+  "description": "",
+  "overrides": {
+    "numTargets": 10
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Frogtagon Intermediate S5"
+  }
+}
