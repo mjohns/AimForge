@@ -41,13 +41,9 @@ class StrafeMovementController : public BasicWallMovementController {
 
     float distance = glm::length(pos - last_direction_change_position_);
 
-    if (pos.y > bounds_.max_y && direction_.y > 0) {
-      last_direction_change_position_ = pos;
-      current_target_travel_distance_ -= distance;
-      direction_.y *= -1;
-      distance = 0;
-    }
-    if (pos.y < bounds_.min_y && direction_.y < 0) {
+    bool too_high_and_needs_direction_change = pos.y > bounds_.max_y && direction_.y > 0;
+    bool too_low_and_needs_direction_change = pos.y < bounds_.min_y && direction_.y < 0;
+    if (too_high_and_needs_direction_change || too_low_and_needs_direction_change) {
       last_direction_change_position_ = pos;
       current_target_travel_distance_ -= distance;
       direction_.y *= -1;
@@ -189,6 +185,29 @@ class StrafeMovementController : public BasicWallMovementController {
 
       float x_percent = clipped_x_distance / total_x_distance;
       end_pos = current_pos + (distance * x_percent * new_direction);
+    }
+
+    distance = glm::length(end_pos - current_pos);
+
+    // See if we should let it bounce vertically or just truncate the distance if it is not too
+    // much.
+    bool too_low = end_pos.y < bounds_.min_y;
+    bool too_high = end_pos.y > bounds_.max_y;
+    if (too_low || too_high) {
+      float total_y_distance = 0;
+      float clipped_y_distance = 0;
+      if (too_low) {
+        total_y_distance = current_pos.y - end_pos.y;
+        clipped_y_distance = current_pos.y - bounds_.min_y;
+      } else {
+        total_y_distance = end_pos.y - current_pos.y;
+        clipped_y_distance = bounds_.max_y - current_pos.y;
+      }
+
+      float y_percent = clipped_y_distance / total_y_distance;
+      if (y_percent > 90) {
+        end_pos = current_pos + (distance * y_percent * new_direction);
+      }
     }
 
     // Recalculate distance and direction
