@@ -40,6 +40,20 @@ class StrafeMovementController : public BasicWallMovementController {
     }
 
     float distance = glm::length(pos - last_direction_change_position_);
+
+    if (pos.y > bounds_.max_y && direction_.y > 0) {
+      last_direction_change_position_ = pos;
+      current_target_travel_distance_ -= distance;
+      direction_.y *= -1;
+      distance = 0;
+    }
+    if (pos.y < bounds_.min_y && direction_.y < 0) {
+      last_direction_change_position_ = pos;
+      current_target_travel_distance_ -= distance;
+      direction_.y *= -1;
+      distance = 0;
+    }
+
     if (acceleration_ <= 0) {
       // No accel/decel. Instant turn.
       bool should_turn = distance > current_target_travel_distance_;
@@ -141,9 +155,11 @@ class StrafeMovementController : public BasicWallMovementController {
     glm::vec2 new_direction;
     float angle = abs(app_.rand().GetJittered(profile.angle(), profile.angle_jitter()));
     angle = glm::clamp(angle, 0.f, 45.f);
-    if (current_pos.y >= bounds_.max_y) {
+    float y_range = bounds_.max_y - bounds_.min_y;
+    float y_angle_buffer = y_range * 0.15;
+    if (current_pos.y >= (bounds_.max_y - y_angle_buffer)) {
       angle *= -1;
-    } else if (current_pos.y <= bounds_.min_y) {
+    } else if (current_pos.y <= (bounds_.min_y + y_angle_buffer)) {
       // Keep angle positive
     } else {
       // 50/50 strafe up or down
@@ -157,9 +173,23 @@ class StrafeMovementController : public BasicWallMovementController {
       new_direction.x *= -1;
     }
 
+    // Recalculate distance to stay in bounds.
     glm::vec2 end_pos = current_pos + distance * new_direction;
-    end_pos.x = glm::clamp(end_pos.x, bounds_.min_x, bounds_.max_x);
-    end_pos.y = glm::clamp(end_pos.y, bounds_.min_y, bounds_.max_y);
+    if (end_pos.x < bounds_.min_x) {
+      // Will go too far left. Truncate distance.
+      float total_x_distance = current_pos.x - end_pos.x;
+      float clipped_x_distance = current_pos.x - bounds_.min_x;
+
+      float x_percent = clipped_x_distance / total_x_distance;
+      end_pos = current_pos + (distance * x_percent * new_direction);
+    } else if (end_pos.x > bounds_.max_x) {
+      // Will go too far left. Truncate distance.
+      float total_x_distance = end_pos.x - current_pos.x;
+      float clipped_x_distance = bounds_.max_x - current_pos.x;
+
+      float x_percent = clipped_x_distance / total_x_distance;
+      end_pos = current_pos + (distance * x_percent * new_direction);
+    }
 
     // Recalculate distance and direction
     direction_ = end_pos - current_pos;
