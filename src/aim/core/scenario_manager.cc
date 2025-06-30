@@ -233,10 +233,10 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
       profile.set_speed(profile.speed() * mult);
     }
-    if (original.has_wall_arc_def()) {
-      if (mult > 0) {
-        // Faster speed means shorter duration. Multiplier 2 should be duration 1/2.
-        // result.mutable_wall_arc_def()->set_duration(original.wall_arc_def().duration() / mult);
+    if (original.has_wall_strafe_def()) {
+      float accel = original.wall_strafe_def().has_acceleration();
+      if (accel > 0) {
+        result.mutable_wall_strafe_def()->set_acceleration(accel * mult);
       }
     }
   }
