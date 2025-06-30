@@ -27,9 +27,11 @@ class TrackingSound {
 
  private:
   void PlaySound() {
-    app_->sound_manager()->PlayShootSound(settings_.shoot());
     if (is_hitting_) {
+      app_->sound_manager()->PlayShootSound(settings_.shoot());
       app_->sound_manager()->PlayHitSound(settings_.hit());
+    } else {
+      app_->sound_manager()->PlayShootSound(settings_.shoot());
     }
   }
 

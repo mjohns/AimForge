@@ -24,6 +24,7 @@ Sound::~Sound() {
 }
 
 void Sound::Play(int channel) {
+  // Mix_VolumeChunk
   Mix_PlayChannel(channel, chunk_, 0);
 }
 

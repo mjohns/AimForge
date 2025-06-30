@@ -1,4 +1,3 @@
-
 #include <memory>
 
 #include "aim/common/geometry.h"
@@ -158,9 +157,23 @@ class StrafeMovementController : public BasicWallMovementController {
     } else if (current_pos.y <= (bounds_.min_y + y_angle_buffer)) {
       // Keep angle positive
     } else {
-      // 50/50 strafe up or down
-      if (app_.rand().FlipCoin()) {
-        angle *= -1;
+      if (direction_.y == 0) {
+        // Was going flat. Always 50/50 strafe up or down.
+        if (app_.rand().FlipCoin()) {
+          angle *= -1;
+        }
+      } else {
+        bool going_down = direction_.y < 0;
+        float multiplier = going_down ? -1 : 1;
+        float change_direction_percent = 0.5;
+        if (profile.has_direction_change_percent()) {
+          change_direction_percent = profile.direction_change_percent();
+        }
+        bool change_direction = app_.rand().FlipCoin(change_direction_percent);
+        if (change_direction) {
+          multiplier *= -1;
+        }
+        angle *= multiplier;
       }
     }
 

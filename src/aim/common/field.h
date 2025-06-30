@@ -18,6 +18,12 @@ struct Field {
   std::function<bool()> has;
 };
 
+static Field<float> MultiplyField(Field<float> unscaled, float multiplier) {
+  std::function<float()> get = [=]() {return unscaled.get() * multiplier; };
+  std::function<void(float)> set = [=](float value) { unscaled.set(value / multiplier); };
+  return Field<float>(get, set, unscaled.clear, unscaled.has);
+}
+
 template <typename T>
 struct JitteredField {
   JitteredField(Field<T> value, Field<T> jitter) : value(value), jitter(jitter) {}

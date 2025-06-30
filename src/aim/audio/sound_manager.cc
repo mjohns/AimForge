@@ -8,6 +8,7 @@ namespace {
 constexpr int kHitChannel = 1;
 constexpr int kShootChannel = 2;
 constexpr int kMetronomeChannel = 3;
+constexpr int kKillChannel = 4;
 
 std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound_dirs,
                                  const std::string& name) {
@@ -51,7 +52,7 @@ void SoundManager::LoadSounds(const Settings& settings) {
 }
 
 SoundManager& SoundManager::PlayKillSound(const std::string& name) {
-  PlaySound(name, -1);
+  PlaySound(name, kKillChannel);
   return *this;
 }
 

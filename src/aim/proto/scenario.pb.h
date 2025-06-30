@@ -2444,21 +2444,22 @@ class WallStrafeProfile final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kDescriptionFieldNumber = 6,
-    kMinDistanceFieldNumber = 2,
-    kMaxDistanceFieldNumber = 3,
+    kDescriptionFieldNumber = 9,
+    kMinDistanceFieldNumber = 4,
+    kMaxDistanceFieldNumber = 5,
     kWeightFieldNumber = 1,
-    kAngleFieldNumber = 4,
-    kAngleJitterFieldNumber = 5,
-    kPauseAtEndChanceFieldNumber = 7,
-    kPauseSecondsFieldNumber = 8,
-    kPauseSecondsJitterFieldNumber = 9,
-    kSpeedOverrideFieldNumber = 10,
-    kAccelerationOverrideFieldNumber = 11,
-    kNextProfileFieldNumber = 12,
-    kMinSelectionGapFieldNumber = 13,
+    kNextProfileFieldNumber = 2,
+    kMinSelectionGapFieldNumber = 3,
+    kAngleFieldNumber = 6,
+    kAngleJitterFieldNumber = 7,
+    kDirectionChangePercentFieldNumber = 8,
+    kPauseAtEndChanceFieldNumber = 10,
+    kPauseSecondsFieldNumber = 11,
+    kPauseSecondsJitterFieldNumber = 12,
+    kSpeedOverrideFieldNumber = 13,
+    kAccelerationOverrideFieldNumber = 14,
   };
-  // string description = 6;
+  // string description = 9;
   bool has_description() const;
   void clear_description() ;
   const std::string& description() const;
@@ -2475,7 +2476,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   std::string* _internal_mutable_description();
 
   public:
-  // .aim.RegionLength min_distance = 2;
+  // .aim.RegionLength min_distance = 4;
   bool has_min_distance() const;
   void clear_min_distance() ;
   const ::aim::RegionLength& min_distance() const;
@@ -2490,7 +2491,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_min_distance();
 
   public:
-  // .aim.RegionLength max_distance = 3;
+  // .aim.RegionLength max_distance = 5;
   bool has_max_distance() const;
   void clear_max_distance() ;
   const ::aim::RegionLength& max_distance() const;
@@ -2516,84 +2517,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_weight(float value);
 
   public:
-  // float angle = 4;
-  bool has_angle() const;
-  void clear_angle() ;
-  float angle() const;
-  void set_angle(float value);
-
-  private:
-  float _internal_angle() const;
-  void _internal_set_angle(float value);
-
-  public:
-  // float angle_jitter = 5;
-  bool has_angle_jitter() const;
-  void clear_angle_jitter() ;
-  float angle_jitter() const;
-  void set_angle_jitter(float value);
-
-  private:
-  float _internal_angle_jitter() const;
-  void _internal_set_angle_jitter(float value);
-
-  public:
-  // float pause_at_end_chance = 7;
-  bool has_pause_at_end_chance() const;
-  void clear_pause_at_end_chance() ;
-  float pause_at_end_chance() const;
-  void set_pause_at_end_chance(float value);
-
-  private:
-  float _internal_pause_at_end_chance() const;
-  void _internal_set_pause_at_end_chance(float value);
-
-  public:
-  // float pause_seconds = 8;
-  bool has_pause_seconds() const;
-  void clear_pause_seconds() ;
-  float pause_seconds() const;
-  void set_pause_seconds(float value);
-
-  private:
-  float _internal_pause_seconds() const;
-  void _internal_set_pause_seconds(float value);
-
-  public:
-  // float pause_seconds_jitter = 9;
-  bool has_pause_seconds_jitter() const;
-  void clear_pause_seconds_jitter() ;
-  float pause_seconds_jitter() const;
-  void set_pause_seconds_jitter(float value);
-
-  private:
-  float _internal_pause_seconds_jitter() const;
-  void _internal_set_pause_seconds_jitter(float value);
-
-  public:
-  // float speed_override = 10;
-  bool has_speed_override() const;
-  void clear_speed_override() ;
-  float speed_override() const;
-  void set_speed_override(float value);
-
-  private:
-  float _internal_speed_override() const;
-  void _internal_set_speed_override(float value);
-
-  public:
-  // float acceleration_override = 11;
-  bool has_acceleration_override() const;
-  void clear_acceleration_override() ;
-  float acceleration_override() const;
-  void set_acceleration_override(float value);
-
-  private:
-  float _internal_acceleration_override() const;
-  void _internal_set_acceleration_override(float value);
-
-  public:
-  // int32 next_profile = 12;
+  // int32 next_profile = 2;
   bool has_next_profile() const;
   void clear_next_profile() ;
   ::int32_t next_profile() const;
@@ -2604,7 +2528,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_next_profile(::int32_t value);
 
   public:
-  // int32 min_selection_gap = 13;
+  // int32 min_selection_gap = 3;
   bool has_min_selection_gap() const;
   void clear_min_selection_gap() ;
   ::int32_t min_selection_gap() const;
@@ -2615,12 +2539,100 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_min_selection_gap(::int32_t value);
 
   public:
+  // float angle = 6;
+  bool has_angle() const;
+  void clear_angle() ;
+  float angle() const;
+  void set_angle(float value);
+
+  private:
+  float _internal_angle() const;
+  void _internal_set_angle(float value);
+
+  public:
+  // float angle_jitter = 7;
+  bool has_angle_jitter() const;
+  void clear_angle_jitter() ;
+  float angle_jitter() const;
+  void set_angle_jitter(float value);
+
+  private:
+  float _internal_angle_jitter() const;
+  void _internal_set_angle_jitter(float value);
+
+  public:
+  // float direction_change_percent = 8;
+  bool has_direction_change_percent() const;
+  void clear_direction_change_percent() ;
+  float direction_change_percent() const;
+  void set_direction_change_percent(float value);
+
+  private:
+  float _internal_direction_change_percent() const;
+  void _internal_set_direction_change_percent(float value);
+
+  public:
+  // float pause_at_end_chance = 10;
+  bool has_pause_at_end_chance() const;
+  void clear_pause_at_end_chance() ;
+  float pause_at_end_chance() const;
+  void set_pause_at_end_chance(float value);
+
+  private:
+  float _internal_pause_at_end_chance() const;
+  void _internal_set_pause_at_end_chance(float value);
+
+  public:
+  // float pause_seconds = 11;
+  bool has_pause_seconds() const;
+  void clear_pause_seconds() ;
+  float pause_seconds() const;
+  void set_pause_seconds(float value);
+
+  private:
+  float _internal_pause_seconds() const;
+  void _internal_set_pause_seconds(float value);
+
+  public:
+  // float pause_seconds_jitter = 12;
+  bool has_pause_seconds_jitter() const;
+  void clear_pause_seconds_jitter() ;
+  float pause_seconds_jitter() const;
+  void set_pause_seconds_jitter(float value);
+
+  private:
+  float _internal_pause_seconds_jitter() const;
+  void _internal_set_pause_seconds_jitter(float value);
+
+  public:
+  // float speed_override = 13;
+  bool has_speed_override() const;
+  void clear_speed_override() ;
+  float speed_override() const;
+  void set_speed_override(float value);
+
+  private:
+  float _internal_speed_override() const;
+  void _internal_set_speed_override(float value);
+
+  public:
+  // float acceleration_override = 14;
+  bool has_acceleration_override() const;
+  void clear_acceleration_override() ;
+  float acceleration_override() const;
+  void set_acceleration_override(float value);
+
+  private:
+  float _internal_acceleration_override() const;
+  void _internal_set_acceleration_override(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallStrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 13, 2,
+      4, 14, 2,
       49, 2>
       _table_;
 
@@ -2644,15 +2656,16 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     ::aim::RegionLength* min_distance_;
     ::aim::RegionLength* max_distance_;
     float weight_;
+    ::int32_t next_profile_;
+    ::int32_t min_selection_gap_;
     float angle_;
     float angle_jitter_;
+    float direction_change_percent_;
     float pause_at_end_chance_;
     float pause_seconds_;
     float pause_seconds_jitter_;
     float speed_override_;
     float acceleration_override_;
-    ::int32_t next_profile_;
-    ::int32_t min_selection_gap_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -14781,15 +14794,15 @@ inline void WallStrafeProfile::_internal_set_weight(float value) {
   _impl_.weight_ = value;
 }
 
-// int32 next_profile = 12;
+// int32 next_profile = 2;
 inline bool WallStrafeProfile::has_next_profile() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_next_profile() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.next_profile_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000800u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline ::int32_t WallStrafeProfile::next_profile() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.next_profile)
@@ -14797,7 +14810,7 @@ inline ::int32_t WallStrafeProfile::next_profile() const {
 }
 inline void WallStrafeProfile::set_next_profile(::int32_t value) {
   _internal_set_next_profile(value);
-  _impl_._has_bits_[0] |= 0x00000800u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.next_profile)
 }
 inline ::int32_t WallStrafeProfile::_internal_next_profile() const {
@@ -14809,15 +14822,15 @@ inline void WallStrafeProfile::_internal_set_next_profile(::int32_t value) {
   _impl_.next_profile_ = value;
 }
 
-// int32 min_selection_gap = 13;
+// int32 min_selection_gap = 3;
 inline bool WallStrafeProfile::has_min_selection_gap() const {
-  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_min_selection_gap() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.min_selection_gap_ = 0;
-  _impl_._has_bits_[0] &= ~0x00001000u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline ::int32_t WallStrafeProfile::min_selection_gap() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.min_selection_gap)
@@ -14825,7 +14838,7 @@ inline ::int32_t WallStrafeProfile::min_selection_gap() const {
 }
 inline void WallStrafeProfile::set_min_selection_gap(::int32_t value) {
   _internal_set_min_selection_gap(value);
-  _impl_._has_bits_[0] |= 0x00001000u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.min_selection_gap)
 }
 inline ::int32_t WallStrafeProfile::_internal_min_selection_gap() const {
@@ -14837,7 +14850,7 @@ inline void WallStrafeProfile::_internal_set_min_selection_gap(::int32_t value) 
   _impl_.min_selection_gap_ = value;
 }
 
-// .aim.RegionLength min_distance = 2;
+// .aim.RegionLength min_distance = 4;
 inline bool WallStrafeProfile::has_min_distance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.min_distance_ != nullptr);
@@ -14933,7 +14946,7 @@ inline void WallStrafeProfile::set_allocated_min_distance(::aim::RegionLength* v
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.min_distance)
 }
 
-// .aim.RegionLength max_distance = 3;
+// .aim.RegionLength max_distance = 5;
 inline bool WallStrafeProfile::has_max_distance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.max_distance_ != nullptr);
@@ -15029,15 +15042,15 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.max_distance)
 }
 
-// float angle = 4;
+// float angle = 6;
 inline bool WallStrafeProfile::has_angle() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_angle() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float WallStrafeProfile::angle() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle)
@@ -15045,7 +15058,7 @@ inline float WallStrafeProfile::angle() const {
 }
 inline void WallStrafeProfile::set_angle(float value) {
   _internal_set_angle(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle)
 }
 inline float WallStrafeProfile::_internal_angle() const {
@@ -15057,15 +15070,15 @@ inline void WallStrafeProfile::_internal_set_angle(float value) {
   _impl_.angle_ = value;
 }
 
-// float angle_jitter = 5;
+// float angle_jitter = 7;
 inline bool WallStrafeProfile::has_angle_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_angle_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float WallStrafeProfile::angle_jitter() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle_jitter)
@@ -15073,7 +15086,7 @@ inline float WallStrafeProfile::angle_jitter() const {
 }
 inline void WallStrafeProfile::set_angle_jitter(float value) {
   _internal_set_angle_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle_jitter)
 }
 inline float WallStrafeProfile::_internal_angle_jitter() const {
@@ -15085,7 +15098,35 @@ inline void WallStrafeProfile::_internal_set_angle_jitter(float value) {
   _impl_.angle_jitter_ = value;
 }
 
-// string description = 6;
+// float direction_change_percent = 8;
+inline bool WallStrafeProfile::has_direction_change_percent() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_direction_change_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_change_percent_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000100u;
+}
+inline float WallStrafeProfile::direction_change_percent() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.direction_change_percent)
+  return _internal_direction_change_percent();
+}
+inline void WallStrafeProfile::set_direction_change_percent(float value) {
+  _internal_set_direction_change_percent(value);
+  _impl_._has_bits_[0] |= 0x00000100u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.direction_change_percent)
+}
+inline float WallStrafeProfile::_internal_direction_change_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.direction_change_percent_;
+}
+inline void WallStrafeProfile::_internal_set_direction_change_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.direction_change_percent_ = value;
+}
+
+// string description = 9;
 inline bool WallStrafeProfile::has_description() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -15154,15 +15195,15 @@ inline void WallStrafeProfile::set_allocated_description(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.description)
 }
 
-// float pause_at_end_chance = 7;
+// float pause_at_end_chance = 10;
 inline bool WallStrafeProfile::has_pause_at_end_chance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_pause_at_end_chance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_at_end_chance_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline float WallStrafeProfile::pause_at_end_chance() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_at_end_chance)
@@ -15170,7 +15211,7 @@ inline float WallStrafeProfile::pause_at_end_chance() const {
 }
 inline void WallStrafeProfile::set_pause_at_end_chance(float value) {
   _internal_set_pause_at_end_chance(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_at_end_chance)
 }
 inline float WallStrafeProfile::_internal_pause_at_end_chance() const {
@@ -15182,15 +15223,15 @@ inline void WallStrafeProfile::_internal_set_pause_at_end_chance(float value) {
   _impl_.pause_at_end_chance_ = value;
 }
 
-// float pause_seconds = 8;
+// float pause_seconds = 11;
 inline bool WallStrafeProfile::has_pause_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_pause_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000400u;
 }
 inline float WallStrafeProfile::pause_seconds() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_seconds)
@@ -15198,7 +15239,7 @@ inline float WallStrafeProfile::pause_seconds() const {
 }
 inline void WallStrafeProfile::set_pause_seconds(float value) {
   _internal_set_pause_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000400u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_seconds)
 }
 inline float WallStrafeProfile::_internal_pause_seconds() const {
@@ -15210,15 +15251,15 @@ inline void WallStrafeProfile::_internal_set_pause_seconds(float value) {
   _impl_.pause_seconds_ = value;
 }
 
-// float pause_seconds_jitter = 9;
+// float pause_seconds_jitter = 12;
 inline bool WallStrafeProfile::has_pause_seconds_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_pause_seconds_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_seconds_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000800u;
 }
 inline float WallStrafeProfile::pause_seconds_jitter() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_seconds_jitter)
@@ -15226,7 +15267,7 @@ inline float WallStrafeProfile::pause_seconds_jitter() const {
 }
 inline void WallStrafeProfile::set_pause_seconds_jitter(float value) {
   _internal_set_pause_seconds_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000800u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_seconds_jitter)
 }
 inline float WallStrafeProfile::_internal_pause_seconds_jitter() const {
@@ -15238,15 +15279,15 @@ inline void WallStrafeProfile::_internal_set_pause_seconds_jitter(float value) {
   _impl_.pause_seconds_jitter_ = value;
 }
 
-// float speed_override = 10;
+// float speed_override = 13;
 inline bool WallStrafeProfile::has_speed_override() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_speed_override() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_override_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000200u;
+  _impl_._has_bits_[0] &= ~0x00001000u;
 }
 inline float WallStrafeProfile::speed_override() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.speed_override)
@@ -15254,7 +15295,7 @@ inline float WallStrafeProfile::speed_override() const {
 }
 inline void WallStrafeProfile::set_speed_override(float value) {
   _internal_set_speed_override(value);
-  _impl_._has_bits_[0] |= 0x00000200u;
+  _impl_._has_bits_[0] |= 0x00001000u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.speed_override)
 }
 inline float WallStrafeProfile::_internal_speed_override() const {
@@ -15266,15 +15307,15 @@ inline void WallStrafeProfile::_internal_set_speed_override(float value) {
   _impl_.speed_override_ = value;
 }
 
-// float acceleration_override = 11;
+// float acceleration_override = 14;
 inline bool WallStrafeProfile::has_acceleration_override() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00002000u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_acceleration_override() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_override_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000400u;
+  _impl_._has_bits_[0] &= ~0x00002000u;
 }
 inline float WallStrafeProfile::acceleration_override() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.acceleration_override)
@@ -15282,7 +15323,7 @@ inline float WallStrafeProfile::acceleration_override() const {
 }
 inline void WallStrafeProfile::set_acceleration_override(float value) {
   _internal_set_acceleration_override(value);
-  _impl_._has_bits_[0] |= 0x00000400u;
+  _impl_._has_bits_[0] |= 0x00002000u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.acceleration_override)
 }
 inline float WallStrafeProfile::_internal_acceleration_override() const {

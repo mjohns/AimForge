@@ -978,6 +978,20 @@ class ScenarioEditorScreen : public UiScreen {
     p->set_angle(angle);
     p->set_angle_jitter(angle_jitter);
 
+    if (p->angle() > 0 || p->angle_jitter() > 0) {
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("DirectionChangePercent")
+              .set_label("Direction change chance")
+              .set_step(1, 5)
+              .set_range(0, 100)
+              .set_precision(0)
+              .set_default(50)
+              .set_width(char_x_ * 12),
+          MultiplyField(PROTO_FLOAT_FIELD(WallStrafeProfile, p, direction_change_percent), 100));
+    } else {
+      p->clear_direction_change_percent();
+    }
+
     bool has_speed_override = p->has_speed_override();
     float speed_override = p->speed_override();
     if (!p->has_speed_override()) {
