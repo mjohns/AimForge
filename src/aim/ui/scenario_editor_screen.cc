@@ -902,20 +902,6 @@ class ScenarioEditorScreen : public UiScreen {
     DrawRegionLengthEditor("Height", /*default_to_x=*/false, w.mutable_height());
     ImGui::Unindent();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Strafe at height");
-    bool has_y = w.has_y();
-    ImGui::SameLine();
-    ImGui::Checkbox("##HasStrafeHeight", &has_y);
-    if (has_y) {
-      ImGui::Indent();
-      DrawRegionLengthEditor(
-          "Height##StrafeHeight", /*default_to_x=*/false, w.mutable_y(), /*is_point=*/true);
-      ImGui::Unindent();
-    } else {
-      w.clear_y();
-    }
-
     if (w.profiles_size() == 0) {
       w.add_profiles();
     }
@@ -952,10 +938,31 @@ class ScenarioEditorScreen : public UiScreen {
     Line();
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Initial target location");
-    ImGui::Indent();
-    DrawTargetPlacementStrategyEditor("Placement", w.mutable_target_placement_strategy());
-    ImGui::Unindent();
+    ImGui::Text("Strafe at height");
+    bool has_y = w.has_y();
+    ImGui::SameLine();
+    ImGui::Checkbox("##HasStrafeHeight", &has_y);
+    if (has_y) {
+      ImGui::Indent();
+      DrawRegionLengthEditor(
+          "Height##StrafeHeight", /*default_to_x=*/false, w.mutable_y(), /*is_point=*/true);
+      ImGui::Unindent();
+    } else {
+      w.clear_y();
+    }
+
+    bool use_target_placement = w.has_target_placement_strategy();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Set initial target location");
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
+    if (use_target_placement) {
+      ImGui::Indent();
+      DrawTargetPlacementStrategyEditor("Placement", w.mutable_target_placement_strategy());
+      ImGui::Unindent();
+    } else {
+      w.clear_target_placement_strategy();
+    }
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {
@@ -1505,6 +1512,13 @@ class ScenarioEditorScreen : public UiScreen {
                               RegionLength* length,
                               bool is_point = false) {
     ImGui::IdGuard cid(id);
+    if (length->type_case() == RegionLength::TYPE_NOT_SET) {
+      if (default_to_x) {
+        length->set_x_percent_value(0);
+      } else {
+        length->set_y_percent_value(0);
+      }
+    }
     bool is_x = length->type_case() == RegionLength::kXPercentValue;
     bool is_y = length->type_case() == RegionLength::kYPercentValue;
     bool is_percent = is_x || is_y;
@@ -1527,9 +1541,6 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       // Absolute value.
       float value = length->value();
-      if (!is_point && value <= 0) {
-        value = 50;
-      }
       ImGui::InputFloat("##AbsoluteValue", &value, 1, 5, "%.0f");
       length->set_value(value);
     }
