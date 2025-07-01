@@ -1,0 +1,97 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 140,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 69,
+      "widthPerimeterPercent": 0.5
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "description": "",
+        "speed": 60,
+        "speedJitter": 0,
+        "targetRadius": 2.89999938,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 91,
+    "depth": 100,
+    "forwardBackProfiles": [
+      {
+        "accelerationMultiplier": 0.4,
+        "description": "",
+        "speedMultiplier": 0.4,
+        "time": 1.60000014,
+        "timeJitter": 0.5
+      }
+    ],
+    "height": {
+      "yPercentValue": 0.9
+    },
+    "leftRightProfiles": [
+      {
+        "description": "",
+        "time": 2.99999905,
+        "timeJitter": 0.6
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": 65,
+      "regions": [
+        {
+          "depth": 47,
+          "depthJitter": 34,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.709999859
+            },
+            "yLength": {
+              "yPercentValue": 0.609999895
+            }
+          }
+        }
+      ]
+    },
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 1.40000153,
+        "description": "Slow Vertical",
+        "speedMultiplier": 0.400000036,
+        "time": 1.80000019,
+        "timeJitter": 0.3,
+        "weight": 2
+      },
+      {
+        "description": "No vertical movement",
+        "speedMultiplier": 0,
+        "time": 1,
+        "timeJitter": 0.5,
+        "weight": 1
+      }
+    ],
+    "width": {
+      "xPercentValue": 0.9
+    }
+  }
+}

@@ -20,6 +20,7 @@ struct SingleDirectionController {
 
   float current_speed = 0;
 
+  bool initialized = false;
   bool going_left = false;
   float next_direction_change_time = -1;
   float speed_multiplier = 1;
@@ -36,16 +37,25 @@ struct SingleDirectionController {
       float current_position,
       float now_seconds,
       float delta_seconds) {
+    if (!initialized) {
+      initialized = true;
+      // The first time we are going to call change direction so toggle direction once here
+      // so it will be toggled back correctly.
+      going_left = !going_left;
+    }
+
+    float acceleration = def.acceleration() * acceleration_multiplier;
+
     bool too_left = going_left && current_position <= min;
     bool too_right = !going_left && current_position >= max;
     bool time_up = now_seconds >= next_direction_change_time;
-    if (too_left || too_right || time_up) {
+    if (too_left || too_right || time_up ||
+        (is_stopping && acceleration > 0 && current_speed <= 0.001)) {
       ChangeDirection(app, now_seconds, profiles, order, def);
     }
 
     float max_speed = t.speed * speed_multiplier;
 
-    float acceleration = def.acceleration() * acceleration_multiplier;
     if (acceleration > 0) {
       // Adjust current speed for acceleration.
       float stop_distance = (current_speed * current_speed) / (2 * acceleration);
@@ -124,7 +134,7 @@ class MovementControllerImpl : public MovementController {
 
     if (d.left_right_profiles_size() > 0) {
       SingleDirectionController ctrl;
-      ctrl.going_left = app_.rand().FlipCoin();
+      ctrl.going_left = GetInitialGoingLeft(d.left_right_initial_direction());
       ctrl.min = min_x;
       ctrl.max = max_x;
       left_right_controller_ = ctrl;
@@ -132,7 +142,7 @@ class MovementControllerImpl : public MovementController {
 
     if (d.up_down_profiles_size() > 0) {
       SingleDirectionController ctrl;
-      ctrl.going_left = app_.rand().FlipCoin();
+      ctrl.going_left = GetInitialGoingLeft(d.up_down_initial_direction());
       ctrl.min = min_y;
       ctrl.max = max_y;
       up_down_controller_ = ctrl;
@@ -140,7 +150,7 @@ class MovementControllerImpl : public MovementController {
 
     if (depth > 0 && d.forward_back_profiles_size() > 0) {
       SingleDirectionController ctrl;
-      ctrl.going_left = app_.rand().FlipCoin();
+      ctrl.going_left = GetInitialGoingLeft(d.forward_back_initial_direction());
       ctrl.min = 0;
       ctrl.max = depth;
       forward_back_controller_ = ctrl;
@@ -148,6 +158,15 @@ class MovementControllerImpl : public MovementController {
   }
 
  protected:
+  bool GetInitialGoingLeft(PositiveNegativeDirection dir) {
+    if (dir == DIRECTION_POSITIVE) {
+      return false;
+    } else if (dir == DIRECTION_NEGATIVE) {
+      return true;
+    } else {
+      return app_.rand().FlipCoin();
+    }
+  }
   void UpdatePosition(Target& t, const Room& room, float delta_seconds) override {
     if (!t.wall_position.has_value()) {
       t.wall_position = glm::vec2(0.0f);

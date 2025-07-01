@@ -10,7 +10,35 @@
     },
     {
       "numPlays": 1,
+      "scenario": "VDIM psalmTS angelic click 30% larger"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM ToonsClick Intermediate"
+    },
+    {
+      "numPlays": 1,
       "scenario": "VDIM remClick - F"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PasuTs Intermediate S5"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Pasu Intermediate S5 Speed"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Pasu Intermediate S5 Multi"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Pasu Intermediate S5 Hard"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Pasu Intermediate S5"
     },
     {
       "numPlays": 1,

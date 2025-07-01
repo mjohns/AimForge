@@ -161,9 +161,9 @@ namespace protobuf {
 
 namespace aim {
 enum InOutDirection : int {
-  IN = 0,
-  OUT = 1,
-  RANDOM = 2,
+  DIRECTION_IN = 0,
+  DIRECTION_OUT = 2,
+  DIRECTION_IN_OR_OUT = 3,
   InOutDirection_INT_MIN_SENTINEL_DO_NOT_USE_ =
       std::numeric_limits<::int32_t>::min(),
   InOutDirection_INT_MAX_SENTINEL_DO_NOT_USE_ =
@@ -173,8 +173,8 @@ enum InOutDirection : int {
 bool InOutDirection_IsValid(int value);
 extern const uint32_t InOutDirection_internal_data_[];
 constexpr InOutDirection InOutDirection_MIN = static_cast<InOutDirection>(0);
-constexpr InOutDirection InOutDirection_MAX = static_cast<InOutDirection>(2);
-constexpr int InOutDirection_ARRAYSIZE = 2 + 1;
+constexpr InOutDirection InOutDirection_MAX = static_cast<InOutDirection>(3);
+constexpr int InOutDirection_ARRAYSIZE = 3 + 1;
 const ::google::protobuf::EnumDescriptor*
 InOutDirection_descriptor();
 template <typename T>
@@ -187,12 +187,46 @@ const std::string& InOutDirection_Name(T value) {
 template <>
 inline const std::string& InOutDirection_Name(InOutDirection value) {
   return ::google::protobuf::internal::NameOfDenseEnum<InOutDirection_descriptor,
-                                                 0, 2>(
+                                                 0, 3>(
       static_cast<int>(value));
 }
 inline bool InOutDirection_Parse(absl::string_view name, InOutDirection* value) {
   return ::google::protobuf::internal::ParseNamedEnum<InOutDirection>(
       InOutDirection_descriptor(), name, value);
+}
+enum PositiveNegativeDirection : int {
+  DIRECTION_POSITIVE_OR_NEGATIVE = 0,
+  DIRECTION_POSITIVE = 2,
+  DIRECTION_NEGATIVE = 3,
+  PositiveNegativeDirection_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  PositiveNegativeDirection_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool PositiveNegativeDirection_IsValid(int value);
+extern const uint32_t PositiveNegativeDirection_internal_data_[];
+constexpr PositiveNegativeDirection PositiveNegativeDirection_MIN = static_cast<PositiveNegativeDirection>(0);
+constexpr PositiveNegativeDirection PositiveNegativeDirection_MAX = static_cast<PositiveNegativeDirection>(3);
+constexpr int PositiveNegativeDirection_ARRAYSIZE = 3 + 1;
+const ::google::protobuf::EnumDescriptor*
+PositiveNegativeDirection_descriptor();
+template <typename T>
+const std::string& PositiveNegativeDirection_Name(T value) {
+  static_assert(std::is_same<T, PositiveNegativeDirection>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to PositiveNegativeDirection_Name().");
+  return PositiveNegativeDirection_Name(static_cast<PositiveNegativeDirection>(value));
+}
+template <>
+inline const std::string& PositiveNegativeDirection_Name(PositiveNegativeDirection value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<PositiveNegativeDirection_descriptor,
+                                                 0, 3>(
+      static_cast<int>(value));
+}
+inline bool PositiveNegativeDirection_Parse(absl::string_view name, PositiveNegativeDirection* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PositiveNegativeDirection>(
+      PositiveNegativeDirection_descriptor(), name, value);
 }
 
 // ===================================================================
@@ -7695,6 +7729,9 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
     kDepthFieldNumber = 3,
     kTimeScaleMultiplierFieldNumber = 11,
     kAccelerationFieldNumber = 12,
+    kLeftRightInitialDirectionFieldNumber = 13,
+    kUpDownInitialDirectionFieldNumber = 14,
+    kForwardBackInitialDirectionFieldNumber = 15,
   };
   // repeated .aim.TimedDirectionProfile left_right_profiles = 5;
   int left_right_profiles_size() const;
@@ -7879,12 +7916,45 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
   void _internal_set_acceleration(float value);
 
   public:
+  // .aim.PositiveNegativeDirection left_right_initial_direction = 13;
+  bool has_left_right_initial_direction() const;
+  void clear_left_right_initial_direction() ;
+  ::aim::PositiveNegativeDirection left_right_initial_direction() const;
+  void set_left_right_initial_direction(::aim::PositiveNegativeDirection value);
+
+  private:
+  ::aim::PositiveNegativeDirection _internal_left_right_initial_direction() const;
+  void _internal_set_left_right_initial_direction(::aim::PositiveNegativeDirection value);
+
+  public:
+  // .aim.PositiveNegativeDirection up_down_initial_direction = 14;
+  bool has_up_down_initial_direction() const;
+  void clear_up_down_initial_direction() ;
+  ::aim::PositiveNegativeDirection up_down_initial_direction() const;
+  void set_up_down_initial_direction(::aim::PositiveNegativeDirection value);
+
+  private:
+  ::aim::PositiveNegativeDirection _internal_up_down_initial_direction() const;
+  void _internal_set_up_down_initial_direction(::aim::PositiveNegativeDirection value);
+
+  public:
+  // .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
+  bool has_forward_back_initial_direction() const;
+  void clear_forward_back_initial_direction() ;
+  ::aim::PositiveNegativeDirection forward_back_initial_direction() const;
+  void set_forward_back_initial_direction(::aim::PositiveNegativeDirection value);
+
+  private:
+  ::aim::PositiveNegativeDirection _internal_forward_back_initial_direction() const;
+  void _internal_set_forward_back_initial_direction(::aim::PositiveNegativeDirection value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TimedDirectionScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 12, 6,
+      4, 15, 6,
       0, 2>
       _table_;
 
@@ -7919,6 +7989,9 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
     float depth_;
     float time_scale_multiplier_;
     float acceleration_;
+    int left_right_initial_direction_;
+    int up_down_initial_direction_;
+    int forward_back_initial_direction_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -17558,6 +17631,90 @@ inline void TimedDirectionScenarioDef::_internal_set_acceleration(float value) {
   _impl_.acceleration_ = value;
 }
 
+// .aim.PositiveNegativeDirection left_right_initial_direction = 13;
+inline bool TimedDirectionScenarioDef::has_left_right_initial_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void TimedDirectionScenarioDef::clear_left_right_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.left_right_initial_direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::left_right_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.left_right_initial_direction)
+  return _internal_left_right_initial_direction();
+}
+inline void TimedDirectionScenarioDef::set_left_right_initial_direction(::aim::PositiveNegativeDirection value) {
+  _internal_set_left_right_initial_direction(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.left_right_initial_direction)
+}
+inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::_internal_left_right_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::PositiveNegativeDirection>(_impl_.left_right_initial_direction_);
+}
+inline void TimedDirectionScenarioDef::_internal_set_left_right_initial_direction(::aim::PositiveNegativeDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.left_right_initial_direction_ = value;
+}
+
+// .aim.PositiveNegativeDirection up_down_initial_direction = 14;
+inline bool TimedDirectionScenarioDef::has_up_down_initial_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void TimedDirectionScenarioDef::clear_up_down_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.up_down_initial_direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::up_down_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.up_down_initial_direction)
+  return _internal_up_down_initial_direction();
+}
+inline void TimedDirectionScenarioDef::set_up_down_initial_direction(::aim::PositiveNegativeDirection value) {
+  _internal_set_up_down_initial_direction(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.up_down_initial_direction)
+}
+inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::_internal_up_down_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::PositiveNegativeDirection>(_impl_.up_down_initial_direction_);
+}
+inline void TimedDirectionScenarioDef::_internal_set_up_down_initial_direction(::aim::PositiveNegativeDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.up_down_initial_direction_ = value;
+}
+
+// .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
+inline bool TimedDirectionScenarioDef::has_forward_back_initial_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  return value;
+}
+inline void TimedDirectionScenarioDef::clear_forward_back_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000100u;
+}
+inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::forward_back_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.forward_back_initial_direction)
+  return _internal_forward_back_initial_direction();
+}
+inline void TimedDirectionScenarioDef::set_forward_back_initial_direction(::aim::PositiveNegativeDirection value) {
+  _internal_set_forward_back_initial_direction(value);
+  _impl_._has_bits_[0] |= 0x00000100u;
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.forward_back_initial_direction)
+}
+inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::_internal_forward_back_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::PositiveNegativeDirection>(_impl_.forward_back_initial_direction_);
+}
+inline void TimedDirectionScenarioDef::_internal_set_forward_back_initial_direction(::aim::PositiveNegativeDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // WallArcScenarioDef
@@ -19320,6 +19477,12 @@ struct is_proto_enum<::aim::InOutDirection> : std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor<::aim::InOutDirection>() {
   return ::aim::InOutDirection_descriptor();
+}
+template <>
+struct is_proto_enum<::aim::PositiveNegativeDirection> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::aim::PositiveNegativeDirection>() {
+  return ::aim::PositiveNegativeDirection_descriptor();
 }
 
 }  // namespace protobuf

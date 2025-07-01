@@ -234,13 +234,13 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
       profile.set_speed(profile.speed() * mult);
     }
     if (original.has_wall_strafe_def()) {
-      float accel = original.wall_strafe_def().has_acceleration();
+      float accel = original.wall_strafe_def().acceleration();
       if (accel > 0) {
         result.mutable_wall_strafe_def()->set_acceleration(accel * mult);
       }
     }
     if (original.has_timed_direction_def()) {
-      float accel = original.timed_direction_def().has_acceleration();
+      float accel = original.timed_direction_def().acceleration();
       if (accel > 0) {
         result.mutable_timed_direction_def()->set_acceleration(accel * mult);
       }

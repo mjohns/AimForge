@@ -15,6 +15,10 @@
     {
       "numPlays": 1,
       "scenario": "VDIM tamTargetSwitch Smooth Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Smoothsphere Diamond"
     }
   ]
 }

@@ -1,0 +1,105 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 140,
+      "hideSides": false,
+      "radius": 150,
+      "sideAngleDegrees": 80,
+      "widthPerimeterPercent": 0.8
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "description": "",
+        "healthRegenRate": 1.50000012,
+        "speed": 109,
+        "speedJitter": 0,
+        "targetRadius": 2.99999952,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 225,
+    "depth": 90,
+    "forwardBackProfiles": [
+      {
+        "accelerationMultiplier": 0.549999893,
+        "description": "",
+        "speedMultiplier": 0.15,
+        "time": 2.79999948,
+        "timeJitter": 1.00000012
+      }
+    ],
+    "height": {
+      "yPercentValue": 0.9
+    },
+    "leftRightProfiles": [
+      {
+        "description": "",
+        "time": 2.99999928,
+        "timeJitter": 1.10000014,
+        "weight": 4
+      },
+      {
+        "description": "Shifty Strafe",
+        "time": 0.799999952,
+        "timeJitter": 0.1,
+        "weight": 1
+      }
+    ],
+    "targetPlacementStrategy": {
+      "regions": [
+        {
+          "depth": 38,
+          "depthJitter": 0,
+          "description": "Middle with depth",
+          "rectangle": {
+            "xLength": {
+              "value": 1
+            },
+            "yLength": {
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 0.549999833,
+        "description": "",
+        "speedMultiplier": 0.2,
+        "time": 2.79999948,
+        "timeJitter": 0.6,
+        "weight": 6
+      },
+      {
+        "accelerationMultiplier": 0.299999982,
+        "description": "Big up down swing",
+        "speedMultiplier": 0.599999905,
+        "time": 2.39999986,
+        "timeJitter": 0.5,
+        "weight": 1
+      }
+    ],
+    "width": {
+      "xPercentValue": 0.9
+    }
+  }
+}

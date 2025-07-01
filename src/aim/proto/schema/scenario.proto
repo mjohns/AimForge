@@ -234,9 +234,15 @@ message BarrelScenarioDef {
 }
 
 enum InOutDirection {
-  IN = 0;
-  OUT = 1;
-  RANDOM = 2;
+  DIRECTION_IN = 0;
+  DIRECTION_OUT = 2;
+  DIRECTION_IN_OR_OUT = 3;
+}
+
+enum PositiveNegativeDirection {
+  DIRECTION_POSITIVE_OR_NEGATIVE = 0;
+  DIRECTION_POSITIVE = 2;
+  DIRECTION_NEGATIVE = 3;
 }
 
 // Targets move linearly within the specified room. Uses 2d wall placement so it support simple room
@@ -276,12 +282,12 @@ message WallStrafeProfile {
   // evenly.
   float angle = 7;
   float angle_jitter = 8;
-  // The chance that the strafe will change direction vertically. i.e. Switch from strafing up to down at the specified angle. Defaults to 0.5, 50/50 chance.
+  // The chance that the strafe will change direction vertically. i.e. Switch from strafing up to
+  // down at the specified angle. Defaults to 0.5, 50/50 chance.
   float direction_change_percent = 9;
 
-
   float pause_at_end_chance = 10;
-  float pause_seconds = 11; 
+  float pause_seconds = 11;
   float pause_seconds_jitter = 12;
 
   // Allows increasing to very high value to create a teleport like effect.
@@ -345,6 +351,10 @@ message TimedDirectionScenarioDef {
   float time_scale_multiplier = 11;
 
   float acceleration = 12;
+
+  PositiveNegativeDirection left_right_initial_direction = 13;
+  PositiveNegativeDirection up_down_initial_direction = 14;
+  PositiveNegativeDirection forward_back_initial_direction = 15;
 }
 
 message WallArcScenarioDef {

@@ -1,0 +1,78 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 210,
+      "width": 260
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "description": "",
+        "healthSeconds": 0.6,
+        "healthSecondsJitter": 0,
+        "speed": 79,
+        "speedJitter": 0,
+        "targetRadius": 4.39999819,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 181,
+    "height": {
+      "yPercentValue": 0.85
+    },
+    "leftRightProfiles": [
+      {
+        "description": "",
+        "time": 2.29999971,
+        "timeJitter": 0.5
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": 65,
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "description": "",
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.599999905
+            },
+            "yLength": {
+              "yPercentValue": 0.599999905
+            }
+          }
+        }
+      ]
+    },
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 1.35000157,
+        "description": "Slow Vertical",
+        "speedMultiplier": 0.350000024,
+        "time": 2.59999967,
+        "timeJitter": 0.200000018
+      }
+    ],
+    "width": {
+      "xPercentValue": 0.85
+    }
+  }
+}

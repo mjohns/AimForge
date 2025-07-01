@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 0.800000191,
+    "targetRadiusMultiplier": 1.58999944
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Pasu Intermediate S5"
+  }
+}

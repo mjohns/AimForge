@@ -90,10 +90,11 @@ class LinearScenario : public BaseScenario {
         glm::vec2(1, 0),
         app_.rand().GetJittered(def_.linear_def().angle(), def_.linear_def().angle_jitter()));
     InOutDirection in_out = def_.linear_def().direction();
-    if (in_out == InOutDirection::RANDOM) {
-      in_out = app_.rand().FlipCoin() ? InOutDirection::IN : InOutDirection::OUT;
+    if (in_out == InOutDirection::DIRECTION_IN_OR_OUT) {
+      in_out =
+          app_.rand().FlipCoin() ? InOutDirection::DIRECTION_IN : InOutDirection::DIRECTION_OUT;
     }
-    if (in_out == InOutDirection::OUT) {
+    if (in_out == InOutDirection::DIRECTION_OUT) {
       // Away from center
       if (pos.x < 0) {
         EnsureNegative(&direction.x);

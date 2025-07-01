@@ -34,9 +34,27 @@ const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
 };
 
 const std::vector<std::pair<InOutDirection, std::string>> kInOutDirections{
-    {InOutDirection::IN, "Towards center"},
-    {InOutDirection::OUT, "Away from center"},
-    {InOutDirection::RANDOM, "Random"},
+    {InOutDirection::DIRECTION_IN, "Towards center"},
+    {InOutDirection::DIRECTION_OUT, "Away from center"},
+    {InOutDirection::DIRECTION_IN_OR_OUT, "Random"},
+};
+
+const std::vector<std::pair<PositiveNegativeDirection, std::string>> kLeftRightDirections{
+    {PositiveNegativeDirection::DIRECTION_POSITIVE, "Right"},
+    {PositiveNegativeDirection::DIRECTION_NEGATIVE, "Left"},
+    {PositiveNegativeDirection::DIRECTION_POSITIVE_OR_NEGATIVE, "Random"},
+};
+
+const std::vector<std::pair<PositiveNegativeDirection, std::string>> kUpDownDirections{
+    {PositiveNegativeDirection::DIRECTION_POSITIVE, "Up"},
+    {PositiveNegativeDirection::DIRECTION_NEGATIVE, "Down"},
+    {PositiveNegativeDirection::DIRECTION_POSITIVE_OR_NEGATIVE, "Random"},
+};
+
+const std::vector<std::pair<PositiveNegativeDirection, std::string>> kForwardBackDirections{
+    {PositiveNegativeDirection::DIRECTION_POSITIVE, "Forward"},
+    {PositiveNegativeDirection::DIRECTION_NEGATIVE, "Back"},
+    {PositiveNegativeDirection::DIRECTION_POSITIVE_OR_NEGATIVE, "Random"},
 };
 
 const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
@@ -813,7 +831,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial direction");
     ImGui::SameLine();
-    InOutDirection direction_type = d.has_direction() ? d.direction() : InOutDirection::IN;
+    InOutDirection direction_type =
+        d.has_direction() ? d.direction() : InOutDirection::DIRECTION_IN;
     ImGui::SimpleTypeDropdown(
         "DirectionTypeDropdown", &direction_type, kInOutDirections, char_x_ * 20);
     d.set_direction(direction_type);
@@ -993,6 +1012,18 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
     ImGui::Unindent();
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Initial left/right direction");
+    ImGui::SameLine();
+    PositiveNegativeDirection left_right_direction = d.left_right_initial_direction();
+    ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
+                              &left_right_direction,
+                              kLeftRightDirections,
+                              char_x_ * 12);
+    d.set_left_right_initial_direction(left_right_direction);
+
+    Line();
+
     ImGui::Text("Up/down profiles");
     ImGui::Indent();
     DrawProfileList("UpDownProfileList",
@@ -1002,7 +1033,16 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
     ImGui::Unindent();
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Initial up/down direction");
+    ImGui::SameLine();
+    PositiveNegativeDirection up_down_direction = d.up_down_initial_direction();
+    ImGui::SimpleTypeDropdown(
+        "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 15);
+    d.set_up_down_initial_direction(up_down_direction);
+
     if (d.has_depth()) {
+      Line();
       ImGui::Text("Forward/back profiles");
       ImGui::Indent();
       DrawProfileList("ForwardBackProfileList",
@@ -1011,9 +1051,20 @@ class ScenarioEditorScreen : public UiScreen {
                       d.mutable_forward_back_profiles(),
                       std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
       ImGui::Unindent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Initial forward/back direction");
+      ImGui::SameLine();
+      PositiveNegativeDirection forward_back_direction = d.forward_back_initial_direction();
+      ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
+                                &forward_back_direction,
+                                kForwardBackDirections,
+                                char_x_ * 15);
+      d.set_forward_back_initial_direction(forward_back_direction);
     } else {
       d.clear_forward_back_profiles();
       d.clear_forward_back_profile_order();
+      d.clear_forward_back_initial_direction();
     }
 
     Line();
