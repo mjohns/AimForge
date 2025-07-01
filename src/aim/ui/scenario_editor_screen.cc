@@ -999,21 +999,15 @@ class ScenarioEditorScreen : public UiScreen {
       p->clear_direction_change_percent();
     }
 
-    bool has_speed_override = p->has_speed_override();
-    float speed_override = p->speed_override();
-    if (!p->has_speed_override()) {
-      // Default to a teleport like value.
-      speed_override = 400;
-    }
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Speed override");
-    ImGui::SameLine();
-    OptionalInputFloat("SpeedOverrideInput", &has_speed_override, &speed_override, 5, 30, "%.0f");
-    if (has_speed_override && speed_override > 0) {
-      p->set_speed_override(speed_override);
-    } else {
-      p->clear_speed_override();
-    }
+    ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
+                          .set_label("Speed multiplier")
+                          .set_is_optional()
+                          .set_step(.05, .2)
+                          .set_min(0)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 12),
+                      PROTO_FLOAT_FIELD(WallStrafeProfile, p, speed_multiplier));
 
     bool is_pause = p->pause_at_end_chance() > 0;
     ImGui::AlignTextToFramePadding();

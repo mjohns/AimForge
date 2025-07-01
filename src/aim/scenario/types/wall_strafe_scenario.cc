@@ -132,10 +132,13 @@ class StrafeMovementController : public BasicWallMovementController {
     }
 
     acceleration_ = original_acceleration_;
-    if (profile.has_acceleration_override()) {
-      acceleration_ = profile.acceleration_override();
+    if (profile.has_acceleration_multiplier()) {
+      acceleration_ *= profile.acceleration_multiplier();
     }
-    max_velocity_ = FirstGreaterThanZero(profile.speed_override(), original_speed_);
+    max_velocity_ = original_speed_;
+    if (profile.has_speed_multiplier()) {
+      max_velocity_ *= profile.speed_multiplier();
+    }
 
     float min_strafe_distance = wall_.GetRegionLength(profile.min_distance());
     if (min_strafe_distance <= 0) {

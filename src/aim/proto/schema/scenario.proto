@@ -183,6 +183,7 @@ message ScenarioDef {
     CircleScenarioDef circle_def = 38;
     SineScenarioDef sine_def = 39;
     WaypointScenarioDef waypoint_def = 40;
+    TimedDirectionScenarioDef timed_direction_def = 41;
   }
 }
 
@@ -284,8 +285,8 @@ message WallStrafeProfile {
   float pause_seconds_jitter = 12;
 
   // Allows increasing to very high value to create a teleport like effect.
-  float speed_override = 13;
-  float acceleration_override = 14;
+  float speed_multiplier = 13;
+  float acceleration_multiplier = 14;
 }
 
 message WallStrafeScenarioDef {
@@ -304,6 +305,47 @@ message WallStrafeScenarioDef {
   repeated int32 profile_order = 5;
 
   float acceleration = 6;
+}
+
+message TimedDirectionProfile {
+  float weight = 1;
+  int32 next_profile = 2;
+  // 1 means that 1 other profile must be selected before this one can be selected again.
+  // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
+  int32 min_selection_gap = 3;
+
+  // right, forward, or up depending on the profile type. Moving in increasing x, y, depth value.
+  float direction1_time = 4;
+  float direction1_time_jitter = 5;
+
+  float direction2_time = 6;
+  float direction2_time_jitter = 7;
+
+  float speed_multiplier = 8;
+  float acceleration_multiplier = 9;
+}
+
+message TimedDirectionScenarioDef {
+  // The available width for the target to move in.
+  RegionLength width = 1;
+  // The available height for the target to move in. The target can escape this height based on the
+  // angle and where it starts the strafe from.
+  RegionLength height = 2;
+  float depth = 3;
+
+  TargetPlacementStrategy target_placement_strategy = 4;
+
+  repeated TimedDirectionProfile left_right_profiles = 5;
+  repeated int32 left_right_profile_order = 6;
+
+  repeated TimedDirectionProfile forward_back_profiles = 7;
+  repeated int32 forward_back_profile_order = 8;
+
+  repeated TimedDirectionProfile up_down_profiles = 9;
+  repeated int32 up_down_profile_order = 10;
+
+  // Scales the times in all of the profiles. Defaults to 1.
+  float time_scale_multiplier = 11;
 }
 
 message WallArcScenarioDef {

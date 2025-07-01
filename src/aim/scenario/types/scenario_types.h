@@ -27,5 +27,7 @@ std::unique_ptr<Scenario> CreateCircleScenario(const CreateScenarioParams& param
 std::unique_ptr<Scenario> CreateSineScenario(const CreateScenarioParams& params, Application* app);
 std::unique_ptr<Scenario> CreateWaypointScenario(const CreateScenarioParams& params,
                                                  Application* app);
+std::unique_ptr<Scenario> CreateTimedDirectionScenario(const CreateScenarioParams& params,
+                                                       Application* app);
 
 }  // namespace aim
