@@ -346,6 +346,8 @@ message TimedDirectionScenarioDef {
 
   // Scales the times in all of the profiles. Defaults to 1.
   float time_scale_multiplier = 11;
+
+  float acceleration = 12;
 }
 
 message WallArcScenarioDef {

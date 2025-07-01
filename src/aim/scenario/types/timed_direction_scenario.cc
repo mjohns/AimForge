@@ -18,16 +18,19 @@ struct SingleDirectionController {
   float min;
   float max;
 
+  float current_speed = 0;
+
   bool going_left = false;
   float next_direction_change_time = -1;
   float speed_multiplier = 1;
   float acceleration_multiplier = 1;
   ProfileSelectionContext selection_context{};
+  bool is_stopping = false;
 
   float GetUpdatedPosition(
       Target& t,
       Application& app,
-      float time_scale_multiplier,
+      const TimedDirectionScenarioDef& def,
       const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
       const google::protobuf::RepeatedField<int>& order,
       float current_position,
@@ -37,10 +40,40 @@ struct SingleDirectionController {
     bool too_right = !going_left && current_position >= max;
     bool time_up = now_seconds >= next_direction_change_time;
     if (too_left || too_right || time_up) {
-      ChangeDirection(app, now_seconds, profiles, order, time_scale_multiplier);
+      ChangeDirection(app, now_seconds, profiles, order, def);
     }
 
     float speed = t.speed * speed_multiplier;
+
+    float acceleration = def.acceleration() * acceleration_multiplier;
+    float stop_distance = 0;
+    if (acceleration > 0) {
+      stop_distance = (current_speed * current_speed) / (2 * acceleration);
+      bool stop_left = going_left && (current_position - stop_distance) <= min;
+      bool stop_right = !going_left && (current_position + stop_distance) >= max;
+      if (stop_left || stop_right) {
+        is_stopping = true;
+      }
+      float time_to_stop = current_speed / acceleration;
+      if (now_seconds + time_to_stop >= next_direction_change_time) {
+        is_stopping = true;
+      }
+
+      if (is_stopping) {
+        current_speed -= delta_seconds * acceleration;
+        if (current_speed < 0) {
+          current_speed = 0;
+        }
+      } else {
+        current_speed += delta_seconds * acceleration;
+        if (current_speed > speed) {
+          current_speed = speed;
+        }
+      }
+
+      speed = current_speed;
+    }
+
     float delta_pos = speed * delta_seconds;
     if (going_left) {
       delta_pos *= -1;
@@ -53,21 +86,23 @@ struct SingleDirectionController {
                        float now_seconds,
                        const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
                        const google::protobuf::RepeatedField<int>& order,
-                       float time_scale_multiplier) {
+                       const TimedDirectionScenarioDef& def) {
     auto p = SelectProfile(order, profiles, &selection_context, app.rand());
     if (!p.has_value()) {
       return;
     }
     speed_multiplier = p->has_speed_multiplier() ? p->speed_multiplier() : 1.0;
     acceleration_multiplier = p->has_acceleration_multiplier() ? p->acceleration_multiplier() : 1.0;
+    current_speed = 0;
+    is_stopping = false;
 
     going_left = !going_left;
 
     float time = going_left
                      ? app.rand().GetJittered(p->direction2_time(), p->direction2_time_jitter())
                      : app.rand().GetJittered(p->direction1_time(), p->direction1_time_jitter());
-    if (time_scale_multiplier > 0) {
-      time *= time_scale_multiplier;
+    if (def.has_time_scale_multiplier()) {
+      time *= def.time_scale_multiplier();
     }
 
     next_direction_change_time = now_seconds + time;
@@ -127,7 +162,7 @@ class MovementControllerImpl : public MovementController {
       pos.x = left_right_controller_->GetUpdatedPosition(
           t,
           app_,
-          def_.timed_direction_def().time_scale_multiplier(),
+          def_.timed_direction_def(),
           def_.timed_direction_def().left_right_profiles(),
           def_.timed_direction_def().left_right_profile_order(),
           pos.x,
@@ -139,7 +174,7 @@ class MovementControllerImpl : public MovementController {
       pos.y = up_down_controller_->GetUpdatedPosition(
           t,
           app_,
-          def_.timed_direction_def().time_scale_multiplier(),
+          def_.timed_direction_def(),
           def_.timed_direction_def().up_down_profiles(),
           def_.timed_direction_def().up_down_profile_order(),
           pos.y,
@@ -151,7 +186,7 @@ class MovementControllerImpl : public MovementController {
       t.wall_depth = forward_back_controller_->GetUpdatedPosition(
           t,
           app_,
-          def_.timed_direction_def().time_scale_multiplier(),
+          def_.timed_direction_def(),
           def_.timed_direction_def().forward_back_profiles(),
           def_.timed_direction_def().forward_back_profile_order(),
           t.wall_depth,

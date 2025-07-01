@@ -7701,6 +7701,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
     kTargetPlacementStrategyFieldNumber = 4,
     kDepthFieldNumber = 3,
     kTimeScaleMultiplierFieldNumber = 11,
+    kAccelerationFieldNumber = 12,
   };
   // repeated .aim.TimedDirectionProfile left_right_profiles = 5;
   int left_right_profiles_size() const;
@@ -7874,12 +7875,23 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
   void _internal_set_time_scale_multiplier(float value);
 
   public:
+  // float acceleration = 12;
+  bool has_acceleration() const;
+  void clear_acceleration() ;
+  float acceleration() const;
+  void set_acceleration(float value);
+
+  private:
+  float _internal_acceleration() const;
+  void _internal_set_acceleration(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TimedDirectionScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 11, 6,
+      4, 12, 6,
       0, 2>
       _table_;
 
@@ -7913,6 +7925,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
     float depth_;
     float time_scale_multiplier_;
+    float acceleration_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -17509,6 +17522,34 @@ inline float TimedDirectionScenarioDef::_internal_time_scale_multiplier() const 
 inline void TimedDirectionScenarioDef::_internal_set_time_scale_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.time_scale_multiplier_ = value;
+}
+
+// float acceleration = 12;
+inline bool TimedDirectionScenarioDef::has_acceleration() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void TimedDirectionScenarioDef::clear_acceleration() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float TimedDirectionScenarioDef::acceleration() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.acceleration)
+  return _internal_acceleration();
+}
+inline void TimedDirectionScenarioDef::set_acceleration(float value) {
+  _internal_set_acceleration(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.acceleration)
+}
+inline float TimedDirectionScenarioDef::_internal_acceleration() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_;
+}
+inline void TimedDirectionScenarioDef::_internal_set_acceleration(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_ = value;
 }
 
 // -------------------------------------------------------------------
