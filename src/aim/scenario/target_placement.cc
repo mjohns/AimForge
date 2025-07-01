@@ -26,7 +26,10 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
   glm::vec3 GetNextPosition(ProfileSelectionContext* context) override {
-    glm::vec3 candidate_pos;
+    glm::vec3 candidate_pos(0.0f);
+    if (strategy_.regions_size() == 0) {
+      return candidate_pos;
+    }
     float min_distance = strategy_.min_distance();
     ProfileSelectionContext original_context = *context;
     for (int i = 0; i < 200; ++i) {

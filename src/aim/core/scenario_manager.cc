@@ -239,6 +239,12 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
         result.mutable_wall_strafe_def()->set_acceleration(accel * mult);
       }
     }
+    if (original.has_timed_direction_def()) {
+      float accel = original.timed_direction_def().has_acceleration();
+      if (accel > 0) {
+        result.mutable_timed_direction_def()->set_acceleration(accel * mult);
+      }
+    }
   }
   return result;
 }

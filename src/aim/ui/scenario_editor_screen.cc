@@ -58,6 +58,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kStaticDef, "Static"},
     {ScenarioDef::kCenteringDef, "Centering"},
     {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
+    {ScenarioDef::kTimedDirectionDef, "Timed Direction"},
     {ScenarioDef::kBarrelDef, "Barrel"},
     {ScenarioDef::kLinearDef, "Linear"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
@@ -112,6 +113,9 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   }
   if (def.has_wall_strafe_def()) {
     return def.wall_strafe_def().target_placement_strategy();
+  }
+  if (def.has_timed_direction_def()) {
+    return def.timed_direction_def().target_placement_strategy();
   }
   return {};
 }
@@ -426,6 +430,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kWallStrafeDef) {
       DrawWallStrafeEditor();
     }
+    if (scenario_type == ScenarioDef::kTimedDirectionDef) {
+      DrawTimedDirectionEditor();
+    }
     if (scenario_type == ScenarioDef::kLinearDef) {
       DrawLinearEditor();
     }
@@ -461,6 +468,12 @@ class ScenarioEditorScreen : public UiScreen {
       auto* wall_strafe = def_.mutable_wall_strafe_def();
       if (target_placement.regions_size() > 0) {
         *wall_strafe->mutable_target_placement_strategy() = target_placement;
+      }
+    }
+    if (scenario_type == ScenarioDef::kTimedDirectionDef) {
+      auto* timed_direction = def_.mutable_timed_direction_def();
+      if (target_placement.regions_size() > 0) {
+        *timed_direction->mutable_target_placement_strategy() = target_placement;
       }
     }
     if (scenario_type == ScenarioDef::kLinearDef) {
@@ -879,6 +892,146 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Unindent();
   }
 
+  void DrawTimedDirectionProfile(TimedDirectionProfile* p) {
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams("Time")
+                                  .set_label("Time")
+                                  .set_step(0.1, 0.5)
+                                  .set_min(0.1)
+                                  .set_precision(2)
+                                  .set_default(1)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(TimedDirectionProfile, p, time));
+    ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
+                          .set_label("Speed multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.2)
+                          .set_min(0)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TimedDirectionProfile, p, speed_multiplier));
+    ImGui::InputFloat(ImGui::InputFloatParams("AccelerationMultiplier")
+                          .set_label("Acceleration multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.2)
+                          .set_min(0)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TimedDirectionProfile, p, acceleration_multiplier));
+  }
+
+  void DrawTimedDirectionEditor() {
+    ImGui::IdGuard cid("TimedDirectonEditor");
+    TimedDirectionScenarioDef& d = *def_.mutable_timed_direction_def();
+    if (!d.has_width()) {
+      d.mutable_width()->set_x_percent_value(0.90);
+    }
+    if (!d.has_height()) {
+      d.mutable_height()->set_y_percent_value(0.90);
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Bounds");
+    ImGui::Indent();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Width", /*default_to_x=*/true, d.mutable_width());
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Height", /*default_to_x=*/false, d.mutable_height());
+    ImGui::InputFloat(ImGui::InputFloatParams("Depth")
+                          .set_label("Depth")
+                          .set_is_optional()
+                          .set_step(1, 10)
+                          .set_min(0)
+                          .set_precision(0)
+                          .set_default(100)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, depth));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Allow movement towards and away from the camera within the specified depth from the wall");
+    ImGui::Unindent();
+
+    Line();
+
+    ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
+                          .set_label("Time scale multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.1)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, time_scale_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Scale all the times in the profiles by the given multiplier. To reduce the times by half "
+        "use 0.5");
+
+    ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
+                          .set_label("Acceleration")
+                          .set_is_optional()
+                          .set_step(5, 50)
+                          .set_min(1)
+                          .set_precision(0)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, acceleration));
+
+    Line();
+
+    ImGui::Text("Left/right profiles");
+    ImGui::Indent();
+    DrawProfileList("LeftRightProfileList",
+                    "Profile",
+                    d.mutable_left_right_profile_order(),
+                    d.mutable_left_right_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+    ImGui::Unindent();
+
+    ImGui::Text("Up/down profiles");
+    ImGui::Indent();
+    DrawProfileList("UpDownProfileList",
+                    "Profile",
+                    d.mutable_up_down_profile_order(),
+                    d.mutable_up_down_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+    ImGui::Unindent();
+
+    if (d.has_depth()) {
+      ImGui::Text("Forward/back profiles");
+      ImGui::Indent();
+      DrawProfileList("ForwardBackProfileList",
+                      "Profile",
+                      d.mutable_forward_back_profile_order(),
+                      d.mutable_forward_back_profiles(),
+                      std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+      ImGui::Unindent();
+    } else {
+      d.clear_forward_back_profiles();
+      d.clear_forward_back_profile_order();
+    }
+
+    Line();
+
+    bool use_target_placement = d.has_target_placement_strategy();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Set initial target location");
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
+    if (use_target_placement) {
+      ImGui::Indent();
+      DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
+      ImGui::Unindent();
+    } else {
+      d.clear_target_placement_strategy();
+    }
+  }
+
   void DrawWallStrafeEditor() {
     ImGui::IdGuard cid("WallStrafeEditor");
     WallStrafeScenarioDef& w = *def_.mutable_wall_strafe_def();
@@ -921,17 +1074,15 @@ class ScenarioEditorScreen : public UiScreen {
 
     Line();
 
-    float acceleration = w.acceleration();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Acceleration");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 10);
-    ImGui::InputFloat("##AccelerationInput", &acceleration, 5, 20, "%.0f");
-    if (acceleration <= 0) {
-      w.clear_acceleration();
-    } else {
-      w.set_acceleration(acceleration);
-    }
+    ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
+                          .set_label("Acceleration")
+                          .set_is_optional()
+                          .set_step(5, 50)
+                          .set_min(1)
+                          .set_precision(0)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(WallStrafeScenarioDef, &w, acceleration));
     ImGui::SameLine();
     ImGui::HelpMarker("The target will accelerate in and out of changes of direction");
 

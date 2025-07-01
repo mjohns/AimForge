@@ -635,16 +635,32 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
+    kDescriptionFieldNumber = 4,
     kWeightFieldNumber = 1,
     kNextProfileFieldNumber = 2,
     kMinSelectionGapFieldNumber = 3,
-    kDirection1TimeFieldNumber = 4,
-    kDirection1TimeJitterFieldNumber = 5,
-    kDirection2TimeFieldNumber = 6,
-    kDirection2TimeJitterFieldNumber = 7,
-    kSpeedMultiplierFieldNumber = 8,
-    kAccelerationMultiplierFieldNumber = 9,
+    kTimeFieldNumber = 5,
+    kTimeJitterFieldNumber = 6,
+    kSpeedMultiplierFieldNumber = 7,
+    kAccelerationMultiplierFieldNumber = 8,
   };
+  // string description = 4;
+  bool has_description() const;
+  void clear_description() ;
+  const std::string& description() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  std::string* mutable_description();
+  PROTOBUF_NODISCARD std::string* release_description();
+  void set_allocated_description(std::string* value);
+
+  private:
+  const std::string& _internal_description() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_description(
+      const std::string& value);
+  std::string* _internal_mutable_description();
+
+  public:
   // float weight = 1;
   bool has_weight() const;
   void clear_weight() ;
@@ -678,51 +694,29 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   void _internal_set_min_selection_gap(::int32_t value);
 
   public:
-  // float direction1_time = 4;
-  bool has_direction1_time() const;
-  void clear_direction1_time() ;
-  float direction1_time() const;
-  void set_direction1_time(float value);
+  // float time = 5;
+  bool has_time() const;
+  void clear_time() ;
+  float time() const;
+  void set_time(float value);
 
   private:
-  float _internal_direction1_time() const;
-  void _internal_set_direction1_time(float value);
+  float _internal_time() const;
+  void _internal_set_time(float value);
 
   public:
-  // float direction1_time_jitter = 5;
-  bool has_direction1_time_jitter() const;
-  void clear_direction1_time_jitter() ;
-  float direction1_time_jitter() const;
-  void set_direction1_time_jitter(float value);
+  // float time_jitter = 6;
+  bool has_time_jitter() const;
+  void clear_time_jitter() ;
+  float time_jitter() const;
+  void set_time_jitter(float value);
 
   private:
-  float _internal_direction1_time_jitter() const;
-  void _internal_set_direction1_time_jitter(float value);
+  float _internal_time_jitter() const;
+  void _internal_set_time_jitter(float value);
 
   public:
-  // float direction2_time = 6;
-  bool has_direction2_time() const;
-  void clear_direction2_time() ;
-  float direction2_time() const;
-  void set_direction2_time(float value);
-
-  private:
-  float _internal_direction2_time() const;
-  void _internal_set_direction2_time(float value);
-
-  public:
-  // float direction2_time_jitter = 7;
-  bool has_direction2_time_jitter() const;
-  void clear_direction2_time_jitter() ;
-  float direction2_time_jitter() const;
-  void set_direction2_time_jitter(float value);
-
-  private:
-  float _internal_direction2_time_jitter() const;
-  void _internal_set_direction2_time_jitter(float value);
-
-  public:
-  // float speed_multiplier = 8;
+  // float speed_multiplier = 7;
   bool has_speed_multiplier() const;
   void clear_speed_multiplier() ;
   float speed_multiplier() const;
@@ -733,7 +727,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   void _internal_set_speed_multiplier(float value);
 
   public:
-  // float acceleration_multiplier = 9;
+  // float acceleration_multiplier = 8;
   bool has_acceleration_multiplier() const;
   void clear_acceleration_multiplier() ;
   float acceleration_multiplier() const;
@@ -749,8 +743,8 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 9, 0,
-      0, 2>
+      3, 8, 0,
+      53, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -769,13 +763,12 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
                           const TimedDirectionProfile& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
     float weight_;
     ::int32_t next_profile_;
     ::int32_t min_selection_gap_;
-    float direction1_time_;
-    float direction1_time_jitter_;
-    float direction2_time_;
-    float direction2_time_jitter_;
+    float time_;
+    float time_jitter_;
     float speed_multiplier_;
     float acceleration_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -2746,22 +2739,22 @@ class WallStrafeProfile final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kDescriptionFieldNumber = 9,
-    kMinDistanceFieldNumber = 4,
-    kMaxDistanceFieldNumber = 5,
+    kDescriptionFieldNumber = 4,
+    kMinDistanceFieldNumber = 5,
+    kMaxDistanceFieldNumber = 6,
     kWeightFieldNumber = 1,
     kNextProfileFieldNumber = 2,
     kMinSelectionGapFieldNumber = 3,
-    kAngleFieldNumber = 6,
-    kAngleJitterFieldNumber = 7,
-    kDirectionChangePercentFieldNumber = 8,
+    kAngleFieldNumber = 7,
+    kAngleJitterFieldNumber = 8,
+    kDirectionChangePercentFieldNumber = 9,
     kPauseAtEndChanceFieldNumber = 10,
     kPauseSecondsFieldNumber = 11,
     kPauseSecondsJitterFieldNumber = 12,
     kSpeedMultiplierFieldNumber = 13,
     kAccelerationMultiplierFieldNumber = 14,
   };
-  // string description = 9;
+  // string description = 4;
   bool has_description() const;
   void clear_description() ;
   const std::string& description() const;
@@ -2778,7 +2771,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   std::string* _internal_mutable_description();
 
   public:
-  // .aim.RegionLength min_distance = 4;
+  // .aim.RegionLength min_distance = 5;
   bool has_min_distance() const;
   void clear_min_distance() ;
   const ::aim::RegionLength& min_distance() const;
@@ -2793,7 +2786,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_min_distance();
 
   public:
-  // .aim.RegionLength max_distance = 5;
+  // .aim.RegionLength max_distance = 6;
   bool has_max_distance() const;
   void clear_max_distance() ;
   const ::aim::RegionLength& max_distance() const;
@@ -2841,7 +2834,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_min_selection_gap(::int32_t value);
 
   public:
-  // float angle = 6;
+  // float angle = 7;
   bool has_angle() const;
   void clear_angle() ;
   float angle() const;
@@ -2852,7 +2845,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_angle(float value);
 
   public:
-  // float angle_jitter = 7;
+  // float angle_jitter = 8;
   bool has_angle_jitter() const;
   void clear_angle_jitter() ;
   float angle_jitter() const;
@@ -2863,7 +2856,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_angle_jitter(float value);
 
   public:
-  // float direction_change_percent = 8;
+  // float direction_change_percent = 9;
   bool has_direction_change_percent() const;
   void clear_direction_change_percent() ;
   float direction_change_percent() const;
@@ -15643,7 +15636,76 @@ inline void WallStrafeProfile::_internal_set_min_selection_gap(::int32_t value) 
   _impl_.min_selection_gap_ = value;
 }
 
-// .aim.RegionLength min_distance = 4;
+// string description = 4;
+inline bool WallStrafeProfile::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void WallStrafeProfile::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& WallStrafeProfile::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void WallStrafeProfile::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.description)
+}
+inline std::string* WallStrafeProfile::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.description)
+  return _s;
+}
+inline const std::string& WallStrafeProfile::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void WallStrafeProfile::_internal_set_description(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* WallStrafeProfile::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* WallStrafeProfile::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void WallStrafeProfile::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.description)
+}
+
+// .aim.RegionLength min_distance = 5;
 inline bool WallStrafeProfile::has_min_distance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.min_distance_ != nullptr);
@@ -15739,7 +15801,7 @@ inline void WallStrafeProfile::set_allocated_min_distance(::aim::RegionLength* v
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.min_distance)
 }
 
-// .aim.RegionLength max_distance = 5;
+// .aim.RegionLength max_distance = 6;
 inline bool WallStrafeProfile::has_max_distance() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.max_distance_ != nullptr);
@@ -15835,7 +15897,7 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.max_distance)
 }
 
-// float angle = 6;
+// float angle = 7;
 inline bool WallStrafeProfile::has_angle() const {
   bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
@@ -15863,7 +15925,7 @@ inline void WallStrafeProfile::_internal_set_angle(float value) {
   _impl_.angle_ = value;
 }
 
-// float angle_jitter = 7;
+// float angle_jitter = 8;
 inline bool WallStrafeProfile::has_angle_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
@@ -15891,7 +15953,7 @@ inline void WallStrafeProfile::_internal_set_angle_jitter(float value) {
   _impl_.angle_jitter_ = value;
 }
 
-// float direction_change_percent = 8;
+// float direction_change_percent = 9;
 inline bool WallStrafeProfile::has_direction_change_percent() const {
   bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
@@ -15917,75 +15979,6 @@ inline float WallStrafeProfile::_internal_direction_change_percent() const {
 inline void WallStrafeProfile::_internal_set_direction_change_percent(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.direction_change_percent_ = value;
-}
-
-// string description = 9;
-inline bool WallStrafeProfile::has_description() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void WallStrafeProfile::clear_description() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.description_.ClearToEmpty();
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline const std::string& WallStrafeProfile::description() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.description)
-  return _internal_description();
-}
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void WallStrafeProfile::set_description(Arg_&& arg,
-                                                     Args_... args) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.description)
-}
-inline std::string* WallStrafeProfile::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_description();
-  // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.description)
-  return _s;
-}
-inline const std::string& WallStrafeProfile::_internal_description() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.description_.Get();
-}
-inline void WallStrafeProfile::_internal_set_description(const std::string& value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.description_.Set(value, GetArena());
-}
-inline std::string* WallStrafeProfile::_internal_mutable_description() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  return _impl_.description_.Mutable( GetArena());
-}
-inline std::string* WallStrafeProfile::release_description() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.description)
-  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
-    return nullptr;
-  }
-  _impl_._has_bits_[0] &= ~0x00000001u;
-  auto* released = _impl_.description_.Release();
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.description_.Set("", GetArena());
-  }
-  return released;
-}
-inline void WallStrafeProfile::set_allocated_description(std::string* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
-  }
-  _impl_.description_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
-    _impl_.description_.Set("", GetArena());
-  }
-  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.description)
 }
 
 // float pause_at_end_chance = 10;
@@ -16644,13 +16637,13 @@ inline void WallStrafeScenarioDef::_internal_set_acceleration(float value) {
 
 // float weight = 1;
 inline bool TimedDirectionProfile::has_weight() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_weight() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.weight_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline float TimedDirectionProfile::weight() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.weight)
@@ -16658,7 +16651,7 @@ inline float TimedDirectionProfile::weight() const {
 }
 inline void TimedDirectionProfile::set_weight(float value) {
   _internal_set_weight(value);
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.weight)
 }
 inline float TimedDirectionProfile::_internal_weight() const {
@@ -16672,13 +16665,13 @@ inline void TimedDirectionProfile::_internal_set_weight(float value) {
 
 // int32 next_profile = 2;
 inline bool TimedDirectionProfile::has_next_profile() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_next_profile() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.next_profile_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline ::int32_t TimedDirectionProfile::next_profile() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.next_profile)
@@ -16686,7 +16679,7 @@ inline ::int32_t TimedDirectionProfile::next_profile() const {
 }
 inline void TimedDirectionProfile::set_next_profile(::int32_t value) {
   _internal_set_next_profile(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.next_profile)
 }
 inline ::int32_t TimedDirectionProfile::_internal_next_profile() const {
@@ -16700,13 +16693,13 @@ inline void TimedDirectionProfile::_internal_set_next_profile(::int32_t value) {
 
 // int32 min_selection_gap = 3;
 inline bool TimedDirectionProfile::has_min_selection_gap() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_min_selection_gap() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.min_selection_gap_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline ::int32_t TimedDirectionProfile::min_selection_gap() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.min_selection_gap)
@@ -16714,7 +16707,7 @@ inline ::int32_t TimedDirectionProfile::min_selection_gap() const {
 }
 inline void TimedDirectionProfile::set_min_selection_gap(::int32_t value) {
   _internal_set_min_selection_gap(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.min_selection_gap)
 }
 inline ::int32_t TimedDirectionProfile::_internal_min_selection_gap() const {
@@ -16726,127 +16719,140 @@ inline void TimedDirectionProfile::_internal_set_min_selection_gap(::int32_t val
   _impl_.min_selection_gap_ = value;
 }
 
-// float direction1_time = 4;
-inline bool TimedDirectionProfile::has_direction1_time() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+// string description = 4;
+inline bool TimedDirectionProfile::has_description() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline void TimedDirectionProfile::clear_direction1_time() {
+inline void TimedDirectionProfile::clear_description() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction1_time_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_.description_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline float TimedDirectionProfile::direction1_time() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.direction1_time)
-  return _internal_direction1_time();
+inline const std::string& TimedDirectionProfile::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.description)
+  return _internal_description();
 }
-inline void TimedDirectionProfile::set_direction1_time(float value) {
-  _internal_set_direction1_time(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.direction1_time)
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void TimedDirectionProfile::set_description(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.description)
 }
-inline float TimedDirectionProfile::_internal_direction1_time() const {
+inline std::string* TimedDirectionProfile::mutable_description() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionProfile.description)
+  return _s;
+}
+inline const std::string& TimedDirectionProfile::_internal_description() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.direction1_time_;
+  return _impl_.description_.Get();
 }
-inline void TimedDirectionProfile::_internal_set_direction1_time(float value) {
+inline void TimedDirectionProfile::_internal_set_description(const std::string& value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction1_time_ = value;
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.description_.Set(value, GetArena());
+}
+inline std::string* TimedDirectionProfile::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.description_.Mutable( GetArena());
+}
+inline std::string* TimedDirectionProfile::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TimedDirectionProfile.description)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TimedDirectionProfile::set_allocated_description(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.TimedDirectionProfile.description)
 }
 
-// float direction1_time_jitter = 5;
-inline bool TimedDirectionProfile::has_direction1_time_jitter() const {
+// float time = 5;
+inline bool TimedDirectionProfile::has_time() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
-inline void TimedDirectionProfile::clear_direction1_time_jitter() {
+inline void TimedDirectionProfile::clear_time() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction1_time_jitter_ = 0;
+  _impl_.time_ = 0;
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline float TimedDirectionProfile::direction1_time_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.direction1_time_jitter)
-  return _internal_direction1_time_jitter();
+inline float TimedDirectionProfile::time() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.time)
+  return _internal_time();
 }
-inline void TimedDirectionProfile::set_direction1_time_jitter(float value) {
-  _internal_set_direction1_time_jitter(value);
+inline void TimedDirectionProfile::set_time(float value) {
+  _internal_set_time(value);
   _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.direction1_time_jitter)
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.time)
 }
-inline float TimedDirectionProfile::_internal_direction1_time_jitter() const {
+inline float TimedDirectionProfile::_internal_time() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.direction1_time_jitter_;
+  return _impl_.time_;
 }
-inline void TimedDirectionProfile::_internal_set_direction1_time_jitter(float value) {
+inline void TimedDirectionProfile::_internal_set_time(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction1_time_jitter_ = value;
+  _impl_.time_ = value;
 }
 
-// float direction2_time = 6;
-inline bool TimedDirectionProfile::has_direction2_time() const {
+// float time_jitter = 6;
+inline bool TimedDirectionProfile::has_time_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
-inline void TimedDirectionProfile::clear_direction2_time() {
+inline void TimedDirectionProfile::clear_time_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction2_time_ = 0;
+  _impl_.time_jitter_ = 0;
   _impl_._has_bits_[0] &= ~0x00000020u;
 }
-inline float TimedDirectionProfile::direction2_time() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.direction2_time)
-  return _internal_direction2_time();
+inline float TimedDirectionProfile::time_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.time_jitter)
+  return _internal_time_jitter();
 }
-inline void TimedDirectionProfile::set_direction2_time(float value) {
-  _internal_set_direction2_time(value);
+inline void TimedDirectionProfile::set_time_jitter(float value) {
+  _internal_set_time_jitter(value);
   _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.direction2_time)
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.time_jitter)
 }
-inline float TimedDirectionProfile::_internal_direction2_time() const {
+inline float TimedDirectionProfile::_internal_time_jitter() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.direction2_time_;
+  return _impl_.time_jitter_;
 }
-inline void TimedDirectionProfile::_internal_set_direction2_time(float value) {
+inline void TimedDirectionProfile::_internal_set_time_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction2_time_ = value;
+  _impl_.time_jitter_ = value;
 }
 
-// float direction2_time_jitter = 7;
-inline bool TimedDirectionProfile::has_direction2_time_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
-  return value;
-}
-inline void TimedDirectionProfile::clear_direction2_time_jitter() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction2_time_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
-}
-inline float TimedDirectionProfile::direction2_time_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.direction2_time_jitter)
-  return _internal_direction2_time_jitter();
-}
-inline void TimedDirectionProfile::set_direction2_time_jitter(float value) {
-  _internal_set_direction2_time_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.direction2_time_jitter)
-}
-inline float TimedDirectionProfile::_internal_direction2_time_jitter() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.direction2_time_jitter_;
-}
-inline void TimedDirectionProfile::_internal_set_direction2_time_jitter(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.direction2_time_jitter_ = value;
-}
-
-// float speed_multiplier = 8;
+// float speed_multiplier = 7;
 inline bool TimedDirectionProfile::has_speed_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_speed_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float TimedDirectionProfile::speed_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.speed_multiplier)
@@ -16854,7 +16860,7 @@ inline float TimedDirectionProfile::speed_multiplier() const {
 }
 inline void TimedDirectionProfile::set_speed_multiplier(float value) {
   _internal_set_speed_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.speed_multiplier)
 }
 inline float TimedDirectionProfile::_internal_speed_multiplier() const {
@@ -16866,15 +16872,15 @@ inline void TimedDirectionProfile::_internal_set_speed_multiplier(float value) {
   _impl_.speed_multiplier_ = value;
 }
 
-// float acceleration_multiplier = 9;
+// float acceleration_multiplier = 8;
 inline bool TimedDirectionProfile::has_acceleration_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float TimedDirectionProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.acceleration_multiplier)
@@ -16882,7 +16888,7 @@ inline float TimedDirectionProfile::acceleration_multiplier() const {
 }
 inline void TimedDirectionProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.acceleration_multiplier)
 }
 inline float TimedDirectionProfile::_internal_acceleration_multiplier() const {

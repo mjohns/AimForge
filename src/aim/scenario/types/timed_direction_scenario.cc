@@ -43,12 +43,12 @@ struct SingleDirectionController {
       ChangeDirection(app, now_seconds, profiles, order, def);
     }
 
-    float speed = t.speed * speed_multiplier;
+    float max_speed = t.speed * speed_multiplier;
 
     float acceleration = def.acceleration() * acceleration_multiplier;
-    float stop_distance = 0;
     if (acceleration > 0) {
-      stop_distance = (current_speed * current_speed) / (2 * acceleration);
+      // Adjust current speed for acceleration.
+      float stop_distance = (current_speed * current_speed) / (2 * acceleration);
       bool stop_left = going_left && (current_position - stop_distance) <= min;
       bool stop_right = !going_left && (current_position + stop_distance) >= max;
       if (stop_left || stop_right) {
@@ -66,15 +66,15 @@ struct SingleDirectionController {
         }
       } else {
         current_speed += delta_seconds * acceleration;
-        if (current_speed > speed) {
-          current_speed = speed;
+        if (current_speed > max_speed) {
+          current_speed = max_speed;
         }
       }
-
-      speed = current_speed;
+    } else {
+      current_speed = max_speed;
     }
 
-    float delta_pos = speed * delta_seconds;
+    float delta_pos = current_speed * delta_seconds;
     if (going_left) {
       delta_pos *= -1;
     }
@@ -98,9 +98,7 @@ struct SingleDirectionController {
 
     going_left = !going_left;
 
-    float time = going_left
-                     ? app.rand().GetJittered(p->direction2_time(), p->direction2_time_jitter())
-                     : app.rand().GetJittered(p->direction1_time(), p->direction1_time_jitter());
+    float time = app.rand().GetJittered(p->time(), p->time_jitter());
     if (def.has_time_scale_multiplier()) {
       time *= def.time_scale_multiplier();
     }
