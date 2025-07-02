@@ -42,6 +42,8 @@ bool CopyPlaylist(Playlist source,
 
   PlaylistDef dest = source.def;
   if (opts.deep_copy) {
+    std::unordered_map<std::string, ResourceName> new_name_map;
+    std::unordered_map<std::string, ScenarioDef> new_scenario_map;
     dest.clear_items();
     for (const auto& source_item : source.def.items()) {
       auto source_scenario = app.scenario_manager().GetScenario(source_item.scenario());
@@ -70,9 +72,27 @@ bool CopyPlaylist(Playlist source,
       auto maybe_final_scenario_name =
           app.scenario_manager().SaveScenarioWithUniqueName(new_scenario_name, new_def);
       if (maybe_final_scenario_name) {
+        new_name_map[source_item.scenario()] = *maybe_final_scenario_name;
+        new_scenario_map[maybe_final_scenario_name->full_name()] = new_def;
         PlaylistItem item = source_item;
         item.set_scenario(maybe_final_scenario_name->full_name());
         *dest.add_items() = item;
+      }
+    }
+    if (!opts.as_references) {
+      // Make sure any copied scenarios which were references that pointed to other scenarios in the
+      // playlist are updated to point to the version in the new playlist.
+      for (const auto& item : dest.items()) {
+        ScenarioDef& def = new_scenario_map[item.scenario()];
+        std::string old_referenced_scenario = def.reference_def().scenario_id();
+        if (old_referenced_scenario.size() > 0) {
+          auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
+          if (new_referenced_scenario != new_name_map.end()) {
+            def.mutable_reference_def()->set_scenario_id(
+                new_referenced_scenario->second.full_name());
+            app.scenario_manager().SaveScenario(new_referenced_scenario->second, def);
+          }
+        }
       }
     }
   }
