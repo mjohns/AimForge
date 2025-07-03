@@ -14,12 +14,12 @@ message Settings {
   float dpi = 1;
   float cm_per_360 = 2;
   // The cm_per_360 per scenario run will be adjusted by a random value in +/- jitter.
-  float cm_per_360_jitter = 11;
-  string theme_name = 3;
-  float metronome_bpm = 4;
+  float cm_per_360_jitter = 3;
+  string theme_name = 4;
+  float metronome_bpm = 5;
 
-  float crosshair_size = 5;
-  string current_crosshair_name = 6;
+  float crosshair_size = 6;
+  string current_crosshair_name = 7;
 
   bool disable_click_to_start = 8;
 
@@ -33,8 +33,9 @@ message Settings {
   bool disable_per_scenario_settings = 13;
 
   float max_render_fps = 14;
+  float use_vsync = 15;
 
-  SoundSettings sound = 15;
+  SoundSettings sound = 16;
 }
 
 message SoundSettings {

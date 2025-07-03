@@ -72,6 +72,7 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       force_start_immediately_(params.force_start_immediately),
       from_scenario_editor_(params.from_scenario_editor) {
   theme_ = app->settings_manager().GetCurrentTheme();
+  settings_ = app_.settings_manager().GetCurrentSettingsForScenario(id_);
 
   if (ShouldRecordReplay()) {
     replay_ = google::protobuf::Arena::Create<Replay>(&replay_arena_);
@@ -204,7 +205,11 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
 }
 
 void Scenario::OnAttach() {
-  app_.DisableVsync();
+  if (settings_.use_vsync()) {
+    app_.EnableVsync();
+  } else {
+    app_.DisableVsync();
+  }
   SDL_SetWindowRelativeMouseMode(app_.sdl_window(), true);
   RefreshState();
   timer_.StartLoop();

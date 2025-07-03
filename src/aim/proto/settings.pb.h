@@ -1593,22 +1593,23 @@ class Settings final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kThemeNameFieldNumber = 3,
-    kCurrentCrosshairNameFieldNumber = 6,
+    kThemeNameFieldNumber = 4,
+    kCurrentCrosshairNameFieldNumber = 7,
     kKeybindsFieldNumber = 9,
     kHealthBarFieldNumber = 12,
-    kSoundFieldNumber = 15,
+    kSoundFieldNumber = 16,
     kDpiFieldNumber = 1,
     kCmPer360FieldNumber = 2,
-    kMetronomeBpmFieldNumber = 4,
-    kCrosshairSizeFieldNumber = 5,
+    kCmPer360JitterFieldNumber = 3,
+    kMetronomeBpmFieldNumber = 5,
+    kCrosshairSizeFieldNumber = 6,
     kDisableClickToStartFieldNumber = 8,
     kAutoHoldTrackingFieldNumber = 10,
     kDisablePerScenarioSettingsFieldNumber = 13,
-    kCmPer360JitterFieldNumber = 11,
     kMaxRenderFpsFieldNumber = 14,
+    kUseVsyncFieldNumber = 15,
   };
-  // string theme_name = 3;
+  // string theme_name = 4;
   bool has_theme_name() const;
   void clear_theme_name() ;
   const std::string& theme_name() const;
@@ -1625,7 +1626,7 @@ class Settings final : public ::google::protobuf::Message
   std::string* _internal_mutable_theme_name();
 
   public:
-  // string current_crosshair_name = 6;
+  // string current_crosshair_name = 7;
   bool has_current_crosshair_name() const;
   void clear_current_crosshair_name() ;
   const std::string& current_crosshair_name() const;
@@ -1672,7 +1673,7 @@ class Settings final : public ::google::protobuf::Message
   ::aim::HealthBarSettings* _internal_mutable_health_bar();
 
   public:
-  // .aim.SoundSettings sound = 15;
+  // .aim.SoundSettings sound = 16;
   bool has_sound() const;
   void clear_sound() ;
   const ::aim::SoundSettings& sound() const;
@@ -1709,7 +1710,18 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_cm_per_360(float value);
 
   public:
-  // float metronome_bpm = 4;
+  // float cm_per_360_jitter = 3;
+  bool has_cm_per_360_jitter() const;
+  void clear_cm_per_360_jitter() ;
+  float cm_per_360_jitter() const;
+  void set_cm_per_360_jitter(float value);
+
+  private:
+  float _internal_cm_per_360_jitter() const;
+  void _internal_set_cm_per_360_jitter(float value);
+
+  public:
+  // float metronome_bpm = 5;
   bool has_metronome_bpm() const;
   void clear_metronome_bpm() ;
   float metronome_bpm() const;
@@ -1720,7 +1732,7 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_metronome_bpm(float value);
 
   public:
-  // float crosshair_size = 5;
+  // float crosshair_size = 6;
   bool has_crosshair_size() const;
   void clear_crosshair_size() ;
   float crosshair_size() const;
@@ -1764,17 +1776,6 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_disable_per_scenario_settings(bool value);
 
   public:
-  // float cm_per_360_jitter = 11;
-  bool has_cm_per_360_jitter() const;
-  void clear_cm_per_360_jitter() ;
-  float cm_per_360_jitter() const;
-  void set_cm_per_360_jitter(float value);
-
-  private:
-  float _internal_cm_per_360_jitter() const;
-  void _internal_set_cm_per_360_jitter(float value);
-
-  public:
   // float max_render_fps = 14;
   bool has_max_render_fps() const;
   void clear_max_render_fps() ;
@@ -1786,12 +1787,23 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_max_render_fps(float value);
 
   public:
+  // float use_vsync = 15;
+  bool has_use_vsync() const;
+  void clear_use_vsync() ;
+  float use_vsync() const;
+  void set_use_vsync(float value);
+
+  private:
+  float _internal_use_vsync() const;
+  void _internal_set_use_vsync(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 14, 3,
+      4, 15, 3,
       61, 2>
       _table_;
 
@@ -1818,13 +1830,14 @@ class Settings final : public ::google::protobuf::Message
     ::aim::SoundSettings* sound_;
     float dpi_;
     float cm_per_360_;
+    float cm_per_360_jitter_;
     float metronome_bpm_;
     float crosshair_size_;
     bool disable_click_to_start_;
     bool auto_hold_tracking_;
     bool disable_per_scenario_settings_;
-    float cm_per_360_jitter_;
     float max_render_fps_;
+    float use_vsync_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2047,15 +2060,15 @@ inline void Settings::_internal_set_cm_per_360(float value) {
   _impl_.cm_per_360_ = value;
 }
 
-// float cm_per_360_jitter = 11;
+// float cm_per_360_jitter = 3;
 inline bool Settings::has_cm_per_360_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void Settings::clear_cm_per_360_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00001000u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float Settings::cm_per_360_jitter() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360_jitter)
@@ -2063,7 +2076,7 @@ inline float Settings::cm_per_360_jitter() const {
 }
 inline void Settings::set_cm_per_360_jitter(float value) {
   _internal_set_cm_per_360_jitter(value);
-  _impl_._has_bits_[0] |= 0x00001000u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360_jitter)
 }
 inline float Settings::_internal_cm_per_360_jitter() const {
@@ -2075,7 +2088,7 @@ inline void Settings::_internal_set_cm_per_360_jitter(float value) {
   _impl_.cm_per_360_jitter_ = value;
 }
 
-// string theme_name = 3;
+// string theme_name = 4;
 inline bool Settings::has_theme_name() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -2144,15 +2157,15 @@ inline void Settings::set_allocated_theme_name(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.theme_name)
 }
 
-// float metronome_bpm = 4;
+// float metronome_bpm = 5;
 inline bool Settings::has_metronome_bpm() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void Settings::clear_metronome_bpm() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float Settings::metronome_bpm() const {
   // @@protoc_insertion_point(field_get:aim.Settings.metronome_bpm)
@@ -2160,7 +2173,7 @@ inline float Settings::metronome_bpm() const {
 }
 inline void Settings::set_metronome_bpm(float value) {
   _internal_set_metronome_bpm(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.Settings.metronome_bpm)
 }
 inline float Settings::_internal_metronome_bpm() const {
@@ -2172,15 +2185,15 @@ inline void Settings::_internal_set_metronome_bpm(float value) {
   _impl_.metronome_bpm_ = value;
 }
 
-// float crosshair_size = 5;
+// float crosshair_size = 6;
 inline bool Settings::has_crosshair_size() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void Settings::clear_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.crosshair_size_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline float Settings::crosshair_size() const {
   // @@protoc_insertion_point(field_get:aim.Settings.crosshair_size)
@@ -2188,7 +2201,7 @@ inline float Settings::crosshair_size() const {
 }
 inline void Settings::set_crosshair_size(float value) {
   _internal_set_crosshair_size(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.Settings.crosshair_size)
 }
 inline float Settings::_internal_crosshair_size() const {
@@ -2200,7 +2213,7 @@ inline void Settings::_internal_set_crosshair_size(float value) {
   _impl_.crosshair_size_ = value;
 }
 
-// string current_crosshair_name = 6;
+// string current_crosshair_name = 7;
 inline bool Settings::has_current_crosshair_name() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
@@ -2271,13 +2284,13 @@ inline void Settings::set_allocated_current_crosshair_name(std::string* value) {
 
 // bool disable_click_to_start = 8;
 inline bool Settings::has_disable_click_to_start() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
 inline void Settings::clear_disable_click_to_start() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_click_to_start_ = false;
-  _impl_._has_bits_[0] &= ~0x00000200u;
+  _impl_._has_bits_[0] &= ~0x00000400u;
 }
 inline bool Settings::disable_click_to_start() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_click_to_start)
@@ -2285,7 +2298,7 @@ inline bool Settings::disable_click_to_start() const {
 }
 inline void Settings::set_disable_click_to_start(bool value) {
   _internal_set_disable_click_to_start(value);
-  _impl_._has_bits_[0] |= 0x00000200u;
+  _impl_._has_bits_[0] |= 0x00000400u;
   // @@protoc_insertion_point(field_set:aim.Settings.disable_click_to_start)
 }
 inline bool Settings::_internal_disable_click_to_start() const {
@@ -2395,13 +2408,13 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* value) {
 
 // bool auto_hold_tracking = 10;
 inline bool Settings::has_auto_hold_tracking() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
   return value;
 }
 inline void Settings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
-  _impl_._has_bits_[0] &= ~0x00000400u;
+  _impl_._has_bits_[0] &= ~0x00000800u;
 }
 inline bool Settings::auto_hold_tracking() const {
   // @@protoc_insertion_point(field_get:aim.Settings.auto_hold_tracking)
@@ -2409,7 +2422,7 @@ inline bool Settings::auto_hold_tracking() const {
 }
 inline void Settings::set_auto_hold_tracking(bool value) {
   _internal_set_auto_hold_tracking(value);
-  _impl_._has_bits_[0] |= 0x00000400u;
+  _impl_._has_bits_[0] |= 0x00000800u;
   // @@protoc_insertion_point(field_set:aim.Settings.auto_hold_tracking)
 }
 inline bool Settings::_internal_auto_hold_tracking() const {
@@ -2519,13 +2532,13 @@ inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* value) 
 
 // bool disable_per_scenario_settings = 13;
 inline bool Settings::has_disable_per_scenario_settings() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
   return value;
 }
 inline void Settings::clear_disable_per_scenario_settings() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_per_scenario_settings_ = false;
-  _impl_._has_bits_[0] &= ~0x00000800u;
+  _impl_._has_bits_[0] &= ~0x00001000u;
 }
 inline bool Settings::disable_per_scenario_settings() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_per_scenario_settings)
@@ -2533,7 +2546,7 @@ inline bool Settings::disable_per_scenario_settings() const {
 }
 inline void Settings::set_disable_per_scenario_settings(bool value) {
   _internal_set_disable_per_scenario_settings(value);
-  _impl_._has_bits_[0] |= 0x00000800u;
+  _impl_._has_bits_[0] |= 0x00001000u;
   // @@protoc_insertion_point(field_set:aim.Settings.disable_per_scenario_settings)
 }
 inline bool Settings::_internal_disable_per_scenario_settings() const {
@@ -2573,7 +2586,35 @@ inline void Settings::_internal_set_max_render_fps(float value) {
   _impl_.max_render_fps_ = value;
 }
 
-// .aim.SoundSettings sound = 15;
+// float use_vsync = 15;
+inline bool Settings::has_use_vsync() const {
+  bool value = (_impl_._has_bits_[0] & 0x00004000u) != 0;
+  return value;
+}
+inline void Settings::clear_use_vsync() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.use_vsync_ = 0;
+  _impl_._has_bits_[0] &= ~0x00004000u;
+}
+inline float Settings::use_vsync() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.use_vsync)
+  return _internal_use_vsync();
+}
+inline void Settings::set_use_vsync(float value) {
+  _internal_set_use_vsync(value);
+  _impl_._has_bits_[0] |= 0x00004000u;
+  // @@protoc_insertion_point(field_set:aim.Settings.use_vsync)
+}
+inline float Settings::_internal_use_vsync() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.use_vsync_;
+}
+inline void Settings::_internal_set_use_vsync(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.use_vsync_ = value;
+}
+
+// .aim.SoundSettings sound = 16;
 inline bool Settings::has_sound() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.sound_ != nullptr);

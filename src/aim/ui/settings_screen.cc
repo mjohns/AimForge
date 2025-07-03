@@ -79,12 +79,20 @@ class SettingsScreen : public UiScreen {
                             .set_is_optional()
                             .set_step(10, 100)
                             .set_width(char_x_ * 10)
-                            .set_range(60, 1000),
+                            .set_range(30, 2000),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, max_render_fps));
       ImGui::SameLine();
       ImGui::HelpMarker(
-          "Don't set too high above refresh rate as additional time rendering will take away "
-          "from time to perform state updates and poll mouse events");
+          "State updates and event polling are not tied to fps. A good target can be 2x monitor "
+          "refresh rate to reduce tearing.");
+
+      ImGui::InputBool(ImGui::InputBoolParams("EnableVsync").set_label("Enable vsync"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, use_vsync));
+
+      ImGui::InputBool(
+          ImGui::InputBoolParams("DisablePerScenarioSettings")
+              .set_label("Disable per scenario settings"),
+          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
 
       ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
                             .set_label("Metronome BPM")

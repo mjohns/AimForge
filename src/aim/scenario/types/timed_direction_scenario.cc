@@ -247,6 +247,12 @@ class TimedDirectionScenario : public BaseScenario {
     glm::vec3 pos(0.0f);
     if (wall_target_placer_) {
       pos = wall_target_placer_->GetNextPosition();
+    } else {
+      float depth = def_.timed_direction_def().depth();
+      if (depth > 0) {
+        // Start in the middle of the available depth.
+        pos.z = depth / 2.0;
+      }
     }
     target->SetWallPosition(pos, def_.room());
     target->movement_controller =

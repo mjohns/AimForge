@@ -219,6 +219,16 @@ int Application::Initialize() {
   }
   EnableVsync();
 
+  auto settings = settings_manager_->GetCurrentSettings();
+  if (settings.max_render_fps() <= 0) {
+    const SDL_DisplayMode* display_mode = SDL_GetCurrentDisplayMode(SDL_GetPrimaryDisplay());
+    if (display_mode != nullptr) {
+      auto updater = settings_manager_->CreateUpdater();
+      updater.settings.set_max_render_fps(std::round(display_mode->refresh_rate * 2));
+      updater.SaveIfChangesMade("");
+    }
+  }
+
   auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
   icon_ = IMG_Load(logo_path.string().c_str());
   if (icon_ != nullptr) {
