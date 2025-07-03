@@ -1,10 +1,9 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": -20
     },
     "simpleRoom": {
@@ -26,8 +25,6 @@
   },
   "wallArcDef": {
     "controlHeight": 2,
-    "controlHeightJitter": 0,
-    "duration": 2.10000062,
     "height": {
       "yPercentValue": 0.5
     },

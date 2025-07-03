@@ -1,10 +1,9 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cylinderRoom": {
       "height": 150,
-      "radius": 100,
+      "radius": 200,
       "sideAngleDegrees": 40,
       "width": 320
     }
@@ -58,7 +57,6 @@
         "pauseAtEndChance": 1,
         "pauseSeconds": 0.700000048,
         "pauseSecondsJitter": 0,
-        "speedOverride": 400,
         "weight": 2
       }
     ],

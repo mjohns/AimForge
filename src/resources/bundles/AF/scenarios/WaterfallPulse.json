@@ -3,7 +3,6 @@
   "linearDef": {
     "angle": 90,
     "angleJitter": 5,
-    "direction": "IN",
     "targetPlacementStrategy": {
       "minDistance": 20,
       "regions": [
@@ -32,7 +31,7 @@
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     },
     "simpleRoom": {

@@ -4,8 +4,7 @@
     "angleJitter": 0,
     "angleLength": {
       "xPercentValue": 0.96999985
-    },
-    "orientPill": true
+    }
   },
   "durationSeconds": 60,
   "room": {
@@ -14,7 +13,7 @@
     },
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     }
   },

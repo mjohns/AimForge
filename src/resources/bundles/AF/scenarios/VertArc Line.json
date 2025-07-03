@@ -4,7 +4,7 @@
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": -45
     },
     "simpleRoom": {
@@ -27,8 +27,6 @@
   },
   "wallArcDef": {
     "controlHeight": 2,
-    "controlHeightJitter": 0,
-    "duration": 2.20000052,
     "height": {
       "xPercentValue": 0.72
     },

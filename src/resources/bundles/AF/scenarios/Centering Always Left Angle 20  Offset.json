@@ -4,7 +4,6 @@
   "linearDef": {
     "angle": 20,
     "angleJitter": 0,
-    "direction": "OUT",
     "targetPlacementStrategy": {
       "regions": [
         {
@@ -29,7 +28,6 @@
       ]
     }
   },
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -39,7 +37,7 @@
     "cylinderRoom": {
       "height": 80,
       "hideSides": true,
-      "radius": 100,
+      "radius": 200,
       "width": 500000
     }
   },

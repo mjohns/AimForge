@@ -1,10 +1,9 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     },
     "simpleRoom": {
@@ -32,6 +31,15 @@
     "removeClosestOnMiss": false
   },
   "wallWanderDef": {
+    "profiles": [
+      {
+        "description": "",
+        "turnRate": 300,
+        "turnRateJitter": 70,
+        "turnTime": 2.2,
+        "turnTimeJitter": 0.5
+      }
+    ],
     "targetPlacementStrategy": {
       "regions": [
         {
@@ -48,15 +56,6 @@
           }
         }
       ]
-    },
-    "profiles": [
-      {
-        "description": "",
-        "turnRate": 300,
-        "turnRateJitter": 70,
-        "turnTime": 2.2,
-        "turnTimeJitter": 0.5
-      }
-    ]
+    }
   }
 }

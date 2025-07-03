@@ -36,7 +36,8 @@
   },
   "timedDirectionDef": {
     "acceleration": 225,
-    "depth": 90,
+    "depth": 60,
+    "forwardBackInitialDirection": "DIRECTION_POSITIVE_OR_NEGATIVE",
     "forwardBackProfiles": [
       {
         "accelerationMultiplier": 0.549999893,
@@ -49,6 +50,7 @@
     "height": {
       "yPercentValue": 0.9
     },
+    "leftRightInitialDirection": "DIRECTION_NEGATIVE",
     "leftRightProfiles": [
       {
         "description": "",
@@ -63,23 +65,7 @@
         "weight": 1
       }
     ],
-    "targetPlacementStrategy": {
-      "regions": [
-        {
-          "depth": 38,
-          "depthJitter": 0,
-          "description": "Middle with depth",
-          "rectangle": {
-            "xLength": {
-              "value": 1
-            },
-            "yLength": {
-              "value": 1
-            }
-          }
-        }
-      ]
-    },
+    "upDownInitialDirection": "DIRECTION_POSITIVE",
     "upDownProfiles": [
       {
         "accelerationMultiplier": 0.549999833,

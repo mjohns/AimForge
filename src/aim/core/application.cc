@@ -25,6 +25,24 @@ namespace aim {
 namespace {
 const char* kImguiIniFile = "imgui.ini";
 
+void RunScenarioBackfill(ScenarioManager* mgr) {
+  /*
+  for (ScenarioItem item : mgr->scenarios()) {
+    ScenarioDef def = item.def;
+    Room* room = def.mutable_room();
+    if (room->camera_position().y() == -100) {
+      room->mutable_camera_position()->set_y(-200);
+      mgr->SaveScenario(item.name, def);
+    }
+    if (room->cylinder_room().radius() == 100) {
+      room->mutable_cylinder_room()->set_radius(200);
+      mgr->SaveScenario(item.name, def);
+    }
+
+  }
+  */
+}
+
 void CopyInitialDirIfNotExists(const std::string& dir_name,
                                const std::string& dest_dir,
                                FileSystem* fs) {
@@ -297,6 +315,7 @@ int Application::Initialize() {
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
   logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
+  RunScenarioBackfill(scenario_manager_.get());
   return 0;
 }
 

@@ -30,7 +30,7 @@
     "cylinderRoom": {
       "height": 130,
       "hideSides": true,
-      "radius": 100,
+      "radius": 200,
       "width": 500000
     }
   },

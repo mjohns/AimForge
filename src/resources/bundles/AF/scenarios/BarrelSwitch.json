@@ -21,14 +21,13 @@
     }
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 75
     },
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     }
   },

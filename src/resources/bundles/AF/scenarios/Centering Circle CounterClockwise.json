@@ -7,14 +7,13 @@
     "startDegrees": 0
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 65
     },
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     }
   },

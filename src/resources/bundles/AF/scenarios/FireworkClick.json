@@ -3,7 +3,6 @@
   "linearDef": {
     "angle": 0,
     "angleJitter": 360,
-    "direction": "OUT",
     "targetPlacementStrategy": {
       "minDistance": 10,
       "regions": [
@@ -26,7 +25,7 @@
     },
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     }
   },

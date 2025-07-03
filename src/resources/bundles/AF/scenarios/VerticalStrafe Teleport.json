@@ -1,7 +1,6 @@
 {
   "description": "AF Strafe Teleport but with the camera rotated so that the strafing is vertical.",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -16,7 +15,7 @@
     "cylinderRoom": {
       "height": 150,
       "hideSides": true,
-      "radius": 100,
+      "radius": 200,
       "width": 320
     }
   },
@@ -69,7 +68,6 @@
         "pauseAtEndChance": 1,
         "pauseSeconds": 0.700000048,
         "pauseSecondsJitter": 0,
-        "speedOverride": 400,
         "weight": 2
       }
     ],

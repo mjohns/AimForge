@@ -10,7 +10,7 @@
     "cylinderRoom": {
       "height": 240,
       "hideSides": false,
-      "radius": 100,
+      "radius": 200,
       "sideAngleDegrees": 65,
       "widthPerimeterPercent": 0.599999964
     }

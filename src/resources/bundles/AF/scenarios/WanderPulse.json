@@ -1,13 +1,12 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 75
     },
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": 0
     }
   },
@@ -32,6 +31,15 @@
     "staggerInitialTargetsSeconds": 0.2
   },
   "wallWanderDef": {
+    "profiles": [
+      {
+        "description": "",
+        "turnRate": 160,
+        "turnRateJitter": 40,
+        "turnTime": 2.5,
+        "turnTimeJitter": 0.8
+      }
+    ],
     "targetPlacementStrategy": {
       "minDistance": 43,
       "regions": [
@@ -46,15 +54,6 @@
           "description": ""
         }
       ]
-    },
-    "profiles": [
-      {
-        "description": "",
-        "turnRate": 160,
-        "turnRateJitter": 40,
-        "turnTime": 2.5,
-        "turnTimeJitter": 0.8
-      }
-    ]
+    }
   }
 }

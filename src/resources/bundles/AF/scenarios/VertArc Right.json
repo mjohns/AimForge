@@ -2,11 +2,10 @@
   "description": "VertArc but with \"camera up\" rotated so that the Arc is coming from the left wall out to the right.",
   "durationSeconds": 60,
   "endScore": 45,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -100,
+      "y": -200,
       "z": -45
     },
     "cameraUp": {

@@ -3,7 +3,7 @@
   "room": {
     "cylinderRoom": {
       "height": 150,
-      "radius": 100,
+      "radius": 200,
       "sideAngleDegrees": 30,
       "width": 300
     }
