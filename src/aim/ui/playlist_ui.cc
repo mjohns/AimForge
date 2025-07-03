@@ -29,6 +29,7 @@ struct CopyPlaylistOptions {
   std::string add_prefix;
   bool deep_copy = false;
   bool as_references = false;
+  bool bake_references = false;
 };
 
 bool CopyPlaylist(Playlist source,
@@ -66,8 +67,10 @@ bool CopyPlaylist(Playlist source,
       ScenarioDef new_def;
       if (opts.as_references) {
         new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
-      } else {
+      } else if (opts.bake_references) {
         new_def = source_scenario->def;
+      } else {
+        new_def = source_scenario->unevaluated_def;
       }
       auto maybe_final_scenario_name =
           app.scenario_manager().SaveScenarioWithUniqueName(new_scenario_name, new_def);
@@ -90,7 +93,7 @@ bool CopyPlaylist(Playlist source,
           if (new_referenced_scenario != new_name_map.end()) {
             def.mutable_reference_def()->set_scenario_id(
                 new_referenced_scenario->second.full_name());
-            app.scenario_manager().SaveScenario(new_referenced_scenario->second, def);
+            app.scenario_manager().SaveScenario(ResourceName::Parse(item.scenario()), def);
           }
         }
       }
