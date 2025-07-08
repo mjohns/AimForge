@@ -850,32 +850,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Indent();
     DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
     ImGui::Unindent();
-
-    Line();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Override wall width");
-    ImGui::SameLine();
-    bool has_width = d.has_width();
-    float width = FirstGreaterThanZero(d.width(), 100);
-    OptionalInputFloat("WidthOverride", &has_width, &width, 10, 20, "%.0f");
-    if (has_width) {
-      d.set_width(width);
-    } else {
-      d.clear_width();
-    }
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Override wall height");
-    ImGui::SameLine();
-    bool has_height = d.has_height();
-    float height = FirstGreaterThanZero(d.height(), 100);
-    OptionalInputFloat("HeightOverride", &has_height, &height, 10, 20, "%.0f");
-    if (has_height) {
-      d.set_height(height);
-    } else {
-      d.clear_height();
-    }
   }
 
   void DrawBarrelEditor() {
@@ -949,37 +923,7 @@ class ScenarioEditorScreen : public UiScreen {
   void DrawTimedDirectionEditor() {
     ImGui::IdGuard cid("TimedDirectonEditor");
     TimedDirectionScenarioDef& d = *def_.mutable_timed_direction_def();
-    if (!d.has_width()) {
-      d.mutable_width()->set_x_percent_value(0.90);
-    }
-    if (!d.has_height()) {
-      d.mutable_height()->set_y_percent_value(0.90);
-    }
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Bounds");
-    ImGui::Indent();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Width");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("Width", DefaultDim::DIM_X, d.mutable_width());
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Height");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, d.mutable_height());
-    ImGui::InputFloat(ImGui::InputFloatParams("Depth")
-                          .set_label("Depth")
-                          .set_is_optional()
-                          .set_step(1, 10)
-                          .set_min(0)
-                          .set_precision(0)
-                          .set_default(100)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, depth));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Allow movement towards and away from the camera within the specified depth from the wall");
-    ImGui::Unindent();
+    DrawBoundsEditor("##Bounds", d.mutable_bounds());
 
     Line();
 
@@ -1047,7 +991,7 @@ class ScenarioEditorScreen : public UiScreen {
         "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 15);
     d.set_up_down_initial_direction(up_down_direction);
 
-    if (d.has_depth()) {
+    if (d.bounds().has_depth()) {
       Line();
       ImGui::Text("Forward/back profiles");
       ImGui::Indent();
@@ -1092,25 +1036,7 @@ class ScenarioEditorScreen : public UiScreen {
   void DrawWallStrafeEditor() {
     ImGui::IdGuard cid("WallStrafeEditor");
     WallStrafeScenarioDef& w = *def_.mutable_wall_strafe_def();
-    if (!w.has_width()) {
-      w.mutable_width()->set_x_percent_value(0.85);
-    }
-    if (!w.has_height()) {
-      w.mutable_height()->set_y_percent_value(0.85);
-    }
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Strafing bounds");
-    ImGui::Indent();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Width");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("Width", DefaultDim::DIM_X, w.mutable_width());
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Height");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, w.mutable_height());
-    ImGui::Unindent();
+    DrawBoundsEditor("##Bounds", w.mutable_bounds());
 
     if (w.profiles_size() == 0) {
       w.add_profiles();
@@ -1144,20 +1070,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker("The target will accelerate in and out of changes of direction");
 
     Line();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Strafe at height");
-    bool has_y = w.has_y();
-    ImGui::SameLine();
-    ImGui::Checkbox("##HasStrafeHeight", &has_y);
-    if (has_y) {
-      ImGui::Indent();
-      DrawRegionLengthEditor(
-          "Height##StrafeHeight", DefaultDim::DIM_Y, w.mutable_y(), /*is_point=*/true);
-      ImGui::Unindent();
-    } else {
-      w.clear_y();
-    }
 
     bool use_target_placement = w.has_target_placement_strategy();
     ImGui::AlignTextToFramePadding();
@@ -1709,6 +1621,58 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
+  void DrawBoundsEditor(const std::string& id, Bounds* bounds) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Bounds");
+    ImGui::Indent();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    bool use_width = bounds->has_width();
+    ImGui::Checkbox("##WidthCheck", &use_width);
+    if (use_width) {
+      if (!bounds->has_width()) {
+        bounds->mutable_width()->set_x_percent_value(0.9);
+      }
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Width", DefaultDim::DIM_X, bounds->mutable_width());
+    } else {
+      bounds->clear_width();
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    bool use_height = bounds->has_height();
+    ImGui::Checkbox("##HeightCheck", &use_height);
+    if (use_height) {
+      if (!bounds->has_height()) {
+        bounds->mutable_height()->set_y_percent_value(0.9);
+      }
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, bounds->mutable_height());
+    } else {
+      bounds->clear_height();
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Depth");
+    ImGui::SameLine();
+    bool use_depth = bounds->has_depth();
+    ImGui::Checkbox("##DepthCheck", &use_depth);
+    if (use_depth) {
+      if (!bounds->has_depth()) {
+        bounds->mutable_depth()->set_depth_percent_value(0.5);
+      }
+      ImGui::SameLine();
+      DrawRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, bounds->mutable_depth());
+    } else {
+      bounds->clear_depth();
+    }
+    ImGui::Unindent();
+  }
+
   enum class DefaultDim {
     DIM_X,
     DIM_Y,
@@ -1752,11 +1716,14 @@ class ScenarioEditorScreen : public UiScreen {
                       .set_precision(0)
                       .set_width(char_x_ * 9);
     if (is_percent) {
-      params.set_min(0).set_default(100 * default_percent);
+      if (!is_point) {
+        params.set_min(0);
+      }
+      params.set_default(100 * default_percent);
     }
     ImGui::InputFloat(params, field);
 
-    bool was_percent = is_percent;
+    const bool was_percent = is_percent;
     ImGui::SameLine();
     ImGui::Text("as percent");
     ImGui::SameLine();

@@ -36,6 +36,14 @@
   },
   "timedDirectionDef": {
     "acceleration": 91,
+    "bounds": {
+      "height": {
+        "yPercentValue": 0.9
+      },
+      "width": {
+        "xPercentValue": 0.9
+      }
+    },
     "depth": 100,
     "forwardBackProfiles": [
       {

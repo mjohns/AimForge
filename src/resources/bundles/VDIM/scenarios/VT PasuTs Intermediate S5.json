@@ -35,6 +35,14 @@
   },
   "timedDirectionDef": {
     "acceleration": 181,
+    "bounds": {
+      "height": {
+        "yPercentValue": 0.85
+      },
+      "width": {
+        "xPercentValue": 0.85
+      }
+    },
     "height": {
       "yPercentValue": 0.85
     },

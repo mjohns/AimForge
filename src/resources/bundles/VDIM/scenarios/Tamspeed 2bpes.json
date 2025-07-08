@@ -33,6 +33,14 @@
   },
   "wallStrafeDef": {
     "acceleration": 183,
+    "bounds": {
+      "height": {
+        "yPercentValue": 0.9
+      },
+      "width": {
+        "xPercentValue": 0.9
+      }
+    },
     "height": {
       "yPercentValue": 0.9
     },

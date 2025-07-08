@@ -14,13 +14,6 @@
 namespace aim {
 namespace {
 
-struct StrafeBounds {
-  float min_x;
-  float max_x;
-  float min_y;
-  float max_y;
-};
-
 class StrafeMovementController : public BasicWallMovementController {
  public:
   StrafeMovementController(float speed, Wall wall, ScenarioDef def, Application& app)
@@ -96,13 +89,7 @@ class StrafeMovementController : public BasicWallMovementController {
     initialized_ = true;
 
     auto d = def_.wall_strafe_def();
-    float width = d.has_width() ? wall_.GetRegionLength(d.width()) : 0.85 * wall_.width;
-    bounds_.min_x = -0.5 * width;
-    bounds_.max_x = 0.5 * width;
-
-    float height = d.has_height() ? wall_.GetRegionLength(d.height()) : 0.85 * wall_.height;
-    bounds_.min_y = (-0.5 * height);
-    bounds_.max_y = (0.5 * height);
+    bounds_ = wall_.GetWallBounds(d.bounds());
 
     acceleration_ = abs(d.acceleration());
     original_acceleration_ = acceleration_;
@@ -263,7 +250,7 @@ class StrafeMovementController : public BasicWallMovementController {
   ScenarioDef def_;
   Application& app_;
 
-  StrafeBounds bounds_;
+  WallBounds bounds_;
 
   float max_velocity_;
   float acceleration_;

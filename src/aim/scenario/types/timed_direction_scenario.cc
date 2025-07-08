@@ -122,37 +122,29 @@ class MovementControllerImpl : public MovementController {
   MovementControllerImpl(float speed, Wall wall, ScenarioDef def, Application& app)
       : def_(def), app_(app) {
     auto d = def_.timed_direction_def();
-    float width = d.has_width() ? wall.GetRegionLength(d.width()) : 0.90 * wall.width;
-    float min_x = -0.5 * width;
-    float max_x = 0.5 * width;
-
-    float height = d.has_height() ? wall.GetRegionLength(d.height()) : 0.90 * wall.height;
-    float min_y = (-0.5 * height);
-    float max_y = (0.5 * height);
-
-    float depth = d.depth();
+    const WallBounds bounds = wall.GetWallBounds(d.bounds());
 
     if (d.left_right_profiles_size() > 0) {
       SingleDirectionController ctrl;
       ctrl.going_left = GetInitialGoingLeft(d.left_right_initial_direction());
-      ctrl.min = min_x;
-      ctrl.max = max_x;
+      ctrl.min = bounds.min_x;
+      ctrl.max = bounds.max_x;
       left_right_controller_ = ctrl;
     }
 
     if (d.up_down_profiles_size() > 0) {
       SingleDirectionController ctrl;
       ctrl.going_left = GetInitialGoingLeft(d.up_down_initial_direction());
-      ctrl.min = min_y;
-      ctrl.max = max_y;
+      ctrl.min = bounds.min_y;
+      ctrl.max = bounds.max_y;
       up_down_controller_ = ctrl;
     }
 
-    if (depth > 0 && d.forward_back_profiles_size() > 0) {
+    if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
       SingleDirectionController ctrl;
       ctrl.going_left = GetInitialGoingLeft(d.forward_back_initial_direction());
-      ctrl.min = 0;
-      ctrl.max = depth;
+      ctrl.min = bounds.min_depth;
+      ctrl.max = bounds.max_depth;
       forward_back_controller_ = ctrl;
     }
   }
@@ -220,9 +212,6 @@ class MovementControllerImpl : public MovementController {
   ScenarioDef def_;
   Application& app_;
 
-  float min_depth_;
-  float max_depth_;
-
   std::optional<SingleDirectionController> left_right_controller_;
   std::optional<SingleDirectionController> up_down_controller_;
   std::optional<SingleDirectionController> forward_back_controller_;
@@ -248,7 +237,7 @@ class TimedDirectionScenario : public BaseScenario {
     if (wall_target_placer_) {
       pos = wall_target_placer_->GetNextPosition();
     } else {
-      float depth = def_.timed_direction_def().depth();
+      float depth = wall_.GetWallBounds(def_.timed_direction_def().bounds()).max_depth;
       if (depth > 0) {
         // Start in the middle of the available depth.
         pos.z = depth / 2.0;

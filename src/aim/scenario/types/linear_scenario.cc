@@ -59,14 +59,6 @@ class LinearScenario : public BaseScenario {
  public:
   explicit LinearScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
-    float width = def_.linear_def().width();
-    if (width > 0 && width < wall_.width) {
-      wall_.width = width;
-    }
-    float height = def_.linear_def().height();
-    if (height > 0 && height < wall_.height) {
-      wall_.height = height;
-    }
     if (params.def.linear_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
           wall_, params.def.linear_def().target_placement_strategy(), &target_manager_, &app_);

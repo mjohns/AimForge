@@ -32,6 +32,23 @@ glm::vec2 Wall::GetRegionVec2(const RegionVec2& v) const {
   return glm::vec2(GetRegionLength(v.x()), GetRegionLength(v.y()));
 }
 
+WallBounds Wall::GetWallBounds(const Bounds& b) const {
+  WallBounds result;
+  float width_value = b.has_width() ? GetRegionLength(b.width()) : 0.9 * this->width;
+  result.min_x = -0.5 * width_value;
+  result.max_x = 0.5 * width_value;
+
+  float height_value = b.has_height() ? GetRegionLength(b.height()) : 0.9 * this->height;
+  result.min_y = (-0.5 * height_value);
+  result.max_y = (0.5 * height_value);
+
+  float max_depth = b.has_depth() ? GetRegionLength(b.depth()) : 0.5 * this->depth;
+  result.min_depth = 0;
+  result.max_depth = max_depth;
+
+  return result;
+}
+
 Wall Wall::ForRoom(const Room& room) {
   Wall wall{};
   if (room.has_cylinder_room()) {

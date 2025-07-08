@@ -25,101 +25,33 @@ namespace aim {
 namespace {
 const char* kImguiIniFile = "imgui.ini";
 
-template <typename T>
-void RemapProfile(T* p) {
-  ProfileInfo* info = p->mutable_info();
-  /*
-  if (p->has_weight()) {
-    info->set_weight(p->weight());
-  }
-  if (p->has_next_profile()) {
-    info->set_next_profile(p->next_profile());
-  }
-  if (p->has_min_selection_gap()) {
-    info->set_min_selection_gap(p->min_selection_gap());
-  }
-  if (p->has_description()) {
-    info->set_description(p->description());
-  }
-  p->clear_description();
-  p->clear_weight();
-  p->clear_next_profile();
-  p->clear_min_selection_gap();
-  */
-}
-
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : mgr->scenarios()) {
+      /*
     ScenarioDef def = item.def;
-    for (TargetProfile& p : *def.mutable_target_def()->mutable_profiles()) {
-      RemapProfile(&p);
-    }
     if (def.has_wall_strafe_def()) {
-      for (WallStrafeProfile& p : *def.mutable_wall_strafe_def()->mutable_profiles()) {
-        RemapProfile(&p);
+      auto* d = def.mutable_wall_strafe_def();
+      Bounds* b = d->mutable_bounds();
+      if (d->has_height()) {
+        *b->mutable_height() = d->height();
       }
-    }
-    if (def.has_wall_wander_def()) {
-      for (auto& p : *def.mutable_wall_wander_def()->mutable_profiles()) {
-        RemapProfile(&p);
+      if (d->has_width()) {
+        *b->mutable_width() = d->width();
       }
     }
     if (def.has_timed_direction_def()) {
-      for (auto& p : *def.mutable_timed_direction_def()->mutable_left_right_profiles()) {
-        RemapProfile(&p);
+      auto* d = def.mutable_timed_direction_def();
+      Bounds* b = d->mutable_bounds();
+      if (d->has_height()) {
+        *b->mutable_height() = d->height();
       }
-      for (auto& p : *def.mutable_timed_direction_def()->mutable_up_down_profiles()) {
-        RemapProfile(&p);
-      }
-      for (auto& p : *def.mutable_timed_direction_def()->mutable_forward_back_profiles()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.static_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p :
-           *def.mutable_static_def()->mutable_target_placement_strategy()->mutable_regions()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.waypoint_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p :
-           *def.mutable_waypoint_def()->mutable_target_placement_strategy()->mutable_regions()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.barrel_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p :
-           *def.mutable_barrel_def()->mutable_target_placement_strategy()->mutable_regions()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.linear_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p :
-           *def.mutable_linear_def()->mutable_target_placement_strategy()->mutable_regions()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.wall_strafe_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p :
-           *def.mutable_wall_strafe_def()->mutable_target_placement_strategy()->mutable_regions()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.wall_wander_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p :
-           *def.mutable_wall_wander_def()->mutable_target_placement_strategy()->mutable_regions()) {
-        RemapProfile(&p);
-      }
-    }
-    if (def.timed_direction_def().target_placement_strategy().regions_size() > 0) {
-      for (auto& p : *def.mutable_timed_direction_def()
-                          ->mutable_target_placement_strategy()
-                          ->mutable_regions()) {
-        RemapProfile(&p);
+      if (d->has_width()) {
+        *b->mutable_width() = d->width();
       }
     }
 
     mgr->SaveScenario(item.name, def);
+    */
   }
 }
 

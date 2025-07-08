@@ -7,6 +7,17 @@
 
 namespace aim {
 
+struct WallBounds {
+  float min_x;
+  float max_x;
+
+  float min_y;
+  float max_y;
+
+  float min_depth;
+  float max_depth;
+};
+
 struct Wall {
   static Wall ForRoom(const Room& room);
 
@@ -16,6 +27,7 @@ struct Wall {
 
   float GetRegionLength(const RegionLength& r) const;
   glm::vec2 GetRegionVec2(const RegionVec2& v) const;
+  WallBounds GetWallBounds(const Bounds& b) const;
 };
 
 }  // namespace aim

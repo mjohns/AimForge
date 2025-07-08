@@ -868,9 +868,7 @@ inline constexpr WallStrafeScenarioDef::Impl_::Impl_(
         profile_order_{},
         _profile_order_cached_byte_size_{0},
         bounds_{nullptr},
-        height_{nullptr},
         target_placement_strategy_{nullptr},
-        width_{nullptr},
         acceleration_{0} {}
 
 template <typename>
@@ -906,10 +904,7 @@ inline constexpr TimedDirectionScenarioDef::Impl_::Impl_(
         up_down_profile_order_{},
         _up_down_profile_order_cached_byte_size_{0},
         bounds_{nullptr},
-        height_{nullptr},
         target_placement_strategy_{nullptr},
-        width_{nullptr},
-        depth_{0},
         time_scale_multiplier_{0},
         acceleration_{0},
         left_right_initial_direction_{static_cast< ::aim::PositiveNegativeDirection >(0)},
@@ -967,8 +962,6 @@ inline constexpr LinearScenarioDef::Impl_::Impl_(
         target_placement_strategy_{nullptr},
         angle_{0},
         angle_jitter_{0},
-        width_{0},
-        height_{0},
         direction_{static_cast< ::aim::InOutDirection >(0)} {}
 
 template <typename>
@@ -1438,16 +1431,12 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::LinearScenarioDef, _impl_.angle_),
         PROTOBUF_FIELD_OFFSET(::aim::LinearScenarioDef, _impl_.angle_jitter_),
-        PROTOBUF_FIELD_OFFSET(::aim::LinearScenarioDef, _impl_.width_),
-        PROTOBUF_FIELD_OFFSET(::aim::LinearScenarioDef, _impl_.height_),
         PROTOBUF_FIELD_OFFSET(::aim::LinearScenarioDef, _impl_.target_placement_strategy_),
         PROTOBUF_FIELD_OFFSET(::aim::LinearScenarioDef, _impl_.direction_),
         1,
         2,
-        3,
-        4,
         0,
-        5,
+        3,
         PROTOBUF_FIELD_OFFSET(::aim::SineScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::SineScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1531,19 +1520,15 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.bounds_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.width_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.height_),
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.target_placement_strategy_),
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.profiles_),
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.profile_order_),
         PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.acceleration_),
         0,
-        3,
         1,
+        ~0u,
+        ~0u,
         2,
-        ~0u,
-        ~0u,
-        4,
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionProfile, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionProfile, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1570,9 +1555,6 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.width_),
-        PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.height_),
-        PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.depth_),
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.bounds_),
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.target_placement_strategy_),
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.left_right_profiles_),
@@ -1586,22 +1568,19 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.left_right_initial_direction_),
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.up_down_initial_direction_),
         PROTOBUF_FIELD_OFFSET(::aim::TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_),
-        3,
-        1,
-        4,
         0,
+        1,
+        ~0u,
+        ~0u,
+        ~0u,
+        ~0u,
+        ~0u,
+        ~0u,
         2,
-        ~0u,
-        ~0u,
-        ~0u,
-        ~0u,
-        ~0u,
-        ~0u,
+        3,
+        4,
         5,
         6,
-        7,
-        8,
-        9,
         PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::WallArcScenarioDef, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1752,20 +1731,20 @@ static const ::_pbi::MigrationSchema
         {325, 337, -1, sizeof(::aim::CenteringScenarioDef)},
         {341, 351, -1, sizeof(::aim::WaypointScenarioDef)},
         {353, 364, -1, sizeof(::aim::BarrelScenarioDef)},
-        {367, 381, -1, sizeof(::aim::LinearScenarioDef)},
-        {387, 398, -1, sizeof(::aim::SineScenarioDef)},
-        {401, 413, -1, sizeof(::aim::ProfileInfo)},
-        {417, 436, -1, sizeof(::aim::WallStrafeProfile)},
-        {447, 458, -1, sizeof(::aim::Bounds)},
-        {461, 476, -1, sizeof(::aim::WallStrafeScenarioDef)},
-        {483, 496, -1, sizeof(::aim::TimedDirectionProfile)},
-        {501, 525, -1, sizeof(::aim::TimedDirectionScenarioDef)},
-        {541, 555, -1, sizeof(::aim::WallArcScenarioDef)},
-        {561, 574, -1, sizeof(::aim::WallWanderProfile)},
-        {579, 590, -1, sizeof(::aim::WallWanderScenarioDef)},
-        {593, 609, -1, sizeof(::aim::TargetDef)},
-        {617, 626, -1, sizeof(::aim::PillTargetDef)},
-        {627, 651, -1, sizeof(::aim::TargetProfile)},
+        {367, 379, -1, sizeof(::aim::LinearScenarioDef)},
+        {383, 394, -1, sizeof(::aim::SineScenarioDef)},
+        {397, 409, -1, sizeof(::aim::ProfileInfo)},
+        {413, 432, -1, sizeof(::aim::WallStrafeProfile)},
+        {443, 454, -1, sizeof(::aim::Bounds)},
+        {457, 470, -1, sizeof(::aim::WallStrafeScenarioDef)},
+        {475, 488, -1, sizeof(::aim::TimedDirectionProfile)},
+        {493, 514, -1, sizeof(::aim::TimedDirectionScenarioDef)},
+        {527, 541, -1, sizeof(::aim::WallArcScenarioDef)},
+        {547, 560, -1, sizeof(::aim::WallWanderProfile)},
+        {565, 576, -1, sizeof(::aim::WallWanderScenarioDef)},
+        {579, 595, -1, sizeof(::aim::TargetDef)},
+        {603, 612, -1, sizeof(::aim::PillTargetDef)},
+        {613, 637, -1, sizeof(::aim::TargetProfile)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_SimpleRoom_default_instance_._instance,
@@ -1899,94 +1878,90 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "placement_strategy\030\001 \001(\0132\034.aim.TargetPla"
     "cementStrategy\022 \n\030direction_radius_perce"
     "nt\030\002 \001(\002\022&\n\tdirection\030\003 \001(\0162\023.aim.InOutD"
-    "irection\"\300\001\n\021LinearScenarioDef\022\r\n\005angle\030"
-    "\001 \001(\002\022\024\n\014angle_jitter\030\002 \001(\002\022\r\n\005width\030\003 \001"
-    "(\002\022\016\n\006height\030\004 \001(\002\022\?\n\031target_placement_s"
-    "trategy\030\005 \001(\0132\034.aim.TargetPlacementStrat"
-    "egy\022&\n\tdirection\030\006 \001(\0162\023.aim.InOutDirect"
-    "ion\"j\n\017SineScenarioDef\022!\n\006height\030\001 \001(\0132\021"
-    ".aim.RegionLength\022 \n\005width\030\002 \001(\0132\021.aim.R"
-    "egionLength\022\022\n\ngoing_left\030\003 \001(\010\"c\n\013Profi"
-    "leInfo\022\016\n\006weight\030\001 \001(\002\022\024\n\014next_profile\030\002"
-    " \001(\005\022\031\n\021min_selection_gap\030\003 \001(\005\022\023\n\013descr"
-    "iption\030\004 \001(\t\"\331\002\n\021WallStrafeProfile\022\036\n\004in"
-    "fo\030\001 \001(\0132\020.aim.ProfileInfo\022\'\n\014min_distan"
-    "ce\030\005 \001(\0132\021.aim.RegionLength\022\'\n\014max_dista"
-    "nce\030\006 \001(\0132\021.aim.RegionLength\022\r\n\005angle\030\007 "
-    "\001(\002\022\024\n\014angle_jitter\030\010 \001(\002\022 \n\030direction_c"
-    "hange_percent\030\t \001(\002\022\033\n\023pause_at_end_chan"
-    "ce\030\n \001(\002\022\025\n\rpause_seconds\030\013 \001(\002\022\034\n\024pause"
-    "_seconds_jitter\030\014 \001(\002\022\030\n\020speed_multiplie"
-    "r\030\r \001(\002\022\037\n\027acceleration_multiplier\030\016 \001(\002"
-    "\"o\n\006Bounds\022 \n\005width\030\001 \001(\0132\021.aim.RegionLe"
-    "ngth\022!\n\006height\030\002 \001(\0132\021.aim.RegionLength\022"
-    " \n\005depth\030\003 \001(\0132\021.aim.RegionLength\"\221\002\n\025Wa"
-    "llStrafeScenarioDef\022\033\n\006bounds\030\001 \001(\0132\013.ai"
-    "m.Bounds\022 \n\005width\030\014 \001(\0132\021.aim.RegionLeng"
-    "th\022!\n\006height\030\002 \001(\0132\021.aim.RegionLength\022\?\n"
-    "\031target_placement_strategy\030\007 \001(\0132\034.aim.T"
-    "argetPlacementStrategy\022(\n\010profiles\030\004 \003(\013"
-    "2\026.aim.WallStrafeProfile\022\025\n\rprofile_orde"
-    "r\030\005 \003(\005\022\024\n\014acceleration\030\006 \001(\002\"\225\001\n\025TimedD"
-    "irectionProfile\022\036\n\004info\030\001 \001(\0132\020.aim.Prof"
-    "ileInfo\022\014\n\004time\030\005 \001(\002\022\023\n\013time_jitter\030\006 \001"
-    "(\002\022\030\n\020speed_multiplier\030\007 \001(\002\022\037\n\027accelera"
-    "tion_multiplier\030\010 \001(\002\"\342\005\n\031TimedDirection"
-    "ScenarioDef\022 \n\005width\030d \001(\0132\021.aim.RegionL"
-    "ength\022!\n\006height\030\002 \001(\0132\021.aim.RegionLength"
-    "\022\r\n\005depth\030\003 \001(\002\022\033\n\006bounds\030\001 \001(\0132\013.aim.Bo"
-    "unds\022\?\n\031target_placement_strategy\030\004 \001(\0132"
-    "\034.aim.TargetPlacementStrategy\0227\n\023left_ri"
-    "ght_profiles\030\005 \003(\0132\032.aim.TimedDirectionP"
-    "rofile\022 \n\030left_right_profile_order\030\006 \003(\005"
-    "\0229\n\025forward_back_profiles\030\007 \003(\0132\032.aim.Ti"
-    "medDirectionProfile\022\"\n\032forward_back_prof"
-    "ile_order\030\010 \003(\005\0224\n\020up_down_profiles\030\t \003("
-    "\0132\032.aim.TimedDirectionProfile\022\035\n\025up_down"
-    "_profile_order\030\n \003(\005\022\035\n\025time_scale_multi"
-    "plier\030\013 \001(\002\022\024\n\014acceleration\030\014 \001(\002\022D\n\034lef"
-    "t_right_initial_direction\030\r \001(\0162\036.aim.Po"
-    "sitiveNegativeDirection\022A\n\031up_down_initi"
-    "al_direction\030\016 \001(\0162\036.aim.PositiveNegativ"
-    "eDirection\022F\n\036forward_back_initial_direc"
-    "tion\030\017 \001(\0162\036.aim.PositiveNegativeDirecti"
-    "on\"\305\001\n\022WallArcScenarioDef\022 \n\005width\030\001 \001(\013"
-    "2\021.aim.RegionLength\022!\n\006height\030\002 \001(\0132\021.ai"
-    "m.RegionLength\022(\n\rheight_jitter\030\003 \001(\0132\021."
-    "aim.RegionLength\022\026\n\016control_height\030\004 \001(\002"
-    "\022\027\n\017start_on_ground\030\005 \001(\010\022\017\n\007reflect\030\006 \001"
-    "(\010\"\215\001\n\021WallWanderProfile\022\036\n\004info\030\001 \001(\0132\020"
-    ".aim.ProfileInfo\022\021\n\tturn_time\030\002 \001(\002\022\030\n\020t"
-    "urn_time_jitter\030\003 \001(\002\022\021\n\tturn_rate\030\004 \001(\002"
-    "\022\030\n\020turn_rate_jitter\030\005 \001(\002\"\231\001\n\025WallWande"
-    "rScenarioDef\022\?\n\031target_placement_strateg"
-    "y\030\001 \001(\0132\034.aim.TargetPlacementStrategy\022(\n"
-    "\010profiles\030\002 \003(\0132\026.aim.WallWanderProfile\022"
-    "\025\n\rprofile_order\030\003 \003(\005\"\214\002\n\tTargetDef\022$\n\010"
-    "profiles\030\001 \003(\0132\022.aim.TargetProfile\022\023\n\013nu"
-    "m_targets\030\002 \001(\005\022\036\n\026remove_closest_on_mis"
-    "s\030\003 \001(\010\022\024\n\014target_order\030\004 \003(\005\022\036\n\026newest_"
-    "target_is_ghost\030\005 \001(\010\022 \n\030new_target_dela"
-    "y_seconds\030\006 \001(\002\022#\n\033remove_target_after_s"
-    "econds\030\007 \001(\002\022\'\n\037stagger_initial_targets_"
-    "seconds\030\010 \001(\002\"\037\n\rPillTargetDef\022\016\n\006height"
-    "\030\001 \001(\002\"\316\003\n\rTargetProfile\022\036\n\004info\030\001 \001(\0132\020"
-    ".aim.ProfileInfo\022\025\n\rtarget_radius\030\002 \001(\002\022"
-    "\034\n\024target_radius_jitter\030\003 \001(\002\022\r\n\005speed\030\004"
-    " \001(\002\022\024\n\014speed_jitter\030\005 \001(\002\022\026\n\016health_sec"
-    "onds\030\006 \001(\002\022\035\n\025health_seconds_jitter\030\007 \001("
-    "\002\022\035\n\025target_radius_at_kill\030\010 \001(\002\022$\n\034targ"
-    "et_hit_radius_multiplier\030\t \001(\002\022)\n!target"
-    "_radius_growth_time_seconds\030\014 \001(\002\022!\n\031tar"
-    "get_radius_growth_size\030\r \001(\002\022\031\n\021health_r"
-    "egen_rate\030\016 \001(\002\022\025\n\rhealth_clicks\030\017 \001(\005\022\033"
-    "\n\023health_clicks_regen\030\020 \001(\005\022\"\n\004pill\030\n \001("
-    "\0132\022.aim.PillTargetDefH\000B\006\n\004type*N\n\016InOut"
-    "Direction\022\020\n\014DIRECTION_IN\020\000\022\021\n\rDIRECTION"
-    "_OUT\020\002\022\027\n\023DIRECTION_IN_OR_OUT\020\003*o\n\031Posit"
-    "iveNegativeDirection\022\"\n\036DIRECTION_POSITI"
-    "VE_OR_NEGATIVE\020\000\022\026\n\022DIRECTION_POSITIVE\020\002"
-    "\022\026\n\022DIRECTION_NEGATIVE\020\003b\010editionsp\350\007"
+    "irection\"\241\001\n\021LinearScenarioDef\022\r\n\005angle\030"
+    "\001 \001(\002\022\024\n\014angle_jitter\030\002 \001(\002\022\?\n\031target_pl"
+    "acement_strategy\030\005 \001(\0132\034.aim.TargetPlace"
+    "mentStrategy\022&\n\tdirection\030\006 \001(\0162\023.aim.In"
+    "OutDirection\"j\n\017SineScenarioDef\022!\n\006heigh"
+    "t\030\001 \001(\0132\021.aim.RegionLength\022 \n\005width\030\002 \001("
+    "\0132\021.aim.RegionLength\022\022\n\ngoing_left\030\003 \001(\010"
+    "\"c\n\013ProfileInfo\022\016\n\006weight\030\001 \001(\002\022\024\n\014next_"
+    "profile\030\002 \001(\005\022\031\n\021min_selection_gap\030\003 \001(\005"
+    "\022\023\n\013description\030\004 \001(\t\"\331\002\n\021WallStrafeProf"
+    "ile\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022\'\n\014m"
+    "in_distance\030\005 \001(\0132\021.aim.RegionLength\022\'\n\014"
+    "max_distance\030\006 \001(\0132\021.aim.RegionLength\022\r\n"
+    "\005angle\030\007 \001(\002\022\024\n\014angle_jitter\030\010 \001(\002\022 \n\030di"
+    "rection_change_percent\030\t \001(\002\022\033\n\023pause_at"
+    "_end_chance\030\n \001(\002\022\025\n\rpause_seconds\030\013 \001(\002"
+    "\022\034\n\024pause_seconds_jitter\030\014 \001(\002\022\030\n\020speed_"
+    "multiplier\030\r \001(\002\022\037\n\027acceleration_multipl"
+    "ier\030\016 \001(\002\"o\n\006Bounds\022 \n\005width\030\001 \001(\0132\021.aim"
+    ".RegionLength\022!\n\006height\030\002 \001(\0132\021.aim.Regi"
+    "onLength\022 \n\005depth\030\003 \001(\0132\021.aim.RegionLeng"
+    "th\"\314\001\n\025WallStrafeScenarioDef\022\033\n\006bounds\030\001"
+    " \001(\0132\013.aim.Bounds\022\?\n\031target_placement_st"
+    "rategy\030\007 \001(\0132\034.aim.TargetPlacementStrate"
+    "gy\022(\n\010profiles\030\004 \003(\0132\026.aim.WallStrafePro"
+    "file\022\025\n\rprofile_order\030\005 \003(\005\022\024\n\014accelerat"
+    "ion\030\006 \001(\002\"\225\001\n\025TimedDirectionProfile\022\036\n\004i"
+    "nfo\030\001 \001(\0132\020.aim.ProfileInfo\022\014\n\004time\030\005 \001("
+    "\002\022\023\n\013time_jitter\030\006 \001(\002\022\030\n\020speed_multipli"
+    "er\030\007 \001(\002\022\037\n\027acceleration_multiplier\030\010 \001("
+    "\002\"\216\005\n\031TimedDirectionScenarioDef\022\033\n\006bound"
+    "s\030\001 \001(\0132\013.aim.Bounds\022\?\n\031target_placement"
+    "_strategy\030\004 \001(\0132\034.aim.TargetPlacementStr"
+    "ategy\0227\n\023left_right_profiles\030\005 \003(\0132\032.aim"
+    ".TimedDirectionProfile\022 \n\030left_right_pro"
+    "file_order\030\006 \003(\005\0229\n\025forward_back_profile"
+    "s\030\007 \003(\0132\032.aim.TimedDirectionProfile\022\"\n\032f"
+    "orward_back_profile_order\030\010 \003(\005\0224\n\020up_do"
+    "wn_profiles\030\t \003(\0132\032.aim.TimedDirectionPr"
+    "ofile\022\035\n\025up_down_profile_order\030\n \003(\005\022\035\n\025"
+    "time_scale_multiplier\030\013 \001(\002\022\024\n\014accelerat"
+    "ion\030\014 \001(\002\022D\n\034left_right_initial_directio"
+    "n\030\r \001(\0162\036.aim.PositiveNegativeDirection\022"
+    "A\n\031up_down_initial_direction\030\016 \001(\0162\036.aim"
+    ".PositiveNegativeDirection\022F\n\036forward_ba"
+    "ck_initial_direction\030\017 \001(\0162\036.aim.Positiv"
+    "eNegativeDirection\"\305\001\n\022WallArcScenarioDe"
+    "f\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006h"
+    "eight\030\002 \001(\0132\021.aim.RegionLength\022(\n\rheight"
+    "_jitter\030\003 \001(\0132\021.aim.RegionLength\022\026\n\016cont"
+    "rol_height\030\004 \001(\002\022\027\n\017start_on_ground\030\005 \001("
+    "\010\022\017\n\007reflect\030\006 \001(\010\"\215\001\n\021WallWanderProfile"
+    "\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022\021\n\tturn"
+    "_time\030\002 \001(\002\022\030\n\020turn_time_jitter\030\003 \001(\002\022\021\n"
+    "\tturn_rate\030\004 \001(\002\022\030\n\020turn_rate_jitter\030\005 \001"
+    "(\002\"\231\001\n\025WallWanderScenarioDef\022\?\n\031target_p"
+    "lacement_strategy\030\001 \001(\0132\034.aim.TargetPlac"
+    "ementStrategy\022(\n\010profiles\030\002 \003(\0132\026.aim.Wa"
+    "llWanderProfile\022\025\n\rprofile_order\030\003 \003(\005\"\214"
+    "\002\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim.Tar"
+    "getProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026remov"
+    "e_closest_on_miss\030\003 \001(\010\022\024\n\014target_order\030"
+    "\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001(\010\022 \n"
+    "\030new_target_delay_seconds\030\006 \001(\002\022#\n\033remov"
+    "e_target_after_seconds\030\007 \001(\002\022\'\n\037stagger_"
+    "initial_targets_seconds\030\010 \001(\002\"\037\n\rPillTar"
+    "getDef\022\016\n\006height\030\001 \001(\002\"\316\003\n\rTargetProfile"
+    "\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022\025\n\rtarg"
+    "et_radius\030\002 \001(\002\022\034\n\024target_radius_jitter\030"
+    "\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 \001"
+    "(\002\022\026\n\016health_seconds\030\006 \001(\002\022\035\n\025health_sec"
+    "onds_jitter\030\007 \001(\002\022\035\n\025target_radius_at_ki"
+    "ll\030\010 \001(\002\022$\n\034target_hit_radius_multiplier"
+    "\030\t \001(\002\022)\n!target_radius_growth_time_seco"
+    "nds\030\014 \001(\002\022!\n\031target_radius_growth_size\030\r"
+    " \001(\002\022\031\n\021health_regen_rate\030\016 \001(\002\022\025\n\rhealt"
+    "h_clicks\030\017 \001(\005\022\033\n\023health_clicks_regen\030\020 "
+    "\001(\005\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000B"
+    "\006\n\004type*N\n\016InOutDirection\022\020\n\014DIRECTION_I"
+    "N\020\000\022\021\n\rDIRECTION_OUT\020\002\022\027\n\023DIRECTION_IN_O"
+    "R_OUT\020\003*o\n\031PositiveNegativeDirection\022\"\n\036"
+    "DIRECTION_POSITIVE_OR_NEGATIVE\020\000\022\026\n\022DIRE"
+    "CTION_POSITIVE\020\002\022\026\n\022DIRECTION_NEGATIVE\020\003"
+    "b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_scenario_2eproto_deps[1] =
     {
@@ -1996,7 +1971,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    7237,
+    7053,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -10297,15 +10272,15 @@ const ::google::protobuf::internal::ClassData* LinearScenarioDef::GetClassData()
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 6, 1, 0, 2> LinearScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<3, 4, 1, 0, 2> LinearScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
     6, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967232,  // skipmap
+    4294967244,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
+    4,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -10322,18 +10297,14 @@ const ::_pbi::TcParseTable<3, 6, 1, 0, 2> LinearScenarioDef::_table_ = {
     // float angle_jitter = 2;
     {::_pbi::TcParser::FastF32S1,
      {21, 2, 0, PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.angle_jitter_)}},
-    // float width = 3;
-    {::_pbi::TcParser::FastF32S1,
-     {29, 3, 0, PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.width_)}},
-    // float height = 4;
-    {::_pbi::TcParser::FastF32S1,
-     {37, 4, 0, PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.height_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
     // .aim.TargetPlacementStrategy target_placement_strategy = 5;
     {::_pbi::TcParser::FastMtS1,
      {42, 0, 0, PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.target_placement_strategy_)}},
     // .aim.InOutDirection direction = 6;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(LinearScenarioDef, _impl_.direction_), 5>(),
-     {48, 5, 0, PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.direction_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(LinearScenarioDef, _impl_.direction_), 3>(),
+     {48, 3, 0, PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.direction_)}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
@@ -10344,17 +10315,11 @@ const ::_pbi::TcParseTable<3, 6, 1, 0, 2> LinearScenarioDef::_table_ = {
     // float angle_jitter = 2;
     {PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.angle_jitter_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float width = 3;
-    {PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.width_), _Internal::kHasBitsOffset + 3, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float height = 4;
-    {PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.height_), _Internal::kHasBitsOffset + 4, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.TargetPlacementStrategy target_placement_strategy = 5;
     {PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.InOutDirection direction = 6;
-    {PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.direction_), _Internal::kHasBitsOffset + 5, 0,
+    {PROTOBUF_FIELD_OFFSET(LinearScenarioDef, _impl_.direction_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
@@ -10374,7 +10339,7 @@ PROTOBUF_NOINLINE void LinearScenarioDef::Clear() {
     ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
     _impl_.target_placement_strategy_->Clear();
   }
-  if (cached_has_bits & 0x0000003eu) {
+  if (cached_has_bits & 0x0000000eu) {
     ::memset(&_impl_.angle_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.direction_) -
         reinterpret_cast<char*>(&_impl_.angle_)) + sizeof(_impl_.direction_));
@@ -10413,20 +10378,6 @@ PROTOBUF_NOINLINE void LinearScenarioDef::Clear() {
                 2, this_._internal_angle_jitter(), target);
           }
 
-          // float width = 3;
-          if (cached_has_bits & 0x00000008u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_width(), target);
-          }
-
-          // float height = 4;
-          if (cached_has_bits & 0x00000010u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                4, this_._internal_height(), target);
-          }
-
           // .aim.TargetPlacementStrategy target_placement_strategy = 5;
           if (cached_has_bits & 0x00000001u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
@@ -10435,7 +10386,7 @@ PROTOBUF_NOINLINE void LinearScenarioDef::Clear() {
           }
 
           // .aim.InOutDirection direction = 6;
-          if (cached_has_bits & 0x00000020u) {
+          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
                 6, this_._internal_direction(), target);
@@ -10466,7 +10417,7 @@ PROTOBUF_NOINLINE void LinearScenarioDef::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000003fu) {
+          if (cached_has_bits & 0x0000000fu) {
             // .aim.TargetPlacementStrategy target_placement_strategy = 5;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
@@ -10480,16 +10431,8 @@ PROTOBUF_NOINLINE void LinearScenarioDef::Clear() {
             if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
-            // float width = 3;
-            if (cached_has_bits & 0x00000008u) {
-              total_size += 5;
-            }
-            // float height = 4;
-            if (cached_has_bits & 0x00000010u) {
-              total_size += 5;
-            }
             // .aim.InOutDirection direction = 6;
-            if (cached_has_bits & 0x00000020u) {
+            if (cached_has_bits & 0x00000008u) {
               total_size += 1 +
                             ::_pbi::WireFormatLite::EnumSize(this_._internal_direction());
             }
@@ -10508,7 +10451,7 @@ void LinearScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
   (void) cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000000fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
       if (_this->_impl_.target_placement_strategy_ == nullptr) {
@@ -10525,12 +10468,6 @@ void LinearScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, const
       _this->_impl_.angle_jitter_ = from._impl_.angle_jitter_;
     }
     if (cached_has_bits & 0x00000008u) {
-      _this->_impl_.width_ = from._impl_.width_;
-    }
-    if (cached_has_bits & 0x00000010u) {
-      _this->_impl_.height_ = from._impl_.height_;
-    }
-    if (cached_has_bits & 0x00000020u) {
       _this->_impl_.direction_ = from._impl_.direction_;
     }
   }
@@ -12125,14 +12062,8 @@ WallStrafeScenarioDef::WallStrafeScenarioDef(
   _impl_.bounds_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::Bounds>(
                               arena, *from._impl_.bounds_)
                         : nullptr;
-  _impl_.height_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(
-                              arena, *from._impl_.height_)
-                        : nullptr;
-  _impl_.target_placement_strategy_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(
+  _impl_.target_placement_strategy_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(
                               arena, *from._impl_.target_placement_strategy_)
-                        : nullptr;
-  _impl_.width_ = (cached_has_bits & 0x00000008u) ? ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(
-                              arena, *from._impl_.width_)
                         : nullptr;
   _impl_.acceleration_ = from._impl_.acceleration_;
 
@@ -12164,9 +12095,7 @@ inline void WallStrafeScenarioDef::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.bounds_;
-  delete this_._impl_.height_;
   delete this_._impl_.target_placement_strategy_;
-  delete this_._impl_.width_;
   this_._impl_.~Impl_();
 }
 
@@ -12222,16 +12151,16 @@ const ::google::protobuf::internal::ClassData* WallStrafeScenarioDef::GetClassDa
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 7, 5, 0, 2> WallStrafeScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 3, 0, 2> WallStrafeScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    12, 56,  // max_field_number, fast_idx_mask
+    7, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294965124,  // skipmap
+    4294967174,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    7,  // num_field_entries
-    5,  // num_aux_entries
+    5,  // num_field_entries
+    3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -12244,52 +12173,42 @@ const ::_pbi::TcParseTable<3, 7, 5, 0, 2> WallStrafeScenarioDef::_table_ = {
     // .aim.Bounds bounds = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.bounds_)}},
-    // .aim.RegionLength height = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 1, 1, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.height_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     // repeated .aim.WallStrafeProfile profiles = 4;
     {::_pbi::TcParser::FastMtR1,
-     {34, 63, 2, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_)}},
+     {34, 63, 1, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_)}},
     // repeated int32 profile_order = 5;
     {::_pbi::TcParser::FastV32P1,
      {42, 63, 0, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profile_order_)}},
     // float acceleration = 6;
     {::_pbi::TcParser::FastF32S1,
-     {53, 4, 0, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.acceleration_)}},
+     {53, 2, 0, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.acceleration_)}},
     // .aim.TargetPlacementStrategy target_placement_strategy = 7;
     {::_pbi::TcParser::FastMtS1,
-     {58, 2, 3, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.target_placement_strategy_)}},
+     {58, 1, 2, PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.target_placement_strategy_)}},
   }}, {{
     65535, 65535
   }}, {{
     // .aim.Bounds bounds = 1;
     {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.bounds_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.RegionLength height = 2;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.height_), _Internal::kHasBitsOffset + 1, 1,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated .aim.WallStrafeProfile profiles = 4;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_), -1, 2,
+    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_), -1, 1,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated int32 profile_order = 5;
     {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profile_order_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
     // float acceleration = 6;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.acceleration_), _Internal::kHasBitsOffset + 4, 0,
+    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.acceleration_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.TargetPlacementStrategy target_placement_strategy = 7;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 2, 3,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.RegionLength width = 12;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.width_), _Internal::kHasBitsOffset + 3, 4,
+    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 1, 2,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Bounds>()},
-    {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
     {::_pbi::TcParser::GetTable<::aim::WallStrafeProfile>()},
     {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
-    {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
   }}, {{
   }},
 };
@@ -12304,22 +12223,14 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
   _impl_.profiles_.Clear();
   _impl_.profile_order_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(_impl_.bounds_ != nullptr);
       _impl_.bounds_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(_impl_.height_ != nullptr);
-      _impl_.height_->Clear();
-    }
-    if (cached_has_bits & 0x00000004u) {
       ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
       _impl_.target_placement_strategy_->Clear();
-    }
-    if (cached_has_bits & 0x00000008u) {
-      ABSL_DCHECK(_impl_.width_ != nullptr);
-      _impl_.width_->Clear();
     }
   }
   _impl_.acceleration_ = 0;
@@ -12350,13 +12261,6 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
                 stream);
           }
 
-          // .aim.RegionLength height = 2;
-          if (cached_has_bits & 0x00000002u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.height_, this_._impl_.height_->GetCachedSize(), target,
-                stream);
-          }
-
           // repeated .aim.WallStrafeProfile profiles = 4;
           for (unsigned i = 0, n = static_cast<unsigned>(
                                    this_._internal_profiles_size());
@@ -12378,23 +12282,16 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
           }
 
           // float acceleration = 6;
-          if (cached_has_bits & 0x00000010u) {
+          if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 6, this_._internal_acceleration(), target);
           }
 
           // .aim.TargetPlacementStrategy target_placement_strategy = 7;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000002u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 7, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
-                stream);
-          }
-
-          // .aim.RegionLength width = 12;
-          if (cached_has_bits & 0x00000008u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                12, *this_._impl_.width_, this_._impl_.width_->GetCachedSize(), target,
                 stream);
           }
 
@@ -12439,29 +12336,19 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
             }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x0000001fu) {
+          if (cached_has_bits & 0x00000007u) {
             // .aim.Bounds bounds = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.bounds_);
             }
-            // .aim.RegionLength height = 2;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.height_);
-            }
             // .aim.TargetPlacementStrategy target_placement_strategy = 7;
-            if (cached_has_bits & 0x00000004u) {
+            if (cached_has_bits & 0x00000002u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.target_placement_strategy_);
             }
-            // .aim.RegionLength width = 12;
-            if (cached_has_bits & 0x00000008u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.width_);
-            }
             // float acceleration = 6;
-            if (cached_has_bits & 0x00000010u) {
+            if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
           }
@@ -12482,7 +12369,7 @@ void WallStrafeScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, c
       from._internal_profiles());
   _this->_internal_mutable_profile_order()->MergeFrom(from._internal_profile_order());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.bounds_ != nullptr);
       if (_this->_impl_.bounds_ == nullptr) {
@@ -12493,15 +12380,6 @@ void WallStrafeScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, c
       }
     }
     if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(from._impl_.height_ != nullptr);
-      if (_this->_impl_.height_ == nullptr) {
-        _this->_impl_.height_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(arena, *from._impl_.height_);
-      } else {
-        _this->_impl_.height_->MergeFrom(*from._impl_.height_);
-      }
-    }
-    if (cached_has_bits & 0x00000004u) {
       ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
       if (_this->_impl_.target_placement_strategy_ == nullptr) {
         _this->_impl_.target_placement_strategy_ =
@@ -12510,16 +12388,7 @@ void WallStrafeScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg, c
         _this->_impl_.target_placement_strategy_->MergeFrom(*from._impl_.target_placement_strategy_);
       }
     }
-    if (cached_has_bits & 0x00000008u) {
-      ABSL_DCHECK(from._impl_.width_ != nullptr);
-      if (_this->_impl_.width_ == nullptr) {
-        _this->_impl_.width_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(arena, *from._impl_.width_);
-      } else {
-        _this->_impl_.width_->MergeFrom(*from._impl_.width_);
-      }
-    }
-    if (cached_has_bits & 0x00000010u) {
+    if (cached_has_bits & 0x00000004u) {
       _this->_impl_.acceleration_ = from._impl_.acceleration_;
     }
   }
@@ -12961,21 +12830,15 @@ TimedDirectionScenarioDef::TimedDirectionScenarioDef(
   _impl_.bounds_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::aim::Bounds>(
                               arena, *from._impl_.bounds_)
                         : nullptr;
-  _impl_.height_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(
-                              arena, *from._impl_.height_)
-                        : nullptr;
-  _impl_.target_placement_strategy_ = (cached_has_bits & 0x00000004u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(
+  _impl_.target_placement_strategy_ = (cached_has_bits & 0x00000002u) ? ::google::protobuf::Message::CopyConstruct<::aim::TargetPlacementStrategy>(
                               arena, *from._impl_.target_placement_strategy_)
                         : nullptr;
-  _impl_.width_ = (cached_has_bits & 0x00000008u) ? ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(
-                              arena, *from._impl_.width_)
-                        : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, depth_),
+               offsetof(Impl_, time_scale_multiplier_),
            reinterpret_cast<const char *>(&from._impl_) +
-               offsetof(Impl_, depth_),
+               offsetof(Impl_, time_scale_multiplier_),
            offsetof(Impl_, forward_back_initial_direction_) -
-               offsetof(Impl_, depth_) +
+               offsetof(Impl_, time_scale_multiplier_) +
                sizeof(Impl_::forward_back_initial_direction_));
 
   // @@protoc_insertion_point(copy_constructor:aim.TimedDirectionScenarioDef)
@@ -13012,9 +12875,7 @@ inline void TimedDirectionScenarioDef::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.bounds_;
-  delete this_._impl_.height_;
   delete this_._impl_.target_placement_strategy_;
-  delete this_._impl_.width_;
   this_._impl_.~Impl_();
 }
 
@@ -13086,16 +12947,16 @@ const ::google::protobuf::internal::ClassData* TimedDirectionScenarioDef::GetCla
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<5, 16, 7, 0, 7> TimedDirectionScenarioDef::_table_ = {
+const ::_pbi::TcParseTable<4, 13, 5, 0, 2> TimedDirectionScenarioDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
-    100, 248,  // max_field_number, fast_idx_mask
+    15, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294934528,  // skipmap
+    4294934534,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    16,  // num_field_entries
-    7,  // num_aux_entries
+    13,  // num_field_entries
+    5,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -13108,127 +12969,92 @@ const ::_pbi::TcParseTable<5, 16, 7, 0, 7> TimedDirectionScenarioDef::_table_ = 
     // .aim.Bounds bounds = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 0, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.bounds_)}},
-    // .aim.RegionLength height = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 1, 1, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.height_)}},
-    // float depth = 3;
-    {::_pbi::TcParser::FastF32S1,
-     {29, 4, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.depth_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
     // .aim.TargetPlacementStrategy target_placement_strategy = 4;
     {::_pbi::TcParser::FastMtS1,
-     {34, 2, 2, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.target_placement_strategy_)}},
+     {34, 1, 1, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.target_placement_strategy_)}},
     // repeated .aim.TimedDirectionProfile left_right_profiles = 5;
     {::_pbi::TcParser::FastMtR1,
-     {42, 63, 3, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_profiles_)}},
+     {42, 63, 2, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_profiles_)}},
     // repeated int32 left_right_profile_order = 6;
     {::_pbi::TcParser::FastV32P1,
      {50, 63, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_profile_order_)}},
     // repeated .aim.TimedDirectionProfile forward_back_profiles = 7;
     {::_pbi::TcParser::FastMtR1,
-     {58, 63, 4, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_profiles_)}},
+     {58, 63, 3, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_profiles_)}},
     // repeated int32 forward_back_profile_order = 8;
     {::_pbi::TcParser::FastV32P1,
      {66, 63, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_profile_order_)}},
     // repeated .aim.TimedDirectionProfile up_down_profiles = 9;
     {::_pbi::TcParser::FastMtR1,
-     {74, 63, 5, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_profiles_)}},
+     {74, 63, 4, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_profiles_)}},
     // repeated int32 up_down_profile_order = 10;
     {::_pbi::TcParser::FastV32P1,
      {82, 63, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_profile_order_)}},
     // float time_scale_multiplier = 11;
     {::_pbi::TcParser::FastF32S1,
-     {93, 5, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.time_scale_multiplier_)}},
+     {93, 2, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.time_scale_multiplier_)}},
     // float acceleration = 12;
     {::_pbi::TcParser::FastF32S1,
-     {101, 6, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.acceleration_)}},
+     {101, 3, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.acceleration_)}},
     // .aim.PositiveNegativeDirection left_right_initial_direction = 13;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimedDirectionScenarioDef, _impl_.left_right_initial_direction_), 7>(),
-     {104, 7, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_initial_direction_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimedDirectionScenarioDef, _impl_.left_right_initial_direction_), 4>(),
+     {104, 4, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_initial_direction_)}},
     // .aim.PositiveNegativeDirection up_down_initial_direction = 14;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimedDirectionScenarioDef, _impl_.up_down_initial_direction_), 8>(),
-     {112, 8, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_initial_direction_)}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimedDirectionScenarioDef, _impl_.up_down_initial_direction_), 5>(),
+     {112, 5, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_initial_direction_)}},
     // .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_), 9>(),
-     {120, 9, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    // .aim.RegionLength width = 100;
-    {::_pbi::TcParser::FastMtS2,
-     {1698, 3, 6, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.width_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_), 6>(),
+     {120, 6, 0, PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_)}},
   }}, {{
-    100, 0, 1,
-    65534, 15,
     65535, 65535
   }}, {{
     // .aim.Bounds bounds = 1;
     {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.bounds_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.RegionLength height = 2;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.height_), _Internal::kHasBitsOffset + 1, 1,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // float depth = 3;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.depth_), _Internal::kHasBitsOffset + 4, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.TargetPlacementStrategy target_placement_strategy = 4;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 2, 2,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 1, 1,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated .aim.TimedDirectionProfile left_right_profiles = 5;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_profiles_), -1, 3,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_profiles_), -1, 2,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated int32 left_right_profile_order = 6;
     {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_profile_order_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
     // repeated .aim.TimedDirectionProfile forward_back_profiles = 7;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_profiles_), -1, 4,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_profiles_), -1, 3,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated int32 forward_back_profile_order = 8;
     {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_profile_order_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
     // repeated .aim.TimedDirectionProfile up_down_profiles = 9;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_profiles_), -1, 5,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_profiles_), -1, 4,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated int32 up_down_profile_order = 10;
     {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_profile_order_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
     // float time_scale_multiplier = 11;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.time_scale_multiplier_), _Internal::kHasBitsOffset + 5, 0,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.time_scale_multiplier_), _Internal::kHasBitsOffset + 2, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float acceleration = 12;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.acceleration_), _Internal::kHasBitsOffset + 6, 0,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.acceleration_), _Internal::kHasBitsOffset + 3, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.PositiveNegativeDirection left_right_initial_direction = 13;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_initial_direction_), _Internal::kHasBitsOffset + 7, 0,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.left_right_initial_direction_), _Internal::kHasBitsOffset + 4, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
     // .aim.PositiveNegativeDirection up_down_initial_direction = 14;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_initial_direction_), _Internal::kHasBitsOffset + 8, 0,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.up_down_initial_direction_), _Internal::kHasBitsOffset + 5, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
     // .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_), _Internal::kHasBitsOffset + 9, 0,
+    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.forward_back_initial_direction_), _Internal::kHasBitsOffset + 6, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
-    // .aim.RegionLength width = 100;
-    {PROTOBUF_FIELD_OFFSET(TimedDirectionScenarioDef, _impl_.width_), _Internal::kHasBitsOffset + 3, 6,
-    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::Bounds>()},
-    {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
     {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
     {::_pbi::TcParser::GetTable<::aim::TimedDirectionProfile>()},
     {::_pbi::TcParser::GetTable<::aim::TimedDirectionProfile>()},
     {::_pbi::TcParser::GetTable<::aim::TimedDirectionProfile>()},
-    {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
   }}, {{
   }},
 };
@@ -13247,33 +13073,20 @@ PROTOBUF_NOINLINE void TimedDirectionScenarioDef::Clear() {
   _impl_.up_down_profiles_.Clear();
   _impl_.up_down_profile_order_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(_impl_.bounds_ != nullptr);
       _impl_.bounds_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(_impl_.height_ != nullptr);
-      _impl_.height_->Clear();
-    }
-    if (cached_has_bits & 0x00000004u) {
       ABSL_DCHECK(_impl_.target_placement_strategy_ != nullptr);
       _impl_.target_placement_strategy_->Clear();
     }
-    if (cached_has_bits & 0x00000008u) {
-      ABSL_DCHECK(_impl_.width_ != nullptr);
-      _impl_.width_->Clear();
-    }
   }
-  if (cached_has_bits & 0x000000f0u) {
-    ::memset(&_impl_.depth_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.left_right_initial_direction_) -
-        reinterpret_cast<char*>(&_impl_.depth_)) + sizeof(_impl_.left_right_initial_direction_));
-  }
-  if (cached_has_bits & 0x00000300u) {
-    ::memset(&_impl_.up_down_initial_direction_, 0, static_cast<::size_t>(
+  if (cached_has_bits & 0x0000007cu) {
+    ::memset(&_impl_.time_scale_multiplier_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.forward_back_initial_direction_) -
-        reinterpret_cast<char*>(&_impl_.up_down_initial_direction_)) + sizeof(_impl_.forward_back_initial_direction_));
+        reinterpret_cast<char*>(&_impl_.time_scale_multiplier_)) + sizeof(_impl_.forward_back_initial_direction_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -13302,22 +13115,8 @@ PROTOBUF_NOINLINE void TimedDirectionScenarioDef::Clear() {
                 stream);
           }
 
-          // .aim.RegionLength height = 2;
-          if (cached_has_bits & 0x00000002u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                2, *this_._impl_.height_, this_._impl_.height_->GetCachedSize(), target,
-                stream);
-          }
-
-          // float depth = 3;
-          if (cached_has_bits & 0x00000010u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteFloatToArray(
-                3, this_._internal_depth(), target);
-          }
-
           // .aim.TargetPlacementStrategy target_placement_strategy = 4;
-          if (cached_has_bits & 0x00000004u) {
+          if (cached_has_bits & 0x00000002u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 4, *this_._impl_.target_placement_strategy_, this_._impl_.target_placement_strategy_->GetCachedSize(), target,
                 stream);
@@ -13384,45 +13183,38 @@ PROTOBUF_NOINLINE void TimedDirectionScenarioDef::Clear() {
           }
 
           // float time_scale_multiplier = 11;
-          if (cached_has_bits & 0x00000020u) {
+          if (cached_has_bits & 0x00000004u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 11, this_._internal_time_scale_multiplier(), target);
           }
 
           // float acceleration = 12;
-          if (cached_has_bits & 0x00000040u) {
+          if (cached_has_bits & 0x00000008u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteFloatToArray(
                 12, this_._internal_acceleration(), target);
           }
 
           // .aim.PositiveNegativeDirection left_right_initial_direction = 13;
-          if (cached_has_bits & 0x00000080u) {
+          if (cached_has_bits & 0x00000010u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
                 13, this_._internal_left_right_initial_direction(), target);
           }
 
           // .aim.PositiveNegativeDirection up_down_initial_direction = 14;
-          if (cached_has_bits & 0x00000100u) {
+          if (cached_has_bits & 0x00000020u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
                 14, this_._internal_up_down_initial_direction(), target);
           }
 
           // .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
-          if (cached_has_bits & 0x00000200u) {
+          if (cached_has_bits & 0x00000040u) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
                 15, this_._internal_forward_back_initial_direction(), target);
-          }
-
-          // .aim.RegionLength width = 100;
-          if (cached_has_bits & 0x00000008u) {
-            target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                100, *this_._impl_.width_, this_._impl_.width_->GetCachedSize(), target,
-                stream);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -13494,53 +13286,37 @@ PROTOBUF_NOINLINE void TimedDirectionScenarioDef::Clear() {
             }
           }
           cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x000000ffu) {
+          if (cached_has_bits & 0x0000007fu) {
             // .aim.Bounds bounds = 1;
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.bounds_);
             }
-            // .aim.RegionLength height = 2;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 1 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.height_);
-            }
             // .aim.TargetPlacementStrategy target_placement_strategy = 4;
-            if (cached_has_bits & 0x00000004u) {
+            if (cached_has_bits & 0x00000002u) {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.target_placement_strategy_);
             }
-            // .aim.RegionLength width = 100;
-            if (cached_has_bits & 0x00000008u) {
-              total_size += 2 +
-                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.width_);
-            }
-            // float depth = 3;
-            if (cached_has_bits & 0x00000010u) {
-              total_size += 5;
-            }
             // float time_scale_multiplier = 11;
-            if (cached_has_bits & 0x00000020u) {
+            if (cached_has_bits & 0x00000004u) {
               total_size += 5;
             }
             // float acceleration = 12;
-            if (cached_has_bits & 0x00000040u) {
+            if (cached_has_bits & 0x00000008u) {
               total_size += 5;
             }
             // .aim.PositiveNegativeDirection left_right_initial_direction = 13;
-            if (cached_has_bits & 0x00000080u) {
+            if (cached_has_bits & 0x00000010u) {
               total_size += 1 +
                             ::_pbi::WireFormatLite::EnumSize(this_._internal_left_right_initial_direction());
             }
-          }
-          if (cached_has_bits & 0x00000300u) {
             // .aim.PositiveNegativeDirection up_down_initial_direction = 14;
-            if (cached_has_bits & 0x00000100u) {
+            if (cached_has_bits & 0x00000020u) {
               total_size += 1 +
                             ::_pbi::WireFormatLite::EnumSize(this_._internal_up_down_initial_direction());
             }
             // .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
-            if (cached_has_bits & 0x00000200u) {
+            if (cached_has_bits & 0x00000040u) {
               total_size += 1 +
                             ::_pbi::WireFormatLite::EnumSize(this_._internal_forward_back_initial_direction());
             }
@@ -13568,7 +13344,7 @@ void TimedDirectionScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_ms
       from._internal_up_down_profiles());
   _this->_internal_mutable_up_down_profile_order()->MergeFrom(from._internal_up_down_profile_order());
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x000000ffu) {
+  if (cached_has_bits & 0x0000007fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(from._impl_.bounds_ != nullptr);
       if (_this->_impl_.bounds_ == nullptr) {
@@ -13579,15 +13355,6 @@ void TimedDirectionScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_ms
       }
     }
     if (cached_has_bits & 0x00000002u) {
-      ABSL_DCHECK(from._impl_.height_ != nullptr);
-      if (_this->_impl_.height_ == nullptr) {
-        _this->_impl_.height_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(arena, *from._impl_.height_);
-      } else {
-        _this->_impl_.height_->MergeFrom(*from._impl_.height_);
-      }
-    }
-    if (cached_has_bits & 0x00000004u) {
       ABSL_DCHECK(from._impl_.target_placement_strategy_ != nullptr);
       if (_this->_impl_.target_placement_strategy_ == nullptr) {
         _this->_impl_.target_placement_strategy_ =
@@ -13596,33 +13363,19 @@ void TimedDirectionScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_ms
         _this->_impl_.target_placement_strategy_->MergeFrom(*from._impl_.target_placement_strategy_);
       }
     }
-    if (cached_has_bits & 0x00000008u) {
-      ABSL_DCHECK(from._impl_.width_ != nullptr);
-      if (_this->_impl_.width_ == nullptr) {
-        _this->_impl_.width_ =
-            ::google::protobuf::Message::CopyConstruct<::aim::RegionLength>(arena, *from._impl_.width_);
-      } else {
-        _this->_impl_.width_->MergeFrom(*from._impl_.width_);
-      }
-    }
-    if (cached_has_bits & 0x00000010u) {
-      _this->_impl_.depth_ = from._impl_.depth_;
-    }
-    if (cached_has_bits & 0x00000020u) {
+    if (cached_has_bits & 0x00000004u) {
       _this->_impl_.time_scale_multiplier_ = from._impl_.time_scale_multiplier_;
     }
-    if (cached_has_bits & 0x00000040u) {
+    if (cached_has_bits & 0x00000008u) {
       _this->_impl_.acceleration_ = from._impl_.acceleration_;
     }
-    if (cached_has_bits & 0x00000080u) {
+    if (cached_has_bits & 0x00000010u) {
       _this->_impl_.left_right_initial_direction_ = from._impl_.left_right_initial_direction_;
     }
-  }
-  if (cached_has_bits & 0x00000300u) {
-    if (cached_has_bits & 0x00000100u) {
+    if (cached_has_bits & 0x00000020u) {
       _this->_impl_.up_down_initial_direction_ = from._impl_.up_down_initial_direction_;
     }
-    if (cached_has_bits & 0x00000200u) {
+    if (cached_has_bits & 0x00000040u) {
       _this->_impl_.forward_back_initial_direction_ = from._impl_.forward_back_initial_direction_;
     }
   }
