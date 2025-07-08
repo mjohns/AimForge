@@ -312,8 +312,6 @@ message WallStrafeScenarioDef {
   // angle and where it starts the strafe from.
   RegionLength height = 2;
 
-  // The height the target will strafe at. Defaults to 0 (center of wall).
-  RegionLength y = 3;
   TargetPlacementStrategy target_placement_strategy = 7;
 
   repeated WallStrafeProfile profiles = 4;

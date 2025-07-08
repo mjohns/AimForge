@@ -7730,7 +7730,6 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     kProfileOrderFieldNumber = 5,
     kBoundsFieldNumber = 1,
     kHeightFieldNumber = 2,
-    kYFieldNumber = 3,
     kTargetPlacementStrategyFieldNumber = 7,
     kWidthFieldNumber = 12,
     kAccelerationFieldNumber = 6,
@@ -7800,21 +7799,6 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_height();
 
   public:
-  // .aim.RegionLength y = 3;
-  bool has_y() const;
-  void clear_y() ;
-  const ::aim::RegionLength& y() const;
-  PROTOBUF_NODISCARD ::aim::RegionLength* release_y();
-  ::aim::RegionLength* mutable_y();
-  void set_allocated_y(::aim::RegionLength* value);
-  void unsafe_arena_set_allocated_y(::aim::RegionLength* value);
-  ::aim::RegionLength* unsafe_arena_release_y();
-
-  private:
-  const ::aim::RegionLength& _internal_y() const;
-  ::aim::RegionLength* _internal_mutable_y();
-
-  public:
   // .aim.TargetPlacementStrategy target_placement_strategy = 7;
   bool has_target_placement_strategy() const;
   void clear_target_placement_strategy() ;
@@ -7861,7 +7845,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 8, 6,
+      3, 7, 5,
       0, 2>
       _table_;
 
@@ -7886,7 +7870,6 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::Bounds* bounds_;
     ::aim::RegionLength* height_;
-    ::aim::RegionLength* y_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
     ::aim::RegionLength* width_;
     float acceleration_;
@@ -17063,14 +17046,14 @@ inline void WallStrafeScenarioDef::set_allocated_bounds(::aim::Bounds* value) {
 
 // .aim.RegionLength width = 12;
 inline bool WallStrafeScenarioDef::has_width() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.width_ != nullptr);
   return value;
 }
 inline void WallStrafeScenarioDef::clear_width() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.width_ != nullptr) _impl_.width_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline const ::aim::RegionLength& WallStrafeScenarioDef::_internal_width() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -17088,16 +17071,16 @@ inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_width(::aim::Regio
   }
   _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000010u;
+    _impl_._has_bits_[0] |= 0x00000008u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000010u;
+    _impl_._has_bits_[0] &= ~0x00000008u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.width)
 }
 inline ::aim::RegionLength* WallStrafeScenarioDef::release_width() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
   ::aim::RegionLength* released = _impl_.width_;
   _impl_.width_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -17117,7 +17100,7 @@ inline ::aim::RegionLength* WallStrafeScenarioDef::unsafe_arena_release_width() 
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.width)
 
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
   ::aim::RegionLength* temp = _impl_.width_;
   _impl_.width_ = nullptr;
   return temp;
@@ -17131,7 +17114,7 @@ inline ::aim::RegionLength* WallStrafeScenarioDef::_internal_mutable_width() {
   return _impl_.width_;
 }
 inline ::aim::RegionLength* WallStrafeScenarioDef::mutable_width() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   ::aim::RegionLength* _msg = _internal_mutable_width();
   // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.width)
   return _msg;
@@ -17148,9 +17131,9 @@ inline void WallStrafeScenarioDef::set_allocated_width(::aim::RegionLength* valu
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000010u;
+    _impl_._has_bits_[0] |= 0x00000008u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000010u;
+    _impl_._has_bits_[0] &= ~0x00000008u;
   }
 
   _impl_.width_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -17253,112 +17236,16 @@ inline void WallStrafeScenarioDef::set_allocated_height(::aim::RegionLength* val
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.height)
 }
 
-// .aim.RegionLength y = 3;
-inline bool WallStrafeScenarioDef::has_y() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  PROTOBUF_ASSUME(!value || _impl_.y_ != nullptr);
-  return value;
-}
-inline void WallStrafeScenarioDef::clear_y() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.y_ != nullptr) _impl_.y_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline const ::aim::RegionLength& WallStrafeScenarioDef::_internal_y() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::RegionLength* p = _impl_.y_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
-}
-inline const ::aim::RegionLength& WallStrafeScenarioDef::y() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.y)
-  return _internal_y();
-}
-inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_y(::aim::RegionLength* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.y_);
-  }
-  _impl_.y_ = reinterpret_cast<::aim::RegionLength*>(value);
-  if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.y)
-}
-inline ::aim::RegionLength* WallStrafeScenarioDef::release_y() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  _impl_._has_bits_[0] &= ~0x00000004u;
-  ::aim::RegionLength* released = _impl_.y_;
-  _impl_.y_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::RegionLength* WallStrafeScenarioDef::unsafe_arena_release_y() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.y)
-
-  _impl_._has_bits_[0] &= ~0x00000004u;
-  ::aim::RegionLength* temp = _impl_.y_;
-  _impl_.y_ = nullptr;
-  return temp;
-}
-inline ::aim::RegionLength* WallStrafeScenarioDef::_internal_mutable_y() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.y_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
-    _impl_.y_ = reinterpret_cast<::aim::RegionLength*>(p);
-  }
-  return _impl_.y_;
-}
-inline ::aim::RegionLength* WallStrafeScenarioDef::mutable_y() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000004u;
-  ::aim::RegionLength* _msg = _internal_mutable_y();
-  // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.y)
-  return _msg;
-}
-inline void WallStrafeScenarioDef::set_allocated_y(::aim::RegionLength* value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete (_impl_.y_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    _impl_._has_bits_[0] |= 0x00000004u;
-  } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
-  }
-
-  _impl_.y_ = reinterpret_cast<::aim::RegionLength*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.y)
-}
-
 // .aim.TargetPlacementStrategy target_placement_strategy = 7;
 inline bool WallStrafeScenarioDef::has_target_placement_strategy() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
   return value;
 }
 inline void WallStrafeScenarioDef::clear_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline const ::aim::TargetPlacementStrategy& WallStrafeScenarioDef::_internal_target_placement_strategy() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -17376,16 +17263,16 @@ inline void WallStrafeScenarioDef::unsafe_arena_set_allocated_target_placement_s
   }
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000008u;
+    _impl_._has_bits_[0] |= 0x00000004u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
+    _impl_._has_bits_[0] &= ~0x00000004u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeScenarioDef.target_placement_strategy)
 }
 inline ::aim::TargetPlacementStrategy* WallStrafeScenarioDef::release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -17405,7 +17292,7 @@ inline ::aim::TargetPlacementStrategy* WallStrafeScenarioDef::unsafe_arena_relea
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallStrafeScenarioDef.target_placement_strategy)
 
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   return temp;
@@ -17419,7 +17306,7 @@ inline ::aim::TargetPlacementStrategy* WallStrafeScenarioDef::_internal_mutable_
   return _impl_.target_placement_strategy_;
 }
 inline ::aim::TargetPlacementStrategy* WallStrafeScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
   // @@protoc_insertion_point(field_mutable:aim.WallStrafeScenarioDef.target_placement_strategy)
   return _msg;
@@ -17436,9 +17323,9 @@ inline void WallStrafeScenarioDef::set_allocated_target_placement_strategy(::aim
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000008u;
+    _impl_._has_bits_[0] |= 0x00000004u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
+    _impl_._has_bits_[0] &= ~0x00000004u;
   }
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
@@ -17541,13 +17428,13 @@ inline ::google::protobuf::RepeatedField<::int32_t>* WallStrafeScenarioDef::_int
 
 // float acceleration = 6;
 inline bool WallStrafeScenarioDef::has_acceleration() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void WallStrafeScenarioDef::clear_acceleration() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float WallStrafeScenarioDef::acceleration() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.acceleration)
@@ -17555,7 +17442,7 @@ inline float WallStrafeScenarioDef::acceleration() const {
 }
 inline void WallStrafeScenarioDef::set_acceleration(float value) {
   _internal_set_acceleration(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeScenarioDef.acceleration)
 }
 inline float WallStrafeScenarioDef::_internal_acceleration() const {

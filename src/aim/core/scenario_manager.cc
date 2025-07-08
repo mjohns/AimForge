@@ -233,6 +233,9 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
       profile.set_speed(profile.speed() * mult);
     }
+  }
+  if (overrides.has_acceleration_multiplier()) {
+    float mult = overrides.acceleration_multiplier();
     if (original.has_wall_strafe_def()) {
       float accel = original.wall_strafe_def().acceleration();
       if (accel > 0) {
@@ -244,6 +247,14 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
       if (accel > 0) {
         result.mutable_timed_direction_def()->set_acceleration(accel * mult);
       }
+    }
+  }
+  if (overrides.has_time_scale_multiplier()) {
+    float mult = overrides.time_scale_multiplier();
+    if (original.has_timed_direction_def()) {
+      float time_scale =
+          FirstGreaterThanZero(original.timed_direction_def().time_scale_multiplier(), 1.0);
+      result.mutable_timed_direction_def()->set_time_scale_multiplier(time_scale * mult);
     }
   }
   return result;

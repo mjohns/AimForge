@@ -302,8 +302,7 @@ class WallStrafeScenario : public BaseScenario {
   }
 
   void FillInNewTarget(Target* target) override {
-    float starting_y = wall_.GetRegionLength(def_.wall_strafe_def().y());
-    glm::vec3 pos(0, starting_y, 0);
+    glm::vec3 pos(0, 0, 0);
     if (target_placer_) {
       pos = target_placer_->GetNextPosition();
     }
