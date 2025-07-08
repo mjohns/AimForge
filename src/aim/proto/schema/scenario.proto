@@ -50,7 +50,8 @@ message RegionLength {
     // Length is a percent of relevant dimension (x,y) on the wall.
     float x_percent_value = 1;
     float y_percent_value = 2;
-    float value = 3;
+    float depth_percent_value = 3;
+    float value = 4;
   }
 }
 
@@ -297,9 +298,16 @@ message WallStrafeProfile {
   float acceleration_multiplier = 14;
 }
 
-message WallStrafeScenarioDef {
-  // The available width for the target to move in.
+message Bounds {
   RegionLength width = 1;
+  RegionLength height = 2;
+  RegionLength depth = 3;
+}
+
+message WallStrafeScenarioDef {
+  Bounds bounds = 1;
+  // The available width for the target to move in.
+  RegionLength width = 12;
   // The available height for the target to move in. The target can escape this height based on the
   // angle and where it starts the strafe from.
   RegionLength height = 2;
@@ -327,11 +335,12 @@ message TimedDirectionProfile {
 
 message TimedDirectionScenarioDef {
   // The available width for the target to move in.
-  RegionLength width = 1;
+  RegionLength width = 100;
   // The available height for the target to move in. The target can escape this height based on the
   // angle and where it starts the strafe from.
   RegionLength height = 2;
   float depth = 3;
+  Bounds bounds = 1;
 
   TargetPlacementStrategy target_placement_strategy = 4;
 

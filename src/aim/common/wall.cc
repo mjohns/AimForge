@@ -22,6 +22,9 @@ float Wall::GetRegionLength(const RegionLength& length) const {
   if (length.has_y_percent_value()) {
     return height * length.y_percent_value();
   }
+  if (length.has_depth_percent_value()) {
+    return depth * length.depth_percent_value();
+  }
   return 0;
 }
 
@@ -39,12 +42,15 @@ Wall Wall::ForRoom(const Room& room) {
       wall.width = room.cylinder_room().width();
     }
     wall.height = room.cylinder_room().height();
+    wall.depth = room.cylinder_room().radius() - room.camera_position().y();
   } else if (room.has_barrel_room()) {
     wall.width = room.barrel_room().radius() * 2;
     wall.height = wall.width;
+    wall.depth = abs(room.camera_position().y());
   } else if (room.has_simple_room()) {
     wall.width = room.simple_room().width();
     wall.height = room.simple_room().height();
+    wall.depth = abs(room.camera_position().y());
   }
   return wall;
 }
