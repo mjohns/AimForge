@@ -26,6 +26,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "speed": 128,
         "speedJitter": 0,
         "targetRadius": 2,

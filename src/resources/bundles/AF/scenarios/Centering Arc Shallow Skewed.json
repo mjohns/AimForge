@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -24,6 +23,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "targetRadius": 1.49999988,
         "targetRadiusJitter": 0
       }
@@ -31,8 +31,6 @@
   },
   "wallArcDef": {
     "controlHeight": 2,
-    "controlHeightJitter": 0,
-    "duration": 2.00000072,
     "height": {
       "yPercentValue": 0.5
     },

@@ -15,6 +15,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "pill": {
           "height": 15
         },
@@ -33,7 +34,9 @@
       {
         "angle": 0,
         "angleJitter": 0,
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "maxDistance": {
           "xPercentValue": 0.8
         },

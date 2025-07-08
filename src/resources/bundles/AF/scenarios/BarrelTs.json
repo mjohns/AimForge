@@ -15,7 +15,9 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": ""
+          "info": {
+            "description": ""
+          }
         }
       ]
     }
@@ -39,18 +41,22 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "Large Fast",
         "healthSeconds": 0.6,
         "healthSecondsJitter": 0,
+        "info": {
+          "description": "Large Fast"
+        },
         "speed": 60,
         "speedJitter": 0,
         "targetRadius": 2.8,
         "targetRadiusJitter": 0
       },
       {
-        "description": "Small Slow",
         "healthSeconds": 0.6,
         "healthSecondsJitter": 0,
+        "info": {
+          "description": "Small Slow"
+        },
         "speed": 50,
         "speedJitter": 3,
         "targetRadius": 2.2,

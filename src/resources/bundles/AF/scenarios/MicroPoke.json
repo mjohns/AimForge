@@ -21,7 +21,6 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
           "ellipse": {
             "xDiameter": {
               "xPercentValue": 0.075
@@ -29,6 +28,9 @@
             "yDiameter": {
               "yPercentValue": 0.075
             }
+          },
+          "info": {
+            "description": ""
           }
         }
       ]
@@ -39,7 +41,9 @@
     "numTargets": 3,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "targetRadius": 1.05,
         "targetRadiusJitter": 0
       }

@@ -14,7 +14,9 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": ""
+          "info": {
+            "description": ""
+          }
         }
       ]
     }
@@ -37,7 +39,9 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 24,
         "speedJitter": 2,
         "targetRadius": 1.5999999,

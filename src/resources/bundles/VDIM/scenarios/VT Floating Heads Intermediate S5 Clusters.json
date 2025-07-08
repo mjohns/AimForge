@@ -3,14 +3,15 @@
   "linearDef": {
     "angle": 0,
     "angleJitter": 13,
-    "direction": "RANDOM",
     "targetPlacementStrategy": {
       "minDistance": 50,
       "regions": [
         {
           "depth": 0,
           "depthJitter": 11,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.599999905
@@ -23,7 +24,6 @@
       ]
     }
   },
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -43,20 +43,24 @@
     "numTargets": 14,
     "profiles": [
       {
-        "description": "Big",
+        "info": {
+          "description": "Big",
+          "weight": 1
+        },
         "speed": 46,
         "speedJitter": 0,
         "targetRadius": 2.29999971,
-        "targetRadiusJitter": 0,
-        "weight": 1
+        "targetRadiusJitter": 0
       },
       {
-        "description": "Small",
+        "info": {
+          "description": "Small",
+          "weight": 1
+        },
         "speed": 28,
         "speedJitter": 0,
         "targetRadius": 1.9,
-        "targetRadiusJitter": 0,
-        "weight": 1
+        "targetRadiusJitter": 0
       }
     ],
     "removeClosestOnMiss": false

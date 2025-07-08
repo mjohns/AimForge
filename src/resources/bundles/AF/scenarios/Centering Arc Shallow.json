@@ -18,6 +18,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "targetRadius": 2,
         "targetRadiusJitter": 0
       }

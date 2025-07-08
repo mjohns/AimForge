@@ -23,7 +23,9 @@
     "numTargets": 1,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 95,
         "speedJitter": 0,
         "targetHitRadiusMultiplier": 2.79999948,
@@ -42,7 +44,9 @@
       {
         "angle": 0,
         "angleJitter": 19,
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "maxDistance": {
           "xPercentValue": 0.669999838
         },

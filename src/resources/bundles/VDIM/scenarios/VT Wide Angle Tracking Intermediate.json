@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -20,7 +19,9 @@
     "numTargets": 1,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 162,
         "speedJitter": 0,
         "targetRadius": 2.2,
@@ -48,7 +49,9 @@
         {
           "depth": 10,
           "depthJitter": 10,
-          "description": "LeftFar",
+          "info": {
+            "description": "LeftFar"
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.03
@@ -67,7 +70,9 @@
         {
           "depth": 210,
           "depthJitter": 10,
-          "description": "LeftClose",
+          "info": {
+            "description": "LeftClose"
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.03
@@ -86,7 +91,9 @@
         {
           "depth": 210,
           "depthJitter": 10,
-          "description": "RightClose",
+          "info": {
+            "description": "RightClose"
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.03
@@ -105,7 +112,9 @@
         {
           "depth": 10,
           "depthJitter": 10,
-          "description": "RightFar",
+          "info": {
+            "description": "RightFar"
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.03

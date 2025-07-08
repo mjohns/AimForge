@@ -21,7 +21,6 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
           "ellipse": {
             "xDiameter": {
               "xPercentValue": 0.6
@@ -30,12 +29,18 @@
               "yPercentValue": 0.32
             }
           },
-          "weight": 2
+          "info": {
+            "description": "",
+            "weight": 2
+          }
         },
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": "",
+            "weight": 1
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.65
@@ -43,8 +48,7 @@
             "yLength": {
               "yPercentValue": 0.55
             }
-          },
-          "weight": 1
+          }
         }
       ]
     }
@@ -54,7 +58,9 @@
     "numTargets": 17,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "targetRadius": 1.7,
         "targetRadiusJitter": 0.3
       }

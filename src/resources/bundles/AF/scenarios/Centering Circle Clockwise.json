@@ -7,7 +7,6 @@
     "startDegrees": 0
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 65
@@ -25,6 +24,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "speed": 40,
         "speedJitter": 0,
         "targetRadius": 2,

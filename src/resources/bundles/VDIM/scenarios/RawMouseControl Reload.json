@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -22,7 +21,6 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
           "ellipse": {
             "xDiameter": {
               "xPercentValue": 0.09
@@ -30,6 +28,9 @@
             "yDiameter": {
               "yPercentValue": 0.09
             }
+          },
+          "info": {
+            "description": ""
           }
         }
       ]
@@ -40,7 +41,9 @@
     "numTargets": 3,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "targetRadius": 1.3,
         "targetRadiusJitter": 0
       }

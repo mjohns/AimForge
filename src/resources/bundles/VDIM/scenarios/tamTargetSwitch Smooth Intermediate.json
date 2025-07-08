@@ -1,7 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -24,10 +23,12 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "",
         "healthRegenRate": 1.50000012,
         "healthSeconds": 0.6,
         "healthSecondsJitter": 0,
+        "info": {
+          "description": ""
+        },
         "speed": 79,
         "speedJitter": 0,
         "targetRadius": 2.2,
@@ -45,50 +46,58 @@
       {
         "angle": 0,
         "angleJitter": 13,
-        "description": "Little Verticality",
+        "info": {
+          "description": "Little Verticality",
+          "weight": 5
+        },
         "maxDistance": {
           "xPercentValue": 0.33
         },
         "minDistance": {
           "xPercentValue": 0.210000113
-        },
-        "weight": 5
+        }
       },
       {
         "angle": 0,
         "angleJitter": 3,
-        "description": "Flat Mid",
+        "info": {
+          "description": "Flat Mid",
+          "weight": 11
+        },
         "maxDistance": {
           "xPercentValue": 0.38
         },
         "minDistance": {
           "xPercentValue": 0.240000054
-        },
-        "weight": 11
+        }
       },
       {
         "angle": 20,
         "angleJitter": 0,
-        "description": "Bigger Vert Down",
+        "info": {
+          "description": "Bigger Vert Down",
+          "weight": 2
+        },
         "maxDistance": {
           "xPercentValue": 0.37
         },
         "minDistance": {
           "xPercentValue": 0.240000054
-        },
-        "weight": 2
+        }
       },
       {
         "angle": -20,
         "angleJitter": 0,
-        "description": "Bigger Vert Up",
+        "info": {
+          "description": "Bigger Vert Up",
+          "weight": 1
+        },
         "maxDistance": {
           "xPercentValue": 0.36
         },
         "minDistance": {
           "xPercentValue": 0.25000006
-        },
-        "weight": 1
+        }
       }
     ],
     "targetPlacementStrategy": {
@@ -97,7 +106,9 @@
         {
           "depth": 36,
           "depthJitter": 35,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.799999833

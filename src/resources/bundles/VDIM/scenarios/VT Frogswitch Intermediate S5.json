@@ -15,13 +15,14 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": ""
+          "info": {
+            "description": ""
+          }
         }
       ]
     }
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 85
@@ -40,18 +41,22 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "Large Fast",
         "healthSeconds": 0.200000018,
         "healthSecondsJitter": 0,
+        "info": {
+          "description": "Large Fast"
+        },
         "speed": 56,
         "speedJitter": 0,
         "targetRadius": 2.99999976,
         "targetRadiusJitter": 0
       },
       {
-        "description": "Small Slow",
         "healthSeconds": 0.200000018,
         "healthSecondsJitter": 0,
+        "info": {
+          "description": "Small Slow"
+        },
         "speed": 48,
         "speedJitter": 3,
         "targetRadius": 2.59999967,

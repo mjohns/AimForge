@@ -26,8 +26,10 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": "Top Right",
-          "weight": 1,
+          "info": {
+            "description": "Top Right",
+            "weight": 1
+          },
           "xOffset": {
             "xPercentValue": 0.34
           },
@@ -43,8 +45,10 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": "Top Left",
-          "weight": 1,
+          "info": {
+            "description": "Top Left",
+            "weight": 1
+          },
           "xOffset": {
             "xPercentValue": -0.34
           },
@@ -60,8 +64,10 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": "Bottom Left",
-          "weight": 1,
+          "info": {
+            "description": "Bottom Left",
+            "weight": 1
+          },
           "xOffset": {
             "xPercentValue": -0.34
           },
@@ -77,8 +83,10 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": "Bottom Right",
-          "weight": 1,
+          "info": {
+            "description": "Bottom Right",
+            "weight": 1
+          },
           "xOffset": {
             "xPercentValue": 0.34
           },
@@ -94,7 +102,9 @@
     "numTargets": 2,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "targetRadius": 1.5,
         "targetRadiusJitter": 0
       }

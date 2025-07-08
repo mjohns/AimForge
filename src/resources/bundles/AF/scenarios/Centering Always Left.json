@@ -42,6 +42,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "pill": {
           "height": 14.9999809
         },

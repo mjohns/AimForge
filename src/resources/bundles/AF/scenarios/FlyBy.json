@@ -1,50 +1,6 @@
 {
-  "centeringDef": {
-    "targetPlacementStrategy": {
-      "regionOrder": [
-        0,
-        1
-      ],
-      "regions": [
-        {
-          "description": "Left",
-          "rectangle": {
-            "xLength": {
-              "xPercentValue": 0.04
-            },
-            "yLength": {
-              "yPercentValue": 0.799999833
-            }
-          },
-          "xOffset": {
-            "xPercentValue": -0.48
-          },
-          "yOffset": {
-            "value": 0
-          }
-        },
-        {
-          "description": "Right",
-          "rectangle": {
-            "xLength": {
-              "xPercentValue": 0.04
-            },
-            "yLength": {
-              "yPercentValue": 0.799999833
-            }
-          },
-          "xOffset": {
-            "xPercentValue": 0.48
-          },
-          "yOffset": {
-            "value": 0
-          }
-        }
-      ]
-    }
-  },
+  "centeringDef": {},
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -68,6 +24,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "speed": 88,
         "speedJitter": 0,
         "targetRadius": 2.00000048,

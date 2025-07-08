@@ -21,7 +21,6 @@
   },
   "durationSeconds": 60,
   "endScore": 45,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -44,6 +43,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "pill": {
           "height": 16.7000065
         },

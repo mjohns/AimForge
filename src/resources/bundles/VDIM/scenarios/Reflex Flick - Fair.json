@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -22,7 +21,6 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
           "ellipse": {
             "xDiameter": {
               "xPercentValue": 0.6
@@ -31,12 +29,18 @@
               "yPercentValue": 0.32
             }
           },
-          "weight": 1
+          "info": {
+            "description": "",
+            "weight": 1
+          }
         },
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "Outside Rect",
+          "info": {
+            "description": "Outside Rect",
+            "weight": 2
+          },
           "rectangle": {
             "innerXLength": {
               "xPercentValue": 0.549999952
@@ -50,8 +54,7 @@
             "yLength": {
               "yPercentValue": 0.85
             }
-          },
-          "weight": 2
+          }
         },
         {
           "circle": {
@@ -64,8 +67,10 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": "Mid Circle",
-          "weight": 2
+          "info": {
+            "description": "Mid Circle",
+            "weight": 2
+          }
         }
       ]
     }
@@ -76,7 +81,9 @@
     "numTargets": 1,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "targetRadius": 2.99999905,
         "targetRadiusJitter": 0
       }

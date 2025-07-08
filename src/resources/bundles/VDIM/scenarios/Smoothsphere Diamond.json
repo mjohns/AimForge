@@ -1,7 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -24,8 +23,10 @@
     "numTargets": 1,
     "profiles": [
       {
-        "description": "",
         "healthRegenRate": 1.50000012,
+        "info": {
+          "description": ""
+        },
         "speed": 109,
         "speedJitter": 0,
         "targetRadius": 2.99999952,
@@ -41,7 +42,9 @@
     "forwardBackProfiles": [
       {
         "accelerationMultiplier": 0.549999893,
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speedMultiplier": 0.15,
         "time": 2.79999948,
         "timeJitter": 1.00000012
@@ -53,35 +56,43 @@
     "leftRightInitialDirection": "DIRECTION_NEGATIVE",
     "leftRightProfiles": [
       {
-        "description": "",
+        "info": {
+          "description": "",
+          "weight": 4
+        },
         "time": 2.99999928,
-        "timeJitter": 1.10000014,
-        "weight": 4
+        "timeJitter": 1.10000014
       },
       {
-        "description": "Shifty Strafe",
+        "info": {
+          "description": "Shifty Strafe",
+          "weight": 1
+        },
         "time": 0.799999952,
-        "timeJitter": 0.1,
-        "weight": 1
+        "timeJitter": 0.1
       }
     ],
     "upDownInitialDirection": "DIRECTION_POSITIVE",
     "upDownProfiles": [
       {
         "accelerationMultiplier": 0.549999833,
-        "description": "",
+        "info": {
+          "description": "",
+          "weight": 6
+        },
         "speedMultiplier": 0.2,
         "time": 2.79999948,
-        "timeJitter": 0.6,
-        "weight": 6
+        "timeJitter": 0.6
       },
       {
         "accelerationMultiplier": 0.299999982,
-        "description": "Big up down swing",
+        "info": {
+          "description": "Big up down swing",
+          "weight": 1
+        },
         "speedMultiplier": 0.599999905,
         "time": 2.39999986,
-        "timeJitter": 0.5,
-        "weight": 1
+        "timeJitter": 0.5
       }
     ],
     "width": {

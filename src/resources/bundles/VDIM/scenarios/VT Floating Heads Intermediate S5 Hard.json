@@ -1,10 +1,68 @@
 {
-  "description": "",
-  "overrides": {
-    "speedMultiplier": 1.1,
-    "targetRadiusMultiplier": 0.9
+  "durationSeconds": 60,
+  "linearDef": {
+    "angle": 0,
+    "angleJitter": 13,
+    "targetPlacementStrategy": {
+      "minDistance": 50,
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 11,
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.599999905
+            },
+            "yLength": {
+              "yPercentValue": 0.799999833
+            }
+          }
+        }
+      ]
+    }
   },
-  "referenceDef": {
-    "scenarioId": "VDIM VT Floating Heads Intermediate S5"
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 240,
+      "width": 390
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "info": {
+          "description": "Big",
+          "weight": 1
+        },
+        "speed": 50.6000023,
+        "speedJitter": 0,
+        "targetRadius": 2.06999969,
+        "targetRadiusJitter": 0
+      },
+      {
+        "info": {
+          "description": "Small",
+          "weight": 1
+        },
+        "speed": 30.8000011,
+        "speedJitter": 0,
+        "targetRadius": 1.70999992,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

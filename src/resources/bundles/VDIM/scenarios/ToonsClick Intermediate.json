@@ -1,7 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -24,7 +23,9 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 91,
         "speedJitter": 0,
         "targetRadius": 4.99999762,
@@ -39,7 +40,9 @@
     "forwardBackProfiles": [
       {
         "accelerationMultiplier": 0.4,
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speedMultiplier": 0.4,
         "time": 1.60000014,
         "timeJitter": 0.5
@@ -50,7 +53,9 @@
     },
     "leftRightProfiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "time": 2.29999971,
         "timeJitter": 0.5
       }
@@ -61,7 +66,9 @@
         {
           "depth": 47,
           "depthJitter": 34,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.649999857
@@ -76,18 +83,22 @@
     "upDownProfiles": [
       {
         "accelerationMultiplier": 1.40000153,
-        "description": "Slow Vertical",
+        "info": {
+          "description": "Slow Vertical",
+          "weight": 2
+        },
         "speedMultiplier": 0.550000072,
         "time": 1.80000019,
-        "timeJitter": 0.3,
-        "weight": 2
+        "timeJitter": 0.3
       },
       {
-        "description": "No Vertical",
+        "info": {
+          "description": "No Vertical",
+          "weight": 1
+        },
         "speedMultiplier": 0,
         "time": 1,
-        "timeJitter": 0.5,
-        "weight": 1
+        "timeJitter": 0.5
       }
     ],
     "width": {

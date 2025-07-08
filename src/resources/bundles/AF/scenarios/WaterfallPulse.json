@@ -9,7 +9,9 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.6
@@ -47,7 +49,9 @@
     "numTargets": 5,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 60,
         "speedJitter": 8,
         "targetRadius": 1.39999986,

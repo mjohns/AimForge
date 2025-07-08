@@ -1,7 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -24,7 +23,9 @@
     "numTargets": 1,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "pill": {
           "height": 8.59997559
         },
@@ -45,7 +46,9 @@
       {
         "angle": 0,
         "angleJitter": 19,
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "maxDistance": {
           "xPercentValue": 0.669999838
         },
@@ -59,7 +62,9 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "value": 50

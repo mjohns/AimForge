@@ -20,7 +20,6 @@
     ]
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -39,6 +38,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "speed": 38,
         "speedJitter": 0,
         "targetRadius": 1.30000007,

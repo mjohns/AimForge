@@ -15,7 +15,9 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": "Spawn target on outside edge"
+          "info": {
+            "description": "Spawn target on outside edge"
+          }
         }
       ]
     }
@@ -40,7 +42,9 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 59,
         "speedJitter": 10,
         "targetRadius": 1.40000057,

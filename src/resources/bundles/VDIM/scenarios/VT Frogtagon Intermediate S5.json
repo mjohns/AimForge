@@ -15,13 +15,14 @@
           },
           "depth": 0,
           "depthJitter": 0,
-          "description": ""
+          "info": {
+            "description": ""
+          }
         }
       ]
     }
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 85
@@ -40,28 +41,34 @@
     "numTargets": 4,
     "profiles": [
       {
-        "description": "Large Fast",
+        "info": {
+          "description": "Large Fast",
+          "weight": 5
+        },
         "speed": 58,
         "speedJitter": 2,
         "targetRadius": 3.19999957,
-        "targetRadiusJitter": 0.1,
-        "weight": 5
+        "targetRadiusJitter": 0.1
       },
       {
-        "description": "Small Slow",
+        "info": {
+          "description": "Small Slow",
+          "weight": 1
+        },
         "speed": 31,
         "speedJitter": 2,
         "targetRadius": 2.2,
-        "targetRadiusJitter": 0.05,
-        "weight": 1
+        "targetRadiusJitter": 0.05
       },
       {
-        "description": "Medium",
+        "info": {
+          "description": "Medium",
+          "weight": 3
+        },
         "speed": 44,
         "speedJitter": 2,
         "targetRadius": 2.69999933,
-        "targetRadiusJitter": 0.1,
-        "weight": 3
+        "targetRadiusJitter": 0.1
       }
     ],
     "removeClosestOnMiss": false

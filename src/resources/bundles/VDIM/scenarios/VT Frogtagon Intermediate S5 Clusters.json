@@ -1,9 +1,76 @@
 {
-  "description": "",
-  "overrides": {
-    "numTargets": 10
+  "barrelDef": {
+    "directionRadiusPercent": 0.7,
+    "targetPlacementStrategy": {
+      "minDistance": 15,
+      "regions": [
+        {
+          "circle": {
+            "diameter": {
+              "xPercentValue": 0.92
+            },
+            "innerDiameter": {
+              "xPercentValue": 0.7
+            }
+          },
+          "depth": 0,
+          "depthJitter": 0,
+          "info": {
+            "description": ""
+          }
+        }
+      ]
+    }
   },
-  "referenceDef": {
-    "scenarioId": "VDIM VT Frogtagon Intermediate S5"
+  "durationSeconds": 60,
+  "room": {
+    "barrelRoom": {
+      "radius": 85
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 10,
+    "profiles": [
+      {
+        "info": {
+          "description": "Large Fast",
+          "weight": 5
+        },
+        "speed": 58,
+        "speedJitter": 2,
+        "targetRadius": 3.19999957,
+        "targetRadiusJitter": 0.1
+      },
+      {
+        "info": {
+          "description": "Small Slow",
+          "weight": 1
+        },
+        "speed": 31,
+        "speedJitter": 2,
+        "targetRadius": 2.2,
+        "targetRadiusJitter": 0.05
+      },
+      {
+        "info": {
+          "description": "Medium",
+          "weight": 3
+        },
+        "speed": 44,
+        "speedJitter": 2,
+        "targetRadius": 2.69999933,
+        "targetRadiusJitter": 0.1
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

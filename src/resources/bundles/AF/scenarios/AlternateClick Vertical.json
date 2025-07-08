@@ -26,7 +26,9 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.3
@@ -45,7 +47,9 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.3
@@ -69,6 +73,7 @@
     "numTargets": 2,
     "profiles": [
       {
+        "info": {},
         "targetRadius": 1.5
       }
     ],

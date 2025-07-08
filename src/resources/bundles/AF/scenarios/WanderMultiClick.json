@@ -19,8 +19,10 @@
     "numTargets": 5,
     "profiles": [
       {
-        "description": "",
         "healthClicks": 3,
+        "info": {
+          "description": ""
+        },
         "speed": 12,
         "speedJitter": 0,
         "targetRadius": 2.30000019,
@@ -33,7 +35,9 @@
   "wallWanderDef": {
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "turnRate": 300,
         "turnRateJitter": 80,
         "turnTime": 2.19999981,
@@ -46,7 +50,9 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.599999905

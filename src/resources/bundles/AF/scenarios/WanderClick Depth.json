@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -20,7 +19,9 @@
     "numTargets": 6,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 18,
         "speedJitter": 0,
         "targetRadius": 2.30000019,
@@ -32,7 +33,9 @@
   "wallWanderDef": {
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "turnRate": 160,
         "turnRateJitter": 100,
         "turnTime": 2.19999981,
@@ -45,7 +48,9 @@
         {
           "depth": 38,
           "depthJitter": 15,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.599999905

@@ -1572,9 +1572,9 @@ class ScenarioEditorScreen : public UiScreen {
         }
 
         auto& profile = profile_list->at(number);
-        if (profile.description().size() > 0) {
+        if (profile.info().description().size() > 0) {
           ImGui::SameLine();
-          ImGui::TextDisabled(profile.description().c_str());
+          ImGui::TextDisabled(profile.info().description().c_str());
         }
       }
       if (ImGui::Button("Add##Order")) {
@@ -1597,7 +1597,7 @@ class ScenarioEditorScreen : public UiScreen {
     float total_weight = 0;
     for (int i = 0; i < profile_list->size(); ++i) {
       auto* p = &profile_list->at(i);
-      total_weight += p->weight();
+      total_weight += p->info().weight();
     }
 
     for (int i = 0; i < profile_list->size(); ++i) {
@@ -1624,7 +1624,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::OpenPopupOnItemClick(item_menu_id, ImGuiPopupFlags_MouseButtonRight);
       ImGui::SameLine();
       ImGui::SetNextItemWidth(char_x_ * 22);
-      ImGui::InputText("##DescriptionInput", p->mutable_description());
+      ImGui::InputText("##DescriptionInput", p->mutable_info()->mutable_description());
       ImGui::SameLine();
       if (ImGui::Button(kIconMoreVert)) {
         ImGui::OpenPopup(item_menu_id);
@@ -1635,13 +1635,13 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Selection weight");
         ImGui::SameLine();
-        int weight = p->weight();
-        if (!p->has_weight()) {
+        int weight = p->info().weight();
+        if (!p->info().has_weight()) {
           weight = 1;
         }
         ImGui::SetNextItemWidth(char_x_ * 10);
         ImGui::InputInt("##WeightInput", &weight, 1, 5);
-        p->set_weight(weight);
+        p->mutable_info()->set_weight(weight);
 
         if (total_weight > 0) {
           ImGui::SameLine();
@@ -1656,7 +1656,7 @@ class ScenarioEditorScreen : public UiScreen {
                             .set_default(1)
                             .set_is_optional()
                             .set_width(char_x_ * 10),
-                        PROTO_INT_FIELD(T, p, next_profile));
+                        PROTO_INT_FIELD(ProfileInfo, p->mutable_info(), next_profile));
         ImGui::SameLine();
         ImGui::HelpMarker("If this profile is selected, always select the specified profile next.");
 
@@ -1667,15 +1667,15 @@ class ScenarioEditorScreen : public UiScreen {
                             .set_default(2)
                             .set_is_optional()
                             .set_width(char_x_ * 10),
-                        PROTO_INT_FIELD(T, p, min_selection_gap));
+                        PROTO_INT_FIELD(ProfileInfo, p->mutable_info(), min_selection_gap));
         ImGui::SameLine();
         ImGui::HelpMarker(
             "Limit how frequently the profile can be selected. A value of 2 means that 2 other "
             "profiles must be selected before this one can be chosen again.");
 
       } else {
-        p->clear_weight();
-        p->clear_next_profile();
+        p->mutable_info()->clear_weight();
+        p->mutable_info()->clear_next_profile();
       }
 
       draw_profile_fn(&profile_list->at(i));

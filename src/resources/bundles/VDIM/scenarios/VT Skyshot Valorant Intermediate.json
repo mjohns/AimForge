@@ -3,14 +3,15 @@
   "linearDef": {
     "angle": 0,
     "angleJitter": 0,
-    "direction": "IN",
     "targetPlacementStrategy": {
       "minDistance": 50,
       "regions": [
         {
           "depth": 65,
           "depthJitter": 61,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.889999866
@@ -23,7 +24,6 @@
       ]
     }
   },
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -43,7 +43,9 @@
     "numTargets": 2,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 21,
         "speedJitter": 0,
         "targetRadius": 1.39999986,

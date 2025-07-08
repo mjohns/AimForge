@@ -46,6 +46,10 @@
     },
     {
       "numPlays": 1,
+      "scenario": "VDIM Star Clicking Intermediate"
+    },
+    {
+      "numPlays": 1,
       "scenario": "VDIM dev1T Static Click"
     },
     {

@@ -1,7 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -21,7 +20,9 @@
     "numTargets": 2,
     "profiles": [
       {
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "speed": 52,
         "speedJitter": 0,
         "targetRadius": 2.59999967,
@@ -39,7 +40,9 @@
       {
         "angle": 0,
         "angleJitter": 7,
-        "description": "",
+        "info": {
+          "description": ""
+        },
         "maxDistance": {
           "xPercentValue": 0.579999924
         },
@@ -54,7 +57,9 @@
         {
           "depth": 0,
           "depthJitter": 0,
-          "description": "",
+          "info": {
+            "description": ""
+          },
           "rectangle": {
             "xLength": {
               "xPercentValue": 0.799999833

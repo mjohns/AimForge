@@ -40,11 +40,11 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
 
     const T& profile = profiles[i];
 
-    if (profile.has_next_profile()) {
-      context->next_index = profile.next_profile();
+    if (profile.info().has_next_profile()) {
+      context->next_index = profile.info().next_profile();
     }
-    if (profile.has_min_selection_gap()) {
-      context->rate_limited_indices[i] = profile.min_selection_gap();
+    if (profile.info().has_min_selection_gap()) {
+      context->rate_limited_indices[i] = profile.info().min_selection_gap();
     }
     return profile;
   }
@@ -52,7 +52,7 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
   float total_weight = 0;
   for (int i = 0; i < profiles.size(); ++i) {
     if (context->rate_limited_indices[i] <= 0) {
-      total_weight += profiles[i].weight();
+      total_weight += profiles[i].info().weight();
     }
   }
 
@@ -66,13 +66,13 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
     }
     if (!selected_profile.has_value()) {
       const T& profile = profiles[i];
-      used_weight += profile.weight();
+      used_weight += profile.info().weight();
       if (used_weight >= roll) {
-        if (profile.has_next_profile()) {
-          context->next_index = profile.next_profile();
+        if (profile.info().has_next_profile()) {
+          context->next_index = profile.info().next_profile();
         }
-        if (profile.has_min_selection_gap()) {
-          context->rate_limited_indices[i] = profile.min_selection_gap();
+        if (profile.info().has_min_selection_gap()) {
+          context->rate_limited_indices[i] = profile.info().min_selection_gap();
         }
         selected_profile = profile;
       }

@@ -16,6 +16,7 @@
     "numTargets": 1,
     "profiles": [
       {
+        "info": {},
         "pill": {
           "height": 15
         },
@@ -35,19 +36,24 @@
       {
         "angle": 0,
         "angleJitter": 0,
-        "description": "Long",
+        "info": {
+          "description": "Long",
+          "weight": 9
+        },
         "maxDistance": {
           "value": 72.6000061
         },
         "minDistance": {
           "value": 67.6
-        },
-        "weight": 9
+        }
       },
       {
         "angle": 0,
         "angleJitter": 0,
-        "description": "Teleport",
+        "info": {
+          "description": "Teleport",
+          "weight": 2
+        },
         "maxDistance": {
           "value": 74
         },
@@ -56,8 +62,7 @@
         },
         "pauseAtEndChance": 1,
         "pauseSeconds": 0.700000048,
-        "pauseSecondsJitter": 0,
-        "weight": 2
+        "pauseSecondsJitter": 0
       }
     ],
     "width": {
