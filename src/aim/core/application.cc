@@ -27,31 +27,31 @@ const char* kImguiIniFile = "imgui.ini";
 
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : mgr->scenarios()) {
-      /*
-    ScenarioDef def = item.def;
-    if (def.has_wall_strafe_def()) {
-      auto* d = def.mutable_wall_strafe_def();
-      Bounds* b = d->mutable_bounds();
-      if (d->has_height()) {
-        *b->mutable_height() = d->height();
-      }
-      if (d->has_width()) {
-        *b->mutable_width() = d->width();
-      }
+    /*
+  ScenarioDef def = item.def;
+  if (def.has_wall_strafe_def()) {
+    auto* d = def.mutable_wall_strafe_def();
+    Bounds* b = d->mutable_bounds();
+    if (d->has_height()) {
+      *b->mutable_height() = d->height();
     }
-    if (def.has_timed_direction_def()) {
-      auto* d = def.mutable_timed_direction_def();
-      Bounds* b = d->mutable_bounds();
-      if (d->has_height()) {
-        *b->mutable_height() = d->height();
-      }
-      if (d->has_width()) {
-        *b->mutable_width() = d->width();
-      }
+    if (d->has_width()) {
+      *b->mutable_width() = d->width();
     }
+  }
+  if (def.has_timed_direction_def()) {
+    auto* d = def.mutable_timed_direction_def();
+    Bounds* b = d->mutable_bounds();
+    if (d->has_height()) {
+      *b->mutable_height() = d->height();
+    }
+    if (d->has_width()) {
+      *b->mutable_width() = d->width();
+    }
+  }
 
-    mgr->SaveScenario(item.name, def);
-    */
+  mgr->SaveScenario(item.name, def);
+  */
   }
 }
 

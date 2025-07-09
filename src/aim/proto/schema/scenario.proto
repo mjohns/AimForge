@@ -353,6 +353,7 @@ message BounceProfile {
 
   float delay_seconds = 4;
   float delay_seconds_jitter = 5;
+  bool only_delay_on_floor = 6;
 
   float speed_multiplier = 7;
   float acceleration_multiplier = 8;
@@ -373,12 +374,14 @@ message BounceScenarioDef {
   repeated int32 forward_back_profile_order = 8;
 
   // Scales the times in all of the profiles. Defaults to 1.
-  float time_scale_multiplier = 11;
+  float time_scale_multiplier = 9;
 
-  float acceleration = 12;
+  float acceleration = 10;
 
-  InitialDirection left_right_initial_direction = 13;
-  InitialDirection forward_back_initial_direction = 15;
+  InitialDirection left_right_initial_direction = 11;
+  InitialDirection forward_back_initial_direction = 12;
+
+  RegionLength floor_height = 13;
 }
 
 message WallArcScenarioDef {

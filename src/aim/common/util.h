@@ -179,4 +179,17 @@ static void EnsurePositive(float* val) {
   }
 }
 
+static float GetStopDistance(float speed, float acceleration) {
+  return (speed * speed) / (2 * acceleration);
+}
+
+static float GetStopTime(float speed, float acceleration) {
+  return speed / acceleration;
+}
+
+static float GetStartSpeedForStopDistance(float stop_distance, float acceleration) {
+  float speed_squared = 2.0f * acceleration * stop_distance;
+  return std::sqrt(speed_squared);
+}
+
 }  // namespace aim

@@ -22,6 +22,12 @@
 namespace aim {
 namespace {
 
+struct BoundsDimensions {
+  bool draw_width = true;
+  bool draw_height = true;
+  bool draw_depth = true;
+};
+
 void Line() {
   ImGui::Spacing();
   ImGui::Separator();
@@ -84,12 +90,13 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kCenteringDef, "Centering"},
     {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
     {ScenarioDef::kTimedDirectionDef, "Timed Direction"},
-    {ScenarioDef::kBarrelDef, "Barrel"},
+    {ScenarioDef::kBounceDef, "Bounce"},
     {ScenarioDef::kLinearDef, "Linear"},
-    {ScenarioDef::kWallArcDef, "Wall Arc"},
+    {ScenarioDef::kBarrelDef, "Barrel"},
     {ScenarioDef::kWallWanderDef, "Wall Wander"},
     {ScenarioDef::kWaypointDef, "Waypoint"},
     {ScenarioDef::kCircleDef, "Circle"},
+    {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kSineDef, "Sine"},
     {ScenarioDef::kReferenceDef, "Reference"},
 };
@@ -141,6 +148,9 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   }
   if (def.has_timed_direction_def()) {
     return def.timed_direction_def().target_placement_strategy();
+  }
+  if (def.has_bounce_def()) {
+    return def.bounce_def().target_placement_strategy();
   }
   return {};
 }
@@ -458,6 +468,9 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kTimedDirectionDef) {
       DrawTimedDirectionEditor();
     }
+    if (scenario_type == ScenarioDef::kBounceDef) {
+      DrawBounceEditor();
+    }
     if (scenario_type == ScenarioDef::kLinearDef) {
       DrawLinearEditor();
     }
@@ -499,6 +512,12 @@ class ScenarioEditorScreen : public UiScreen {
       auto* timed_direction = def_.mutable_timed_direction_def();
       if (target_placement.regions_size() > 0) {
         *timed_direction->mutable_target_placement_strategy() = target_placement;
+      }
+    }
+    if (scenario_type == ScenarioDef::kBounceDef) {
+      auto* d = def_.mutable_bounce_def();
+      if (target_placement.regions_size() > 0) {
+        *d->mutable_target_placement_strategy() = target_placement;
       }
     }
     if (scenario_type == ScenarioDef::kLinearDef) {
@@ -1002,6 +1021,169 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SimpleTypeDropdown(
         "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 18);
     d.set_up_down_initial_direction(up_down_direction);
+
+    if (d.bounds().has_depth()) {
+      Line();
+      ImGui::Text("Forward/back profiles");
+      ImGui::Indent();
+      DrawProfileList("ForwardBackProfileList",
+                      "Profile",
+                      d.mutable_forward_back_profile_order(),
+                      d.mutable_forward_back_profiles(),
+                      std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+      ImGui::Unindent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Initial forward/back direction");
+      ImGui::SameLine();
+      InitialDirection forward_back_direction = d.forward_back_initial_direction();
+      ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
+                                &forward_back_direction,
+                                kForwardBackDirections,
+                                char_x_ * 18);
+      d.set_forward_back_initial_direction(forward_back_direction);
+    } else {
+      d.clear_forward_back_profiles();
+      d.clear_forward_back_profile_order();
+      d.clear_forward_back_initial_direction();
+    }
+
+    Line();
+
+    bool use_target_placement = d.has_target_placement_strategy();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Set initial target location");
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
+    if (use_target_placement) {
+      ImGui::Indent();
+      DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
+      ImGui::Unindent();
+    } else {
+      d.clear_target_placement_strategy();
+    }
+  }
+
+  void DrawBounceProfile(BounceProfile* p) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Bounce height");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("BounceHeight", DefaultDim::DIM_Y, p->mutable_height());
+
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams("Delay")
+                                  .set_label("Bounce delay")
+                                  .set_step(0.05, 0.2)
+                                  .set_zero_is_unset()
+                                  .set_min(0)
+                                  .set_precision(2)
+                                  .set_default(0)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(BounceProfile, p, delay_seconds));
+    ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor")
+                         .set_label("Only delay on floor")
+                         .set_false_is_unset(),
+                     PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
+
+    ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
+                          .set_label("Speed multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.2)
+                          .set_min(0)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(BounceProfile, p, speed_multiplier));
+    ImGui::InputFloat(ImGui::InputFloatParams("AccelerationMultiplier")
+                          .set_label("Acceleration multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.2)
+                          .set_min(0)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(BounceProfile, p, acceleration_multiplier));
+  }
+
+  void DrawBounceEditor() {
+    ImGui::IdGuard cid("BounceEditor");
+    BounceScenarioDef& d = *def_.mutable_bounce_def();
+    BoundsDimensions dimensions;
+    dimensions.draw_height = false;
+    DrawBoundsEditor("##Bounds", d.mutable_bounds(), dimensions);
+
+    Line();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Floor height");
+    ImGui::SameLine();
+    bool use_floor_height = d.has_floor_height();
+    ImGui::SameLine();
+    ImGui::Checkbox("##FloorHeight", &use_floor_height);
+    if (use_floor_height) {
+      ImGui::SameLine();
+      DrawRegionLengthEditor("FloorHeight", DefaultDim::DIM_Y, d.mutable_floor_height());
+    } else {
+      d.clear_floor_height();
+    }
+
+    if (d.bounce_profiles_size() == 0) {
+      d.add_bounce_profiles();
+    }
+    ImGui::Text("Bounce profiles");
+    ImGui::Indent();
+    DrawProfileList("BounceProfileList",
+                    "Profile",
+                    d.mutable_bounce_profile_order(),
+                    d.mutable_bounce_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawBounceProfile, this));
+    ImGui::Unindent();
+
+    Line();
+
+    ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
+                          .set_label("Time scale multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.1)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(BounceScenarioDef, &d, time_scale_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Scale all the times in the profiles by the given multiplier. To reduce the times by half "
+        "use 0.5");
+
+    ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
+                          .set_label("Acceleration")
+                          .set_is_optional()
+                          .set_step(5, 50)
+                          .set_min(1)
+                          .set_precision(0)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(BounceScenarioDef, &d, acceleration));
+
+    Line();
+
+    ImGui::Text("Left/right profiles");
+    ImGui::Indent();
+    DrawProfileList("LeftRightProfileList",
+                    "Profile",
+                    d.mutable_left_right_profile_order(),
+                    d.mutable_left_right_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+    ImGui::Unindent();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Initial left/right direction");
+    ImGui::SameLine();
+    InitialDirection left_right_direction = d.left_right_initial_direction();
+    ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
+                              &left_right_direction,
+                              kLeftRightDirections,
+                              char_x_ * 18);
+    d.set_left_right_initial_direction(left_right_direction);
 
     if (d.bounds().has_depth()) {
       Line();
@@ -1633,54 +1815,60 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawBoundsEditor(const std::string& id, Bounds* bounds) {
+  void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions dimensions = {}) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Bounds");
     ImGui::Indent();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Width");
-    ImGui::SameLine();
-    bool use_width = bounds->has_width();
-    ImGui::Checkbox("##WidthCheck", &use_width);
-    if (use_width) {
-      if (!bounds->has_width()) {
-        bounds->mutable_width()->set_x_percent_value(0.9);
-      }
+    if (dimensions.draw_width) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Width");
       ImGui::SameLine();
-      DrawRegionLengthEditor("Width", DefaultDim::DIM_X, bounds->mutable_width());
-    } else {
-      bounds->clear_width();
+      bool use_width = bounds->has_width();
+      ImGui::Checkbox("##WidthCheck", &use_width);
+      if (use_width) {
+        if (!bounds->has_width()) {
+          bounds->mutable_width()->set_x_percent_value(0.9);
+        }
+        ImGui::SameLine();
+        DrawRegionLengthEditor("Width", DefaultDim::DIM_X, bounds->mutable_width());
+      } else {
+        bounds->clear_width();
+      }
     }
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Height");
-    ImGui::SameLine();
-    bool use_height = bounds->has_height();
-    ImGui::Checkbox("##HeightCheck", &use_height);
-    if (use_height) {
-      if (!bounds->has_height()) {
-        bounds->mutable_height()->set_y_percent_value(0.9);
-      }
+    if (dimensions.draw_height) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Height");
       ImGui::SameLine();
-      DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, bounds->mutable_height());
-    } else {
-      bounds->clear_height();
+      bool use_height = bounds->has_height();
+      ImGui::Checkbox("##HeightCheck", &use_height);
+      if (use_height) {
+        if (!bounds->has_height()) {
+          bounds->mutable_height()->set_y_percent_value(0.9);
+        }
+        ImGui::SameLine();
+        DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, bounds->mutable_height());
+      } else {
+        bounds->clear_height();
+      }
     }
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Depth");
-    ImGui::SameLine();
-    bool use_depth = bounds->has_depth();
-    ImGui::Checkbox("##DepthCheck", &use_depth);
-    if (use_depth) {
-      if (!bounds->has_depth()) {
-        bounds->mutable_depth()->set_depth_percent_value(0.5);
-      }
+    if (dimensions.draw_depth) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Depth");
       ImGui::SameLine();
-      DrawRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, bounds->mutable_depth());
-    } else {
-      bounds->clear_depth();
+      bool use_depth = bounds->has_depth();
+      ImGui::Checkbox("##DepthCheck", &use_depth);
+      if (use_depth) {
+        if (!bounds->has_depth()) {
+          bounds->mutable_depth()->set_depth_percent_value(0.5);
+        }
+        ImGui::SameLine();
+        DrawRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, bounds->mutable_depth());
+      } else {
+        bounds->clear_depth();
+      }
     }
     ImGui::Unindent();
   }

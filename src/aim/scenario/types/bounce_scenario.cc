@@ -14,12 +14,182 @@
 namespace aim {
 namespace {
 
+class BounceController {
+ public:
+  BounceController(float min_y, float max_y, float unscaled_acceleration)
+      : min_y_(min_y), max_y_(max_y), unscaled_acceleration_(unscaled_acceleration) {}
+
+  float GetUpdatedHeight(Target& t,
+                         float y,
+                         const Room& room,
+                         const Wall& wall,
+                         const BounceScenarioDef& def,
+                         Random& rand,
+                         float now_seconds,
+                         float delta_seconds) {
+    if (!initialized_) {
+      initialized_ = true;
+      unscaled_max_speed_ = t.speed;
+      StartNewBounce(y, def, wall, rand, now_seconds);
+    }
+
+    float actual_min = min_y_ + t.radius;
+
+    if (wait_until_time_ > 0) {
+      bool can_delay = true;
+      if (only_delay_on_floor_) {
+        bool is_on_floor = y <= (actual_min + 0.2);
+        can_delay = is_on_floor;
+      }
+
+      if (can_delay && wait_until_time_ > now_seconds) {
+        return y;
+      }
+      wait_until_time_ = -1;
+    }
+
+    if (!going_up_ && y <= actual_min) {
+      StartNewBounce(y, def, wall, rand, now_seconds);
+      return actual_min;
+    }
+
+    float actual_max = max_y_ - t.radius;
+    float target_y = min_y_ + height_;
+    if (target_y > actual_max) {
+      target_y = actual_max;
+    }
+    if (going_up_) {
+      bool too_high = y >= target_y;
+      bool stopped = current_speed_ <= 0.001 && is_stopping_;
+      if (too_high || stopped) {
+        going_up_ = false;
+        is_stopping_ = false;
+        if (acceleration_ > 0) {
+          current_speed_ = 0;
+        }
+        return y;
+      }
+    }
+
+    if (going_up_) {
+      if (!is_stopping_ && acceleration_ > 0) {
+        // See if we should start stopping.
+        float stop_distance = GetStopDistance(current_speed_, acceleration_);
+        bool should_stop = y + stop_distance > target_y;
+        if (should_stop) {
+          is_stopping_ = true;
+        }
+      }
+    }
+
+    if (acceleration_ > 0) {
+      if (is_stopping_) {
+        current_speed_ -= delta_seconds * acceleration_;
+        if (current_speed_ < 0) {
+          current_speed_ = 0;
+        }
+      } else {
+        current_speed_ += delta_seconds * acceleration_;
+        if (current_speed_ > max_speed_) {
+          current_speed_ = max_speed_;
+        }
+      }
+    } else {
+      current_speed_ = max_speed_;
+    }
+
+    float new_y = y;
+    if (going_up_) {
+      new_y += delta_seconds * current_speed_;
+    } else {
+      new_y -= delta_seconds * current_speed_;
+    }
+
+    return new_y;
+  }
+
+ private:
+  void StartNewBounce(
+      float y, const BounceScenarioDef& def, const Wall& wall, Random& rand, float now_seconds) {
+    BounceProfile profile = GetNextProfile(def, rand);
+    going_up_ = true;
+    wait_until_time_ = -1;
+    only_delay_on_floor_ = false;
+
+    float delay = rand.GetJittered(profile.delay_seconds(), profile.delay_seconds_jitter());
+    if (delay > 0) {
+      wait_until_time_ = now_seconds + delay;
+      only_delay_on_floor_ = profile.only_delay_on_floor();
+    }
+
+    height_ = rand.GetJittered(wall.GetRegionLength(profile.height()),
+                               wall.GetRegionLength(profile.height_jitter()));
+
+    max_speed_ = unscaled_max_speed_;
+    if (profile.has_speed_multiplier()) {
+      max_speed_ *= profile.speed_multiplier();
+    }
+
+    acceleration_ = unscaled_acceleration_;
+    if (profile.has_acceleration_multiplier()) {
+      acceleration_ *= profile.acceleration_multiplier();
+    }
+
+    float target_y = min_y_ + height_;
+    if (y >= target_y) {
+      going_up_ = false;
+      current_speed_ = 0;
+      return;
+    }
+
+    current_speed_ =
+        std::min<float>(max_speed_, GetStartSpeedForStopDistance(target_y - y, acceleration_));
+  }
+
+  BounceProfile GetNextProfile(const BounceScenarioDef& def, Random& rand) {
+    auto p =
+        SelectProfile(def.bounce_profile_order(), def.bounce_profiles(), &selection_context_, rand);
+    if (!p.has_value()) {
+      BounceProfile profile;
+      profile.set_delay_seconds(1000);
+      return profile;
+    }
+    return *p;
+  }
+
+  float min_y_;
+  float max_y_;
+  bool initialized_ = false;
+
+  float height_;
+  bool going_up_ = true;
+  bool is_stopping_ = false;
+
+  float current_speed_;
+  float acceleration_;
+  float max_speed_;
+
+  float wait_until_time_ = -1;
+  bool only_delay_on_floor_ = false;
+
+  float unscaled_max_speed_;
+  float unscaled_acceleration_;
+
+  ProfileSelectionContext selection_context_{};
+};
+
 class MovementControllerImpl : public MovementController {
  public:
   MovementControllerImpl(float speed, Wall wall, ScenarioDef def, Application& app)
-      : def_(def), app_(app) {
+      : def_(def), app_(app), wall_(wall) {
     auto d = def_.bounce_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
+    float min_y = -1 * (wall.height / 2.0);
+    if (d.has_floor_height()) {
+      min_y += wall.GetRegionLength(d.floor_height());
+    }
+    bounce_controller_ =
+        std::make_unique<BounceController>(min_y, wall.height / 2.0, d.acceleration());
 
     DirectionParams params;
     if (d.has_acceleration()) {
@@ -41,16 +211,6 @@ class MovementControllerImpl : public MovementController {
   }
 
  protected:
-  bool GetInitialGoingLeft(InitialDirection dir) {
-    if (dir == DIRECTION_POSITIVE) {
-      return false;
-    } else if (dir == DIRECTION_NEGATIVE) {
-      return true;
-    } else {
-      return app_.rand().FlipCoin();
-    }
-  }
-
   void UpdatePosition(Target& t, const Room& room, float delta_seconds) override {
     if (!t.wall_position.has_value()) {
       t.wall_position = glm::vec2(0.0f);
@@ -81,18 +241,24 @@ class MovementControllerImpl : public MovementController {
           delta_seconds);
     }
 
+    if (bounce_controller_) {
+      float updated_y = bounce_controller_->GetUpdatedHeight(
+          t, pos.y, room, wall_, def_.bounce_def(), app_.rand(), now_seconds, delta_seconds);
+      pos.y = updated_y;
+    }
+
     t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room, t.wall_depth);
   }
 
  private:
-  bool initialized_ = false;
-
+  Wall wall_;
   ScenarioDef def_;
   Application& app_;
 
   std::optional<SingleDirectionController> left_right_controller_;
   std::optional<SingleDirectionController> up_down_controller_;
   std::optional<SingleDirectionController> forward_back_controller_;
+  std::unique_ptr<BounceController> bounce_controller_;
 };
 
 class BounceScenario : public BaseScenario {

@@ -6127,6 +6127,7 @@ class BounceProfile final : public ::google::protobuf::Message
     kHeightJitterFieldNumber = 3,
     kDelaySecondsFieldNumber = 4,
     kDelaySecondsJitterFieldNumber = 5,
+    kOnlyDelayOnFloorFieldNumber = 6,
     kSpeedMultiplierFieldNumber = 7,
     kAccelerationMultiplierFieldNumber = 8,
   };
@@ -6197,6 +6198,17 @@ class BounceProfile final : public ::google::protobuf::Message
   void _internal_set_delay_seconds_jitter(float value);
 
   public:
+  // bool only_delay_on_floor = 6;
+  bool has_only_delay_on_floor() const;
+  void clear_only_delay_on_floor() ;
+  bool only_delay_on_floor() const;
+  void set_only_delay_on_floor(bool value);
+
+  private:
+  bool _internal_only_delay_on_floor() const;
+  void _internal_set_only_delay_on_floor(bool value);
+
+  public:
   // float speed_multiplier = 7;
   bool has_speed_multiplier() const;
   void clear_speed_multiplier() ;
@@ -6224,7 +6236,7 @@ class BounceProfile final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 7, 3,
+      3, 8, 3,
       0, 2>
       _table_;
 
@@ -6249,6 +6261,7 @@ class BounceProfile final : public ::google::protobuf::Message
     ::aim::RegionLength* height_jitter_;
     float delay_seconds_;
     float delay_seconds_jitter_;
+    bool only_delay_on_floor_;
     float speed_multiplier_;
     float acceleration_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -9098,10 +9111,11 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     kForwardBackProfileOrderFieldNumber = 8,
     kBoundsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
-    kTimeScaleMultiplierFieldNumber = 11,
-    kAccelerationFieldNumber = 12,
-    kLeftRightInitialDirectionFieldNumber = 13,
-    kForwardBackInitialDirectionFieldNumber = 15,
+    kFloorHeightFieldNumber = 13,
+    kTimeScaleMultiplierFieldNumber = 9,
+    kAccelerationFieldNumber = 10,
+    kLeftRightInitialDirectionFieldNumber = 11,
+    kForwardBackInitialDirectionFieldNumber = 12,
   };
   // repeated .aim.BounceProfile bounce_profiles = 3;
   int bounce_profiles_size() const;
@@ -9238,7 +9252,22 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
 
   public:
-  // float time_scale_multiplier = 11;
+  // .aim.RegionLength floor_height = 13;
+  bool has_floor_height() const;
+  void clear_floor_height() ;
+  const ::aim::RegionLength& floor_height() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_floor_height();
+  ::aim::RegionLength* mutable_floor_height();
+  void set_allocated_floor_height(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_floor_height(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_floor_height();
+
+  private:
+  const ::aim::RegionLength& _internal_floor_height() const;
+  ::aim::RegionLength* _internal_mutable_floor_height();
+
+  public:
+  // float time_scale_multiplier = 9;
   bool has_time_scale_multiplier() const;
   void clear_time_scale_multiplier() ;
   float time_scale_multiplier() const;
@@ -9249,7 +9278,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_time_scale_multiplier(float value);
 
   public:
-  // float acceleration = 12;
+  // float acceleration = 10;
   bool has_acceleration() const;
   void clear_acceleration() ;
   float acceleration() const;
@@ -9260,7 +9289,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_acceleration(float value);
 
   public:
-  // .aim.InitialDirection left_right_initial_direction = 13;
+  // .aim.InitialDirection left_right_initial_direction = 11;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
   ::aim::InitialDirection left_right_initial_direction() const;
@@ -9271,7 +9300,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_left_right_initial_direction(::aim::InitialDirection value);
 
   public:
-  // .aim.InitialDirection forward_back_initial_direction = 15;
+  // .aim.InitialDirection forward_back_initial_direction = 12;
   bool has_forward_back_initial_direction() const;
   void clear_forward_back_initial_direction() ;
   ::aim::InitialDirection forward_back_initial_direction() const;
@@ -9287,7 +9316,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 12, 5,
+      4, 13, 6,
       0, 2>
       _table_;
 
@@ -9318,6 +9347,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
     ::aim::Bounds* bounds_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
+    ::aim::RegionLength* floor_height_;
     float time_scale_multiplier_;
     float acceleration_;
     int left_right_initial_direction_;
@@ -19020,15 +19050,43 @@ inline void BounceProfile::_internal_set_delay_seconds_jitter(float value) {
   _impl_.delay_seconds_jitter_ = value;
 }
 
+// bool only_delay_on_floor = 6;
+inline bool BounceProfile::has_only_delay_on_floor() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void BounceProfile::clear_only_delay_on_floor() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.only_delay_on_floor_ = false;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline bool BounceProfile::only_delay_on_floor() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.only_delay_on_floor)
+  return _internal_only_delay_on_floor();
+}
+inline void BounceProfile::set_only_delay_on_floor(bool value) {
+  _internal_set_only_delay_on_floor(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.only_delay_on_floor)
+}
+inline bool BounceProfile::_internal_only_delay_on_floor() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.only_delay_on_floor_;
+}
+inline void BounceProfile::_internal_set_only_delay_on_floor(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.only_delay_on_floor_ = value;
+}
+
 // float speed_multiplier = 7;
 inline bool BounceProfile::has_speed_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void BounceProfile::clear_speed_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float BounceProfile::speed_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.BounceProfile.speed_multiplier)
@@ -19036,7 +19094,7 @@ inline float BounceProfile::speed_multiplier() const {
 }
 inline void BounceProfile::set_speed_multiplier(float value) {
   _internal_set_speed_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.BounceProfile.speed_multiplier)
 }
 inline float BounceProfile::_internal_speed_multiplier() const {
@@ -19050,13 +19108,13 @@ inline void BounceProfile::_internal_set_speed_multiplier(float value) {
 
 // float acceleration_multiplier = 8;
 inline bool BounceProfile::has_acceleration_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void BounceProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float BounceProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.BounceProfile.acceleration_multiplier)
@@ -19064,7 +19122,7 @@ inline float BounceProfile::acceleration_multiplier() const {
 }
 inline void BounceProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.BounceProfile.acceleration_multiplier)
 }
 inline float BounceProfile::_internal_acceleration_multiplier() const {
@@ -19554,15 +19612,15 @@ inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::_interna
   return &_impl_.forward_back_profile_order_;
 }
 
-// float time_scale_multiplier = 11;
+// float time_scale_multiplier = 9;
 inline bool BounceScenarioDef::has_time_scale_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void BounceScenarioDef::clear_time_scale_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.time_scale_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float BounceScenarioDef::time_scale_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.time_scale_multiplier)
@@ -19570,7 +19628,7 @@ inline float BounceScenarioDef::time_scale_multiplier() const {
 }
 inline void BounceScenarioDef::set_time_scale_multiplier(float value) {
   _internal_set_time_scale_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.time_scale_multiplier)
 }
 inline float BounceScenarioDef::_internal_time_scale_multiplier() const {
@@ -19582,15 +19640,15 @@ inline void BounceScenarioDef::_internal_set_time_scale_multiplier(float value) 
   _impl_.time_scale_multiplier_ = value;
 }
 
-// float acceleration = 12;
+// float acceleration = 10;
 inline bool BounceScenarioDef::has_acceleration() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void BounceScenarioDef::clear_acceleration() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float BounceScenarioDef::acceleration() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.acceleration)
@@ -19598,7 +19656,7 @@ inline float BounceScenarioDef::acceleration() const {
 }
 inline void BounceScenarioDef::set_acceleration(float value) {
   _internal_set_acceleration(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.acceleration)
 }
 inline float BounceScenarioDef::_internal_acceleration() const {
@@ -19610,15 +19668,15 @@ inline void BounceScenarioDef::_internal_set_acceleration(float value) {
   _impl_.acceleration_ = value;
 }
 
-// .aim.InitialDirection left_right_initial_direction = 13;
+// .aim.InitialDirection left_right_initial_direction = 11;
 inline bool BounceScenarioDef::has_left_right_initial_direction() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void BounceScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline ::aim::InitialDirection BounceScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
@@ -19626,7 +19684,7 @@ inline ::aim::InitialDirection BounceScenarioDef::left_right_initial_direction()
 }
 inline void BounceScenarioDef::set_left_right_initial_direction(::aim::InitialDirection value) {
   _internal_set_left_right_initial_direction(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
 }
 inline ::aim::InitialDirection BounceScenarioDef::_internal_left_right_initial_direction() const {
@@ -19638,15 +19696,15 @@ inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim:
   _impl_.left_right_initial_direction_ = value;
 }
 
-// .aim.InitialDirection forward_back_initial_direction = 15;
+// .aim.InitialDirection forward_back_initial_direction = 12;
 inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void BounceScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline ::aim::InitialDirection BounceScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
@@ -19654,7 +19712,7 @@ inline ::aim::InitialDirection BounceScenarioDef::forward_back_initial_direction
 }
 inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::InitialDirection value) {
   _internal_set_forward_back_initial_direction(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::InitialDirection BounceScenarioDef::_internal_forward_back_initial_direction() const {
@@ -19664,6 +19722,102 @@ inline ::aim::InitialDirection BounceScenarioDef::_internal_forward_back_initial
 inline void BounceScenarioDef::_internal_set_forward_back_initial_direction(::aim::InitialDirection value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = value;
+}
+
+// .aim.RegionLength floor_height = 13;
+inline bool BounceScenarioDef::has_floor_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.floor_height_ != nullptr);
+  return value;
+}
+inline void BounceScenarioDef::clear_floor_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.floor_height_ != nullptr) _impl_.floor_height_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::RegionLength& BounceScenarioDef::_internal_floor_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.floor_height_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& BounceScenarioDef::floor_height() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.floor_height)
+  return _internal_floor_height();
+}
+inline void BounceScenarioDef::unsafe_arena_set_allocated_floor_height(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.floor_height_);
+  }
+  _impl_.floor_height_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.floor_height)
+}
+inline ::aim::RegionLength* BounceScenarioDef::release_floor_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.floor_height_;
+  _impl_.floor_height_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* BounceScenarioDef::unsafe_arena_release_floor_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.floor_height)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.floor_height_;
+  _impl_.floor_height_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* BounceScenarioDef::_internal_mutable_floor_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.floor_height_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.floor_height_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.floor_height_;
+}
+inline ::aim::RegionLength* BounceScenarioDef::mutable_floor_height() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_floor_height();
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.floor_height)
+  return _msg;
+}
+inline void BounceScenarioDef::set_allocated_floor_height(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.floor_height_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.floor_height_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.floor_height)
 }
 
 // -------------------------------------------------------------------

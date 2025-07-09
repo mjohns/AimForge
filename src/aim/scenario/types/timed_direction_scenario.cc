@@ -46,15 +46,6 @@ class MovementControllerImpl : public MovementController {
   }
 
  protected:
-  bool GetInitialGoingLeft(InitialDirection dir) {
-    if (dir == DIRECTION_POSITIVE) {
-      return false;
-    } else if (dir == DIRECTION_NEGATIVE) {
-      return true;
-    } else {
-      return app_.rand().FlipCoin();
-    }
-  }
   void UpdatePosition(Target& t, const Room& room, float delta_seconds) override {
     if (!t.wall_position.has_value()) {
       t.wall_position = glm::vec2(0.0f);
@@ -100,8 +91,6 @@ class MovementControllerImpl : public MovementController {
   }
 
  private:
-  bool initialized_ = false;
-
   ScenarioDef def_;
   Application& app_;
 

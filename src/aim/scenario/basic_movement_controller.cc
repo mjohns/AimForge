@@ -1,5 +1,6 @@
 #include "basic_movement_controller.h"
 
+#include "aim/common/util.h"
 #include "aim/core/target.h"
 #include "glm/vec2.hpp"
 
@@ -93,13 +94,13 @@ float SingleDirectionController::GetUpdatedPosition(
 
   if (acceleration > 0) {
     // Adjust current speed for acceleration.
-    float stop_distance = (current_speed_ * current_speed_) / (2 * acceleration);
+    float stop_distance = GetStopDistance(current_speed_, acceleration);
     bool stop_left = going_left_ && (current_position - stop_distance) <= min_;
     bool stop_right = !going_left_ && (current_position + stop_distance) >= max_;
     if (stop_left || stop_right) {
       is_stopping_ = true;
     }
-    float time_to_stop = current_speed_ / acceleration;
+    float time_to_stop = GetStopTime(current_speed_, acceleration);
     if (now_seconds + time_to_stop >= next_direction_change_time_) {
       is_stopping_ = true;
     }
