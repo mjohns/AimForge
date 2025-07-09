@@ -18,7 +18,7 @@ class MovementControllerImpl : public MovementController {
  public:
   MovementControllerImpl(float speed, Wall wall, ScenarioDef def, Application& app)
       : def_(def), app_(app) {
-    auto d = def_.timed_direction_def();
+    auto d = def_.bounce_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
 
     if (d.left_right_profiles_size() > 0) {
@@ -27,14 +27,6 @@ class MovementControllerImpl : public MovementController {
       ctrl.min = bounds.min_x;
       ctrl.max = bounds.max_x;
       left_right_controller_ = ctrl;
-    }
-
-    if (d.up_down_profiles_size() > 0) {
-      SingleDirectionController ctrl;
-      ctrl.going_left = GetInitialGoingLeft(d.up_down_initial_direction());
-      ctrl.min = bounds.min_y;
-      ctrl.max = bounds.max_y;
-      up_down_controller_ = ctrl;
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
@@ -56,6 +48,7 @@ class MovementControllerImpl : public MovementController {
       return app_.rand().FlipCoin();
     }
   }
+
   void UpdatePosition(Target& t, const Room& room, float delta_seconds) override {
     if (!t.wall_position.has_value()) {
       t.wall_position = glm::vec2(0.0f);
@@ -114,13 +107,13 @@ class MovementControllerImpl : public MovementController {
   std::optional<SingleDirectionController> forward_back_controller_;
 };
 
-class TimedDirectionScenario : public BaseScenario {
+class BounceScenario : public BaseScenario {
  public:
-  explicit TimedDirectionScenario(const CreateScenarioParams& params, Application* app)
+  explicit BounceScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
-    if (def_.timed_direction_def().has_target_placement_strategy()) {
+    if (def_.bounce_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
-          wall_, def_.timed_direction_def().target_placement_strategy(), &target_manager_, app);
+          wall_, def_.bounce_def().target_placement_strategy(), &target_manager_, app);
     }
   }
 
@@ -134,7 +127,7 @@ class TimedDirectionScenario : public BaseScenario {
     if (wall_target_placer_) {
       pos = wall_target_placer_->GetNextPosition();
     } else {
-      float depth = wall_.GetWallBounds(def_.timed_direction_def().bounds()).max_depth;
+      float depth = wall_.GetWallBounds(def_.bounce_def().bounds()).max_depth;
       if (depth > 0) {
         // Start in the middle of the available depth.
         pos.z = depth / 2.0;
@@ -156,9 +149,9 @@ class TimedDirectionScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateTimedDirectionScenario(const CreateScenarioParams& params,
+std::unique_ptr<Scenario> CreateBounceScenario(const CreateScenarioParams& params,
                                                        Application* app) {
-  return std::make_unique<TimedDirectionScenario>(params, app);
+  return std::make_unique<BounceScenario>(params, app);
 }
 
 }  // namespace aim

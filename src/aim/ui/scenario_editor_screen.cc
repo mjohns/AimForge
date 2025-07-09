@@ -16,6 +16,7 @@
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/scenario_factory.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {

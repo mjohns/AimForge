@@ -23,7 +23,6 @@
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/scenario_timer.h"
-#include "aim/scenario/types/scenario_types.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/stats_screen.h"
@@ -631,39 +630,6 @@ void Scenario::RunAfterSeconds(float delay_seconds, std::function<void()>&& fn) 
   DelayedTask& task = delayed_tasks_.back();
   task.fn = std::move(fn);
   task.run_time_seconds = timer_.GetElapsedSeconds() + delay_seconds;
-}
-
-std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params,
-                                         Application* app) {
-  CreateScenarioParams params = unevaluated_params;
-  params.def = ApplyScenarioOverrides(params.def);
-  switch (params.def.type_case()) {
-    case ScenarioDef::kStaticDef:
-      return CreateStaticScenario(params, app);
-    case ScenarioDef::kCenteringDef:
-      return CreateCenteringScenario(params, app);
-    case ScenarioDef::kBarrelDef:
-      return CreateBarrelScenario(params, app);
-    case ScenarioDef::kLinearDef:
-      return CreateLinearScenario(params, app);
-    case ScenarioDef::kWallStrafeDef:
-      return CreateWallStrafeScenario(params, app);
-    case ScenarioDef::kWallArcDef:
-      return CreateWallArcScenario(params, app);
-    case ScenarioDef::kWallWanderDef:
-      return CreateWallWanderScenario(params, app);
-    case ScenarioDef::kCircleDef:
-      return CreateCircleScenario(params, app);
-    case ScenarioDef::kSineDef:
-      return CreateSineScenario(params, app);
-    case ScenarioDef::kWaypointDef:
-      return CreateWaypointScenario(params, app);
-    case ScenarioDef::kTimedDirectionDef:
-      return CreateTimedDirectionScenario(params, app);
-    default:
-      break;
-  }
-  return {};
 }
 
 }  // namespace aim

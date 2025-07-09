@@ -12,6 +12,7 @@
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
+#include "aim/scenario/scenario_factory.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_editor_screen.h"

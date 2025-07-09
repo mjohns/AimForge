@@ -8,6 +8,8 @@
 
 namespace aim {
 
+std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);
+
 std::unique_ptr<Scenario> CreateCenteringScenario(const CreateScenarioParams& params,
                                                   Application* app);
 std::unique_ptr<Scenario> CreateStaticScenario(const CreateScenarioParams& params,
@@ -29,5 +31,7 @@ std::unique_ptr<Scenario> CreateWaypointScenario(const CreateScenarioParams& par
                                                  Application* app);
 std::unique_ptr<Scenario> CreateTimedDirectionScenario(const CreateScenarioParams& params,
                                                        Application* app);
+std::unique_ptr<Scenario> CreateBounceScenario(const CreateScenarioParams& params,
+                                               Application* app);
 
 }  // namespace aim

@@ -60,6 +60,12 @@ extern BarrelRoomDefaultTypeInternal _BarrelRoom_default_instance_;
 class BarrelScenarioDef;
 struct BarrelScenarioDefDefaultTypeInternal;
 extern BarrelScenarioDefDefaultTypeInternal _BarrelScenarioDef_default_instance_;
+class BounceProfile;
+struct BounceProfileDefaultTypeInternal;
+extern BounceProfileDefaultTypeInternal _BounceProfile_default_instance_;
+class BounceScenarioDef;
+struct BounceScenarioDefDefaultTypeInternal;
+extern BounceScenarioDefDefaultTypeInternal _BounceScenarioDef_default_instance_;
 class Bounds;
 struct BoundsDefaultTypeInternal;
 extern BoundsDefaultTypeInternal _Bounds_default_instance_;
@@ -1751,7 +1757,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 33;
+  static constexpr int kIndexInFileMessages = 35;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -2392,7 +2398,7 @@ class WallWanderProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderProfile*>(
         &_WallWanderProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 30;
+  static constexpr int kIndexInFileMessages = 32;
   friend void swap(WallWanderProfile& a, WallWanderProfile& b) { a.Swap(&b); }
   inline void Swap(WallWanderProfile* other) {
     if (other == this) return;
@@ -2974,7 +2980,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallArcScenarioDef*>(
         &_WallArcScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 29;
+  static constexpr int kIndexInFileMessages = 31;
   friend void swap(WallArcScenarioDef& a, WallArcScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallArcScenarioDef* other) {
     if (other == this) return;
@@ -3495,7 +3501,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 34;
+  static constexpr int kIndexInFileMessages = 36;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -6002,6 +6008,288 @@ class Bounds final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class BounceProfile final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.BounceProfile) */ {
+ public:
+  inline BounceProfile() : BounceProfile(nullptr) {}
+  ~BounceProfile() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(BounceProfile* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(BounceProfile));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR BounceProfile(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline BounceProfile(const BounceProfile& from) : BounceProfile(nullptr, from) {}
+  inline BounceProfile(BounceProfile&& from) noexcept
+      : BounceProfile(nullptr, std::move(from)) {}
+  inline BounceProfile& operator=(const BounceProfile& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BounceProfile& operator=(BounceProfile&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const BounceProfile& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const BounceProfile* internal_default_instance() {
+    return reinterpret_cast<const BounceProfile*>(
+        &_BounceProfile_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 29;
+  friend void swap(BounceProfile& a, BounceProfile& b) { a.Swap(&b); }
+  inline void Swap(BounceProfile* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BounceProfile* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  BounceProfile* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<BounceProfile>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const BounceProfile& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const BounceProfile& from) { BounceProfile::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(BounceProfile* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.BounceProfile"; }
+
+ protected:
+  explicit BounceProfile(::google::protobuf::Arena* arena);
+  BounceProfile(::google::protobuf::Arena* arena, const BounceProfile& from);
+  BounceProfile(::google::protobuf::Arena* arena, BounceProfile&& from) noexcept
+      : BounceProfile(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kInfoFieldNumber = 1,
+    kHeightFieldNumber = 2,
+    kHeightJitterFieldNumber = 3,
+    kDelaySecondsFieldNumber = 4,
+    kDelaySecondsJitterFieldNumber = 5,
+    kSpeedMultiplierFieldNumber = 7,
+    kAccelerationMultiplierFieldNumber = 8,
+  };
+  // .aim.ProfileInfo info = 1;
+  bool has_info() const;
+  void clear_info() ;
+  const ::aim::ProfileInfo& info() const;
+  PROTOBUF_NODISCARD ::aim::ProfileInfo* release_info();
+  ::aim::ProfileInfo* mutable_info();
+  void set_allocated_info(::aim::ProfileInfo* value);
+  void unsafe_arena_set_allocated_info(::aim::ProfileInfo* value);
+  ::aim::ProfileInfo* unsafe_arena_release_info();
+
+  private:
+  const ::aim::ProfileInfo& _internal_info() const;
+  ::aim::ProfileInfo* _internal_mutable_info();
+
+  public:
+  // .aim.RegionLength height = 2;
+  bool has_height() const;
+  void clear_height() ;
+  const ::aim::RegionLength& height() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_height();
+  ::aim::RegionLength* mutable_height();
+  void set_allocated_height(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_height(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_height();
+
+  private:
+  const ::aim::RegionLength& _internal_height() const;
+  ::aim::RegionLength* _internal_mutable_height();
+
+  public:
+  // .aim.RegionLength height_jitter = 3;
+  bool has_height_jitter() const;
+  void clear_height_jitter() ;
+  const ::aim::RegionLength& height_jitter() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_height_jitter();
+  ::aim::RegionLength* mutable_height_jitter();
+  void set_allocated_height_jitter(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_height_jitter(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_height_jitter();
+
+  private:
+  const ::aim::RegionLength& _internal_height_jitter() const;
+  ::aim::RegionLength* _internal_mutable_height_jitter();
+
+  public:
+  // float delay_seconds = 4;
+  bool has_delay_seconds() const;
+  void clear_delay_seconds() ;
+  float delay_seconds() const;
+  void set_delay_seconds(float value);
+
+  private:
+  float _internal_delay_seconds() const;
+  void _internal_set_delay_seconds(float value);
+
+  public:
+  // float delay_seconds_jitter = 5;
+  bool has_delay_seconds_jitter() const;
+  void clear_delay_seconds_jitter() ;
+  float delay_seconds_jitter() const;
+  void set_delay_seconds_jitter(float value);
+
+  private:
+  float _internal_delay_seconds_jitter() const;
+  void _internal_set_delay_seconds_jitter(float value);
+
+  public:
+  // float speed_multiplier = 7;
+  bool has_speed_multiplier() const;
+  void clear_speed_multiplier() ;
+  float speed_multiplier() const;
+  void set_speed_multiplier(float value);
+
+  private:
+  float _internal_speed_multiplier() const;
+  void _internal_set_speed_multiplier(float value);
+
+  public:
+  // float acceleration_multiplier = 8;
+  bool has_acceleration_multiplier() const;
+  void clear_acceleration_multiplier() ;
+  float acceleration_multiplier() const;
+  void set_acceleration_multiplier(float value);
+
+  private:
+  float _internal_acceleration_multiplier() const;
+  void _internal_set_acceleration_multiplier(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.BounceProfile)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      3, 7, 3,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const BounceProfile& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::ProfileInfo* info_;
+    ::aim::RegionLength* height_;
+    ::aim::RegionLength* height_jitter_;
+    float delay_seconds_;
+    float delay_seconds_jitter_;
+    float speed_multiplier_;
+    float acceleration_multiplier_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class TargetRegion final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.TargetRegion) */ {
  public:
@@ -6398,7 +6686,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 32;
+  static constexpr int kIndexInFileMessages = 34;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -7403,7 +7691,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 31;
+  static constexpr int kIndexInFileMessages = 33;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* other) {
     if (other == this) return;
@@ -8675,6 +8963,391 @@ class LinearScenarioDef final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class BounceScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.BounceScenarioDef) */ {
+ public:
+  inline BounceScenarioDef() : BounceScenarioDef(nullptr) {}
+  ~BounceScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(BounceScenarioDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(BounceScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR BounceScenarioDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline BounceScenarioDef(const BounceScenarioDef& from) : BounceScenarioDef(nullptr, from) {}
+  inline BounceScenarioDef(BounceScenarioDef&& from) noexcept
+      : BounceScenarioDef(nullptr, std::move(from)) {}
+  inline BounceScenarioDef& operator=(const BounceScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BounceScenarioDef& operator=(BounceScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const BounceScenarioDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const BounceScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const BounceScenarioDef*>(
+        &_BounceScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 30;
+  friend void swap(BounceScenarioDef& a, BounceScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(BounceScenarioDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BounceScenarioDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  BounceScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<BounceScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const BounceScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const BounceScenarioDef& from) { BounceScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(BounceScenarioDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.BounceScenarioDef"; }
+
+ protected:
+  explicit BounceScenarioDef(::google::protobuf::Arena* arena);
+  BounceScenarioDef(::google::protobuf::Arena* arena, const BounceScenarioDef& from);
+  BounceScenarioDef(::google::protobuf::Arena* arena, BounceScenarioDef&& from) noexcept
+      : BounceScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kBounceProfilesFieldNumber = 3,
+    kBounceProfileOrderFieldNumber = 4,
+    kLeftRightProfilesFieldNumber = 5,
+    kLeftRightProfileOrderFieldNumber = 6,
+    kForwardBackProfilesFieldNumber = 7,
+    kForwardBackProfileOrderFieldNumber = 8,
+    kBoundsFieldNumber = 1,
+    kTargetPlacementStrategyFieldNumber = 2,
+    kTimeScaleMultiplierFieldNumber = 11,
+    kAccelerationFieldNumber = 12,
+    kLeftRightInitialDirectionFieldNumber = 13,
+    kForwardBackInitialDirectionFieldNumber = 15,
+  };
+  // repeated .aim.BounceProfile bounce_profiles = 3;
+  int bounce_profiles_size() const;
+  private:
+  int _internal_bounce_profiles_size() const;
+
+  public:
+  void clear_bounce_profiles() ;
+  ::aim::BounceProfile* mutable_bounce_profiles(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>* mutable_bounce_profiles();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>& _internal_bounce_profiles() const;
+  ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>* _internal_mutable_bounce_profiles();
+  public:
+  const ::aim::BounceProfile& bounce_profiles(int index) const;
+  ::aim::BounceProfile* add_bounce_profiles();
+  const ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>& bounce_profiles() const;
+  // repeated int32 bounce_profile_order = 4;
+  int bounce_profile_order_size() const;
+  private:
+  int _internal_bounce_profile_order_size() const;
+
+  public:
+  void clear_bounce_profile_order() ;
+  ::int32_t bounce_profile_order(int index) const;
+  void set_bounce_profile_order(int index, ::int32_t value);
+  void add_bounce_profile_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& bounce_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* mutable_bounce_profile_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_bounce_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_bounce_profile_order();
+
+  public:
+  // repeated .aim.TimedDirectionProfile left_right_profiles = 5;
+  int left_right_profiles_size() const;
+  private:
+  int _internal_left_right_profiles_size() const;
+
+  public:
+  void clear_left_right_profiles() ;
+  ::aim::TimedDirectionProfile* mutable_left_right_profiles(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>* mutable_left_right_profiles();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>& _internal_left_right_profiles() const;
+  ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>* _internal_mutable_left_right_profiles();
+  public:
+  const ::aim::TimedDirectionProfile& left_right_profiles(int index) const;
+  ::aim::TimedDirectionProfile* add_left_right_profiles();
+  const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>& left_right_profiles() const;
+  // repeated int32 left_right_profile_order = 6;
+  int left_right_profile_order_size() const;
+  private:
+  int _internal_left_right_profile_order_size() const;
+
+  public:
+  void clear_left_right_profile_order() ;
+  ::int32_t left_right_profile_order(int index) const;
+  void set_left_right_profile_order(int index, ::int32_t value);
+  void add_left_right_profile_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& left_right_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* mutable_left_right_profile_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_left_right_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_left_right_profile_order();
+
+  public:
+  // repeated .aim.TimedDirectionProfile forward_back_profiles = 7;
+  int forward_back_profiles_size() const;
+  private:
+  int _internal_forward_back_profiles_size() const;
+
+  public:
+  void clear_forward_back_profiles() ;
+  ::aim::TimedDirectionProfile* mutable_forward_back_profiles(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>* mutable_forward_back_profiles();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>& _internal_forward_back_profiles() const;
+  ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>* _internal_mutable_forward_back_profiles();
+  public:
+  const ::aim::TimedDirectionProfile& forward_back_profiles(int index) const;
+  ::aim::TimedDirectionProfile* add_forward_back_profiles();
+  const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>& forward_back_profiles() const;
+  // repeated int32 forward_back_profile_order = 8;
+  int forward_back_profile_order_size() const;
+  private:
+  int _internal_forward_back_profile_order_size() const;
+
+  public:
+  void clear_forward_back_profile_order() ;
+  ::int32_t forward_back_profile_order(int index) const;
+  void set_forward_back_profile_order(int index, ::int32_t value);
+  void add_forward_back_profile_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& forward_back_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* mutable_forward_back_profile_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_forward_back_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_forward_back_profile_order();
+
+  public:
+  // .aim.Bounds bounds = 1;
+  bool has_bounds() const;
+  void clear_bounds() ;
+  const ::aim::Bounds& bounds() const;
+  PROTOBUF_NODISCARD ::aim::Bounds* release_bounds();
+  ::aim::Bounds* mutable_bounds();
+  void set_allocated_bounds(::aim::Bounds* value);
+  void unsafe_arena_set_allocated_bounds(::aim::Bounds* value);
+  ::aim::Bounds* unsafe_arena_release_bounds();
+
+  private:
+  const ::aim::Bounds& _internal_bounds() const;
+  ::aim::Bounds* _internal_mutable_bounds();
+
+  public:
+  // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+  bool has_target_placement_strategy() const;
+  void clear_target_placement_strategy() ;
+  const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
+  PROTOBUF_NODISCARD ::aim::TargetPlacementStrategy* release_target_placement_strategy();
+  ::aim::TargetPlacementStrategy* mutable_target_placement_strategy();
+  void set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
+  void unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value);
+  ::aim::TargetPlacementStrategy* unsafe_arena_release_target_placement_strategy();
+
+  private:
+  const ::aim::TargetPlacementStrategy& _internal_target_placement_strategy() const;
+  ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
+
+  public:
+  // float time_scale_multiplier = 11;
+  bool has_time_scale_multiplier() const;
+  void clear_time_scale_multiplier() ;
+  float time_scale_multiplier() const;
+  void set_time_scale_multiplier(float value);
+
+  private:
+  float _internal_time_scale_multiplier() const;
+  void _internal_set_time_scale_multiplier(float value);
+
+  public:
+  // float acceleration = 12;
+  bool has_acceleration() const;
+  void clear_acceleration() ;
+  float acceleration() const;
+  void set_acceleration(float value);
+
+  private:
+  float _internal_acceleration() const;
+  void _internal_set_acceleration(float value);
+
+  public:
+  // .aim.PositiveNegativeDirection left_right_initial_direction = 13;
+  bool has_left_right_initial_direction() const;
+  void clear_left_right_initial_direction() ;
+  ::aim::PositiveNegativeDirection left_right_initial_direction() const;
+  void set_left_right_initial_direction(::aim::PositiveNegativeDirection value);
+
+  private:
+  ::aim::PositiveNegativeDirection _internal_left_right_initial_direction() const;
+  void _internal_set_left_right_initial_direction(::aim::PositiveNegativeDirection value);
+
+  public:
+  // .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
+  bool has_forward_back_initial_direction() const;
+  void clear_forward_back_initial_direction() ;
+  ::aim::PositiveNegativeDirection forward_back_initial_direction() const;
+  void set_forward_back_initial_direction(::aim::PositiveNegativeDirection value);
+
+  private:
+  ::aim::PositiveNegativeDirection _internal_forward_back_initial_direction() const;
+  void _internal_set_forward_back_initial_direction(::aim::PositiveNegativeDirection value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.BounceScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      4, 12, 5,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const BounceScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::BounceProfile > bounce_profiles_;
+    ::google::protobuf::RepeatedField<::int32_t> bounce_profile_order_;
+    ::google::protobuf::internal::CachedSize _bounce_profile_order_cached_byte_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::TimedDirectionProfile > left_right_profiles_;
+    ::google::protobuf::RepeatedField<::int32_t> left_right_profile_order_;
+    ::google::protobuf::internal::CachedSize _left_right_profile_order_cached_byte_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::TimedDirectionProfile > forward_back_profiles_;
+    ::google::protobuf::RepeatedField<::int32_t> forward_back_profile_order_;
+    ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
+    ::aim::Bounds* bounds_;
+    ::aim::TargetPlacementStrategy* target_placement_strategy_;
+    float time_scale_multiplier_;
+    float acceleration_;
+    int left_right_initial_direction_;
+    int forward_back_initial_direction_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class BarrelScenarioDef final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.BarrelScenarioDef) */ {
  public:
@@ -8965,6 +9638,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kSineDef = 39,
     kWaypointDef = 40,
     kTimedDirectionDef = 41,
+    kBounceDef = 42,
     TYPE_NOT_SET = 0,
   };
   static inline const ScenarioDef* internal_default_instance() {
@@ -9079,6 +9753,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kSineDefFieldNumber = 39,
     kWaypointDefFieldNumber = 40,
     kTimedDirectionDefFieldNumber = 41,
+    kBounceDefFieldNumber = 42,
   };
   // string description = 1;
   bool has_description() const;
@@ -9429,6 +10104,25 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::TimedDirectionScenarioDef* _internal_mutable_timed_direction_def();
 
   public:
+  // .aim.BounceScenarioDef bounce_def = 42;
+  bool has_bounce_def() const;
+  private:
+  bool _internal_has_bounce_def() const;
+
+  public:
+  void clear_bounce_def() ;
+  const ::aim::BounceScenarioDef& bounce_def() const;
+  PROTOBUF_NODISCARD ::aim::BounceScenarioDef* release_bounce_def();
+  ::aim::BounceScenarioDef* mutable_bounce_def();
+  void set_allocated_bounce_def(::aim::BounceScenarioDef* value);
+  void unsafe_arena_set_allocated_bounce_def(::aim::BounceScenarioDef* value);
+  ::aim::BounceScenarioDef* unsafe_arena_release_bounce_def();
+
+  private:
+  const ::aim::BounceScenarioDef& _internal_bounce_def() const;
+  ::aim::BounceScenarioDef* _internal_mutable_bounce_def();
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ScenarioDef)
@@ -9446,11 +10140,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_sine_def();
   void set_has_waypoint_def();
   void set_has_timed_direction_def();
+  void set_has_bounce_def();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 21, 16,
+      4, 22, 17,
       51, 7>
       _table_;
 
@@ -9494,6 +10189,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::SineScenarioDef* sine_def_;
       ::aim::WaypointScenarioDef* waypoint_def_;
       ::aim::TimedDirectionScenarioDef* timed_direction_def_;
+      ::aim::BounceScenarioDef* bounce_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -14497,6 +15193,85 @@ inline ::aim::TimedDirectionScenarioDef* ScenarioDef::mutable_timed_direction_de
   return _msg;
 }
 
+// .aim.BounceScenarioDef bounce_def = 42;
+inline bool ScenarioDef::has_bounce_def() const {
+  return type_case() == kBounceDef;
+}
+inline bool ScenarioDef::_internal_has_bounce_def() const {
+  return type_case() == kBounceDef;
+}
+inline void ScenarioDef::set_has_bounce_def() {
+  _impl_._oneof_case_[0] = kBounceDef;
+}
+inline void ScenarioDef::clear_bounce_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kBounceDef) {
+    if (GetArena() == nullptr) {
+      delete _impl_.type_.bounce_def_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.bounce_def_);
+    }
+    clear_has_type();
+  }
+}
+inline ::aim::BounceScenarioDef* ScenarioDef::release_bounce_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.bounce_def)
+  if (type_case() == kBounceDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.bounce_def_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.type_.bounce_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::aim::BounceScenarioDef& ScenarioDef::_internal_bounce_def() const {
+  return type_case() == kBounceDef ? *_impl_.type_.bounce_def_ : reinterpret_cast<::aim::BounceScenarioDef&>(::aim::_BounceScenarioDef_default_instance_);
+}
+inline const ::aim::BounceScenarioDef& ScenarioDef::bounce_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.bounce_def)
+  return _internal_bounce_def();
+}
+inline ::aim::BounceScenarioDef* ScenarioDef::unsafe_arena_release_bounce_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.bounce_def)
+  if (type_case() == kBounceDef) {
+    clear_has_type();
+    auto* temp = _impl_.type_.bounce_def_;
+    _impl_.type_.bounce_def_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_bounce_def(::aim::BounceScenarioDef* value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_type();
+  if (value) {
+    set_has_bounce_def();
+    _impl_.type_.bounce_def_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.bounce_def)
+}
+inline ::aim::BounceScenarioDef* ScenarioDef::_internal_mutable_bounce_def() {
+  if (type_case() != kBounceDef) {
+    clear_type();
+    set_has_bounce_def();
+    _impl_.type_.bounce_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::BounceScenarioDef>(GetArena());
+  }
+  return _impl_.type_.bounce_def_;
+}
+inline ::aim::BounceScenarioDef* ScenarioDef::mutable_bounce_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::BounceScenarioDef* _msg = _internal_mutable_bounce_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.bounce_def)
+  return _msg;
+}
+
 inline bool ScenarioDef::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -17925,6 +18700,1000 @@ inline ::aim::PositiveNegativeDirection TimedDirectionScenarioDef::_internal_for
   return static_cast<::aim::PositiveNegativeDirection>(_impl_.forward_back_initial_direction_);
 }
 inline void TimedDirectionScenarioDef::_internal_set_forward_back_initial_direction(::aim::PositiveNegativeDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// BounceProfile
+
+// .aim.ProfileInfo info = 1;
+inline bool BounceProfile::has_info() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.info_ != nullptr);
+  return value;
+}
+inline void BounceProfile::clear_info() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.info_ != nullptr) _impl_.info_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::ProfileInfo& BounceProfile::_internal_info() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::ProfileInfo* p = _impl_.info_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ProfileInfo&>(::aim::_ProfileInfo_default_instance_);
+}
+inline const ::aim::ProfileInfo& BounceProfile::info() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.info)
+  return _internal_info();
+}
+inline void BounceProfile::unsafe_arena_set_allocated_info(::aim::ProfileInfo* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.info_);
+  }
+  _impl_.info_ = reinterpret_cast<::aim::ProfileInfo*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceProfile.info)
+}
+inline ::aim::ProfileInfo* BounceProfile::release_info() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::ProfileInfo* released = _impl_.info_;
+  _impl_.info_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::ProfileInfo* BounceProfile::unsafe_arena_release_info() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceProfile.info)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::ProfileInfo* temp = _impl_.info_;
+  _impl_.info_ = nullptr;
+  return temp;
+}
+inline ::aim::ProfileInfo* BounceProfile::_internal_mutable_info() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.info_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ProfileInfo>(GetArena());
+    _impl_.info_ = reinterpret_cast<::aim::ProfileInfo*>(p);
+  }
+  return _impl_.info_;
+}
+inline ::aim::ProfileInfo* BounceProfile::mutable_info() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::ProfileInfo* _msg = _internal_mutable_info();
+  // @@protoc_insertion_point(field_mutable:aim.BounceProfile.info)
+  return _msg;
+}
+inline void BounceProfile::set_allocated_info(::aim::ProfileInfo* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.info_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.info_ = reinterpret_cast<::aim::ProfileInfo*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceProfile.info)
+}
+
+// .aim.RegionLength height = 2;
+inline bool BounceProfile::has_height() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.height_ != nullptr);
+  return value;
+}
+inline void BounceProfile::clear_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.height_ != nullptr) _impl_.height_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::RegionLength& BounceProfile::_internal_height() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.height_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& BounceProfile::height() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.height)
+  return _internal_height();
+}
+inline void BounceProfile::unsafe_arena_set_allocated_height(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.height_);
+  }
+  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceProfile.height)
+}
+inline ::aim::RegionLength* BounceProfile::release_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.height_;
+  _impl_.height_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* BounceProfile::unsafe_arena_release_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceProfile.height)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.height_;
+  _impl_.height_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* BounceProfile::_internal_mutable_height() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.height_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.height_;
+}
+inline ::aim::RegionLength* BounceProfile::mutable_height() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_height();
+  // @@protoc_insertion_point(field_mutable:aim.BounceProfile.height)
+  return _msg;
+}
+inline void BounceProfile::set_allocated_height(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.height_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.height_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceProfile.height)
+}
+
+// .aim.RegionLength height_jitter = 3;
+inline bool BounceProfile::has_height_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.height_jitter_ != nullptr);
+  return value;
+}
+inline void BounceProfile::clear_height_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.height_jitter_ != nullptr) _impl_.height_jitter_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::RegionLength& BounceProfile::_internal_height_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.height_jitter_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& BounceProfile::height_jitter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.height_jitter)
+  return _internal_height_jitter();
+}
+inline void BounceProfile::unsafe_arena_set_allocated_height_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.height_jitter_);
+  }
+  _impl_.height_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceProfile.height_jitter)
+}
+inline ::aim::RegionLength* BounceProfile::release_height_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.height_jitter_;
+  _impl_.height_jitter_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* BounceProfile::unsafe_arena_release_height_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceProfile.height_jitter)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.height_jitter_;
+  _impl_.height_jitter_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* BounceProfile::_internal_mutable_height_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.height_jitter_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.height_jitter_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.height_jitter_;
+}
+inline ::aim::RegionLength* BounceProfile::mutable_height_jitter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_height_jitter();
+  // @@protoc_insertion_point(field_mutable:aim.BounceProfile.height_jitter)
+  return _msg;
+}
+inline void BounceProfile::set_allocated_height_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.height_jitter_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.height_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceProfile.height_jitter)
+}
+
+// float delay_seconds = 4;
+inline bool BounceProfile::has_delay_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void BounceProfile::clear_delay_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.delay_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float BounceProfile::delay_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.delay_seconds)
+  return _internal_delay_seconds();
+}
+inline void BounceProfile::set_delay_seconds(float value) {
+  _internal_set_delay_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.delay_seconds)
+}
+inline float BounceProfile::_internal_delay_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.delay_seconds_;
+}
+inline void BounceProfile::_internal_set_delay_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.delay_seconds_ = value;
+}
+
+// float delay_seconds_jitter = 5;
+inline bool BounceProfile::has_delay_seconds_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void BounceProfile::clear_delay_seconds_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.delay_seconds_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float BounceProfile::delay_seconds_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.delay_seconds_jitter)
+  return _internal_delay_seconds_jitter();
+}
+inline void BounceProfile::set_delay_seconds_jitter(float value) {
+  _internal_set_delay_seconds_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.delay_seconds_jitter)
+}
+inline float BounceProfile::_internal_delay_seconds_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.delay_seconds_jitter_;
+}
+inline void BounceProfile::_internal_set_delay_seconds_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.delay_seconds_jitter_ = value;
+}
+
+// float speed_multiplier = 7;
+inline bool BounceProfile::has_speed_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void BounceProfile::clear_speed_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float BounceProfile::speed_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.speed_multiplier)
+  return _internal_speed_multiplier();
+}
+inline void BounceProfile::set_speed_multiplier(float value) {
+  _internal_set_speed_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.speed_multiplier)
+}
+inline float BounceProfile::_internal_speed_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.speed_multiplier_;
+}
+inline void BounceProfile::_internal_set_speed_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_ = value;
+}
+
+// float acceleration_multiplier = 8;
+inline bool BounceProfile::has_acceleration_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void BounceProfile::clear_acceleration_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline float BounceProfile::acceleration_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.acceleration_multiplier)
+  return _internal_acceleration_multiplier();
+}
+inline void BounceProfile::set_acceleration_multiplier(float value) {
+  _internal_set_acceleration_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.acceleration_multiplier)
+}
+inline float BounceProfile::_internal_acceleration_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_multiplier_;
+}
+inline void BounceProfile::_internal_set_acceleration_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// BounceScenarioDef
+
+// .aim.Bounds bounds = 1;
+inline bool BounceScenarioDef::has_bounds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.bounds_ != nullptr);
+  return value;
+}
+inline void BounceScenarioDef::clear_bounds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.bounds_ != nullptr) _impl_.bounds_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::aim::Bounds& BounceScenarioDef::_internal_bounds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::Bounds* p = _impl_.bounds_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::Bounds&>(::aim::_Bounds_default_instance_);
+}
+inline const ::aim::Bounds& BounceScenarioDef::bounds() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.bounds)
+  return _internal_bounds();
+}
+inline void BounceScenarioDef::unsafe_arena_set_allocated_bounds(::aim::Bounds* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.bounds_);
+  }
+  _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.bounds)
+}
+inline ::aim::Bounds* BounceScenarioDef::release_bounds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::Bounds* released = _impl_.bounds_;
+  _impl_.bounds_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::Bounds* BounceScenarioDef::unsafe_arena_release_bounds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.bounds)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::Bounds* temp = _impl_.bounds_;
+  _impl_.bounds_ = nullptr;
+  return temp;
+}
+inline ::aim::Bounds* BounceScenarioDef::_internal_mutable_bounds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.bounds_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::Bounds>(GetArena());
+    _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(p);
+  }
+  return _impl_.bounds_;
+}
+inline ::aim::Bounds* BounceScenarioDef::mutable_bounds() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::Bounds* _msg = _internal_mutable_bounds();
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.bounds)
+  return _msg;
+}
+inline void BounceScenarioDef::set_allocated_bounds(::aim::Bounds* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.bounds_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.bounds)
+}
+
+// .aim.TargetPlacementStrategy target_placement_strategy = 2;
+inline bool BounceScenarioDef::has_target_placement_strategy() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
+  return value;
+}
+inline void BounceScenarioDef::clear_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::TargetPlacementStrategy& BounceScenarioDef::_internal_target_placement_strategy() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
+}
+inline const ::aim::TargetPlacementStrategy& BounceScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.target_placement_strategy)
+  return _internal_target_placement_strategy();
+}
+inline void BounceScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+  }
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.target_placement_strategy)
+}
+inline ::aim::TargetPlacementStrategy* BounceScenarioDef::release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::TargetPlacementStrategy* BounceScenarioDef::unsafe_arena_release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.target_placement_strategy)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  return temp;
+}
+inline ::aim::TargetPlacementStrategy* BounceScenarioDef::_internal_mutable_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
+    _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
+  }
+  return _impl_.target_placement_strategy_;
+}
+inline ::aim::TargetPlacementStrategy* BounceScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.target_placement_strategy)
+  return _msg;
+}
+inline void BounceScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.target_placement_strategy_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.target_placement_strategy)
+}
+
+// repeated .aim.BounceProfile bounce_profiles = 3;
+inline int BounceScenarioDef::_internal_bounce_profiles_size() const {
+  return _internal_bounce_profiles().size();
+}
+inline int BounceScenarioDef::bounce_profiles_size() const {
+  return _internal_bounce_profiles_size();
+}
+inline void BounceScenarioDef::clear_bounce_profiles() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.bounce_profiles_.Clear();
+}
+inline ::aim::BounceProfile* BounceScenarioDef::mutable_bounce_profiles(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.bounce_profiles)
+  return _internal_mutable_bounce_profiles()->Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>* BounceScenarioDef::mutable_bounce_profiles()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.bounce_profiles)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_bounce_profiles();
+}
+inline const ::aim::BounceProfile& BounceScenarioDef::bounce_profiles(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.bounce_profiles)
+  return _internal_bounce_profiles().Get(index);
+}
+inline ::aim::BounceProfile* BounceScenarioDef::add_bounce_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::aim::BounceProfile* _add = _internal_mutable_bounce_profiles()->Add();
+  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.bounce_profiles)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>& BounceScenarioDef::bounce_profiles() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.bounce_profiles)
+  return _internal_bounce_profiles();
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>&
+BounceScenarioDef::_internal_bounce_profiles() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.bounce_profiles_;
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>*
+BounceScenarioDef::_internal_mutable_bounce_profiles() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.bounce_profiles_;
+}
+
+// repeated int32 bounce_profile_order = 4;
+inline int BounceScenarioDef::_internal_bounce_profile_order_size() const {
+  return _internal_bounce_profile_order().size();
+}
+inline int BounceScenarioDef::bounce_profile_order_size() const {
+  return _internal_bounce_profile_order_size();
+}
+inline void BounceScenarioDef::clear_bounce_profile_order() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.bounce_profile_order_.Clear();
+}
+inline ::int32_t BounceScenarioDef::bounce_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.bounce_profile_order)
+  return _internal_bounce_profile_order().Get(index);
+}
+inline void BounceScenarioDef::set_bounce_profile_order(int index, ::int32_t value) {
+  _internal_mutable_bounce_profile_order()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.bounce_profile_order)
+}
+inline void BounceScenarioDef::add_bounce_profile_order(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_bounce_profile_order()->Add(value);
+  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.bounce_profile_order)
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>& BounceScenarioDef::bounce_profile_order() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.bounce_profile_order)
+  return _internal_bounce_profile_order();
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::mutable_bounce_profile_order()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.bounce_profile_order)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_bounce_profile_order();
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>&
+BounceScenarioDef::_internal_bounce_profile_order() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.bounce_profile_order_;
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::_internal_mutable_bounce_profile_order() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.bounce_profile_order_;
+}
+
+// repeated .aim.TimedDirectionProfile left_right_profiles = 5;
+inline int BounceScenarioDef::_internal_left_right_profiles_size() const {
+  return _internal_left_right_profiles().size();
+}
+inline int BounceScenarioDef::left_right_profiles_size() const {
+  return _internal_left_right_profiles_size();
+}
+inline void BounceScenarioDef::clear_left_right_profiles() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.left_right_profiles_.Clear();
+}
+inline ::aim::TimedDirectionProfile* BounceScenarioDef::mutable_left_right_profiles(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.left_right_profiles)
+  return _internal_mutable_left_right_profiles()->Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>* BounceScenarioDef::mutable_left_right_profiles()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.left_right_profiles)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_left_right_profiles();
+}
+inline const ::aim::TimedDirectionProfile& BounceScenarioDef::left_right_profiles(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_profiles)
+  return _internal_left_right_profiles().Get(index);
+}
+inline ::aim::TimedDirectionProfile* BounceScenarioDef::add_left_right_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::aim::TimedDirectionProfile* _add = _internal_mutable_left_right_profiles()->Add();
+  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.left_right_profiles)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>& BounceScenarioDef::left_right_profiles() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.left_right_profiles)
+  return _internal_left_right_profiles();
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>&
+BounceScenarioDef::_internal_left_right_profiles() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.left_right_profiles_;
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>*
+BounceScenarioDef::_internal_mutable_left_right_profiles() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.left_right_profiles_;
+}
+
+// repeated int32 left_right_profile_order = 6;
+inline int BounceScenarioDef::_internal_left_right_profile_order_size() const {
+  return _internal_left_right_profile_order().size();
+}
+inline int BounceScenarioDef::left_right_profile_order_size() const {
+  return _internal_left_right_profile_order_size();
+}
+inline void BounceScenarioDef::clear_left_right_profile_order() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.left_right_profile_order_.Clear();
+}
+inline ::int32_t BounceScenarioDef::left_right_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_profile_order)
+  return _internal_left_right_profile_order().Get(index);
+}
+inline void BounceScenarioDef::set_left_right_profile_order(int index, ::int32_t value) {
+  _internal_mutable_left_right_profile_order()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_profile_order)
+}
+inline void BounceScenarioDef::add_left_right_profile_order(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_left_right_profile_order()->Add(value);
+  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.left_right_profile_order)
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>& BounceScenarioDef::left_right_profile_order() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.left_right_profile_order)
+  return _internal_left_right_profile_order();
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::mutable_left_right_profile_order()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.left_right_profile_order)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_left_right_profile_order();
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>&
+BounceScenarioDef::_internal_left_right_profile_order() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.left_right_profile_order_;
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::_internal_mutable_left_right_profile_order() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.left_right_profile_order_;
+}
+
+// repeated .aim.TimedDirectionProfile forward_back_profiles = 7;
+inline int BounceScenarioDef::_internal_forward_back_profiles_size() const {
+  return _internal_forward_back_profiles().size();
+}
+inline int BounceScenarioDef::forward_back_profiles_size() const {
+  return _internal_forward_back_profiles_size();
+}
+inline void BounceScenarioDef::clear_forward_back_profiles() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_profiles_.Clear();
+}
+inline ::aim::TimedDirectionProfile* BounceScenarioDef::mutable_forward_back_profiles(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.forward_back_profiles)
+  return _internal_mutable_forward_back_profiles()->Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>* BounceScenarioDef::mutable_forward_back_profiles()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.forward_back_profiles)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_forward_back_profiles();
+}
+inline const ::aim::TimedDirectionProfile& BounceScenarioDef::forward_back_profiles(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_profiles)
+  return _internal_forward_back_profiles().Get(index);
+}
+inline ::aim::TimedDirectionProfile* BounceScenarioDef::add_forward_back_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::aim::TimedDirectionProfile* _add = _internal_mutable_forward_back_profiles()->Add();
+  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.forward_back_profiles)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>& BounceScenarioDef::forward_back_profiles() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.forward_back_profiles)
+  return _internal_forward_back_profiles();
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>&
+BounceScenarioDef::_internal_forward_back_profiles() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.forward_back_profiles_;
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::TimedDirectionProfile>*
+BounceScenarioDef::_internal_mutable_forward_back_profiles() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.forward_back_profiles_;
+}
+
+// repeated int32 forward_back_profile_order = 8;
+inline int BounceScenarioDef::_internal_forward_back_profile_order_size() const {
+  return _internal_forward_back_profile_order().size();
+}
+inline int BounceScenarioDef::forward_back_profile_order_size() const {
+  return _internal_forward_back_profile_order_size();
+}
+inline void BounceScenarioDef::clear_forward_back_profile_order() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_profile_order_.Clear();
+}
+inline ::int32_t BounceScenarioDef::forward_back_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_profile_order)
+  return _internal_forward_back_profile_order().Get(index);
+}
+inline void BounceScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
+  _internal_mutable_forward_back_profile_order()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_profile_order)
+}
+inline void BounceScenarioDef::add_forward_back_profile_order(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_forward_back_profile_order()->Add(value);
+  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.forward_back_profile_order)
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>& BounceScenarioDef::forward_back_profile_order() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.forward_back_profile_order)
+  return _internal_forward_back_profile_order();
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::mutable_forward_back_profile_order()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.forward_back_profile_order)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_forward_back_profile_order();
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>&
+BounceScenarioDef::_internal_forward_back_profile_order() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.forward_back_profile_order_;
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* BounceScenarioDef::_internal_mutable_forward_back_profile_order() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.forward_back_profile_order_;
+}
+
+// float time_scale_multiplier = 11;
+inline bool BounceScenarioDef::has_time_scale_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void BounceScenarioDef::clear_time_scale_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.time_scale_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float BounceScenarioDef::time_scale_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.time_scale_multiplier)
+  return _internal_time_scale_multiplier();
+}
+inline void BounceScenarioDef::set_time_scale_multiplier(float value) {
+  _internal_set_time_scale_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.time_scale_multiplier)
+}
+inline float BounceScenarioDef::_internal_time_scale_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.time_scale_multiplier_;
+}
+inline void BounceScenarioDef::_internal_set_time_scale_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.time_scale_multiplier_ = value;
+}
+
+// float acceleration = 12;
+inline bool BounceScenarioDef::has_acceleration() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void BounceScenarioDef::clear_acceleration() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float BounceScenarioDef::acceleration() const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.acceleration)
+  return _internal_acceleration();
+}
+inline void BounceScenarioDef::set_acceleration(float value) {
+  _internal_set_acceleration(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.acceleration)
+}
+inline float BounceScenarioDef::_internal_acceleration() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_;
+}
+inline void BounceScenarioDef::_internal_set_acceleration(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_ = value;
+}
+
+// .aim.PositiveNegativeDirection left_right_initial_direction = 13;
+inline bool BounceScenarioDef::has_left_right_initial_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void BounceScenarioDef::clear_left_right_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.left_right_initial_direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline ::aim::PositiveNegativeDirection BounceScenarioDef::left_right_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
+  return _internal_left_right_initial_direction();
+}
+inline void BounceScenarioDef::set_left_right_initial_direction(::aim::PositiveNegativeDirection value) {
+  _internal_set_left_right_initial_direction(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
+}
+inline ::aim::PositiveNegativeDirection BounceScenarioDef::_internal_left_right_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::PositiveNegativeDirection>(_impl_.left_right_initial_direction_);
+}
+inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim::PositiveNegativeDirection value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.left_right_initial_direction_ = value;
+}
+
+// .aim.PositiveNegativeDirection forward_back_initial_direction = 15;
+inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void BounceScenarioDef::clear_forward_back_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline ::aim::PositiveNegativeDirection BounceScenarioDef::forward_back_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
+  return _internal_forward_back_initial_direction();
+}
+inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::PositiveNegativeDirection value) {
+  _internal_set_forward_back_initial_direction(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
+}
+inline ::aim::PositiveNegativeDirection BounceScenarioDef::_internal_forward_back_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::PositiveNegativeDirection>(_impl_.forward_back_initial_direction_);
+}
+inline void BounceScenarioDef::_internal_set_forward_back_initial_direction(::aim::PositiveNegativeDirection value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = value;
 }

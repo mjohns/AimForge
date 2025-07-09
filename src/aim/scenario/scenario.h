@@ -171,6 +171,4 @@ class Scenario : public Screen {
   bool play_time_flushed_ = false;
 };
 
-std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& params, Application* app);
-
 }  // namespace aim

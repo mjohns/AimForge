@@ -181,6 +181,7 @@ message ScenarioDef {
     SineScenarioDef sine_def = 39;
     WaypointScenarioDef waypoint_def = 40;
     TimedDirectionScenarioDef timed_direction_def = 41;
+    BounceScenarioDef bounce_def = 42;
   }
 }
 
@@ -346,6 +347,42 @@ message TimedDirectionScenarioDef {
 
   PositiveNegativeDirection left_right_initial_direction = 13;
   PositiveNegativeDirection up_down_initial_direction = 14;
+  PositiveNegativeDirection forward_back_initial_direction = 15;
+}
+
+message BounceProfile {
+  ProfileInfo info = 1;
+
+  RegionLength height = 2;
+  RegionLength height_jitter = 3;
+
+  float delay_seconds = 4;
+  float delay_seconds_jitter = 5;
+
+  float speed_multiplier = 7;
+  float acceleration_multiplier = 8;
+}
+
+message BounceScenarioDef {
+  Bounds bounds = 1;
+
+  TargetPlacementStrategy target_placement_strategy = 2;
+
+  repeated BounceProfile bounce_profiles = 3;
+  repeated int32 bounce_profile_order = 4;
+
+  repeated TimedDirectionProfile left_right_profiles = 5;
+  repeated int32 left_right_profile_order = 6;
+
+  repeated TimedDirectionProfile forward_back_profiles = 7;
+  repeated int32 forward_back_profile_order = 8;
+
+  // Scales the times in all of the profiles. Defaults to 1.
+  float time_scale_multiplier = 11;
+
+  float acceleration = 12;
+
+  PositiveNegativeDirection left_right_initial_direction = 13;
   PositiveNegativeDirection forward_back_initial_direction = 15;
 }
 
