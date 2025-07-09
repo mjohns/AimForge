@@ -981,7 +981,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
                               &left_right_direction,
                               kLeftRightDirections,
-                              char_x_ * 12);
+                              char_x_ * 18);
     d.set_left_right_initial_direction(left_right_direction);
 
     Line();
@@ -1000,7 +1000,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     InitialDirection up_down_direction = d.up_down_initial_direction();
     ImGui::SimpleTypeDropdown(
-        "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 15);
+        "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 18);
     d.set_up_down_initial_direction(up_down_direction);
 
     if (d.bounds().has_depth()) {
@@ -1021,7 +1021,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
                                 &forward_back_direction,
                                 kForwardBackDirections,
-                                char_x_ * 15);
+                                char_x_ * 18);
       d.set_forward_back_initial_direction(forward_back_direction);
     } else {
       d.clear_forward_back_profiles();

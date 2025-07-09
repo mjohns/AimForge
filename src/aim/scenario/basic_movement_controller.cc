@@ -62,4 +62,109 @@ void WallDepthMovementController::UpdatePosition(Target& t, const Room& room, fl
   t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room, t.wall_depth);
 }
 
+float SingleDirectionController::GetUpdatedPosition(
+    Target& t,
+    Random& rand,
+    const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
+    const google::protobuf::RepeatedField<int>& order,
+    float current_position,
+    float now_seconds,
+    float delta_seconds) {
+  if (!initialized_) {
+    initialized_ = true;
+    going_left_ = GetInitialGoingLeft(initial_direction_, current_position, rand);
+
+    // The first time we are going to call change direction so toggle direction once here
+    // so it will be toggled back correctly.
+    going_left_ = !going_left_;
+  }
+
+  float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
+
+  bool too_left = going_left_ && current_position <= min_;
+  bool too_right = !going_left_ && current_position >= max_;
+  bool time_up = now_seconds >= next_direction_change_time_;
+  if (too_left || too_right || time_up ||
+      (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
+    ChangeDirection(rand, now_seconds, profiles, order);
+  }
+
+  float max_speed = t.speed * speed_multiplier_;
+
+  if (acceleration > 0) {
+    // Adjust current speed for acceleration.
+    float stop_distance = (current_speed_ * current_speed_) / (2 * acceleration);
+    bool stop_left = going_left_ && (current_position - stop_distance) <= min_;
+    bool stop_right = !going_left_ && (current_position + stop_distance) >= max_;
+    if (stop_left || stop_right) {
+      is_stopping_ = true;
+    }
+    float time_to_stop = current_speed_ / acceleration;
+    if (now_seconds + time_to_stop >= next_direction_change_time_) {
+      is_stopping_ = true;
+    }
+
+    if (is_stopping_) {
+      current_speed_ -= delta_seconds * acceleration;
+      if (current_speed_ < 0) {
+        current_speed_ = 0;
+      }
+    } else {
+      current_speed_ += delta_seconds * acceleration;
+      if (current_speed_ > max_speed) {
+        current_speed_ = max_speed;
+      }
+    }
+  } else {
+    current_speed_ = max_speed;
+  }
+
+  float delta_pos = current_speed_ * delta_seconds;
+  if (going_left_) {
+    delta_pos *= -1;
+  }
+  float next_pos = glm::clamp<float>(current_position + delta_pos, min_ - 0.01, max_ + 0.01);
+  return next_pos;
+}
+
+bool SingleDirectionController::GetInitialGoingLeft(InitialDirection dir,
+                                                    float current_position,
+                                                    Random& rand) {
+  if (initial_direction_ == DIRECTION_POSITIVE) {
+    return false;
+  } else if (initial_direction_ == DIRECTION_NEGATIVE) {
+    return true;
+  } else if (initial_direction_ == DIRECTION_IN) {
+    return current_position > mid_;
+  } else if (initial_direction_ == DIRECTION_OUT) {
+    return current_position < mid_;
+  } else {
+    return rand.FlipCoin();
+  }
+}
+
+void SingleDirectionController::ChangeDirection(
+    Random& rand,
+    float now_seconds,
+    const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
+    const google::protobuf::RepeatedField<int>& order) {
+  auto p = SelectProfile(order, profiles, &selection_context_, rand);
+  if (!p.has_value()) {
+    return;
+  }
+  speed_multiplier_ = p->has_speed_multiplier() ? p->speed_multiplier() : 1.0;
+  acceleration_multiplier_ = p->has_acceleration_multiplier() ? p->acceleration_multiplier() : 1.0;
+  current_speed_ = 0;
+  is_stopping_ = false;
+
+  going_left_ = !going_left_;
+
+  float time = rand.GetJittered(p->time(), p->time_jitter());
+  if (time_scale_multiplier_ > 0) {
+    time *= time_scale_multiplier_;
+  }
+
+  next_direction_change_time_ = now_seconds + time;
+}
+
 }  // namespace aim

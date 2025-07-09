@@ -43,107 +43,56 @@ class WallDepthMovementController : public MovementController {
   const float original_speed_ = 0;
 };
 
-struct SingleDirectionController {
-  float min;
-  float max;
+struct DirectionParams {
+  float acceleration = 0;
+  float time_scale_multiplier = 0;
+};
 
-  float current_speed = 0;
-
-  bool initialized = false;
-  bool going_left = false;
-  float next_direction_change_time = -1;
-  float speed_multiplier = 1;
-  float acceleration_multiplier = 1;
-  ProfileSelectionContext selection_context{};
-  bool is_stopping = false;
+class SingleDirectionController {
+ public:
+  SingleDirectionController(float min,
+                            float max,
+                            InitialDirection initial_direction,
+                            DirectionParams params)
+      : initial_direction_(initial_direction),
+        min_(min),
+        max_(max),
+        mid_(min + ((max - min) / 2.0)),
+        unscaled_acceleration_(params.acceleration),
+        time_scale_multiplier_(params.time_scale_multiplier) {}
 
   float GetUpdatedPosition(
       Target& t,
       Random& rand,
-      const TimedDirectionScenarioDef& def,
       const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
       const google::protobuf::RepeatedField<int>& order,
       float current_position,
       float now_seconds,
-      float delta_seconds) {
-    if (!initialized) {
-      initialized = true;
-      // The first time we are going to call change direction so toggle direction once here
-      // so it will be toggled back correctly.
-      going_left = !going_left;
-    }
+      float delta_seconds);
 
-    float acceleration = def.acceleration() * acceleration_multiplier;
-
-    bool too_left = going_left && current_position <= min;
-    bool too_right = !going_left && current_position >= max;
-    bool time_up = now_seconds >= next_direction_change_time;
-    if (too_left || too_right || time_up ||
-        (is_stopping && acceleration > 0 && current_speed <= 0.001)) {
-      ChangeDirection(rand, now_seconds, profiles, order, def);
-    }
-
-    float max_speed = t.speed * speed_multiplier;
-
-    if (acceleration > 0) {
-      // Adjust current speed for acceleration.
-      float stop_distance = (current_speed * current_speed) / (2 * acceleration);
-      bool stop_left = going_left && (current_position - stop_distance) <= min;
-      bool stop_right = !going_left && (current_position + stop_distance) >= max;
-      if (stop_left || stop_right) {
-        is_stopping = true;
-      }
-      float time_to_stop = current_speed / acceleration;
-      if (now_seconds + time_to_stop >= next_direction_change_time) {
-        is_stopping = true;
-      }
-
-      if (is_stopping) {
-        current_speed -= delta_seconds * acceleration;
-        if (current_speed < 0) {
-          current_speed = 0;
-        }
-      } else {
-        current_speed += delta_seconds * acceleration;
-        if (current_speed > max_speed) {
-          current_speed = max_speed;
-        }
-      }
-    } else {
-      current_speed = max_speed;
-    }
-
-    float delta_pos = current_speed * delta_seconds;
-    if (going_left) {
-      delta_pos *= -1;
-    }
-    float next_pos = glm::clamp<float>(current_position + delta_pos, min - 0.01, max + 0.01);
-    return next_pos;
-  }
+ private:
+  bool GetInitialGoingLeft(InitialDirection dir, float current_position, Random& rand);
 
   void ChangeDirection(Random& rand,
                        float now_seconds,
                        const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
-                       const google::protobuf::RepeatedField<int>& order,
-                       const TimedDirectionScenarioDef& def) {
-    auto p = SelectProfile(order, profiles, &selection_context, rand);
-    if (!p.has_value()) {
-      return;
-    }
-    speed_multiplier = p->has_speed_multiplier() ? p->speed_multiplier() : 1.0;
-    acceleration_multiplier = p->has_acceleration_multiplier() ? p->acceleration_multiplier() : 1.0;
-    current_speed = 0;
-    is_stopping = false;
+                       const google::protobuf::RepeatedField<int>& order);
 
-    going_left = !going_left;
+  InitialDirection initial_direction_;
+  float min_;
+  float max_;
+  float mid_;
+  float unscaled_acceleration_;
+  float time_scale_multiplier_;
 
-    float time = rand.GetJittered(p->time(), p->time_jitter());
-    if (def.has_time_scale_multiplier()) {
-      time *= def.time_scale_multiplier();
-    }
-
-    next_direction_change_time = now_seconds + time;
-  }
+  float current_speed_ = 0;
+  bool initialized_ = false;
+  float next_direction_change_time_ = -1;
+  float speed_multiplier_ = 1;
+  float acceleration_multiplier_ = 1;
+  ProfileSelectionContext selection_context_{};
+  bool is_stopping_ = false;
+  bool going_left_ = false;
 };
 
 }  // namespace aim

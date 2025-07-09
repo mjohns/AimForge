@@ -21,20 +21,22 @@ class MovementControllerImpl : public MovementController {
     auto d = def_.bounce_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
 
+    DirectionParams params;
+    if (d.has_acceleration()) {
+      params.acceleration = d.acceleration();
+    }
+    if (d.has_time_scale_multiplier()) {
+      params.time_scale_multiplier = d.time_scale_multiplier();
+    }
+
     if (d.left_right_profiles_size() > 0) {
-      SingleDirectionController ctrl;
-      ctrl.going_left = GetInitialGoingLeft(d.left_right_initial_direction());
-      ctrl.min = bounds.min_x;
-      ctrl.max = bounds.max_x;
-      left_right_controller_ = ctrl;
+      left_right_controller_ = SingleDirectionController(
+          bounds.min_x, bounds.max_x, d.left_right_initial_direction(), params);
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
-      SingleDirectionController ctrl;
-      ctrl.going_left = GetInitialGoingLeft(d.forward_back_initial_direction());
-      ctrl.min = bounds.min_depth;
-      ctrl.max = bounds.max_depth;
-      forward_back_controller_ = ctrl;
+      forward_back_controller_ = SingleDirectionController(
+          bounds.min_depth, bounds.max_depth, d.forward_back_initial_direction(), params);
     }
   }
 
@@ -58,36 +60,22 @@ class MovementControllerImpl : public MovementController {
     float now_seconds = GetNowSeconds();
 
     if (left_right_controller_) {
-      pos.x = left_right_controller_->GetUpdatedPosition(
-          t,
-          app_.rand(),
-          def_.timed_direction_def(),
-          def_.timed_direction_def().left_right_profiles(),
-          def_.timed_direction_def().left_right_profile_order(),
-          pos.x,
-          now_seconds,
-          delta_seconds);
-    }
-
-    if (up_down_controller_) {
-      pos.y = up_down_controller_->GetUpdatedPosition(
-          t,
-          app_.rand(),
-          def_.timed_direction_def(),
-          def_.timed_direction_def().up_down_profiles(),
-          def_.timed_direction_def().up_down_profile_order(),
-          pos.y,
-          now_seconds,
-          delta_seconds);
+      pos.x =
+          left_right_controller_->GetUpdatedPosition(t,
+                                                     app_.rand(),
+                                                     def_.bounce_def().left_right_profiles(),
+                                                     def_.bounce_def().left_right_profile_order(),
+                                                     pos.x,
+                                                     now_seconds,
+                                                     delta_seconds);
     }
 
     if (forward_back_controller_) {
       t.wall_depth = forward_back_controller_->GetUpdatedPosition(
           t,
           app_.rand(),
-          def_.timed_direction_def(),
-          def_.timed_direction_def().forward_back_profiles(),
-          def_.timed_direction_def().forward_back_profile_order(),
+          def_.bounce_def().forward_back_profiles(),
+          def_.bounce_def().forward_back_profile_order(),
           t.wall_depth,
           now_seconds,
           delta_seconds);
@@ -150,7 +138,7 @@ class BounceScenario : public BaseScenario {
 }  // namespace
 
 std::unique_ptr<Scenario> CreateBounceScenario(const CreateScenarioParams& params,
-                                                       Application* app) {
+                                               Application* app) {
   return std::make_unique<BounceScenario>(params, app);
 }
 
