@@ -3,6 +3,7 @@
   "linearDef": {
     "angle": 90,
     "angleJitter": 5,
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
     "targetPlacementStrategy": {
       "minDistance": 20,
       "regions": [
@@ -28,8 +29,10 @@
           }
         }
       ]
-    }
+    },
+    "upDownInitialDirection": "DIRECTION_NEGATIVE"
   },
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -45,15 +48,20 @@
     "clickSingle": true
   },
   "targetDef": {
+    "newestTargetIsGhost": false,
     "numTargets": 5,
     "profiles": [
       {
-        "info": {},
+        "info": {
+          "description": ""
+        },
         "speed": 50,
         "speedJitter": 8,
-        "targetRadius": 2
+        "targetRadius": 2,
+        "targetRadiusJitter": 0
       }
     ],
+    "removeClosestOnMiss": false,
     "removeTargetAfterSeconds": 2.5,
     "staggerInitialTargetsSeconds": 0.3
   }

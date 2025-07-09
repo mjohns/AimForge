@@ -74,6 +74,32 @@ class LinearScenario : public BaseScenario {
   }
 
  protected:
+  void UpdateInitialDirection(InitialDirection dir, float pos, float* direction_value) {
+    if (dir == InitialDirection::DIRECTION_OUT) {
+      // Away from center
+      if (pos < 0) {
+        EnsureNegative(direction_value);
+      } else {
+        EnsurePositive(direction_value);
+      }
+    } else if (dir == InitialDirection::DIRECTION_IN) {
+      // Towards center
+      if (pos > 0) {
+        EnsureNegative(direction_value);
+      } else {
+        EnsurePositive(direction_value);
+      }
+    } else if (dir == InitialDirection::DIRECTION_NEGATIVE) {
+      EnsureNegative(direction_value);
+    } else if (dir == InitialDirection::DIRECTION_POSITIVE) {
+      EnsurePositive(direction_value);
+    } else {
+      if (app_.rand().FlipCoin()) {
+        *direction_value *= -1;
+      }
+    }
+  }
+
   void FillInNewTarget(Target* target) override {
     glm::vec3 pos = wall_target_placer_->GetNextPosition();
     target->SetWallPosition(pos, def_.room());
@@ -81,36 +107,11 @@ class LinearScenario : public BaseScenario {
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
         app_.rand().GetJittered(def_.linear_def().angle(), def_.linear_def().angle_jitter()));
-    InOutDirection in_out = def_.linear_def().direction();
-    if (in_out == InOutDirection::DIRECTION_IN_OR_OUT) {
-      in_out =
-          app_.rand().FlipCoin() ? InOutDirection::DIRECTION_IN : InOutDirection::DIRECTION_OUT;
-    }
-    if (in_out == InOutDirection::DIRECTION_OUT) {
-      // Away from center
-      if (pos.x < 0) {
-        EnsureNegative(&direction.x);
-      } else {
-        EnsurePositive(&direction.x);
-      }
-      if (pos.y < 0) {
-        EnsureNegative(&direction.y);
-      } else {
-        EnsurePositive(&direction.y);
-      }
-    } else {
-      // Towards center
-      if (pos.x > 0) {
-        EnsureNegative(&direction.x);
-      } else {
-        EnsurePositive(&direction.x);
-      }
-      if (pos.y > 0) {
-        EnsureNegative(&direction.y);
-      } else {
-        EnsurePositive(&direction.y);
-      }
-    }
+    InitialDirection initial_direction = def_.linear_def().has_left_right_initial_direction()
+                                             ? def_.linear_def().left_right_initial_direction()
+                                             : InitialDirection::DIRECTION_IN;
+    UpdateInitialDirection(initial_direction, pos.x, &direction.x);
+    UpdateInitialDirection(def_.linear_def().up_down_initial_direction(), pos.y, &direction.y);
 
     target->movement_controller =
         std::make_shared<LinearMovementController>(target->speed, direction, wall_);

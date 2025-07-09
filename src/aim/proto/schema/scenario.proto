@@ -227,20 +227,14 @@ message BarrelScenarioDef {
   // When targets spawn or hit a wall they will be directed towards a point in the center percent of
   // the barrel.
   float direction_radius_percent = 2;
-
-  InOutDirection direction = 3;
 }
 
-enum InOutDirection {
-  DIRECTION_IN = 0;
-  DIRECTION_OUT = 2;
-  DIRECTION_IN_OR_OUT = 3;
-}
-
-enum PositiveNegativeDirection {
-  DIRECTION_POSITIVE_OR_NEGATIVE = 0;
-  DIRECTION_POSITIVE = 2;
-  DIRECTION_NEGATIVE = 3;
+enum InitialDirection {
+  DIRECTION_RANDOM = 0;
+  DIRECTION_POSITIVE = 1;
+  DIRECTION_NEGATIVE = 2;
+  DIRECTION_IN = 3;
+  DIRECTION_OUT = 4;
 }
 
 // Targets move linearly within the specified room. Uses 2d wall placement so it support simple room
@@ -253,7 +247,8 @@ message LinearScenarioDef {
 
   TargetPlacementStrategy target_placement_strategy = 5;
 
-  InOutDirection direction = 6;
+  InitialDirection left_right_initial_direction = 6;
+  InitialDirection up_down_initial_direction = 7;
 }
 
 message SineScenarioDef {
@@ -345,9 +340,9 @@ message TimedDirectionScenarioDef {
 
   float acceleration = 12;
 
-  PositiveNegativeDirection left_right_initial_direction = 13;
-  PositiveNegativeDirection up_down_initial_direction = 14;
-  PositiveNegativeDirection forward_back_initial_direction = 15;
+  InitialDirection left_right_initial_direction = 13;
+  InitialDirection up_down_initial_direction = 14;
+  InitialDirection forward_back_initial_direction = 15;
 }
 
 message BounceProfile {
@@ -382,8 +377,8 @@ message BounceScenarioDef {
 
   float acceleration = 12;
 
-  PositiveNegativeDirection left_right_initial_direction = 13;
-  PositiveNegativeDirection forward_back_initial_direction = 15;
+  InitialDirection left_right_initial_direction = 13;
+  InitialDirection forward_back_initial_direction = 15;
 }
 
 message WallArcScenarioDef {

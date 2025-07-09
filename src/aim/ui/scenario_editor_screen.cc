@@ -40,28 +40,28 @@ const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthT
     {RegionLength::kDepthPercentValue, "depth"},
 };
 
-const std::vector<std::pair<InOutDirection, std::string>> kInOutDirections{
-    {InOutDirection::DIRECTION_IN, "Towards center"},
-    {InOutDirection::DIRECTION_OUT, "Away from center"},
-    {InOutDirection::DIRECTION_IN_OR_OUT, "Random"},
+const std::vector<std::pair<InitialDirection, std::string>> kLeftRightDirections{
+    {InitialDirection::DIRECTION_POSITIVE, "Right"},
+    {InitialDirection::DIRECTION_NEGATIVE, "Left"},
+    {InitialDirection::DIRECTION_IN, "Towards center"},
+    {InitialDirection::DIRECTION_OUT, "Away from center"},
+    {InitialDirection::DIRECTION_RANDOM, "Random"},
 };
 
-const std::vector<std::pair<PositiveNegativeDirection, std::string>> kLeftRightDirections{
-    {PositiveNegativeDirection::DIRECTION_POSITIVE, "Right"},
-    {PositiveNegativeDirection::DIRECTION_NEGATIVE, "Left"},
-    {PositiveNegativeDirection::DIRECTION_POSITIVE_OR_NEGATIVE, "Random"},
+const std::vector<std::pair<InitialDirection, std::string>> kUpDownDirections{
+    {InitialDirection::DIRECTION_POSITIVE, "Up"},
+    {InitialDirection::DIRECTION_NEGATIVE, "Down"},
+    {InitialDirection::DIRECTION_IN, "Towards center"},
+    {InitialDirection::DIRECTION_OUT, "Away from center"},
+    {InitialDirection::DIRECTION_RANDOM, "Random"},
 };
 
-const std::vector<std::pair<PositiveNegativeDirection, std::string>> kUpDownDirections{
-    {PositiveNegativeDirection::DIRECTION_POSITIVE, "Up"},
-    {PositiveNegativeDirection::DIRECTION_NEGATIVE, "Down"},
-    {PositiveNegativeDirection::DIRECTION_POSITIVE_OR_NEGATIVE, "Random"},
-};
-
-const std::vector<std::pair<PositiveNegativeDirection, std::string>> kForwardBackDirections{
-    {PositiveNegativeDirection::DIRECTION_POSITIVE, "Forward"},
-    {PositiveNegativeDirection::DIRECTION_NEGATIVE, "Back"},
-    {PositiveNegativeDirection::DIRECTION_POSITIVE_OR_NEGATIVE, "Random"},
+const std::vector<std::pair<InitialDirection, std::string>> kForwardBackDirections{
+    {InitialDirection::DIRECTION_POSITIVE, "Forward"},
+    {InitialDirection::DIRECTION_NEGATIVE, "Back"},
+    {InitialDirection::DIRECTION_IN, "Towards center"},
+    {InitialDirection::DIRECTION_OUT, "Away from center"},
+    {InitialDirection::DIRECTION_RANDOM, "Random"},
 };
 
 const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
@@ -836,13 +836,24 @@ class ScenarioEditorScreen : public UiScreen {
     d.set_angle_jitter(angle_jitter);
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Initial direction");
+    ImGui::Text("Initial left/right direction");
     ImGui::SameLine();
-    InOutDirection direction_type =
-        d.has_direction() ? d.direction() : InOutDirection::DIRECTION_IN;
+    InitialDirection left_right_direction_type = d.has_left_right_initial_direction()
+                                                     ? d.left_right_initial_direction()
+                                                     : InitialDirection::DIRECTION_IN;
+    ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
+                              &left_right_direction_type,
+                              kLeftRightDirections,
+                              char_x_ * 20);
+    d.set_left_right_initial_direction(left_right_direction_type);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Initial up/down direction");
+    ImGui::SameLine();
+    InitialDirection up_down_direction_type = d.up_down_initial_direction();
     ImGui::SimpleTypeDropdown(
-        "DirectionTypeDropdown", &direction_type, kInOutDirections, char_x_ * 20);
-    d.set_direction(direction_type);
+        "UpDownDirectionTypeDropdown", &up_down_direction_type, kUpDownDirections, char_x_ * 20);
+    d.set_up_down_initial_direction(up_down_direction_type);
 
     Line();
 
@@ -966,7 +977,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial left/right direction");
     ImGui::SameLine();
-    PositiveNegativeDirection left_right_direction = d.left_right_initial_direction();
+    InitialDirection left_right_direction = d.left_right_initial_direction();
     ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
                               &left_right_direction,
                               kLeftRightDirections,
@@ -987,7 +998,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial up/down direction");
     ImGui::SameLine();
-    PositiveNegativeDirection up_down_direction = d.up_down_initial_direction();
+    InitialDirection up_down_direction = d.up_down_initial_direction();
     ImGui::SimpleTypeDropdown(
         "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 15);
     d.set_up_down_initial_direction(up_down_direction);
@@ -1006,7 +1017,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Initial forward/back direction");
       ImGui::SameLine();
-      PositiveNegativeDirection forward_back_direction = d.forward_back_initial_direction();
+      InitialDirection forward_back_direction = d.forward_back_initial_direction();
       ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
                                 &forward_back_direction,
                                 kForwardBackDirections,

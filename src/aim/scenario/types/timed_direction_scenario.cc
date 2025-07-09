@@ -47,7 +47,7 @@ class MovementControllerImpl : public MovementController {
   }
 
  protected:
-  bool GetInitialGoingLeft(PositiveNegativeDirection dir) {
+  bool GetInitialGoingLeft(InitialDirection dir) {
     if (dir == DIRECTION_POSITIVE) {
       return false;
     } else if (dir == DIRECTION_NEGATIVE) {
