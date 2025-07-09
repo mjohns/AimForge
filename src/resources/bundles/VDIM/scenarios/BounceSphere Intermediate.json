@@ -1,0 +1,91 @@
+{
+  "bounceDef": {
+    "acceleration": 151,
+    "bounceProfiles": [
+      {
+        "delaySecondsJitter": 0,
+        "height": {
+          "yPercentValue": 0.829999864
+        },
+        "heightJitter": {
+          "yPercentValue": 0
+        },
+        "info": {
+          "description": "Bounce"
+        }
+      }
+    ],
+    "bounds": {},
+    "leftRightInitialDirection": "DIRECTION_POSITIVE",
+    "leftRightProfiles": [
+      {
+        "accelerationMultiplier": 0.699999869,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.549999893,
+        "time": 9.29999924,
+        "timeJitter": 0
+      }
+    ],
+    "targetPlacementStrategy": {
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "value": 1
+            },
+            "yLength": {
+              "value": 1
+            }
+          },
+          "xOffset": {
+            "xPercentValue": 0
+          },
+          "yOffset": {
+            "yPercentValue": -0.45
+          }
+        }
+      ]
+    }
+  },
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -47
+    },
+    "cylinderRoom": {
+      "height": 160,
+      "hideSides": true,
+      "radius": 200,
+      "widthPerimeterPercent": 1.30000019
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 146,
+        "speedJitter": 0,
+        "targetRadius": 2.49999952,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  }
+}

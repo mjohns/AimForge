@@ -1,0 +1,109 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 32
+    },
+    "cylinderRoom": {
+      "height": 160,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 65,
+      "widthPerimeterPercent": 0.599999964
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "pill": {
+          "height": 8.59997559
+        },
+        "speed": 102,
+        "speedJitter": 0,
+        "targetRadius": 0.9,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 116,
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.559999943
+      },
+      "height": {
+        "yPercentValue": 0.500000119
+      },
+      "width": {
+        "xPercentValue": 0.9
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "forwardBackProfiles": [
+      {
+        "accelerationMultiplier": 0.349999845,
+        "info": {
+          "description": "",
+          "weight": 2
+        },
+        "speedMultiplier": 0.549999893,
+        "time": 1.70000017,
+        "timeJitter": 0.800000072
+      },
+      {
+        "accelerationMultiplier": 0.799999952,
+        "info": {
+          "description": "",
+          "weight": 1
+        },
+        "speedMultiplier": 0.799999952,
+        "time": 2.89999938,
+        "timeJitter": 0.6
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_NEGATIVE",
+    "leftRightProfiles": [
+      {
+        "info": {
+          "description": "",
+          "weight": 3
+        },
+        "time": 3.89999866,
+        "timeJitter": 1.4000001
+      },
+      {
+        "info": {
+          "description": "Shorter",
+          "weight": 1
+        },
+        "time": 2.99999928,
+        "timeJitter": 0.3
+      }
+    ],
+    "upDownInitialDirection": "DIRECTION_POSITIVE",
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 0.499999881,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.199999779,
+        "time": 2.39999986,
+        "timeJitter": 1.30000019
+      }
+    ]
+  }
+}

@@ -23,6 +23,38 @@
     {
       "numPlays": 1,
       "scenario": "VDIM Smoothbot Pauer Glider Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Snake Track Intermediate S5 Precision Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Snake Track Intermediate S5 Reactive Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Snake Track Intermediate S5 Hard"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Snake Track Intermediate S5"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Smooth Your Vertical Altered POV Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT BT180TI Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM BounceSphere Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Curveswitch Intermediate"
     }
   ]
 }

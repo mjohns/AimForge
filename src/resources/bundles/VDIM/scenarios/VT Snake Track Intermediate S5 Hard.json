@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 1.08999991,
+    "targetRadiusMultiplier": 0.920000076
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Snake Track Intermediate S5"
+  }
+}
