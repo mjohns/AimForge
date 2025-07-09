@@ -1070,6 +1070,13 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     DrawRegionLengthEditor("BounceHeight", DefaultDim::DIM_Y, p->mutable_height());
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Indent();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("BounceHeightJitter", DefaultDim::DIM_Y, p->mutable_height_jitter());
+    ImGui::Unindent();
+
     ImGui::InputJitteredFloat(ImGui::InputFloatParams("Delay")
                                   .set_label("Bounce delay")
                                   .set_step(0.05, 0.2)

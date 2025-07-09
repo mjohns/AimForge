@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 1.0999999,
+    "targetRadiusMultiplier": 0.930000067
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Popcorn Intermediate S5"
+  }
+}

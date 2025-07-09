@@ -42,6 +42,42 @@
     },
     {
       "numPlays": 1,
+      "scenario": "VDIM Leapcorn Pure"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Bounceshot Intermediate 20% smaller"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Curveshot Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Poptrack Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Popswitch Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Popcorn Intermediate S5 Speed"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Popcorn Intermediate S5 Multi"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Popcorn Intermediate S5 Hard"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Popcorn Intermediate S5"
+    },
+    {
+      "numPlays": 1,
       "scenario": "VDIM VPP AdjustSwitch Intermediate"
     },
     {

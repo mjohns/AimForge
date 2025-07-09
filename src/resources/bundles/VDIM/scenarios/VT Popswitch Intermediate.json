@@ -1,0 +1,96 @@
+{
+  "bounceDef": {
+    "acceleration": 91,
+    "bounceProfiles": [
+      {
+        "delaySeconds": 0.25,
+        "delaySecondsJitter": 0.05,
+        "height": {
+          "yPercentValue": 0.5
+        },
+        "heightJitter": {
+          "yPercentValue": 0.0200000294
+        },
+        "info": {
+          "description": "Bounce"
+        },
+        "onlyDelayOnFloor": true
+      }
+    ],
+    "bounds": {},
+    "leftRightInitialDirection": "DIRECTION_IN",
+    "leftRightProfiles": [
+      {
+        "accelerationMultiplier": 2.84999824,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.649999917,
+        "time": 7.09999561,
+        "timeJitter": 0
+      }
+    ],
+    "targetPlacementStrategy": {
+      "regions": [
+        {
+          "depth": 27,
+          "depthJitter": 19,
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.639999866
+            },
+            "yLength": {
+              "value": 1
+            }
+          },
+          "xOffset": {
+            "xPercentValue": 0
+          },
+          "yOffset": {
+            "yPercentValue": -0.48
+          }
+        }
+      ]
+    }
+  },
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+    },
+    "cylinderRoom": {
+      "height": 130,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 44,
+      "widthPerimeterPercent": 0.3
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "healthSeconds": 0.3,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": ""
+        },
+        "speed": 128,
+        "speedJitter": 0,
+        "targetRadius": 2.59999943,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  }
+}
