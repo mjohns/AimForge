@@ -1,0 +1,104 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 150,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 38,
+      "widthPerimeterPercent": 0.4
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 123,
+        "speedJitter": 0,
+        "targetRadius": 2.29999971,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 175,
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.35
+      },
+      "height": {
+        "yPercentValue": 0.73
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "forwardBackProfiles": [
+      {
+        "accelerationMultiplier": 0.399999857,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.6,
+        "time": 2.59999943,
+        "timeJitter": 0.800000072
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_NEGATIVE",
+    "leftRightProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 1.05,
+        "time": 1,
+        "timeJitter": 0.4
+      }
+    ],
+    "upDownInitialDirection": "DIRECTION_NEGATIVE",
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 0.299999833,
+        "info": {
+          "description": "Slow",
+          "weight": 2
+        },
+        "speedMultiplier": 0.100000009,
+        "time": 5.99999666,
+        "timeJitter": 1.4000001
+      },
+      {
+        "accelerationMultiplier": 0.4,
+        "info": {
+          "description": "Slow2",
+          "weight": 2
+        },
+        "speedMultiplier": 0.05,
+        "time": 4.49999809,
+        "timeJitter": 1.80000031
+      },
+      {
+        "accelerationMultiplier": 0.549999893,
+        "info": {
+          "description": "Shorter",
+          "weight": 1
+        },
+        "speedMultiplier": 0.1,
+        "time": 1.1,
+        "timeJitter": 0.3
+      }
+    ]
+  }
+}

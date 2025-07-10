@@ -120,7 +120,7 @@ class TimedDirectionScenario : public BaseScenario {
       pos = wall_target_placer_->GetNextPosition();
     } else {
       float depth = wall_.GetWallBounds(def_.timed_direction_def().bounds()).max_depth;
-      if (depth > 0) {
+      if (depth > 0 && def_.timed_direction_def().forward_back_profiles_size() > 0) {
         // Start in the middle of the available depth.
         pos.z = depth / 2.0;
       }

@@ -1,60 +1,132 @@
 {
   "items": [
     {
-      "numPlays": 1,
+      "numPlays": 3,
       "scenario": "VDIM SYW (Smooth Your Wrist) Truly FIXED"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM Centering II 180 Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT Wide Angle Tracking Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM tamTargetSwitch Smooth Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM Smoothsphere Diamond"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM Smoothbot Pauer Glider Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 3,
       "scenario": "VDIM VT Snake Track Intermediate S5 Precision Focus"
     },
     {
-      "numPlays": 1,
+      "numPlays": 3,
       "scenario": "VDIM VT Snake Track Intermediate S5 Reactive Focus"
     },
     {
-      "numPlays": 1,
+      "numPlays": 3,
       "scenario": "VDIM VT Snake Track Intermediate S5 Hard"
     },
     {
-      "numPlays": 1,
+      "numPlays": 4,
       "scenario": "VDIM VT Snake Track Intermediate S5"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM Smooth Your Vertical Altered POV Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT BT180TI Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM BounceSphere Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT Curveswitch Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 1 Precision"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 2 Precision"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 3 Precision"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 1 Reactive"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 2 Reactive"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 3 Reactive"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 1"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 2"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT PGT Intermediate S5 Bot 3"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM cAt purrTrack Intermediate"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM tamTargetSwitch Control Intermediate"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM Controlsphere"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM cloverRawControl Easy"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM Silo Easier"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT Raw Control Intermediate S5 Precision Focus"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT Raw Control Intermediate S5 Reactive Focus"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT Raw Control Intermediate S5 Hard"
+    },
+    {
+      "numPlays": 4,
+      "scenario": "VDIM VT Raw Control Intermediate S5"
     }
   ]
 }

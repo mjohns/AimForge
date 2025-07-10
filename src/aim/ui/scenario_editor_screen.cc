@@ -648,6 +648,28 @@ class ScenarioEditorScreen : public UiScreen {
             .set_width(char_x_ * 10),
         PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), speed_multiplier));
 
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("AccelMult")
+            .set_label("Acceleration multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), acceleration_multiplier));
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("TimeScale")
+            .set_label("Time scale multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), time_scale_multiplier));
+
     if (def_.has_reference_def()) {
       // Allow overriding full set of fields for references.
       ImGui::InputInt(ImGui::InputIntParams("NumberOfTargets")
@@ -2440,6 +2462,9 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Health");
       ImGui::SameLine();
+      if (health_seconds <= 0) {
+        health_seconds = 0.4;
+      }
       JitteredValueInput(
           "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.1, 0.5, "%.1f");
       ImGui::SameLine();

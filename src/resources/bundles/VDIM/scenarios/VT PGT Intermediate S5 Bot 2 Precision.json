@@ -1,0 +1,110 @@
+{
+  "bounceDef": {
+    "acceleration": 31,
+    "bounceProfiles": [
+      {
+        "accelerationMultiplier": 0.849999964,
+        "delaySecondsJitter": 0,
+        "height": {
+          "yPercentValue": 0.549999952
+        },
+        "heightJitter": {
+          "yPercentValue": 0.08
+        },
+        "info": {
+          "description": "Bounce"
+        },
+        "speedMultiplier": 0.699999928
+      }
+    ],
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.34
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_NEGATIVE",
+    "forwardBackProfiles": [
+      {
+        "accelerationMultiplier": 0.74999994,
+        "info": {
+          "description": ""
+        },
+        "time": 2.00000024,
+        "timeJitter": 0.5
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_NEGATIVE",
+    "leftRightProfiles": [
+      {
+        "accelerationMultiplier": 1.19999981,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 1.0999999,
+        "time": 5.19999743,
+        "timeJitter": 0.5
+      }
+    ],
+    "targetPlacementStrategy": {
+      "regions": [
+        {
+          "depth": 40,
+          "depthJitter": 0,
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "value": 1
+            },
+            "yLength": {
+              "value": 1
+            }
+          },
+          "xOffset": {
+            "xPercentValue": 0
+          },
+          "yOffset": {
+            "yPercentValue": -0.45
+          }
+        }
+      ]
+    },
+    "timeScaleMultiplier": 1.34999967
+  },
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 140,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 38,
+      "widthPerimeterPercent": 0.5
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 88,
+        "speedJitter": 0,
+        "targetRadius": 1.39999974,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  }
+}

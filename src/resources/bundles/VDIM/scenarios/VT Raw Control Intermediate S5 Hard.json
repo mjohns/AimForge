@@ -1,0 +1,12 @@
+{
+  "description": "",
+  "overrides": {
+    "accelerationMultiplier": 1.09999979,
+    "speedMultiplier": 1.11999965,
+    "targetRadiusMultiplier": 0.920000076,
+    "timeScaleMultiplier": 0.939999938
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Raw Control Intermediate S5"
+  }
+}
