@@ -252,8 +252,7 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
   if (overrides.has_distance_multiplier()) {
     float mult = overrides.distance_multiplier();
     for (auto& profile : *result.mutable_wall_strafe_def()->mutable_profiles()) {
-      MultiplyRegionLength(profile.mutable_min_distance(), mult);
-      MultiplyRegionLength(profile.mutable_max_distance(), mult);
+      MultiplyRegionLength(profile.mutable_distance(), mult);
     }
   }
   if (overrides.has_acceleration_multiplier()) {

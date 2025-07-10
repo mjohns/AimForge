@@ -48,6 +48,12 @@
       {
         "angle": 0,
         "angleJitter": 0,
+        "distance": {
+          "xPercentValue": 0.44
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.1
+        },
         "info": {
           "description": "Short",
           "weight": 4
@@ -62,6 +68,12 @@
       {
         "angle": 0,
         "angleJitter": 0,
+        "distance": {
+          "xPercentValue": 0.28
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.08
+        },
         "info": {
           "description": "Mid",
           "weight": 2

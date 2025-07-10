@@ -1,6 +1,7 @@
 {
   "description": "",
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -47,22 +48,25 @@
         "xPercentValue": 0.85
       }
     },
-    "height": {
-      "yPercentValue": 0.9
-    },
     "profiles": [
       {
         "angle": 22,
         "angleJitter": 10,
         "directionChangePercent": 0,
+        "distance": {
+          "xPercentValue": 0.42
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.1
+        },
         "info": {
           "description": ""
         },
         "maxDistance": {
-          "xPercentValue": 0.539999962
+          "xPercentValue": 0.1
         },
         "minDistance": {
-          "xPercentValue": 0.290000081
+          "xPercentValue": 0.42
         }
       }
     ],
@@ -84,9 +88,6 @@
           }
         }
       ]
-    },
-    "width": {
-      "xPercentValue": 0.85
     }
   }
 }

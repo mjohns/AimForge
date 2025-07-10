@@ -1106,7 +1106,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Indent();
     ImGui::Text("+/-");
     ImGui::SameLine();
-    DrawRegionLengthEditor("BounceHeightJitter", DefaultDim::DIM_Y, p->mutable_height_jitter());
+    DrawRegionLengthEditor(
+        "BounceHeightJitter", DefaultDim::DIM_Y, p->mutable_height_jitter(), false, true);
     ImGui::Unindent();
 
     ImGui::InputJitteredFloat(ImGui::InputFloatParams("Delay")
@@ -1319,6 +1320,11 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawWallStrafeProfile(WallStrafeProfile* p) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Distance");
+    ImGui::SameLine();
+    DrawJitteredRegionLengthEditor("Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Min distance");
     ImGui::SameLine();
@@ -1932,11 +1938,25 @@ class ScenarioEditorScreen : public UiScreen {
     return PROTO_FLOAT_FIELD(RegionLength, length, value);
   }
 
+  void DrawJitteredRegionLengthEditor(const std::string& id,
+                                      DefaultDim default_dim,
+                                      RegionLength* length,
+                                      RegionLength* jitter) {
+    ImGui::IdGuard cid(id);
+    DrawRegionLengthEditor("RegionValue", default_dim, length);
+    ImGui::Indent();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("RegionJitterValue", default_dim, jitter, false, true);
+    ImGui::Unindent();
+  }
+
   void DrawRegionLengthEditor(const std::string& id,
                               DefaultDim default_dim,
                               RegionLength* length,
-                              bool is_point = false) {
-    float default_percent = is_point ? 0 : 0.50;
+                              bool is_point = false,
+                              bool default_to_zero = false) {
+    float default_percent = is_point || default_to_zero ? 0 : 0.50;
     ImGui::IdGuard cid(id);
     if (length->type_case() == RegionLength::TYPE_NOT_SET) {
       if (default_dim == DefaultDim::DIM_X) {

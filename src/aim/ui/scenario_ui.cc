@@ -12,6 +12,23 @@
 namespace aim {
 namespace {
 
+const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
+    {ScenarioDef::TYPE_NOT_SET, "None"},
+    {ScenarioDef::kStaticDef, "Static"},
+    {ScenarioDef::kCenteringDef, "Centering"},
+    {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
+    {ScenarioDef::kTimedDirectionDef, "Timed Direction"},
+    {ScenarioDef::kBounceDef, "Bounce"},
+    {ScenarioDef::kLinearDef, "Linear"},
+    {ScenarioDef::kBarrelDef, "Barrel"},
+    {ScenarioDef::kWallWanderDef, "Wall Wander"},
+    {ScenarioDef::kWaypointDef, "Waypoint"},
+    {ScenarioDef::kCircleDef, "Circle"},
+    {ScenarioDef::kWallArcDef, "Wall Arc"},
+    {ScenarioDef::kSineDef, "Sine"},
+    {ScenarioDef::kReferenceDef, "Reference"},
+};
+
 const char* kScenarioViewTypeKey = "ScenarioViewType";
 
 enum class ScenarioViewType : int {
@@ -58,7 +75,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     }
 
     ImGui::SetNextItemWidth(char_size.x * 8);
-    bool view_type_changed = ImGui::SimpleTypeDropdown("##PlaylistViewType",
+    bool view_type_changed = ImGui::SimpleTypeDropdown("##ScenarioViewType",
                                                        &view_type_,
                                                        {
                                                            {ScenarioViewType::RECENT, "Recent"},
@@ -68,6 +85,17 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     if (view_type_changed) {
       app_->local_store().PutInt(kScenarioViewTypeKey, (int)view_type_);
       UpdateFilteredScenarios();
+    }
+
+    if (view_type_ == ScenarioViewType::ALL) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Type");
+      ImGui::SameLine();
+      bool is_new_type = ImGui::SimpleTypeDropdown(
+          "ScenarioTypeDropdown", &scenario_type_filter_, kScenarioTypes, char_size.x * 15);
+      if (is_new_type) {
+        UpdateFilteredScenarios();
+      }
     }
 
     ImGui::Spacing();
@@ -241,7 +269,9 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       }
     } else {
       for (const ScenarioItem& scenario : app_->scenario_manager().scenarios()) {
-        if (StringMatchesSearch(scenario.id(), search_words)) {
+        bool type_matches = scenario_type_filter_ == ScenarioDef::TYPE_NOT_SET ||
+                            scenario.def.type_case() == scenario_type_filter_;
+        if (type_matches && StringMatchesSearch(scenario.id(), search_words)) {
           filtered_scenario_ids_.push_back(scenario.id());
         }
       }
@@ -266,6 +296,8 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   int expand_all_ = 0;
   int collapse_all_ = 0;
   Application* app_;
+
+  ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
 };
 
 }  // namespace

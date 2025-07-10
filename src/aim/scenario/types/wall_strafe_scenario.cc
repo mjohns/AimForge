@@ -127,15 +127,8 @@ class StrafeMovementController : public BasicWallMovementController {
       max_velocity_ *= profile.speed_multiplier();
     }
 
-    float min_strafe_distance = wall_.GetRegionLength(profile.min_distance());
-    if (min_strafe_distance <= 0) {
-      min_strafe_distance = 30;
-    }
-    float max_strafe_distance = wall_.GetRegionLength(profile.max_distance());
-    if (max_strafe_distance <= 0) {
-      max_strafe_distance = 100;
-    }
-    float distance = app_.rand().GetInRange(min_strafe_distance, max_strafe_distance);
+    float distance = app_.rand().GetJittered(wall_.GetRegionLength(profile.distance()),
+                                             wall_.GetRegionLength(profile.distance_jitter()));
 
     glm::vec2 new_direction;
     float angle = abs(app_.rand().GetJittered(profile.angle(), profile.angle_jitter()));

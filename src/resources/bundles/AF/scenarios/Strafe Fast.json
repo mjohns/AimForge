@@ -1,5 +1,6 @@
 {
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cylinderRoom": {
       "height": 150,
@@ -12,10 +13,13 @@
     "trackingInvincible": true
   },
   "targetDef": {
+    "newestTargetIsGhost": false,
     "numTargets": 1,
     "profiles": [
       {
-        "info": {},
+        "info": {
+          "description": ""
+        },
         "pill": {
           "height": 15
         },
@@ -24,7 +28,8 @@
         "targetRadius": 4.0999994299999996,
         "targetRadiusJitter": 0
       }
-    ]
+    ],
+    "removeClosestOnMiss": false
   },
   "wallStrafeDef": {
     "bounds": {
@@ -35,13 +40,16 @@
         "xPercentValue": 0.85
       }
     },
-    "height": {
-      "yPercentValue": 0.85
-    },
     "profiles": [
       {
         "angle": 0,
         "angleJitter": 0,
+        "distance": {
+          "xPercentValue": 0.7
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.1
+        },
         "info": {
           "description": ""
         },
@@ -52,9 +60,6 @@
           "xPercentValue": 0.6
         }
       }
-    ],
-    "width": {
-      "xPercentValue": 0.85
-    }
+    ]
   }
 }

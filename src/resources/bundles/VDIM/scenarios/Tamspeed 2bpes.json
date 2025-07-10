@@ -1,6 +1,7 @@
 {
   "description": "",
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -41,13 +42,17 @@
         "xPercentValue": 0.9
       }
     },
-    "height": {
-      "yPercentValue": 0.9
-    },
     "profiles": [
       {
         "angle": 0,
         "angleJitter": 7,
+        "directionChangePercent": 0.5,
+        "distance": {
+          "xPercentValue": 0.38
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.2
+        },
         "info": {
           "description": ""
         },
@@ -78,9 +83,6 @@
           }
         }
       ]
-    },
-    "width": {
-      "xPercentValue": 0.9
     }
   }
 }

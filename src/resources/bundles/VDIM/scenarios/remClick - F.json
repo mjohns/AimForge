@@ -1,6 +1,7 @@
 {
   "description": "",
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -41,13 +42,17 @@
         "xPercentValue": 0.9
       }
     },
-    "height": {
-      "yPercentValue": 0.9
-    },
     "profiles": [
       {
         "angle": 0,
         "angleJitter": 13,
+        "directionChangePercent": 0.5,
+        "distance": {
+          "xPercentValue": 0.32
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.08
+        },
         "info": {
           "description": "Little Verticality",
           "weight": 5
@@ -62,6 +67,12 @@
       {
         "angle": 0,
         "angleJitter": 0,
+        "distance": {
+          "xPercentValue": 0.35
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.08
+        },
         "info": {
           "description": "Flat Mid",
           "weight": 11
@@ -76,6 +87,13 @@
       {
         "angle": 20,
         "angleJitter": 0,
+        "directionChangePercent": 0.5,
+        "distance": {
+          "xPercentValue": 0.35
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.05
+        },
         "info": {
           "description": "Bigger Vert Down",
           "weight": 2
@@ -90,6 +108,12 @@
       {
         "angle": -20,
         "angleJitter": 0,
+        "distance": {
+          "xPercentValue": 0.35
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.05
+        },
         "info": {
           "description": "Bigger Vert Up",
           "weight": 1
@@ -121,9 +145,6 @@
           }
         }
       ]
-    },
-    "width": {
-      "xPercentValue": 0.9
     }
   }
 }

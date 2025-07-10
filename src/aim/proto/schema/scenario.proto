@@ -274,6 +274,9 @@ message ProfileInfo {
 message WallStrafeProfile {
   ProfileInfo info = 1;
 
+  RegionLength distance = 2;
+  RegionLength distance_jitter = 3;
+
   RegionLength min_distance = 5;
   RegionLength max_distance = 6;
 

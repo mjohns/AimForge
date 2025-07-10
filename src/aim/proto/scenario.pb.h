@@ -2715,6 +2715,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kInfoFieldNumber = 1,
+    kDistanceFieldNumber = 2,
+    kDistanceJitterFieldNumber = 3,
     kMinDistanceFieldNumber = 5,
     kMaxDistanceFieldNumber = 6,
     kAngleFieldNumber = 7,
@@ -2739,6 +2741,36 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   private:
   const ::aim::ProfileInfo& _internal_info() const;
   ::aim::ProfileInfo* _internal_mutable_info();
+
+  public:
+  // .aim.RegionLength distance = 2;
+  bool has_distance() const;
+  void clear_distance() ;
+  const ::aim::RegionLength& distance() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_distance();
+  ::aim::RegionLength* mutable_distance();
+  void set_allocated_distance(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_distance(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_distance();
+
+  private:
+  const ::aim::RegionLength& _internal_distance() const;
+  ::aim::RegionLength* _internal_mutable_distance();
+
+  public:
+  // .aim.RegionLength distance_jitter = 3;
+  bool has_distance_jitter() const;
+  void clear_distance_jitter() ;
+  const ::aim::RegionLength& distance_jitter() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_distance_jitter();
+  ::aim::RegionLength* mutable_distance_jitter();
+  void set_allocated_distance_jitter(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_distance_jitter(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_distance_jitter();
+
+  private:
+  const ::aim::RegionLength& _internal_distance_jitter() const;
+  ::aim::RegionLength* _internal_mutable_distance_jitter();
 
   public:
   // .aim.RegionLength min_distance = 5;
@@ -2864,7 +2896,7 @@ class WallStrafeProfile final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 11, 3,
+      4, 13, 5,
       0, 2>
       _table_;
 
@@ -2885,6 +2917,8 @@ class WallStrafeProfile final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::ProfileInfo* info_;
+    ::aim::RegionLength* distance_;
+    ::aim::RegionLength* distance_jitter_;
     ::aim::RegionLength* min_distance_;
     ::aim::RegionLength* max_distance_;
     float angle_;
@@ -16900,16 +16934,208 @@ inline void WallStrafeProfile::set_allocated_info(::aim::ProfileInfo* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.info)
 }
 
+// .aim.RegionLength distance = 2;
+inline bool WallStrafeProfile::has_distance() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.distance_ != nullptr);
+  return value;
+}
+inline void WallStrafeProfile::clear_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.distance_ != nullptr) _impl_.distance_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::RegionLength& WallStrafeProfile::_internal_distance() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.distance_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallStrafeProfile::distance() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.distance)
+  return _internal_distance();
+}
+inline void WallStrafeProfile::unsafe_arena_set_allocated_distance(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.distance_);
+  }
+  _impl_.distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeProfile.distance)
+}
+inline ::aim::RegionLength* WallStrafeProfile::release_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.distance_;
+  _impl_.distance_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallStrafeProfile::unsafe_arena_release_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.distance)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.distance_;
+  _impl_.distance_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallStrafeProfile::_internal_mutable_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.distance_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.distance_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.distance_;
+}
+inline ::aim::RegionLength* WallStrafeProfile::mutable_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_distance();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.distance)
+  return _msg;
+}
+inline void WallStrafeProfile::set_allocated_distance(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.distance_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.distance)
+}
+
+// .aim.RegionLength distance_jitter = 3;
+inline bool WallStrafeProfile::has_distance_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.distance_jitter_ != nullptr);
+  return value;
+}
+inline void WallStrafeProfile::clear_distance_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.distance_jitter_ != nullptr) _impl_.distance_jitter_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::RegionLength& WallStrafeProfile::_internal_distance_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.distance_jitter_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& WallStrafeProfile::distance_jitter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.distance_jitter)
+  return _internal_distance_jitter();
+}
+inline void WallStrafeProfile::unsafe_arena_set_allocated_distance_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.distance_jitter_);
+  }
+  _impl_.distance_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeProfile.distance_jitter)
+}
+inline ::aim::RegionLength* WallStrafeProfile::release_distance_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.distance_jitter_;
+  _impl_.distance_jitter_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* WallStrafeProfile::unsafe_arena_release_distance_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.distance_jitter)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.distance_jitter_;
+  _impl_.distance_jitter_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* WallStrafeProfile::_internal_mutable_distance_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.distance_jitter_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.distance_jitter_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.distance_jitter_;
+}
+inline ::aim::RegionLength* WallStrafeProfile::mutable_distance_jitter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_distance_jitter();
+  // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.distance_jitter)
+  return _msg;
+}
+inline void WallStrafeProfile::set_allocated_distance_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.distance_jitter_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.distance_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeProfile.distance_jitter)
+}
+
 // .aim.RegionLength min_distance = 5;
 inline bool WallStrafeProfile::has_min_distance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.min_distance_ != nullptr);
   return value;
 }
 inline void WallStrafeProfile::clear_min_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.min_distance_ != nullptr) _impl_.min_distance_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline const ::aim::RegionLength& WallStrafeProfile::_internal_min_distance() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -16927,16 +17153,16 @@ inline void WallStrafeProfile::unsafe_arena_set_allocated_min_distance(::aim::Re
   }
   _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000008u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000008u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeProfile.min_distance)
 }
 inline ::aim::RegionLength* WallStrafeProfile::release_min_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
   ::aim::RegionLength* released = _impl_.min_distance_;
   _impl_.min_distance_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -16956,7 +17182,7 @@ inline ::aim::RegionLength* WallStrafeProfile::unsafe_arena_release_min_distance
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.min_distance)
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
   ::aim::RegionLength* temp = _impl_.min_distance_;
   _impl_.min_distance_ = nullptr;
   return temp;
@@ -16970,7 +17196,7 @@ inline ::aim::RegionLength* WallStrafeProfile::_internal_mutable_min_distance() 
   return _impl_.min_distance_;
 }
 inline ::aim::RegionLength* WallStrafeProfile::mutable_min_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   ::aim::RegionLength* _msg = _internal_mutable_min_distance();
   // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.min_distance)
   return _msg;
@@ -16987,9 +17213,9 @@ inline void WallStrafeProfile::set_allocated_min_distance(::aim::RegionLength* v
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000008u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000008u;
   }
 
   _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -16998,14 +17224,14 @@ inline void WallStrafeProfile::set_allocated_min_distance(::aim::RegionLength* v
 
 // .aim.RegionLength max_distance = 6;
 inline bool WallStrafeProfile::has_max_distance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.max_distance_ != nullptr);
   return value;
 }
 inline void WallStrafeProfile::clear_max_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.max_distance_ != nullptr) _impl_.max_distance_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline const ::aim::RegionLength& WallStrafeProfile::_internal_max_distance() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -17023,16 +17249,16 @@ inline void WallStrafeProfile::unsafe_arena_set_allocated_max_distance(::aim::Re
   }
   _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000010u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000010u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallStrafeProfile.max_distance)
 }
 inline ::aim::RegionLength* WallStrafeProfile::release_max_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
   ::aim::RegionLength* released = _impl_.max_distance_;
   _impl_.max_distance_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -17052,7 +17278,7 @@ inline ::aim::RegionLength* WallStrafeProfile::unsafe_arena_release_max_distance
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallStrafeProfile.max_distance)
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
   ::aim::RegionLength* temp = _impl_.max_distance_;
   _impl_.max_distance_ = nullptr;
   return temp;
@@ -17066,7 +17292,7 @@ inline ::aim::RegionLength* WallStrafeProfile::_internal_mutable_max_distance() 
   return _impl_.max_distance_;
 }
 inline ::aim::RegionLength* WallStrafeProfile::mutable_max_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   ::aim::RegionLength* _msg = _internal_mutable_max_distance();
   // @@protoc_insertion_point(field_mutable:aim.WallStrafeProfile.max_distance)
   return _msg;
@@ -17083,9 +17309,9 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000010u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000010u;
   }
 
   _impl_.max_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -17094,13 +17320,13 @@ inline void WallStrafeProfile::set_allocated_max_distance(::aim::RegionLength* v
 
 // float angle = 7;
 inline bool WallStrafeProfile::has_angle() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_angle() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float WallStrafeProfile::angle() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle)
@@ -17108,7 +17334,7 @@ inline float WallStrafeProfile::angle() const {
 }
 inline void WallStrafeProfile::set_angle(float value) {
   _internal_set_angle(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle)
 }
 inline float WallStrafeProfile::_internal_angle() const {
@@ -17122,13 +17348,13 @@ inline void WallStrafeProfile::_internal_set_angle(float value) {
 
 // float angle_jitter = 8;
 inline bool WallStrafeProfile::has_angle_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_angle_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.angle_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float WallStrafeProfile::angle_jitter() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.angle_jitter)
@@ -17136,7 +17362,7 @@ inline float WallStrafeProfile::angle_jitter() const {
 }
 inline void WallStrafeProfile::set_angle_jitter(float value) {
   _internal_set_angle_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.angle_jitter)
 }
 inline float WallStrafeProfile::_internal_angle_jitter() const {
@@ -17150,13 +17376,13 @@ inline void WallStrafeProfile::_internal_set_angle_jitter(float value) {
 
 // float direction_change_percent = 9;
 inline bool WallStrafeProfile::has_direction_change_percent() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_direction_change_percent() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.direction_change_percent_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float WallStrafeProfile::direction_change_percent() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.direction_change_percent)
@@ -17164,7 +17390,7 @@ inline float WallStrafeProfile::direction_change_percent() const {
 }
 inline void WallStrafeProfile::set_direction_change_percent(float value) {
   _internal_set_direction_change_percent(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.direction_change_percent)
 }
 inline float WallStrafeProfile::_internal_direction_change_percent() const {
@@ -17178,13 +17404,13 @@ inline void WallStrafeProfile::_internal_set_direction_change_percent(float valu
 
 // float pause_at_end_chance = 10;
 inline bool WallStrafeProfile::has_pause_at_end_chance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_pause_at_end_chance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_at_end_chance_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float WallStrafeProfile::pause_at_end_chance() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_at_end_chance)
@@ -17192,7 +17418,7 @@ inline float WallStrafeProfile::pause_at_end_chance() const {
 }
 inline void WallStrafeProfile::set_pause_at_end_chance(float value) {
   _internal_set_pause_at_end_chance(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_at_end_chance)
 }
 inline float WallStrafeProfile::_internal_pause_at_end_chance() const {
@@ -17206,13 +17432,13 @@ inline void WallStrafeProfile::_internal_set_pause_at_end_chance(float value) {
 
 // float pause_seconds = 11;
 inline bool WallStrafeProfile::has_pause_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_pause_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline float WallStrafeProfile::pause_seconds() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_seconds)
@@ -17220,7 +17446,7 @@ inline float WallStrafeProfile::pause_seconds() const {
 }
 inline void WallStrafeProfile::set_pause_seconds(float value) {
   _internal_set_pause_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_seconds)
 }
 inline float WallStrafeProfile::_internal_pause_seconds() const {
@@ -17234,13 +17460,13 @@ inline void WallStrafeProfile::_internal_set_pause_seconds(float value) {
 
 // float pause_seconds_jitter = 12;
 inline bool WallStrafeProfile::has_pause_seconds_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_pause_seconds_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_seconds_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000400u;
 }
 inline float WallStrafeProfile::pause_seconds_jitter() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.pause_seconds_jitter)
@@ -17248,7 +17474,7 @@ inline float WallStrafeProfile::pause_seconds_jitter() const {
 }
 inline void WallStrafeProfile::set_pause_seconds_jitter(float value) {
   _internal_set_pause_seconds_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000400u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.pause_seconds_jitter)
 }
 inline float WallStrafeProfile::_internal_pause_seconds_jitter() const {
@@ -17262,13 +17488,13 @@ inline void WallStrafeProfile::_internal_set_pause_seconds_jitter(float value) {
 
 // float speed_multiplier = 13;
 inline bool WallStrafeProfile::has_speed_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_speed_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000200u;
+  _impl_._has_bits_[0] &= ~0x00000800u;
 }
 inline float WallStrafeProfile::speed_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.speed_multiplier)
@@ -17276,7 +17502,7 @@ inline float WallStrafeProfile::speed_multiplier() const {
 }
 inline void WallStrafeProfile::set_speed_multiplier(float value) {
   _internal_set_speed_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000200u;
+  _impl_._has_bits_[0] |= 0x00000800u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.speed_multiplier)
 }
 inline float WallStrafeProfile::_internal_speed_multiplier() const {
@@ -17290,13 +17516,13 @@ inline void WallStrafeProfile::_internal_set_speed_multiplier(float value) {
 
 // float acceleration_multiplier = 14;
 inline bool WallStrafeProfile::has_acceleration_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
   return value;
 }
 inline void WallStrafeProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000400u;
+  _impl_._has_bits_[0] &= ~0x00001000u;
 }
 inline float WallStrafeProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeProfile.acceleration_multiplier)
@@ -17304,7 +17530,7 @@ inline float WallStrafeProfile::acceleration_multiplier() const {
 }
 inline void WallStrafeProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000400u;
+  _impl_._has_bits_[0] |= 0x00001000u;
   // @@protoc_insertion_point(field_set:aim.WallStrafeProfile.acceleration_multiplier)
 }
 inline float WallStrafeProfile::_internal_acceleration_multiplier() const {
