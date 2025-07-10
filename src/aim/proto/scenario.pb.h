@@ -6809,6 +6809,8 @@ class TargetDef final : public ::google::protobuf::Message
     kNewTargetDelaySecondsFieldNumber = 6,
     kRemoveTargetAfterSecondsFieldNumber = 7,
     kStaggerInitialTargetsSecondsFieldNumber = 8,
+    kRemoveIfBelowHealthThresholdFieldNumber = 9,
+    kRemoveIfBelowHealthTimeFieldNumber = 10,
   };
   // repeated .aim.TargetProfile profiles = 1;
   int profiles_size() const;
@@ -6911,12 +6913,34 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_stagger_initial_targets_seconds(float value);
 
   public:
+  // float remove_if_below_health_threshold = 9;
+  bool has_remove_if_below_health_threshold() const;
+  void clear_remove_if_below_health_threshold() ;
+  float remove_if_below_health_threshold() const;
+  void set_remove_if_below_health_threshold(float value);
+
+  private:
+  float _internal_remove_if_below_health_threshold() const;
+  void _internal_set_remove_if_below_health_threshold(float value);
+
+  public:
+  // float remove_if_below_health_time = 10;
+  bool has_remove_if_below_health_time() const;
+  void clear_remove_if_below_health_time() ;
+  float remove_if_below_health_time() const;
+  void set_remove_if_below_health_time(float value);
+
+  private:
+  float _internal_remove_if_below_health_time() const;
+  void _internal_set_remove_if_below_health_time(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 8, 1,
+      4, 10, 1,
       0, 2>
       _table_;
 
@@ -6945,6 +6969,8 @@ class TargetDef final : public ::google::protobuf::Message
     float new_target_delay_seconds_;
     float remove_target_after_seconds_;
     float stagger_initial_targets_seconds_;
+    float remove_if_below_health_threshold_;
+    float remove_if_below_health_time_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -21174,6 +21200,62 @@ inline float TargetDef::_internal_stagger_initial_targets_seconds() const {
 inline void TargetDef::_internal_set_stagger_initial_targets_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stagger_initial_targets_seconds_ = value;
+}
+
+// float remove_if_below_health_threshold = 9;
+inline bool TargetDef::has_remove_if_below_health_threshold() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void TargetDef::clear_remove_if_below_health_threshold() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_threshold_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline float TargetDef::remove_if_below_health_threshold() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.remove_if_below_health_threshold)
+  return _internal_remove_if_below_health_threshold();
+}
+inline void TargetDef::set_remove_if_below_health_threshold(float value) {
+  _internal_set_remove_if_below_health_threshold(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.TargetDef.remove_if_below_health_threshold)
+}
+inline float TargetDef::_internal_remove_if_below_health_threshold() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_if_below_health_threshold_;
+}
+inline void TargetDef::_internal_set_remove_if_below_health_threshold(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_threshold_ = value;
+}
+
+// float remove_if_below_health_time = 10;
+inline bool TargetDef::has_remove_if_below_health_time() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void TargetDef::clear_remove_if_below_health_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_time_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline float TargetDef::remove_if_below_health_time() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.remove_if_below_health_time)
+  return _internal_remove_if_below_health_time();
+}
+inline void TargetDef::set_remove_if_below_health_time(float value) {
+  _internal_set_remove_if_below_health_time(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.TargetDef.remove_if_below_health_time)
+}
+inline float TargetDef::_internal_remove_if_below_health_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_if_below_health_time_;
+}
+inline void TargetDef::_internal_set_remove_if_below_health_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_time_ = value;
 }
 
 // -------------------------------------------------------------------

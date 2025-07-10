@@ -450,6 +450,11 @@ message TargetDef {
 
   // The initial target will be added with the specified delay between each target.
   float stagger_initial_targets_seconds = 8;
+
+  // Remove the target if it has less than the specified health after x seconds of
+  // leaving the target.
+  float remove_if_below_health_threshold = 9;
+  float remove_if_below_health_time = 10;
 }
 
 message PillTargetDef {

@@ -1323,7 +1323,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Distance");
     ImGui::SameLine();
-    DrawJitteredRegionLengthEditor("Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
+    DrawJitteredRegionLengthEditor(
+        "Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Min distance");
@@ -2397,6 +2398,33 @@ class ScenarioEditorScreen : public UiScreen {
       t->set_stagger_initial_targets_seconds(stagger);
     } else {
       t->clear_stagger_initial_targets_seconds();
+    }
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
+            .set_label("Remove if below health percent")
+            .set_step(1, 5)
+            .set_min(1)
+            .set_max(99)
+            .set_precision(0)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        MultiplyField(PROTO_FLOAT_FIELD(TargetDef, t, remove_if_below_health_threshold), 100));
+
+    if (t->has_remove_if_below_health_threshold()) {
+      ImGui::Indent();
+      ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthTime")
+                            .set_label("After time")
+                            .set_step(.01, .1)
+                            .set_min(0)
+                            .set_precision(2)
+                            .set_default(.01)
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(TargetDef, t, remove_if_below_health_time));
+      ImGui::Unindent();
+    } else {
+      t->clear_remove_if_below_health_time();
     }
   }
 

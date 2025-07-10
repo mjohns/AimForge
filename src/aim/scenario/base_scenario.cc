@@ -55,12 +55,12 @@ void BaseScenario::Initialize() {
 
 void BaseScenario::UpdateState(UpdateStateData* data) {
   auto shot_type = GetShotType();
+  std::vector<u16> targets_to_remove;
   if (shot_type == ShotType::kTrackingKill || shot_type == ShotType::kTrackingInvincible) {
-    HandleTrackingHits(data);
+    HandleTrackingHits(data, &targets_to_remove);
   } else {
     HandleClickHits(data);
   }
-  std::vector<u16> targets_to_remove;
   if (def_.target_def().remove_target_after_seconds() > 0) {
     for (const Target& target : target_manager_.GetTargets()) {
       if (target.ShouldDraw() && target.remove_after_time_seconds < timer_.GetElapsedSeconds()) {
@@ -99,7 +99,8 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   UpdateTargetPositions();
 }
 
-void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
+void BaseScenario::HandleTrackingHits(UpdateStateData* data,
+                                      std::vector<u16>* target_ids_to_remove) {
   if (data->is_click_held) {
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (!tracking_sound_) {
@@ -116,8 +117,11 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
         bool is_hitting_this_target = false;
         if (maybe_hit_target_id.has_value() && *maybe_hit_target_id == target.id) {
           target.StartHitTimer();
+          target.last_hit_time = timer_.GetElapsedSeconds();
+          target.is_hit = true;
           is_hitting_this_target = true;
         } else {
+          target.is_hit = false;
           target.StopHitTimer();
         }
         if (target.health_seconds > 0) {
@@ -149,6 +153,21 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data) {
         float health_percent = target.GetHealthPercent();
         target.radius = target.radius_at_kill->end_radius + health_percent * radius_diff;
       }
+
+      float remove_if_below_health_threshold = def_.target_def().remove_if_below_health_threshold();
+      if (remove_if_below_health_threshold > 0 && !target.is_hit && target.last_hit_time >= 0) {
+        float remove_if_below_health_time = def_.target_def().remove_if_below_health_time();
+        float elapsed_time = timer_.GetElapsedSeconds() - target.last_hit_time;
+        float health = target.GetHealthPercent();
+        if (elapsed_time >= remove_if_below_health_time &&
+            health <= remove_if_below_health_threshold) {
+          // Remove the target early and add partial kill.
+          if (ShouldCountPartialKills()) {
+            stats_.num_hits += GetPartialHitValue(target);
+          }
+          target_ids_to_remove->push_back(target.id);
+        }
+      }
     }
   }
 }
@@ -174,6 +193,7 @@ void BaseScenario::TrackingHoldDone() {
   tracking_sound_ = {};
   if (GetShotType() == ShotType::kTrackingKill) {
     for (Target& target : target_manager_.GetMutableTargets()) {
+      target.is_hit = false;
       if (is_done()) {
         target.StopAllTimers();
       } else {

@@ -602,7 +602,6 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     target.growth_info = growth_info;
   }
 
-  // target.notify_at_health_seconds = 0.12;
   target.speed = app_.rand().GetJittered(profile.speed(), profile.speed_jitter());
   target.health_seconds =
       app_.rand().GetJittered(profile.health_seconds(), profile.health_seconds_jitter());

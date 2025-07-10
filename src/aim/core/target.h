@@ -63,6 +63,9 @@ struct Target {
 
   float remove_after_time_seconds = -1;
 
+  float last_hit_time = -1;
+  bool is_hit = false;
+
   bool hidden = false;
   bool is_ghost = false;
 
@@ -76,7 +79,6 @@ struct Target {
   void StopAllTimers();
   void AddTestDamage();
 
-  float notify_at_health_seconds = 0;
   float health_seconds = 0;
   float health_regen_rate = 0;
   std::optional<RadiusAtKill> radius_at_kill{};

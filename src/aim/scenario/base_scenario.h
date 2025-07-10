@@ -27,7 +27,7 @@ class BaseScenario : public Scenario {
 
  private:
   void HandleClickHits(UpdateStateData* data);
-  void HandleTrackingHits(UpdateStateData* data);
+  void HandleTrackingHits(UpdateStateData* data, std::vector<u16>* target_ids_to_remove);
   void AddNewTargetDuringRun(u16 old_target_id, bool is_kill = true);
   void TrackingHoldDone();
   Target GetNewTarget();
