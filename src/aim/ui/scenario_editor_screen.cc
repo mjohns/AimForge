@@ -669,6 +669,16 @@ class ScenarioEditorScreen : public UiScreen {
             .set_is_optional()
             .set_width(char_x_ * 10),
         PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), time_scale_multiplier));
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("Distance")
+            .set_label("Distance multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), distance_multiplier));
 
     if (def_.has_reference_def()) {
       // Allow overriding full set of fields for references.

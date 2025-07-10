@@ -201,6 +201,21 @@ std::optional<ScenarioItem> ScenarioManager::GetEvaluatedScenario(
   return resolved;
 }
 
+void MultiplyRegionLength(RegionLength* l, float mult) {
+  if (l->has_depth_percent_value()) {
+    l->set_depth_percent_value(l->depth_percent_value() * mult);
+  }
+  if (l->has_x_percent_value()) {
+    l->set_x_percent_value(l->x_percent_value() * mult);
+  }
+  if (l->has_y_percent_value()) {
+    l->set_y_percent_value(l->y_percent_value() * mult);
+  }
+  if (l->has_value()) {
+    l->set_value(l->value() * mult);
+  }
+}
+
 ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
   if (!original.has_overrides()) {
     return original;
@@ -234,6 +249,13 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
       profile.set_speed(profile.speed() * mult);
     }
   }
+  if (overrides.has_distance_multiplier()) {
+    float mult = overrides.distance_multiplier();
+    for (auto& profile : *result.mutable_wall_strafe_def()->mutable_profiles()) {
+      MultiplyRegionLength(profile.mutable_min_distance(), mult);
+      MultiplyRegionLength(profile.mutable_max_distance(), mult);
+    }
+  }
   if (overrides.has_acceleration_multiplier()) {
     float mult = overrides.acceleration_multiplier();
     if (original.has_wall_strafe_def()) {
@@ -256,6 +278,11 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
           FirstGreaterThanZero(original.timed_direction_def().time_scale_multiplier(), 1.0);
       result.mutable_timed_direction_def()->set_time_scale_multiplier(time_scale * mult);
     }
+    if (original.has_bounce_def()) {
+      float time_scale = FirstGreaterThanZero(original.bounce_def().time_scale_multiplier(), 1.0);
+      result.mutable_bounce_def()->set_time_scale_multiplier(time_scale * mult);
+    }
+    // TODO: wander def
   }
   return result;
 }

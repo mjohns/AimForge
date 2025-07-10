@@ -127,6 +127,7 @@ message ScenarioOverrides {
   float speed_multiplier = 4;
   float acceleration_multiplier = 5;
   float time_scale_multiplier = 6;
+  float distance_multiplier = 7;
 }
 
 message ShotType {
@@ -302,13 +303,15 @@ message Bounds {
 message WallStrafeScenarioDef {
   Bounds bounds = 1;
 
-  TargetPlacementStrategy target_placement_strategy = 7;
+  TargetPlacementStrategy target_placement_strategy = 2;
 
   repeated WallStrafeProfile profiles = 4;
   // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 profile_order = 5;
 
   float acceleration = 6;
+  // Multiply all strafe distances by the specified value. Defaults to 1.
+  float distance_multiplier = 7;
 }
 
 message TimedDirectionProfile {

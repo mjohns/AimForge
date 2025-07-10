@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Midrange Long Strafes Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Midrange Short Strafes Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Closerange Short Strafes Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Closerange Long Strafes Intermediate"
+    }
+  ]
+}

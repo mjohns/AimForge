@@ -1,0 +1,62 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 150,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 46,
+      "widthPerimeterPercent": 0.35
+    }
+  },
+  "shotType": {
+    "trackingInvincible": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "pill": {
+          "height": 15
+        },
+        "speed": 124,
+        "speedJitter": 0,
+        "targetRadius": 2.20000076,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "wallStrafeDef": {
+    "bounds": {
+      "width": {
+        "xPercentValue": 0.9
+      }
+    },
+    "profiles": [
+      {
+        "angle": 0,
+        "angleJitter": 0,
+        "info": {
+          "description": ""
+        },
+        "maxDistance": {
+          "xPercentValue": 0.8
+        },
+        "minDistance": {
+          "xPercentValue": 0.3
+        }
+      }
+    ]
+  }
+}

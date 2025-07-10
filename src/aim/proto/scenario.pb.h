@@ -876,6 +876,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     kSpeedMultiplierFieldNumber = 4,
     kAccelerationMultiplierFieldNumber = 5,
     kTimeScaleMultiplierFieldNumber = 6,
+    kDistanceMultiplierFieldNumber = 7,
   };
   // float duration_seconds = 1;
   bool has_duration_seconds() const;
@@ -943,12 +944,23 @@ class ScenarioOverrides final : public ::google::protobuf::Message
   void _internal_set_time_scale_multiplier(float value);
 
   public:
+  // float distance_multiplier = 7;
+  bool has_distance_multiplier() const;
+  void clear_distance_multiplier() ;
+  float distance_multiplier() const;
+  void set_distance_multiplier(float value);
+
+  private:
+  float _internal_distance_multiplier() const;
+  void _internal_set_distance_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioOverrides)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 0,
+      3, 7, 0,
       0, 2>
       _table_;
 
@@ -974,6 +986,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     float speed_multiplier_;
     float acceleration_multiplier_;
     float time_scale_multiplier_;
+    float distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -7998,8 +8011,9 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     kProfilesFieldNumber = 4,
     kProfileOrderFieldNumber = 5,
     kBoundsFieldNumber = 1,
-    kTargetPlacementStrategyFieldNumber = 7,
+    kTargetPlacementStrategyFieldNumber = 2,
     kAccelerationFieldNumber = 6,
+    kDistanceMultiplierFieldNumber = 7,
   };
   // repeated .aim.WallStrafeProfile profiles = 4;
   int profiles_size() const;
@@ -8051,7 +8065,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::Bounds* _internal_mutable_bounds();
 
   public:
-  // .aim.TargetPlacementStrategy target_placement_strategy = 7;
+  // .aim.TargetPlacementStrategy target_placement_strategy = 2;
   bool has_target_placement_strategy() const;
   void clear_target_placement_strategy() ;
   const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
@@ -8077,12 +8091,23 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
   void _internal_set_acceleration(float value);
 
   public:
+  // float distance_multiplier = 7;
+  bool has_distance_multiplier() const;
+  void clear_distance_multiplier() ;
+  float distance_multiplier() const;
+  void set_distance_multiplier(float value);
+
+  private:
+  float _internal_distance_multiplier() const;
+  void _internal_set_distance_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallStrafeScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 3,
+      3, 6, 3,
       0, 2>
       _table_;
 
@@ -8108,6 +8133,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     ::aim::Bounds* bounds_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
     float acceleration_;
+    float distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -13440,6 +13466,34 @@ inline void ScenarioOverrides::_internal_set_time_scale_multiplier(float value) 
   _impl_.time_scale_multiplier_ = value;
 }
 
+// float distance_multiplier = 7;
+inline bool ScenarioOverrides::has_distance_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void ScenarioOverrides::clear_distance_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.distance_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline float ScenarioOverrides::distance_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.distance_multiplier)
+  return _internal_distance_multiplier();
+}
+inline void ScenarioOverrides::set_distance_multiplier(float value) {
+  _internal_set_distance_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.distance_multiplier)
+}
+inline float ScenarioOverrides::_internal_distance_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.distance_multiplier_;
+}
+inline void ScenarioOverrides::_internal_set_distance_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.distance_multiplier_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // ShotType
@@ -17654,7 +17708,7 @@ inline void WallStrafeScenarioDef::set_allocated_bounds(::aim::Bounds* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.WallStrafeScenarioDef.bounds)
 }
 
-// .aim.TargetPlacementStrategy target_placement_strategy = 7;
+// .aim.TargetPlacementStrategy target_placement_strategy = 2;
 inline bool WallStrafeScenarioDef::has_target_placement_strategy() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
@@ -17870,6 +17924,34 @@ inline float WallStrafeScenarioDef::_internal_acceleration() const {
 inline void WallStrafeScenarioDef::_internal_set_acceleration(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_ = value;
+}
+
+// float distance_multiplier = 7;
+inline bool WallStrafeScenarioDef::has_distance_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void WallStrafeScenarioDef::clear_distance_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.distance_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float WallStrafeScenarioDef::distance_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.distance_multiplier)
+  return _internal_distance_multiplier();
+}
+inline void WallStrafeScenarioDef::set_distance_multiplier(float value) {
+  _internal_set_distance_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.WallStrafeScenarioDef.distance_multiplier)
+}
+inline float WallStrafeScenarioDef::_internal_distance_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.distance_multiplier_;
+}
+inline void WallStrafeScenarioDef::_internal_set_distance_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.distance_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------
