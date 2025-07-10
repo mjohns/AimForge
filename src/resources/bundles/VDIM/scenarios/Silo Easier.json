@@ -55,7 +55,7 @@
         "timeJitter": 0.3
       }
     ],
-    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightInitialDirection": "DIRECTION_NEGATIVE",
     "leftRightProfiles": [
       {
         "info": {

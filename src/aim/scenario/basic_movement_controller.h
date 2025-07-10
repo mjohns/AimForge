@@ -76,7 +76,8 @@ class SingleDirectionController {
   void ChangeDirection(Random& rand,
                        float now_seconds,
                        const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
-                       const google::protobuf::RepeatedField<int>& order);
+                       const google::protobuf::RepeatedField<int>& order,
+                       float target_speed);
 
   InitialDirection initial_direction_;
   float min_;
@@ -93,6 +94,7 @@ class SingleDirectionController {
   ProfileSelectionContext selection_context_{};
   bool is_stopping_ = false;
   bool going_left_ = false;
+  int direction_change_count_ = 0;
 };
 
 }  // namespace aim

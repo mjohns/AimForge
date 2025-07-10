@@ -87,7 +87,7 @@ float SingleDirectionController::GetUpdatedPosition(
   bool time_up = now_seconds >= next_direction_change_time_;
   if (too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
-    ChangeDirection(rand, now_seconds, profiles, order);
+    ChangeDirection(rand, now_seconds, profiles, order, t.speed);
   }
 
   float max_speed = t.speed * speed_multiplier_;
@@ -148,13 +148,16 @@ void SingleDirectionController::ChangeDirection(
     Random& rand,
     float now_seconds,
     const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
-    const google::protobuf::RepeatedField<int>& order) {
+    const google::protobuf::RepeatedField<int>& order,
+    float target_speed) {
+  direction_change_count_++;
   auto p = SelectProfile(order, profiles, &selection_context_, rand);
   if (!p.has_value()) {
     return;
   }
   speed_multiplier_ = p->has_speed_multiplier() ? p->speed_multiplier() : 1.0;
   acceleration_multiplier_ = p->has_acceleration_multiplier() ? p->acceleration_multiplier() : 1.0;
+
   current_speed_ = 0;
   is_stopping_ = false;
 
@@ -164,6 +167,15 @@ void SingleDirectionController::ChangeDirection(
   if (time_scale_multiplier_ > 0) {
     time *= time_scale_multiplier_;
   }
+
+  /*
+  // Start at full speed
+  float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
+  if (direction_change_count_ == 1 && acceleration > 0) {
+    float max_speed_that_can_stop = GetSpeedToStopInTime(time, acceleration);
+    current_speed_ = glm::min<float>(max_speed_that_can_stop, target_speed * speed_multiplier_);
+  }
+  */
 
   next_direction_change_time_ = now_seconds + time;
 }

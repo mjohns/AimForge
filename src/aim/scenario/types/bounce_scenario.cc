@@ -111,6 +111,7 @@ class BounceController {
  private:
   void StartNewBounce(
       float y, const BounceScenarioDef& def, const Wall& wall, Random& rand, float now_seconds) {
+    bounce_number_++;
     BounceProfile profile = GetNextProfile(def, rand);
     going_up_ = true;
     wait_until_time_ = -1;
@@ -139,6 +140,12 @@ class BounceController {
     if (y >= target_y) {
       going_up_ = false;
       current_speed_ = 0;
+      /*
+      if (bounce_number_ == 1) {
+        current_speed_ =
+            std::min<float>(max_speed_, GetStartSpeedForStopDistance(y - min_y_, acceleration_));
+      }
+      */
       return;
     }
 
@@ -175,6 +182,7 @@ class BounceController {
   float unscaled_max_speed_;
   float unscaled_acceleration_;
 
+  int bounce_number_ = 0;
   ProfileSelectionContext selection_context_{};
 };
 
@@ -189,7 +197,7 @@ class MovementControllerImpl : public MovementController {
       min_y += wall.GetRegionLength(d.floor_height());
     }
     bounce_controller_ =
-        std::make_unique<BounceController>(min_y, wall.height / 2.0, d.acceleration());
+        std::make_unique<BounceController>(min_y, wall.height / 2.0f, d.acceleration());
 
     DirectionParams params;
     if (d.has_acceleration()) {

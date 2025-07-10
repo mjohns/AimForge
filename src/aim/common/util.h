@@ -187,6 +187,10 @@ static float GetStopTime(float speed, float acceleration) {
   return speed / acceleration;
 }
 
+static float GetSpeedToStopInTime(float time, float acceleration) {
+  return time * acceleration;
+}
+
 static float GetStartSpeedForStopDistance(float stop_distance, float acceleration) {
   float speed_squared = 2.0f * acceleration * stop_distance;
   return std::sqrt(speed_squared);
