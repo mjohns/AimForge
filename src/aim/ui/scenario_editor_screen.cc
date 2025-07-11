@@ -1278,19 +1278,6 @@ class ScenarioEditorScreen : public UiScreen {
 
     Line();
 
-    ImGui::Text("Strafe profiles");
-    ImGui::Indent();
-    DrawProfileList("StrafeProfileList",
-                    "Profile",
-                    w.mutable_profile_order(),
-                    w.mutable_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawWallStrafeProfile, this));
-    ImGui::Unindent();
-
-    ImGui::Spacing();
-
-    Line();
-
     ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
                           .set_label("Acceleration")
                           .set_is_optional()
@@ -1302,6 +1289,32 @@ class ScenarioEditorScreen : public UiScreen {
                       PROTO_FLOAT_FIELD(WallStrafeScenarioDef, &w, acceleration));
     ImGui::SameLine();
     ImGui::HelpMarker("The target will accelerate in and out of changes of direction");
+
+    ImGui::InputFloat(ImGui::InputFloatParams("DistanceMult")
+                          .set_label("Distance multiplier")
+                          .set_is_optional()
+                          .set_step(0.01, 0.1)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(WallStrafeScenarioDef, &w, distance_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker("Multiply all strafe distances by the provided value");
+
+    Line();
+
+
+    ImGui::Text("Strafe profiles");
+    ImGui::Indent();
+    DrawProfileList("StrafeProfileList",
+                    "Profile",
+                    w.mutable_profile_order(),
+                    w.mutable_profiles(),
+                    std::bind_front(&ScenarioEditorScreen::DrawWallStrafeProfile, this));
+    ImGui::Unindent();
+
+    ImGui::Spacing();
 
     Line();
 
@@ -1368,6 +1381,15 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_default(1)
                           .set_width(char_x_ * 12),
                       PROTO_FLOAT_FIELD(WallStrafeProfile, p, speed_multiplier));
+    ImGui::InputFloat(ImGui::InputFloatParams("AccelMultiplier")
+                          .set_label("Acceleration multiplier")
+                          .set_is_optional()
+                          .set_step(.05, .2)
+                          .set_min(0)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 12),
+                      PROTO_FLOAT_FIELD(WallStrafeProfile, p, acceleration_multiplier));
 
     bool is_pause = p->pause_at_end_chance() > 0;
     ImGui::AlignTextToFramePadding();

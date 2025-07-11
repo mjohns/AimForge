@@ -1,0 +1,11 @@
+{
+  "description": "",
+  "overrides": {
+    "accelerationMultiplier": 0.840000153,
+    "speedMultiplier": 0.78000021,
+    "targetRadiusMultiplier": 0.600000381
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Ground Intermediate S5 Bot 3"
+  }
+}

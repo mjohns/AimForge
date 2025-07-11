@@ -129,6 +129,9 @@ class StrafeMovementController : public BasicWallMovementController {
 
     float distance = app_.rand().GetJittered(wall_.GetRegionLength(profile.distance()),
                                              wall_.GetRegionLength(profile.distance_jitter()));
+    if (def_.wall_strafe_def().has_distance_multiplier()) {
+      distance *= def_.wall_strafe_def().distance_multiplier();
+    }
 
     glm::vec2 new_direction;
     float angle = abs(app_.rand().GetJittered(profile.angle(), profile.angle_jitter()));

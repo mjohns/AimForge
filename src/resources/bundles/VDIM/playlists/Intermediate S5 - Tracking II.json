@@ -1,20 +1,68 @@
 {
   "items": [
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT Midrange Long Strafes Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT Midrange Short Strafes Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT Closerange Short Strafes Intermediate"
     },
     {
-      "numPlays": 1,
+      "numPlays": 2,
       "scenario": "VDIM VT Closerange Long Strafes Intermediate"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM Prediction Cancelling - Midrange I"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM Trackstop Intermediate"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM VT MSFI Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 1 Precision Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 2 Precision Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 3 Precision Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 1 Reactive Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 2 Reactive Focus"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 3 Reactive Focus"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 1"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 2"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM VT Ground Intermediate S5 Bot 3"
     }
   ]
 }
