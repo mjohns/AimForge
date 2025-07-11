@@ -476,6 +476,7 @@ void Scenario::HandleScenarioDone() {
   stats_id_ = stats_row.stats_id;
 
   PlaylistRun* playlist_run = app_.playlist_manager().GetCurrentRun();
+  // TODO: Also see if the scenario is in the playlist even if it is not the current index.
   if (playlist_run != nullptr && playlist_run->IsCurrentIndexValid()) {
     PlaylistItemProgress* progress = playlist_run->GetMutableCurrentPlaylistItemProgress();
     if (id_ == progress->item.scenario()) {

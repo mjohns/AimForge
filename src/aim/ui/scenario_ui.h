@@ -20,7 +20,7 @@ struct ScenarioBrowserResult {
 
 enum ScenarioBrowserType {
   FULL,
-  RECENT,
+  QUICK_ACCESS,
 };
 
 class ScenarioBrowserComponent {
@@ -28,11 +28,12 @@ class ScenarioBrowserComponent {
   virtual ~ScenarioBrowserComponent() {}
 
   // Returns whether to open an individual playlist.
-  virtual void Show(ScenarioBrowserType type, ScenarioBrowserResult* result) = 0;
+  virtual void Show(const::std::string& id, ScenarioBrowserResult* result) = 0;
 
   virtual void Reload() = 0;
 };
 
-std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(Application* app);
+std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(ScenarioBrowserType type,
+                                                                         Application* app);
 
 }  // namespace aim

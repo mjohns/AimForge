@@ -39,7 +39,9 @@ class HomeScreen : public UiScreen {
         app.file_system()->GetBasePath("resources/images/logo.png"), app.gpu_device());
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
-    scenario_browser_component_ = CreateScenarioBrowserComponent(&app);
+    scenario_browser_component_ = CreateScenarioBrowserComponent(ScenarioBrowserType::FULL, &app);
+    quick_access_scenario_browser_component_ =
+        CreateScenarioBrowserComponent(ScenarioBrowserType::QUICK_ACCESS, &app);
 
     auto selected_app_screen = app_.local_store().GetInt(kSelectedAppScreenKey);
     if (selected_app_screen) {
@@ -109,6 +111,7 @@ class HomeScreen : public UiScreen {
 
   void OnAttachUi() override {
     scenario_browser_component_->Reload();
+    quick_access_scenario_browser_component_->Reload();
   }
 
   void DrawScreenInternal() {
@@ -183,7 +186,7 @@ class HomeScreen : public UiScreen {
 
       if (ImGui::BeginChild("PrimaryContent")) {
         if (app_screen_ == AppScreen::SCENARIOS) {
-          DrawScenariosScreen(ScenarioBrowserType::FULL);
+          DrawScenariosScreen();
         }
         if (app_screen_ == AppScreen::PLAYLISTS) {
           DrawPlaylistsScreen();
@@ -306,14 +309,18 @@ class HomeScreen : public UiScreen {
     }
   }
 
-  void DrawScenariosScreen(ScenarioBrowserType type) {
+  void DrawScenariosScreen() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
 
-    if (ImGui::BeginTable("ScenarioColumns", 2, flags)) {
+    if (ImGui::BeginTable("ScenarioColumns", 3, flags)) {
       ImGui::TableNextColumn();
-
+      ImGui::Text("Quick access");
+      ImGui::Separator();
       ScenarioBrowserResult result;
-      scenario_browser_component_->Show(type, &result);
+      quick_access_scenario_browser_component_->Show("QuickAccessScenarioBrowser", &result);
+
+      ImGui::TableNextColumn();
+      scenario_browser_component_->Show("ScenarioBrowser", &result);
       if (result.scenario_to_start.size() > 0) {
         if (app_.scenario_manager().SetCurrentScenario(result.scenario_to_start)) {
           state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
@@ -337,6 +344,7 @@ class HomeScreen : public UiScreen {
         app_.scenario_manager().LoadScenariosFromDisk();
         app_.playlist_manager().LoadPlaylistsFromDisk();
         scenario_browser_component_->Reload();
+        quick_access_scenario_browser_component_->Reload();
       }
 
       ImGui::TableNextColumn();
@@ -419,6 +427,7 @@ class HomeScreen : public UiScreen {
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component_;
+  std::unique_ptr<ScenarioBrowserComponent> quick_access_scenario_browser_component_;
 };
 
 }  // namespace

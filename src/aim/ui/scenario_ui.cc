@@ -39,12 +39,15 @@ enum class ScenarioViewType : int {
 
 class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
  public:
-  explicit ScenarioBrowserComponentImpl(Application* app) : app_(app) {
-    auto maybe_initial_view_type = app_->local_store().GetInt(kScenarioViewTypeKey);
-    if (maybe_initial_view_type) {
-      view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
-    } else {
-      view_type_ = ScenarioViewType::ALL;
+  explicit ScenarioBrowserComponentImpl(ScenarioBrowserType type, Application* app)
+      : type_(type), app_(app) {
+    if (type_ == ScenarioBrowserType::FULL) {
+      auto maybe_initial_view_type = app_->local_store().GetInt(kScenarioViewTypeKey);
+      if (maybe_initial_view_type) {
+        view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
+      } else {
+        view_type_ = ScenarioViewType::ALL;
+      }
     }
     UpdateFilteredScenarios();
   }
@@ -53,8 +56,8 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     UpdateFilteredScenarios();
   }
 
-  void Show(ScenarioBrowserType type, ScenarioBrowserResult* result) override {
-    ImGui::IdGuard cid("ScenarioBrowserComponent");
+  void Show(const::std::string& id, ScenarioBrowserResult* result) override {
+    ImGui::IdGuard cid(id);
 
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
@@ -63,6 +66,14 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         result->reload_scenarios = true;
       }
     });
+
+    if (type_ == ScenarioBrowserType::QUICK_ACCESS) {
+      if (ImGui::BeginChild("ScenarioContent")) {
+        DrawScenariosTable(result);
+      }
+      ImGui::EndChild();
+      return;
+    }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
@@ -249,11 +260,45 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     return handled_search_text_ != search_text_;
   }
 
-  void UpdateFilteredScenarios() {
-    auto search_words = GetSearchWords(search_text_);
-    filtered_scenario_ids_.clear();
-    filtered_scenario_ids_.reserve(app_->scenario_manager().scenarios().size());
+  void GetQuickAccessScenarios(std::vector<std::string>* scenario_ids) {
+    int limit = 25;
+    int max_recent_maybe_starred = 8;
+    scenario_ids->reserve(limit);
 
+    auto starred_items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
+    auto recent_scenarios = app_->history_manager().recent_scenario_ids();
+
+    max_recent_maybe_starred =
+        std::max<int>(max_recent_maybe_starred, limit - starred_items->items.size());
+
+    std::unordered_set<std::string> added_scenario_ids;
+
+    for (const std::string& scenario_id : recent_scenarios) {
+      if (scenario_ids->size() >= limit) {
+        break;
+      }
+      bool only_starred = scenario_ids->size() >= max_recent_maybe_starred;
+
+      auto scenario = app_->scenario_manager().GetScenario(scenario_id);
+      if (scenario.has_value()) {
+        bool add = !only_starred || starred_items->item_set.contains(scenario_id);
+        if (add) {
+          added_scenario_ids.insert(scenario_id);
+          scenario_ids->push_back(scenario_id);
+        }
+      }
+    }
+  }
+
+  void UpdateFilteredScenarios() {
+    filtered_scenario_ids_.clear();
+    if (type_ == ScenarioBrowserType::QUICK_ACCESS) {
+      GetQuickAccessScenarios(&filtered_scenario_ids_);
+      return;
+    }
+
+    filtered_scenario_ids_.reserve(app_->scenario_manager().scenarios().size());
+    auto search_words = GetSearchWords(search_text_);
     if (view_type_ == ScenarioViewType::STARRED) {
       auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
       for (const std::string& scenario_id : items->items) {
@@ -284,6 +329,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     return ids.size() > 0 ? ids[0] : "";
   }
 
+  ScenarioBrowserType type_;
   std::string search_text_;
 
   ScenarioViewType view_type_ = ScenarioViewType::ALL;
@@ -302,8 +348,9 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
 
 }  // namespace
 
-std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(Application* app) {
-  return std::make_unique<ScenarioBrowserComponentImpl>(app);
+std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(ScenarioBrowserType type,
+                                                                         Application* app) {
+  return std::make_unique<ScenarioBrowserComponentImpl>(type, app);
 }
 
 }  // namespace aim

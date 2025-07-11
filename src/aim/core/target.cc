@@ -1,7 +1,5 @@
 #include "target.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
