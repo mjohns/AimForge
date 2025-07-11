@@ -56,7 +56,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     UpdateFilteredScenarios();
   }
 
-  void Show(const::std::string& id, ScenarioBrowserResult* result) override {
+  void Show(const ::std::string& id, ScenarioBrowserResult* result) override {
     ImGui::IdGuard cid(id);
 
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {

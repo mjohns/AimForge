@@ -18,8 +18,11 @@ class PlayTimeManager {
 
   void AddPlayTime(const PlayTime& play_time);
 
+  PlayTimeBreakdown GetPlayTime();
+
  private:
   std::unique_ptr<PlayTimeDb> play_time_db_;
+  std::optional<PlayTimeBreakdown> play_time_;
 };
 
 }  // namespace aim

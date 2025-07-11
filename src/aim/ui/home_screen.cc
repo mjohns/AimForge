@@ -30,6 +30,7 @@ const char* kSelectedAppScreenKey = "SelectedAppScreen";
 enum class AppScreen : int {
   SCENARIOS = 1,
   PLAYLISTS = 2,
+  PLAY_TIME = 3,
 };
 
 class HomeScreen : public UiScreen {
@@ -191,6 +192,9 @@ class HomeScreen : public UiScreen {
         if (app_screen_ == AppScreen::PLAYLISTS) {
           DrawPlaylistsScreen();
         }
+        if (app_screen_ == AppScreen::PLAY_TIME) {
+          DrawPlayTimeScreen();
+        }
       }
       ImGui::EndChild();
 
@@ -288,6 +292,9 @@ class HomeScreen : public UiScreen {
     if (ImGui::Selectable(std::format("{} Crosshairs", kIconMyLocation).c_str(), false)) {
       PushNextScreen(CreateCrosshairEditorScreen(&app_));
     }
+    if (ImGui::Selectable(std::format("{} Play time", kIconAvTimer).c_str(), false)) {
+      app_screen_ = AppScreen::PLAY_TIME;
+    }
 
     if (original_app_screen != app_screen_) {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
@@ -314,13 +321,13 @@ class HomeScreen : public UiScreen {
 
     if (ImGui::BeginTable("ScenarioColumns", 3, flags)) {
       ImGui::TableNextColumn();
-      ImGui::Text("Quick access");
-      ImGui::Separator();
       ScenarioBrowserResult result;
-      quick_access_scenario_browser_component_->Show("QuickAccessScenarioBrowser", &result);
+      scenario_browser_component_->Show("ScenarioBrowser", &result);
 
       ImGui::TableNextColumn();
-      scenario_browser_component_->Show("ScenarioBrowser", &result);
+      ImGui::Text("Quick access");
+      ImGui::Separator();
+      quick_access_scenario_browser_component_->Show("QuickAccessScenarioBrowser", &result);
       if (result.scenario_to_start.size() > 0) {
         if (app_.scenario_manager().SetCurrentScenario(result.scenario_to_start)) {
           state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
@@ -418,6 +425,38 @@ class HomeScreen : public UiScreen {
       if (app_.scenario_manager().SetCurrentScenario(scenario_id)) {
         state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       }
+    }
+  }
+
+  void DrawPlayTimeScreen() {
+    ImGui::IdGuard cid("PlayTime");
+    auto play_times = app_.play_time_manager().GetPlayTime();
+
+    float total_play_time_seconds = 0;
+    float total_partial_play_time_seconds = 0;
+    for (auto& play_time : play_times.play_times) {
+      total_play_time_seconds +=
+          play_time.complete_run_time_seconds + play_time.partial_run_time_seconds;
+      total_partial_play_time_seconds += play_time.partial_run_time_seconds;
+    }
+    ImGui::Text("Total time: %.1f hours", total_play_time_seconds / 3600.0f);
+    ImGui::Text("Partial run time: %.1f hours (%.0f%\%)",
+                total_partial_play_time_seconds / 3600.0f,
+                (total_partial_play_time_seconds / total_play_time_seconds) * 100);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
+
+    if (total_play_time_seconds > 0) {
+      ImGui::Text("Breakdown by shot type");
+      ImGui::Indent();
+      for (const auto& play_time : play_times.play_times) {
+        std::string type = FirstNonEmpty(play_time.shot_type, "Unknown");
+        ImGui::TextFmt(
+            "{}: {:.1f} hours",
+            type,
+            (play_time.complete_run_time_seconds + play_time.partial_run_time_seconds) / 3600.0f);
+      }
+      ImGui::Unindent();
     }
   }
 

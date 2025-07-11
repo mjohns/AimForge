@@ -153,6 +153,10 @@ std::vector<T> MoveVectorItem(const std::vector<T>& original_values, int src_i, 
 
 std::string MakeUniqueName(const std::string& name, const std::vector<std::string>& used_names);
 
+static std::string FirstNonEmpty(const std::string& v1, const std::string& v2) {
+  return v1.size() > 0 ? v1 : v2;
+}
+
 static bool IsZero(const StoredVec3& v) {
   return v.x() == 0 && v.y() == 0 && v.z() == 0;
 }

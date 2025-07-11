@@ -36,6 +36,12 @@ INSERT INTO PlayTime (
   VALUES (NULL, ?, ?, ?, ?, ?, ?);
 )AIMS";
 
+const char* kGetPlayTimeSql = R"AIMS(
+SELECT ShotType, IsCompleteRun, SUM(DurationSeconds)
+FROM PlayTime
+GROUP BY 1,2; 
+)AIMS";
+
 std::string ShotTypeToString(ShotType::TypeCase type) {
   switch (type) {
     case ShotType::kClickSingle:
@@ -94,8 +100,47 @@ void PlayTimeDb::AddPlayTime(const PlayTime& play_time) {
   // return rc == SQLITE_DONE;
 }
 
-float PlayTimeDb::GetTotalPlayTimeSeconds() {
-  return 0;
+PlayTimeBreakdown PlayTimeDb::GetPlayTime() {
+  PlayTimeBreakdown result;
+  sqlite3_stmt* stmt;
+  int rc = sqlite3_prepare_v2(db_, kGetPlayTimeSql, -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+    return {};
+  }
+
+  std::unordered_map<std::string, float> complete_run_map_;
+  std::unordered_map<std::string, float> partial_run_map_;
+  std::unordered_set<std::string> shot_types;
+  while (sqlite3_step(stmt) == SQLITE_ROW) {
+    std::string shot_type = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+    shot_types.insert(shot_type);
+    bool is_complete_run = sqlite3_column_int64(stmt, 1);
+    float duration = sqlite3_column_double(stmt, 2);
+    if (is_complete_run) {
+      complete_run_map_[shot_type] = duration;
+    } else {
+      partial_run_map_[shot_type] = duration;
+    }
+  }
+
+  for (const std::string& shot_type : shot_types) {
+    PlayTimeForShotType p;
+    p.shot_type = shot_type;
+    p.complete_run_time_seconds = complete_run_map_[shot_type];
+    p.partial_run_time_seconds = partial_run_map_[shot_type];
+    result.play_times.push_back(p);
+  }
+
+  std::sort(result.play_times.begin(),
+            result.play_times.end(),
+            [](const PlayTimeForShotType& lhs, const PlayTimeForShotType& rhs) {
+              return (rhs.complete_run_time_seconds + rhs.partial_run_time_seconds) <
+                     (lhs.complete_run_time_seconds + lhs.partial_run_time_seconds);
+            });
+
+  sqlite3_finalize(stmt);
+  return result;
 }
 
 }  // namespace aim
