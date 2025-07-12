@@ -175,6 +175,13 @@ class ThemeEditorScreen : public UiScreen {
         *reference = theme_names_[0];
       }
       ImGui::SimpleDropdown("ReferenceThemeSelector", reference, theme_names_, char_x_ * 20);
+
+      if (ImGui::Button("Edit referenced theme")) {
+        std::string referenced_copy = *reference;
+        BackToThemeList();
+        OpenExistingTheme(referenced_copy);
+      }
+
       ImGui::End();
     } else {
       current_theme_.clear_reference();
