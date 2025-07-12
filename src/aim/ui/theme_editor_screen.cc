@@ -12,7 +12,7 @@
 namespace aim {
 namespace {
 
-const float kBackgroundAlpha = 0.4;
+const float kBackgroundAlpha = 0.6;
 constexpr const char* kSolidColorItem = "Solid color";
 constexpr const char* kTextureItem = "Texture";
 
@@ -154,123 +154,147 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::SetNextItemWidth(char_x_ * 20);
     ImGui::InputText("##NameInput", &current_theme_name_);
 
-    Line();
-
+    bool is_reference = current_theme_.has_reference();
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Targets");
-    ImGui::Indent();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Color");
+    ImGui::Text("Reference");
     ImGui::SameLine();
-    DrawStoredColorEditor("TargetColor", current_theme_.mutable_target_color());
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Ghost color");
-    ImGui::SameLine();
-    DrawStoredColorEditor("GhostTargetColor", current_theme_.mutable_ghost_target_color());
-
-    ImGui::Unindent();
+    ImGui::Checkbox("##ReferenceCheck", &is_reference);
 
     Line();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Crosshair");
-    ImGui::Indent();
+    if (is_reference) {
+      std::string original_name = current_theme_.name();
+      std::string original_reference = current_theme_.reference();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Color");
-    ImGui::SameLine();
-    DrawStoredColorEditor("CrosshairColor", current_theme_.mutable_crosshair()->mutable_color());
+      current_theme_.Clear();
+      current_theme_.set_name(original_name);
+      current_theme_.set_reference(original_reference);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Outline color");
-    ImGui::SameLine();
-    DrawStoredColorEditor("OutlineCrosshairColor",
-                          current_theme_.mutable_crosshair()->mutable_outline_color());
-
-    ImGui::Unindent();
-
-    Line();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Health bar");
-    HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
-    ImGui::Indent();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Health color");
-    ImGui::SameLine();
-    DrawStoredColorEditor("HealthColor", health_bar.mutable_health_color());
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Health alpha");
-    ImGui::SameLine();
-    bool has_health_alpha = health_bar.has_health_alpha();
-    float health_alpha = health_bar.health_alpha();
-    ImGui::OptionalInputFloat(
-        "HealthAlpha", &has_health_alpha, &health_alpha, 0.05, 0.2, "%.2f", char_x_ * 9);
-    if (has_health_alpha) {
-      health_bar.set_health_alpha(health_alpha);
+      std::string* reference = current_theme_.mutable_reference();
+      if (reference->size() == 0) {
+        *reference = theme_names_[0];
+      }
+      ImGui::SimpleDropdown("ReferenceThemeSelector", reference, theme_names_, char_x_ * 20);
+      ImGui::End();
     } else {
-      health_bar.clear_health_alpha();
+      current_theme_.clear_reference();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Targets");
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("TargetColor", current_theme_.mutable_target_color());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Ghost color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("GhostTargetColor", current_theme_.mutable_ghost_target_color());
+
+      ImGui::Unindent();
+
+      Line();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Crosshair");
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("CrosshairColor", current_theme_.mutable_crosshair()->mutable_color());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Outline color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("OutlineCrosshairColor",
+                            current_theme_.mutable_crosshair()->mutable_outline_color());
+
+      ImGui::Unindent();
+
+      Line();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Health bar");
+      HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Health color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("HealthColor", health_bar.mutable_health_color());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Health alpha");
+      ImGui::SameLine();
+      bool has_health_alpha = health_bar.has_health_alpha();
+      float health_alpha = health_bar.health_alpha();
+      ImGui::OptionalInputFloat(
+          "HealthAlpha", &has_health_alpha, &health_alpha, 0.05, 0.2, "%.2f", char_x_ * 9);
+      if (has_health_alpha) {
+        health_bar.set_health_alpha(health_alpha);
+      } else {
+        health_bar.clear_health_alpha();
+      }
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Background color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("HealthBackgroundColor", health_bar.mutable_background_color());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Background alpha");
+      ImGui::SameLine();
+      bool has_background_alpha = health_bar.has_background_alpha();
+      float background_alpha = health_bar.background_alpha();
+      ImGui::OptionalInputFloat("BackgroundAlpha",
+                                &has_background_alpha,
+                                &background_alpha,
+                                0.05,
+                                0.2,
+                                "%.2f",
+                                char_x_ * 9);
+      if (has_background_alpha) {
+        health_bar.set_background_alpha(background_alpha);
+      } else {
+        health_bar.clear_background_alpha();
+      }
+      ImGui::Unindent();
+
+      Line();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Walls");
+      ImGui::Indent();
+      DrawWallAppearanceEditor("Front", current_theme_.mutable_front_appearance());
+      DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
+      DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
+      DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
+      DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
+      ImGui::Unindent();
+
+      ImGui::Spacing();
+      ImGui::Spacing();
+
+      Crosshair crosshair;
+      crosshair.add_layers()->mutable_dot()->set_outline_thickness(2);
+
+      ImGui::End();
+
+      ImGui::SetNextWindowPos(
+          ImVec2(app_.screen_info().center.x - 30, app_.screen_info().center.y - 30));
+      ImGui::SetNextWindowSize(ImVec2(60, 60));
+      ImGui::SetNextWindowBgAlpha(0);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+      ImGui::Begin(
+          "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+      ImDrawList* draw_list = ImGui::GetWindowDrawList();
+      app_.crosshair_manager().Draw(crosshair, 25, current_theme_, app_.screen_info().center);
+      ImGui::End();
+      ImGui::PopStyleVar();
     }
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Background color");
-    ImGui::SameLine();
-    DrawStoredColorEditor("HealthBackgroundColor", health_bar.mutable_background_color());
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Background alpha");
-    ImGui::SameLine();
-    bool has_background_alpha = health_bar.has_background_alpha();
-    float background_alpha = health_bar.background_alpha();
-    ImGui::OptionalInputFloat("BackgroundAlpha",
-                              &has_background_alpha,
-                              &background_alpha,
-                              0.05,
-                              0.2,
-                              "%.2f",
-                              char_x_ * 9);
-    if (has_background_alpha) {
-      health_bar.set_background_alpha(background_alpha);
-    } else {
-      health_bar.clear_background_alpha();
-    }
-    ImGui::Unindent();
-
-    Line();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Walls");
-    ImGui::Indent();
-    DrawWallAppearanceEditor("Front", current_theme_.mutable_front_appearance());
-    DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
-    DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
-    DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
-    DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
-    ImGui::Unindent();
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-
-    Crosshair crosshair;
-    crosshair.add_layers()->mutable_dot()->set_outline_thickness(2);
-
-    ImGui::End();
-
-    ImGui::SetNextWindowPos(
-        ImVec2(app_.screen_info().center.x - 30, app_.screen_info().center.y - 30));
-    ImGui::SetNextWindowSize(ImVec2(60, 60));
-    ImGui::SetNextWindowBgAlpha(0);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::Begin(
-        "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    app_.crosshair_manager().Draw(crosshair, 25, current_theme_, app_.screen_info().center);
-    ImGui::End();
-    ImGui::PopStyleVar();
   }
 
   void DrawThemeListEditor() {
@@ -316,14 +340,14 @@ class ThemeEditorScreen : public UiScreen {
     current_theme_name_ = name;
     original_theme_name_ = name;
     is_new_theme_ = false;
-    current_theme_ = app_.settings_manager().GetTheme(name);
+    current_theme_ = app_.settings_manager().GetThemeNoReferenceFollow(name);
   }
 
   void OpenThemeCopy(const std::string& name) {
     current_theme_name_ = MakeUniqueName(name + " Copy", theme_names_);
     original_theme_name_ = current_theme_name_;
     is_new_theme_ = true;
-    current_theme_ = app_.settings_manager().GetTheme(name);
+    current_theme_ = app_.settings_manager().GetThemeNoReferenceFollow(name);
   }
 
   void OpenNewTheme() {

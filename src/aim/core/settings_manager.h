@@ -70,6 +70,7 @@ class SettingsManager {
   Settings* GetMutableCurrentSettings();
 
   Theme GetTheme(const std::string& theme_name);
+  Theme GetThemeNoReferenceFollow(const std::string& theme_name);
   Theme GetCurrentTheme();
   bool ThemeExists(const std::string& name);
   bool SaveTheme(const std::string& name, const Theme& crosshair);
@@ -98,7 +99,6 @@ class SettingsManager {
   SettingsUpdater CreateUpdater();
 
  private:
-  Theme GetThemeNoReferenceFollow(const std::string& theme_name);
   void WriteScenarioSettings(const std::string& scenario_id);
   std::filesystem::path GetCrosshairPath(const std::string& name);
   std::filesystem::path GetThemePath(const std::string& name);
