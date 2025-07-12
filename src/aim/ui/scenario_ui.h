@@ -28,7 +28,7 @@ class ScenarioBrowserComponent {
   virtual ~ScenarioBrowserComponent() {}
 
   // Returns whether to open an individual playlist.
-  virtual void Show(const::std::string& id, ScenarioBrowserResult* result) = 0;
+  virtual void Show(const ::std::string& id, ScenarioBrowserResult* result) = 0;
 
   virtual void Reload() = 0;
 };
