@@ -1304,7 +1304,6 @@ class ScenarioEditorScreen : public UiScreen {
 
     Line();
 
-
     ImGui::Text("Strafe profiles");
     ImGui::Indent();
     DrawProfileList("StrafeProfileList",

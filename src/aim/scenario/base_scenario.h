@@ -10,6 +10,14 @@
 
 namespace aim {
 
+struct ScenarioStats {
+  double num_hits = 0;
+  double num_shots = 0;
+  double num_kills = 0;
+  Stopwatch hit_stopwatch;
+  Stopwatch shot_stopwatch;
+};
+
 class BaseScenario : public Scenario {
  public:
   explicit BaseScenario(const CreateScenarioParams& params, Application* app)
@@ -24,6 +32,7 @@ class BaseScenario : public Scenario {
   void UpdateState(UpdateStateData* data) override;
   void OnPause() override;
   void OnScenarioDone() override;
+  std::optional<StatsRow> GetStatsRow() override;
 
  private:
   void HandleClickHits(UpdateStateData* data);
@@ -35,6 +44,8 @@ class BaseScenario : public Scenario {
 
   std::optional<u16> current_poke_target_id_;
   i64 current_poke_start_time_micros_ = 0;
+
+  ScenarioStats stats_;
 
   std::unique_ptr<TrackingSound> tracking_sound_;
 };

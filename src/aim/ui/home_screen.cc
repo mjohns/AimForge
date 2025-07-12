@@ -40,9 +40,12 @@ class HomeScreen : public UiScreen {
         app.file_system()->GetBasePath("resources/images/logo.png"), app.gpu_device());
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
-    scenario_browser_component_ = CreateScenarioBrowserComponent(ScenarioBrowserType::FULL, &app);
-    quick_access_scenario_browser_component_ =
-        CreateScenarioBrowserComponent(ScenarioBrowserType::QUICK_ACCESS, &app);
+    scenario_browser_component1_ =
+        CreateScenarioBrowserComponent("ScenarioBrowser1", ScenarioBrowserType::FULL, &app);
+    scenario_browser_component2_ =
+        CreateScenarioBrowserComponent("ScenarioBrowser2", ScenarioBrowserType::FULL, &app);
+    quick_access_scenario_browser_component_ = CreateScenarioBrowserComponent(
+        "QuickAccessScenarioBrowser", ScenarioBrowserType::QUICK_ACCESS, &app);
 
     auto selected_app_screen = app_.local_store().GetInt(kSelectedAppScreenKey);
     if (selected_app_screen) {
@@ -111,7 +114,8 @@ class HomeScreen : public UiScreen {
   }
 
   void OnAttachUi() override {
-    scenario_browser_component_->Reload();
+    scenario_browser_component1_->Reload();
+    scenario_browser_component2_->Reload();
     quick_access_scenario_browser_component_->Reload();
   }
 
@@ -322,12 +326,15 @@ class HomeScreen : public UiScreen {
     if (ImGui::BeginTable("ScenarioColumns", 3, flags)) {
       ImGui::TableNextColumn();
       ScenarioBrowserResult result;
-      scenario_browser_component_->Show("ScenarioBrowser", &result);
+      scenario_browser_component1_->Show(&result);
+
+      ImGui::TableNextColumn();
+      scenario_browser_component2_->Show(&result);
 
       ImGui::TableNextColumn();
       ImGui::Text("Quick access");
       ImGui::Separator();
-      quick_access_scenario_browser_component_->Show("QuickAccessScenarioBrowser", &result);
+      quick_access_scenario_browser_component_->Show(&result);
       if (result.scenario_to_start.size() > 0) {
         if (app_.scenario_manager().SetCurrentScenario(result.scenario_to_start)) {
           state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
@@ -350,10 +357,12 @@ class HomeScreen : public UiScreen {
       if (result.reload_scenarios) {
         app_.scenario_manager().LoadScenariosFromDisk();
         app_.playlist_manager().LoadPlaylistsFromDisk();
-        scenario_browser_component_->Reload();
+        scenario_browser_component1_->Reload();
+        scenario_browser_component2_->Reload();
         quick_access_scenario_browser_component_->Reload();
       }
 
+      /*
       ImGui::TableNextColumn();
       auto current_scenario = app_.scenario_manager().GetCurrentScenario();
       if (current_scenario) {
@@ -380,7 +389,8 @@ class HomeScreen : public UiScreen {
         ImGui::Indent();
         ImGui::Text(current_scenario->def.description());
         ImGui::Unindent();
-      }
+       }
+        */
 
       ImGui::EndTable();
     }
@@ -440,7 +450,7 @@ class HomeScreen : public UiScreen {
       total_partial_play_time_seconds += play_time.partial_run_time_seconds;
     }
     ImGui::Text("Total time: %.1f hours", total_play_time_seconds / 3600.0f);
-    ImGui::Text("Partial run time: %.1f hours (%.0f%\%)",
+    ImGui::TextFmt("Partial run time: {:.1f} hours ({:.0f}%)",
                 total_partial_play_time_seconds / 3600.0f,
                 (total_partial_play_time_seconds / total_play_time_seconds) * 100);
     ImGui::SameLine();
@@ -465,7 +475,8 @@ class HomeScreen : public UiScreen {
   std::unique_ptr<Texture> logo_texture_;
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
-  std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component_;
+  std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component1_;
+  std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component2_;
   std::unique_ptr<ScenarioBrowserComponent> quick_access_scenario_browser_component_;
 };
 

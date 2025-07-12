@@ -32,14 +32,6 @@ struct CreateScenarioParams {
   bool from_scenario_editor = false;
 };
 
-struct ScenarioStats {
-  double num_hits = 0;
-  double num_shots = 0;
-  double num_kills = 0;
-  Stopwatch hit_stopwatch;
-  Stopwatch shot_stopwatch;
-};
-
 struct UpdateStateData {
   bool has_click = false;
   bool has_click_up = false;
@@ -88,6 +80,10 @@ class Scenario : public Screen {
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
 
+  virtual std::optional<StatsRow> GetStatsRow() {
+    return {};
+  }
+
   virtual bool ShouldRecordReplay() {
     return false;
   }
@@ -115,7 +111,6 @@ class Scenario : public Screen {
 
   std::string id_;
   ScenarioDef def_;
-  ScenarioStats stats_;
   std::unique_ptr<Metronome> metronome_;
   ScenarioTimer timer_;
   Camera camera_;
@@ -129,6 +124,7 @@ class Scenario : public Screen {
   bool has_started_ = false;
   ScenarioRunState run_state_ = ScenarioRunState::NOT_STARTED;
   Settings settings_;
+  float effective_cm_per_360_ = 0;
 
  private:
   void OnRunningTick();
@@ -151,9 +147,7 @@ class Scenario : public Screen {
   float crosshair_size_;
   float cm_per_360_base_ = 0;
   float cm_per_360_jitter_ = 0;
-  float effective_cm_per_360_ = 0;
   bool is_click_held_ = false;
-  i64 stats_id_ = 0;
   bool is_done_ = false;
   std::vector<DelayedTask> delayed_tasks_;
   i64 max_render_age_micros_;

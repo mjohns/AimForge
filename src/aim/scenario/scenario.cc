@@ -426,54 +426,7 @@ void Scenario::OnRunningTick() {
 
 void Scenario::HandleScenarioDone() {
   run_state_ = ScenarioRunState::DONE;
-  stats_.hit_stopwatch.Stop();
-  stats_.shot_stopwatch.Stop();
   OnScenarioDone();
-
-  ShotType::TypeCase shot_type = GetShotType();
-  float score = 0;
-  switch (shot_type) {
-    case ShotType::kTrackingInvincible: {
-      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
-      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
-      score = stats_.hit_stopwatch.GetElapsedSeconds();
-      break;
-    }
-    case ShotType::kTrackingKill: {
-      // Make sure to take the score from num hits before changing hits/shots to tracking on/off
-      // time so that percentage shows up like for normal tracking invincible scenarios.
-      score = stats_.num_hits;
-      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
-      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
-      break;
-    }
-    case ShotType::kClickSingle:
-    case ShotType::kClickMulti: {
-      // Default clicking scoring
-      float hit_percent = stats_.num_hits / stats_.num_shots;
-      // float duration_modifier = 60.0f / def_.duration_seconds();
-      float accuracy_penalty = 1.0 - sqrt(hit_percent);
-      if (def_.has_accuracy_penalty_modifier()) {
-        accuracy_penalty *= def_.accuracy_penalty_modifier();
-      }
-      score = stats_.num_hits * (1 - accuracy_penalty);
-      break;
-    }
-    case ShotType::kPoke:
-      score = stats_.num_kills;
-      break;
-    default:
-      break;
-  }
-
-  StatsRow stats_row;
-  stats_row.cm_per_360 = effective_cm_per_360_;
-  stats_row.num_hits = stats_.num_hits;
-  stats_row.num_shots = stats_.num_shots;
-  stats_row.score = score;
-  app_.stats_manager().AddStats(id_, &stats_row);
-
-  stats_id_ = stats_row.stats_id;
 
   PlaylistRun* playlist_run = app_.playlist_manager().GetCurrentRun();
   // TODO: Also see if the scenario is in the playlist even if it is not the current index.
@@ -489,10 +442,16 @@ void Scenario::HandleScenarioDone() {
     }
   }
 
-  state_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
   FlushPlayTime();
   PopSelf();
-  PushNextScreen(CreateStatsScreen(id_, stats_id_, &app_));
+
+  std::optional<StatsRow> maybe_stats_row = GetStatsRow();
+  if (maybe_stats_row) {
+    StatsRow stats_row = *maybe_stats_row;
+    app_.stats_manager().AddStats(id_, &stats_row);
+    state_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
+    PushNextScreen(CreateStatsScreen(id_, stats_row.stats_id, &app_));
+  }
 }
 
 ShotType::TypeCase Scenario::GetShotType() {

@@ -171,6 +171,8 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
 }
 
 void BaseScenario::OnScenarioDone() {
+  stats_.hit_stopwatch.Stop();
+  stats_.shot_stopwatch.Stop();
   TrackingHoldDone();
   if (ShouldCountPartialKills()) {
     float partial_kills = 0;
@@ -334,6 +336,51 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
   } else {
     AddRemoveTargetEvent(old_target_id);
   }
+}
+
+std::optional<StatsRow> BaseScenario::GetStatsRow() {
+  ShotType::TypeCase shot_type = GetShotType();
+  float score = 0;
+  switch (shot_type) {
+    case ShotType::kTrackingInvincible: {
+      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
+      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
+      score = stats_.hit_stopwatch.GetElapsedSeconds();
+      break;
+    }
+    case ShotType::kTrackingKill: {
+      // Make sure to take the score from num hits before changing hits/shots to tracking on/off
+      // time so that percentage shows up like for normal tracking invincible scenarios.
+      score = stats_.num_hits;
+      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
+      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
+      break;
+    }
+    case ShotType::kClickSingle:
+    case ShotType::kClickMulti: {
+      // Default clicking scoring
+      float hit_percent = stats_.num_hits / stats_.num_shots;
+      // float duration_modifier = 60.0f / def_.duration_seconds();
+      float accuracy_penalty = 1.0 - sqrt(hit_percent);
+      if (def_.has_accuracy_penalty_modifier()) {
+        accuracy_penalty *= def_.accuracy_penalty_modifier();
+      }
+      score = stats_.num_hits * (1 - accuracy_penalty);
+      break;
+    }
+    case ShotType::kPoke:
+      score = stats_.num_kills;
+      break;
+    default:
+      break;
+  }
+
+  StatsRow stats_row;
+  stats_row.cm_per_360 = effective_cm_per_360_;
+  stats_row.num_hits = stats_.num_hits;
+  stats_row.num_shots = stats_.num_shots;
+  stats_row.score = score;
+  return stats_row;
 }
 
 }  // namespace aim

@@ -29,8 +29,6 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kReferenceDef, "Reference"},
 };
 
-const char* kScenarioViewTypeKey = "ScenarioViewType";
-
 enum class ScenarioViewType : int {
   RECENT = 1,
   STARRED = 2,
@@ -39,25 +37,36 @@ enum class ScenarioViewType : int {
 
 class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
  public:
-  explicit ScenarioBrowserComponentImpl(ScenarioBrowserType type, Application* app)
-      : type_(type), app_(app) {
+  explicit ScenarioBrowserComponentImpl(ScenarioBrowserType type,
+                                        const std::string& id,
+                                        Application* app)
+      : type_(type), id_(id), app_(app) {
     if (type_ == ScenarioBrowserType::FULL) {
-      auto maybe_initial_view_type = app_->local_store().GetInt(kScenarioViewTypeKey);
+      auto maybe_initial_view_type = app_->local_store().GetInt(GetViewTypeKey());
       if (maybe_initial_view_type) {
         view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
       } else {
         view_type_ = ScenarioViewType::ALL;
       }
+
+      search_text_ = app_->local_store().Get(GetSearchTextKey());
     }
     UpdateFilteredScenarios();
+    initial_search_text_ = search_text_;
+  }
+
+  ~ScenarioBrowserComponentImpl() {
+    if (initial_search_text_ != search_text_) {
+      app_->local_store().Put(GetSearchTextKey(), search_text_);
+    }
   }
 
   void Reload() override {
     UpdateFilteredScenarios();
   }
 
-  void Show(const ::std::string& id, ScenarioBrowserResult* result) override {
-    ImGui::IdGuard cid(id);
+  void Show(ScenarioBrowserResult* result) override {
+    ImGui::IdGuard cid(id_);
 
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
@@ -94,7 +103,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
                                                            {ScenarioViewType::ALL, "All"},
                                                        });
     if (view_type_changed) {
-      app_->local_store().PutInt(kScenarioViewTypeKey, (int)view_type_);
+      app_->local_store().PutInt(GetViewTypeKey(), (int)view_type_);
       UpdateFilteredScenarios();
     }
 
@@ -162,6 +171,13 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   }
 
  private:
+  std::string GetViewTypeKey() {
+    return std::format("ScenarioViewType_{}", id_);
+  }
+  std::string GetSearchTextKey() {
+    return std::format("ScenarioSearchText_{}", id_);
+  }
+
   void DrawScenarioItem(const ScenarioItem& scenario, ScenarioBrowserResult* result) {
     auto current_scenario = app_->scenario_manager().GetCurrentScenario();
     std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
@@ -331,6 +347,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
 
   ScenarioBrowserType type_;
   std::string search_text_;
+  std::string initial_search_text_;
 
   ScenarioViewType view_type_ = ScenarioViewType::ALL;
   std::string handled_search_text_;
@@ -343,14 +360,17 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   int collapse_all_ = 0;
   Application* app_;
 
+  std::string id_;
+
   ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
 };
 
 }  // namespace
 
-std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(ScenarioBrowserType type,
+std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(const std::string& id,
+                                                                         ScenarioBrowserType type,
                                                                          Application* app) {
-  return std::make_unique<ScenarioBrowserComponentImpl>(type, app);
+  return std::make_unique<ScenarioBrowserComponentImpl>(type, id, app);
 }
 
 }  // namespace aim
