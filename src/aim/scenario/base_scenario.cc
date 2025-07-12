@@ -64,9 +64,6 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   if (def_.target_def().remove_target_after_seconds() > 0) {
     for (const Target& target : target_manager_.GetTargets()) {
       if (target.ShouldDraw() && target.remove_after_time_seconds < timer_.GetElapsedSeconds()) {
-        if (ShouldCountPartialKills()) {
-          stats_.num_hits += GetPartialHitValue(target);
-        }
         targets_to_remove.push_back(target.id);
       }
     }
@@ -93,6 +90,10 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   }
 
   for (u16 target_id : targets_to_remove) {
+    Target* target = target_manager_.GetMutableTarget(target_id);
+    if (target != nullptr && ShouldCountPartialKills()) {
+      stats_.num_hits += GetPartialHitValue(*target);
+    }
     AddNewTargetDuringRun(target_id, /*is_kill=*/false);
   }
 
@@ -161,10 +162,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
         float health = target.GetHealthPercent();
         if (elapsed_time >= remove_if_below_health_time &&
             health <= remove_if_below_health_threshold) {
-          // Remove the target early and add partial kill.
-          if (ShouldCountPartialKills()) {
-            stats_.num_hits += GetPartialHitValue(target);
-          }
+          // Remove the target early
           target_ids_to_remove->push_back(target.id);
         }
       }

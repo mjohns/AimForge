@@ -2426,7 +2426,7 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
             .set_label("Remove if below health percent")
             .set_step(1, 5)
-            .set_min(1)
+            .set_min(15)
             .set_max(99)
             .set_precision(0)
             .set_default(1)
