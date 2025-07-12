@@ -159,6 +159,12 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Text("Reference");
     ImGui::SameLine();
     ImGui::Checkbox("##ReferenceCheck", &is_reference);
+    ImGui::SameLine();
+    // TODO: Improve help text to be more clear
+    ImGui::HelpMarker(
+        "Use settings from another theme. Useful when you using per scenario theme settings and "
+        "you want to create a \"Default Static\" theme which you can change and have all static "
+        "scenarios use the new theme.");
 
     Line();
 
