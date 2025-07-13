@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Speedswitch 90 Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT Speedswitch 180 Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Pokevox Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM StaticSwitchingVox xSmall"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Aimerz+ Week #5 - Static Switching"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM DotTS 30% Larger"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT DotTS Intermediate S5 Speed"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT DotTS Intermediate S5 Evasive"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT DotTS Intermediate S5 Regen"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT DotTS Intermediate S5 Hard"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT DotTS Intermediate S5"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM waldoTs Intermediate"
+    }
+  ]
+}

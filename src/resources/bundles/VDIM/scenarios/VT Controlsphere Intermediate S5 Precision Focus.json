@@ -1,0 +1,12 @@
+{
+  "description": "",
+  "overrides": {
+    "accelerationMultiplier": 0.660000324,
+    "speedMultiplier": 0.620000362,
+    "targetRadiusMultiplier": 0.750000238,
+    "timeScaleMultiplier": 1.16999984
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Controlsphere Intermediate S5"
+  }
+}

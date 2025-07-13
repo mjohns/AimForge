@@ -1,0 +1,9 @@
+{
+  "description": "",
+  "overrides": {
+    "targetRadiusMultiplier": 0.890000105
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT DotTS Intermediate S5"
+  }
+}

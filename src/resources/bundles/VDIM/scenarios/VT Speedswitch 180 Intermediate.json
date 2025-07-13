@@ -1,0 +1,101 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 130,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 25,
+      "widthPerimeterPercent": 0.3
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "healthSeconds": 0.18,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": ""
+        },
+        "speed": 11,
+        "speedJitter": 0,
+        "targetRadius": 7.39999533,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 326,
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.170000061
+      },
+      "width": {
+        "xPercentValue": 0.79
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "forwardBackProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "time": 4.29999828,
+        "timeJitter": 0
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "time": 4.49999809,
+        "timeJitter": 0
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": 43,
+      "regions": [
+        {
+          "depth": 19,
+          "depthJitter": 15,
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.639999866
+            },
+            "yLength": {
+              "yPercentValue": 0.569999933
+            }
+          }
+        }
+      ]
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM",
+    "upDownProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.399999857,
+        "time": 3.69999862,
+        "timeJitter": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 110,
+      "width": 210
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "healthSeconds": 0.25,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": ""
+        },
+        "speed": 5,
+        "speedJitter": 0,
+        "targetRadius": 2.19999981,
+        "targetRadiusJitter": 0.25
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "wallWanderDef": {
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "turnRate": 300,
+        "turnRateJitter": 60,
+        "turnTime": 2,
+        "turnTimeJitter": 0.2
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": 15,
+      "regions": [
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "info": {
+            "description": "",
+            "weight": 1
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.789999843
+            },
+            "yLength": {
+              "yPercentValue": 0.679999828
+            }
+          }
+        },
+        {
+          "depth": 0,
+          "depthJitter": 0,
+          "ellipse": {
+            "xDiameter": {
+              "xPercentValue": 0.739999831
+            },
+            "yDiameter": {
+              "yPercentValue": 0.5
+            }
+          },
+          "info": {
+            "description": "Oval",
+            "weight": 2
+          }
+        }
+      ]
+    }
+  }
+}

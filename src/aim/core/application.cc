@@ -25,6 +25,31 @@ namespace aim {
 namespace {
 const char* kImguiIniFile = "imgui.ini";
 
+TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
+  if (def->static_def().has_target_placement_strategy()) {
+    return def->mutable_static_def()->mutable_target_placement_strategy();
+  }
+  if (def->waypoint_def().has_target_placement_strategy()) {
+    return def->mutable_waypoint_def()->mutable_target_placement_strategy();
+  }
+  if (def->linear_def().has_target_placement_strategy()) {
+    return def->mutable_linear_def()->mutable_target_placement_strategy();
+  }
+  if (def->wall_wander_def().has_target_placement_strategy()) {
+    return def->mutable_wall_wander_def()->mutable_target_placement_strategy();
+  }
+  if (def->wall_strafe_def().has_target_placement_strategy()) {
+    return def->mutable_wall_strafe_def()->mutable_target_placement_strategy();
+  }
+  if (def->timed_direction_def().has_target_placement_strategy()) {
+    return def->mutable_timed_direction_def()->mutable_target_placement_strategy();
+  }
+  if (def->bounce_def().has_target_placement_strategy()) {
+    return def->mutable_bounce_def()->mutable_target_placement_strategy();
+  }
+  return nullptr;
+}
+
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : mgr->scenarios()) {
     /*
