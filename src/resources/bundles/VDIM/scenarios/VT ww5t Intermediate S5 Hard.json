@@ -22,21 +22,12 @@
       "minDistance": {
         "value": 27
       },
-      "minDistance2": {
-        "value": 27
-      },
       "regions": [
         {
           "depth": {
             "value": 0
           },
-          "depth2": {
-            "value": 0
-          },
           "depthJitter": {
-            "value": 0
-          },
-          "depthJitter2": {
             "value": 0
           },
           "ellipse": {
@@ -56,13 +47,7 @@
           "depth": {
             "value": 0
           },
-          "depth2": {
-            "value": 0
-          },
           "depthJitter": {
-            "value": 0
-          },
-          "depthJitter2": {
             "value": 0
           },
           "info": {

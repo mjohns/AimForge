@@ -85,13 +85,7 @@
           "depth": {
             "value": 16
           },
-          "depth2": {
-            "value": 16
-          },
           "depthJitter": {
-            "value": 0
-          },
-          "depthJitter2": {
             "value": 0
           },
           "info": {

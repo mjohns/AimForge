@@ -35,9 +35,6 @@
       "minDistance": {
         "value": 44
       },
-      "minDistance2": {
-        "value": 44
-      },
       "regionOrder": [
         0,
         2,
@@ -63,13 +60,7 @@
           "depth": {
             "value": 10
           },
-          "depth2": {
-            "value": 10
-          },
           "depthJitter": {
-            "value": 10
-          },
-          "depthJitter2": {
             "value": 10
           },
           "info": {
@@ -94,13 +85,7 @@
           "depth": {
             "value": 210
           },
-          "depth2": {
-            "value": 210
-          },
           "depthJitter": {
-            "value": 10
-          },
-          "depthJitter2": {
             "value": 10
           },
           "info": {
@@ -125,13 +110,7 @@
           "depth": {
             "value": 210
           },
-          "depth2": {
-            "value": 210
-          },
           "depthJitter": {
-            "value": 10
-          },
-          "depthJitter2": {
             "value": 10
           },
           "info": {
@@ -156,13 +135,7 @@
           "depth": {
             "value": 10
           },
-          "depth2": {
-            "value": 10
-          },
           "depthJitter": {
-            "value": 10
-          },
-          "depthJitter2": {
             "value": 10
           },
           "info": {

@@ -51,4 +51,27 @@ struct JitteredField {
   JitteredField<float>(PROTO_FLOAT_FIELD(ProtoClass, instance, field_name), \
                        PROTO_FLOAT_FIELD(ProtoClass, instance, field_name##_jitter))
 
+template <typename T>
+struct PtrField {
+  PtrField(std::function<T()> get,
+           std::function<T*()> get_mutable,
+           std::function<void()> clear,
+           std::function<bool()> has)
+      : get(std::move(get)),
+        get_mutable(std::move(get_mutable)),
+        clear(std::move(clear)),
+        has(std::move(has)) {}
+
+  std::function<T()> get;
+  std::function<T*()> get_mutable;
+  std::function<void()> clear;
+  std::function<bool()> has;
+};
+
+#define PROTO_PTR_FIELD(T, ProtoClass, instance, field_name)                           \
+  aim::PtrField<##T>(std::bind_front(&##ProtoClass::##field_name, ##instance),         \
+                     std::bind_front(&##ProtoClass::mutable_##field_name, ##instance), \
+                     std::bind_front(&##ProtoClass::clear_##field_name, ##instance),   \
+                     std::bind_front(&##ProtoClass::has_##field_name, ##instance))
+
 }  // namespace aim

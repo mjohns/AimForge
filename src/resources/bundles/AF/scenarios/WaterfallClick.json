@@ -8,21 +8,12 @@
       "minDistance": {
         "value": 20
       },
-      "minDistance2": {
-        "value": 20
-      },
       "regions": [
         {
           "depth": {
             "value": 0
           },
-          "depth2": {
-            "value": 0
-          },
           "depthJitter": {
-            "value": 0
-          },
-          "depthJitter2": {
             "value": 0
           },
           "info": {

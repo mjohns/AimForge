@@ -1541,44 +1541,22 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Min distance");
     ImGui::SameLine();
 
-    /*
-    bool use_min = s->has_min_distance();
-    float min_value = s->min_distance();
-    if (!s->has_min_distance()) {
-      min_value = 20;
-    }
-    OptionalInputFloat("MinDistanceInput", &use_min, &min_value, 1, 10, "%.0f");
-    if (use_min) {
-      s->set_min_distance(min_value);
-    } else {
-      s->clear_min_distance();
-    }
+    DrawOptionalRegionLengthEditor(
+        "MinDistanceInput",
+        DefaultDim::DIM_X,
+        PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, min_distance),
+        false,
+        true);
     ImGui::SameLine();
     ImGui::HelpMarker("Minimum distance between targets.");
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Fixed distance");
-    ImGui::SameLine();
-    bool use_fixed = s->has_fixed_distance_from_last_target();
-    ImGui::Checkbox("##FixedDistanceCheck", &use_fixed);
-    if (use_fixed) {
-      float value = s->fixed_distance_from_last_target();
-      if (!s->has_fixed_distance_from_last_target()) {
-        value = 20;
-      }
-      float jitter = s->fixed_distance_jitter();
-      ImGui::SameLine();
-      JitteredValueInput("FixedDistanceInput", &value, &jitter, 1, 5, "%.0f");
-      s->set_fixed_distance_from_last_target(value);
-      s->set_fixed_distance_jitter(jitter);
-    } else {
-      s->clear_fixed_distance_from_last_target();
-      s->clear_fixed_distance_jitter();
-    }
+    DrawOptionalRegionLengthEditor(
+        "FixedDistanceInput",
+        DefaultDim::DIM_X,
+        PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target));
     ImGui::SameLine();
     ImGui::HelpMarker(
         "New target will be placed at a fixed distance from the last target that was added.");
-    */
   }
 
   void DrawTargetRegion(bool support_depth, TargetRegion* region) {
@@ -1659,9 +1637,6 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       DrawRegionLengthEditor("YDiameter", DefaultDim::DIM_Y, t->mutable_y_diameter());
     }
-
-    ImGui::Spacing();
-    ImGui::Spacing();
 
     if (support_depth) {
       ImGui::AlignTextToFramePadding();
@@ -1967,6 +1942,23 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     DrawRegionLengthEditor("RegionJitterValue", default_dim, jitter, false, true);
     ImGui::Unindent();
+  }
+
+  void DrawOptionalRegionLengthEditor(const std::string& id,
+                                      DefaultDim default_dim,
+                                      PtrField<RegionLength> length,
+                                      bool is_point = false,
+                                      bool default_to_zero = false) {
+    ImGui::IdGuard cid(id);
+    bool has_value = length.has();
+    ImGui::Checkbox("##UseRegionLength", &has_value);
+    if (has_value) {
+      ImGui::SameLine();
+      DrawRegionLengthEditor(
+          "RegionLength", default_dim, length.get_mutable(), is_point, default_to_zero);
+    } else {
+      length.clear();
+    }
   }
 
   void DrawRegionLengthEditor(const std::string& id,

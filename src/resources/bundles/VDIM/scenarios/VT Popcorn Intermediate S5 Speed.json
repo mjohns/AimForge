@@ -36,13 +36,7 @@
           "depth": {
             "value": 27
           },
-          "depth2": {
-            "value": 27
-          },
           "depthJitter": {
-            "value": 19
-          },
-          "depthJitter2": {
             "value": 19
           },
           "info": {
