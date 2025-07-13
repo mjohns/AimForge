@@ -52,31 +52,29 @@ TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
 
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : mgr->scenarios()) {
-    /*
-  ScenarioDef def = item.def;
-  if (def.has_wall_strafe_def()) {
-    auto* d = def.mutable_wall_strafe_def();
-    Bounds* b = d->mutable_bounds();
-    if (d->has_height()) {
-      *b->mutable_height() = d->height();
+    ScenarioDef def = item.def;
+    TargetPlacementStrategy* strat = GetTargetPlacementStrategy(&def);
+    if (strat == nullptr) {
+      continue;
     }
-    if (d->has_width()) {
-      *b->mutable_width() = d->width();
+    if (strat->has_min_distance()) {
+      strat->mutable_min_distance2()->set_value(strat->min_distance());
     }
-  }
-  if (def.has_timed_direction_def()) {
-    auto* d = def.mutable_timed_direction_def();
-    Bounds* b = d->mutable_bounds();
-    if (d->has_height()) {
-      *b->mutable_height() = d->height();
+    if (strat->has_fixed_distance_from_last_target()) {
+      strat->mutable_fixed_distance_from_last_target2()->set_value(strat->fixed_distance_from_last_target());
     }
-    if (d->has_width()) {
-      *b->mutable_width() = d->width();
-    }
-  }
+    strat->clear_fixed_distance_jitter();
 
-  mgr->SaveScenario(item.name, def);
-  */
+    for (TargetRegion& region : *strat->mutable_regions()) {
+      if (region.has_depth()) {
+        region.mutable_depth2()->set_value(region.depth());
+      }
+      if (region.has_depth_jitter()) {
+        region.mutable_depth_jitter2()->set_value(region.depth_jitter());
+      }
+    }
+
+    mgr->SaveScenario(item.name, def);
   }
 }
 

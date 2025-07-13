@@ -58,7 +58,7 @@ class CircleScenario : public BaseScenario {
   void FillInNewTarget(Target* target) override {
     // This should only be called once during initialize.
     target->wall_position = initial_position_;
-    target->wall_depth = c_.depth();
+    target->wall_depth = wall_.GetRegionLength(c_.depth());
   }
 
   void UpdateTargetPositions() override {

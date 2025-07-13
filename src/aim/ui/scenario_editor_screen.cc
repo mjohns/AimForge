@@ -805,13 +805,10 @@ class ScenarioEditorScreen : public UiScreen {
 
     Line();
 
-    ImGui::InputFloat(ImGui::InputFloatParams("Depth")
-                          .set_label("Depth")
-                          .set_step(1, 10)
-                          .set_precision(0)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(CircleScenarioDef, &d, depth));
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Depth");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, d.mutable_depth());
     ImGui::SameLine();
     ImGui::HelpMarker("Distance away from the wall");
   }

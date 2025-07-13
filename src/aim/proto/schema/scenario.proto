@@ -79,7 +79,7 @@ message TargetRegion {
   float depth_jitter = 8;
 
   RegionLength depth2 = 77;
-  RegionLength depth_jitter2 = 88jkk;
+  RegionLength depth_jitter2 = 88;
 
   oneof type {
     RectangleTargetRegion rectangle = 4;
