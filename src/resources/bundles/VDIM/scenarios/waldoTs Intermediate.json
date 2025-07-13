@@ -5,11 +5,26 @@
     "angleJitter": 0,
     "leftRightInitialDirection": "DIRECTION_RANDOM",
     "targetPlacementStrategy": {
-      "minDistance": 15,
+      "minDistance": {
+        "value": 15
+      },
+      "minDistance2": {
+        "value": 15
+      },
       "regions": [
         {
-          "depth": 36,
-          "depthJitter": 32,
+          "depth": {
+            "value": 36
+          },
+          "depth2": {
+            "value": 36
+          },
+          "depthJitter": {
+            "value": 32
+          },
+          "depthJitter2": {
+            "value": 32
+          },
           "info": {
             "description": ""
           },
@@ -26,7 +41,6 @@
     },
     "upDownInitialDirection": "DIRECTION_RANDOM"
   },
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,

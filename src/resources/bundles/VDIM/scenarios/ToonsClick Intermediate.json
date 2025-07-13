@@ -44,7 +44,6 @@
         "xPercentValue": 0.64
       }
     },
-    "depth": 100,
     "forwardBackProfiles": [
       {
         "accelerationMultiplier": 0.4,
@@ -56,9 +55,6 @@
         "timeJitter": 0.5
       }
     ],
-    "height": {
-      "yPercentValue": 0.79
-    },
     "leftRightProfiles": [
       {
         "info": {
@@ -69,11 +65,26 @@
       }
     ],
     "targetPlacementStrategy": {
-      "minDistance": 65,
+      "minDistance": {
+        "value": 65
+      },
+      "minDistance2": {
+        "value": 65
+      },
       "regions": [
         {
-          "depth": 47,
-          "depthJitter": 34,
+          "depth": {
+            "value": 47
+          },
+          "depth2": {
+            "value": 47
+          },
+          "depthJitter": {
+            "value": 34
+          },
+          "depthJitter2": {
+            "value": 34
+          },
           "info": {
             "description": ""
           },
@@ -108,9 +119,6 @@
         "time": 1,
         "timeJitter": 0.5
       }
-    ],
-    "width": {
-      "xPercentValue": 0.64
-    }
+    ]
   }
 }

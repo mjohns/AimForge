@@ -59,7 +59,7 @@ class BarrelScenario : public BaseScenario {
     Wall wall = Wall::ForRoom(def_.room());
     TargetPlacementStrategy strat = params.def.barrel_def().target_placement_strategy();
     if (!params.def.barrel_def().has_target_placement_strategy()) {
-      strat.set_min_distance(15);
+      strat.mutable_min_distance()->set_value(15);
       CircleTargetRegion* region = strat.add_regions()->mutable_circle();
       region->mutable_diameter()->set_x_percent_value(0.92);
       region->mutable_inner_diameter()->set_x_percent_value(0.7);

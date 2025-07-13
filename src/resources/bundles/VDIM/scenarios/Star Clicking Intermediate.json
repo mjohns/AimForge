@@ -44,8 +44,6 @@
         "xPercentValue": 0.85
       }
     },
-    "depth": 90,
-    "forwardBackInitialDirection": "DIRECTION_POSITIVE_OR_NEGATIVE",
     "forwardBackProfiles": [
       {
         "info": {
@@ -56,10 +54,6 @@
         "timeJitter": 0.2
       }
     ],
-    "height": {
-      "yPercentValue": 0.85
-    },
-    "leftRightInitialDirection": "DIRECTION_POSITIVE_OR_NEGATIVE",
     "leftRightProfiles": [
       {
         "info": {
@@ -79,11 +73,26 @@
       }
     ],
     "targetPlacementStrategy": {
-      "minDistance": 73,
+      "minDistance": {
+        "value": 73
+      },
+      "minDistance2": {
+        "value": 73
+      },
       "regions": [
         {
-          "depth": 30,
-          "depthJitter": 10,
+          "depth": {
+            "value": 30
+          },
+          "depth2": {
+            "value": 30
+          },
+          "depthJitter": {
+            "value": 10
+          },
+          "depthJitter2": {
+            "value": 10
+          },
           "info": {
             "description": ""
           },
@@ -98,7 +107,6 @@
         }
       ]
     },
-    "upDownInitialDirection": "DIRECTION_POSITIVE_OR_NEGATIVE",
     "upDownProfiles": [
       {
         "accelerationMultiplier": 0.850001872,
@@ -119,9 +127,6 @@
         "time": 1.30000007,
         "timeJitter": 0.4
       }
-    ],
-    "width": {
-      "xPercentValue": 0.85
-    }
+    ]
   }
 }

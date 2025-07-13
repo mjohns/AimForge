@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -17,11 +16,26 @@
   },
   "staticDef": {
     "targetPlacementStrategy": {
-      "minDistance": 50,
+      "minDistance": {
+        "value": 50
+      },
+      "minDistance2": {
+        "value": 50
+      },
       "regions": [
         {
-          "depth": 77,
-          "depthJitter": 76,
+          "depth": {
+            "value": 77
+          },
+          "depth2": {
+            "value": 77
+          },
+          "depthJitter": {
+            "value": 76
+          },
+          "depthJitter2": {
+            "value": 76
+          },
           "info": {
             "description": ""
           },

@@ -43,9 +43,6 @@
         "xPercentValue": 0.85
       }
     },
-    "height": {
-      "yPercentValue": 0.85
-    },
     "leftRightProfiles": [
       {
         "info": {
@@ -56,11 +53,26 @@
       }
     ],
     "targetPlacementStrategy": {
-      "minDistance": 65,
+      "minDistance": {
+        "value": 65
+      },
+      "minDistance2": {
+        "value": 65
+      },
       "regions": [
         {
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": ""
           },
@@ -85,9 +97,6 @@
         "time": 2.59999967,
         "timeJitter": 0.200000018
       }
-    ],
-    "width": {
-      "xPercentValue": 0.85
-    }
+    ]
   }
 }

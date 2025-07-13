@@ -33,8 +33,18 @@
     "targetPlacementStrategy": {
       "regions": [
         {
-          "depth": 27,
-          "depthJitter": 19,
+          "depth": {
+            "value": 27
+          },
+          "depth2": {
+            "value": 27
+          },
+          "depthJitter": {
+            "value": 19
+          },
+          "depthJitter2": {
+            "value": 19
+          },
           "info": {
             "description": ""
           },
@@ -57,7 +67,6 @@
     }
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,

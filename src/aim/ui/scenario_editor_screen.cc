@@ -935,7 +935,7 @@ class ScenarioEditorScreen : public UiScreen {
     d.set_direction_radius_percent(percent / 100.0);
 
     if (!d.has_target_placement_strategy()) {
-      d.mutable_target_placement_strategy()->set_min_distance(15);
+      d.mutable_target_placement_strategy()->mutable_min_distance()->set_value(15);
       CircleTargetRegion* region =
           d.mutable_target_placement_strategy()->add_regions()->mutable_circle();
       region->mutable_diameter()->set_x_percent_value(0.92);
@@ -1541,6 +1541,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Min distance");
     ImGui::SameLine();
 
+    /*
     bool use_min = s->has_min_distance();
     float min_value = s->min_distance();
     if (!s->has_min_distance()) {
@@ -1577,6 +1578,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "New target will be placed at a fixed distance from the last target that was added.");
+    */
   }
 
   void DrawTargetRegion(bool support_depth, TargetRegion* region) {
@@ -1665,11 +1667,8 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Depth");
       ImGui::SameLine();
-      float depth = region->depth();
-      float depth_jitter = region->depth_jitter();
-      JitteredValueInput("DepthInput", &depth, &depth_jitter, 1, 5, "%.0f");
-      region->set_depth(depth);
-      region->set_depth_jitter(depth_jitter);
+      DrawJitteredRegionLengthEditor(
+          "Depth", DefaultDim::DIM_DEPTH, region->mutable_depth(), region->mutable_depth_jitter());
       ImGui::SameLine();
       ImGui::HelpMarker(
           "The distance away from the wall towards the camera. The greater the value, the further "

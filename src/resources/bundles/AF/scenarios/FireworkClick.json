@@ -4,7 +4,12 @@
     "angle": 0,
     "angleJitter": 360,
     "targetPlacementStrategy": {
-      "minDistance": 10,
+      "minDistance": {
+        "value": 10
+      },
+      "minDistance2": {
+        "value": 10
+      },
       "regions": [
         {
           "circle": {
@@ -12,8 +17,18 @@
               "value": 9
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": ""
           }

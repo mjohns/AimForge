@@ -4,15 +4,30 @@
     "angle": 0,
     "angleJitter": 15,
     "targetPlacementStrategy": {
-      "minDistance": 20,
+      "minDistance": {
+        "value": 20
+      },
+      "minDistance2": {
+        "value": 20
+      },
       "regionOrder": [
         0,
         1
       ],
       "regions": [
         {
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": ""
           },
@@ -32,8 +47,18 @@
           }
         },
         {
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": ""
           },

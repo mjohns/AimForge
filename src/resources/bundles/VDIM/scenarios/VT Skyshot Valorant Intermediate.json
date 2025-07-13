@@ -4,11 +4,26 @@
     "angle": 0,
     "angleJitter": 0,
     "targetPlacementStrategy": {
-      "minDistance": 50,
+      "minDistance": {
+        "value": 50
+      },
+      "minDistance2": {
+        "value": 50
+      },
       "regions": [
         {
-          "depth": 65,
-          "depthJitter": 61,
+          "depth": {
+            "value": 65
+          },
+          "depth2": {
+            "value": 65
+          },
+          "depthJitter": {
+            "value": 61
+          },
+          "depthJitter2": {
+            "value": 61
+          },
           "info": {
             "description": ""
           },

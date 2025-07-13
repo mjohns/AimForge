@@ -16,11 +16,26 @@
   },
   "staticDef": {
     "targetPlacementStrategy": {
-      "minDistance": 44,
+      "minDistance": {
+        "value": 44
+      },
+      "minDistance2": {
+        "value": 44
+      },
       "regions": [
         {
-          "depth": 155,
-          "depthJitter": 155,
+          "depth": {
+            "value": 155
+          },
+          "depth2": {
+            "value": 155
+          },
+          "depthJitter": {
+            "value": 155
+          },
+          "depthJitter2": {
+            "value": 155
+          },
           "info": {
             "description": ""
           },

@@ -16,11 +16,26 @@
   },
   "staticDef": {
     "targetPlacementStrategy": {
-      "minDistance": 4,
+      "minDistance": {
+        "value": 4
+      },
+      "minDistance2": {
+        "value": 4
+      },
       "regions": [
         {
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "ellipse": {
             "xDiameter": {
               "xPercentValue": 0.09

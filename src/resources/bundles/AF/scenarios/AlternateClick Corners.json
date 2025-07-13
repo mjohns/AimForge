@@ -16,7 +16,12 @@
   },
   "staticDef": {
     "targetPlacementStrategy": {
-      "minDistance": 43,
+      "minDistance": {
+        "value": 43
+      },
+      "minDistance2": {
+        "value": 43
+      },
       "regions": [
         {
           "circle": {
@@ -24,8 +29,18 @@
               "value": 23.5
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": "Top Right",
             "weight": 1
@@ -43,8 +58,18 @@
               "value": 24
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": "Top Left",
             "weight": 1
@@ -62,8 +87,18 @@
               "value": 24
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": "Bottom Left",
             "weight": 1
@@ -81,8 +116,18 @@
               "value": 24
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
+          "depth": {
+            "value": 0
+          },
+          "depth2": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "depthJitter2": {
+            "value": 0
+          },
           "info": {
             "description": "Bottom Right",
             "weight": 1

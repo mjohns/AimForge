@@ -57,21 +57,21 @@ void RunScenarioBackfill(ScenarioManager* mgr) {
     if (strat == nullptr) {
       continue;
     }
-    if (strat->has_min_distance()) {
-      strat->mutable_min_distance2()->set_value(strat->min_distance());
+    if (strat->has_min_distance2()) {
+      *strat->mutable_min_distance() = strat->min_distance2();
     }
-    if (strat->has_fixed_distance_from_last_target()) {
-      strat->mutable_fixed_distance_from_last_target2()->set_value(strat->fixed_distance_from_last_target());
+    if (strat->has_fixed_distance_from_last_target2()) {
+      *strat->mutable_fixed_distance_from_last_target() = strat->fixed_distance_from_last_target2();
     }
-    strat->clear_fixed_distance_jitter();
 
     for (TargetRegion& region : *strat->mutable_regions()) {
-      if (region.has_depth()) {
-        region.mutable_depth2()->set_value(region.depth());
+      if (region.has_depth2()) {
+        *region.mutable_depth() = region.depth2();
       }
-      if (region.has_depth_jitter()) {
-        region.mutable_depth_jitter2()->set_value(region.depth_jitter());
+      if (region.has_depth_jitter2()) {
+        *region.mutable_depth_jitter() = region.depth_jitter2();
       }
+      //region.clear_depth2();
     }
 
     mgr->SaveScenario(item.name, def);

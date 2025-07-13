@@ -32,7 +32,12 @@
   },
   "waypointDef": {
     "targetPlacementStrategy": {
-      "minDistance": 44,
+      "minDistance": {
+        "value": 44
+      },
+      "minDistance2": {
+        "value": 44
+      },
       "regionOrder": [
         0,
         2,
@@ -55,8 +60,18 @@
       ],
       "regions": [
         {
-          "depth": 10,
-          "depthJitter": 10,
+          "depth": {
+            "value": 10
+          },
+          "depth2": {
+            "value": 10
+          },
+          "depthJitter": {
+            "value": 10
+          },
+          "depthJitter2": {
+            "value": 10
+          },
           "info": {
             "description": "LeftFar"
           },
@@ -76,8 +91,18 @@
           }
         },
         {
-          "depth": 210,
-          "depthJitter": 10,
+          "depth": {
+            "value": 210
+          },
+          "depth2": {
+            "value": 210
+          },
+          "depthJitter": {
+            "value": 10
+          },
+          "depthJitter2": {
+            "value": 10
+          },
           "info": {
             "description": "LeftClose"
           },
@@ -97,8 +122,18 @@
           }
         },
         {
-          "depth": 210,
-          "depthJitter": 10,
+          "depth": {
+            "value": 210
+          },
+          "depth2": {
+            "value": 210
+          },
+          "depthJitter": {
+            "value": 10
+          },
+          "depthJitter2": {
+            "value": 10
+          },
           "info": {
             "description": "RightClose"
           },
@@ -118,8 +153,18 @@
           }
         },
         {
-          "depth": 10,
-          "depthJitter": 10,
+          "depth": {
+            "value": 10
+          },
+          "depth2": {
+            "value": 10
+          },
+          "depthJitter": {
+            "value": 10
+          },
+          "depthJitter2": {
+            "value": 10
+          },
           "info": {
             "description": "RightFar"
           },

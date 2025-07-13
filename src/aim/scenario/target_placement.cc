@@ -30,7 +30,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     if (strategy_.regions_size() == 0) {
       return candidate_pos;
     }
-    float min_distance = strategy_.min_distance();
+    float min_distance = wall_.GetRegionLength(strategy_.min_distance());
     ProfileSelectionContext original_context = *context;
     for (int i = 0; i < 200; ++i) {
       // Reset this so that the counter only increments once even if the candidates are invalid.
@@ -83,7 +83,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     float x_offset = wall_.GetRegionLength(region.x_offset());
     float y_offset = wall_.GetRegionLength(region.y_offset());
 
-    float z = ClampPositive(app_->rand().GetJittered(region.depth(), region.depth_jitter()));
+    float z = ClampPositive(app_->rand().GetJittered(wall_.GetRegionLength(region.depth()),
+                                                     wall_.GetRegionLength(region.depth_jitter())));
 
     if (region.has_ellipse()) {
       glm::vec2 pos =
@@ -120,8 +121,9 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     if (most_recent_target == nullptr) {
       return point;
     }
-    float distance = app_->rand().GetJittered(strategy_.fixed_distance_from_last_target(),
-                                              strategy_.fixed_distance_jitter());
+    float distance = app_->rand().GetJittered(
+        wall_.GetRegionLength(strategy_.fixed_distance_from_last_target()),
+        wall_.GetRegionLength(strategy_.fixed_distance_from_last_target_jitter()));
     // This can't just drop the y component and take x,z from world position because for cylinder
     // walls we wrap the flat wall around the circle.
     glm::vec2 dir = glm::normalize(point - *most_recent_target->wall_position);

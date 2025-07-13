@@ -6476,11 +6476,11 @@ class TargetRegion final : public ::google::protobuf::Message
   enum : int {
     kXOffsetFieldNumber = 2,
     kYOffsetFieldNumber = 3,
+    kDepthFieldNumber = 7,
+    kDepthJitterFieldNumber = 8,
     kInfoFieldNumber = 15,
     kDepth2FieldNumber = 77,
     kDepthJitter2FieldNumber = 88,
-    kDepthFieldNumber = 7,
-    kDepthJitterFieldNumber = 8,
     kRectangleFieldNumber = 4,
     kEllipseFieldNumber = 5,
     kCircleFieldNumber = 6,
@@ -6513,6 +6513,36 @@ class TargetRegion final : public ::google::protobuf::Message
   private:
   const ::aim::RegionLength& _internal_y_offset() const;
   ::aim::RegionLength* _internal_mutable_y_offset();
+
+  public:
+  // .aim.RegionLength depth = 7;
+  bool has_depth() const;
+  void clear_depth() ;
+  const ::aim::RegionLength& depth() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_depth();
+  ::aim::RegionLength* mutable_depth();
+  void set_allocated_depth(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_depth(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_depth();
+
+  private:
+  const ::aim::RegionLength& _internal_depth() const;
+  ::aim::RegionLength* _internal_mutable_depth();
+
+  public:
+  // .aim.RegionLength depth_jitter = 8;
+  bool has_depth_jitter() const;
+  void clear_depth_jitter() ;
+  const ::aim::RegionLength& depth_jitter() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_depth_jitter();
+  ::aim::RegionLength* mutable_depth_jitter();
+  void set_allocated_depth_jitter(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_depth_jitter(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_depth_jitter();
+
+  private:
+  const ::aim::RegionLength& _internal_depth_jitter() const;
+  ::aim::RegionLength* _internal_mutable_depth_jitter();
 
   public:
   // .aim.ProfileInfo info = 15;
@@ -6558,28 +6588,6 @@ class TargetRegion final : public ::google::protobuf::Message
   private:
   const ::aim::RegionLength& _internal_depth_jitter2() const;
   ::aim::RegionLength* _internal_mutable_depth_jitter2();
-
-  public:
-  // float depth = 7;
-  bool has_depth() const;
-  void clear_depth() ;
-  float depth() const;
-  void set_depth(float value);
-
-  private:
-  float _internal_depth() const;
-  void _internal_set_depth(float value);
-
-  public:
-  // float depth_jitter = 8;
-  bool has_depth_jitter() const;
-  void clear_depth_jitter() ;
-  float depth_jitter() const;
-  void set_depth_jitter(float value);
-
-  private:
-  float _internal_depth_jitter() const;
-  void _internal_set_depth_jitter(float value);
 
   public:
   // .aim.RectangleTargetRegion rectangle = 4;
@@ -6651,7 +6659,7 @@ class TargetRegion final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 10, 8,
+      4, 10, 10,
       0, 7>
       _table_;
 
@@ -6673,11 +6681,11 @@ class TargetRegion final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::RegionLength* x_offset_;
     ::aim::RegionLength* y_offset_;
+    ::aim::RegionLength* depth_;
+    ::aim::RegionLength* depth_jitter_;
     ::aim::ProfileInfo* info_;
     ::aim::RegionLength* depth2_;
     ::aim::RegionLength* depth_jitter2_;
-    float depth_;
-    float depth_jitter_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -7405,12 +7413,12 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   enum : int {
     kRegionsFieldNumber = 1,
     kRegionOrderFieldNumber = 2,
+    kMinDistanceFieldNumber = 3,
+    kFixedDistanceFromLastTargetFieldNumber = 4,
+    kFixedDistanceFromLastTargetJitterFieldNumber = 5,
     kFixedDistanceFromLastTarget2FieldNumber = 44,
     kFixedDistanceJitter2FieldNumber = 55,
     kMinDistance2FieldNumber = 454,
-    kMinDistanceFieldNumber = 3,
-    kFixedDistanceFromLastTargetFieldNumber = 4,
-    kFixedDistanceJitterFieldNumber = 5,
   };
   // repeated .aim.TargetRegion regions = 1;
   int regions_size() const;
@@ -7445,6 +7453,51 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   private:
   const ::google::protobuf::RepeatedField<::int32_t>& _internal_region_order() const;
   ::google::protobuf::RepeatedField<::int32_t>* _internal_mutable_region_order();
+
+  public:
+  // .aim.RegionLength min_distance = 3;
+  bool has_min_distance() const;
+  void clear_min_distance() ;
+  const ::aim::RegionLength& min_distance() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_min_distance();
+  ::aim::RegionLength* mutable_min_distance();
+  void set_allocated_min_distance(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_min_distance(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_min_distance();
+
+  private:
+  const ::aim::RegionLength& _internal_min_distance() const;
+  ::aim::RegionLength* _internal_mutable_min_distance();
+
+  public:
+  // .aim.RegionLength fixed_distance_from_last_target = 4;
+  bool has_fixed_distance_from_last_target() const;
+  void clear_fixed_distance_from_last_target() ;
+  const ::aim::RegionLength& fixed_distance_from_last_target() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_fixed_distance_from_last_target();
+  ::aim::RegionLength* mutable_fixed_distance_from_last_target();
+  void set_allocated_fixed_distance_from_last_target(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_fixed_distance_from_last_target(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_fixed_distance_from_last_target();
+
+  private:
+  const ::aim::RegionLength& _internal_fixed_distance_from_last_target() const;
+  ::aim::RegionLength* _internal_mutable_fixed_distance_from_last_target();
+
+  public:
+  // .aim.RegionLength fixed_distance_from_last_target_jitter = 5;
+  bool has_fixed_distance_from_last_target_jitter() const;
+  void clear_fixed_distance_from_last_target_jitter() ;
+  const ::aim::RegionLength& fixed_distance_from_last_target_jitter() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_fixed_distance_from_last_target_jitter();
+  ::aim::RegionLength* mutable_fixed_distance_from_last_target_jitter();
+  void set_allocated_fixed_distance_from_last_target_jitter(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_fixed_distance_from_last_target_jitter(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_fixed_distance_from_last_target_jitter();
+
+  private:
+  const ::aim::RegionLength& _internal_fixed_distance_from_last_target_jitter() const;
+  ::aim::RegionLength* _internal_mutable_fixed_distance_from_last_target_jitter();
 
   public:
   // .aim.RegionLength fixed_distance_from_last_target2 = 44;
@@ -7492,45 +7545,12 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_min_distance2();
 
   public:
-  // float min_distance = 3;
-  bool has_min_distance() const;
-  void clear_min_distance() ;
-  float min_distance() const;
-  void set_min_distance(float value);
-
-  private:
-  float _internal_min_distance() const;
-  void _internal_set_min_distance(float value);
-
-  public:
-  // float fixed_distance_from_last_target = 4;
-  bool has_fixed_distance_from_last_target() const;
-  void clear_fixed_distance_from_last_target() ;
-  float fixed_distance_from_last_target() const;
-  void set_fixed_distance_from_last_target(float value);
-
-  private:
-  float _internal_fixed_distance_from_last_target() const;
-  void _internal_set_fixed_distance_from_last_target(float value);
-
-  public:
-  // float fixed_distance_jitter = 5;
-  bool has_fixed_distance_jitter() const;
-  void clear_fixed_distance_jitter() ;
-  float fixed_distance_jitter() const;
-  void set_fixed_distance_jitter(float value);
-
-  private:
-  float _internal_fixed_distance_jitter() const;
-  void _internal_set_fixed_distance_jitter(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.TargetPlacementStrategy)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 8, 4,
+      4, 8, 7,
       0, 12>
       _table_;
 
@@ -7553,12 +7573,12 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedPtrField< ::aim::TargetRegion > regions_;
     ::google::protobuf::RepeatedField<::int32_t> region_order_;
     ::google::protobuf::internal::CachedSize _region_order_cached_byte_size_;
+    ::aim::RegionLength* min_distance_;
+    ::aim::RegionLength* fixed_distance_from_last_target_;
+    ::aim::RegionLength* fixed_distance_from_last_target_jitter_;
     ::aim::RegionLength* fixed_distance_from_last_target2_;
     ::aim::RegionLength* fixed_distance_jitter2_;
     ::aim::RegionLength* min_distance2_;
-    float min_distance_;
-    float fixed_distance_from_last_target_;
-    float fixed_distance_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -11893,14 +11913,14 @@ inline void RegionVec3::set_allocated_z(::aim::RegionLength* value) {
 
 // .aim.ProfileInfo info = 15;
 inline bool TargetRegion::has_info() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.info_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.info_ != nullptr) _impl_.info_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline const ::aim::ProfileInfo& TargetRegion::_internal_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -11918,16 +11938,16 @@ inline void TargetRegion::unsafe_arena_set_allocated_info(::aim::ProfileInfo* va
   }
   _impl_.info_ = reinterpret_cast<::aim::ProfileInfo*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000010u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000010u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.info)
 }
 inline ::aim::ProfileInfo* TargetRegion::release_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
   ::aim::ProfileInfo* released = _impl_.info_;
   _impl_.info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -11947,7 +11967,7 @@ inline ::aim::ProfileInfo* TargetRegion::unsafe_arena_release_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetRegion.info)
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
   ::aim::ProfileInfo* temp = _impl_.info_;
   _impl_.info_ = nullptr;
   return temp;
@@ -11961,7 +11981,7 @@ inline ::aim::ProfileInfo* TargetRegion::_internal_mutable_info() {
   return _impl_.info_;
 }
 inline ::aim::ProfileInfo* TargetRegion::mutable_info() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   ::aim::ProfileInfo* _msg = _internal_mutable_info();
   // @@protoc_insertion_point(field_mutable:aim.TargetRegion.info)
   return _msg;
@@ -11978,9 +11998,9 @@ inline void TargetRegion::set_allocated_info(::aim::ProfileInfo* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000010u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000010u;
   }
 
   _impl_.info_ = reinterpret_cast<::aim::ProfileInfo*>(value);
@@ -12179,72 +12199,208 @@ inline void TargetRegion::set_allocated_y_offset(::aim::RegionLength* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.y_offset)
 }
 
-// float depth = 7;
+// .aim.RegionLength depth = 7;
 inline bool TargetRegion::has_depth() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.depth_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_depth() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.depth_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  if (_impl_.depth_ != nullptr) _impl_.depth_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float TargetRegion::depth() const {
+inline const ::aim::RegionLength& TargetRegion::_internal_depth() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.depth_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& TargetRegion::depth() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:aim.TargetRegion.depth)
   return _internal_depth();
 }
-inline void TargetRegion::set_depth(float value) {
-  _internal_set_depth(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.TargetRegion.depth)
+inline void TargetRegion::unsafe_arena_set_allocated_depth(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.depth_);
+  }
+  _impl_.depth_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.depth)
 }
-inline float TargetRegion::_internal_depth() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
+inline ::aim::RegionLength* TargetRegion::release_depth() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.depth_;
+  _impl_.depth_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_depth() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.depth)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.depth_;
+  _impl_.depth_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* TargetRegion::_internal_mutable_depth() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.depth_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.depth_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
   return _impl_.depth_;
 }
-inline void TargetRegion::_internal_set_depth(float value) {
+inline ::aim::RegionLength* TargetRegion::mutable_depth() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_depth();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.depth)
+  return _msg;
+}
+inline void TargetRegion::set_allocated_depth(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.depth_ = value;
+  if (message_arena == nullptr) {
+    delete (_impl_.depth_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.depth_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.depth)
 }
 
-// float depth_jitter = 8;
+// .aim.RegionLength depth_jitter = 8;
 inline bool TargetRegion::has_depth_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.depth_jitter_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_depth_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.depth_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  if (_impl_.depth_jitter_ != nullptr) _impl_.depth_jitter_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
-inline float TargetRegion::depth_jitter() const {
+inline const ::aim::RegionLength& TargetRegion::_internal_depth_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.depth_jitter_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& TargetRegion::depth_jitter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:aim.TargetRegion.depth_jitter)
   return _internal_depth_jitter();
 }
-inline void TargetRegion::set_depth_jitter(float value) {
-  _internal_set_depth_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
-  // @@protoc_insertion_point(field_set:aim.TargetRegion.depth_jitter)
+inline void TargetRegion::unsafe_arena_set_allocated_depth_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.depth_jitter_);
+  }
+  _impl_.depth_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.depth_jitter)
 }
-inline float TargetRegion::_internal_depth_jitter() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
+inline ::aim::RegionLength* TargetRegion::release_depth_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::RegionLength* released = _impl_.depth_jitter_;
+  _impl_.depth_jitter_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_depth_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetRegion.depth_jitter)
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::aim::RegionLength* temp = _impl_.depth_jitter_;
+  _impl_.depth_jitter_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* TargetRegion::_internal_mutable_depth_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.depth_jitter_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.depth_jitter_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
   return _impl_.depth_jitter_;
 }
-inline void TargetRegion::_internal_set_depth_jitter(float value) {
+inline ::aim::RegionLength* TargetRegion::mutable_depth_jitter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  ::aim::RegionLength* _msg = _internal_mutable_depth_jitter();
+  // @@protoc_insertion_point(field_mutable:aim.TargetRegion.depth_jitter)
+  return _msg;
+}
+inline void TargetRegion::set_allocated_depth_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.depth_jitter_ = value;
+  if (message_arena == nullptr) {
+    delete (_impl_.depth_jitter_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+
+  _impl_.depth_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetRegion.depth_jitter)
 }
 
 // .aim.RegionLength depth2 = 77;
 inline bool TargetRegion::has_depth2() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.depth2_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_depth2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.depth2_ != nullptr) _impl_.depth2_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline const ::aim::RegionLength& TargetRegion::_internal_depth2() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -12262,16 +12418,16 @@ inline void TargetRegion::unsafe_arena_set_allocated_depth2(::aim::RegionLength*
   }
   _impl_.depth2_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000008u;
+    _impl_._has_bits_[0] |= 0x00000020u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
+    _impl_._has_bits_[0] &= ~0x00000020u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.depth2)
 }
 inline ::aim::RegionLength* TargetRegion::release_depth2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
   ::aim::RegionLength* released = _impl_.depth2_;
   _impl_.depth2_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -12291,7 +12447,7 @@ inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_depth2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetRegion.depth2)
 
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
   ::aim::RegionLength* temp = _impl_.depth2_;
   _impl_.depth2_ = nullptr;
   return temp;
@@ -12305,7 +12461,7 @@ inline ::aim::RegionLength* TargetRegion::_internal_mutable_depth2() {
   return _impl_.depth2_;
 }
 inline ::aim::RegionLength* TargetRegion::mutable_depth2() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   ::aim::RegionLength* _msg = _internal_mutable_depth2();
   // @@protoc_insertion_point(field_mutable:aim.TargetRegion.depth2)
   return _msg;
@@ -12322,9 +12478,9 @@ inline void TargetRegion::set_allocated_depth2(::aim::RegionLength* value) {
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000008u;
+    _impl_._has_bits_[0] |= 0x00000020u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000008u;
+    _impl_._has_bits_[0] &= ~0x00000020u;
   }
 
   _impl_.depth2_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -12333,14 +12489,14 @@ inline void TargetRegion::set_allocated_depth2(::aim::RegionLength* value) {
 
 // .aim.RegionLength depth_jitter2 = 88;
 inline bool TargetRegion::has_depth_jitter2() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.depth_jitter2_ != nullptr);
   return value;
 }
 inline void TargetRegion::clear_depth_jitter2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.depth_jitter2_ != nullptr) _impl_.depth_jitter2_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline const ::aim::RegionLength& TargetRegion::_internal_depth_jitter2() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -12358,16 +12514,16 @@ inline void TargetRegion::unsafe_arena_set_allocated_depth_jitter2(::aim::Region
   }
   _impl_.depth_jitter2_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000010u;
+    _impl_._has_bits_[0] |= 0x00000040u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000010u;
+    _impl_._has_bits_[0] &= ~0x00000040u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetRegion.depth_jitter2)
 }
 inline ::aim::RegionLength* TargetRegion::release_depth_jitter2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
   ::aim::RegionLength* released = _impl_.depth_jitter2_;
   _impl_.depth_jitter2_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -12387,7 +12543,7 @@ inline ::aim::RegionLength* TargetRegion::unsafe_arena_release_depth_jitter2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetRegion.depth_jitter2)
 
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
   ::aim::RegionLength* temp = _impl_.depth_jitter2_;
   _impl_.depth_jitter2_ = nullptr;
   return temp;
@@ -12401,7 +12557,7 @@ inline ::aim::RegionLength* TargetRegion::_internal_mutable_depth_jitter2() {
   return _impl_.depth_jitter2_;
 }
 inline ::aim::RegionLength* TargetRegion::mutable_depth_jitter2() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   ::aim::RegionLength* _msg = _internal_mutable_depth_jitter2();
   // @@protoc_insertion_point(field_mutable:aim.TargetRegion.depth_jitter2)
   return _msg;
@@ -12418,9 +12574,9 @@ inline void TargetRegion::set_allocated_depth_jitter2(::aim::RegionLength* value
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000010u;
+    _impl_._has_bits_[0] |= 0x00000040u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000010u;
+    _impl_._has_bits_[0] &= ~0x00000040u;
   }
 
   _impl_.depth_jitter2_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -13551,44 +13707,112 @@ inline ::google::protobuf::RepeatedField<::int32_t>* TargetPlacementStrategy::_i
   return &_impl_.region_order_;
 }
 
-// float min_distance = 3;
+// .aim.RegionLength min_distance = 3;
 inline bool TargetPlacementStrategy::has_min_distance() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.min_distance_ != nullptr);
   return value;
 }
 inline void TargetPlacementStrategy::clear_min_distance() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.min_distance_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  if (_impl_.min_distance_ != nullptr) _impl_.min_distance_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline float TargetPlacementStrategy::min_distance() const {
+inline const ::aim::RegionLength& TargetPlacementStrategy::_internal_min_distance() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.min_distance_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& TargetPlacementStrategy::min_distance() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.min_distance)
   return _internal_min_distance();
 }
-inline void TargetPlacementStrategy::set_min_distance(float value) {
-  _internal_set_min_distance(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.min_distance)
+inline void TargetPlacementStrategy::unsafe_arena_set_allocated_min_distance(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.min_distance_);
+  }
+  _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.min_distance)
 }
-inline float TargetPlacementStrategy::_internal_min_distance() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
+inline ::aim::RegionLength* TargetPlacementStrategy::release_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* released = _impl_.min_distance_;
+  _impl_.min_distance_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::unsafe_arena_release_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.min_distance)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::aim::RegionLength* temp = _impl_.min_distance_;
+  _impl_.min_distance_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::_internal_mutable_min_distance() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.min_distance_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
   return _impl_.min_distance_;
 }
-inline void TargetPlacementStrategy::_internal_set_min_distance(float value) {
+inline ::aim::RegionLength* TargetPlacementStrategy::mutable_min_distance() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  ::aim::RegionLength* _msg = _internal_mutable_min_distance();
+  // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.min_distance)
+  return _msg;
+}
+inline void TargetPlacementStrategy::set_allocated_min_distance(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.min_distance_ = value;
+  if (message_arena == nullptr) {
+    delete (_impl_.min_distance_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.min_distance_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetPlacementStrategy.min_distance)
 }
 
 // .aim.RegionLength min_distance2 = 454;
 inline bool TargetPlacementStrategy::has_min_distance2() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.min_distance2_ != nullptr);
   return value;
 }
 inline void TargetPlacementStrategy::clear_min_distance2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.min_distance2_ != nullptr) _impl_.min_distance2_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline const ::aim::RegionLength& TargetPlacementStrategy::_internal_min_distance2() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -13606,16 +13830,16 @@ inline void TargetPlacementStrategy::unsafe_arena_set_allocated_min_distance2(::
   }
   _impl_.min_distance2_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000020u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000020u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.min_distance2)
 }
 inline ::aim::RegionLength* TargetPlacementStrategy::release_min_distance2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
   ::aim::RegionLength* released = _impl_.min_distance2_;
   _impl_.min_distance2_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -13635,7 +13859,7 @@ inline ::aim::RegionLength* TargetPlacementStrategy::unsafe_arena_release_min_di
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.min_distance2)
 
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
   ::aim::RegionLength* temp = _impl_.min_distance2_;
   _impl_.min_distance2_ = nullptr;
   return temp;
@@ -13649,7 +13873,7 @@ inline ::aim::RegionLength* TargetPlacementStrategy::_internal_mutable_min_dista
   return _impl_.min_distance2_;
 }
 inline ::aim::RegionLength* TargetPlacementStrategy::mutable_min_distance2() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   ::aim::RegionLength* _msg = _internal_mutable_min_distance2();
   // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.min_distance2)
   return _msg;
@@ -13666,81 +13890,217 @@ inline void TargetPlacementStrategy::set_allocated_min_distance2(::aim::RegionLe
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000004u;
+    _impl_._has_bits_[0] |= 0x00000020u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000004u;
+    _impl_._has_bits_[0] &= ~0x00000020u;
   }
 
   _impl_.min_distance2_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.TargetPlacementStrategy.min_distance2)
 }
 
-// float fixed_distance_from_last_target = 4;
+// .aim.RegionLength fixed_distance_from_last_target = 4;
 inline bool TargetPlacementStrategy::has_fixed_distance_from_last_target() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.fixed_distance_from_last_target_ != nullptr);
   return value;
 }
 inline void TargetPlacementStrategy::clear_fixed_distance_from_last_target() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.fixed_distance_from_last_target_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  if (_impl_.fixed_distance_from_last_target_ != nullptr) _impl_.fixed_distance_from_last_target_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline float TargetPlacementStrategy::fixed_distance_from_last_target() const {
+inline const ::aim::RegionLength& TargetPlacementStrategy::_internal_fixed_distance_from_last_target() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.fixed_distance_from_last_target_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& TargetPlacementStrategy::fixed_distance_from_last_target() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
   return _internal_fixed_distance_from_last_target();
 }
-inline void TargetPlacementStrategy::set_fixed_distance_from_last_target(float value) {
-  _internal_set_fixed_distance_from_last_target(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
+inline void TargetPlacementStrategy::unsafe_arena_set_allocated_fixed_distance_from_last_target(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.fixed_distance_from_last_target_);
+  }
+  _impl_.fixed_distance_from_last_target_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
 }
-inline float TargetPlacementStrategy::_internal_fixed_distance_from_last_target() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
+inline ::aim::RegionLength* TargetPlacementStrategy::release_fixed_distance_from_last_target() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* released = _impl_.fixed_distance_from_last_target_;
+  _impl_.fixed_distance_from_last_target_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::unsafe_arena_release_fixed_distance_from_last_target() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::RegionLength* temp = _impl_.fixed_distance_from_last_target_;
+  _impl_.fixed_distance_from_last_target_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::_internal_mutable_fixed_distance_from_last_target() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.fixed_distance_from_last_target_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.fixed_distance_from_last_target_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
   return _impl_.fixed_distance_from_last_target_;
 }
-inline void TargetPlacementStrategy::_internal_set_fixed_distance_from_last_target(float value) {
+inline ::aim::RegionLength* TargetPlacementStrategy::mutable_fixed_distance_from_last_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::RegionLength* _msg = _internal_mutable_fixed_distance_from_last_target();
+  // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
+  return _msg;
+}
+inline void TargetPlacementStrategy::set_allocated_fixed_distance_from_last_target(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.fixed_distance_from_last_target_ = value;
+  if (message_arena == nullptr) {
+    delete (_impl_.fixed_distance_from_last_target_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.fixed_distance_from_last_target_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetPlacementStrategy.fixed_distance_from_last_target)
 }
 
-// float fixed_distance_jitter = 5;
-inline bool TargetPlacementStrategy::has_fixed_distance_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+// .aim.RegionLength fixed_distance_from_last_target_jitter = 5;
+inline bool TargetPlacementStrategy::has_fixed_distance_from_last_target_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.fixed_distance_from_last_target_jitter_ != nullptr);
   return value;
 }
-inline void TargetPlacementStrategy::clear_fixed_distance_jitter() {
+inline void TargetPlacementStrategy::clear_fixed_distance_from_last_target_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.fixed_distance_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  if (_impl_.fixed_distance_from_last_target_jitter_ != nullptr) _impl_.fixed_distance_from_last_target_jitter_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline float TargetPlacementStrategy::fixed_distance_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_jitter)
-  return _internal_fixed_distance_jitter();
-}
-inline void TargetPlacementStrategy::set_fixed_distance_jitter(float value) {
-  _internal_set_fixed_distance_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.fixed_distance_jitter)
-}
-inline float TargetPlacementStrategy::_internal_fixed_distance_jitter() const {
+inline const ::aim::RegionLength& TargetPlacementStrategy::_internal_fixed_distance_from_last_target_jitter() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.fixed_distance_jitter_;
+  const ::aim::RegionLength* p = _impl_.fixed_distance_from_last_target_jitter_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
 }
-inline void TargetPlacementStrategy::_internal_set_fixed_distance_jitter(float value) {
+inline const ::aim::RegionLength& TargetPlacementStrategy::fixed_distance_from_last_target_jitter() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.fixed_distance_from_last_target_jitter)
+  return _internal_fixed_distance_from_last_target_jitter();
+}
+inline void TargetPlacementStrategy::unsafe_arena_set_allocated_fixed_distance_from_last_target_jitter(::aim::RegionLength* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.fixed_distance_jitter_ = value;
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.fixed_distance_from_last_target_jitter_);
+  }
+  _impl_.fixed_distance_from_last_target_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.fixed_distance_from_last_target_jitter)
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::release_fixed_distance_from_last_target_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.fixed_distance_from_last_target_jitter_;
+  _impl_.fixed_distance_from_last_target_jitter_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::unsafe_arena_release_fixed_distance_from_last_target_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.fixed_distance_from_last_target_jitter)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.fixed_distance_from_last_target_jitter_;
+  _impl_.fixed_distance_from_last_target_jitter_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::_internal_mutable_fixed_distance_from_last_target_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.fixed_distance_from_last_target_jitter_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.fixed_distance_from_last_target_jitter_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.fixed_distance_from_last_target_jitter_;
+}
+inline ::aim::RegionLength* TargetPlacementStrategy::mutable_fixed_distance_from_last_target_jitter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_fixed_distance_from_last_target_jitter();
+  // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.fixed_distance_from_last_target_jitter)
+  return _msg;
+}
+inline void TargetPlacementStrategy::set_allocated_fixed_distance_from_last_target_jitter(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.fixed_distance_from_last_target_jitter_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.fixed_distance_from_last_target_jitter_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.TargetPlacementStrategy.fixed_distance_from_last_target_jitter)
 }
 
 // .aim.RegionLength fixed_distance_jitter2 = 55;
 inline bool TargetPlacementStrategy::has_fixed_distance_jitter2() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.fixed_distance_jitter2_ != nullptr);
   return value;
 }
 inline void TargetPlacementStrategy::clear_fixed_distance_jitter2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.fixed_distance_jitter2_ != nullptr) _impl_.fixed_distance_jitter2_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline const ::aim::RegionLength& TargetPlacementStrategy::_internal_fixed_distance_jitter2() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -13758,16 +14118,16 @@ inline void TargetPlacementStrategy::unsafe_arena_set_allocated_fixed_distance_j
   }
   _impl_.fixed_distance_jitter2_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000010u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000010u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.fixed_distance_jitter2)
 }
 inline ::aim::RegionLength* TargetPlacementStrategy::release_fixed_distance_jitter2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
   ::aim::RegionLength* released = _impl_.fixed_distance_jitter2_;
   _impl_.fixed_distance_jitter2_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -13787,7 +14147,7 @@ inline ::aim::RegionLength* TargetPlacementStrategy::unsafe_arena_release_fixed_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.fixed_distance_jitter2)
 
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
   ::aim::RegionLength* temp = _impl_.fixed_distance_jitter2_;
   _impl_.fixed_distance_jitter2_ = nullptr;
   return temp;
@@ -13801,7 +14161,7 @@ inline ::aim::RegionLength* TargetPlacementStrategy::_internal_mutable_fixed_dis
   return _impl_.fixed_distance_jitter2_;
 }
 inline ::aim::RegionLength* TargetPlacementStrategy::mutable_fixed_distance_jitter2() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   ::aim::RegionLength* _msg = _internal_mutable_fixed_distance_jitter2();
   // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.fixed_distance_jitter2)
   return _msg;
@@ -13818,9 +14178,9 @@ inline void TargetPlacementStrategy::set_allocated_fixed_distance_jitter2(::aim:
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000002u;
+    _impl_._has_bits_[0] |= 0x00000010u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000002u;
+    _impl_._has_bits_[0] &= ~0x00000010u;
   }
 
   _impl_.fixed_distance_jitter2_ = reinterpret_cast<::aim::RegionLength*>(value);
@@ -13829,14 +14189,14 @@ inline void TargetPlacementStrategy::set_allocated_fixed_distance_jitter2(::aim:
 
 // .aim.RegionLength fixed_distance_from_last_target2 = 44;
 inline bool TargetPlacementStrategy::has_fixed_distance_from_last_target2() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.fixed_distance_from_last_target2_ != nullptr);
   return value;
 }
 inline void TargetPlacementStrategy::clear_fixed_distance_from_last_target2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.fixed_distance_from_last_target2_ != nullptr) _impl_.fixed_distance_from_last_target2_->Clear();
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline const ::aim::RegionLength& TargetPlacementStrategy::_internal_fixed_distance_from_last_target2() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -13854,16 +14214,16 @@ inline void TargetPlacementStrategy::unsafe_arena_set_allocated_fixed_distance_f
   }
   _impl_.fixed_distance_from_last_target2_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000008u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000008u;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.fixed_distance_from_last_target2)
 }
 inline ::aim::RegionLength* TargetPlacementStrategy::release_fixed_distance_from_last_target2() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
   ::aim::RegionLength* released = _impl_.fixed_distance_from_last_target2_;
   _impl_.fixed_distance_from_last_target2_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -13883,7 +14243,7 @@ inline ::aim::RegionLength* TargetPlacementStrategy::unsafe_arena_release_fixed_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.fixed_distance_from_last_target2)
 
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
   ::aim::RegionLength* temp = _impl_.fixed_distance_from_last_target2_;
   _impl_.fixed_distance_from_last_target2_ = nullptr;
   return temp;
@@ -13897,7 +14257,7 @@ inline ::aim::RegionLength* TargetPlacementStrategy::_internal_mutable_fixed_dis
   return _impl_.fixed_distance_from_last_target2_;
 }
 inline ::aim::RegionLength* TargetPlacementStrategy::mutable_fixed_distance_from_last_target2() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   ::aim::RegionLength* _msg = _internal_mutable_fixed_distance_from_last_target2();
   // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.fixed_distance_from_last_target2)
   return _msg;
@@ -13914,9 +14274,9 @@ inline void TargetPlacementStrategy::set_allocated_fixed_distance_from_last_targ
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    _impl_._has_bits_[0] |= 0x00000001u;
+    _impl_._has_bits_[0] |= 0x00000008u;
   } else {
-    _impl_._has_bits_[0] &= ~0x00000001u;
+    _impl_._has_bits_[0] &= ~0x00000008u;
   }
 
   _impl_.fixed_distance_from_last_target2_ = reinterpret_cast<::aim::RegionLength*>(value);

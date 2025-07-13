@@ -64,7 +64,7 @@ class LinearScenario : public BaseScenario {
           wall_, params.def.linear_def().target_placement_strategy(), &target_manager_, &app_);
     } else {
       TargetPlacementStrategy strat;
-      strat.set_min_distance(15);
+      strat.mutable_min_distance()->set_value(15);
       RectangleTargetRegion* region = strat.add_regions()->mutable_rectangle();
       region->mutable_x_length()->set_x_percent_value(0.9);
       region->mutable_y_length()->set_y_percent_value(0.9);
