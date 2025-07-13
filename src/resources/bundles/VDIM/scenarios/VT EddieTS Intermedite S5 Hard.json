@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 1.04,
+    "targetRadiusMultiplier": 0.8
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT EddieTS Intermedite S5"
+  }
+}

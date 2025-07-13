@@ -1535,8 +1535,8 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this, support_depth));
     ImGui::Unindent();
 
-    ImGui::Spacing();
-    ImGui::Spacing();
+    Line();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Min distance");
     ImGui::SameLine();
@@ -1550,6 +1550,9 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("Minimum distance between targets.");
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Fixed distance");
+    ImGui::SameLine();
     DrawOptionalRegionLengthEditor(
         "FixedDistanceInput",
         DefaultDim::DIM_X,
@@ -2533,7 +2536,7 @@ class ScenarioEditorScreen : public UiScreen {
         health_seconds = 0.4;
       }
       JitteredValueInput(
-          "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.1, 0.5, "%.1f");
+          "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.05, 0.25, "%.2f");
       ImGui::SameLine();
       ImGui::HelpMarker("The amount of time in seconds to kill the target.");
 

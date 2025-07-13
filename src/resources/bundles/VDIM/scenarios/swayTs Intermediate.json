@@ -1,0 +1,98 @@
+{
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -300,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 120,
+      "width": 200
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "healthSeconds": 0.2,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": ""
+        },
+        "speed": 32,
+        "speedJitter": 0,
+        "targetRadius": 2.39999962,
+        "targetRadiusJitter": 1.49011612e-08
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.46
+      },
+      "height": {
+        "yPercentValue": 0.74
+      },
+      "width": {
+        "xPercentValue": 0.83
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "time": 4.29999828,
+        "timeJitter": 0.5
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": {
+        "value": 50
+      },
+      "regions": [
+        {
+          "depth": {
+            "depthPercentValue": 0.300000072
+          },
+          "depthJitter": {
+            "depthPercentValue": 0.300000072
+          },
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.829999864
+            },
+            "yLength": {
+              "yPercentValue": 0.46
+            }
+          }
+        }
+      ]
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM",
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 0.449999869,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.299999833,
+        "time": 1.4000001,
+        "timeJitter": 0
+      }
+    ]
+  }
+}

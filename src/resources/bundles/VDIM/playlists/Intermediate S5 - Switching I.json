@@ -47,6 +47,50 @@
     {
       "numPlays": 1,
       "scenario": "VDIM waldoTs Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM patCircleSwitch V2 Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT skyTs Intermediate Varied"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT skyTs Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM swayTs Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT EddieTS Intermedite S5 Speed"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT EddieTS Intermedite S5 Static"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT EddieTS Intermedite S5 Regen"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT EddieTS Intermedite S5 Hard"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM VT EddieTS Intermedite S5"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Popswitch Intermediate"
+    },
+    {
+      "numPlays": 1,
+      "scenario": "VDIM Trippez Smooth Switching Intermediate"
     }
   ]
 }
