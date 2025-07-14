@@ -921,18 +921,14 @@ class ScenarioEditorScreen : public UiScreen {
       return;
     }
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Direction radius percent");
-    ImGui::SameLine();
-    int percent = d.direction_radius_percent() * 100;
-    if (!d.has_direction_radius_percent()) {
-      percent = 45;
-    } else if (percent <= 0) {
-      percent = 1;
-    }
-    ImGui::SetNextItemWidth(char_x_ * 10);
-    ImGui::InputInt("##DirectionRadiusPercent", &percent, 1, 5);
-    d.set_direction_radius_percent(percent / 100.0);
+    ImGui::InputFloat(ImGui::InputFloatParams("DirectionRadiusPercent")
+                          .set_label("Direction radius percent")
+                          .set_step(1, 5)
+                          .set_min(1)
+                          .set_precision(0)
+                          .set_default(40)
+                          .set_width(char_x_ * 10),
+                      PROTO_PERCENT_FIELD(BarrelScenarioDef, &d, direction_radius_percent));
 
     if (!d.has_target_placement_strategy()) {
       d.mutable_target_placement_strategy()->mutable_min_distance()->set_value(15);
@@ -1355,15 +1351,14 @@ class ScenarioEditorScreen : public UiScreen {
     p->set_angle_jitter(angle_jitter);
 
     if (p->angle() > 0 || p->angle_jitter() > 0) {
-      ImGui::InputFloat(
-          ImGui::InputFloatParams("DirectionChangePercent")
-              .set_label("Direction change chance")
-              .set_step(1, 5)
-              .set_range(0, 100)
-              .set_precision(0)
-              .set_default(50)
-              .set_width(char_x_ * 12),
-          MultiplyField(PROTO_FLOAT_FIELD(WallStrafeProfile, p, direction_change_percent), 100));
+      ImGui::InputFloat(ImGui::InputFloatParams("DirectionChangePercent")
+                            .set_label("Direction change chance")
+                            .set_step(1, 5)
+                            .set_range(0, 100)
+                            .set_precision(0)
+                            .set_default(50)
+                            .set_width(char_x_ * 12),
+                        PROTO_PERCENT_FIELD(WallStrafeProfile, p, direction_change_percent));
     } else {
       p->clear_direction_change_percent();
     }
@@ -1923,11 +1918,11 @@ class ScenarioEditorScreen : public UiScreen {
   Field<float> GetRegionLengthField(RegionLength* length, RegionLength::TypeCase type) {
     switch (type) {
       case RegionLength::kYPercentValue:
-        return MultiplyField(PROTO_FLOAT_FIELD(RegionLength, length, y_percent_value), 100);
+        return PROTO_PERCENT_FIELD(RegionLength, length, y_percent_value);
       case RegionLength::kDepthPercentValue:
-        return MultiplyField(PROTO_FLOAT_FIELD(RegionLength, length, depth_percent_value), 100);
+        return PROTO_PERCENT_FIELD(RegionLength, length, depth_percent_value);
       case RegionLength::kXPercentValue:
-        return MultiplyField(PROTO_FLOAT_FIELD(RegionLength, length, x_percent_value), 100);
+        return PROTO_PERCENT_FIELD(RegionLength, length, x_percent_value);
       case RegionLength::kValue:
         break;
     }
@@ -2376,53 +2371,52 @@ class ScenarioEditorScreen : public UiScreen {
 
     Line();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("New target delay seconds");
-    ImGui::SameLine();
-    float new_target_delay = t->new_target_delay_seconds();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##NewTargetDelay", &new_target_delay, 0.1, 0.1, "%.2f");
-    if (new_target_delay > 0) {
-      t->set_new_target_delay_seconds(new_target_delay);
-    } else {
-      t->clear_new_target_delay_seconds();
-    }
+    ImGui::InputFloat(ImGui::InputFloatParams("NewTargetDelaySeconds")
+                          .set_label("New target delay")
+                          .set_is_optional()
+                          .set_zero_is_unset()
+                          .set_step(0.05, 0.25)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(0.2)
+                          .set_width(char_x_ * 10),
+                      PROTO_PERCENT_FIELD(TargetDef, t, new_target_delay_seconds));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Remove target after seconds");
-    ImGui::SameLine();
-    float remove_after = t->remove_target_after_seconds();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##RemoveAfterDelay", &remove_after, 0.1, 0.1, "%.2f");
-    if (remove_after > 0) {
-      t->set_remove_target_after_seconds(remove_after);
-    } else {
-      t->clear_remove_target_after_seconds();
-    }
+    ImGui::InputFloat(ImGui::InputFloatParams("RemoveTargetAfterSeconds")
+                          .set_label("Remove after time")
+                          .set_is_optional()
+                          .set_zero_is_unset()
+                          .set_step(0.05, 0.25)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(0.2)
+                          .set_width(char_x_ * 10),
+                      PROTO_PERCENT_FIELD(TargetDef, t, remove_target_after_seconds));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Stagger initial targets seconds");
+    ImGui::InputFloat(ImGui::InputFloatParams("StaggerInitialTargetsSeconds")
+                          .set_label("Initial stagger time")
+                          .set_is_optional()
+                          .set_zero_is_unset()
+                          .set_step(0.05, 0.25)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(0.2)
+                          .set_width(char_x_ * 10),
+                      PROTO_PERCENT_FIELD(TargetDef, t, stagger_initial_targets_seconds));
     ImGui::SameLine();
-    float stagger = t->stagger_initial_targets_seconds();
-    ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##StaggerDelay", &stagger, 0.1, 0.1, "%.2f");
-    if (stagger > 0) {
-      t->set_stagger_initial_targets_seconds(stagger);
-    } else {
-      t->clear_stagger_initial_targets_seconds();
-    }
+    ImGui::HelpMarker(
+        "Time in seconds between each target being added at the start of the scenario.");
 
-    ImGui::InputFloat(
-        ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
-            .set_label("Remove if below health percent")
-            .set_step(1, 5)
-            .set_min(15)
-            .set_max(99)
-            .set_precision(0)
-            .set_default(1)
-            .set_is_optional()
-            .set_width(char_x_ * 10),
-        MultiplyField(PROTO_FLOAT_FIELD(TargetDef, t, remove_if_below_health_threshold), 100));
+    ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
+                          .set_label("Remove if below health percent")
+                          .set_step(1, 5)
+                          .set_min(15)
+                          .set_max(99)
+                          .set_precision(0)
+                          .set_default(1)
+                          .set_is_optional()
+                          .set_width(char_x_ * 10),
+                      PROTO_PERCENT_FIELD(TargetDef, t, remove_if_below_health_threshold));
 
     if (t->has_remove_if_below_health_threshold()) {
       ImGui::Indent();

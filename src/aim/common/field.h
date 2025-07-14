@@ -46,6 +46,9 @@ struct JitteredField {
   PROTO_FIELD(int, ProtoClass, instance, field_name)
 #define PROTO_STRING_FIELD(ProtoClass, instance, field_name) \
   PROTO_FIELD(std::string, ProtoClass, instance, field_name)
+// A float field that is displayed multiplied by 100. i.e. real value is 0.5 but shows 50%
+#define PROTO_PERCENT_FIELD(ProtoClass, instance, field_name) \
+  MultiplyField(PROTO_FIELD(float, ProtoClass, instance, field_name), 100)
 
 #define PROTO_JITTERED_FIELD(ProtoClass, instance, field_name)              \
   JitteredField<float>(PROTO_FLOAT_FIELD(ProtoClass, instance, field_name), \
