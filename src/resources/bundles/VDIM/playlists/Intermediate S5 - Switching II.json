@@ -1,0 +1,48 @@
+{
+  "items": [
+    {
+      "numPlays": 2,
+      "scenario": "VDIM CG Adjust Switch Micro Intermediate"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM VT Angleswitch Micro Valorant Intermediate"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VPP AdjustSwitch Intermediate"
+    },
+    {
+      "numPlays": 2,
+      "scenario": "VDIM Aimerz+ cheaTS Med S1"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM WhisphereTS Intermediate"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT FlyTS Intermedite S5 Speed"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT FlyTS Intermedite S5 Smooth"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM VT FlyTS Intermedite S5 Hard"
+    },
+    {
+      "numPlays": 4,
+      "scenario": "VDIM VT FlyTS Intermedite S5"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM cAt purrSwitch Intermediate"
+    },
+    {
+      "numPlays": 3,
+      "scenario": "VDIM ToonsTS Intermediate"
+    }
+  ]
+}

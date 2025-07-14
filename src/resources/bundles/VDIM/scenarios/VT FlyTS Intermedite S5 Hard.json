@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 1.05,
+    "targetRadiusMultiplier": 0.850000143
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT FlyTS Intermedite S5"
+  }
+}

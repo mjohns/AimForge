@@ -4,12 +4,12 @@
   "room": {
     "cameraPosition": {
       "x": 0,
-      "y": -200,
-      "z": 0
+      "y": -366,
+      "z": 9
     },
     "simpleRoom": {
-      "height": 130,
-      "width": 180
+      "height": 100,
+      "width": 140
     }
   },
   "shotType": {
@@ -17,32 +17,33 @@
   },
   "targetDef": {
     "newestTargetIsGhost": false,
-    "numTargets": 2,
+    "numTargets": 3,
     "profiles": [
       {
-        "healthSeconds": 0.2,
+        "healthSeconds": 0.35,
         "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },
-        "speed": 26,
+        "speed": 19,
         "speedJitter": 0,
-        "targetRadius": 2.10000038,
+        "targetRadius": 2.4,
         "targetRadiusJitter": 0
       }
     ],
     "removeClosestOnMiss": false
   },
-  "wallWanderDef": {
-    "profiles": [
+  "timedDirectionDef": {
+    "acceleration": 121,
+    "bounds": {},
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightProfiles": [
       {
         "info": {
           "description": ""
         },
-        "turnRate": 300,
-        "turnRateJitter": 80,
-        "turnTime": 2.19999981,
-        "turnTimeJitter": 0.6
+        "time": 2.10000014,
+        "timeJitter": 0.5
       }
     ],
     "targetPlacementStrategy": {
@@ -62,14 +63,36 @@
           },
           "rectangle": {
             "xLength": {
-              "xPercentValue": 0.639999866
+              "xPercentValue": 0.599999905
             },
             "yLength": {
-              "yPercentValue": 0.639999866
+              "yPercentValue": 0.52
             }
           }
         }
       ]
-    }
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM",
+    "upDownProfiles": [
+      {
+        "info": {
+          "description": "",
+          "weight": 3
+        },
+        "speedMultiplier": 0.74999994,
+        "time": 1,
+        "timeJitter": 0
+      },
+      {
+        "accelerationMultiplier": 0.499999881,
+        "info": {
+          "description": "Flat",
+          "weight": 1
+        },
+        "speedMultiplier": 0,
+        "time": 0.599999905,
+        "timeJitter": 0.3
+      }
+    ]
   }
 }

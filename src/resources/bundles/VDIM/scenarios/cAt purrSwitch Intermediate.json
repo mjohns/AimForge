@@ -8,8 +8,8 @@
       "z": 0
     },
     "simpleRoom": {
-      "height": 130,
-      "width": 180
+      "height": 150,
+      "width": 190
     }
   },
   "shotType": {
@@ -17,17 +17,17 @@
   },
   "targetDef": {
     "newestTargetIsGhost": false,
-    "numTargets": 2,
+    "numTargets": 4,
     "profiles": [
       {
-        "healthSeconds": 0.2,
+        "healthSeconds": 0.299999982,
         "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },
-        "speed": 26,
+        "speed": 27,
         "speedJitter": 0,
-        "targetRadius": 2.10000038,
+        "targetRadius": 3.29999924,
         "targetRadiusJitter": 0
       }
     ],
@@ -62,10 +62,10 @@
           },
           "rectangle": {
             "xLength": {
-              "xPercentValue": 0.639999866
+              "xPercentValue": 0.52
             },
             "yLength": {
-              "yPercentValue": 0.639999866
+              "yPercentValue": 0.52
             }
           }
         }

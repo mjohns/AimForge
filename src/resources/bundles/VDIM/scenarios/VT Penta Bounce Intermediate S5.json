@@ -1,0 +1,89 @@
+{
+  "barrelDef": {
+    "directionRadiusPercent": 0.52,
+    "targetPlacementStrategy": {
+      "minDistance": {
+        "value": 15
+      },
+      "regions": [
+        {
+          "circle": {
+            "diameter": {
+              "xPercentValue": 0.92
+            },
+            "innerDiameter": {
+              "xPercentValue": 0.74
+            }
+          },
+          "depth": {
+            "depthPercentValue": 0
+          },
+          "depthJitter": {
+            "depthPercentValue": 0
+          },
+          "info": {
+            "description": ""
+          }
+        }
+      ]
+    }
+  },
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "barrelRoom": {
+      "radius": 90
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "healthSeconds": 0.5,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": "Large",
+          "weight": 1
+        },
+        "speed": 87,
+        "speedJitter": 3,
+        "targetRadius": 3.09999967,
+        "targetRadiusJitter": 0
+      },
+      {
+        "healthSeconds": 0.5,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": "Small",
+          "weight": 1
+        },
+        "speed": 59,
+        "speedJitter": 3,
+        "targetRadius": 2.1,
+        "targetRadiusJitter": 0
+      },
+      {
+        "healthSeconds": 0.5,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": "Mid",
+          "weight": 1
+        },
+        "speed": 72,
+        "speedJitter": 2,
+        "targetRadius": 2.59999943,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  }
+}

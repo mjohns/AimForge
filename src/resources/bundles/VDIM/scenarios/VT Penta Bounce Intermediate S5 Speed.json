@@ -1,0 +1,10 @@
+{
+  "description": "",
+  "overrides": {
+    "speedMultiplier": 0.860000134,
+    "targetRadiusMultiplier": 1.4000001
+  },
+  "referenceDef": {
+    "scenarioId": "VDIM VT Penta Bounce Intermediate S5"
+  }
+}

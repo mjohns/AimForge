@@ -1,0 +1,101 @@
+{
+  "description": "",
+  "durationSeconds": 60,
+  "overrides": {},
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cylinderRoom": {
+      "height": 140,
+      "hideSides": false,
+      "radius": 200,
+      "sideAngleDegrees": 38,
+      "widthPerimeterPercent": 0.35
+    }
+  },
+  "shotType": {
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "healthSeconds": 0.35,
+        "healthSecondsJitter": 0,
+        "info": {
+          "description": ""
+        },
+        "speed": 60,
+        "speedJitter": 0,
+        "targetRadius": 4.39999819,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 191,
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.4
+      },
+      "height": {
+        "yPercentValue": 0.9
+      },
+      "width": {
+        "xPercentValue": 0.9
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "forwardBackProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "time": 2.00000024,
+        "timeJitter": 0.4
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "time": 1.59999979,
+        "timeJitter": 0.4
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": {
+        "value": 65
+      },
+      "regions": [
+        {
+          "depth": {
+            "value": 47
+          },
+          "depthJitter": {
+            "value": 34
+          },
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.709999859
+            },
+            "yLength": {
+              "yPercentValue": 0.609999895
+            }
+          }
+        }
+      ]
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM"
+  }
+}

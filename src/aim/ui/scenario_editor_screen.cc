@@ -931,7 +931,7 @@ class ScenarioEditorScreen : public UiScreen {
       percent = 1;
     }
     ImGui::SetNextItemWidth(char_x_ * 10);
-    ImGui::InputInt("##DirectionRadiusPercent", &percent, 5, 10);
+    ImGui::InputInt("##DirectionRadiusPercent", &percent, 1, 5);
     d.set_direction_radius_percent(percent / 100.0);
 
     if (!d.has_target_placement_strategy()) {

@@ -1,5 +1,6 @@
 {
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -103,6 +104,6 @@
       }
     ],
     "removeClosestOnMiss": true,
-    "removeTargetAfterSeconds": 0.55
+    "removeTargetAfterSeconds": 0.6
   }
 }
