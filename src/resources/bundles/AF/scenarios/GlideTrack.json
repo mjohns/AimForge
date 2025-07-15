@@ -51,14 +51,11 @@
       {
         "angle": 0,
         "angleJitter": 19,
-        "info": {
-          "description": ""
-        },
         "distance": {
           "xPercentValue": 0.669999838
         },
-        "minDistance": {
-          "xPercentValue": 0.420000076
+        "info": {
+          "description": ""
         }
       }
     ],

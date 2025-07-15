@@ -45,14 +45,11 @@
       {
         "angle": 0,
         "angleJitter": 0,
-        "info": {
-          "description": ""
-        },
         "distance": {
           "xPercentValue": 0.5
         },
-        "minDistance": {
-          "xPercentValue": 0.3
+        "info": {
+          "description": ""
         }
       }
     ]
