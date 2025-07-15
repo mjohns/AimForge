@@ -60,12 +60,6 @@
         "info": {
           "description": "Little Verticality",
           "weight": 5
-        },
-        "maxDistance": {
-          "xPercentValue": 0.33
-        },
-        "minDistance": {
-          "xPercentValue": 0.210000113
         }
       },
       {
@@ -81,12 +75,6 @@
         "info": {
           "description": "Flat Mid",
           "weight": 11
-        },
-        "maxDistance": {
-          "xPercentValue": 0.38
-        },
-        "minDistance": {
-          "xPercentValue": 0.240000054
         }
       },
       {
@@ -102,12 +90,6 @@
         "info": {
           "description": "Bigger Vert Down",
           "weight": 2
-        },
-        "maxDistance": {
-          "xPercentValue": 0.37
-        },
-        "minDistance": {
-          "xPercentValue": 0.240000054
         }
       },
       {
@@ -122,12 +104,6 @@
         "info": {
           "description": "Bigger Vert Up",
           "weight": 1
-        },
-        "maxDistance": {
-          "xPercentValue": 0.36
-        },
-        "minDistance": {
-          "xPercentValue": 0.25000006
         }
       }
     ],

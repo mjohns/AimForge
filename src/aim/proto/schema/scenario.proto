@@ -78,9 +78,6 @@ message TargetRegion {
   RegionLength depth = 7;
   RegionLength depth_jitter = 8;
 
-  RegionLength depth2 = 77;
-  RegionLength depth_jitter2 = 88;
-
   oneof type {
     RectangleTargetRegion rectangle = 4;
     EllipseTargetRegion ellipse = 5;
@@ -88,6 +85,7 @@ message TargetRegion {
   }
 }
 
+// [json_name = "modernName"]
 message RectangleTargetRegion {
   RegionLength x_length = 1;
   RegionLength y_length = 2;
@@ -115,16 +113,12 @@ message TargetPlacementStrategy {
   repeated int32 region_order = 2;
 
   RegionLength min_distance = 3;
-  RegionLength min_distance2 = 454;
 
   // The next target will be placed at the specified distance from the last target within the
   // specified region. A random direction will be chosen.
   RegionLength fixed_distance_from_last_target = 4;
   // If using fixed distance allow the distance to vary by this amount. i.e. +/- jitter.
   RegionLength fixed_distance_from_last_target_jitter = 5;
-
-  RegionLength fixed_distance_jitter2 = 55;
-  RegionLength fixed_distance_from_last_target2 = 44;
 }
 
 message ScenarioOverrides {
@@ -298,9 +292,6 @@ message WallStrafeProfile {
 
   RegionLength distance = 2;
   RegionLength distance_jitter = 3;
-
-  RegionLength min_distance = 5;
-  RegionLength max_distance = 6;
 
   // Angle to strafe at. In range 0-45. Will choose between strafing up or down at this angle
   // evenly.

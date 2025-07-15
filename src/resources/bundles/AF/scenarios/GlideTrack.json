@@ -54,7 +54,7 @@
         "info": {
           "description": ""
         },
-        "maxDistance": {
+        "distance": {
           "xPercentValue": 0.669999838
         },
         "minDistance": {

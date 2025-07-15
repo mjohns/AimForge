@@ -56,12 +56,6 @@
         "info": {
           "description": "Shorter",
           "weight": 3
-        },
-        "maxDistance": {
-          "xPercentValue": 0.5
-        },
-        "minDistance": {
-          "xPercentValue": 0.5
         }
       },
       {
@@ -76,12 +70,6 @@
         "info": {
           "description": "Mid",
           "weight": 1
-        },
-        "maxDistance": {
-          "xPercentValue": 0.5
-        },
-        "minDistance": {
-          "xPercentValue": 0.5
         }
       }
     ],

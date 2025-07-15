@@ -60,12 +60,6 @@
         },
         "info": {
           "description": ""
-        },
-        "maxDistance": {
-          "xPercentValue": 0.1
-        },
-        "minDistance": {
-          "xPercentValue": 0.42
         }
       }
     ],

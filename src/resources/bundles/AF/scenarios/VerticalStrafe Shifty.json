@@ -55,12 +55,6 @@
         "info": {
           "description": "Default Strafe",
           "weight": 4
-        },
-        "maxDistance": {
-          "xPercentValue": 0.26000005
-        },
-        "minDistance": {
-          "xPercentValue": 0.14
         }
       },
       {
@@ -69,12 +63,6 @@
         "info": {
           "description": "Quick Strafe",
           "weight": 3
-        },
-        "maxDistance": {
-          "xPercentValue": 0.18
-        },
-        "minDistance": {
-          "xPercentValue": 0.12
         }
       },
       {
@@ -83,12 +71,6 @@
         "info": {
           "description": "Long Strafe (Punish predict)",
           "weight": 1
-        },
-        "maxDistance": {
-          "xPercentValue": 0.37
-        },
-        "minDistance": {
-          "xPercentValue": 0.37
         }
       }
     ]

@@ -1332,16 +1332,6 @@ class ScenarioEditorScreen : public UiScreen {
         "Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Min distance");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("MinDistance", DefaultDim::DIM_X, p->mutable_min_distance());
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Max distance");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("MaxDistance", DefaultDim::DIM_X, p->mutable_max_distance());
-
-    ImGui::AlignTextToFramePadding();
     ImGui::Text("Angle");
     ImGui::SameLine();
     float angle = p->angle();

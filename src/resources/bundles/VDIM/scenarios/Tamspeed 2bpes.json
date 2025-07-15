@@ -54,12 +54,6 @@
         },
         "info": {
           "description": ""
-        },
-        "maxDistance": {
-          "xPercentValue": 0.579999924
-        },
-        "minDistance": {
-          "xPercentValue": 0.180000111
         }
       }
     ],
