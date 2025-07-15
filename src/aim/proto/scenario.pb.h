@@ -7799,6 +7799,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     kProfilesFieldNumber = 2,
     kProfileOrderFieldNumber = 3,
     kTargetPlacementStrategyFieldNumber = 1,
+    kTimeScaleMultiplierFieldNumber = 4,
   };
   // repeated .aim.WallWanderProfile profiles = 2;
   int profiles_size() const;
@@ -7850,12 +7851,23 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* _internal_mutable_target_placement_strategy();
 
   public:
+  // float time_scale_multiplier = 4;
+  bool has_time_scale_multiplier() const;
+  void clear_time_scale_multiplier() ;
+  float time_scale_multiplier() const;
+  void set_time_scale_multiplier(float value);
+
+  private:
+  float _internal_time_scale_multiplier() const;
+  void _internal_set_time_scale_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.WallWanderScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 2,
+      2, 4, 2,
       0, 2>
       _table_;
 
@@ -7879,6 +7891,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<::int32_t> profile_order_;
     ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::TargetPlacementStrategy* target_placement_strategy_;
+    float time_scale_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -21254,6 +21267,34 @@ WallWanderScenarioDef::_internal_profile_order() const {
 inline ::google::protobuf::RepeatedField<::int32_t>* WallWanderScenarioDef::_internal_mutable_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.profile_order_;
+}
+
+// float time_scale_multiplier = 4;
+inline bool WallWanderScenarioDef::has_time_scale_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void WallWanderScenarioDef::clear_time_scale_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.time_scale_multiplier_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline float WallWanderScenarioDef::time_scale_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.time_scale_multiplier)
+  return _internal_time_scale_multiplier();
+}
+inline void WallWanderScenarioDef::set_time_scale_multiplier(float value) {
+  _internal_set_time_scale_multiplier(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.time_scale_multiplier)
+}
+inline float WallWanderScenarioDef::_internal_time_scale_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.time_scale_multiplier_;
+}
+inline void WallWanderScenarioDef::_internal_set_time_scale_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.time_scale_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------

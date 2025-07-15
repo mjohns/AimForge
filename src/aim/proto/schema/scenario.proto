@@ -438,6 +438,9 @@ message WallWanderScenarioDef {
 
   // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 profile_order = 3;
+
+  // Scales the times in all of the profiles. Defaults to 1.
+  float time_scale_multiplier = 4;
 }
 
 message TargetDef {

@@ -281,6 +281,10 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
       float time_scale = FirstGreaterThanZero(original.bounce_def().time_scale_multiplier(), 1.0);
       result.mutable_bounce_def()->set_time_scale_multiplier(time_scale * mult);
     }
+    if (original.has_wall_wander_def()) {
+      float time_scale = FirstGreaterThanZero(original.wall_wander_def().time_scale_multiplier(), 1.0);
+      result.mutable_wall_wander_def()->set_time_scale_multiplier(time_scale * mult);
+    }
     // TODO: wander def
   }
   return result;

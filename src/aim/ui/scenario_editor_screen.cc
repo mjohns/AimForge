@@ -953,16 +953,14 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawTimedDirectionProfile(TimedDirectionProfile* p) {
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams("Time")
-                                  .set_label("Time")
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Time")
                                   .set_step(0.1, 0.5)
                                   .set_min(0.1)
                                   .set_precision(2)
                                   .set_default(1)
                                   .set_width(char_x_ * 10),
                               PROTO_JITTERED_FIELD(TimedDirectionProfile, p, time));
-    ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
-                          .set_label("Speed multiplier")
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Speed multiplier")
                           .set_is_optional()
                           .set_step(0.05, 0.2)
                           .set_min(0)
@@ -970,8 +968,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(TimedDirectionProfile, p, speed_multiplier));
-    ImGui::InputFloat(ImGui::InputFloatParams("AccelerationMultiplier")
-                          .set_label("Acceleration multiplier")
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration multiplier")
                           .set_is_optional()
                           .set_step(0.05, 0.2)
                           .set_min(0)
@@ -1385,18 +1382,17 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "Specify a probability that the target will stop for a certain duration at the end of "
-        "this "
-        "strafe before changing direction.");
+        "this strafe before changing direction.");
     if (is_pause) {
       ImGui::Indent();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Percent chance");
-      float chance = FirstGreaterThanZero(p->pause_at_end_chance() * 100, 50);
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 8);
-      ImGui::InputFloat("##PauseChance", &chance, 5, 15, "%.0f");
-      chance = glm::clamp(chance, 0.0f, 100.0f);
-      p->set_pause_at_end_chance(chance / 100.0f);
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Percent chance")
+                            .set_step(1, 10)
+                            .set_min(0)
+                            .set_max(100)
+                            .set_default(50)
+                            .set_precision(0)
+                            .set_width(char_x_ * 10),
+                        PROTO_PERCENT_FIELD(WallStrafeProfile, p, pause_at_end_chance));
 
       ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Pause seconds")
                                     .set_step(0.05, .25)
