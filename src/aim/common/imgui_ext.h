@@ -353,6 +353,10 @@ static void SetButtonCursorAtRight(const std::string& text) {
 struct InputFloatParams {
   explicit InputFloatParams(const std::string& id) : id(id) {}
 
+  static InputFloatParams WithLabelAsId(const std::string& label) {
+    return InputFloatParams(label).set_label(label);
+  }
+
   InputFloatParams& set_precision(int decimal_places) {
     if (decimal_places == 1) {
       format = "%.1f";

@@ -23,6 +23,7 @@
 
 namespace aim {
 namespace {
+
 const char* kImguiIniFile = "imgui.ini";
 
 TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
@@ -53,7 +54,7 @@ TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : mgr->scenarios()) {
     ScenarioDef def = item.def;
-    mgr->SaveScenario(item.name, def);
+    //mgr->SaveScenario(item.name, def);
   }
 }
 

@@ -874,14 +874,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::IdGuard cid("LinearEditor");
     LinearScenarioDef& d = *def_.mutable_linear_def();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Angle");
-    ImGui::SameLine();
-    float angle = d.angle();
-    float angle_jitter = d.angle_jitter();
-    JitteredValueInput("AngleInput", &angle, &angle_jitter, 1, 3, "%.0f");
-    d.set_angle(angle);
-    d.set_angle_jitter(angle_jitter);
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Angle")
+                                  .set_step(1, 3)
+                                  .set_min(0)
+                                  .set_max(60)
+                                  .set_precision(0)
+                                  .set_default(0)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(LinearScenarioDef, &d, angle));
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial left/right direction");
@@ -922,13 +922,18 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     ImGui::InputFloat(ImGui::InputFloatParams("DirectionRadiusPercent")
-                          .set_label("Direction radius percent")
+                          .set_label("Redirect to percent of center")
                           .set_step(1, 5)
                           .set_min(1)
                           .set_precision(0)
                           .set_default(40)
                           .set_width(char_x_ * 10),
                       PROTO_PERCENT_FIELD(BarrelScenarioDef, &d, direction_radius_percent));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "When the target collides with the wall it will be redirected in the direction of a random "
+        "point within the specified portion of the center. The smaller the radius the more it will "
+        "be redirected towards the center of the circle.");
 
     if (!d.has_target_placement_strategy()) {
       d.mutable_target_placement_strategy()->mutable_min_distance()->set_value(15);
@@ -1331,14 +1336,14 @@ class ScenarioEditorScreen : public UiScreen {
     DrawJitteredRegionLengthEditor(
         "Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Angle");
-    ImGui::SameLine();
-    float angle = p->angle();
-    float angle_jitter = p->angle_jitter();
-    JitteredValueInput("AngleInput", &angle, &angle_jitter, 1, 3, "%.0f");
-    p->set_angle(angle);
-    p->set_angle_jitter(angle_jitter);
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Angle")
+                                  .set_step(1, 3)
+                                  .set_min(0)
+                                  .set_max(60)
+                                  .set_precision(0)
+                                  .set_default(0)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(WallStrafeProfile, p, angle));
 
     if (p->angle() > 0 || p->angle_jitter() > 0) {
       ImGui::InputFloat(ImGui::InputFloatParams("DirectionChangePercent")
@@ -1393,14 +1398,13 @@ class ScenarioEditorScreen : public UiScreen {
       chance = glm::clamp(chance, 0.0f, 100.0f);
       p->set_pause_at_end_chance(chance / 100.0f);
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Pause seconds");
-      float pause_seconds = FirstGreaterThanZero(p->pause_seconds(), 0.5);
-      float jitter = p->pause_seconds_jitter();
-      ImGui::SameLine();
-      JitteredValueInput("PauseSecondsInput", &pause_seconds, &jitter, 0.1, 1, "%.1f");
-      p->set_pause_seconds(pause_seconds);
-      p->set_pause_seconds_jitter(jitter);
+      ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Pause seconds")
+                                    .set_step(0.05, .25)
+                                    .set_min(0.01)
+                                    .set_precision(2)
+                                    .set_default(0.3)
+                                    .set_width(char_x_ * 10),
+                                PROTO_JITTERED_FIELD(WallStrafeProfile, p, pause_seconds));
     } else {
       p->clear_pause_seconds();
       p->clear_pause_seconds_jitter();
@@ -2457,31 +2461,21 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawTargetProfile(TargetProfile* profile) {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Radius");
-    ImGui::SameLine();
-    float target_radius = profile->target_radius();
-    if (target_radius <= 0) {
-      target_radius = 2;
-    }
-    float radius_jitter = profile->target_radius_jitter();
-    JitteredValueInput("TargetRadiusInput", &target_radius, &radius_jitter, 0.1, 0.3, "%.2f");
-    profile->set_target_radius(target_radius);
-    profile->set_target_radius_jitter(radius_jitter);
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Radius")
+                                  .set_step(0.05, 0.5)
+                                  .set_min(0.01)
+                                  .set_precision(2)
+                                  .set_default(2)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(TargetProfile, profile, target_radius));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Speed");
-    ImGui::SameLine();
-    float speed = profile->speed();
-    float speed_jitter = profile->speed_jitter();
-    JitteredValueInput("SpeedInput", &speed, &speed_jitter, 1, 10, "%.1f");
-    if (speed > 0) {
-      profile->set_speed(speed);
-      profile->set_speed_jitter(speed_jitter);
-    } else {
-      profile->clear_speed();
-      profile->clear_speed_jitter();
-    }
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed")
+                                  .set_step(1, 10)
+                                  .set_min(0)
+                                  .set_precision(1)
+                                  .set_zero_is_unset()
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Use pill shape");
@@ -2574,35 +2568,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker(
         "Updates the target's hit radius to not match the visuals. To make the hit box twice as "
         "large use a value of 2.");
-  }
-
-  void JitteredValueInput(const std::string& id,
-                          float* value,
-                          float* jitter_value,
-                          float step,
-                          float fast_step,
-                          const char* format = "%.1f") {
-    ImGui::IdGuard cid(id);
-    ImGui::SetNextItemWidth(char_x_ * 9);
-    ImGui::InputFloat("##ValueEntry", value, step, fast_step, format);
-
-    ImGui::SameLine();
-    ImGui::Text("+/-");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 9);
-    ImGui::InputFloat("##JitterEntry", jitter_value, step, fast_step, format);
-    if (*jitter_value < 0) {
-      *jitter_value = 0;
-    }
-  }
-
-  void OptionalInputFloat(const std::string& id,
-                          bool* has_value,
-                          float* value,
-                          float step,
-                          float fast_step,
-                          const char* format = "%.1f") {
-    ImGui::OptionalInputFloat(id, has_value, value, step, fast_step, format, char_x_ * 12);
   }
 
   void Render() override {
