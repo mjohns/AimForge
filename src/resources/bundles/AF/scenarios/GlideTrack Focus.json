@@ -45,9 +45,6 @@
         "xPercentValue": 0.85
       }
     },
-    "height": {
-      "yPercentValue": 0.69
-    },
     "profiles": [
       {
         "angle": 0,
@@ -62,9 +59,6 @@
           "xPercentValue": 0.420000076
         }
       }
-    ],
-    "width": {
-      "xPercentValue": 0.85
-    }
+    ]
   }
 }

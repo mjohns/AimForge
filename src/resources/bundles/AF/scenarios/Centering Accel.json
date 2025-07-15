@@ -40,9 +40,6 @@
         "value": 120
       }
     },
-    "height": {
-      "value": 10
-    },
     "profiles": [
       {
         "angle": 0,
@@ -57,9 +54,6 @@
           "xPercentValue": 1
         }
       }
-    ],
-    "width": {
-      "value": 120
-    }
+    ]
   }
 }

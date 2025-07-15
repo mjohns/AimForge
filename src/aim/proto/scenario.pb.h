@@ -588,6 +588,11 @@ class ShotType final : public ::google::protobuf::Message
   enum : int {
     kPokeKillTimeSecondsFieldNumber = 10,
     kNoPartialKillsFieldNumber = 11,
+    kHealthSecondsFieldNumber = 12,
+    kHealthRegenRateFieldNumber = 13,
+    kRemoveIfBelowHealthThresholdFieldNumber = 14,
+    kRemoveIfBelowHealthTimeFieldNumber = 15,
+    kHealthClicksFieldNumber = 16,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -614,6 +619,61 @@ class ShotType final : public ::google::protobuf::Message
   private:
   bool _internal_no_partial_kills() const;
   void _internal_set_no_partial_kills(bool value);
+
+  public:
+  // float health_seconds = 12;
+  bool has_health_seconds() const;
+  void clear_health_seconds() ;
+  float health_seconds() const;
+  void set_health_seconds(float value);
+
+  private:
+  float _internal_health_seconds() const;
+  void _internal_set_health_seconds(float value);
+
+  public:
+  // float health_regen_rate = 13;
+  bool has_health_regen_rate() const;
+  void clear_health_regen_rate() ;
+  float health_regen_rate() const;
+  void set_health_regen_rate(float value);
+
+  private:
+  float _internal_health_regen_rate() const;
+  void _internal_set_health_regen_rate(float value);
+
+  public:
+  // float remove_if_below_health_threshold = 14;
+  bool has_remove_if_below_health_threshold() const;
+  void clear_remove_if_below_health_threshold() ;
+  float remove_if_below_health_threshold() const;
+  void set_remove_if_below_health_threshold(float value);
+
+  private:
+  float _internal_remove_if_below_health_threshold() const;
+  void _internal_set_remove_if_below_health_threshold(float value);
+
+  public:
+  // float remove_if_below_health_time = 15;
+  bool has_remove_if_below_health_time() const;
+  void clear_remove_if_below_health_time() ;
+  float remove_if_below_health_time() const;
+  void set_remove_if_below_health_time(float value);
+
+  private:
+  float _internal_remove_if_below_health_time() const;
+  void _internal_set_remove_if_below_health_time(float value);
+
+  public:
+  // int32 health_clicks = 16;
+  bool has_health_clicks() const;
+  void clear_health_clicks() ;
+  ::int32_t health_clicks() const;
+  void set_health_clicks(::int32_t value);
+
+  private:
+  ::int32_t _internal_health_clicks() const;
+  void _internal_set_health_clicks(::int32_t value);
 
   public:
   // bool poke = 1;
@@ -685,7 +745,7 @@ class ShotType final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 7, 0,
+      3, 12, 0,
       0, 2>
       _table_;
 
@@ -707,6 +767,11 @@ class ShotType final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     float poke_kill_time_seconds_;
     bool no_partial_kills_;
+    float health_seconds_;
+    float health_regen_rate_;
+    float remove_if_below_health_threshold_;
+    float remove_if_below_health_time_;
+    ::int32_t health_clicks_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -3608,15 +3673,10 @@ class TargetProfile final : public ::google::protobuf::Message
     kTargetRadiusJitterFieldNumber = 3,
     kSpeedFieldNumber = 4,
     kSpeedJitterFieldNumber = 5,
-    kHealthSecondsFieldNumber = 6,
-    kHealthSecondsJitterFieldNumber = 7,
     kTargetRadiusAtKillFieldNumber = 8,
     kTargetHitRadiusMultiplierFieldNumber = 9,
     kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
     kTargetRadiusGrowthSizeFieldNumber = 13,
-    kHealthRegenRateFieldNumber = 14,
-    kHealthClicksFieldNumber = 15,
-    kHealthClicksRegenFieldNumber = 16,
     kPillFieldNumber = 10,
   };
   // .aim.ProfileInfo info = 1;
@@ -3678,28 +3738,6 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_speed_jitter(float value);
 
   public:
-  // float health_seconds = 6;
-  bool has_health_seconds() const;
-  void clear_health_seconds() ;
-  float health_seconds() const;
-  void set_health_seconds(float value);
-
-  private:
-  float _internal_health_seconds() const;
-  void _internal_set_health_seconds(float value);
-
-  public:
-  // float health_seconds_jitter = 7;
-  bool has_health_seconds_jitter() const;
-  void clear_health_seconds_jitter() ;
-  float health_seconds_jitter() const;
-  void set_health_seconds_jitter(float value);
-
-  private:
-  float _internal_health_seconds_jitter() const;
-  void _internal_set_health_seconds_jitter(float value);
-
-  public:
   // float target_radius_at_kill = 8;
   bool has_target_radius_at_kill() const;
   void clear_target_radius_at_kill() ;
@@ -3744,39 +3782,6 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_target_radius_growth_size(float value);
 
   public:
-  // float health_regen_rate = 14;
-  bool has_health_regen_rate() const;
-  void clear_health_regen_rate() ;
-  float health_regen_rate() const;
-  void set_health_regen_rate(float value);
-
-  private:
-  float _internal_health_regen_rate() const;
-  void _internal_set_health_regen_rate(float value);
-
-  public:
-  // int32 health_clicks = 15;
-  bool has_health_clicks() const;
-  void clear_health_clicks() ;
-  ::int32_t health_clicks() const;
-  void set_health_clicks(::int32_t value);
-
-  private:
-  ::int32_t _internal_health_clicks() const;
-  void _internal_set_health_clicks(::int32_t value);
-
-  public:
-  // int32 health_clicks_regen = 16;
-  bool has_health_clicks_regen() const;
-  void clear_health_clicks_regen() ;
-  ::int32_t health_clicks_regen() const;
-  void set_health_clicks_regen(::int32_t value);
-
-  private:
-  ::int32_t _internal_health_clicks_regen() const;
-  void _internal_set_health_clicks_regen(::int32_t value);
-
-  public:
   // .aim.PillTargetDef pill = 10;
   bool has_pill() const;
   private:
@@ -3806,7 +3811,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 15, 2,
+      4, 10, 2,
       0, 2>
       _table_;
 
@@ -3831,15 +3836,10 @@ class TargetProfile final : public ::google::protobuf::Message
     float target_radius_jitter_;
     float speed_;
     float speed_jitter_;
-    float health_seconds_;
-    float health_seconds_jitter_;
     float target_radius_at_kill_;
     float target_hit_radius_multiplier_;
     float target_radius_growth_time_seconds_;
     float target_radius_growth_size_;
-    float health_regen_rate_;
-    ::int32_t health_clicks_;
-    ::int32_t health_clicks_regen_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -6855,8 +6855,6 @@ class TargetDef final : public ::google::protobuf::Message
     kNewTargetDelaySecondsFieldNumber = 6,
     kRemoveTargetAfterSecondsFieldNumber = 7,
     kStaggerInitialTargetsSecondsFieldNumber = 8,
-    kRemoveIfBelowHealthThresholdFieldNumber = 9,
-    kRemoveIfBelowHealthTimeFieldNumber = 10,
   };
   // repeated .aim.TargetProfile profiles = 1;
   int profiles_size() const;
@@ -6959,34 +6957,12 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_stagger_initial_targets_seconds(float value);
 
   public:
-  // float remove_if_below_health_threshold = 9;
-  bool has_remove_if_below_health_threshold() const;
-  void clear_remove_if_below_health_threshold() ;
-  float remove_if_below_health_threshold() const;
-  void set_remove_if_below_health_threshold(float value);
-
-  private:
-  float _internal_remove_if_below_health_threshold() const;
-  void _internal_set_remove_if_below_health_threshold(float value);
-
-  public:
-  // float remove_if_below_health_time = 10;
-  bool has_remove_if_below_health_time() const;
-  void clear_remove_if_below_health_time() ;
-  float remove_if_below_health_time() const;
-  void set_remove_if_below_health_time(float value);
-
-  private:
-  float _internal_remove_if_below_health_time() const;
-  void _internal_set_remove_if_below_health_time(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.TargetDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 10, 1,
+      3, 8, 1,
       0, 2>
       _table_;
 
@@ -7015,8 +6991,6 @@ class TargetDef final : public ::google::protobuf::Message
     float new_target_delay_seconds_;
     float remove_target_after_seconds_;
     float stagger_initial_targets_seconds_;
-    float remove_if_below_health_threshold_;
-    float remove_if_below_health_time_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -14708,6 +14682,146 @@ inline void ShotType::_internal_set_no_partial_kills(bool value) {
   _impl_.no_partial_kills_ = value;
 }
 
+// float health_seconds = 12;
+inline bool ShotType::has_health_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void ShotType::clear_health_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline float ShotType::health_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.health_seconds)
+  return _internal_health_seconds();
+}
+inline void ShotType::set_health_seconds(float value) {
+  _internal_set_health_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.health_seconds)
+}
+inline float ShotType::_internal_health_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_seconds_;
+}
+inline void ShotType::_internal_set_health_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_seconds_ = value;
+}
+
+// float health_regen_rate = 13;
+inline bool ShotType::has_health_regen_rate() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void ShotType::clear_health_regen_rate() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_regen_rate_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float ShotType::health_regen_rate() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.health_regen_rate)
+  return _internal_health_regen_rate();
+}
+inline void ShotType::set_health_regen_rate(float value) {
+  _internal_set_health_regen_rate(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.health_regen_rate)
+}
+inline float ShotType::_internal_health_regen_rate() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_regen_rate_;
+}
+inline void ShotType::_internal_set_health_regen_rate(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_regen_rate_ = value;
+}
+
+// float remove_if_below_health_threshold = 14;
+inline bool ShotType::has_remove_if_below_health_threshold() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void ShotType::clear_remove_if_below_health_threshold() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_threshold_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float ShotType::remove_if_below_health_threshold() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_threshold)
+  return _internal_remove_if_below_health_threshold();
+}
+inline void ShotType::set_remove_if_below_health_threshold(float value) {
+  _internal_set_remove_if_below_health_threshold(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_threshold)
+}
+inline float ShotType::_internal_remove_if_below_health_threshold() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_if_below_health_threshold_;
+}
+inline void ShotType::_internal_set_remove_if_below_health_threshold(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_threshold_ = value;
+}
+
+// float remove_if_below_health_time = 15;
+inline bool ShotType::has_remove_if_below_health_time() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void ShotType::clear_remove_if_below_health_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_time_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float ShotType::remove_if_below_health_time() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_time)
+  return _internal_remove_if_below_health_time();
+}
+inline void ShotType::set_remove_if_below_health_time(float value) {
+  _internal_set_remove_if_below_health_time(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_time)
+}
+inline float ShotType::_internal_remove_if_below_health_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_if_below_health_time_;
+}
+inline void ShotType::_internal_set_remove_if_below_health_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_if_below_health_time_ = value;
+}
+
+// int32 health_clicks = 16;
+inline bool ShotType::has_health_clicks() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void ShotType::clear_health_clicks() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_clicks_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline ::int32_t ShotType::health_clicks() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.health_clicks)
+  return _internal_health_clicks();
+}
+inline void ShotType::set_health_clicks(::int32_t value) {
+  _internal_set_health_clicks(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.health_clicks)
+}
+inline ::int32_t ShotType::_internal_health_clicks() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.health_clicks_;
+}
+inline void ShotType::_internal_set_health_clicks(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.health_clicks_ = value;
+}
+
 inline bool ShotType::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -22199,62 +22313,6 @@ inline void TargetDef::_internal_set_stagger_initial_targets_seconds(float value
   _impl_.stagger_initial_targets_seconds_ = value;
 }
 
-// float remove_if_below_health_threshold = 9;
-inline bool TargetDef::has_remove_if_below_health_threshold() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
-  return value;
-}
-inline void TargetDef::clear_remove_if_below_health_threshold() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_threshold_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
-}
-inline float TargetDef::remove_if_below_health_threshold() const {
-  // @@protoc_insertion_point(field_get:aim.TargetDef.remove_if_below_health_threshold)
-  return _internal_remove_if_below_health_threshold();
-}
-inline void TargetDef::set_remove_if_below_health_threshold(float value) {
-  _internal_set_remove_if_below_health_threshold(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
-  // @@protoc_insertion_point(field_set:aim.TargetDef.remove_if_below_health_threshold)
-}
-inline float TargetDef::_internal_remove_if_below_health_threshold() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.remove_if_below_health_threshold_;
-}
-inline void TargetDef::_internal_set_remove_if_below_health_threshold(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_threshold_ = value;
-}
-
-// float remove_if_below_health_time = 10;
-inline bool TargetDef::has_remove_if_below_health_time() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
-  return value;
-}
-inline void TargetDef::clear_remove_if_below_health_time() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_time_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
-}
-inline float TargetDef::remove_if_below_health_time() const {
-  // @@protoc_insertion_point(field_get:aim.TargetDef.remove_if_below_health_time)
-  return _internal_remove_if_below_health_time();
-}
-inline void TargetDef::set_remove_if_below_health_time(float value) {
-  _internal_set_remove_if_below_health_time(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
-  // @@protoc_insertion_point(field_set:aim.TargetDef.remove_if_below_health_time)
-}
-inline float TargetDef::_internal_remove_if_below_health_time() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.remove_if_below_health_time_;
-}
-inline void TargetDef::_internal_set_remove_if_below_health_time(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_time_ = value;
-}
-
 // -------------------------------------------------------------------
 
 // PillTargetDef
@@ -22499,71 +22557,15 @@ inline void TargetProfile::_internal_set_speed_jitter(float value) {
   _impl_.speed_jitter_ = value;
 }
 
-// float health_seconds = 6;
-inline bool TargetProfile::has_health_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
-  return value;
-}
-inline void TargetProfile::clear_health_seconds() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
-}
-inline float TargetProfile::health_seconds() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_seconds)
-  return _internal_health_seconds();
-}
-inline void TargetProfile::set_health_seconds(float value) {
-  _internal_set_health_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_seconds)
-}
-inline float TargetProfile::_internal_health_seconds() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.health_seconds_;
-}
-inline void TargetProfile::_internal_set_health_seconds(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_seconds_ = value;
-}
-
-// float health_seconds_jitter = 7;
-inline bool TargetProfile::has_health_seconds_jitter() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
-  return value;
-}
-inline void TargetProfile::clear_health_seconds_jitter() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_seconds_jitter_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
-}
-inline float TargetProfile::health_seconds_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_seconds_jitter)
-  return _internal_health_seconds_jitter();
-}
-inline void TargetProfile::set_health_seconds_jitter(float value) {
-  _internal_set_health_seconds_jitter(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_seconds_jitter)
-}
-inline float TargetProfile::_internal_health_seconds_jitter() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.health_seconds_jitter_;
-}
-inline void TargetProfile::_internal_set_health_seconds_jitter(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_seconds_jitter_ = value;
-}
-
 // float target_radius_at_kill = 8;
 inline bool TargetProfile::has_target_radius_at_kill() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_radius_at_kill() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_at_kill_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float TargetProfile::target_radius_at_kill() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_at_kill)
@@ -22571,7 +22573,7 @@ inline float TargetProfile::target_radius_at_kill() const {
 }
 inline void TargetProfile::set_target_radius_at_kill(float value) {
   _internal_set_target_radius_at_kill(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_at_kill)
 }
 inline float TargetProfile::_internal_target_radius_at_kill() const {
@@ -22585,13 +22587,13 @@ inline void TargetProfile::_internal_set_target_radius_at_kill(float value) {
 
 // float target_hit_radius_multiplier = 9;
 inline bool TargetProfile::has_target_hit_radius_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_hit_radius_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_hit_radius_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float TargetProfile::target_hit_radius_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_hit_radius_multiplier)
@@ -22599,7 +22601,7 @@ inline float TargetProfile::target_hit_radius_multiplier() const {
 }
 inline void TargetProfile::set_target_hit_radius_multiplier(float value) {
   _internal_set_target_hit_radius_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_hit_radius_multiplier)
 }
 inline float TargetProfile::_internal_target_hit_radius_multiplier() const {
@@ -22613,13 +22615,13 @@ inline void TargetProfile::_internal_set_target_hit_radius_multiplier(float valu
 
 // float target_radius_growth_time_seconds = 12;
 inline bool TargetProfile::has_target_radius_growth_time_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_radius_growth_time_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_time_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000200u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float TargetProfile::target_radius_growth_time_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_time_seconds)
@@ -22627,7 +22629,7 @@ inline float TargetProfile::target_radius_growth_time_seconds() const {
 }
 inline void TargetProfile::set_target_radius_growth_time_seconds(float value) {
   _internal_set_target_radius_growth_time_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000200u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_time_seconds)
 }
 inline float TargetProfile::_internal_target_radius_growth_time_seconds() const {
@@ -22641,13 +22643,13 @@ inline void TargetProfile::_internal_set_target_radius_growth_time_seconds(float
 
 // float target_radius_growth_size = 13;
 inline bool TargetProfile::has_target_radius_growth_size() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000400u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void TargetProfile::clear_target_radius_growth_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_size_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000400u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float TargetProfile::target_radius_growth_size() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_size)
@@ -22655,7 +22657,7 @@ inline float TargetProfile::target_radius_growth_size() const {
 }
 inline void TargetProfile::set_target_radius_growth_size(float value) {
   _internal_set_target_radius_growth_size(value);
-  _impl_._has_bits_[0] |= 0x00000400u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_size)
 }
 inline float TargetProfile::_internal_target_radius_growth_size() const {
@@ -22665,90 +22667,6 @@ inline float TargetProfile::_internal_target_radius_growth_size() const {
 inline void TargetProfile::_internal_set_target_radius_growth_size(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_size_ = value;
-}
-
-// float health_regen_rate = 14;
-inline bool TargetProfile::has_health_regen_rate() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000800u) != 0;
-  return value;
-}
-inline void TargetProfile::clear_health_regen_rate() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_regen_rate_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000800u;
-}
-inline float TargetProfile::health_regen_rate() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_regen_rate)
-  return _internal_health_regen_rate();
-}
-inline void TargetProfile::set_health_regen_rate(float value) {
-  _internal_set_health_regen_rate(value);
-  _impl_._has_bits_[0] |= 0x00000800u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_regen_rate)
-}
-inline float TargetProfile::_internal_health_regen_rate() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.health_regen_rate_;
-}
-inline void TargetProfile::_internal_set_health_regen_rate(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_regen_rate_ = value;
-}
-
-// int32 health_clicks = 15;
-inline bool TargetProfile::has_health_clicks() const {
-  bool value = (_impl_._has_bits_[0] & 0x00001000u) != 0;
-  return value;
-}
-inline void TargetProfile::clear_health_clicks() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_clicks_ = 0;
-  _impl_._has_bits_[0] &= ~0x00001000u;
-}
-inline ::int32_t TargetProfile::health_clicks() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_clicks)
-  return _internal_health_clicks();
-}
-inline void TargetProfile::set_health_clicks(::int32_t value) {
-  _internal_set_health_clicks(value);
-  _impl_._has_bits_[0] |= 0x00001000u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_clicks)
-}
-inline ::int32_t TargetProfile::_internal_health_clicks() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.health_clicks_;
-}
-inline void TargetProfile::_internal_set_health_clicks(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_clicks_ = value;
-}
-
-// int32 health_clicks_regen = 16;
-inline bool TargetProfile::has_health_clicks_regen() const {
-  bool value = (_impl_._has_bits_[0] & 0x00002000u) != 0;
-  return value;
-}
-inline void TargetProfile::clear_health_clicks_regen() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_clicks_regen_ = 0;
-  _impl_._has_bits_[0] &= ~0x00002000u;
-}
-inline ::int32_t TargetProfile::health_clicks_regen() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.health_clicks_regen)
-  return _internal_health_clicks_regen();
-}
-inline void TargetProfile::set_health_clicks_regen(::int32_t value) {
-  _internal_set_health_clicks_regen(value);
-  _impl_._has_bits_[0] |= 0x00002000u;
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.health_clicks_regen)
-}
-inline ::int32_t TargetProfile::_internal_health_clicks_regen() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.health_clicks_regen_;
-}
-inline void TargetProfile::_internal_set_health_clicks_regen(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.health_clicks_regen_ = value;
 }
 
 // .aim.PillTargetDef pill = 10;

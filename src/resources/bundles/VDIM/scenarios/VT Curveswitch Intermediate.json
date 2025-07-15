@@ -78,6 +78,7 @@
     }
   },
   "shotType": {
+    "healthSeconds": 0.4,
     "trackingKill": true
   },
   "targetDef": {
@@ -85,8 +86,6 @@
     "numTargets": 10,
     "profiles": [
       {
-        "healthSeconds": 0.4,
-        "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },

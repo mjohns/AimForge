@@ -20,7 +20,6 @@
     ]
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,

@@ -1,10 +1,83 @@
 {
-  "description": "",
-  "overrides": {
-    "speedMultiplier": 0.860000134,
-    "targetRadiusMultiplier": 1.4000001
+  "barrelDef": {
+    "directionRadiusPercent": 0.52,
+    "targetPlacementStrategy": {
+      "minDistance": {
+        "value": 15
+      },
+      "regions": [
+        {
+          "circle": {
+            "diameter": {
+              "xPercentValue": 0.92
+            },
+            "innerDiameter": {
+              "xPercentValue": 0.74
+            }
+          },
+          "depth": {
+            "depthPercentValue": 0
+          },
+          "depthJitter": {
+            "depthPercentValue": 0
+          },
+          "info": {
+            "description": ""
+          }
+        }
+      ]
+    }
   },
-  "referenceDef": {
-    "scenarioId": "VDIM VT Penta Bounce Intermediate S5"
+  "durationSeconds": 60,
+  "room": {
+    "barrelRoom": {
+      "radius": 90
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "healthSeconds": 0.5,
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 5,
+    "profiles": [
+      {
+        "info": {
+          "description": "Large",
+          "weight": 1
+        },
+        "speed": 74.820015,
+        "speedJitter": 3,
+        "targetRadius": 4.33999968,
+        "targetRadiusJitter": 0
+      },
+      {
+        "info": {
+          "description": "Small",
+          "weight": 1
+        },
+        "speed": 50.7400093,
+        "speedJitter": 3,
+        "targetRadius": 2.94,
+        "targetRadiusJitter": 0
+      },
+      {
+        "info": {
+          "description": "Mid",
+          "weight": 1
+        },
+        "speed": 61.9200096,
+        "speedJitter": 2,
+        "targetRadius": 3.63999939,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

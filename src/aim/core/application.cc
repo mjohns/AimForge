@@ -51,38 +51,10 @@ TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
 }
 
 void RunScenarioBackfill(ScenarioManager* mgr) {
-  /*
   for (ScenarioItem item : mgr->scenarios()) {
     ScenarioDef def = item.def;
-    TargetPlacementStrategy* strat = GetTargetPlacementStrategy(&def);
-    if (strat == nullptr) {
-      continue;
-    }
-    if (strat->has_min_distance2()) {
-      *strat->mutable_min_distance() = strat->min_distance2();
-    }
-    if (strat->has_fixed_distance_from_last_target2()) {
-      *strat->mutable_fixed_distance_from_last_target() = strat->fixed_distance_from_last_target2();
-    }
-
-    for (TargetRegion& region : *strat->mutable_regions()) {
-      if (region.has_depth2()) {
-        *region.mutable_depth() = region.depth2();
-      }
-      if (region.has_depth_jitter2()) {
-        *region.mutable_depth_jitter() = region.depth_jitter2();
-      }
-      region.clear_depth2();
-      region.clear_depth_jitter2();
-    }
-
-    strat->clear_min_distance2();
-    strat->clear_fixed_distance_from_last_target2();
-    strat->clear_fixed_distance_jitter2();
-
     mgr->SaveScenario(item.name, def);
   }
-  */
 }
 
 void CopyInitialDirIfNotExists(const std::string& dir_name,

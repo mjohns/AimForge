@@ -2048,45 +2048,107 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
 
     auto type = def_.shot_type().type_case();
+    ShotType& s = *def_.mutable_shot_type();
+
     if (ImGui::SimpleTypeDropdown("ShotTypeDropdown", &type, kShotTypes, char_x_ * 15)) {
+      s.Clear();
       if (type == ShotType::kClickSingle) {
-        def_.mutable_shot_type()->set_click_single(true);
+        s.set_click_single(true);
       }
       if (type == ShotType::kClickMulti) {
-        def_.mutable_shot_type()->set_click_multi(true);
+        s.set_click_multi(true);
+        s.set_health_clicks(3);
       }
       if (type == ShotType::kTrackingInvincible) {
-        def_.mutable_shot_type()->set_tracking_invincible(true);
+        s.set_tracking_invincible(true);
       }
       if (type == ShotType::kTrackingKill) {
-        def_.mutable_shot_type()->set_tracking_kill(true);
+        s.set_tracking_kill(true);
+        s.set_health_seconds(0.4);
       }
       if (type == ShotType::kPoke) {
-        def_.mutable_shot_type()->set_poke(true);
+        s.set_poke(true);
       }
     }
+
     if (type == ShotType::kPoke) {
-      ImGui::InputFloat(
-          ImGui::InputFloatParams("PokeKillTime")
-              .set_label("Poke kill time")
-              .set_step(0.01, 0.1)
-              .set_min(0.01)
-              .set_precision(2)
-              .set_default(0.05)
-              .set_is_optional()
-              .set_width(char_x_ * 10),
-          PROTO_FLOAT_FIELD(ShotType, def_.mutable_shot_type(), poke_kill_time_seconds));
-    } else {
-      def_.mutable_shot_type()->clear_poke_kill_time_seconds();
+      ImGui::InputFloat(ImGui::InputFloatParams("PokeKillTime")
+                            .set_label("Poke kill time")
+                            .set_step(0.01, 0.1)
+                            .set_min(0.01)
+                            .set_precision(2)
+                            .set_default(0.05)
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(ShotType, &s, poke_kill_time_seconds));
+    }
+
+    if (type == ShotType::kClickMulti) {
+      ImGui::InputInt(ImGui::InputIntParams("ClickCount")
+                          .set_label("Health clicks")
+                          .set_step(1, 2)
+                          .set_min(2)
+                          .set_default(3)
+                          .set_width(char_x_ * 10),
+                      PROTO_INT_FIELD(ShotType, def_.mutable_shot_type(), health_clicks));
     }
 
     if (type == ShotType::kTrackingKill) {
+      ImGui::InputFloat(ImGui::InputFloatParams("HealthSeconds")
+                            .set_label("Health time")
+                            .set_step(0.01, 0.1)
+                            .set_min(0.01)
+                            .set_precision(2)
+                            .set_default(0.4)
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(ShotType, &s, health_seconds));
+      ImGui::SameLine();
+      ImGui::HelpMarker("The amount of time in seconds to kill the target.");
+
+      ImGui::InputFloat(ImGui::InputFloatParams("HealthRegenRate")
+                            .set_label("Health regen rate")
+                            .set_step(0.1, 0.5)
+                            .set_min(0.1)
+                            .set_precision(1)
+                            .set_default(1)
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(ShotType, &s, health_regen_rate));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "The rate health is regenerated if you switch off target before killing. 1 means regen "
+          "at same rate as health is taken away for hits.");
+
+      ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
+                            .set_label("Remove if below health percent")
+                            .set_step(1, 5)
+                            .set_min(15)
+                            .set_max(99)
+                            .set_precision(0)
+                            .set_default(1)
+                            .set_is_optional()
+                            .set_width(char_x_ * 10),
+                        PROTO_PERCENT_FIELD(ShotType, &s, remove_if_below_health_threshold));
+
+      if (s.has_remove_if_below_health_threshold()) {
+        ImGui::Indent();
+        ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthTime")
+                              .set_label("After time")
+                              .set_step(.01, .1)
+                              .set_min(0)
+                              .set_precision(2)
+                              .set_default(.01)
+                              .set_width(char_x_ * 10),
+                          PROTO_FLOAT_FIELD(ShotType, &s, remove_if_below_health_time));
+        ImGui::Unindent();
+      } else {
+        s.clear_remove_if_below_health_time();
+      }
+
       ImGui::InputBool(ImGui::InputBoolParams("NoPartialKills")
                            .set_label("No partial kills")
                            .set_false_is_unset(),
                        PROTO_BOOL_FIELD(ShotType, def_.mutable_shot_type(), no_partial_kills));
-    } else {
-      def_.mutable_shot_type()->clear_no_partial_kills();
     }
   }
 
@@ -2311,10 +2373,6 @@ class ScenarioEditorScreen : public UiScreen {
       }
 
       TargetProfile p = t->profiles(0);
-      p.clear_health_regen_rate();
-      p.clear_health_seconds();
-      p.clear_health_clicks();
-      p.clear_health_clicks_regen();
 
       t->Clear();
       *t->add_profiles() = p;
@@ -2406,32 +2464,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "Time in seconds between each target being added at the start of the scenario.");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
-                          .set_label("Remove if below health percent")
-                          .set_step(1, 5)
-                          .set_min(15)
-                          .set_max(99)
-                          .set_precision(0)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_PERCENT_FIELD(TargetDef, t, remove_if_below_health_threshold));
-
-    if (t->has_remove_if_below_health_threshold()) {
-      ImGui::Indent();
-      ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthTime")
-                            .set_label("After time")
-                            .set_step(.01, .1)
-                            .set_min(0)
-                            .set_precision(2)
-                            .set_default(.01)
-                            .set_width(char_x_ * 10),
-                        PROTO_FLOAT_FIELD(TargetDef, t, remove_if_below_health_time));
-      ImGui::Unindent();
-    } else {
-      t->clear_remove_if_below_health_time();
-    }
   }
 
   void DrawTargetProfile(TargetProfile* profile) {
@@ -2518,57 +2550,6 @@ class ScenarioEditorScreen : public UiScreen {
     } else {
       profile->clear_target_radius_growth_time_seconds();
       profile->clear_target_radius_growth_size();
-    }
-
-    float health_seconds = profile->health_seconds();
-    float health_seconds_jitter = profile->health_seconds_jitter();
-    if (def_.shot_type().type_case() == ShotType::kTrackingKill) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Health");
-      ImGui::SameLine();
-      if (health_seconds <= 0) {
-        health_seconds = 0.4;
-      }
-      JitteredValueInput(
-          "HealthSecondsInput", &health_seconds, &health_seconds_jitter, 0.05, 0.25, "%.2f");
-      ImGui::SameLine();
-      ImGui::HelpMarker("The amount of time in seconds to kill the target.");
-
-      ImGui::InputFloat(ImGui::InputFloatParams("HealthRegenRate")
-                            .set_label("Health regen rate")
-                            .set_step(0.1, 0.5)
-                            .set_min(0.1)
-                            .set_precision(1)
-                            .set_default(1)
-                            .set_is_optional()
-                            .set_width(char_x_ * 10),
-                        PROTO_FLOAT_FIELD(TargetProfile, profile, health_regen_rate));
-      ImGui::SameLine();
-      ImGui::HelpMarker(
-          "The rate health is regenerated if you switch off target before killing. 1 means regen "
-          "at same rate as health is taken away for hits.");
-    } else {
-      health_seconds = 0;
-    }
-    if (health_seconds > 0) {
-      profile->set_health_seconds(health_seconds);
-      profile->set_health_seconds_jitter(health_seconds_jitter);
-    } else {
-      profile->clear_health_seconds();
-      profile->clear_health_seconds_jitter();
-    }
-
-    if (def_.shot_type().type_case() == ShotType::kClickMulti) {
-      ImGui::InputInt(ImGui::InputIntParams("ClickCount")
-                          .set_label("Health clicks")
-                          .set_step(1, 2)
-                          .set_min(2)
-                          .set_default(2)
-                          .set_width(char_x_ * 10),
-                      PROTO_INT_FIELD(TargetProfile, profile, health_clicks));
-    } else {
-      profile->clear_health_clicks();
-      profile->clear_health_clicks_regen();
     }
 
     if (def_.shot_type().type_case() == ShotType::kClickMulti ||

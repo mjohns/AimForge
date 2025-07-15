@@ -1,9 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {
-    "timeScaleMultiplier": 0.930000067
-  },
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -26,7 +23,6 @@
     "numTargets": 1,
     "profiles": [
       {
-        "healthRegenRate": 1.50000012,
         "info": {
           "description": ""
         },
@@ -82,6 +78,7 @@
         "timeJitter": 0.1
       }
     ],
+    "timeScaleMultiplier": 0.930000067,
     "upDownInitialDirection": "DIRECTION_POSITIVE",
     "upDownProfiles": [
       {

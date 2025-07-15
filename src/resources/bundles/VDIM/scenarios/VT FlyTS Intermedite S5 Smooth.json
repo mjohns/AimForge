@@ -1,6 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -13,6 +12,8 @@
     }
   },
   "shotType": {
+    "healthRegenRate": 1.1,
+    "healthSeconds": 0.50000006,
     "trackingKill": true
   },
   "targetDef": {
@@ -20,9 +21,6 @@
     "numTargets": 4,
     "profiles": [
       {
-        "healthRegenRate": 0.799999952,
-        "healthSeconds": 0.50000006,
-        "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },

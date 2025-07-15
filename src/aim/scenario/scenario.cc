@@ -563,16 +563,15 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   }
 
   target.speed = app_.rand().GetJittered(profile.speed(), profile.speed_jitter());
-  target.health_seconds =
-      app_.rand().GetJittered(profile.health_seconds(), profile.health_seconds_jitter());
-  if (profile.has_health_clicks()) {
-    target.health_clicks = profile.health_clicks();
+  target.health_seconds = def_.shot_type().health_seconds();
+  if (def_.shot_type().has_health_clicks()) {
+    target.health_clicks = def_.shot_type().health_clicks();
   }
   if (profile.has_pill()) {
     target.is_pill = true;
     target.height = profile.pill().height();
   }
-  target.health_regen_rate = profile.health_regen_rate();
+  target.health_regen_rate = def_.shot_type().health_regen_rate();
   return target;
 }
 

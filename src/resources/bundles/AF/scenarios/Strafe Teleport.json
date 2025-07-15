@@ -37,9 +37,6 @@
         "xPercentValue": 0.7
       }
     },
-    "height": {
-      "yPercentValue": 0.85
-    },
     "profiles": [
       {
         "angle": 0,
@@ -72,9 +69,6 @@
         "pauseSeconds": 0.700000048,
         "pauseSecondsJitter": 0
       }
-    ],
-    "width": {
-      "xPercentValue": 0.7
-    }
+    ]
   }
 }

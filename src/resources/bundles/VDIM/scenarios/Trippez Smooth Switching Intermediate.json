@@ -29,7 +29,6 @@
     }
   },
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "barrelRoom": {
       "radius": 90
@@ -41,6 +40,7 @@
     }
   },
   "shotType": {
+    "healthSeconds": 0.5,
     "trackingKill": true
   },
   "targetDef": {
@@ -48,8 +48,6 @@
     "numTargets": 3,
     "profiles": [
       {
-        "healthSeconds": 0.5,
-        "healthSecondsJitter": 0,
         "info": {
           "description": "",
           "weight": 2
@@ -60,8 +58,6 @@
         "targetRadiusJitter": 0
       },
       {
-        "healthSeconds": 0.4,
-        "healthSecondsJitter": 0,
         "info": {
           "description": "Small",
           "weight": 1

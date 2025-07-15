@@ -155,9 +155,9 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
         target.radius = target.radius_at_kill->end_radius + health_percent * radius_diff;
       }
 
-      float remove_if_below_health_threshold = def_.target_def().remove_if_below_health_threshold();
+      float remove_if_below_health_threshold = def_.shot_type().remove_if_below_health_threshold();
       if (remove_if_below_health_threshold > 0 && !target.is_hit && target.last_hit_time >= 0) {
-        float remove_if_below_health_time = def_.target_def().remove_if_below_health_time();
+        float remove_if_below_health_time = def_.shot_type().remove_if_below_health_time();
         float elapsed_time = timer_.GetElapsedSeconds() - target.last_hit_time;
         float health = target.GetHealthPercent();
         if (elapsed_time >= remove_if_below_health_time &&

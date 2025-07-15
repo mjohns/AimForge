@@ -23,7 +23,6 @@
     "numTargets": 1,
     "profiles": [
       {
-        "healthRegenRate": 1.50000012,
         "info": {
           "description": ""
         },
@@ -45,8 +44,6 @@
         "xPercentValue": 0.9
       }
     },
-    "depth": 60,
-    "forwardBackInitialDirection": "DIRECTION_POSITIVE_OR_NEGATIVE",
     "forwardBackProfiles": [
       {
         "accelerationMultiplier": 0.549999893,
@@ -58,9 +55,6 @@
         "timeJitter": 1.00000012
       }
     ],
-    "height": {
-      "yPercentValue": 0.9
-    },
     "leftRightInitialDirection": "DIRECTION_NEGATIVE",
     "leftRightProfiles": [
       {
@@ -102,9 +96,6 @@
         "time": 2.39999986,
         "timeJitter": 0.5
       }
-    ],
-    "width": {
-      "xPercentValue": 0.9
-    }
+    ]
   }
 }

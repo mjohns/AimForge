@@ -1,7 +1,6 @@
 {
   "description": "",
   "durationSeconds": 60,
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -17,6 +16,7 @@
     }
   },
   "shotType": {
+    "healthSeconds": 0.35,
     "trackingKill": true
   },
   "targetDef": {
@@ -24,8 +24,6 @@
     "numTargets": 4,
     "profiles": [
       {
-        "healthSeconds": 0.35,
-        "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },

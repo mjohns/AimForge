@@ -1,10 +1,115 @@
 {
-  "description": "",
-  "overrides": {
-    "speedMultiplier": 1.05,
-    "targetRadiusMultiplier": 0.850000143
+  "durationSeconds": 60,
+  "room": {
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    },
+    "simpleRoom": {
+      "height": 110,
+      "width": 190
+    }
   },
-  "referenceDef": {
-    "scenarioId": "VDIM VT FlyTS Intermedite S5"
+  "shotType": {
+    "healthSeconds": 0.50000006,
+    "trackingKill": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 39.8999977,
+        "speedJitter": 0,
+        "targetRadius": 2.54999971,
+        "targetRadiusJitter": 1.49011612e-08
+      }
+    ],
+    "removeClosestOnMiss": false
+  },
+  "timedDirectionDef": {
+    "acceleration": 131,
+    "bounds": {
+      "depth": {
+        "depthPercentValue": 0.35
+      },
+      "height": {
+        "yPercentValue": 0.74
+      },
+      "width": {
+        "xPercentValue": 0.83
+      }
+    },
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "forwardBackProfiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "time": 2.00000024,
+        "timeJitter": 0.3
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightProfiles": [
+      {
+        "info": {
+          "description": "",
+          "weight": 4
+        },
+        "time": 4.29999828,
+        "timeJitter": 0.6
+      },
+      {
+        "info": {
+          "description": "",
+          "weight": 1
+        },
+        "time": 1.90000021,
+        "timeJitter": 0.2
+      }
+    ],
+    "targetPlacementStrategy": {
+      "minDistance": {
+        "value": 50
+      },
+      "regions": [
+        {
+          "depth": {
+            "depthPercentValue": 0.12
+          },
+          "depthJitter": {
+            "depthPercentValue": 0.09
+          },
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "xPercentValue": 0.689999819
+            },
+            "yLength": {
+              "yPercentValue": 0.46
+            }
+          }
+        }
+      ]
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM",
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 0.449999869,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.299999833,
+        "time": 2.00000024,
+        "timeJitter": 0.4
+      }
+    ]
   }
 }

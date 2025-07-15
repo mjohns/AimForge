@@ -23,7 +23,6 @@
     "numTargets": 1,
     "profiles": [
       {
-        "healthRegenRate": 1.50000012,
         "info": {
           "description": ""
         },

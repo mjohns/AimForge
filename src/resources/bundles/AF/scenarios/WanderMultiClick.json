@@ -12,14 +12,14 @@
     }
   },
   "shotType": {
-    "clickMulti": true
+    "clickMulti": true,
+    "healthClicks": 3
   },
   "targetDef": {
     "newestTargetIsGhost": false,
     "numTargets": 5,
     "profiles": [
       {
-        "healthClicks": 3,
         "info": {
           "description": ""
         },

@@ -84,7 +84,6 @@ struct Target {
   std::optional<RadiusAtKill> radius_at_kill{};
 
   int health_clicks = -1;
-  int health_clicks_regen = 0;
   int click_count = 0;
 
   bool HasHealth() const {

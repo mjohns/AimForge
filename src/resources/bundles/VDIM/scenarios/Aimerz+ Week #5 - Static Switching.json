@@ -12,6 +12,8 @@
     }
   },
   "shotType": {
+    "healthRegenRate": 4.6999979,
+    "healthSeconds": 0.15,
     "trackingKill": true
   },
   "staticDef": {
@@ -68,9 +70,6 @@
     "numTargets": 4,
     "profiles": [
       {
-        "healthRegenRate": 4.6999979,
-        "healthSeconds": 0.15,
-        "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },

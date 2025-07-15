@@ -1,9 +1,5 @@
 {
   "durationSeconds": 60,
-  "overrides": {
-    "distanceMultiplier": 1.28999972,
-    "speedMultiplier": 1.03
-  },
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -32,7 +28,7 @@
         "pill": {
           "height": 30
         },
-        "speed": 149,
+        "speed": 153.47,
         "speedJitter": 0,
         "targetRadius": 3.49999952,
         "targetRadiusJitter": 0
@@ -52,7 +48,7 @@
         "angle": 0,
         "angleJitter": 0,
         "distance": {
-          "xPercentValue": 0.44
+          "xPercentValue": 0.567599893
         },
         "distanceJitter": {
           "xPercentValue": 0.1
@@ -72,7 +68,7 @@
         "angle": 0,
         "angleJitter": 0,
         "distance": {
-          "xPercentValue": 0.28
+          "xPercentValue": 0.361199915
         },
         "distanceJitter": {
           "xPercentValue": 0.08

@@ -156,6 +156,21 @@ message ShotType {
 
   // Partial kills are not counted towards score.
   bool no_partial_kills = 11;
+
+  // For tracking kill, the amount of time it takes to kill.
+  float health_seconds = 12;
+
+  // The rate for health to regen if a target with health is not killed. 1 means to regen at the
+  // same rate as health is taken away. So 2 means regen twice as fast as it is killed.
+  float health_regen_rate = 13;
+
+  // Remove the target if it has less than the specified health percent after x seconds of
+  // leaving the target.
+  float remove_if_below_health_threshold = 14;
+  float remove_if_below_health_time = 15;
+
+  // For multi click, the number of clicks to kill the target.
+  int32 health_clicks = 16;
 }
 
 message ScenarioDef {
@@ -457,11 +472,6 @@ message TargetDef {
 
   // The initial target will be added with the specified delay between each target.
   float stagger_initial_targets_seconds = 8;
-
-  // Remove the target if it has less than the specified health after x seconds of
-  // leaving the target.
-  float remove_if_below_health_threshold = 9;
-  float remove_if_below_health_time = 10;
 }
 
 message PillTargetDef {
@@ -478,8 +488,6 @@ message TargetProfile {
   // Speed will be adjusted +/- jitter amount.
   float speed_jitter = 5;
 
-  float health_seconds = 6;
-  float health_seconds_jitter = 7;
   // Target will shrink from target_radius to this value based on health amount.
   float target_radius_at_kill = 8;
 
@@ -489,15 +497,6 @@ message TargetProfile {
   // The target will grow to the specified size after n seconds.
   float target_radius_growth_time_seconds = 12;
   float target_radius_growth_size = 13;
-
-  // The rate for health to regen if a target with health is not killed. 1 means to regen at the
-  // same rate as health is taken away. So 2 means regen twice as fast as it is killed.
-  float health_regen_rate = 14;
-
-  // For multi click, the number of clicks to kill the target.
-  int32 health_clicks = 15;
-  // For a miss, how many clicks health is restored.
-  int32 health_clicks_regen = 16;
 
   // Defaults to spehere if no more specific type is specified.
   oneof type {

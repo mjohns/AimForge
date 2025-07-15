@@ -32,7 +32,6 @@
     },
     "upDownInitialDirection": "DIRECTION_RANDOM"
   },
-  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -45,6 +44,7 @@
     }
   },
   "shotType": {
+    "healthSeconds": 0.2,
     "trackingKill": true
   },
   "targetDef": {
@@ -52,8 +52,6 @@
     "numTargets": 4,
     "profiles": [
       {
-        "healthSeconds": 0.2,
-        "healthSecondsJitter": 0,
         "info": {
           "description": ""
         },
