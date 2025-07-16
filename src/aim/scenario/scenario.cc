@@ -1,8 +1,5 @@
 #include "scenario.h"
 
-#include <backends/imgui_impl_sdl3.h>
-#include <imgui.h>
-
 #include <algorithm>
 #include <format>
 #include <fstream>
@@ -30,6 +27,8 @@
 #include "glm/mat4x4.hpp"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
+#include "imgui.h"
+#include "imgui/backends/imgui_impl_sdl3.h"
 
 namespace aim {
 namespace {

@@ -46,28 +46,28 @@ const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthT
     {RegionLength::kDepthPercentValue, "depth"},
 };
 
-const std::vector<std::pair<InitialDirection, std::string>> kLeftRightDirections{
-    {InitialDirection::DIRECTION_POSITIVE, "Right"},
-    {InitialDirection::DIRECTION_NEGATIVE, "Left"},
-    {InitialDirection::DIRECTION_IN, "Towards center"},
-    {InitialDirection::DIRECTION_OUT, "Away from center"},
-    {InitialDirection::DIRECTION_RANDOM, "Random"},
+const std::vector<std::pair<Direction, std::string>> kLeftRightDirections{
+    {Direction::DIRECTION_POSITIVE, "Right"},
+    {Direction::DIRECTION_NEGATIVE, "Left"},
+    {Direction::DIRECTION_IN, "Towards center"},
+    {Direction::DIRECTION_OUT, "Away from center"},
+    {Direction::DIRECTION_RANDOM, "Random"},
 };
 
-const std::vector<std::pair<InitialDirection, std::string>> kUpDownDirections{
-    {InitialDirection::DIRECTION_POSITIVE, "Up"},
-    {InitialDirection::DIRECTION_NEGATIVE, "Down"},
-    {InitialDirection::DIRECTION_IN, "Towards center"},
-    {InitialDirection::DIRECTION_OUT, "Away from center"},
-    {InitialDirection::DIRECTION_RANDOM, "Random"},
+const std::vector<std::pair<Direction, std::string>> kUpDownDirections{
+    {Direction::DIRECTION_POSITIVE, "Up"},
+    {Direction::DIRECTION_NEGATIVE, "Down"},
+    {Direction::DIRECTION_IN, "Towards center"},
+    {Direction::DIRECTION_OUT, "Away from center"},
+    {Direction::DIRECTION_RANDOM, "Random"},
 };
 
-const std::vector<std::pair<InitialDirection, std::string>> kForwardBackDirections{
-    {InitialDirection::DIRECTION_POSITIVE, "Forward"},
-    {InitialDirection::DIRECTION_NEGATIVE, "Back"},
-    {InitialDirection::DIRECTION_IN, "Towards center"},
-    {InitialDirection::DIRECTION_OUT, "Away from center"},
-    {InitialDirection::DIRECTION_RANDOM, "Random"},
+const std::vector<std::pair<Direction, std::string>> kForwardBackDirections{
+    {Direction::DIRECTION_POSITIVE, "Forward"},
+    {Direction::DIRECTION_NEGATIVE, "Back"},
+    {Direction::DIRECTION_IN, "Towards center"},
+    {Direction::DIRECTION_OUT, "Away from center"},
+    {Direction::DIRECTION_RANDOM, "Random"},
 };
 
 const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
@@ -779,8 +779,17 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("0 degrees starts at 3 o'clock and rotates counter clockwise.");
 
-    ImGui::InputBool(ImGui::InputBoolParams("Clockwise").set_label("Clockwise"),
+    ImGui::InputBool(ImGui::InputBoolParams("Clockwise").set_label("Start clockwise"),
                      PROTO_BOOL_FIELD(CircleScenarioDef, &d, rotate_clockwise));
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Switch direction after time")
+                          .set_is_optional()
+                          .set_step(1, 5)
+                          .set_min(5)
+                          .set_precision(0)
+                          .set_default(30)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(CircleScenarioDef, &d, switch_after_seconds));
 
     Line();
 
@@ -808,7 +817,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Depth");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, d.mutable_depth());
+    DrawDefaultZeroRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, d.mutable_depth());
     ImGui::SameLine();
     ImGui::HelpMarker("Distance away from the wall");
   }
@@ -886,9 +895,9 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial left/right direction");
     ImGui::SameLine();
-    InitialDirection left_right_direction_type = d.has_left_right_initial_direction()
-                                                     ? d.left_right_initial_direction()
-                                                     : InitialDirection::DIRECTION_IN;
+    Direction left_right_direction_type = d.has_left_right_initial_direction()
+                                              ? d.left_right_initial_direction()
+                                              : Direction::DIRECTION_IN;
     ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
                               &left_right_direction_type,
                               kLeftRightDirections,
@@ -898,7 +907,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial up/down direction");
     ImGui::SameLine();
-    InitialDirection up_down_direction_type = d.up_down_initial_direction();
+    Direction up_down_direction_type = d.up_down_initial_direction();
     ImGui::SimpleTypeDropdown(
         "UpDownDirectionTypeDropdown", &up_down_direction_type, kUpDownDirections, char_x_ * 20);
     d.set_up_down_initial_direction(up_down_direction_type);
@@ -1023,7 +1032,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial left/right direction");
     ImGui::SameLine();
-    InitialDirection left_right_direction = d.left_right_initial_direction();
+    Direction left_right_direction = d.left_right_initial_direction();
     ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
                               &left_right_direction,
                               kLeftRightDirections,
@@ -1044,7 +1053,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial up/down direction");
     ImGui::SameLine();
-    InitialDirection up_down_direction = d.up_down_initial_direction();
+    Direction up_down_direction = d.up_down_initial_direction();
     ImGui::SimpleTypeDropdown(
         "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x_ * 18);
     d.set_up_down_initial_direction(up_down_direction);
@@ -1063,7 +1072,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Initial forward/back direction");
       ImGui::SameLine();
-      InitialDirection forward_back_direction = d.forward_back_initial_direction();
+      Direction forward_back_direction = d.forward_back_initial_direction();
       ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
                                 &forward_back_direction,
                                 kForwardBackDirections,
@@ -1213,7 +1222,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial left/right direction");
     ImGui::SameLine();
-    InitialDirection left_right_direction = d.left_right_initial_direction();
+    Direction left_right_direction = d.left_right_initial_direction();
     ImGui::SimpleTypeDropdown("LeftRightDirectionTypeDropdown",
                               &left_right_direction,
                               kLeftRightDirections,
@@ -1234,7 +1243,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Initial forward/back direction");
       ImGui::SameLine();
-      InitialDirection forward_back_direction = d.forward_back_initial_direction();
+      Direction forward_back_direction = d.forward_back_initial_direction();
       ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
                                 &forward_back_direction,
                                 kForwardBackDirections,
@@ -2019,6 +2028,12 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
+  void DrawDefaultZeroRegionLengthEditor(const std::string& id,
+                                         DefaultDim default_dim,
+                                         RegionLength* length) {
+    DrawRegionLengthEditor(id, default_dim, length, false, true);
+  }
+
   void DrawRegionVec2Editor(const std::string& id, RegionVec2* v) {
     ImGui::IdGuard cid(id);
     ImGui::AlignTextToFramePadding();
@@ -2112,10 +2127,10 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
                             .set_label("Remove if below health percent")
                             .set_step(1, 5)
-                            .set_min(15)
+                            .set_min(1)
                             .set_max(99)
                             .set_precision(0)
-                            .set_default(1)
+                            .set_default(15)
                             .set_is_optional()
                             .set_width(char_x_ * 10),
                         PROTO_PERCENT_FIELD(ShotType, &s, remove_if_below_health_threshold));

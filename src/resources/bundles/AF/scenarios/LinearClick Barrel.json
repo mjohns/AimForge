@@ -1,0 +1,65 @@
+{
+  "durationSeconds": 60,
+  "linearDef": {
+    "angle": 0,
+    "angleJitter": 11,
+    "leftRightInitialDirection": "DIRECTION_IN",
+    "targetPlacementStrategy": {
+      "minDistance": {
+        "value": 50
+      },
+      "regions": [
+        {
+          "depth": {
+            "value": 0
+          },
+          "depthJitter": {
+            "value": 0
+          },
+          "info": {
+            "description": ""
+          },
+          "rectangle": {
+            "xLength": {
+              "value": 50
+            },
+            "yLength": {
+              "value": 69
+            }
+          }
+        }
+      ]
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM"
+  },
+  "overrides": {},
+  "room": {
+    "barrelRoom": {
+      "radius": 75
+    },
+    "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+    }
+  },
+  "shotType": {
+    "clickSingle": true
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 48,
+        "speedJitter": 0,
+        "targetRadius": 1.8,
+        "targetRadiusJitter": 1.49011612e-08
+      }
+    ],
+    "removeClosestOnMiss": true
+  }
+}

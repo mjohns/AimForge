@@ -48,6 +48,11 @@ class CircleScenario : public BaseScenario {
 
     glm::vec3 look_at_pos = WallPositionToWorldPosition(initial_position_, 2.0f, params.def.room());
     camera_.SetPitchYawLookingAtPoint(look_at_pos);
+
+    going_clockwise_ = def_.circle_def().rotate_clockwise();
+    if (def_.circle_def().has_switch_after_seconds()) {
+      next_direction_switch_time_ = def_.circle_def().switch_after_seconds();
+    }
   }
 
  protected:
@@ -73,6 +78,13 @@ class CircleScenario : public BaseScenario {
       return;
     }
 
+    if (def_.circle_def().has_switch_after_seconds()) {
+      if (now_seconds > next_direction_switch_time_) {
+        next_direction_switch_time_ += def_.circle_def().switch_after_seconds();
+        going_clockwise_ = !going_clockwise_;
+      }
+    }
+
     float delta_seconds = now_seconds - last_update_time_;
     last_update_time_ = now_seconds;
 
@@ -82,7 +94,7 @@ class CircleScenario : public BaseScenario {
 
     float degrees = 360 * percent_around;
 
-    if (c_.rotate_clockwise()) {
+    if (going_clockwise_) {
       degrees *= -1;
     }
 
@@ -108,6 +120,9 @@ class CircleScenario : public BaseScenario {
   float circumference_;
   Wall wall_;
   CircleScenarioDef c_;
+
+  bool going_clockwise_;
+  float next_direction_switch_time_ = -1;
 };
 
 }  // namespace

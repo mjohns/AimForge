@@ -53,7 +53,7 @@ TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
 
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : mgr->scenarios()) {
-    ScenarioDef def = item.def;
+    ScenarioDef def = item.unevaluated_def;
     //mgr->SaveScenario(item.name, def);
   }
 }

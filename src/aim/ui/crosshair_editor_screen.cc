@@ -362,10 +362,11 @@ class CrosshairEditorScreen : public UiScreen {
   void DrawCrosshairDotEditor(DotCrosshair* c) {
     ImGui::InputFloat(ImGui::InputFloatParams("OutlineThicknessInput")
                           .set_label("Outline thickness")
+                          .set_is_optional()
+                          .set_default(1)
                           .set_step(0.1, 1)
                           .set_precision(1)
                           .set_width(char_x_ * 8)
-                          .set_default(1)
                           .set_zero_is_unset(),
                       PROTO_FLOAT_FIELD(DotCrosshair, c, outline_thickness));
   }
@@ -451,7 +452,8 @@ class CrosshairEditorScreen : public UiScreen {
                           .set_step(0.1, 1)
                           .set_precision(1)
                           .set_width(char_x_ * 8)
-                          .set_zero_is_unset(),
+                          .set_is_optional()
+                          .set_default(1),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, outline_thickness));
 
     ImGui::InputFloat(ImGui::InputFloatParams("Rounding")

@@ -52,7 +52,7 @@ class SingleDirectionController {
  public:
   SingleDirectionController(float min,
                             float max,
-                            InitialDirection initial_direction,
+                            Direction initial_direction,
                             DirectionParams params)
       : initial_direction_(initial_direction),
         min_(min),
@@ -71,7 +71,7 @@ class SingleDirectionController {
       float delta_seconds);
 
  private:
-  bool GetInitialGoingLeft(InitialDirection dir, float current_position, Random& rand);
+  bool GetInitialGoingLeft(Direction dir, float current_position, Random& rand);
 
   void ChangeDirection(Random& rand,
                        float now_seconds,
@@ -79,7 +79,7 @@ class SingleDirectionController {
                        const google::protobuf::RepeatedField<int>& order,
                        float target_speed);
 
-  InitialDirection initial_direction_;
+  Direction initial_direction_;
   float min_;
   float max_;
   float mid_;

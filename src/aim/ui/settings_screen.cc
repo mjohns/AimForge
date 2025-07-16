@@ -89,11 +89,6 @@ class SettingsScreen : public UiScreen {
       ImGui::InputBool(ImGui::InputBoolParams("EnableVsync").set_label("Enable vsync"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, use_vsync));
 
-      ImGui::InputBool(
-          ImGui::InputBoolParams("DisablePerScenarioSettings")
-              .set_label("Disable per scenario settings"),
-          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
-
       ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
                             .set_label("Metronome BPM")
                             .set_min(0)

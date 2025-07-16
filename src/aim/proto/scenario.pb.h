@@ -69,6 +69,9 @@ extern BounceScenarioDefDefaultTypeInternal _BounceScenarioDef_default_instance_
 class Bounds;
 struct BoundsDefaultTypeInternal;
 extern BoundsDefaultTypeInternal _Bounds_default_instance_;
+class CenterBias;
+struct CenterBiasDefaultTypeInternal;
+extern CenterBiasDefaultTypeInternal _CenterBias_default_instance_;
 class CenteringScenarioDef;
 struct CenteringScenarioDefDefaultTypeInternal;
 extern CenteringScenarioDefDefaultTypeInternal _CenteringScenarioDef_default_instance_;
@@ -172,41 +175,41 @@ namespace protobuf {
 }  // namespace google
 
 namespace aim {
-enum InitialDirection : int {
+enum Direction : int {
   DIRECTION_RANDOM = 0,
   DIRECTION_POSITIVE = 1,
   DIRECTION_NEGATIVE = 2,
   DIRECTION_IN = 3,
   DIRECTION_OUT = 4,
-  InitialDirection_INT_MIN_SENTINEL_DO_NOT_USE_ =
+  Direction_INT_MIN_SENTINEL_DO_NOT_USE_ =
       std::numeric_limits<::int32_t>::min(),
-  InitialDirection_INT_MAX_SENTINEL_DO_NOT_USE_ =
+  Direction_INT_MAX_SENTINEL_DO_NOT_USE_ =
       std::numeric_limits<::int32_t>::max(),
 };
 
-bool InitialDirection_IsValid(int value);
-extern const uint32_t InitialDirection_internal_data_[];
-constexpr InitialDirection InitialDirection_MIN = static_cast<InitialDirection>(0);
-constexpr InitialDirection InitialDirection_MAX = static_cast<InitialDirection>(4);
-constexpr int InitialDirection_ARRAYSIZE = 4 + 1;
+bool Direction_IsValid(int value);
+extern const uint32_t Direction_internal_data_[];
+constexpr Direction Direction_MIN = static_cast<Direction>(0);
+constexpr Direction Direction_MAX = static_cast<Direction>(4);
+constexpr int Direction_ARRAYSIZE = 4 + 1;
 const ::google::protobuf::EnumDescriptor*
-InitialDirection_descriptor();
+Direction_descriptor();
 template <typename T>
-const std::string& InitialDirection_Name(T value) {
-  static_assert(std::is_same<T, InitialDirection>::value ||
+const std::string& Direction_Name(T value) {
+  static_assert(std::is_same<T, Direction>::value ||
                     std::is_integral<T>::value,
-                "Incorrect type passed to InitialDirection_Name().");
-  return InitialDirection_Name(static_cast<InitialDirection>(value));
+                "Incorrect type passed to Direction_Name().");
+  return Direction_Name(static_cast<Direction>(value));
 }
 template <>
-inline const std::string& InitialDirection_Name(InitialDirection value) {
-  return ::google::protobuf::internal::NameOfDenseEnum<InitialDirection_descriptor,
+inline const std::string& Direction_Name(Direction value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<Direction_descriptor,
                                                  0, 4>(
       static_cast<int>(value));
 }
-inline bool InitialDirection_Parse(absl::string_view name, InitialDirection* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<InitialDirection>(
-      InitialDirection_descriptor(), name, value);
+inline bool Direction_Parse(absl::string_view name, Direction* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Direction>(
+      Direction_descriptor(), name, value);
 }
 
 // ===================================================================
@@ -1803,7 +1806,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 35;
+  static constexpr int kIndexInFileMessages = 36;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -2193,6 +2196,211 @@ class CylinderRoom final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class CenterBias final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.CenterBias) */ {
+ public:
+  inline CenterBias() : CenterBias(nullptr) {}
+  ~CenterBias() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CenterBias* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CenterBias));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CenterBias(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline CenterBias(const CenterBias& from) : CenterBias(nullptr, from) {}
+  inline CenterBias(CenterBias&& from) noexcept
+      : CenterBias(nullptr, std::move(from)) {}
+  inline CenterBias& operator=(const CenterBias& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CenterBias& operator=(CenterBias&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CenterBias& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CenterBias* internal_default_instance() {
+    return reinterpret_cast<const CenterBias*>(
+        &_CenterBias_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 27;
+  friend void swap(CenterBias& a, CenterBias& b) { a.Swap(&b); }
+  inline void Swap(CenterBias* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CenterBias* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CenterBias* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CenterBias>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CenterBias& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CenterBias& from) { CenterBias::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CenterBias* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.CenterBias"; }
+
+ protected:
+  explicit CenterBias(::google::protobuf::Arena* arena);
+  CenterBias(::google::protobuf::Arena* arena, const CenterBias& from);
+  CenterBias(::google::protobuf::Arena* arena, CenterBias&& from) noexcept
+      : CenterBias(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kCenterBiasFieldNumber = 1,
+    kRelativeToInitialPositionFieldNumber = 2,
+  };
+  // float center_bias = 1;
+  bool has_center_bias() const;
+  void clear_center_bias() ;
+  float center_bias() const;
+  void set_center_bias(float value);
+
+  private:
+  float _internal_center_bias() const;
+  void _internal_set_center_bias(float value);
+
+  public:
+  // bool relative_to_initial_position = 2;
+  bool has_relative_to_initial_position() const;
+  void clear_relative_to_initial_position() ;
+  bool relative_to_initial_position() const;
+  void set_relative_to_initial_position(bool value);
+
+  private:
+  bool _internal_relative_to_initial_position() const;
+  void _internal_set_relative_to_initial_position(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.CenterBias)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      1, 2, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const CenterBias& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    float center_bias_;
+    bool relative_to_initial_position_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+// -------------------------------------------------------------------
+
 class BarrelRoom final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.BarrelRoom) */ {
  public:
@@ -2444,7 +2652,7 @@ class WallWanderProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderProfile*>(
         &_WallWanderProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 32;
+  static constexpr int kIndexInFileMessages = 33;
   friend void swap(WallWanderProfile& a, WallWanderProfile& b) { a.Swap(&b); }
   inline void Swap(WallWanderProfile* other) {
     if (other == this) return;
@@ -3026,7 +3234,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallArcScenarioDef*>(
         &_WallArcScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 31;
+  static constexpr int kIndexInFileMessages = 32;
   friend void swap(WallArcScenarioDef& a, WallArcScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallArcScenarioDef* other) {
     if (other == this) return;
@@ -3295,7 +3503,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TimedDirectionProfile*>(
         &_TimedDirectionProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 27;
+  static constexpr int kIndexInFileMessages = 28;
   friend void swap(TimedDirectionProfile& a, TimedDirectionProfile& b) { a.Swap(&b); }
   inline void Swap(TimedDirectionProfile* other) {
     if (other == this) return;
@@ -3547,7 +3755,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 36;
+  static constexpr int kIndexInFileMessages = 37;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -5648,8 +5856,9 @@ class CircleScenarioDef final : public ::google::protobuf::Message
     kDepthFieldNumber = 4,
     kStartDegreesFieldNumber = 2,
     kRotateClockwiseFieldNumber = 3,
-    kStretchYFieldNumber = 5,
-    kStretchXFieldNumber = 6,
+    kSwitchAfterSecondsFieldNumber = 5,
+    kStretchYFieldNumber = 6,
+    kStretchXFieldNumber = 7,
   };
   // .aim.RegionLength radius = 1;
   bool has_radius() const;
@@ -5703,7 +5912,18 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   void _internal_set_rotate_clockwise(bool value);
 
   public:
-  // float stretch_y = 5;
+  // float switch_after_seconds = 5;
+  bool has_switch_after_seconds() const;
+  void clear_switch_after_seconds() ;
+  float switch_after_seconds() const;
+  void set_switch_after_seconds(float value);
+
+  private:
+  float _internal_switch_after_seconds() const;
+  void _internal_set_switch_after_seconds(float value);
+
+  public:
+  // float stretch_y = 6;
   bool has_stretch_y() const;
   void clear_stretch_y() ;
   float stretch_y() const;
@@ -5714,7 +5934,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   void _internal_set_stretch_y(float value);
 
   public:
-  // float stretch_x = 6;
+  // float stretch_x = 7;
   bool has_stretch_x() const;
   void clear_stretch_x() ;
   float stretch_x() const;
@@ -5730,7 +5950,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 2,
+      3, 7, 2,
       0, 2>
       _table_;
 
@@ -5754,6 +5974,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* depth_;
     float start_degrees_;
     bool rotate_clockwise_;
+    float switch_after_seconds_;
     float stretch_y_;
     float stretch_x_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -6052,7 +6273,7 @@ class BounceProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const BounceProfile*>(
         &_BounceProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 29;
+  static constexpr int kIndexInFileMessages = 30;
   friend void swap(BounceProfile& a, BounceProfile& b) { a.Swap(&b); }
   inline void Swap(BounceProfile* other) {
     if (other == this) return;
@@ -6692,7 +6913,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 34;
+  static constexpr int kIndexInFileMessages = 35;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -7709,7 +7930,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 33;
+  static constexpr int kIndexInFileMessages = 34;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* other) {
     if (other == this) return;
@@ -8237,7 +8458,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TimedDirectionScenarioDef*>(
         &_TimedDirectionScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 28;
+  static constexpr int kIndexInFileMessages = 29;
   friend void swap(TimedDirectionScenarioDef& a, TimedDirectionScenarioDef& b) { a.Swap(&b); }
   inline void Swap(TimedDirectionScenarioDef* other) {
     if (other == this) return;
@@ -8495,37 +8716,37 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
   void _internal_set_acceleration(float value);
 
   public:
-  // .aim.InitialDirection left_right_initial_direction = 13;
+  // .aim.Direction left_right_initial_direction = 13;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
-  ::aim::InitialDirection left_right_initial_direction() const;
-  void set_left_right_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction left_right_initial_direction() const;
+  void set_left_right_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_left_right_initial_direction() const;
-  void _internal_set_left_right_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_left_right_initial_direction() const;
+  void _internal_set_left_right_initial_direction(::aim::Direction value);
 
   public:
-  // .aim.InitialDirection up_down_initial_direction = 14;
+  // .aim.Direction up_down_initial_direction = 14;
   bool has_up_down_initial_direction() const;
   void clear_up_down_initial_direction() ;
-  ::aim::InitialDirection up_down_initial_direction() const;
-  void set_up_down_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction up_down_initial_direction() const;
+  void set_up_down_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_up_down_initial_direction() const;
-  void _internal_set_up_down_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_up_down_initial_direction() const;
+  void _internal_set_up_down_initial_direction(::aim::Direction value);
 
   public:
-  // .aim.InitialDirection forward_back_initial_direction = 15;
+  // .aim.Direction forward_back_initial_direction = 15;
   bool has_forward_back_initial_direction() const;
   void clear_forward_back_initial_direction() ;
-  ::aim::InitialDirection forward_back_initial_direction() const;
-  void set_forward_back_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction forward_back_initial_direction() const;
+  void set_forward_back_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_forward_back_initial_direction() const;
-  void _internal_set_forward_back_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_forward_back_initial_direction() const;
+  void _internal_set_forward_back_initial_direction(::aim::Direction value);
 
   public:
   // @@protoc_insertion_point(class_scope:aim.TimedDirectionScenarioDef)
@@ -8961,26 +9182,26 @@ class LinearScenarioDef final : public ::google::protobuf::Message
   void _internal_set_angle_jitter(float value);
 
   public:
-  // .aim.InitialDirection left_right_initial_direction = 6;
+  // .aim.Direction left_right_initial_direction = 6;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
-  ::aim::InitialDirection left_right_initial_direction() const;
-  void set_left_right_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction left_right_initial_direction() const;
+  void set_left_right_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_left_right_initial_direction() const;
-  void _internal_set_left_right_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_left_right_initial_direction() const;
+  void _internal_set_left_right_initial_direction(::aim::Direction value);
 
   public:
-  // .aim.InitialDirection up_down_initial_direction = 7;
+  // .aim.Direction up_down_initial_direction = 7;
   bool has_up_down_initial_direction() const;
   void clear_up_down_initial_direction() ;
-  ::aim::InitialDirection up_down_initial_direction() const;
-  void set_up_down_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction up_down_initial_direction() const;
+  void set_up_down_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_up_down_initial_direction() const;
-  void _internal_set_up_down_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_up_down_initial_direction() const;
+  void _internal_set_up_down_initial_direction(::aim::Direction value);
 
   public:
   // @@protoc_insertion_point(class_scope:aim.LinearScenarioDef)
@@ -9079,7 +9300,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const BounceScenarioDef*>(
         &_BounceScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 30;
+  static constexpr int kIndexInFileMessages = 31;
   friend void swap(BounceScenarioDef& a, BounceScenarioDef& b) { a.Swap(&b); }
   inline void Swap(BounceScenarioDef* other) {
     if (other == this) return;
@@ -9352,26 +9573,26 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_acceleration(float value);
 
   public:
-  // .aim.InitialDirection left_right_initial_direction = 11;
+  // .aim.Direction left_right_initial_direction = 11;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
-  ::aim::InitialDirection left_right_initial_direction() const;
-  void set_left_right_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction left_right_initial_direction() const;
+  void set_left_right_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_left_right_initial_direction() const;
-  void _internal_set_left_right_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_left_right_initial_direction() const;
+  void _internal_set_left_right_initial_direction(::aim::Direction value);
 
   public:
-  // .aim.InitialDirection forward_back_initial_direction = 12;
+  // .aim.Direction forward_back_initial_direction = 12;
   bool has_forward_back_initial_direction() const;
   void clear_forward_back_initial_direction() ;
-  ::aim::InitialDirection forward_back_initial_direction() const;
-  void set_forward_back_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction forward_back_initial_direction() const;
+  void set_forward_back_initial_direction(::aim::Direction value);
 
   private:
-  ::aim::InitialDirection _internal_forward_back_initial_direction() const;
-  void _internal_set_forward_back_initial_direction(::aim::InitialDirection value);
+  ::aim::Direction _internal_forward_back_initial_direction() const;
+  void _internal_set_forward_back_initial_direction(::aim::Direction value);
 
   public:
   // @@protoc_insertion_point(class_scope:aim.BounceScenarioDef)
@@ -16275,15 +16496,43 @@ inline void CircleScenarioDef::set_allocated_depth(::aim::RegionLength* value) {
   // @@protoc_insertion_point(field_set_allocated:aim.CircleScenarioDef.depth)
 }
 
-// float stretch_y = 5;
-inline bool CircleScenarioDef::has_stretch_y() const {
+// float switch_after_seconds = 5;
+inline bool CircleScenarioDef::has_switch_after_seconds() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void CircleScenarioDef::clear_switch_after_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.switch_after_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float CircleScenarioDef::switch_after_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.switch_after_seconds)
+  return _internal_switch_after_seconds();
+}
+inline void CircleScenarioDef::set_switch_after_seconds(float value) {
+  _internal_set_switch_after_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.switch_after_seconds)
+}
+inline float CircleScenarioDef::_internal_switch_after_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.switch_after_seconds_;
+}
+inline void CircleScenarioDef::_internal_set_switch_after_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.switch_after_seconds_ = value;
+}
+
+// float stretch_y = 6;
+inline bool CircleScenarioDef::has_stretch_y() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_stretch_y() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stretch_y_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float CircleScenarioDef::stretch_y() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.stretch_y)
@@ -16291,7 +16540,7 @@ inline float CircleScenarioDef::stretch_y() const {
 }
 inline void CircleScenarioDef::set_stretch_y(float value) {
   _internal_set_stretch_y(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.stretch_y)
 }
 inline float CircleScenarioDef::_internal_stretch_y() const {
@@ -16303,15 +16552,15 @@ inline void CircleScenarioDef::_internal_set_stretch_y(float value) {
   _impl_.stretch_y_ = value;
 }
 
-// float stretch_x = 6;
+// float stretch_x = 7;
 inline bool CircleScenarioDef::has_stretch_x() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_stretch_x() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stretch_x_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float CircleScenarioDef::stretch_x() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.stretch_x)
@@ -16319,7 +16568,7 @@ inline float CircleScenarioDef::stretch_x() const {
 }
 inline void CircleScenarioDef::set_stretch_x(float value) {
   _internal_set_stretch_x(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.stretch_x)
 }
 inline float CircleScenarioDef::_internal_stretch_x() const {
@@ -16948,7 +17197,7 @@ inline void LinearScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
   // @@protoc_insertion_point(field_set_allocated:aim.LinearScenarioDef.target_placement_strategy)
 }
 
-// .aim.InitialDirection left_right_initial_direction = 6;
+// .aim.Direction left_right_initial_direction = 6;
 inline bool LinearScenarioDef::has_left_right_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
@@ -16958,25 +17207,25 @@ inline void LinearScenarioDef::clear_left_right_initial_direction() {
   _impl_.left_right_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000008u;
 }
-inline ::aim::InitialDirection LinearScenarioDef::left_right_initial_direction() const {
+inline ::aim::Direction LinearScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.left_right_initial_direction)
   return _internal_left_right_initial_direction();
 }
-inline void LinearScenarioDef::set_left_right_initial_direction(::aim::InitialDirection value) {
+inline void LinearScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.left_right_initial_direction)
 }
-inline ::aim::InitialDirection LinearScenarioDef::_internal_left_right_initial_direction() const {
+inline ::aim::Direction LinearScenarioDef::_internal_left_right_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.left_right_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.left_right_initial_direction_);
 }
-inline void LinearScenarioDef::_internal_set_left_right_initial_direction(::aim::InitialDirection value) {
+inline void LinearScenarioDef::_internal_set_left_right_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = value;
 }
 
-// .aim.InitialDirection up_down_initial_direction = 7;
+// .aim.Direction up_down_initial_direction = 7;
 inline bool LinearScenarioDef::has_up_down_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
@@ -16986,20 +17235,20 @@ inline void LinearScenarioDef::clear_up_down_initial_direction() {
   _impl_.up_down_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline ::aim::InitialDirection LinearScenarioDef::up_down_initial_direction() const {
+inline ::aim::Direction LinearScenarioDef::up_down_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.LinearScenarioDef.up_down_initial_direction)
   return _internal_up_down_initial_direction();
 }
-inline void LinearScenarioDef::set_up_down_initial_direction(::aim::InitialDirection value) {
+inline void LinearScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
   _internal_set_up_down_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.LinearScenarioDef.up_down_initial_direction)
 }
-inline ::aim::InitialDirection LinearScenarioDef::_internal_up_down_initial_direction() const {
+inline ::aim::Direction LinearScenarioDef::_internal_up_down_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.up_down_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.up_down_initial_direction_);
 }
-inline void LinearScenarioDef::_internal_set_up_down_initial_direction(::aim::InitialDirection value) {
+inline void LinearScenarioDef::_internal_set_up_down_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = value;
 }
@@ -18541,6 +18790,66 @@ inline void WallStrafeScenarioDef::_internal_set_distance_multiplier(float value
 
 // -------------------------------------------------------------------
 
+// CenterBias
+
+// float center_bias = 1;
+inline bool CenterBias::has_center_bias() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void CenterBias::clear_center_bias() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.center_bias_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline float CenterBias::center_bias() const {
+  // @@protoc_insertion_point(field_get:aim.CenterBias.center_bias)
+  return _internal_center_bias();
+}
+inline void CenterBias::set_center_bias(float value) {
+  _internal_set_center_bias(value);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_set:aim.CenterBias.center_bias)
+}
+inline float CenterBias::_internal_center_bias() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.center_bias_;
+}
+inline void CenterBias::_internal_set_center_bias(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.center_bias_ = value;
+}
+
+// bool relative_to_initial_position = 2;
+inline bool CenterBias::has_relative_to_initial_position() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline void CenterBias::clear_relative_to_initial_position() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.relative_to_initial_position_ = false;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline bool CenterBias::relative_to_initial_position() const {
+  // @@protoc_insertion_point(field_get:aim.CenterBias.relative_to_initial_position)
+  return _internal_relative_to_initial_position();
+}
+inline void CenterBias::set_relative_to_initial_position(bool value) {
+  _internal_set_relative_to_initial_position(value);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_set:aim.CenterBias.relative_to_initial_position)
+}
+inline bool CenterBias::_internal_relative_to_initial_position() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.relative_to_initial_position_;
+}
+inline void CenterBias::_internal_set_relative_to_initial_position(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.relative_to_initial_position_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // TimedDirectionProfile
 
 // .aim.ProfileInfo info = 1;
@@ -19285,7 +19594,7 @@ inline void TimedDirectionScenarioDef::_internal_set_acceleration(float value) {
   _impl_.acceleration_ = value;
 }
 
-// .aim.InitialDirection left_right_initial_direction = 13;
+// .aim.Direction left_right_initial_direction = 13;
 inline bool TimedDirectionScenarioDef::has_left_right_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
@@ -19295,25 +19604,25 @@ inline void TimedDirectionScenarioDef::clear_left_right_initial_direction() {
   _impl_.left_right_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline ::aim::InitialDirection TimedDirectionScenarioDef::left_right_initial_direction() const {
+inline ::aim::Direction TimedDirectionScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.left_right_initial_direction)
   return _internal_left_right_initial_direction();
 }
-inline void TimedDirectionScenarioDef::set_left_right_initial_direction(::aim::InitialDirection value) {
+inline void TimedDirectionScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.left_right_initial_direction)
 }
-inline ::aim::InitialDirection TimedDirectionScenarioDef::_internal_left_right_initial_direction() const {
+inline ::aim::Direction TimedDirectionScenarioDef::_internal_left_right_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.left_right_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.left_right_initial_direction_);
 }
-inline void TimedDirectionScenarioDef::_internal_set_left_right_initial_direction(::aim::InitialDirection value) {
+inline void TimedDirectionScenarioDef::_internal_set_left_right_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = value;
 }
 
-// .aim.InitialDirection up_down_initial_direction = 14;
+// .aim.Direction up_down_initial_direction = 14;
 inline bool TimedDirectionScenarioDef::has_up_down_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
@@ -19323,25 +19632,25 @@ inline void TimedDirectionScenarioDef::clear_up_down_initial_direction() {
   _impl_.up_down_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000020u;
 }
-inline ::aim::InitialDirection TimedDirectionScenarioDef::up_down_initial_direction() const {
+inline ::aim::Direction TimedDirectionScenarioDef::up_down_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.up_down_initial_direction)
   return _internal_up_down_initial_direction();
 }
-inline void TimedDirectionScenarioDef::set_up_down_initial_direction(::aim::InitialDirection value) {
+inline void TimedDirectionScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
   _internal_set_up_down_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.up_down_initial_direction)
 }
-inline ::aim::InitialDirection TimedDirectionScenarioDef::_internal_up_down_initial_direction() const {
+inline ::aim::Direction TimedDirectionScenarioDef::_internal_up_down_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.up_down_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.up_down_initial_direction_);
 }
-inline void TimedDirectionScenarioDef::_internal_set_up_down_initial_direction(::aim::InitialDirection value) {
+inline void TimedDirectionScenarioDef::_internal_set_up_down_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = value;
 }
 
-// .aim.InitialDirection forward_back_initial_direction = 15;
+// .aim.Direction forward_back_initial_direction = 15;
 inline bool TimedDirectionScenarioDef::has_forward_back_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
@@ -19351,20 +19660,20 @@ inline void TimedDirectionScenarioDef::clear_forward_back_initial_direction() {
   _impl_.forward_back_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000040u;
 }
-inline ::aim::InitialDirection TimedDirectionScenarioDef::forward_back_initial_direction() const {
+inline ::aim::Direction TimedDirectionScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.forward_back_initial_direction)
   return _internal_forward_back_initial_direction();
 }
-inline void TimedDirectionScenarioDef::set_forward_back_initial_direction(::aim::InitialDirection value) {
+inline void TimedDirectionScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.forward_back_initial_direction)
 }
-inline ::aim::InitialDirection TimedDirectionScenarioDef::_internal_forward_back_initial_direction() const {
+inline ::aim::Direction TimedDirectionScenarioDef::_internal_forward_back_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.forward_back_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.forward_back_initial_direction_);
 }
-inline void TimedDirectionScenarioDef::_internal_set_forward_back_initial_direction(::aim::InitialDirection value) {
+inline void TimedDirectionScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = value;
 }
@@ -20335,7 +20644,7 @@ inline void BounceScenarioDef::_internal_set_acceleration(float value) {
   _impl_.acceleration_ = value;
 }
 
-// .aim.InitialDirection left_right_initial_direction = 11;
+// .aim.Direction left_right_initial_direction = 11;
 inline bool BounceScenarioDef::has_left_right_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
@@ -20345,25 +20654,25 @@ inline void BounceScenarioDef::clear_left_right_initial_direction() {
   _impl_.left_right_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000020u;
 }
-inline ::aim::InitialDirection BounceScenarioDef::left_right_initial_direction() const {
+inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
   return _internal_left_right_initial_direction();
 }
-inline void BounceScenarioDef::set_left_right_initial_direction(::aim::InitialDirection value) {
+inline void BounceScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
 }
-inline ::aim::InitialDirection BounceScenarioDef::_internal_left_right_initial_direction() const {
+inline ::aim::Direction BounceScenarioDef::_internal_left_right_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.left_right_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.left_right_initial_direction_);
 }
-inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim::InitialDirection value) {
+inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = value;
 }
 
-// .aim.InitialDirection forward_back_initial_direction = 12;
+// .aim.Direction forward_back_initial_direction = 12;
 inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
@@ -20373,20 +20682,20 @@ inline void BounceScenarioDef::clear_forward_back_initial_direction() {
   _impl_.forward_back_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000040u;
 }
-inline ::aim::InitialDirection BounceScenarioDef::forward_back_initial_direction() const {
+inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
   return _internal_forward_back_initial_direction();
 }
-inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::InitialDirection value) {
+inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
 }
-inline ::aim::InitialDirection BounceScenarioDef::_internal_forward_back_initial_direction() const {
+inline ::aim::Direction BounceScenarioDef::_internal_forward_back_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::InitialDirection>(_impl_.forward_back_initial_direction_);
+  return static_cast<::aim::Direction>(_impl_.forward_back_initial_direction_);
 }
-inline void BounceScenarioDef::_internal_set_forward_back_initial_direction(::aim::InitialDirection value) {
+inline void BounceScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = value;
 }
@@ -22019,10 +22328,10 @@ namespace google {
 namespace protobuf {
 
 template <>
-struct is_proto_enum<::aim::InitialDirection> : std::true_type {};
+struct is_proto_enum<::aim::Direction> : std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor<::aim::InitialDirection>() {
-  return ::aim::InitialDirection_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor<::aim::Direction>() {
+  return ::aim::Direction_descriptor();
 }
 
 }  // namespace protobuf

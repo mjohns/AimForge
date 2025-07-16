@@ -128,7 +128,7 @@ float SingleDirectionController::GetUpdatedPosition(
   return next_pos;
 }
 
-bool SingleDirectionController::GetInitialGoingLeft(InitialDirection dir,
+bool SingleDirectionController::GetInitialGoingLeft(Direction dir,
                                                     float current_position,
                                                     Random& rand) {
   if (initial_direction_ == DIRECTION_POSITIVE) {

@@ -16,12 +16,26 @@ namespace {
 
 class LinearMovementController : public BasicWallMovementController {
  public:
-  LinearMovementController(float speed, const glm::vec2& direction, Wall wall)
-      : BasicWallMovementController(speed, direction), wall_(wall) {}
+  LinearMovementController(float speed, const glm::vec2& direction, Wall wall, float radius)
+      : BasicWallMovementController(speed, direction), wall_(wall), radius_(radius) {}
 
  protected:
   void UpdateDirectionAndSpeed(Target& t, float delta_seconds) override {
     glm::vec2 new_position = *t.wall_position;
+
+    if (radius_ > 0) {
+      float length = glm::length(new_position);
+      if ((length - t.radius) >= radius_) {
+        glm::vec2 next_position_with_current_direction = new_position + direction_;
+        float next_length = glm::length(next_position_with_current_direction);
+        if (next_length > length) {
+          // Reflect across normal pointing back at center.
+          direction_ *= -1;
+          direction_ = MirrorVector(direction_, new_position * -1.0f);
+        }
+      }
+      return;
+    }
 
     float max_x = (wall_.width * 0.5) - (t.radius * 1.2);
     float min_x = -1 * max_x;
@@ -53,6 +67,7 @@ class LinearMovementController : public BasicWallMovementController {
  private:
   Wall wall_;
   bool direction_initialized_ = false;
+  float radius_ = 0;
 };
 
 class LinearScenario : public BaseScenario {
@@ -74,24 +89,24 @@ class LinearScenario : public BaseScenario {
   }
 
  protected:
-  void UpdateInitialDirection(InitialDirection dir, float pos, float* direction_value) {
-    if (dir == InitialDirection::DIRECTION_OUT) {
+  void UpdateInitialDirection(Direction dir, float pos, float* direction_value) {
+    if (dir == Direction::DIRECTION_OUT) {
       // Away from center
       if (pos < 0) {
         EnsureNegative(direction_value);
       } else {
         EnsurePositive(direction_value);
       }
-    } else if (dir == InitialDirection::DIRECTION_IN) {
+    } else if (dir == Direction::DIRECTION_IN) {
       // Towards center
       if (pos > 0) {
         EnsureNegative(direction_value);
       } else {
         EnsurePositive(direction_value);
       }
-    } else if (dir == InitialDirection::DIRECTION_NEGATIVE) {
+    } else if (dir == Direction::DIRECTION_NEGATIVE) {
       EnsureNegative(direction_value);
-    } else if (dir == InitialDirection::DIRECTION_POSITIVE) {
+    } else if (dir == Direction::DIRECTION_POSITIVE) {
       EnsurePositive(direction_value);
     } else {
       if (app_.rand().FlipCoin()) {
@@ -107,14 +122,14 @@ class LinearScenario : public BaseScenario {
     glm::vec2 direction = RotateDegrees(
         glm::vec2(1, 0),
         app_.rand().GetJittered(def_.linear_def().angle(), def_.linear_def().angle_jitter()));
-    InitialDirection initial_direction = def_.linear_def().has_left_right_initial_direction()
-                                             ? def_.linear_def().left_right_initial_direction()
-                                             : InitialDirection::DIRECTION_IN;
+    Direction initial_direction = def_.linear_def().has_left_right_initial_direction()
+                                      ? def_.linear_def().left_right_initial_direction()
+                                      : Direction::DIRECTION_IN;
     UpdateInitialDirection(initial_direction, pos.x, &direction.x);
     UpdateInitialDirection(def_.linear_def().up_down_initial_direction(), pos.y, &direction.y);
 
-    target->movement_controller =
-        std::make_shared<LinearMovementController>(target->speed, direction, wall_);
+    target->movement_controller = std::make_shared<LinearMovementController>(
+        target->speed, direction, wall_, def_.room().barrel_room().radius());
   }
 
   void UpdateTargetPositions() override {

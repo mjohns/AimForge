@@ -3,6 +3,7 @@
 // For glm intersect
 #define GLM_ENABLE_EXPERIMENTAL
 
+#include "glm/geometric.hpp"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/intersect.hpp"
@@ -243,6 +244,10 @@ std::optional<float> GetNormalizedMissedShotDistance(const glm::vec3& camera_pos
   }
   glm::vec3 intersection_point = camera_position + direction_to_point * plane_distance;
   return glm::length(plane_origin - intersection_point);
+}
+
+glm::vec2 MirrorVector(const glm::vec2& v, const glm::vec2& n) {
+  return glm::reflect(v, RotateRadians(glm::normalize(n), glm::half_pi<float>()));
 }
 
 }  // namespace aim

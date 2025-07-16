@@ -218,9 +218,10 @@ message CircleScenarioDef {
   float start_degrees = 2;
   bool rotate_clockwise = 3;
   RegionLength depth = 4;
+  float switch_after_seconds = 5;
 
-  float stretch_y = 5;
-  float stretch_x = 6;
+  float stretch_y = 6;
+  float stretch_x = 7;
 }
 
 message CenteringScenarioDef {
@@ -246,7 +247,7 @@ message BarrelScenarioDef {
   float direction_radius_percent = 2;
 }
 
-enum InitialDirection {
+enum Direction {
   DIRECTION_RANDOM = 0;
   DIRECTION_POSITIVE = 1;
   DIRECTION_NEGATIVE = 2;
@@ -264,8 +265,8 @@ message LinearScenarioDef {
 
   TargetPlacementStrategy target_placement_strategy = 5;
 
-  InitialDirection left_right_initial_direction = 6;
-  InitialDirection up_down_initial_direction = 7;
+  Direction left_right_initial_direction = 6;
+  Direction up_down_initial_direction = 7;
 }
 
 message SineScenarioDef {
@@ -330,6 +331,12 @@ message WallStrafeScenarioDef {
   float distance_multiplier = 7;
 }
 
+message CenterBias {
+    // Value from 0 to 1. 0 meaning no bias. 1 meaning max bias.
+   float center_bias = 1;
+   bool relative_to_initial_position = 2;
+}
+
 message TimedDirectionProfile {
   ProfileInfo info = 1;
 
@@ -359,9 +366,9 @@ message TimedDirectionScenarioDef {
 
   float acceleration = 12;
 
-  InitialDirection left_right_initial_direction = 13;
-  InitialDirection up_down_initial_direction = 14;
-  InitialDirection forward_back_initial_direction = 15;
+  Direction left_right_initial_direction = 13;
+  Direction up_down_initial_direction = 14;
+  Direction forward_back_initial_direction = 15;
 }
 
 message BounceProfile {
@@ -397,8 +404,8 @@ message BounceScenarioDef {
 
   float acceleration = 10;
 
-  InitialDirection left_right_initial_direction = 11;
-  InitialDirection forward_back_initial_direction = 12;
+  Direction left_right_initial_direction = 11;
+  Direction forward_back_initial_direction = 12;
 
   RegionLength floor_height = 13;
 }
