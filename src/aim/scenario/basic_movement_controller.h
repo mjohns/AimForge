@@ -52,11 +52,15 @@ class SingleDirectionController {
  public:
   SingleDirectionController(float min,
                             float max,
+                            std::optional<float> relative_min,
+                            std::optional<float> relative_max,
                             Direction initial_direction,
                             DirectionParams params)
       : initial_direction_(initial_direction),
         min_(min),
         max_(max),
+        relative_min_(relative_min),
+        relative_max_(relative_max),
         mid_(min + ((max - min) / 2.0)),
         unscaled_acceleration_(params.acceleration),
         time_scale_multiplier_(params.time_scale_multiplier) {}
@@ -83,6 +87,9 @@ class SingleDirectionController {
   float min_;
   float max_;
   float mid_;
+  std::optional<float> relative_min_;
+  std::optional<float> relative_max_;
+  float initial_position_ = 0;
   float unscaled_acceleration_;
   float time_scale_multiplier_;
 

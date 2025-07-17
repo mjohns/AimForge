@@ -52,6 +52,11 @@
         "timeJitter": 0.4
       }
     ],
+    "relativeBounds": {
+      "width": {
+        "xPercentValue": 0.35
+      }
+    },
     "targetPlacementStrategy": {
       "minDistance": {
         "value": 65

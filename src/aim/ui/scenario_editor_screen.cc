@@ -992,6 +992,19 @@ class ScenarioEditorScreen : public UiScreen {
     TimedDirectionScenarioDef& d = *def_.mutable_timed_direction_def();
     DrawBoundsEditor("##Bounds", d.mutable_bounds());
 
+    bool has_relative_bounds = d.has_relative_bounds();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Relative bounds");
+    ImGui::SameLine();
+    ImGui::Checkbox("##UseRelativeBounds", &has_relative_bounds);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Constrain movement based on the initial target position");
+    if (has_relative_bounds) {
+      DrawBoundsEditor("##RelativeBounds", d.mutable_relative_bounds());
+    } else {
+      d.clear_relative_bounds();
+    }
+
     Line();
 
     ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
@@ -1851,6 +1864,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions dimensions = {}) {
+    ImGui::IdGuard cid(id);
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Bounds");
     ImGui::Indent();

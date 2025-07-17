@@ -349,6 +349,7 @@ message TimedDirectionProfile {
 
 message TimedDirectionScenarioDef {
   Bounds bounds = 1;
+  Bounds relative_bounds = 2;
 
   TargetPlacementStrategy target_placement_strategy = 4;
 

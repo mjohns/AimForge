@@ -209,12 +209,12 @@ class MovementControllerImpl : public MovementController {
 
     if (d.left_right_profiles_size() > 0) {
       left_right_controller_ = SingleDirectionController(
-          bounds.min_x, bounds.max_x, d.left_right_initial_direction(), params);
+          bounds.min_x, bounds.max_x, {}, {}, d.left_right_initial_direction(), params);
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
       forward_back_controller_ = SingleDirectionController(
-          bounds.min_depth, bounds.max_depth, d.forward_back_initial_direction(), params);
+          bounds.min_depth, bounds.max_depth, {}, {}, d.forward_back_initial_direction(), params);
     }
   }
 

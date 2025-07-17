@@ -78,6 +78,15 @@ float SingleDirectionController::GetUpdatedPosition(
     // The first time we are going to call change direction so toggle direction once here
     // so it will be toggled back correctly.
     going_left_ = !going_left_;
+
+    if (relative_min_) {
+      float new_min = current_position + *relative_min_;
+      min_ = std::max(new_min, min_);
+    }
+    if (relative_max_) {
+      float new_max = current_position + *relative_max_;
+      max_ = std::min(new_max, max_);
+    }
   }
 
   float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
