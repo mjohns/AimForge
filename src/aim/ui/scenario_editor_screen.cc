@@ -231,7 +231,6 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
         app_.scenario_manager().LoadScenariosFromDisk();
-        app_.playlist_manager().LoadPlaylistsFromDisk();
         PopSelf();
       }
     }

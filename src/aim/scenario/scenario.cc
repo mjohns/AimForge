@@ -427,9 +427,9 @@ void Scenario::HandleScenarioDone() {
   run_state_ = ScenarioRunState::DONE;
   OnScenarioDone();
 
-  PlaylistRun* playlist_run = app_.playlist_manager().GetCurrentRun();
+  std::shared_ptr<PlaylistRun> playlist_run = app_.playlist_manager().GetCurrentRun();
   // TODO: Also see if the scenario is in the playlist even if it is not the current index.
-  if (playlist_run != nullptr && playlist_run->IsCurrentIndexValid()) {
+  if (playlist_run && playlist_run->IsCurrentIndexValid()) {
     PlaylistItemProgress* progress = playlist_run->GetMutableCurrentPlaylistItemProgress();
     if (id_ == progress->item.scenario()) {
       progress->runs_done++;

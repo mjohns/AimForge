@@ -236,7 +236,7 @@ class HomeScreen : public UiScreen {
   }
 
   void HandlePlaylistNext() {
-    PlaylistRun* run = app_.playlist_manager().GetCurrentRun();
+    std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
     if (run == nullptr) {
       RunCurrentScenario();
       return;
@@ -356,7 +356,7 @@ class HomeScreen : public UiScreen {
       }
       if (result.reload_scenarios) {
         app_.scenario_manager().LoadScenariosFromDisk();
-        app_.playlist_manager().LoadPlaylistsFromDisk();
+        //app_.playlist_manager().LoadPlaylistsFromDisk();
         scenario_browser_component1_->Reload();
         scenario_browser_component2_->Reload();
         quick_access_scenario_browser_component_->Reload();
@@ -410,10 +410,6 @@ class HomeScreen : public UiScreen {
           app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, playlist.name.full_name());
           app_.playlist_manager().SetCurrentPlaylist(playlist.name.full_name());
         }
-        if (result.reload_playlists) {
-          app_.playlist_manager().LoadPlaylistsFromDisk();
-          app_.scenario_manager().LoadScenariosFromDisk();
-        }
       }
       ImGui::EndChild();
 
@@ -426,12 +422,12 @@ class HomeScreen : public UiScreen {
 
   void DrawCurrentPlaylistScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
-    PlaylistRun* run = app_.playlist_manager().GetCurrentRun();
+    std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
     if (run == nullptr) {
       return;
     }
     std::string scenario_id;
-    if (playlist_component_->Show(run->playlist.name.full_name(), &scenario_id)) {
+    if (playlist_component_->Show(run->playlist_name(), &scenario_id)) {
       if (app_.scenario_manager().SetCurrentScenario(scenario_id)) {
         state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       }
@@ -451,8 +447,8 @@ class HomeScreen : public UiScreen {
     }
     ImGui::Text("Total time: %.1f hours", total_play_time_seconds / 3600.0f);
     ImGui::TextFmt("Partial run time: {:.1f} hours ({:.0f}%)",
-                total_partial_play_time_seconds / 3600.0f,
-                (total_partial_play_time_seconds / total_play_time_seconds) * 100);
+                   total_partial_play_time_seconds / 3600.0f,
+                   (total_partial_play_time_seconds / total_play_time_seconds) * 100);
     ImGui::SameLine();
     ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
 

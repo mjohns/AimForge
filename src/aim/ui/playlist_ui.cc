@@ -16,7 +16,7 @@ const char* kPlaylistViewTypeKey = "PlaylistViewType";
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
   std::vector<std::string> names;
-  for (const Playlist& playlist : app->playlist_manager().playlists()) {
+  for (const Playlist& playlist : *app->playlist_manager().playlists()) {
     if (playlist.name.bundle_name() == bundle_name) {
       names.push_back(playlist.name.relative_name());
     }
@@ -108,6 +108,7 @@ bool CopyPlaylist(Playlist source,
 struct EditorResult {
   bool playlist_updated = false;
   bool editor_closed = false;
+  std::string new_playlist_name;
 };
 
 class PlaylistEditorComponent {
@@ -116,13 +117,16 @@ class PlaylistEditorComponent {
                                    Screen& screen,
                                    const std::string& playlist_name)
       : app_(app), screen_(screen) {
-    PlaylistRun* run = app.playlist_manager().GetRun(playlist_name);
+    std::shared_ptr<PlaylistRun> run = app.playlist_manager().GetRun(playlist_name);
     if (run != nullptr) {
       new_playlist_name_ = run->playlist.name.relative_name();
       original_playlist_name_ = run->playlist.name;
       bundle_name_ = run->playlist.name.bundle_name();
-      for (auto& i : run->playlist.def.items()) {
-        scenario_items_.push_back(i);
+      auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name);
+      if (maybe_playlist) {
+        for (auto& i : maybe_playlist->def.items()) {
+          scenario_items_.push_back(i);
+        }
       }
     }
   }
@@ -250,6 +254,7 @@ class PlaylistEditorComponent {
     if (scenario_search_text_.size() > 0) {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
+      int num_displayed = 0;
       for (int i = 0; i < app_.scenario_manager().scenarios().size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
         const auto& scenario = app_.scenario_manager().scenarios()[i];
@@ -259,6 +264,10 @@ class PlaylistEditorComponent {
                 return item.scenario() == scenario.id();
               });
           if (!already_in_playlist) {
+            num_displayed++;
+            if (num_displayed > 15) {
+              break;
+            }
             if (ImGui::Button(scenario.id().c_str())) {
               PlaylistItem item;
               item.set_scenario(scenario.id());
@@ -315,7 +324,7 @@ class PlaylistEditorComponent {
         return false;
       }
       app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, final_name.full_name());
-      PlaylistRun* current_run = app_.playlist_manager().GetCurrentRun();
+      std::shared_ptr<PlaylistRun> current_run = app_.playlist_manager().GetCurrentRun();
       if (current_run != nullptr && current_run->playlist.name == original_playlist_name_) {
         app_.playlist_manager().SetCurrentPlaylist(final_name.full_name());
       }
@@ -362,9 +371,6 @@ class PlaylistComponentImpl : public PlaylistComponent {
       if (editor_result.editor_closed) {
         editor_component_ = {};
         showing_editor_ = false;
-        if (editor_result.playlist_updated) {
-          app_.playlist_manager().LoadPlaylistsFromDisk();
-        }
       }
       return false;
     }
@@ -408,14 +414,14 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
       screen_.app().playlist_manager().DeletePlaylist(playlist.name);
-      result->reload_playlists = true;
+      // result->reload_playlists = true;
     });
 
     if (copy_dialog_.Draw(app_)) {
-      result->reload_playlists = true;
+      // result->reload_playlists = true;
     }
     if (add_dialog_.Draw(app_)) {
-      result->reload_playlists = true;
+      // result->reload_playlists = true;
     }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
@@ -466,7 +472,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
         }
       }
     } else {
-      for (const auto& playlist : app_.playlist_manager().playlists()) {
+      for (const auto& playlist : *app_.playlist_manager().playlists()) {
         auto id_guard = loop_id.Get();
         std::string name = playlist.name.full_name();
         if (StringMatchesSearch(name, search_words)) {
@@ -479,11 +485,12 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   }
 
   void DrawPlaylistItem(const std::string& playlist_name, PlaylistListResult* result) {
+    auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
+    if (!playlist) {
+      return;
+    }
     if (ImGui::Button(playlist_name.c_str())) {
-      auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
-      if (playlist) {
-        result->open_playlist = *playlist;
-      }
+      result->open_playlist = *playlist;
     }
     const char* menu_id = "PlaylistItemMenu";
     if (ImGui::BeginPopupContextItem(menu_id)) {
@@ -528,7 +535,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
 }  // namespace
 
-void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run, Screen& screen) {
+void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run, Screen& screen) {
   const char* popup_id = "ScenarioItemMenu";
   if (ImGui::BeginPopupContextItem(popup_id)) {
     if (ImGui::Selectable("Edit")) {
@@ -546,7 +553,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run,
       ScenarioEditorOptions opts;
       opts.scenario_id = scenario_id;
       opts.is_new_copy = true;
-      opts.add_to_playlist = run->playlist.name.full_name();
+      opts.add_to_playlist = run.playlist_name();
       opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
       screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
     }
@@ -557,8 +564,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run,
       for (int i = 0; i < std::min<int>(6, recent_playlists.size()); ++i) {
         const std::string& playlist_name = recent_playlists[i];
         ImGui::IdGuard playlist_id(playlist_name, i);
-        if (run->playlist.name.full_name() != playlist_name &&
-            ImGui::MenuItem(playlist_name.c_str())) {
+        if (run.playlist_name() != playlist_name && ImGui::MenuItem(playlist_name.c_str())) {
           selected_playlist = playlist_name;
         }
       }
@@ -572,7 +578,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun* run,
   ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
 }
 
-void PlaylistRunComponent(const std::string& id, PlaylistRun* run, Screen& screen) {
+void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> run, Screen& screen) {
   ImGui::IdGuard cid(id);
   const PlaylistDef& playlist = run->playlist.def;
   ImGuiTableFlags flags = ImGuiTableFlags_RowBg;
@@ -620,7 +626,7 @@ void PlaylistRunComponent(const std::string& id, PlaylistRun* run, Screen& scree
       screen.app().scenario_manager().SetCurrentScenario(item.scenario());
       screen.ReturnHome();
     }
-    PlaylistRunRightClickMenu(item.scenario(), run, screen);
+    PlaylistRunRightClickMenu(item.scenario(), *run, screen);
 
     ImGui::TableNextColumn();
     std::string progress_text = std::format("{}/{}", progress.runs_done, item.num_plays());

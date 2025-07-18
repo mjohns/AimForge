@@ -6,6 +6,7 @@
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
+#include "google/protobuf/util/message_differencer.h"
 
 namespace aim {
 namespace {
@@ -49,9 +50,6 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
       playlists.push_back(p);
     }
   }
-  std::sort(playlists.begin(), playlists.end(), [](const Playlist& lhs, const Playlist& rhs) {
-    return lhs.name.full_name() < rhs.name.full_name();
-  });
   return playlists;
 }
 
@@ -59,12 +57,33 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
 
 PlaylistManager::PlaylistManager(FileSystem* fs) : fs_(fs) {}
 
+void PlaylistManager::UpdatePlaylistListFromMap() {
+  auto new_playlists = std::make_shared<std::vector<Playlist>>();
+  new_playlists->reserve(playlist_map_.size());
+  for (auto& entry : playlist_map_) {
+    new_playlists->push_back(entry.second);
+  }
+  std::sort(
+      new_playlists->begin(), new_playlists->end(), [](const Playlist& lhs, const Playlist& rhs) {
+        return lhs.name.full_name() < rhs.name.full_name();
+      });
+  playlists_ = new_playlists;
+}
+
 bool PlaylistManager::SavePlaylist(const ResourceName& name, const PlaylistDef& def) {
   auto path = GetPlaylistPath(fs_, name);
   if (!path.has_value()) {
     return false;
   }
-  return WriteJsonMessageToFile(*path, def);
+  bool updated = WriteJsonMessageToFile(*path, def);
+  if (updated) {
+    auto& p = playlist_map_[name.full_name()];
+    p.name = name;
+    p.def = def;
+    UpdatePlaylistListFromMap();
+    UpdatePlaylistRun(name, def);
+  }
+  return updated;
 }
 
 bool PlaylistManager::DeletePlaylist(const ResourceName& name) {
@@ -72,7 +91,13 @@ bool PlaylistManager::DeletePlaylist(const ResourceName& name) {
   if (!path.has_value()) {
     return false;
   }
-  return std::filesystem::remove(*path);
+  bool updated = std::filesystem::remove(*path);
+  if (updated) {
+    playlist_map_.erase(name.full_name());
+    playlist_run_map_.erase(name.full_name());
+    UpdatePlaylistListFromMap();
+  }
+  return updated;
 }
 
 bool PlaylistManager::RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) {
@@ -85,12 +110,29 @@ bool PlaylistManager::RenamePlaylist(const ResourceName& old_name, const Resourc
     return false;
   }
   std::filesystem::rename(*old_path, *new_path);
+  if (current_playlist_name_ == old_name.full_name()) {
+    current_playlist_name_ = new_name.full_name();
+  }
+  if (playlist_run_map_.contains(old_name.full_name())) {
+    auto run = playlist_run_map_[old_name.full_name()];
+    run->playlist.name = new_name;
+    playlist_run_map_[new_name.full_name()] = run;
+    playlist_run_map_.erase(old_name.full_name());
+  }
+  auto it = playlist_map_.find(old_name.full_name());
+  if (it != playlist_map_.end()) {
+    auto& new_playlist = playlist_map_[new_name.full_name()];
+    new_playlist.name = new_name;
+    new_playlist.def = it->second.def;
+    playlist_map_.erase(old_name.full_name());
+    UpdatePlaylistListFromMap();
+  }
   return true;
 }
 
 void PlaylistManager::RenameScenarioInAllPlaylists(const std::string& old_name,
                                                    const std::string& new_name) {
-  for (Playlist playlist : playlists_) {
+  for (Playlist playlist : *playlists_) {
     bool changed = false;
     PlaylistDef def = playlist.def;
     for (auto& item : *def.mutable_items()) {
@@ -107,60 +149,56 @@ void PlaylistManager::RenameScenarioInAllPlaylists(const std::string& old_name,
 }
 
 void PlaylistManager::LoadPlaylistsFromDisk() {
-  playlists_.clear();
   for (BundleInfo& bundle : fs_->GetBundles()) {
-    PushBackAll(&playlists_, LoadPlaylists(bundle.name, bundle.path / "playlists"));
+    for (auto& playlist : LoadPlaylists(bundle.name, bundle.path / "playlists")) {
+      playlist_map_[playlist.name.full_name()] = playlist;
+    }
   }
-  playlist_map_.clear();
-  for (const Playlist& playlist : playlists_) {
-    playlist_map_[playlist.name.full_name()] = playlist;
-  }
+  UpdatePlaylistListFromMap();
   playlist_run_map_.clear();
 }
 
-PlaylistRun* PlaylistManager::GetOptionalExistingRun(const std::string& name) {
+std::shared_ptr<PlaylistRun> PlaylistManager::GetOptionalExistingRun(const std::string& name) {
   auto it = playlist_run_map_.find(name);
   if (it != playlist_run_map_.end()) {
-    return it->second.get();
+    return it->second;
   }
   return nullptr;
 }
 
 void PlaylistManager::AddScenarioToPlaylist(const std::string& playlist_name,
                                             const std::string& scenario_name) {
-  for (Playlist& playlist : playlists_) {
-    if (playlist.name.full_name() == playlist_name) {
-      auto* item = playlist.def.add_items();
-      item->set_scenario(scenario_name);
-      item->set_num_plays(1);
+  auto it = playlist_map_.find(playlist_name);
+  if (it != playlist_map_.end()) {
+    Playlist& playlist = it->second;
+    auto* item = playlist.def.add_items();
+    item->set_scenario(scenario_name);
+    item->set_num_plays(1);
 
-      PlaylistRun* run = GetOptionalExistingRun(playlist_name);
-      if (run != nullptr) {
-        run->playlist = playlist;
-        PlaylistItemProgress progress;
-        progress.item = *item;
-        run->progress_list.push_back(progress);
-      }
-      SavePlaylist(playlist.name, playlist.def);
-      return;
+    auto run = GetOptionalExistingRun(playlist_name);
+    if (run) {
+      run->playlist = playlist;
+      PlaylistItemProgress progress;
+      progress.item = *item;
+      run->progress_list.push_back(progress);
     }
+    SavePlaylist(playlist.name, playlist.def);
   }
 }
 
-PlaylistRun* PlaylistManager::GetRun(const std::string& name) {
+std::shared_ptr<PlaylistRun> PlaylistManager::GetRun(const std::string& name) {
   auto existing_run = GetOptionalExistingRun(name);
   if (existing_run != nullptr) {
     return existing_run;
   }
-  for (const Playlist& playlist : playlists_) {
-    if (playlist.name.full_name() == name) {
-      auto run = std::make_unique<PlaylistRun>();
-      *run = InitializeRun(playlist);
-      PlaylistRun* result = run.get();
-      playlist_run_map_[name] = std::move(run);
-      return result;
-    }
+  auto it = playlist_map_.find(name);
+  if (it != playlist_map_.end()) {
+    auto run = std::make_shared<PlaylistRun>();
+    *run = InitializeRun(it->second);
+    playlist_run_map_[name] = run;
+    return run;
   }
+
   return nullptr;
 }
 
@@ -181,6 +219,40 @@ std::optional<Playlist> PlaylistManager::GetPlaylist(const std::string& playlist
     return it->second;
   }
   return {};
+}
+
+void PlaylistManager::UpdatePlaylistRun(const ResourceName& playlist_name,
+                                        const PlaylistDef& new_def) {
+  std::shared_ptr<PlaylistRun> run = GetOptionalExistingRun(playlist_name.full_name());
+  if (!run) {
+    return;
+  }
+  if (google::protobuf::util::MessageDifferencer::Equivalent(new_def, run->playlist.def)) {
+    return;
+  }
+  run->playlist.name = playlist_name;
+  std::unordered_map<std::string, std::vector<PlaylistItemProgress>> scenario_progress_map;
+  for (auto& progress : run->progress_list) {
+    scenario_progress_map[progress.item.scenario()].push_back(progress);
+  }
+
+  run->playlist.def = new_def;
+  run->progress_list.clear();
+  for (int i = 0; i < new_def.items_size(); ++i) {
+    auto item = new_def.items(i);
+    PlaylistItemProgress progress;
+    progress.item = item;
+
+    auto existing_progress_list = scenario_progress_map.find(item.scenario());
+    if (existing_progress_list != scenario_progress_map.end()) {
+      std::vector<PlaylistItemProgress>& progress_list = existing_progress_list->second;
+      if (progress_list.size() > 0) {
+        progress.runs_done = progress_list.front().runs_done;
+        progress_list.erase(progress_list.begin());
+      }
+    }
+    run->progress_list.push_back(progress);
+  }
 }
 
 }  // namespace aim

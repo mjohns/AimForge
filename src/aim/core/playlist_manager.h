@@ -29,6 +29,11 @@ struct Playlist {
 
 struct PlaylistRun {
   Playlist playlist;
+
+  std::string playlist_name() {
+    return playlist.name.full_name();
+  };
+
   int current_index = 0;
   std::vector<PlaylistItemProgress> progress_list;
 
@@ -47,8 +52,7 @@ class PlaylistManager {
 
   void LoadPlaylistsFromDisk();
 
-  // Don't hold onto the pointer for long periods of time as it could be invalidated.
-  PlaylistRun* GetCurrentRun() {
+  std::shared_ptr<PlaylistRun> GetCurrentRun() {
     if (current_playlist_name_.size() == 0) {
       return nullptr;
     }
@@ -60,17 +64,20 @@ class PlaylistManager {
   }
 
   // Don't hold onto the pointer for long periods of time as it could be invalidated.
-  PlaylistRun* GetRun(const std::string& name);
+  std::shared_ptr<PlaylistRun> GetRun(const std::string& name);
 
   void SetCurrentPlaylist(const std::string& name) {
     current_playlist_name_ = name;
   }
 
-  const std::vector<Playlist>& playlists() const {
+  std::shared_ptr<std::vector<Playlist>> playlists() const {
     return playlists_;
   }
 
   std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const;
+  std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const {
+    return GetPlaylist(playlist_name.full_name());
+  }
 
   void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
 
@@ -83,16 +90,18 @@ class PlaylistManager {
   void RenameScenarioInAllPlaylists(const std::string& old_name, const std::string& new_name);
 
  private:
-  PlaylistRun* GetOptionalExistingRun(const std::string& name);
+  std::shared_ptr<PlaylistRun> GetOptionalExistingRun(const std::string& name);
   PlaylistRun InitializeRun(const Playlist& playlist);
+  void UpdatePlaylistListFromMap();
+  void UpdatePlaylistRun(const ResourceName& playlist_name, const PlaylistDef& new_def);
 
   std::string current_playlist_name_;
   std::filesystem::path base_dir_;
   std::filesystem::path user_dir_;
-  std::vector<Playlist> playlists_;
+  std::shared_ptr<std::vector<Playlist>> playlists_;
   std::unordered_map<std::string, Playlist> playlist_map_;
   FileSystem* fs_;
-  std::unordered_map<std::string, std::unique_ptr<PlaylistRun>> playlist_run_map_;
+  std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
 };
 
 }  // namespace aim
