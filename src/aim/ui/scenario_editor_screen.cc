@@ -770,6 +770,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     DrawRegionLengthEditor("Radius", DefaultDim::DIM_X, d.mutable_radius());
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Final radius");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor(
+        "FinalRadius",
+        DefaultDim::DIM_X,
+        PROTO_PTR_FIELD(RegionLength, CircleScenarioDef, &d, final_radius));
+
     ImGui::InputFloat(ImGui::InputFloatParams("StartDegrees")
                           .set_label("Start degrees")
                           .set_step(5, 30)

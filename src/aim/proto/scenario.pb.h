@@ -5854,6 +5854,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   enum : int {
     kRadiusFieldNumber = 1,
     kDepthFieldNumber = 4,
+    kFinalRadiusFieldNumber = 8,
     kStartDegreesFieldNumber = 2,
     kRotateClockwiseFieldNumber = 3,
     kSwitchAfterSecondsFieldNumber = 5,
@@ -5888,6 +5889,21 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   private:
   const ::aim::RegionLength& _internal_depth() const;
   ::aim::RegionLength* _internal_mutable_depth();
+
+  public:
+  // .aim.RegionLength final_radius = 8;
+  bool has_final_radius() const;
+  void clear_final_radius() ;
+  const ::aim::RegionLength& final_radius() const;
+  PROTOBUF_NODISCARD ::aim::RegionLength* release_final_radius();
+  ::aim::RegionLength* mutable_final_radius();
+  void set_allocated_final_radius(::aim::RegionLength* value);
+  void unsafe_arena_set_allocated_final_radius(::aim::RegionLength* value);
+  ::aim::RegionLength* unsafe_arena_release_final_radius();
+
+  private:
+  const ::aim::RegionLength& _internal_final_radius() const;
+  ::aim::RegionLength* _internal_mutable_final_radius();
 
   public:
   // float start_degrees = 2;
@@ -5950,7 +5966,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 7, 2,
+      3, 8, 3,
       0, 2>
       _table_;
 
@@ -5972,6 +5988,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::aim::RegionLength* radius_;
     ::aim::RegionLength* depth_;
+    ::aim::RegionLength* final_radius_;
     float start_degrees_;
     bool rotate_clockwise_;
     float switch_after_seconds_;
@@ -16363,13 +16380,13 @@ inline void CircleScenarioDef::set_allocated_radius(::aim::RegionLength* value) 
 
 // float start_degrees = 2;
 inline bool CircleScenarioDef::has_start_degrees() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_start_degrees() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_degrees_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline float CircleScenarioDef::start_degrees() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.start_degrees)
@@ -16377,7 +16394,7 @@ inline float CircleScenarioDef::start_degrees() const {
 }
 inline void CircleScenarioDef::set_start_degrees(float value) {
   _internal_set_start_degrees(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.start_degrees)
 }
 inline float CircleScenarioDef::_internal_start_degrees() const {
@@ -16391,13 +16408,13 @@ inline void CircleScenarioDef::_internal_set_start_degrees(float value) {
 
 // bool rotate_clockwise = 3;
 inline bool CircleScenarioDef::has_rotate_clockwise() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_rotate_clockwise() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.rotate_clockwise_ = false;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline bool CircleScenarioDef::rotate_clockwise() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.rotate_clockwise)
@@ -16405,7 +16422,7 @@ inline bool CircleScenarioDef::rotate_clockwise() const {
 }
 inline void CircleScenarioDef::set_rotate_clockwise(bool value) {
   _internal_set_rotate_clockwise(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.rotate_clockwise)
 }
 inline bool CircleScenarioDef::_internal_rotate_clockwise() const {
@@ -16515,13 +16532,13 @@ inline void CircleScenarioDef::set_allocated_depth(::aim::RegionLength* value) {
 
 // float switch_after_seconds = 5;
 inline bool CircleScenarioDef::has_switch_after_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_switch_after_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.switch_after_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float CircleScenarioDef::switch_after_seconds() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.switch_after_seconds)
@@ -16529,7 +16546,7 @@ inline float CircleScenarioDef::switch_after_seconds() const {
 }
 inline void CircleScenarioDef::set_switch_after_seconds(float value) {
   _internal_set_switch_after_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.switch_after_seconds)
 }
 inline float CircleScenarioDef::_internal_switch_after_seconds() const {
@@ -16543,13 +16560,13 @@ inline void CircleScenarioDef::_internal_set_switch_after_seconds(float value) {
 
 // float stretch_y = 6;
 inline bool CircleScenarioDef::has_stretch_y() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_stretch_y() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stretch_y_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float CircleScenarioDef::stretch_y() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.stretch_y)
@@ -16557,7 +16574,7 @@ inline float CircleScenarioDef::stretch_y() const {
 }
 inline void CircleScenarioDef::set_stretch_y(float value) {
   _internal_set_stretch_y(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.stretch_y)
 }
 inline float CircleScenarioDef::_internal_stretch_y() const {
@@ -16571,13 +16588,13 @@ inline void CircleScenarioDef::_internal_set_stretch_y(float value) {
 
 // float stretch_x = 7;
 inline bool CircleScenarioDef::has_stretch_x() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void CircleScenarioDef::clear_stretch_x() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stretch_x_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float CircleScenarioDef::stretch_x() const {
   // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.stretch_x)
@@ -16585,7 +16602,7 @@ inline float CircleScenarioDef::stretch_x() const {
 }
 inline void CircleScenarioDef::set_stretch_x(float value) {
   _internal_set_stretch_x(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.CircleScenarioDef.stretch_x)
 }
 inline float CircleScenarioDef::_internal_stretch_x() const {
@@ -16595,6 +16612,102 @@ inline float CircleScenarioDef::_internal_stretch_x() const {
 inline void CircleScenarioDef::_internal_set_stretch_x(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stretch_x_ = value;
+}
+
+// .aim.RegionLength final_radius = 8;
+inline bool CircleScenarioDef::has_final_radius() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.final_radius_ != nullptr);
+  return value;
+}
+inline void CircleScenarioDef::clear_final_radius() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.final_radius_ != nullptr) _impl_.final_radius_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::aim::RegionLength& CircleScenarioDef::_internal_final_radius() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionLength* p = _impl_.final_radius_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionLength&>(::aim::_RegionLength_default_instance_);
+}
+inline const ::aim::RegionLength& CircleScenarioDef::final_radius() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.CircleScenarioDef.final_radius)
+  return _internal_final_radius();
+}
+inline void CircleScenarioDef::unsafe_arena_set_allocated_final_radius(::aim::RegionLength* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.final_radius_);
+  }
+  _impl_.final_radius_ = reinterpret_cast<::aim::RegionLength*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.CircleScenarioDef.final_radius)
+}
+inline ::aim::RegionLength* CircleScenarioDef::release_final_radius() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* released = _impl_.final_radius_;
+  _impl_.final_radius_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionLength* CircleScenarioDef::unsafe_arena_release_final_radius() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.CircleScenarioDef.final_radius)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::aim::RegionLength* temp = _impl_.final_radius_;
+  _impl_.final_radius_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionLength* CircleScenarioDef::_internal_mutable_final_radius() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.final_radius_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionLength>(GetArena());
+    _impl_.final_radius_ = reinterpret_cast<::aim::RegionLength*>(p);
+  }
+  return _impl_.final_radius_;
+}
+inline ::aim::RegionLength* CircleScenarioDef::mutable_final_radius() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  ::aim::RegionLength* _msg = _internal_mutable_final_radius();
+  // @@protoc_insertion_point(field_mutable:aim.CircleScenarioDef.final_radius)
+  return _msg;
+}
+inline void CircleScenarioDef::set_allocated_final_radius(::aim::RegionLength* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.final_radius_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.final_radius_ = reinterpret_cast<::aim::RegionLength*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.CircleScenarioDef.final_radius)
 }
 
 // -------------------------------------------------------------------

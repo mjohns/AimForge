@@ -31,11 +31,17 @@ class CircleScenario : public BaseScenario {
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
     c_ = def_.circle_def();
     radius_ = wall_.GetRegionLength(c_.radius());
-    circumference_ = radius_ * glm::two_pi<float>();
+
+    if (c_.has_final_radius()) {
+      float final_radius = wall_.GetRegionLength(c_.final_radius());
+      float total_seconds =
+          c_.has_switch_after_seconds() ? c_.switch_after_seconds() : def_.duration_seconds();
+      radius_change_rate_ = (final_radius - radius_) / total_seconds;
+    }
 
     initial_position_ = RotateDegrees(glm::vec2(1, 0) * radius_, c_.start_degrees());
     // This value should not be stretched.
-    current_circle_position_ = initial_position_;
+    current_circle_position_ = glm::normalize(initial_position_);
 
     float stretch_y = def_.circle_def().stretch_y();
     if (stretch_y > 0) {
@@ -82,15 +88,26 @@ class CircleScenario : public BaseScenario {
       if (now_seconds > next_direction_switch_time_) {
         next_direction_switch_time_ += def_.circle_def().switch_after_seconds();
         going_clockwise_ = !going_clockwise_;
+        direction_count_++;
       }
     }
 
     float delta_seconds = now_seconds - last_update_time_;
     last_update_time_ = now_seconds;
 
+    if (radius_change_rate_ > 0) {
+      bool is_positive = direction_count_ % 2 == 0;
+      if (is_positive) {
+        radius_ += (radius_change_rate_ * delta_seconds);
+      } else {
+        radius_ -= (radius_change_rate_ * delta_seconds);
+      }
+    }
+
     float desired_distance = target->speed * delta_seconds;
 
-    float percent_around = desired_distance / circumference_;
+    float circumference = radius_ * glm::two_pi<float>();
+    float percent_around = desired_distance / circumference;
 
     float degrees = 360 * percent_around;
 
@@ -101,6 +118,7 @@ class CircleScenario : public BaseScenario {
     glm::vec2 new_position = RotateDegrees(current_circle_position_, degrees);
     current_circle_position_ = new_position;
 
+    new_position *= radius_;
     float stretch_y = def_.circle_def().stretch_y();
     if (stretch_y > 0) {
       new_position.y *= stretch_y;
@@ -117,12 +135,13 @@ class CircleScenario : public BaseScenario {
   glm::vec2 initial_position_;
   glm::vec2 current_circle_position_;
   float radius_;
-  float circumference_;
+  float radius_change_rate_ = 0;
   Wall wall_;
   CircleScenarioDef c_;
 
   bool going_clockwise_;
   float next_direction_switch_time_ = -1;
+  int direction_count_ = 0;
 };
 
 }  // namespace

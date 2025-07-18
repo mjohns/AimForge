@@ -222,6 +222,9 @@ message CircleScenarioDef {
 
   float stretch_y = 6;
   float stretch_x = 7;
+
+  // If specified the target radius will change to this over time.
+  RegionLength final_radius = 8;
 }
 
 message CenteringScenarioDef {

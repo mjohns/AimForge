@@ -1,5 +1,6 @@
 {
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -17,7 +18,7 @@
   "staticDef": {
     "targetPlacementStrategy": {
       "minDistance": {
-        "value": 17
+        "value": 14
       },
       "regions": [
         {
@@ -71,6 +72,7 @@
         "info": {
           "description": ""
         },
+        "speedJitter": 0,
         "targetRadius": 1.7,
         "targetRadiusJitter": 0
       }
