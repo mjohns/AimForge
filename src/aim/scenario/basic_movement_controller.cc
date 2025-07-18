@@ -182,22 +182,30 @@ void SingleDirectionController::ChangeDirection(
   float time = rand.GetJittered(p->time(), p->time_jitter());
   if (p->center_bias() > 0) {
     float max_dist = (max_ - min_) / 2.0f;
+    // Only add time if outside the middle 30% of bounds
     float cutoff = 0.15;
     float min_dist = max_dist * cutoff;
 
-    if (current_position > (center_ + min_dist)) {
-      // On right side
-      if (going_left_) {
+    bool on_right = current_position > center_;
+    bool on_far_right = current_position > (center_ + min_dist);
+    bool on_left = current_position < center_;
+    bool on_far_left = current_position < (center_ - min_dist);
+
+    if (going_left_) {
+      if (on_far_right) {
         time += p->center_bias();
-      } else {
+      }
+      if (on_left) {
+        // Subtract time as long as it is on the wrong side trying to move further away from center.
         time -= p->center_bias();
       }
-    } else if (current_position < (center_ - min_dist)) {
-      // On left side
-      if (going_left_) {
-        time -= p->center_bias();
-      } else {
+    } else {
+      // Going right
+      if (on_far_left) {
         time += p->center_bias();
+      }
+      if (on_right) {
+        time -= p->center_bias();
       }
     }
   }
