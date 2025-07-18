@@ -777,6 +777,10 @@ class ScenarioEditorScreen : public UiScreen {
         "FinalRadius",
         DefaultDim::DIM_X,
         PROTO_PTR_FIELD(RegionLength, CircleScenarioDef, &d, final_radius));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The radius will change to this value over the duration of the scenario (or until "
+        "direction change)");
 
     ImGui::InputFloat(ImGui::InputFloatParams("StartDegrees")
                           .set_label("Start degrees")
@@ -993,6 +997,14 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(TimedDirectionProfile, p, acceleration_multiplier));
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Center bias")
+                          .set_is_optional()
+                          .set_step(0.1, 0.5)
+                          .set_min(0.1)
+                          .set_precision(2)
+                          .set_default(0.1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(TimedDirectionProfile, p, center_bias));
   }
 
   void DrawTimedDirectionEditor() {

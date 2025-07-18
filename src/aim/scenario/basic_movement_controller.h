@@ -59,9 +59,9 @@ class SingleDirectionController {
       : initial_direction_(initial_direction),
         min_(min),
         max_(max),
+        absolute_center_((min + max) / 2.0f),
         relative_min_(relative_min),
         relative_max_(relative_max),
-        mid_(min + ((max - min) / 2.0)),
         unscaled_acceleration_(params.acceleration),
         time_scale_multiplier_(params.time_scale_multiplier) {}
 
@@ -81,17 +81,19 @@ class SingleDirectionController {
                        float now_seconds,
                        const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
                        const google::protobuf::RepeatedField<int>& order,
-                       float target_speed);
+                       float target_speed,
+                       float current_position);
 
   Direction initial_direction_;
   float min_;
   float max_;
-  float mid_;
   std::optional<float> relative_min_;
   std::optional<float> relative_max_;
   float initial_position_ = 0;
   float unscaled_acceleration_;
   float time_scale_multiplier_;
+  float absolute_center_;
+  float center_ = 0;
 
   float current_speed_ = 0;
   bool initialized_ = false;

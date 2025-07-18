@@ -73,6 +73,7 @@ float SingleDirectionController::GetUpdatedPosition(
     float delta_seconds) {
   if (!initialized_) {
     initialized_ = true;
+    // Going left is based on absolute center_ and not adjusted for relative values.
     going_left_ = GetInitialGoingLeft(initial_direction_, current_position, rand);
 
     // The first time we are going to call change direction so toggle direction once here
@@ -87,6 +88,11 @@ float SingleDirectionController::GetUpdatedPosition(
       float new_max = current_position + *relative_max_;
       max_ = std::min(new_max, max_);
     }
+    if (relative_min_ || relative_max_) {
+      center_ = (min_ + max_) / 2.0f;
+    } else {
+      center_ = absolute_center_;
+    }
   }
 
   float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
@@ -96,7 +102,7 @@ float SingleDirectionController::GetUpdatedPosition(
   bool time_up = now_seconds >= next_direction_change_time_;
   if (too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
-    ChangeDirection(rand, now_seconds, profiles, order, t.speed);
+    ChangeDirection(rand, now_seconds, profiles, order, t.speed, current_position);
   }
 
   float max_speed = t.speed * speed_multiplier_;
@@ -145,9 +151,9 @@ bool SingleDirectionController::GetInitialGoingLeft(Direction dir,
   } else if (initial_direction_ == DIRECTION_NEGATIVE) {
     return true;
   } else if (initial_direction_ == DIRECTION_IN) {
-    return current_position > mid_;
+    return current_position > absolute_center_;
   } else if (initial_direction_ == DIRECTION_OUT) {
-    return current_position < mid_;
+    return current_position < absolute_center_;
   } else {
     return rand.FlipCoin();
   }
@@ -158,7 +164,8 @@ void SingleDirectionController::ChangeDirection(
     float now_seconds,
     const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
     const google::protobuf::RepeatedField<int>& order,
-    float target_speed) {
+    float target_speed,
+    float current_position) {
   direction_change_count_++;
   auto p = SelectProfile(order, profiles, &selection_context_, rand);
   if (!p.has_value()) {
@@ -173,6 +180,28 @@ void SingleDirectionController::ChangeDirection(
   going_left_ = !going_left_;
 
   float time = rand.GetJittered(p->time(), p->time_jitter());
+  if (p->center_bias() > 0) {
+    float max_dist = (max_ - min_) / 2.0f;
+    float cutoff = 0.15;
+    float min_dist = max_dist * cutoff;
+
+    if (current_position > (center_ + min_dist)) {
+      // On right side
+      if (going_left_) {
+        time += p->center_bias();
+      } else {
+        time -= p->center_bias();
+      }
+    } else if (current_position < (center_ - min_dist)) {
+      // On left side
+      if (going_left_) {
+        time -= p->center_bias();
+      } else {
+        time += p->center_bias();
+      }
+    }
+  }
+
   if (time_scale_multiplier_ > 0) {
     time *= time_scale_multiplier_;
   }

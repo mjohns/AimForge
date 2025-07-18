@@ -69,9 +69,6 @@ extern BounceScenarioDefDefaultTypeInternal _BounceScenarioDef_default_instance_
 class Bounds;
 struct BoundsDefaultTypeInternal;
 extern BoundsDefaultTypeInternal _Bounds_default_instance_;
-class CenterBias;
-struct CenterBiasDefaultTypeInternal;
-extern CenterBiasDefaultTypeInternal _CenterBias_default_instance_;
 class CenteringScenarioDef;
 struct CenteringScenarioDefDefaultTypeInternal;
 extern CenteringScenarioDefDefaultTypeInternal _CenteringScenarioDef_default_instance_;
@@ -1806,7 +1803,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 36;
+  static constexpr int kIndexInFileMessages = 35;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* other) {
     if (other == this) return;
@@ -2196,211 +2193,6 @@ class CylinderRoom final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class CenterBias final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.CenterBias) */ {
- public:
-  inline CenterBias() : CenterBias(nullptr) {}
-  ~CenterBias() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(CenterBias* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(CenterBias));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR CenterBias(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline CenterBias(const CenterBias& from) : CenterBias(nullptr, from) {}
-  inline CenterBias(CenterBias&& from) noexcept
-      : CenterBias(nullptr, std::move(from)) {}
-  inline CenterBias& operator=(const CenterBias& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline CenterBias& operator=(CenterBias&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const CenterBias& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const CenterBias* internal_default_instance() {
-    return reinterpret_cast<const CenterBias*>(
-        &_CenterBias_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 27;
-  friend void swap(CenterBias& a, CenterBias& b) { a.Swap(&b); }
-  inline void Swap(CenterBias* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(CenterBias* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  CenterBias* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<CenterBias>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const CenterBias& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const CenterBias& from) { CenterBias::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(CenterBias* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.CenterBias"; }
-
- protected:
-  explicit CenterBias(::google::protobuf::Arena* arena);
-  CenterBias(::google::protobuf::Arena* arena, const CenterBias& from);
-  CenterBias(::google::protobuf::Arena* arena, CenterBias&& from) noexcept
-      : CenterBias(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kCenterBiasFieldNumber = 1,
-    kRelativeToInitialPositionFieldNumber = 2,
-  };
-  // float center_bias = 1;
-  bool has_center_bias() const;
-  void clear_center_bias() ;
-  float center_bias() const;
-  void set_center_bias(float value);
-
-  private:
-  float _internal_center_bias() const;
-  void _internal_set_center_bias(float value);
-
-  public:
-  // bool relative_to_initial_position = 2;
-  bool has_relative_to_initial_position() const;
-  void clear_relative_to_initial_position() ;
-  bool relative_to_initial_position() const;
-  void set_relative_to_initial_position(bool value);
-
-  private:
-  bool _internal_relative_to_initial_position() const;
-  void _internal_set_relative_to_initial_position(bool value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.CenterBias)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 0,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const CenterBias& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    float center_bias_;
-    bool relative_to_initial_position_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_scenario_2eproto;
-};
-// -------------------------------------------------------------------
-
 class BarrelRoom final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.BarrelRoom) */ {
  public:
@@ -2652,7 +2444,7 @@ class WallWanderProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderProfile*>(
         &_WallWanderProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 33;
+  static constexpr int kIndexInFileMessages = 32;
   friend void swap(WallWanderProfile& a, WallWanderProfile& b) { a.Swap(&b); }
   inline void Swap(WallWanderProfile* other) {
     if (other == this) return;
@@ -3234,7 +3026,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallArcScenarioDef*>(
         &_WallArcScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 32;
+  static constexpr int kIndexInFileMessages = 31;
   friend void swap(WallArcScenarioDef& a, WallArcScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallArcScenarioDef* other) {
     if (other == this) return;
@@ -3503,7 +3295,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TimedDirectionProfile*>(
         &_TimedDirectionProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 28;
+  static constexpr int kIndexInFileMessages = 27;
   friend void swap(TimedDirectionProfile& a, TimedDirectionProfile& b) { a.Swap(&b); }
   inline void Swap(TimedDirectionProfile* other) {
     if (other == this) return;
@@ -3591,8 +3383,9 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kInfoFieldNumber = 1,
-    kTimeFieldNumber = 5,
-    kTimeJitterFieldNumber = 6,
+    kTimeFieldNumber = 2,
+    kTimeJitterFieldNumber = 3,
+    kCenterBiasFieldNumber = 4,
     kSpeedMultiplierFieldNumber = 7,
     kAccelerationMultiplierFieldNumber = 8,
   };
@@ -3611,7 +3404,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   ::aim::ProfileInfo* _internal_mutable_info();
 
   public:
-  // float time = 5;
+  // float time = 2;
   bool has_time() const;
   void clear_time() ;
   float time() const;
@@ -3622,7 +3415,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   void _internal_set_time(float value);
 
   public:
-  // float time_jitter = 6;
+  // float time_jitter = 3;
   bool has_time_jitter() const;
   void clear_time_jitter() ;
   float time_jitter() const;
@@ -3631,6 +3424,17 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   private:
   float _internal_time_jitter() const;
   void _internal_set_time_jitter(float value);
+
+  public:
+  // float center_bias = 4;
+  bool has_center_bias() const;
+  void clear_center_bias() ;
+  float center_bias() const;
+  void set_center_bias(float value);
+
+  private:
+  float _internal_center_bias() const;
+  void _internal_set_center_bias(float value);
 
   public:
   // float speed_multiplier = 7;
@@ -3660,7 +3464,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 1,
+      3, 6, 1,
       0, 2>
       _table_;
 
@@ -3683,6 +3487,7 @@ class TimedDirectionProfile final : public ::google::protobuf::Message
     ::aim::ProfileInfo* info_;
     float time_;
     float time_jitter_;
+    float center_bias_;
     float speed_multiplier_;
     float acceleration_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -3755,7 +3560,7 @@ class TargetProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetProfile*>(
         &_TargetProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 37;
+  static constexpr int kIndexInFileMessages = 36;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* other) {
     if (other == this) return;
@@ -6290,7 +6095,7 @@ class BounceProfile final : public ::google::protobuf::Message
     return reinterpret_cast<const BounceProfile*>(
         &_BounceProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 30;
+  static constexpr int kIndexInFileMessages = 29;
   friend void swap(BounceProfile& a, BounceProfile& b) { a.Swap(&b); }
   inline void Swap(BounceProfile* other) {
     if (other == this) return;
@@ -6930,7 +6735,7 @@ class TargetDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 35;
+  static constexpr int kIndexInFileMessages = 34;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* other) {
     if (other == this) return;
@@ -7947,7 +7752,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 34;
+  static constexpr int kIndexInFileMessages = 33;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* other) {
     if (other == this) return;
@@ -8475,7 +8280,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const TimedDirectionScenarioDef*>(
         &_TimedDirectionScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 29;
+  static constexpr int kIndexInFileMessages = 28;
   friend void swap(TimedDirectionScenarioDef& a, TimedDirectionScenarioDef& b) { a.Swap(&b); }
   inline void Swap(TimedDirectionScenarioDef* other) {
     if (other == this) return;
@@ -9334,7 +9139,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     return reinterpret_cast<const BounceScenarioDef*>(
         &_BounceScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 31;
+  static constexpr int kIndexInFileMessages = 30;
   friend void swap(BounceScenarioDef& a, BounceScenarioDef& b) { a.Swap(&b); }
   inline void Swap(BounceScenarioDef* other) {
     if (other == this) return;
@@ -18920,66 +18725,6 @@ inline void WallStrafeScenarioDef::_internal_set_distance_multiplier(float value
 
 // -------------------------------------------------------------------
 
-// CenterBias
-
-// float center_bias = 1;
-inline bool CenterBias::has_center_bias() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void CenterBias::clear_center_bias() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.center_bias_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline float CenterBias::center_bias() const {
-  // @@protoc_insertion_point(field_get:aim.CenterBias.center_bias)
-  return _internal_center_bias();
-}
-inline void CenterBias::set_center_bias(float value) {
-  _internal_set_center_bias(value);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.CenterBias.center_bias)
-}
-inline float CenterBias::_internal_center_bias() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.center_bias_;
-}
-inline void CenterBias::_internal_set_center_bias(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.center_bias_ = value;
-}
-
-// bool relative_to_initial_position = 2;
-inline bool CenterBias::has_relative_to_initial_position() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline void CenterBias::clear_relative_to_initial_position() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.relative_to_initial_position_ = false;
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline bool CenterBias::relative_to_initial_position() const {
-  // @@protoc_insertion_point(field_get:aim.CenterBias.relative_to_initial_position)
-  return _internal_relative_to_initial_position();
-}
-inline void CenterBias::set_relative_to_initial_position(bool value) {
-  _internal_set_relative_to_initial_position(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.CenterBias.relative_to_initial_position)
-}
-inline bool CenterBias::_internal_relative_to_initial_position() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.relative_to_initial_position_;
-}
-inline void CenterBias::_internal_set_relative_to_initial_position(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.relative_to_initial_position_ = value;
-}
-
-// -------------------------------------------------------------------
-
 // TimedDirectionProfile
 
 // .aim.ProfileInfo info = 1;
@@ -19078,7 +18823,7 @@ inline void TimedDirectionProfile::set_allocated_info(::aim::ProfileInfo* value)
   // @@protoc_insertion_point(field_set_allocated:aim.TimedDirectionProfile.info)
 }
 
-// float time = 5;
+// float time = 2;
 inline bool TimedDirectionProfile::has_time() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
@@ -19106,7 +18851,7 @@ inline void TimedDirectionProfile::_internal_set_time(float value) {
   _impl_.time_ = value;
 }
 
-// float time_jitter = 6;
+// float time_jitter = 3;
 inline bool TimedDirectionProfile::has_time_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
@@ -19134,15 +18879,43 @@ inline void TimedDirectionProfile::_internal_set_time_jitter(float value) {
   _impl_.time_jitter_ = value;
 }
 
+// float center_bias = 4;
+inline bool TimedDirectionProfile::has_center_bias() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void TimedDirectionProfile::clear_center_bias() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.center_bias_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline float TimedDirectionProfile::center_bias() const {
+  // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.center_bias)
+  return _internal_center_bias();
+}
+inline void TimedDirectionProfile::set_center_bias(float value) {
+  _internal_set_center_bias(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.center_bias)
+}
+inline float TimedDirectionProfile::_internal_center_bias() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.center_bias_;
+}
+inline void TimedDirectionProfile::_internal_set_center_bias(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.center_bias_ = value;
+}
+
 // float speed_multiplier = 7;
 inline bool TimedDirectionProfile::has_speed_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_speed_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000008u;
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline float TimedDirectionProfile::speed_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.speed_multiplier)
@@ -19150,7 +18923,7 @@ inline float TimedDirectionProfile::speed_multiplier() const {
 }
 inline void TimedDirectionProfile::set_speed_multiplier(float value) {
   _internal_set_speed_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_._has_bits_[0] |= 0x00000010u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.speed_multiplier)
 }
 inline float TimedDirectionProfile::_internal_speed_multiplier() const {
@@ -19164,13 +18937,13 @@ inline void TimedDirectionProfile::_internal_set_speed_multiplier(float value) {
 
 // float acceleration_multiplier = 8;
 inline bool TimedDirectionProfile::has_acceleration_multiplier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void TimedDirectionProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline float TimedDirectionProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.TimedDirectionProfile.acceleration_multiplier)
@@ -19178,7 +18951,7 @@ inline float TimedDirectionProfile::acceleration_multiplier() const {
 }
 inline void TimedDirectionProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.TimedDirectionProfile.acceleration_multiplier)
 }
 inline float TimedDirectionProfile::_internal_acceleration_multiplier() const {

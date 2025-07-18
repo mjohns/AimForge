@@ -334,17 +334,13 @@ message WallStrafeScenarioDef {
   float distance_multiplier = 7;
 }
 
-message CenterBias {
-    // Value from 0 to 1. 0 meaning no bias. 1 meaning max bias.
-   float center_bias = 1;
-   bool relative_to_initial_position = 2;
-}
-
 message TimedDirectionProfile {
   ProfileInfo info = 1;
 
-  float time = 5;
-  float time_jitter = 6;
+  float time = 2;
+  float time_jitter = 3;
+  // Time is updated by this value based on whether it is moving towards/away from the center to encourage the target to stay closer to center.
+  float center_bias = 4;
 
   float speed_multiplier = 7;
   float acceleration_multiplier = 8;
