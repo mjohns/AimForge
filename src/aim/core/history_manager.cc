@@ -46,10 +46,7 @@ void HistoryManager::MaybeReloadPlaylists() {
     auto candidates = GetRecentUniqueNames(ObjectType::PLAYLIST, kCachedRecentNamesSize);
     recent_playlists_.clear();
     for (const std::string& name : candidates) {
-      auto playlist = playlist_manager_->GetPlaylist(name);
-      if (playlist) {
-        recent_playlists_.push_back(name);
-      }
+      recent_playlists_.push_back(name);
     }
   }
 }
