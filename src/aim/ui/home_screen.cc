@@ -90,7 +90,7 @@ class HomeScreen : public UiScreen {
     app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, current_scenario.id());
     CreateScenarioParams params;
     params.id = current_scenario.id();
-    params.def = current_scenario.def;
+    params.def = current_scenario.evaluated_def;
     std::shared_ptr<Screen> running_scenario = CreateScenario(params, &app_);
     if (!running_scenario) {
       // TODO: Error dialog for invalid scenarios.

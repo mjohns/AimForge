@@ -613,7 +613,7 @@ class ScenarioEditorScreen : public UiScreen {
       auto parent = app_.scenario_manager().GetEvaluatedScenario(r.scenario_id());
       if (parent) {
         auto overrides = def_.overrides();
-        def_ = parent->def;
+        def_ = parent->evaluated_def;
         *def_.mutable_overrides() = overrides;
         def_ = ApplyScenarioOverrides(def_);
       } else {
@@ -2669,7 +2669,7 @@ class ScenarioEditorScreen : public UiScreen {
                                     def_.reference_def().scenario_id()));
         return;
       }
-      params.def = base_scenario->def;
+      params.def = base_scenario->evaluated_def;
       if (def_.has_overrides()) {
         *params.def.mutable_overrides() = def_.overrides();
       }

@@ -17,7 +17,9 @@ namespace aim {
 
 struct ScenarioItem {
   ResourceName name;
-  ScenarioDef def;
+  // References have been evaluated.
+  ScenarioDef evaluated_def;
+  // References have not been evaluated.
   ScenarioDef unevaluated_def;
 
   bool has_invalid_reference = false;
@@ -33,41 +35,47 @@ class ScenarioManager {
  public:
   virtual ~ScenarioManager() {}
 
-  virtual void LoadScenariosFromDisk() = 0;
-  virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
-
   virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
 
   // Gets the scenario following any references and applying all overrides.
   virtual std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) = 0;
 
-  virtual std::optional<ScenarioItem> GetCurrentScenario() = 0;
+  virtual std::shared_ptr<std::vector<ScenarioItem>> scenarios() const = 0;
+
+  virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
+
+  // Return the name the scenario was saved with if successful.
+  virtual std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
+                                                                 const ScenarioDef& def) = 0;
+  virtual bool DeleteScenario(const ResourceName& name) = 0;
+
+  virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;
+
+  virtual bool SetCurrentScenario(const std::string& scenario_id) = 0;
+
+  std::optional<ScenarioItem> GetCurrentScenario() {
+    return GetScenario(GetCurrentScenarioId());
+  }
+
   virtual const std::string& GetCurrentScenarioId() = 0;
 
   virtual void ClearCurrentScenario() = 0;
+
+  virtual void SetCurrentRunningScenario(std::shared_ptr<Screen> scenario) = 0;
+
+  virtual std::shared_ptr<Screen> GetCurrentRunningScenario() = 0;
+
+  virtual bool has_running_scenario() const = 0;
 
   virtual void GenerateScenarioLevels(const std::string& starting_scenario_id,
                                       const ScenarioOverrides& overrides,
                                       int num_levels) = 0;
 
-  virtual bool SetCurrentScenario(const std::string& scenario_id) = 0;
+  virtual void LoadScenariosFromDisk() = 0;
 
-  virtual std::shared_ptr<std::vector<ScenarioItem>> scenarios() const = 0;
-
-  virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
-  // Return the name the scenario was saved with if successful.
-  virtual std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
-                                                                 const ScenarioDef& def) = 0;
-  virtual bool DeleteScenario(const ResourceName& name) = 0;
-  virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;
+  virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
 
   virtual void OpenFile(const ResourceName& name) = 0;
-
-  virtual bool has_running_scenario() const = 0;
-
-  virtual std::shared_ptr<Screen> GetCurrentRunningScenario() = 0;
-
-  virtual void SetCurrentRunningScenario(std::shared_ptr<Screen> scenario) = 0;
 
   virtual void RegisterRenameListener(
       std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;

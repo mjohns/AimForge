@@ -218,7 +218,7 @@ class StatsScreen : public UiScreen {
     if (!scenario_) {
       return 0;
     }
-    return GetScenarioScoreLevel(score, scenario_->def);
+    return GetScenarioScoreLevel(score, scenario_->evaluated_def);
   }
 
   void DrawPerformanceStats() {

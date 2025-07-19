@@ -74,11 +74,11 @@ std::vector<ScenarioItem> LoadScenarios(const std::string& bundle_name,
     ScenarioItem item;
     item.name.set(bundle_name, absl::StripSuffix(filename, ".json"));
 
-    if (!ReadJsonMessageFromFile(entry.path(), &item.def)) {
+    if (!ReadJsonMessageFromFile(entry.path(), &item.evaluated_def)) {
       Logger::get()->warn("Unable to read scenario {}", entry.path().string());
       continue;
     }
-    item.unevaluated_def = item.def;
+    item.unevaluated_def = item.evaluated_def;
     scenarios.push_back(item);
   }
 
@@ -147,7 +147,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     for (ScenarioItem& item : *new_scenarios) {
       auto evaluated_scenario = GetEvaluatedScenario(item.id());
       if (evaluated_scenario) {
-        item.def = evaluated_scenario->def;
+        item.evaluated_def = evaluated_scenario->evaluated_def;
       } else {
         item.has_invalid_reference = true;
       }
@@ -178,10 +178,6 @@ class ScenarioManagerImpl : public ScenarioManager {
   std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) override {
     std::unordered_set<std::string> visited_scenario_names;
     return GetEvaluatedScenarioInternal(scenario_id, &visited_scenario_names);
-  }
-
-  std::optional<ScenarioItem> GetCurrentScenario() override {
-    return GetScenario(current_scenario_id_);
   }
 
   const std::string& GetCurrentScenarioId() override {
@@ -339,22 +335,22 @@ class ScenarioManagerImpl : public ScenarioManager {
       return {};
     }
     ScenarioItem scenario = *maybe_scenario;
-    if (!scenario.def.has_reference_def()) {
-      scenario.def = ApplyScenarioOverrides(scenario.def);
+    if (!scenario.evaluated_def.has_reference_def()) {
+      scenario.evaluated_def = ApplyScenarioOverrides(scenario.evaluated_def);
       return scenario;
     }
 
     auto referenced_scenario = GetEvaluatedScenarioInternal(
-        scenario.def.reference_def().scenario_id(), visited_scenario_names);
+        scenario.evaluated_def.reference_def().scenario_id(), visited_scenario_names);
     if (!referenced_scenario) {
       return {};
     }
 
     ScenarioItem resolved = *referenced_scenario;
     resolved.name = scenario.name;
-    if (scenario.def.has_overrides()) {
-      *resolved.def.mutable_overrides() = scenario.def.overrides();
-      resolved.def = ApplyScenarioOverrides(resolved.def);
+    if (scenario.evaluated_def.has_overrides()) {
+      *resolved.evaluated_def.mutable_overrides() = scenario.evaluated_def.overrides();
+      resolved.evaluated_def = ApplyScenarioOverrides(resolved.evaluated_def);
     }
     return resolved;
   }
@@ -375,7 +371,15 @@ class ScenarioManagerImpl : public ScenarioManager {
     }
   }
 
-  void RebuildScenarioList() {}
+  void RebuildScenarioList() {
+    auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
+    new_scenarios->reserve(scenario_map_.size());
+    for (auto& entry : scenario_map_) {
+      new_scenarios->push_back(entry.second);
+    }
+    SortScenarios(new_scenarios.get());
+    scenarios_ = new_scenarios;
+  }
 
   std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
   std::unordered_map<std::string, ScenarioItem> scenario_map_;

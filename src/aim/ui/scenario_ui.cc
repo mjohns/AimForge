@@ -331,7 +331,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     } else {
       for (const ScenarioItem& scenario : *app_->scenario_manager().scenarios()) {
         bool type_matches = scenario_type_filter_ == ScenarioDef::TYPE_NOT_SET ||
-                            scenario.def.type_case() == scenario_type_filter_;
+                            scenario.evaluated_def.type_case() == scenario_type_filter_;
         if (type_matches && StringMatchesSearch(scenario.id(), search_words)) {
           filtered_scenario_ids_.push_back(scenario.id());
         }

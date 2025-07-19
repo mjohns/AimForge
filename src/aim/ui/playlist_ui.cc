@@ -68,7 +68,7 @@ bool CopyPlaylist(Playlist source,
       if (opts.as_references) {
         new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
       } else if (opts.bake_references) {
-        new_def = source_scenario->def;
+        new_def = source_scenario->evaluated_def;
       } else {
         new_def = source_scenario->unevaluated_def;
       }
@@ -600,7 +600,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     if (stats.total_runs > 0) {
       auto scenario = screen.app().scenario_manager().GetScenario(item.scenario());
       if (scenario) {
-        level = GetScenarioScoreLevel(stats.high_score_stats.score, scenario->def);
+        level = GetScenarioScoreLevel(stats.high_score_stats.score, scenario->evaluated_def);
         if (level > 0) {
           has_score_level = true;
         }
