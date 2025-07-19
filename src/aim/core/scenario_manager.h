@@ -1,10 +1,8 @@
 #pragma once
 
-#include <filesystem>
 #include <functional>
 #include <optional>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include "aim/common/resource_name.h"
@@ -28,8 +26,6 @@ struct ScenarioItem {
     return name.full_name();
   }
 };
-
-ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original_def);
 
 class ScenarioManager {
  public:

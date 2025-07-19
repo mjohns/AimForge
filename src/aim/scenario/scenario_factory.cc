@@ -1,5 +1,7 @@
 #include "scenario_factory.h"
 
+#include "aim/scenario/scenario_overrides.h"
+
 namespace aim {
 
 std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params,
