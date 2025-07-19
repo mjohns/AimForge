@@ -231,7 +231,7 @@ class ScenarioEditorScreen : public UiScreen {
         is_new_scenario ? std::format("{} Create", kIconAdd) : std::format("{} Update", kIconSave);
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
-        app_.scenario_manager().LoadScenariosFromDisk();
+        //app_.scenario_manager().LoadScenariosFromDisk();
         PopSelf();
       }
     }

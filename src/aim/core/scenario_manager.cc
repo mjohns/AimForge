@@ -172,11 +172,13 @@ class ScenarioManagerImpl : public ScenarioManager {
       ScenarioDef def;
       def.mutable_reference_def()->set_scenario_id(prev.full_name());
       *def.mutable_overrides() = overrides;
-      if (!SaveScenario(next, def)) {
-        return;
+      if (!SaveScenarioNoRebuild(next, def)) {
+        break;
       }
       prev = next;
     }
+
+    RebuildCachedScenarioList();
   }
 
   bool SetCurrentScenario(const std::string& scenario_id) override {

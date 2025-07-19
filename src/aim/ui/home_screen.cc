@@ -355,8 +355,10 @@ class HomeScreen : public UiScreen {
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
       if (result.reload_scenarios) {
-        app_.scenario_manager().LoadScenariosFromDisk();
+        //app_.scenario_manager().LoadScenariosFromDisk();
         //app_.playlist_manager().LoadPlaylistsFromDisk();
+        
+        // TODO: Update to use listeners on ScenarioManager for updates.
         scenario_browser_component1_->Reload();
         scenario_browser_component2_->Reload();
         quick_access_scenario_browser_component_->Reload();
