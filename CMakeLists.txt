@@ -14,9 +14,6 @@ endif()
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
-enable_testing()
-
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(vendor)

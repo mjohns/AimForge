@@ -192,6 +192,14 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
   bool SaveScenario(const ResourceName& name, const ScenarioDef& def) override {
+    bool saved = SaveScenarioNoRebuild(name, def);
+    if (saved) {
+      RebuildCachedScenarioList();
+    }
+    return saved;
+  }
+
+  bool SaveScenarioNoRebuild(const ResourceName& name, const ScenarioDef& def) {
     auto path = GetScenarioPath(fs_, name);
     if (!path.has_value()) {
       return false;
@@ -218,7 +226,12 @@ class ScenarioManagerImpl : public ScenarioManager {
     if (!path.has_value()) {
       return false;
     }
-    return std::filesystem::remove(*path);
+    bool deleted = std::filesystem::remove(*path);
+    if (deleted) {
+      scenario_map_.erase(name.full_name());
+      RebuildCachedScenarioList();
+    }
+    return deleted;
   }
 
   bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) override {
@@ -236,6 +249,8 @@ class ScenarioManagerImpl : public ScenarioManager {
       current_scenario_id_ = new_name.full_name();
     }
 
+    // auto old_item = scenario_map_.find(old_name);
+
     for (auto& listener : scenario_rename_listeners_) {
       listener(old_name.full_name(), new_name.full_name());
     }
@@ -245,8 +260,9 @@ class ScenarioManagerImpl : public ScenarioManager {
     for (const ScenarioItem& item : *scenarios_copy) {
       if (item.unevaluated_def.reference_def().scenario_id() == old_name.full_name()) {
         ScenarioDef new_def = item.unevaluated_def;
+
         new_def.mutable_reference_def()->set_scenario_id(new_name.full_name());
-        SaveScenario(item.name, new_def);
+        SaveScenarioNoRebuild(item.name, new_def);
       }
     }
     return true;
@@ -347,7 +363,6 @@ class ScenarioManagerImpl : public ScenarioManager {
       }
     }
 
-    EvaluateAllReferencesInCache();
     RebuildCachedScenarioList();
   }
 
@@ -372,12 +387,10 @@ class ScenarioManagerImpl : public ScenarioManager {
     item.name = name;
     item.unevaluated_def = new_def;
     item.evaluated_def = ApplyScenarioOverrides(new_def);
-
-    EvaluateAllReferencesInCache();
-    RebuildCachedScenarioList();
   }
 
   void RebuildCachedScenarioList() {
+    EvaluateAllReferencesInCache();
     auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
     new_scenarios->reserve(scenario_map_.size());
     for (auto& entry : scenario_map_) {

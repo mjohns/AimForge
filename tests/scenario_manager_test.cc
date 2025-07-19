@@ -10,29 +10,39 @@
 #include "aim/common/files.h"
 #include "aim/common/resource_name.h"
 #include "aim/core/file_system.h"
+#include "google/protobuf/message.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "gtest/gtest.h"
 
 using namespace aim;
+using google::protobuf::Message;
 using google::protobuf::util::MessageDifferencer;
 
 namespace {
 
-void ExpectScenarioDefsEqual(const ScenarioDef& actual,
-                             const ScenarioDef& expected,
-                             std::string msg = "") {
+std::string GetDiffMessage(const Message& actual, const Message& expected) {
   std::string diff_report;
   MessageDifferencer differ;
   differ.ReportDifferencesToString(&diff_report);
-  EXPECT_TRUE(differ.Compare(actual, expected)) << msg << diff_report;
+  differ.Compare(actual, expected);
+  return diff_report;
 }
 
-void ExpectScenariosEqual(const ScenarioItem& actual, const ScenarioItem& expected) {
-  EXPECT_EQ(actual.id(), expected.id());
-  EXPECT_EQ(actual.has_invalid_reference, expected.has_invalid_reference);
-  ExpectScenarioDefsEqual(actual.unevaluated_def, expected.unevaluated_def, "UnevaluatedDef");
-  ExpectScenarioDefsEqual(actual.evaluated_def, expected.evaluated_def, "EvaluatedDef");
+bool ProtosAreEqual(const Message& actual, const Message& expected) {
+  MessageDifferencer differ;
+  return differ.Compare(actual, expected);
 }
+
+#define EXPECT_PROTOS_EQ(actual, expected) \
+  EXPECT_TRUE(ProtosAreEqual(actual, expected)) << GetDiffMessage(actual, expected);
+
+#define EXPECT_SCENARIOS_EQ(actual, expected)                                    \
+  {                                                                              \
+    EXPECT_EQ((actual).id(), (expected).id());                                   \
+    EXPECT_EQ((actual).has_invalid_reference, (expected).has_invalid_reference); \
+    EXPECT_PROTOS_EQ((actual).unevaluated_def, (expected).unevaluated_def);      \
+    EXPECT_PROTOS_EQ((actual).evaluated_def, (expected).evaluated_def);          \
+  }
 
 }  // namespace
 
@@ -88,43 +98,43 @@ TEST_F(ScenarioManagerTest, CreateScenario) {
 
   std::optional<ScenarioItem> original_scenario = scenario_manager_->GetScenario("Bundle Scenario");
   ASSERT_TRUE(original_scenario.has_value());
-  ExpectScenarioDefsEqual(original_scenario->unevaluated_def, def);
+  EXPECT_PROTOS_EQ(original_scenario->unevaluated_def, def);
   EXPECT_FALSE(original_scenario->has_invalid_reference);
 
   ScenarioDef expected_evaluated = def;
   expected_evaluated.mutable_target_def()->mutable_profiles(0)->set_speed(2);
   expected_evaluated.clear_overrides();
-  ExpectScenarioDefsEqual(original_scenario->evaluated_def, expected_evaluated);
+  EXPECT_PROTOS_EQ(original_scenario->evaluated_def, expected_evaluated);
 
   auto scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
-  ExpectScenariosEqual(*original_scenario, (*scenarios)[0]);
+  EXPECT_SCENARIOS_EQ(*original_scenario, (*scenarios)[0]);
 
   // Make sure reloading from disk preserves the scenario
   scenario_manager_->LoadScenariosFromDisk();
   auto reloaded_scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(reloaded_scenarios->size(), 1);
-  ExpectScenariosEqual(*original_scenario, (*reloaded_scenarios)[0]);
+  EXPECT_SCENARIOS_EQ(*original_scenario, (*reloaded_scenarios)[0]);
 
   std::optional<ScenarioItem> reloaded_scenario = scenario_manager_->GetScenario("Bundle Scenario");
   ASSERT_TRUE(reloaded_scenario.has_value());
-  ExpectScenariosEqual(*original_scenario, *reloaded_scenario);
+  EXPECT_SCENARIOS_EQ(*original_scenario, *reloaded_scenario);
 
   ScenarioDef updated_def = def;
   updated_def.mutable_room()->mutable_barrel_room()->set_radius(10);
   ASSERT_TRUE(scenario_manager_->SaveScenario(scenario_name, updated_def));
 
   std::optional<ScenarioItem> updated_scenario = scenario_manager_->GetScenario("Bundle Scenario");
-  ExpectScenarioDefsEqual(updated_scenario->unevaluated_def, updated_def);
+  EXPECT_PROTOS_EQ(updated_scenario->unevaluated_def, updated_def);
 
   expected_evaluated = updated_def;
   expected_evaluated.mutable_target_def()->mutable_profiles(0)->set_speed(2);
   expected_evaluated.clear_overrides();
-  ExpectScenarioDefsEqual(updated_scenario->evaluated_def, expected_evaluated);
+  EXPECT_PROTOS_EQ(updated_scenario->evaluated_def, expected_evaluated);
 
   scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
-  ExpectScenariosEqual(*updated_scenario, (*scenarios)[0]);
+  EXPECT_SCENARIOS_EQ(*updated_scenario, (*scenarios)[0]);
 }
 
 TEST_F(ScenarioManagerTest, ScenarioLevels) {
@@ -151,11 +161,11 @@ TEST_F(ScenarioManagerTest, ScenarioLevels) {
   expected_def.mutable_reference_def()->set_scenario_id("Bundle Scenario L04");
   *expected_def.mutable_overrides() = overrides;
 
-  ExpectScenarioDefsEqual(l5->unevaluated_def, expected_def);
+  EXPECT_PROTOS_EQ(l5->unevaluated_def, expected_def);
 
   ScenarioDef expected_evaluated_def = def;
   expected_evaluated_def.mutable_target_def()->mutable_profiles(0)->set_speed(32);
-  ExpectScenarioDefsEqual(l5->evaluated_def, expected_evaluated_def);
+  EXPECT_PROTOS_EQ(l5->evaluated_def, expected_evaluated_def);
 
   // Update base scenario and make sure changes propgate through all references.
   def.mutable_target_def()->mutable_profiles(0)->set_speed(2);
@@ -164,8 +174,17 @@ TEST_F(ScenarioManagerTest, ScenarioLevels) {
   l5 = scenario_manager_->GetScenario("Bundle Scenario L05");
   ASSERT_TRUE(l5.has_value());
 
-  ExpectScenarioDefsEqual(l5->unevaluated_def, expected_def);
+  EXPECT_PROTOS_EQ(l5->unevaluated_def, expected_def);
 
   expected_evaluated_def.mutable_target_def()->mutable_profiles(0)->set_speed(64);
-  ExpectScenarioDefsEqual(l5->evaluated_def, expected_evaluated_def);
+  EXPECT_PROTOS_EQ(l5->evaluated_def, expected_evaluated_def);
+
+  // Delete a scenario in the middle and make sure things update.
+  scenario_manager_->DeleteScenario(ResourceName("Bundle", "Scenario L03"));
+  EXPECT_FALSE(scenario_manager_->GetScenario("Bundle Scenario L03").has_value());
+  EXPECT_TRUE(scenario_manager_->GetScenario("Bundle Scenario L04")->has_invalid_reference);
+  EXPECT_TRUE(scenario_manager_->GetScenario("Bundle Scenario L05")->has_invalid_reference);
+
+  scenarios = scenario_manager_->scenarios();
+  ASSERT_EQ(scenarios->size(), 5);
 }
