@@ -93,7 +93,7 @@ class ScenarioManager {
   }
 
   void RegisterRenameListener(
-      std::function<void(const ResourceName& old_name, const ResourceName& new_name)> listener) {
+      std::function<void(const std::string& old_name, const std::string& new_name)> listener) {
     scenario_rename_listeners_.push_back(std::move(listener));
   }
 
@@ -110,7 +110,7 @@ class ScenarioManager {
 
   std::string current_scenario_id_;
 
-  std::vector<std::function<void(const ResourceName& old_name, const ResourceName& new_name)>>
+  std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
       scenario_rename_listeners_;
 };
 

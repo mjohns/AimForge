@@ -39,6 +39,10 @@ ORDER BY Timestamp DESC
 LIMIT ?;
 )AIMS";
 
+const char* kUpdateRecentViewNameSql = R"AIMS(
+UPDATE RecentViews SET Id = ? WHERE Id = ? AND Type = ?;
+)AIMS";
+
 }  // namespace
 
 HistoryDb::HistoryDb(const std::filesystem::path& db_path) {
@@ -114,6 +118,28 @@ std::vector<std::string> HistoryDb::GetRecentUniqueNames(ObjectType t, int limit
     }
   }
   return result;
+}
+
+void HistoryDb::Rename(ObjectType t, const std::string& old_id, const std::string& new_id) {
+  sqlite3_stmt* stmt;
+  int rc = sqlite3_prepare_v2(db_, kUpdateRecentViewNameSql, -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+    return;
+  }
+  BindString(stmt, 1, new_id);
+  BindString(stmt, 2, old_id);
+  std::string type_string = ObjectTypeToString(t);
+  BindString(stmt, 3, type_string);
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    Logger::get()->warn("Failed to rename {} to {} for type {}: {}",
+                        old_id,
+                        new_id,
+                        type_string,
+                        sqlite3_errmsg(db_));
+  }
+  sqlite3_finalize(stmt);
 }
 
 }  // namespace aim

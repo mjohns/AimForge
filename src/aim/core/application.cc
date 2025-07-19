@@ -336,6 +336,8 @@ int Application::Initialize() {
       std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&StatsManager::RenameScenario, stats_manager_.get()));
+  scenario_manager_->RegisterRenameListener(
+      std::bind_front(&HistoryManager::RenameItem, history_manager_.get(), ObjectType::SCENARIO));
 
   return 0;
 }

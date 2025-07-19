@@ -130,17 +130,17 @@ bool PlaylistManager::RenamePlaylist(const ResourceName& old_name, const Resourc
   return true;
 }
 
-void PlaylistManager::RenameScenarioInAllPlaylists(const ResourceName& old_name,
-                                                   const ResourceName& new_name) {
+void PlaylistManager::RenameScenarioInAllPlaylists(const std::string& old_name,
+                                                   const std::string& new_name) {
   // Need to make an explicit copy of the shared ptr as SavePlaylist can invalidate it.
   auto playlists_copy = playlists_;
   for (const Playlist& playlist : *playlists_copy) {
     bool changed = false;
     PlaylistDef def = playlist.def;
     for (auto& item : *def.mutable_items()) {
-      if (item.scenario() == old_name.full_name()) {
+      if (item.scenario() == old_name) {
         changed = true;
-        item.set_scenario(new_name.full_name());
+        item.set_scenario(new_name);
       }
     }
 

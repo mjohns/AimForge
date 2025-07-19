@@ -27,6 +27,8 @@ class HistoryManager {
   const std::vector<std::string>& recent_scenario_ids();
   const std::vector<std::string>& recent_playlists();
 
+  void RenameItem(ObjectType t, const std::string& old_name, const std::string& new_name);
+
  private:
   void MaybeReloadScenarios();
   void MaybeReloadPlaylists();

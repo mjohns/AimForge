@@ -23,6 +23,7 @@ class HistoryDb {
   AIM_NO_COPY(HistoryDb);
 
   void UpdateRecentView(ObjectType t, const std::string& id);
+  void Rename(ObjectType t, const std::string& old_id, const std::string& new_id);
 
   std::vector<RecentView> GetRecentViews(ObjectType t, int limit);
   std::vector<std::string> GetRecentUniqueNames(ObjectType t, int limit);

@@ -87,7 +87,7 @@ class PlaylistManager {
 
   bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);
 
-  void RenameScenarioInAllPlaylists(const ResourceName& old_name, const ResourceName& new_name);
+  void RenameScenarioInAllPlaylists(const std::string& old_name, const std::string& new_name);
 
  private:
   std::shared_ptr<PlaylistRun> GetOptionalExistingRun(const std::string& name);

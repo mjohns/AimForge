@@ -344,7 +344,7 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
   std::filesystem::rename(*old_path, *new_path);
 
   for (auto& listener : scenario_rename_listeners_) {
-    listener(old_name, new_name);
+    listener(old_name.full_name(), new_name.full_name());
   }
 
   // Fix any references to the renamed scenario.

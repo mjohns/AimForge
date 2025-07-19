@@ -40,7 +40,7 @@ class StatsManager {
 
   void DeleteStats(const std::string& scenario_id, i64 run_id);
 
-  void RenameScenario(const ResourceName& old_name, const ResourceName& new_name);
+  void RenameScenario(const std::string& old_name, const std::string& new_name);
 
  private:
   AggregateScenarioStats GetAggregateStatsFromDb(const std::string& scenario_id);

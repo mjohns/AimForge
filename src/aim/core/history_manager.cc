@@ -33,6 +33,12 @@ std::vector<std::string> HistoryManager::GetRecentUniqueNames(ObjectType t, int 
   return history_db_->GetRecentUniqueNames(t, limit);
 }
 
+void HistoryManager::RenameItem(ObjectType t,
+                                const std::string& old_name,
+                                const std::string& new_name) {
+  history_db_->Rename(t, old_name, new_name);
+}
+
 void HistoryManager::MaybeReloadScenarios() {
   if (scenarios_need_reload_) {
     scenarios_need_reload_ = false;
