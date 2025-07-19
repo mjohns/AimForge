@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <functional>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -13,9 +14,6 @@
 #include "aim/proto/scenario.pb.h"
 
 namespace aim {
-
-class PlaylistManager;
-class StatsManager;
 
 struct ScenarioItem {
   ResourceName name;
@@ -33,7 +31,7 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original_def);
 
 class ScenarioManager {
  public:
-  ScenarioManager(FileSystem* fs, PlaylistManager* playlist_manager, StatsManager* stats_manager);
+  explicit ScenarioManager(FileSystem* fs);
   AIM_NO_COPY(ScenarioManager);
 
   void LoadScenariosFromDisk();
@@ -94,6 +92,11 @@ class ScenarioManager {
     current_running_scenario_ = std::move(scenario);
   }
 
+  void RegisterRenameListener(
+      std::function<void(const ResourceName& old_name, const ResourceName& new_name)> listener) {
+    scenario_rename_listeners_.push_back(std::move(listener));
+  }
+
  private:
   std::optional<ScenarioItem> GetEvaluatedScenario(
       const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names);
@@ -103,11 +106,12 @@ class ScenarioManager {
   std::unordered_map<std::string, ScenarioItem> scenario_map_;
 
   FileSystem* fs_;
-  PlaylistManager* playlist_manager_;
-  StatsManager* stats_manager_;
   std::shared_ptr<Screen> current_running_scenario_;
 
   std::string current_scenario_id_;
+
+  std::vector<std::function<void(const ResourceName& old_name, const ResourceName& new_name)>>
+      scenario_rename_listeners_;
 };
 
 }  // namespace aim

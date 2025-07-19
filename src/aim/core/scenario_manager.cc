@@ -15,8 +15,6 @@
 #include "aim/common/log.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
-#include "aim/core/playlist_manager.h"
-#include "aim/core/stats_manager.h"
 
 namespace aim {
 namespace {
@@ -118,10 +116,7 @@ std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioIte
 
 }  // namespace
 
-ScenarioManager::ScenarioManager(FileSystem* fs,
-                                 PlaylistManager* playlist_manager,
-                                 StatsManager* stats_manager)
-    : fs_(fs), playlist_manager_(playlist_manager), stats_manager_(stats_manager) {}
+ScenarioManager::ScenarioManager(FileSystem* fs) : fs_(fs) {}
 
 std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
     const std::string& bundle_name) {
@@ -347,8 +342,10 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
     return false;
   }
   std::filesystem::rename(*old_path, *new_path);
-  playlist_manager_->RenameScenarioInAllPlaylists(old_name.full_name(), new_name.full_name());
-  stats_manager_->RenameScenario(old_name.full_name(), new_name.full_name());
+
+  for (auto& listener : scenario_rename_listeners_) {
+    listener(old_name, new_name);
+  }
 
   // Fix any references to the renamed scenario.
   for (const ScenarioItem& item : *scenarios_) {

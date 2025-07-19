@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/database/stats_db.h"
@@ -39,7 +40,7 @@ class StatsManager {
 
   void DeleteStats(const std::string& scenario_id, i64 run_id);
 
-  void RenameScenario(const std::string& old_scenario_id, const std::string& new_scenario_id);
+  void RenameScenario(const ResourceName& old_name, const ResourceName& new_name);
 
  private:
   AggregateScenarioStats GetAggregateStatsFromDb(const std::string& scenario_id);

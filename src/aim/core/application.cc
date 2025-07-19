@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <functional>
 #include <memory>
 
 #include "SDL3/SDL.h"
@@ -54,7 +55,7 @@ TargetPlacementStrategy* GetTargetPlacementStrategy(ScenarioDef* def) {
 void RunScenarioBackfill(ScenarioManager* mgr) {
   for (ScenarioItem item : *mgr->scenarios()) {
     ScenarioDef def = item.unevaluated_def;
-    //mgr->SaveScenario(item.name, def);
+    // mgr->SaveScenario(item.name, def);
   }
 }
 
@@ -208,8 +209,7 @@ int Application::Initialize() {
 
   playlist_manager_->LoadPlaylistsFromDisk();
 
-  scenario_manager_ = std::make_unique<ScenarioManager>(
-      file_system_.get(), playlist_manager_.get(), stats_manager_.get());
+  scenario_manager_ = std::make_unique<ScenarioManager>(file_system_.get());
   scenario_manager_->LoadScenariosFromDisk();
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
@@ -331,6 +331,12 @@ int Application::Initialize() {
 
   logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   RunScenarioBackfill(scenario_manager_.get());
+
+  scenario_manager_->RegisterRenameListener(
+      std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
+  scenario_manager_->RegisterRenameListener(
+      std::bind_front(&StatsManager::RenameScenario, stats_manager_.get()));
+
   return 0;
 }
 
