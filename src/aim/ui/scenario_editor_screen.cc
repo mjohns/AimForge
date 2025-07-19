@@ -611,10 +611,10 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Spacing();
 
     if (ImGui::Button("Bake")) {
-      auto parent = app_.scenario_manager().GetEvaluatedScenario(r.scenario_id());
+      auto parent = app_.scenario_manager().GetScenario(r.scenario_id());
       if (parent) {
         auto overrides = def_.overrides();
-        def_ = parent->evaluated_def;
+        def_ = ApplyScenarioOverrides(parent->evaluated_def);
         *def_.mutable_overrides() = overrides;
         def_ = ApplyScenarioOverrides(def_);
       } else {
@@ -2664,13 +2664,13 @@ class ScenarioEditorScreen : public UiScreen {
     CreateScenarioParams params;
     if (def_.has_reference_def()) {
       auto base_scenario =
-          app_.scenario_manager().GetEvaluatedScenario(def_.reference_def().scenario_id());
+          app_.scenario_manager().GetScenario(def_.reference_def().scenario_id());
       if (!base_scenario) {
         SetErrorMessage(std::format("Unable to find referenced scenario \"{}\"",
                                     def_.reference_def().scenario_id()));
         return;
       }
-      params.def = base_scenario->evaluated_def;
+      params.def = ApplyScenarioOverrides(base_scenario->evaluated_def);
       if (def_.has_overrides()) {
         *params.def.mutable_overrides() = def_.overrides();
       }

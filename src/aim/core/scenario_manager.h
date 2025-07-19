@@ -33,9 +33,6 @@ class ScenarioManager {
 
   virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
 
-  // Gets the scenario following any references and applying all overrides.
-  virtual std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) = 0;
-
   virtual std::shared_ptr<std::vector<ScenarioItem>> scenarios() const = 0;
 
   virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;

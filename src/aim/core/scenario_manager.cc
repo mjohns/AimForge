@@ -119,29 +119,6 @@ class ScenarioManagerImpl : public ScenarioManager {
  public:
   explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {}
 
-  void LoadScenariosFromDisk() override {
-    auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
-    scenario_map_.clear();
-    for (BundleInfo& bundle : fs_->GetBundles()) {
-      PushBackAll(new_scenarios.get(), LoadScenarios(bundle.name, bundle.path / "scenarios"));
-    }
-    for (ScenarioItem& item : *new_scenarios) {
-      scenario_map_[item.id()] = item;
-    }
-
-    // Now evaluate all references.
-    for (ScenarioItem& item : *new_scenarios) {
-      auto evaluated_scenario = GetEvaluatedScenario(item.id());
-      if (evaluated_scenario) {
-        item.evaluated_def = evaluated_scenario->evaluated_def;
-      } else {
-        item.has_invalid_reference = true;
-      }
-      scenario_map_[item.id()] = item;
-    }
-    scenarios_ = new_scenarios;
-  }
-
   std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) override {
     std::vector<std::string> names;
     for (const ScenarioItem& s : *scenarios_) {
@@ -158,12 +135,6 @@ class ScenarioManagerImpl : public ScenarioManager {
       return it->second;
     }
     return {};
-  }
-
-  // Gets the scenario following any references and applying all overrides.
-  std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) override {
-    std::unordered_set<std::string> visited_scenario_names;
-    return GetEvaluatedScenarioInternal(scenario_id, &visited_scenario_names);
   }
 
   const std::string& GetCurrentScenarioId() override {
@@ -309,6 +280,12 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
  private:
+  // Gets the scenario following any references and applying all overrides.
+  std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) {
+    std::unordered_set<std::string> visited_scenario_names;
+    return GetEvaluatedScenarioInternal(scenario_id, &visited_scenario_names);
+  }
+
   std::optional<ScenarioItem> GetEvaluatedScenarioInternal(
       const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names) {
     bool added = visited_scenario_names->insert(scenario_id).second;
@@ -341,6 +318,29 @@ class ScenarioManagerImpl : public ScenarioManager {
     return resolved;
   }
 
+  void LoadScenariosFromDisk() override {
+    auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
+    scenario_map_.clear();
+    for (BundleInfo& bundle : fs_->GetBundles()) {
+      PushBackAll(new_scenarios.get(), LoadScenarios(bundle.name, bundle.path / "scenarios"));
+    }
+    for (ScenarioItem& item : *new_scenarios) {
+      scenario_map_[item.id()] = item;
+    }
+
+    // Now evaluate all references.
+    for (ScenarioItem& item : *new_scenarios) {
+      auto evaluated_scenario = GetEvaluatedScenario(item.id());
+      if (evaluated_scenario) {
+        item.evaluated_def = evaluated_scenario->evaluated_def;
+      } else {
+        item.has_invalid_reference = true;
+      }
+      scenario_map_[item.id()] = item;
+    }
+    scenarios_ = new_scenarios;
+  }
+
   void UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item) {
     for (ScenarioItem& old_item : *scenarios_) {
       if (old_item.name.full_name() == name) {
@@ -369,6 +369,9 @@ class ScenarioManagerImpl : public ScenarioManager {
 
   std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
   std::unordered_map<std::string, ScenarioItem> scenario_map_;
+
+  // If the key is updated then the entry will also need to be updated.
+  std::unordered_map<std::string, std::string> scenario_reference_dependency_map_;
 
   FileSystem* fs_;
   std::shared_ptr<Screen> current_running_scenario_;
