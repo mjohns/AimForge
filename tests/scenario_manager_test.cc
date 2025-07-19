@@ -179,6 +179,20 @@ TEST_F(ScenarioManagerTest, ScenarioLevels) {
   expected_evaluated_def.mutable_target_def()->mutable_profiles(0)->set_speed(64);
   EXPECT_PROTOS_EQ(l5->evaluated_def, expected_evaluated_def);
 
+  // Rename one scenario and make sure references are updated
+  auto l1 = *scenario_manager_->GetScenario("Bundle Scenario L01");
+  auto l2 = *scenario_manager_->GetScenario("Bundle Scenario L02");
+  ASSERT_TRUE(scenario_manager_->RenameScenario(ResourceName("Bundle", "Scenario L01"),
+                                                ResourceName("Bundle", "ScenarioUpd L01")));
+  EXPECT_TRUE(scenario_manager_->GetScenario("Bundle ScenarioUpd L01").has_value());
+  EXPECT_FALSE(scenario_manager_->GetScenario("Bundle Scenario L01").has_value());
+  ScenarioItem l1_upd = *scenario_manager_->GetScenario("Bundle ScenarioUpd L01");
+  EXPECT_PROTOS_EQ(l1_upd.evaluated_def, l1.evaluated_def);
+
+  ScenarioItem l2_upd = *scenario_manager_->GetScenario("Bundle Scenario L02");
+  EXPECT_PROTOS_EQ(l2_upd.evaluated_def, l2.evaluated_def);
+  EXPECT_EQ(l2_upd.unevaluated_def.reference_def().scenario_id(), "Bundle ScenarioUpd L01");
+
   // Delete a scenario in the middle and make sure things update.
   scenario_manager_->DeleteScenario(ResourceName("Bundle", "Scenario L03"));
   EXPECT_FALSE(scenario_manager_->GetScenario("Bundle Scenario L03").has_value());

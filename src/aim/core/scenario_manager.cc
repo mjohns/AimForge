@@ -249,7 +249,13 @@ class ScenarioManagerImpl : public ScenarioManager {
       current_scenario_id_ = new_name.full_name();
     }
 
-    // auto old_item = scenario_map_.find(old_name);
+    auto old_item = scenario_map_.find(old_name.full_name());
+    if (old_item != scenario_map_.end()) {
+      ScenarioItem& item = scenario_map_[new_name.full_name()];
+      item = old_item->second;
+      item.name = new_name;
+      scenario_map_.erase(old_name.full_name());
+    }
 
     for (auto& listener : scenario_rename_listeners_) {
       listener(old_name.full_name(), new_name.full_name());
@@ -265,6 +271,8 @@ class ScenarioManagerImpl : public ScenarioManager {
         SaveScenarioNoRebuild(item.name, new_def);
       }
     }
+
+    RebuildCachedScenarioList();
     return true;
   }
 
