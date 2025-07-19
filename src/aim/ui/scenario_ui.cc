@@ -313,7 +313,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       return;
     }
 
-    filtered_scenario_ids_.reserve(app_->scenario_manager().scenarios().size());
+    filtered_scenario_ids_.reserve(app_->scenario_manager().scenarios()->size());
     auto search_words = GetSearchWords(search_text_);
     if (view_type_ == ScenarioViewType::STARRED) {
       auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
@@ -329,7 +329,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         }
       }
     } else {
-      for (const ScenarioItem& scenario : app_->scenario_manager().scenarios()) {
+      for (const ScenarioItem& scenario : *app_->scenario_manager().scenarios()) {
         bool type_matches = scenario_type_filter_ == ScenarioDef::TYPE_NOT_SET ||
                             scenario.def.type_case() == scenario_type_filter_;
         if (type_matches && StringMatchesSearch(scenario.id(), search_words)) {

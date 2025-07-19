@@ -69,7 +69,7 @@ class ScenarioManager {
     return GetScenario(scenario_id).has_value();
   }
 
-  const std::vector<ScenarioItem>& scenarios() const {
+  std::shared_ptr<std::vector<ScenarioItem>> scenarios() const {
     return scenarios_;
   }
 
@@ -99,8 +99,9 @@ class ScenarioManager {
       const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names);
   void UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item);
 
-  std::vector<ScenarioItem> scenarios_;
+  std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
   std::unordered_map<std::string, ScenarioItem> scenario_map_;
+
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   StatsManager* stats_manager_;

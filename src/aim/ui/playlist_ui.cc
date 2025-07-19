@@ -255,9 +255,10 @@ class PlaylistEditorComponent {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
       int num_displayed = 0;
-      for (int i = 0; i < app_.scenario_manager().scenarios().size(); ++i) {
+      auto scenarios = app_.scenario_manager().scenarios();
+      for (int i = 0; i < scenarios->size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
-        const auto& scenario = app_.scenario_manager().scenarios()[i];
+        const auto& scenario = (*scenarios)[i];
         if (StringMatchesSearch(scenario.id(), search_words, /*empty_matches=*/false)) {
           bool already_in_playlist =
               std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {

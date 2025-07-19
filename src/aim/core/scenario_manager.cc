@@ -126,7 +126,7 @@ ScenarioManager::ScenarioManager(FileSystem* fs,
 std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
     const std::string& bundle_name) {
   std::vector<std::string> names;
-  for (const ScenarioItem& s : scenarios()) {
+  for (const ScenarioItem& s : *scenarios_) {
     if (s.name.bundle_name() == bundle_name) {
       names.push_back(s.name.relative_name());
     }
@@ -135,17 +135,17 @@ std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
 }
 
 void ScenarioManager::LoadScenariosFromDisk() {
-  scenarios_.clear();
+  auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
   scenario_map_.clear();
   for (BundleInfo& bundle : fs_->GetBundles()) {
-    PushBackAll(&scenarios_, LoadScenarios(bundle.name, bundle.path / "scenarios"));
+    PushBackAll(new_scenarios.get(), LoadScenarios(bundle.name, bundle.path / "scenarios"));
   }
-  for (ScenarioItem& item : scenarios_) {
+  for (ScenarioItem& item : *new_scenarios) {
     scenario_map_[item.id()] = item;
   }
 
   // Now evaluate all references.
-  for (ScenarioItem& item : scenarios_) {
+  for (ScenarioItem& item : *new_scenarios) {
     auto evaluated_scenario = GetEvaluatedScenario(item.id());
     if (evaluated_scenario) {
       item.def = evaluated_scenario->def;
@@ -154,6 +154,7 @@ void ScenarioManager::LoadScenariosFromDisk() {
     }
     scenario_map_[item.id()] = item;
   }
+  scenarios_ = new_scenarios;
 }
 
 std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id) {
@@ -282,7 +283,8 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
       result.mutable_bounce_def()->set_time_scale_multiplier(time_scale * mult);
     }
     if (original.has_wall_wander_def()) {
-      float time_scale = FirstGreaterThanZero(original.wall_wander_def().time_scale_multiplier(), 1.0);
+      float time_scale =
+          FirstGreaterThanZero(original.wall_wander_def().time_scale_multiplier(), 1.0);
       result.mutable_wall_wander_def()->set_time_scale_multiplier(time_scale * mult);
     }
     // TODO: wander def
@@ -303,14 +305,14 @@ bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& 
 }
 
 void ScenarioManager::UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item) {
-  for (ScenarioItem& old_item : scenarios_) {
+  for (ScenarioItem& old_item : *scenarios_) {
     if (old_item.name.full_name() == name) {
       old_item = new_item;
     }
   }
   bool name_changed = name != new_item.name.full_name();
   if (name_changed) {
-    SortScenarios(&scenarios_);
+    SortScenarios(scenarios_.get());
     scenario_map_.erase(name);
     scenario_map_[new_item.name.full_name()] = new_item;
   } else {
@@ -349,7 +351,7 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
   stats_manager_->RenameScenario(old_name.full_name(), new_name.full_name());
 
   // Fix any references to the renamed scenario.
-  for (const ScenarioItem& item : scenarios_) {
+  for (const ScenarioItem& item : *scenarios_) {
     if (item.def.reference_def().scenario_id() == old_name.full_name()) {
       ScenarioDef new_def = item.def;
       new_def.mutable_reference_def()->set_scenario_id(new_name.full_name());

@@ -584,7 +584,7 @@ class ScenarioEditorScreen : public UiScreen {
         int num_matches = 0;
         auto search_words = GetSearchWords(r.scenario_id());
         ImGui::Indent();
-        for (const auto& scenario : app_.scenario_manager().scenarios()) {
+        for (const auto& scenario : *app_.scenario_manager().scenarios()) {
           if (StringMatchesSearch(scenario.id(), search_words)) {
             num_matches++;
             if (ImGui::Button(scenario.id())) {

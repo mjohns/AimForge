@@ -309,7 +309,7 @@ class HomeScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
+    //ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
 
     // Place exit at bottom
     // float
