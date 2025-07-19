@@ -44,6 +44,12 @@ FetchContent_Declare(
   GIT_TAG        v29.3
 )
 
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        v1.17.0
+)
+
 # Settings
 
 # For SDL2 to be able to override options
@@ -76,5 +82,7 @@ add_subdirectory(implot)
 add_subdirectory(json)
 add_subdirectory(stb)
 
-FetchContent_MakeAvailable(fmt SDL3 SDL3_image SDL_mixer spdlog glm protobuf)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(fmt SDL3 SDL3_image SDL_mixer spdlog glm protobuf googletest)
 

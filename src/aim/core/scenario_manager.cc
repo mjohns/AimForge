@@ -198,7 +198,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     }
     bool saved = WriteJsonMessageToFile(*path, def);
     if (saved) {
-      // UpdatedCachedScenario(name.full_name()
+      UpdateCachedScenario(name, def);
     }
     return saved;
   }
@@ -280,13 +280,32 @@ class ScenarioManagerImpl : public ScenarioManager {
 
  private:
   // Gets the scenario following any references and applying all overrides.
-  std::optional<ScenarioDef> GetEvaluatedScenarioDef(const std::string& scenario_id) {
+  std::optional<ScenarioDef> GetEvaluatedScenarioDef(
+      const std::string& scenario_id,
+      std::unordered_map<std::string, std::optional<ScenarioDef>>* evaluated_scenario_cache) {
     std::unordered_set<std::string> visited_scenario_names;
-    return GetEvaluatedScenarioDefInternal(scenario_id, &visited_scenario_names);
+    return GetEvaluatedScenarioDefInternal(
+        scenario_id, &visited_scenario_names, evaluated_scenario_cache);
   }
 
   std::optional<ScenarioDef> GetEvaluatedScenarioDefInternal(
-      const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names) {
+      const std::string& scenario_id,
+      std::unordered_set<std::string>* visited_scenario_names,
+      std::unordered_map<std::string, std::optional<ScenarioDef>>* evaluated_scenario_cache) {
+    auto cached_def = evaluated_scenario_cache->find(scenario_id);
+    if (cached_def != evaluated_scenario_cache->end()) {
+      return cached_def->second;
+    }
+    auto result = GetEvaluatedScenarioDefInternalNoCaching(
+        scenario_id, visited_scenario_names, evaluated_scenario_cache);
+    (*evaluated_scenario_cache)[scenario_id] = result;
+    return result;
+  }
+
+  std::optional<ScenarioDef> GetEvaluatedScenarioDefInternalNoCaching(
+      const std::string& scenario_id,
+      std::unordered_set<std::string>* visited_scenario_names,
+      std::unordered_map<std::string, std::optional<ScenarioDef>>* evaluated_scenario_cache) {
     bool added = visited_scenario_names->insert(scenario_id).second;
     if (!added) {
       Logger::get()->warn("Scenario cycle detected reading {}", scenario_id);
@@ -301,8 +320,10 @@ class ScenarioManagerImpl : public ScenarioManager {
       return ApplyScenarioOverrides(unevaluated_def);
     }
 
-    auto referenced_scenario = GetEvaluatedScenarioDefInternal(
-        unevaluated_def.reference_def().scenario_id(), visited_scenario_names);
+    auto referenced_scenario =
+        GetEvaluatedScenarioDefInternal(unevaluated_def.reference_def().scenario_id(),
+                                        visited_scenario_names,
+                                        evaluated_scenario_cache);
     if (!referenced_scenario) {
       return {};
     }
@@ -317,13 +338,8 @@ class ScenarioManagerImpl : public ScenarioManager {
     for (BundleInfo& bundle : fs_->GetBundles()) {
       for (ScenarioItem& item : LoadUnevaluatedScenarios(bundle.name, bundle.path / "scenarios")) {
         if (item.unevaluated_def.has_reference_def()) {
-          const std::string& reference_scenario_id =
-              item.unevaluated_def.reference_def().scenario_id();
-          if (reference_scenario_id.size() > 0) {
-            scenario_reference_dependency_map_[reference_scenario_id].push_back(
-                item.name.full_name());
-          }
           // Need to evaluate later once all scenarios are loaded.
+          item.evaluated_def = item.unevaluated_def;
         } else {
           item.evaluated_def = ApplyScenarioOverrides(item.unevaluated_def);
         }
@@ -331,11 +347,16 @@ class ScenarioManagerImpl : public ScenarioManager {
       }
     }
 
-    // Now evaluate all references scenarios.
+    EvaluateAllReferencesInCache();
+    RebuildCachedScenarioList();
+  }
+
+  void EvaluateAllReferencesInCache() {
+    std::unordered_map<std::string, std::optional<ScenarioDef>> evaluated_scenario_cache;
     for (auto& entry : scenario_map_) {
       ScenarioItem& item = entry.second;
       if (item.unevaluated_def.has_reference_def()) {
-        auto maybe_def = GetEvaluatedScenarioDef(item.id());
+        auto maybe_def = GetEvaluatedScenarioDef(item.id(), &evaluated_scenario_cache);
         if (maybe_def) {
           item.evaluated_def = *maybe_def;
         } else {
@@ -344,28 +365,16 @@ class ScenarioManagerImpl : public ScenarioManager {
         }
       }
     }
+  }
 
+  void UpdateCachedScenario(const ResourceName& name, const ScenarioDef& new_def) {
+    ScenarioItem& item = scenario_map_[name.full_name()];
+    item.name = name;
+    item.unevaluated_def = new_def;
+    item.evaluated_def = ApplyScenarioOverrides(new_def);
+
+    EvaluateAllReferencesInCache();
     RebuildCachedScenarioList();
-  }
-
-  void MaybeUpdateDepMap(const ScenarioItem& item) {}
-
-  void UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item) {
-    /*
-  for (ScenarioItem& old_item : *scenarios_) {
-    if (old_item.name.full_name() == name) {
-      old_item = new_item;
-    }
-  }
-  */
-    bool name_changed = name != new_item.name.full_name();
-    if (name_changed) {
-      SortScenarios(scenarios_.get());
-      scenario_map_.erase(name);
-      scenario_map_[new_item.name.full_name()] = new_item;
-    } else {
-      scenario_map_[name] = new_item;
-    }
   }
 
   void RebuildCachedScenarioList() {
@@ -380,9 +389,6 @@ class ScenarioManagerImpl : public ScenarioManager {
 
   std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
   std::unordered_map<std::string, ScenarioItem> scenario_map_;
-
-  // If the key is updated then the entry will also need to be updated.
-  std::unordered_map<std::string, std::vector<std::string>> scenario_reference_dependency_map_;
 
   FileSystem* fs_;
   std::shared_ptr<Screen> current_running_scenario_;

@@ -21,6 +21,9 @@ FileSystem::FileSystem() {
   base_dir_ = SDL_GetBasePath();
 }
 
+FileSystem::FileSystem(const std::filesystem::path& base_dir, const std::filesystem::path& pref_dir)
+    : pref_dir_(pref_dir), base_dir_(base_dir) {}
+
 std::filesystem::path FileSystem::GetUserDataPath(const std::filesystem::path& file_name) {
   return pref_dir_ / file_name;
 }
@@ -65,6 +68,19 @@ std::optional<BundleInfo> FileSystem::GetBundle(const std::string& bundle_name) 
     }
   }
   return {};
+}
+
+bool FileSystem::CreateBundle(const std::string& bundle_name) {
+  auto bundles_dir = GetUserDataPath("bundles");
+  if (!std::filesystem::exists(bundles_dir)) {
+    std::filesystem::create_directory(bundles_dir);
+  }
+
+  auto path = bundles_dir / bundle_name;
+  if (std::filesystem::exists(path)) {
+    return false;
+  }
+  return std::filesystem::create_directory(path);
 }
 
 }  // namespace aim
