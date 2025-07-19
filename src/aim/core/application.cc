@@ -329,7 +329,6 @@ int Application::Initialize() {
 
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
-  logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   RunScenarioBackfill(scenario_manager_.get());
 
   scenario_manager_->RegisterRenameListener(
@@ -338,7 +337,10 @@ int Application::Initialize() {
       std::bind_front(&StatsManager::RenameScenario, stats_manager_.get()));
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&HistoryManager::RenameItem, history_manager_.get(), ObjectType::SCENARIO));
+  scenario_manager_->RegisterRenameListener(
+      std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
 
+  logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
   return 0;
 }
 

@@ -538,4 +538,11 @@ SettingsUpdater SettingsManager::CreateUpdater() {
   return SettingsUpdater(this, history_manager_);
 }
 
+void SettingsManager::RenameScenario(const std::string& old_name, const std::string& new_name) {
+  auto old_settings = settings_db_->GetScenarioSettings(old_name);
+  if (old_settings) {
+    settings_db_->UpdateScenarioSettings(new_name, *old_settings);
+  }
+}
+
 }  // namespace aim

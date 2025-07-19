@@ -96,6 +96,8 @@ class SettingsManager {
 
   void MaybeInvalidateThemeCache();
 
+  void RenameScenario(const std::string& old_name, const std::string& new_name);
+
   SettingsUpdater CreateUpdater();
 
  private:

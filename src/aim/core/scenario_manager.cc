@@ -343,14 +343,19 @@ bool ScenarioManager::RenameScenario(const ResourceName& old_name, const Resourc
   }
   std::filesystem::rename(*old_path, *new_path);
 
+  if (current_scenario_id_ == old_name.full_name()) {
+    current_scenario_id_ = new_name.full_name();
+  }
+
   for (auto& listener : scenario_rename_listeners_) {
     listener(old_name.full_name(), new_name.full_name());
   }
 
   // Fix any references to the renamed scenario.
-  for (const ScenarioItem& item : *scenarios_) {
-    if (item.def.reference_def().scenario_id() == old_name.full_name()) {
-      ScenarioDef new_def = item.def;
+  std::shared_ptr<std::vector<ScenarioItem>> scenarios_copy = scenarios_;
+  for (const ScenarioItem& item : *scenarios_copy) {
+    if (item.unevaluated_def.reference_def().scenario_id() == old_name.full_name()) {
+      ScenarioDef new_def = item.unevaluated_def;
       new_def.mutable_reference_def()->set_scenario_id(new_name.full_name());
       SaveScenario(item.name, new_def);
     }
