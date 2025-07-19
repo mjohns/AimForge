@@ -19,6 +19,21 @@
 namespace aim {
 namespace {
 
+void MultiplyRegionLength(RegionLength* l, float mult) {
+  if (l->has_depth_percent_value()) {
+    l->set_depth_percent_value(l->depth_percent_value() * mult);
+  }
+  if (l->has_x_percent_value()) {
+    l->set_x_percent_value(l->x_percent_value() * mult);
+  }
+  if (l->has_y_percent_value()) {
+    l->set_y_percent_value(l->y_percent_value() * mult);
+  }
+  if (l->has_value()) {
+    l->set_value(l->value() * mult);
+  }
+}
+
 std::filesystem::path GetScenarioPath(const std::filesystem::path& bundle_path,
                                       const std::string& name) {
   return bundle_path / "scenarios" / (name + ".json");
@@ -114,103 +129,267 @@ std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioIte
   return prefixes;
 }
 
-}  // namespace
+class ScenarioManagerImpl : public ScenarioManager {
+ public:
+  explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {}
 
-ScenarioManager::ScenarioManager(FileSystem* fs) : fs_(fs) {}
+  void LoadScenariosFromDisk() override {
+    auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
+    scenario_map_.clear();
+    for (BundleInfo& bundle : fs_->GetBundles()) {
+      PushBackAll(new_scenarios.get(), LoadScenarios(bundle.name, bundle.path / "scenarios"));
+    }
+    for (ScenarioItem& item : *new_scenarios) {
+      scenario_map_[item.id()] = item;
+    }
 
-std::vector<std::string> ScenarioManager::GetAllRelativeNamesInBundle(
-    const std::string& bundle_name) {
-  std::vector<std::string> names;
-  for (const ScenarioItem& s : *scenarios_) {
-    if (s.name.bundle_name() == bundle_name) {
-      names.push_back(s.name.relative_name());
+    // Now evaluate all references.
+    for (ScenarioItem& item : *new_scenarios) {
+      auto evaluated_scenario = GetEvaluatedScenario(item.id());
+      if (evaluated_scenario) {
+        item.def = evaluated_scenario->def;
+      } else {
+        item.has_invalid_reference = true;
+      }
+      scenario_map_[item.id()] = item;
+    }
+    scenarios_ = new_scenarios;
+  }
+
+  std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) override {
+    std::vector<std::string> names;
+    for (const ScenarioItem& s : *scenarios_) {
+      if (s.name.bundle_name() == bundle_name) {
+        names.push_back(s.name.relative_name());
+      }
+    }
+    return names;
+  }
+
+  std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) override {
+    auto it = scenario_map_.find(scenario_id);
+    if (it != scenario_map_.end()) {
+      return it->second;
+    }
+    return {};
+  }
+
+  // Gets the scenario following any references and applying all overrides.
+  std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) override {
+    std::unordered_set<std::string> visited_scenario_names;
+    return GetEvaluatedScenarioInternal(scenario_id, &visited_scenario_names);
+  }
+
+  std::optional<ScenarioItem> GetCurrentScenario() override {
+    return GetScenario(current_scenario_id_);
+  }
+
+  const std::string& GetCurrentScenarioId() override {
+    return current_scenario_id_;
+  }
+
+  void ClearCurrentScenario() override {
+    current_scenario_id_ = "";
+    current_running_scenario_ = {};
+  }
+
+  void GenerateScenarioLevels(const std::string& starting_scenario_id,
+                              const ScenarioOverrides& overrides,
+                              int num_levels) override {
+    auto starting_scenario = GetScenario(starting_scenario_id);
+    if (!starting_scenario) {
+      return;
+    }
+    float starting_level = 0;
+    auto base_name = StripLevelSuffix(starting_scenario->name.relative_name(), &starting_level);
+    if (!base_name) {
+      return;
+    }
+    std::string bundle_name = starting_scenario->name.bundle_name();
+    ResourceName prev = starting_scenario->name;
+    int current_level = starting_level;
+    for (int i = 0; i < num_levels; ++i) {
+      current_level++;
+      std::string relative_name = current_level < 10
+                                      ? std::format("{} L0{}", *base_name, current_level)
+                                      : std::format("{} L{}", *base_name, current_level);
+      ResourceName next(bundle_name, relative_name);
+      if (GetScenario(next.full_name()).has_value()) {
+        return;
+      }
+      ScenarioDef def;
+      def.mutable_reference_def()->set_scenario_id(prev.full_name());
+      *def.mutable_overrides() = overrides;
+      if (!SaveScenario(next, def)) {
+        return;
+      }
+      prev = next;
     }
   }
-  return names;
-}
 
-void ScenarioManager::LoadScenariosFromDisk() {
-  auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
-  scenario_map_.clear();
-  for (BundleInfo& bundle : fs_->GetBundles()) {
-    PushBackAll(new_scenarios.get(), LoadScenarios(bundle.name, bundle.path / "scenarios"));
-  }
-  for (ScenarioItem& item : *new_scenarios) {
-    scenario_map_[item.id()] = item;
+  bool SetCurrentScenario(const std::string& scenario_id) override {
+    if (scenario_id != current_scenario_id_) {
+      current_running_scenario_ = {};
+    }
+    current_scenario_id_ = scenario_id;
+    return GetScenario(scenario_id).has_value();
   }
 
-  // Now evaluate all references.
-  for (ScenarioItem& item : *new_scenarios) {
-    auto evaluated_scenario = GetEvaluatedScenario(item.id());
-    if (evaluated_scenario) {
-      item.def = evaluated_scenario->def;
+  std::shared_ptr<std::vector<ScenarioItem>> scenarios() const override {
+    return scenarios_;
+  }
+
+  bool SaveScenario(const ResourceName& name, const ScenarioDef& def) override {
+    auto path = GetScenarioPath(fs_, name);
+    if (!path.has_value()) {
+      return false;
+    }
+    bool saved = WriteJsonMessageToFile(*path, def);
+    if (saved) {
+      // UpdatedCachedScenario(name.full_name()
+    }
+    return saved;
+  }
+
+  // Return the name the scenario was saved with if successful.
+  std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name_in,
+                                                         const ScenarioDef& def) override {
+    ResourceName name = name_in;
+    *name.mutable_relative_name() =
+        MakeUniqueName(name.relative_name(), GetAllRelativeNamesInBundle(name.bundle_name()));
+    bool saved = SaveScenario(name, def);
+    return saved ? name : std::optional<ResourceName>{};
+  }
+
+  bool DeleteScenario(const ResourceName& name) override {
+    auto path = GetScenarioPath(fs_, name);
+    if (!path.has_value()) {
+      return false;
+    }
+    return std::filesystem::remove(*path);
+  }
+
+  bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) override {
+    auto old_path = GetScenarioPath(fs_, old_name);
+    if (!old_path.has_value()) {
+      return false;
+    }
+    auto new_path = GetScenarioPath(fs_, new_name);
+    if (!new_path.has_value()) {
+      return false;
+    }
+    std::filesystem::rename(*old_path, *new_path);
+
+    if (current_scenario_id_ == old_name.full_name()) {
+      current_scenario_id_ = new_name.full_name();
+    }
+
+    for (auto& listener : scenario_rename_listeners_) {
+      listener(old_name.full_name(), new_name.full_name());
+    }
+
+    // Fix any references to the renamed scenario.
+    std::shared_ptr<std::vector<ScenarioItem>> scenarios_copy = scenarios_;
+    for (const ScenarioItem& item : *scenarios_copy) {
+      if (item.unevaluated_def.reference_def().scenario_id() == old_name.full_name()) {
+        ScenarioDef new_def = item.unevaluated_def;
+        new_def.mutable_reference_def()->set_scenario_id(new_name.full_name());
+        SaveScenario(item.name, new_def);
+      }
+    }
+    return true;
+  }
+
+  void OpenFile(const ResourceName& name) override {
+    auto maybe_path = GetScenarioPath(fs_, name);
+    if (maybe_path.has_value()) {
+      // #ifdef _WIN32
+      // auto rc = ShellExecuteW(NULL, L"explore", maybe_path->c_str(), NULL, NULL, SW_SHOWNORMAL);
+      // #endif
+    }
+  }
+
+  bool has_running_scenario() const override {
+    return current_running_scenario_ != nullptr;
+  }
+
+  std::shared_ptr<Screen> GetCurrentRunningScenario() override {
+    return current_running_scenario_;
+  }
+
+  void SetCurrentRunningScenario(std::shared_ptr<Screen> scenario) override {
+    current_running_scenario_ = std::move(scenario);
+  }
+
+  void RegisterRenameListener(std::function<void(const std::string& old_name,
+                                                 const std::string& new_name)> listener) override {
+    scenario_rename_listeners_.push_back(std::move(listener));
+  }
+
+ private:
+  std::optional<ScenarioItem> GetEvaluatedScenarioInternal(
+      const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names) {
+    bool added = visited_scenario_names->insert(scenario_id).second;
+    if (!added) {
+      Logger::get()->warn("Scenario cycle detected reading {}", scenario_id);
+      return {};
+    }
+    auto maybe_scenario = GetScenario(scenario_id);
+    if (!maybe_scenario) {
+      return {};
+    }
+    ScenarioItem scenario = *maybe_scenario;
+    if (!scenario.def.has_reference_def()) {
+      scenario.def = ApplyScenarioOverrides(scenario.def);
+      return scenario;
+    }
+
+    auto referenced_scenario = GetEvaluatedScenarioInternal(
+        scenario.def.reference_def().scenario_id(), visited_scenario_names);
+    if (!referenced_scenario) {
+      return {};
+    }
+
+    ScenarioItem resolved = *referenced_scenario;
+    resolved.name = scenario.name;
+    if (scenario.def.has_overrides()) {
+      *resolved.def.mutable_overrides() = scenario.def.overrides();
+      resolved.def = ApplyScenarioOverrides(resolved.def);
+    }
+    return resolved;
+  }
+
+  void UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item) {
+    for (ScenarioItem& old_item : *scenarios_) {
+      if (old_item.name.full_name() == name) {
+        old_item = new_item;
+      }
+    }
+    bool name_changed = name != new_item.name.full_name();
+    if (name_changed) {
+      SortScenarios(scenarios_.get());
+      scenario_map_.erase(name);
+      scenario_map_[new_item.name.full_name()] = new_item;
     } else {
-      item.has_invalid_reference = true;
+      scenario_map_[name] = new_item;
     }
-    scenario_map_[item.id()] = item;
-  }
-  scenarios_ = new_scenarios;
-}
-
-std::optional<ScenarioItem> ScenarioManager::GetScenario(const std::string& scenario_id) {
-  auto it = scenario_map_.find(scenario_id);
-  if (it != scenario_map_.end()) {
-    return it->second;
-  }
-  return {};
-}
-
-std::optional<ScenarioItem> ScenarioManager::GetEvaluatedScenario(const std::string& scenario_id) {
-  std::unordered_set<std::string> visited_scenario_names;
-  return GetEvaluatedScenario(scenario_id, &visited_scenario_names);
-}
-
-std::optional<ScenarioItem> ScenarioManager::GetEvaluatedScenario(
-    const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names) {
-  bool added = visited_scenario_names->insert(scenario_id).second;
-  if (!added) {
-    Logger::get()->warn("Scenario cycle detected reading {}", scenario_id);
-    return {};
-  }
-  auto maybe_scenario = GetScenario(scenario_id);
-  if (!maybe_scenario) {
-    return {};
-  }
-  ScenarioItem scenario = *maybe_scenario;
-  if (!scenario.def.has_reference_def()) {
-    scenario.def = ApplyScenarioOverrides(scenario.def);
-    return scenario;
   }
 
-  auto referenced_scenario =
-      GetEvaluatedScenario(scenario.def.reference_def().scenario_id(), visited_scenario_names);
-  if (!referenced_scenario) {
-    return {};
-  }
+  void RebuildScenarioList() {}
 
-  ScenarioItem resolved = *referenced_scenario;
-  resolved.name = scenario.name;
-  if (scenario.def.has_overrides()) {
-    *resolved.def.mutable_overrides() = scenario.def.overrides();
-    resolved.def = ApplyScenarioOverrides(resolved.def);
-  }
-  return resolved;
-}
+  std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
+  std::unordered_map<std::string, ScenarioItem> scenario_map_;
 
-void MultiplyRegionLength(RegionLength* l, float mult) {
-  if (l->has_depth_percent_value()) {
-    l->set_depth_percent_value(l->depth_percent_value() * mult);
-  }
-  if (l->has_x_percent_value()) {
-    l->set_x_percent_value(l->x_percent_value() * mult);
-  }
-  if (l->has_y_percent_value()) {
-    l->set_y_percent_value(l->y_percent_value() * mult);
-  }
-  if (l->has_value()) {
-    l->set_value(l->value() * mult);
-  }
-}
+  FileSystem* fs_;
+  std::shared_ptr<Screen> current_running_scenario_;
+
+  std::string current_scenario_id_;
+
+  std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
+      scenario_rename_listeners_;
+};
+
+}  // namespace
 
 ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
   if (!original.has_overrides()) {
@@ -282,128 +461,12 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
           FirstGreaterThanZero(original.wall_wander_def().time_scale_multiplier(), 1.0);
       result.mutable_wall_wander_def()->set_time_scale_multiplier(time_scale * mult);
     }
-    // TODO: wander def
   }
   return result;
 }
 
-bool ScenarioManager::SaveScenario(const ResourceName& name, const ScenarioDef& def) {
-  auto path = GetScenarioPath(fs_, name);
-  if (!path.has_value()) {
-    return false;
-  }
-  bool saved = WriteJsonMessageToFile(*path, def);
-  if (saved) {
-    // UpdatedCachedScenario(name.full_name()
-  }
-  return saved;
-}
-
-void ScenarioManager::UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item) {
-  for (ScenarioItem& old_item : *scenarios_) {
-    if (old_item.name.full_name() == name) {
-      old_item = new_item;
-    }
-  }
-  bool name_changed = name != new_item.name.full_name();
-  if (name_changed) {
-    SortScenarios(scenarios_.get());
-    scenario_map_.erase(name);
-    scenario_map_[new_item.name.full_name()] = new_item;
-  } else {
-    scenario_map_[name] = new_item;
-  }
-}
-
-std::optional<ResourceName> ScenarioManager::SaveScenarioWithUniqueName(const ResourceName& name_in,
-                                                                        const ScenarioDef& def) {
-  ResourceName name = name_in;
-  *name.mutable_relative_name() =
-      MakeUniqueName(name.relative_name(), GetAllRelativeNamesInBundle(name.bundle_name()));
-  bool saved = SaveScenario(name, def);
-  return saved ? name : std::optional<ResourceName>{};
-}
-
-bool ScenarioManager::DeleteScenario(const ResourceName& name) {
-  auto path = GetScenarioPath(fs_, name);
-  if (!path.has_value()) {
-    return false;
-  }
-  return std::filesystem::remove(*path);
-}
-
-bool ScenarioManager::RenameScenario(const ResourceName& old_name, const ResourceName& new_name) {
-  auto old_path = GetScenarioPath(fs_, old_name);
-  if (!old_path.has_value()) {
-    return false;
-  }
-  auto new_path = GetScenarioPath(fs_, new_name);
-  if (!new_path.has_value()) {
-    return false;
-  }
-  std::filesystem::rename(*old_path, *new_path);
-
-  if (current_scenario_id_ == old_name.full_name()) {
-    current_scenario_id_ = new_name.full_name();
-  }
-
-  for (auto& listener : scenario_rename_listeners_) {
-    listener(old_name.full_name(), new_name.full_name());
-  }
-
-  // Fix any references to the renamed scenario.
-  std::shared_ptr<std::vector<ScenarioItem>> scenarios_copy = scenarios_;
-  for (const ScenarioItem& item : *scenarios_copy) {
-    if (item.unevaluated_def.reference_def().scenario_id() == old_name.full_name()) {
-      ScenarioDef new_def = item.unevaluated_def;
-      new_def.mutable_reference_def()->set_scenario_id(new_name.full_name());
-      SaveScenario(item.name, new_def);
-    }
-  }
-  return true;
-}
-
-void ScenarioManager::OpenFile(const ResourceName& name) {
-  auto maybe_path = GetScenarioPath(fs_, name);
-  if (maybe_path.has_value()) {
-    // #ifdef _WIN32
-    // auto rc = ShellExecuteW(NULL, L"explore", maybe_path->c_str(), NULL, NULL, SW_SHOWNORMAL);
-    // #endif
-  }
-}
-
-void ScenarioManager::GenerateScenarioLevels(const std::string& starting_scenario_id,
-                                             const ScenarioOverrides& overrides,
-                                             int num_levels) {
-  auto starting_scenario = GetScenario(starting_scenario_id);
-  if (!starting_scenario) {
-    return;
-  }
-  float starting_level = 0;
-  auto base_name = StripLevelSuffix(starting_scenario->name.relative_name(), &starting_level);
-  if (!base_name) {
-    return;
-  }
-  std::string bundle_name = starting_scenario->name.bundle_name();
-  ResourceName prev = starting_scenario->name;
-  int current_level = starting_level;
-  for (int i = 0; i < num_levels; ++i) {
-    current_level++;
-    std::string relative_name = current_level < 10
-                                    ? std::format("{} L0{}", *base_name, current_level)
-                                    : std::format("{} L{}", *base_name, current_level);
-    ResourceName next(bundle_name, relative_name);
-    if (GetScenario(next.full_name()).has_value()) {
-      return;
-    }
-    ScenarioDef def;
-    def.mutable_reference_def()->set_scenario_id(prev.full_name());
-    *def.mutable_overrides() = overrides;
-    if (!SaveScenario(next, def)) {
-      return;
-    }
-    prev = next;
-  }
+std::unique_ptr<ScenarioManager> CreateScenarioManager(FileSystem* fs) {
+  return std::make_unique<ScenarioManagerImpl>(fs);
 }
 
 }  // namespace aim

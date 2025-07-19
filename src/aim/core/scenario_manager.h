@@ -31,87 +31,48 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original_def);
 
 class ScenarioManager {
  public:
-  explicit ScenarioManager(FileSystem* fs);
-  AIM_NO_COPY(ScenarioManager);
+  virtual ~ScenarioManager() {}
 
-  void LoadScenariosFromDisk();
-  std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);
+  virtual void LoadScenariosFromDisk() = 0;
+  virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
 
-  std::optional<ScenarioItem> GetScenario(const std::string& scenario_id);
+  virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
 
   // Gets the scenario following any references and applying all overrides.
-  std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id);
+  virtual std::optional<ScenarioItem> GetEvaluatedScenario(const std::string& scenario_id) = 0;
 
-  std::optional<ScenarioItem> GetCurrentScenario() {
-    return GetScenario(current_scenario_id_);
-  }
+  virtual std::optional<ScenarioItem> GetCurrentScenario() = 0;
+  virtual const std::string& GetCurrentScenarioId() = 0;
 
-  const std::string& GetCurrentScenarioId() {
-    return current_scenario_id_;
-  }
+  virtual void ClearCurrentScenario() = 0;
 
-  void ClearCurrentScenario() {
-    current_scenario_id_ = "";
-    current_running_scenario_ = {};
-  }
+  virtual void GenerateScenarioLevels(const std::string& starting_scenario_id,
+                                      const ScenarioOverrides& overrides,
+                                      int num_levels) = 0;
 
-  void GenerateScenarioLevels(const std::string& starting_scenario_id,
-                              const ScenarioOverrides& overrides,
-                              int num_levels);
+  virtual bool SetCurrentScenario(const std::string& scenario_id) = 0;
 
-  bool SetCurrentScenario(const std::string& scenario_id) {
-    if (scenario_id != current_scenario_id_) {
-      current_running_scenario_ = {};
-    }
-    current_scenario_id_ = scenario_id;
-    return GetScenario(scenario_id).has_value();
-  }
+  virtual std::shared_ptr<std::vector<ScenarioItem>> scenarios() const = 0;
 
-  std::shared_ptr<std::vector<ScenarioItem>> scenarios() const {
-    return scenarios_;
-  }
-
-  bool SaveScenario(const ResourceName& name, const ScenarioDef& def);
+  virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
   // Return the name the scenario was saved with if successful.
-  std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
-                                                         const ScenarioDef& def);
-  bool DeleteScenario(const ResourceName& name);
-  bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name);
+  virtual std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
+                                                                 const ScenarioDef& def) = 0;
+  virtual bool DeleteScenario(const ResourceName& name) = 0;
+  virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;
 
-  void OpenFile(const ResourceName& name);
+  virtual void OpenFile(const ResourceName& name) = 0;
 
-  bool has_running_scenario() const {
-    return current_running_scenario_ != nullptr;
-  }
+  virtual bool has_running_scenario() const = 0;
 
-  std::shared_ptr<Screen> GetCurrentRunningScenario() {
-    return current_running_scenario_;
-  }
+  virtual std::shared_ptr<Screen> GetCurrentRunningScenario() = 0;
 
-  void SetCurrentRunningScenario(std::shared_ptr<Screen> scenario) {
-    current_running_scenario_ = std::move(scenario);
-  }
+  virtual void SetCurrentRunningScenario(std::shared_ptr<Screen> scenario) = 0;
 
-  void RegisterRenameListener(
-      std::function<void(const std::string& old_name, const std::string& new_name)> listener) {
-    scenario_rename_listeners_.push_back(std::move(listener));
-  }
-
- private:
-  std::optional<ScenarioItem> GetEvaluatedScenario(
-      const std::string& scenario_id, std::unordered_set<std::string>* visited_scenario_names);
-  void UpdateCachedScenario(const std::string& name, const ScenarioItem& new_item);
-
-  std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
-  std::unordered_map<std::string, ScenarioItem> scenario_map_;
-
-  FileSystem* fs_;
-  std::shared_ptr<Screen> current_running_scenario_;
-
-  std::string current_scenario_id_;
-
-  std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
-      scenario_rename_listeners_;
+  virtual void RegisterRenameListener(
+      std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;
 };
+
+std::unique_ptr<ScenarioManager> CreateScenarioManager(FileSystem* fs);
 
 }  // namespace aim

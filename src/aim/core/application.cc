@@ -209,7 +209,7 @@ int Application::Initialize() {
 
   playlist_manager_->LoadPlaylistsFromDisk();
 
-  scenario_manager_ = std::make_unique<ScenarioManager>(file_system_.get());
+  scenario_manager_ = CreateScenarioManager(file_system_.get());
   scenario_manager_->LoadScenariosFromDisk();
 
   if (Mix_Init(MIX_INIT_OGG) == 0) {
