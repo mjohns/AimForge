@@ -103,6 +103,19 @@ class StatsScreen : public UiScreen {
     }
   }
 
+  bool HasAccuracyPenalty() {
+    if (scenario_) {
+      switch (scenario_->evaluated_def.shot_type().type_case()) {
+        case ShotType::kClickSingle:
+        case ShotType::kClickMulti:
+          return true;
+        default:
+          break;
+      }
+      return false;
+    }
+  }
+
   bool IsScreenOlderThan(i64 millis) {
     i64 age_millis = GetNowMillis() - screen_start_time_millis_;
     return age_millis > millis;
@@ -211,11 +224,18 @@ class StatsScreen : public UiScreen {
 
   void DrawStatsTable() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg;
-    if (ImGui::BeginTable("StatsTable", 6, flags)) {
+    int num_cols = 6;
+    if (HasAccuracyPenalty()) {
+      num_cols++;
+    }
+    if (ImGui::BeginTable("StatsTable", num_cols, flags)) {
       ImGui::TableSetupColumn("Compare to", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Diff", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Accuracy", ImGuiTableColumnFlags_WidthStretch);
+      if (HasAccuracyPenalty()) {
+        ImGui::TableSetupColumn("Penalty", ImGuiTableColumnFlags_WidthStretch);
+      }
       ImGui::TableSetupColumn("CM/360", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableHeadersRow();
@@ -270,6 +290,19 @@ class StatsScreen : public UiScreen {
     // Accuracy
     ImGui::TableNextColumn();
     ImGui::Text(GetHitPercentageString(comparison_stats));
+
+    if (HasAccuracyPenalty()) {
+      // Penalty
+      ImGui::TableNextColumn();
+
+      float max_score = comparison_stats.num_hits;
+      float penalty = max_score - comparison_stats.score;
+      float penalty_percent = 100 * (penalty / max_score);
+
+      if (penalty > 0) {
+        ImGui::TextFmt("{}% ({})", MaybeIntToString(penalty_percent, 2), MaybeIntToString(penalty));
+      }
+    }
 
     // cm/360
     ImGui::TableNextColumn();
