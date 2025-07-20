@@ -71,49 +71,6 @@ std::vector<ScenarioItem> LoadUnevaluatedScenarios(const std::string& bundle_nam
   return scenarios;
 }
 
-std::optional<std::string> StripLevelSuffix(const std::string& scenario_name,
-                                            float* level_out = nullptr) {
-  std::vector<std::string_view> words =
-      absl::StrSplit(scenario_name, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
-  if (words.empty()) {
-    return {};
-  }
-  std::string_view suffix = words.back();
-  if (suffix.length() <= 1 || suffix[0] != 'L') {
-    return {};
-  }
-  float level;
-  if (!absl::SimpleAtof(suffix.substr(1), level_out != nullptr ? level_out : &level)) {
-    return {};
-  }
-
-  std::string_view stripped =
-      absl::StripTrailingAsciiWhitespace(absl::StripSuffix(scenario_name, suffix));
-  return std::string(stripped);
-}
-
-// Returns a list of scenario prefixes that should be grouped together in the UI.
-// This allows grouping all of the scenarios ending in L00, L01, L02.1 etc in the
-// scenario browser.
-std::vector<std::string> GetScenarioSharedPrefixes(const std::vector<ScenarioItem>& scenarios) {
-  std::unordered_map<std::string, int> prefix_count_map;
-  std::unordered_set<std::string> scenario_names;
-  for (const ScenarioItem& s : scenarios) {
-    scenario_names.insert(s.id());
-    auto maybe_prefix = StripLevelSuffix(s.id());
-    if (maybe_prefix) {
-      prefix_count_map[*maybe_prefix]++;
-    }
-  }
-  std::vector<std::string> prefixes;
-  for (auto& entry : prefix_count_map) {
-    if (entry.second > 4 && !scenario_names.contains(entry.first)) {
-      prefixes.push_back(entry.first);
-    }
-  }
-  return prefixes;
-}
-
 class ScenarioManagerImpl : public ScenarioManager {
  public:
   explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {}
@@ -152,7 +109,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     if (!starting_scenario) {
       return;
     }
-    float starting_level = 0;
+    int starting_level = 0;
     auto base_name = StripLevelSuffix(starting_scenario->name.relative_name(), &starting_level);
     if (!base_name) {
       return;
@@ -162,9 +119,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     int current_level = starting_level;
     for (int i = 0; i < num_levels; ++i) {
       current_level++;
-      std::string relative_name = current_level < 10
-                                      ? std::format("{} L0{}", *base_name, current_level)
-                                      : std::format("{} L{}", *base_name, current_level);
+      std::string relative_name = AddLevelSuffix(*base_name, current_level);
       ResourceName next(bundle_name, relative_name);
       if (GetScenario(next.full_name()).has_value()) {
         return;

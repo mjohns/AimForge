@@ -27,11 +27,6 @@ struct HistoryRow {
   i64 stats_id;
 };
 
-const std::unordered_map<std::string, std::vector<std::string>> kComparisonMap = {
-    {"SMOOTH Centering L1", {"SMOOTH Centering L2", "SMOOTH Centering L3"}},
-    {"SMOOTH Centering L2", {"SMOOTH Centering L1", "SMOOTH Centering L3"}},
-};
-
 std::string GetHitPercentageString(const StatsRow& stats) {
   if (stats.num_shots > 0) {
     float hit_percent = stats.num_hits / stats.num_shots;
@@ -538,19 +533,24 @@ class StatsScreen : public UiScreen {
 
  private:
   std::vector<std::string> GetCompareToList() {
-    std::vector<std::string> result = GetPartialCompareToListFromMap();
+    std::vector<std::string> result;
+    int level = 0;
+    auto level_prefix = StripLevelSuffix(scenario_id_);
+    if (level_prefix) {
+      int start = std::max<int>(level - 3, 0);
+      for (int i = start; i < start + 7; ++i) {
+        if (i != level) {
+          result.push_back(AddLevelSuffix(*level_prefix, i));
+        }
+      }
+    }
+
     if (reference_scenario_id_.size() > 0) {
-      result.push_back(reference_scenario_id_);
+      if (!VectorContains(result, reference_scenario_id_)) {
+        result.push_back(reference_scenario_id_);
+      }
     }
     return result;
-  }
-
-  std::vector<std::string> GetPartialCompareToListFromMap() {
-    auto it = kComparisonMap.find(scenario_id_);
-    if (it == kComparisonMap.end()) {
-      return {};
-    }
-    return it->second;
   }
 
   bool GetStatsInfo(StatsInfo* info) {

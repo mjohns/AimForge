@@ -12,6 +12,9 @@
 #include <vector>
 
 #include "absl/strings/ascii.h"
+#include "absl/strings/str_split.h"
+#include "absl/strings/string_view.h"
+#include "absl/strings/strip.h"
 #include "aim/common/simple_types.h"
 #include "aim/proto/common.pb.h"
 #include "glm/ext/scalar_common.hpp"
@@ -220,6 +223,34 @@ std::string MakeUniqueName(const std::string& name, const std::vector<std::strin
 
     n++;
   }
+}
+
+std::optional<std::string> StripLevelSuffix(const std::string& scenario_name, int* level_out) {
+  if (level_out != nullptr) {
+    *level_out = -1;
+  }
+  std::vector<std::string_view> words =
+      absl::StrSplit(scenario_name, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
+  if (words.empty()) {
+    return {};
+  }
+  std::string_view suffix = words.back();
+  if (suffix.length() <= 1 || suffix[0] != 'L') {
+    return {};
+  }
+  int level;
+  if (!absl::SimpleAtoi(suffix.substr(1), level_out != nullptr ? level_out : &level)) {
+    return {};
+  }
+
+  std::string_view stripped =
+      absl::StripTrailingAsciiWhitespace(absl::StripSuffix(scenario_name, suffix));
+  return std::string(stripped);
+}
+
+std::string AddLevelSuffix(const std::string& base_name, int level) {
+  return level < 10 ? std::format("{} L0{}", base_name, level)
+                    : std::format("{} L{}", base_name, level);
 }
 
 }  // namespace aim
