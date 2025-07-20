@@ -162,7 +162,6 @@ class ScenarioEditorScreen : public UiScreen {
       : UiScreen(app),
         target_manager_(GetDefaultSimpleRoom()),
         add_to_playlist_(opts.add_to_playlist) {
-    projection_ = GetPerspectiveTransformation(app_.screen_info());
     auto themes = app_.settings_manager().ListThemes();
     if (themes.size() > 0) {
       theme_ = app_.settings_manager().GetTheme(themes[0]);
@@ -2347,6 +2346,15 @@ class ScenarioEditorScreen : public UiScreen {
                  room.mutable_camera_position());
     ImGui::Unindent();
 
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Horizontal Fov")
+                          .set_is_optional()
+                          .set_step(1, 5)
+                          .set_min(1)
+                          .set_precision(0)
+                          .set_default(103)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(Room, &room, horizontal_fov));
+
     ImGui::Spacing();
     bool has_camera_up = room.has_camera_up();
     ImGui::AlignTextToFramePadding();
@@ -2630,7 +2638,9 @@ class ScenarioEditorScreen : public UiScreen {
     Stopwatch stopwatch;
     FrameTimes frame_times;
     if (app_.StartRender(&ctx)) {
-      app_.renderer()->DrawScenario(projection_,
+      auto projection =
+          GetPerspectiveTransformation(app_.screen_info(), def_.room().horizontal_fov());
+      app_.renderer()->DrawScenario(projection,
                                     def_.room(),
                                     theme_,
                                     settings_.health_bar(),
@@ -2685,7 +2695,6 @@ class ScenarioEditorScreen : public UiScreen {
 
   ScenarioDef def_;
   TargetManager target_manager_;
-  glm::mat4 projection_;
   Theme theme_;
   float char_x_ = 0;
   ImVec2 char_size_{};

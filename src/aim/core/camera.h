@@ -26,7 +26,7 @@ struct PitchYaw {
 };
 
 glm::mat4 GetPerspectiveTransformation(const ScreenInfo& screen,
-                                       float horizontal_fov_degrees = 103.0f);
+                                       float horizontal_fov_degrees = 0);
 
 struct CameraParams {
   CameraParams() {}

@@ -38,6 +38,9 @@ message Room {
   float start_pitch = 4;
   float start_yaw = 5;
 
+  // Defaults to 103
+  float horizontal_fov = 6;
+
   oneof type {
     SimpleRoom simple_room = 21;
     CylinderRoom cylinder_room = 22;

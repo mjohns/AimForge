@@ -112,8 +112,8 @@ class StatsScreen : public UiScreen {
         default:
           break;
       }
-      return false;
     }
+      return false;
   }
 
   bool IsScreenOlderThan(i64 millis) {
@@ -136,7 +136,7 @@ class StatsScreen : public UiScreen {
     }
 
     i64 age_millis = GetNowMillis() - screen_start_time_millis_;
-    if (!IsScreenOlderThan(200)) {
+    if (!IsScreenOlderThan(100)) {
       return;
     }
 

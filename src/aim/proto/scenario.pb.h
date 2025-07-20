@@ -4215,6 +4215,7 @@ class Room final : public ::google::protobuf::Message
     kCameraFrontFieldNumber = 3,
     kStartPitchFieldNumber = 4,
     kStartYawFieldNumber = 5,
+    kHorizontalFovFieldNumber = 6,
     kSimpleRoomFieldNumber = 21,
     kCylinderRoomFieldNumber = 22,
     kBarrelRoomFieldNumber = 23,
@@ -4286,6 +4287,17 @@ class Room final : public ::google::protobuf::Message
   void _internal_set_start_yaw(float value);
 
   public:
+  // float horizontal_fov = 6;
+  bool has_horizontal_fov() const;
+  void clear_horizontal_fov() ;
+  float horizontal_fov() const;
+  void set_horizontal_fov(float value);
+
+  private:
+  float _internal_horizontal_fov() const;
+  void _internal_set_horizontal_fov(float value);
+
+  public:
   // .aim.SimpleRoom simple_room = 21;
   bool has_simple_room() const;
   private:
@@ -4355,7 +4367,7 @@ class Room final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 8, 6,
+      3, 9, 6,
       0, 2>
       _table_;
 
@@ -4380,6 +4392,7 @@ class Room final : public ::google::protobuf::Message
     ::aim::StoredVec3* camera_front_;
     float start_pitch_;
     float start_yaw_;
+    float horizontal_fov_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -10954,6 +10967,34 @@ inline float Room::_internal_start_yaw() const {
 inline void Room::_internal_set_start_yaw(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_yaw_ = value;
+}
+
+// float horizontal_fov = 6;
+inline bool Room::has_horizontal_fov() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  return value;
+}
+inline void Room::clear_horizontal_fov() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.horizontal_fov_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline float Room::horizontal_fov() const {
+  // @@protoc_insertion_point(field_get:aim.Room.horizontal_fov)
+  return _internal_horizontal_fov();
+}
+inline void Room::set_horizontal_fov(float value) {
+  _internal_set_horizontal_fov(value);
+  _impl_._has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_set:aim.Room.horizontal_fov)
+}
+inline float Room::_internal_horizontal_fov() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.horizontal_fov_;
+}
+inline void Room::_internal_set_horizontal_fov(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.horizontal_fov_ = value;
 }
 
 // .aim.SimpleRoom simple_room = 21;

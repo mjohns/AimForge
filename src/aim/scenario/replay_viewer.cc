@@ -25,7 +25,7 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
   float crosshair_size = settings.crosshair_size();
 
   ScreenInfo screen = app->screen_info();
-  glm::mat4 projection = GetPerspectiveTransformation(screen);
+  glm::mat4 projection = GetPerspectiveTransformation(screen, replay.room().horizontal_fov());
 
   std::vector<ReplayEvent> events(replay.events().begin(), replay.events().end());
   std::sort(events.begin(), events.end(), CompareEventsByTime);

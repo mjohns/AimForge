@@ -111,7 +111,7 @@ void Scenario::RefreshState() {
   app_.sound_manager()->LoadSounds(settings_);
   float render_fps = FirstGreaterThanZero(settings_.max_render_fps(), kDefaultTargetRenderFps);
   max_render_age_micros_ = (1 / (float)(render_fps + 1)) * 1000 * 1000;
-  projection_ = GetPerspectiveTransformation(app_.screen_info());
+  projection_ = GetPerspectiveTransformation(app_.screen_info(), def_.room().horizontal_fov());
 
   float dpi = app_.settings_manager().GetDpi();
   metronome_ =
