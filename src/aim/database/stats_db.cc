@@ -61,6 +61,10 @@ const char* kDeleteAllStatsForScenarioSql = R"AIMS(
 DELETE FROM Stats WHERE ScenarioId = ?;
 )AIMS";
 
+const char* kDeleteStatsRunForScenarioSql = R"AIMS(
+DELETE FROM Stats WHERE ScenarioId = ? AND StatsId = ?;
+)AIMS";
+
 const char* kRenameScenarioSql = R"AIMS(
 UPDATE Stats SET ScenarioId = ? WHERE ScenarioId = ?;
 )AIMS";
@@ -196,6 +200,21 @@ void StatsDb::RenameScenario(const std::string& old_scenario_id,
 void StatsDb::CopyAllStats(const std::string& from_scenario_id, const std::string& to_scenario_id) {
 }
 
-void StatsDb::DeleteStats(const std::string& scenario_id, i64 run_id) {}
+void StatsDb::DeleteStats(const std::string& scenario_id, i64 run_id) {
+  sqlite3_stmt* stmt;
+  int rc = sqlite3_prepare_v2(db_, kDeleteStatsRunForScenarioSql, -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+    return;
+  }
+  BindString(stmt, 1, scenario_id);
+  sqlite3_bind_int64(stmt, 2, run_id);
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    Logger::get()->warn(
+        "Failed to delete stats for {} {}: {}", scenario_id, run_id, sqlite3_errmsg(db_));
+  }
+  sqlite3_finalize(stmt);
+}
 
 }  // namespace aim

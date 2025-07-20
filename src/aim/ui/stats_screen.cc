@@ -1,5 +1,6 @@
 #include "stats_screen.h"
 
+#include <algorithm>
 #include <fstream>
 #include <optional>
 
@@ -17,6 +18,14 @@
 namespace aim {
 namespace {
 constexpr i64 kDayMicros = 86400000000;
+
+struct HistoryRow {
+  int run_number = 0;
+  std::string time_ago;
+  std::string timestamp;
+  float score;
+  i64 stats_id;
+};
 
 const std::unordered_map<std::string, std::vector<std::string>> kComparisonMap = {
     {"SMOOTH Centering L1", {"SMOOTH Centering L2", "SMOOTH Centering L3"}},
@@ -75,9 +84,7 @@ class StatsScreen : public UiScreen {
     if (scenario_) {
       reference_scenario_id_ = scenario_->unevaluated_def.reference_def().scenario_id();
     }
-    if (GetStatsInfo(&info_)) {
-      is_valid_ = true;
-    }
+    is_valid_ = GetStatsInfo(&info_);
     performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
@@ -104,6 +111,12 @@ class StatsScreen : public UiScreen {
 
   void DrawScreen() override {
     ImGui::IdGuard cid("StatsScreen");
+
+    if (reset_stats_) {
+      reset_stats_ = false;
+      history_rows_ = {};
+      is_valid_ = GetStatsInfo(&info_);
+    }
 
     if (!is_valid_) {
       PopSelf();
@@ -142,10 +155,6 @@ class StatsScreen : public UiScreen {
           ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("History")) {
-          if (ImGui::Button("Clear history")) {
-            delete_history_confirmation_dialog_.NotifyOpen(
-                std::format("Delete history for \"{}\"?", scenario_id_), scenario_id_);
-          }
           DrawHistory();
           ImGui::EndTabItem();
         }
@@ -396,7 +405,6 @@ class StatsScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
     DrawStatsTable();
-    // DrawHistory();
   }
 
   void DrawHistory() {
@@ -416,6 +424,89 @@ class StatsScreen : public UiScreen {
       ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
       ImPlot::PlotStems("##Scores", &info_.scores[0], info_.scores.size());
       ImPlot::EndPlot();
+    }
+
+    DrawHistoryListTable();
+  }
+
+  void DrawHistoryListTable() {
+    if (ImGui::Button("Clear history")) {
+      delete_history_confirmation_dialog_.NotifyOpen(
+          std::format("Delete history for \"{}\"?", scenario_id_), scenario_id_);
+    }
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Sort by score");
+    ImGui::SameLine();
+    if (ImGui::Checkbox("##HistorySortByScore", &sort_by_score_)) {
+      history_rows_ = {};
+    }
+
+    if (!history_rows_) {
+      history_rows_ = std::vector<HistoryRow>();
+      history_rows_->reserve(info_.all_stats.size());
+      int run_number = 0;
+      i64 now = GetNowMicros();
+      for (StatsRow& stats : info_.all_stats) {
+        run_number++;
+        HistoryRow row;
+        row.stats_id = stats.stats_id;
+        row.run_number = run_number;
+        row.score = stats.score;
+
+        auto maybe_time = ParseTimestampStringAsMicros(stats.timestamp);
+        if (maybe_time) {
+          row.time_ago = GetHowLongAgoString(*maybe_time, now);
+          row.timestamp = stats.timestamp;
+        }
+        history_rows_->push_back(row);
+      }
+      if (sort_by_score_) {
+        std::sort(
+            history_rows_->begin(),
+            history_rows_->end(),
+            [](const HistoryRow& lhs, const HistoryRow& rhs) { return lhs.score > rhs.score; });
+      }
+    }
+
+    float remaining_height = ImGui::GetContentRegionAvail().y;
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg |
+                            ImGuiTableFlags_BordersV | ImGuiTableFlags_ScrollY;
+    if (ImGui::BeginTable("HistoryTable", 5, flags, ImVec2(0, remaining_height))) {
+      ImGui::TableSetupColumn("Run", ImGuiTableColumnFlags_WidthFixed, char_x_ * 4);
+      ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthFixed, char_x_ * 8);
+      ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed, char_x_ * 12);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 10);
+      ImGui::TableHeadersRow();
+
+      ImGui::LoopId loop_id;
+      for (const HistoryRow& row : *history_rows_) {
+        auto lid = loop_id.Get();
+        ImGui::TableNextRow();
+
+        ImGui::TableNextColumn();
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextFmt("{}", row.run_number);
+
+        ImGui::TableNextColumn();
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextFmt("{}", MaybeIntToString(row.score, 2));
+
+        ImGui::TableNextColumn();
+        if (row.time_ago.size() > 0) {
+          ImGui::AlignTextToFramePadding();
+          ImGui::Text(row.time_ago);
+          ImGui::HelpTooltip(row.timestamp);
+        }
+
+        ImGui::TableNextColumn();
+        ImGui::SetButtonCursorAtRight(kIconDelete);
+        if (ImGui::Button(kIconDelete)) {
+          app_.stats_manager().DeleteStats(scenario_id_, row.stats_id);
+          reset_stats_ = true;
+        }
+      }
+
+      ImGui::EndTable();
     }
   }
 
@@ -444,6 +535,7 @@ class StatsScreen : public UiScreen {
   }
 
   bool GetStatsInfo(StatsInfo* info) {
+    *info = {};
     auto all_stats = app_.stats_manager().GetStats(scenario_id_);
     info->all_stats.reserve(all_stats.size());
     info->scores.reserve(all_stats.size());
@@ -539,6 +631,10 @@ class StatsScreen : public UiScreen {
   ImGui::ConfirmationDialog<std::string> delete_history_confirmation_dialog_{
       "DeleteHistoryConfirmationDialog"};
   std::shared_ptr<PlaylistRun> playlist_run_;
+
+  bool reset_stats_ = false;
+  bool sort_by_score_ = false;
+  std::optional<std::vector<HistoryRow>> history_rows_;
 };
 
 }  // namespace
