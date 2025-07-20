@@ -113,7 +113,7 @@ class StatsScreen : public UiScreen {
           break;
       }
     }
-      return false;
+    return false;
   }
 
   bool IsScreenOlderThan(i64 millis) {
@@ -431,7 +431,7 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawStats() {
-    float percent = 0.7;
+    float percent = 0.8;
     float padding = (ImGui::GetContentRegionAvail().x * (1 - percent)) / 2.0f;
     if (ImGui::BeginTable("TopPanelTable", 4, 0)) {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, padding);
@@ -470,7 +470,7 @@ class StatsScreen : public UiScreen {
   void DrawPlaylistItem(int i, const PlaylistItemProgress& progress, PlaylistRun* run) {
     bool allow_click = IsScreenOlderThan(500);
     if (ImGui::Button(progress.item.scenario()) && allow_click) {
-      app_.scenario_manager().SetCurrentScenario(scenario_id_);
+      app_.scenario_manager().SetCurrentScenario(progress.item.scenario());
       state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       run->current_index = i;
       ReturnHome();
