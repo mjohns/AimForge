@@ -80,6 +80,7 @@ class StatsScreen : public UiScreen {
  public:
   StatsScreen(std::string scenario_id, i64 run_id, Application* app)
       : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
+    screen_start_time_millis_ = GetNowMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_id);
     if (scenario_) {
       reference_scenario_id_ = scenario_->unevaluated_def.reference_def().scenario_id();
@@ -109,6 +110,11 @@ class StatsScreen : public UiScreen {
     }
   }
 
+  bool IsScreenOlderThan(i64 millis) {
+    i64 age_millis = GetNowMillis() - screen_start_time_millis_;
+    return age_millis > millis;
+  }
+
   void DrawScreen() override {
     ImGui::IdGuard cid("StatsScreen");
 
@@ -120,6 +126,11 @@ class StatsScreen : public UiScreen {
 
     if (!is_valid_) {
       PopSelf();
+      return;
+    }
+
+    i64 age_millis = GetNowMillis() - screen_start_time_millis_;
+    if (!IsScreenOlderThan(200)) {
       return;
     }
 
@@ -468,6 +479,8 @@ class StatsScreen : public UiScreen {
       }
     }
 
+    bool allow_delete = IsScreenOlderThan(1300);
+
     float remaining_height = ImGui::GetContentRegionAvail().y;
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg |
                             ImGuiTableFlags_BordersV | ImGuiTableFlags_ScrollY;
@@ -500,9 +513,15 @@ class StatsScreen : public UiScreen {
 
         ImGui::TableNextColumn();
         ImGui::SetButtonCursorAtRight(kIconDelete);
+        if (!allow_delete) {
+          ImGui::BeginDisabled();
+        }
         if (ImGui::Button(kIconDelete)) {
           app_.stats_manager().DeleteStats(scenario_id_, row.stats_id);
           reset_stats_ = true;
+        }
+        if (!allow_delete) {
+          ImGui::EndDisabled();
         }
       }
 
@@ -635,6 +654,7 @@ class StatsScreen : public UiScreen {
   bool reset_stats_ = false;
   bool sort_by_score_ = false;
   std::optional<std::vector<HistoryRow>> history_rows_;
+  i64 screen_start_time_millis_;
 };
 
 }  // namespace

@@ -11,6 +11,7 @@ namespace aim {
 
 std::string GetNowString();
 i64 GetNowMicros();
+i64 GetNowMillis();
 
 std::string GetHowLongAgoString(i64 start_epoch_micros, i64 end_epoch_micros);
 std::optional<i64> ParseTimestampStringAsMicros(const std::string& timestamp);
