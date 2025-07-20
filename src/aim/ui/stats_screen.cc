@@ -392,10 +392,14 @@ class StatsScreen : public UiScreen {
       if (hit_percent.size() > 0) {
         ImGui::Text(hit_percent);
       }
-
-      auto avg_comparison = GetStatsComparison(info_.stats, info_.average_stats);
-      ImGui::TextFmt("Avg {}", avg_comparison.score_diff_percent_string);
     }
+    auto avg_comparison = GetStatsComparison(info_.stats, info_.average_stats);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Average");
+    ImGui::BeginDisabled();
+    ImGui::SameLine();
+    ImGui::Button(avg_comparison.score_diff_percent_string);
+    ImGui::EndDisabled();
 
     /*
     if (all_stats.size() > 1) {
