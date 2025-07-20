@@ -231,7 +231,7 @@ class ScenarioEditorScreen : public UiScreen {
         is_new_scenario ? std::format("{} Create", kIconAdd) : std::format("{} Update", kIconSave);
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
-        //app_.scenario_manager().LoadScenariosFromDisk();
+        // app_.scenario_manager().LoadScenariosFromDisk();
         PopSelf();
       }
     }
@@ -2663,8 +2663,7 @@ class ScenarioEditorScreen : public UiScreen {
   void PlayScenario() {
     CreateScenarioParams params;
     if (def_.has_reference_def()) {
-      auto base_scenario =
-          app_.scenario_manager().GetScenario(def_.reference_def().scenario_id());
+      auto base_scenario = app_.scenario_manager().GetScenario(def_.reference_def().scenario_id());
       if (!base_scenario) {
         SetErrorMessage(std::format("Unable to find referenced scenario \"{}\"",
                                     def_.reference_def().scenario_id()));

@@ -1,8 +1,5 @@
 #include "stats_screen.h"
 
-#include <imgui.h>
-#include <implot.h>
-
 #include <fstream>
 #include <optional>
 
@@ -13,6 +10,9 @@
 #include "aim/core/stats_manager.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
+#include "aim/ui/settings_screen.h"
+#include "imgui.h"
+#include "implot.h"
 
 namespace aim {
 namespace {
@@ -79,9 +79,123 @@ class StatsScreen : public UiScreen {
       is_valid_ = true;
     }
     performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
+
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    char_x_ = char_size.x;
   }
 
  protected:
+  void OnAttachUi() override {
+    playlist_run_ = app_.playlist_manager().GetCurrentRun();
+    if (!playlist_run_) {
+      return;
+    }
+    bool playlist_has_scenario = false;
+    for (auto& item : playlist_run_->progress_list) {
+      if (item.item.scenario() == scenario_id_) {
+        playlist_has_scenario = true;
+        break;
+      }
+    }
+    if (!playlist_has_scenario) {
+      playlist_run_ = nullptr;
+    }
+  }
+
+  void DrawScreen() override {
+    ImGui::IdGuard cid("StatsScreen");
+
+    if (!is_valid_) {
+      PopSelf();
+      return;
+    }
+
+    DrawTopBar();
+
+    if (BeginMainWindow("MainWindow", 0.9)) {
+      DrawMainContent();
+    }
+    ImGui::End();
+  }
+
+  void DrawMainContent() {
+    /*
+  std::string scenario_to_start;
+  if (playlist_run_ != nullptr) {
+    if (ImGui::Begin("Playlist")) {
+      std::string scenario_to_start;
+      PlaylistRunComponent("PlaylistRun", playlist_run_, *this);
+    }
+    ImGui::End();
+  }
+  */
+
+    delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
+      app_.stats_manager().DeleteAllStats(scenario_id);
+      PopSelf();
+    });
+
+    if (info_.all_stats.size() > 1) {
+      if (ImGui::BeginTabBar("StatsTabBar")) {
+        if (ImGui::BeginTabItem("Current run")) {
+          DrawStats();
+          ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("History")) {
+          if (ImGui::Button("Clear history")) {
+            delete_history_confirmation_dialog_.NotifyOpen(
+                std::format("Delete history for \"{}\"?", scenario_id_), scenario_id_);
+          }
+          DrawHistory();
+          ImGui::EndTabItem();
+        }
+        if (performance_stats_) {
+          if (ImGui::BeginTabItem("Perf")) {
+            DrawPerformanceStats();
+            ImGui::EndTabItem();
+          }
+        }
+        ImGui::EndTabBar();
+      }
+    } else {
+      DrawStats();
+    }
+  }
+
+  void DrawTopBar() {
+    float width = char_x_ * 30;
+    float middle = app_.screen_info().width / 2.0;
+    // ImGui::SetNextWindowBgAlpha();
+    ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
+    ImGui::SetNextWindowSize(ImVec2(width, -1));
+    ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+    if (ImGui::Button(std::format("{} Home", kIconHome))) {
+      ReturnHome();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button(std::format("{} Restart", kIconRefresh))) {
+      app_.scenario_manager().SetCurrentScenario(scenario_id_);
+      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+      ReturnHome();
+    }
+    if (playlist_run_) {
+      ImGui::SameLine();
+      if (ImGui::Button(std::format("{} Next", kIconArrowForward))) {
+        state_.scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
+        ReturnHome();
+      }
+    }
+
+    ImGui::SameLine();
+    ImGui::SetButtonCursorAtRight(kIconSettings);
+    if (ImGui::Button(kIconSettings)) {
+      PushNextScreen(CreateSettingsScreen(&app_, scenario_id_));
+    }
+
+    ImGui::End();
+  }
+
   void DrawStatsTable() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg;
     if (ImGui::BeginTable("StatsTable", 6, flags)) {
@@ -161,57 +275,17 @@ class StatsScreen : public UiScreen {
     }
   }
 
-  void DrawScreen() override {
-    ImGui::IdGuard cid("StatsScreen");
+  bool BeginMainWindow(const std::string& name, float width_multiple) {
+    float padding = char_x_ * 0.3;
+    float start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 0.9;
+    float end_y = app_.screen_info().height - padding;
+    float width = app_.screen_info().width * width_multiple;
+    float height = end_y - start_y;
 
-    if (!is_valid_) {
-      PopSelf();
-      return;
-    }
-
-    std::shared_ptr<PlaylistRun> playlist_run = app_.playlist_manager().GetCurrentRun();
-    std::string scenario_to_start;
-    if (playlist_run != nullptr) {
-      if (ImGui::Begin("Playlist")) {
-        std::string scenario_to_start;
-        PlaylistRunComponent("PlaylistRun", playlist_run, *this);
-      }
-      ImGui::End();
-    }
-
-    if (ImGui::Begin("Stats")) {
-      delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
-        app_.stats_manager().DeleteAllStats(scenario_id);
-        PopSelf();
-      });
-
-      if (info_.all_stats.size() > 1) {
-        if (ImGui::BeginTabBar("StatsTabBar")) {
-          if (ImGui::BeginTabItem("Current run")) {
-            DrawStats();
-            ImGui::EndTabItem();
-          }
-          if (ImGui::BeginTabItem("History")) {
-            if (ImGui::Button("Clear history")) {
-              delete_history_confirmation_dialog_.NotifyOpen(
-                  std::format("Delete history for \"{}\"?", scenario_id_), scenario_id_);
-            }
-            DrawHistory();
-            ImGui::EndTabItem();
-          }
-          if (performance_stats_) {
-            if (ImGui::BeginTabItem("Perf")) {
-              DrawPerformanceStats();
-              ImGui::EndTabItem();
-            }
-          }
-          ImGui::EndTabBar();
-        }
-      } else {
-        DrawStats();
-      }
-    }
-    ImGui::End();
+    ImGui::SetNextWindowPos(ImVec2((app_.screen_info().width - width) / 2.0, start_y));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    return ImGui::Begin(
+        name.c_str(), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
   }
 
   float GetScoreLevel(float score) {
@@ -323,17 +397,6 @@ class StatsScreen : public UiScreen {
     ImGui::Spacing();
     DrawStatsTable();
     // DrawHistory();
-    ImGui::SetCursorAtBottom();
-    if (ImGui::Button("Restart")) {
-      app_.scenario_manager().SetCurrentScenario(scenario_id_);
-      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-      ReturnHome();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Next")) {
-      state_.scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
-      ReturnHome();
-    }
   }
 
   void DrawHistory() {
@@ -466,6 +529,7 @@ class StatsScreen : public UiScreen {
   StatsInfo info_;
   bool is_valid_ = false;
 
+  float char_x_ = 0;
   std::optional<ScenarioItem> scenario_;
   std::string reference_scenario_id_;
 
@@ -474,6 +538,7 @@ class StatsScreen : public UiScreen {
   std::optional<RunPerformanceStats> performance_stats_;
   ImGui::ConfirmationDialog<std::string> delete_history_confirmation_dialog_{
       "DeleteHistoryConfirmationDialog"};
+  std::shared_ptr<PlaylistRun> playlist_run_;
 };
 
 }  // namespace
