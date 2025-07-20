@@ -149,17 +149,6 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawMainContent() {
-    /*
-  std::string scenario_to_start;
-  if (playlist_run_ != nullptr) {
-    if (ImGui::Begin("Playlist")) {
-      std::string scenario_to_start;
-      PlaylistRunComponent("PlaylistRun", playlist_run_, *this);
-    }
-    ImGui::End();
-  }
-  */
-
     delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       app_.stats_manager().DeleteAllStats(scenario_id);
       PopSelf();
@@ -223,12 +212,14 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawStatsTable() {
-    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg;
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg |
+                            ImGuiTableFlags_BordersV | ImGuiTableFlags_ScrollY;
     int num_cols = 6;
     if (HasAccuracyPenalty()) {
       num_cols++;
     }
-    if (ImGui::BeginTable("StatsTable", num_cols, flags)) {
+    if (ImGui::BeginTable(
+            "StatsTable", num_cols, flags, ImVec2(0, ImGui::GetContentRegionAvail().y))) {
       ImGui::TableSetupColumn("Compare to", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Diff", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthStretch);
@@ -377,7 +368,7 @@ class StatsScreen : public UiScreen {
     }
   }
 
-  void DrawStats() {
+  void DrawCurrentStatsPanel() {
     StatsRow stats = info_.stats;
     const auto& all_stats = info_.all_stats;
     float previous_high_score = info_.previous_high_score_stats.score;
@@ -434,18 +425,48 @@ class StatsScreen : public UiScreen {
     ImGui::Button(avg_comparison.score_diff_percent_string);
     ImGui::EndDisabled();
 
-    /*
     if (all_stats.size() > 1) {
-      ImGui::Spacing();
-      ImGui::Spacing();
-      ImGui::Spacing();
-      ImGui::Text("Total runs: %d", all_stats.size());
+      ImGui::TextFmt("{} total runs", all_stats.size());
     }
-    */
+  }
+
+  void DrawStats() {
+    if (ImGui::BeginTable("TopPanelTable", 2, 0)) {
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+      DrawCurrentStatsPanel();
+
+      ImGui::TableNextColumn();
+      if (playlist_run_) {
+        ImGui::TextFmt("{}", playlist_run_->playlist_name());
+        // Clicking the button may mutate current_index so save outside loop.
+        int start = playlist_run_->current_index;
+        for (int i = start; i < start + 4; ++i) {
+          ImGui::IdGuard cid(i);
+          if (IsValidIndex(playlist_run_->progress_list, i)) {
+            DrawPlaylistItem(i, playlist_run_->progress_list[i], playlist_run_.get());
+          }
+        }
+      }
+
+      ImGui::EndTable();
+    }
 
     ImGui::Spacing();
     ImGui::Spacing();
     DrawStatsTable();
+  }
+
+  void DrawPlaylistItem(int i, const PlaylistItemProgress& progress, PlaylistRun* run) {
+    bool allow_click = IsScreenOlderThan(500);
+    if (ImGui::Button(progress.item.scenario()) && allow_click) {
+      app_.scenario_manager().SetCurrentScenario(scenario_id_);
+      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
+      run->current_index = i;
+      ReturnHome();
+    }
+    ImGui::SameLine();
+    ImGui::TextFmt("{}/{}", progress.runs_done, progress.item.num_plays());
   }
 
   void DrawHistory() {
