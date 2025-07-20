@@ -42,9 +42,7 @@ struct StatsInfo {
   std::vector<StatsRow> all_stats;
   StatsRow stats;
   StatsRow previous_high_score_stats;
-  std::optional<StatsRow> day_ago_high_score_stats;
-  std::optional<StatsRow> week_ago_high_score_stats;
-  std::optional<StatsRow> month_ago_high_score_stats;
+  StatsRow average_stats;
   std::vector<double> scores;
   float min_score = 0;
 };
@@ -229,16 +227,7 @@ class StatsScreen : public UiScreen {
           high_score_name = "Previous high";
         }
         DrawStatsTableRow(high_score_name, info_.stats, info_.previous_high_score_stats);
-
-        if (info_.day_ago_high_score_stats) {
-          DrawStatsTableRow("Day ago high", info_.stats, *info_.day_ago_high_score_stats);
-        }
-        if (info_.week_ago_high_score_stats) {
-          DrawStatsTableRow("Week ago high", info_.stats, *info_.week_ago_high_score_stats);
-        }
-        if (info_.month_ago_high_score_stats) {
-          DrawStatsTableRow("Month ago high", info_.stats, *info_.month_ago_high_score_stats);
-        }
+        DrawStatsTableRow("Average", info_.stats, info_.average_stats);
       }
 
       std::vector<std::string> compare_to_scenarios = GetCompareToList();
@@ -265,12 +254,18 @@ class StatsScreen : public UiScreen {
 
     // Percent diff
     ImGui::TableNextColumn();
-    ImGui::Text(comparison.score_diff_percent_string);
+    if (comparison.score_diff != 0) {
+      ImGui::Text(comparison.score_diff_percent_string);
+    }
 
     // Score
     ImGui::TableNextColumn();
-    ImGui::TextFmt(
-        "{} ({})", MaybeIntToString(comparison_stats.score, 2), comparison.score_diff_string);
+    if (comparison.score_diff != 0) {
+      ImGui::TextFmt(
+          "{} ({})", MaybeIntToString(comparison_stats.score, 2), comparison.score_diff_string);
+    } else {
+      ImGui::TextFmt("{}", MaybeIntToString(comparison_stats.score, 2));
+    }
 
     // Accuracy
     ImGui::TableNextColumn();
@@ -534,6 +529,8 @@ class StatsScreen : public UiScreen {
  private:
   std::vector<std::string> GetCompareToList() {
     std::vector<std::string> result;
+
+    // Compare to different levels of the same scenario.
     int level = 0;
     auto level_prefix = StripLevelSuffix(scenario_id_);
     if (level_prefix) {
@@ -565,21 +562,23 @@ class StatsScreen : public UiScreen {
 
     i64 step = kDayMicros;
     i64 now_micros = GetNowMicros();
-    i64 day_ago_micros = now_micros - kDayMicros;
-    i64 week_ago_micros = now_micros - (kDayMicros * 7);
-    i64 month_ago_micros = now_micros - (kDayMicros * 30);
 
-    int found_max_week_ago_index = -1;
-    int found_max_day_ago_index = -1;
-    int found_max_month_ago_index = -1;
     int found_max_index = -1;
     float max_score = 0;
     bool found_stats = false;
     info->min_score = 1000000;
+
+    float total_runs_count = 0;
     for (int i = 0; i < all_stats.size(); ++i) {
       StatsRow& stats = all_stats[i];
       info->all_stats.push_back(stats);
       info->scores.push_back(stats.score);
+
+      info->average_stats.score += stats.score;
+      info->average_stats.num_hits += stats.num_hits;
+      info->average_stats.num_shots += stats.num_shots;
+      info->average_stats.cm_per_360 += stats.cm_per_360;
+      total_runs_count++;
 
       if (stats.stats_id == run_id_) {
         info->stats = stats;
@@ -587,32 +586,20 @@ class StatsScreen : public UiScreen {
         break;
       }
 
-      auto maybe_time = ParseTimestampStringAsMicros(stats.timestamp);
-      bool is_over_week_ago = false;
-      bool is_over_day_ago = false;
-      bool is_over_month_ago = false;
-      if (maybe_time) {
-        is_over_month_ago = *maybe_time < month_ago_micros;
-        is_over_week_ago = *maybe_time < week_ago_micros;
-        is_over_day_ago = *maybe_time < day_ago_micros;
-      }
-
       if (stats.score >= max_score && stats.score > 0) {
         found_max_index = i;
-        if (is_over_week_ago) {
-          found_max_week_ago_index = i;
-        }
-        if (is_over_month_ago) {
-          found_max_month_ago_index = i;
-        }
-        if (is_over_day_ago) {
-          found_max_day_ago_index = i;
-        }
         max_score = stats.score;
       }
       if (stats.score < info->min_score) {
         info->min_score = stats.score;
       }
+    }
+
+    if (total_runs_count > 0) {
+      info->average_stats.score /= total_runs_count;
+      info->average_stats.num_hits /= total_runs_count;
+      info->average_stats.num_shots /= total_runs_count;
+      info->average_stats.cm_per_360 /= total_runs_count;
     }
 
     if (!found_stats) {
@@ -621,15 +608,6 @@ class StatsScreen : public UiScreen {
 
     if (found_max_index >= 0) {
       info->previous_high_score_stats = all_stats[found_max_index];
-    }
-    if (found_max_month_ago_index >= 0) {
-      info->month_ago_high_score_stats = all_stats[found_max_month_ago_index];
-    }
-    if (found_max_week_ago_index >= 0) {
-      info->week_ago_high_score_stats = all_stats[found_max_week_ago_index];
-    }
-    if (found_max_day_ago_index >= 0) {
-      info->day_ago_high_score_stats = all_stats[found_max_day_ago_index];
     }
 
     return true;
