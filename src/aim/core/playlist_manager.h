@@ -44,6 +44,10 @@ struct PlaylistRun {
   bool IsCurrentIndexValid() {
     return IsValidIndex(progress_list, current_index);
   }
+
+  std::string current_scenario_name() {
+    return IsCurrentIndexValid() ? progress_list[current_index].item.scenario() : "";
+  }
 };
 
 class PlaylistManager {
