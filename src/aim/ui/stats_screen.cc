@@ -431,9 +431,19 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawStats() {
-    if (ImGui::BeginTable("TopPanelTable", 2, 0)) {
+    float percent = 0.7;
+    float padding = (ImGui::GetContentRegionAvail().x * (1 - percent)) / 2.0f;
+    if (ImGui::BeginTable("TopPanelTable", 4, 0)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, padding);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, padding);
+      ImGui::TableNextRow();
+
       ImGui::TableNextRow();
       ImGui::TableNextColumn();
+      ImGui::TableNextColumn();
+
       DrawCurrentStatsPanel();
 
       ImGui::TableNextColumn();
