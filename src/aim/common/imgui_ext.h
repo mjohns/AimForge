@@ -129,7 +129,7 @@ static bool SimpleDropdown(const std::string& id,
     ImGui::PushItemWidth(input_width);
   }
   bool item_was_selected = false;
-  ImGuiComboFlags combo_flags = 0;
+  ImGuiComboFlags combo_flags = ImGuiComboFlags_HeightLarge;
   if (opened != nullptr) {
     *opened = false;
   }
@@ -178,7 +178,7 @@ bool SimpleTypeDropdown(const std::string& id,
   }
 
   bool item_was_selected = false;
-  ImGuiComboFlags combo_flags = 0;
+  ImGuiComboFlags combo_flags = ImGuiComboFlags_HeightLarge;
   if (ImGui::BeginCombo("##Combo", initial_value.c_str(), combo_flags)) {
     ImGui::LoopId loop_id;
     for (const auto& item : values) {

@@ -451,7 +451,7 @@ class StatsScreen : public UiScreen {
         ImGui::TextFmt("{}", playlist_run_->playlist_name());
         // Clicking the button may mutate current_index so save outside loop.
         int start = playlist_run_->current_index;
-        for (int i = start; i < start + 4; ++i) {
+        for (int i = start; i < start + 6; ++i) {
           ImGui::IdGuard cid(i);
           if (IsValidIndex(playlist_run_->progress_list, i)) {
             DrawPlaylistItem(i, playlist_run_->progress_list[i], playlist_run_.get());
