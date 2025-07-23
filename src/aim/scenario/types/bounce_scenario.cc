@@ -206,15 +206,23 @@ class MovementControllerImpl : public MovementController {
     if (d.has_time_scale_multiplier()) {
       params.time_scale_multiplier = d.time_scale_multiplier();
     }
+    if (d.has_distance_multiplier()) {
+      params.distance_multiplier = d.distance_multiplier();
+    }
 
     if (d.left_right_profiles_size() > 0) {
       left_right_controller_ = SingleDirectionController(
-          bounds.min_x, bounds.max_x, {}, {}, d.left_right_initial_direction(), params);
+          bounds.min_x, bounds.max_x, {}, {}, d.left_right_initial_direction(), params, wall);
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
-      forward_back_controller_ = SingleDirectionController(
-          bounds.min_depth, bounds.max_depth, {}, {}, d.forward_back_initial_direction(), params);
+      forward_back_controller_ = SingleDirectionController(bounds.min_depth,
+                                                           bounds.max_depth,
+                                                           {},
+                                                           {},
+                                                           d.forward_back_initial_direction(),
+                                                           params,
+                                                           wall);
     }
   }
 
@@ -264,7 +272,6 @@ class MovementControllerImpl : public MovementController {
   Application& app_;
 
   std::optional<SingleDirectionController> left_right_controller_;
-  std::optional<SingleDirectionController> up_down_controller_;
   std::optional<SingleDirectionController> forward_back_controller_;
   std::unique_ptr<BounceController> bounce_controller_;
 };

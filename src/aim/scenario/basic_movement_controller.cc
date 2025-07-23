@@ -71,8 +71,10 @@ float SingleDirectionController::GetUpdatedPosition(
     float current_position,
     float now_seconds,
     float delta_seconds) {
+  bool is_first = false;
   if (!initialized_) {
     initialized_ = true;
+    is_first = true;
     // Going left is based on absolute center_ and not adjusted for relative values.
     going_left_ = GetInitialGoingLeft(initial_direction_, current_position, rand);
 
@@ -97,10 +99,20 @@ float SingleDirectionController::GetUpdatedPosition(
 
   float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
 
-  bool too_left = going_left_ && current_position <= min_;
-  bool too_right = !going_left_ && current_position >= max_;
-  bool time_up = now_seconds >= next_direction_change_time_;
-  if (too_left || too_right || time_up ||
+  float stop_min = min_;
+  float stop_max = max_;
+  if (next_direction_change_pos_) {
+    if (going_left_) {
+      stop_min = *next_direction_change_pos_;
+    } else {
+      stop_max = *next_direction_change_pos_;
+    }
+  }
+
+  bool too_left = going_left_ && current_position <= stop_min;
+  bool too_right = !going_left_ && current_position >= stop_max;
+  bool time_up = next_direction_change_time_ > 0 && now_seconds >= next_direction_change_time_;
+  if (is_first || too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
     ChangeDirection(rand, now_seconds, profiles, order, t.speed, current_position);
   }
@@ -110,14 +122,16 @@ float SingleDirectionController::GetUpdatedPosition(
   if (acceleration > 0) {
     // Adjust current speed for acceleration.
     float stop_distance = GetStopDistance(current_speed_, acceleration);
-    bool stop_left = going_left_ && (current_position - stop_distance) <= min_;
-    bool stop_right = !going_left_ && (current_position + stop_distance) >= max_;
+    bool stop_left = going_left_ && (current_position - stop_distance) <= stop_min;
+    bool stop_right = !going_left_ && (current_position + stop_distance) >= stop_max;
     if (stop_left || stop_right) {
       is_stopping_ = true;
     }
-    float time_to_stop = GetStopTime(current_speed_, acceleration);
-    if (now_seconds + time_to_stop >= next_direction_change_time_) {
-      is_stopping_ = true;
+    if (next_direction_change_time_ > 0) {
+      float time_to_stop = GetStopTime(current_speed_, acceleration);
+      if (now_seconds + time_to_stop >= next_direction_change_time_) {
+        is_stopping_ = true;
+      }
     }
 
     if (is_stopping_) {
@@ -179,7 +193,15 @@ void SingleDirectionController::ChangeDirection(
 
   going_left_ = !going_left_;
 
-  float time = rand.GetJittered(p->time(), p->time_jitter());
+  float value = 0;
+  bool use_time = p->has_time();
+  if (use_time) {
+    value = rand.GetJittered(p->time(), p->time_jitter());
+  } else {
+    value = rand.GetJittered(wall_.GetRegionLength(p->distance()),
+                             wall_.GetRegionLength(p->distance_jitter()));
+  }
+
   if (p->center_bias() > 0) {
     float max_dist = (max_ - min_) / 2.0f;
     // Only add time if outside the middle 30% of bounds
@@ -191,27 +213,31 @@ void SingleDirectionController::ChangeDirection(
     bool on_left = current_position < center_;
     bool on_far_left = current_position < (center_ - min_dist);
 
+    float bias_increment = value * p->center_bias();
     if (going_left_) {
       if (on_far_right) {
-        time += p->center_bias();
+        value += bias_increment;
       }
       if (on_left) {
-        // Subtract time as long as it is on the wrong side trying to move further away from center.
-        time -= p->center_bias();
+        // Subtract as long as it is on the wrong side trying to move further away from center.
+        value -= bias_increment;
       }
     } else {
       // Going right
       if (on_far_left) {
-        time += p->center_bias();
+        value += bias_increment;
       }
       if (on_right) {
-        time -= p->center_bias();
+        value -= bias_increment;
       }
     }
   }
 
-  if (time_scale_multiplier_ > 0) {
-    time *= time_scale_multiplier_;
+  if (use_time && time_scale_multiplier_ > 0) {
+    value *= time_scale_multiplier_;
+  }
+  if (!use_time && distance_multiplier_ > 0) {
+    value *= distance_multiplier_;
   }
 
   /*
@@ -223,7 +249,17 @@ void SingleDirectionController::ChangeDirection(
   }
   */
 
-  next_direction_change_time_ = now_seconds + time;
+  next_direction_change_pos_ = {};
+  next_direction_change_time_ = -1;
+  if (use_time) {
+    next_direction_change_time_ = now_seconds + value;
+  } else {
+    if (going_left_) {
+      next_direction_change_pos_ = std::max<float>(min_, current_position - value);
+    } else {
+      next_direction_change_pos_ = std::min<float>(max_, current_position + value);
+    }
+  }
 }
 
 }  // namespace aim

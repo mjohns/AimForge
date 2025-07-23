@@ -47,6 +47,12 @@ const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthT
     {RegionLength::kDepthPercentValue, "depth"},
 };
 
+enum class TimeOrDistance { TIME, DISTANCE };
+const std::vector<std::pair<TimeOrDistance, std::string>> kTimeOrDistance{
+    {TimeOrDistance::TIME, "Time"},
+    {TimeOrDistance::DISTANCE, "Distance"},
+};
+
 const std::vector<std::pair<Direction, std::string>> kLeftRightDirections{
     {Direction::DIRECTION_POSITIVE, "Right"},
     {Direction::DIRECTION_NEGATIVE, "Left"},
@@ -373,7 +379,8 @@ class ScenarioEditorScreen : public UiScreen {
         *name_.mutable_relative_name() = name_.relative_name() + " Copy";
       }
       ImGui::HelpTooltip(
-          "Save the current changes in a new copy of the scenario leaving the original unchanged.");
+          "Save the current changes in a new copy of the scenario leaving the original "
+          "unchanged.");
     }
 
     if (ImGui::Button("View Json")) {
@@ -854,7 +861,8 @@ class ScenarioEditorScreen : public UiScreen {
                               PROTO_JITTERED_FIELD(WallWanderProfile, p, turn_rate));
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "The number of degrees to turn per second. The turn rate will accelerate smoothly between "
+        "The number of degrees to turn per second. The turn rate will accelerate smoothly "
+        "between "
         "turns base on turn time.");
   }
 
@@ -951,8 +959,10 @@ class ScenarioEditorScreen : public UiScreen {
                       PROTO_PERCENT_FIELD(BarrelScenarioDef, &d, direction_radius_percent));
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "When the target collides with the wall it will be redirected in the direction of a random "
-        "point within the specified portion of the center. The smaller the radius the more it will "
+        "When the target collides with the wall it will be redirected in the direction of a "
+        "random "
+        "point within the specified portion of the center. The smaller the radius the more it "
+        "will "
         "be redirected towards the center of the circle.");
 
     if (!d.has_target_placement_strategy()) {
@@ -973,13 +983,26 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawTimedDirectionProfile(TimedDirectionProfile* p) {
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Time")
-                                  .set_step(0.1, 0.5)
-                                  .set_min(0.1)
-                                  .set_precision(2)
-                                  .set_default(1)
-                                  .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(TimedDirectionProfile, p, time));
+    TimeOrDistance type = p->has_distance() ? TimeOrDistance::DISTANCE : TimeOrDistance::TIME;
+    ImGui::SimpleTypeDropdown("TimeOrDistanceDropdown", &type, kTimeOrDistance, char_x_ * 9);
+    ImGui::SameLine();
+    if (type == TimeOrDistance::TIME) {
+      ImGui::InputJitteredFloat(ImGui::InputFloatParams("Time")
+                                    .set_step(0.1, 0.5)
+                                    .set_min(0.1)
+                                    .set_precision(2)
+                                    .set_default(1)
+                                    .set_width(char_x_ * 10),
+                                PROTO_JITTERED_FIELD(TimedDirectionProfile, p, time));
+      p->clear_distance();
+      p->clear_distance_jitter();
+    } else {
+      // TODO: Default dim correct.
+      DrawJitteredRegionLengthEditor(
+          "Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
+      p->clear_time();
+      p->clear_time_jitter();
+    }
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Speed multiplier")
                           .set_is_optional()
                           .set_step(0.05, 0.2)
@@ -1037,7 +1060,8 @@ class ScenarioEditorScreen : public UiScreen {
                       PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, time_scale_multiplier));
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "Scale all the times in the profiles by the given multiplier. To reduce the times by half "
+        "Scale all the times in the profiles by the given multiplier. To reduce the times by "
+        "half "
         "use 0.5");
 
     ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
@@ -1227,7 +1251,8 @@ class ScenarioEditorScreen : public UiScreen {
                       PROTO_FLOAT_FIELD(BounceScenarioDef, &d, time_scale_multiplier));
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "Scale all the times in the profiles by the given multiplier. To reduce the times by half "
+        "Scale all the times in the profiles by the given multiplier. To reduce the times by "
+        "half "
         "use 0.5");
 
     ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
@@ -1675,7 +1700,8 @@ class ScenarioEditorScreen : public UiScreen {
           "Depth", DefaultDim::DIM_DEPTH, region->mutable_depth(), region->mutable_depth_jitter());
       ImGui::SameLine();
       ImGui::HelpMarker(
-          "The distance away from the wall towards the camera. The greater the value, the further "
+          "The distance away from the wall towards the camera. The greater the value, the "
+          "further "
           "it is from the wall.");
     } else {
       region->clear_depth();

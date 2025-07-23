@@ -1,6 +1,7 @@
 {
   "description": "",
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -49,7 +50,7 @@
         "angle": 0,
         "angleJitter": 0,
         "distance": {
-          "xPercentValue": 0.197600052
+          "xPercentValue": 0.197600067
         },
         "distanceJitter": {
           "xPercentValue": 0.04
@@ -78,10 +79,10 @@
         "angle": 0,
         "angleJitter": 0,
         "distance": {
-          "xPercentValue": 0.343200028
+          "xPercentValue": 0.263200074
         },
         "distanceJitter": {
-          "xPercentValue": 0.09
+          "xPercentValue": 0.03
         },
         "info": {
           "description": "Teleport",

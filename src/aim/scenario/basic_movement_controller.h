@@ -1,6 +1,7 @@
 #pragma once
 
 #include "aim/common/random.h"
+#include "aim/common/wall.h"
 #include "aim/core/target.h"
 #include "aim/proto/scenario.pb.h"
 #include "glm/vec2.hpp"
@@ -46,6 +47,7 @@ class WallDepthMovementController : public MovementController {
 struct DirectionParams {
   float acceleration = 0;
   float time_scale_multiplier = 0;
+  float distance_multiplier = 0;
 };
 
 class SingleDirectionController {
@@ -55,7 +57,8 @@ class SingleDirectionController {
                             std::optional<float> relative_min,
                             std::optional<float> relative_max,
                             Direction initial_direction,
-                            DirectionParams params)
+                            DirectionParams params,
+      Wall wall)
       : initial_direction_(initial_direction),
         min_(min),
         max_(max),
@@ -63,7 +66,9 @@ class SingleDirectionController {
         relative_min_(relative_min),
         relative_max_(relative_max),
         unscaled_acceleration_(params.acceleration),
-        time_scale_multiplier_(params.time_scale_multiplier) {}
+        time_scale_multiplier_(params.time_scale_multiplier),
+        distance_multiplier_(params.distance_multiplier),
+  wall_(wall) {}
 
   float GetUpdatedPosition(
       Target& t,
@@ -92,18 +97,23 @@ class SingleDirectionController {
   float initial_position_ = 0;
   float unscaled_acceleration_;
   float time_scale_multiplier_;
+  float distance_multiplier_;
   float absolute_center_;
   float center_ = 0;
 
   float current_speed_ = 0;
   bool initialized_ = false;
+
   float next_direction_change_time_ = -1;
+  std::optional<float> next_direction_change_pos_;
+
   float speed_multiplier_ = 1;
   float acceleration_multiplier_ = 1;
   ProfileSelectionContext selection_context_{};
   bool is_stopping_ = false;
   bool going_left_ = false;
   int direction_change_count_ = 0;
+  Wall wall_;
 };
 
 }  // namespace aim

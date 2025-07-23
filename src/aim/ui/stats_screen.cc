@@ -43,6 +43,12 @@ struct StatsInfo {
   StatsRow stats;
   StatsRow previous_high_score_stats;
   StatsRow average_stats;
+
+  int last_n_average = 0;
+  StatsRow last_n_average_stats;
+  StatsRow before_last_n_average_stats;
+  StatsRow median_stats;
+
   std::vector<double> scores;
   float min_score = 0;
 };

@@ -49,6 +49,9 @@ class MovementControllerImpl : public MovementController {
     if (d.has_time_scale_multiplier()) {
       params.time_scale_multiplier = d.time_scale_multiplier();
     }
+    if (d.has_distance_multiplier()) {
+      params.distance_multiplier = d.distance_multiplier();
+    }
 
     if (d.left_right_profiles_size() > 0) {
       left_right_controller_ = SingleDirectionController(bounds.min_x,
@@ -56,7 +59,8 @@ class MovementControllerImpl : public MovementController {
                                                          relative_min_x,
                                                          relative_max_x,
                                                          d.left_right_initial_direction(),
-                                                         params);
+                                                         params,
+                                                         wall);
     }
 
     if (d.up_down_profiles_size() > 0) {
@@ -65,7 +69,8 @@ class MovementControllerImpl : public MovementController {
                                                       relative_min_y,
                                                       relative_max_y,
                                                       d.up_down_initial_direction(),
-                                                      params);
+                                                      params,
+                                                      wall);
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
@@ -74,7 +79,8 @@ class MovementControllerImpl : public MovementController {
                                                            relative_min_depth,
                                                            relative_max_depth,
                                                            d.forward_back_initial_direction(),
-                                                           params);
+                                                           params,
+                                                           wall);
     }
   }
 

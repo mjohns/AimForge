@@ -342,8 +342,12 @@ message TimedDirectionProfile {
 
   float time = 2;
   float time_jitter = 3;
+
   // Time is updated by this value based on whether it is moving towards/away from the center to encourage the target to stay closer to center.
   float center_bias = 4;
+
+  RegionLength distance = 5;
+  RegionLength distance_jitter = 6;
 
   float speed_multiplier = 7;
   float acceleration_multiplier = 8;
@@ -366,6 +370,7 @@ message TimedDirectionScenarioDef {
 
   // Scales the times in all of the profiles. Defaults to 1.
   float time_scale_multiplier = 11;
+  float distance_multiplier = 16;
 
   float acceleration = 12;
 
@@ -404,6 +409,7 @@ message BounceScenarioDef {
 
   // Scales the times in all of the profiles. Defaults to 1.
   float time_scale_multiplier = 9;
+  float distance_multiplier = 14;
 
   float acceleration = 10;
 
