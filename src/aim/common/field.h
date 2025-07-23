@@ -24,6 +24,22 @@ static Field<float> MultiplyField(Field<float> unscaled, float multiplier) {
   return Field<float>(get, set, unscaled.clear, unscaled.has);
 }
 
+static Field<float> CreateOptionalFloatField(std::optional<float>* optional_value) {
+  std::function<float()> get = [=]() { return *(*optional_value); };
+  std::function<void(float)> set = [=](float value) { *optional_value = value; };
+  std::function<void()> clear = [=]() { *optional_value = {}; };
+  std::function<bool()> has = [=]() { return optional_value->has_value(); };
+  return Field<float>(get, set, clear, has);
+}
+
+static Field<float> CreateFloatField(float* value) {
+  std::function<float()> get = [=]() { return *value; };
+  std::function<void(float)> set = [=](float new_value) { *value = new_value; };
+  std::function<void()> clear = [=]() { *value = 0; };
+  std::function<bool()> has = [=]() { return true; };
+  return Field<float>(get, set, clear, has);
+}
+
 template <typename T>
 struct JitteredField {
   JitteredField(Field<T> value, Field<T> jitter) : value(value), jitter(jitter) {}

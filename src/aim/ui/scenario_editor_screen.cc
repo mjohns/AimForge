@@ -41,6 +41,13 @@ const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kBarrelRoom, "Barrel"},
 };
 
+const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthTypesV2{
+    {RegionLength::kValue, "value"},
+    {RegionLength::kXPercentValue, "width%"},
+    {RegionLength::kYPercentValue, "height%"},
+    {RegionLength::kDepthPercentValue, "depth%"},
+};
+
 const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthTypes{
     {RegionLength::kXPercentValue, "width"},
     {RegionLength::kYPercentValue, "height"},
@@ -1625,7 +1632,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Width");
       ImGui::SameLine();
-      DrawRegionLengthEditor("Width", DefaultDim::DIM_X, t->mutable_x_length());
+      DrawRegionLengthEditorV2("Width", RegionLength::kXPercentValue, t->mutable_x_length(), 50);
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Height");
@@ -1998,6 +2005,68 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     DrawRegionLengthEditor("RegionJitterValue", default_dim, jitter, false, true);
     ImGui::Unindent();
+  }
+
+  void SetRegionLengthValue(RegionLength* length, RegionLength::TypeCase type, float value) {
+    switch (type) {
+      case RegionLength::kValue:
+        length->set_value(value);
+        return;
+      case RegionLength::kDepthPercentValue:
+        length->set_depth_percent_value(value / 100.0f);
+        return;
+      case RegionLength::kXPercentValue:
+        length->set_x_percent_value(value / 100.0f);
+        return;
+      case RegionLength::kYPercentValue:
+        length->set_y_percent_value(value / 100.0f);
+        return;
+    }
+  }
+
+  float GetRegionLengthValue(RegionLength* length) {
+    switch (length->type_case()) {
+      case RegionLength::kValue:
+        return length->value();
+      case RegionLength::kDepthPercentValue:
+        return length->depth_percent_value() * 100;
+      case RegionLength::kXPercentValue:
+        return length->x_percent_value() * 100;
+      case RegionLength::kYPercentValue:
+        return length->y_percent_value() * 100;
+    }
+    return 0;
+  }
+
+  void DrawRegionLengthEditorV2(const std::string& id,
+                                RegionLength::TypeCase default_type,
+                                RegionLength* length,
+                                float default_value,
+                                bool is_point = false) {
+    float value = GetRegionLengthValue(length);
+    RegionLength::TypeCase type = length->type_case();
+    if (type == RegionLength::TYPE_NOT_SET) {
+      type = default_type;
+      value = default_value;
+    }
+    ImGui::IdGuard cid(id);
+
+    bool is_percent = length->type_case() != RegionLength::kValue;
+    Field<float> field = CreateFloatField(&value);
+    auto params = ImGui::InputFloatParams("ValueInput")
+                      .set_step(1, 5)
+                      .set_precision(0)
+                      .set_width(char_x_ * 9);
+    if (!is_point) {
+      params.set_min(0);
+    }
+    ImGui::InputFloat(params, field);
+
+    ImGui::SameLine();
+    bool type_changed =
+        ImGui::SimpleTypeDropdown("TypeDropdown", &type, kRegionLengthTypesV2, char_x_ * 8);
+
+    SetRegionLengthValue(length, type, field.get());
   }
 
   void DrawOptionalRegionLengthEditor(const std::string& id,
