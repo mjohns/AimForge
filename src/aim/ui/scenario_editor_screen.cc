@@ -726,14 +726,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Width", DefaultDim::DIM_X, d.mutable_width());
+    DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, d.mutable_width(), 50);
     ImGui::SameLine();
     ImGui::HelpMarker("The arc will be stretched over the specified width");
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Height");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, d.mutable_height());
+    DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, d.mutable_height(), 50);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Height range");
@@ -742,7 +742,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Checkbox("##UseRange", &use_range);
     if (use_range) {
       ImGui::SameLine();
-      DrawRegionLengthEditor("Height range", DefaultDim::DIM_Y, d.mutable_height_jitter());
+      DrawRegionLengthEditor(
+          "Height range", RegionLength::kYPercentValue, d.mutable_height_jitter());
     } else {
       d.clear_height_jitter();
     }
@@ -763,12 +764,12 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Height");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, d.mutable_height());
+    DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, d.mutable_height(), 20);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Width", DefaultDim::DIM_X, d.mutable_width());
+    DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, d.mutable_width(), 20);
 
     ImGui::InputBool(ImGui::InputBoolParams("GoingRight").set_label("Going left"),
                      PROTO_BOOL_FIELD(SineScenarioDef, &d, going_left));
@@ -781,15 +782,16 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Radius");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Radius", DefaultDim::DIM_X, d.mutable_radius());
+    DrawRegionLengthEditor("Radius", RegionLength::kXPercentValue, d.mutable_radius(), 50);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Final radius");
     ImGui::SameLine();
     DrawOptionalRegionLengthEditor(
         "FinalRadius",
-        DefaultDim::DIM_X,
-        PROTO_PTR_FIELD(RegionLength, CircleScenarioDef, &d, final_radius));
+        RegionLength::kXPercentValue,
+        PROTO_PTR_FIELD(RegionLength, CircleScenarioDef, &d, final_radius),
+        50);
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The radius will change to this value over the duration of the scenario (or until "
@@ -842,7 +844,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Depth");
     ImGui::SameLine();
-    DrawDefaultZeroRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, d.mutable_depth());
+    DrawRegionLengthEditor("Depth", RegionLength::kDepthPercentValue, d.mutable_depth(), 0);
     ImGui::SameLine();
     ImGui::HelpMarker("Distance away from the wall");
   }
@@ -989,7 +991,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Unindent();
   }
 
-  void DrawStrafeProfile(StrafeProfile* p) {
+  void DrawStrafeProfile(RegionLength::TypeCase default_region_length_type, StrafeProfile* p) {
     TimeOrDistance type = p->has_distance() ? TimeOrDistance::DISTANCE : TimeOrDistance::TIME;
     ImGui::SimpleTypeDropdown("TimeOrDistanceDropdown", &type, kTimeOrDistance, char_x_ * 9);
     ImGui::SameLine();
@@ -1004,9 +1006,11 @@ class ScenarioEditorScreen : public UiScreen {
       p->clear_distance();
       p->clear_distance_jitter();
     } else {
-      // TODO: Default dim correct.
-      DrawJitteredRegionLengthEditor(
-          "Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
+      DrawJitteredRegionLengthEditor("Distance",
+                                     default_region_length_type,
+                                     p->mutable_distance(),
+                                     p->mutable_distance_jitter(),
+                                     30);
       p->clear_time();
       p->clear_time_jitter();
     }
@@ -1085,11 +1089,13 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Left/right profiles");
     ImGui::Indent();
-    DrawProfileList("LeftRightProfileList",
-                    "Profile",
-                    d.mutable_left_right_profile_order(),
-                    d.mutable_left_right_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
+    DrawProfileList(
+        "LeftRightProfileList",
+        "Profile",
+        d.mutable_left_right_profile_order(),
+        d.mutable_left_right_profiles(),
+        std::bind_front(
+            &ScenarioEditorScreen::DrawStrafeProfile, this, RegionLength::kXPercentValue));
     ImGui::Unindent();
 
     ImGui::AlignTextToFramePadding();
@@ -1106,11 +1112,13 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Up/down profiles");
     ImGui::Indent();
-    DrawProfileList("UpDownProfileList",
-                    "Profile",
-                    d.mutable_up_down_profile_order(),
-                    d.mutable_up_down_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
+    DrawProfileList(
+        "UpDownProfileList",
+        "Profile",
+        d.mutable_up_down_profile_order(),
+        d.mutable_up_down_profiles(),
+        std::bind_front(
+            &ScenarioEditorScreen::DrawStrafeProfile, this, RegionLength::kYPercentValue));
     ImGui::Unindent();
 
     ImGui::AlignTextToFramePadding();
@@ -1125,11 +1133,13 @@ class ScenarioEditorScreen : public UiScreen {
       Line();
       ImGui::Text("Forward/back profiles");
       ImGui::Indent();
-      DrawProfileList("ForwardBackProfileList",
-                      "Profile",
-                      d.mutable_forward_back_profile_order(),
-                      d.mutable_forward_back_profiles(),
-                      std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
+      DrawProfileList(
+          "ForwardBackProfileList",
+          "Profile",
+          d.mutable_forward_back_profile_order(),
+          d.mutable_forward_back_profiles(),
+          std::bind_front(
+              &ScenarioEditorScreen::DrawStrafeProfile, this, RegionLength::kDepthPercentValue));
       ImGui::Unindent();
 
       ImGui::AlignTextToFramePadding();
@@ -1167,15 +1177,11 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Bounce height");
     ImGui::SameLine();
-    DrawRegionLengthEditor("BounceHeight", DefaultDim::DIM_Y, p->mutable_height());
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Indent();
-    ImGui::Text("+/-");
-    ImGui::SameLine();
-    DrawRegionLengthEditor(
-        "BounceHeightJitter", DefaultDim::DIM_Y, p->mutable_height_jitter(), false, true);
-    ImGui::Unindent();
+    DrawJitteredRegionLengthEditor("BounceHeight",
+                                   RegionLength::kYPercentValue,
+                                   p->mutable_height(),
+                                   p->mutable_height_jitter(),
+                                   30);
 
     ImGui::InputJitteredFloat(ImGui::InputFloatParams("Delay")
                                   .set_label("Bounce delay")
@@ -1228,7 +1234,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Checkbox("##FloorHeight", &use_floor_height);
     if (use_floor_height) {
       ImGui::SameLine();
-      DrawRegionLengthEditor("FloorHeight", DefaultDim::DIM_Y, d.mutable_floor_height());
+      DrawRegionLengthEditor(
+          "FloorHeight", RegionLength::kYPercentValue, d.mutable_floor_height(), 0);
     } else {
       d.clear_floor_height();
     }
@@ -1276,11 +1283,13 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Left/right profiles");
     ImGui::Indent();
-    DrawProfileList("LeftRightProfileList",
-                    "Profile",
-                    d.mutable_left_right_profile_order(),
-                    d.mutable_left_right_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
+    DrawProfileList(
+        "LeftRightProfileList",
+        "Profile",
+        d.mutable_left_right_profile_order(),
+        d.mutable_left_right_profiles(),
+        std::bind_front(
+            &ScenarioEditorScreen::DrawStrafeProfile, this, RegionLength::kXPercentValue));
     ImGui::Unindent();
 
     ImGui::AlignTextToFramePadding();
@@ -1297,11 +1306,13 @@ class ScenarioEditorScreen : public UiScreen {
       Line();
       ImGui::Text("Forward/back profiles");
       ImGui::Indent();
-      DrawProfileList("ForwardBackProfileList",
-                      "Profile",
-                      d.mutable_forward_back_profile_order(),
-                      d.mutable_forward_back_profiles(),
-                      std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
+      DrawProfileList(
+          "ForwardBackProfileList",
+          "Profile",
+          d.mutable_forward_back_profile_order(),
+          d.mutable_forward_back_profiles(),
+          std::bind_front(
+              &ScenarioEditorScreen::DrawStrafeProfile, this, RegionLength::kDepthPercentValue));
       ImGui::Unindent();
 
       ImGui::AlignTextToFramePadding();
@@ -1403,8 +1414,11 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Distance");
     ImGui::SameLine();
-    DrawJitteredRegionLengthEditor(
-        "Distance", DefaultDim::DIM_X, p->mutable_distance(), p->mutable_distance_jitter());
+    DrawJitteredRegionLengthEditor("Distance",
+                                   RegionLength::kXPercentValue,
+                                   p->mutable_distance(),
+                                   p->mutable_distance_jitter(),
+                                   30);
 
     ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Angle")
                                   .set_step(1, 3)
@@ -1518,7 +1532,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::HelpMarker(
           "Specify just the angle of movement and how far to travel. Typically used with Barrel "
           "rooms.");
-      DrawRegionLengthEditor("Length", DefaultDim::DIM_X, c.mutable_angle_length());
+      DrawRegionLengthEditor("Length", RegionLength::kXPercentValue, c.mutable_angle_length(), 50);
       ImGui::Unindent();
     } else {
       // Ensure two wall points.
@@ -1601,10 +1615,9 @@ class ScenarioEditorScreen : public UiScreen {
 
     DrawOptionalRegionLengthEditor(
         "MinDistanceInput",
-        DefaultDim::DIM_X,
+        RegionLength::kXPercentValue,
         PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, min_distance),
-        false,
-        true);
+        1);
     ImGui::SameLine();
     ImGui::HelpMarker("Minimum distance between targets.");
 
@@ -1613,8 +1626,9 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     DrawOptionalRegionLengthEditor(
         "FixedDistanceInput",
-        DefaultDim::DIM_X,
-        PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target));
+        RegionLength::kXPercentValue,
+        PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target),
+        10);
     ImGui::SameLine();
     ImGui::HelpMarker(
         "New target will be placed at a fixed distance from the last target that was added.");
@@ -1632,12 +1646,12 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Width");
       ImGui::SameLine();
-      DrawRegionLengthEditorV2("Width", RegionLength::kXPercentValue, t->mutable_x_length(), 50);
+      DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, t->mutable_x_length(), 50);
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Height");
       ImGui::SameLine();
-      DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, t->mutable_y_length());
+      DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, t->mutable_y_length(), 50);
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Inner");
@@ -1651,12 +1665,14 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Width");
         ImGui::SameLine();
-        DrawRegionLengthEditor("Width", DefaultDim::DIM_X, t->mutable_inner_x_length());
+        DrawRegionLengthEditor(
+            "InnerWidth", RegionLength::kXPercentValue, t->mutable_inner_x_length(), 25);
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Height");
         ImGui::SameLine();
-        DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, t->mutable_inner_y_length());
+        DrawRegionLengthEditor(
+            "InnterHeight", RegionLength::kYPercentValue, t->mutable_inner_y_length(), 25);
 
         ImGui::Unindent();
       } else {
@@ -1670,8 +1686,9 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Diameter");
       ImGui::SameLine();
-      DrawRegionLengthEditor("Diameter", DefaultDim::DIM_X, t->mutable_diameter());
+      DrawRegionLengthEditor("Diameter", RegionLength::kXPercentValue, t->mutable_diameter(), 50);
 
+      // TODO: Optional region length
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Inner diameter");
       ImGui::SameLine();
@@ -1679,7 +1696,8 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Checkbox("##InnerCheckbox", &use_inner);
       if (use_inner) {
         ImGui::Indent();
-        DrawRegionLengthEditor("InnerDiameter", DefaultDim::DIM_X, t->mutable_inner_diameter());
+        DrawRegionLengthEditor(
+            "InnerDiameter", RegionLength::kXPercentValue, t->mutable_inner_diameter(), 25);
         ImGui::Unindent();
       } else {
         t->clear_inner_diameter();
@@ -1691,20 +1709,25 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("X diameter");
       ImGui::SameLine();
-      DrawRegionLengthEditor("XDiameter", DefaultDim::DIM_X, t->mutable_x_diameter());
+      DrawRegionLengthEditor(
+          "XDiameter", RegionLength::kXPercentValue, t->mutable_x_diameter(), 50);
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Y diameter");
       ImGui::SameLine();
-      DrawRegionLengthEditor("YDiameter", DefaultDim::DIM_Y, t->mutable_y_diameter());
+      DrawRegionLengthEditor(
+          "YDiameter", RegionLength::kYPercentValue, t->mutable_y_diameter(), 50);
     }
 
     if (support_depth) {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Depth");
       ImGui::SameLine();
-      DrawJitteredRegionLengthEditor(
-          "Depth", DefaultDim::DIM_DEPTH, region->mutable_depth(), region->mutable_depth_jitter());
+      DrawJitteredRegionLengthEditor("Depth",
+                                     RegionLength::kDepthPercentValue,
+                                     region->mutable_depth(),
+                                     region->mutable_depth_jitter(),
+                                     30);
       ImGui::SameLine();
       ImGui::HelpMarker(
           "The distance away from the wall towards the camera. The greater the value, the "
@@ -1725,14 +1748,14 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("X offset");
       ImGui::SameLine();
-      DrawRegionLengthEditor(
-          "XOffset", DefaultDim::DIM_X, region->mutable_x_offset(), /*is_point=*/true);
+      DrawRegionLengthPointEditor(
+          "XOffset", RegionLength::kXPercentValue, region->mutable_x_offset());
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Y offset");
       ImGui::SameLine();
-      DrawRegionLengthEditor(
-          "YOffset", DefaultDim::DIM_Y, region->mutable_y_offset(), /*is_point=*/true);
+      DrawRegionLengthPointEditor(
+          "YOffset", RegionLength::kYPercentValue, region->mutable_y_offset());
       ImGui::Unindent();
     } else {
       region->clear_x_offset();
@@ -1925,51 +1948,30 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Width");
       ImGui::SameLine();
-      bool use_width = bounds->has_width();
-      ImGui::Checkbox("##WidthCheck", &use_width);
-      if (use_width) {
-        if (!bounds->has_width()) {
-          bounds->mutable_width()->set_x_percent_value(0.9);
-        }
-        ImGui::SameLine();
-        DrawRegionLengthEditor("Width", DefaultDim::DIM_X, bounds->mutable_width());
-      } else {
-        bounds->clear_width();
-      }
+      DrawOptionalRegionLengthEditor("Width",
+                                     RegionLength::kXPercentValue,
+                                     PROTO_PTR_FIELD(RegionLength, Bounds, bounds, width),
+                                     90);
     }
 
     if (dimensions.draw_height) {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Height");
       ImGui::SameLine();
-      bool use_height = bounds->has_height();
-      ImGui::Checkbox("##HeightCheck", &use_height);
-      if (use_height) {
-        if (!bounds->has_height()) {
-          bounds->mutable_height()->set_y_percent_value(0.9);
-        }
-        ImGui::SameLine();
-        DrawRegionLengthEditor("Height", DefaultDim::DIM_Y, bounds->mutable_height());
-      } else {
-        bounds->clear_height();
-      }
+      DrawOptionalRegionLengthEditor("Height",
+                                     RegionLength::kYPercentValue,
+                                     PROTO_PTR_FIELD(RegionLength, Bounds, bounds, height),
+                                     90);
     }
 
     if (dimensions.draw_depth) {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Depth");
       ImGui::SameLine();
-      bool use_depth = bounds->has_depth();
-      ImGui::Checkbox("##DepthCheck", &use_depth);
-      if (use_depth) {
-        if (!bounds->has_depth()) {
-          bounds->mutable_depth()->set_depth_percent_value(0.5);
-        }
-        ImGui::SameLine();
-        DrawRegionLengthEditor("Depth", DefaultDim::DIM_DEPTH, bounds->mutable_depth());
-      } else {
-        bounds->clear_depth();
-      }
+      DrawOptionalRegionLengthEditor("Depth",
+                                     RegionLength::kDepthPercentValue,
+                                     PROTO_PTR_FIELD(RegionLength, Bounds, bounds, depth),
+                                     40);
     }
     ImGui::Unindent();
   }
@@ -1992,19 +1994,6 @@ class ScenarioEditorScreen : public UiScreen {
         break;
     }
     return PROTO_FLOAT_FIELD(RegionLength, length, value);
-  }
-
-  void DrawJitteredRegionLengthEditor(const std::string& id,
-                                      DefaultDim default_dim,
-                                      RegionLength* length,
-                                      RegionLength* jitter) {
-    ImGui::IdGuard cid(id);
-    DrawRegionLengthEditor("RegionValue", default_dim, length);
-    ImGui::Indent();
-    ImGui::Text("+/-");
-    ImGui::SameLine();
-    DrawRegionLengthEditor("RegionJitterValue", default_dim, jitter, false, true);
-    ImGui::Unindent();
   }
 
   void SetRegionLengthValue(RegionLength* length, RegionLength::TypeCase type, float value) {
@@ -2038,11 +2027,11 @@ class ScenarioEditorScreen : public UiScreen {
     return 0;
   }
 
-  void DrawRegionLengthEditorV2(const std::string& id,
-                                RegionLength::TypeCase default_type,
-                                RegionLength* length,
-                                float default_value,
-                                bool is_point = false) {
+  void DrawRegionLengthEditor(const std::string& id,
+                              RegionLength::TypeCase default_type,
+                              RegionLength* length,
+                              float default_value = 0,
+                              bool is_point = false) {
     float value = GetRegionLengthValue(length);
     RegionLength::TypeCase type = length->type_case();
     if (type == RegionLength::TYPE_NOT_SET) {
@@ -2051,7 +2040,6 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::IdGuard cid(id);
 
-    bool is_percent = length->type_case() != RegionLength::kValue;
     Field<float> field = CreateFloatField(&value);
     auto params = ImGui::InputFloatParams("ValueInput")
                       .set_step(1, 5)
@@ -2069,97 +2057,62 @@ class ScenarioEditorScreen : public UiScreen {
     SetRegionLengthValue(length, type, field.get());
   }
 
+  void DrawRegionLengthPointEditor(const std::string& id,
+                                   RegionLength::TypeCase default_type,
+                                   RegionLength* length) {
+    return DrawRegionLengthEditor(id, default_type, length, 0, /*is_point=*/true);
+  }
+
+  void DrawJitteredRegionLengthEditor(const std::string& id,
+                                      RegionLength::TypeCase default_type,
+                                      RegionLength* length,
+                                      RegionLength* jitter_length,
+                                      float default_value) {
+    float value = GetRegionLengthValue(length);
+    float jitter_value = GetRegionLengthValue(jitter_length);
+    RegionLength::TypeCase type = length->type_case();
+    if (type == RegionLength::TYPE_NOT_SET) {
+      type = default_type;
+      value = default_value;
+    }
+    ImGui::IdGuard cid(id);
+
+    Field<float> field = CreateFloatField(&value);
+    Field<float> jitter_field = CreateFloatField(&jitter_value);
+
+    auto params = ImGui::InputFloatParams("ValueInput")
+                      .set_step(1, 5)
+                      .set_precision(0)
+                      .set_width(char_x_ * 9);
+
+    ImGui::InputFloat(params, field);
+    ImGui::SameLine();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    params.set_id("JitteredValueInput").set_precision(1).set_step(0.5, 2.5);
+    ImGui::InputFloat(params, jitter_field);
+
+    ImGui::SameLine();
+    bool type_changed =
+        ImGui::SimpleTypeDropdown("TypeDropdown", &type, kRegionLengthTypesV2, char_x_ * 8);
+
+    SetRegionLengthValue(length, type, field.get());
+    SetRegionLengthValue(jitter_length, type, jitter_field.get());
+  }
+
   void DrawOptionalRegionLengthEditor(const std::string& id,
-                                      DefaultDim default_dim,
+                                      RegionLength::TypeCase default_type,
                                       PtrField<RegionLength> length,
-                                      bool is_point = false,
-                                      bool default_to_zero = false) {
+                                      float default_value) {
     ImGui::IdGuard cid(id);
     bool has_value = length.has();
     ImGui::Checkbox("##UseRegionLength", &has_value);
     if (has_value) {
       ImGui::SameLine();
-      DrawRegionLengthEditor(
-          "RegionLength", default_dim, length.get_mutable(), is_point, default_to_zero);
+      DrawRegionLengthEditor("RegionLength", default_type, length.get_mutable(), default_value);
     } else {
       length.clear();
     }
-  }
-
-  void DrawRegionLengthEditor(const std::string& id,
-                              DefaultDim default_dim,
-                              RegionLength* length,
-                              bool is_point = false,
-                              bool default_to_zero = false) {
-    float default_percent = is_point || default_to_zero ? 0 : 0.50;
-    ImGui::IdGuard cid(id);
-    if (length->type_case() == RegionLength::TYPE_NOT_SET) {
-      if (default_dim == DefaultDim::DIM_X) {
-        length->set_x_percent_value(default_percent);
-      } else if (default_dim == DefaultDim::DIM_Y) {
-        length->set_y_percent_value(default_percent);
-      } else {
-        length->set_depth_percent_value(default_percent);
-      }
-    }
-
-    bool is_percent = length->type_case() != RegionLength::kValue;
-    Field<float> field = GetRegionLengthField(length, length->type_case());
-    auto params = ImGui::InputFloatParams("ValueInput")
-                      .set_step(1, 5)
-                      .set_precision(0)
-                      .set_width(char_x_ * 9);
-    if (is_percent) {
-      if (!is_point) {
-        params.set_min(0);
-      }
-      params.set_default(100 * default_percent);
-    }
-    ImGui::InputFloat(params, field);
-
-    const bool was_percent = is_percent;
-    ImGui::SameLine();
-    ImGui::Text("as percent");
-    ImGui::SameLine();
-    ImGui::Checkbox("##UsePercent", &is_percent);
-
-    if (is_percent) {
-      if (!was_percent) {
-        if (default_dim == DefaultDim::DIM_X) {
-          length->set_x_percent_value(default_percent);
-        } else if (default_dim == DefaultDim::DIM_Y) {
-          length->set_y_percent_value(default_percent);
-        } else {
-          length->set_depth_percent_value(default_percent);
-        }
-      }
-
-      ImGui::SameLine();
-      ImGui::Text("of");
-      ImGui::SameLine();
-
-      ImGui::PushItemWidth(char_x_ * 7);
-      auto type = length->type_case();
-      if (ImGui::SimpleTypeDropdown("##LengthType", &type, kRegionLengthTypes, char_x_ * 7)) {
-        float old_value = glm::clamp<float>(field.get(), 0, 100);
-        auto new_field = GetRegionLengthField(length, type);
-        new_field.set(old_value);
-      }
-
-      ImGui::SameLine();
-      float evaluated_length = Wall::ForRoom(def_.room()).GetRegionLength(*length);
-      ImGui::TextDisabled(MaybeIntToString(evaluated_length, 1).c_str());
-    } else {
-      if (!length->has_value()) {
-        length->set_value(Wall::ForRoom(def_.room()).GetRegionLength(*length));
-      }
-    }
-  }
-
-  void DrawDefaultZeroRegionLengthEditor(const std::string& id,
-                                         DefaultDim default_dim,
-                                         RegionLength* length) {
-    DrawRegionLengthEditor(id, default_dim, length, false, true);
   }
 
   void DrawRegionVec2Editor(const std::string& id, RegionVec2* v) {
@@ -2167,11 +2120,11 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("x");
     ImGui::SameLine();
-    DrawRegionLengthEditor("X" + id, DefaultDim::DIM_X, v->mutable_x(), /*is_point=*/true);
+    DrawRegionLengthPointEditor("X" + id, RegionLength::kXPercentValue, v->mutable_x());
     ImGui::AlignTextToFramePadding();
     ImGui::Text("y");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Y" + id, DefaultDim::DIM_Y, v->mutable_y(), /*is_point=*/true);
+    DrawRegionLengthPointEditor("Y" + id, RegionLength::kYPercentValue, v->mutable_y());
   }
 
   void DrawShotTypeEditor() {
