@@ -200,7 +200,7 @@ message ScenarioDef {
     CircleScenarioDef circle_def = 38;
     SineScenarioDef sine_def = 39;
     WaypointScenarioDef waypoint_def = 40;
-    TimedDirectionScenarioDef timed_direction_def = 41 [json_name = "strafeDef"];
+    StrafeScenarioDef strafe_def = 41;
     BounceScenarioDef bounce_def = 42;
   }
 }
@@ -353,7 +353,7 @@ message StrafeProfile {
   float acceleration_multiplier = 8;
 }
 
-message TimedDirectionScenarioDef {
+message StrafeScenarioDef {
   Bounds bounds = 1;
   Bounds relative_bounds = 2;
 

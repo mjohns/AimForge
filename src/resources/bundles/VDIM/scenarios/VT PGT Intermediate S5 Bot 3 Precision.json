@@ -17,23 +17,7 @@
   "shotType": {
     "trackingInvincible": true
   },
-  "targetDef": {
-    "newestTargetIsGhost": false,
-    "numTargets": 1,
-    "profiles": [
-      {
-        "info": {
-          "description": ""
-        },
-        "speed": 86,
-        "speedJitter": 0,
-        "targetRadius": 1.39999974,
-        "targetRadiusJitter": 0
-      }
-    ],
-    "removeClosestOnMiss": false
-  },
-  "timedDirectionDef": {
+  "strafeDef": {
     "acceleration": 70,
     "bounds": {
       "depth": {
@@ -90,5 +74,21 @@
         "timeJitter": 1.80000031
       }
     ]
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 86,
+        "speedJitter": 0,
+        "targetRadius": 1.39999974,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

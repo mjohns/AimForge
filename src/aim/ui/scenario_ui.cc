@@ -17,7 +17,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kStaticDef, "Static"},
     {ScenarioDef::kCenteringDef, "Centering"},
     {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
-    {ScenarioDef::kTimedDirectionDef, "Timed Direction"},
+    {ScenarioDef::kStrafeDef, "Strafe"},
     {ScenarioDef::kBounceDef, "Bounce"},
     {ScenarioDef::kLinearDef, "Linear"},
     {ScenarioDef::kBarrelDef, "Barrel"},

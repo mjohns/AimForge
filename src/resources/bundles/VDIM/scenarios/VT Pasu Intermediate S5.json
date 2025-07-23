@@ -16,23 +16,7 @@
   "shotType": {
     "clickSingle": true
   },
-  "targetDef": {
-    "newestTargetIsGhost": false,
-    "numTargets": 4,
-    "profiles": [
-      {
-        "info": {
-          "description": ""
-        },
-        "speed": 63,
-        "speedJitter": 0,
-        "targetRadius": 4.14999723,
-        "targetRadiusJitter": 0
-      }
-    ],
-    "removeClosestOnMiss": false
-  },
-  "timedDirectionDef": {
+  "strafeDef": {
     "acceleration": 181,
     "bounds": {
       "height": {
@@ -95,5 +79,21 @@
         "timeJitter": 0.200000018
       }
     ]
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 63,
+        "speedJitter": 0,
+        "targetRadius": 4.14999723,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

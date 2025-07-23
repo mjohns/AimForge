@@ -15,23 +15,7 @@
     "healthSeconds": 0.18,
     "trackingKill": true
   },
-  "targetDef": {
-    "newestTargetIsGhost": false,
-    "numTargets": 3,
-    "profiles": [
-      {
-        "info": {
-          "description": ""
-        },
-        "speed": 11,
-        "speedJitter": 0,
-        "targetRadius": 7.39999533,
-        "targetRadiusJitter": 0
-      }
-    ],
-    "removeClosestOnMiss": false
-  },
-  "timedDirectionDef": {
+  "strafeDef": {
     "acceleration": 326,
     "bounds": {
       "depth": {
@@ -98,5 +82,21 @@
         "timeJitter": 0
       }
     ]
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 3,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 11,
+        "speedJitter": 0,
+        "targetRadius": 7.39999533,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

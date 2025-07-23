@@ -60,6 +60,14 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     for (auto& profile : *result.mutable_wall_strafe_def()->mutable_profiles()) {
       MultiplyRegionLength(profile.mutable_distance(), mult);
     }
+    if (original.has_strafe_def()) {
+      float distance = FirstGreaterThanZero(original.strafe_def().distance_multiplier(), 1.0);
+      result.mutable_strafe_def()->set_distance_multiplier(distance * mult);
+    }
+    if (original.has_bounce_def()) {
+      float distance = FirstGreaterThanZero(original.bounce_def().distance_multiplier(), 1.0);
+      result.mutable_bounce_def()->set_distance_multiplier(distance * mult);
+    }
   }
   if (overrides.has_acceleration_multiplier()) {
     float mult = overrides.acceleration_multiplier();
@@ -69,19 +77,18 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
         result.mutable_wall_strafe_def()->set_acceleration(accel * mult);
       }
     }
-    if (original.has_timed_direction_def()) {
-      float accel = original.timed_direction_def().acceleration();
+    if (original.has_strafe_def()) {
+      float accel = original.strafe_def().acceleration();
       if (accel > 0) {
-        result.mutable_timed_direction_def()->set_acceleration(accel * mult);
+        result.mutable_strafe_def()->set_acceleration(accel * mult);
       }
     }
   }
   if (overrides.has_time_scale_multiplier()) {
     float mult = overrides.time_scale_multiplier();
-    if (original.has_timed_direction_def()) {
-      float time_scale =
-          FirstGreaterThanZero(original.timed_direction_def().time_scale_multiplier(), 1.0);
-      result.mutable_timed_direction_def()->set_time_scale_multiplier(time_scale * mult);
+    if (original.has_strafe_def()) {
+      float time_scale = FirstGreaterThanZero(original.strafe_def().time_scale_multiplier(), 1.0);
+      result.mutable_strafe_def()->set_time_scale_multiplier(time_scale * mult);
     }
     if (original.has_bounce_def()) {
       float time_scale = FirstGreaterThanZero(original.bounce_def().time_scale_multiplier(), 1.0);

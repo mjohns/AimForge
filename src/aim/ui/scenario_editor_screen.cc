@@ -94,18 +94,18 @@ const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
 
 const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kStaticDef, "Static"},
-    {ScenarioDef::kCenteringDef, "Centering"},
-    {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
-    {ScenarioDef::kTimedDirectionDef, "Timed Direction"},
+    {ScenarioDef::kStrafeDef, "Strafe"},
     {ScenarioDef::kBounceDef, "Bounce"},
     {ScenarioDef::kLinearDef, "Linear"},
-    {ScenarioDef::kBarrelDef, "Barrel"},
+    {ScenarioDef::kReferenceDef, "Reference"},
     {ScenarioDef::kWallWanderDef, "Wall Wander"},
+    {ScenarioDef::kCenteringDef, "Centering"},
     {ScenarioDef::kWaypointDef, "Waypoint"},
+    {ScenarioDef::kBarrelDef, "Barrel"},
     {ScenarioDef::kCircleDef, "Circle"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kSineDef, "Sine"},
-    {ScenarioDef::kReferenceDef, "Reference"},
+    {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
 };
 
 const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
@@ -153,8 +153,8 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   if (def.has_wall_strafe_def()) {
     return def.wall_strafe_def().target_placement_strategy();
   }
-  if (def.has_timed_direction_def()) {
-    return def.timed_direction_def().target_placement_strategy();
+  if (def.has_strafe_def()) {
+    return def.strafe_def().target_placement_strategy();
   }
   if (def.has_bounce_def()) {
     return def.bounce_def().target_placement_strategy();
@@ -471,8 +471,8 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kWallStrafeDef) {
       DrawWallStrafeEditor();
     }
-    if (scenario_type == ScenarioDef::kTimedDirectionDef) {
-      DrawTimedDirectionEditor();
+    if (scenario_type == ScenarioDef::kStrafeDef) {
+      DrawStrafeEditor();
     }
     if (scenario_type == ScenarioDef::kBounceDef) {
       DrawBounceEditor();
@@ -514,10 +514,10 @@ class ScenarioEditorScreen : public UiScreen {
         *wall_strafe->mutable_target_placement_strategy() = target_placement;
       }
     }
-    if (scenario_type == ScenarioDef::kTimedDirectionDef) {
-      auto* timed_direction = def_.mutable_timed_direction_def();
+    if (scenario_type == ScenarioDef::kStrafeDef) {
+      auto* strafe = def_.mutable_strafe_def();
       if (target_placement.regions_size() > 0) {
-        *timed_direction->mutable_target_placement_strategy() = target_placement;
+        *strafe->mutable_target_placement_strategy() = target_placement;
       }
     }
     if (scenario_type == ScenarioDef::kBounceDef) {
@@ -1029,9 +1029,9 @@ class ScenarioEditorScreen : public UiScreen {
                       PROTO_FLOAT_FIELD(StrafeProfile, p, center_bias));
   }
 
-  void DrawTimedDirectionEditor() {
+  void DrawStrafeEditor() {
     ImGui::IdGuard cid("TimedDirectonEditor");
-    TimedDirectionScenarioDef& d = *def_.mutable_timed_direction_def();
+    StrafeScenarioDef& d = *def_.mutable_strafe_def();
     DrawBoundsEditor("##Bounds", d.mutable_bounds());
 
     bool has_relative_bounds = d.has_relative_bounds();
@@ -1057,7 +1057,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, time_scale_multiplier));
+                      PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, time_scale_multiplier));
     ImGui::SameLine();
     ImGui::HelpMarker(
         "Scale all the times in the profiles by the given multiplier. To reduce the times by "
@@ -1072,7 +1072,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(0)
                           .set_default(1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TimedDirectionScenarioDef, &d, acceleration));
+                      PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, acceleration));
 
     Line();
 

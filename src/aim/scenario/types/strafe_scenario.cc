@@ -18,7 +18,7 @@ class MovementControllerImpl : public MovementController {
  public:
   MovementControllerImpl(float speed, Wall wall, ScenarioDef def, Application& app)
       : def_(def), app_(app) {
-    auto d = def_.timed_direction_def();
+    auto d = def_.strafe_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
     std::optional<float> relative_min_x;
     std::optional<float> relative_max_x;
@@ -97,8 +97,8 @@ class MovementControllerImpl : public MovementController {
       pos.x = left_right_controller_->GetUpdatedPosition(
           t,
           app_.rand(),
-          def_.timed_direction_def().left_right_profiles(),
-          def_.timed_direction_def().left_right_profile_order(),
+          def_.strafe_def().left_right_profiles(),
+          def_.strafe_def().left_right_profile_order(),
           pos.x,
           now_seconds,
           delta_seconds);
@@ -108,8 +108,8 @@ class MovementControllerImpl : public MovementController {
       pos.y = up_down_controller_->GetUpdatedPosition(
           t,
           app_.rand(),
-          def_.timed_direction_def().up_down_profiles(),
-          def_.timed_direction_def().up_down_profile_order(),
+          def_.strafe_def().up_down_profiles(),
+          def_.strafe_def().up_down_profile_order(),
           pos.y,
           now_seconds,
           delta_seconds);
@@ -119,8 +119,8 @@ class MovementControllerImpl : public MovementController {
       t.wall_depth = forward_back_controller_->GetUpdatedPosition(
           t,
           app_.rand(),
-          def_.timed_direction_def().forward_back_profiles(),
-          def_.timed_direction_def().forward_back_profile_order(),
+          def_.strafe_def().forward_back_profiles(),
+          def_.strafe_def().forward_back_profile_order(),
           t.wall_depth,
           now_seconds,
           delta_seconds);
@@ -138,13 +138,13 @@ class MovementControllerImpl : public MovementController {
   std::optional<StrafeController> forward_back_controller_;
 };
 
-class TimedDirectionScenario : public BaseScenario {
+class StrafeScenario : public BaseScenario {
  public:
-  explicit TimedDirectionScenario(const CreateScenarioParams& params, Application* app)
+  explicit StrafeScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
-    if (def_.timed_direction_def().has_target_placement_strategy()) {
+    if (def_.strafe_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
-          wall_, def_.timed_direction_def().target_placement_strategy(), &target_manager_, app);
+          wall_, def_.strafe_def().target_placement_strategy(), &target_manager_, app);
     }
   }
 
@@ -158,8 +158,8 @@ class TimedDirectionScenario : public BaseScenario {
     if (wall_target_placer_) {
       pos = wall_target_placer_->GetNextPosition();
     } else {
-      float depth = wall_.GetWallBounds(def_.timed_direction_def().bounds()).max_depth;
-      if (depth > 0 && def_.timed_direction_def().forward_back_profiles_size() > 0) {
+      float depth = wall_.GetWallBounds(def_.strafe_def().bounds()).max_depth;
+      if (depth > 0 && def_.strafe_def().forward_back_profiles_size() > 0) {
         // Start in the middle of the available depth.
         pos.z = depth / 2.0;
       }
@@ -180,9 +180,9 @@ class TimedDirectionScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateTimedDirectionScenario(const CreateScenarioParams& params,
+std::unique_ptr<Scenario> CreateStrafeScenario(const CreateScenarioParams& params,
                                                        Application* app) {
-  return std::make_unique<TimedDirectionScenario>(params, app);
+  return std::make_unique<StrafeScenario>(params, app);
 }
 
 }  // namespace aim

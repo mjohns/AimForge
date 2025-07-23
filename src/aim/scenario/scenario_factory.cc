@@ -29,8 +29,8 @@ std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated
       return CreateSineScenario(params, app);
     case ScenarioDef::kWaypointDef:
       return CreateWaypointScenario(params, app);
-    case ScenarioDef::kTimedDirectionDef:
-      return CreateTimedDirectionScenario(params, app);
+    case ScenarioDef::kStrafeDef:
+      return CreateStrafeScenario(params, app);
     case ScenarioDef::kBounceDef:
       return CreateBounceScenario(params, app);
     default:

@@ -18,26 +18,7 @@
   "shotType": {
     "trackingInvincible": true
   },
-  "targetDef": {
-    "newestTargetIsGhost": false,
-    "numTargets": 1,
-    "profiles": [
-      {
-        "info": {
-          "description": ""
-        },
-        "pill": {
-          "height": 21.4000053
-        },
-        "speed": 121,
-        "speedJitter": 0,
-        "targetRadius": 2.6,
-        "targetRadiusJitter": 0
-      }
-    ],
-    "removeClosestOnMiss": false
-  },
-  "timedDirectionDef": {
+  "strafeDef": {
     "acceleration": 480,
     "bounds": {
       "width": {
@@ -103,5 +84,24 @@
       ]
     },
     "upDownInitialDirection": "DIRECTION_POSITIVE"
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 1,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "pill": {
+          "height": 21.4000053
+        },
+        "speed": 121,
+        "speedJitter": 0,
+        "targetRadius": 2.6,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }

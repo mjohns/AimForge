@@ -132,6 +132,9 @@ extern StaticScenarioDefDefaultTypeInternal _StaticScenarioDef_default_instance_
 class StrafeProfile;
 struct StrafeProfileDefaultTypeInternal;
 extern StrafeProfileDefaultTypeInternal _StrafeProfile_default_instance_;
+class StrafeScenarioDef;
+struct StrafeScenarioDefDefaultTypeInternal;
+extern StrafeScenarioDefDefaultTypeInternal _StrafeScenarioDef_default_instance_;
 class TargetDef;
 struct TargetDefDefaultTypeInternal;
 extern TargetDefDefaultTypeInternal _TargetDef_default_instance_;
@@ -144,9 +147,6 @@ extern TargetProfileDefaultTypeInternal _TargetProfile_default_instance_;
 class TargetRegion;
 struct TargetRegionDefaultTypeInternal;
 extern TargetRegionDefaultTypeInternal _TargetRegion_default_instance_;
-class TimedDirectionScenarioDef;
-struct TimedDirectionScenarioDefDefaultTypeInternal;
-extern TimedDirectionScenarioDefDefaultTypeInternal _TimedDirectionScenarioDef_default_instance_;
 class WallArcScenarioDef;
 struct WallArcScenarioDefDefaultTypeInternal;
 extern WallArcScenarioDefDefaultTypeInternal _WallArcScenarioDef_default_instance_;
@@ -8268,31 +8268,31 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class TimedDirectionScenarioDef final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.TimedDirectionScenarioDef) */ {
+class StrafeScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.StrafeScenarioDef) */ {
  public:
-  inline TimedDirectionScenarioDef() : TimedDirectionScenarioDef(nullptr) {}
-  ~TimedDirectionScenarioDef() PROTOBUF_FINAL;
+  inline StrafeScenarioDef() : StrafeScenarioDef(nullptr) {}
+  ~StrafeScenarioDef() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(TimedDirectionScenarioDef* msg, std::destroying_delete_t) {
+  void operator delete(StrafeScenarioDef* msg, std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(TimedDirectionScenarioDef));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(StrafeScenarioDef));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR TimedDirectionScenarioDef(
+  explicit PROTOBUF_CONSTEXPR StrafeScenarioDef(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline TimedDirectionScenarioDef(const TimedDirectionScenarioDef& from) : TimedDirectionScenarioDef(nullptr, from) {}
-  inline TimedDirectionScenarioDef(TimedDirectionScenarioDef&& from) noexcept
-      : TimedDirectionScenarioDef(nullptr, std::move(from)) {}
-  inline TimedDirectionScenarioDef& operator=(const TimedDirectionScenarioDef& from) {
+  inline StrafeScenarioDef(const StrafeScenarioDef& from) : StrafeScenarioDef(nullptr, from) {}
+  inline StrafeScenarioDef(StrafeScenarioDef&& from) noexcept
+      : StrafeScenarioDef(nullptr, std::move(from)) {}
+  inline StrafeScenarioDef& operator=(const StrafeScenarioDef& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TimedDirectionScenarioDef& operator=(TimedDirectionScenarioDef&& from) noexcept {
+  inline StrafeScenarioDef& operator=(StrafeScenarioDef&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -8320,16 +8320,16 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TimedDirectionScenarioDef& default_instance() {
+  static const StrafeScenarioDef& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TimedDirectionScenarioDef* internal_default_instance() {
-    return reinterpret_cast<const TimedDirectionScenarioDef*>(
-        &_TimedDirectionScenarioDef_default_instance_);
+  static inline const StrafeScenarioDef* internal_default_instance() {
+    return reinterpret_cast<const StrafeScenarioDef*>(
+        &_StrafeScenarioDef_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 28;
-  friend void swap(TimedDirectionScenarioDef& a, TimedDirectionScenarioDef& b) { a.Swap(&b); }
-  inline void Swap(TimedDirectionScenarioDef* other) {
+  friend void swap(StrafeScenarioDef& a, StrafeScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(StrafeScenarioDef* other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -8337,7 +8337,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TimedDirectionScenarioDef* other) {
+  void UnsafeArenaSwap(StrafeScenarioDef* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -8345,13 +8345,13 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  TimedDirectionScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<TimedDirectionScenarioDef>(arena);
+  StrafeScenarioDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<StrafeScenarioDef>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const TimedDirectionScenarioDef& from);
+  void CopyFrom(const StrafeScenarioDef& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const TimedDirectionScenarioDef& from) { TimedDirectionScenarioDef::MergeImpl(*this, from); }
+  void MergeFrom(const StrafeScenarioDef& from) { StrafeScenarioDef::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -8388,18 +8388,18 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(TimedDirectionScenarioDef* other);
+  void InternalSwap(StrafeScenarioDef* other);
  private:
   template <typename T>
   friend ::absl::string_view(
       ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.TimedDirectionScenarioDef"; }
+  static ::absl::string_view FullMessageName() { return "aim.StrafeScenarioDef"; }
 
  protected:
-  explicit TimedDirectionScenarioDef(::google::protobuf::Arena* arena);
-  TimedDirectionScenarioDef(::google::protobuf::Arena* arena, const TimedDirectionScenarioDef& from);
-  TimedDirectionScenarioDef(::google::protobuf::Arena* arena, TimedDirectionScenarioDef&& from) noexcept
-      : TimedDirectionScenarioDef(arena) {
+  explicit StrafeScenarioDef(::google::protobuf::Arena* arena);
+  StrafeScenarioDef(::google::protobuf::Arena* arena, const StrafeScenarioDef& from);
+  StrafeScenarioDef(::google::protobuf::Arena* arena, StrafeScenarioDef&& from) noexcept
+      : StrafeScenarioDef(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
@@ -8646,7 +8646,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
   void _internal_set_distance_multiplier(float value);
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.TimedDirectionScenarioDef)
+  // @@protoc_insertion_point(class_scope:aim.StrafeScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
@@ -8668,7 +8668,7 @@ class TimedDirectionScenarioDef final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const TimedDirectionScenarioDef& from_msg);
+                          const StrafeScenarioDef& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > left_right_profiles_;
@@ -9831,7 +9831,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kCircleDef = 38,
     kSineDef = 39,
     kWaypointDef = 40,
-    kTimedDirectionDef = 41,
+    kStrafeDef = 41,
     kBounceDef = 42,
     TYPE_NOT_SET = 0,
   };
@@ -9946,7 +9946,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kCircleDefFieldNumber = 38,
     kSineDefFieldNumber = 39,
     kWaypointDefFieldNumber = 40,
-    kTimedDirectionDefFieldNumber = 41,
+    kStrafeDefFieldNumber = 41,
     kBounceDefFieldNumber = 42,
   };
   // string description = 1;
@@ -10279,23 +10279,23 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::WaypointScenarioDef* _internal_mutable_waypoint_def();
 
   public:
-  // .aim.TimedDirectionScenarioDef timed_direction_def = 41 [json_name = "strafeDef"];
-  bool has_timed_direction_def() const;
+  // .aim.StrafeScenarioDef strafe_def = 41;
+  bool has_strafe_def() const;
   private:
-  bool _internal_has_timed_direction_def() const;
+  bool _internal_has_strafe_def() const;
 
   public:
-  void clear_timed_direction_def() ;
-  const ::aim::TimedDirectionScenarioDef& timed_direction_def() const;
-  PROTOBUF_NODISCARD ::aim::TimedDirectionScenarioDef* release_timed_direction_def();
-  ::aim::TimedDirectionScenarioDef* mutable_timed_direction_def();
-  void set_allocated_timed_direction_def(::aim::TimedDirectionScenarioDef* value);
-  void unsafe_arena_set_allocated_timed_direction_def(::aim::TimedDirectionScenarioDef* value);
-  ::aim::TimedDirectionScenarioDef* unsafe_arena_release_timed_direction_def();
+  void clear_strafe_def() ;
+  const ::aim::StrafeScenarioDef& strafe_def() const;
+  PROTOBUF_NODISCARD ::aim::StrafeScenarioDef* release_strafe_def();
+  ::aim::StrafeScenarioDef* mutable_strafe_def();
+  void set_allocated_strafe_def(::aim::StrafeScenarioDef* value);
+  void unsafe_arena_set_allocated_strafe_def(::aim::StrafeScenarioDef* value);
+  ::aim::StrafeScenarioDef* unsafe_arena_release_strafe_def();
 
   private:
-  const ::aim::TimedDirectionScenarioDef& _internal_timed_direction_def() const;
-  ::aim::TimedDirectionScenarioDef* _internal_mutable_timed_direction_def();
+  const ::aim::StrafeScenarioDef& _internal_strafe_def() const;
+  ::aim::StrafeScenarioDef* _internal_mutable_strafe_def();
 
   public:
   // .aim.BounceScenarioDef bounce_def = 42;
@@ -10333,7 +10333,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   void set_has_circle_def();
   void set_has_sine_def();
   void set_has_waypoint_def();
-  void set_has_timed_direction_def();
+  void set_has_strafe_def();
   void set_has_bounce_def();
   inline bool has_type() const;
   inline void clear_has_type();
@@ -10382,7 +10382,7 @@ class ScenarioDef final : public ::google::protobuf::Message
       ::aim::CircleScenarioDef* circle_def_;
       ::aim::SineScenarioDef* sine_def_;
       ::aim::WaypointScenarioDef* waypoint_def_;
-      ::aim::TimedDirectionScenarioDef* timed_direction_def_;
+      ::aim::StrafeScenarioDef* strafe_def_;
       ::aim::BounceScenarioDef* bounce_def_;
     } type_;
     ::uint32_t _oneof_case_[1];
@@ -15844,82 +15844,82 @@ inline ::aim::WaypointScenarioDef* ScenarioDef::mutable_waypoint_def() ABSL_ATTR
   return _msg;
 }
 
-// .aim.TimedDirectionScenarioDef timed_direction_def = 41 [json_name = "strafeDef"];
-inline bool ScenarioDef::has_timed_direction_def() const {
-  return type_case() == kTimedDirectionDef;
+// .aim.StrafeScenarioDef strafe_def = 41;
+inline bool ScenarioDef::has_strafe_def() const {
+  return type_case() == kStrafeDef;
 }
-inline bool ScenarioDef::_internal_has_timed_direction_def() const {
-  return type_case() == kTimedDirectionDef;
+inline bool ScenarioDef::_internal_has_strafe_def() const {
+  return type_case() == kStrafeDef;
 }
-inline void ScenarioDef::set_has_timed_direction_def() {
-  _impl_._oneof_case_[0] = kTimedDirectionDef;
+inline void ScenarioDef::set_has_strafe_def() {
+  _impl_._oneof_case_[0] = kStrafeDef;
 }
-inline void ScenarioDef::clear_timed_direction_def() {
+inline void ScenarioDef::clear_strafe_def() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (type_case() == kTimedDirectionDef) {
+  if (type_case() == kStrafeDef) {
     if (GetArena() == nullptr) {
-      delete _impl_.type_.timed_direction_def_;
+      delete _impl_.type_.strafe_def_;
     } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.timed_direction_def_);
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.strafe_def_);
     }
     clear_has_type();
   }
 }
-inline ::aim::TimedDirectionScenarioDef* ScenarioDef::release_timed_direction_def() {
-  // @@protoc_insertion_point(field_release:aim.ScenarioDef.timed_direction_def)
-  if (type_case() == kTimedDirectionDef) {
+inline ::aim::StrafeScenarioDef* ScenarioDef::release_strafe_def() {
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.strafe_def)
+  if (type_case() == kStrafeDef) {
     clear_has_type();
-    auto* temp = _impl_.type_.timed_direction_def_;
+    auto* temp = _impl_.type_.strafe_def_;
     if (GetArena() != nullptr) {
       temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
     }
-    _impl_.type_.timed_direction_def_ = nullptr;
+    _impl_.type_.strafe_def_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::aim::TimedDirectionScenarioDef& ScenarioDef::_internal_timed_direction_def() const {
-  return type_case() == kTimedDirectionDef ? *_impl_.type_.timed_direction_def_ : reinterpret_cast<::aim::TimedDirectionScenarioDef&>(::aim::_TimedDirectionScenarioDef_default_instance_);
+inline const ::aim::StrafeScenarioDef& ScenarioDef::_internal_strafe_def() const {
+  return type_case() == kStrafeDef ? *_impl_.type_.strafe_def_ : reinterpret_cast<::aim::StrafeScenarioDef&>(::aim::_StrafeScenarioDef_default_instance_);
 }
-inline const ::aim::TimedDirectionScenarioDef& ScenarioDef::timed_direction_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ScenarioDef.timed_direction_def)
-  return _internal_timed_direction_def();
+inline const ::aim::StrafeScenarioDef& ScenarioDef::strafe_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.strafe_def)
+  return _internal_strafe_def();
 }
-inline ::aim::TimedDirectionScenarioDef* ScenarioDef::unsafe_arena_release_timed_direction_def() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.timed_direction_def)
-  if (type_case() == kTimedDirectionDef) {
+inline ::aim::StrafeScenarioDef* ScenarioDef::unsafe_arena_release_strafe_def() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:aim.ScenarioDef.strafe_def)
+  if (type_case() == kStrafeDef) {
     clear_has_type();
-    auto* temp = _impl_.type_.timed_direction_def_;
-    _impl_.type_.timed_direction_def_ = nullptr;
+    auto* temp = _impl_.type_.strafe_def_;
+    _impl_.type_.strafe_def_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline void ScenarioDef::unsafe_arena_set_allocated_timed_direction_def(::aim::TimedDirectionScenarioDef* value) {
+inline void ScenarioDef::unsafe_arena_set_allocated_strafe_def(::aim::StrafeScenarioDef* value) {
   // We rely on the oneof clear method to free the earlier contents
   // of this oneof. We can directly use the pointer we're given to
   // set the new value.
   clear_type();
   if (value) {
-    set_has_timed_direction_def();
-    _impl_.type_.timed_direction_def_ = value;
+    set_has_strafe_def();
+    _impl_.type_.strafe_def_ = value;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.timed_direction_def)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.strafe_def)
 }
-inline ::aim::TimedDirectionScenarioDef* ScenarioDef::_internal_mutable_timed_direction_def() {
-  if (type_case() != kTimedDirectionDef) {
+inline ::aim::StrafeScenarioDef* ScenarioDef::_internal_mutable_strafe_def() {
+  if (type_case() != kStrafeDef) {
     clear_type();
-    set_has_timed_direction_def();
-    _impl_.type_.timed_direction_def_ =
-        ::google::protobuf::Message::DefaultConstruct<::aim::TimedDirectionScenarioDef>(GetArena());
+    set_has_strafe_def();
+    _impl_.type_.strafe_def_ =
+        ::google::protobuf::Message::DefaultConstruct<::aim::StrafeScenarioDef>(GetArena());
   }
-  return _impl_.type_.timed_direction_def_;
+  return _impl_.type_.strafe_def_;
 }
-inline ::aim::TimedDirectionScenarioDef* ScenarioDef::mutable_timed_direction_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  ::aim::TimedDirectionScenarioDef* _msg = _internal_mutable_timed_direction_def();
-  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.timed_direction_def)
+inline ::aim::StrafeScenarioDef* ScenarioDef::mutable_strafe_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::aim::StrafeScenarioDef* _msg = _internal_mutable_strafe_def();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.strafe_def)
   return _msg;
 }
 
@@ -19258,29 +19258,29 @@ inline void StrafeProfile::_internal_set_acceleration_multiplier(float value) {
 
 // -------------------------------------------------------------------
 
-// TimedDirectionScenarioDef
+// StrafeScenarioDef
 
 // .aim.Bounds bounds = 1;
-inline bool TimedDirectionScenarioDef::has_bounds() const {
+inline bool StrafeScenarioDef::has_bounds() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.bounds_ != nullptr);
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_bounds() {
+inline void StrafeScenarioDef::clear_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounds_ != nullptr) _impl_.bounds_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const ::aim::Bounds& TimedDirectionScenarioDef::_internal_bounds() const {
+inline const ::aim::Bounds& StrafeScenarioDef::_internal_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::aim::Bounds* p = _impl_.bounds_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::Bounds&>(::aim::_Bounds_default_instance_);
 }
-inline const ::aim::Bounds& TimedDirectionScenarioDef::bounds() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.bounds)
+inline const ::aim::Bounds& StrafeScenarioDef::bounds() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.bounds)
   return _internal_bounds();
 }
-inline void TimedDirectionScenarioDef::unsafe_arena_set_allocated_bounds(::aim::Bounds* value) {
+inline void StrafeScenarioDef::unsafe_arena_set_allocated_bounds(::aim::Bounds* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.bounds_);
@@ -19291,9 +19291,9 @@ inline void TimedDirectionScenarioDef::unsafe_arena_set_allocated_bounds(::aim::
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TimedDirectionScenarioDef.bounds)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.bounds)
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::release_bounds() {
+inline ::aim::Bounds* StrafeScenarioDef::release_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
@@ -19312,16 +19312,16 @@ inline ::aim::Bounds* TimedDirectionScenarioDef::release_bounds() {
   }
   return released;
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::unsafe_arena_release_bounds() {
+inline ::aim::Bounds* StrafeScenarioDef::unsafe_arena_release_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.TimedDirectionScenarioDef.bounds)
+  // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.bounds)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
   ::aim::Bounds* temp = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   return temp;
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::_internal_mutable_bounds() {
+inline ::aim::Bounds* StrafeScenarioDef::_internal_mutable_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounds_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::Bounds>(GetArena());
@@ -19329,13 +19329,13 @@ inline ::aim::Bounds* TimedDirectionScenarioDef::_internal_mutable_bounds() {
   }
   return _impl_.bounds_;
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::mutable_bounds() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::Bounds* StrafeScenarioDef::mutable_bounds() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000001u;
   ::aim::Bounds* _msg = _internal_mutable_bounds();
-  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionScenarioDef.bounds)
+  // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.bounds)
   return _msg;
 }
-inline void TimedDirectionScenarioDef::set_allocated_bounds(::aim::Bounds* value) {
+inline void StrafeScenarioDef::set_allocated_bounds(::aim::Bounds* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -19353,30 +19353,30 @@ inline void TimedDirectionScenarioDef::set_allocated_bounds(::aim::Bounds* value
   }
 
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.TimedDirectionScenarioDef.bounds)
+  // @@protoc_insertion_point(field_set_allocated:aim.StrafeScenarioDef.bounds)
 }
 
 // .aim.Bounds relative_bounds = 2;
-inline bool TimedDirectionScenarioDef::has_relative_bounds() const {
+inline bool StrafeScenarioDef::has_relative_bounds() const {
   bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.relative_bounds_ != nullptr);
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_relative_bounds() {
+inline void StrafeScenarioDef::clear_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.relative_bounds_ != nullptr) _impl_.relative_bounds_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline const ::aim::Bounds& TimedDirectionScenarioDef::_internal_relative_bounds() const {
+inline const ::aim::Bounds& StrafeScenarioDef::_internal_relative_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::aim::Bounds* p = _impl_.relative_bounds_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::Bounds&>(::aim::_Bounds_default_instance_);
 }
-inline const ::aim::Bounds& TimedDirectionScenarioDef::relative_bounds() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.relative_bounds)
+inline const ::aim::Bounds& StrafeScenarioDef::relative_bounds() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.relative_bounds)
   return _internal_relative_bounds();
 }
-inline void TimedDirectionScenarioDef::unsafe_arena_set_allocated_relative_bounds(::aim::Bounds* value) {
+inline void StrafeScenarioDef::unsafe_arena_set_allocated_relative_bounds(::aim::Bounds* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.relative_bounds_);
@@ -19387,9 +19387,9 @@ inline void TimedDirectionScenarioDef::unsafe_arena_set_allocated_relative_bound
   } else {
     _impl_._has_bits_[0] &= ~0x00000002u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TimedDirectionScenarioDef.relative_bounds)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.relative_bounds)
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::release_relative_bounds() {
+inline ::aim::Bounds* StrafeScenarioDef::release_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000002u;
@@ -19408,16 +19408,16 @@ inline ::aim::Bounds* TimedDirectionScenarioDef::release_relative_bounds() {
   }
   return released;
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::unsafe_arena_release_relative_bounds() {
+inline ::aim::Bounds* StrafeScenarioDef::unsafe_arena_release_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.TimedDirectionScenarioDef.relative_bounds)
+  // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.relative_bounds)
 
   _impl_._has_bits_[0] &= ~0x00000002u;
   ::aim::Bounds* temp = _impl_.relative_bounds_;
   _impl_.relative_bounds_ = nullptr;
   return temp;
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::_internal_mutable_relative_bounds() {
+inline ::aim::Bounds* StrafeScenarioDef::_internal_mutable_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.relative_bounds_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::Bounds>(GetArena());
@@ -19425,13 +19425,13 @@ inline ::aim::Bounds* TimedDirectionScenarioDef::_internal_mutable_relative_boun
   }
   return _impl_.relative_bounds_;
 }
-inline ::aim::Bounds* TimedDirectionScenarioDef::mutable_relative_bounds() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::Bounds* StrafeScenarioDef::mutable_relative_bounds() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000002u;
   ::aim::Bounds* _msg = _internal_mutable_relative_bounds();
-  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionScenarioDef.relative_bounds)
+  // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.relative_bounds)
   return _msg;
 }
-inline void TimedDirectionScenarioDef::set_allocated_relative_bounds(::aim::Bounds* value) {
+inline void StrafeScenarioDef::set_allocated_relative_bounds(::aim::Bounds* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -19449,30 +19449,30 @@ inline void TimedDirectionScenarioDef::set_allocated_relative_bounds(::aim::Boun
   }
 
   _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.TimedDirectionScenarioDef.relative_bounds)
+  // @@protoc_insertion_point(field_set_allocated:aim.StrafeScenarioDef.relative_bounds)
 }
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 4;
-inline bool TimedDirectionScenarioDef::has_target_placement_strategy() const {
+inline bool StrafeScenarioDef::has_target_placement_strategy() const {
   bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_target_placement_strategy() {
+inline void StrafeScenarioDef::clear_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline const ::aim::TargetPlacementStrategy& TimedDirectionScenarioDef::_internal_target_placement_strategy() const {
+inline const ::aim::TargetPlacementStrategy& StrafeScenarioDef::_internal_target_placement_strategy() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
   return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
 }
-inline const ::aim::TargetPlacementStrategy& TimedDirectionScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.target_placement_strategy)
+inline const ::aim::TargetPlacementStrategy& StrafeScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.target_placement_strategy)
   return _internal_target_placement_strategy();
 }
-inline void TimedDirectionScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+inline void StrafeScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
@@ -19483,9 +19483,9 @@ inline void TimedDirectionScenarioDef::unsafe_arena_set_allocated_target_placeme
   } else {
     _impl_._has_bits_[0] &= ~0x00000004u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TimedDirectionScenarioDef.target_placement_strategy)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.target_placement_strategy)
 }
-inline ::aim::TargetPlacementStrategy* TimedDirectionScenarioDef::release_target_placement_strategy() {
+inline ::aim::TargetPlacementStrategy* StrafeScenarioDef::release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000004u;
@@ -19504,16 +19504,16 @@ inline ::aim::TargetPlacementStrategy* TimedDirectionScenarioDef::release_target
   }
   return released;
 }
-inline ::aim::TargetPlacementStrategy* TimedDirectionScenarioDef::unsafe_arena_release_target_placement_strategy() {
+inline ::aim::TargetPlacementStrategy* StrafeScenarioDef::unsafe_arena_release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.TimedDirectionScenarioDef.target_placement_strategy)
+  // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.target_placement_strategy)
 
   _impl_._has_bits_[0] &= ~0x00000004u;
   ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   return temp;
 }
-inline ::aim::TargetPlacementStrategy* TimedDirectionScenarioDef::_internal_mutable_target_placement_strategy() {
+inline ::aim::TargetPlacementStrategy* StrafeScenarioDef::_internal_mutable_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
@@ -19521,13 +19521,13 @@ inline ::aim::TargetPlacementStrategy* TimedDirectionScenarioDef::_internal_muta
   }
   return _impl_.target_placement_strategy_;
 }
-inline ::aim::TargetPlacementStrategy* TimedDirectionScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::TargetPlacementStrategy* StrafeScenarioDef::mutable_target_placement_strategy() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000004u;
   ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
-  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionScenarioDef.target_placement_strategy)
+  // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.target_placement_strategy)
   return _msg;
 }
-inline void TimedDirectionScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
+inline void StrafeScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -19545,455 +19545,455 @@ inline void TimedDirectionScenarioDef::set_allocated_target_placement_strategy(:
   }
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.TimedDirectionScenarioDef.target_placement_strategy)
+  // @@protoc_insertion_point(field_set_allocated:aim.StrafeScenarioDef.target_placement_strategy)
 }
 
 // repeated .aim.StrafeProfile left_right_profiles = 5;
-inline int TimedDirectionScenarioDef::_internal_left_right_profiles_size() const {
+inline int StrafeScenarioDef::_internal_left_right_profiles_size() const {
   return _internal_left_right_profiles().size();
 }
-inline int TimedDirectionScenarioDef::left_right_profiles_size() const {
+inline int StrafeScenarioDef::left_right_profiles_size() const {
   return _internal_left_right_profiles_size();
 }
-inline void TimedDirectionScenarioDef::clear_left_right_profiles() {
+inline void StrafeScenarioDef::clear_left_right_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_profiles_.Clear();
 }
-inline ::aim::StrafeProfile* TimedDirectionScenarioDef::mutable_left_right_profiles(int index)
+inline ::aim::StrafeProfile* StrafeScenarioDef::mutable_left_right_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionScenarioDef.left_right_profiles)
+  // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.left_right_profiles)
   return _internal_mutable_left_right_profiles()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* TimedDirectionScenarioDef::mutable_left_right_profiles()
+inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* StrafeScenarioDef::mutable_left_right_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.TimedDirectionScenarioDef.left_right_profiles)
+  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.left_right_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_left_right_profiles();
 }
-inline const ::aim::StrafeProfile& TimedDirectionScenarioDef::left_right_profiles(int index) const
+inline const ::aim::StrafeProfile& StrafeScenarioDef::left_right_profiles(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.left_right_profiles)
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_profiles)
   return _internal_left_right_profiles().Get(index);
 }
-inline ::aim::StrafeProfile* TimedDirectionScenarioDef::add_left_right_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::StrafeProfile* StrafeScenarioDef::add_left_right_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::aim::StrafeProfile* _add = _internal_mutable_left_right_profiles()->Add();
-  // @@protoc_insertion_point(field_add:aim.TimedDirectionScenarioDef.left_right_profiles)
+  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.left_right_profiles)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& TimedDirectionScenarioDef::left_right_profiles() const
+inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& StrafeScenarioDef::left_right_profiles() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TimedDirectionScenarioDef.left_right_profiles)
+  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.left_right_profiles)
   return _internal_left_right_profiles();
 }
 inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>&
-TimedDirectionScenarioDef::_internal_left_right_profiles() const {
+StrafeScenarioDef::_internal_left_right_profiles() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.left_right_profiles_;
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>*
-TimedDirectionScenarioDef::_internal_mutable_left_right_profiles() {
+StrafeScenarioDef::_internal_mutable_left_right_profiles() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.left_right_profiles_;
 }
 
 // repeated int32 left_right_profile_order = 6;
-inline int TimedDirectionScenarioDef::_internal_left_right_profile_order_size() const {
+inline int StrafeScenarioDef::_internal_left_right_profile_order_size() const {
   return _internal_left_right_profile_order().size();
 }
-inline int TimedDirectionScenarioDef::left_right_profile_order_size() const {
+inline int StrafeScenarioDef::left_right_profile_order_size() const {
   return _internal_left_right_profile_order_size();
 }
-inline void TimedDirectionScenarioDef::clear_left_right_profile_order() {
+inline void StrafeScenarioDef::clear_left_right_profile_order() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_profile_order_.Clear();
 }
-inline ::int32_t TimedDirectionScenarioDef::left_right_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.left_right_profile_order)
+inline ::int32_t StrafeScenarioDef::left_right_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_profile_order)
   return _internal_left_right_profile_order().Get(index);
 }
-inline void TimedDirectionScenarioDef::set_left_right_profile_order(int index, ::int32_t value) {
+inline void StrafeScenarioDef::set_left_right_profile_order(int index, ::int32_t value) {
   _internal_mutable_left_right_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.left_right_profile_order)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.left_right_profile_order)
 }
-inline void TimedDirectionScenarioDef::add_left_right_profile_order(::int32_t value) {
+inline void StrafeScenarioDef::add_left_right_profile_order(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _internal_mutable_left_right_profile_order()->Add(value);
-  // @@protoc_insertion_point(field_add:aim.TimedDirectionScenarioDef.left_right_profile_order)
+  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.left_right_profile_order)
 }
-inline const ::google::protobuf::RepeatedField<::int32_t>& TimedDirectionScenarioDef::left_right_profile_order() const
+inline const ::google::protobuf::RepeatedField<::int32_t>& StrafeScenarioDef::left_right_profile_order() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TimedDirectionScenarioDef.left_right_profile_order)
+  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.left_right_profile_order)
   return _internal_left_right_profile_order();
 }
-inline ::google::protobuf::RepeatedField<::int32_t>* TimedDirectionScenarioDef::mutable_left_right_profile_order()
+inline ::google::protobuf::RepeatedField<::int32_t>* StrafeScenarioDef::mutable_left_right_profile_order()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.TimedDirectionScenarioDef.left_right_profile_order)
+  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.left_right_profile_order)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_left_right_profile_order();
 }
 inline const ::google::protobuf::RepeatedField<::int32_t>&
-TimedDirectionScenarioDef::_internal_left_right_profile_order() const {
+StrafeScenarioDef::_internal_left_right_profile_order() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.left_right_profile_order_;
 }
-inline ::google::protobuf::RepeatedField<::int32_t>* TimedDirectionScenarioDef::_internal_mutable_left_right_profile_order() {
+inline ::google::protobuf::RepeatedField<::int32_t>* StrafeScenarioDef::_internal_mutable_left_right_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.left_right_profile_order_;
 }
 
 // repeated .aim.StrafeProfile forward_back_profiles = 7;
-inline int TimedDirectionScenarioDef::_internal_forward_back_profiles_size() const {
+inline int StrafeScenarioDef::_internal_forward_back_profiles_size() const {
   return _internal_forward_back_profiles().size();
 }
-inline int TimedDirectionScenarioDef::forward_back_profiles_size() const {
+inline int StrafeScenarioDef::forward_back_profiles_size() const {
   return _internal_forward_back_profiles_size();
 }
-inline void TimedDirectionScenarioDef::clear_forward_back_profiles() {
+inline void StrafeScenarioDef::clear_forward_back_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_profiles_.Clear();
 }
-inline ::aim::StrafeProfile* TimedDirectionScenarioDef::mutable_forward_back_profiles(int index)
+inline ::aim::StrafeProfile* StrafeScenarioDef::mutable_forward_back_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionScenarioDef.forward_back_profiles)
+  // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.forward_back_profiles)
   return _internal_mutable_forward_back_profiles()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* TimedDirectionScenarioDef::mutable_forward_back_profiles()
+inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* StrafeScenarioDef::mutable_forward_back_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.TimedDirectionScenarioDef.forward_back_profiles)
+  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.forward_back_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_forward_back_profiles();
 }
-inline const ::aim::StrafeProfile& TimedDirectionScenarioDef::forward_back_profiles(int index) const
+inline const ::aim::StrafeProfile& StrafeScenarioDef::forward_back_profiles(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.forward_back_profiles)
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_profiles)
   return _internal_forward_back_profiles().Get(index);
 }
-inline ::aim::StrafeProfile* TimedDirectionScenarioDef::add_forward_back_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::StrafeProfile* StrafeScenarioDef::add_forward_back_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::aim::StrafeProfile* _add = _internal_mutable_forward_back_profiles()->Add();
-  // @@protoc_insertion_point(field_add:aim.TimedDirectionScenarioDef.forward_back_profiles)
+  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.forward_back_profiles)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& TimedDirectionScenarioDef::forward_back_profiles() const
+inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& StrafeScenarioDef::forward_back_profiles() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TimedDirectionScenarioDef.forward_back_profiles)
+  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.forward_back_profiles)
   return _internal_forward_back_profiles();
 }
 inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>&
-TimedDirectionScenarioDef::_internal_forward_back_profiles() const {
+StrafeScenarioDef::_internal_forward_back_profiles() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.forward_back_profiles_;
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>*
-TimedDirectionScenarioDef::_internal_mutable_forward_back_profiles() {
+StrafeScenarioDef::_internal_mutable_forward_back_profiles() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.forward_back_profiles_;
 }
 
 // repeated int32 forward_back_profile_order = 8;
-inline int TimedDirectionScenarioDef::_internal_forward_back_profile_order_size() const {
+inline int StrafeScenarioDef::_internal_forward_back_profile_order_size() const {
   return _internal_forward_back_profile_order().size();
 }
-inline int TimedDirectionScenarioDef::forward_back_profile_order_size() const {
+inline int StrafeScenarioDef::forward_back_profile_order_size() const {
   return _internal_forward_back_profile_order_size();
 }
-inline void TimedDirectionScenarioDef::clear_forward_back_profile_order() {
+inline void StrafeScenarioDef::clear_forward_back_profile_order() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_profile_order_.Clear();
 }
-inline ::int32_t TimedDirectionScenarioDef::forward_back_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.forward_back_profile_order)
+inline ::int32_t StrafeScenarioDef::forward_back_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_profile_order)
   return _internal_forward_back_profile_order().Get(index);
 }
-inline void TimedDirectionScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
+inline void StrafeScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
   _internal_mutable_forward_back_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.forward_back_profile_order)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.forward_back_profile_order)
 }
-inline void TimedDirectionScenarioDef::add_forward_back_profile_order(::int32_t value) {
+inline void StrafeScenarioDef::add_forward_back_profile_order(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _internal_mutable_forward_back_profile_order()->Add(value);
-  // @@protoc_insertion_point(field_add:aim.TimedDirectionScenarioDef.forward_back_profile_order)
+  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.forward_back_profile_order)
 }
-inline const ::google::protobuf::RepeatedField<::int32_t>& TimedDirectionScenarioDef::forward_back_profile_order() const
+inline const ::google::protobuf::RepeatedField<::int32_t>& StrafeScenarioDef::forward_back_profile_order() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TimedDirectionScenarioDef.forward_back_profile_order)
+  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.forward_back_profile_order)
   return _internal_forward_back_profile_order();
 }
-inline ::google::protobuf::RepeatedField<::int32_t>* TimedDirectionScenarioDef::mutable_forward_back_profile_order()
+inline ::google::protobuf::RepeatedField<::int32_t>* StrafeScenarioDef::mutable_forward_back_profile_order()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.TimedDirectionScenarioDef.forward_back_profile_order)
+  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.forward_back_profile_order)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_forward_back_profile_order();
 }
 inline const ::google::protobuf::RepeatedField<::int32_t>&
-TimedDirectionScenarioDef::_internal_forward_back_profile_order() const {
+StrafeScenarioDef::_internal_forward_back_profile_order() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.forward_back_profile_order_;
 }
-inline ::google::protobuf::RepeatedField<::int32_t>* TimedDirectionScenarioDef::_internal_mutable_forward_back_profile_order() {
+inline ::google::protobuf::RepeatedField<::int32_t>* StrafeScenarioDef::_internal_mutable_forward_back_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.forward_back_profile_order_;
 }
 
 // repeated .aim.StrafeProfile up_down_profiles = 9;
-inline int TimedDirectionScenarioDef::_internal_up_down_profiles_size() const {
+inline int StrafeScenarioDef::_internal_up_down_profiles_size() const {
   return _internal_up_down_profiles().size();
 }
-inline int TimedDirectionScenarioDef::up_down_profiles_size() const {
+inline int StrafeScenarioDef::up_down_profiles_size() const {
   return _internal_up_down_profiles_size();
 }
-inline void TimedDirectionScenarioDef::clear_up_down_profiles() {
+inline void StrafeScenarioDef::clear_up_down_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_profiles_.Clear();
 }
-inline ::aim::StrafeProfile* TimedDirectionScenarioDef::mutable_up_down_profiles(int index)
+inline ::aim::StrafeProfile* StrafeScenarioDef::mutable_up_down_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:aim.TimedDirectionScenarioDef.up_down_profiles)
+  // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.up_down_profiles)
   return _internal_mutable_up_down_profiles()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* TimedDirectionScenarioDef::mutable_up_down_profiles()
+inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* StrafeScenarioDef::mutable_up_down_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.TimedDirectionScenarioDef.up_down_profiles)
+  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.up_down_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_up_down_profiles();
 }
-inline const ::aim::StrafeProfile& TimedDirectionScenarioDef::up_down_profiles(int index) const
+inline const ::aim::StrafeProfile& StrafeScenarioDef::up_down_profiles(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.up_down_profiles)
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_profiles)
   return _internal_up_down_profiles().Get(index);
 }
-inline ::aim::StrafeProfile* TimedDirectionScenarioDef::add_up_down_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::aim::StrafeProfile* StrafeScenarioDef::add_up_down_profiles() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::aim::StrafeProfile* _add = _internal_mutable_up_down_profiles()->Add();
-  // @@protoc_insertion_point(field_add:aim.TimedDirectionScenarioDef.up_down_profiles)
+  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.up_down_profiles)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& TimedDirectionScenarioDef::up_down_profiles() const
+inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& StrafeScenarioDef::up_down_profiles() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TimedDirectionScenarioDef.up_down_profiles)
+  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.up_down_profiles)
   return _internal_up_down_profiles();
 }
 inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>&
-TimedDirectionScenarioDef::_internal_up_down_profiles() const {
+StrafeScenarioDef::_internal_up_down_profiles() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.up_down_profiles_;
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>*
-TimedDirectionScenarioDef::_internal_mutable_up_down_profiles() {
+StrafeScenarioDef::_internal_mutable_up_down_profiles() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.up_down_profiles_;
 }
 
 // repeated int32 up_down_profile_order = 10;
-inline int TimedDirectionScenarioDef::_internal_up_down_profile_order_size() const {
+inline int StrafeScenarioDef::_internal_up_down_profile_order_size() const {
   return _internal_up_down_profile_order().size();
 }
-inline int TimedDirectionScenarioDef::up_down_profile_order_size() const {
+inline int StrafeScenarioDef::up_down_profile_order_size() const {
   return _internal_up_down_profile_order_size();
 }
-inline void TimedDirectionScenarioDef::clear_up_down_profile_order() {
+inline void StrafeScenarioDef::clear_up_down_profile_order() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_profile_order_.Clear();
 }
-inline ::int32_t TimedDirectionScenarioDef::up_down_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.up_down_profile_order)
+inline ::int32_t StrafeScenarioDef::up_down_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_profile_order)
   return _internal_up_down_profile_order().Get(index);
 }
-inline void TimedDirectionScenarioDef::set_up_down_profile_order(int index, ::int32_t value) {
+inline void StrafeScenarioDef::set_up_down_profile_order(int index, ::int32_t value) {
   _internal_mutable_up_down_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.up_down_profile_order)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.up_down_profile_order)
 }
-inline void TimedDirectionScenarioDef::add_up_down_profile_order(::int32_t value) {
+inline void StrafeScenarioDef::add_up_down_profile_order(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _internal_mutable_up_down_profile_order()->Add(value);
-  // @@protoc_insertion_point(field_add:aim.TimedDirectionScenarioDef.up_down_profile_order)
+  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.up_down_profile_order)
 }
-inline const ::google::protobuf::RepeatedField<::int32_t>& TimedDirectionScenarioDef::up_down_profile_order() const
+inline const ::google::protobuf::RepeatedField<::int32_t>& StrafeScenarioDef::up_down_profile_order() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TimedDirectionScenarioDef.up_down_profile_order)
+  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.up_down_profile_order)
   return _internal_up_down_profile_order();
 }
-inline ::google::protobuf::RepeatedField<::int32_t>* TimedDirectionScenarioDef::mutable_up_down_profile_order()
+inline ::google::protobuf::RepeatedField<::int32_t>* StrafeScenarioDef::mutable_up_down_profile_order()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:aim.TimedDirectionScenarioDef.up_down_profile_order)
+  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.up_down_profile_order)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_up_down_profile_order();
 }
 inline const ::google::protobuf::RepeatedField<::int32_t>&
-TimedDirectionScenarioDef::_internal_up_down_profile_order() const {
+StrafeScenarioDef::_internal_up_down_profile_order() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.up_down_profile_order_;
 }
-inline ::google::protobuf::RepeatedField<::int32_t>* TimedDirectionScenarioDef::_internal_mutable_up_down_profile_order() {
+inline ::google::protobuf::RepeatedField<::int32_t>* StrafeScenarioDef::_internal_mutable_up_down_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.up_down_profile_order_;
 }
 
 // float time_scale_multiplier = 11;
-inline bool TimedDirectionScenarioDef::has_time_scale_multiplier() const {
+inline bool StrafeScenarioDef::has_time_scale_multiplier() const {
   bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_time_scale_multiplier() {
+inline void StrafeScenarioDef::clear_time_scale_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.time_scale_multiplier_ = 0;
   _impl_._has_bits_[0] &= ~0x00000008u;
 }
-inline float TimedDirectionScenarioDef::time_scale_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.time_scale_multiplier)
+inline float StrafeScenarioDef::time_scale_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.time_scale_multiplier)
   return _internal_time_scale_multiplier();
 }
-inline void TimedDirectionScenarioDef::set_time_scale_multiplier(float value) {
+inline void StrafeScenarioDef::set_time_scale_multiplier(float value) {
   _internal_set_time_scale_multiplier(value);
   _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.time_scale_multiplier)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.time_scale_multiplier)
 }
-inline float TimedDirectionScenarioDef::_internal_time_scale_multiplier() const {
+inline float StrafeScenarioDef::_internal_time_scale_multiplier() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.time_scale_multiplier_;
 }
-inline void TimedDirectionScenarioDef::_internal_set_time_scale_multiplier(float value) {
+inline void StrafeScenarioDef::_internal_set_time_scale_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.time_scale_multiplier_ = value;
 }
 
 // float distance_multiplier = 16;
-inline bool TimedDirectionScenarioDef::has_distance_multiplier() const {
+inline bool StrafeScenarioDef::has_distance_multiplier() const {
   bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_distance_multiplier() {
+inline void StrafeScenarioDef::clear_distance_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_multiplier_ = 0;
   _impl_._has_bits_[0] &= ~0x00000100u;
 }
-inline float TimedDirectionScenarioDef::distance_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.distance_multiplier)
+inline float StrafeScenarioDef::distance_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.distance_multiplier)
   return _internal_distance_multiplier();
 }
-inline void TimedDirectionScenarioDef::set_distance_multiplier(float value) {
+inline void StrafeScenarioDef::set_distance_multiplier(float value) {
   _internal_set_distance_multiplier(value);
   _impl_._has_bits_[0] |= 0x00000100u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.distance_multiplier)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.distance_multiplier)
 }
-inline float TimedDirectionScenarioDef::_internal_distance_multiplier() const {
+inline float StrafeScenarioDef::_internal_distance_multiplier() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.distance_multiplier_;
 }
-inline void TimedDirectionScenarioDef::_internal_set_distance_multiplier(float value) {
+inline void StrafeScenarioDef::_internal_set_distance_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_multiplier_ = value;
 }
 
 // float acceleration = 12;
-inline bool TimedDirectionScenarioDef::has_acceleration() const {
+inline bool StrafeScenarioDef::has_acceleration() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_acceleration() {
+inline void StrafeScenarioDef::clear_acceleration() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_ = 0;
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline float TimedDirectionScenarioDef::acceleration() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.acceleration)
+inline float StrafeScenarioDef::acceleration() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.acceleration)
   return _internal_acceleration();
 }
-inline void TimedDirectionScenarioDef::set_acceleration(float value) {
+inline void StrafeScenarioDef::set_acceleration(float value) {
   _internal_set_acceleration(value);
   _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.acceleration)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.acceleration)
 }
-inline float TimedDirectionScenarioDef::_internal_acceleration() const {
+inline float StrafeScenarioDef::_internal_acceleration() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.acceleration_;
 }
-inline void TimedDirectionScenarioDef::_internal_set_acceleration(float value) {
+inline void StrafeScenarioDef::_internal_set_acceleration(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_ = value;
 }
 
 // .aim.Direction left_right_initial_direction = 13;
-inline bool TimedDirectionScenarioDef::has_left_right_initial_direction() const {
+inline bool StrafeScenarioDef::has_left_right_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_left_right_initial_direction() {
+inline void StrafeScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000020u;
 }
-inline ::aim::Direction TimedDirectionScenarioDef::left_right_initial_direction() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.left_right_initial_direction)
+inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_initial_direction)
   return _internal_left_right_initial_direction();
 }
-inline void TimedDirectionScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
+inline void StrafeScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.left_right_initial_direction)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.left_right_initial_direction)
 }
-inline ::aim::Direction TimedDirectionScenarioDef::_internal_left_right_initial_direction() const {
+inline ::aim::Direction StrafeScenarioDef::_internal_left_right_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return static_cast<::aim::Direction>(_impl_.left_right_initial_direction_);
 }
-inline void TimedDirectionScenarioDef::_internal_set_left_right_initial_direction(::aim::Direction value) {
+inline void StrafeScenarioDef::_internal_set_left_right_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = value;
 }
 
 // .aim.Direction up_down_initial_direction = 14;
-inline bool TimedDirectionScenarioDef::has_up_down_initial_direction() const {
+inline bool StrafeScenarioDef::has_up_down_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_up_down_initial_direction() {
+inline void StrafeScenarioDef::clear_up_down_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000040u;
 }
-inline ::aim::Direction TimedDirectionScenarioDef::up_down_initial_direction() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.up_down_initial_direction)
+inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_initial_direction)
   return _internal_up_down_initial_direction();
 }
-inline void TimedDirectionScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
+inline void StrafeScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
   _internal_set_up_down_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000040u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.up_down_initial_direction)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.up_down_initial_direction)
 }
-inline ::aim::Direction TimedDirectionScenarioDef::_internal_up_down_initial_direction() const {
+inline ::aim::Direction StrafeScenarioDef::_internal_up_down_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return static_cast<::aim::Direction>(_impl_.up_down_initial_direction_);
 }
-inline void TimedDirectionScenarioDef::_internal_set_up_down_initial_direction(::aim::Direction value) {
+inline void StrafeScenarioDef::_internal_set_up_down_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = value;
 }
 
 // .aim.Direction forward_back_initial_direction = 15;
-inline bool TimedDirectionScenarioDef::has_forward_back_initial_direction() const {
+inline bool StrafeScenarioDef::has_forward_back_initial_direction() const {
   bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
-inline void TimedDirectionScenarioDef::clear_forward_back_initial_direction() {
+inline void StrafeScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   _impl_._has_bits_[0] &= ~0x00000080u;
 }
-inline ::aim::Direction TimedDirectionScenarioDef::forward_back_initial_direction() const {
-  // @@protoc_insertion_point(field_get:aim.TimedDirectionScenarioDef.forward_back_initial_direction)
+inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_initial_direction)
   return _internal_forward_back_initial_direction();
 }
-inline void TimedDirectionScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
+inline void StrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
   _impl_._has_bits_[0] |= 0x00000080u;
-  // @@protoc_insertion_point(field_set:aim.TimedDirectionScenarioDef.forward_back_initial_direction)
+  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.forward_back_initial_direction)
 }
-inline ::aim::Direction TimedDirectionScenarioDef::_internal_forward_back_initial_direction() const {
+inline ::aim::Direction StrafeScenarioDef::_internal_forward_back_initial_direction() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return static_cast<::aim::Direction>(_impl_.forward_back_initial_direction_);
 }
-inline void TimedDirectionScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
+inline void StrafeScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = value;
 }
