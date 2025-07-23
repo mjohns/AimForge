@@ -211,12 +211,12 @@ class MovementControllerImpl : public MovementController {
     }
 
     if (d.left_right_profiles_size() > 0) {
-      left_right_controller_ = SingleDirectionController(
+      left_right_controller_ = StrafeController(
           bounds.min_x, bounds.max_x, {}, {}, d.left_right_initial_direction(), params, wall);
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
-      forward_back_controller_ = SingleDirectionController(bounds.min_depth,
+      forward_back_controller_ = StrafeController(bounds.min_depth,
                                                            bounds.max_depth,
                                                            {},
                                                            {},
@@ -271,8 +271,8 @@ class MovementControllerImpl : public MovementController {
   ScenarioDef def_;
   Application& app_;
 
-  std::optional<SingleDirectionController> left_right_controller_;
-  std::optional<SingleDirectionController> forward_back_controller_;
+  std::optional<StrafeController> left_right_controller_;
+  std::optional<StrafeController> forward_back_controller_;
   std::unique_ptr<BounceController> bounce_controller_;
 };
 

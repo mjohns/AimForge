@@ -63,10 +63,10 @@ void WallDepthMovementController::UpdatePosition(Target& t, const Room& room, fl
   t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room, t.wall_depth);
 }
 
-float SingleDirectionController::GetUpdatedPosition(
+float StrafeController::GetUpdatedPosition(
     Target& t,
     Random& rand,
-    const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
+    const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
     const google::protobuf::RepeatedField<int>& order,
     float current_position,
     float now_seconds,
@@ -157,7 +157,7 @@ float SingleDirectionController::GetUpdatedPosition(
   return next_pos;
 }
 
-bool SingleDirectionController::GetInitialGoingLeft(Direction dir,
+bool StrafeController::GetInitialGoingLeft(Direction dir,
                                                     float current_position,
                                                     Random& rand) {
   if (initial_direction_ == DIRECTION_POSITIVE) {
@@ -173,10 +173,10 @@ bool SingleDirectionController::GetInitialGoingLeft(Direction dir,
   }
 }
 
-void SingleDirectionController::ChangeDirection(
+void StrafeController::ChangeDirection(
     Random& rand,
     float now_seconds,
-    const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
+    const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
     const google::protobuf::RepeatedField<int>& order,
     float target_speed,
     float current_position) {

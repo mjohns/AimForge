@@ -982,7 +982,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Unindent();
   }
 
-  void DrawTimedDirectionProfile(TimedDirectionProfile* p) {
+  void DrawStrafeProfile(StrafeProfile* p) {
     TimeOrDistance type = p->has_distance() ? TimeOrDistance::DISTANCE : TimeOrDistance::TIME;
     ImGui::SimpleTypeDropdown("TimeOrDistanceDropdown", &type, kTimeOrDistance, char_x_ * 9);
     ImGui::SameLine();
@@ -993,7 +993,7 @@ class ScenarioEditorScreen : public UiScreen {
                                     .set_precision(2)
                                     .set_default(1)
                                     .set_width(char_x_ * 10),
-                                PROTO_JITTERED_FIELD(TimedDirectionProfile, p, time));
+                                PROTO_JITTERED_FIELD(StrafeProfile, p, time));
       p->clear_distance();
       p->clear_distance_jitter();
     } else {
@@ -1010,7 +1010,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TimedDirectionProfile, p, speed_multiplier));
+                      PROTO_FLOAT_FIELD(StrafeProfile, p, speed_multiplier));
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration multiplier")
                           .set_is_optional()
                           .set_step(0.05, 0.2)
@@ -1018,7 +1018,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TimedDirectionProfile, p, acceleration_multiplier));
+                      PROTO_FLOAT_FIELD(StrafeProfile, p, acceleration_multiplier));
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Center bias")
                           .set_is_optional()
                           .set_step(0.1, 0.5)
@@ -1026,7 +1026,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(0.1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TimedDirectionProfile, p, center_bias));
+                      PROTO_FLOAT_FIELD(StrafeProfile, p, center_bias));
   }
 
   void DrawTimedDirectionEditor() {
@@ -1082,7 +1082,7 @@ class ScenarioEditorScreen : public UiScreen {
                     "Profile",
                     d.mutable_left_right_profile_order(),
                     d.mutable_left_right_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+                    std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
     ImGui::Unindent();
 
     ImGui::AlignTextToFramePadding();
@@ -1103,7 +1103,7 @@ class ScenarioEditorScreen : public UiScreen {
                     "Profile",
                     d.mutable_up_down_profile_order(),
                     d.mutable_up_down_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+                    std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
     ImGui::Unindent();
 
     ImGui::AlignTextToFramePadding();
@@ -1122,7 +1122,7 @@ class ScenarioEditorScreen : public UiScreen {
                       "Profile",
                       d.mutable_forward_back_profile_order(),
                       d.mutable_forward_back_profiles(),
-                      std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+                      std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
       ImGui::Unindent();
 
       ImGui::AlignTextToFramePadding();
@@ -1273,7 +1273,7 @@ class ScenarioEditorScreen : public UiScreen {
                     "Profile",
                     d.mutable_left_right_profile_order(),
                     d.mutable_left_right_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+                    std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
     ImGui::Unindent();
 
     ImGui::AlignTextToFramePadding();
@@ -1294,7 +1294,7 @@ class ScenarioEditorScreen : public UiScreen {
                       "Profile",
                       d.mutable_forward_back_profile_order(),
                       d.mutable_forward_back_profiles(),
-                      std::bind_front(&ScenarioEditorScreen::DrawTimedDirectionProfile, this));
+                      std::bind_front(&ScenarioEditorScreen::DrawStrafeProfile, this));
       ImGui::Unindent();
 
       ImGui::AlignTextToFramePadding();

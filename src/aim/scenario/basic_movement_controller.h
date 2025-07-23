@@ -50,15 +50,15 @@ struct DirectionParams {
   float distance_multiplier = 0;
 };
 
-class SingleDirectionController {
+class StrafeController {
  public:
-  SingleDirectionController(float min,
+  StrafeController(float min,
                             float max,
                             std::optional<float> relative_min,
                             std::optional<float> relative_max,
                             Direction initial_direction,
                             DirectionParams params,
-      Wall wall)
+                            Wall wall)
       : initial_direction_(initial_direction),
         min_(min),
         max_(max),
@@ -68,23 +68,22 @@ class SingleDirectionController {
         unscaled_acceleration_(params.acceleration),
         time_scale_multiplier_(params.time_scale_multiplier),
         distance_multiplier_(params.distance_multiplier),
-  wall_(wall) {}
+        wall_(wall) {}
 
-  float GetUpdatedPosition(
-      Target& t,
-      Random& rand,
-      const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
-      const google::protobuf::RepeatedField<int>& order,
-      float current_position,
-      float now_seconds,
-      float delta_seconds);
+  float GetUpdatedPosition(Target& t,
+                           Random& rand,
+                           const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
+                           const google::protobuf::RepeatedField<int>& order,
+                           float current_position,
+                           float now_seconds,
+                           float delta_seconds);
 
  private:
   bool GetInitialGoingLeft(Direction dir, float current_position, Random& rand);
 
   void ChangeDirection(Random& rand,
                        float now_seconds,
-                       const google::protobuf::RepeatedPtrField<TimedDirectionProfile>& profiles,
+                       const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
                        const google::protobuf::RepeatedField<int>& order,
                        float target_speed,
                        float current_position);

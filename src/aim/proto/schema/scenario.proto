@@ -200,7 +200,7 @@ message ScenarioDef {
     CircleScenarioDef circle_def = 38;
     SineScenarioDef sine_def = 39;
     WaypointScenarioDef waypoint_def = 40;
-    TimedDirectionScenarioDef timed_direction_def = 41;
+    TimedDirectionScenarioDef timed_direction_def = 41 [json_name = "strafeDef"];
     BounceScenarioDef bounce_def = 42;
   }
 }
@@ -337,7 +337,7 @@ message WallStrafeScenarioDef {
   float distance_multiplier = 7;
 }
 
-message TimedDirectionProfile {
+message StrafeProfile {
   ProfileInfo info = 1;
 
   float time = 2;
@@ -359,13 +359,13 @@ message TimedDirectionScenarioDef {
 
   TargetPlacementStrategy target_placement_strategy = 4;
 
-  repeated TimedDirectionProfile left_right_profiles = 5;
+  repeated StrafeProfile left_right_profiles = 5;
   repeated int32 left_right_profile_order = 6;
 
-  repeated TimedDirectionProfile forward_back_profiles = 7;
+  repeated StrafeProfile forward_back_profiles = 7;
   repeated int32 forward_back_profile_order = 8;
 
-  repeated TimedDirectionProfile up_down_profiles = 9;
+  repeated StrafeProfile up_down_profiles = 9;
   repeated int32 up_down_profile_order = 10;
 
   // Scales the times in all of the profiles. Defaults to 1.
@@ -401,10 +401,10 @@ message BounceScenarioDef {
   repeated BounceProfile bounce_profiles = 3;
   repeated int32 bounce_profile_order = 4;
 
-  repeated TimedDirectionProfile left_right_profiles = 5;
+  repeated StrafeProfile left_right_profiles = 5;
   repeated int32 left_right_profile_order = 6;
 
-  repeated TimedDirectionProfile forward_back_profiles = 7;
+  repeated StrafeProfile forward_back_profiles = 7;
   repeated int32 forward_back_profile_order = 8;
 
   // Scales the times in all of the profiles. Defaults to 1.
