@@ -86,6 +86,13 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     float z = ClampPositive(app_->rand().GetJittered(wall_.GetRegionLength(region.depth()),
                                                      wall_.GetRegionLength(region.depth_jitter())));
 
+    if (region.has_point()) {
+      glm::vec2 pos;
+      pos.x = wall_.GetRegionLength(region.point().x());
+      pos.y = wall_.GetRegionLength(region.point().y());
+      return glm::vec3(pos, z);
+    }
+
     if (region.has_ellipse()) {
       glm::vec2 pos =
           GetRandomPositionInEllipse(0.5 * wall_.GetRegionLength(region.ellipse().x_diameter()),

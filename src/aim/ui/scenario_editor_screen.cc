@@ -41,17 +41,11 @@ const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kBarrelRoom, "Barrel"},
 };
 
-const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthTypesV2{
+const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthTypes{
     {RegionLength::kValue, "value"},
     {RegionLength::kXPercentValue, "width%"},
     {RegionLength::kYPercentValue, "height%"},
     {RegionLength::kDepthPercentValue, "depth%"},
-};
-
-const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthTypes{
-    {RegionLength::kXPercentValue, "width"},
-    {RegionLength::kYPercentValue, "height"},
-    {RegionLength::kDepthPercentValue, "depth"},
 };
 
 enum class TimeOrDistance { TIME, DISTANCE };
@@ -119,6 +113,7 @@ const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
     {TargetRegion::kRectangle, "Rectangle"},
     {TargetRegion::kCircle, "Circle"},
     {TargetRegion::kEllipse, "Ellipse"},
+    {TargetRegion::kPoint, "Point"},
 };
 
 Room GetDefaultSimpleRoom() {
@@ -1072,8 +1067,20 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "Scale all the times in the profiles by the given multiplier. To reduce the times by "
-        "half "
-        "use 0.5");
+        "half use 0.5");
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Distance multiplier")
+                          .set_is_optional()
+                          .set_step(0.05, 0.1)
+                          .set_min(0.01)
+                          .set_precision(2)
+                          .set_default(1)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, distance_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Scale all the distances in the profiles by the given multiplier. To reduce the distance "
+        "by half use 0.5");
 
     ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
                           .set_label("Acceleration")
@@ -1641,6 +1648,10 @@ class ScenarioEditorScreen : public UiScreen {
     auto region_type = region->type_case();
     ImGui::SimpleTypeDropdown("RegionTypeDropdown", &region_type, kRegionTypes, char_x_ * 15);
 
+    if (region_type == TargetRegion::kPoint) {
+      DrawRegionVec2Editor("Point", region->mutable_point());
+    }
+
     if (region_type == TargetRegion::kRectangle) {
       auto* t = region->mutable_rectangle();
       ImGui::AlignTextToFramePadding();
@@ -1692,16 +1703,11 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Inner diameter");
       ImGui::SameLine();
-      bool use_inner = t->has_inner_diameter();
-      ImGui::Checkbox("##InnerCheckbox", &use_inner);
-      if (use_inner) {
-        ImGui::Indent();
-        DrawRegionLengthEditor(
-            "InnerDiameter", RegionLength::kXPercentValue, t->mutable_inner_diameter(), 25);
-        ImGui::Unindent();
-      } else {
-        t->clear_inner_diameter();
-      }
+      DrawOptionalRegionLengthEditor(
+          "InnerDiameter",
+          RegionLength::kXPercentValue,
+          PROTO_PTR_FIELD(RegionLength, CircleTargetRegion, t, inner_diameter),
+          25);
     }
 
     if (region_type == TargetRegion::kEllipse) {
@@ -1731,8 +1737,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       ImGui::HelpMarker(
           "The distance away from the wall towards the camera. The greater the value, the "
-          "further "
-          "it is from the wall.");
+          "further it is from the wall.");
     } else {
       region->clear_depth();
       region->clear_depth_jitter();
@@ -1976,26 +1981,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Unindent();
   }
 
-  enum class DefaultDim {
-    DIM_X,
-    DIM_Y,
-    DIM_DEPTH,
-  };
-
-  Field<float> GetRegionLengthField(RegionLength* length, RegionLength::TypeCase type) {
-    switch (type) {
-      case RegionLength::kYPercentValue:
-        return PROTO_PERCENT_FIELD(RegionLength, length, y_percent_value);
-      case RegionLength::kDepthPercentValue:
-        return PROTO_PERCENT_FIELD(RegionLength, length, depth_percent_value);
-      case RegionLength::kXPercentValue:
-        return PROTO_PERCENT_FIELD(RegionLength, length, x_percent_value);
-      case RegionLength::kValue:
-        break;
-    }
-    return PROTO_FLOAT_FIELD(RegionLength, length, value);
-  }
-
   void SetRegionLengthValue(RegionLength* length, RegionLength::TypeCase type, float value) {
     switch (type) {
       case RegionLength::kValue:
@@ -2052,7 +2037,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SameLine();
     bool type_changed =
-        ImGui::SimpleTypeDropdown("TypeDropdown", &type, kRegionLengthTypesV2, char_x_ * 8);
+        ImGui::SimpleTypeDropdown("TypeDropdown", &type, kRegionLengthTypes, char_x_ * 8);
 
     SetRegionLengthValue(length, type, field.get());
   }
@@ -2094,7 +2079,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SameLine();
     bool type_changed =
-        ImGui::SimpleTypeDropdown("TypeDropdown", &type, kRegionLengthTypesV2, char_x_ * 8);
+        ImGui::SimpleTypeDropdown("TypeDropdown", &type, kRegionLengthTypes, char_x_ * 8);
 
     SetRegionLengthValue(length, type, field.get());
     SetRegionLengthValue(jitter_length, type, jitter_field.get());

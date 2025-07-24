@@ -63,14 +63,8 @@ message RegionVec2 {
   RegionLength y = 2;
 }
 
-message RegionVec3 {
-  RegionLength x = 1;
-  RegionLength y = 2;
-  RegionLength z = 3;
-}
-
 message TargetRegion {
-  ProfileInfo info = 15;
+  ProfileInfo info = 1;
 
   // (0, 0) is the center of the wall.
   RegionLength x_offset = 2;
@@ -78,13 +72,14 @@ message TargetRegion {
 
   // The distance in from the wall to place the target. The larget the depth, the closer to the
   // camera. 0 depth is on the wall.
-  RegionLength depth = 7;
-  RegionLength depth_jitter = 8;
+  RegionLength depth = 4;
+  RegionLength depth_jitter = 5;
 
   oneof type {
-    RectangleTargetRegion rectangle = 4;
-    EllipseTargetRegion ellipse = 5;
-    CircleTargetRegion circle = 6;
+    RectangleTargetRegion rectangle = 10;
+    EllipseTargetRegion ellipse = 11;
+    CircleTargetRegion circle = 12;
+    RegionVec2 point = 13;
   }
 }
 
