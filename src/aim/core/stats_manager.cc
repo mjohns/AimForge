@@ -81,11 +81,13 @@ float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
   if (def.start_score() > 0) {
     return GetScoreLevel(score, def.start_score(), def.end_score());
   }
+  /*
   if (def.has_centering_def() || def.has_wall_arc_def() ||
       def.shot_type().type_case() == ShotType::kTrackingInvincible) {
     // Default range to tracking from 40% to 75% of time.
     return GetScoreLevel(score, def.duration_seconds() * 0.399, def.duration_seconds() * 0.75);
   }
+  */
   return 0;
 }
 

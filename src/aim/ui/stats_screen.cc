@@ -40,6 +40,7 @@ std::string GetHitPercentageString(const StatsRow& stats) {
 
 struct StatsInfo {
   std::vector<StatsRow> all_stats;
+  std::vector<StatsRow> sorted_stats;
   StatsRow stats;
   StatsRow previous_high_score_stats;
   StatsRow average_stats;
@@ -245,6 +246,7 @@ class StatsScreen : public UiScreen {
         }
         DrawStatsTableRow(high_score_name, info_.stats, info_.previous_high_score_stats);
         DrawStatsTableRow("Average", info_.stats, info_.average_stats);
+        DrawStatsTableRow("Median", info_.stats, info_.median_stats);
       }
 
       std::vector<std::string> compare_to_scenarios = GetCompareToList();
@@ -685,6 +687,22 @@ class StatsScreen : public UiScreen {
 
     if (found_max_index >= 0) {
       info->previous_high_score_stats = all_stats[found_max_index];
+    }
+
+    info->sorted_stats = info->all_stats;
+    std::sort(info->sorted_stats.begin(),
+              info->sorted_stats.end(),
+              [](const StatsRow& lhs, const StatsRow& rhs) { return lhs.score < rhs.score; });
+
+    if (info->sorted_stats.size() > 0) {
+      int mid = info->sorted_stats.size() / 2;
+      if (info->sorted_stats.size() % 2 == 0) {
+        // Maybe average the two mid for a more true median? For now just take the higher one so the
+        // time and other fields make sense.
+        info->median_stats = info->sorted_stats[mid];
+      } else {
+        info->median_stats = info->sorted_stats[mid + 1];
+      }
     }
 
     return true;

@@ -1,6 +1,7 @@
 {
   "description": "",
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -8,7 +9,7 @@
       "z": 0
     },
     "cylinderRoom": {
-      "height": 130,
+      "height": 110,
       "hideSides": false,
       "radius": 200,
       "sideAngleDegrees": 80,
@@ -17,92 +18,56 @@
   },
   "shotType": {
     "healthRegenRate": 1.50000012,
-    "healthSeconds": 0.6,
+    "healthSeconds": 0.550000072,
     "trackingKill": true
   },
-  "targetDef": {
-    "newestTargetIsGhost": false,
-    "numTargets": 4,
-    "profiles": [
-      {
-        "info": {
-          "description": ""
-        },
-        "speed": 79,
-        "speedJitter": 0,
-        "targetRadius": 2.2,
-        "targetRadiusJitter": 0
-      }
-    ],
-    "removeClosestOnMiss": false
-  },
-  "wallStrafeDef": {
-    "acceleration": 213,
+  "strafeDef": {
+    "acceleration": 265,
     "bounds": {
+      "depth": {
+        "depthPercentValue": 0.300000072
+      },
       "height": {
-        "yPercentValue": 0.7
+        "yPercentValue": 0.6
       },
       "width": {
         "xPercentValue": 0.9
       }
     },
-    "profiles": [
+    "forwardBackInitialDirection": "DIRECTION_RANDOM",
+    "forwardBackProfiles": [
       {
-        "angle": 0,
-        "angleJitter": 13,
-        "directionChangePercent": 0.5,
+        "info": {
+          "description": ""
+        },
+        "speedMultiplier": 0.2,
+        "time": 1,
+        "timeJitter": 0.2
+      }
+    ],
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
+    "leftRightProfiles": [
+      {
         "distance": {
-          "xPercentValue": 0.26
+          "xPercentValue": 0.3
+        },
+        "distanceJitter": {
+          "xPercentValue": 0.15
+        },
+        "info": {
+          "description": "",
+          "weight": 1
+        }
+      },
+      {
+        "distance": {
+          "xPercentValue": 0.200000063
         },
         "distanceJitter": {
           "xPercentValue": 0.05
         },
         "info": {
-          "description": "Little Verticality",
-          "weight": 5
-        }
-      },
-      {
-        "angle": 0,
-        "angleJitter": 3,
-        "directionChangePercent": 0.5,
-        "distance": {
-          "xPercentValue": 0.3
-        },
-        "distanceJitter": {
-          "xPercentValue": 0.08
-        },
-        "info": {
-          "description": "Flat Mid",
-          "weight": 11
-        }
-      },
-      {
-        "angle": 20,
-        "angleJitter": 0,
-        "directionChangePercent": 0.5,
-        "distance": {
-          "xPercentValue": 0.3
-        },
-        "distanceJitter": {
-          "xPercentValue": 0.07
-        },
-        "info": {
-          "description": "Bigger Vert Down",
-          "weight": 2
-        }
-      },
-      {
-        "angle": -20,
-        "angleJitter": 0,
-        "distance": {
-          "xPercentValue": 0.3
-        },
-        "distanceJitter": {
-          "xPercentValue": 0.05
-        },
-        "info": {
-          "description": "Bigger Vert Up",
+          "description": "Shorter",
           "weight": 1
         }
       }
@@ -114,10 +79,10 @@
       "regions": [
         {
           "depth": {
-            "value": 36
+            "depthPercentValue": 0.15
           },
           "depthJitter": {
-            "value": 35
+            "depthPercentValue": 0.05
           },
           "info": {
             "description": ""
@@ -127,11 +92,53 @@
               "xPercentValue": 0.799999833
             },
             "yLength": {
-              "yPercentValue": 0.799999833
+              "yPercentValue": 0.4
             }
           }
         }
       ]
-    }
+    },
+    "upDownInitialDirection": "DIRECTION_RANDOM",
+    "upDownProfiles": [
+      {
+        "accelerationMultiplier": 0.149999842,
+        "distance": {
+          "yPercentValue": 0.140000045
+        },
+        "distanceJitter": {
+          "yPercentValue": 0.045
+        },
+        "info": {
+          "description": "",
+          "weight": 1
+        },
+        "speedMultiplier": 0.149999842
+      },
+      {
+        "info": {
+          "description": "",
+          "weight": 1
+        },
+        "speedMultiplier": 0.05,
+        "time": 1,
+        "timeJitter": 0.2
+      }
+    ]
+  },
+  "targetDef": {
+    "newestTargetIsGhost": false,
+    "numTargets": 4,
+    "profiles": [
+      {
+        "info": {
+          "description": ""
+        },
+        "speed": 79,
+        "speedJitter": 0,
+        "targetRadius": 2.99999928,
+        "targetRadiusJitter": 0
+      }
+    ],
+    "removeClosestOnMiss": false
   }
 }
