@@ -20,6 +20,7 @@ const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTy
     {CrosshairLayer::kDot, "Dot"},
     {CrosshairLayer::kPlus, "Plus"},
     {CrosshairLayer::kCircle, "Circle"},
+    {CrosshairLayer::kDiamond, "Diamond"},
     {CrosshairLayer::kImage, "Image"},
 };
 
@@ -349,6 +350,9 @@ class CrosshairEditorScreen : public UiScreen {
       if (type == CrosshairLayer::kPlus) {
         DrawCrosshairPlusEditor(l.mutable_plus());
       }
+      if (type == CrosshairLayer::kDiamond) {
+        DrawCrosshairDiamondEditor(l.mutable_diamond());
+      }
       if (type == CrosshairLayer::kImage) {
         DrawCrosshairImageEditor(l.mutable_image());
       }
@@ -365,8 +369,8 @@ class CrosshairEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_default(1)
                           .set_step(0.1, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_zero_is_unset(),
                       PROTO_FLOAT_FIELD(DotCrosshair, c, outline_thickness));
   }
@@ -377,8 +381,8 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("Thickness")
                           .set_label("Thickness")
                           .set_step(0.5, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_default(1.5)
                           .set_min(0.1),
                       PROTO_FLOAT_FIELD(CircleCrosshair, c, thickness));
@@ -404,8 +408,8 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("HorizontalSize")
                           .set_label("Horizontal size")
                           .set_step(0.1, 0.5)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_default(1)
                           .set_min(0),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, horizontal_size));
@@ -413,8 +417,8 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("HorizontalGapSize")
                           .set_label("gap")
                           .set_step(0.1, 0.5)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_zero_is_unset()
                           .set_min(0),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, horizontal_gap_size));
@@ -422,8 +426,8 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("VerticalSize")
                           .set_label("Vertical size")
                           .set_step(0.1, 0.5)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_default(1)
                           .set_min(0),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, vertical_size));
@@ -432,8 +436,8 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("VerticalGapSize")
                           .set_label("gap")
                           .set_step(0.1, 0.5)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_zero_is_unset()
                           .set_min(0),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, vertical_gap_size));
@@ -441,7 +445,7 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("Thickness")
                           .set_label("Thickness")
                           .set_step(0.1, 1)
-                          .set_precision(1)
+                          .set_precision(2)
                           .set_width(char_x_ * 10)
                           .set_min(0.1)
                           .set_default(1),
@@ -450,8 +454,8 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("OutlineThickness")
                           .set_label("Outline thickness")
                           .set_step(0.1, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_is_optional()
                           .set_default(1),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, outline_thickness));
@@ -459,10 +463,36 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputFloat(ImGui::InputFloatParams("Rounding")
                           .set_label("Rounding")
                           .set_step(0.5, 1)
-                          .set_precision(1)
-                          .set_width(char_x_ * 8)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
                           .set_min(0),
                       PROTO_FLOAT_FIELD(PlusCrosshair, c, rounding));
+  }
+
+  void DrawCrosshairDiamondEditor(DiamondCrosshair* c) {
+    ImGui::IdGuard cid("DiamondCrosshair");
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Horizontal size")
+                          .set_step(0.1, 0.5)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
+                          .set_default(1)
+                          .set_min(0),
+                      PROTO_FLOAT_FIELD(DiamondCrosshair, c, horizontal_size));
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Vertical size")
+                          .set_step(0.1, 0.5)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
+                          .set_default(1)
+                          .set_min(0),
+                      PROTO_FLOAT_FIELD(DiamondCrosshair, c, vertical_size));
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Outline thickness")
+                          .set_step(0.1, 1)
+                          .set_precision(2)
+                          .set_width(char_x_ * 9)
+                          .set_is_optional()
+                          .set_default(1),
+                      PROTO_FLOAT_FIELD(DiamondCrosshair, c, outline_thickness));
   }
 
   float char_x_ = 0;

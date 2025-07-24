@@ -27,6 +27,12 @@ message CircleCrosshair {
   bool use_outline_color = 2;
 }
 
+message DiamondCrosshair {
+  float horizontal_size = 1;
+  float vertical_size = 2;
+  float outline_thickness = 3;
+}
+
 message ImageCrosshair {
   string file_name = 1;
 }
@@ -44,6 +50,7 @@ message CrosshairLayer {
     PlusCrosshair plus = 11;
     ImageCrosshair image = 12;
     CircleCrosshair circle = 13;
+    DiamondCrosshair diamond = 14;
   }
 }
 

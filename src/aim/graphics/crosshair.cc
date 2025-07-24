@@ -191,6 +191,32 @@ void CrosshairManager::DrawLayer(const CrosshairLayer& layer,
     return;
   }
 
+  if (layer.has_diamond()) {
+    const DiamondCrosshair& d = layer.diamond();
+    float base_length = crosshair_size * 0.55f;
+
+    float horizontal_length = base_length * 0.5;
+    if (d.has_horizontal_size()) {
+      horizontal_length *= d.horizontal_size();
+    }
+    float vertical_length = base_length * 0.5;
+    if (d.has_vertical_size()) {
+      vertical_length *= d.vertical_size();
+    }
+
+    ImVec2 left(center.x - horizontal_length, center.y);
+    ImVec2 right(center.x + horizontal_length, center.y);
+    ImVec2 up(center.x, center.y - vertical_length);
+    ImVec2 down(center.x, center.y + vertical_length);
+    draw_list->AddQuadFilled(up, right, down, left, main_color);
+
+    if (d.outline_thickness() > 0) {
+      draw_list->AddQuad(up, right, down, left, outline_color, d.outline_thickness());
+    }
+
+    return;
+  }
+
   if (layer.has_image()) {
     Texture* texture = texture_manager_.GetTexture(layer.image().file_name());
     if (texture != nullptr) {

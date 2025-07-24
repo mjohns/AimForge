@@ -109,6 +109,33 @@ struct DotCrosshairDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DotCrosshairDefaultTypeInternal _DotCrosshair_default_instance_;
 
+inline constexpr DiamondCrosshair::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        horizontal_size_{0},
+        vertical_size_{0},
+        outline_thickness_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DiamondCrosshair::DiamondCrosshair(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct DiamondCrosshairDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DiamondCrosshairDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DiamondCrosshairDefaultTypeInternal() {}
+  union {
+    DiamondCrosshair _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DiamondCrosshairDefaultTypeInternal _DiamondCrosshair_default_instance_;
+
 inline constexpr CircleCrosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -244,6 +271,20 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::CircleCrosshair, _impl_.use_outline_color_),
         0,
         1,
+        PROTOBUF_FIELD_OFFSET(::aim::DiamondCrosshair, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::DiamondCrosshair, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::aim::DiamondCrosshair, _impl_.horizontal_size_),
+        PROTOBUF_FIELD_OFFSET(::aim::DiamondCrosshair, _impl_.vertical_size_),
+        PROTOBUF_FIELD_OFFSET(::aim::DiamondCrosshair, _impl_.outline_thickness_),
+        0,
+        1,
+        2,
         PROTOBUF_FIELD_OFFSET(::aim::ImageCrosshair, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ImageCrosshair, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -270,11 +311,13 @@ const ::uint32_t
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
         ::_pbi::kInvalidFieldOffsetTag,
+        ::_pbi::kInvalidFieldOffsetTag,
         PROTOBUF_FIELD_OFFSET(::aim::CrosshairLayer, _impl_.type_),
         0,
         1,
         2,
         3,
+        ~0u,
         ~0u,
         ~0u,
         ~0u,
@@ -298,14 +341,16 @@ static const ::_pbi::MigrationSchema
         {0, 9, -1, sizeof(::aim::DotCrosshair)},
         {10, 25, -1, sizeof(::aim::PlusCrosshair)},
         {32, 42, -1, sizeof(::aim::CircleCrosshair)},
-        {44, 53, -1, sizeof(::aim::ImageCrosshair)},
-        {54, 71, -1, sizeof(::aim::CrosshairLayer)},
-        {79, 89, -1, sizeof(::aim::Crosshair)},
+        {44, 55, -1, sizeof(::aim::DiamondCrosshair)},
+        {58, 67, -1, sizeof(::aim::ImageCrosshair)},
+        {68, 86, -1, sizeof(::aim::CrosshairLayer)},
+        {95, 105, -1, sizeof(::aim::Crosshair)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::aim::_DotCrosshair_default_instance_._instance,
     &::aim::_PlusCrosshair_default_instance_._instance,
     &::aim::_CircleCrosshair_default_instance_._instance,
+    &::aim::_DiamondCrosshair_default_instance_._instance,
     &::aim::_ImageCrosshair_default_instance_._instance,
     &::aim::_CrosshairLayer_default_instance_._instance,
     &::aim::_Crosshair_default_instance_._instance,
@@ -320,17 +365,20 @@ const char descriptor_table_protodef_crosshair_2eproto[] ABSL_ATTRIBUTE_SECTION_
     "ess\030\005 \001(\002\022\031\n\021vertical_gap_size\030\006 \001(\002\022\033\n\023"
     "horizontal_gap_size\030\007 \001(\002\"\?\n\017CircleCross"
     "hair\022\021\n\tthickness\030\001 \001(\002\022\031\n\021use_outline_c"
-    "olor\030\002 \001(\010\"#\n\016ImageCrosshair\022\021\n\tfile_nam"
-    "e\030\001 \001(\t\"\246\002\n\016CrosshairLayer\022(\n\016override_c"
-    "olor\030\001 \001(\0132\020.aim.StoredColor\0220\n\026override"
-    "_outline_color\030\002 \001(\0132\020.aim.StoredColor\022\r"
-    "\n\005scale\030\003 \001(\002\022\r\n\005alpha\030\004 \001(\002\022 \n\003dot\030\n \001("
-    "\0132\021.aim.DotCrosshairH\000\022\"\n\004plus\030\013 \001(\0132\022.a"
-    "im.PlusCrosshairH\000\022$\n\005image\030\014 \001(\0132\023.aim."
-    "ImageCrosshairH\000\022&\n\006circle\030\r \001(\0132\024.aim.C"
-    "ircleCrosshairH\000B\006\n\004type\">\n\tCrosshair\022\014\n"
-    "\004name\030\001 \001(\t\022#\n\006layers\030\002 \003(\0132\023.aim.Crossh"
-    "airLayerb\010editionsp\350\007"
+    "olor\030\002 \001(\010\"]\n\020DiamondCrosshair\022\027\n\017horizo"
+    "ntal_size\030\001 \001(\002\022\025\n\rvertical_size\030\002 \001(\002\022\031"
+    "\n\021outline_thickness\030\003 \001(\002\"#\n\016ImageCrossh"
+    "air\022\021\n\tfile_name\030\001 \001(\t\"\320\002\n\016CrosshairLaye"
+    "r\022(\n\016override_color\030\001 \001(\0132\020.aim.StoredCo"
+    "lor\0220\n\026override_outline_color\030\002 \001(\0132\020.ai"
+    "m.StoredColor\022\r\n\005scale\030\003 \001(\002\022\r\n\005alpha\030\004 "
+    "\001(\002\022 \n\003dot\030\n \001(\0132\021.aim.DotCrosshairH\000\022\"\n"
+    "\004plus\030\013 \001(\0132\022.aim.PlusCrosshairH\000\022$\n\005ima"
+    "ge\030\014 \001(\0132\023.aim.ImageCrosshairH\000\022&\n\006circl"
+    "e\030\r \001(\0132\024.aim.CircleCrosshairH\000\022(\n\007diamo"
+    "nd\030\016 \001(\0132\025.aim.DiamondCrosshairH\000B\006\n\004typ"
+    "e\">\n\tCrosshair\022\014\n\004name\030\001 \001(\t\022#\n\006layers\030\002"
+    " \003(\0132\023.aim.CrosshairLayerb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_crosshair_2eproto_deps[1] =
     {
@@ -340,13 +388,13 @@ static ::absl::once_flag descriptor_table_crosshair_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_crosshair_2eproto = {
     false,
     false,
-    741,
+    878,
     descriptor_table_protodef_crosshair_2eproto,
     "crosshair.proto",
     &descriptor_table_crosshair_2eproto_once,
     descriptor_table_crosshair_2eproto_deps,
     1,
-    6,
+    7,
     schemas,
     file_default_instances,
     TableStruct_crosshair_2eproto::offsets,
@@ -1181,6 +1229,281 @@ void CircleCrosshair::InternalSwap(CircleCrosshair* PROTOBUF_RESTRICT other) {
 }
 // ===================================================================
 
+class DiamondCrosshair::_Internal {
+ public:
+  using HasBits =
+      decltype(std::declval<DiamondCrosshair>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_._has_bits_);
+};
+
+DiamondCrosshair::DiamondCrosshair(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.DiamondCrosshair)
+}
+DiamondCrosshair::DiamondCrosshair(
+    ::google::protobuf::Arena* arena, const DiamondCrosshair& from)
+    : DiamondCrosshair(arena) {
+  MergeFrom(from);
+}
+inline PROTOBUF_NDEBUG_INLINE DiamondCrosshair::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void DiamondCrosshair::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, horizontal_size_),
+           0,
+           offsetof(Impl_, outline_thickness_) -
+               offsetof(Impl_, horizontal_size_) +
+               sizeof(Impl_::outline_thickness_));
+}
+DiamondCrosshair::~DiamondCrosshair() {
+  // @@protoc_insertion_point(destructor:aim.DiamondCrosshair)
+  SharedDtor(*this);
+}
+inline void DiamondCrosshair::SharedDtor(MessageLite& self) {
+  DiamondCrosshair& this_ = static_cast<DiamondCrosshair&>(self);
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* DiamondCrosshair::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) DiamondCrosshair(arena);
+}
+constexpr auto DiamondCrosshair::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(DiamondCrosshair),
+                                            alignof(DiamondCrosshair));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull DiamondCrosshair::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_DiamondCrosshair_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &DiamondCrosshair::MergeImpl,
+        ::google::protobuf::Message::GetNewImpl<DiamondCrosshair>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &DiamondCrosshair::SharedDtor,
+        ::google::protobuf::Message::GetClearImpl<DiamondCrosshair>(), &DiamondCrosshair::ByteSizeLong,
+            &DiamondCrosshair::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_._cached_size_),
+        false,
+    },
+    &DiamondCrosshair::kDescriptorMethods,
+    &descriptor_table_crosshair_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* DiamondCrosshair::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 0, 0, 2> DiamondCrosshair::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::DiamondCrosshair>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // float horizontal_size = 1;
+    {::_pbi::TcParser::FastF32S1,
+     {13, 0, 0, PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.horizontal_size_)}},
+    // float vertical_size = 2;
+    {::_pbi::TcParser::FastF32S1,
+     {21, 1, 0, PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.vertical_size_)}},
+    // float outline_thickness = 3;
+    {::_pbi::TcParser::FastF32S1,
+     {29, 2, 0, PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.outline_thickness_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // float horizontal_size = 1;
+    {PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.horizontal_size_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float vertical_size = 2;
+    {PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.vertical_size_), _Internal::kHasBitsOffset + 1, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float outline_thickness = 3;
+    {PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.outline_thickness_), _Internal::kHasBitsOffset + 2, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+PROTOBUF_NOINLINE void DiamondCrosshair::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.DiamondCrosshair)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    ::memset(&_impl_.horizontal_size_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.outline_thickness_) -
+        reinterpret_cast<char*>(&_impl_.horizontal_size_)) + sizeof(_impl_.outline_thickness_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::uint8_t* DiamondCrosshair::_InternalSerialize(
+            const MessageLite& base, ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) {
+          const DiamondCrosshair& this_ = static_cast<const DiamondCrosshair&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::uint8_t* DiamondCrosshair::_InternalSerialize(
+            ::uint8_t* target,
+            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+          const DiamondCrosshair& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(serialize_to_array_start:aim.DiamondCrosshair)
+          ::uint32_t cached_has_bits = 0;
+          (void)cached_has_bits;
+
+          cached_has_bits = this_._impl_._has_bits_[0];
+          // float horizontal_size = 1;
+          if (cached_has_bits & 0x00000001u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                1, this_._internal_horizontal_size(), target);
+          }
+
+          // float vertical_size = 2;
+          if (cached_has_bits & 0x00000002u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                2, this_._internal_vertical_size(), target);
+          }
+
+          // float outline_thickness = 3;
+          if (cached_has_bits & 0x00000004u) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                3, this_._internal_outline_thickness(), target);
+          }
+
+          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+            target =
+                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+          }
+          // @@protoc_insertion_point(serialize_to_array_end:aim.DiamondCrosshair)
+          return target;
+        }
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        ::size_t DiamondCrosshair::ByteSizeLong(const MessageLite& base) {
+          const DiamondCrosshair& this_ = static_cast<const DiamondCrosshair&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+        ::size_t DiamondCrosshair::ByteSizeLong() const {
+          const DiamondCrosshair& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          // @@protoc_insertion_point(message_byte_size_start:aim.DiamondCrosshair)
+          ::size_t total_size = 0;
+
+          ::uint32_t cached_has_bits = 0;
+          // Prevent compiler warnings about cached_has_bits being unused
+          (void)cached_has_bits;
+
+          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+          cached_has_bits = this_._impl_._has_bits_[0];
+          if (cached_has_bits & 0x00000007u) {
+            // float horizontal_size = 1;
+            if (cached_has_bits & 0x00000001u) {
+              total_size += 5;
+            }
+            // float vertical_size = 2;
+            if (cached_has_bits & 0x00000002u) {
+              total_size += 5;
+            }
+            // float outline_thickness = 3;
+            if (cached_has_bits & 0x00000004u) {
+              total_size += 5;
+            }
+          }
+          return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                                     &this_._impl_._cached_size_);
+        }
+
+void DiamondCrosshair::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
+  auto* const _this = static_cast<DiamondCrosshair*>(&to_msg);
+  auto& from = static_cast<const DiamondCrosshair&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.DiamondCrosshair)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000007u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.horizontal_size_ = from._impl_.horizontal_size_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.vertical_size_ = from._impl_.vertical_size_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _this->_impl_.outline_thickness_ = from._impl_.outline_thickness_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DiamondCrosshair::CopyFrom(const DiamondCrosshair& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aim.DiamondCrosshair)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void DiamondCrosshair::InternalSwap(DiamondCrosshair* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.outline_thickness_)
+      + sizeof(DiamondCrosshair::_impl_.outline_thickness_)
+      - PROTOBUF_FIELD_OFFSET(DiamondCrosshair, _impl_.horizontal_size_)>(
+          reinterpret_cast<char*>(&_impl_.horizontal_size_),
+          reinterpret_cast<char*>(&other->_impl_.horizontal_size_));
+}
+
+::google::protobuf::Metadata DiamondCrosshair::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
 class ImageCrosshair::_Internal {
  public:
   using HasBits =
@@ -1498,6 +1821,19 @@ void CrosshairLayer::set_allocated_circle(::aim::CircleCrosshair* circle) {
   }
   // @@protoc_insertion_point(field_set_allocated:aim.CrosshairLayer.circle)
 }
+void CrosshairLayer::set_allocated_diamond(::aim::DiamondCrosshair* diamond) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_type();
+  if (diamond) {
+    ::google::protobuf::Arena* submessage_arena = diamond->GetArena();
+    if (message_arena != submessage_arena) {
+      diamond = ::google::protobuf::internal::GetOwnedMessage(message_arena, diamond, submessage_arena);
+    }
+    set_has_diamond();
+    _impl_.type_.diamond_ = diamond;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.CrosshairLayer.diamond)
+}
 CrosshairLayer::CrosshairLayer(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, _class_data_.base()) {
@@ -1556,6 +1892,9 @@ CrosshairLayer::CrosshairLayer(
         break;
       case kCircle:
         _impl_.type_.circle_ = ::google::protobuf::Message::CopyConstruct<::aim::CircleCrosshair>(arena, *from._impl_.type_.circle_);
+        break;
+      case kDiamond:
+        _impl_.type_.diamond_ = ::google::protobuf::Message::CopyConstruct<::aim::DiamondCrosshair>(arena, *from._impl_.type_.diamond_);
         break;
   }
 
@@ -1629,6 +1968,14 @@ void CrosshairLayer::clear_type() {
       }
       break;
     }
+    case kDiamond: {
+      if (GetArena() == nullptr) {
+        delete _impl_.type_.diamond_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.diamond_);
+      }
+      break;
+    }
     case TYPE_NOT_SET: {
       break;
     }
@@ -1673,16 +2020,16 @@ const ::google::protobuf::internal::ClassData* CrosshairLayer::GetClassData() co
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 8, 6, 0, 2> CrosshairLayer::_table_ = {
+const ::_pbi::TcParseTable<2, 9, 7, 0, 2> CrosshairLayer::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CrosshairLayer, _impl_._has_bits_),
     0, // no _extensions_
-    13, 24,  // max_field_number, fast_idx_mask
+    14, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294959600,  // skipmap
+    4294951408,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    8,  // num_field_entries
-    6,  // num_aux_entries
+    9,  // num_field_entries
+    7,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1730,6 +2077,9 @@ const ::_pbi::TcParseTable<2, 8, 6, 0, 2> CrosshairLayer::_table_ = {
     // .aim.CircleCrosshair circle = 13;
     {PROTOBUF_FIELD_OFFSET(CrosshairLayer, _impl_.type_.circle_), _Internal::kOneofCaseOffset + 0, 5,
     (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.DiamondCrosshair diamond = 14;
+    {PROTOBUF_FIELD_OFFSET(CrosshairLayer, _impl_.type_.diamond_), _Internal::kOneofCaseOffset + 0, 6,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
     {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
@@ -1737,6 +2087,7 @@ const ::_pbi::TcParseTable<2, 8, 6, 0, 2> CrosshairLayer::_table_ = {
     {::_pbi::TcParser::GetTable<::aim::PlusCrosshair>()},
     {::_pbi::TcParser::GetTable<::aim::ImageCrosshair>()},
     {::_pbi::TcParser::GetTable<::aim::CircleCrosshair>()},
+    {::_pbi::TcParser::GetTable<::aim::DiamondCrosshair>()},
   }}, {{
   }},
 };
@@ -1838,6 +2189,12 @@ PROTOBUF_NOINLINE void CrosshairLayer::Clear() {
                   stream);
               break;
             }
+            case kDiamond: {
+              target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+                  14, *this_._impl_.type_.diamond_, this_._impl_.type_.diamond_->GetCachedSize(), target,
+                  stream);
+              break;
+            }
             default:
               break;
           }
@@ -1909,6 +2266,12 @@ PROTOBUF_NOINLINE void CrosshairLayer::Clear() {
             case kCircle: {
               total_size += 1 +
                             ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.circle_);
+              break;
+            }
+            // .aim.DiamondCrosshair diamond = 14;
+            case kDiamond: {
+              total_size += 1 +
+                            ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.diamond_);
               break;
             }
             case TYPE_NOT_SET: {
@@ -2000,6 +2363,15 @@ void CrosshairLayer::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::
               ::google::protobuf::Message::CopyConstruct<::aim::CircleCrosshair>(arena, *from._impl_.type_.circle_);
         } else {
           _this->_impl_.type_.circle_->MergeFrom(from._internal_circle());
+        }
+        break;
+      }
+      case kDiamond: {
+        if (oneof_needs_init) {
+          _this->_impl_.type_.diamond_ =
+              ::google::protobuf::Message::CopyConstruct<::aim::DiamondCrosshair>(arena, *from._impl_.type_.diamond_);
+        } else {
+          _this->_impl_.type_.diamond_->MergeFrom(from._internal_diamond());
         }
         break;
       }

@@ -2280,7 +2280,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       float width = room.simple_room().width();
       ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##RoomWidth", &width, 10, 1, "%.0f");
+      ImGui::InputFloat("##RoomWidth", &width, 1, 10, "%.0f");
       room.mutable_simple_room()->set_width(width);
 
       ImGui::AlignTextToFramePadding();
@@ -2288,7 +2288,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       float height = room.simple_room().height();
       ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
+      ImGui::InputFloat("##RoomHeight", &height, 1, 10, "%.0f");
       room.mutable_simple_room()->set_height(height);
     }
 
@@ -2298,7 +2298,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       float radius = room.barrel_room().radius();
       ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##RoomRadius", &radius, 5, 1, "%.0f");
+      ImGui::InputFloat("##RoomRadius", &radius, 1, 5, "%.0f");
       room.mutable_barrel_room()->set_radius(radius);
     }
 
@@ -2308,7 +2308,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       float height = room.cylinder_room().height();
       ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##RoomHeight", &height, 10, 1, "%.0f");
+      ImGui::InputFloat("##RoomHeight", &height, 1, 10, "%.0f");
 
       bool use_width_percent = room.cylinder_room().width_perimeter_percent() > 0;
       ImGui::AlignTextToFramePadding();
@@ -2323,13 +2323,13 @@ class ScenarioEditorScreen : public UiScreen {
         float width_percent =
             FirstGreaterThanZero(room.cylinder_room().width_perimeter_percent() * 100, 40);
         ImGui::SetNextItemWidth(char_x_ * 12);
-        ImGui::InputFloat("##WidthPercent", &width_percent, 5, 1, "%.1f");
+        ImGui::InputFloat("##WidthPercent", &width_percent, 1, 5, "%.1f");
         room.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
         room.mutable_cylinder_room()->clear_width();
       } else {
         float width = FirstGreaterThanZero(room.cylinder_room().width(), 100);
         ImGui::SetNextItemWidth(char_x_ * 12);
-        ImGui::InputFloat("##Width", &width, 10, 1, "%.0f");
+        ImGui::InputFloat("##Width", &width, 1, 10, "%.0f");
         room.mutable_cylinder_room()->set_width(width);
         room.mutable_cylinder_room()->clear_width_perimeter_percent();
       }
@@ -2340,7 +2340,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SameLine();
       float radius = room.cylinder_room().radius();
       ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##RoomRadius", &radius, 10, 1, "%.0f");
+      ImGui::InputFloat("##RoomRadius", &radius, 1, 10, "%.0f");
       room.mutable_cylinder_room()->set_radius(radius);
 
       ImGui::AlignTextToFramePadding();
@@ -2359,7 +2359,7 @@ class ScenarioEditorScreen : public UiScreen {
         ImGui::Text("Side angle degrees");
         ImGui::Indent();
         ImGui::SetNextItemWidth(char_x_ * 12);
-        ImGui::InputFloat("##SideAngle", &side_angle, 1, 1, "%.0f");
+        ImGui::InputFloat("##SideAngle", &side_angle, 1, 5, "%.0f");
         room.mutable_cylinder_room()->set_side_angle_degrees(side_angle);
         ImGui::Unindent();
       } else {
