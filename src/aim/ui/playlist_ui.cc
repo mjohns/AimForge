@@ -135,6 +135,7 @@ class PlaylistEditorComponent {
       bundle_name_ = run->playlist.name.bundle_name();
       auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name);
       if (maybe_playlist) {
+        original_playlist_def_ = maybe_playlist->def;
         for (auto& i : maybe_playlist->def.items()) {
           scenario_items_.push_back(i);
         }
@@ -521,8 +522,10 @@ class PlaylistEditorComponent {
     if (!base_scenario) {
       return false;
     }
+    std::unordered_set<std::string> scenario_names;
     for (int i = 0; i < playlist.items_size(); ++i) {
       const PlaylistItem& item = playlist.items(i);
+      scenario_names.insert(item.scenario());
       if (i == 0) {
         // Copy the base scenario to create the first level if necessary.
         if (base_scenario->id() != item.scenario()) {
@@ -550,6 +553,15 @@ class PlaylistEditorComponent {
           if (!app_.scenario_manager().SaveScenario(ResourceName::Parse(item.scenario()), def)) {
             return false;
           }
+        }
+      }
+    }
+
+    // TODO: Consider making this deletion optional or warning somewhere.
+    if (original_playlist_def_.has_scenario_levels_def()) {
+      for (const PlaylistItem& original_item : original_playlist_def_.items()) {
+        if (!scenario_names.contains(original_item.scenario())) {
+          app_.scenario_manager().DeleteScenario(ResourceName::Parse(original_item.scenario()));
         }
       }
     }
@@ -603,6 +615,7 @@ class PlaylistEditorComponent {
   std::string scenario_search_text_;
   std::string new_playlist_name_;
   float char_x_ = 0;
+  PlaylistDef original_playlist_def_;
 };
 
 enum class PlaylistViewType : int {
