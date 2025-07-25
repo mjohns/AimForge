@@ -338,7 +338,8 @@ message StrafeProfile {
   float time = 2;
   float time_jitter = 3;
 
-  // Time is updated by this value based on whether it is moving towards/away from the center to encourage the target to stay closer to center.
+  // Time is updated by this value based on whether it is moving towards/away from the center to
+  // encourage the target to stay closer to center.
   float center_bias = 4;
 
   RegionLength distance = 5;

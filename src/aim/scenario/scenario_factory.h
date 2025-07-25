@@ -30,7 +30,7 @@ std::unique_ptr<Scenario> CreateSineScenario(const CreateScenarioParams& params,
 std::unique_ptr<Scenario> CreateWaypointScenario(const CreateScenarioParams& params,
                                                  Application* app);
 std::unique_ptr<Scenario> CreateStrafeScenario(const CreateScenarioParams& params,
-                                                       Application* app);
+                                               Application* app);
 std::unique_ptr<Scenario> CreateBounceScenario(const CreateScenarioParams& params,
                                                Application* app);
 

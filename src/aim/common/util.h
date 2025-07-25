@@ -203,6 +203,6 @@ static float GetStartSpeedForStopDistance(float stop_distance, float acceleratio
 std::optional<std::string> StripLevelSuffix(const std::string& scenario_name,
                                             int* level_out = nullptr);
 
-std::string AddLevelSuffix(const std::string& base_name, int level); 
+std::string AddLevelSuffix(const std::string& base_name, int level);
 
 }  // namespace aim

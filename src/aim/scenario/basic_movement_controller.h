@@ -53,12 +53,12 @@ struct DirectionParams {
 class StrafeController {
  public:
   StrafeController(float min,
-                            float max,
-                            std::optional<float> relative_min,
-                            std::optional<float> relative_max,
-                            Direction initial_direction,
-                            DirectionParams params,
-                            Wall wall)
+                   float max,
+                   std::optional<float> relative_min,
+                   std::optional<float> relative_max,
+                   Direction initial_direction,
+                   DirectionParams params,
+                   Wall wall)
       : initial_direction_(initial_direction),
         min_(min),
         max_(max),

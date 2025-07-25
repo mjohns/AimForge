@@ -217,12 +217,12 @@ class MovementControllerImpl : public MovementController {
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
       forward_back_controller_ = StrafeController(bounds.min_depth,
-                                                           bounds.max_depth,
-                                                           {},
-                                                           {},
-                                                           d.forward_back_initial_direction(),
-                                                           params,
-                                                           wall);
+                                                  bounds.max_depth,
+                                                  {},
+                                                  {},
+                                                  d.forward_back_initial_direction(),
+                                                  params,
+                                                  wall);
     }
   }
 

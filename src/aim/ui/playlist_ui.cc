@@ -6,12 +6,23 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
 #include "aim/ui/scenario_editor_screen.h"
+#include "google/protobuf/util/message_differencer.h"
 #include "imgui.h"
 
 namespace aim {
 namespace {
 
 const char* kPlaylistViewTypeKey = "PlaylistViewType";
+
+enum class PlaylistType {
+  DEFAULT,
+  LEVELS,
+};
+
+const std::vector<std::pair<PlaylistType, std::string>> kPlaylistTypes{
+    {PlaylistType::DEFAULT, "Default"},
+    {PlaylistType::LEVELS, "Levels"},
+};
 
 std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name,
                                                      Application* app) {
@@ -127,24 +138,20 @@ class PlaylistEditorComponent {
         for (auto& i : maybe_playlist->def.items()) {
           scenario_items_.push_back(i);
         }
+        if (maybe_playlist->def.has_scenario_levels_def()) {
+          levels_def_ = maybe_playlist->def.scenario_levels_def();
+        }
       }
     }
   }
 
-  void Show(EditorResult* result) {
-    ImGui::IdGuard cid("PlaylistEditor");
+  void DrawPlaylistLevelsList() {
+    for (auto& item : scenario_items_) {
+      ImGui::Text(item.scenario());
+    }
+  }
 
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text(bundle_name_);
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(400);
-    ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-
+  void DrawPlaylistScenariosEditor(EditorResult* result) {
     int remove_i = -1;
     bool still_dragging = false;
     for (int i = 0; i < scenario_items_.size(); ++i) {
@@ -226,7 +233,7 @@ class PlaylistEditorComponent {
       ImGui::SameLine();
       u32 num_plays = item.num_plays();
       u32 step = 1;
-      ImGui::SetNextItemWidth(char_size.x * 8);
+      ImGui::SetNextItemWidth(char_x_ * 8);
       ImGui::InputScalar("###NumPlays", ImGuiDataType_U32, &num_plays, &step, nullptr, "%u");
 
       item.set_num_plays(num_plays);
@@ -245,7 +252,7 @@ class PlaylistEditorComponent {
     ImGui::Spacing();
     ImGui::Text("Add scenario");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_size.x * 18);
+    ImGui::SetNextItemWidth(char_x_ * 18);
     ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
     ImGui::SameLine();
     if (ImGui::Button(kIconCancel)) {
@@ -254,7 +261,6 @@ class PlaylistEditorComponent {
     if (scenario_search_text_.size() > 0) {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
-      int num_displayed = 0;
       auto scenarios = app_.scenario_manager().scenarios();
       for (int i = 0; i < scenarios->size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
@@ -265,10 +271,6 @@ class PlaylistEditorComponent {
                 return item.scenario() == scenario.id();
               });
           if (!already_in_playlist) {
-            num_displayed++;
-            if (num_displayed > 15) {
-              break;
-            }
             if (ImGui::Button(scenario.id().c_str())) {
               PlaylistItem item;
               item.set_scenario(scenario.id());
@@ -280,9 +282,203 @@ class PlaylistEditorComponent {
       }
       ImGui::Unindent();
     }
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Spacing();
+  }
+
+  std::string GetScenarioLevelName(int i) {
+    if (!levels_def_ || levels_def_->base_scenario().size() == 0) {
+      return "";
+    }
+
+    std::string base_scenario = levels_def_->base_scenario();
+    int level = 0;
+    auto parsed_base_name = StripLevelSuffix(base_scenario, &level);
+    if (parsed_base_name) {
+      base_scenario = *parsed_base_name;
+    }
+
+    return AddLevelSuffix(base_scenario, i);
+  }
+
+  void DrawLevelsEditor() {
+    if (!levels_def_) {
+      return;
+    }
+    ScenarioLevelsDef& levels = *levels_def_;
+
+    scenario_items_.clear();
+    if (levels.base_scenario().size() > 5) {
+      for (int i = 1; i <= levels.max_level(); ++i) {
+        PlaylistItem item;
+        item.set_num_plays(levels.num_plays_per_level());
+        item.set_scenario(GetScenarioLevelName(i));
+        scenario_items_.push_back(item);
+      }
+    }
+
+    ImGui::IdGuard cid("LevelsEditor");
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Base scenario");
+    ImGui::SameLine();
+    ImGui::HelpMarker("The first scenario level which the overrides will be applied to.");
+    ImGui::SameLine();
+    ImGui::InputText("##BaseScenario", levels.mutable_base_scenario());
+
+    if (levels.base_scenario().size() > 0) {
+      auto matching_scenario = app_.scenario_manager().GetScenario(levels.base_scenario());
+      if (!matching_scenario) {
+        // Show search results for scenarios.
+        int num_matches = 0;
+        auto search_words = GetSearchWords(levels.base_scenario());
+        ImGui::Indent();
+        for (const auto& scenario : *app_.scenario_manager().scenarios()) {
+          if (StringMatchesSearch(scenario.id(), search_words)) {
+            num_matches++;
+            if (ImGui::Button(scenario.id())) {
+              levels.set_base_scenario(scenario.id());
+            }
+          }
+        }
+        if (num_matches == 0) {
+          ImGui::Text("No matching scenarios found");
+        }
+        ImGui::Unindent();
+      }
+    }
+
+    ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Max level")
+                        .set_step(1, 2)
+                        .set_min(2)
+                        .set_default(10)
+                        .set_width(char_x_ * 10),
+                    PROTO_INT_FIELD(ScenarioLevelsDef, &levels, max_level));
+    ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Plays per level")
+                        .set_step(1, 2)
+                        .set_min(1)
+                        .set_default(1)
+                        .set_width(char_x_ * 10),
+                    PROTO_INT_FIELD(ScenarioLevelsDef, &levels, num_plays_per_level));
 
     ImGui::Spacing();
+    ImGui::Separator();
     ImGui::Spacing();
+
+    ImGui::Text("Per level overrides");
+    ImGui::Indent();
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams::WithLabelAsId("Target radius multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(
+            ScenarioOverrides, levels.mutable_scenario_overrides(), target_radius_multiplier));
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("SpeedMult")
+            .set_label("Speed multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(
+            ScenarioOverrides, levels.mutable_scenario_overrides(), speed_multiplier));
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("AccelMult")
+            .set_label("Acceleration multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(
+            ScenarioOverrides, levels.mutable_scenario_overrides(), acceleration_multiplier));
+
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("TimeScale")
+            .set_label("Time scale multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(
+            ScenarioOverrides, levels.mutable_scenario_overrides(), time_scale_multiplier));
+    ImGui::InputFloat(
+        ImGui::InputFloatParams("Distance")
+            .set_label("Distance multiplier")
+            .set_step(0.01, 0.25)
+            .set_min(0.01)
+            .set_precision(2)
+            .set_default(1)
+            .set_is_optional()
+            .set_width(char_x_ * 10),
+        PROTO_FLOAT_FIELD(
+            ScenarioOverrides, levels.mutable_scenario_overrides(), distance_multiplier));
+
+    ImGui::Unindent();
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+  }
+
+  void Show(EditorResult* result) {
+    ImGui::IdGuard cid("PlaylistEditor");
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal("Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+      ImGui::Text("Unable to save playlist");
+
+      if (ImGui::Button("OK", ImVec2(120, 0))) {
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
+
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    char_x_ = char_size.x;
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(bundle_name_);
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(400);
+    ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Type");
+    ImGui::SameLine();
+    PlaylistType type = levels_def_.has_value() ? PlaylistType::LEVELS : PlaylistType::DEFAULT;
+    if (ImGui::SimpleTypeDropdown("##TypeSelector", &type, kPlaylistTypes, char_x_ * 10)) {
+      if (type == PlaylistType::LEVELS) {
+        levels_def_ = ScenarioLevelsDef();
+        ScenarioLevelsDef& levels = *levels_def_;
+        levels.set_max_level(10);
+        levels.set_num_plays_per_level(1);
+        if (scenario_items_.size() > 0) {
+          levels.set_base_scenario(scenario_items_[0].scenario());
+        }
+      }
+      if (type == PlaylistType::DEFAULT) {
+        levels_def_ = {};
+      }
+    }
+
+    if (type == PlaylistType::LEVELS) {
+      DrawLevelsEditor();
+    }
+
     if (ImGui::Button("Save")) {
       if (SavePlaylist()) {
         result->editor_closed = true;
@@ -298,22 +494,75 @@ class PlaylistEditorComponent {
       return;
     }
 
-    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    if (ImGui::BeginPopupModal("Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-      ImGui::Text("Unable to save playlist");
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
 
-      if (ImGui::Button("OK", ImVec2(120, 0))) {
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
+    ImGui::BeginChild("PlaylistScrollableContent");
+
+    if (type == PlaylistType::DEFAULT) {
+      DrawPlaylistScenariosEditor(result);
     }
+    if (type == PlaylistType::LEVELS) {
+      DrawPlaylistLevelsList();
+    }
+
+    ImGui::EndChild();
   }
 
  private:
+  bool EnsureLevelsAreSaved(ScenarioLevelsDef& levels, const PlaylistDef& playlist) {
+    if (playlist.items_size() == 0) {
+      return false;
+    }
+    auto base_scenario = app_.scenario_manager().GetScenario(levels.base_scenario());
+    if (!base_scenario) {
+      return false;
+    }
+    for (int i = 0; i < playlist.items_size(); ++i) {
+      const PlaylistItem& item = playlist.items(i);
+      if (i == 0) {
+        // Copy the base scenario to create the first level if necessary.
+        if (base_scenario->id() != item.scenario()) {
+          if (!app_.scenario_manager().SaveScenario(ResourceName::Parse(item.scenario()),
+                                                    base_scenario->evaluated_def)) {
+            return false;
+          }
+          levels_def_->set_base_scenario(item.scenario());
+        }
+      } else {
+        // Create chained references.
+        auto existing_scenario = app_.scenario_manager().GetScenario(item.scenario());
+        ScenarioDef def;
+        def.mutable_reference_def()->set_scenario_id(playlist.items(i - 1).scenario());
+        *def.mutable_overrides() = levels_def_->scenario_overrides();
+        bool needs_save = true;
+        if (existing_scenario) {
+          if (google::protobuf::util::MessageDifferencer::Equivalent(
+                  def, existing_scenario->unevaluated_def)) {
+            needs_save = false;
+          }
+        }
+
+        if (needs_save) {
+          if (!app_.scenario_manager().SaveScenario(ResourceName::Parse(item.scenario()), def)) {
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
   bool SavePlaylist() {
     PlaylistDef playlist;
     playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
+
+    if (levels_def_) {
+      *playlist.mutable_scenario_levels_def() = *levels_def_;
+      // Did it change? We need to update and create scenarios if necessary.
+    }
 
     ResourceName final_name(bundle_name_, new_playlist_name_);
     bool name_changed = final_name != original_playlist_name_;
@@ -331,6 +580,13 @@ class PlaylistEditorComponent {
       }
     }
 
+    if (levels_def_) {
+      if (!EnsureLevelsAreSaved(*levels_def_, playlist)) {
+        return false;
+      }
+      *playlist.mutable_scenario_levels_def() = *levels_def_;
+    }
+
     return app_.playlist_manager().SavePlaylist(final_name, playlist);
   }
 
@@ -340,9 +596,11 @@ class PlaylistEditorComponent {
   int dragging_i_ = -1;
   ResourceName original_playlist_name_;
   std::string bundle_name_;
+  std::optional<ScenarioLevelsDef> levels_def_;
 
   std::string scenario_search_text_;
   std::string new_playlist_name_;
+  float char_x_ = 0;
 };
 
 enum class PlaylistViewType : int {
@@ -688,7 +946,8 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         ImGui::InputText("##AddPrefix", &add_prefix_);
         ImGui::SameLine();
         ImGui::HelpMarker(
-            "Adds the following prefix to all newly created scenario names after the bundle name");
+            "Adds the following prefix to all newly created scenario names after the bundle "
+            "name");
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Remove name prefix");

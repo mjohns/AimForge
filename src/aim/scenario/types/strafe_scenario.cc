@@ -55,32 +55,32 @@ class MovementControllerImpl : public MovementController {
 
     if (d.left_right_profiles_size() > 0) {
       left_right_controller_ = StrafeController(bounds.min_x,
-                                                         bounds.max_x,
-                                                         relative_min_x,
-                                                         relative_max_x,
-                                                         d.left_right_initial_direction(),
-                                                         params,
-                                                         wall);
+                                                bounds.max_x,
+                                                relative_min_x,
+                                                relative_max_x,
+                                                d.left_right_initial_direction(),
+                                                params,
+                                                wall);
     }
 
     if (d.up_down_profiles_size() > 0) {
       up_down_controller_ = StrafeController(bounds.min_y,
-                                                      bounds.max_y,
-                                                      relative_min_y,
-                                                      relative_max_y,
-                                                      d.up_down_initial_direction(),
-                                                      params,
-                                                      wall);
+                                             bounds.max_y,
+                                             relative_min_y,
+                                             relative_max_y,
+                                             d.up_down_initial_direction(),
+                                             params,
+                                             wall);
     }
 
     if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
       forward_back_controller_ = StrafeController(bounds.min_depth,
-                                                           bounds.max_depth,
-                                                           relative_min_depth,
-                                                           relative_max_depth,
-                                                           d.forward_back_initial_direction(),
-                                                           params,
-                                                           wall);
+                                                  bounds.max_depth,
+                                                  relative_min_depth,
+                                                  relative_max_depth,
+                                                  d.forward_back_initial_direction(),
+                                                  params,
+                                                  wall);
     }
   }
 
@@ -94,25 +94,24 @@ class MovementControllerImpl : public MovementController {
     float now_seconds = GetNowSeconds();
 
     if (left_right_controller_) {
-      pos.x = left_right_controller_->GetUpdatedPosition(
-          t,
-          app_.rand(),
-          def_.strafe_def().left_right_profiles(),
-          def_.strafe_def().left_right_profile_order(),
-          pos.x,
-          now_seconds,
-          delta_seconds);
+      pos.x =
+          left_right_controller_->GetUpdatedPosition(t,
+                                                     app_.rand(),
+                                                     def_.strafe_def().left_right_profiles(),
+                                                     def_.strafe_def().left_right_profile_order(),
+                                                     pos.x,
+                                                     now_seconds,
+                                                     delta_seconds);
     }
 
     if (up_down_controller_) {
-      pos.y = up_down_controller_->GetUpdatedPosition(
-          t,
-          app_.rand(),
-          def_.strafe_def().up_down_profiles(),
-          def_.strafe_def().up_down_profile_order(),
-          pos.y,
-          now_seconds,
-          delta_seconds);
+      pos.y = up_down_controller_->GetUpdatedPosition(t,
+                                                      app_.rand(),
+                                                      def_.strafe_def().up_down_profiles(),
+                                                      def_.strafe_def().up_down_profile_order(),
+                                                      pos.y,
+                                                      now_seconds,
+                                                      delta_seconds);
     }
 
     if (forward_back_controller_) {
@@ -181,7 +180,7 @@ class StrafeScenario : public BaseScenario {
 }  // namespace
 
 std::unique_ptr<Scenario> CreateStrafeScenario(const CreateScenarioParams& params,
-                                                       Application* app) {
+                                               Application* app) {
   return std::make_unique<StrafeScenario>(params, app);
 }
 

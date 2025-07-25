@@ -29,6 +29,7 @@
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
 #include "google/protobuf/unknown_field_set.h"
+#include "scenario.pb.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
@@ -58,6 +59,9 @@ extern PlaylistDefDefaultTypeInternal _PlaylistDef_default_instance_;
 class PlaylistItem;
 struct PlaylistItemDefaultTypeInternal;
 extern PlaylistItemDefaultTypeInternal _PlaylistItem_default_instance_;
+class ScenarioLevelsDef;
+struct ScenarioLevelsDefDefaultTypeInternal;
+extern ScenarioLevelsDefDefaultTypeInternal _ScenarioLevelsDef_default_instance_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
@@ -130,7 +134,7 @@ class PlaylistItem final : public ::google::protobuf::Message
     return reinterpret_cast<const PlaylistItem*>(
         &_PlaylistItem_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 2;
   friend void swap(PlaylistItem& a, PlaylistItem& b) { a.Swap(&b); }
   inline void Swap(PlaylistItem* other) {
     if (other == this) return;
@@ -295,6 +299,247 @@ class PlaylistItem final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
+class ScenarioLevelsDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ScenarioLevelsDef) */ {
+ public:
+  inline ScenarioLevelsDef() : ScenarioLevelsDef(nullptr) {}
+  ~ScenarioLevelsDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ScenarioLevelsDef* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ScenarioLevelsDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ScenarioLevelsDef(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline ScenarioLevelsDef(const ScenarioLevelsDef& from) : ScenarioLevelsDef(nullptr, from) {}
+  inline ScenarioLevelsDef(ScenarioLevelsDef&& from) noexcept
+      : ScenarioLevelsDef(nullptr, std::move(from)) {}
+  inline ScenarioLevelsDef& operator=(const ScenarioLevelsDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ScenarioLevelsDef& operator=(ScenarioLevelsDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ScenarioLevelsDef& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ScenarioLevelsDef* internal_default_instance() {
+    return reinterpret_cast<const ScenarioLevelsDef*>(
+        &_ScenarioLevelsDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 1;
+  friend void swap(ScenarioLevelsDef& a, ScenarioLevelsDef& b) { a.Swap(&b); }
+  inline void Swap(ScenarioLevelsDef* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ScenarioLevelsDef* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ScenarioLevelsDef* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ScenarioLevelsDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ScenarioLevelsDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ScenarioLevelsDef& from) { ScenarioLevelsDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(
+      ::google::protobuf::MessageLite& to_msg,
+      const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* _InternalSerialize(
+      const MessageLite& msg, ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target,
+      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ScenarioLevelsDef* other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ScenarioLevelsDef"; }
+
+ protected:
+  explicit ScenarioLevelsDef(::google::protobuf::Arena* arena);
+  ScenarioLevelsDef(::google::protobuf::Arena* arena, const ScenarioLevelsDef& from);
+  ScenarioLevelsDef(::google::protobuf::Arena* arena, ScenarioLevelsDef&& from) noexcept
+      : ScenarioLevelsDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kBaseScenarioFieldNumber = 1,
+    kScenarioOverridesFieldNumber = 2,
+    kMaxLevelFieldNumber = 3,
+    kNumPlaysPerLevelFieldNumber = 4,
+  };
+  // string base_scenario = 1;
+  bool has_base_scenario() const;
+  void clear_base_scenario() ;
+  const std::string& base_scenario() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_base_scenario(Arg_&& arg, Args_... args);
+  std::string* mutable_base_scenario();
+  PROTOBUF_NODISCARD std::string* release_base_scenario();
+  void set_allocated_base_scenario(std::string* value);
+
+  private:
+  const std::string& _internal_base_scenario() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_base_scenario(
+      const std::string& value);
+  std::string* _internal_mutable_base_scenario();
+
+  public:
+  // .aim.ScenarioOverrides scenario_overrides = 2;
+  bool has_scenario_overrides() const;
+  void clear_scenario_overrides() ;
+  const ::aim::ScenarioOverrides& scenario_overrides() const;
+  PROTOBUF_NODISCARD ::aim::ScenarioOverrides* release_scenario_overrides();
+  ::aim::ScenarioOverrides* mutable_scenario_overrides();
+  void set_allocated_scenario_overrides(::aim::ScenarioOverrides* value);
+  void unsafe_arena_set_allocated_scenario_overrides(::aim::ScenarioOverrides* value);
+  ::aim::ScenarioOverrides* unsafe_arena_release_scenario_overrides();
+
+  private:
+  const ::aim::ScenarioOverrides& _internal_scenario_overrides() const;
+  ::aim::ScenarioOverrides* _internal_mutable_scenario_overrides();
+
+  public:
+  // int32 max_level = 3;
+  bool has_max_level() const;
+  void clear_max_level() ;
+  ::int32_t max_level() const;
+  void set_max_level(::int32_t value);
+
+  private:
+  ::int32_t _internal_max_level() const;
+  void _internal_set_max_level(::int32_t value);
+
+  public:
+  // int32 num_plays_per_level = 4;
+  bool has_num_plays_per_level() const;
+  void clear_num_plays_per_level() ;
+  ::int32_t num_plays_per_level() const;
+  void set_num_plays_per_level(::int32_t value);
+
+  private:
+  ::int32_t _internal_num_plays_per_level() const;
+  void _internal_set_num_plays_per_level(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.ScenarioLevelsDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      2, 4, 1,
+      43, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const ScenarioLevelsDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr base_scenario_;
+    ::aim::ScenarioOverrides* scenario_overrides_;
+    ::int32_t max_level_;
+    ::int32_t num_plays_per_level_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_playlist_2eproto;
+};
+// -------------------------------------------------------------------
+
 class PlaylistDef final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.PlaylistDef) */ {
  public:
@@ -443,6 +688,7 @@ class PlaylistDef final : public ::google::protobuf::Message
   enum : int {
     kItemsFieldNumber = 1,
     kDescriptionFieldNumber = 2,
+    kScenarioLevelsDefFieldNumber = 3,
   };
   // repeated .aim.PlaylistItem items = 1;
   int items_size() const;
@@ -478,12 +724,27 @@ class PlaylistDef final : public ::google::protobuf::Message
   std::string* _internal_mutable_description();
 
   public:
+  // .aim.ScenarioLevelsDef scenario_levels_def = 3;
+  bool has_scenario_levels_def() const;
+  void clear_scenario_levels_def() ;
+  const ::aim::ScenarioLevelsDef& scenario_levels_def() const;
+  PROTOBUF_NODISCARD ::aim::ScenarioLevelsDef* release_scenario_levels_def();
+  ::aim::ScenarioLevelsDef* mutable_scenario_levels_def();
+  void set_allocated_scenario_levels_def(::aim::ScenarioLevelsDef* value);
+  void unsafe_arena_set_allocated_scenario_levels_def(::aim::ScenarioLevelsDef* value);
+  ::aim::ScenarioLevelsDef* unsafe_arena_release_scenario_levels_def();
+
+  private:
+  const ::aim::ScenarioLevelsDef& _internal_scenario_levels_def() const;
+  ::aim::ScenarioLevelsDef* _internal_mutable_scenario_levels_def();
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.PlaylistDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 1,
+      2, 3, 2,
       35, 2>
       _table_;
 
@@ -505,6 +766,7 @@ class PlaylistDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::PlaylistItem > items_;
     ::google::protobuf::internal::ArenaStringPtr description_;
+    ::aim::ScenarioLevelsDef* scenario_levels_def_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -643,6 +905,322 @@ inline void PlaylistDef::set_allocated_description(std::string* value) {
     _impl_.description_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.PlaylistDef.description)
+}
+
+// .aim.ScenarioLevelsDef scenario_levels_def = 3;
+inline bool PlaylistDef::has_scenario_levels_def() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.scenario_levels_def_ != nullptr);
+  return value;
+}
+inline void PlaylistDef::clear_scenario_levels_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.scenario_levels_def_ != nullptr) _impl_.scenario_levels_def_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline const ::aim::ScenarioLevelsDef& PlaylistDef::_internal_scenario_levels_def() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::ScenarioLevelsDef* p = _impl_.scenario_levels_def_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ScenarioLevelsDef&>(::aim::_ScenarioLevelsDef_default_instance_);
+}
+inline const ::aim::ScenarioLevelsDef& PlaylistDef::scenario_levels_def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.PlaylistDef.scenario_levels_def)
+  return _internal_scenario_levels_def();
+}
+inline void PlaylistDef::unsafe_arena_set_allocated_scenario_levels_def(::aim::ScenarioLevelsDef* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.scenario_levels_def_);
+  }
+  _impl_.scenario_levels_def_ = reinterpret_cast<::aim::ScenarioLevelsDef*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.PlaylistDef.scenario_levels_def)
+}
+inline ::aim::ScenarioLevelsDef* PlaylistDef::release_scenario_levels_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::ScenarioLevelsDef* released = _impl_.scenario_levels_def_;
+  _impl_.scenario_levels_def_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::ScenarioLevelsDef* PlaylistDef::unsafe_arena_release_scenario_levels_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.PlaylistDef.scenario_levels_def)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::ScenarioLevelsDef* temp = _impl_.scenario_levels_def_;
+  _impl_.scenario_levels_def_ = nullptr;
+  return temp;
+}
+inline ::aim::ScenarioLevelsDef* PlaylistDef::_internal_mutable_scenario_levels_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.scenario_levels_def_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ScenarioLevelsDef>(GetArena());
+    _impl_.scenario_levels_def_ = reinterpret_cast<::aim::ScenarioLevelsDef*>(p);
+  }
+  return _impl_.scenario_levels_def_;
+}
+inline ::aim::ScenarioLevelsDef* PlaylistDef::mutable_scenario_levels_def() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::ScenarioLevelsDef* _msg = _internal_mutable_scenario_levels_def();
+  // @@protoc_insertion_point(field_mutable:aim.PlaylistDef.scenario_levels_def)
+  return _msg;
+}
+inline void PlaylistDef::set_allocated_scenario_levels_def(::aim::ScenarioLevelsDef* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.scenario_levels_def_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.scenario_levels_def_ = reinterpret_cast<::aim::ScenarioLevelsDef*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.PlaylistDef.scenario_levels_def)
+}
+
+// -------------------------------------------------------------------
+
+// ScenarioLevelsDef
+
+// string base_scenario = 1;
+inline bool ScenarioLevelsDef::has_base_scenario() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline void ScenarioLevelsDef::clear_base_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.base_scenario_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& ScenarioLevelsDef::base_scenario() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioLevelsDef.base_scenario)
+  return _internal_base_scenario();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ScenarioLevelsDef::set_base_scenario(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.base_scenario_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.ScenarioLevelsDef.base_scenario)
+}
+inline std::string* ScenarioLevelsDef::mutable_base_scenario() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_base_scenario();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioLevelsDef.base_scenario)
+  return _s;
+}
+inline const std::string& ScenarioLevelsDef::_internal_base_scenario() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.base_scenario_.Get();
+}
+inline void ScenarioLevelsDef::_internal_set_base_scenario(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.base_scenario_.Set(value, GetArena());
+}
+inline std::string* ScenarioLevelsDef::_internal_mutable_base_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  return _impl_.base_scenario_.Mutable( GetArena());
+}
+inline std::string* ScenarioLevelsDef::release_base_scenario() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioLevelsDef.base_scenario)
+  if ((_impl_._has_bits_[0] & 0x00000001u) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  auto* released = _impl_.base_scenario_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.base_scenario_.Set("", GetArena());
+  }
+  return released;
+}
+inline void ScenarioLevelsDef::set_allocated_base_scenario(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  _impl_.base_scenario_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.base_scenario_.IsDefault()) {
+    _impl_.base_scenario_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioLevelsDef.base_scenario)
+}
+
+// .aim.ScenarioOverrides scenario_overrides = 2;
+inline bool ScenarioLevelsDef::has_scenario_overrides() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.scenario_overrides_ != nullptr);
+  return value;
+}
+inline const ::aim::ScenarioOverrides& ScenarioLevelsDef::_internal_scenario_overrides() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::ScenarioOverrides* p = _impl_.scenario_overrides_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ScenarioOverrides&>(::aim::_ScenarioOverrides_default_instance_);
+}
+inline const ::aim::ScenarioOverrides& ScenarioLevelsDef::scenario_overrides() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioLevelsDef.scenario_overrides)
+  return _internal_scenario_overrides();
+}
+inline void ScenarioLevelsDef::unsafe_arena_set_allocated_scenario_overrides(::aim::ScenarioOverrides* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.scenario_overrides_);
+  }
+  _impl_.scenario_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioLevelsDef.scenario_overrides)
+}
+inline ::aim::ScenarioOverrides* ScenarioLevelsDef::release_scenario_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::ScenarioOverrides* released = _impl_.scenario_overrides_;
+  _impl_.scenario_overrides_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::ScenarioOverrides* ScenarioLevelsDef::unsafe_arena_release_scenario_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioLevelsDef.scenario_overrides)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::aim::ScenarioOverrides* temp = _impl_.scenario_overrides_;
+  _impl_.scenario_overrides_ = nullptr;
+  return temp;
+}
+inline ::aim::ScenarioOverrides* ScenarioLevelsDef::_internal_mutable_scenario_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.scenario_overrides_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ScenarioOverrides>(GetArena());
+    _impl_.scenario_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(p);
+  }
+  return _impl_.scenario_overrides_;
+}
+inline ::aim::ScenarioOverrides* ScenarioLevelsDef::mutable_scenario_overrides() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  ::aim::ScenarioOverrides* _msg = _internal_mutable_scenario_overrides();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioLevelsDef.scenario_overrides)
+  return _msg;
+}
+inline void ScenarioLevelsDef::set_allocated_scenario_overrides(::aim::ScenarioOverrides* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.scenario_overrides_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.scenario_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioLevelsDef.scenario_overrides)
+}
+
+// int32 max_level = 3;
+inline bool ScenarioLevelsDef::has_max_level() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline void ScenarioLevelsDef::clear_max_level() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.max_level_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline ::int32_t ScenarioLevelsDef::max_level() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioLevelsDef.max_level)
+  return _internal_max_level();
+}
+inline void ScenarioLevelsDef::set_max_level(::int32_t value) {
+  _internal_set_max_level(value);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioLevelsDef.max_level)
+}
+inline ::int32_t ScenarioLevelsDef::_internal_max_level() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.max_level_;
+}
+inline void ScenarioLevelsDef::_internal_set_max_level(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.max_level_ = value;
+}
+
+// int32 num_plays_per_level = 4;
+inline bool ScenarioLevelsDef::has_num_plays_per_level() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline void ScenarioLevelsDef::clear_num_plays_per_level() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.num_plays_per_level_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline ::int32_t ScenarioLevelsDef::num_plays_per_level() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioLevelsDef.num_plays_per_level)
+  return _internal_num_plays_per_level();
+}
+inline void ScenarioLevelsDef::set_num_plays_per_level(::int32_t value) {
+  _internal_set_num_plays_per_level(value);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_set:aim.ScenarioLevelsDef.num_plays_per_level)
+}
+inline ::int32_t ScenarioLevelsDef::_internal_num_plays_per_level() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.num_plays_per_level_;
+}
+inline void ScenarioLevelsDef::_internal_set_num_plays_per_level(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.num_plays_per_level_ = value;
 }
 
 // -------------------------------------------------------------------

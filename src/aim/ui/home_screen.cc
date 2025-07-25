@@ -309,7 +309,7 @@ class HomeScreen : public UiScreen {
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    //ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
+    // ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
 
     // Place exit at bottom
     // float
@@ -355,9 +355,9 @@ class HomeScreen : public UiScreen {
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
       if (result.reload_scenarios) {
-        //app_.scenario_manager().LoadScenariosFromDisk();
-        //app_.playlist_manager().LoadPlaylistsFromDisk();
-        
+        // app_.scenario_manager().LoadScenariosFromDisk();
+        // app_.playlist_manager().LoadPlaylistsFromDisk();
+
         // TODO: Update to use listeners on ScenarioManager for updates.
         scenario_browser_component1_->Reload();
         scenario_browser_component2_->Reload();

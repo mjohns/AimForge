@@ -157,9 +157,7 @@ float StrafeController::GetUpdatedPosition(
   return next_pos;
 }
 
-bool StrafeController::GetInitialGoingLeft(Direction dir,
-                                                    float current_position,
-                                                    Random& rand) {
+bool StrafeController::GetInitialGoingLeft(Direction dir, float current_position, Random& rand) {
   if (initial_direction_ == DIRECTION_POSITIVE) {
     return false;
   } else if (initial_direction_ == DIRECTION_NEGATIVE) {

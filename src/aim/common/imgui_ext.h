@@ -545,6 +545,10 @@ static void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
 struct InputIntParams {
   explicit InputIntParams(const std::string& id) : id(id) {}
 
+  static InputIntParams WithLabelAsId(const std::string& label) {
+    return InputIntParams(label).set_label(label);
+  }
+
   InputIntParams& set_step(int step, int fast_step) {
     this->step = step;
     this->fast_step = fast_step;
