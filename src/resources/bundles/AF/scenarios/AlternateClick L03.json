@@ -1,8 +1,0 @@
-{
-  "overrides": {
-    "targetRadiusMultiplier": 1.25
-  },
-  "referenceDef": {
-    "scenarioId": "AF AlternateClick L02"
-  }
-}

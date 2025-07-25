@@ -299,7 +299,9 @@ class PlaylistEditorComponent {
       base_scenario = *parsed_base_name;
     }
 
-    return AddLevelSuffix(base_scenario, i);
+    ResourceName name = ResourceName::Parse(AddLevelSuffix(base_scenario, i));
+    *name.mutable_bundle_name() = bundle_name_;
+    return name.full_name();
   }
 
   void DrawLevelsEditor() {
