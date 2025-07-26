@@ -72,7 +72,7 @@ bool ReadJsonMessageFromFile(const std::filesystem::path& path,
                              google::protobuf::Message* message) {
   auto maybe_content = ReadFileContentAsString(path);
   if (!maybe_content.has_value()) {
-    Logger::get()->warn("Unable to read theme: {}", path.string());
+    Logger::get()->warn("Unable to read proto json: {}", path.string());
     return false;
   }
   google::protobuf::json::ParseOptions opts;
@@ -81,7 +81,7 @@ bool ReadJsonMessageFromFile(const std::filesystem::path& path,
   std::string json = *maybe_content;
   auto status = google::protobuf::util::JsonStringToMessage(json, message, opts);
   if (!status.ok()) {
-    Logger::get()->warn("Unable to parse theme json ({}): {}", status.message(), json);
+    Logger::get()->warn("Unable to parse proto json ({}): {}", status.message(), json);
   }
   return status.ok();
 }

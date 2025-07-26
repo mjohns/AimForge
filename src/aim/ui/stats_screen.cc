@@ -696,13 +696,9 @@ class StatsScreen : public UiScreen {
 
     if (info->sorted_stats.size() > 0) {
       int mid = info->sorted_stats.size() / 2;
-      if (info->sorted_stats.size() % 2 == 0) {
-        // Maybe average the two mid for a more true median? For now just take the higher one so the
-        // time and other fields make sense.
-        info->median_stats = info->sorted_stats[mid];
-      } else {
-        info->median_stats = info->sorted_stats[mid + 1];
-      }
+      // Maybe average the two mid for a more true median? For now just take the higher one so the
+      // time and other fields make sense.
+      info->median_stats = info->sorted_stats[mid];
     }
 
     return true;

@@ -2,7 +2,9 @@
   "barrelDef": {
     "directionRadiusPercent": 0.7,
     "targetPlacementStrategy": {
-      "minDistance": 15,
+      "minDistance": {
+        "value": 15
+      },
       "regions": [
         {
           "circle": {
@@ -13,8 +15,6 @@
               "xPercentValue": 0.7
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
           "info": {
             "description": ""
           }
@@ -34,15 +34,14 @@
     }
   },
   "shotType": {
-    "trackingKill": true
+    "trackingKill": true,
+    "healthSeconds": 0.2
   },
   "targetDef": {
     "newestTargetIsGhost": false,
     "numTargets": 4,
     "profiles": [
       {
-        "healthSeconds": 0.200000018,
-        "healthSecondsJitter": 0,
         "info": {
           "description": "Large Fast"
         },
@@ -52,8 +51,6 @@
         "targetRadiusJitter": 0
       },
       {
-        "healthSeconds": 0.200000018,
-        "healthSecondsJitter": 0,
         "info": {
           "description": "Small Slow"
         },
