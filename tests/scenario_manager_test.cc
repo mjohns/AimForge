@@ -18,16 +18,20 @@
 using namespace aim;
 using google::protobuf::Message;
 using ::protobuf_matchers::EqualsProto;
+using ::testing::AllOf;
+using ::testing::Eq;
+using ::testing::Field;
+using ::testing::ResultOf;
+using ::testing::StrEq;
 
 namespace {
 
-#define EXPECT_SCENARIOS_EQ(actual, expected)                                       \
-  {                                                                                 \
-    EXPECT_EQ((actual).id(), (expected).id());                                      \
-    EXPECT_EQ((actual).has_invalid_reference, (expected).has_invalid_reference);    \
-    EXPECT_THAT((actual).unevaluated_def, EqualsProto((expected).unevaluated_def)); \
-    EXPECT_THAT((actual).evaluated_def, EqualsProto((expected).evaluated_def));     \
-  }
+auto EqualsScenario(const ScenarioItem& expected) {
+  return AllOf(Field(&ScenarioItem::has_invalid_reference, Eq(expected.has_invalid_reference)),
+               Property(&ScenarioItem::id, StrEq(expected.id())),
+               Field(&ScenarioItem::evaluated_def, EqualsProto(expected.evaluated_def)),
+               Field(&ScenarioItem::unevaluated_def, EqualsProto(expected.unevaluated_def)));
+}
 
 }  // namespace
 
@@ -93,17 +97,18 @@ TEST_F(ScenarioManagerTest, CreateScenario) {
 
   auto scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
-  EXPECT_SCENARIOS_EQ(*original_scenario, (*scenarios)[0]);
+  EXPECT_THAT(*original_scenario, EqualsScenario((*scenarios)[0]));
+  EXPECT_THAT(*original_scenario, EqualsScenario((*scenarios)[0]));
 
   // Make sure reloading from disk preserves the scenario
   scenario_manager_->LoadScenariosFromDisk();
   auto reloaded_scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(reloaded_scenarios->size(), 1);
-  EXPECT_SCENARIOS_EQ(*original_scenario, (*reloaded_scenarios)[0]);
+  EXPECT_THAT(*original_scenario, EqualsScenario((*reloaded_scenarios)[0]));
 
   std::optional<ScenarioItem> reloaded_scenario = scenario_manager_->GetScenario("Bundle Scenario");
   ASSERT_TRUE(reloaded_scenario.has_value());
-  EXPECT_SCENARIOS_EQ(*original_scenario, *reloaded_scenario);
+  EXPECT_THAT(*original_scenario, EqualsScenario(*reloaded_scenario));
 
   ScenarioDef updated_def = def;
   updated_def.mutable_room()->mutable_barrel_room()->set_radius(10);
@@ -119,7 +124,7 @@ TEST_F(ScenarioManagerTest, CreateScenario) {
 
   scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
-  EXPECT_SCENARIOS_EQ(*updated_scenario, (*scenarios)[0]);
+  EXPECT_THAT(*updated_scenario, EqualsScenario((*scenarios)[0]));
 }
 
 TEST_F(ScenarioManagerTest, ScenarioLevels) {
