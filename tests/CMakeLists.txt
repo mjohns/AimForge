@@ -8,6 +8,8 @@ add_executable(${NAME} ${TEST_SOURCES})
 # Link your test executable to your library and GTest
 target_link_libraries(
     ${NAME}
-    GTest::gtest_main
+    GTest::gmock_main
+    GTest::gmock
+    protobuf-matchers
     aim
 )

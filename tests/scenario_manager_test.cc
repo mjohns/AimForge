@@ -10,38 +10,23 @@
 #include "aim/common/files.h"
 #include "aim/common/resource_name.h"
 #include "aim/core/file_system.h"
+#include "gmock/gmock.h"
 #include "google/protobuf/message.h"
-#include "google/protobuf/util/message_differencer.h"
 #include "gtest/gtest.h"
+#include "protobuf-matchers/protocol-buffer-matchers.h"
 
 using namespace aim;
 using google::protobuf::Message;
-using google::protobuf::util::MessageDifferencer;
+using ::protobuf_matchers::EqualsProto;
 
 namespace {
 
-std::string GetDiffMessage(const Message& actual, const Message& expected) {
-  std::string diff_report;
-  MessageDifferencer differ;
-  differ.ReportDifferencesToString(&diff_report);
-  differ.Compare(actual, expected);
-  return diff_report;
-}
-
-bool ProtosAreEqual(const Message& actual, const Message& expected) {
-  MessageDifferencer differ;
-  return differ.Compare(actual, expected);
-}
-
-#define EXPECT_PROTOS_EQ(actual, expected) \
-  EXPECT_TRUE(ProtosAreEqual(actual, expected)) << GetDiffMessage(actual, expected);
-
-#define EXPECT_SCENARIOS_EQ(actual, expected)                                    \
-  {                                                                              \
-    EXPECT_EQ((actual).id(), (expected).id());                                   \
-    EXPECT_EQ((actual).has_invalid_reference, (expected).has_invalid_reference); \
-    EXPECT_PROTOS_EQ((actual).unevaluated_def, (expected).unevaluated_def);      \
-    EXPECT_PROTOS_EQ((actual).evaluated_def, (expected).evaluated_def);          \
+#define EXPECT_SCENARIOS_EQ(actual, expected)                                       \
+  {                                                                                 \
+    EXPECT_EQ((actual).id(), (expected).id());                                      \
+    EXPECT_EQ((actual).has_invalid_reference, (expected).has_invalid_reference);    \
+    EXPECT_THAT((actual).unevaluated_def, EqualsProto((expected).unevaluated_def)); \
+    EXPECT_THAT((actual).evaluated_def, EqualsProto((expected).evaluated_def));     \
   }
 
 }  // namespace
@@ -98,13 +83,13 @@ TEST_F(ScenarioManagerTest, CreateScenario) {
 
   std::optional<ScenarioItem> original_scenario = scenario_manager_->GetScenario("Bundle Scenario");
   ASSERT_TRUE(original_scenario.has_value());
-  EXPECT_PROTOS_EQ(original_scenario->unevaluated_def, def);
+  EXPECT_THAT(original_scenario->unevaluated_def, EqualsProto(def));
   EXPECT_FALSE(original_scenario->has_invalid_reference);
 
   ScenarioDef expected_evaluated = def;
   expected_evaluated.mutable_target_def()->mutable_profiles(0)->set_speed(2);
   expected_evaluated.clear_overrides();
-  EXPECT_PROTOS_EQ(original_scenario->evaluated_def, expected_evaluated);
+  EXPECT_THAT(original_scenario->evaluated_def, EqualsProto(expected_evaluated));
 
   auto scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
@@ -125,12 +110,12 @@ TEST_F(ScenarioManagerTest, CreateScenario) {
   ASSERT_TRUE(scenario_manager_->SaveScenario(scenario_name, updated_def));
 
   std::optional<ScenarioItem> updated_scenario = scenario_manager_->GetScenario("Bundle Scenario");
-  EXPECT_PROTOS_EQ(updated_scenario->unevaluated_def, updated_def);
+  EXPECT_THAT(updated_scenario->unevaluated_def, EqualsProto(updated_def));
 
   expected_evaluated = updated_def;
   expected_evaluated.mutable_target_def()->mutable_profiles(0)->set_speed(2);
   expected_evaluated.clear_overrides();
-  EXPECT_PROTOS_EQ(updated_scenario->evaluated_def, expected_evaluated);
+  EXPECT_THAT(updated_scenario->evaluated_def, EqualsProto(expected_evaluated));
 
   scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
@@ -161,11 +146,11 @@ TEST_F(ScenarioManagerTest, ScenarioLevels) {
   expected_def.mutable_reference_def()->set_scenario_id("Bundle Scenario L04");
   *expected_def.mutable_overrides() = overrides;
 
-  EXPECT_PROTOS_EQ(l5->unevaluated_def, expected_def);
+  EXPECT_THAT(l5->unevaluated_def, EqualsProto(expected_def));
 
   ScenarioDef expected_evaluated_def = def;
   expected_evaluated_def.mutable_target_def()->mutable_profiles(0)->set_speed(32);
-  EXPECT_PROTOS_EQ(l5->evaluated_def, expected_evaluated_def);
+  EXPECT_THAT(l5->evaluated_def, EqualsProto(expected_evaluated_def));
 
   // Update base scenario and make sure changes propgate through all references.
   def.mutable_target_def()->mutable_profiles(0)->set_speed(2);
@@ -174,10 +159,10 @@ TEST_F(ScenarioManagerTest, ScenarioLevels) {
   l5 = scenario_manager_->GetScenario("Bundle Scenario L05");
   ASSERT_TRUE(l5.has_value());
 
-  EXPECT_PROTOS_EQ(l5->unevaluated_def, expected_def);
+  EXPECT_THAT(l5->unevaluated_def, EqualsProto(expected_def));
 
   expected_evaluated_def.mutable_target_def()->mutable_profiles(0)->set_speed(64);
-  EXPECT_PROTOS_EQ(l5->evaluated_def, expected_evaluated_def);
+  EXPECT_THAT(l5->evaluated_def, EqualsProto(expected_evaluated_def));
 
   // Rename one scenario and make sure references are updated
   auto l1 = *scenario_manager_->GetScenario("Bundle Scenario L01");
@@ -187,10 +172,10 @@ TEST_F(ScenarioManagerTest, ScenarioLevels) {
   EXPECT_TRUE(scenario_manager_->GetScenario("Bundle ScenarioUpd L01").has_value());
   EXPECT_FALSE(scenario_manager_->GetScenario("Bundle Scenario L01").has_value());
   ScenarioItem l1_upd = *scenario_manager_->GetScenario("Bundle ScenarioUpd L01");
-  EXPECT_PROTOS_EQ(l1_upd.evaluated_def, l1.evaluated_def);
+  EXPECT_THAT(l1_upd.evaluated_def, EqualsProto(l1.evaluated_def));
 
   ScenarioItem l2_upd = *scenario_manager_->GetScenario("Bundle Scenario L02");
-  EXPECT_PROTOS_EQ(l2_upd.evaluated_def, l2.evaluated_def);
+  EXPECT_THAT(l2_upd.evaluated_def, EqualsProto(l2.evaluated_def));
   EXPECT_EQ(l2_upd.unevaluated_def.reference_def().scenario_id(), "Bundle ScenarioUpd L01");
 
   // Delete a scenario in the middle and make sure things update.

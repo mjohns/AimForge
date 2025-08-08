@@ -115,22 +115,34 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
     }
     if (GetShotType() == ShotType::kTrackingKill) {
       for (Target& target : target_manager_.GetMutableTargets()) {
-        bool is_hitting_this_target = false;
         if (maybe_hit_target_id.has_value() && *maybe_hit_target_id == target.id) {
           target.StartHitTimer();
           target.last_hit_time = timer_.GetElapsedSeconds();
           target.is_hit = true;
-          is_hitting_this_target = true;
         } else {
           target.is_hit = false;
           target.StopHitTimer();
+        }
+        float remove_if_below_health_threshold =
+            def_.shot_type().remove_if_below_health_threshold();
+        if (remove_if_below_health_threshold > 0) {
+          float health_percent = target.GetHealthPercent();
+          if (health_percent <= remove_if_below_health_threshold) {
+            if (!target.kill_sound_played) {
+              PlayKillSound();
+              target.kill_sound_played = true;
+            }
+          }
         }
         if (target.health_seconds > 0) {
           float health_percent = target.GetHealthPercent();
           if (health_percent <= 0) {
             stats_.num_hits++;
             stats_.num_kills++;
-            PlayKillSound();
+            if (!target.kill_sound_played) {
+              PlayKillSound();
+              target.kill_sound_played = true;
+            }
             AddNewTargetDuringRun(target.id);
           }
           /*

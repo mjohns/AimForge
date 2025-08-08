@@ -62,6 +62,7 @@ struct Target {
   float speed = 0;
 
   float remove_after_time_seconds = -1;
+  bool kill_sound_played = false;
 
   float last_hit_time = -1;
   bool is_hit = false;
