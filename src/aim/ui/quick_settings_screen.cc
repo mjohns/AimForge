@@ -131,15 +131,27 @@ class QuickSettingsScreen : public UiScreen {
     }
 
     if (type_ == QuickSettingsType::METRONOME) {
-      for (int i = 100; i <= 160; i += 10) {
+      button_sz.x /= 2.0;
+      for (int i = 70; i <= 250; i += 20) {
         std::string bpm1 = std::format("{}", i);
         std::string bpm2 = std::format("{}", i + 5);
+        std::string bpm3 = std::format("{}", i + 10);
+        std::string bpm4 = std::format("{}", i + 15);
+
         if (ImGui::Button(bpm1.c_str(), button_sz)) {
           updater_.settings.set_metronome_bpm(i);
         }
         ImGui::SameLine();
         if (ImGui::Button(bpm2.c_str(), button_sz)) {
           updater_.settings.set_metronome_bpm(i + 5);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(bpm3.c_str(), button_sz)) {
+          updater_.settings.set_metronome_bpm(i + 10);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(bpm4.c_str(), button_sz)) {
+          updater_.settings.set_metronome_bpm(i + 15);
         }
       }
 

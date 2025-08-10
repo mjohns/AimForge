@@ -98,7 +98,6 @@ TEST_F(ScenarioManagerTest, CreateScenario) {
   auto scenarios = scenario_manager_->scenarios();
   ASSERT_EQ(scenarios->size(), 1);
   EXPECT_THAT(*original_scenario, EqualsScenario((*scenarios)[0]));
-  EXPECT_THAT(*original_scenario, EqualsScenario((*scenarios)[0]));
 
   // Make sure reloading from disk preserves the scenario
   scenario_manager_->LoadScenariosFromDisk();

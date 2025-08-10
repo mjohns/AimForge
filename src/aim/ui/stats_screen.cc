@@ -611,7 +611,7 @@ class StatsScreen : public UiScreen {
 
     // Compare to different levels of the same scenario.
     int level = 0;
-    auto level_prefix = StripLevelSuffix(scenario_id_);
+    auto level_prefix = StripLevelSuffix(scenario_id_, &level);
     if (level_prefix) {
       int start = std::max<int>(level - 3, 0);
       for (int i = start; i < start + 7; ++i) {
