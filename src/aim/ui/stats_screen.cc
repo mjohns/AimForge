@@ -613,11 +613,10 @@ class StatsScreen : public UiScreen {
     int level = 0;
     auto level_prefix = StripLevelSuffix(scenario_id_, &level);
     if (level_prefix) {
-      int start = std::max<int>(level - 3, 0);
-      for (int i = start; i < start + 7; ++i) {
-        if (i != level) {
-          result.push_back(AddLevelSuffix(*level_prefix, i));
-        }
+      int num_to_show = 11;
+      int start = std::max<int>(level - (num_to_show / 2), 0);
+      for (int i = start; i <= start + num_to_show; ++i) {
+        result.push_back(AddLevelSuffix(*level_prefix, i));
       }
     }
 

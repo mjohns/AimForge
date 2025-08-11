@@ -39,6 +39,11 @@ class ApplicationExitException : public std::runtime_error {
   ApplicationExitException() : std::runtime_error("exit") {}
 };
 
+class ApplicationRestartException : public std::runtime_error {
+ public:
+  ApplicationRestartException() : std::runtime_error("restart") {}
+};
+
 class AimAbslLogSink : public absl::LogSink {
  public:
   AimAbslLogSink(std::shared_ptr<spdlog::logger> logger) : logger_(std::move(logger)) {}

@@ -16,6 +16,7 @@ static const char* kIconClose = "\xEE\x97\x8D";
 static const char* kIconDelete = "\xEE\xA1\xB2";
 static const char* kIconMoreVert = "\xEE\x97\x94";
 static const char* kIconRefresh = "\xEE\x97\x95";
+static const char* kIconRestartAlt = "\xEF\x81\x93";
 static const char* kIconMenu = "\xEE\x97\x92";
 static const char* kIconSettings = "\xEE\xA2\xB8";
 static const char* kIconSearch = "\xEE\xA2\xB6";

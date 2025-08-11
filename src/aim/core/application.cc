@@ -131,6 +131,9 @@ Application::~Application() {
   SDL_Quit();
 
   Logger::getInstance().ResetToDefault();
+  if (logger_) {
+    logger_->flush();
+  }
 }
 
 int Application::Initialize() {
@@ -146,10 +149,16 @@ int Application::Initialize() {
   {
     auto max_size = 1048576 * 10;
     auto max_files = 4;
-    logger_ = spdlog::rotating_logger_mt(
-        "aim", file_system_->GetUserDataPath("logs/log_file.txt").string(), max_size, max_files);
-    logger_->flush_on(spdlog::level::warn);
-
+    const std::string logger_name = "aim";
+    logger_ = spdlog::get(logger_name);
+    if (!logger_) {
+      logger_ =
+          spdlog::rotating_logger_mt(logger_name,
+                                     file_system_->GetUserDataPath("logs/log_file.txt").string(),
+                                     max_size,
+                                     max_files);
+      logger_->flush_on(spdlog::level::warn);
+    }
     Logger::getInstance().SetLogger(logger_);
 
     absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);

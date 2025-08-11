@@ -3,12 +3,17 @@
 
 int main(int, char**) {
   using namespace aim;
-  try {
-    auto app = Application::Create();
-    app->PushScreenInternal(CreateHomeScreen(app.get()));
-    app->RunMainLoop();
-  } catch (ApplicationExitException e) {
-    return 0;
+  while (true) {
+    try {
+      auto app = Application::Create();
+      app->PushScreenInternal(CreateHomeScreen(app.get()));
+      app->RunMainLoop();
+      return 0;
+    } catch (ApplicationExitException e) {
+      return 0;
+    } catch (ApplicationRestartException e) {
+        // Continue to next loop iteration.
+    }
   }
   return 0;
 }

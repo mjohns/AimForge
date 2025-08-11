@@ -313,7 +313,10 @@ class HomeScreen : public UiScreen {
 
     // Place exit at bottom
     // float
-    ImGui::SetCursorAtBottom();
+    ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
+    if (ImGui::Selectable(std::format("{} Restart", kIconRestartAlt).c_str(), false)) {
+      throw ApplicationRestartException();
+    }
     if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
       // Show a screen to confirm?
       throw ApplicationExitException();
