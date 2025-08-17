@@ -1009,22 +1009,22 @@ class ScenarioEditorScreen : public UiScreen {
       p->clear_time();
       p->clear_time_jitter();
     }
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Speed multiplier")
-                          .set_is_optional()
-                          .set_step(0.05, 0.2)
-                          .set_min(0)
-                          .set_precision(2)
-                          .set_default(1)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(StrafeProfile, p, speed_multiplier));
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration multiplier")
-                          .set_is_optional()
-                          .set_step(0.05, 0.2)
-                          .set_min(0)
-                          .set_precision(2)
-                          .set_default(1)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(StrafeProfile, p, acceleration_multiplier));
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed multiplier")
+                                  .set_is_optional()
+                                  .set_step(0.05, 0.2)
+                                  .set_min(0)
+                                  .set_precision(2)
+                                  .set_default(1)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(StrafeProfile, p, speed_multiplier));
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration multiplier")
+                                  .set_is_optional()
+                                  .set_step(0.05, 0.2)
+                                  .set_min(0)
+                                  .set_precision(2)
+                                  .set_default(1)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(StrafeProfile, p, acceleration_multiplier));
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Center bias")
                           .set_is_optional()
                           .set_step(0.1, 0.5)

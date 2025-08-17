@@ -346,7 +346,10 @@ message StrafeProfile {
   RegionLength distance_jitter = 6;
 
   float speed_multiplier = 7;
-  float acceleration_multiplier = 8;
+  float speed_multiplier_jitter = 8;
+
+  float acceleration_multiplier = 9;
+  float acceleration_multiplier_jitter = 10;
 }
 
 message StrafeScenarioDef {

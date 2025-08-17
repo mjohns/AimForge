@@ -183,8 +183,13 @@ void StrafeController::ChangeDirection(
   if (!p.has_value()) {
     return;
   }
-  speed_multiplier_ = p->has_speed_multiplier() ? p->speed_multiplier() : 1.0;
-  acceleration_multiplier_ = p->has_acceleration_multiplier() ? p->acceleration_multiplier() : 1.0;
+  speed_multiplier_ = p->has_speed_multiplier()
+                          ? rand.GetJittered(p->speed_multiplier(), p->speed_multiplier_jitter())
+                          : 1.0;
+  acceleration_multiplier_ =
+      p->has_acceleration_multiplier()
+          ? rand.GetJittered(p->acceleration_multiplier(), p->acceleration_multiplier_jitter())
+          : 1.0;
 
   current_speed_ = 0;
   is_stopping_ = false;

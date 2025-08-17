@@ -3721,7 +3721,9 @@ class StrafeProfile final : public ::google::protobuf::Message
     kTimeJitterFieldNumber = 3,
     kCenterBiasFieldNumber = 4,
     kSpeedMultiplierFieldNumber = 7,
-    kAccelerationMultiplierFieldNumber = 8,
+    kSpeedMultiplierJitterFieldNumber = 8,
+    kAccelerationMultiplierFieldNumber = 9,
+    kAccelerationMultiplierJitterFieldNumber = 10,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -3812,7 +3814,18 @@ class StrafeProfile final : public ::google::protobuf::Message
   void _internal_set_speed_multiplier(float value);
 
   public:
-  // float acceleration_multiplier = 8;
+  // float speed_multiplier_jitter = 8;
+  bool has_speed_multiplier_jitter() const;
+  void clear_speed_multiplier_jitter() ;
+  float speed_multiplier_jitter() const;
+  void set_speed_multiplier_jitter(float value);
+
+  private:
+  float _internal_speed_multiplier_jitter() const;
+  void _internal_set_speed_multiplier_jitter(float value);
+
+  public:
+  // float acceleration_multiplier = 9;
   bool has_acceleration_multiplier() const;
   void clear_acceleration_multiplier() ;
   float acceleration_multiplier() const;
@@ -3823,12 +3836,23 @@ class StrafeProfile final : public ::google::protobuf::Message
   void _internal_set_acceleration_multiplier(float value);
 
   public:
+  // float acceleration_multiplier_jitter = 10;
+  bool has_acceleration_multiplier_jitter() const;
+  void clear_acceleration_multiplier_jitter() ;
+  float acceleration_multiplier_jitter() const;
+  void set_acceleration_multiplier_jitter(float value);
+
+  private:
+  float _internal_acceleration_multiplier_jitter() const;
+  void _internal_set_acceleration_multiplier_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.StrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 8, 3,
+      4, 10, 3,
       0, 2>
       _table_;
 
@@ -3855,7 +3879,9 @@ class StrafeProfile final : public ::google::protobuf::Message
     float time_jitter_;
     float center_bias_;
     float speed_multiplier_;
+    float speed_multiplier_jitter_;
     float acceleration_multiplier_;
+    float acceleration_multiplier_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -18805,15 +18831,43 @@ inline void StrafeProfile::_internal_set_speed_multiplier(float value) {
   _impl_.speed_multiplier_ = value;
 }
 
-// float acceleration_multiplier = 8;
-inline bool StrafeProfile::has_acceleration_multiplier() const {
+// float speed_multiplier_jitter = 8;
+inline bool StrafeProfile::has_speed_multiplier_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  return value;
+}
+inline void StrafeProfile::clear_speed_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000080u;
+}
+inline float StrafeProfile::speed_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.speed_multiplier_jitter)
+  return _internal_speed_multiplier_jitter();
+}
+inline void StrafeProfile::set_speed_multiplier_jitter(float value) {
+  _internal_set_speed_multiplier_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000080u;
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.speed_multiplier_jitter)
+}
+inline float StrafeProfile::_internal_speed_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.speed_multiplier_jitter_;
+}
+inline void StrafeProfile::_internal_set_speed_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_jitter_ = value;
+}
+
+// float acceleration_multiplier = 9;
+inline bool StrafeProfile::has_acceleration_multiplier() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void StrafeProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float StrafeProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.StrafeProfile.acceleration_multiplier)
@@ -18821,7 +18875,7 @@ inline float StrafeProfile::acceleration_multiplier() const {
 }
 inline void StrafeProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.StrafeProfile.acceleration_multiplier)
 }
 inline float StrafeProfile::_internal_acceleration_multiplier() const {
@@ -18831,6 +18885,34 @@ inline float StrafeProfile::_internal_acceleration_multiplier() const {
 inline void StrafeProfile::_internal_set_acceleration_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = value;
+}
+
+// float acceleration_multiplier_jitter = 10;
+inline bool StrafeProfile::has_acceleration_multiplier_jitter() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
+  return value;
+}
+inline void StrafeProfile::clear_acceleration_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000200u;
+}
+inline float StrafeProfile::acceleration_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.acceleration_multiplier_jitter)
+  return _internal_acceleration_multiplier_jitter();
+}
+inline void StrafeProfile::set_acceleration_multiplier_jitter(float value) {
+  _internal_set_acceleration_multiplier_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000200u;
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.acceleration_multiplier_jitter)
+}
+inline float StrafeProfile::_internal_acceleration_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_multiplier_jitter_;
+}
+inline void StrafeProfile::_internal_set_acceleration_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_jitter_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -69,7 +69,10 @@ class CenteringScenario : public BaseScenario {
       // Look a little in front of the starting position
       float target_radius = GetNextTargetProfile().target_radius();
       glm::vec3 look_at_pos = WallPositionToWorldPosition(
-          start_point_ + (glm::normalize(direction) * 10.0f), target_radius, params.def.room());
+          start_point_ + (glm::normalize(direction) * 2.0f * target_radius),
+          // start_point_,
+          target_radius,
+          params.def.room());
       camera_.SetPitchYawLookingAtPoint(look_at_pos);
     }
   }

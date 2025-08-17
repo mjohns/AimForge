@@ -422,6 +422,11 @@ struct InputFloatParams {
     return *this;
   }
 
+  InputFloatParams& set_is_optional(bool value) {
+    is_optional = value;
+    return *this;
+  }
+
   std::string id;
   std::string label;
 
@@ -488,19 +493,22 @@ static void InputFloat(const InputFloatParams& params, aim::Field<float> field) 
 static void InputJitteredFloat(const InputFloatParams& params, aim::JitteredField<float> field) {
   InputFloat(params, field.value);
 
-  ImGui::SameLine();
-  ImGui::Text("+/-");
-
-  ImGui::SameLine();
-
   InputFloatParams jitter_params(params.id + "JitterInput");
   jitter_params.set_label("")
       .set_min(0)
+      .set_is_optional(false)
       .set_step(params.step, params.fast_step)
       .set_width(params.width);
   jitter_params.format = params.format;
 
-  InputFloat(jitter_params, field.jitter);
+  if (!params.is_optional || field.value.has()) {
+    ImGui::SameLine();
+    ImGui::Text("+/-");
+    ImGui::SameLine();
+    InputFloat(jitter_params, field.jitter);
+  } else {
+    field.jitter.clear();
+  }
 }
 
 struct InputBoolParams {
