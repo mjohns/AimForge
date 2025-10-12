@@ -443,7 +443,7 @@ bool SettingsManager::MaybeFlushToDisk(const std::string& scenario_id) {
 }
 
 void SettingsManager::WriteScenarioSettings(const std::string& scenario_id) {
-  if (scenario_id.size()) {
+  if (scenario_id.size() > 0) {
     ScenarioSettings scenario_settings;
     scenario_settings.set_crosshair_size(settings_.crosshair_size());
     scenario_settings.set_crosshair_name(settings_.current_crosshair_name());

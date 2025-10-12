@@ -18,7 +18,7 @@
   "staticDef": {
     "targetPlacementStrategy": {
       "minDistance": {
-        "value": 14
+        "value": 11
       },
       "regions": [
         {

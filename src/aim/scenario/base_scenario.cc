@@ -356,8 +356,8 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
       stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
-      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
-      score = stats_.num_hits;
+      stats_.num_shots = def_.duration_seconds();
+      score = 100 * (stats_.num_hits / stats_.num_shots);
       break;
     }
     case ShotType::kTrackingKill: {
