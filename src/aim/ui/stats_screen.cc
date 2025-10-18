@@ -163,7 +163,12 @@ class StatsScreen : public UiScreen {
 
     if (info_.all_stats.size() > 1) {
       if (ImGui::BeginTabBar("StatsTabBar")) {
-        if (ImGui::BeginTabItem("Current run")) {
+        ImGuiTabItemFlags first_tab_flags = ImGuiTabItemFlags_None;
+        if (!initialized_selected_tab_) {
+          initialized_selected_tab_ = true;
+          first_tab_flags = ImGuiTabItemFlags_SetSelected;
+        }
+        if (ImGui::BeginTabItem("Current run", nullptr, first_tab_flags)) {
           DrawStats();
           ImGui::EndTabItem();
         }
@@ -725,6 +730,8 @@ class StatsScreen : public UiScreen {
   bool sort_by_score_ = false;
   std::optional<std::vector<HistoryRow>> history_rows_;
   i64 screen_start_time_millis_;
+
+  bool initialized_selected_tab_ = false;
 };
 
 }  // namespace
