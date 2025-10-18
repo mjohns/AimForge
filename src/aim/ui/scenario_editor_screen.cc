@@ -2190,31 +2190,21 @@ class ScenarioEditorScreen : public UiScreen {
           "The rate health is regenerated if you switch off target before killing. 1 means regen "
           "at same rate as health is taken away for hits.");
 
-      ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthThreshold")
-                            .set_label("Remove if below health percent")
-                            .set_step(1, 5)
-                            .set_min(1)
-                            .set_max(99)
-                            .set_precision(0)
-                            .set_default(15)
+      ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthSeconds")
+                            .set_label("Remove if below remaining health seconds")
+                            .set_step(0.01, 0.05)
+                            .set_min(0.01)
+                            .set_max(5)
+                            .set_precision(2)
+                            .set_default(0.10)
                             .set_is_optional()
                             .set_width(char_x_ * 10),
-                        PROTO_PERCENT_FIELD(ShotType, &s, remove_if_below_health_threshold));
-
-      if (s.has_remove_if_below_health_threshold()) {
-        ImGui::Indent();
-        ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthTime")
-                              .set_label("After time")
-                              .set_step(.01, .1)
-                              .set_min(0)
-                              .set_precision(2)
-                              .set_default(.01)
-                              .set_width(char_x_ * 10),
-                          PROTO_FLOAT_FIELD(ShotType, &s, remove_if_below_health_time));
-        ImGui::Unindent();
-      } else {
-        s.clear_remove_if_below_health_time();
-      }
+                        PROTO_FLOAT_FIELD(ShotType, &s, remove_if_below_health_seconds));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "If the target has less than the specified health time remaining and you are not on "
+          "target, remove the target and  receive partial score. The kill sound will  be played "
+          "early based on this time.");
 
       ImGui::InputBool(ImGui::InputBoolParams("NoPartialKills")
                            .set_label("No partial kills")

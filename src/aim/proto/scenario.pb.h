@@ -587,8 +587,7 @@ class ShotType final : public ::google::protobuf::Message
     kNoPartialKillsFieldNumber = 11,
     kHealthSecondsFieldNumber = 12,
     kHealthRegenRateFieldNumber = 13,
-    kRemoveIfBelowHealthThresholdFieldNumber = 14,
-    kRemoveIfBelowHealthTimeFieldNumber = 15,
+    kRemoveIfBelowHealthSecondsFieldNumber = 14,
     kHealthClicksFieldNumber = 16,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
@@ -640,26 +639,15 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_health_regen_rate(float value);
 
   public:
-  // float remove_if_below_health_threshold = 14;
-  bool has_remove_if_below_health_threshold() const;
-  void clear_remove_if_below_health_threshold() ;
-  float remove_if_below_health_threshold() const;
-  void set_remove_if_below_health_threshold(float value);
+  // float remove_if_below_health_seconds = 14;
+  bool has_remove_if_below_health_seconds() const;
+  void clear_remove_if_below_health_seconds() ;
+  float remove_if_below_health_seconds() const;
+  void set_remove_if_below_health_seconds(float value);
 
   private:
-  float _internal_remove_if_below_health_threshold() const;
-  void _internal_set_remove_if_below_health_threshold(float value);
-
-  public:
-  // float remove_if_below_health_time = 15;
-  bool has_remove_if_below_health_time() const;
-  void clear_remove_if_below_health_time() ;
-  float remove_if_below_health_time() const;
-  void set_remove_if_below_health_time(float value);
-
-  private:
-  float _internal_remove_if_below_health_time() const;
-  void _internal_set_remove_if_below_health_time(float value);
+  float _internal_remove_if_below_health_seconds() const;
+  void _internal_set_remove_if_below_health_seconds(float value);
 
   public:
   // int32 health_clicks = 16;
@@ -742,7 +730,7 @@ class ShotType final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 12, 0,
+      3, 11, 0,
       0, 2>
       _table_;
 
@@ -766,8 +754,7 @@ class ShotType final : public ::google::protobuf::Message
     bool no_partial_kills_;
     float health_seconds_;
     float health_regen_rate_;
-    float remove_if_below_health_threshold_;
-    float remove_if_below_health_time_;
+    float remove_if_below_health_seconds_;
     ::int32_t health_clicks_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
@@ -13916,71 +13903,43 @@ inline void ShotType::_internal_set_health_regen_rate(float value) {
   _impl_.health_regen_rate_ = value;
 }
 
-// float remove_if_below_health_threshold = 14;
-inline bool ShotType::has_remove_if_below_health_threshold() const {
+// float remove_if_below_health_seconds = 14;
+inline bool ShotType::has_remove_if_below_health_seconds() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
-inline void ShotType::clear_remove_if_below_health_threshold() {
+inline void ShotType::clear_remove_if_below_health_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_threshold_ = 0;
+  _impl_.remove_if_below_health_seconds_ = 0;
   _impl_._has_bits_[0] &= ~0x00000010u;
 }
-inline float ShotType::remove_if_below_health_threshold() const {
-  // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_threshold)
-  return _internal_remove_if_below_health_threshold();
+inline float ShotType::remove_if_below_health_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_seconds)
+  return _internal_remove_if_below_health_seconds();
 }
-inline void ShotType::set_remove_if_below_health_threshold(float value) {
-  _internal_set_remove_if_below_health_threshold(value);
+inline void ShotType::set_remove_if_below_health_seconds(float value) {
+  _internal_set_remove_if_below_health_seconds(value);
   _impl_._has_bits_[0] |= 0x00000010u;
-  // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_threshold)
+  // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_seconds)
 }
-inline float ShotType::_internal_remove_if_below_health_threshold() const {
+inline float ShotType::_internal_remove_if_below_health_seconds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.remove_if_below_health_threshold_;
+  return _impl_.remove_if_below_health_seconds_;
 }
-inline void ShotType::_internal_set_remove_if_below_health_threshold(float value) {
+inline void ShotType::_internal_set_remove_if_below_health_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_threshold_ = value;
-}
-
-// float remove_if_below_health_time = 15;
-inline bool ShotType::has_remove_if_below_health_time() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
-  return value;
-}
-inline void ShotType::clear_remove_if_below_health_time() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_time_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
-}
-inline float ShotType::remove_if_below_health_time() const {
-  // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_time)
-  return _internal_remove_if_below_health_time();
-}
-inline void ShotType::set_remove_if_below_health_time(float value) {
-  _internal_set_remove_if_below_health_time(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
-  // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_time)
-}
-inline float ShotType::_internal_remove_if_below_health_time() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.remove_if_below_health_time_;
-}
-inline void ShotType::_internal_set_remove_if_below_health_time(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_if_below_health_time_ = value;
+  _impl_.remove_if_below_health_seconds_ = value;
 }
 
 // int32 health_clicks = 16;
 inline bool ShotType::has_health_clicks() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void ShotType::clear_health_clicks() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_clicks_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline ::int32_t ShotType::health_clicks() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_clicks)
@@ -13988,7 +13947,7 @@ inline ::int32_t ShotType::health_clicks() const {
 }
 inline void ShotType::set_health_clicks(::int32_t value) {
   _internal_set_health_clicks(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.ShotType.health_clicks)
 }
 inline ::int32_t ShotType::_internal_health_clicks() const {

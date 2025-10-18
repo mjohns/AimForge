@@ -117,17 +117,15 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
       for (Target& target : target_manager_.GetMutableTargets()) {
         if (maybe_hit_target_id.has_value() && *maybe_hit_target_id == target.id) {
           target.StartHitTimer();
-          target.last_hit_time = timer_.GetElapsedSeconds();
           target.is_hit = true;
         } else {
           target.is_hit = false;
           target.StopHitTimer();
         }
-        float remove_if_below_health_threshold =
-            def_.shot_type().remove_if_below_health_threshold();
-        if (remove_if_below_health_threshold > 0) {
-          float health_percent = target.GetHealthPercent();
-          if (health_percent <= remove_if_below_health_threshold) {
+        float remove_if_below_health_seconds = def_.shot_type().remove_if_below_health_seconds();
+        if (remove_if_below_health_seconds > 0) {
+          float remaining_health_seconds = target.GetHealthPercent() * target.health_seconds;
+          if (remaining_health_seconds <= remove_if_below_health_seconds) {
             if (!target.kill_sound_played) {
               PlayKillSound();
               target.kill_sound_played = true;
@@ -145,13 +143,6 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
             }
             AddNewTargetDuringRun(target.id);
           }
-          /*
-        if (is_hitting_this_target && target.notify_at_health_seconds > 0 &&
-            target.notify_at_health_seconds >= health_left) {
-          app_.sound_manager()->PlayNotifyBeforeKillSound();
-          target.notify_at_health_seconds = 0;
-        }
-        */
         }
       }
     }
@@ -167,14 +158,12 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
         target.radius = target.radius_at_kill->end_radius + health_percent * radius_diff;
       }
 
-      float remove_if_below_health_threshold = def_.shot_type().remove_if_below_health_threshold();
-      if (remove_if_below_health_threshold > 0 && !target.is_hit && target.last_hit_time >= 0) {
-        float remove_if_below_health_time = def_.shot_type().remove_if_below_health_time();
-        float elapsed_time = timer_.GetElapsedSeconds() - target.last_hit_time;
-        float health = target.GetHealthPercent();
-        if (elapsed_time >= remove_if_below_health_time &&
-            health <= remove_if_below_health_threshold) {
-          // Remove the target early
+      // See if for tracking kill we are no longer on target and it has low enough health to be
+      // removed.
+      float remove_if_below_health_seconds = def_.shot_type().remove_if_below_health_seconds();
+      if (remove_if_below_health_seconds > 0 && !target.is_hit) {
+        float remaining_health_seconds = target.GetHealthPercent() * target.health_seconds;
+        if (remaining_health_seconds <= remove_if_below_health_seconds) {
           target_ids_to_remove->push_back(target.id);
         }
       }

@@ -156,10 +156,8 @@ message ShotType {
   // same rate as health is taken away. So 2 means regen twice as fast as it is killed.
   float health_regen_rate = 13;
 
-  // Remove the target if it has less than the specified health percent after x seconds of
-  // leaving the target.
-  float remove_if_below_health_threshold = 14;
-  float remove_if_below_health_time = 15;
+  // Remove the target if it has less than the specified health time left and you are no longer on target.
+  float remove_if_below_health_seconds = 14;
 
   // For multi click, the number of clicks to kill the target.
   int32 health_clicks = 16;
