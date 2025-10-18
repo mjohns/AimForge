@@ -393,11 +393,13 @@ class StatsScreen : public UiScreen {
       auto font = app_.font_manager().UseLarge();
       ImGui::AlignTextToFramePadding();
       ImGui::Text(scenario_id_);
+      /*
       float score_level = GetScoreLevel(stats.score);
       if (score_level > 0) {
         ImGui::SameLine();
         ImGui::Button(MaybeIntToString(score_level, 2).c_str());
       }
+      */
     }
     ImGui::Spacing();
     ImGui::Spacing();

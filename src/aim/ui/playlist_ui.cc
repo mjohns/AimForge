@@ -891,9 +891,11 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
 
     ImGui::TableNextColumn();
     std::string label = item.scenario();
+    /*
     if (score_levels[i] > 0) {
       label = std::format("{} -- {}", label, MaybeIntToString(score_levels[i], 1));
     }
+    */
     if (ImGui::Selectable(label.c_str(), is_selected)) {
       run->current_index = i;
       screen.state().scenario_run_option = ScenarioRunOption::START_CURRENT;

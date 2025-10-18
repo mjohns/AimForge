@@ -332,6 +332,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
     def_.set_duration_seconds(duration_seconds);
 
+    /*
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Score range");
     ImGui::SameLine();
@@ -350,6 +351,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_width(char_x_ * 12),
                       PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
+    */
 
     Line();
 
