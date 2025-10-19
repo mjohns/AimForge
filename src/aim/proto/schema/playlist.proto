@@ -5,20 +5,30 @@ import "scenario.proto";
 package aim;
 
 message PlaylistDef {
-  repeated PlaylistItem items = 1;
-  string description = 2;
+  string description = 1;
+
+  // Standard playlist with explicit items.
+  repeated PlaylistItem items = 2;
+
+  // Playlist with levels that increment difficulty by a specified amount.
+  // The name of the scenarios is based on the name of the playlist with
+  // the suffix L01, L02 .. added.
   ScenarioLevelsDef scenario_levels_def = 3;
+
+  BenchmarkDef benchmark_def = 4;
 }
 
 message ScenarioLevelsDef {
-  string base_scenario = 1;
-  ScenarioOverrides scenario_overrides = 2;
-  int32 max_level = 3;
-  int32 num_plays_per_level = 4;
+  // Specifies the changes to the scenario per level.
+  ScenarioOverrides scenario_overrides = 1;
+  int32 max_level = 2;
+  int32 num_plays_per_level = 3;
+}
+
+message BenchmarkDef {
 }
 
 message PlaylistItem {
   string scenario = 1;
   int32 num_plays = 2;
-  bool auto_next = 3;
 }

@@ -24,8 +24,23 @@ struct PlaylistItemProgress {
 
 struct Playlist {
   ResourceName name;
-  PlaylistDef def;
+
+  PlaylistDef* mutable_def() {
+    return &def_;
+  }
+
+  const PlaylistDef& def() const {
+    return def_;
+  }
+
+  std::vector<PlaylistItem> items() const;
+
+ private:
+  PlaylistDef def_;
 };
+
+std::vector<PlaylistItem> GetPlaylistItems(const ResourceName& playlist_name,
+                                           const PlaylistDef& def);
 
 struct PlaylistRun {
   Playlist playlist;
