@@ -193,15 +193,12 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       if (ImGui::BeginMenu("Add to")) {
         ImGui::LoopId playlist_loop_id;
         std::string selected_playlist;
-        int playlist_count = 0;
-        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
+        for (auto& playlist_name : app_->playlist_manager().FilterOutLevelsPlaylists(
+                 app_->history_manager().recent_playlists(), 15)) {
           auto id = playlist_loop_id.Get();
-          if (playlist_count < 15) {
-            if (ImGui::MenuItem(playlist_name.c_str())) {
-              selected_playlist = playlist_name;
-            }
+          if (ImGui::MenuItem(playlist_name.c_str())) {
+            selected_playlist = playlist_name;
           }
-          playlist_count++;
         }
         if (selected_playlist.size() > 0) {
           app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.id());
@@ -211,21 +208,18 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       if (ImGui::BeginMenu("Add copy to")) {
         ImGui::LoopId playlist_loop_id;
         std::string selected_playlist;
-        int playlist_count = 0;
-        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
+        for (auto& playlist_name : app_->playlist_manager().FilterOutLevelsPlaylists(
+                 app_->history_manager().recent_playlists(), 15)) {
           auto id = playlist_loop_id.Get();
-          if (playlist_count < 15) {
-            if (ImGui::MenuItem(playlist_name.c_str())) {
-              selected_playlist = playlist_name;
-              ScenarioEditorOptions opts;
-              opts.scenario_id = scenario.id();
-              opts.is_new_copy = true;
-              opts.add_to_playlist = playlist_name;
-              opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
-              app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
-            }
+          if (ImGui::MenuItem(playlist_name.c_str())) {
+            selected_playlist = playlist_name;
+            ScenarioEditorOptions opts;
+            opts.scenario_id = scenario.id();
+            opts.is_new_copy = true;
+            opts.add_to_playlist = playlist_name;
+            opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
+            app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
           }
-          playlist_count++;
         }
         ImGui::EndMenu();
       }

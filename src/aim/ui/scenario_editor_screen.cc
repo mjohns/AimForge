@@ -180,6 +180,16 @@ class ScenarioEditorScreen : public UiScreen {
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app_.file_system()->GetBundleNames();
 
+    // See if this is a scenario from a levels playlist and limit features if so.
+    int level = 0;
+    std::string levels_playlist_name = StripLevelSuffix(opts.scenario_id, &level).value_or("");
+    if (level > 0) {
+      auto levels_playlist = app_.playlist_manager().GetPlaylist(levels_playlist_name);
+      if (levels_playlist && levels_playlist->def().has_scenario_levels_def()) {
+        is_levels_playlist_scenario_ = true;
+      }
+    }
+
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->unevaluated_def;
@@ -199,15 +209,6 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
  protected:
-  void DrawNameEditor() {
-    notification_popup_.Draw();
-    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
-
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 40);
-    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
-  }
-
   void DrawTopBar() {
     float width = char_x_ * 70;
     float middle = app_.screen_info().width / 2.0;
@@ -225,12 +226,21 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::HelpTooltip("Try playing the edited version of the scenario.");
 
-    ImGui::SameLine();
-    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
+    if (is_levels_playlist_scenario_) {
+      ImGui::SameLine();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(name_.full_name());
+      ImGui::SameLine();
+      ImGui::HelpMarker("This name cannot be changed as it is part of a levels playlist");
+    } else {
+      ImGui::SameLine();
+      ImGui::SimpleDropdown(
+          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
 
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 40);
-    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(char_x_ * 40);
+      ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+    }
 
     ImGui::SameLine();
     bool is_new_scenario = !original_name_.has_value();
@@ -2735,6 +2745,7 @@ class ScenarioEditorScreen : public UiScreen {
 
   bool editing_room_ = false;
   bool editing_description_ = false;
+  bool is_levels_playlist_scenario_ = false;
 };
 
 }  // namespace

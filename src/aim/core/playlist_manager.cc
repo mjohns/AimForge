@@ -230,6 +230,21 @@ std::optional<Playlist> PlaylistManager::GetPlaylist(const std::string& playlist
   return {};
 }
 
+std::vector<std::string> PlaylistManager::FilterOutLevelsPlaylists(
+    const std::vector<std::string>& all_playlists, int limit_size) {
+  std::vector<std::string> result;
+  for (const std::string& playlist_name : all_playlists) {
+    if (result.size() >= limit_size) {
+      break;
+    }
+    auto playlist = GetPlaylist(playlist_name);
+    if (playlist && !playlist->def().has_scenario_levels_def()) {
+      result.push_back(playlist_name);
+    }
+  }
+  return result;
+}
+
 void PlaylistManager::UpdatePlaylistRun(const ResourceName& playlist_name,
                                         const PlaylistDef& new_def) {
   std::shared_ptr<PlaylistRun> run = GetOptionalExistingRun(playlist_name.full_name());

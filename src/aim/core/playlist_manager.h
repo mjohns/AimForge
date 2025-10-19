@@ -93,6 +93,9 @@ class PlaylistManager {
     return playlists_;
   }
 
+  std::vector<std::string> FilterOutLevelsPlaylists(const std::vector<std::string>& all_playlists,
+                                                    int limit_size = -1);
+
   std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const;
   std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const {
     return GetPlaylist(playlist_name.full_name());
