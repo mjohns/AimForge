@@ -282,25 +282,6 @@ class PlaylistEditorComponent {
     ImGui::Spacing();
   }
 
-  /*
-  std::string GetScenarioLevelName(int i) {
-    if (!levels_def_ || levels_def_->base_scenario().size() == 0) {
-      return "";
-    }
-
-    std::string base_scenario = levels_def_->base_scenario();
-    int level = 0;
-    auto parsed_base_name = StripLevelSuffix(base_scenario, &level);
-    if (parsed_base_name) {
-      base_scenario = *parsed_base_name;
-    }
-
-    ResourceName name = ResourceName::Parse(AddLevelSuffix(base_scenario, i));
-    *name.mutable_bundle_name() = bundle_name_;
-    return name.full_name();
-  }
-  */
-
   void DrawLevelsEditor() {
     if (!levels_def_) {
       return;
@@ -833,33 +814,44 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
 void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run, Screen& screen) {
   const char* popup_id = "ScenarioItemMenu";
+  bool is_levels_playlist = run.playlist.def().has_scenario_levels_def();
   if (ImGui::BeginPopupContextItem(popup_id)) {
-    if (ImGui::Selectable("Edit")) {
-      ScenarioEditorOptions opts;
-      opts.scenario_id = scenario_id;
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
-    }
-    if (ImGui::Selectable("Edit new copy")) {
-      ScenarioEditorOptions opts;
-      opts.scenario_id = scenario_id;
-      opts.is_new_copy = true;
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
-    }
-    if (ImGui::Selectable("Add new copy")) {
-      ScenarioEditorOptions opts;
-      opts.scenario_id = scenario_id;
-      opts.is_new_copy = true;
-      opts.add_to_playlist = run.playlist_name();
-      opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+    if (!is_levels_playlist) {
+      if (ImGui::Selectable("Edit")) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = scenario_id;
+        screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+      }
+      if (ImGui::Selectable("Edit new copy")) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = scenario_id;
+        opts.is_new_copy = true;
+        screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+      }
+      if (ImGui::Selectable("Add new copy")) {
+        ScenarioEditorOptions opts;
+        opts.scenario_id = scenario_id;
+        opts.is_new_copy = true;
+        opts.add_to_playlist = run.playlist_name();
+        opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
+        screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+      }
     }
     if (ImGui::BeginMenu("Add to")) {
       std::string selected_playlist;
       int playlist_count = 0;
       const auto& recent_playlists = screen.app().history_manager().recent_playlists();
-      for (int i = 0; i < std::min<int>(6, recent_playlists.size()); ++i) {
+      for (int i = 0; i < recent_playlists.size(); ++i) {
         const std::string& playlist_name = recent_playlists[i];
+        auto maybe_playlist = screen.app().playlist_manager().GetPlaylist(playlist_name);
+        if (!maybe_playlist.has_value() || maybe_playlist->def().has_scenario_levels_def()) {
+          continue;
+        }
+        if (playlist_count >= 6) {
+          break;
+        }
         ImGui::IdGuard playlist_id(playlist_name, i);
+        playlist_count++;
         if (run.playlist_name() != playlist_name && ImGui::MenuItem(playlist_name.c_str())) {
           selected_playlist = playlist_name;
         }
