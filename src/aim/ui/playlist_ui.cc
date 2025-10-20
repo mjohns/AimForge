@@ -528,7 +528,7 @@ class PlaylistEditorComponent {
       }
     }
 
-    // This base scenario should exist now.
+    // The base scenario should exist now.
     new_base_scenario = app_.scenario_manager().GetScenario(new_base_scenario_name);
 
     for (int i = 2; i <= levels.max_level(); ++i) {
@@ -566,7 +566,17 @@ class PlaylistEditorComponent {
       }
     }
 
-    // TODO: If old max levels was higher, delete scenarios.
+    // If old max_levels was higher, delete scenarios that should no longer exist.
+    int old_max_levels = original_playlist_def_.scenario_levels_def().max_level();
+    for (int i = levels.max_level() + 1; i <= old_max_levels; ++i) {
+      std::string name = AddLevelSuffix(final_name.full_name(), i);
+      app_.scenario_manager().DeleteScenario(
+          ResourceName::Parse(AddLevelSuffix(final_name.full_name(), i)));
+      if (is_rename) {
+        app_.scenario_manager().DeleteScenario(
+            ResourceName::Parse(AddLevelSuffix(original_playlist_name_.full_name(), i)));
+      }
+    }
 
     return true;
   }
