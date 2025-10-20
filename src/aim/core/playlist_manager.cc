@@ -307,4 +307,15 @@ std::vector<PlaylistItem> Playlist::items() const {
   return GetPlaylistItems(name, def_);
 }
 
+std::vector<std::string> PlaylistManager::GetAllRelativeNamesInBundle(
+    const std::string& bundle_name) {
+  std::vector<std::string> names;
+  for (const Playlist& playlist : *playlists_) {
+    if (playlist.name.bundle_name() == bundle_name) {
+      names.push_back(playlist.name.relative_name());
+    }
+  }
+  return names;
+}
+
 }  // namespace aim

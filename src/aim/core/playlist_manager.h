@@ -111,6 +111,8 @@ class PlaylistManager {
 
   void RenameScenarioInAllPlaylists(const std::string& old_name, const std::string& new_name);
 
+  std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);
+
  private:
   std::shared_ptr<PlaylistRun> GetOptionalExistingRun(const std::string& name);
   PlaylistRun InitializeRun(const Playlist& playlist);
