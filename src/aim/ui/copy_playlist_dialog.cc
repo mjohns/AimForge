@@ -17,7 +17,6 @@ struct CopyPlaylistOptions {
   std::string add_prefix;
   bool deep_copy = false;
   bool as_references = false;
-  bool bake_references = false;
 };
 
 bool CopyPlaylist(Playlist source,
@@ -31,6 +30,7 @@ bool CopyPlaylist(Playlist source,
       MakeUniqueName(new_playlist_name.relative_name(), taken_names);
 
   PlaylistDef dest = source.def();
+  dest.clear_scenario_levels_def();
   if (opts.deep_copy) {
     std::unordered_map<std::string, ResourceName> new_name_map;
     std::unordered_map<std::string, ScenarioDef> new_scenario_map;
@@ -56,8 +56,6 @@ bool CopyPlaylist(Playlist source,
       ScenarioDef new_def;
       if (opts.as_references) {
         new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
-      } else if (opts.bake_references) {
-        new_def = source_scenario->evaluated_def;
       } else {
         new_def = source_scenario->unevaluated_def;
       }
@@ -85,6 +83,13 @@ bool CopyPlaylist(Playlist source,
             app.scenario_manager().SaveScenario(ResourceName::Parse(item.scenario()), def);
           }
         }
+      }
+    }
+  } else {
+    // Not a deep copy. If it was a levels scenario copy the items over as is.
+    if (source.def().has_scenario_levels_def()) {
+      for (const auto& source_item : source.items()) {
+        *dest.add_items() = source_item;
       }
     }
   }
