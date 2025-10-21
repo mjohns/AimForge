@@ -74,9 +74,8 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     if (target.growth_info.has_value()) {
       auto g = *target.growth_info;
       float delta_seconds = now_seconds - g.start_time_seconds;
-      if (delta_seconds >= g.grow_time_seconds) {
-        targets_to_remove.push_back(target.id);
-      } else {
+      bool is_growing = delta_seconds < g.grow_time_seconds;
+      if (is_growing) {
         // Change radius.
         float radius_range = std::abs(g.start_radius - g.end_radius);
         float rate = radius_range / g.grow_time_seconds;
@@ -84,6 +83,10 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
           target.radius = g.start_radius + (rate * delta_seconds);
         } else {
           target.radius = g.start_radius - (rate * delta_seconds);
+        }
+      } else {
+        if (delta_seconds >= (g.grow_time_seconds + g.time_at_final_size_seconds)) {
+          targets_to_remove.push_back(target.id);
         }
       }
     }

@@ -2618,9 +2618,24 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::SetNextItemWidth(char_x_ * 10);
       ImGui::InputFloat("##FinalGrowthRadius", &final_radius, 0.1, 0.5, "%.1f");
       profile->set_target_radius_growth_size(std::max(final_radius, 0.1f));
+
+      ImGui::InputFloat(
+          ImGui::InputFloatParams::WithLabelAsId("Time at final size")
+              .set_step(0.1, 0.5)
+              .set_min(0)
+              .set_precision(1)
+              .set_default(0)
+              .set_is_optional()
+              .set_width(char_x_ * 10),
+          PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_growth_final_size_time_seconds));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Time target will stay at final size before being removed. Defaults to 0. i.e. remove "
+          "immediately upon reaching final size. This time is in addition to the pulse time.");
       ImGui::Unindent();
     } else {
       profile->clear_target_radius_growth_time_seconds();
+      profile->clear_target_radius_growth_final_size_time_seconds();
       profile->clear_target_radius_growth_size();
     }
 

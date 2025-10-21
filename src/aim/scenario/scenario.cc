@@ -581,6 +581,7 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
     TargetGrowthInfo growth_info;
     growth_info.start_time_seconds = timer_.GetElapsedSeconds();
     growth_info.grow_time_seconds = profile.target_radius_growth_time_seconds();
+    growth_info.time_at_final_size_seconds = profile.target_radius_growth_final_size_time_seconds();
     growth_info.end_radius = profile.target_radius_growth_size();
     growth_info.start_radius = target.radius;
     target.growth_info = growth_info;

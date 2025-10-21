@@ -504,6 +504,8 @@ message TargetProfile {
   // The target will grow to the specified size after n seconds.
   float target_radius_growth_time_seconds = 12;
   float target_radius_growth_size = 13;
+  // The amount of time it will stay at final size before being removed. This time is in addition to the growth size.
+  float target_radius_growth_final_size_time_seconds = 14;
 
   // Defaults to spehere if no more specific type is specified.
   oneof type {

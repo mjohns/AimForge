@@ -21,6 +21,7 @@ struct RadiusAtKill {
 
 struct TargetGrowthInfo {
   float grow_time_seconds;
+  float time_at_final_size_seconds = 0;
   float start_time_seconds;
   float start_radius;
   float end_radius;

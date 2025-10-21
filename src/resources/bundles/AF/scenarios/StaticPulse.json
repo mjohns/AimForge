@@ -1,5 +1,6 @@
 {
   "durationSeconds": 60,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -71,9 +72,11 @@
         "info": {
           "description": ""
         },
+        "speedJitter": 0,
         "targetRadius": 1.0999999,
+        "targetRadiusGrowthFinalSizeTimeSeconds": 0.2,
         "targetRadiusGrowthSize": 4.00000048,
-        "targetRadiusGrowthTimeSeconds": 2.1,
+        "targetRadiusGrowthTimeSeconds": 1.89999986,
         "targetRadiusJitter": 0
       }
     ],
