@@ -12,7 +12,7 @@ int main(int, char**) {
     } catch (ApplicationExitException e) {
       return 0;
     } catch (ApplicationRestartException e) {
-        // Continue to next loop iteration.
+      // Continue to next loop iteration.
     }
   }
   return 0;

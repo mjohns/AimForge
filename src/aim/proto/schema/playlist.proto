@@ -25,8 +25,7 @@ message ScenarioLevelsDef {
   int32 num_plays_per_level = 3;
 }
 
-message BenchmarkDef {
-}
+message BenchmarkDef {}
 
 message PlaylistItem {
   string scenario = 1;

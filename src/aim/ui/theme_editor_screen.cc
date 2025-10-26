@@ -20,7 +20,7 @@ Room GetDefaultRoom() {
   Room r;
   r.mutable_simple_room()->set_height(130);
   r.mutable_simple_room()->set_width(150);
-  *r.mutable_camera_position() = ToStoredVec3(0, -100, 0);
+  *r.mutable_camera_position() = ToStoredVec3(0, -200, 0);
   return r;
 }
 
