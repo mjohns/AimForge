@@ -3,6 +3,7 @@
 #include <optional>
 #include <random>
 
+#include "aim/common/geometry.h"
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/wall.h"
@@ -62,6 +63,10 @@ bool IntersectRaySphere(const glm::vec3& position,
 std::optional<float> GetNormalizedMissedShotDistance(const glm::vec3& camera_position,
                                                      const glm::vec3& look_at,
                                                      const glm::vec3& position);
+
+std::optional<float> GetMissedShotDistance(const glm::vec3& camera_position,
+                                           const glm::vec3& look_at,
+                                           const glm::vec3& position);
 
 // Axes must be normalized.
 glm::mat4 MakeCoordinateSystemTransform(const glm::vec3& x_axis,

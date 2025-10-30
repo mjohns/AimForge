@@ -422,7 +422,7 @@ class StatsScreen : public UiScreen {
     if (has_previous_high_score) {
       auto font = app_.font_manager().UseLarge();
       ImGui::SameLine();
-      ImGui::Button(percent_diff_string);
+      ImGui::Button(std::format("{}###pervious_high_diff", percent_diff_string));
     }
 
     {
@@ -437,7 +437,7 @@ class StatsScreen : public UiScreen {
     ImGui::Text("Average");
     ImGui::BeginDisabled();
     ImGui::SameLine();
-    ImGui::Button(avg_comparison.score_diff_percent_string);
+    ImGui::Button(std::format("{}###avg_diff_button", avg_comparison.score_diff_percent_string));
     ImGui::EndDisabled();
 
     if (all_stats.size() > 1) {

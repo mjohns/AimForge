@@ -246,6 +246,20 @@ std::optional<float> GetNormalizedMissedShotDistance(const glm::vec3& camera_pos
   return glm::length(plane_origin - intersection_point);
 }
 
+std::optional<float> GetMissedShotDistance(const glm::vec3& camera_position,
+                                           const glm::vec3& look_at,
+                                           const glm::vec3& position) {
+  glm::vec3 plane_origin = position;
+  float plane_distance;
+  bool has_plane_intersection =
+      glm::intersectRayPlane(camera_position, look_at, plane_origin, look_at, plane_distance);
+  if (!has_plane_intersection) {
+    return {};
+  }
+  glm::vec3 intersection_point = camera_position + look_at * plane_distance;
+  return glm::length(plane_origin - intersection_point);
+}
+
 glm::vec2 MirrorVector(const glm::vec2& v, const glm::vec2& n) {
   return glm::reflect(v, RotateRadians(glm::normalize(n), glm::half_pi<float>()));
 }

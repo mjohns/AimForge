@@ -58,6 +58,8 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   std::vector<u16> targets_to_remove;
   if (shot_type == ShotType::kTrackingKill || shot_type == ShotType::kTrackingInvincible) {
     HandleTrackingHits(data, &targets_to_remove);
+  } else if (shot_type == ShotType::kTrackingProximity) {
+    HandleProximityTrackingHits(data);
   } else {
     HandleClickHits(data);
   }
@@ -101,6 +103,44 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   }
 
   UpdateTargetPositions();
+}
+
+void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
+  i64 now_micros = timer_.GetElapsedMicros();
+  i64 delta_micros = now_micros - last_proximity_tracking_update_time_micros_;
+  last_proximity_tracking_update_time_micros_ = now_micros;
+
+  if (data->is_click_held) {
+    if (!tracking_sound_) {
+      tracking_sound_ = std::make_unique<TrackingSound>(settings_.sound(), &app_);
+    }
+    bool is_hitting = false;
+    const auto& targets = target_manager_.GetTargets();
+    if (targets.size() > 0) {
+      glm::vec3 position = targets[0].position;
+
+      std::optional<float> maybe_distance =
+          GetMissedShotDistance(camera_.GetPosition(), camera_.GetLookAt().front, position);
+
+      if (maybe_distance) {
+        // .02 outside of decent sized
+        // .169 about 5 targets out
+        // 0.00116545008 Close to direct hit
+        // 0.27 maybe as max
+        float max_distance = targets[0].radius * targets[0].hit_radius_multiplier;
+        float value = (max_distance - *maybe_distance) / max_distance;
+        if (value > 0) {
+          is_hitting = true;
+          stats_.num_hits += delta_micros * value * 0.00001;
+        }
+      }
+    }
+
+    // Change volume or frequency based  on how close of a hit?
+    tracking_sound_->DoTick(is_hitting);
+  } else {
+    TrackingHoldDone();
+  }
 }
 
 void BaseScenario::HandleTrackingHits(UpdateStateData* data,
@@ -350,6 +390,11 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
       stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
       stats_.num_shots = def_.duration_seconds();
       score = 100 * (stats_.num_hits / stats_.num_shots);
+      break;
+    }
+    case ShotType::kTrackingProximity: {
+      float time_normalized_multiplier = 60.0f / def_.duration_seconds();
+      score = stats_.num_hits * time_normalized_multiplier;
       break;
     }
     case ShotType::kTrackingKill: {

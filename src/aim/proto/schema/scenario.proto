@@ -142,6 +142,9 @@ message ShotType {
     bool click_single = 4;
     // Targets take multiple clicks to kill where the number of clicks is specified on the target.
     bool click_multi = 5;
+    // A single invincible target is tracked. The score is based on how close to the center you are
+    // and not the size of the target which is just visual.
+    bool tracking_proximity = 6;
   }
   // If unset defaults to 0.05 (50 millis)
   float poke_kill_time_seconds = 10;

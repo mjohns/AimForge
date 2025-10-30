@@ -83,6 +83,7 @@ const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kTrackingInvincible, "Tracking"},
     {ShotType::kTrackingKill, "Tracking kill"},
     {ShotType::kPoke, "Poke"},
+    {ShotType::kTrackingProximity, "Proximity tracking"},
     {ShotType::kClickMulti, "Multi click"},
 };
 
@@ -2144,6 +2145,9 @@ class ScenarioEditorScreen : public UiScreen {
       }
       if (type == ShotType::kTrackingInvincible) {
         s.set_tracking_invincible(true);
+      }
+      if (type == ShotType::kTrackingProximity) {
+        s.set_tracking_proximity(true);
       }
       if (type == ShotType::kTrackingKill) {
         s.set_tracking_kill(true);
