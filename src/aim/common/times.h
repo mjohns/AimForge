@@ -13,6 +13,12 @@ std::string GetNowString();
 i64 GetNowMicros();
 i64 GetNowMillis();
 
+// Gets the interval between events in microseconds for a rate of n times per second.
+static i64 TimesPerSecondToIntervalMicros(float times_per_second) {
+  i64 micros_per_second = 1000000;
+  return micros_per_second / times_per_second;
+}
+
 std::string GetHowLongAgoString(i64 start_epoch_micros, i64 end_epoch_micros);
 std::optional<i64> ParseTimestampStringAsMicros(const std::string& timestamp);
 
@@ -41,8 +47,7 @@ class Stopwatch {
 struct TimedInvokerParams {
   static TimedInvokerParams TimesPerSecond(float times_per_second) {
     TimedInvokerParams params;
-    i64 micros_per_second = 1000000;
-    params.interval_micros = micros_per_second / times_per_second;
+    params.interval_micros = TimesPerSecondToIntervalMicros(times_per_second);
     return params;
   }
 

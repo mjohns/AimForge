@@ -111,10 +111,10 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
   last_proximity_tracking_update_time_micros_ = now_micros;
 
   if (data->is_click_held) {
-    if (!tracking_sound_) {
-      tracking_sound_ = std::make_unique<TrackingSound>(settings_.sound(), &app_);
+    if (!proximity_tracking_sound_) {
+      proximity_tracking_sound_ = std::make_unique<ProximityTrackingSound>(settings_.sound(), &app_);
     }
-    bool is_hitting = false;
+    std::optional<float> normalized_distance_from_center;
     const auto& targets = target_manager_.GetTargets();
     if (targets.size() > 0) {
       glm::vec3 position = targets[0].position;
@@ -123,21 +123,16 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
           GetMissedShotDistance(camera_.GetPosition(), camera_.GetLookAt().front, position);
 
       if (maybe_distance) {
-        // .02 outside of decent sized
-        // .169 about 5 targets out
-        // 0.00116545008 Close to direct hit
-        // 0.27 maybe as max
         float max_distance = targets[0].radius * targets[0].hit_radius_multiplier;
         float value = (max_distance - *maybe_distance) / max_distance;
         if (value > 0) {
-          is_hitting = true;
           stats_.num_hits += delta_micros * value * 0.00001;
+          normalized_distance_from_center = 1.0 - value;
         }
       }
     }
 
-    // Change volume or frequency based  on how close of a hit?
-    tracking_sound_->DoTick(is_hitting);
+    proximity_tracking_sound_->DoTick(normalized_distance_from_center);
   } else {
     TrackingHoldDone();
   }
@@ -235,6 +230,7 @@ void BaseScenario::TrackingHoldDone() {
   stats_.shot_stopwatch.Stop();
   stats_.hit_stopwatch.Stop();
   tracking_sound_ = {};
+  proximity_tracking_sound_ = {};
   if (GetShotType() == ShotType::kTrackingKill) {
     for (Target& target : target_manager_.GetMutableTargets()) {
       target.is_hit = false;

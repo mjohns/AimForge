@@ -51,6 +51,7 @@ class BaseScenario : public Scenario {
   ScenarioStats stats_;
 
   std::unique_ptr<TrackingSound> tracking_sound_;
+  std::unique_ptr<ProximityTrackingSound> proximity_tracking_sound_;
 };
 
 }  // namespace aim
