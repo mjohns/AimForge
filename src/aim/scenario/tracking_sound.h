@@ -7,8 +7,8 @@ namespace aim {
 
 constexpr const float kDefaultHitSoundsPerSecond = 12;
 
-constexpr const float kDefaultSlowHitSoundsPerSecond = 9;
-constexpr const float kDefaultFastHitSoundsPerSecond = 18;
+constexpr const float kDefaultSlowHitSoundsPerSecond = 8;
+constexpr const float kDefaultFastHitSoundsPerSecond = 15;
 
 class TrackingSound {
  public:

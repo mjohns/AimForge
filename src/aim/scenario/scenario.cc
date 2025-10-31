@@ -145,7 +145,8 @@ bool Scenario::ShouldAutoHold() {
     return false;
   }
   auto type = GetShotType();
-  return type == ShotType::kTrackingInvincible || type == ShotType::kTrackingKill;
+  return type == ShotType::kTrackingInvincible || type == ShotType::kTrackingKill ||
+         type == ShotType::kTrackingProximity;
 }
 
 void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
