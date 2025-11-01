@@ -87,6 +87,11 @@ const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kClickMulti, "Multi click"},
 };
 
+const std::vector<std::pair<ShotType::TypeCase, std::string>> kSingleTargetTrackingShotTypes{
+    {ShotType::kTrackingInvincible, "Tracking"},
+    {ShotType::kTrackingProximity, "Proximity tracking"},
+};
+
 const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
     ScenarioDef::kCenteringDef,
     ScenarioDef::kWallArcDef,
@@ -182,12 +187,14 @@ class ScenarioEditorScreen : public UiScreen {
     bundle_names_ = app_.file_system()->GetBundleNames();
 
     // See if this is a scenario from a levels playlist and limit features if so.
-    int level = 0;
-    std::string levels_playlist_name = StripLevelSuffix(opts.scenario_id, &level).value_or("");
-    if (level > 0) {
-      auto levels_playlist = app_.playlist_manager().GetPlaylist(levels_playlist_name);
-      if (levels_playlist && levels_playlist->def().has_scenario_levels_def()) {
-        is_levels_playlist_scenario_ = true;
+    if (!opts.is_new_copy) {
+      int level = 0;
+      std::string levels_playlist_name = StripLevelSuffix(opts.scenario_id, &level).value_or("");
+      if (level > 0) {
+        auto levels_playlist = app_.playlist_manager().GetPlaylist(levels_playlist_name);
+        if (levels_playlist && levels_playlist->def().has_scenario_levels_def()) {
+          is_levels_playlist_scenario_ = true;
+        }
       }
     }
 
@@ -463,14 +470,14 @@ class ScenarioEditorScreen : public UiScreen {
         "ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
     InitializeScenarioType(scenario_type);
 
-    if (VectorContains(kSingleTargetTrackingTypes, scenario_type)) {
-      def_.mutable_shot_type()->set_tracking_invincible(true);
+    bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, scenario_type);
+    if (is_single_target_tracking) {
       if (is_new_type) {
+        def_.mutable_shot_type()->set_tracking_invincible(true);
         def_.clear_target_def();
       }
-    } else {
-      DrawShotTypeEditor();
     }
+    DrawShotTypeEditor(is_single_target_tracking);
 
     Line();
 
@@ -2125,7 +2132,7 @@ class ScenarioEditorScreen : public UiScreen {
     DrawRegionLengthPointEditor("Y" + id, RegionLength::kYPercentValue, v->mutable_y());
   }
 
-  void DrawShotTypeEditor() {
+  void DrawShotTypeEditor(bool is_single_target_tracking) {
     ImGui::IdGuard cid("ShotTypeEditor");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Shot type");
@@ -2134,7 +2141,11 @@ class ScenarioEditorScreen : public UiScreen {
     auto type = def_.shot_type().type_case();
     ShotType& s = *def_.mutable_shot_type();
 
-    if (ImGui::SimpleTypeDropdown("ShotTypeDropdown", &type, kShotTypes, char_x_ * 15)) {
+    auto* shot_types = &kShotTypes;
+    if (is_single_target_tracking) {
+      shot_types = &kSingleTargetTrackingShotTypes;
+    }
+    if (ImGui::SimpleTypeDropdown("ShotTypeDropdown", &type, *shot_types, char_x_ * 15)) {
       s.Clear();
       if (type == ShotType::kClickSingle) {
         s.set_click_single(true);
