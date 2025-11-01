@@ -1,13 +1,12 @@
 #include "play_time_db.h"
 
-#include <sqlite3.h>
-
 #include <format>
 #include <string>
 
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/database/sqlite_util.h"
+#include "sqlite3.h"
 
 namespace aim {
 namespace {
@@ -54,6 +53,8 @@ std::string ShotTypeToString(ShotType::TypeCase type) {
       return "Tracking";
     case ShotType::kTrackingKill:
       return "TrackingKill";
+    case ShotType::kTrackingProximity:
+      return "TrackingProximity";
   }
   return "";
 }
