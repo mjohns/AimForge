@@ -43,6 +43,7 @@ std::string MessageToJson(const google::protobuf::Message& message, int indent) 
   opts.unquote_int64_if_possible = true;
   auto status = google::protobuf::util::MessageToJsonString(message, &json_string, opts);
   if (!status.ok()) {
+    Logger::get()->error("Unable to serialize message to json: {}", status.message());
     return "";
   }
   nlohmann::json json_data = nlohmann::json::parse(json_string);
@@ -52,20 +53,19 @@ std::string MessageToJson(const google::protobuf::Message& message, int indent) 
 
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
                             const google::protobuf::Message& message) {
-  std::string json_string;
-  google::protobuf::json::PrintOptions opts;
-  opts.add_whitespace = true;
-  opts.unquote_int64_if_possible = true;
-  auto status = google::protobuf::util::MessageToJsonString(message, &json_string, opts);
-  if (!status.ok()) {
-    Logger::get()->error("Unable to serialize message to json: {}", status.message());
-    return false;
-  }
-  int indent = 2;
-  nlohmann::json json_data = nlohmann::json::parse(json_string);
-  std::string formatted_json = json_data.dump(indent, ' ', true);
+  std::string json_string = MessageToJson(message, /*indent=*/2);
+  return WriteStringToFile(path, json_string);
+}
 
-  return WriteStringToFile(path, formatted_json);
+bool JsonToMessage(const std::string& json, google::protobuf::Message* message) {
+  google::protobuf::json::ParseOptions opts;
+  opts.ignore_unknown_fields = true;
+  opts.case_insensitive_enum_parsing = true;
+  auto status = google::protobuf::util::JsonStringToMessage(json, message, opts);
+  if (!status.ok()) {
+    Logger::get()->warn("Unable to parse proto json ({}): {}", status.message(), json);
+  }
+  return status.ok();
 }
 
 bool ReadJsonMessageFromFile(const std::filesystem::path& path,
@@ -75,15 +75,7 @@ bool ReadJsonMessageFromFile(const std::filesystem::path& path,
     Logger::get()->warn("Unable to read proto json: {}", path.string());
     return false;
   }
-  google::protobuf::json::ParseOptions opts;
-  opts.ignore_unknown_fields = true;
-  opts.case_insensitive_enum_parsing = true;
-  std::string json = *maybe_content;
-  auto status = google::protobuf::util::JsonStringToMessage(json, message, opts);
-  if (!status.ok()) {
-    Logger::get()->warn("Unable to parse proto json ({}): {}", status.message(), json);
-  }
-  return status.ok();
+  return JsonToMessage(*maybe_content, message);
 }
 
 std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(

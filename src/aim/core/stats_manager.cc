@@ -1,9 +1,9 @@
 #include "stats_manager.h"
 
-#include <glm/ext/scalar_common.hpp>
 #include <memory>
 
 #include "aim/common/util.h"
+#include "glm/ext/scalar_common.hpp"
 
 namespace aim {
 namespace {

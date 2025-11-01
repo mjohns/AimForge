@@ -16,6 +16,7 @@ std::string MessageToJson(const google::protobuf::Message& message, int indent =
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
                             const google::protobuf::Message& message);
 
+bool JsonToMessage(const std::string& json, google::protobuf::Message* message);
 bool ReadJsonMessageFromFile(const std::filesystem::path& path, google::protobuf::Message* message);
 
 std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(

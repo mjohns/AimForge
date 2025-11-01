@@ -3,10 +3,12 @@
 #include <sqlite3.h>
 
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <vector>
 
 #include "aim/common/simple_types.h"
+#include "aim/proto/stats.pb.h"
 
 namespace aim {
 
@@ -17,6 +19,7 @@ struct StatsRow {
   double num_shots = 0;
   double score = 0.0;
   double cm_per_360 = 0.0;
+  std::optional<StatsExtraInfo> extra_info;
 };
 
 class StatsDb {

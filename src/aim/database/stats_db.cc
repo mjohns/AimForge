@@ -5,6 +5,7 @@
 #include <format>
 #include <string>
 
+#include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/database/sqlite_util.h"
@@ -33,8 +34,9 @@ INSERT INTO Stats (
     NumHits,
     NumShots,
     CmPer360,
-    Score)
-  VALUES (NULL, ?, ?, ?, ?, ?, ?);
+    Score,
+    ExtraInfo)
+  VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);
 )AIMS";
 
 const char* kGetRecentStatsSql = R"AIMS(
@@ -44,7 +46,8 @@ SELECT
   NumHits,
   NumShots,
   CmPer360,
-  Score
+  Score,
+  ExtraInfo
 FROM Stats
 WHERE ScenarioId = ?
 ORDER BY StatsId ASC LIMIT 5000;
@@ -111,6 +114,15 @@ std::vector<StatsRow> StatsDb::GetStats(const std::string& scenario_id) {
     stats.cm_per_360 = sqlite3_column_double(stmt, 4);
     stats.score = sqlite3_column_double(stmt, 5);
 
+    const char* extra_info_text = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+    if (extra_info_text != nullptr) {
+      StatsExtraInfo extra_info;
+      bool parsed_extra_info = JsonToMessage(std::string(extra_info_text), &extra_info);
+      if (parsed_extra_info) {
+        stats.extra_info = extra_info;
+      }
+    }
+
     all_stats.push_back(stats);
   }
 
@@ -155,6 +167,12 @@ void StatsDb::AddStats(const std::string& scenario_id, StatsRow* row) {
   sqlite3_bind_double(stmt, 4, row->num_shots);
   sqlite3_bind_double(stmt, 5, row->cm_per_360);
   sqlite3_bind_double(stmt, 6, row->score);
+
+  if (row->extra_info.has_value()) {
+    BindString(stmt, 7, MessageToJson(*row->extra_info));
+  } else {
+    sqlite3_bind_null(stmt, 7);
+  }
 
   rc = sqlite3_step(stmt);
   sqlite3_finalize(stmt);

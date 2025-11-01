@@ -112,7 +112,8 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
 
   if (data->is_click_held) {
     if (!proximity_tracking_sound_) {
-      proximity_tracking_sound_ = std::make_unique<ProximityTrackingSound>(settings_.sound(), &app_);
+      proximity_tracking_sound_ =
+          std::make_unique<ProximityTrackingSound>(settings_.sound(), &app_);
     }
     std::optional<float> normalized_distance_from_center;
     const auto& targets = target_manager_.GetTargets();
@@ -129,6 +130,17 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
           // Max value for score is 750.
           stats_.num_hits += delta_micros * ((value + 0.25) * 0.00001);
           normalized_distance_from_center = 1.0 - value;
+
+          stats_.proximity.hit_micros_100 += delta_micros;
+          if (*normalized_distance_from_center <= 0.75) {
+            stats_.proximity.hit_micros_75 += delta_micros;
+          }
+          if (*normalized_distance_from_center <= 0.50) {
+            stats_.proximity.hit_micros_50 += delta_micros;
+          }
+          if (*normalized_distance_from_center <= 0.25) {
+            stats_.proximity.hit_micros_25 += delta_micros;
+          }
         }
       }
     }
@@ -382,6 +394,7 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
 std::optional<StatsRow> BaseScenario::GetStatsRow() {
   ShotType::TypeCase shot_type = GetShotType();
   float score = 0;
+  std::optional<StatsExtraInfo> maybe_extra_info;
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
       stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
@@ -392,6 +405,16 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
     case ShotType::kTrackingProximity: {
       float time_normalized_multiplier = 60.0f / def_.duration_seconds();
       score = stats_.num_hits * time_normalized_multiplier;
+
+      float total_micros = def_.duration_seconds() * 1000000;
+      stats_.num_shots = def_.duration_seconds();
+      stats_.num_hits = (stats_.proximity.hit_micros_100 / total_micros) * stats_.num_shots;
+
+      StatsExtraInfo extra_info;
+      extra_info.set_num_hits_75((stats_.proximity.hit_micros_75 / total_micros) * stats_.num_shots);
+      extra_info.set_num_hits_50((stats_.proximity.hit_micros_50 / total_micros) * stats_.num_shots);
+      extra_info.set_num_hits_25((stats_.proximity.hit_micros_25 / total_micros) * stats_.num_shots);
+      maybe_extra_info = extra_info;
       break;
     }
     case ShotType::kTrackingKill: {
@@ -426,6 +449,7 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
   stats_row.num_hits = stats_.num_hits;
   stats_row.num_shots = stats_.num_shots;
   stats_row.score = score;
+  stats_row.extra_info = maybe_extra_info;
   return stats_row;
 }
 

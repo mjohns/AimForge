@@ -10,12 +10,23 @@
 
 namespace aim {
 
+struct ProximityStats {
+  // Anywhere on  target.
+  i64 hit_micros_100 = 0;
+  // Inner 75%.
+  i64 hit_micros_75 = 0;
+  // Inner 50%.
+  i64 hit_micros_50 = 0;
+  i64 hit_micros_25 = 0;
+};
+
 struct ScenarioStats {
   double num_hits = 0;
   double num_shots = 0;
   double num_kills = 0;
   Stopwatch hit_stopwatch;
   Stopwatch shot_stopwatch;
+  ProximityStats proximity;
 };
 
 class BaseScenario : public Scenario {
