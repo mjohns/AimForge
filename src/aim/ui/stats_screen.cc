@@ -440,6 +440,20 @@ class StatsScreen : public UiScreen {
     ImGui::Button(std::format("{}###avg_diff_button", avg_comparison.score_diff_percent_string));
     ImGui::EndDisabled();
 
+    if (info_.stats.extra_info.has_value()) {
+      auto& extra_info = *info_.stats.extra_info;
+      ImGui::AlignTextToFramePadding();
+      ImGui::TextFmt("Accuracy breakdown {:.1f}%, {:.1f}%, {:.1f}%, {:.1f}%",
+                     (info_.stats.num_hits * 100) / info_.stats.num_shots,
+                     (extra_info.num_hits_75() * 100) / info_.stats.num_shots,
+                     (extra_info.num_hits_50() * 100) / info_.stats.num_shots,
+                     (extra_info.num_hits_25() * 100) / info_.stats.num_shots);
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Breakdown of hit  percent by closeness to center. First is anywhere on target, then "
+          "middle 75%, middle 50%, .. 25%");
+    }
+
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
     }
