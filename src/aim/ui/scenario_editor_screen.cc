@@ -725,18 +725,13 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::IdGuard cid("WallArcEditor");
     WallArcScenarioDef& d = *def_.mutable_wall_arc_def();
 
-    ImGui::InputFloat(ImGui::InputFloatParams("ControlHeight")
-                          .set_label("Control height")
-                          .set_step(0.1, 2)
-                          .set_precision(1)
-                          .set_default(2)
-                          .set_min(0.1)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(WallArcScenarioDef, &d, control_height));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "The arc is defined by a quadratic bezier curve where start is (0, 0) and end is (2, 0). "
-        "The specified height is for the control point (1, height).");
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
+                                  .set_step(5, 50)
+                                  .set_min(1)
+                                  .set_precision(0)
+                                  .set_default(1)
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(WallArcScenarioDef, &d, acceleration));
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");

@@ -1,6 +1,7 @@
 {
   "durationSeconds": 60,
   "endScore": 45,
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,
@@ -21,7 +22,7 @@
     "profiles": [
       {
         "info": {},
-        "speed": 128,
+        "speed": 118,
         "speedJitter": 0,
         "targetRadius": 2,
         "targetRadiusJitter": 0
@@ -29,9 +30,10 @@
     ]
   },
   "wallArcDef": {
-    "controlHeight": 2,
+    "acceleration": 166,
+    "accelerationJitter": 140,
     "height": {
-      "value": 94.6000061
+      "yPercentValue": 0.5
     },
     "reflect": false,
     "startOnGround": true,

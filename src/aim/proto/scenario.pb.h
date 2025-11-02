@@ -3115,9 +3115,10 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     kWidthFieldNumber = 1,
     kHeightFieldNumber = 2,
     kHeightJitterFieldNumber = 3,
-    kControlHeightFieldNumber = 4,
-    kStartOnGroundFieldNumber = 5,
-    kReflectFieldNumber = 6,
+    kAccelerationFieldNumber = 4,
+    kAccelerationJitterFieldNumber = 5,
+    kStartOnGroundFieldNumber = 6,
+    kReflectFieldNumber = 7,
   };
   // .aim.RegionLength width = 1;
   bool has_width() const;
@@ -3164,18 +3165,29 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* _internal_mutable_height_jitter();
 
   public:
-  // float control_height = 4;
-  bool has_control_height() const;
-  void clear_control_height() ;
-  float control_height() const;
-  void set_control_height(float value);
+  // float acceleration = 4;
+  bool has_acceleration() const;
+  void clear_acceleration() ;
+  float acceleration() const;
+  void set_acceleration(float value);
 
   private:
-  float _internal_control_height() const;
-  void _internal_set_control_height(float value);
+  float _internal_acceleration() const;
+  void _internal_set_acceleration(float value);
 
   public:
-  // bool start_on_ground = 5;
+  // float acceleration_jitter = 5;
+  bool has_acceleration_jitter() const;
+  void clear_acceleration_jitter() ;
+  float acceleration_jitter() const;
+  void set_acceleration_jitter(float value);
+
+  private:
+  float _internal_acceleration_jitter() const;
+  void _internal_set_acceleration_jitter(float value);
+
+  public:
+  // bool start_on_ground = 6;
   bool has_start_on_ground() const;
   void clear_start_on_ground() ;
   bool start_on_ground() const;
@@ -3186,7 +3198,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   void _internal_set_start_on_ground(bool value);
 
   public:
-  // bool reflect = 6;
+  // bool reflect = 7;
   bool has_reflect() const;
   void clear_reflect() ;
   bool reflect() const;
@@ -3202,7 +3214,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 6, 3,
+      3, 7, 3,
       0, 2>
       _table_;
 
@@ -3225,7 +3237,8 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* width_;
     ::aim::RegionLength* height_;
     ::aim::RegionLength* height_jitter_;
-    float control_height_;
+    float acceleration_;
+    float acceleration_jitter_;
     bool start_on_ground_;
     bool reflect_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -21115,43 +21128,71 @@ inline void WallArcScenarioDef::set_allocated_height_jitter(::aim::RegionLength*
   // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.height_jitter)
 }
 
-// float control_height = 4;
-inline bool WallArcScenarioDef::has_control_height() const {
+// float acceleration = 4;
+inline bool WallArcScenarioDef::has_acceleration() const {
   bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
-inline void WallArcScenarioDef::clear_control_height() {
+inline void WallArcScenarioDef::clear_acceleration() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.control_height_ = 0;
+  _impl_.acceleration_ = 0;
   _impl_._has_bits_[0] &= ~0x00000008u;
 }
-inline float WallArcScenarioDef::control_height() const {
-  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.control_height)
-  return _internal_control_height();
+inline float WallArcScenarioDef::acceleration() const {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.acceleration)
+  return _internal_acceleration();
 }
-inline void WallArcScenarioDef::set_control_height(float value) {
-  _internal_set_control_height(value);
+inline void WallArcScenarioDef::set_acceleration(float value) {
+  _internal_set_acceleration(value);
   _impl_._has_bits_[0] |= 0x00000008u;
-  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.control_height)
+  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.acceleration)
 }
-inline float WallArcScenarioDef::_internal_control_height() const {
+inline float WallArcScenarioDef::_internal_acceleration() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.control_height_;
+  return _impl_.acceleration_;
 }
-inline void WallArcScenarioDef::_internal_set_control_height(float value) {
+inline void WallArcScenarioDef::_internal_set_acceleration(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.control_height_ = value;
+  _impl_.acceleration_ = value;
 }
 
-// bool start_on_ground = 5;
-inline bool WallArcScenarioDef::has_start_on_ground() const {
+// float acceleration_jitter = 5;
+inline bool WallArcScenarioDef::has_acceleration_jitter() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline void WallArcScenarioDef::clear_acceleration_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_jitter_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline float WallArcScenarioDef::acceleration_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.acceleration_jitter)
+  return _internal_acceleration_jitter();
+}
+inline void WallArcScenarioDef::set_acceleration_jitter(float value) {
+  _internal_set_acceleration_jitter(value);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.acceleration_jitter)
+}
+inline float WallArcScenarioDef::_internal_acceleration_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_jitter_;
+}
+inline void WallArcScenarioDef::_internal_set_acceleration_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_jitter_ = value;
+}
+
+// bool start_on_ground = 6;
+inline bool WallArcScenarioDef::has_start_on_ground() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline void WallArcScenarioDef::clear_start_on_ground() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_on_ground_ = false;
-  _impl_._has_bits_[0] &= ~0x00000010u;
+  _impl_._has_bits_[0] &= ~0x00000020u;
 }
 inline bool WallArcScenarioDef::start_on_ground() const {
   // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.start_on_ground)
@@ -21159,7 +21200,7 @@ inline bool WallArcScenarioDef::start_on_ground() const {
 }
 inline void WallArcScenarioDef::set_start_on_ground(bool value) {
   _internal_set_start_on_ground(value);
-  _impl_._has_bits_[0] |= 0x00000010u;
+  _impl_._has_bits_[0] |= 0x00000020u;
   // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.start_on_ground)
 }
 inline bool WallArcScenarioDef::_internal_start_on_ground() const {
@@ -21171,15 +21212,15 @@ inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
   _impl_.start_on_ground_ = value;
 }
 
-// bool reflect = 6;
+// bool reflect = 7;
 inline bool WallArcScenarioDef::has_reflect() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void WallArcScenarioDef::clear_reflect() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.reflect_ = false;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline bool WallArcScenarioDef::reflect() const {
   // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.reflect)
@@ -21187,7 +21228,7 @@ inline bool WallArcScenarioDef::reflect() const {
 }
 inline void WallArcScenarioDef::set_reflect(bool value) {
   _internal_set_reflect(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.reflect)
 }
 inline bool WallArcScenarioDef::_internal_reflect() const {
