@@ -1,6 +1,6 @@
 {
   "circleDef": {
-    "depth": 13,
+    "depth": {"value": 13},
     "radius": {
       "xPercentValue": 0.47
     },

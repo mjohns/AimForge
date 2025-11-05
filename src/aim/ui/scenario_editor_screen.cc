@@ -924,7 +924,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Angle")
                                   .set_step(1, 3)
                                   .set_min(0)
-                                  .set_max(60)
+                                  .set_max(90)
                                   .set_precision(0)
                                   .set_default(0)
                                   .set_width(char_x_ * 10),

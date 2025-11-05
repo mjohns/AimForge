@@ -3,6 +3,7 @@
   "linearDef": {
     "angle": 90,
     "angleJitter": 5,
+    "leftRightInitialDirection": "DIRECTION_RANDOM",
     "targetPlacementStrategy": {
       "minDistance": {
         "value": 20
@@ -34,8 +35,10 @@
           }
         }
       ]
-    }
+    },
+    "upDownInitialDirection": "DIRECTION_NEGATIVE"
   },
+  "overrides": {},
   "room": {
     "cameraPosition": {
       "x": 0,

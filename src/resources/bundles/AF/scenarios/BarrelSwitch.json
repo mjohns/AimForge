@@ -2,7 +2,6 @@
   "barrelDef": {
     "directionRadiusPercent": 0.45,
     "targetPlacementStrategy": {
-      "minDistance": 15,
       "regions": [
         {
           "circle": {
@@ -13,8 +12,6 @@
               "xPercentValue": 0.6
             }
           },
-          "depth": 0,
-          "depthJitter": 0,
           "info": {
             "description": ""
           }
