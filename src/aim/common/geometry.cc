@@ -260,6 +260,46 @@ std::optional<float> GetMissedShotDistance(const glm::vec3& camera_position,
   return glm::length(plane_origin - intersection_point);
 }
 
+std::optional<float> GetPillMissedShotDistance(const glm::vec3& camera_position,
+                                               const glm::vec3& look_at,
+                                               const glm::vec3& position,
+                                               float pill_height) {
+  glm::vec3 plane_origin = position;
+
+  // The plane will be oriented vertically in z direction regardless of look_at matching the pill
+  // orientation.
+  glm::vec3 plane_normal = look_at;
+  plane_normal.z = 0;
+
+  float plane_distance;
+  bool has_plane_intersection =
+      glm::intersectRayPlane(camera_position, look_at, plane_origin, plane_normal, plane_distance);
+  if (!has_plane_intersection) {
+    return {};
+  }
+
+  glm::vec3 intersection_point = camera_position + look_at * plane_distance;
+
+  // Adjust z of poisiton to be closest to hit along the pill's center line.
+  float height_half = pill_height / 2.0f;
+
+  glm::vec3 center_position = position;
+  center_position.z = intersection_point.z;
+
+  float max_z = position.z + height_half;
+  float min_z = position.z - height_half;
+  if (center_position.z > max_z) {
+    center_position.z = max_z;
+    return GetMissedShotDistance(camera_position, look_at, center_position);
+  }
+  if (center_position.z < min_z) {
+    center_position.z = min_z;
+    return GetMissedShotDistance(camera_position, look_at, center_position);
+  }
+
+  return glm::length(center_position - intersection_point);
+}
+
 glm::vec2 MirrorVector(const glm::vec2& v, const glm::vec2& n) {
   return glm::reflect(v, RotateRadians(glm::normalize(n), glm::half_pi<float>()));
 }

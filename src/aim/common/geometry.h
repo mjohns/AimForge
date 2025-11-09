@@ -68,6 +68,11 @@ std::optional<float> GetMissedShotDistance(const glm::vec3& camera_position,
                                            const glm::vec3& look_at,
                                            const glm::vec3& position);
 
+std::optional<float> GetPillMissedShotDistance(const glm::vec3& camera_position,
+                                               const glm::vec3& look_at,
+                                               const glm::vec3& position,
+                                               float pill_height);
+
 // Axes must be normalized.
 glm::mat4 MakeCoordinateSystemTransform(const glm::vec3& x_axis,
                                         const glm::vec3& y_axis,

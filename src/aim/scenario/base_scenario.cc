@@ -118,13 +118,19 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
     std::optional<float> normalized_distance_from_center;
     const auto& targets = target_manager_.GetTargets();
     if (targets.size() > 0) {
-      glm::vec3 position = targets[0].position;
+      const Target& target = targets[0];
+      glm::vec3 position = target.position;
 
       std::optional<float> maybe_distance =
-          GetMissedShotDistance(camera_.GetPosition(), camera_.GetLookAt().front, position);
+          target.is_pill
+              ? GetPillMissedShotDistance(camera_.GetPosition(),
+                                          camera_.GetLookAt().front,
+                                          position,
+                                          target.height - target.radius)
+              : GetMissedShotDistance(camera_.GetPosition(), camera_.GetLookAt().front, position);
 
       if (maybe_distance) {
-        float max_distance = targets[0].radius * targets[0].hit_radius_multiplier;
+        float max_distance = target.radius * target.hit_radius_multiplier;
         float value = (max_distance - *maybe_distance) / max_distance;
         if (value > 0) {
           // Max value for score is 750.
@@ -411,9 +417,12 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
       stats_.num_hits = (stats_.proximity.hit_micros_100 / total_micros) * stats_.num_shots;
 
       StatsExtraInfo extra_info;
-      extra_info.set_num_hits_75((stats_.proximity.hit_micros_75 / total_micros) * stats_.num_shots);
-      extra_info.set_num_hits_50((stats_.proximity.hit_micros_50 / total_micros) * stats_.num_shots);
-      extra_info.set_num_hits_25((stats_.proximity.hit_micros_25 / total_micros) * stats_.num_shots);
+      extra_info.set_num_hits_75((stats_.proximity.hit_micros_75 / total_micros) *
+                                 stats_.num_shots);
+      extra_info.set_num_hits_50((stats_.proximity.hit_micros_50 / total_micros) *
+                                 stats_.num_shots);
+      extra_info.set_num_hits_25((stats_.proximity.hit_micros_25 / total_micros) *
+                                 stats_.num_shots);
       maybe_extra_info = extra_info;
       break;
     }
