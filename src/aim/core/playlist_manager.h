@@ -1,11 +1,13 @@
 #pragma once
 
+#include <algorithm>
 #include <filesystem>
 #include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "aim/common/random.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
@@ -54,6 +56,10 @@ struct PlaylistRun {
 
   PlaylistItemProgress* GetMutableCurrentPlaylistItemProgress() {
     return IsCurrentIndexValid() ? &progress_list[current_index] : nullptr;
+  }
+
+  void Shuffle(Random& rand) {
+    std::shuffle(progress_list.begin(), progress_list.end(), *rand.random_generator());
   }
 
   bool IsCurrentIndexValid() {

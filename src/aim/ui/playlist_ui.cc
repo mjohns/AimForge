@@ -53,6 +53,13 @@ class PlaylistComponentImpl : public PlaylistComponent {
     if (ImGui::Button(kIconEdit)) {
       showing_editor_ = true;
     }
+    ImGui::HelpTooltip("Edit playlist");
+    ImGui::SameLine();
+    if (ImGui::Button(kIconShuffle)) {
+      app_.playlist_manager().GetCurrentRun()->Shuffle(app_.rand());
+    }
+    ImGui::HelpTooltip("Shuffle playlist order");
+
     ImGui::Spacing();
     ImGui::Spacing();
     PlaylistRunComponent("PlaylistRun", app_.playlist_manager().GetCurrentRun(), screen_);
@@ -273,7 +280,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
   ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
   ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, progress_width);
 
-  std::vector<PlaylistItem> items = run->playlist.items();
+  auto& progress_items = run->progress_list;
 
   /*
   std::vector<float> score_levels;
@@ -294,11 +301,11 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
   }
   */
 
-  for (int i = 0; i < items.size(); ++i) {
+  for (int i = 0; i < progress_items.size(); ++i) {
     ImGui::TableNextRow();
     ImGui::IdGuard id(i);
     PlaylistItemProgress& progress = run->progress_list[i];
-    PlaylistItem& item = items[i];
+    PlaylistItem& item = progress_items[i].item;
     bool is_selected = i == run->current_index;
 
     ImGui::TableNextColumn();

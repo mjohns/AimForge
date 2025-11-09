@@ -45,6 +45,10 @@ class Random {
     return base_value;
   }
 
+  std::mt19937* random_generator() {
+    return &random_generator_;
+  }
+
  private:
   std::mt19937 random_generator_;
 };
