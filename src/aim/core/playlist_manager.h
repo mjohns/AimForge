@@ -53,6 +53,7 @@ struct PlaylistRun {
 
   int current_index = 0;
   std::vector<PlaylistItemProgress> progress_list;
+  bool is_shuffled = false;
 
   PlaylistItemProgress* GetMutableCurrentPlaylistItemProgress() {
     return IsCurrentIndexValid() ? &progress_list[current_index] : nullptr;
@@ -60,6 +61,7 @@ struct PlaylistRun {
 
   void Shuffle(Random& rand) {
     std::shuffle(progress_list.begin(), progress_list.end(), *rand.random_generator());
+    is_shuffled = true;
   }
 
   bool IsCurrentIndexValid() {
@@ -90,6 +92,8 @@ class PlaylistManager {
 
   // Don't hold onto the pointer for long periods of time as it could be invalidated.
   std::shared_ptr<PlaylistRun> GetRun(const std::string& name);
+
+  void ClearCurrentRun(const std::string& name);
 
   void SetCurrentPlaylist(const std::string& name) {
     current_playlist_name_ = name;

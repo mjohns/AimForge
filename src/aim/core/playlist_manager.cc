@@ -210,6 +210,10 @@ std::shared_ptr<PlaylistRun> PlaylistManager::GetRun(const std::string& name) {
   return nullptr;
 }
 
+void PlaylistManager::ClearCurrentRun(const std::string& name) {
+  playlist_run_map_.erase(name);
+}
+
 PlaylistRun PlaylistManager::InitializeRun(const Playlist& playlist) {
   PlaylistRun run;
   run.playlist = playlist;

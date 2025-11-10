@@ -47,6 +47,8 @@ class PlaylistComponentImpl : public PlaylistComponent {
       return false;
     }
 
+    std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("%s", playlist_name.c_str());
     ImGui::SameLine();
@@ -54,15 +56,23 @@ class PlaylistComponentImpl : public PlaylistComponent {
       showing_editor_ = true;
     }
     ImGui::HelpTooltip("Edit playlist");
+
+    ImGui::SameLine();
+    if (ImGui::Button(kIconRedo)) {
+      app_.playlist_manager().ClearCurrentRun(run->playlist_name());
+      run = app_.playlist_manager().GetCurrentRun();
+    }
+    ImGui::HelpTooltip("Reset current run");
+
     ImGui::SameLine();
     if (ImGui::Button(kIconShuffle)) {
-      app_.playlist_manager().GetCurrentRun()->Shuffle(app_.rand());
+      run->Shuffle(app_.rand());
     }
     ImGui::HelpTooltip("Shuffle playlist order");
 
     ImGui::Spacing();
     ImGui::Spacing();
-    PlaylistRunComponent("PlaylistRun", app_.playlist_manager().GetCurrentRun(), screen_);
+    PlaylistRunComponent("PlaylistRun", run, screen_);
     return false;
   }
 
