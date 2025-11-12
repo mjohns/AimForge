@@ -26,6 +26,13 @@ struct ProgressBarUniform {
   float progress = 0.0;
 };
 
+struct SimpleSphereWithLightingUniform {
+  glm::vec4 base_color{};
+  glm::vec4 light_color{};
+  glm::vec4 light_direction{};
+  glm::mat4 transform{};
+};
+
 struct HealthBar {
   glm::mat4 transform;
   float health_percent;
@@ -142,6 +149,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, sphere_pipeline_);
       sphere_pipeline_ = nullptr;
     }
+    if (simple_sphere_lighting_pipeline_ != nullptr) {
+      SDL_ReleaseGPUGraphicsPipeline(device_, simple_sphere_lighting_pipeline_);
+      simple_sphere_lighting_pipeline_ = nullptr;
+    }
     if (solid_quad_pipeline_ != nullptr) {
       SDL_ReleaseGPUGraphicsPipeline(device_, solid_quad_pipeline_);
       solid_quad_pipeline_ = nullptr;
@@ -198,9 +209,17 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUShader(device_, position_and_tex_coord_vertex_shader_);
       position_and_tex_coord_vertex_shader_ = nullptr;
     }
+    if (simple_sphere_lighting_vertex_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, simple_sphere_lighting_vertex_shader_);
+      simple_sphere_lighting_vertex_shader_ = nullptr;
+    }
     if (texture_fragment_shader_ != nullptr) {
       SDL_ReleaseGPUShader(device_, texture_fragment_shader_);
       texture_fragment_shader_ = nullptr;
+    }
+    if (interpolate_color_fragment_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, interpolate_color_fragment_shader_);
+      interpolate_color_fragment_shader_ = nullptr;
     }
     if (progress_bar_fragment_shader_ != nullptr) {
       SDL_ReleaseGPUShader(device_, progress_bar_fragment_shader_);
@@ -219,6 +238,10 @@ class RendererImpl : public Renderer {
         LoadShader(device_, shader_dir, "progress_bar.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
     position_and_tex_coord_vertex_shader_ = LoadShader(
         device_, shader_dir, "position_and_texture_coord.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
+    simple_sphere_lighting_vertex_shader_ = LoadShader(
+        device_, shader_dir, "simple_sphere_lighting.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
+    interpolate_color_fragment_shader_ =
+        LoadShader(device_, shader_dir, "interpolate_color.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
 
     SDL_GPUTextureCreateInfo depth_texture_info{};
     depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
@@ -254,6 +277,9 @@ class RendererImpl : public Renderer {
     msaa_resolve_texture_ = SDL_CreateGPUTexture(device_, &resolve_texture_info);
 
     if (!CreateSpherePipeline()) {
+      return false;
+    }
+    if (!CreateSimpleSphereLightingPipeline()) {
       return false;
     }
     if (!CreateSolidQuadPipeline()) {
@@ -660,6 +686,7 @@ class RendererImpl : public Renderer {
         theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
 
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
+    // SDL_BindGPUGraphicsPipeline(ctx->render_pass, simple_sphere_lighting_pipeline_);
 
     std::vector<HealthBar> health_bars;
     for (const Target& target : targets) {
@@ -679,6 +706,8 @@ class RendererImpl : public Renderer {
               view_projection, c.position + c.up * (c.height * -0.5f), target.radius, color, ctx);
         } else {
           DrawSphere(view_projection, target.position, target.radius, color, ctx);
+          // DrawSimpleSphereWithLighting(
+          //    view_projection, target.position, target.radius, color, look_at.position, ctx);
           if (health_bar_settings.show() && target.HasHealth()) {
             bool is_damaged = target.GetHealthPercent() < 1;
             if (!health_bar_settings.only_damaged() || is_damaged) {
@@ -745,6 +774,36 @@ class RendererImpl : public Renderer {
 
     glm::vec4 color4(color, 1.0f);
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+
+    SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
+  }
+
+  void DrawSimpleSphereWithLighting(const glm::mat4& view_projection,
+                                    const glm::vec3& position,
+                                    float radius,
+                                    const glm::vec3& color,
+                                    const glm::vec3& camera_position,
+                                    RenderContext* ctx) {
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = sphere_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+    SimpleSphereWithLightingUniform uniform_data{};
+    uniform_data.transform = glm::mat4(1.0f);
+    uniform_data.transform = glm::translate(uniform_data.transform, position);
+    uniform_data.transform = glm::scale(uniform_data.transform, glm::vec3(radius));
+    uniform_data.transform = view_projection * uniform_data.transform;
+
+    uniform_data.base_color = glm::vec4(color, 0.6f);
+    uniform_data.light_color = glm::vec4(1.0f);
+
+    glm::vec3 light_position = camera_position;
+    // light_position.z += 15;
+    uniform_data.light_direction = glm::vec4(glm::normalize(light_position - position), 1.0f);
+
+    SDL_PushGPUVertexUniformData(
+        ctx->command_buffer, 0, &uniform_data, sizeof(SimpleSphereWithLightingUniform));
 
     SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
   }
@@ -840,6 +899,44 @@ class RendererImpl : public Renderer {
     if (sphere_pipeline_ == NULL) {
       Logger::get()->error("ERROR: SpherePipeline SDL_CreateGPUGraphicsPipeline failed: {}",
                            SDL_GetError());
+      return false;
+    }
+
+    return true;
+  }
+
+  bool CreateSimpleSphereLightingPipeline() {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info = CreateDefaultPipelineInfo(
+        simple_sphere_lighting_vertex_shader_, interpolate_color_fragment_shader_);
+
+    SDL_GPUColorTargetDescription color_target_desc[1];
+    color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    color_target_desc[0].blend_state = DefaultBlendState();
+    pipeline_info.target_info.color_target_descriptions = color_target_desc;
+
+    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+    vertex_buffer_descriptions[0].slot = 0;
+    vertex_buffer_descriptions[0].pitch = sizeof(float) * 3;
+    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+    vertex_buffer_descriptions[0].instance_step_rate = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+    pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
+
+    SDL_GPUVertexAttribute vertex_attributes[1];
+    vertex_attributes[0].location = 0;
+    vertex_attributes[0].buffer_slot = 0;
+    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+    vertex_attributes[0].offset = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_attributes = 1;
+    pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
+
+    simple_sphere_lighting_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+    if (simple_sphere_lighting_pipeline_ == NULL) {
+      Logger::get()->error(
+          "ERROR: SimpleSphereLightingPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+          SDL_GetError());
       return false;
     }
 
@@ -1105,8 +1202,11 @@ class RendererImpl : public Renderer {
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
   SDL_GPUShader* texture_fragment_shader_ = nullptr;
+  SDL_GPUShader* interpolate_color_fragment_shader_ = nullptr;
+  SDL_GPUShader* simple_sphere_lighting_vertex_shader_ = nullptr;
   SDL_GPUShader* progress_bar_fragment_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
+  SDL_GPUGraphicsPipeline* simple_sphere_lighting_pipeline_;
   SDL_GPUGraphicsPipeline* solid_quad_pipeline_;
   SDL_GPUGraphicsPipeline* texture_quad_pipeline_;
   SDL_GPUGraphicsPipeline* progress_bar_pipeline_;
