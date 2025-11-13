@@ -476,6 +476,10 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       }
     }
 
+    if (is_rename) {
+      app_.playlist_manager().ClearCurrentRun(final_name.full_name());
+    }
+
     return true;
   }
 
