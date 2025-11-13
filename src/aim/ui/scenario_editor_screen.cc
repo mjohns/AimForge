@@ -50,8 +50,8 @@ const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthT
 
 enum class TimeOrDistance { TIME, DISTANCE };
 const std::vector<std::pair<TimeOrDistance, std::string>> kTimeOrDistance{
-    {TimeOrDistance::TIME, "Time"},
     {TimeOrDistance::DISTANCE, "Distance"},
+    {TimeOrDistance::TIME, "Time"},
 };
 
 const std::vector<std::pair<Direction, std::string>> kLeftRightDirections{
@@ -1002,7 +1002,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawStrafeProfile(RegionLength::TypeCase default_region_length_type, StrafeProfile* p) {
-    TimeOrDistance type = p->has_distance() ? TimeOrDistance::DISTANCE : TimeOrDistance::TIME;
+    TimeOrDistance type = p->has_time() ? TimeOrDistance::TIME : TimeOrDistance::DISTANCE;
     ImGui::SimpleTypeDropdown("TimeOrDistanceDropdown", &type, kTimeOrDistance, char_x_ * 9);
     ImGui::SameLine();
     if (type == TimeOrDistance::TIME) {
