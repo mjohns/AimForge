@@ -21,7 +21,7 @@ Output main(Input input) {
   float diffuse = saturate(dot(input.Position, LightDirection.xyz));
     
   float4 diffuseColor = LightColor * diffuse;
-    output.Color = saturate(diffuseColor * (1 - BaseColor.a) + BaseColor * BaseColor.a);
+  output.Color = saturate(diffuseColor * (1 - BaseColor.a) + BaseColor * BaseColor.a);
   output.Color.a = 1.0;
   return output;
 }
