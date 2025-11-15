@@ -236,9 +236,13 @@ class ScenarioManagerImpl : public ScenarioManager {
   void OpenFile(const ResourceName& name) override {
     auto maybe_path = GetScenarioPath(fs_, name);
     if (maybe_path.has_value()) {
-      // #ifdef _WIN32
-      // auto rc = ShellExecuteW(NULL, L"explore", maybe_path->c_str(), NULL, NULL, SW_SHOWNORMAL);
-      // #endif
+#ifdef _WIN32
+      std::wstring arguments = L"/select, \"" + maybe_path->wstring() + L"\"";
+      auto rc = ShellExecuteW(NULL, L"open", L"explorer", arguments.c_str(), NULL, SW_SHOWNORMAL);
+      if (!SUCCEEDED(rc)) {
+        Logger::get()->warn("Failed to open scenario file {}", maybe_path->string());
+      }
+#endif
     }
   }
 

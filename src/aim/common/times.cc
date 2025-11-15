@@ -122,10 +122,13 @@ std::string GetHowLongAgoString(i64 start, i64 end) {
 }
 
 std::optional<i64> ParseTimestampStringAsMicros(const std::string& timestamp) {
+  if (timestamp.empty()) {
+    return {};
+  }
   absl::Time out;
   std::string err;
   if (!absl::ParseTime(absl::RFC3339_full, timestamp, &out, &err)) {
-    Logger::get()->warn("Failed to part time {}. err: {}", timestamp, err);
+    Logger::get()->warn("Failed to parse time {}. err: {}", timestamp, err);
     return {};
   }
   return absl::ToUnixMicros(out);
