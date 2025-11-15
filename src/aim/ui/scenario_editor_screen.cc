@@ -2178,12 +2178,25 @@ class ScenarioEditorScreen : public UiScreen {
 
     if (type == ShotType::kClickMulti) {
       ImGui::InputInt(ImGui::InputIntParams("ClickCount")
-                          .set_label("Health clicks")
+                          .set_label("Clicks to kill")
                           .set_step(1, 2)
                           .set_min(2)
                           .set_default(3)
                           .set_width(char_x_ * 10),
                       PROTO_INT_FIELD(ShotType, def_.mutable_shot_type(), health_clicks));
+    }
+
+    if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
+                            .set_is_optional()
+                            .set_step(0.05, 0.2)
+                            .set_min(0.05)
+                            .set_default(0.5)
+                            .set_precision(2)
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(ShotType, def_.mutable_shot_type(), click_rate_seconds));
+      ImGui::SameLine();
+      ImGui::HelpMarker("The amount of time in seconds after shooting before you can shoot again");
     }
 
     if (type == ShotType::kTrackingKill) {

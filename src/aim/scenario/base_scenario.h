@@ -53,11 +53,15 @@ class BaseScenario : public Scenario {
   void TrackingHoldDone();
   Target GetNewTarget();
   bool ShouldCountPartialKills();
+  bool ShouldLimitShotRate();
 
   std::optional<u16> current_poke_target_id_;
   i64 current_poke_start_time_micros_ = 0;
 
   i64 last_proximity_tracking_update_time_micros_ = 0;
+
+  // When limiting the rate you can click, the last time a click happened.
+  i64 last_shot_time_micros_ = -99999999; // Sufficiently negative so first click will be allowed.
 
   ScenarioStats stats_;
 

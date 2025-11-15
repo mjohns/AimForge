@@ -245,6 +245,10 @@ bool BaseScenario::ShouldCountPartialKills() {
   return GetShotType() == ShotType::kTrackingKill && !def_.shot_type().no_partial_kills();
 }
 
+bool BaseScenario::ShouldLimitShotRate() {
+  return def_.shot_type().click_rate_seconds() > 0;
+}
+
 void BaseScenario::TrackingHoldDone() {
   stats_.shot_stopwatch.Stop();
   stats_.hit_stopwatch.Stop();
@@ -306,7 +310,21 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
       current_poke_start_time_micros_ = 0;
     }
   } else {
-    if (data->has_click) {
+    bool shot_fired = data->has_click;
+    if (shot_fired && ShouldLimitShotRate()) {
+      // See if we should allow the shot.
+      i64 shot_rate_micros = def_.shot_type().click_rate_seconds() * 1000000;
+      i64 now_micros = timer_.GetElapsedMicros();
+      i64 time_since_last_shot = now_micros - last_shot_time_micros_;
+      if (time_since_last_shot < shot_rate_micros) {
+        shot_fired = false;
+      } else {
+        // Allow the shot.
+        last_shot_time_micros_ = now_micros;
+      }
+    }
+
+    if (shot_fired) {
       stats_.num_shots++;
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       PlayShootSound();
@@ -315,6 +333,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           Target* hit_target = target_manager_.GetMutableTarget(*maybe_hit_target_id);
           stats_.num_hits++;
           hit_target->click_count++;
+          PlayHitSound();
           if (hit_target->radius_at_kill.has_value()) {
             float radius_diff =
                 hit_target->radius_at_kill->start_radius - hit_target->radius_at_kill->end_radius;

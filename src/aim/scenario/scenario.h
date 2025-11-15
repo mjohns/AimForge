@@ -103,6 +103,7 @@ class Scenario : public Screen {
   void AddShotFiredEvent();
 
   void PlayShootSound();
+  void PlayHitSound();
   void PlayMissSound();
   void PlayKillSound();
 

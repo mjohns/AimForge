@@ -590,6 +590,7 @@ class ShotType final : public ::google::protobuf::Message
     kHealthRegenRateFieldNumber = 13,
     kRemoveIfBelowHealthSecondsFieldNumber = 14,
     kHealthClicksFieldNumber = 16,
+    kClickRateSecondsFieldNumber = 17,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -661,6 +662,17 @@ class ShotType final : public ::google::protobuf::Message
   private:
   ::int32_t _internal_health_clicks() const;
   void _internal_set_health_clicks(::int32_t value);
+
+  public:
+  // float click_rate_seconds = 17;
+  bool has_click_rate_seconds() const;
+  void clear_click_rate_seconds() ;
+  float click_rate_seconds() const;
+  void set_click_rate_seconds(float value);
+
+  private:
+  float _internal_click_rate_seconds() const;
+  void _internal_set_click_rate_seconds(float value);
 
   public:
   // bool poke = 1;
@@ -744,7 +756,7 @@ class ShotType final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 12, 0,
+      3, 13, 0,
       0, 2>
       _table_;
 
@@ -770,6 +782,7 @@ class ShotType final : public ::google::protobuf::Message
     float health_regen_rate_;
     float remove_if_below_health_seconds_;
     ::int32_t health_clicks_;
+    float click_rate_seconds_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -14031,6 +14044,34 @@ inline ::int32_t ShotType::_internal_health_clicks() const {
 inline void ShotType::_internal_set_health_clicks(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_clicks_ = value;
+}
+
+// float click_rate_seconds = 17;
+inline bool ShotType::has_click_rate_seconds() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  return value;
+}
+inline void ShotType::clear_click_rate_seconds() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.click_rate_seconds_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000040u;
+}
+inline float ShotType::click_rate_seconds() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.click_rate_seconds)
+  return _internal_click_rate_seconds();
+}
+inline void ShotType::set_click_rate_seconds(float value) {
+  _internal_set_click_rate_seconds(value);
+  _impl_._has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_set:aim.ShotType.click_rate_seconds)
+}
+inline float ShotType::_internal_click_rate_seconds() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.click_rate_seconds_;
+}
+inline void ShotType::_internal_set_click_rate_seconds(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.click_rate_seconds_ = value;
 }
 
 inline bool ShotType::has_type() const {

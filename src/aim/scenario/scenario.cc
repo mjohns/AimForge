@@ -554,6 +554,10 @@ void Scenario::PlayShootSound() {
   AddShotFiredEvent();
 }
 
+void Scenario::PlayHitSound() {
+  app_.sound_manager()->PlayHitSound(settings_.sound().shoot());
+}
+
 void Scenario::PlayMissSound() {
   app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
 }

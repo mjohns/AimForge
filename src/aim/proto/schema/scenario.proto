@@ -165,6 +165,9 @@ message ShotType {
 
   // For multi click, the number of clicks to kill the target.
   int32 health_clicks = 16;
+
+  // If specified, you can only click at the given rate.
+  float click_rate_seconds = 17;
 }
 
 message ScenarioDef {
