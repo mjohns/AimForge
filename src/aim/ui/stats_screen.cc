@@ -82,6 +82,7 @@ class StatsScreen : public UiScreen {
       : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
     screen_start_time_millis_ = GetNowMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_id);
+    evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_id);
     if (scenario_) {
       reference_scenario_id_ = scenario_->unevaluated_def.reference_def().scenario_id();
     }
@@ -111,8 +112,8 @@ class StatsScreen : public UiScreen {
   }
 
   bool HasAccuracyPenalty() {
-    if (scenario_) {
-      switch (scenario_->evaluated_def.shot_type().type_case()) {
+    if (evaluated_scenario_def_) {
+      switch (evaluated_scenario_def_->shot_type().type_case()) {
         case ShotType::kClickSingle:
         case ShotType::kClickMulti:
           return true;
@@ -724,6 +725,7 @@ class StatsScreen : public UiScreen {
 
   float char_x_ = 0;
   std::optional<ScenarioItem> scenario_;
+  std::optional<ScenarioDef> evaluated_scenario_def_;
   std::string reference_scenario_id_;
 
   std::optional<QuickSettingsType> show_settings_;

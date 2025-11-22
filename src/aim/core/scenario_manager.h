@@ -15,13 +15,13 @@ namespace aim {
 
 struct ScenarioItem {
   ResourceName name;
-  // References have been evaluated.
-  ScenarioDef evaluated_def;
+  std::string scenario_id;
+
   // References have not been evaluated.
   ScenarioDef unevaluated_def;
 
-  std::string id() const {
-    return name.full_name();
+  const std::string& id() const {
+    return scenario_id;
   }
 };
 
@@ -30,6 +30,8 @@ class ScenarioManager {
   virtual ~ScenarioManager() {}
 
   virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
+
+  virtual std::optional<ScenarioDef> GetEvaluatedScenarioDef(const std::string& scenario_id) = 0;
 
   virtual std::shared_ptr<std::vector<std::string>> scenario_names() const = 0;
 

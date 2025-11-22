@@ -151,8 +151,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   }
 
   void DrawScenarioItem(const ScenarioItem& scenario, ScenarioBrowserResult* result) {
-    auto current_scenario = app_->scenario_manager().GetCurrentScenario();
-    std::string current_scenario_id = current_scenario ? current_scenario->id() : "";
     if (ImGui::Button(scenario.id())) {
       if (app_->scenario_manager().GetCurrentScenarioId() == scenario.id()) {
         result->scenario_to_start = scenario.id();
