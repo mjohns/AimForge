@@ -199,7 +199,6 @@ int Application::Initialize() {
     stats_manager_->GetAggregateStats(scenario_id);
   }
 
-
   scenario_manager_ = CreateScenarioManager(file_system_.get());
 
   std::vector<std::filesystem::path> sound_dirs = {

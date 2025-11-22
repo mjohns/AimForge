@@ -61,7 +61,7 @@ class BaseScenario : public Scenario {
   i64 last_proximity_tracking_update_time_micros_ = 0;
 
   // When limiting the rate you can click, the last time a click happened.
-  i64 last_shot_time_micros_ = -99999999; // Sufficiently negative so first click will be allowed.
+  i64 last_shot_time_micros_ = -99999999;  // Sufficiently negative so first click will be allowed.
 
   ScenarioStats stats_;
 

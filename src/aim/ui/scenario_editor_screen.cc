@@ -2746,7 +2746,8 @@ class ScenarioEditorScreen : public UiScreen {
   void PlayScenario() {
     CreateScenarioParams params;
     if (def_.has_reference_def()) {
-      auto base_scenario = app_.scenario_manager().GetEvaluatedScenarioDef(def_.reference_def().scenario_id());
+      auto base_scenario =
+          app_.scenario_manager().GetEvaluatedScenarioDef(def_.reference_def().scenario_id());
       if (!base_scenario) {
         SetErrorMessage(std::format("Unable to find referenced scenario \"{}\"",
                                     def_.reference_def().scenario_id()));

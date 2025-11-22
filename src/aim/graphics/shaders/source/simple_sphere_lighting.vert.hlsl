@@ -19,7 +19,7 @@ Output main(Input input) {
   output.Position = mul(MatrixTransform, float4(input.Position, 1.0f));
 
   float diffuse = saturate(dot(input.Position, LightDirection.xyz));
-    
+
   float4 diffuseColor = LightColor * diffuse;
   output.Color = saturate(diffuseColor * (1 - BaseColor.a) + BaseColor * BaseColor.a);
   output.Color.a = 1.0;
