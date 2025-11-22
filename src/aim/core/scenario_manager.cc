@@ -31,6 +31,12 @@ void SortScenarios(std::vector<ScenarioItem>* scenarios) {
             [](const ScenarioItem& lhs, const ScenarioItem& rhs) { return lhs.id() < rhs.id(); });
 }
 
+void SortScenarioNames(std::vector<std::string>* scenarios) {
+  std::sort(scenarios->begin(),
+            scenarios->end(),
+            [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
+}
+
 std::optional<std::filesystem::path> GetScenarioPath(FileSystem* fs, const ResourceName& resource) {
   auto maybe_bundle = fs->GetBundle(resource.bundle_name());
   if (!maybe_bundle.has_value()) {
@@ -144,8 +150,8 @@ class ScenarioManagerImpl : public ScenarioManager {
     return GetScenario(scenario_id).has_value();
   }
 
-  std::shared_ptr<std::vector<ScenarioItem>> scenarios() const override {
-    return scenarios_;
+  std::shared_ptr<std::vector<std::string>> scenario_names() const override {
+    return scenario_names_;
   }
 
   bool SaveScenario(const ResourceName& name, const ScenarioDef& def) override {
@@ -333,6 +339,9 @@ class ScenarioManagerImpl : public ScenarioManager {
     }
 
     RebuildCachedScenarioList();
+   // WriteBinaryMessageToFile(fs_->GetUserDataPath("scenarios.bin"), scenario_file);
+   // WriteJsonMessageToFile(fs_->GetUserDataPath("scenarios.json"), scenario_file);
+
   }
 
   void EvaluateAllReferencesInCache() {
@@ -361,15 +370,22 @@ class ScenarioManagerImpl : public ScenarioManager {
   void RebuildCachedScenarioList() {
     EvaluateAllReferencesInCache();
     auto new_scenarios = std::make_shared<std::vector<ScenarioItem>>();
+    auto new_scenario_names = std::make_shared<std::vector<std::string>>();
     new_scenarios->reserve(scenario_map_.size());
+    new_scenario_names->reserve(scenario_map_.size());
     for (auto& entry : scenario_map_) {
       new_scenarios->push_back(entry.second);
+      new_scenario_names->push_back(entry.second.name.full_name());
     }
     SortScenarios(new_scenarios.get());
+    SortScenarioNames(new_scenario_names.get());
+
     scenarios_ = new_scenarios;
+    scenario_names_ = new_scenario_names;
   }
 
   std::shared_ptr<std::vector<ScenarioItem>> scenarios_;
+  std::shared_ptr<std::vector<std::string>> scenario_names_;
   std::unordered_map<std::string, ScenarioItem> scenario_map_;
 
   FileSystem* fs_;

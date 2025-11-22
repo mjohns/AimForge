@@ -14,3 +14,4 @@ CMakeUserPresets.json
 # Visual Studio stuff
 .vs
 enc_temp_folder/
+/src/logo.aps

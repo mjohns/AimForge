@@ -613,11 +613,11 @@ class ScenarioEditorScreen : public UiScreen {
         int num_matches = 0;
         auto search_words = GetSearchWords(r.scenario_id());
         ImGui::Indent();
-        for (const auto& scenario : *app_.scenario_manager().scenarios()) {
-          if (StringMatchesSearch(scenario.id(), search_words)) {
+        for (const std::string& scenario_id : *app_.scenario_manager().scenario_names()) {
+          if (StringMatchesSearch(scenario_id, search_words)) {
             num_matches++;
-            if (ImGui::Button(scenario.id())) {
-              r.set_scenario_id(scenario.id());
+            if (ImGui::Button(scenario_id)) {
+              r.set_scenario_id(scenario_id);
             }
           }
         }

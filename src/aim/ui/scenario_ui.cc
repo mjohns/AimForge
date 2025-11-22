@@ -12,23 +12,6 @@
 namespace aim {
 namespace {
 
-const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
-    {ScenarioDef::TYPE_NOT_SET, "None"},
-    {ScenarioDef::kStaticDef, "Static"},
-    {ScenarioDef::kCenteringDef, "Centering"},
-    {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
-    {ScenarioDef::kStrafeDef, "Strafe"},
-    {ScenarioDef::kBounceDef, "Bounce"},
-    {ScenarioDef::kLinearDef, "Linear"},
-    {ScenarioDef::kBarrelDef, "Barrel"},
-    {ScenarioDef::kWallWanderDef, "Wall Wander"},
-    {ScenarioDef::kWaypointDef, "Waypoint"},
-    {ScenarioDef::kCircleDef, "Circle"},
-    {ScenarioDef::kWallArcDef, "Wall Arc"},
-    {ScenarioDef::kSineDef, "Sine"},
-    {ScenarioDef::kReferenceDef, "Reference"},
-};
-
 enum class ScenarioViewType : int {
   RECENT = 1,
   STARRED = 2,
@@ -105,17 +88,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     if (view_type_changed) {
       app_->local_store().PutInt(GetViewTypeKey(), (int)view_type_);
       UpdateFilteredScenarios();
-    }
-
-    if (view_type_ == ScenarioViewType::ALL) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Type");
-      ImGui::SameLine();
-      bool is_new_type = ImGui::SimpleTypeDropdown(
-          "ScenarioTypeDropdown", &scenario_type_filter_, kScenarioTypes, char_size.x * 15);
-      if (is_new_type) {
-        UpdateFilteredScenarios();
-      }
     }
 
     ImGui::Spacing();
@@ -310,7 +282,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       return;
     }
 
-    filtered_scenario_ids_.reserve(app_->scenario_manager().scenarios()->size());
+    filtered_scenario_ids_.reserve(app_->scenario_manager().scenario_names()->size());
     auto search_words = GetSearchWords(search_text_);
     if (view_type_ == ScenarioViewType::STARRED) {
       auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
@@ -326,11 +298,9 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         }
       }
     } else {
-      for (const ScenarioItem& scenario : *app_->scenario_manager().scenarios()) {
-        bool type_matches = scenario_type_filter_ == ScenarioDef::TYPE_NOT_SET ||
-                            scenario.evaluated_def.type_case() == scenario_type_filter_;
-        if (type_matches && StringMatchesSearch(scenario.id(), search_words)) {
-          filtered_scenario_ids_.push_back(scenario.id());
+      for (const std::string& scenario_id : *app_->scenario_manager().scenario_names()) {
+        if (StringMatchesSearch(scenario_id, search_words)) {
+          filtered_scenario_ids_.push_back(scenario_id);
         }
       }
     }

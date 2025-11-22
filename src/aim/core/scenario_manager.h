@@ -33,7 +33,7 @@ class ScenarioManager {
 
   virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
 
-  virtual std::shared_ptr<std::vector<ScenarioItem>> scenarios() const = 0;
+  virtual std::shared_ptr<std::vector<std::string>> scenario_names() const = 0;
 
   virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
 

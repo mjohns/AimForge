@@ -224,19 +224,19 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     if (scenario_search_text_.size() > 0) {
       auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
-      auto scenarios = app_.scenario_manager().scenarios();
-      for (int i = 0; i < scenarios->size(); ++i) {
+      auto scenario_names = app_.scenario_manager().scenario_names();
+      for (int i = 0; i < scenario_names->size(); ++i) {
         ImGui::IdGuard id("ScenarioSearch", i);
-        const auto& scenario = (*scenarios)[i];
-        if (StringMatchesSearch(scenario.id(), search_words, /*empty_matches=*/false)) {
+        const std::string& scenario = (*scenario_names)[i];
+        if (StringMatchesSearch(scenario, search_words, /*empty_matches=*/false)) {
           bool already_in_playlist =
               std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
-                return item.scenario() == scenario.id();
+                return item.scenario() == scenario;
               });
           if (!already_in_playlist) {
-            if (ImGui::Button(scenario.id().c_str())) {
+            if (ImGui::Button(scenario.c_str())) {
               PlaylistItem item;
-              item.set_scenario(scenario.id());
+              item.set_scenario(scenario);
               item.set_num_plays(1);
               scenario_items_.push_back(item);
             }
@@ -290,11 +290,11 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           int num_matches = 0;
           auto search_words = GetSearchWords(source_base_scenario_);
           ImGui::Indent();
-          for (const auto& scenario : *app_.scenario_manager().scenarios()) {
-            if (StringMatchesSearch(scenario.id(), search_words)) {
+          for (const std::string& scenario_id : *app_.scenario_manager().scenario_names()) {
+            if (StringMatchesSearch(scenario_id, search_words)) {
               num_matches++;
-              if (ImGui::Button(scenario.id())) {
-                source_base_scenario_ = scenario.id();
+              if (ImGui::Button(scenario_id)) {
+                source_base_scenario_ = scenario_id;
               }
             }
           }

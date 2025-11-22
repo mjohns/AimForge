@@ -27,14 +27,6 @@ namespace {
 
 const char* kImguiIniFile = "imgui.ini";
 
-void RunScenarioBackfill(ScenarioManager* mgr) {
-  std::shared_ptr<std::vector<ScenarioItem>> scenarios = mgr->scenarios();
-  for (ScenarioItem item : *scenarios) {
-    ScenarioDef def = item.unevaluated_def;
-    // mgr->SaveScenario(item.name, def);
-  }
-}
-
 void CopyInitialDirIfNotExists(const std::string& dir_name,
                                const std::string& dest_dir,
                                FileSystem* fs) {
