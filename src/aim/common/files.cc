@@ -57,6 +57,21 @@ bool WriteJsonMessageToFile(const std::filesystem::path& path,
   return WriteStringToFile(path, json_string);
 }
 
+bool WriteBinaryMessageToFile(const std::filesystem::path& path,
+                              const google::protobuf::Message& message) {
+  std::ofstream outfile(path);
+  if (!outfile.is_open()) {
+    Logger::get()->warn("Unable to open file for writing: {}", path.string());
+    return false;
+  }
+  if (!message.SerializeToOstream(&outfile)) {
+    Logger::get()->warn("Unable to write content to file: {}", path.string());
+    return false;
+  }
+
+  return true;
+}
+
 bool JsonToMessage(const std::string& json, google::protobuf::Message* message) {
   google::protobuf::json::ParseOptions opts;
   opts.ignore_unknown_fields = true;

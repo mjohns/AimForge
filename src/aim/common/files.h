@@ -15,6 +15,8 @@ bool WriteStringToFile(const std::filesystem::path& path, const std::string& con
 std::string MessageToJson(const google::protobuf::Message& message, int indent = 2);
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
                             const google::protobuf::Message& message);
+bool WriteBinaryMessageToFile(const std::filesystem::path& path,
+                              const google::protobuf::Message& message);
 
 bool JsonToMessage(const std::string& json, google::protobuf::Message* message);
 bool ReadJsonMessageFromFile(const std::filesystem::path& path, google::protobuf::Message* message);
