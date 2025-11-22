@@ -145,6 +145,21 @@ int Application::Initialize() {
     Logger::get()->error("Error: SDL_Init(): {}", SDL_GetError());
     return -1;
   }
+
+  if (Mix_Init(MIX_INIT_OGG) == 0) {
+    logger_->error("SDL_mixer OGG init failed: {}", SDL_GetError());
+    return -1;
+  }
+
+  SDL_AudioSpec spec;
+  spec.freq = MIX_DEFAULT_FREQUENCY;
+  spec.format = MIX_DEFAULT_FORMAT;
+  spec.channels = MIX_DEFAULT_CHANNELS;
+  if (!Mix_OpenAudio(0, &spec)) {
+    logger_->error("Couldn't open audio: {}", SDL_GetError());
+    return 1;
+  }
+
   file_system_ = std::make_unique<FileSystem>();
   {
     auto max_size = 1048576 * 10;
@@ -192,24 +207,9 @@ int Application::Initialize() {
     stats_manager_->GetAggregateStats(scenario_id);
   }
 
-  playlist_manager_->LoadPlaylistsFromDisk();
 
   scenario_manager_ = CreateScenarioManager(file_system_.get());
-  scenario_manager_->LoadScenariosFromDisk();
 
-  if (Mix_Init(MIX_INIT_OGG) == 0) {
-    logger_->error("SDL_mixer OGG init failed: {}", SDL_GetError());
-    return -1;
-  }
-
-  SDL_AudioSpec spec;
-  spec.freq = MIX_DEFAULT_FREQUENCY;
-  spec.format = MIX_DEFAULT_FORMAT;
-  spec.channels = MIX_DEFAULT_CHANNELS;
-  if (!Mix_OpenAudio(0, &spec)) {
-    logger_->error("Couldn't open audio: {}", SDL_GetError());
-    return 1;
-  }
   std::vector<std::filesystem::path> sound_dirs = {
       file_system_->GetUserDataPath("resources/sounds"),
   };
@@ -314,7 +314,8 @@ int Application::Initialize() {
 
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
-  RunScenarioBackfill(scenario_manager_.get());
+  playlist_manager_->LoadPlaylistsFromDisk();
+  scenario_manager_->LoadScenariosFromDisk();
 
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
@@ -325,7 +326,9 @@ int Application::Initialize() {
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
 
-  logger_->debug("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
+  if (stopwatch.GetElapsedSeconds() > 2) {
+    logger_->info("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
+  }
   return 0;
 }
 
