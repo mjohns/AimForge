@@ -20,8 +20,6 @@ struct ScenarioItem {
   // References have not been evaluated.
   ScenarioDef unevaluated_def;
 
-  bool has_invalid_reference = false;
-
   std::string id() const {
     return name.full_name();
   }
@@ -59,10 +57,6 @@ class ScenarioManager {
   virtual std::shared_ptr<Screen> GetCurrentRunningScenario() = 0;
 
   virtual bool has_running_scenario() const = 0;
-
-  virtual void GenerateScenarioLevels(const std::string& starting_scenario_id,
-                                      const ScenarioOverrides& overrides,
-                                      int num_levels) = 0;
 
   virtual void LoadScenariosFromDisk() = 0;
 

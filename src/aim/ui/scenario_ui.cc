@@ -210,11 +210,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
           result->scenario_stats_to_view = scenario.id();
           result->run_id = app_->stats_manager().GetLatestRunId(scenario.id());
         }
-        if (ImGui::MenuItem("Generate levels")) {
-          app_->scenario_manager().GenerateScenarioLevels(
-              scenario.id(), scenario.unevaluated_def.overrides(), 5);
-          result->reload_scenarios = true;
-        }
         if (ImGui::MenuItem("Reload")) {
           result->reload_scenarios = true;
         }

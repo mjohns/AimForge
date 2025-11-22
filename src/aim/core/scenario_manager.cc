@@ -108,40 +108,6 @@ class ScenarioManagerImpl : public ScenarioManager {
     current_running_scenario_ = {};
   }
 
-  void GenerateScenarioLevels(const std::string& starting_scenario_id,
-                              const ScenarioOverrides& overrides,
-                              int num_levels) override {
-    auto starting_scenario = GetScenario(starting_scenario_id);
-    if (!starting_scenario) {
-      return;
-    }
-    int starting_level = 0;
-    auto base_name = StripLevelSuffix(starting_scenario->name.relative_name(), &starting_level);
-    if (!base_name) {
-      return;
-    }
-    std::string bundle_name = starting_scenario->name.bundle_name();
-    ResourceName prev = starting_scenario->name;
-    int current_level = starting_level;
-    for (int i = 0; i < num_levels; ++i) {
-      current_level++;
-      std::string relative_name = AddLevelSuffix(*base_name, current_level);
-      ResourceName next(bundle_name, relative_name);
-      if (GetScenario(next.full_name()).has_value()) {
-        return;
-      }
-      ScenarioDef def;
-      def.mutable_reference_def()->set_scenario_id(prev.full_name());
-      *def.mutable_overrides() = overrides;
-      if (!SaveScenarioNoRebuild(next, def)) {
-        break;
-      }
-      prev = next;
-    }
-
-    RebuildCachedScenarioList();
-  }
-
   bool SetCurrentScenario(const std::string& scenario_id) override {
     if (scenario_id != current_scenario_id_) {
       current_running_scenario_ = {};
@@ -354,7 +320,6 @@ class ScenarioManagerImpl : public ScenarioManager {
           item.evaluated_def = *maybe_def;
         } else {
           item.evaluated_def = item.unevaluated_def;
-          item.has_invalid_reference = true;
         }
       }
     }

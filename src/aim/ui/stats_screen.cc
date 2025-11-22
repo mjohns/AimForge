@@ -335,13 +335,6 @@ class StatsScreen : public UiScreen {
         name.c_str(), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
   }
 
-  float GetScoreLevel(float score) {
-    if (!scenario_) {
-      return 0;
-    }
-    return GetScenarioScoreLevel(score, scenario_->evaluated_def);
-  }
-
   void DrawPerformanceStats() {
     auto& worst_times_ = performance_stats_->worst_times;
     ImGui::TextFmt("Worst frame n={}", worst_times_.frame_number);
