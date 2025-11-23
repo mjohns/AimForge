@@ -299,6 +299,7 @@ class ScenarioManagerImpl : public ScenarioManager {
 
   void UpdateCachedScenario(const ResourceName& name, const ScenarioDef& new_def) {
     auto& item = scenario_map_[name.full_name()];
+    item.name = name;
     item.def = new_def;
   }
 
