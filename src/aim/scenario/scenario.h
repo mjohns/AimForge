@@ -146,8 +146,6 @@ class Scenario : public Screen {
   float radians_per_dot_;
   Crosshair crosshair_;
   float crosshair_size_;
-  float cm_per_360_base_ = 0;
-  float cm_per_360_jitter_ = 0;
   bool is_click_held_ = false;
   bool is_done_ = false;
   std::vector<DelayedTask> delayed_tasks_;

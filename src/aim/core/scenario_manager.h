@@ -20,6 +20,8 @@ struct ScenarioItem {
   // References have not been evaluated.
   ScenarioDef unevaluated_def;
 
+  std::optional<float> forced_cm_per_360{};
+
   const std::string& id() const {
     return scenario_id;
   }

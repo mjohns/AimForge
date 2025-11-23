@@ -100,6 +100,21 @@ class ScenarioManagerImpl : public ScenarioManager {
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) override {
     auto it = scenario_map_.find(scenario_id);
     if (it == scenario_map_.end()) {
+
+      // See if it should be an automatic cm/360 version of a scenario.
+      float cm_per_360;
+      std::optional<std::string> base_scenario_name = StripCmSuffix(scenario_id, &cm_per_360);
+      if (base_scenario_name && cm_per_360 > 0) {
+        auto base_scenario = GetScenario(*base_scenario_name);
+        if (base_scenario) {
+          ScenarioItem item = *base_scenario;
+          item.name = ResourceName::Parse(scenario_id);
+          item.scenario_id = scenario_id;
+          item.forced_cm_per_360 = cm_per_360;
+          return item;
+        }
+      }
+      
       return {};
     }
 
@@ -263,12 +278,13 @@ class ScenarioManagerImpl : public ScenarioManager {
       Logger::get()->warn("Stopping evaluation due to cycle for {}", scenario_id);
       return {};
     }
-    auto it = scenario_map_.find(scenario_id);
-    if (it == scenario_map_.end()) {
+
+    auto scenario = GetScenario(scenario_id);
+    if (!scenario) {
       return {};
     }
 
-    ScenarioDef& def = it->second.def;
+    ScenarioDef& def = scenario->unevaluated_def;
     if (!def.has_reference_def()) {
       return ApplyScenarioOverrides(def);
     }

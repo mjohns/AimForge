@@ -117,20 +117,19 @@ void Scenario::RefreshState() {
   metronome_ =
       std::make_unique<Metronome>(settings_.metronome_bpm(), settings_.sound().metronome(), &app_);
 
-  bool needs_sens_update = effective_cm_per_360_ == 0 ||
-                           cm_per_360_base_ != settings_.cm_per_360() ||
-                           cm_per_360_jitter_ != settings_.cm_per_360_jitter();
-  if (needs_sens_update) {
-    cm_per_360_base_ = settings_.cm_per_360();
-    cm_per_360_jitter_ = settings_.cm_per_360_jitter();
-    effective_cm_per_360_ =
-        app_.rand().GetJittered(settings_.cm_per_360(), settings_.cm_per_360_jitter());
-    if (effective_cm_per_360_ <= 0) {
-      effective_cm_per_360_ = 0.1;
-    }
+  effective_cm_per_360_ = settings_.cm_per_360();
+
+  float forced_cm_per_360;
+  auto should_force_cm_per_360 = StripCmSuffix(id_, &forced_cm_per_360);
+  if (should_force_cm_per_360) {
+    effective_cm_per_360_ = forced_cm_per_360;
   }
 
+  if (effective_cm_per_360_ <= 0) {
+    effective_cm_per_360_ = 0.1;
+  }
   radians_per_dot_ = CmPer360ToRadiansPerDot(effective_cm_per_360_, dpi);
+
   is_click_held_ = false;
   crosshair_ = app_.settings_manager().GetCurrentCrosshair();
   crosshair_size_ = settings_.crosshair_size();
