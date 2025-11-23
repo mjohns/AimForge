@@ -205,4 +205,10 @@ std::optional<std::string> StripLevelSuffix(const std::string& scenario_name,
 
 std::string AddLevelSuffix(const std::string& base_name, int level);
 
+std::optional<std::string> StripCmSuffix(const std::string& scenario_name,
+                                         float* cm_per_360 = nullptr);
+
+// Splits value by whitespace and returns the last word (possibly empty).
+std::string GetLastWord(const std::string& value);
+
 }  // namespace aim

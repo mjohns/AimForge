@@ -225,22 +225,48 @@ std::string MakeUniqueName(const std::string& name, const std::vector<std::strin
   }
 }
 
+std::string GetLastWord(const std::string& value) {
+  std::vector<std::string_view> words =
+      absl::StrSplit(value, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
+  if (words.empty()) {
+    return "";
+  }
+  return std::string(words.back());
+}
+
 std::optional<std::string> StripLevelSuffix(const std::string& scenario_name, int* level_out) {
   if (level_out != nullptr) {
     *level_out = -1;
   }
-  std::vector<std::string_view> words =
-      absl::StrSplit(scenario_name, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
-  if (words.empty()) {
-    return {};
-  }
-  std::string_view suffix = words.back();
+  std::string suffix = GetLastWord(scenario_name);
   if (suffix.length() <= 1 || suffix[0] != 'L') {
     return {};
   }
   int level;
   if (!absl::SimpleAtoi(suffix.substr(1), level_out != nullptr ? level_out : &level)) {
     return {};
+  }
+
+  std::string_view stripped =
+      absl::StripTrailingAsciiWhitespace(absl::StripSuffix(scenario_name, suffix));
+  return std::string(stripped);
+}
+
+std::optional<std::string> StripCmSuffix(const std::string& scenario_name, float* cm_per_360_out) {
+  if (cm_per_360_out != nullptr) {
+    *cm_per_360_out = -1;
+  }
+  std::string suffix = GetLastWord(scenario_name);
+  if (suffix.length() <= 2 || !suffix.ends_with("cm")) {
+    return {};
+  }
+  float cm_per_360;
+  if (!absl::SimpleAtof(suffix.substr(0, suffix.length() - 2), &cm_per_360)) {
+    return {};
+  }
+
+  if (cm_per_360_out != nullptr) {
+    *cm_per_360_out = cm_per_360;
   }
 
   std::string_view stripped =

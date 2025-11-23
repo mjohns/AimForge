@@ -1,7 +1,7 @@
 #include "aim/common/util.h"
 
-#include "gtest/gtest.h"
 #include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 using namespace aim;
 
@@ -27,4 +27,27 @@ TEST(UtilTest, AddLevelSuffix) {
   EXPECT_EQ(AddLevelSuffix("Scenario", 1), "Scenario L01");
   EXPECT_EQ(AddLevelSuffix("Scenario", 9), "Scenario L09");
   EXPECT_EQ(AddLevelSuffix("Scenario", 10), "Scenario L10");
+}
+
+TEST(UtilTest, StripCmSuffix) {
+  EXPECT_FALSE(StripCmSuffix("Scenario No Suffix 1").has_value());
+
+  float cm_per_360 = -3;
+  auto result = StripCmSuffix("Scenario 25cm", &cm_per_360);
+  ASSERT_TRUE(result.has_value());
+  EXPECT_EQ(*result, "Scenario");
+  EXPECT_EQ(cm_per_360, 25);
+
+  result = StripCmSuffix("Scenario cm", &cm_per_360);
+  ASSERT_FALSE(result.has_value());
+
+  result = StripCmSuffix("Scenario 2cm", &cm_per_360);
+  ASSERT_TRUE(result.has_value());
+  EXPECT_EQ(*result, "Scenario");
+  EXPECT_EQ(cm_per_360, 2);
+
+  result = StripCmSuffix("Scenario 2.5cm", &cm_per_360);
+  ASSERT_TRUE(result.has_value());
+  EXPECT_EQ(*result, "Scenario");
+  EXPECT_EQ(cm_per_360, 2.5);
 }
