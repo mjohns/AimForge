@@ -252,21 +252,31 @@ std::optional<std::string> StripLevelSuffix(const std::string& scenario_name, in
   return std::string(stripped);
 }
 
+// Returns the cm/360 number from single words like 25cm.
+std::optional<float> GetCmFromWord(const std::string_view& word) {
+  if (word.length() <= 2 || word.length() > 5 || !word.ends_with("cm")) {
+    return {};
+  }
+  float cm_per_360;
+  if (!absl::SimpleAtof(word.substr(0, word.length() - 2), &cm_per_360)) {
+    return {};
+  }
+
+  return cm_per_360;
+}
+
 std::optional<std::string> StripCmSuffix(const std::string& scenario_name, float* cm_per_360_out) {
   if (cm_per_360_out != nullptr) {
     *cm_per_360_out = -1;
   }
   std::string suffix = GetLastWord(scenario_name);
-  if (suffix.length() <= 2 || !suffix.ends_with("cm")) {
-    return {};
-  }
-  float cm_per_360;
-  if (!absl::SimpleAtof(suffix.substr(0, suffix.length() - 2), &cm_per_360)) {
+  auto maybe_cm_per_360 = GetCmFromWord(suffix);
+  if (!maybe_cm_per_360) {
     return {};
   }
 
   if (cm_per_360_out != nullptr) {
-    *cm_per_360_out = cm_per_360;
+    *cm_per_360_out = *maybe_cm_per_360;
   }
 
   std::string_view stripped =

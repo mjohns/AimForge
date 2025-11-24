@@ -208,6 +208,9 @@ std::string AddLevelSuffix(const std::string& base_name, int level);
 std::optional<std::string> StripCmSuffix(const std::string& scenario_name,
                                          float* cm_per_360 = nullptr);
 
+// Returns the cm/360 number from single words like 25cm.
+std::optional<float> GetCmFromWord(const std::string_view& word);
+
 // Splits value by whitespace and returns the last word (possibly empty).
 std::string GetLastWord(const std::string& value);
 

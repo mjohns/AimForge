@@ -4,6 +4,7 @@
 
 #include "absl/strings/ascii.h"
 #include "absl/strings/str_split.h"
+#include "aim/common/util.h"
 
 namespace aim {
 namespace {
@@ -44,6 +45,24 @@ bool InputMatchesSearchWord(const std::vector<std::string>& input_word_parts,
 }
 
 }  // namespace
+
+SearchQuery GetSearchQuery(const std::string& text) {
+  SearchQuery query;
+  if (text.size() == 0) {
+    return {};
+  }
+  std::vector<std::string_view> search_words = absl::StrSplit(text, ' ');
+  std::vector<std::string> result;
+  for (auto& part : search_words) {
+    std::optional<float> cm_per_360 = GetCmFromWord(part);
+    if (cm_per_360) {
+      query.cm_per_360 = cm_per_360;
+    } else {
+      query.search_words.push_back(absl::AsciiStrToLower(part));
+    }
+  }
+  return query;
+}
 
 std::vector<std::string> GetSearchWords(const std::string& text) {
   if (text.size() == 0) {

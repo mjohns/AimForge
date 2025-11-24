@@ -100,7 +100,6 @@ class ScenarioManagerImpl : public ScenarioManager {
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) override {
     auto it = scenario_map_.find(scenario_id);
     if (it == scenario_map_.end()) {
-
       // See if it should be an automatic cm/360 version of a scenario.
       float cm_per_360;
       std::optional<std::string> base_scenario_name = StripCmSuffix(scenario_id, &cm_per_360);
@@ -114,7 +113,7 @@ class ScenarioManagerImpl : public ScenarioManager {
           return item;
         }
       }
-      
+
       return {};
     }
 

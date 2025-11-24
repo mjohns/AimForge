@@ -6,6 +6,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
 #include "aim/ui/scenario_editor_screen.h"
+#include "aim/ui/search_selector.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "imgui.h"
 
@@ -222,26 +223,24 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       scenario_search_text_ = "";
     }
     if (scenario_search_text_.size() > 0) {
-      auto search_words = GetSearchWords(scenario_search_text_);
       ImGui::Indent();
       auto scenario_names = app_.scenario_manager().scenario_names();
-      for (int i = 0; i < scenario_names->size(); ++i) {
-        ImGui::IdGuard id("ScenarioSearch", i);
-        const std::string& scenario = (*scenario_names)[i];
-        if (StringMatchesSearch(scenario, search_words, /*empty_matches=*/false)) {
-          bool already_in_playlist =
-              std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
-                return item.scenario() == scenario;
-              });
-          if (!already_in_playlist) {
-            if (ImGui::Button(scenario.c_str())) {
-              PlaylistItem item;
-              item.set_scenario(scenario);
-              item.set_num_plays(1);
-              scenario_items_.push_back(item);
-            }
-          }
-        }
+      ScenarioSelectorOptions options;
+      options.additional_predicate = [&](const std::string& scenario_name) {
+        bool already_in_playlist =
+            std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
+              return item.scenario() == scenario_name;
+            });
+        return !already_in_playlist;
+      };
+
+      std::optional<std::string> selected_scenario =
+          ScenarioSelector(scenario_search_text_, *scenario_names, options);
+      if (selected_scenario) {
+        PlaylistItem item;
+        item.set_scenario(*selected_scenario);
+        item.set_num_plays(1);
+        scenario_items_.push_back(item);
       }
       ImGui::Unindent();
     }
