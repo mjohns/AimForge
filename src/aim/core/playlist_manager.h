@@ -90,7 +90,7 @@ class PlaylistManager {
 
   virtual void SetCurrentPlaylist(const std::string& name) = 0;
 
-  virtual std::shared_ptr<std::vector<Playlist>> playlists() const = 0;
+  virtual std::shared_ptr<std::vector<std::string>> playlist_names() const = 0;
 
   virtual std::vector<std::string> FilterOutLevelsPlaylists(
       const std::vector<std::string>& all_playlists, int limit_size = -1) = 0;

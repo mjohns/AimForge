@@ -161,9 +161,8 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
         }
       }
     } else {
-      for (const auto& playlist : *app_.playlist_manager().playlists()) {
+      for (const std::string& name : *app_.playlist_manager().playlist_names()) {
         auto id_guard = loop_id.Get();
-        std::string name = playlist.name.full_name();
         if (StringMatchesSearch(name, search_words)) {
           DrawPlaylistItem(name, result);
         }

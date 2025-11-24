@@ -103,8 +103,8 @@ class PlaylistManagerImpl : public PlaylistManager {
     current_playlist_name_ = name;
   }
 
-  std::shared_ptr<std::vector<Playlist>> playlists() const {
-    return playlists_;
+  std::shared_ptr<std::vector<std::string>> playlist_names() const override {
+    return playlist_names_;
   }
 
   std::vector<std::string> FilterOutLevelsPlaylists(const std::vector<std::string>& all_playlists,
@@ -273,15 +273,23 @@ class PlaylistManagerImpl : public PlaylistManager {
 
   void UpdatePlaylistListFromMap() {
     auto new_playlists = std::make_shared<std::vector<Playlist>>();
+    auto new_playlist_names = std::make_shared<std::vector<std::string>>();
     new_playlists->reserve(playlist_map_.size());
+    new_playlist_names->reserve(playlist_map_.size());
     for (auto& entry : playlist_map_) {
       new_playlists->push_back(entry.second);
+      new_playlist_names->push_back(entry.second.name.full_name());
     }
     std::sort(
         new_playlists->begin(), new_playlists->end(), [](const Playlist& lhs, const Playlist& rhs) {
           return lhs.name.full_name() < rhs.name.full_name();
         });
+    std::sort(new_playlist_names->begin(),
+              new_playlist_names->end(),
+              [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
+
     playlists_ = new_playlists;
+    playlist_names_ = new_playlist_names;
   }
 
   void UpdatePlaylistRun(const ResourceName& playlist_name, const PlaylistDef& new_def) {
@@ -323,6 +331,7 @@ class PlaylistManagerImpl : public PlaylistManager {
   std::filesystem::path base_dir_;
   std::filesystem::path user_dir_;
   std::shared_ptr<std::vector<Playlist>> playlists_;
+  std::shared_ptr<std::vector<std::string>> playlist_names_;
   std::unordered_map<std::string, Playlist> playlist_map_;
   FileSystem* fs_;
   std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
