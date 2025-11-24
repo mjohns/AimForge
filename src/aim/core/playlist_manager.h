@@ -75,67 +75,44 @@ struct PlaylistRun {
 
 class PlaylistManager {
  public:
-  explicit PlaylistManager(FileSystem* fs);
+  PlaylistManager() {}
+  virtual ~PlaylistManager() {}
 
-  void LoadPlaylistsFromDisk();
+  virtual void LoadPlaylistsFromDisk() = 0;
 
-  std::shared_ptr<PlaylistRun> GetCurrentRun() {
-    if (current_playlist_name_.size() == 0) {
-      return nullptr;
-    }
-    return GetRun(current_playlist_name_);
-  }
+  virtual std::shared_ptr<PlaylistRun> GetCurrentRun() = 0;
 
-  const std::string& current_playlist_name() const {
-    return current_playlist_name_;
-  }
+  virtual const std::string& current_playlist_name() const = 0;
 
-  // Don't hold onto the pointer for long periods of time as it could be invalidated.
-  std::shared_ptr<PlaylistRun> GetRun(const std::string& name);
+  virtual std::shared_ptr<PlaylistRun> GetRun(const std::string& name) = 0;
 
-  void ClearCurrentRun(const std::string& name);
+  virtual void ClearCurrentRun(const std::string& name) = 0;
 
-  void SetCurrentPlaylist(const std::string& name) {
-    current_playlist_name_ = name;
-  }
+  virtual void SetCurrentPlaylist(const std::string& name) = 0;
 
-  std::shared_ptr<std::vector<Playlist>> playlists() const {
-    return playlists_;
-  }
+  virtual std::shared_ptr<std::vector<Playlist>> playlists() const = 0;
 
-  std::vector<std::string> FilterOutLevelsPlaylists(const std::vector<std::string>& all_playlists,
-                                                    int limit_size = -1);
+  virtual std::vector<std::string> FilterOutLevelsPlaylists(
+      const std::vector<std::string>& all_playlists, int limit_size = -1) = 0;
 
-  std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const;
-  std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const {
-    return GetPlaylist(playlist_name.full_name());
-  }
+  virtual std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const = 0;
+  virtual std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const = 0;
 
-  void AddScenarioToPlaylist(const std::string& playlist_name, const std::string& scenario_name);
+  virtual void AddScenarioToPlaylist(const std::string& playlist_name,
+                                     const std::string& scenario_name) = 0;
 
-  bool SavePlaylist(const ResourceName& name, const PlaylistDef& def);
+  virtual bool SavePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
 
-  bool DeletePlaylist(const ResourceName& name);
+  virtual bool DeletePlaylist(const ResourceName& name) = 0;
 
-  bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name);
+  virtual bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) = 0;
 
-  void RenameScenarioInAllPlaylists(const std::string& old_name, const std::string& new_name);
+  virtual void RenameScenarioInAllPlaylists(const std::string& old_name,
+                                            const std::string& new_name) = 0;
 
-  std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name);
-
- private:
-  std::shared_ptr<PlaylistRun> GetOptionalExistingRun(const std::string& name);
-  PlaylistRun InitializeRun(const Playlist& playlist);
-  void UpdatePlaylistListFromMap();
-  void UpdatePlaylistRun(const ResourceName& playlist_name, const PlaylistDef& new_def);
-
-  std::string current_playlist_name_;
-  std::filesystem::path base_dir_;
-  std::filesystem::path user_dir_;
-  std::shared_ptr<std::vector<Playlist>> playlists_;
-  std::unordered_map<std::string, Playlist> playlist_map_;
-  FileSystem* fs_;
-  std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
+  virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
 };
+
+std::unique_ptr<PlaylistManager> CreatePlaylistManager(FileSystem* fs);
 
 }  // namespace aim

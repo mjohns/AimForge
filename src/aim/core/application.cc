@@ -178,7 +178,7 @@ int Application::Initialize() {
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(file_system_.get());
   stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
-  playlist_manager_ = std::make_unique<PlaylistManager>(file_system_.get());
+  playlist_manager_ = CreatePlaylistManager(file_system_.get());
   history_manager_ = std::make_unique<HistoryManager>(file_system_.get(), playlist_manager_.get());
   labels_manager_ = std::make_unique<LabelsManager>(file_system_.get());
   settings_manager_ =
