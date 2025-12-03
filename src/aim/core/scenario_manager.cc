@@ -116,7 +116,7 @@ class ScenarioManagerImpl : public ScenarioManager {
       }
 
       // Now check if it is a level scenario.
-      int level = 0;
+      float level = 0;
       base_scenario_name = StripLevelSuffix(scenario_id, &level);
       if (base_scenario_name) {
         auto base_scenario = GetScenario(*base_scenario_name);

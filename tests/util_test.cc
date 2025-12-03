@@ -14,7 +14,7 @@ using ::testing::StrEq;
 TEST(UtilTest, StripLevelSuffix) {
   EXPECT_FALSE(StripLevelSuffix("Scenario No Suffix 1").has_value());
 
-  int level = -3;
+  float level = -3;
   auto result = StripLevelSuffix("Scenario L0", &level);
   EXPECT_THAT(result, Optional(StrEq("Scenario")));
   EXPECT_EQ(level, 0);
@@ -22,6 +22,10 @@ TEST(UtilTest, StripLevelSuffix) {
   result = StripLevelSuffix("ScenarioL2 L11", &level);
   EXPECT_THAT(result, Optional(StrEq("ScenarioL2")));
   EXPECT_EQ(level, 11);
+
+  result = StripLevelSuffix("ScenarioL2 L11.5", &level);
+  EXPECT_THAT(result, Optional(StrEq("ScenarioL2")));
+  EXPECT_EQ(level, 11.5);
 
   EXPECT_FALSE(StripLevelSuffix("Scenario L1 No Suffix").has_value());
 }

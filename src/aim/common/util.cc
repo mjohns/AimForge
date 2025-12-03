@@ -234,19 +234,19 @@ std::string GetLastWord(const std::string& value) {
   return std::string(words.back());
 }
 
-std::optional<std::string> StripLevelSuffix(const std::string& scenario_name, int* level_out) {
+std::optional<std::string> StripLevelSuffix(const std::string& scenario_name, float* level_out) {
   if (level_out != nullptr) {
-    *level_out = -1;
+    *level_out = 0;
   }
   std::string suffix = GetLastWord(scenario_name);
-  if (suffix.length() <= 1 || suffix[0] != 'L') {
-    return {};
-  }
-  int level;
-  if (!absl::SimpleAtoi(suffix.substr(1), level_out != nullptr ? level_out : &level)) {
+  std::optional<float> level = GetLevelFromWord(suffix);
+  if (!level) {
     return {};
   }
 
+  if (level_out != nullptr) {
+    *level_out = *level;
+  }
   std::string_view stripped =
       absl::StripTrailingAsciiWhitespace(absl::StripSuffix(scenario_name, suffix));
   return std::string(stripped);

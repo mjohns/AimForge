@@ -625,6 +625,7 @@ class StatsScreen : public UiScreen {
     std::vector<std::string> result;
 
     // Compare to different levels of the same scenario.
+    /*
     int level = 0;
     auto level_prefix = StripLevelSuffix(scenario_id_, &level);
     if (level_prefix) {
@@ -634,6 +635,7 @@ class StatsScreen : public UiScreen {
         result.push_back(AddLevelSuffix(*level_prefix, i));
       }
     }
+    */
 
     if (reference_scenario_id_.size() > 0) {
       if (!VectorContains(result, reference_scenario_id_)) {
