@@ -21,6 +21,7 @@ struct ScenarioItem {
   ScenarioDef unevaluated_def;
 
   std::optional<float> forced_cm_per_360{};
+  std::optional<float> level{};
 
   const std::string& id() const {
     return scenario_id;

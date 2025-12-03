@@ -9788,6 +9788,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kTargetDefFieldNumber = 5,
     kOverridesFieldNumber = 7,
     kShotTypeFieldNumber = 8,
+    kLevelOverridesFieldNumber = 12,
     kDurationSecondsFieldNumber = 2,
     kAccuracyPenaltyModifierFieldNumber = 9,
     kStartScoreFieldNumber = 10,
@@ -9881,6 +9882,21 @@ class ScenarioDef final : public ::google::protobuf::Message
   private:
   const ::aim::ShotType& _internal_shot_type() const;
   ::aim::ShotType* _internal_mutable_shot_type();
+
+  public:
+  // .aim.ScenarioOverrides level_overrides = 12;
+  bool has_level_overrides() const;
+  void clear_level_overrides() ;
+  const ::aim::ScenarioOverrides& level_overrides() const;
+  PROTOBUF_NODISCARD ::aim::ScenarioOverrides* release_level_overrides();
+  ::aim::ScenarioOverrides* mutable_level_overrides();
+  void set_allocated_level_overrides(::aim::ScenarioOverrides* value);
+  void unsafe_arena_set_allocated_level_overrides(::aim::ScenarioOverrides* value);
+  ::aim::ScenarioOverrides* unsafe_arena_release_level_overrides();
+
+  private:
+  const ::aim::ScenarioOverrides& _internal_level_overrides() const;
+  ::aim::ScenarioOverrides* _internal_mutable_level_overrides();
 
   public:
   // float duration_seconds = 2;
@@ -10196,7 +10212,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      4, 22, 17,
+      4, 23, 18,
       51, 7>
       _table_;
 
@@ -10221,6 +10237,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::TargetDef* target_def_;
     ::aim::ScenarioOverrides* overrides_;
     ::aim::ShotType* shot_type_;
+    ::aim::ScenarioOverrides* level_overrides_;
     float duration_seconds_;
     float accuracy_penalty_modifier_;
     float start_score_;
@@ -14158,13 +14175,13 @@ inline void ScenarioDef::set_allocated_description(std::string* value) {
 
 // float duration_seconds = 2;
 inline bool ScenarioDef::has_duration_seconds() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline void ScenarioDef::clear_duration_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.duration_seconds_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000020u;
+  _impl_._has_bits_[0] &= ~0x00000040u;
 }
 inline float ScenarioDef::duration_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.duration_seconds)
@@ -14172,7 +14189,7 @@ inline float ScenarioDef::duration_seconds() const {
 }
 inline void ScenarioDef::set_duration_seconds(float value) {
   _internal_set_duration_seconds(value);
-  _impl_._has_bits_[0] |= 0x00000020u;
+  _impl_._has_bits_[0] |= 0x00000040u;
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.duration_seconds)
 }
 inline float ScenarioDef::_internal_duration_seconds() const {
@@ -14472,6 +14489,102 @@ inline void ScenarioDef::set_allocated_overrides(::aim::ScenarioOverrides* value
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.overrides)
 }
 
+// .aim.ScenarioOverrides level_overrides = 12;
+inline bool ScenarioDef::has_level_overrides() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000020u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.level_overrides_ != nullptr);
+  return value;
+}
+inline void ScenarioDef::clear_level_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.level_overrides_ != nullptr) _impl_.level_overrides_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000020u;
+}
+inline const ::aim::ScenarioOverrides& ScenarioDef::_internal_level_overrides() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::ScenarioOverrides* p = _impl_.level_overrides_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ScenarioOverrides&>(::aim::_ScenarioOverrides_default_instance_);
+}
+inline const ::aim::ScenarioOverrides& ScenarioDef::level_overrides() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.level_overrides)
+  return _internal_level_overrides();
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_level_overrides(::aim::ScenarioOverrides* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.level_overrides_);
+  }
+  _impl_.level_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000020u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000020u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.level_overrides)
+}
+inline ::aim::ScenarioOverrides* ScenarioDef::release_level_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  _impl_._has_bits_[0] &= ~0x00000020u;
+  ::aim::ScenarioOverrides* released = _impl_.level_overrides_;
+  _impl_.level_overrides_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::ScenarioOverrides* ScenarioDef::unsafe_arena_release_level_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.level_overrides)
+
+  _impl_._has_bits_[0] &= ~0x00000020u;
+  ::aim::ScenarioOverrides* temp = _impl_.level_overrides_;
+  _impl_.level_overrides_ = nullptr;
+  return temp;
+}
+inline ::aim::ScenarioOverrides* ScenarioDef::_internal_mutable_level_overrides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.level_overrides_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ScenarioOverrides>(GetArena());
+    _impl_.level_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(p);
+  }
+  return _impl_.level_overrides_;
+}
+inline ::aim::ScenarioOverrides* ScenarioDef::mutable_level_overrides() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  _impl_._has_bits_[0] |= 0x00000020u;
+  ::aim::ScenarioOverrides* _msg = _internal_mutable_level_overrides();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.level_overrides)
+  return _msg;
+}
+inline void ScenarioDef::set_allocated_level_overrides(::aim::ScenarioOverrides* value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete (_impl_.level_overrides_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = (value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000020u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000020u;
+  }
+
+  _impl_.level_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.level_overrides)
+}
+
 // .aim.ShotType shot_type = 8;
 inline bool ScenarioDef::has_shot_type() const {
   bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
@@ -14570,13 +14683,13 @@ inline void ScenarioDef::set_allocated_shot_type(::aim::ShotType* value) {
 
 // float accuracy_penalty_modifier = 9;
 inline bool ScenarioDef::has_accuracy_penalty_modifier() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000040u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
   return value;
 }
 inline void ScenarioDef::clear_accuracy_penalty_modifier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.accuracy_penalty_modifier_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000040u;
+  _impl_._has_bits_[0] &= ~0x00000080u;
 }
 inline float ScenarioDef::accuracy_penalty_modifier() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.accuracy_penalty_modifier)
@@ -14584,7 +14697,7 @@ inline float ScenarioDef::accuracy_penalty_modifier() const {
 }
 inline void ScenarioDef::set_accuracy_penalty_modifier(float value) {
   _internal_set_accuracy_penalty_modifier(value);
-  _impl_._has_bits_[0] |= 0x00000040u;
+  _impl_._has_bits_[0] |= 0x00000080u;
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.accuracy_penalty_modifier)
 }
 inline float ScenarioDef::_internal_accuracy_penalty_modifier() const {
@@ -14598,13 +14711,13 @@ inline void ScenarioDef::_internal_set_accuracy_penalty_modifier(float value) {
 
 // float start_score = 10;
 inline bool ScenarioDef::has_start_score() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000080u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
   return value;
 }
 inline void ScenarioDef::clear_start_score() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_score_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000080u;
+  _impl_._has_bits_[0] &= ~0x00000100u;
 }
 inline float ScenarioDef::start_score() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.start_score)
@@ -14612,7 +14725,7 @@ inline float ScenarioDef::start_score() const {
 }
 inline void ScenarioDef::set_start_score(float value) {
   _internal_set_start_score(value);
-  _impl_._has_bits_[0] |= 0x00000080u;
+  _impl_._has_bits_[0] |= 0x00000100u;
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.start_score)
 }
 inline float ScenarioDef::_internal_start_score() const {
@@ -14626,13 +14739,13 @@ inline void ScenarioDef::_internal_set_start_score(float value) {
 
 // float end_score = 11;
 inline bool ScenarioDef::has_end_score() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000100u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000200u) != 0;
   return value;
 }
 inline void ScenarioDef::clear_end_score() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.end_score_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000100u;
+  _impl_._has_bits_[0] &= ~0x00000200u;
 }
 inline float ScenarioDef::end_score() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.end_score)
@@ -14640,7 +14753,7 @@ inline float ScenarioDef::end_score() const {
 }
 inline void ScenarioDef::set_end_score(float value) {
   _internal_set_end_score(value);
-  _impl_._has_bits_[0] |= 0x00000100u;
+  _impl_._has_bits_[0] |= 0x00000200u;
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.end_score)
 }
 inline float ScenarioDef::_internal_end_score() const {

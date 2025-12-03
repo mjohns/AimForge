@@ -20,25 +20,17 @@ void MultiplyRegionLength(RegionLength* l, float mult) {
   }
 }
 
-}  // namespace
-
-ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
-  if (!original.has_overrides()) {
-    return original;
-  }
+ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
+                                  const ScenarioOverrides& overrides,
+                                  std::optional<float> levels) {
   ScenarioDef result = original;
-  result.clear_overrides();
 
-  const ScenarioOverrides& overrides = original.overrides();
+  auto get_multiplier = [=](float multiplier) {
+    return levels.has_value() ? std::pow(multiplier, *levels) : multiplier;
+  };
 
-  if (overrides.has_duration_seconds()) {
-    result.set_duration_seconds(overrides.duration_seconds());
-  }
-  if (overrides.has_num_targets()) {
-    result.mutable_target_def()->set_num_targets(overrides.num_targets());
-  }
   if (overrides.has_target_radius_multiplier()) {
-    float mult = overrides.target_radius_multiplier();
+    float mult = get_multiplier(overrides.target_radius_multiplier());
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
       profile.set_target_radius(profile.target_radius() * mult);
       if (profile.has_target_radius_at_kill()) {
@@ -50,13 +42,13 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     }
   }
   if (overrides.has_speed_multiplier()) {
-    float mult = overrides.speed_multiplier();
+    float mult = get_multiplier(overrides.speed_multiplier());
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
       profile.set_speed(profile.speed() * mult);
     }
   }
   if (overrides.has_distance_multiplier()) {
-    float mult = overrides.distance_multiplier();
+    float mult = get_multiplier(overrides.distance_multiplier());
     for (auto& profile : *result.mutable_wall_strafe_def()->mutable_profiles()) {
       MultiplyRegionLength(profile.mutable_distance(), mult);
     }
@@ -70,7 +62,7 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     }
   }
   if (overrides.has_acceleration_multiplier()) {
-    float mult = overrides.acceleration_multiplier();
+    float mult = get_multiplier(overrides.acceleration_multiplier());
     if (original.has_wall_strafe_def()) {
       float accel = original.wall_strafe_def().acceleration();
       if (accel > 0) {
@@ -85,7 +77,7 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     }
   }
   if (overrides.has_time_scale_multiplier()) {
-    float mult = overrides.time_scale_multiplier();
+    float mult = get_multiplier(overrides.time_scale_multiplier());
     if (original.has_strafe_def()) {
       float time_scale = FirstGreaterThanZero(original.strafe_def().time_scale_multiplier(), 1.0);
       result.mutable_strafe_def()->set_time_scale_multiplier(time_scale * mult);
@@ -101,6 +93,35 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
     }
   }
   return result;
+}
+
+}  // namespace
+
+ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
+  if (!original.has_overrides()) {
+    return original;
+  }
+  ScenarioDef result = ApplyLeveledOverrides(original, original.overrides(), {});
+  result.clear_overrides();
+
+  const ScenarioOverrides& overrides = original.overrides();
+
+  // Apply non leveled overrides.
+  if (overrides.has_duration_seconds()) {
+    result.set_duration_seconds(overrides.duration_seconds());
+  }
+  if (overrides.has_num_targets()) {
+    result.mutable_target_def()->set_num_targets(overrides.num_targets());
+  }
+  return result;
+}
+
+ScenarioDef ApplyScenarioLevelOverrides(const ScenarioDef& original_def, float levels) {
+  ScenarioDef result = ApplyScenarioOverrides(original_def);
+  if (levels == 0) {
+    return result;
+  }
+  return ApplyLeveledOverrides(result, result.level_overrides(), levels);
 }
 
 }  // namespace aim

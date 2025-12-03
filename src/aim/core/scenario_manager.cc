@@ -93,8 +93,8 @@ class ScenarioManagerImpl : public ScenarioManager {
           names.push_back(name.relative_name());
         }
       }
-      return names;
     }
+    return names;
   }
 
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) override {
@@ -105,13 +105,29 @@ class ScenarioManagerImpl : public ScenarioManager {
       std::optional<std::string> base_scenario_name = StripCmSuffix(scenario_id, &cm_per_360);
       if (base_scenario_name && cm_per_360 > 0) {
         auto base_scenario = GetScenario(*base_scenario_name);
-        if (base_scenario) {
-          ScenarioItem item = *base_scenario;
-          item.name = ResourceName::Parse(scenario_id);
-          item.scenario_id = scenario_id;
-          item.forced_cm_per_360 = cm_per_360;
-          return item;
+        if (!base_scenario) {
+          return {};
         }
+        ScenarioItem item = *base_scenario;
+        item.name = ResourceName::Parse(scenario_id);
+        item.scenario_id = scenario_id;
+        item.forced_cm_per_360 = cm_per_360;
+        return item;
+      }
+
+      // Now check if it is a level scenario.
+      int level = 0;
+      base_scenario_name = StripLevelSuffix(scenario_id, &level);
+      if (base_scenario_name) {
+        auto base_scenario = GetScenario(*base_scenario_name);
+        if (!base_scenario) {
+          return {};
+        }
+        ScenarioItem item = *base_scenario;
+        item.name = ResourceName::Parse(scenario_id);
+        item.scenario_id = scenario_id;
+        item.level = level;
+        return item;
       }
 
       return {};
@@ -285,7 +301,8 @@ class ScenarioManagerImpl : public ScenarioManager {
 
     ScenarioDef& def = scenario->unevaluated_def;
     if (!def.has_reference_def()) {
-      return ApplyScenarioOverrides(def);
+      return scenario->level.has_value() ? ApplyScenarioLevelOverrides(def, *scenario->level)
+                                         : ApplyScenarioOverrides(def);
     }
 
     auto referenced =
@@ -297,8 +314,12 @@ class ScenarioManagerImpl : public ScenarioManager {
     if (def.has_overrides()) {
       *referenced->mutable_overrides() = def.overrides();
     }
+    if (def.has_level_overrides()) {
+      *referenced->mutable_level_overrides() = def.level_overrides();
+    }
 
-    return ApplyScenarioOverrides(*referenced);
+    return scenario->level.has_value() ? ApplyScenarioLevelOverrides(*referenced, *scenario->level)
+                                       : ApplyScenarioOverrides(*referenced);
   }
 
   void LoadScenariosFromDisk() override {

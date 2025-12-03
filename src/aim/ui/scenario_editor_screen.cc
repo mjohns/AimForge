@@ -186,18 +186,6 @@ class ScenarioEditorScreen : public UiScreen {
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app_.file_system()->GetBundleNames();
 
-    // See if this is a scenario from a levels playlist and limit features if so.
-    if (!opts.is_new_copy) {
-      int level = 0;
-      std::string levels_playlist_name = StripLevelSuffix(opts.scenario_id, &level).value_or("");
-      if (level > 0) {
-        auto levels_playlist = app_.playlist_manager().GetPlaylist(levels_playlist_name);
-        if (levels_playlist && levels_playlist->def().has_scenario_levels_def()) {
-          is_levels_playlist_scenario_ = true;
-        }
-      }
-    }
-
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->unevaluated_def;
@@ -234,21 +222,12 @@ class ScenarioEditorScreen : public UiScreen {
     }
     ImGui::HelpTooltip("Try playing the edited version of the scenario.");
 
-    if (is_levels_playlist_scenario_) {
-      ImGui::SameLine();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(name_.full_name());
-      ImGui::SameLine();
-      ImGui::HelpMarker("This name cannot be changed as it is part of a levels playlist");
-    } else {
-      ImGui::SameLine();
-      ImGui::SimpleDropdown(
-          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
+    ImGui::SameLine();
+    ImGui::SimpleDropdown("BundlePicker", name_.mutable_bundle_name(), bundle_names_, char_x_ * 11);
 
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 40);
-      ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
-    }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 40);
+    ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
     ImGui::SameLine();
     bool is_new_scenario = !original_name_.has_value();
@@ -375,12 +354,19 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Overrides");
     ImGui::Indent();
-    DrawOverridesEditor();
+    DrawOverridesEditor(def_.mutable_overrides());
     if (ImGui::Button("Bake")) {
       def_ = ApplyScenarioOverrides(def_);
     }
     ImGui::SameLine();
     ImGui::HelpMarker("Apply and remove the overrides.");
+    ImGui::Unindent();
+
+    Line();
+
+    ImGui::Text("Level overrides");
+    ImGui::Indent();
+    DrawOverridesEditor(def_.mutable_level_overrides(), /*is_levels=*/true);
     ImGui::Unindent();
 
     Line();
@@ -632,7 +618,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Overrides");
     ImGui::Indent();
-    DrawOverridesEditor();
+    DrawOverridesEditor(def_.mutable_overrides());
     ImGui::Unindent();
 
     ImGui::Spacing();
@@ -653,7 +639,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
   }
 
-  void DrawOverridesEditor() {
+  void DrawOverridesEditor(ScenarioOverrides* overrides, bool is_levels = false) {
     ImGui::InputFloat(
         ImGui::InputFloatParams("TargetRadiusMult")
             .set_label("Target radius multiplier")
@@ -663,7 +649,7 @@ class ScenarioEditorScreen : public UiScreen {
             .set_default(1)
             .set_is_optional()
             .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), target_radius_multiplier));
+        PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, target_radius_multiplier));
 
     ImGui::InputFloat(
         ImGui::InputFloatParams("SpeedMult")
@@ -674,7 +660,7 @@ class ScenarioEditorScreen : public UiScreen {
             .set_default(1)
             .set_is_optional()
             .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), speed_multiplier));
+        PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, speed_multiplier));
 
     ImGui::InputFloat(
         ImGui::InputFloatParams("AccelMult")
@@ -685,7 +671,7 @@ class ScenarioEditorScreen : public UiScreen {
             .set_default(1)
             .set_is_optional()
             .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), acceleration_multiplier));
+        PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, acceleration_multiplier));
 
     ImGui::InputFloat(
         ImGui::InputFloatParams("TimeScale")
@@ -696,7 +682,7 @@ class ScenarioEditorScreen : public UiScreen {
             .set_default(1)
             .set_is_optional()
             .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), time_scale_multiplier));
+        PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, time_scale_multiplier));
     ImGui::InputFloat(
         ImGui::InputFloatParams("Distance")
             .set_label("Distance multiplier")
@@ -706,9 +692,9 @@ class ScenarioEditorScreen : public UiScreen {
             .set_default(1)
             .set_is_optional()
             .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(ScenarioOverrides, def_.mutable_overrides(), distance_multiplier));
+        PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, distance_multiplier));
 
-    if (def_.has_reference_def()) {
+    if (def_.has_reference_def() && !is_levels) {
       // Allow overriding full set of fields for references.
       ImGui::InputInt(ImGui::InputIntParams("NumberOfTargets")
                           .set_label("Number of targets")
@@ -717,7 +703,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),
-                      PROTO_INT_FIELD(ScenarioOverrides, def_.mutable_overrides(), num_targets));
+                      PROTO_INT_FIELD(ScenarioOverrides, overrides, num_targets));
     }
   }
 
@@ -2784,7 +2770,6 @@ class ScenarioEditorScreen : public UiScreen {
 
   bool editing_room_ = false;
   bool editing_description_ = false;
-  bool is_levels_playlist_scenario_ = false;
 };
 
 }  // namespace
