@@ -58,7 +58,12 @@ SearchQuery GetSearchQuery(const std::string& text) {
     if (cm_per_360) {
       query.cm_per_360 = cm_per_360;
     } else {
-      query.search_words.push_back(absl::AsciiStrToLower(part));
+      std::optional<float> level = GetLevelFromWord(part);
+      if (level) {
+        query.level = level;
+      } else {
+        query.search_words.push_back(absl::AsciiStrToLower(part));
+      }
     }
   }
   return query;

@@ -22,10 +22,13 @@ std::optional<std::string> ScenarioSelector(const std::string& search_text,
     ImGui::IdGuard id("ScenarioSearch", i);
     const std::string& scenario = scenarios[i];
     if (StringMatchesSearch(scenario, query.search_words, options.empty_search_text_matches_all)) {
-      std::string actual_name =
-          query.cm_per_360
-              ? std::format("{} {}cm", scenario, MaybeIntToString(*query.cm_per_360, 1))
-              : scenario;
+      std::string actual_name = scenario;
+      if (query.level) {
+        actual_name = std::format("{} L{}", actual_name, MaybeIntToString(*query.level, 2));
+      }
+      if (query.cm_per_360) {
+        actual_name = std::format("{} {}cm", actual_name, MaybeIntToString(*query.cm_per_360, 1));
+      }
       if (options.additional_predicate) {
         bool matches = options.additional_predicate(actual_name);
         if (!matches) {

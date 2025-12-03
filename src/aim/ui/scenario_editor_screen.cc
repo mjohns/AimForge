@@ -354,7 +354,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Overrides");
     ImGui::Indent();
-    DrawOverridesEditor(def_.mutable_overrides());
+    DrawOverridesEditor("Overrides", def_.mutable_overrides());
     if (ImGui::Button("Bake")) {
       def_ = ApplyScenarioOverrides(def_);
     }
@@ -366,7 +366,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Level overrides");
     ImGui::Indent();
-    DrawOverridesEditor(def_.mutable_level_overrides(), /*is_levels=*/true);
+    DrawOverridesEditor("LevelOverrides", def_.mutable_level_overrides(), /*is_levels=*/true);
     ImGui::Unindent();
 
     Line();
@@ -618,7 +618,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Text("Overrides");
     ImGui::Indent();
-    DrawOverridesEditor(def_.mutable_overrides());
+    DrawOverridesEditor("ReferenceOverrides", def_.mutable_overrides());
     ImGui::Unindent();
 
     ImGui::Spacing();
@@ -639,7 +639,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
   }
 
-  void DrawOverridesEditor(ScenarioOverrides* overrides, bool is_levels = false) {
+  void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_levels = false) {
+    ImGui::IdGuard cid(id);
     ImGui::InputFloat(
         ImGui::InputFloatParams("TargetRadiusMult")
             .set_label("Target radius multiplier")

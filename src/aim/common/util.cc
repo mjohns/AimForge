@@ -265,6 +265,19 @@ std::optional<float> GetCmFromWord(const std::string_view& word) {
   return cm_per_360;
 }
 
+// Returns the level number from single words like L1, L-1.
+std::optional<float> GetLevelFromWord(const std::string_view& word) {
+  if (word.length() <= 1 && !word.starts_with("L")) {
+    return {};
+  }
+  float level;
+  if (!absl::SimpleAtof(word.substr(1, word.length()), &level)) {
+    return {};
+  }
+
+  return level;
+}
+
 std::optional<std::string> StripCmSuffix(const std::string& scenario_name, float* cm_per_360_out) {
   if (cm_per_360_out != nullptr) {
     *cm_per_360_out = -1;

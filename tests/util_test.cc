@@ -1,9 +1,14 @@
 #include "aim/common/util.h"
 
+#include <optional>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 using namespace aim;
+
+using ::testing::Optional;
+using ::testing::Eq;
 
 TEST(UtilTest, StripLevelSuffix) {
   EXPECT_FALSE(StripLevelSuffix("Scenario No Suffix 1").has_value());
@@ -50,4 +55,26 @@ TEST(UtilTest, StripCmSuffix) {
   ASSERT_TRUE(result.has_value());
   EXPECT_EQ(*result, "Scenario");
   EXPECT_EQ(cm_per_360, 2.5);
+}
+
+TEST(UtilTest, GetCmFromWord) {
+  EXPECT_FALSE(GetCmFromWord("Scenario").has_value());
+  EXPECT_FALSE(GetCmFromWord("cm").has_value());
+  EXPECT_FALSE(GetCmFromWord("Scenario 25cm No Suffix cm").has_value());
+
+  EXPECT_THAT(GetCmFromWord("35cm"), Optional(35));
+  EXPECT_THAT(GetCmFromWord("45cm"), Optional(45));
+  EXPECT_THAT(GetCmFromWord("100cm"), Optional(100));
+}
+
+TEST(UtilTest, GetLevelFromWord) {
+  EXPECT_FALSE(GetLevelFromWord("Scenario").has_value());
+  EXPECT_FALSE(GetLevelFromWord("L").has_value());
+  EXPECT_FALSE(GetLevelFromWord("L1").has_value());
+
+  EXPECT_THAT(GetLevelFromWord("L1"), Optional(1));
+  EXPECT_THAT(GetLevelFromWord("L2"), Optional(2));
+  EXPECT_THAT(GetLevelFromWord("L-1"), Optional(-1));
+  EXPECT_THAT(GetLevelFromWord("L-1.5"), Optional(-1.5));
+  EXPECT_THAT(GetLevelFromWord("L0"), Optional(0));
 }
