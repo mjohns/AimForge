@@ -9,19 +9,18 @@ using namespace aim;
 
 using ::testing::Optional;
 using ::testing::Eq;
+using ::testing::StrEq;
 
 TEST(UtilTest, StripLevelSuffix) {
   EXPECT_FALSE(StripLevelSuffix("Scenario No Suffix 1").has_value());
 
   int level = -3;
   auto result = StripLevelSuffix("Scenario L0", &level);
-  ASSERT_TRUE(result.has_value());
-  EXPECT_EQ(*result, "Scenario");
+  EXPECT_THAT(result, Optional(StrEq("Scenario")));
   EXPECT_EQ(level, 0);
 
   result = StripLevelSuffix("ScenarioL2 L11", &level);
-  ASSERT_TRUE(result.has_value());
-  EXPECT_EQ(*result, "ScenarioL2");
+  EXPECT_THAT(result, Optional(StrEq("ScenarioL2")));
   EXPECT_EQ(level, 11);
 
   EXPECT_FALSE(StripLevelSuffix("Scenario L1 No Suffix").has_value());
@@ -70,7 +69,6 @@ TEST(UtilTest, GetCmFromWord) {
 TEST(UtilTest, GetLevelFromWord) {
   EXPECT_FALSE(GetLevelFromWord("Scenario").has_value());
   EXPECT_FALSE(GetLevelFromWord("L").has_value());
-  EXPECT_FALSE(GetLevelFromWord("L1").has_value());
 
   EXPECT_THAT(GetLevelFromWord("L1"), Optional(1));
   EXPECT_THAT(GetLevelFromWord("L2"), Optional(2));

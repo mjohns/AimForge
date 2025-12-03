@@ -22,6 +22,7 @@ using ::testing::AllOf;
 using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::Field;
+using ::testing::Optional;
 using ::testing::ResultOf;
 using ::testing::StrEq;
 
@@ -192,24 +193,19 @@ TEST_F(ScenarioManagerTest, GetEvaluatedLevelScenario) {
 
   std::optional<ScenarioDef> scenario =
       scenario_manager_->GetEvaluatedScenarioDef(scenario_name.full_name());
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_def(3)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_def(3))));
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Scenario L0");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_def(3)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_def(3))));
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Scenario L1");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_def(6)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_def(6))));
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Scenario L-1");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_def(1.5)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_def(1.5))));
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Scenario L2");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_def(12)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_def(12))));
 
   ScenarioDef ref;
   ref.mutable_overrides()->set_speed_multiplier(0.5);
@@ -227,14 +223,11 @@ TEST_F(ScenarioManagerTest, GetEvaluatedLevelScenario) {
   };
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Ref");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_ref_def(3)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_ref_def(3))));
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Ref L1");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_ref_def(9)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_ref_def(9))));
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Ref L-1");
-  ASSERT_TRUE(scenario.has_value());
-  EXPECT_THAT(*scenario, EqualsProto(create_evaluated_ref_def(1)));
+  EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_ref_def(1))));
 }
