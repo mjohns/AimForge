@@ -32,6 +32,8 @@ class ApplicationState {
                            i64 run_id,
                            const RunPerformanceStats& stats);
 
+  InitializationTimes initialization_times{};
+
  private:
   std::unordered_map<std::string, RunPerformanceStats> perf_stats_;
 };

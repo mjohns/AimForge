@@ -13,6 +13,7 @@
 #include "absl/log/log_sink.h"
 #include "absl/log/log_sink_registry.h"
 #include "aim/common/log.h"
+#include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "imgui.h"
@@ -132,6 +133,12 @@ int Application::Initialize() {
   Stopwatch stopwatch;
   stopwatch.Start();
 
+  state_->initialization_times.total.start = stopwatch.GetElapsedMicros();
+  ScopeGuard initialization_done_guard([&]() {
+    state_->initialization_times.total.end = stopwatch.GetElapsedMicros();
+  });
+
+  state_->initialization_times.sdl.start = stopwatch.GetElapsedMicros();
   // Setup SDL
   if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
     Logger::get()->error("Error: SDL_Init(): {}", SDL_GetError());
@@ -151,6 +158,8 @@ int Application::Initialize() {
     logger_->error("Couldn't open audio: {}", SDL_GetError());
     return 1;
   }
+
+  state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
 
   file_system_ = std::make_unique<FileSystem>();
   {
@@ -173,6 +182,7 @@ int Application::Initialize() {
   }
   InitializeAimForgeFolder(file_system_.get());
 
+  state_->initialization_times.db.start = stopwatch.GetElapsedMicros();
   local_store_ = std::make_unique<LocalStore>(file_system_.get());
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("db/settings.db"));
 
@@ -188,6 +198,7 @@ int Application::Initialize() {
                                         file_system_->GetUserDataPath("resources/crosshairs"),
                                         settings_db_.get(),
                                         history_manager_.get());
+  state_->initialization_times.db.end = stopwatch.GetElapsedMicros();
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
     logger_->error("Loading settings failed: {}", settings_status.message());
@@ -305,8 +316,11 @@ int Application::Initialize() {
 
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
+
+  state_->initialization_times.load_bundles.start = stopwatch.GetElapsedMicros();
   playlist_manager_->LoadPlaylistsFromDisk();
   scenario_manager_->LoadScenariosFromDisk();
+  state_->initialization_times.load_bundles.end = stopwatch.GetElapsedMicros();
 
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
@@ -317,9 +331,6 @@ int Application::Initialize() {
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
 
-  if (stopwatch.GetElapsedSeconds() > 2) {
-    logger_->info("App Initialized in {}ms", stopwatch.GetElapsedMicros() / 1000);
-  }
   return 0;
 }
 

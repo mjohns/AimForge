@@ -310,11 +310,14 @@ class HomeScreen : public UiScreen {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Spacing();
+    for (int i = 0; i < 30; ++i) {
+      ImGui::Spacing();
+    }
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::TextFmt("init {:.1f}s", app_.state().initialization_times.total.GetSeconds());
+    ImGui::TextFmt("load {:.1f}s", app_.state().initialization_times.load_bundles.GetSeconds());
+    ImGui::TextFmt("db {:.1f}s", app_.state().initialization_times.db.GetSeconds());
+    ImGui::TextFmt("sdl {:.1f}s", app_.state().initialization_times.sdl.GetSeconds());
     // ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
 
     // Place exit at bottom

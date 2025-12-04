@@ -13,16 +13,6 @@
 namespace aim {
 namespace {
 
-enum class PlaylistType {
-  DEFAULT,
-  LEVELS,
-};
-
-const std::vector<std::pair<PlaylistType, std::string>> kPlaylistTypes{
-    {PlaylistType::DEFAULT, "Default"},
-    {PlaylistType::LEVELS, "Levels"},
-};
-
 class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
  public:
   explicit PlaylistEditorComponentImpl(Screen& screen, const std::string& playlist_name)
@@ -37,9 +27,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
         original_playlist_def_ = maybe_playlist->def();
         for (auto& i : maybe_playlist->items()) {
           scenario_items_.push_back(i);
-        }
-        if (maybe_playlist->def().has_scenario_levels_def()) {
-          levels_def_ = maybe_playlist->def().scenario_levels_def();
         }
       }
     }
@@ -68,26 +55,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::SetNextItemWidth(400);
     ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Type");
-    ImGui::SameLine();
-    PlaylistType type = levels_def_.has_value() ? PlaylistType::LEVELS : PlaylistType::DEFAULT;
-    if (ImGui::SimpleTypeDropdown("##TypeSelector", &type, kPlaylistTypes, char_x_ * 10)) {
-      if (type == PlaylistType::LEVELS) {
-        levels_def_ = ScenarioLevelsDef();
-        ScenarioLevelsDef& levels = *levels_def_;
-        levels.set_max_level(10);
-        levels.set_num_plays_per_level(1);
-      }
-      if (type == PlaylistType::DEFAULT) {
-        levels_def_ = {};
-      }
-    }
-
-    if (type == PlaylistType::LEVELS) {
-      DrawLevelsEditor();
-    }
-
     if (ImGui::Button("Save")) {
       if (SavePlaylist()) {
         result->editor_closed = true;
@@ -103,15 +70,13 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       return;
     }
 
-    if (type == PlaylistType::DEFAULT) {
-      ImGui::Spacing();
-      ImGui::Separator();
-      ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
 
-      ImGui::BeginChild("PlaylistScrollableContent");
-      DrawPlaylistScenariosEditor(result);
-      ImGui::EndChild();
-    }
+    ImGui::BeginChild("PlaylistScrollableContent");
+    DrawPlaylistScenariosEditor(result);
+    ImGui::EndChild();
   }
 
  private:
@@ -127,8 +92,25 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
         ImGui::BeginDisabled();
         ImGui::Button(scenario_name);
         ImGui::EndDisabled();
+      } else if (i == editing_i_) {
+        if (focus_editor_) {
+          // Fix issue where the first time it selects all the text when focusing
+          // ImGui::SetKeyboardFocusHere();
+          focus_editor_ = false;
+        }
+        bool enter_pressed = ImGui::InputText(
+            "##ScenarioItemEditor", item.mutable_scenario(), ImGuiInputTextFlags_EnterReturnsTrue);
+        if (enter_pressed) {
+          editing_i_ = -1;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(kIconSave)) {
+          editing_i_ = -1;
+        }
       } else {
-        ImGui::Button(scenario_name);
+        if (ImGui::Button(scenario_name)) {
+          editing_i_ = -1;
+        }
       }
       if (ImGui::BeginDragDropSource()) {
         ImGui::SetDragDropPayload("PLAYLIST_ITEM_TYPE", &i, sizeof(int));
@@ -186,9 +168,12 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           remove_i = i;
         }
         if (ImGui::Selectable("Edit")) {
-          ScenarioEditorOptions opts;
-          opts.scenario_id = item.scenario();
-          screen_.PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+          editing_i_ = i;
+          focus_editor_ = true;
+        }
+        if (ImGui::Selectable("Add levels")) {
+          //std::optional<std::string> base_name = StripLevelSuffix
+          //  item.scenario();
         }
         ImGui::EndPopup();
       }
@@ -249,248 +234,10 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::Spacing();
   }
 
-  void DrawLevelsEditor() {
-    if (!levels_def_) {
-      return;
-    }
-    ScenarioLevelsDef& levels = *levels_def_;
-    if (levels.max_level() < 1) {
-      levels.set_max_level(1);
-    }
-
-    std::string original_base_scenario_name =
-        AddLevelSuffix(original_playlist_name_.full_name(), 1);
-    std::string new_base_scenario_name = AddLevelSuffix(new_playlist_name_, 1);
-
-    std::optional<ScenarioItem> original_base_scenario =
-        app_.scenario_manager().GetScenario(original_base_scenario_name);
-    std::optional<ScenarioItem> new_base_scenario =
-        app_.scenario_manager().GetScenario(new_base_scenario_name);
-
-    scenario_items_.clear();
-
-    ImGui::IdGuard cid("LevelsEditor");
-
-    if (!original_base_scenario.has_value() && !new_base_scenario.has_value()) {
-      // There  is no base scenario. Add UI to copy the base scenario from other existing scenario.
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Copy initial level from scenario");
-      ImGui::SameLine();
-      ImGui::HelpMarker(
-          "The first scenario level which the overrides will be applied to. The scenario will be "
-          "copied into \"<playlist  name> L01\"");
-      ImGui::SameLine();
-      ImGui::InputText("##BaseScenario", &source_base_scenario_);
-
-      if (source_base_scenario_.size() > 0) {
-        auto matching_scenario = app_.scenario_manager().GetScenario(source_base_scenario_);
-        if (!matching_scenario) {
-          // Show search results for scenarios.
-          int num_matches = 0;
-          auto search_words = GetSearchWords(source_base_scenario_);
-          ImGui::Indent();
-          for (const std::string& scenario_id : *app_.scenario_manager().scenario_names()) {
-            if (StringMatchesSearch(scenario_id, search_words)) {
-              num_matches++;
-              if (ImGui::Button(scenario_id)) {
-                source_base_scenario_ = scenario_id;
-              }
-            }
-          }
-          if (num_matches == 0) {
-            ImGui::Text("No matching scenarios found");
-          }
-          ImGui::Unindent();
-        }
-      }
-    }
-
-    ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Max level")
-                        .set_step(1, 2)
-                        .set_min(2)
-                        .set_default(10)
-                        .set_width(char_x_ * 10),
-                    PROTO_INT_FIELD(ScenarioLevelsDef, &levels, max_level));
-    ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Plays per level")
-                        .set_step(1, 2)
-                        .set_min(1)
-                        .set_default(1)
-                        .set_width(char_x_ * 10),
-                    PROTO_INT_FIELD(ScenarioLevelsDef, &levels, num_plays_per_level));
-
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-
-    ImGui::Text("Per level overrides");
-    ImGui::Indent();
-
-    ImGui::InputFloat(
-        ImGui::InputFloatParams::WithLabelAsId("Target radius multiplier")
-            .set_step(0.01, 0.25)
-            .set_min(0.01)
-            .set_precision(2)
-            .set_default(1)
-            .set_is_optional()
-            .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(
-            ScenarioOverrides, levels.mutable_scenario_overrides(), target_radius_multiplier));
-
-    ImGui::InputFloat(
-        ImGui::InputFloatParams("SpeedMult")
-            .set_label("Speed multiplier")
-            .set_step(0.01, 0.25)
-            .set_min(0.01)
-            .set_precision(2)
-            .set_default(1)
-            .set_is_optional()
-            .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(
-            ScenarioOverrides, levels.mutable_scenario_overrides(), speed_multiplier));
-
-    ImGui::InputFloat(
-        ImGui::InputFloatParams("AccelMult")
-            .set_label("Acceleration multiplier")
-            .set_step(0.01, 0.25)
-            .set_min(0.01)
-            .set_precision(2)
-            .set_default(1)
-            .set_is_optional()
-            .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(
-            ScenarioOverrides, levels.mutable_scenario_overrides(), acceleration_multiplier));
-
-    ImGui::InputFloat(
-        ImGui::InputFloatParams("TimeScale")
-            .set_label("Time scale multiplier")
-            .set_step(0.01, 0.25)
-            .set_min(0.01)
-            .set_precision(2)
-            .set_default(1)
-            .set_is_optional()
-            .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(
-            ScenarioOverrides, levels.mutable_scenario_overrides(), time_scale_multiplier));
-    ImGui::InputFloat(
-        ImGui::InputFloatParams("Distance")
-            .set_label("Distance multiplier")
-            .set_step(0.01, 0.25)
-            .set_min(0.01)
-            .set_precision(2)
-            .set_default(1)
-            .set_is_optional()
-            .set_width(char_x_ * 10),
-        PROTO_FLOAT_FIELD(
-            ScenarioOverrides, levels.mutable_scenario_overrides(), distance_multiplier));
-
-    ImGui::Unindent();
-
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-  }
-
-  // For a levels playlist, ensure all of  the scenarios for the various levels are saved.
-  bool EnsureLevelsAreSaved(ScenarioLevelsDef& levels,
-                            const PlaylistDef& playlist,
-                            ResourceName& final_name) {
-    bool is_rename = final_name != original_playlist_name_;
-    std::string original_base_scenario_name =
-        AddLevelSuffix(original_playlist_name_.full_name(), 1);
-    std::string new_base_scenario_name = AddLevelSuffix(final_name.full_name(), 1);
-
-    std::optional<ScenarioItem> new_base_scenario =
-        app_.scenario_manager().GetScenario(new_base_scenario_name);
-    if (!new_base_scenario.has_value()) {
-      // The new base scenario does not exist. We need to copy it from the source or rename.
-      std::optional<ScenarioItem> source_base_scenario =
-          app_.scenario_manager().GetScenario(source_base_scenario_);
-      if (source_base_scenario.has_value()) {
-        // Copy from the source scenario.
-        if (!app_.scenario_manager().SaveScenario(ResourceName::Parse(new_base_scenario_name),
-                                                  source_base_scenario->unevaluated_def)) {
-          return false;
-        }
-      } else {
-        std::optional<ScenarioItem> original_base_scenario =
-            app_.scenario_manager().GetScenario(original_base_scenario_name);
-        if (!original_base_scenario.has_value()) {
-          // This should have been validated earlier. Source should have been present.
-          return false;
-        }
-        if (!app_.scenario_manager().RenameScenario(original_base_scenario->name,
-                                                    ResourceName::Parse(new_base_scenario_name))) {
-          return false;
-        }
-      }
-    }
-
-    // The base scenario should exist now.
-    new_base_scenario = app_.scenario_manager().GetScenario(new_base_scenario_name);
-
-    for (int i = 2; i <= levels.max_level(); ++i) {
-      std::string name = AddLevelSuffix(final_name.full_name(), i);
-
-      if (is_rename) {
-        // The playlist was renamed. Rename this level if it exists. It will be updated or created
-        // as necessary later.
-        std::string old_name = AddLevelSuffix(original_playlist_name_.full_name(), i);
-        auto old_scenario = app_.scenario_manager().GetScenario(old_name);
-        if (old_scenario.has_value()) {
-          if (!app_.scenario_manager().RenameScenario(ResourceName::Parse(old_name),
-                                                      ResourceName::Parse(name))) {
-            return false;
-          }
-        }
-      }
-
-      // Create chained references.
-      auto existing_scenario = app_.scenario_manager().GetScenario(name);
-      ScenarioDef def;
-      def.mutable_reference_def()->set_scenario_id(AddLevelSuffix(final_name.full_name(), i - 1));
-      *def.mutable_overrides() = levels_def_->scenario_overrides();
-      bool needs_save = true;
-      if (existing_scenario) {
-        if (google::protobuf::util::MessageDifferencer::Equivalent(
-                def, existing_scenario->unevaluated_def)) {
-          needs_save = false;
-        }
-      }
-      if (needs_save) {
-        if (!app_.scenario_manager().SaveScenario(ResourceName::Parse(name), def)) {
-          return false;
-        }
-      }
-    }
-
-    // If old max_levels was higher, delete scenarios that should no longer exist.
-    int old_max_levels = original_playlist_def_.scenario_levels_def().max_level();
-    for (int i = levels.max_level() + 1; i <= old_max_levels; ++i) {
-      std::string name = AddLevelSuffix(final_name.full_name(), i);
-      app_.scenario_manager().DeleteScenario(
-          ResourceName::Parse(AddLevelSuffix(final_name.full_name(), i)));
-      if (is_rename) {
-        app_.scenario_manager().DeleteScenario(
-            ResourceName::Parse(AddLevelSuffix(original_playlist_name_.full_name(), i)));
-      }
-    }
-
-    if (is_rename) {
-      app_.playlist_manager().ClearCurrentRun(final_name.full_name());
-    }
-
-    return true;
-  }
-
   bool SavePlaylist() {
     PlaylistDef playlist;
 
-    if (levels_def_) {
-      *playlist.mutable_scenario_levels_def() = *levels_def_;
-      // Did it change? We need to update and create scenarios if necessary.
-    } else {
-      playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
-    }
+    playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
 
     ResourceName final_name(bundle_name_, new_playlist_name_);
     bool name_changed = final_name != original_playlist_name_;
@@ -509,12 +256,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       }
     }
 
-    if (levels_def_) {
-      if (!EnsureLevelsAreSaved(*levels_def_, playlist, final_name)) {
-        return false;
-      }
-    }
-
     return app_.playlist_manager().SavePlaylist(final_name, playlist);
   }
 
@@ -522,9 +263,10 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   Screen& screen_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
+  int editing_i_ = -1;
+  bool focus_editor_ = false;
   ResourceName original_playlist_name_;
   std::string bundle_name_;
-  std::optional<ScenarioLevelsDef> levels_def_;
   std::string source_base_scenario_;
 
   std::string scenario_search_text_;

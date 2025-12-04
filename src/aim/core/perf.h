@@ -5,6 +5,26 @@
 
 namespace aim {
 
+struct TimeSpan {
+  i64 start = 0;
+  i64 end = 0;
+
+  float GetSeconds() {
+    i64 duration_micros = end - start;
+    if (duration_micros < 0) {
+      return 0;
+    }
+    return duration_micros / 1000000.0f;
+  }
+};
+
+struct InitializationTimes {
+  TimeSpan total;
+  TimeSpan load_bundles;
+  TimeSpan sdl;
+  TimeSpan db;
+};
+
 struct FrameTimes {
   // All times in micros;
   i64 start = 0;
@@ -21,6 +41,7 @@ struct FrameTimes {
   i64 render_targets_end = 0;
   i64 render_imgui_start = 0;
   i64 render_imgui_end = 0;
+
   i64 total = 0;
   i64 frame_number = 0;
 };
