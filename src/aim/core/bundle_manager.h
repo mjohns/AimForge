@@ -1,0 +1,27 @@
+#pragma once
+
+#include <string>
+
+#include "aim/proto/bundle.pb.h"
+
+namespace aim {
+
+class PlaylistManager;
+class ScenarioManager;
+class FileSystem;
+
+class BundleManager {
+ public:
+  BundleManager() {}
+  virtual ~BundleManager() {}
+
+  virtual void LoadBundlesFromDisk() = 0;
+
+  virtual bool SaveBundle(const std::string& bundle_name) = 0;
+};
+
+std::unique_ptr<BundleManager> CreateBundleManager(FileSystem* fs,
+                                                   PlaylistManager* playlist_manager,
+                                                   ScenarioManager* scenario_manager);
+
+}  // namespace aim

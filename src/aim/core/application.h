@@ -14,6 +14,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/core/application_state.h"
+#include "aim/core/bundle_manager.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/history_manager.h"
@@ -190,6 +191,7 @@ class Application {
   std::unique_ptr<CrosshairManager> crosshair_manager_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
+  std::unique_ptr<BundleManager> bundle_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
   std::unique_ptr<PlayTimeManager> play_time_manager_;
   std::unique_ptr<FontManager> font_manager_;

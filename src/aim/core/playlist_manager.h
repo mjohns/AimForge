@@ -11,6 +11,7 @@
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
+#include "aim/proto/bundle.pb.h"
 #include "aim/proto/playlist.pb.h"
 
 namespace aim {
@@ -79,6 +80,8 @@ class PlaylistManager {
   virtual ~PlaylistManager() {}
 
   virtual void LoadPlaylistsFromDisk() = 0;
+
+  virtual void AddPlaylistsForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
   virtual std::shared_ptr<PlaylistRun> GetCurrentRun() = 0;
 

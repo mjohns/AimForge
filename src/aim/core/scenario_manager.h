@@ -9,6 +9,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/core/screen.h"
+#include "aim/proto/bundle.pb.h"
 #include "aim/proto/scenario.pb.h"
 
 namespace aim {
@@ -31,6 +32,8 @@ struct ScenarioItem {
 class ScenarioManager {
  public:
   virtual ~ScenarioManager() {}
+
+  virtual void AddScenariosForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
   virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
 

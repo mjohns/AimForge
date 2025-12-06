@@ -134,9 +134,8 @@ int Application::Initialize() {
   stopwatch.Start();
 
   state_->initialization_times.total.start = stopwatch.GetElapsedMicros();
-  ScopeGuard initialization_done_guard([&]() {
-    state_->initialization_times.total.end = stopwatch.GetElapsedMicros();
-  });
+  ScopeGuard initialization_done_guard(
+      [&]() { state_->initialization_times.total.end = stopwatch.GetElapsedMicros(); });
 
   state_->initialization_times.sdl.start = stopwatch.GetElapsedMicros();
   // Setup SDL
@@ -188,7 +187,10 @@ int Application::Initialize() {
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(file_system_.get());
   stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
+  scenario_manager_ = CreateScenarioManager(file_system_.get());
   playlist_manager_ = CreatePlaylistManager(file_system_.get());
+  bundle_manager_ =
+      CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());
   history_manager_ = std::make_unique<HistoryManager>(file_system_.get(), playlist_manager_.get());
   labels_manager_ = std::make_unique<LabelsManager>(file_system_.get());
   settings_manager_ =
@@ -209,8 +211,6 @@ int Application::Initialize() {
   for (const std::string& scenario_id : history_manager_->recent_scenario_ids()) {
     stats_manager_->GetAggregateStats(scenario_id);
   }
-
-  scenario_manager_ = CreateScenarioManager(file_system_.get());
 
   std::vector<std::filesystem::path> sound_dirs = {
       file_system_->GetUserDataPath("resources/sounds"),
@@ -316,7 +316,6 @@ int Application::Initialize() {
 
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
-
   state_->initialization_times.load_bundles.start = stopwatch.GetElapsedMicros();
   playlist_manager_->LoadPlaylistsFromDisk();
   scenario_manager_->LoadScenariosFromDisk();
@@ -331,6 +330,8 @@ int Application::Initialize() {
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
 
+  bundle_manager_->SaveBundle("AF");
+  bundle_manager_->SaveBundle("VDIM");
   return 0;
 }
 

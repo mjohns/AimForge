@@ -84,6 +84,17 @@ class ScenarioManagerImpl : public ScenarioManager {
  public:
   explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {}
 
+  void AddScenariosForBundle(const std::string& bundle_name, BundleFile* bundle_file) override {
+    for (const std::string& full_name : *scenario_names_) {
+      ResourceName name = ResourceName::Parse(full_name);
+      if (name.bundle_name() == bundle_name) {
+        BundleScenario& bundle_scenario = *bundle_file->add_scenarios();
+        bundle_scenario.set_name(name.relative_name());
+        *bundle_scenario.mutable_def() = scenario_map_[full_name].def;
+      }
+    }
+  }
+
   std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) override {
     std::vector<std::string> names;
     for (const std::string& full_name : *scenario_names_) {

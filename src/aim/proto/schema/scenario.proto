@@ -178,7 +178,7 @@ message ScenarioDef {
 
   ScenarioOverrides overrides = 7;
 
-  // Defines the automatically created variations L1,L2,... and L-1,L-2,... 
+  // Defines the automatically created variations L1,L2,... and L-1,L-2,...
   ScenarioOverrides level_overrides = 12;
 
   ShotType shot_type = 8;

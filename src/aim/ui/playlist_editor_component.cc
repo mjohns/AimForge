@@ -172,8 +172,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           focus_editor_ = true;
         }
         if (ImGui::Selectable("Add levels")) {
-          //std::optional<std::string> base_name = StripLevelSuffix
-          //  item.scenario();
+          // std::optional<std::string> base_name = StripLevelSuffix
+          //   item.scenario();
         }
         ImGui::EndPopup();
       }

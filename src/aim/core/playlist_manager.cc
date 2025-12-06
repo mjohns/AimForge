@@ -67,6 +67,17 @@ class PlaylistManagerImpl : public PlaylistManager {
     playlist_run_map_.clear();
   }
 
+  void AddPlaylistsForBundle(const std::string& bundle_name, BundleFile* bundle_file) override {
+    for (const std::string& full_name : *playlist_names_) {
+      ResourceName name = ResourceName::Parse(full_name);
+      if (name.bundle_name() == bundle_name) {
+        BundlePlaylist& bundle_playlist = *bundle_file->add_playlists();
+        bundle_playlist.set_name(name.relative_name());
+        *bundle_playlist.mutable_def() = playlist_map_[full_name].def();
+      }
+    }
+  }
+
   std::shared_ptr<PlaylistRun> GetCurrentRun() override {
     if (current_playlist_name_.size() == 0) {
       return nullptr;

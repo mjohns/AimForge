@@ -1,0 +1,21 @@
+edition = "2023";
+
+import "scenario.proto";
+import "playlist.proto";
+
+package aim;
+
+message BundleScenario {
+  string name = 1;
+  ScenarioDef def = 2;
+}
+
+message BundlePlaylist {
+  string name = 1;
+  PlaylistDef def = 2;
+}
+
+message BundleFile {
+  repeated BundleScenario scenarios = 1;
+  repeated BundlePlaylist playlists = 2;
+}
