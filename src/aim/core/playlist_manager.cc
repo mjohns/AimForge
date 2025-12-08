@@ -55,7 +55,9 @@ std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
 
 class PlaylistManagerImpl : public PlaylistManager {
  public:
-  explicit PlaylistManagerImpl(FileSystem* fs) : fs_(fs) {}
+  explicit PlaylistManagerImpl(FileSystem* fs) : fs_(fs) {
+    playlist_names_ = std::make_shared<std::vector<std::string>>();
+  }
 
   void LoadPlaylistsFromDisk() override {
     for (BundleInfo& bundle : fs_->GetBundles()) {
@@ -63,6 +65,22 @@ class PlaylistManagerImpl : public PlaylistManager {
         playlist_map_[playlist.name.full_name()] = playlist;
       }
     }
+    UpdatePlaylistListFromMap();
+    playlist_run_map_.clear();
+  }
+
+  void StartReload() override {}
+
+  void LoadPlaylistsFromBundle(const std::string& bundle_name, const BundleFile& bundle) override {
+    for (const BundlePlaylist& playlist : bundle.playlists()) {
+      ResourceName name(bundle_name, playlist.name());
+      auto& item = playlist_map_[name.full_name()];
+      item.name = name;
+      *item.mutable_def() = playlist.def();
+    }
+  }
+
+  void FinishReload() override {
     UpdatePlaylistListFromMap();
     playlist_run_map_.clear();
   }
@@ -118,21 +136,6 @@ class PlaylistManagerImpl : public PlaylistManager {
     return playlist_names_;
   }
 
-  std::vector<std::string> FilterOutLevelsPlaylists(const std::vector<std::string>& all_playlists,
-                                                    int limit_size) override {
-    std::vector<std::string> result;
-    for (const std::string& playlist_name : all_playlists) {
-      if (result.size() >= limit_size) {
-        break;
-      }
-      auto playlist = GetPlaylist(playlist_name);
-      if (playlist && !playlist->def().has_scenario_levels_def()) {
-        result.push_back(playlist_name);
-      }
-    }
-    return result;
-  }
-
   std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const override {
     return GetPlaylist(playlist_name.full_name());
   }
@@ -168,7 +171,6 @@ class PlaylistManagerImpl : public PlaylistManager {
       progress.item = *item;
       run->progress_list.push_back(progress);
     }
-    SavePlaylist(playlist.name, playlist.def());
   }
 
   bool SavePlaylist(const ResourceName& name, const PlaylistDef& def) override {
@@ -187,30 +189,24 @@ class PlaylistManagerImpl : public PlaylistManager {
     return updated;
   }
 
+  void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) override {
+    auto& p = playlist_map_[name.full_name()];
+    p.name = name;
+    *p.mutable_def() = def;
+    UpdatePlaylistListFromMap();
+    UpdatePlaylistRun(name, def);
+    dirty_bundles_.insert(name.bundle_name());
+  }
+
   bool DeletePlaylist(const ResourceName& name) override {
-    auto path = GetPlaylistPath(fs_, name);
-    if (!path.has_value()) {
-      return false;
-    }
-    bool updated = std::filesystem::remove(*path);
-    if (updated) {
-      playlist_map_.erase(name.full_name());
-      playlist_run_map_.erase(name.full_name());
-      UpdatePlaylistListFromMap();
-    }
-    return updated;
+    playlist_map_.erase(name.full_name());
+    playlist_run_map_.erase(name.full_name());
+    UpdatePlaylistListFromMap();
+    dirty_bundles_.insert(name.bundle_name());
+    return true;
   }
 
   bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) override {
-    auto old_path = GetPlaylistPath(fs_, old_name);
-    if (!old_path.has_value()) {
-      return false;
-    }
-    auto new_path = GetPlaylistPath(fs_, new_name);
-    if (!new_path.has_value()) {
-      return false;
-    }
-    std::filesystem::rename(*old_path, *new_path);
     if (current_playlist_name_ == old_name.full_name()) {
       current_playlist_name_ = new_name.full_name();
     }
@@ -246,7 +242,7 @@ class PlaylistManagerImpl : public PlaylistManager {
       }
 
       if (changed) {
-        SavePlaylist(playlist.name, def);
+        dirty_bundles_.insert(playlist.name.bundle_name());
       }
     }
   }
@@ -259,6 +255,14 @@ class PlaylistManagerImpl : public PlaylistManager {
       }
     }
     return names;
+  }
+
+  std::unordered_set<std::string> GetDirtyBundles() override {
+    return dirty_bundles_;
+  }
+
+  void ClearDirtyBundles() override {
+    dirty_bundles_.clear();
   }
 
  private:
@@ -346,6 +350,7 @@ class PlaylistManagerImpl : public PlaylistManager {
   std::unordered_map<std::string, Playlist> playlist_map_;
   FileSystem* fs_;
   std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
+  std::unordered_set<std::string> dirty_bundles_;
 };
 
 }  // namespace

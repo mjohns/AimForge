@@ -59,7 +59,7 @@ bool WriteJsonMessageToFile(const std::filesystem::path& path,
 
 bool WriteBinaryMessageToFile(const std::filesystem::path& path,
                               const google::protobuf::Message& message) {
-  std::ofstream outfile(path);
+  std::ofstream outfile(path, std::ios::out | std::ios::trunc | std::ios::binary);
   if (!outfile.is_open()) {
     Logger::get()->warn("Unable to open file for writing: {}", path.string());
     return false;
@@ -91,6 +91,22 @@ bool ReadJsonMessageFromFile(const std::filesystem::path& path,
     return false;
   }
   return JsonToMessage(*maybe_content, message);
+}
+
+bool ReadBinaryMessageFromFile(const std::filesystem::path& path,
+                               google::protobuf::Message* message) {
+  if (!std::filesystem::exists(path)) {
+    return false;
+  }
+  std::ifstream file(path, std::ios::in | std::ios::binary);
+  if (!file.is_open()) {
+    return false;
+  }
+  if (!message->ParseFromIstream(&file)) {
+    return false;
+  }
+  file.close();
+  return true;
 }
 
 std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(

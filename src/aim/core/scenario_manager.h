@@ -4,6 +4,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 #include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
@@ -33,6 +34,12 @@ class ScenarioManager {
  public:
   virtual ~ScenarioManager() {}
 
+  virtual void StartReload() = 0;
+  virtual void LoadScenariosFromBundle(const std::string& bundle_name, const BundleFile& bundle) = 0;
+  virtual void FinishReload() = 0;
+  virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
+  virtual void ClearDirtyBundles() = 0;
+
   virtual void AddScenariosForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
   virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
@@ -42,11 +49,12 @@ class ScenarioManager {
   virtual std::shared_ptr<std::vector<std::string>> scenario_names() const = 0;
 
   virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
+  virtual void UpdateScenario(const ResourceName& name, const ScenarioDef& def) = 0;
 
   // Return the name the scenario was saved with if successful.
   virtual std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
                                                                  const ScenarioDef& def) = 0;
-  virtual bool DeleteScenario(const ResourceName& name) = 0;
+  virtual void DeleteScenario(const ResourceName& name) = 0;
 
   virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;
 

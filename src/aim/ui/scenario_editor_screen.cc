@@ -235,7 +235,6 @@ class ScenarioEditorScreen : public UiScreen {
         is_new_scenario ? std::format("{} Create", kIconAdd) : std::format("{} Update", kIconSave);
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
-        // app_.scenario_manager().LoadScenariosFromDisk();
         PopSelf();
       }
     }
@@ -407,6 +406,8 @@ class ScenarioEditorScreen : public UiScreen {
 
     bool is_new_file =
         !original_name_.has_value() || original_name_->full_name() != name_.full_name();
+    std::unordered_set<std::string> bundles_to_save;
+    bundles_to_save.insert(name_.bundle_name());
     if (is_new_file) {
       auto existing_scenario_with_name = mgr.GetScenario(name_.full_name());
       if (existing_scenario_with_name.has_value()) {
@@ -415,25 +416,26 @@ class ScenarioEditorScreen : public UiScreen {
       }
 
       if (original_name_.has_value()) {
-        if (!mgr.RenameScenario(*original_name_, name_)) {
-          SetErrorMessage(std::format("Unable to rename \"{}\" to \"{}\".",
-                                      original_name_->full_name(),
-                                      name_.full_name()));
-          return false;
-        }
+        bundles_to_save.insert(original_name_->bundle_name());
+        mgr.RenameScenario(*original_name_, name_);
       }
     }
 
-    if (!mgr.SaveScenario(name_, def_)) {
-      SetErrorMessage(std::format("Unable to save scenario \"{}\".", name_.full_name()));
-      return false;
+    if (add_to_playlist_.size() > 0) {
+      app_.playlist_manager().AddScenarioToPlaylist(add_to_playlist_, name_.full_name());
+      bundles_to_save.insert(ResourceName::Parse(add_to_playlist_).bundle_name());
+    }
+
+    mgr.UpdateScenario(name_, def_);
+    for (const std::string& bundle_name : bundles_to_save) {
+      if (!app_.bundle_manager().SaveBundle(bundle_name)) {
+        SetErrorMessage(std::format("Unable to save in bundle {}.", bundle_name));
+        return false;
+      }
     }
 
     app_.scenario_manager().SetCurrentScenario(name_.full_name());
     app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, name_.full_name());
-    if (add_to_playlist_.size() > 0) {
-      app_.playlist_manager().AddScenarioToPlaylist(add_to_playlist_, name_.full_name());
-    }
     return true;
   }
 

@@ -119,6 +119,11 @@ void PushBackAll(std::vector<T>* v, const std::vector<T>& values) {
 }
 
 template <typename T>
+void InsertAll(T* v, const T& values) {
+  v->insert(values.begin(), values.end());
+}
+
+template <typename T>
 bool VectorContains(const std::vector<T>& values, const T& value) {
   auto it = std::find(values.begin(), values.end(), value);
   return it != values.end();

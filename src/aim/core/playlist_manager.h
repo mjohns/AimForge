@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <unordered_set>
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -80,6 +81,12 @@ class PlaylistManager {
   virtual ~PlaylistManager() {}
 
   virtual void LoadPlaylistsFromDisk() = 0;
+  virtual void StartReload() = 0;
+  virtual void LoadPlaylistsFromBundle(const std::string& bundle_name, const BundleFile& bundle) = 0;
+  virtual void FinishReload() = 0;
+  virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
+  virtual void ClearDirtyBundles() = 0;
+
 
   virtual void AddPlaylistsForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
@@ -95,9 +102,6 @@ class PlaylistManager {
 
   virtual std::shared_ptr<std::vector<std::string>> playlist_names() const = 0;
 
-  virtual std::vector<std::string> FilterOutLevelsPlaylists(
-      const std::vector<std::string>& all_playlists, int limit_size = -1) = 0;
-
   virtual std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const = 0;
   virtual std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const = 0;
 
@@ -105,6 +109,11 @@ class PlaylistManager {
                                      const std::string& scenario_name) = 0;
 
   virtual bool SavePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
+  virtual void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
+
+  void UpdatePlaylist(const std::string& name, const PlaylistDef& def) {
+    return UpdatePlaylist(ResourceName::Parse(name), def);
+  }
 
   virtual bool DeletePlaylist(const ResourceName& name) = 0;
 

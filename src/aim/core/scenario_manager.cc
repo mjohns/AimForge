@@ -82,7 +82,9 @@ void LoadScenariosForBundle(const std::string& bundle_name,
 
 class ScenarioManagerImpl : public ScenarioManager {
  public:
-  explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {}
+  explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {
+    scenario_names_ = std::make_shared<std::vector<std::string>>();
+  }
 
   void AddScenariosForBundle(const std::string& bundle_name, BundleFile* bundle_file) override {
     for (const std::string& full_name : *scenario_names_) {
@@ -152,6 +154,14 @@ class ScenarioManagerImpl : public ScenarioManager {
     return item;
   }
 
+  std::unordered_set<std::string> GetDirtyBundles() override {
+    return dirty_bundles_;
+  }
+
+  void ClearDirtyBundles() override {
+    dirty_bundles_.clear();
+  }
+
   const std::string& GetCurrentScenarioId() override {
     return current_scenario_id_;
   }
@@ -171,6 +181,14 @@ class ScenarioManagerImpl : public ScenarioManager {
 
   std::shared_ptr<std::vector<std::string>> scenario_names() const override {
     return scenario_names_;
+  }
+
+  void UpdateScenario(const ResourceName& name, const ScenarioDef& def) override {
+    auto& item = scenario_map_[name.full_name()];
+    item.name = name;
+    item.def = def;
+    RebuildCachedScenarioList();
+    dirty_bundles_.insert(name.bundle_name());
   }
 
   bool SaveScenario(const ResourceName& name, const ScenarioDef& def) override {
@@ -203,30 +221,12 @@ class ScenarioManagerImpl : public ScenarioManager {
     return saved ? name : std::optional<ResourceName>{};
   }
 
-  bool DeleteScenario(const ResourceName& name) override {
-    auto path = GetScenarioPath(fs_, name);
-    if (!path.has_value()) {
-      return false;
-    }
-    bool deleted = std::filesystem::remove(*path);
-    if (deleted) {
-      scenario_map_.erase(name.full_name());
-      RebuildCachedScenarioList();
-    }
-    return deleted;
+  void DeleteScenario(const ResourceName& name) override {
+    scenario_map_.erase(name.full_name());
+    RebuildCachedScenarioList();
   }
 
   bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) override {
-    auto old_path = GetScenarioPath(fs_, old_name);
-    if (!old_path.has_value()) {
-      return false;
-    }
-    auto new_path = GetScenarioPath(fs_, new_name);
-    if (!new_path.has_value()) {
-      return false;
-    }
-    std::filesystem::rename(*old_path, *new_path);
-
     if (current_scenario_id_ == old_name.full_name()) {
       current_scenario_id_ = new_name.full_name();
     }
@@ -344,6 +344,23 @@ class ScenarioManagerImpl : public ScenarioManager {
     // WriteJsonMessageToFile(fs_->GetUserDataPath("scenarios.json"), scenario_file);
   }
 
+  void StartReload() override {
+    scenario_map_.clear();
+  }
+
+  void LoadScenariosFromBundle(const std::string& bundle_name, const BundleFile& bundle) override {
+    for (const BundleScenario& scenario : bundle.scenarios()) {
+      ResourceName name(bundle_name, scenario.name());
+      auto& item = scenario_map_[name.full_name()];
+      item.name = name;
+      item.def = scenario.def();
+    }
+  }
+
+  void FinishReload() override {
+    RebuildCachedScenarioList();
+  }
+
   void UpdateCachedScenario(const ResourceName& name, const ScenarioDef& new_def) {
     auto& item = scenario_map_[name.full_name()];
     item.name = name;
@@ -369,6 +386,7 @@ class ScenarioManagerImpl : public ScenarioManager {
   std::shared_ptr<Screen> current_running_scenario_;
 
   std::string current_scenario_id_;
+  std::unordered_set<std::string> dirty_bundles_;
 
   std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
       scenario_rename_listeners_;

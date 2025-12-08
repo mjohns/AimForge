@@ -317,8 +317,9 @@ int Application::Initialize() {
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
   state_->initialization_times.load_bundles.start = stopwatch.GetElapsedMicros();
-  playlist_manager_->LoadPlaylistsFromDisk();
-  scenario_manager_->LoadScenariosFromDisk();
+  bundle_manager_->LoadBundlesFromDisk();
+  // playlist_manager_->LoadPlaylistsFromDisk();
+  // scenario_manager_->LoadScenariosFromDisk();
   state_->initialization_times.load_bundles.end = stopwatch.GetElapsedMicros();
 
   scenario_manager_->RegisterRenameListener(
@@ -330,8 +331,13 @@ int Application::Initialize() {
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
 
+  /*
   bundle_manager_->SaveBundle("AF");
+  bundle_manager_->SaveBundle("SERF");
   bundle_manager_->SaveBundle("VDIM");
+  bundle_manager_->SaveBundle("SMOOTH");
+  */
+
   return 0;
 }
 

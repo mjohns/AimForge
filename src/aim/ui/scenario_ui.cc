@@ -55,6 +55,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
         app_->scenario_manager().DeleteScenario(maybe_scenario->name);
+        app_->bundle_manager().SaveBundle(maybe_scenario->name.bundle_name());
         result->reload_scenarios = true;
       }
     });
@@ -163,8 +164,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       if (ImGui::BeginMenu("Add to")) {
         ImGui::LoopId playlist_loop_id;
         std::string selected_playlist;
-        for (auto& playlist_name : app_->playlist_manager().FilterOutLevelsPlaylists(
-                 app_->history_manager().recent_playlists(), 15)) {
+        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
           auto id = playlist_loop_id.Get();
           if (ImGui::MenuItem(playlist_name.c_str())) {
             selected_playlist = playlist_name;
@@ -172,14 +172,14 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         }
         if (selected_playlist.size() > 0) {
           app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.id());
+          app_->bundle_manager().SaveBundle(ResourceName::Parse(selected_playlist).bundle_name());
         }
         ImGui::EndMenu();
       }
       if (ImGui::BeginMenu("Add copy to")) {
         ImGui::LoopId playlist_loop_id;
         std::string selected_playlist;
-        for (auto& playlist_name : app_->playlist_manager().FilterOutLevelsPlaylists(
-                 app_->history_manager().recent_playlists(), 15)) {
+        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
           auto id = playlist_loop_id.Get();
           if (ImGui::MenuItem(playlist_name.c_str())) {
             selected_playlist = playlist_name;

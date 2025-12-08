@@ -133,6 +133,10 @@ class Application {
     return *playlist_manager_;
   }
 
+  BundleManager& bundle_manager() {
+    return *bundle_manager_;
+  }
+
   HistoryManager& history_manager() {
     return *history_manager_;
   }

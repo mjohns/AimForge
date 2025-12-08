@@ -20,6 +20,7 @@ bool WriteBinaryMessageToFile(const std::filesystem::path& path,
 
 bool JsonToMessage(const std::string& json, google::protobuf::Message* message);
 bool ReadJsonMessageFromFile(const std::filesystem::path& path, google::protobuf::Message* message);
+bool ReadBinaryMessageFromFile(const std::filesystem::path& path, google::protobuf::Message* message);
 
 std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
     const std::filesystem::path& base_dir);

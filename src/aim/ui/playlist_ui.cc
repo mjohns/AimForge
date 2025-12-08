@@ -269,6 +269,8 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run,
       }
       if (selected_playlist.size() > 0) {
         screen.app().playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario_id);
+        screen.app().bundle_manager().SaveBundle(
+            ResourceName::Parse(selected_playlist).bundle_name());
       }
       ImGui::EndMenu();
     }
