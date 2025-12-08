@@ -134,14 +134,22 @@ std::optional<i64> ParseTimestampStringAsMicros(const std::string& timestamp) {
   return absl::ToUnixMicros(out);
 }
 
-i64 GetNowMicros() {
+i64 GetNowEpochMicros() {
   auto now = std::chrono::system_clock::now();
   return std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
 }
 
-i64 GetNowMillis() {
+i64 GetNowEpochMillis() {
   auto now = std::chrono::system_clock::now();
   return std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+}
+
+i64 GetNowEpochSeconds() {
+  return GetNowEpochMillis() / 1000;
+}
+
+i32 GetNowEpochMinutes() {
+  return GetNowEpochSeconds() / 60;
 }
 
 }  // namespace aim

@@ -80,7 +80,7 @@ class StatsScreen : public UiScreen {
  public:
   StatsScreen(std::string scenario_id, i64 run_id, Application* app)
       : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
-    screen_start_time_millis_ = GetNowMillis();
+    screen_start_time_millis_ = GetNowEpochMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_id);
     evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_id);
     if (scenario_) {
@@ -125,7 +125,7 @@ class StatsScreen : public UiScreen {
   }
 
   bool IsScreenOlderThan(i64 millis) {
-    i64 age_millis = GetNowMillis() - screen_start_time_millis_;
+    i64 age_millis = GetNowEpochMillis() - screen_start_time_millis_;
     return age_millis > millis;
   }
 
@@ -143,7 +143,7 @@ class StatsScreen : public UiScreen {
       return;
     }
 
-    i64 age_millis = GetNowMillis() - screen_start_time_millis_;
+    i64 age_millis = GetNowEpochMillis() - screen_start_time_millis_;
     if (!IsScreenOlderThan(100)) {
       return;
     }
@@ -318,7 +318,7 @@ class StatsScreen : public UiScreen {
     std::string time_ago;
     auto maybe_time = ParseTimestampStringAsMicros(comparison_stats.timestamp);
     if (maybe_time) {
-      ImGui::Text(GetHowLongAgoString(*maybe_time, GetNowMicros()));
+      ImGui::Text(GetHowLongAgoString(*maybe_time, GetNowEpochMicros()));
       ImGui::HelpTooltip(comparison_stats.timestamp);
     }
   }
@@ -540,7 +540,7 @@ class StatsScreen : public UiScreen {
       history_rows_ = std::vector<HistoryRow>();
       history_rows_->reserve(info_.all_stats.size());
       int run_number = 0;
-      i64 now = GetNowMicros();
+      i64 now = GetNowEpochMicros();
       for (StatsRow& stats : info_.all_stats) {
         run_number++;
         HistoryRow row;
@@ -656,7 +656,7 @@ class StatsScreen : public UiScreen {
     }
 
     i64 step = kDayMicros;
-    i64 now_micros = GetNowMicros();
+    i64 now_micros = GetNowEpochMicros();
 
     int found_max_index = -1;
     float max_score = 0;

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <algorithm>
-#include <unordered_set>
 #include <filesystem>
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "aim/common/random.h"
@@ -82,11 +82,11 @@ class PlaylistManager {
 
   virtual void LoadPlaylistsFromDisk() = 0;
   virtual void StartReload() = 0;
-  virtual void LoadPlaylistsFromBundle(const std::string& bundle_name, const BundleFile& bundle) = 0;
+  virtual void LoadPlaylistsFromBundle(const std::string& bundle_name,
+                                       const BundleFile& bundle) = 0;
   virtual void FinishReload() = 0;
   virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
   virtual void ClearDirtyBundles() = 0;
-
 
   virtual void AddPlaylistsForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 

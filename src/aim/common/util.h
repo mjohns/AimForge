@@ -64,6 +64,7 @@ bool IsInt(float value);
 std::string MaybeIntToString(float value, int decimal_places = 1);
 
 float ParseFloat(const std::string& text);
+i64 ParseInt(const std::string& text);
 
 template <typename T>
 bool IsValidIndex(const T& list, int i) {

@@ -8,6 +8,7 @@
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/resource_name.h"
+#include "aim/common/times.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/file_system.h"
 #include "aim/core/playlist_manager.h"
@@ -102,9 +103,7 @@ class BundleFunctionalTest : public ::testing::Test {
   void SetUp() override {
     std::filesystem::path base_temp_path = std::filesystem::temp_directory_path();
 
-    auto now = std::chrono::high_resolution_clock::now();
-    auto timestamp =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+    i64 timestamp = GetNowEpochMicros();
 
     std::random_device rd;
     std::mt19937 gen(rd());

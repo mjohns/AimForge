@@ -1,0 +1,672 @@
+#include "aim_db.h"
+
+#include <format>
+#include <string>
+
+#include "aim/common/files.h"
+#include "aim/common/log.h"
+#include "aim/common/times.h"
+#include "aim/database/sqlite_util.h"
+#include "sqlite3.h"
+
+namespace aim {
+namespace {
+
+const char* kCreatePlaylistsTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS Playlists (
+    PlaylistId INTEGER PRIMARY KEY AUTOINCREMENT,
+    PlaylistName TEXT NOT NULL,
+    Info BLOB
+);
+)AIMS";
+
+const char* kCreatePlaylistsByNameIndex = R"AIMS(
+CREATE UNIQUE INDEX IF NOT EXISTS PlaylistsByName ON Playlists(PlaylistName);
+)AIMS";
+
+const char* kCreatePlaylistSql = R"AIMS(
+INSERT INTO Playlists (PlaylistId, PlaylistName) VALUES (NULL, ?);
+)AIMS";
+
+const char* kGetAllPlaylistIdsSql = R"AIMS(
+SELECT PlaylistId, PlaylistName FROM Playlists;
+)AIMS";
+
+const char* kGetPlaylistIdSql = R"AIMS(
+SELECT PlaylistId FROM Playlists
+INDEXED BY PlaylistsByName
+WHERE PlaylistName = ?;
+)AIMS";
+
+const char* kUpdatePlaylistNameSql = R"AIMS(
+UPDATE Playlists SET PlaylistName = ? WHERE PlaylistId = ?;
+)AIMS";
+
+const char* kCreateScenariosTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS Scenarios (
+    ScenarioId INTEGER PRIMARY KEY AUTOINCREMENT,
+    ScenarioName TEXT NOT NULL,
+    Settings BLOB,
+    Info BLOB
+);
+)AIMS";
+
+const char* kCreateScenarioSql = R"AIMS(
+INSERT INTO Scenarios (ScenarioId, ScenarioName) VALUES (NULL, ?);
+)AIMS";
+
+const char* kGetScenarioIdSql = R"AIMS(
+SELECT ScenarioId FROM Scenarios
+INDEXED BY ScenariosByName
+WHERE ScenarioName = ?;
+)AIMS";
+
+const char* kUpdateScenarioSettingsSql = R"AIMS(
+UPDATE Scenarios SET Settings = ? WHERE ScenarioId = ?;
+)AIMS";
+
+const char* kUpdateScenarioNameSql = R"AIMS(
+UPDATE Scenarios SET ScenarioName = ? WHERE ScenarioId = ?;
+)AIMS";
+
+const char* kGetAllScenarioIdsSql = R"AIMS(
+SELECT ScenarioId, ScenarioName FROM Scenarios;
+)AIMS";
+
+const char* kGetScenarioSettingsSql = R"AIMS(
+SELECT Settings FROM Scenarios WHERE ScenarioId = ?;
+)AIMS";
+
+const char* kCreateScenariosByNameIndex = R"AIMS(
+CREATE UNIQUE INDEX IF NOT EXISTS ScenariosByName ON Scenarios(ScenarioName);
+)AIMS";
+
+const char* kCreateStatsTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS Stats (
+    ScenarioId INTEGER PRIMARY_KEY,
+    StatsId INTEGER PRIMARY KEY AUTOINCREMENT,
+    TimestampSeconds INTEGER NOT NULL,
+    Score REAL NOT NULL,
+    MmPer360 INTEGER NOT NULL,
+    Info BLOB,
+    FOREIGN KEY (ScenarioId) REFERENCES Scenarios(ScenarioId)
+);
+)AIMS";
+
+const char* kAddStatsSql = R"AIMS(
+INSERT INTO Stats (
+	StatsId,
+  ScenarioId,
+  TimestampSeconds,
+  Score,
+  MmPer360,
+  Info)
+VALUES (NULL, ?, ?, ?, ?, ?);
+)AIMS";
+
+const char* kGetStatsSql = R"AIMS(
+SELECT 
+  StatsId,
+  TimestampSeconds,
+  Score,
+  MmPer360,
+  Info
+FROM Stats
+WHERE ScenarioId = ?
+ORDER BY StatsId ASC;
+)AIMS";
+
+// Used to apply labels like "starred"
+const char* kCreateLabeledItemsTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS LabeledItems (
+    Label INTEGER NOT NULL,
+    Type INTEGER NOT NULL,
+    Id TEXT NOT NULL,
+    PRIMARY KEY (Label, Type, Id)
+);
+)AIMS";
+
+const char* kInsertLabeledItemSql = R"AIMS(
+INSERT OR REPLACE INTO LabeledItems (Label, Type, Id) VALUES ( ?, ?, ?)
+ON CONFLICT DO NOTHING;
+)AIMS";
+
+const char* kDeleteLabeledItemSql = R"AIMS(
+DELETE FROM LabeledItems WHERE Label = ? AND Type = ? AND Id = ?;
+)AIMS";
+
+const char* kGetLabeledItemsSql = R"AIMS(
+SELECT Id FROM LabeledItems WHERE Label = ? AND Type = ?;
+)AIMS";
+
+const char* kCreatePlayTimeTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS PlayTime (
+    PlayTimeId INTEGER PRIMARY KEY AUTOINCREMENT,
+    TimestampMinutes INTEGER,
+    DurationSeconds INTEGER,
+    ScenarioId INTEGER,
+    CmPer360 INTEGER,
+    IsCompleteRun INTEGER,
+    ShotType INTEGER
+);
+)AIMS";
+
+const char* kAddPlayTimeSql = R"AIMS(
+INSERT INTO PlayTime (
+	  PlayTimeId,
+    TimestampMinutes,
+    DurationSeconds,
+    ScenarioId,
+    CmPer360,
+    IsCompleteRun,
+    ShotType)
+VALUES (NULL, ?, ?, ?, ?, ?, ?);
+)AIMS";
+
+const char* kGetPlayTimeByShotTypeSql = R"AIMS(
+SELECT ShotType, IsCompleteRun, SUM(DurationSeconds)
+FROM PlayTime
+GROUP BY 1,2; 
+)AIMS";
+
+const char* kGetPlayTimeByCmPer360Sql = R"AIMS(
+SELECT CmPer360, IsCompleteRun, SUM(DurationSeconds)
+FROM PlayTime
+GROUP BY 1,2; 
+)AIMS";
+
+const char* kCreateRecentViewsTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS RecentViews (
+    Type INTEGER,
+    Id TEXT,
+    TimestampMicros INTEGER,
+    PRIMARY KEY (Type, Id)
+);
+)AIMS";
+
+const char* kInsertRecentViewsSql = R"AIMS(
+INSERT INTO RecentViews (Type, Id, TimestampMicros) VALUES (?, ?, ?)
+ON CONFLICT (Type, Id) DO UPDATE SET TimestampMicros = ?;
+)AIMS";
+
+const char* kGetRecentViewsForTypeSql = R"AIMS(
+SELECT Id, TimestampMicros
+FROM RecentViews
+WHERE Type = ?
+ORDER BY TimestampMicros DESC
+LIMIT ?;
+)AIMS";
+
+class AimDbImpl : public AimDb {
+ public:
+  explicit AimDbImpl(const std::filesystem::path& db_path) {
+    char* err_msg = 0;
+    std::string db_path_str = db_path.string();
+    int rc = sqlite3_open(db_path_str.c_str(), &db_);
+
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Cannot open aim db: {}", sqlite3_errmsg(db_));
+      sqlite3_close(db_);
+      db_ = nullptr;
+      return;
+    }
+
+    ExecuteSqliteQuery(db_, kCreateScenariosTable);
+    ExecuteSqliteQuery(db_, kCreateScenariosByNameIndex);
+    ExecuteSqliteQuery(db_, kCreatePlaylistsTable);
+    ExecuteSqliteQuery(db_, kCreatePlaylistsByNameIndex);
+    ExecuteSqliteQuery(db_, kCreateStatsTable);
+    ExecuteSqliteQuery(db_, kCreatePlayTimeTable);
+    ExecuteSqliteQuery(db_, kCreateRecentViewsTable);
+    ExecuteSqliteQuery(db_, kCreateLabeledItemsTable);
+  }
+
+  i64 CreatePlaylistEntry(const std::string& name) {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kCreatePlaylistSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return -1;
+    }
+
+    BindString(stmt, 1, name);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+    return sqlite3_last_insert_rowid(db_);
+  }
+
+  std::unordered_map<std::string, i64> GetPlaylistIdMap() override {
+    return GetNameToIdMap(kGetAllPlaylistIdsSql);
+  }
+
+  i64 GetPlaylistId(const std::string& name) override {
+    auto it = partial_playlist_id_map_.find(name);
+    if (it != partial_playlist_id_map_.end()) {
+      return it->second;
+    }
+    auto existing_entry = GetExistingIdFromDb(name, kGetPlaylistIdSql);
+    if (existing_entry) {
+      partial_playlist_id_map_[name] = *existing_entry;
+      return *existing_entry;
+    }
+    i64 playlist_id = CreatePlaylistEntry(name);
+    partial_playlist_id_map_[name] = playlist_id;
+    return playlist_id;
+  }
+
+  i64 RenamePlaylist(const std::string& old_name, const std::string& new_name) override {
+    i64 existing_id = GetPlaylistId(old_name);
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kUpdatePlaylistNameSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return existing_id;
+    }
+
+    BindString(stmt, 1, new_name);
+
+    sqlite3_bind_int64(stmt, 2, existing_id);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    // TODO: Check rename worked. new_name may have already existed.
+
+    partial_playlist_id_map_.erase(old_name);
+    partial_playlist_id_map_[new_name] = existing_id;
+    return existing_id;
+  }
+
+  i64 GetScenarioId(const std::string& name) override {
+    auto it = partial_scenario_id_map_.find(name);
+    if (it != partial_scenario_id_map_.end()) {
+      return it->second;
+    }
+    auto existing_entry = GetExistingIdFromDb(name, kGetScenarioIdSql);
+    if (existing_entry) {
+      partial_scenario_id_map_[name] = *existing_entry;
+      return *existing_entry;
+    }
+    i64 scenario_id = CreateScenarioEntry(name);
+    partial_scenario_id_map_[name] = scenario_id;
+    return scenario_id;
+  }
+
+  i64 CreateScenarioEntry(const std::string& name) {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kCreateScenarioSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return -1;
+    }
+
+    // This byte string needs to stay around until after step is done.
+    std::string settings_content;
+
+    BindString(stmt, 1, name);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+    return sqlite3_last_insert_rowid(db_);
+  }
+
+  i64 RenameScenario(const std::string& old_name, const std::string& new_name) override {
+    i64 existing_id = GetScenarioId(old_name);
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kUpdateScenarioNameSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return existing_id;
+    }
+
+    BindString(stmt, 1, new_name);
+
+    sqlite3_bind_int64(stmt, 2, existing_id);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    // TODO: Check rename worked. new_name may have already existed.
+
+    partial_scenario_id_map_.erase(old_name);
+    partial_scenario_id_map_[new_name] = existing_id;
+    return existing_id;
+  }
+
+  void UpdateScenarioSettings(i64 scenario_id, ScenarioSettings settings) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kUpdateScenarioSettingsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return;
+    }
+
+    std::string settings_content = settings.SerializeAsString();
+    sqlite3_bind_blob(stmt, 1, settings_content.data(), settings_content.size(), SQLITE_STATIC);
+
+    sqlite3_bind_int64(stmt, 2, scenario_id);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+  }
+
+  ScenarioSettings GetScenarioSettings(i64 scenario_id) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kGetScenarioSettingsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+
+    ScenarioSettings settings;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      if (!IsColumnNull(stmt, 0)) {
+        const void* blob_data = sqlite3_column_blob(stmt, 0);
+        int blob_size = sqlite3_column_bytes(stmt, 0);
+        settings.ParseFromArray(blob_data, blob_size);
+      }
+    }
+
+    sqlite3_finalize(stmt);
+    return settings;
+  }
+
+  std::unordered_map<std::string, i64> GetScenarioIdMap() override {
+    return GetNameToIdMap(kGetAllScenarioIdsSql);
+  }
+
+  bool AddStats(i64 scenario_id, StatsDbRow* row) override {
+    if (row->epoch_seconds < 0) {
+      row->epoch_seconds = GetNowEpochSeconds();
+    }
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kAddStatsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return false;
+    }
+
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+    sqlite3_bind_int64(stmt, 2, row->epoch_seconds);
+    sqlite3_bind_double(stmt, 3, row->score);
+    sqlite3_bind_int(stmt, 4, row->mm_per_360);
+
+    std::string info_content = row->info.SerializeAsString();
+    sqlite3_bind_blob(stmt, 5, info_content.data(), info_content.size(), SQLITE_STATIC);
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+    row->stats_id = sqlite3_last_insert_rowid(db_);
+
+    return true;
+  }
+
+  std::vector<StatsDbRow> GetStats(i64 scenario_id) {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, kGetStatsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+
+    std::vector<StatsDbRow> all_stats;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      all_stats.push_back({});
+      StatsDbRow& stats = all_stats.back();
+
+      stats.stats_id = sqlite3_column_int64(stmt, 0);
+      stats.epoch_seconds = sqlite3_column_int64(stmt, 1);
+      stats.score = sqlite3_column_double(stmt, 2);
+      stats.mm_per_360 = sqlite3_column_int(stmt, 3);
+      if (!IsColumnNull(stmt, 4)) {
+        const void* blob_data = sqlite3_column_blob(stmt, 4);
+        int blob_size = sqlite3_column_bytes(stmt, 4);
+        stats.info.ParseFromArray(blob_data, blob_size);
+      }
+    }
+
+    sqlite3_finalize(stmt);
+    return all_stats;
+  }
+
+  bool AddPlayTime(i64 scenario_id,
+                   float duration_seconds,
+                   const PlayTimeDetails& details) override {
+    // Don't store very short values.
+    if (duration_seconds < 1) {
+      return true;
+    }
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kAddPlayTimeSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return false;
+    }
+
+    sqlite3_bind_int64(stmt, 1, GetNowEpochMinutes());
+
+    sqlite3_bind_int(stmt, 2, (int)std::round(duration_seconds));
+    sqlite3_bind_int64(stmt, 3, scenario_id);
+    sqlite3_bind_int(stmt, 4, (int)std::round(details.cm_per_360));
+    sqlite3_bind_int(stmt, 5, details.is_complete_run);
+    sqlite3_bind_int(stmt, 6, details.shot_type);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    return true;
+  }
+
+  TotalPlaytime GetTotalPlaytime() override {
+    TotalPlaytime result;
+    result.play_times_by_shot_type = GetPlayTimeByShotType();
+    result.play_times_by_cm_per_360 = GetPlayTimeByIntKey(kGetPlayTimeByCmPer360Sql);
+    auto time_by_type = GetPlayTimeByIntKey(kGetPlayTimeByShotTypeSql);
+    for (auto& entry : result.play_times_by_shot_type) {
+      result.total.complete_run_time_seconds += entry.second.complete_run_time_seconds;
+      result.total.partial_run_time_seconds += entry.second.partial_run_time_seconds;
+    }
+    return result;
+  }
+
+  std::unordered_map<ShotType::TypeCase, PlayTimes> GetPlayTimeByShotType() {
+    auto time_by_type = GetPlayTimeByIntKey(kGetPlayTimeByShotTypeSql);
+
+    std::unordered_map<ShotType::TypeCase, PlayTimes> result;
+    for (auto& entry : time_by_type) {
+      ShotType::TypeCase shot_type = static_cast<ShotType::TypeCase>(entry.first);
+      result[shot_type] = entry.second;
+    }
+    return result;
+  }
+
+  std::unordered_map<int, PlayTimes> GetPlayTimeByIntKey(const char* querySql) {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, querySql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    std::unordered_map<int, PlayTimes> play_time_by_type;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      int type = sqlite3_column_int(stmt, 0);
+      auto& times = play_time_by_type[type];
+      bool is_complete_run = sqlite3_column_int64(stmt, 1);
+      int duration = sqlite3_column_int(stmt, 2);
+      if (is_complete_run) {
+        times.complete_run_time_seconds += duration;
+      } else {
+        times.partial_run_time_seconds += duration;
+      }
+    }
+    sqlite3_finalize(stmt);
+    return play_time_by_type;
+  }
+
+  void UpdateRecentView(ObjectType t, const std::string& id) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kInsertRecentViewsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return;
+    }
+
+    i64 now_micros = GetNowEpochMicros();
+
+    sqlite3_bind_int(stmt, 1, (int)t);
+    BindString(stmt, 2, id);
+    sqlite3_bind_int64(stmt, 3, now_micros);
+    sqlite3_bind_int64(stmt, 4, now_micros);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+  }
+
+  std::vector<RecentViewV2> GetRecentViews(ObjectType t, int limit) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kGetRecentViewsForTypeSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    sqlite3_bind_int(stmt, 1, (int)t);
+    sqlite3_bind_int(stmt, 2, limit);
+
+    std::vector<RecentViewV2> views;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      views.push_back({});
+      RecentViewV2& view = views.back();
+      view.id = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+      view.view_time_micros = sqlite3_column_int64(stmt, 1);
+    }
+
+    sqlite3_finalize(stmt);
+    return views;
+  }
+
+  void AddLabeledItem(int label, ObjectType type, const std::string& object_id) {
+    if (object_id.size() == 0) {
+      return;
+    }
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kInsertLabeledItemSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return;
+    }
+
+    sqlite3_bind_int(stmt, 1, label);
+    sqlite3_bind_int(stmt, 2, (int)type);
+    BindString(stmt, 3, object_id);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+  }
+
+  void RemoveLabeledItem(int label, ObjectType type, const std::string& object_id) {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kDeleteLabeledItemSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return;
+    }
+    sqlite3_bind_int(stmt, 1, label);
+    sqlite3_bind_int(stmt, 2, (int)type);
+    BindString(stmt, 3, object_id);
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+      Logger::get()->warn("Failed to delete labeled item for {}: {}", label, sqlite3_errmsg(db_));
+    }
+    sqlite3_finalize(stmt);
+  }
+
+  std::vector<std::string> GetLabeledItems(int label, ObjectType type) {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, kGetLabeledItemsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+    sqlite3_bind_int(stmt, 1, label);
+    sqlite3_bind_int(stmt, 2, (int)type);
+
+    std::vector<std::string> ids;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      std::string id = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+      ids.push_back(id);
+    }
+
+    sqlite3_finalize(stmt);
+    return ids;
+  }
+
+  ~AimDbImpl() override {
+    if (db_ != nullptr) {
+      sqlite3_close(db_);
+    }
+  }
+
+ private:
+  std::unordered_map<std::string, i64> GetNameToIdMap(const char* sql) {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    std::unordered_map<std::string, i64> name_to_id_map;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      i64 id = sqlite3_column_int64(stmt, 0);
+      name_to_id_map[reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1))] = id;
+    }
+
+    sqlite3_finalize(stmt);
+    return name_to_id_map;
+  }
+
+  std::optional<i64> GetExistingIdFromDb(const std::string& name, const char* sql) {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    BindString(stmt, 1, name);
+
+    std::optional<i64> id;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      id = sqlite3_column_int64(stmt, 0);
+    }
+
+    sqlite3_finalize(stmt);
+    return id;
+  }
+
+  std::unordered_map<std::string, i64> partial_scenario_id_map_;
+  std::unordered_map<std::string, i64> partial_playlist_id_map_;
+  sqlite3* db_ = nullptr;
+};
+
+}  // namespace
+
+std::unique_ptr<AimDb> CreateAimDb(const std::filesystem::path& db_path) {
+  return std::make_unique<AimDbImpl>(db_path);
+}
+
+}  // namespace aim

@@ -10,8 +10,11 @@
 namespace aim {
 
 std::string GetNowString();
-i64 GetNowMicros();
-i64 GetNowMillis();
+
+i64 GetNowEpochMicros();
+i64 GetNowEpochMillis();
+i64 GetNowEpochSeconds();
+i32 GetNowEpochMinutes();
 
 // Gets the interval between events in microseconds for a rate of n times per second.
 static i64 TimesPerSecondToIntervalMicros(float times_per_second) {

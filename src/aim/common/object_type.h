@@ -4,11 +4,11 @@
 
 namespace aim {
 
-enum class ObjectType {
-  SCENARIO,
-  PLAYLIST,
-  THEME,
-  CROSSHAIR,
+enum class ObjectType : int {
+  SCENARIO = 1,
+  PLAYLIST = 2,
+  THEME = 3,
+  CROSSHAIR = 4,
 };
 
 static std::string ObjectTypeToString(ObjectType t) {

@@ -182,6 +182,7 @@ int Application::Initialize() {
   InitializeAimForgeFolder(file_system_.get());
 
   state_->initialization_times.db.start = stopwatch.GetElapsedMicros();
+  db_ = CreateAimDb(file_system_->GetUserDataPath("db/aim.db"));
   local_store_ = std::make_unique<LocalStore>(file_system_.get());
   settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("db/settings.db"));
 

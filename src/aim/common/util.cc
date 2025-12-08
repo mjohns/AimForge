@@ -184,6 +184,10 @@ float ParseFloat(const std::string& text) {
   return strtod(text.c_str(), nullptr);
 }
 
+i64 ParseInt(const std::string& text) {
+  return std::stoll(text);
+}
+
 float FirstNonZero(float v1, float v2) {
   return v1 != 0 ? v1 : v2;
 }

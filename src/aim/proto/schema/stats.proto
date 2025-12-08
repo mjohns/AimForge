@@ -8,3 +8,25 @@ message StatsExtraInfo {
   double num_hits_50 = 2;
   double num_hits_25 = 3;
 }
+
+message ProximityPercentiles {
+  // Inner 90%
+  uint32 p90 = 1;
+
+  // Inner 80%
+  uint32 p80 = 2;
+
+  uint32 p70 = 3;
+  uint32 p60 = 4;
+  uint32 p50 = 5;
+  uint32 p40 = 6;
+  uint32 p30 = 7;
+  uint32 p20 = 8;
+  uint32 p10 = 9;
+}
+
+message StatsInfo {
+  float num_hits = 1;
+  float num_shots = 2;
+  ProximityPercentiles proximity_percentiles = 3;
+}

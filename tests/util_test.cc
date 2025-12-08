@@ -7,8 +7,8 @@
 
 using namespace aim;
 
-using ::testing::Optional;
 using ::testing::Eq;
+using ::testing::Optional;
 using ::testing::StrEq;
 
 TEST(UtilTest, StripLevelSuffix) {
@@ -79,4 +79,10 @@ TEST(UtilTest, GetLevelFromWord) {
   EXPECT_THAT(GetLevelFromWord("L-1"), Optional(-1));
   EXPECT_THAT(GetLevelFromWord("L-1.5"), Optional(-1.5));
   EXPECT_THAT(GetLevelFromWord("L0"), Optional(0));
+}
+
+TEST(UtilTest, ParseInt) {
+  EXPECT_THAT(ParseInt("1"), Eq(1));
+  EXPECT_THAT(ParseInt("-1"), Eq(-1));
+  EXPECT_THAT(ParseInt("145"), Eq(145));
 }

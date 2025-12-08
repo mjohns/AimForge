@@ -26,6 +26,7 @@
 #include "aim/core/screen.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
+#include "aim/database/aim_db.h"
 #include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/crosshair.h"
@@ -153,6 +154,10 @@ class Application {
     return *crosshair_manager_;
   }
 
+  AimDb& db() {
+    return *db_;
+  }
+
   spdlog::logger* logger() {
     return logger_.get();
   };
@@ -200,6 +205,7 @@ class Application {
   std::unique_ptr<PlayTimeManager> play_time_manager_;
   std::unique_ptr<FontManager> font_manager_;
   std::unique_ptr<LocalStore> local_store_;
+  std::unique_ptr<AimDb> db_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
   std::string imgui_ini_filename_;
