@@ -3,6 +3,7 @@
 #include <format>
 #include <string>
 
+#include "absl/strings/cord.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/times.h"
@@ -21,11 +22,15 @@ CREATE TABLE IF NOT EXISTS Scenarios (
 )AIMS";
 
 const char* kCreateScenarioSql = R"AIMS(
-INSERT INTO Scenarios (ScenarioId, ScenarioName) VALUES (NULL, ?);
+INSERT INTO Scenarios (ScenarioId, ScenarioName, Settings) VALUES (NULL, ?, ?);
 )AIMS";
 
 const char* kGetAllScenarioIdsSql = R"AIMS(
 SELECT ScenarioId, ScenarioName FROM Scenarios;
+)AIMS";
+
+const char* kGetScenarioSettingsSql = R"AIMS(
+SELECT Settings FROM Scenarios WHERE ScenarioId = ?;
 )AIMS";
 
 const char* kCreateScenarioNameIndex = R"AIMS(
@@ -70,17 +75,50 @@ class AimForgeDbImpl : public AimForgeDb {
     ExecuteSqliteQuery(db_, kCreateScenariosTable);
   }
 
-  i64 CreateScenarioEntry(const std::string& name) override {
+  i64 CreateScenarioEntry(const std::string& name,
+                          std::optional<ScenarioSettings> settings) override {
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kCreateScenarioSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
       Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
       return -1;
     }
+
+    // This byte string needs to stay around until after step is done.
+    std::string settings_content;
+
     BindString(stmt, 1, name);
+    if (settings.has_value()) {
+      settings_content = settings->SerializeAsString();
+      sqlite3_bind_blob(stmt, 2, settings_content.data(), settings_content.size(), SQLITE_STATIC);
+    } else {
+      sqlite3_bind_null(stmt, 2);
+    }
+
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
     return sqlite3_last_insert_rowid(db_);
+  }
+
+  ScenarioSettings GetScenarioSettings(i64 scenario_id) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kGetScenarioSettingsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+
+    ScenarioSettings settings;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      const void* blob_data = sqlite3_column_blob(stmt, 0);
+      int blob_size = sqlite3_column_bytes(stmt, 0);
+      settings.ParseFromArray(blob_data, blob_size);
+    }
+
+    sqlite3_finalize(stmt);
+    return settings;
   }
 
   std::unordered_map<std::string, i64> GetScenarioIdMap() override {
