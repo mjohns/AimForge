@@ -3,8 +3,8 @@
 #include <functional>
 #include <optional>
 #include <string>
-#include <vector>
 #include <unordered_set>
+#include <vector>
 
 #include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
@@ -35,7 +35,8 @@ class ScenarioManager {
   virtual ~ScenarioManager() {}
 
   virtual void StartReload() = 0;
-  virtual void LoadScenariosFromBundle(const std::string& bundle_name, const BundleFile& bundle) = 0;
+  virtual void LoadScenariosFromBundle(const std::string& bundle_name,
+                                       const BundleFile& bundle) = 0;
   virtual void FinishReload() = 0;
   virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
   virtual void ClearDirtyBundles() = 0;
@@ -50,6 +51,9 @@ class ScenarioManager {
 
   virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
   virtual void UpdateScenario(const ResourceName& name, const ScenarioDef& def) = 0;
+  void UpdateScenario(const std::string& name, const ScenarioDef& def) {
+    return UpdateScenario(ResourceName::Parse(name), def);
+  }
 
   // Return the name the scenario was saved with if successful.
   virtual std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
@@ -57,6 +61,9 @@ class ScenarioManager {
   virtual void DeleteScenario(const ResourceName& name) = 0;
 
   virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;
+  bool RenameScenario(const std::string& old_name, const std::string& new_name) {
+    return RenameScenario(ResourceName::Parse(old_name), ResourceName::Parse(new_name));
+  }
 
   virtual bool SetCurrentScenario(const std::string& scenario_id) = 0;
 

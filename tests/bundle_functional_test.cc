@@ -28,6 +28,7 @@ using ::testing::IsEmpty;
 using ::testing::Optional;
 using ::testing::ResultOf;
 using ::testing::StrEq;
+using ::testing::UnorderedElementsAre;
 
 namespace {
 
@@ -63,6 +64,14 @@ class BundleFunctionalTest : public ::testing::Test {
       item->set_scenario(name);
       item->set_num_plays(1);
     }
+    return def;
+  }
+
+  ScenarioDef DefaultScenarioDef() {
+    ScenarioDef def;
+    def.set_duration_seconds(60);
+    def.mutable_overrides()->set_speed_multiplier(2);
+    def.mutable_target_def()->add_profiles()->set_speed(1);
     return def;
   }
 
@@ -117,6 +126,9 @@ class BundleFunctionalTest : public ::testing::Test {
     playlist_manager_ = CreatePlaylistManager(fs_.get());
     bundle_manager_ =
         CreateBundleManager(fs_.get(), playlist_manager_.get(), scenario_manager_.get());
+
+    scenario_manager_->RegisterRenameListener(
+        std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
 
     auto bundles_dir = fs_->GetUserDataPath("bundles");
     std::filesystem::create_directory(bundles_dir);
@@ -309,7 +321,7 @@ TEST_F(BundleFunctionalTest, CreatePlaylist) {
   EXPECT_THAT(original_playlist->def(), EqualsProto(def));
 
   // Make sure reloading from disk preserves the scenario
-  EXPECT_THAT(bundle_manager_->GetDirtyBundles(), ElementsAre("Bundle"));
+  EXPECT_THAT(bundle_manager_->GetDirtyBundles(), UnorderedElementsAre("Bundle"));
   bundle_manager_->SaveDirtyBundles();
   EXPECT_THAT(bundle_manager_->GetDirtyBundles(), IsEmpty());
   bundle_manager_->LoadBundlesFromDisk();
@@ -322,10 +334,19 @@ TEST_F(BundleFunctionalTest, CreatePlaylist) {
 TEST_F(BundleFunctionalTest, RenameScenarioInPlaylist) {
   ResourceName playlist_name("B1", "Playlist");
 
-  PlaylistDef def =
-      PlaylistWithItems({"B1 Scenario1", "B1 Scenario2", "B2 Scenario1", "B2 Scenario2"});
+  scenario_manager_->UpdateScenario("B1 Scenario1", DefaultScenarioDef());
+  scenario_manager_->UpdateScenario("B1 Scenario2", DefaultScenarioDef());
+  scenario_manager_->UpdateScenario("B1 Scenario3", DefaultScenarioDef());
+  scenario_manager_->UpdateScenario("B2 Scenario1", DefaultScenarioDef());
+  scenario_manager_->UpdateScenario("B2 Scenario2", DefaultScenarioDef());
+  scenario_manager_->UpdateScenario("B2 Scenario3", DefaultScenarioDef());
 
-  playlist_manager_->UpdatePlaylist("B1 Playlist", def);
+  playlist_manager_->UpdatePlaylist(
+      "B1 Playlist",
+      PlaylistWithItems({"B1 Scenario1", "B1 Scenario2", "B2 Scenario1", "B2 Scenario2"}));
+
+  playlist_manager_->UpdatePlaylist(
+      "B2 Playlist", PlaylistWithItems({"B1 Scenario1", "B1 Scenario2", "B2 Scenario2"}));
 
   playlist_manager_->AddScenarioToPlaylist("B1 Playlist", "B2 Scenario 1");
 
@@ -336,9 +357,23 @@ TEST_F(BundleFunctionalTest, RenameScenarioInPlaylist) {
       EqualsProto(PlaylistWithItems(
           {"B1 Scenario1", "B1 Scenario2", "B2 Scenario1", "B2 Scenario2", "B2 Scenario 1"})));
 
+  playlist = playlist_manager_->GetPlaylist("B2 Playlist");
+  ASSERT_TRUE(playlist.has_value());
+  EXPECT_THAT(playlist->def(),
+              EqualsProto(PlaylistWithItems({"B1 Scenario1", "B1 Scenario2", "B2 Scenario2"})));
+
   // Make sure reloading from disk preserves the scenario
-  EXPECT_THAT(bundle_manager_->GetDirtyBundles(), ElementsAre("B1"));
+  EXPECT_THAT(bundle_manager_->GetDirtyBundles(), UnorderedElementsAre("B1", "B2"));
   bundle_manager_->SaveDirtyBundles();
   EXPECT_THAT(bundle_manager_->GetDirtyBundles(), IsEmpty());
-  bundle_manager_->LoadBundlesFromDisk();
+
+  scenario_manager_->RenameScenario("B1 Scenario1", "B3 Scenario3");
+  EXPECT_THAT(bundle_manager_->GetDirtyBundles(), UnorderedElementsAre("B1", "B2", "B3"));
+
+  playlist_manager_->UpdatePlaylist(
+      "B1 Playlist",
+      PlaylistWithItems({"B3 Scenario3", "B1 Scenario2", "B2 Scenario1", "B2 Scenario2"}));
+
+  playlist_manager_->UpdatePlaylist(
+      "B2 Playlist", PlaylistWithItems({"B3 Scenario3", "B1 Scenario2", "B2 Scenario2"}));
 }

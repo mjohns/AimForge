@@ -251,6 +251,8 @@ class ScenarioManagerImpl : public ScenarioManager {
       }
     }
 
+    dirty_bundles_.insert(old_name.bundle_name());
+    dirty_bundles_.insert(new_name.bundle_name());
     RebuildCachedScenarioList();
     return true;
   }
