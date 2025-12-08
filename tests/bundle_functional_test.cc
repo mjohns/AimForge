@@ -1,4 +1,3 @@
-
 #include <chrono>
 #include <filesystem>
 #include <fstream>
@@ -7,6 +6,7 @@
 #include <string>
 
 #include "aim/common/files.h"
+#include "aim/common/log.h"
 #include "aim/common/resource_name.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/file_system.h"
@@ -115,9 +115,6 @@ class BundleFunctionalTest : public ::testing::Test {
                                   "_" + std::to_string(random_suffix);
     temp_dir_path_ = base_temp_path / unique_dir_name;
 
-    // 3. Create the temporary directory.
-    //    ASSERT_TRUE is used here because if directory creation fails, subsequent tests will also
-    //    fail.
     ASSERT_TRUE(std::filesystem::create_directory(temp_dir_path_))
         << "Failed to create temporary directory: " << temp_dir_path_;
 
@@ -135,6 +132,7 @@ class BundleFunctionalTest : public ::testing::Test {
   }
 
   void TearDown() override {
+    Logger::getInstance().logger()->flush();
     if (std::filesystem::exists(temp_dir_path_)) {
       ASSERT_TRUE(std::filesystem::remove_all(temp_dir_path_))
           << "Failed to remove temporary directory: " << temp_dir_path_;
