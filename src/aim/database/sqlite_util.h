@@ -21,4 +21,8 @@ static void BindString(sqlite3_stmt* stmt, int index, const std::string& value) 
   sqlite3_bind_text(stmt, index, value.c_str(), value.size(), SQLITE_TRANSIENT);
 }
 
+static bool IsColumnNull(sqlite3_stmt* stmt, int index) {
+  return sqlite3_column_type(stmt, index) == SQLITE_NULL;
+}
+
 }  // namespace aim

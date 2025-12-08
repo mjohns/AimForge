@@ -112,9 +112,11 @@ class AimForgeDbImpl : public AimForgeDb {
 
     ScenarioSettings settings;
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-      const void* blob_data = sqlite3_column_blob(stmt, 0);
-      int blob_size = sqlite3_column_bytes(stmt, 0);
-      settings.ParseFromArray(blob_data, blob_size);
+      if (!IsColumnNull(stmt, 0)) {
+        const void* blob_data = sqlite3_column_blob(stmt, 0);
+        int blob_size = sqlite3_column_bytes(stmt, 0);
+        settings.ParseFromArray(blob_data, blob_size);
+      }
     }
 
     sqlite3_finalize(stmt);

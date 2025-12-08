@@ -65,12 +65,17 @@ class AimForgeDbTest : public ::testing::Test {
   }
 };
 
-TEST_F(AimForgeDbTest, TestCreateScenarioWithSettings) {
+TEST_F(AimForgeDbTest, CreateScenarioWithSettings) {
   ScenarioSettings settings;
   settings.set_cm_per_360(35);
   i64 id = db_->CreateScenarioEntry("Scenario", settings);
 
   EXPECT_THAT(db_->GetScenarioSettings(id), EqualsProto(settings));
+}
+
+TEST_F(AimForgeDbTest, GetScenarioSettings_ValueNull) {
+  i64 id = db_->CreateScenarioEntry("Scenario");
+  EXPECT_THAT(db_->GetScenarioSettings(id), EqualsProto(ScenarioSettings{}));
 }
 
 TEST_F(AimForgeDbTest, GetScenarioNameMap_NoEntries) {
