@@ -10,13 +10,11 @@
 #include <string>
 #include <vector>
 
-#include "absl/strings/ascii.h"
 #include "aim/common/simple_types.h"
 #include "aim/proto/common.pb.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
-#include "google/protobuf/message.h"
 #include "imgui.h"
 
 namespace aim {

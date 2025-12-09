@@ -4,6 +4,7 @@
 #include <functional>
 #include <optional>
 
+#include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"

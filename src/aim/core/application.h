@@ -27,7 +27,6 @@
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/database/aim_db.h"
-#include "aim/database/settings_db.h"
 #include "aim/database/stats_db.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
@@ -194,7 +193,6 @@ class Application {
   std::unique_ptr<StatsManager> stats_manager_;
   std::unique_ptr<SettingsManager> settings_manager_;
   std::unique_ptr<LabelsManager> labels_manager_;
-  std::unique_ptr<SettingsDb> settings_db_;
   std::unique_ptr<HistoryManager> history_manager_;
   std::unique_ptr<Renderer> renderer_;
   std::unique_ptr<CrosshairManager> crosshair_manager_;

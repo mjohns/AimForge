@@ -1,11 +1,10 @@
 #include "file_system.h"
 
-#include <SDL3/SDL_filesystem.h>
-
 #include <algorithm>
 #include <filesystem>
 #include <vector>
 
+#include "SDL3/SDL_filesystem.h"
 #include "aim/common/util.h"
 
 namespace aim {

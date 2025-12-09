@@ -184,7 +184,6 @@ int Application::Initialize() {
   state_->initialization_times.db.start = stopwatch.GetElapsedMicros();
   db_ = CreateAimDb(file_system_->GetUserDataPath("db/aim.db"));
   local_store_ = std::make_unique<LocalStore>(file_system_.get());
-  settings_db_ = std::make_unique<SettingsDb>(file_system_->GetUserDataPath("db/settings.db"));
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(file_system_.get());
   stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
@@ -194,13 +193,12 @@ int Application::Initialize() {
       CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());
   history_manager_ = CreateHistoryManager(db_.get());
   labels_manager_ = CreateLabelsManager(db_.get());
-  settings_manager_ =
-      std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
-                                        file_system_->GetUserDataPath("resources/themes"),
-                                        file_system_->GetUserDataPath("resources/textures"),
-                                        file_system_->GetUserDataPath("resources/crosshairs"),
-                                        settings_db_.get(),
-                                        history_manager_.get());
+  settings_manager_ = CreateSettingsManager(file_system_->GetUserDataPath("settings.json"),
+                                            file_system_->GetUserDataPath("resources/themes"),
+                                            file_system_->GetUserDataPath("resources/textures"),
+                                            file_system_->GetUserDataPath("resources/crosshairs"),
+                                            db_.get(),
+                                            history_manager_.get());
   state_->initialization_times.db.end = stopwatch.GetElapsedMicros();
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {

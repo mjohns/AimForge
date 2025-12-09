@@ -23,6 +23,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "google/protobuf/message.h"
+#include "google/protobuf/util/message_differencer.h"
 #include "imgui.h"
 
 namespace aim {

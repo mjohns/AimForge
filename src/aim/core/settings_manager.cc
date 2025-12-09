@@ -8,6 +8,7 @@
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
+#include "aim/common/proto_util.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -45,6 +46,380 @@ Settings GetDefaultSettings() {
 
   return settings;
 }
+
+class SettingsManagerImpl : public SettingsManager {
+ public:
+  SettingsManagerImpl(const std::filesystem::path& settings_path,
+                      const std::filesystem::path& theme_dir,
+                      const std::filesystem::path& texture_dir,
+                      const std::filesystem::path& crosshair_dir,
+                      AimDb* db,
+                      HistoryManager* history_manager)
+      : settings_path_(settings_path),
+        theme_dir_(theme_dir),
+        texture_dir_(texture_dir),
+        crosshair_dir_(crosshair_dir),
+        db_(db),
+        history_manager_(history_manager) {}
+
+  ~SettingsManagerImpl() override {
+    if (needs_save_) {
+      FlushToDisk("");
+    }
+  }
+
+  absl::Status Initialize() override {
+    // WriteJsonMessageToFile(theme_dirs_[0] / "default.json", GetDefaultTheme());
+
+    auto maybe_content = ReadFileContentAsString(settings_path_);
+    if (maybe_content.has_value()) {
+      google::protobuf::json::ParseOptions opts;
+      opts.ignore_unknown_fields = true;
+      opts.case_insensitive_enum_parsing = true;
+      std::string json = *maybe_content;
+      return google::protobuf::util::JsonStringToMessage(json, &settings_, opts);
+    }
+
+    // Write initial settings to file.
+    settings_ = GetDefaultSettings();
+    FlushToDisk("");
+    return absl::OkStatus();
+  }
+
+  std::vector<std::string> ListCrosshairs() override {
+    if (!std::filesystem::exists(crosshair_dir_) ||
+        !std::filesystem::is_directory(crosshair_dir_)) {
+      return {};
+    }
+
+    std::vector<std::string> valid_crosshair_names;
+    for (const auto& entry : std::filesystem::directory_iterator(crosshair_dir_)) {
+      std::string filename = entry.path().filename().string();
+      if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
+        std::string name(absl::StripSuffix(filename, ".json"));
+        valid_crosshair_names.push_back(name);
+      }
+    }
+
+    std::vector<std::string> names;
+    auto recent_crosshairs = history_manager_->GetRecentUniqueNames(ObjectType::CROSSHAIR, 10);
+    for (auto& crosshair_name : recent_crosshairs) {
+      if (VectorContains(valid_crosshair_names, crosshair_name)) {
+        names.push_back(crosshair_name);
+      }
+    }
+
+    for (auto& crosshair_name : valid_crosshair_names) {
+      if (!VectorContains(names, crosshair_name)) {
+        names.push_back(crosshair_name);
+      }
+    }
+    return names;
+  }
+  SettingsUpdater CreateUpdater() {
+    return SettingsUpdater(this, history_manager_);
+  }
+
+  void RenameScenario(const std::string& old_name, const std::string& new_name) {
+    scenario_settings_cache_.erase(old_name);
+  }
+
+  std::vector<std::string> ListThemes() {
+    if (!std::filesystem::exists(theme_dir_) || !std::filesystem::is_directory(theme_dir_)) {
+      return {};
+    }
+
+    std::vector<std::string> all_theme_names;
+    for (const auto& entry : std::filesystem::directory_iterator(theme_dir_)) {
+      std::string filename = entry.path().filename().string();
+      if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
+        std::string name(absl::StripSuffix(filename, ".json"));
+        all_theme_names.push_back(name);
+      }
+    }
+
+    std::vector<std::string> theme_names;
+    auto recent_themes = history_manager_->GetRecentViews(ObjectType::THEME, 20);
+    for (auto& recent_theme : recent_themes) {
+      if (VectorContains(all_theme_names, recent_theme.name)) {
+        theme_names.push_back(recent_theme.name);
+      }
+    }
+
+    for (auto& theme_name : all_theme_names) {
+      if (!VectorContains(theme_names, theme_name)) {
+        theme_names.push_back(theme_name);
+      }
+    }
+    return theme_names;
+  }
+
+  std::vector<std::string> ListTextures() {
+    std::vector<std::string> texture_names;
+    for (const auto& entry : std::filesystem::directory_iterator(texture_dir_)) {
+      std::string filename = entry.path().filename().string();
+      if (std::filesystem::is_regular_file(entry)) {
+        texture_names.push_back(filename);
+      }
+    }
+    return texture_names;
+  }
+
+  Crosshair GetCrosshair(const std::string& name) {
+    auto it = crosshair_cache_.find(name);
+    if (it != crosshair_cache_.end()) {
+      return it->second;
+    }
+
+    auto path = crosshair_dir_ / std::format("{}.json", name);
+    Crosshair crosshair = GetDefaultCrosshair();
+    if (std::filesystem::exists(path)) {
+      if (!ReadJsonMessageFromFile(path, &crosshair)) {
+        Logger::get()->warn("Unable to parse crosshair json file for {}", name);
+        crosshair = GetDefaultCrosshair();
+      }
+    }
+
+    // Cache invalid entries too with the default value.
+    crosshair_cache_[name] = crosshair;
+    return crosshair;
+  }
+
+  bool CrosshairExists(const std::string& name) {
+    return std::filesystem::exists(GetCrosshairPath(name));
+  }
+
+  bool ThemeExists(const std::string& name) {
+    return std::filesystem::exists(GetThemePath(name));
+  }
+
+  bool SaveCrosshair(const std::string& name, const Crosshair& crosshair) {
+    bool saved = WriteJsonMessageToFile(GetCrosshairPath(name), crosshair);
+    if (saved) {
+      crosshair_cache_[name] = crosshair;
+    }
+    return saved;
+  }
+
+  std::filesystem::path GetCrosshairPath(const std::string& name) {
+    return crosshair_dir_ / std::format("{}.json", name);
+  }
+
+  std::filesystem::path GetThemePath(const std::string& name) {
+    return theme_dir_ / std::format("{}.json", name);
+  }
+
+  bool DeleteCrosshair(const std::string& name) {
+    return std::filesystem::remove(GetCrosshairPath(name));
+  }
+
+  void RenameCrosshair(const std::string& old_name, const std::string& new_name) {
+    std::filesystem::rename(GetCrosshairPath(old_name), GetCrosshairPath(new_name));
+    crosshair_cache_.erase(old_name);
+    crosshair_cache_.erase(new_name);
+  }
+
+  Theme GetTheme(const std::string& theme_name) {
+    std::string current_theme_name = theme_name;
+    for (int i = 0; i < 20; ++i) {
+      Theme theme = GetThemeNoReferenceFollow(current_theme_name);
+      if (!theme.has_reference()) {
+        return theme;
+      }
+      current_theme_name = theme.reference();
+    }
+
+    return GetDefaultTheme();
+  }
+
+  Theme GetThemeNoReferenceFollow(const std::string& theme_name) {
+    if (theme_name.size() == 0) {
+      return GetDefaultTheme();
+    }
+    auto it = theme_cache_.find(theme_name);
+    if (it != theme_cache_.end()) {
+      return it->second.theme;
+    }
+
+    auto path = theme_dir_ / std::format("{}.json", theme_name);
+    if (std::filesystem::exists(path)) {
+      Theme theme;
+      if (ReadJsonMessageFromFile(path, &theme)) {
+        if (!theme.has_health_bar()) {
+          *theme.mutable_health_bar() = GetDefaultHealthBarAppearance();
+        }
+        ThemeCacheEntry entry;
+        theme.set_name(theme_name);
+        entry.theme = theme;
+        entry.file_path = path;
+        entry.last_modified_time = std::filesystem::last_write_time(path);
+        theme_cache_[theme_name] = entry;
+        return theme;
+      }
+    }
+
+    return GetDefaultTheme();
+  }
+
+  Theme GetCurrentTheme() {
+    Settings* settings = GetMutableCurrentSettings();
+    if (settings == nullptr) {
+      return GetDefaultTheme();
+    }
+    return GetTheme(settings->theme_name());
+  }
+
+  bool SaveTheme(const std::string& theme_name, const Theme& theme) {
+    bool saved = WriteJsonMessageToFile(GetThemePath(theme_name), theme);
+    if (saved) {
+      theme_cache_.erase(theme_name);
+    }
+    return saved;
+  }
+
+  bool DeleteTheme(const std::string& name) {
+    return std::filesystem::remove(GetThemePath(name));
+  }
+
+  void RenameTheme(const std::string& old_name, const std::string& new_name) {
+    std::filesystem::rename(GetThemePath(old_name), GetThemePath(new_name));
+    theme_cache_.erase(old_name);
+    theme_cache_.erase(new_name);
+  }
+
+  void MaybeInvalidateThemeCache() {
+    bool something_changed = false;
+    for (auto& map_entry : theme_cache_) {
+      auto& cache_entry = map_entry.second;
+      auto last_modified_time = std::filesystem::last_write_time(cache_entry.file_path);
+      if (last_modified_time > cache_entry.last_modified_time) {
+        Logger::get()->info("Invalidate theme cache entry for {}", map_entry.first);
+        something_changed = true;
+      }
+    }
+    if (something_changed) {
+      // Invalidate everything since references could not have changed while the theme they point to
+      // changed.
+      theme_cache_.clear();
+    }
+  }
+
+  float GetDpi() {
+    float dpi = settings_.dpi();
+    return dpi > 0 ? dpi : kDefaultDpi;
+  }
+
+  Settings GetCurrentSettingsForScenario(const std::string& scenario_name) {
+    if (settings_.disable_per_scenario_settings() || scenario_name.size() == 0) {
+      return settings_;
+    }
+    auto it = scenario_settings_cache_.find(scenario_name);
+    ScenarioSettings scenario_settings;
+    bool missing_scenario_settings = false;
+    if (it != scenario_settings_cache_.end()) {
+      scenario_settings = it->second;
+    } else {
+      i64 scenario_id = db_->GetScenarioId(scenario_name);
+      scenario_settings = db_->GetScenarioSettings(scenario_id);
+      if (!IsDefaultInstance(scenario_settings)) {
+        scenario_settings_cache_[scenario_name] = scenario_settings;
+      } else {
+        missing_scenario_settings = true;
+      }
+    }
+
+    if (scenario_settings.has_cm_per_360()) {
+      settings_.set_cm_per_360(scenario_settings.cm_per_360());
+    }
+    if (scenario_settings.has_cm_per_360_jitter()) {
+      settings_.set_cm_per_360_jitter(scenario_settings.cm_per_360_jitter());
+    }
+    if (scenario_settings.has_theme_name()) {
+      settings_.set_theme_name(scenario_settings.theme_name());
+    }
+    if (scenario_settings.has_metronome_bpm()) {
+      settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
+    }
+    if (scenario_settings.has_crosshair_size()) {
+      settings_.set_crosshair_size(scenario_settings.crosshair_size());
+    }
+    if (scenario_settings.has_crosshair_name()) {
+      settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
+    }
+    if (scenario_settings.has_auto_hold_tracking()) {
+      settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
+    }
+    if (scenario_settings.has_health_bar()) {
+      *settings_.mutable_health_bar() = scenario_settings.health_bar();
+    }
+
+    if (missing_scenario_settings) {
+      WriteScenarioSettings(scenario_name);
+    }
+
+    return settings_;
+  }
+
+  Settings GetCurrentSettings() {
+    return settings_;
+  }
+
+  Settings* GetMutableCurrentSettings() {
+    return &settings_;
+  }
+
+  Crosshair GetCurrentCrosshair() {
+    Settings settings = GetCurrentSettings();
+    return GetCrosshair(settings.current_crosshair_name());
+  }
+
+  void MarkDirty() {
+    needs_save_ = true;
+  }
+
+  bool MaybeFlushToDisk(const std::string& scenario_id) {
+    if (needs_save_) {
+      FlushToDisk(scenario_id);
+      return true;
+    }
+    return false;
+  }
+
+  void WriteScenarioSettings(const std::string& scenario_name) {
+    if (scenario_name.size() > 0) {
+      ScenarioSettings scenario_settings;
+      scenario_settings.set_crosshair_size(settings_.crosshair_size());
+      scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
+      scenario_settings.set_cm_per_360(settings_.cm_per_360());
+      scenario_settings.set_cm_per_360_jitter(settings_.cm_per_360_jitter());
+      scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
+      scenario_settings.set_theme_name(settings_.theme_name());
+      scenario_settings.set_auto_hold_tracking(settings_.auto_hold_tracking());
+      i64 scenario_id = db_->GetScenarioId(scenario_name);
+      db_->UpdateScenarioSettings(scenario_id, scenario_settings);
+      scenario_settings_cache_[scenario_name] = scenario_settings;
+    }
+  }
+
+  void FlushToDisk(const std::string& scenario_name) {
+    WriteScenarioSettings(scenario_name);
+    if (WriteJsonMessageToFile(settings_path_, settings_)) {
+      needs_save_ = false;
+    }
+  }
+
+  std::filesystem::path settings_path_;
+  Settings settings_;
+  bool needs_save_ = false;
+  std::filesystem::path theme_dir_;
+  std::filesystem::path texture_dir_;
+  std::filesystem::path crosshair_dir_;
+  std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
+  std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
+  std::unordered_map<std::string, Crosshair> crosshair_cache_;
+  AimDb* db_;
+  HistoryManager* history_manager_;
+};
 
 }  // namespace
 
@@ -114,356 +489,6 @@ bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& map
   return false;
 }
 
-SettingsManager::SettingsManager(const std::filesystem::path& settings_path,
-                                 const std::filesystem::path& theme_dir,
-                                 const std::filesystem::path& texture_dir,
-                                 const std::filesystem::path& crosshair_dir,
-                                 SettingsDb* settings_db,
-                                 HistoryManager* history_manager)
-    : settings_path_(settings_path),
-      theme_dir_(theme_dir),
-      texture_dir_(texture_dir),
-      crosshair_dir_(crosshair_dir),
-      settings_db_(settings_db),
-      history_manager_(history_manager) {}
-
-SettingsManager::~SettingsManager() {
-  if (needs_save_) {
-    FlushToDisk("");
-  }
-}
-
-absl::Status SettingsManager::Initialize() {
-  // WriteJsonMessageToFile(theme_dirs_[0] / "default.json", GetDefaultTheme());
-
-  auto maybe_content = ReadFileContentAsString(settings_path_);
-  if (maybe_content.has_value()) {
-    google::protobuf::json::ParseOptions opts;
-    opts.ignore_unknown_fields = true;
-    opts.case_insensitive_enum_parsing = true;
-    std::string json = *maybe_content;
-    return google::protobuf::util::JsonStringToMessage(json, &settings_, opts);
-  }
-
-  // Write initial settings to file.
-  settings_ = GetDefaultSettings();
-  FlushToDisk("");
-  return absl::OkStatus();
-}
-
-std::vector<std::string> SettingsManager::ListCrosshairs() {
-  auto recent_crosshairs = history_manager_->GetRecentUniqueNames(ObjectType::CROSSHAIR, 10);
-  if (!std::filesystem::exists(crosshair_dir_) || !std::filesystem::is_directory(crosshair_dir_)) {
-    return {};
-  }
-
-  std::vector<std::string> valid_crosshair_names;
-  for (const auto& entry : std::filesystem::directory_iterator(crosshair_dir_)) {
-    std::string filename = entry.path().filename().string();
-    if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
-      std::string name(absl::StripSuffix(filename, ".json"));
-      valid_crosshair_names.push_back(name);
-    }
-  }
-
-  std::vector<std::string> names;
-  for (auto& crosshair_name : recent_crosshairs) {
-    if (VectorContains(valid_crosshair_names, crosshair_name)) {
-      names.push_back(crosshair_name);
-    }
-  }
-
-  for (auto& crosshair_name : valid_crosshair_names) {
-    if (!VectorContains(names, crosshair_name)) {
-      names.push_back(crosshair_name);
-    }
-  }
-  return names;
-}
-
-std::vector<std::string> SettingsManager::ListThemes() {
-  if (!std::filesystem::exists(theme_dir_) || !std::filesystem::is_directory(theme_dir_)) {
-    return {};
-  }
-
-  std::vector<std::string> all_theme_names;
-  for (const auto& entry : std::filesystem::directory_iterator(theme_dir_)) {
-    std::string filename = entry.path().filename().string();
-    if (std::filesystem::is_regular_file(entry) && filename.ends_with(".json")) {
-      std::string name(absl::StripSuffix(filename, ".json"));
-      all_theme_names.push_back(name);
-    }
-  }
-
-  std::vector<std::string> theme_names;
-  auto recent_themes = history_manager_->GetRecentViews(ObjectType::THEME, 20);
-  for (auto& recent_theme : recent_themes) {
-    if (VectorContains(all_theme_names, recent_theme.name)) {
-      theme_names.push_back(recent_theme.name);
-    }
-  }
-
-  for (auto& theme_name : all_theme_names) {
-    if (!VectorContains(theme_names, theme_name)) {
-      theme_names.push_back(theme_name);
-    }
-  }
-  return theme_names;
-}
-
-std::vector<std::string> SettingsManager::ListTextures() {
-  std::vector<std::string> texture_names;
-  for (const auto& entry : std::filesystem::directory_iterator(texture_dir_)) {
-    std::string filename = entry.path().filename().string();
-    if (std::filesystem::is_regular_file(entry)) {
-      texture_names.push_back(filename);
-    }
-  }
-  return texture_names;
-}
-
-Crosshair SettingsManager::GetCrosshair(const std::string& name) {
-  auto it = crosshair_cache_.find(name);
-  if (it != crosshair_cache_.end()) {
-    return it->second;
-  }
-
-  auto path = crosshair_dir_ / std::format("{}.json", name);
-  Crosshair crosshair = GetDefaultCrosshair();
-  if (std::filesystem::exists(path)) {
-    if (!ReadJsonMessageFromFile(path, &crosshair)) {
-      Logger::get()->warn("Unable to parse crosshair json file for {}", name);
-      crosshair = GetDefaultCrosshair();
-    }
-  }
-
-  // Cache invalid entries too with the default value.
-  crosshair_cache_[name] = crosshair;
-  return crosshair;
-}
-
-bool SettingsManager::CrosshairExists(const std::string& name) {
-  return std::filesystem::exists(GetCrosshairPath(name));
-}
-
-bool SettingsManager::ThemeExists(const std::string& name) {
-  return std::filesystem::exists(GetThemePath(name));
-}
-
-bool SettingsManager::SaveCrosshair(const std::string& name, const Crosshair& crosshair) {
-  bool saved = WriteJsonMessageToFile(GetCrosshairPath(name), crosshair);
-  if (saved) {
-    crosshair_cache_[name] = crosshair;
-  }
-  return saved;
-}
-
-std::filesystem::path SettingsManager::GetCrosshairPath(const std::string& name) {
-  return crosshair_dir_ / std::format("{}.json", name);
-}
-
-std::filesystem::path SettingsManager::GetThemePath(const std::string& name) {
-  return theme_dir_ / std::format("{}.json", name);
-}
-
-bool SettingsManager::DeleteCrosshair(const std::string& name) {
-  return std::filesystem::remove(GetCrosshairPath(name));
-}
-
-void SettingsManager::RenameCrosshair(const std::string& old_name, const std::string& new_name) {
-  std::filesystem::rename(GetCrosshairPath(old_name), GetCrosshairPath(new_name));
-  crosshair_cache_.erase(old_name);
-  crosshair_cache_.erase(new_name);
-}
-
-Theme SettingsManager::GetTheme(const std::string& theme_name) {
-  std::string current_theme_name = theme_name;
-  for (int i = 0; i < 20; ++i) {
-    Theme theme = GetThemeNoReferenceFollow(current_theme_name);
-    if (!theme.has_reference()) {
-      return theme;
-    }
-    current_theme_name = theme.reference();
-  }
-
-  return GetDefaultTheme();
-}
-
-Theme SettingsManager::GetThemeNoReferenceFollow(const std::string& theme_name) {
-  if (theme_name.size() == 0) {
-    return GetDefaultTheme();
-  }
-  auto it = theme_cache_.find(theme_name);
-  if (it != theme_cache_.end()) {
-    return it->second.theme;
-  }
-
-  auto path = theme_dir_ / std::format("{}.json", theme_name);
-  if (std::filesystem::exists(path)) {
-    Theme theme;
-    if (ReadJsonMessageFromFile(path, &theme)) {
-      if (!theme.has_health_bar()) {
-        *theme.mutable_health_bar() = GetDefaultHealthBarAppearance();
-      }
-      ThemeCacheEntry entry;
-      theme.set_name(theme_name);
-      entry.theme = theme;
-      entry.file_path = path;
-      entry.last_modified_time = std::filesystem::last_write_time(path);
-      theme_cache_[theme_name] = entry;
-      return theme;
-    }
-  }
-
-  return GetDefaultTheme();
-}
-
-Theme SettingsManager::GetCurrentTheme() {
-  Settings* settings = GetMutableCurrentSettings();
-  if (settings == nullptr) {
-    return GetDefaultTheme();
-  }
-  return GetTheme(settings->theme_name());
-}
-
-bool SettingsManager::SaveTheme(const std::string& theme_name, const Theme& theme) {
-  bool saved = WriteJsonMessageToFile(GetThemePath(theme_name), theme);
-  if (saved) {
-    theme_cache_.erase(theme_name);
-  }
-  return saved;
-}
-
-bool SettingsManager::DeleteTheme(const std::string& name) {
-  return std::filesystem::remove(GetThemePath(name));
-}
-
-void SettingsManager::RenameTheme(const std::string& old_name, const std::string& new_name) {
-  std::filesystem::rename(GetThemePath(old_name), GetThemePath(new_name));
-  theme_cache_.erase(old_name);
-  theme_cache_.erase(new_name);
-}
-
-void SettingsManager::MaybeInvalidateThemeCache() {
-  bool something_changed = false;
-  for (auto& map_entry : theme_cache_) {
-    auto& cache_entry = map_entry.second;
-    auto last_modified_time = std::filesystem::last_write_time(cache_entry.file_path);
-    if (last_modified_time > cache_entry.last_modified_time) {
-      Logger::get()->info("Invalidate theme cache entry for {}", map_entry.first);
-      something_changed = true;
-    }
-  }
-  if (something_changed) {
-    // Invalidate everything since references could not have changed while the theme they point to
-    // changed.
-    theme_cache_.clear();
-  }
-}
-
-float SettingsManager::GetDpi() {
-  float dpi = settings_.dpi();
-  return dpi > 0 ? dpi : kDefaultDpi;
-}
-
-Settings SettingsManager::GetCurrentSettingsForScenario(const std::string& scenario_id) {
-  if (settings_.disable_per_scenario_settings() || scenario_id.size() == 0) {
-    return settings_;
-  }
-  auto it = scenario_settings_cache_.find(scenario_id);
-  ScenarioSettings scenario_settings;
-  bool missing_scenario_settings = false;
-  if (it != scenario_settings_cache_.end()) {
-    scenario_settings = it->second;
-  } else {
-    auto maybe_scenario_settings = settings_db_->GetScenarioSettings(scenario_id);
-    if (maybe_scenario_settings) {
-      scenario_settings = *maybe_scenario_settings;
-      scenario_settings_cache_[scenario_id] = scenario_settings;
-    } else {
-      missing_scenario_settings = true;
-    }
-  }
-
-  if (scenario_settings.has_cm_per_360()) {
-    settings_.set_cm_per_360(scenario_settings.cm_per_360());
-  }
-  if (scenario_settings.has_cm_per_360_jitter()) {
-    settings_.set_cm_per_360_jitter(scenario_settings.cm_per_360_jitter());
-  }
-  if (scenario_settings.has_theme_name()) {
-    settings_.set_theme_name(scenario_settings.theme_name());
-  }
-  if (scenario_settings.has_metronome_bpm()) {
-    settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
-  }
-  if (scenario_settings.has_crosshair_size()) {
-    settings_.set_crosshair_size(scenario_settings.crosshair_size());
-  }
-  if (scenario_settings.has_crosshair_name()) {
-    settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
-  }
-  if (scenario_settings.has_auto_hold_tracking()) {
-    settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
-  }
-  if (scenario_settings.has_health_bar()) {
-    *settings_.mutable_health_bar() = scenario_settings.health_bar();
-  }
-
-  if (missing_scenario_settings) {
-    WriteScenarioSettings(scenario_id);
-  }
-
-  return settings_;
-}
-
-Settings SettingsManager::GetCurrentSettings() {
-  return settings_;
-}
-
-Settings* SettingsManager::GetMutableCurrentSettings() {
-  return &settings_;
-}
-
-Crosshair SettingsManager::GetCurrentCrosshair() {
-  Settings settings = GetCurrentSettings();
-  return GetCrosshair(settings.current_crosshair_name());
-}
-
-void SettingsManager::MarkDirty() {
-  needs_save_ = true;
-}
-
-bool SettingsManager::MaybeFlushToDisk(const std::string& scenario_id) {
-  if (needs_save_) {
-    FlushToDisk(scenario_id);
-    return true;
-  }
-  return false;
-}
-
-void SettingsManager::WriteScenarioSettings(const std::string& scenario_id) {
-  if (scenario_id.size() > 0) {
-    ScenarioSettings scenario_settings;
-    scenario_settings.set_crosshair_size(settings_.crosshair_size());
-    scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
-    scenario_settings.set_cm_per_360(settings_.cm_per_360());
-    scenario_settings.set_cm_per_360_jitter(settings_.cm_per_360_jitter());
-    scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
-    scenario_settings.set_theme_name(settings_.theme_name());
-    scenario_settings.set_auto_hold_tracking(settings_.auto_hold_tracking());
-    settings_db_->UpdateScenarioSettings(scenario_id, scenario_settings);
-    scenario_settings_cache_[scenario_id] = scenario_settings;
-  }
-}
-
-void SettingsManager::FlushToDisk(const std::string& scenario_id) {
-  WriteScenarioSettings(scenario_id);
-  if (WriteJsonMessageToFile(settings_path_, settings_)) {
-    needs_save_ = false;
-  }
-}
-
 SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryManager* history_manager)
     : settings_manager_(settings_manager), history_manager_(history_manager) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
@@ -472,7 +497,7 @@ SettingsUpdater::SettingsUpdater(SettingsManager* settings_manager, HistoryManag
   }
 }
 
-void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
+void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_name) {
   auto current_settings = settings_manager_->GetMutableCurrentSettings();
   if (current_settings == nullptr) {
     Logger::get()->warn("No settings available at save time");
@@ -496,7 +521,7 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_id) {
 
   *current_settings = settings;
   settings_manager_->MarkDirty();
-  settings_manager_->MaybeFlushToDisk(scenario_id);
+  settings_manager_->MaybeFlushToDisk(scenario_name);
   settings_manager_->MaybeInvalidateThemeCache();
 }
 
@@ -534,15 +559,14 @@ Crosshair GetDefaultCrosshair() {
   return crosshair;
 }
 
-SettingsUpdater SettingsManager::CreateUpdater() {
-  return SettingsUpdater(this, history_manager_);
-}
-
-void SettingsManager::RenameScenario(const std::string& old_name, const std::string& new_name) {
-  auto old_settings = settings_db_->GetScenarioSettings(old_name);
-  if (old_settings) {
-    settings_db_->UpdateScenarioSettings(new_name, *old_settings);
-  }
+std::unique_ptr<SettingsManager> CreateSettingsManager(const std::filesystem::path& settings_path,
+                                                       const std::filesystem::path& theme_dir,
+                                                       const std::filesystem::path& texture_dir,
+                                                       const std::filesystem::path& crosshair_dir,
+                                                       AimDb* db,
+                                                       HistoryManager* history_manager) {
+  return std::make_unique<SettingsManagerImpl>(
+      settings_path, theme_dir, texture_dir, crosshair_dir, db, history_manager);
 }
 
 }  // namespace aim

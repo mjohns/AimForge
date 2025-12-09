@@ -10,7 +10,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
 #include "aim/core/history_manager.h"
-#include "aim/database/settings_db.h"
+#include "aim/database/aim_db.h"
 #include "aim/proto/crosshair.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -42,7 +42,7 @@ struct SettingsUpdater {
  public:
   explicit SettingsUpdater(SettingsManager* settings_manager, HistoryManager* history_manager);
 
-  void SaveIfChangesMade(const std::string& scenario_id);
+  void SaveIfChangesMade(const std::string& scenario_name);
 
   Settings settings;
 
@@ -53,69 +53,52 @@ struct SettingsUpdater {
 
 class SettingsManager {
  public:
-  explicit SettingsManager(const std::filesystem::path& settings_path,
-                           const std::filesystem::path& theme_dir,
-                           const std::filesystem::path& texture_dir,
-                           const std::filesystem::path& crosshair_dir,
-                           SettingsDb* settings_db,
-                           HistoryManager* history_manager);
-  ~SettingsManager();
-  AIM_NO_COPY(SettingsManager);
+  virtual ~SettingsManager() {}
 
-  absl::Status Initialize();
+  virtual absl::Status Initialize() = 0;
 
-  float GetDpi();
-  Settings GetCurrentSettings();
-  Settings GetCurrentSettingsForScenario(const std::string& scenario_id);
-  Settings* GetMutableCurrentSettings();
+  virtual float GetDpi() = 0;
+  virtual Settings GetCurrentSettings() = 0;
+  virtual Settings GetCurrentSettingsForScenario(const std::string& scenario_name) = 0;
+  virtual Settings* GetMutableCurrentSettings() = 0;
 
-  Theme GetTheme(const std::string& theme_name);
-  Theme GetThemeNoReferenceFollow(const std::string& theme_name);
-  Theme GetCurrentTheme();
-  bool ThemeExists(const std::string& name);
-  bool SaveTheme(const std::string& name, const Theme& crosshair);
-  bool DeleteTheme(const std::string& name);
-  void RenameTheme(const std::string& old_name, const std::string& new_name);
+  virtual Theme GetTheme(const std::string& theme_name) = 0;
+  virtual Theme GetThemeNoReferenceFollow(const std::string& theme_name) = 0;
+  virtual Theme GetCurrentTheme() = 0;
+  virtual bool ThemeExists(const std::string& name) = 0;
+  virtual bool SaveTheme(const std::string& name, const Theme& crosshair) = 0;
+  virtual bool DeleteTheme(const std::string& name) = 0;
+  virtual void RenameTheme(const std::string& old_name, const std::string& new_name) = 0;
 
-  Crosshair GetCrosshair(const std::string& name);
-  bool CrosshairExists(const std::string& name);
-  bool SaveCrosshair(const std::string& name, const Crosshair& crosshair);
-  bool DeleteCrosshair(const std::string& name);
-  void RenameCrosshair(const std::string& old_name, const std::string& new_name);
+  virtual Crosshair GetCrosshair(const std::string& name) = 0;
+  virtual bool CrosshairExists(const std::string& name) = 0;
+  virtual bool SaveCrosshair(const std::string& name, const Crosshair& crosshair) = 0;
+  virtual bool DeleteCrosshair(const std::string& name) = 0;
+  virtual void RenameCrosshair(const std::string& old_name, const std::string& new_name) = 0;
 
-  std::vector<std::string> ListCrosshairs();
-  std::vector<std::string> ListThemes();
-  std::vector<std::string> ListTextures();
+  virtual std::vector<std::string> ListCrosshairs() = 0;
+  virtual std::vector<std::string> ListThemes() = 0;
+  virtual std::vector<std::string> ListTextures() = 0;
 
-  Crosshair GetCurrentCrosshair();
+  virtual Crosshair GetCurrentCrosshair() = 0;
 
-  void MarkDirty();
-  void FlushToDisk(const std::string& scenario_id);
+  virtual void MarkDirty() = 0;
+  virtual void FlushToDisk(const std::string& scenario_name) = 0;
   // Only flush to disk if marked dirty.
-  bool MaybeFlushToDisk(const std::string& scenario_id);
+  virtual bool MaybeFlushToDisk(const std::string& scenario_name) = 0;
 
-  void MaybeInvalidateThemeCache();
+  virtual void MaybeInvalidateThemeCache() = 0;
 
-  void RenameScenario(const std::string& old_name, const std::string& new_name);
+  virtual void RenameScenario(const std::string& old_name, const std::string& new_name) = 0;
 
-  SettingsUpdater CreateUpdater();
-
- private:
-  void WriteScenarioSettings(const std::string& scenario_id);
-  std::filesystem::path GetCrosshairPath(const std::string& name);
-  std::filesystem::path GetThemePath(const std::string& name);
-
-  std::filesystem::path settings_path_;
-  Settings settings_;
-  bool needs_save_ = false;
-  std::filesystem::path theme_dir_;
-  std::filesystem::path texture_dir_;
-  std::filesystem::path crosshair_dir_;
-  std::unordered_map<std::string, ThemeCacheEntry> theme_cache_;
-  std::unordered_map<std::string, ScenarioSettings> scenario_settings_cache_;
-  std::unordered_map<std::string, Crosshair> crosshair_cache_;
-  SettingsDb* settings_db_;
-  HistoryManager* history_manager_;
+  virtual SettingsUpdater CreateUpdater() = 0;
 };
+
+std::unique_ptr<SettingsManager> CreateSettingsManager(const std::filesystem::path& settings_path,
+                                                       const std::filesystem::path& theme_dir,
+                                                       const std::filesystem::path& texture_dir,
+                                                       const std::filesystem::path& crosshair_dir,
+                                                       AimDb* db,
+                                                       HistoryManager* history_manager);
 
 }  // namespace aim
