@@ -16,12 +16,8 @@
 namespace aim {
 
 struct RecentViewV2 {
-  std::string id;
+  std::string name;
   i64 view_time_micros;
-
-  i64 id_as_int() {
-    return ParseInt(id);
-  }
 };
 
 struct StatsDbRow {
@@ -92,11 +88,8 @@ class AimDb {
   // RecentViews
   //
 
-  virtual void UpdateRecentView(ObjectType t, const std::string& id) = 0;
-  void UpdateRecentView(ObjectType t, i64 id) {
-    UpdateRecentView(t, std::format("{}", id));
-  }
-  virtual std::vector<RecentViewV2> GetRecentViews(ObjectType t, int limit) = 0;
+  virtual void UpdateRecentView(ObjectType type, const std::string& name) = 0;
+  virtual std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) = 0;
 
   //
   // LabeledItems

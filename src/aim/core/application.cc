@@ -193,7 +193,7 @@ int Application::Initialize() {
   bundle_manager_ =
       CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());
   history_manager_ = std::make_unique<HistoryManager>(file_system_.get(), playlist_manager_.get());
-  labels_manager_ = std::make_unique<LabelsManager>(file_system_.get());
+  labels_manager_ = CreateLabelsManager(db_.get());
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
                                         file_system_->GetUserDataPath("resources/themes"),

@@ -135,7 +135,7 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
         if (value > 0) {
           // Max value for score is 750.
           stats_.num_hits += delta_micros * ((value + 0.25) * 0.00001);
-          normalized_distance_from_center = 1.0 - value;
+          normalized_distance_from_center = 1.0f - value;
 
           stats_.proximity.hit_micros_100 += delta_micros;
           if (*normalized_distance_from_center <= 0.75) {

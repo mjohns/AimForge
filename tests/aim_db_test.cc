@@ -45,12 +45,8 @@ auto EqualsPlayTimes(int total, int partial) {
                Field(&PlayTimes::partial_run_time_seconds, Eq(partial)));
 }
 
-auto EqualsViewId(const std::string& expected) {
-  return AllOf(Field(&RecentViewV2::id, Eq(expected)));
-}
-
-auto EqualsViewId(int expected) {
-  return AllOf(Field(&RecentViewV2::id, Eq(std::format("{}", expected))));
+auto EqualsViewName(const std::string& expected) {
+  return AllOf(Field(&RecentViewV2::name, Eq(expected)));
 }
 
 }  // namespace
@@ -263,27 +259,24 @@ TEST_F(AimDbTest, PlayTime) {
 }
 
 TEST_F(AimDbTest, RecentViews) {
-  i64 scenario1 = db_->GetScenarioId("Scenario1");
-  i64 scenario2 = db_->GetScenarioId("Scenario2");
-
-  db_->UpdateRecentView(ObjectType::SCENARIO, scenario1);
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s1");
   db_->UpdateRecentView(ObjectType::CROSSHAIR, "c1");
   db_->UpdateRecentView(ObjectType::CROSSHAIR, "c2");
 
   EXPECT_THAT(db_->GetRecentViews(ObjectType::PLAYLIST, 10), IsEmpty());
-  EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10), ElementsAre(EqualsViewId(scenario1)));
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10), ElementsAre(EqualsViewName("s1")));
   EXPECT_THAT(db_->GetRecentViews(ObjectType::CROSSHAIR, 10),
-              ElementsAre(EqualsViewId("c2"), EqualsViewId("c1")));
+              ElementsAre(EqualsViewName("c2"), EqualsViewName("c1")));
 
   db_->UpdateRecentView(ObjectType::CROSSHAIR, "c3");
   db_->UpdateRecentView(ObjectType::CROSSHAIR, "c1");
 
   EXPECT_THAT(db_->GetRecentViews(ObjectType::CROSSHAIR, 10),
-              ElementsAre(EqualsViewId("c1"), EqualsViewId("c3"), EqualsViewId("c2")));
+              ElementsAre(EqualsViewName("c1"), EqualsViewName("c3"), EqualsViewName("c2")));
   EXPECT_THAT(db_->GetRecentViews(ObjectType::CROSSHAIR, 3),
-              ElementsAre(EqualsViewId("c1"), EqualsViewId("c3"), EqualsViewId("c2")));
+              ElementsAre(EqualsViewName("c1"), EqualsViewName("c3"), EqualsViewName("c2")));
   EXPECT_THAT(db_->GetRecentViews(ObjectType::CROSSHAIR, 2),
-              ElementsAre(EqualsViewId("c1"), EqualsViewId("c3")));
+              ElementsAre(EqualsViewName("c1"), EqualsViewName("c3")));
 }
 
 TEST_F(AimDbTest, LabeledItems) {
@@ -307,4 +300,18 @@ TEST_F(AimDbTest, LabeledItems) {
 
   db_->RemoveLabeledItem(2, ObjectType::SCENARIO, "5");
   EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::SCENARIO), UnorderedElementsAre("4"));
+}
+
+TEST_F(AimDbTest, TestRenameScenario) {
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s1");
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s2");
+
+  // Should not change a playlist
+  db_->UpdateRecentView(ObjectType::PLAYLIST, "s1");
+
+  db_->RenameScenario("s1", "s1_new");
+
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10),
+              ElementsAre(EqualsViewName("s2"), EqualsViewName("s1_new")));
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::PLAYLIST, 10), ElementsAre(EqualsViewName("s1")));
 }
