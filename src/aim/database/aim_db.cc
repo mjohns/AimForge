@@ -447,10 +447,6 @@ class AimDbImpl : public AimDb {
   bool AddPlayTime(i64 scenario_id,
                    float duration_seconds,
                    const PlayTimeDetails& details) override {
-    // Don't store very short values.
-    if (duration_seconds < 1) {
-      return true;
-    }
 
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kAddPlayTimeSql, -1, &stmt, nullptr);

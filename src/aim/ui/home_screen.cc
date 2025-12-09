@@ -452,13 +452,9 @@ class HomeScreen : public UiScreen {
     ImGui::IdGuard cid("PlayTime");
     auto play_times = app_.play_time_manager().GetPlayTime();
 
-    float total_play_time_seconds = 0;
-    float total_partial_play_time_seconds = 0;
-    for (auto& play_time : play_times.play_times) {
-      total_play_time_seconds +=
-          play_time.complete_run_time_seconds + play_time.partial_run_time_seconds;
-      total_partial_play_time_seconds += play_time.partial_run_time_seconds;
-    }
+    float total_play_time_seconds =
+        play_times.total.complete_run_time_seconds + play_times.total.partial_run_time_seconds;
+    float total_partial_play_time_seconds = play_times.total.partial_run_time_seconds;
     ImGui::Text("Total time: %.1f hours", total_play_time_seconds / 3600.0f);
     ImGui::TextFmt("Partial run time: {:.1f} hours ({:.0f}%)",
                    total_partial_play_time_seconds / 3600.0f,
@@ -466,18 +462,7 @@ class HomeScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
 
-    if (total_play_time_seconds > 0) {
-      ImGui::Text("Breakdown by shot type");
-      ImGui::Indent();
-      for (const auto& play_time : play_times.play_times) {
-        std::string type = FirstNonEmpty(play_time.shot_type, "Unknown");
-        ImGui::TextFmt(
-            "{}: {:.1f} hours",
-            type,
-            (play_time.complete_run_time_seconds + play_time.partial_run_time_seconds) / 3600.0f);
-      }
-      ImGui::Unindent();
-    }
+    // TODO: Display breakdowns
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;

@@ -4,19 +4,26 @@
 
 namespace aim {
 
-PlayTimeManager::PlayTimeManager(FileSystem* fs)
-    : play_time_db_(std::make_unique<PlayTimeDb>(fs->GetUserDataPath("db/play_time.db"))) {}
+PlayTimeManager::PlayTimeManager(AimDb* db) : db_(db) {}
 
-void PlayTimeManager::AddPlayTime(const PlayTime& play_time) {
-  play_time_db_->AddPlayTime(play_time);
+void PlayTimeManager::AddPlayTime(const std::string& scenario_name,
+                                  float duration,
+                                  const PlayTimeDetails& details) {
+  // Don't store very short values.
+  if (duration < 1) {
+    return;
+  }
+
+  i64 scenario_id = db_->GetScenarioId(scenario_name);
+  db_->AddPlayTime(scenario_id, duration, details);
   play_time_ = {};
 }
 
-PlayTimeBreakdown PlayTimeManager::GetPlayTime() {
+TotalPlaytime PlayTimeManager::GetPlayTime() {
   if (play_time_) {
     return *play_time_;
   }
-  play_time_ = play_time_db_->GetPlayTime();
+  play_time_ = db_->GetTotalPlaytime();
   return *play_time_;
 }
 

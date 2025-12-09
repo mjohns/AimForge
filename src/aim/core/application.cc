@@ -185,7 +185,7 @@ int Application::Initialize() {
   db_ = CreateAimDb(file_system_->GetUserDataPath("db/aim.db"));
   local_store_ = std::make_unique<LocalStore>(file_system_.get());
 
-  play_time_manager_ = std::make_unique<PlayTimeManager>(file_system_.get());
+  play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
   stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
   scenario_manager_ = CreateScenarioManager(file_system_.get());
   playlist_manager_ = CreatePlaylistManager(file_system_.get());

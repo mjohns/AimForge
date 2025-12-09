@@ -6,23 +6,24 @@
 #include <vector>
 
 #include "aim/common/simple_types.h"
-#include "aim/core/file_system.h"
-#include "aim/database/play_time_db.h"
+#include "aim/database/aim_db.h"
 
 namespace aim {
 
 class PlayTimeManager {
  public:
-  explicit PlayTimeManager(FileSystem* fs);
+  explicit PlayTimeManager(AimDb* fs);
   AIM_NO_COPY(PlayTimeManager);
 
-  void AddPlayTime(const PlayTime& play_time);
+  void AddPlayTime(const std::string& scenario_name,
+                   float duration,
+                   const PlayTimeDetails& details);
 
-  PlayTimeBreakdown GetPlayTime();
+  TotalPlaytime GetPlayTime();
 
  private:
-  std::unique_ptr<PlayTimeDb> play_time_db_;
-  std::optional<PlayTimeBreakdown> play_time_;
+  AimDb* db_;
+  std::optional<TotalPlaytime> play_time_;
 };
 
 }  // namespace aim

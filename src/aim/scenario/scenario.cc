@@ -77,13 +77,11 @@ void Scenario::FlushPlayTime() {
   play_time_flushed_ = true;
   float elapsed = timer_.GetElapsedSeconds();
   if (elapsed > 0) {
-    PlayTime p;
-    p.scenario_id = id_;
-    p.duration_seconds = elapsed;
-    p.is_complete_run = is_done();
-    p.shot_type = GetShotType();
-    p.cm_per_360 = effective_cm_per_360_;
-    app_.play_time_manager().AddPlayTime(p);
+    PlayTimeDetails details;
+    details.is_complete_run = is_done();
+    details.shot_type = GetShotType();
+    details.cm_per_360 = effective_cm_per_360_;
+    app_.play_time_manager().AddPlayTime(id_, elapsed, details);
   }
 }
 

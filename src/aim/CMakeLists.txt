@@ -3,7 +3,7 @@ set(NAME "aim")
 file(GLOB_RECURSE SRCS *.cc)
 file(GLOB_RECURSE HDRS *.h)
 
-add_library(${NAME} STATIC ${SRCS} ${HRDS} "database/history_db.h")
+add_library(${NAME} STATIC ${SRCS} ${HRDS} )
 
 find_package(OpenGL REQUIRED)
 
