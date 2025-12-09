@@ -182,7 +182,6 @@ std::vector<std::string> SettingsManager::ListCrosshairs() {
 }
 
 std::vector<std::string> SettingsManager::ListThemes() {
-  auto recent_themes = history_manager_->GetRecentViews(ObjectType::THEME, 20);
   if (!std::filesystem::exists(theme_dir_) || !std::filesystem::is_directory(theme_dir_)) {
     return {};
   }
@@ -197,9 +196,10 @@ std::vector<std::string> SettingsManager::ListThemes() {
   }
 
   std::vector<std::string> theme_names;
+  auto recent_themes = history_manager_->GetRecentViews(ObjectType::THEME, 20);
   for (auto& recent_theme : recent_themes) {
-    if (VectorContains(all_theme_names, recent_theme.id)) {
-      theme_names.push_back(recent_theme.id);
+    if (VectorContains(all_theme_names, recent_theme.name)) {
+      theme_names.push_back(recent_theme.name);
     }
   }
 

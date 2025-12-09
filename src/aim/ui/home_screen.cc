@@ -55,14 +55,14 @@ class HomeScreen : public UiScreen {
     auto last_playlist = app_.history_manager().GetRecentViews(ObjectType::PLAYLIST, 1);
 
     if (last_playlist.size() > 0) {
-      std::string name = last_playlist[0].id;
+      std::string name = last_playlist[0].name;
       if (name.size() > 0) {
         app_.playlist_manager().SetCurrentPlaylist(name);
       }
     }
     auto last_scenario = app_.history_manager().GetRecentViews(ObjectType::SCENARIO, 1);
     if (last_scenario.size() > 0) {
-      app_.scenario_manager().SetCurrentScenario(last_scenario[0].id);
+      app_.scenario_manager().SetCurrentScenario(last_scenario[0].name);
     }
   }
 

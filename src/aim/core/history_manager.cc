@@ -2,69 +2,68 @@
 
 #include <memory>
 
-#include "aim/core/playlist_manager.h"
-
 namespace aim {
 namespace {
 
 const int kCachedRecentNamesSize = 240;
 
+class HistoryManagerImpl : public HistoryManager {
+ public:
+  explicit HistoryManagerImpl(AimDb* db) : db_(db) {}
+
+  void UpdateRecentView(ObjectType type, const std::string& name) override {
+    if (type == ObjectType::SCENARIO) {
+      scenarios_need_reload_ = true;
+    } else if (type == ObjectType::PLAYLIST) {
+      playlists_need_reload_ = true;
+    }
+    db_->UpdateRecentView(type, name);
+  }
+
+  const std::vector<std::string>& recent_scenarios() override {
+    if (scenarios_need_reload_) {
+      scenarios_need_reload_ = false;
+      recent_scenarios_ = GetRecentUniqueNames(ObjectType::SCENARIO, kCachedRecentNamesSize);
+    }
+    return recent_scenarios_;
+  }
+
+  const std::vector<std::string>& recent_playlists() override {
+    if (playlists_need_reload_) {
+      playlists_need_reload_ = false;
+      recent_playlists_ = GetRecentUniqueNames(ObjectType::PLAYLIST, kCachedRecentNamesSize);
+    }
+    return recent_playlists_;
+  }
+
+  std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) override {
+    return db_->GetRecentViews(type, limit);
+  }
+
+  std::vector<std::string> GetRecentUniqueNames(ObjectType type, int limit) override {
+    auto views = GetRecentViews(type, limit);
+    std::vector<std::string> result;
+    for (auto& view : views) {
+      if (!VectorContains(result, view.name)) {
+        result.push_back(view.name);
+      }
+    }
+    return result;
+  }
+
+ private:
+  AimDb* db_;
+
+  std::vector<std::string> recent_scenarios_;
+  std::vector<std::string> recent_playlists_;
+  bool scenarios_need_reload_ = true;
+  bool playlists_need_reload_ = true;
+};
+
 }  // namespace
 
-HistoryManager::HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager)
-    : history_db_(std::make_unique<HistoryDb>(fs->GetUserDataPath("db/history.db"))),
-      playlist_manager_(playlist_manager) {}
-
-void HistoryManager::UpdateRecentView(ObjectType t, const std::string& id) {
-  if (t == ObjectType::SCENARIO) {
-    scenarios_need_reload_ = true;
-  }
-  if (t == ObjectType::PLAYLIST) {
-    playlists_need_reload_ = true;
-  }
-  return history_db_->UpdateRecentView(t, id);
-}
-
-std::vector<RecentView> HistoryManager::GetRecentViews(ObjectType t, int limit) {
-  return history_db_->GetRecentViews(t, limit);
-}
-
-std::vector<std::string> HistoryManager::GetRecentUniqueNames(ObjectType t, int limit) {
-  return history_db_->GetRecentUniqueNames(t, limit);
-}
-
-void HistoryManager::RenameItem(ObjectType t,
-                                const std::string& old_name,
-                                const std::string& new_name) {
-  history_db_->Rename(t, old_name, new_name);
-}
-
-void HistoryManager::MaybeReloadScenarios() {
-  if (scenarios_need_reload_) {
-    scenarios_need_reload_ = false;
-    recent_scenario_ids_ = GetRecentUniqueNames(ObjectType::SCENARIO, kCachedRecentNamesSize);
-  }
-}
-
-void HistoryManager::MaybeReloadPlaylists() {
-  if (playlists_need_reload_) {
-    playlists_need_reload_ = false;
-    auto candidates = GetRecentUniqueNames(ObjectType::PLAYLIST, kCachedRecentNamesSize);
-    recent_playlists_.clear();
-    for (const std::string& name : candidates) {
-      recent_playlists_.push_back(name);
-    }
-  }
-}
-
-const std::vector<std::string>& HistoryManager::recent_scenario_ids() {
-  MaybeReloadScenarios();
-  return recent_scenario_ids_;
-}
-
-const std::vector<std::string>& HistoryManager::recent_playlists() {
-  MaybeReloadPlaylists();
-  return recent_playlists_;
+std::unique_ptr<HistoryManager> CreateHistoryManager(AimDb* db) {
+  return std::make_unique<HistoryManagerImpl>(db);
 }
 
 }  // namespace aim

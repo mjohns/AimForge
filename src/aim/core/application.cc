@@ -192,7 +192,7 @@ int Application::Initialize() {
   playlist_manager_ = CreatePlaylistManager(file_system_.get());
   bundle_manager_ =
       CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());
-  history_manager_ = std::make_unique<HistoryManager>(file_system_.get(), playlist_manager_.get());
+  history_manager_ = CreateHistoryManager(db_.get());
   labels_manager_ = CreateLabelsManager(db_.get());
   settings_manager_ =
       std::make_unique<SettingsManager>(file_system_->GetUserDataPath("settings.json"),
@@ -209,7 +209,7 @@ int Application::Initialize() {
   }
 
   // Prime aggregate stats cache for all recent scenarios.
-  for (const std::string& scenario_id : history_manager_->recent_scenario_ids()) {
+  for (const std::string& scenario_id : history_manager_->recent_scenarios()) {
     stats_manager_->GetAggregateStats(scenario_id);
   }
 
@@ -328,9 +328,8 @@ int Application::Initialize() {
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&StatsManager::RenameScenario, stats_manager_.get()));
   scenario_manager_->RegisterRenameListener(
-      std::bind_front(&HistoryManager::RenameItem, history_manager_.get(), ObjectType::SCENARIO));
-  scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
+  scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameScenario, db_.get()));
 
   /*
   bundle_manager_->SaveBundle("AF");

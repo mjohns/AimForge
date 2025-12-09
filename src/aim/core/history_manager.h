@@ -1,14 +1,11 @@
 #pragma once
 
-#include <optional>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include "aim/common/object_type.h"
 #include "aim/common/simple_types.h"
-#include "aim/core/file_system.h"
-#include "aim/database/history_db.h"
+#include "aim/database/aim_db.h"
 
 namespace aim {
 
@@ -16,30 +13,16 @@ class PlaylistManager;
 
 class HistoryManager {
  public:
-  HistoryManager(FileSystem* fs, PlaylistManager* playlist_manager);
-  AIM_NO_COPY(HistoryManager);
+  virtual ~HistoryManager() {}
 
-  void UpdateRecentView(ObjectType t, const std::string& id);
-  std::vector<RecentView> GetRecentViews(ObjectType t, int limit);
+  virtual void UpdateRecentView(ObjectType type, const std::string& name) = 0;
+  virtual std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) = 0;
+  virtual std::vector<std::string> GetRecentUniqueNames(ObjectType type, int limit) = 0;
 
-  std::vector<std::string> GetRecentUniqueNames(ObjectType t, int limit);
-
-  const std::vector<std::string>& recent_scenario_ids();
-  const std::vector<std::string>& recent_playlists();
-
-  void RenameItem(ObjectType t, const std::string& old_name, const std::string& new_name);
-
- private:
-  void MaybeReloadScenarios();
-  void MaybeReloadPlaylists();
-
-  std::unique_ptr<HistoryDb> history_db_;
-
-  std::vector<std::string> recent_scenario_ids_;
-  std::vector<std::string> recent_playlists_;
-  bool scenarios_need_reload_ = true;
-  bool playlists_need_reload_ = true;
-  PlaylistManager* playlist_manager_;
+  virtual const std::vector<std::string>& recent_scenarios() = 0;
+  virtual const std::vector<std::string>& recent_playlists() = 0;
 };
+
+std::unique_ptr<HistoryManager> CreateHistoryManager(AimDb* db);
 
 }  // namespace aim
