@@ -121,22 +121,22 @@ const char* kCreateLabeledItemsTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS LabeledItems (
     Label INTEGER NOT NULL,
     Type INTEGER NOT NULL,
-    Id TEXT NOT NULL,
-    PRIMARY KEY (Label, Type, Id)
+    Name TEXT NOT NULL,
+    PRIMARY KEY (Label, Type, Name)
 );
 )AIMS";
 
 const char* kInsertLabeledItemSql = R"AIMS(
-INSERT OR REPLACE INTO LabeledItems (Label, Type, Id) VALUES ( ?, ?, ?)
+INSERT OR REPLACE INTO LabeledItems (Label, Type, Name) VALUES ( ?, ?, ?)
 ON CONFLICT DO NOTHING;
 )AIMS";
 
 const char* kDeleteLabeledItemSql = R"AIMS(
-DELETE FROM LabeledItems WHERE Label = ? AND Type = ? AND Id = ?;
+DELETE FROM LabeledItems WHERE Label = ? AND Type = ? AND Name = ?;
 )AIMS";
 
 const char* kGetLabeledItemsSql = R"AIMS(
-SELECT Id FROM LabeledItems WHERE Label = ? AND Type = ?;
+SELECT Name FROM LabeledItems WHERE Label = ? AND Type = ?;
 )AIMS";
 
 const char* kCreatePlayTimeTable = R"AIMS(

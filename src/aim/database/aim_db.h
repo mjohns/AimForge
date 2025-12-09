@@ -96,8 +96,8 @@ class AimDb {
   //
 
   virtual std::vector<std::string> GetLabeledItems(int label, ObjectType type) = 0;
-  virtual void RemoveLabeledItem(int label, ObjectType type, const std::string& object_id) = 0;
-  virtual void AddLabeledItem(int label, ObjectType type, const std::string& object_id) = 0;
+  virtual void RemoveLabeledItem(int label, ObjectType type, const std::string& object_name) = 0;
+  virtual void AddLabeledItem(int label, ObjectType type, const std::string& object_name) = 0;
 };
 
 std::unique_ptr<AimDb> CreateAimDb(const std::filesystem::path& db_path);
