@@ -41,9 +41,9 @@ class StatsManagerImpl : public StatsManager {
     return GetStats(scenario_id);
   }
 
-  i64 GetLatestRunId(const std::string& scenario_id) override {
-    // return stats_db_->GetLatestRunId(scenario_id);
-    return 0;
+  i64 GetLatestRunId(const std::string& scenario_name) override {
+    i64 scenario_id = db_->GetScenarioId(scenario_name);
+    return db_->GetLatestStatsId(scenario_id);
   }
 
   AggregateScenarioStats GetAggregateStats(const std::string& scenario_name) override {

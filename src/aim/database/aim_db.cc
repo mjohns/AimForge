@@ -116,6 +116,14 @@ WHERE ScenarioId = ?
 ORDER BY StatsId ASC;
 )AIMS";
 
+const char* kGetMostRecentStatsRunIdSql = R"AIMS(
+SELECT StatsId
+FROM Stats
+WHERE ScenarioId = ?
+ORDER BY StatsId DESC LIMIT 1;
+)AIMS";
+
+
 const char* kDeleteStatsRunSql = R"AIMS(
 DELETE FROM Stats WHERE ScenarioId = ? AND StatsId = ?;
 )AIMS";
@@ -450,6 +458,25 @@ class AimDbImpl : public AimDb {
 
     sqlite3_finalize(stmt);
     return all_stats;
+  }
+
+  i64 GetLatestStatsId(i64 scenario_id) override {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, kGetMostRecentStatsRunIdSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+
+    i64 run_id = 0;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      run_id = sqlite3_column_int64(stmt, 0);
+    }
+
+    sqlite3_finalize(stmt);
+    return run_id;
   }
 
   void CopyAllStats(i64 from_scenario_id, i64 to_scenario_id) override {}
