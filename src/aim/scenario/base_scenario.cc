@@ -137,15 +137,13 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
           stats_.num_hits += delta_micros * ((value + 0.25) * 0.00001);
           normalized_distance_from_center = 1.0f - value;
 
-          stats_.proximity.hit_micros_100 += delta_micros;
-          if (*normalized_distance_from_center <= 0.75) {
-            stats_.proximity.hit_micros_75 += delta_micros;
-          }
-          if (*normalized_distance_from_center <= 0.50) {
-            stats_.proximity.hit_micros_50 += delta_micros;
-          }
-          if (*normalized_distance_from_center <= 0.25) {
-            stats_.proximity.hit_micros_25 += delta_micros;
+          stats_.proximity.hit_micros_map[100] += delta_micros;
+          int comparison_distance = *normalized_distance_from_center * 100;
+          for (int i = 1; i <= 9; ++i) {
+            int percent_key = i * 10;
+            if (comparison_distance <= percent_key) {
+              stats_.proximity.hit_micros_map[percent_key] += delta_micros;
+            }
           }
         }
       }
@@ -433,18 +431,22 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
 
       float total_micros = def_.duration_seconds() * 1000000;
       stats_.num_shots = def_.duration_seconds();
-      stats_.num_hits = (stats_.proximity.hit_micros_100 / total_micros) * stats_.num_shots;
+      stats_.num_hits = (stats_.proximity.hit_micros_map[100] / total_micros) * stats_.num_shots;
 
       ProximityPercentiles p;
-      /*
-      extra_info.set_num_hits_75((stats_.proximity.hit_micros_75 / total_micros) *
-                                 stats_.num_shots);
-      extra_info.set_num_hits_50((stats_.proximity.hit_micros_50 / total_micros) *
-                                 stats_.num_shots);
-      extra_info.set_num_hits_25((stats_.proximity.hit_micros_25 / total_micros) *
-                                 stats_.num_shots);
+      auto get_percent = [&](int percent) {
+        return 100 * (stats_.proximity.hit_micros_map[percent] / (float)total_micros);
+      };
+      p.set_p90(get_percent(90));
+      p.set_p80(get_percent(80));
+      p.set_p70(get_percent(70));
+      p.set_p60(get_percent(60));
+      p.set_p50(get_percent(50));
+      p.set_p40(get_percent(40));
+      p.set_p30(get_percent(30));
+      p.set_p20(get_percent(20));
+      p.set_p10(get_percent(10));
       maybe_proximity_percentiles = p;
-      */
       break;
     }
     case ShotType::kTrackingKill: {

@@ -12,13 +12,8 @@
 namespace aim {
 
 struct ProximityStats {
-  // Anywhere on  target.
-  i64 hit_micros_100 = 0;
-  // Inner 75%.
-  i64 hit_micros_75 = 0;
-  // Inner 50%.
-  i64 hit_micros_50 = 0;
-  i64 hit_micros_25 = 0;
+  // percent to hit_micros map.
+  std::unordered_map<int, i64> hit_micros_map{};
 };
 
 struct ScenarioStats {
