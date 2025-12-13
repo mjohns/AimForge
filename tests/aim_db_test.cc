@@ -180,12 +180,15 @@ TEST_F(AimDbTest, ReadAndWriteStats) {
   i64 scenario2 = db_->GetScenarioId("Scenario2");
   i64 scenario3 = db_->GetScenarioId("Scenario3");
 
+  EXPECT_THAT(db_->GetLatestStatsId(scenario1), Eq(0));
+
   StatsDbRow stats1_1;
   stats1_1.mm_per_360 = 350;
   stats1_1.score = 9.9;
   stats1_1.info.set_num_hits(10);
   ASSERT_TRUE(db_->AddStats(scenario1, &stats1_1));
   ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1)));
+  EXPECT_THAT(db_->GetLatestStatsId(scenario1), Eq(stats1_1.stats_id));
 
   EXPECT_THAT(stats1_1.stats_id, Eq(1));
   EXPECT_THAT(stats1_1.epoch_seconds, Gt(0));
@@ -199,6 +202,9 @@ TEST_F(AimDbTest, ReadAndWriteStats) {
   stats1_2.info.set_num_hits(100);
   ASSERT_TRUE(db_->AddStats(scenario1, &stats1_2));
   ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1), EqualsStats(stats1_2)));
+  EXPECT_THAT(db_->GetLatestStatsId(scenario1), Eq(stats1_2.stats_id));
+
+  EXPECT_THAT(db_->GetLatestStatsId(scenario2), Eq(0));
 
   db_->DeleteStats(scenario1, stats1_2.stats_id);
   ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1)));
@@ -217,6 +223,7 @@ TEST_F(AimDbTest, ReadAndWriteStats) {
   ASSERT_THAT(db_->GetStats(scenario2), IsEmpty());
 
   ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1)));
+  EXPECT_THAT(db_->GetLatestStatsId(scenario1), Eq(stats1_1.stats_id));
 }
 
 TEST_F(AimDbTest, PlayTime) {
