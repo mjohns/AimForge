@@ -2,8 +2,8 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 #include <unordered_set>
+#include <vector>
 
 #include "aim/common/object_type.h"
 #include "aim/common/simple_types.h"

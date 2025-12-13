@@ -123,7 +123,6 @@ WHERE ScenarioId = ?
 ORDER BY StatsId DESC LIMIT 1;
 )AIMS";
 
-
 const char* kDeleteStatsRunSql = R"AIMS(
 DELETE FROM Stats WHERE ScenarioId = ? AND StatsId = ?;
 )AIMS";
