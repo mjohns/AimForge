@@ -162,16 +162,16 @@ class HomeScreen : public UiScreen {
       ImGui::Text("                ");
       if (app_.scenario_manager().has_running_scenario()) {
         ImGui::SameLine();
-        if (ImGui::Button(std::format("{} Resume", kIconPlayArrow))) {
+        if (ImGui::Button(std::format("{}", kIconPlayArrow))) {
           state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
         }
         ImGui::SameLine();
-        if (ImGui::Button(std::format("{} Restart", kIconRefresh))) {
+        if (ImGui::Button(std::format("{}", kIconRefresh))) {
           state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
         }
       } else {
         ImGui::SameLine();
-        if (ImGui::Button(std::format("{} Play", kIconPlayArrow))) {
+        if (ImGui::Button(std::format("{}", kIconPlayArrow))) {
           state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
         }
       }
