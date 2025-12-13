@@ -5,6 +5,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
+#include "aim/database/aim_db.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/tracking_sound.h"
 
@@ -43,7 +44,7 @@ class BaseScenario : public Scenario {
   void UpdateState(UpdateStateData* data) override;
   void OnPause() override;
   void OnScenarioDone() override;
-  std::optional<StatsRow> GetStatsRow() override;
+  std::optional<StatsDbRow> GetStatsRow() override;
 
  private:
   void HandleClickHits(UpdateStateData* data);

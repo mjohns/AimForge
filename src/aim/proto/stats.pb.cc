@@ -26,33 +26,6 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace aim {
 
-inline constexpr StatsExtraInfo::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        num_hits_75_{0},
-        num_hits_50_{0},
-        num_hits_25_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR StatsExtraInfo::StatsExtraInfo(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct StatsExtraInfoDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR StatsExtraInfoDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~StatsExtraInfoDefaultTypeInternal() {}
-  union {
-    StatsExtraInfo _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StatsExtraInfoDefaultTypeInternal _StatsExtraInfo_default_instance_;
-
 inline constexpr ProximityPercentiles::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -120,20 +93,6 @@ static constexpr const ::_pb::ServiceDescriptor**
 const ::uint32_t
     TableStruct_stats_2eproto::offsets[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
         protodesc_cold) = {
-        PROTOBUF_FIELD_OFFSET(::aim::StatsExtraInfo, _impl_._has_bits_),
-        PROTOBUF_FIELD_OFFSET(::aim::StatsExtraInfo, _internal_metadata_),
-        ~0u,  // no _extensions_
-        ~0u,  // no _oneof_case_
-        ~0u,  // no _weak_field_map_
-        ~0u,  // no _inlined_string_donated_
-        ~0u,  // no _split_
-        ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::aim::StatsExtraInfo, _impl_.num_hits_75_),
-        PROTOBUF_FIELD_OFFSET(::aim::StatsExtraInfo, _impl_.num_hits_50_),
-        PROTOBUF_FIELD_OFFSET(::aim::StatsExtraInfo, _impl_.num_hits_25_),
-        0,
-        1,
-        2,
         PROTOBUF_FIELD_OFFSET(::aim::ProximityPercentiles, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::ProximityPercentiles, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -178,39 +137,35 @@ const ::uint32_t
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-        {0, 11, -1, sizeof(::aim::StatsExtraInfo)},
-        {14, 31, -1, sizeof(::aim::ProximityPercentiles)},
-        {40, 51, -1, sizeof(::aim::StatsInfo)},
+        {0, 17, -1, sizeof(::aim::ProximityPercentiles)},
+        {26, 37, -1, sizeof(::aim::StatsInfo)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
-    &::aim::_StatsExtraInfo_default_instance_._instance,
     &::aim::_ProximityPercentiles_default_instance_._instance,
     &::aim::_StatsInfo_default_instance_._instance,
 };
 const char descriptor_table_protodef_stats_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\013stats.proto\022\003aim\"O\n\016StatsExtraInfo\022\023\n\013"
-    "num_hits_75\030\001 \001(\001\022\023\n\013num_hits_50\030\002 \001(\001\022\023"
-    "\n\013num_hits_25\030\003 \001(\001\"\213\001\n\024ProximityPercent"
-    "iles\022\013\n\003p90\030\001 \001(\r\022\013\n\003p80\030\002 \001(\r\022\013\n\003p70\030\003 "
-    "\001(\r\022\013\n\003p60\030\004 \001(\r\022\013\n\003p50\030\005 \001(\r\022\013\n\003p40\030\006 \001"
-    "(\r\022\013\n\003p30\030\007 \001(\r\022\013\n\003p20\030\010 \001(\r\022\013\n\003p10\030\t \001("
-    "\r\"j\n\tStatsInfo\022\020\n\010num_hits\030\001 \001(\002\022\021\n\tnum_"
-    "shots\030\002 \001(\002\0228\n\025proximity_percentiles\030\003 \001"
-    "(\0132\031.aim.ProximityPercentilesb\010editionsp"
-    "\350\007"
+    "\n\013stats.proto\022\003aim\"\213\001\n\024ProximityPercenti"
+    "les\022\013\n\003p90\030\001 \001(\r\022\013\n\003p80\030\002 \001(\r\022\013\n\003p70\030\003 \001"
+    "(\r\022\013\n\003p60\030\004 \001(\r\022\013\n\003p50\030\005 \001(\r\022\013\n\003p40\030\006 \001("
+    "\r\022\013\n\003p30\030\007 \001(\r\022\013\n\003p20\030\010 \001(\r\022\013\n\003p10\030\t \001(\r"
+    "\"j\n\tStatsInfo\022\020\n\010num_hits\030\001 \001(\002\022\021\n\tnum_s"
+    "hots\030\002 \001(\002\0228\n\025proximity_percentiles\030\003 \001("
+    "\0132\031.aim.ProximityPercentilesb\010editionsp\350"
+    "\007"
 };
 static ::absl::once_flag descriptor_table_stats_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_stats_2eproto = {
     false,
     false,
-    362,
+    281,
     descriptor_table_protodef_stats_2eproto,
     "stats.proto",
     &descriptor_table_stats_2eproto_once,
     nullptr,
     0,
-    3,
+    2,
     schemas,
     file_default_instances,
     TableStruct_stats_2eproto::offsets,
@@ -218,281 +173,6 @@ PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_stats_2eproto 
     file_level_service_descriptors_stats_2eproto,
 };
 namespace aim {
-// ===================================================================
-
-class StatsExtraInfo::_Internal {
- public:
-  using HasBits =
-      decltype(std::declval<StatsExtraInfo>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_._has_bits_);
-};
-
-StatsExtraInfo::StatsExtraInfo(::google::protobuf::Arena* arena)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, _class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.StatsExtraInfo)
-}
-StatsExtraInfo::StatsExtraInfo(
-    ::google::protobuf::Arena* arena, const StatsExtraInfo& from)
-    : StatsExtraInfo(arena) {
-  MergeFrom(from);
-}
-inline PROTOBUF_NDEBUG_INLINE StatsExtraInfo::Impl_::Impl_(
-    ::google::protobuf::internal::InternalVisibility visibility,
-    ::google::protobuf::Arena* arena)
-      : _cached_size_{0} {}
-
-inline void StatsExtraInfo::SharedCtor(::_pb::Arena* arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char *>(&_impl_) +
-               offsetof(Impl_, num_hits_75_),
-           0,
-           offsetof(Impl_, num_hits_25_) -
-               offsetof(Impl_, num_hits_75_) +
-               sizeof(Impl_::num_hits_25_));
-}
-StatsExtraInfo::~StatsExtraInfo() {
-  // @@protoc_insertion_point(destructor:aim.StatsExtraInfo)
-  SharedDtor(*this);
-}
-inline void StatsExtraInfo::SharedDtor(MessageLite& self) {
-  StatsExtraInfo& this_ = static_cast<StatsExtraInfo&>(self);
-  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.~Impl_();
-}
-
-inline void* StatsExtraInfo::PlacementNew_(const void*, void* mem,
-                                        ::google::protobuf::Arena* arena) {
-  return ::new (mem) StatsExtraInfo(arena);
-}
-constexpr auto StatsExtraInfo::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(StatsExtraInfo),
-                                            alignof(StatsExtraInfo));
-}
-PROTOBUF_CONSTINIT
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::google::protobuf::internal::ClassDataFull StatsExtraInfo::_class_data_ = {
-    ::google::protobuf::internal::ClassData{
-        &_StatsExtraInfo_default_instance_._instance,
-        &_table_.header,
-        nullptr,  // OnDemandRegisterArenaDtor
-        nullptr,  // IsInitialized
-        &StatsExtraInfo::MergeImpl,
-        ::google::protobuf::Message::GetNewImpl<StatsExtraInfo>(),
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        &StatsExtraInfo::SharedDtor,
-        ::google::protobuf::Message::GetClearImpl<StatsExtraInfo>(), &StatsExtraInfo::ByteSizeLong,
-            &StatsExtraInfo::_InternalSerialize,
-#endif  // PROTOBUF_CUSTOM_VTABLE
-        PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_._cached_size_),
-        false,
-    },
-    &StatsExtraInfo::kDescriptorMethods,
-    &descriptor_table_stats_2eproto,
-    nullptr,  // tracker
-};
-const ::google::protobuf::internal::ClassData* StatsExtraInfo::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
-  return _class_data_.base();
-}
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 0, 2> StatsExtraInfo::_table_ = {
-  {
-    PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_._has_bits_),
-    0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
-    _class_data_.base(),
-    nullptr,  // post_loop_handler
-    ::_pbi::TcParser::GenericFallback,  // fallback
-    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::StatsExtraInfo>(),  // to_prefetch
-    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
-  }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // double num_hits_75 = 1;
-    {::_pbi::TcParser::FastF64S1,
-     {9, 0, 0, PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_75_)}},
-    // double num_hits_50 = 2;
-    {::_pbi::TcParser::FastF64S1,
-     {17, 1, 0, PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_50_)}},
-    // double num_hits_25 = 3;
-    {::_pbi::TcParser::FastF64S1,
-     {25, 2, 0, PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_25_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // double num_hits_75 = 1;
-    {PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_75_), _Internal::kHasBitsOffset + 0, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
-    // double num_hits_50 = 2;
-    {PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_50_), _Internal::kHasBitsOffset + 1, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
-    // double num_hits_25 = 3;
-    {PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_25_), _Internal::kHasBitsOffset + 2, 0,
-    (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
-  }},
-  // no aux_entries
-  {{
-  }},
-};
-
-PROTOBUF_NOINLINE void StatsExtraInfo::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.StatsExtraInfo)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
-    ::memset(&_impl_.num_hits_75_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.num_hits_25_) -
-        reinterpret_cast<char*>(&_impl_.num_hits_75_)) + sizeof(_impl_.num_hits_25_));
-  }
-  _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::uint8_t* StatsExtraInfo::_InternalSerialize(
-            const MessageLite& base, ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) {
-          const StatsExtraInfo& this_ = static_cast<const StatsExtraInfo&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::uint8_t* StatsExtraInfo::_InternalSerialize(
-            ::uint8_t* target,
-            ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-          const StatsExtraInfo& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(serialize_to_array_start:aim.StatsExtraInfo)
-          ::uint32_t cached_has_bits = 0;
-          (void)cached_has_bits;
-
-          cached_has_bits = this_._impl_._has_bits_[0];
-          // double num_hits_75 = 1;
-          if (cached_has_bits & 0x00000001u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteDoubleToArray(
-                1, this_._internal_num_hits_75(), target);
-          }
-
-          // double num_hits_50 = 2;
-          if (cached_has_bits & 0x00000002u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteDoubleToArray(
-                2, this_._internal_num_hits_50(), target);
-          }
-
-          // double num_hits_25 = 3;
-          if (cached_has_bits & 0x00000004u) {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteDoubleToArray(
-                3, this_._internal_num_hits_25(), target);
-          }
-
-          if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
-            target =
-                ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-                    this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-          }
-          // @@protoc_insertion_point(serialize_to_array_end:aim.StatsExtraInfo)
-          return target;
-        }
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-        ::size_t StatsExtraInfo::ByteSizeLong(const MessageLite& base) {
-          const StatsExtraInfo& this_ = static_cast<const StatsExtraInfo&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-        ::size_t StatsExtraInfo::ByteSizeLong() const {
-          const StatsExtraInfo& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          // @@protoc_insertion_point(message_byte_size_start:aim.StatsExtraInfo)
-          ::size_t total_size = 0;
-
-          ::uint32_t cached_has_bits = 0;
-          // Prevent compiler warnings about cached_has_bits being unused
-          (void)cached_has_bits;
-
-          ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-          cached_has_bits = this_._impl_._has_bits_[0];
-          if (cached_has_bits & 0x00000007u) {
-            // double num_hits_75 = 1;
-            if (cached_has_bits & 0x00000001u) {
-              total_size += 9;
-            }
-            // double num_hits_50 = 2;
-            if (cached_has_bits & 0x00000002u) {
-              total_size += 9;
-            }
-            // double num_hits_25 = 3;
-            if (cached_has_bits & 0x00000004u) {
-              total_size += 9;
-            }
-          }
-          return this_.MaybeComputeUnknownFieldsSize(total_size,
-                                                     &this_._impl_._cached_size_);
-        }
-
-void StatsExtraInfo::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google::protobuf::MessageLite& from_msg) {
-  auto* const _this = static_cast<StatsExtraInfo*>(&to_msg);
-  auto& from = static_cast<const StatsExtraInfo&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.StatsExtraInfo)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
-    if (cached_has_bits & 0x00000001u) {
-      _this->_impl_.num_hits_75_ = from._impl_.num_hits_75_;
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.num_hits_50_ = from._impl_.num_hits_50_;
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.num_hits_25_ = from._impl_.num_hits_25_;
-    }
-  }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void StatsExtraInfo::CopyFrom(const StatsExtraInfo& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aim.StatsExtraInfo)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-
-void StatsExtraInfo::InternalSwap(StatsExtraInfo* PROTOBUF_RESTRICT other) {
-  using std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_25_)
-      + sizeof(StatsExtraInfo::_impl_.num_hits_25_)
-      - PROTOBUF_FIELD_OFFSET(StatsExtraInfo, _impl_.num_hits_75_)>(
-          reinterpret_cast<char*>(&_impl_.num_hits_75_),
-          reinterpret_cast<char*>(&other->_impl_.num_hits_75_));
-}
-
-::google::protobuf::Metadata StatsExtraInfo::GetMetadata() const {
-  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
-}
 // ===================================================================
 
 class ProximityPercentiles::_Internal {

@@ -8,7 +8,7 @@
 #include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
-#include "aim/database/stats_db.h"
+#include "aim/database/aim_db.h"
 #include "aim/proto/scenario.pb.h"
 
 namespace aim {
@@ -16,37 +16,31 @@ namespace aim {
 float GetScenarioScoreLevel(float score, const ScenarioDef& def);
 
 struct AggregateScenarioStats {
-  StatsRow high_score_stats;
-  StatsRow last_run_stats;
-  int total_runs;
+  StatsDbRow high_score_stats;
+  StatsDbRow last_run_stats;
+  int total_runs = 0;
 };
 
 class StatsManager {
  public:
-  explicit StatsManager(FileSystem* fs);
-  AIM_NO_COPY(StatsManager);
+  virtual ~StatsManager() {}
 
-  void AddStats(const std::string& scenario_id, StatsRow* row);
+  virtual void AddStats(const std::string& scenario_name, StatsDbRow* row) = 0;
 
-  std::vector<StatsRow> GetStats(const std::string& scenario_id);
+  virtual std::vector<StatsDbRow> GetStats(const std::string& scenario_name) = 0;
 
-  i64 GetLatestRunId(const std::string& scenario_id);
+  virtual i64 GetLatestRunId(const std::string& scenario_name) = 0;
 
-  AggregateScenarioStats GetAggregateStats(const std::string& scenario_id);
+  virtual AggregateScenarioStats GetAggregateStats(const std::string& scenario_name) = 0;
 
-  void DeleteAllStats(const std::string& scenario_id);
+  virtual void DeleteAllStats(const std::string& scenario_name) = 0;
 
-  void CopyAllStats(const std::string& from_scenario_id, const std::string& to_scenario_id);
+  virtual void CopyAllStats(const std::string& from_scenario_name,
+                            const std::string& to_scenario_name) = 0;
 
-  void DeleteStats(const std::string& scenario_id, i64 run_id);
-
-  void RenameScenario(const std::string& old_name, const std::string& new_name);
-
- private:
-  AggregateScenarioStats GetAggregateStatsFromDb(const std::string& scenario_id);
-
-  std::unique_ptr<StatsDb> stats_db_;
-  std::unordered_map<std::string, AggregateScenarioStats> stats_cache_;
+  virtual void DeleteStats(const std::string& scenario_name, i64 run_id) = 0;
 };
+
+std::unique_ptr<StatsManager> CreateStatsManager(AimDb* db);
 
 }  // namespace aim

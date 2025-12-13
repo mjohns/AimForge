@@ -416,10 +416,10 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
   }
 }
 
-std::optional<StatsRow> BaseScenario::GetStatsRow() {
+std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
   ShotType::TypeCase shot_type = GetShotType();
   float score = 0;
-  std::optional<StatsExtraInfo> maybe_extra_info;
+  std::optional<ProximityPercentiles> maybe_proximity_percentiles;
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
       stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
@@ -435,14 +435,16 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
       stats_.num_shots = def_.duration_seconds();
       stats_.num_hits = (stats_.proximity.hit_micros_100 / total_micros) * stats_.num_shots;
 
-      StatsExtraInfo extra_info;
+      ProximityPercentiles p;
+      /*
       extra_info.set_num_hits_75((stats_.proximity.hit_micros_75 / total_micros) *
                                  stats_.num_shots);
       extra_info.set_num_hits_50((stats_.proximity.hit_micros_50 / total_micros) *
                                  stats_.num_shots);
       extra_info.set_num_hits_25((stats_.proximity.hit_micros_25 / total_micros) *
                                  stats_.num_shots);
-      maybe_extra_info = extra_info;
+      maybe_proximity_percentiles = p;
+      */
       break;
     }
     case ShotType::kTrackingKill: {
@@ -472,12 +474,18 @@ std::optional<StatsRow> BaseScenario::GetStatsRow() {
       break;
   }
 
-  StatsRow stats_row;
-  stats_row.cm_per_360 = effective_cm_per_360_;
-  stats_row.num_hits = stats_.num_hits;
-  stats_row.num_shots = stats_.num_shots;
+  StatsDbRow stats_row;
+  stats_row.mm_per_360 = effective_cm_per_360_ * 10;
+  if (stats_.num_hits > 0) {
+    stats_row.info.set_num_hits(stats_.num_hits);
+  }
+  if (stats_.num_shots > 0) {
+    stats_row.info.set_num_shots(stats_.num_shots);
+  }
   stats_row.score = score;
-  stats_row.extra_info = maybe_extra_info;
+  if (maybe_proximity_percentiles) {
+    *stats_row.info.mutable_proximity_percentiles() = *maybe_proximity_percentiles;
+  }
   return stats_row;
 }
 

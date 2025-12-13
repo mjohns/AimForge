@@ -2,13 +2,6 @@ edition = "2023";
 
 package aim;
 
-// Room defined by dimensions of the back wall the user is facing.
-message StatsExtraInfo {
-  double num_hits_75 = 1;
-  double num_hits_50 = 2;
-  double num_hits_25 = 3;
-}
-
 message ProximityPercentiles {
   // Inner 90%
   uint32 p90 = 1;

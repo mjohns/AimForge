@@ -186,7 +186,7 @@ int Application::Initialize() {
   local_store_ = std::make_unique<LocalStore>(file_system_.get());
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
-  stats_manager_ = std::make_unique<StatsManager>(file_system_.get());
+  stats_manager_ = CreateStatsManager(db_.get());
   scenario_manager_ = CreateScenarioManager(file_system_.get());
   playlist_manager_ = CreatePlaylistManager(file_system_.get());
   bundle_manager_ =
@@ -323,8 +323,6 @@ int Application::Initialize() {
 
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
-  scenario_manager_->RegisterRenameListener(
-      std::bind_front(&StatsManager::RenameScenario, stats_manager_.get()));
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
   scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameScenario, db_.get()));

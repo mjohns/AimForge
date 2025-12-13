@@ -9,6 +9,7 @@
 #include "aim/core/perf.h"
 #include "aim/core/screen.h"
 #include "aim/core/target.h"
+#include "aim/database/aim_db.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario_timer.h"
@@ -80,7 +81,7 @@ class Scenario : public Screen {
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
 
-  virtual std::optional<StatsRow> GetStatsRow() {
+  virtual std::optional<StatsDbRow> GetStatsRow() {
     return {};
   }
 

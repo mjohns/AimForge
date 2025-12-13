@@ -467,9 +467,9 @@ void Scenario::HandleScenarioDone() {
   FlushPlayTime();
   PopSelf();
 
-  std::optional<StatsRow> maybe_stats_row = GetStatsRow();
+  std::optional<StatsDbRow> maybe_stats_row = GetStatsRow();
   if (maybe_stats_row) {
-    StatsRow stats_row = *maybe_stats_row;
+    StatsDbRow stats_row = *maybe_stats_row;
     app_.stats_manager().AddStats(id_, &stats_row);
     state_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
     PushNextScreen(CreateStatsScreen(id_, stats_row.stats_id, &app_));

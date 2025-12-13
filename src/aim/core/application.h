@@ -27,7 +27,6 @@
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/database/aim_db.h"
-#include "aim/database/stats_db.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "imgui.h"

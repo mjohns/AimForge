@@ -55,9 +55,6 @@ namespace aim {
 class ProximityPercentiles;
 struct ProximityPercentilesDefaultTypeInternal;
 extern ProximityPercentilesDefaultTypeInternal _ProximityPercentiles_default_instance_;
-class StatsExtraInfo;
-struct StatsExtraInfoDefaultTypeInternal;
-extern StatsExtraInfoDefaultTypeInternal _StatsExtraInfo_default_instance_;
 class StatsInfo;
 struct StatsInfoDefaultTypeInternal;
 extern StatsInfoDefaultTypeInternal _StatsInfo_default_instance_;
@@ -72,224 +69,6 @@ namespace aim {
 // ===================================================================
 
 
-// -------------------------------------------------------------------
-
-class StatsExtraInfo final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.StatsExtraInfo) */ {
- public:
-  inline StatsExtraInfo() : StatsExtraInfo(nullptr) {}
-  ~StatsExtraInfo() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(StatsExtraInfo* msg, std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(StatsExtraInfo));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR StatsExtraInfo(
-      ::google::protobuf::internal::ConstantInitialized);
-
-  inline StatsExtraInfo(const StatsExtraInfo& from) : StatsExtraInfo(nullptr, from) {}
-  inline StatsExtraInfo(StatsExtraInfo&& from) noexcept
-      : StatsExtraInfo(nullptr, std::move(from)) {}
-  inline StatsExtraInfo& operator=(const StatsExtraInfo& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline StatsExtraInfo& operator=(StatsExtraInfo&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const StatsExtraInfo& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const StatsExtraInfo* internal_default_instance() {
-    return reinterpret_cast<const StatsExtraInfo*>(
-        &_StatsExtraInfo_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 0;
-  friend void swap(StatsExtraInfo& a, StatsExtraInfo& b) { a.Swap(&b); }
-  inline void Swap(StatsExtraInfo* other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(StatsExtraInfo* other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  StatsExtraInfo* New(::google::protobuf::Arena* arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<StatsExtraInfo>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const StatsExtraInfo& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const StatsExtraInfo& from) { StatsExtraInfo::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(
-      ::google::protobuf::MessageLite& to_msg,
-      const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* _InternalSerialize(
-      const MessageLite& msg, ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* _InternalSerialize(
-      ::uint8_t* target,
-      ::google::protobuf::io::EpsCopyOutputStream* stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(StatsExtraInfo* other);
- private:
-  template <typename T>
-  friend ::absl::string_view(
-      ::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.StatsExtraInfo"; }
-
- protected:
-  explicit StatsExtraInfo(::google::protobuf::Arena* arena);
-  StatsExtraInfo(::google::protobuf::Arena* arena, const StatsExtraInfo& from);
-  StatsExtraInfo(::google::protobuf::Arena* arena, StatsExtraInfo&& from) noexcept
-      : StatsExtraInfo(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
-  static void* PlacementNew_(const void*, void* mem,
-                             ::google::protobuf::Arena* arena);
-  static constexpr auto InternalNewImpl_();
-  static const ::google::protobuf::internal::ClassDataFull _class_data_;
-
- public:
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kNumHits75FieldNumber = 1,
-    kNumHits50FieldNumber = 2,
-    kNumHits25FieldNumber = 3,
-  };
-  // double num_hits_75 = 1;
-  bool has_num_hits_75() const;
-  void clear_num_hits_75() ;
-  double num_hits_75() const;
-  void set_num_hits_75(double value);
-
-  private:
-  double _internal_num_hits_75() const;
-  void _internal_set_num_hits_75(double value);
-
-  public:
-  // double num_hits_50 = 2;
-  bool has_num_hits_50() const;
-  void clear_num_hits_50() ;
-  double num_hits_50() const;
-  void set_num_hits_50(double value);
-
-  private:
-  double _internal_num_hits_50() const;
-  void _internal_set_num_hits_50(double value);
-
-  public:
-  // double num_hits_25 = 3;
-  bool has_num_hits_25() const;
-  void clear_num_hits_25() ;
-  double num_hits_25() const;
-  void set_num_hits_25(double value);
-
-  private:
-  double _internal_num_hits_25() const;
-  void _internal_set_num_hits_25(double value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:aim.StatsExtraInfo)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 0,
-      0, 2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(
-        ::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena);
-    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
-                          ::google::protobuf::Arena* arena, const Impl_& from,
-                          const StatsExtraInfo& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    double num_hits_75_;
-    double num_hits_50_;
-    double num_hits_25_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_stats_2eproto;
-};
 // -------------------------------------------------------------------
 
 class ProximityPercentiles final : public ::google::protobuf::Message
@@ -351,7 +130,7 @@ class ProximityPercentiles final : public ::google::protobuf::Message
     return reinterpret_cast<const ProximityPercentiles*>(
         &_ProximityPercentiles_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 0;
   friend void swap(ProximityPercentiles& a, ProximityPercentiles& b) { a.Swap(&b); }
   inline void Swap(ProximityPercentiles* other) {
     if (other == this) return;
@@ -647,7 +426,7 @@ class StatsInfo final : public ::google::protobuf::Message
     return reinterpret_cast<const StatsInfo*>(
         &_StatsInfo_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 1;
   friend void swap(StatsInfo& a, StatsInfo& b) { a.Swap(&b); }
   inline void Swap(StatsInfo* other) {
     if (other == this) return;
@@ -821,94 +600,6 @@ class StatsInfo final : public ::google::protobuf::Message
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// StatsExtraInfo
-
-// double num_hits_75 = 1;
-inline bool StatsExtraInfo::has_num_hits_75() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline void StatsExtraInfo::clear_num_hits_75() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_hits_75_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline double StatsExtraInfo::num_hits_75() const {
-  // @@protoc_insertion_point(field_get:aim.StatsExtraInfo.num_hits_75)
-  return _internal_num_hits_75();
-}
-inline void StatsExtraInfo::set_num_hits_75(double value) {
-  _internal_set_num_hits_75(value);
-  _impl_._has_bits_[0] |= 0x00000001u;
-  // @@protoc_insertion_point(field_set:aim.StatsExtraInfo.num_hits_75)
-}
-inline double StatsExtraInfo::_internal_num_hits_75() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.num_hits_75_;
-}
-inline void StatsExtraInfo::_internal_set_num_hits_75(double value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_hits_75_ = value;
-}
-
-// double num_hits_50 = 2;
-inline bool StatsExtraInfo::has_num_hits_50() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline void StatsExtraInfo::clear_num_hits_50() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_hits_50_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline double StatsExtraInfo::num_hits_50() const {
-  // @@protoc_insertion_point(field_get:aim.StatsExtraInfo.num_hits_50)
-  return _internal_num_hits_50();
-}
-inline void StatsExtraInfo::set_num_hits_50(double value) {
-  _internal_set_num_hits_50(value);
-  _impl_._has_bits_[0] |= 0x00000002u;
-  // @@protoc_insertion_point(field_set:aim.StatsExtraInfo.num_hits_50)
-}
-inline double StatsExtraInfo::_internal_num_hits_50() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.num_hits_50_;
-}
-inline void StatsExtraInfo::_internal_set_num_hits_50(double value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_hits_50_ = value;
-}
-
-// double num_hits_25 = 3;
-inline bool StatsExtraInfo::has_num_hits_25() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline void StatsExtraInfo::clear_num_hits_25() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_hits_25_ = 0;
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline double StatsExtraInfo::num_hits_25() const {
-  // @@protoc_insertion_point(field_get:aim.StatsExtraInfo.num_hits_25)
-  return _internal_num_hits_25();
-}
-inline void StatsExtraInfo::set_num_hits_25(double value) {
-  _internal_set_num_hits_25(value);
-  _impl_._has_bits_[0] |= 0x00000004u;
-  // @@protoc_insertion_point(field_set:aim.StatsExtraInfo.num_hits_25)
-}
-inline double StatsExtraInfo::_internal_num_hits_25() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.num_hits_25_;
-}
-inline void StatsExtraInfo::_internal_set_num_hits_25(double value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_hits_25_ = value;
-}
-
 // -------------------------------------------------------------------
 
 // ProximityPercentiles

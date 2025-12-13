@@ -9,6 +9,7 @@
 #include "aim/common/util.h"
 #include "aim/core/perf.h"
 #include "aim/core/stats_manager.h"
+#include "aim/proto/stats.pb.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/settings_screen.h"
@@ -27,28 +28,30 @@ struct HistoryRow {
   i64 stats_id;
 };
 
-std::string GetHitPercentageString(const StatsRow& stats) {
-  if (stats.num_shots > 0) {
-    float hit_percent = stats.num_hits / stats.num_shots;
+std::string GetHitPercentageString(const StatsDbRow& stats) {
+  float num_shots = stats.info.num_shots();
+  float num_hits = stats.info.num_hits();
+  if (num_shots > 0) {
+    float hit_percent = num_hits / num_shots;
     return std::format("{}/{} ({:.1f}%)",
-                       MaybeIntToString(stats.num_hits, 1),
-                       MaybeIntToString(stats.num_shots, 1),
+                       MaybeIntToString(num_hits, 1),
+                       MaybeIntToString(num_shots, 1),
                        hit_percent * 100);
   }
   return "";
 }
 
-struct StatsInfo {
-  std::vector<StatsRow> all_stats;
-  std::vector<StatsRow> sorted_stats;
-  StatsRow stats;
-  StatsRow previous_high_score_stats;
-  StatsRow average_stats;
+struct StatsDetails {
+  std::vector<StatsDbRow> all_stats;
+  std::vector<StatsDbRow> sorted_stats;
+  StatsDbRow stats;
+  StatsDbRow previous_high_score_stats;
+  StatsDbRow average_stats;
 
   int last_n_average = 0;
-  StatsRow last_n_average_stats;
-  StatsRow before_last_n_average_stats;
-  StatsRow median_stats;
+  StatsDbRow last_n_average_stats;
+  StatsDbRow before_last_n_average_stats;
+  StatsDbRow median_stats;
 
   std::vector<double> scores;
   float min_score = 0;
@@ -61,8 +64,8 @@ struct StatsComparison {
   std::string score_diff_string;
 };
 
-StatsComparison GetStatsComparison(const StatsRow& current_stats,
-                                   const StatsRow& comparison_stats) {
+StatsComparison GetStatsComparison(const StatsDbRow& current_stats,
+                                   const StatsDbRow& comparison_stats) {
   StatsComparison r;
   r.score_diff = current_stats.score - comparison_stats.score;
   r.score_diff_percent = r.score_diff / comparison_stats.score;
@@ -86,7 +89,9 @@ class StatsScreen : public UiScreen {
     if (scenario_) {
       reference_scenario_id_ = scenario_->unevaluated_def.reference_def().scenario_id();
     }
-    is_valid_ = GetStatsInfo(&info_);
+
+    is_valid_ = InitializeStatsDetails();
+
     performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
@@ -135,7 +140,8 @@ class StatsScreen : public UiScreen {
     if (reset_stats_) {
       reset_stats_ = false;
       history_rows_ = {};
-      is_valid_ = GetStatsInfo(&info_);
+      details_ = {};
+      is_valid_ = InitializeStatsDetails();
     }
 
     if (!is_valid_) {
@@ -162,7 +168,7 @@ class StatsScreen : public UiScreen {
       PopSelf();
     });
 
-    if (info_.all_stats.size() > 1) {
+    if (details_.all_stats.size() > 1) {
       if (ImGui::BeginTabBar("StatsTabBar")) {
         ImGuiTabItemFlags first_tab_flags = ImGuiTabItemFlags_None;
         if (!initialized_selected_tab_) {
@@ -244,22 +250,22 @@ class StatsScreen : public UiScreen {
       ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableHeadersRow();
 
-      DrawStatsTableRow("Current", info_.stats, info_.stats);
-      if (info_.all_stats.size() > 1) {
+      DrawStatsTableRow("Current", details_.stats, details_.stats);
+      if (details_.all_stats.size() > 1) {
         std::string high_score_name = "Current high";
-        if (info_.stats.score >= info_.previous_high_score_stats.score) {
+        if (details_.stats.score >= details_.previous_high_score_stats.score) {
           high_score_name = "Previous high";
         }
-        DrawStatsTableRow(high_score_name, info_.stats, info_.previous_high_score_stats);
-        DrawStatsTableRow("Average", info_.stats, info_.average_stats);
-        DrawStatsTableRow("Median", info_.stats, info_.median_stats);
+        DrawStatsTableRow(high_score_name, details_.stats, details_.previous_high_score_stats);
+        DrawStatsTableRow("Average", details_.stats, details_.average_stats);
+        DrawStatsTableRow("Median", details_.stats, details_.median_stats);
       }
 
       std::vector<std::string> compare_to_scenarios = GetCompareToList();
       for (const std::string& scenario : compare_to_scenarios) {
         auto compare_stats = app_.stats_manager().GetAggregateStats(scenario);
         if (compare_stats.total_runs > 0) {
-          DrawStatsTableRow(scenario, info_.stats, compare_stats.high_score_stats);
+          DrawStatsTableRow(scenario, details_.stats, compare_stats.high_score_stats);
         }
       }
 
@@ -268,8 +274,8 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawStatsTableRow(const std::string& name,
-                         const StatsRow& current_stats,
-                         const StatsRow& comparison_stats) {
+                         const StatsDbRow& current_stats,
+                         const StatsDbRow& comparison_stats) {
     ImGui::TableNextRow();
 
     ImGui::TableNextColumn();
@@ -300,7 +306,7 @@ class StatsScreen : public UiScreen {
       // Penalty
       ImGui::TableNextColumn();
 
-      float max_score = comparison_stats.num_hits;
+      float max_score = comparison_stats.info.num_hits();
       float penalty = max_score - comparison_stats.score;
       float penalty_percent = 100 * (penalty / max_score);
 
@@ -311,16 +317,16 @@ class StatsScreen : public UiScreen {
 
     // cm/360
     ImGui::TableNextColumn();
-    ImGui::Text(MaybeIntToString(comparison_stats.cm_per_360));
+    ImGui::Text(MaybeIntToString(comparison_stats.mm_per_360 * 10));
 
     // time
     ImGui::TableNextColumn();
     std::string time_ago;
-    auto maybe_time = ParseTimestampStringAsMicros(comparison_stats.timestamp);
-    if (maybe_time) {
-      ImGui::Text(GetHowLongAgoString(*maybe_time, GetNowEpochMicros()));
-      ImGui::HelpTooltip(comparison_stats.timestamp);
+    if (comparison_stats.epoch_seconds > 0) {
+      ImGui::Text(
+          GetHowLongAgoString(comparison_stats.epoch_seconds * 1000000, GetNowEpochMicros()));
     }
+    //    ImGui::HelpTooltip(comparison_stats.timestamp);
   }
 
   bool BeginMainWindow(const std::string& name, float width_multiple) {
@@ -376,15 +382,15 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawCurrentStatsPanel() {
-    StatsRow stats = info_.stats;
-    const auto& all_stats = info_.all_stats;
-    float previous_high_score = info_.previous_high_score_stats.score;
+    StatsDbRow stats = details_.stats;
+    const auto& all_stats = details_.all_stats;
+    float previous_high_score = details_.previous_high_score_stats.score;
     bool has_previous_high_score = all_stats.size() > 0 && previous_high_score > 0;
 
     float percent_diff = 0;
     std::string percent_diff_string;
     if (has_previous_high_score) {
-      auto comparison = GetStatsComparison(info_.stats, info_.previous_high_score_stats);
+      auto comparison = GetStatsComparison(details_.stats, details_.previous_high_score_stats);
       percent_diff = comparison.score_diff_percent;
       percent_diff_string = comparison.score_diff_percent_string;
     }
@@ -426,7 +432,7 @@ class StatsScreen : public UiScreen {
         ImGui::Text(hit_percent);
       }
     }
-    auto avg_comparison = GetStatsComparison(info_.stats, info_.average_stats);
+    auto avg_comparison = GetStatsComparison(details_.stats, details_.average_stats);
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Average");
     ImGui::BeginDisabled();
@@ -434,6 +440,7 @@ class StatsScreen : public UiScreen {
     ImGui::Button(std::format("{}###avg_diff_button", avg_comparison.score_diff_percent_string));
     ImGui::EndDisabled();
 
+    /*
     if (info_.stats.extra_info.has_value()) {
       auto& extra_info = *info_.stats.extra_info;
       ImGui::AlignTextToFramePadding();
@@ -447,6 +454,7 @@ class StatsScreen : public UiScreen {
           "Breakdown of hit  percent by closeness to center. First is anywhere on target, then "
           "middle 75%, middle 50%, .. 25%");
     }
+    */
 
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
@@ -506,18 +514,18 @@ class StatsScreen : public UiScreen {
     if (ImPlot::BeginPlot(std::format("##Scores_{}", scenario_id_).c_str())) {
       // ImPlot::SetupAxisLimits(ImAxis_X1,0,1.0);
       // ImPlot::SetupAxisLimits(ImAxis_Y1,0,1.6);
-      float max_score = info_.previous_high_score_stats.score;
-      float score_range = max_score - info_.min_score;
+      float max_score = details_.previous_high_score_stats.score;
+      float score_range = max_score - details_.min_score;
       bool has_score_range = score_range > 0;
       ImPlotAxisFlags autofit_flags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;
       ImPlot::SetupAxes("Run", "Score", autofit_flags, has_score_range ? 0 : autofit_flags);
       if (has_score_range) {
         float padding = score_range * 0.15;
         ImPlot::SetupAxisLimits(
-            ImAxis_Y1, ClampPositive(info_.min_score - padding), max_score + padding);
+            ImAxis_Y1, ClampPositive(details_.min_score - padding), max_score + padding);
       }
       ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-      ImPlot::PlotStems("##Scores", &info_.scores[0], info_.scores.size());
+      ImPlot::PlotStems("##Scores", &details_.scores[0], details_.scores.size());
       ImPlot::EndPlot();
     }
 
@@ -538,21 +546,23 @@ class StatsScreen : public UiScreen {
 
     if (!history_rows_) {
       history_rows_ = std::vector<HistoryRow>();
-      history_rows_->reserve(info_.all_stats.size());
+      history_rows_->reserve(details_.all_stats.size());
       int run_number = 0;
-      i64 now = GetNowEpochMicros();
-      for (StatsRow& stats : info_.all_stats) {
+      i64 now_micros = GetNowEpochMicros();
+      for (StatsDbRow& stats : details_.all_stats) {
         run_number++;
         HistoryRow row;
         row.stats_id = stats.stats_id;
         row.run_number = run_number;
         row.score = stats.score;
 
-        auto maybe_time = ParseTimestampStringAsMicros(stats.timestamp);
-        if (maybe_time) {
-          row.time_ago = GetHowLongAgoString(*maybe_time, now);
-          row.timestamp = stats.timestamp;
+        i64 time_micros = stats.epoch_seconds * 1000000;
+        if (time_micros > 0) {
+          row.time_ago = GetHowLongAgoString(time_micros, now_micros);
         }
+        auto stats_time = std::chrono::system_clock::from_time_t(stats.epoch_seconds);
+        std::chrono::zoned_time local_stats_time(std::chrono::current_zone(), stats_time);
+        row.timestamp = std::format("{:%Y-%m-%d %H:%M}", local_stats_time);
         history_rows_->push_back(row);
       }
       if (sort_by_score_) {
@@ -645,11 +655,10 @@ class StatsScreen : public UiScreen {
     return result;
   }
 
-  bool GetStatsInfo(StatsInfo* info) {
-    *info = {};
+  bool InitializeStatsDetails() {
     auto all_stats = app_.stats_manager().GetStats(scenario_id_);
-    info->all_stats.reserve(all_stats.size());
-    info->scores.reserve(all_stats.size());
+    details_.all_stats.reserve(all_stats.size());
+    details_.scores.reserve(all_stats.size());
 
     if (all_stats.size() == 0) {
       return false;
@@ -661,22 +670,25 @@ class StatsScreen : public UiScreen {
     int found_max_index = -1;
     float max_score = 0;
     bool found_stats = false;
-    info->min_score = 1000000;
+    details_.min_score = 1000000;
 
     float total_runs_count = 0;
     for (int i = 0; i < all_stats.size(); ++i) {
-      StatsRow& stats = all_stats[i];
-      info->all_stats.push_back(stats);
-      info->scores.push_back(stats.score);
+      StatsDbRow& stats = all_stats[i];
+      details_.all_stats.push_back(stats);
+      details_.scores.push_back(stats.score);
 
-      info->average_stats.score += stats.score;
-      info->average_stats.num_hits += stats.num_hits;
-      info->average_stats.num_shots += stats.num_shots;
-      info->average_stats.cm_per_360 += stats.cm_per_360;
+      details_.average_stats.score += stats.score;
+      details_.average_stats.mm_per_360 += stats.mm_per_360;
+
+      StatsInfo& info = details_.average_stats.info;
+      info.set_num_hits(info.num_hits() + stats.info.num_hits());
+      info.set_num_shots(info.num_shots() + stats.info.num_shots());
+
       total_runs_count++;
 
       if (stats.stats_id == run_id_) {
-        info->stats = stats;
+        details_.stats = stats;
         found_stats = true;
         break;
       }
@@ -685,16 +697,19 @@ class StatsScreen : public UiScreen {
         found_max_index = i;
         max_score = stats.score;
       }
-      if (stats.score < info->min_score) {
-        info->min_score = stats.score;
+      if (stats.score < details_.min_score) {
+        details_.min_score = stats.score;
       }
     }
 
     if (total_runs_count > 0) {
-      info->average_stats.score /= total_runs_count;
-      info->average_stats.num_hits /= total_runs_count;
-      info->average_stats.num_shots /= total_runs_count;
-      info->average_stats.cm_per_360 /= total_runs_count;
+      details_.average_stats.score /= total_runs_count;
+
+      details_.average_stats.info.set_num_hits(details_.average_stats.info.num_hits() /
+                                               total_runs_count);
+      details_.average_stats.info.set_num_shots(details_.average_stats.info.num_shots() /
+                                                total_runs_count);
+      details_.average_stats.mm_per_360 /= total_runs_count;
     }
 
     if (!found_stats) {
@@ -702,19 +717,19 @@ class StatsScreen : public UiScreen {
     }
 
     if (found_max_index >= 0) {
-      info->previous_high_score_stats = all_stats[found_max_index];
+      details_.previous_high_score_stats = all_stats[found_max_index];
     }
 
-    info->sorted_stats = info->all_stats;
-    std::sort(info->sorted_stats.begin(),
-              info->sorted_stats.end(),
-              [](const StatsRow& lhs, const StatsRow& rhs) { return lhs.score < rhs.score; });
+    details_.sorted_stats = details_.all_stats;
+    std::sort(details_.sorted_stats.begin(),
+              details_.sorted_stats.end(),
+              [](const StatsDbRow& lhs, const StatsDbRow& rhs) { return lhs.score < rhs.score; });
 
-    if (info->sorted_stats.size() > 0) {
-      int mid = info->sorted_stats.size() / 2;
+    if (details_.sorted_stats.size() > 0) {
+      int mid = details_.sorted_stats.size() / 2;
       // Maybe average the two mid for a more true median? For now just take the higher one so the
       // time and other fields make sense.
-      info->median_stats = info->sorted_stats[mid];
+      details_.median_stats = details_.sorted_stats[mid];
     }
 
     return true;
@@ -722,7 +737,9 @@ class StatsScreen : public UiScreen {
 
   std::string scenario_id_;
   i64 run_id_;
-  StatsInfo info_;
+
+  StatsDetails details_;
+
   bool is_valid_ = false;
 
   float char_x_ = 0;

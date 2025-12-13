@@ -25,57 +25,87 @@ float GetScoreLevel(float score, float start_score, float end_score) {
   return glm::clamp<float>(num_levels * percent, 0, num_levels + 0.99);
 }
 
-}  // namespace
+class StatsManagerImpl : public StatsManager {
+ public:
+  StatsManagerImpl(AimDb* db) : db_(db) {}
 
-StatsManager::StatsManager(FileSystem* fs)
-    : stats_db_(std::make_unique<StatsDb>(fs->GetUserDataPath("db/stats.db"))) {}
-
-void StatsManager::AddStats(const std::string& scenario_id, StatsRow* row) {
-  stats_db_->AddStats(scenario_id, row);
-  stats_cache_.erase(scenario_id);
-}
-
-std::vector<StatsRow> StatsManager::GetStats(const std::string& scenario_id) {
-  // TODO: Cache at this layer?
-  return stats_db_->GetStats(scenario_id);
-}
-
-i64 StatsManager::GetLatestRunId(const std::string& scenario_id) {
-  return stats_db_->GetLatestRunId(scenario_id);
-}
-
-AggregateScenarioStats StatsManager::GetAggregateStats(const std::string& scenario_id) {
-  auto it = stats_cache_.find(scenario_id);
-  if (it != stats_cache_.end()) {
-    return it->second;
+  void AddStats(const std::string& scenario_name, StatsDbRow* row) override {
+    i64 scenario_id = db_->GetScenarioId(scenario_name);
+    db_->AddStats(scenario_id, row);
+    stats_cache_.erase(scenario_id);
   }
-  AggregateScenarioStats stats = GetAggregateStatsFromDb(scenario_id);
-  stats_cache_[scenario_id] = stats;
-  return stats;
-}
 
-AggregateScenarioStats StatsManager::GetAggregateStatsFromDb(const std::string& scenario_id) {
-  std::vector<StatsRow> all_stats = GetStats(scenario_id);
+  std::vector<StatsDbRow> GetStats(const std::string& scenario_name) override {
+    // TODO: Cache at this layer?
+    i64 scenario_id = db_->GetScenarioId(scenario_name);
+    return GetStats(scenario_id);
+  }
 
-  AggregateScenarioStats info;
-  info.total_runs = all_stats.size();
-  if (all_stats.size() == 0) {
+  i64 GetLatestRunId(const std::string& scenario_id) override {
+    // return stats_db_->GetLatestRunId(scenario_id);
+    return 0;
+  }
+
+  AggregateScenarioStats GetAggregateStats(const std::string& scenario_name) override {
+    i64 scenario_id = db_->GetScenarioId(scenario_name);
+    auto it = stats_cache_.find(scenario_id);
+    if (it != stats_cache_.end()) {
+      return it->second;
+    }
+    AggregateScenarioStats stats = GetAggregateStatsFromDb(scenario_id);
+    stats_cache_[scenario_id] = stats;
+    return stats;
+  }
+
+  void DeleteAllStats(const std::string& scenario_name) override {
+    i64 scenario_id = db_->GetScenarioId(scenario_name);
+    db_->DeleteAllStats(scenario_id);
+    stats_cache_.erase(scenario_id);
+  }
+
+  void CopyAllStats(const std::string& from_scenario_name,
+                    const std::string& to_scenario_name) override {}
+
+  void DeleteStats(const std::string& scenario_name, i64 run_id) override {
+    i64 scenario_id = db_->GetScenarioId(scenario_name);
+    db_->DeleteStats(scenario_id, run_id);
+  }
+
+ private:
+  std::vector<StatsDbRow> GetStats(i64 scenario_id) {
+    // TODO: Cache at this layer?
+    return db_->GetStats(scenario_id);
+  }
+
+  AggregateScenarioStats GetAggregateStatsFromDb(i64 scenario_id) {
+    std::vector<StatsDbRow> all_stats = GetStats(scenario_id);
+
+    AggregateScenarioStats info;
+    info.total_runs = all_stats.size();
+    if (all_stats.size() == 0) {
+      return info;
+    }
+
+    info.last_run_stats = all_stats.back();
+    int found_max_index = 0;
+    float max_score = -100000;
+    for (int i = 0; i < all_stats.size(); ++i) {
+      StatsDbRow& stats = all_stats[i];
+      if (stats.score >= max_score) {
+        found_max_index = i;
+        max_score = stats.score;
+      }
+    }
+    info.high_score_stats = all_stats[found_max_index];
     return info;
   }
 
-  info.last_run_stats = all_stats.back();
-  int found_max_index = 0;
-  float max_score = -100000;
-  for (int i = 0; i < all_stats.size(); ++i) {
-    StatsRow& stats = all_stats[i];
-    if (stats.score >= max_score) {
-      found_max_index = i;
-      max_score = stats.score;
-    }
-  }
-  info.high_score_stats = all_stats[found_max_index];
-  return info;
-}
+  std::unique_ptr<StatsDbRow> stats_db_;
+  std::unordered_map<i64, AggregateScenarioStats> stats_cache_;
+  AimDb* db_;
+};
+
+}  // namespace
 
 float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
   if (def.start_score() > 0) {
@@ -91,25 +121,8 @@ float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
   return 0;
 }
 
-void StatsManager::DeleteAllStats(const std::string& scenario_id) {
-  stats_db_->DeleteAllStats(scenario_id);
-  stats_cache_.erase(scenario_id);
-}
-
-void StatsManager::CopyAllStats(const std::string& from_scenario_id,
-                                const std::string& to_scenario_id) {
-  stats_db_->CopyAllStats(from_scenario_id, to_scenario_id);
-}
-
-void StatsManager::DeleteStats(const std::string& scenario_id, i64 run_id) {
-  stats_db_->DeleteStats(scenario_id, run_id);
-}
-
-void StatsManager::RenameScenario(const std::string& old_scenario_id,
-                                  const std::string& new_scenario_id) {
-  stats_db_->RenameScenario(old_scenario_id, new_scenario_id);
-  stats_cache_.erase(old_scenario_id);
-  stats_cache_.erase(new_scenario_id);
+std::unique_ptr<StatsManager> CreateStatsManager(AimDb* db) {
+  return std::make_unique<StatsManagerImpl>(db);
 }
 
 }  // namespace aim
