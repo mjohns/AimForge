@@ -200,12 +200,23 @@ TEST_F(AimDbTest, ReadAndWriteStats) {
   ASSERT_TRUE(db_->AddStats(scenario1, &stats1_2));
   ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1), EqualsStats(stats1_2)));
 
+  db_->DeleteStats(scenario1, stats1_2.stats_id);
+  ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1)));
+
   StatsDbRow stats2_1;
   stats2_1.mm_per_360 = 360;
   stats2_1.score = 2454;
   stats2_1.info.set_num_hits(11);
   ASSERT_TRUE(db_->AddStats(scenario2, &stats2_1));
   ASSERT_THAT(db_->GetStats(scenario2), ElementsAre(EqualsStats(stats2_1)));
+
+  ASSERT_TRUE(db_->AddStats(scenario2, &stats2_1));
+  ASSERT_THAT(db_->GetStats(scenario2).size(), Eq(2));
+
+  db_->DeleteAllStats(scenario2);
+  ASSERT_THAT(db_->GetStats(scenario2), IsEmpty());
+
+  ASSERT_THAT(db_->GetStats(scenario1), ElementsAre(EqualsStats(stats1_1)));
 }
 
 TEST_F(AimDbTest, PlayTime) {

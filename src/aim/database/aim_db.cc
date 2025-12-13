@@ -116,6 +116,14 @@ WHERE ScenarioId = ?
 ORDER BY StatsId ASC;
 )AIMS";
 
+const char* kDeleteStatsRunSql = R"AIMS(
+DELETE FROM Stats WHERE ScenarioId = ? AND StatsId = ?;
+)AIMS";
+
+const char* kDeleteAllStatsForScenarioSql = R"AIMS(
+DELETE FROM Stats WHERE ScenarioId = ?;
+)AIMS";
+
 // Used to apply labels like "starred"
 const char* kCreateLabeledItemsTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS LabeledItems (
@@ -444,10 +452,44 @@ class AimDbImpl : public AimDb {
     return all_stats;
   }
 
+  void CopyAllStats(i64 from_scenario_id, i64 to_scenario_id) override {}
+
+  void DeleteStats(i64 scenario_id, i64 stats_run_id) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kDeleteStatsRunSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return;
+    }
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+    sqlite3_bind_int64(stmt, 2, stats_run_id);
+    rc = sqlite3_step(stmt);
+
+    if (rc != SQLITE_DONE) {
+      Logger::get()->warn(
+          "Failed to delete stats for {} {}: {}", scenario_id, stats_run_id, sqlite3_errmsg(db_));
+    }
+    sqlite3_finalize(stmt);
+  }
+
+  void DeleteAllStats(i64 scenario_id) override {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kDeleteAllStatsForScenarioSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return;
+    }
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+      Logger::get()->warn("Failed to delete stats for {}: {}", scenario_id, sqlite3_errmsg(db_));
+    }
+    sqlite3_finalize(stmt);
+  }
+
   bool AddPlayTime(i64 scenario_id,
                    float duration_seconds,
                    const PlayTimeDetails& details) override {
-
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kAddPlayTimeSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {

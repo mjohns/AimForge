@@ -74,6 +74,9 @@ class AimDb {
   // The stats_id and timestamp will be filled in after insert.
   virtual bool AddStats(i64 scenario_id, StatsDbRow* row) = 0;
   virtual std::vector<StatsDbRow> GetStats(i64 scenario_id) = 0;
+  virtual void CopyAllStats(i64 from_scenario_id, i64 to_scenario_id) = 0;
+  virtual void DeleteStats(i64 scenario_id, i64 stats_run_id) = 0;
+  virtual void DeleteAllStats(i64 scenario_id) = 0;
 
   //
   // PlayTime
