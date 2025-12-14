@@ -1,10 +1,12 @@
 #include "aim_db.h"
 
+#include <cassert>
 #include <format>
 #include <string>
 
 #include "aim/common/files.h"
 #include "aim/common/log.h"
+#include "aim/common/name_util.h"
 #include "aim/common/times.h"
 #include "aim/database/sqlite_util.h"
 #include "sqlite3.h"
@@ -339,10 +341,45 @@ class AimDbImpl : public AimDb {
   }
 
   void RenameScenario(const std::string& old_name, const std::string& new_name) override {
+    NameInfo old_info = GetNameInfo(old_name);
+    NameInfo new_info = GetNameInfo(new_name);
+    if (old_info.suffix.has_value() || new_info.suffix.has_value()) {
+      // The base scenarios should be renamed and not the dynamic variations. This determination
+      // should be handled at the application layer.
+      assert(false && "Renaming non base scenarios");
+      return;
+    }
+
     std::vector<std::string> candidate_names = GetScenarioNamesWithPrefix(old_name);
     for (const std::string& candidate_name : candidate_names) {
+      NameInfo info = GetNameInfo(candidate_name);
+      if (info.base_name == old_name && info.suffix.has_value()) {
+        RenameSingleScenario(candidate_name, std::format("{} {}", new_name, *info.suffix));
+      }
     }
+
     RenameSingleScenario(old_name, new_name);
+  }
+
+  std::vector<std::string> GetScenarioNamesWithPrefix(const std::string& prefix) override {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, kGetScenarioNamesWithPrefixSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    std::string like_value = std::format("{}%", prefix);
+    BindString(stmt, 1, like_value);
+
+    std::vector<std::string> names;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      names.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
+    }
+
+    sqlite3_finalize(stmt);
+    return names;
   }
 
   void RenameSingleScenario(const std::string& old_name, const std::string& new_name) {
@@ -597,6 +634,11 @@ class AimDbImpl : public AimDb {
   }
 
   void UpdateRecentView(ObjectType type, const std::string& name) override {
+    if (type == ObjectType::SCENARIO) {
+        // Ensure there is an entry for this scenario in the db.
+      GetScenarioId(name);
+    }
+
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kInsertRecentViewsSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -642,6 +684,11 @@ class AimDbImpl : public AimDb {
     if (object_id.size() == 0) {
       return;
     }
+    if (type == ObjectType::SCENARIO) {
+        // Ensure there is an entry for this scenario in the db.
+      GetScenarioId(object_id);
+    }
+
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kInsertLabeledItemSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -719,27 +766,6 @@ class AimDbImpl : public AimDb {
 
     sqlite3_finalize(stmt);
     return name_to_id_map;
-  }
-
-  std::vector<std::string> GetScenarioNamesWithPrefix(const std::string& prefix) {
-    sqlite3_stmt* stmt;
-
-    int rc = sqlite3_prepare_v2(db_, kGetScenarioNamesWithPrefixSql, -1, &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
-      return {};
-    }
-
-    std::string like_value = std::format("{}%", prefix);
-    BindString(stmt, 1, like_value);
-
-    std::vector<std::string> names;
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-      names.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
-    }
-
-    sqlite3_finalize(stmt);
-    return names;
   }
 
   std::optional<i64> GetExistingIdFromDb(const std::string& name, const char* sql) {

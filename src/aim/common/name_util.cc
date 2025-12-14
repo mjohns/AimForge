@@ -80,7 +80,7 @@ std::optional<float> GetCmFromWord(const std::string_view& word) {
 
 // Returns the level number from single words like L1, L-1.
 std::optional<float> GetLevelFromWord(const std::string_view& word) {
-  if (word.length() <= 1 && !word.starts_with("L")) {
+  if (word.length() <= 1 || !word.starts_with("L")) {
     return {};
   }
   float level;

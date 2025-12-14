@@ -109,6 +109,26 @@ TEST_F(AimDbTest, GetScenarioId) {
       UnorderedElementsAre(Pair("s1", id1), Pair("s3", id3), Pair("s2", new_id2), Pair("s4", id4)));
 }
 
+TEST_F(AimDbTest, GetScenarioNamesWithPrefix) {
+  db_->GetScenarioId("Scenario Foo");
+  db_->GetScenarioId("Scenario Foo L1");
+  db_->GetScenarioId("Scenario Foo L2");
+  db_->GetScenarioId("Scenario Foo L2 25cm");
+  db_->GetScenarioId("Scenario Bar L2 25cm");
+  db_->GetScenarioId("Scenario Bar");
+  db_->GetScenarioId("Scenario Baz");
+
+  EXPECT_THAT(db_->GetScenarioNamesWithPrefix("Scenario Baz"),
+              UnorderedElementsAre("Scenario Baz"));
+
+  EXPECT_THAT(db_->GetScenarioNamesWithPrefix("Scenario Bar"),
+              UnorderedElementsAre("Scenario Bar", "Scenario Bar L2 25cm"));
+
+  EXPECT_THAT(db_->GetScenarioNamesWithPrefix("Scenario Foo"),
+              UnorderedElementsAre(
+                  "Scenario Foo", "Scenario Foo L1", "Scenario Foo L2", "Scenario Foo L2 25cm"));
+}
+
 TEST_F(AimDbTest, GetPlaylistNameMap) {
   i64 id1 = db_->GetPlaylistId("p1");
   ASSERT_THAT(id1, Gt(0));
@@ -322,6 +342,9 @@ TEST_F(AimDbTest, LabeledItems) {
 }
 
 TEST_F(AimDbTest, TestRenameScenario) {
+  i64 s1 = db_->GetScenarioId("s1");
+  i64 s2 = db_->GetScenarioId("s2");
+
   db_->UpdateRecentView(ObjectType::SCENARIO, "s1");
   db_->UpdateRecentView(ObjectType::SCENARIO, "s2");
 
@@ -333,4 +356,31 @@ TEST_F(AimDbTest, TestRenameScenario) {
   EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10),
               ElementsAre(EqualsViewName("s2"), EqualsViewName("s1_new")));
   EXPECT_THAT(db_->GetRecentViews(ObjectType::PLAYLIST, 10), ElementsAre(EqualsViewName("s1")));
+  EXPECT_THAT(db_->GetScenarioId("s1_new"), Eq(s1));
+  EXPECT_THAT(db_->GetScenarioId("s2"), Eq(s2));
+  EXPECT_THAT(db_->GetScenarioId("s1"), Ne(s1));
+}
+
+TEST_F(AimDbTest, TestRenameScenario_WithDynamicSuffixes) {
+  i64 s1 = db_->GetScenarioId("s1");
+  i64 s1_25 = db_->GetScenarioId("s1 25cm");
+  i64 s2 = db_->GetScenarioId("s2");
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s1");
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s1 25cm");
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s1 35cm");
+  db_->UpdateRecentView(ObjectType::SCENARIO, "s2");
+
+  db_->RenameScenario("s1", "s1_new");
+
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10),
+              ElementsAre(EqualsViewName("s2"),
+                          EqualsViewName("s1_new 35cm"),
+                          EqualsViewName("s1_new 25cm"),
+                          EqualsViewName("s1_new")));
+
+  EXPECT_THAT(db_->GetScenarioId("s1_new"), Eq(s1));
+  EXPECT_THAT(db_->GetScenarioId("s1_new 25cm"), Eq(s1_25));
+  EXPECT_THAT(db_->GetScenarioId("s2"), Eq(s2));
+  EXPECT_THAT(db_->GetScenarioId("s1"), Ne(s1));
+  EXPECT_THAT(db_->GetScenarioId("s1 25cm"), Ne(s1_25));
 }

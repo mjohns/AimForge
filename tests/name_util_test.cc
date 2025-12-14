@@ -73,6 +73,8 @@ TEST(NameUtilTest, GetCmFromWord) {
 TEST(NameUtilTest, GetLevelFromWord) {
   EXPECT_FALSE(GetLevelFromWord("Scenario").has_value());
   EXPECT_FALSE(GetLevelFromWord("L").has_value());
+  EXPECT_FALSE(GetLevelFromWord("s1").has_value());
+  EXPECT_FALSE(GetLevelFromWord("LL").has_value());
 
   EXPECT_THAT(GetLevelFromWord("L1"), Optional(1));
   EXPECT_THAT(GetLevelFromWord("L2"), Optional(2));
