@@ -34,8 +34,8 @@ struct SimpleSphereWithLightingUniform {
 };
 
 struct HealthBar {
-  glm::mat4 transform;
-  float health_percent;
+  glm::mat4 transform{1.0f};
+  float health_percent = 0.f;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -719,7 +719,7 @@ class RendererImpl : public Renderer {
               glm::vec3 health_bar_center =
                   target.position + up * (height_above_target + target.radius + height / 2.0f);
 
-              auto& health_bar = health_bars.emplace_back(glm::mat4(1.0f));
+              auto& health_bar = health_bars.emplace_back();
               auto& transform = health_bar.transform;
               transform = glm::translate(transform, health_bar_center);
 

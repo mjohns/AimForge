@@ -4,6 +4,7 @@
 #include <fstream>
 #include <optional>
 
+#include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
@@ -417,7 +418,7 @@ class StatsScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Score:");
       ImGui::SameLine();
-      ImGui::Text(MaybeIntToString(stats.score, 2).c_str());
+      ImGui::Text(MaybeIntToString(stats.score, 2));
     }
     if (has_previous_high_score) {
       auto font = app_.font_manager().UseLarge();
@@ -560,9 +561,8 @@ class StatsScreen : public UiScreen {
         if (time_micros > 0) {
           row.time_ago = GetHowLongAgoString(time_micros, now_micros);
         }
-        auto stats_time = std::chrono::system_clock::from_time_t(stats.epoch_seconds);
-        std::chrono::zoned_time local_stats_time(std::chrono::current_zone(), stats_time);
-        row.timestamp = std::format("{:%Y-%m-%d %H:%M}", local_stats_time);
+        row.timestamp = absl::FormatTime(
+            "%Y-%m-%d %H:%M", absl::FromTimeT(stats.epoch_seconds), absl::LocalTimeZone());
         history_rows_->push_back(row);
       }
       if (sort_by_score_) {

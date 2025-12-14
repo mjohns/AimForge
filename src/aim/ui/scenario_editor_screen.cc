@@ -1814,7 +1814,7 @@ class ScenarioEditorScreen : public UiScreen {
         auto& profile = profile_list->at(number);
         if (profile.info().description().size() > 0) {
           ImGui::SameLine();
-          ImGui::TextDisabled(profile.info().description().c_str());
+          ImGui::TextDisabled(profile.info().description());
         }
       }
       if (ImGui::Button("Add##Order")) {

@@ -28,6 +28,10 @@ static void TextDisabledFmt(const std::format_string<_Types...> fmt, _Types&&...
   TextDisabled("%s", message.c_str());
 }
 
+static void TextDisabled(const std::string& val) {
+  TextDisabled("%s", val.c_str());
+}
+
 static void Text(const std::string& val) {
   Text("%s", val.c_str());
 }
