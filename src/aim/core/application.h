@@ -56,6 +56,7 @@ class AimAbslLogSink : public absl::LogSink {
 class Application {
  public:
   ~Application();
+  AIM_NO_COPY(Application);
 
   static std::unique_ptr<Application> Create();
   void RunMainLoop();
@@ -166,11 +167,6 @@ class Application {
 
   void EnableVsync();
   void DisableVsync();
-
-  Application(const Application&) = delete;
-  Application(Application&&) = default;
-  Application& operator=(Application other) = delete;
-  Application& operator=(Application&& other) = delete;
 
  private:
   Application();

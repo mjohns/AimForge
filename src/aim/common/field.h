@@ -48,11 +48,11 @@ struct JitteredField {
   Field<T> jitter;
 };
 
-#define PROTO_FIELD(T, ProtoClass, instance, field_name)                          \
-  aim::Field<##T>(std::bind_front(&##ProtoClass::##field_name, ##instance),       \
-                  std::bind_front(&##ProtoClass::set_##field_name, ##instance),   \
-                  std::bind_front(&##ProtoClass::clear_##field_name, ##instance), \
-                  std::bind_front(&##ProtoClass::has_##field_name, ##instance))
+#define PROTO_FIELD(T, ProtoClass, instance, field_name)                    \
+  aim::Field<T>(std::bind_front(&ProtoClass::field_name, instance),         \
+                std::bind_front(&ProtoClass::set_##field_name, instance),   \
+                std::bind_front(&ProtoClass::clear_##field_name, instance), \
+                std::bind_front(&ProtoClass::has_##field_name, instance))
 
 #define PROTO_FLOAT_FIELD(ProtoClass, instance, field_name) \
   PROTO_FIELD(float, ProtoClass, instance, field_name)

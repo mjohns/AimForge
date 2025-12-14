@@ -297,10 +297,10 @@ class NotificationPopup {
 };
 
 static void HelpMarker(const std::string& text) {
-  ImGui::TextDisabled(aim::kIconHelp);
+  ImGui::TextDisabled("%s", aim::kIconHelp);
   if (ImGui::BeginItemTooltip()) {
     ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-    ImGui::Text(text.c_str());
+    ImGui::Text(text);
     ImGui::PopTextWrapPos();
     ImGui::EndTooltip();
   }
@@ -309,7 +309,7 @@ static void HelpMarker(const std::string& text) {
 static void HelpTooltip(const std::string& text) {
   if (ImGui::BeginItemTooltip()) {
     ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-    ImGui::Text(text.c_str());
+    ImGui::Text(text);
     ImGui::PopTextWrapPos();
     ImGui::EndTooltip();
   }
@@ -690,7 +690,7 @@ static void InputStoredColor(const std::string& id, aim::StoredColor* stored_col
   }
 
   ImGui::SameLine();
-  ImGui::Text(aim::kIconClose);
+  ImGui::Text("%s", aim::kIconClose);
   ImGui::HelpTooltip("Multiply color by value");
 
   ImGui::SameLine();
