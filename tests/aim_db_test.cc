@@ -101,7 +101,8 @@ TEST_F(AimDbTest, GetScenarioId) {
   i64 new_id2 = db_->GetScenarioId("s2");
   EXPECT_THAT(new_id2, Ne(id2));
 
-  i64 id4 = db_->RenameScenario("missing", "s4");
+  db_->RenameScenario("missing", "s4");
+  i64 id4 = db_->GetScenarioId("s4");
 
   EXPECT_THAT(
       db_->GetScenarioIdMap(),

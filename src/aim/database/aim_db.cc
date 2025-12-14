@@ -735,7 +735,7 @@ class AimDbImpl : public AimDb {
 
     std::vector<std::string> names;
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-      names.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
+      names.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
     }
 
     sqlite3_finalize(stmt);

@@ -8,6 +8,7 @@
 #include "SDL3/SDL.h"
 #include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/name_util.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"

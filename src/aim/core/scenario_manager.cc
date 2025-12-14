@@ -13,6 +13,7 @@
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
+#include "aim/common/name_util.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
 #include "aim/scenario/scenario_overrides.h"

@@ -4,7 +4,7 @@
 
 #include "absl/strings/ascii.h"
 #include "absl/strings/str_split.h"
-#include "aim/common/util.h"
+#include "aim/common/name_util.h"
 
 namespace aim {
 namespace {

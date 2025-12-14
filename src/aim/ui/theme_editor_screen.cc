@@ -4,6 +4,7 @@
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/name_util.h"
 #include "aim/common/util.h"
 #include "aim/core/camera.h"
 #include "aim/core/settings_manager.h"

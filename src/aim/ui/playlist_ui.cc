@@ -4,6 +4,7 @@
 
 #include "absl/strings/strip.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/name_util.h"
 #include "aim/common/search.h"
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/playlist_editor_component.h"

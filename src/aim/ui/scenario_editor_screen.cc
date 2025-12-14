@@ -9,6 +9,7 @@
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
+#include "aim/common/name_util.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/search.h"
 #include "aim/common/util.h"
@@ -1814,7 +1815,7 @@ class ScenarioEditorScreen : public UiScreen {
         auto& profile = profile_list->at(number);
         if (profile.info().description().size() > 0) {
           ImGui::SameLine();
-          ImGui::TextDisabled(profile.info().description());
+          ImGui::TextDisabled(profile.info().description().c_str());
         }
       }
       if (ImGui::Button("Add##Order")) {
