@@ -87,10 +87,10 @@ struct PtrField {
   std::function<bool()> has;
 };
 
-#define PROTO_PTR_FIELD(T, ProtoClass, instance, field_name)                           \
-  aim::PtrField<T>(std::bind_front(&ProtoClass::field_name, instance),         \
-                     std::bind_front(&ProtoClass::mutable_##field_name, instance), \
-                     std::bind_front(&ProtoClass::clear_##field_name, instance),   \
-                     std::bind_front(&ProtoClass::has_##field_name, instance))
+#define PROTO_PTR_FIELD(T, ProtoClass, instance, field_name)                     \
+  aim::PtrField<T>(std::bind_front(&ProtoClass::field_name, instance),           \
+                   std::bind_front(&ProtoClass::mutable_##field_name, instance), \
+                   std::bind_front(&ProtoClass::clear_##field_name, instance),   \
+                   std::bind_front(&ProtoClass::has_##field_name, instance))
 
 }  // namespace aim

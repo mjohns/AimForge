@@ -21,7 +21,6 @@ endif(WIN32)
 target_link_libraries(${NAME} PUBLIC aim SDL3::SDL3 imgui glm::glm-header-only)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-
 set (OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
 
 file(COPY resources/bundles DESTINATION "${OUTPUT_DIR}")

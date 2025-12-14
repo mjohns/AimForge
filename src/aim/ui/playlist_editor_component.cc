@@ -4,8 +4,8 @@
 
 #include "absl/strings/strip.h"
 #include "aim/common/imgui_ext.h"
-#include "aim/common/search.h"
 #include "aim/common/name_util.h"
+#include "aim/common/search.h"
 #include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/search_selector.h"
 #include "google/protobuf/util/message_differencer.h"

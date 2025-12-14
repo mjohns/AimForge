@@ -477,7 +477,7 @@ class AimDbImpl : public AimDb {
     return true;
   }
 
-  std::vector<StatsDbRow> GetStats(i64 scenario_id) {
+  std::vector<StatsDbRow> GetStats(i64 scenario_id) override {
     sqlite3_stmt* stmt;
 
     int rc = sqlite3_prepare_v2(db_, kGetStatsSql, -1, &stmt, nullptr);
@@ -635,7 +635,7 @@ class AimDbImpl : public AimDb {
 
   void UpdateRecentView(ObjectType type, const std::string& name) override {
     if (type == ObjectType::SCENARIO) {
-        // Ensure there is an entry for this scenario in the db.
+      // Ensure there is an entry for this scenario in the db.
       GetScenarioId(name);
     }
 
@@ -680,12 +680,12 @@ class AimDbImpl : public AimDb {
     return views;
   }
 
-  void AddLabeledItem(int label, ObjectType type, const std::string& object_id) {
+  void AddLabeledItem(int label, ObjectType type, const std::string& object_id) override {
     if (object_id.size() == 0) {
       return;
     }
     if (type == ObjectType::SCENARIO) {
-        // Ensure there is an entry for this scenario in the db.
+      // Ensure there is an entry for this scenario in the db.
       GetScenarioId(object_id);
     }
 
@@ -704,7 +704,7 @@ class AimDbImpl : public AimDb {
     sqlite3_finalize(stmt);
   }
 
-  void RemoveLabeledItem(int label, ObjectType type, const std::string& object_id) {
+  void RemoveLabeledItem(int label, ObjectType type, const std::string& object_id) override {
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kDeleteLabeledItemSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -721,7 +721,7 @@ class AimDbImpl : public AimDb {
     sqlite3_finalize(stmt);
   }
 
-  std::vector<std::string> GetLabeledItems(int label, ObjectType type) {
+  std::vector<std::string> GetLabeledItems(int label, ObjectType type) override {
     sqlite3_stmt* stmt;
 
     int rc = sqlite3_prepare_v2(db_, kGetLabeledItemsSql, -1, &stmt, nullptr);

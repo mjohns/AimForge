@@ -5,8 +5,8 @@
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
-#include "aim/common/util.h"
 #include "aim/common/name_util.h"
+#include "aim/common/util.h"
 #include "google/protobuf/util/message_differencer.h"
 
 namespace aim {

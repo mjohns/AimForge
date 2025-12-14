@@ -28,6 +28,11 @@ class HistoryManagerImpl : public HistoryManager {
     return recent_scenarios_;
   }
 
+  void ClearCache() override {
+    scenarios_need_reload_ = true;
+    playlists_need_reload_ = true;
+  }
+
   const std::vector<std::string>& recent_playlists() override {
     if (playlists_need_reload_) {
       playlists_need_reload_ = false;

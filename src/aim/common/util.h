@@ -155,7 +155,6 @@ std::vector<T> MoveVectorItem(const std::vector<T>& original_values, int src_i, 
   return result;
 }
 
-
 static std::string FirstNonEmpty(const std::string& v1, const std::string& v2) {
   return v1.size() > 0 ? v1 : v2;
 }

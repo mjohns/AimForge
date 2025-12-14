@@ -401,7 +401,7 @@ class ThemeEditorScreen : public UiScreen {
     }
 
     ImGui::SameLine();
-    ImGui::Text(kIconClose);
+    ImGui::Text("%s", kIconClose);
     ImGui::HelpTooltip("Multiply color by value");
 
     ImGui::SameLine();
