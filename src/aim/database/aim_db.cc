@@ -73,6 +73,11 @@ const char* kGetAllScenarioIdsSql = R"AIMS(
 SELECT ScenarioId, ScenarioName FROM Scenarios;
 )AIMS";
 
+const char* kGetScenarioNamesWithPrefixSql = R"AIMS(
+SELECT ScenarioName FROM Scenarios
+WHERE ScenarioName LIKE ?;
+)AIMS";
+
 const char* kGetScenarioSettingsSql = R"AIMS(
 SELECT Settings FROM Scenarios WHERE ScenarioId = ?;
 )AIMS";
@@ -333,14 +338,21 @@ class AimDbImpl : public AimDb {
     return sqlite3_last_insert_rowid(db_);
   }
 
-  i64 RenameScenario(const std::string& old_name, const std::string& new_name) override {
+  void RenameScenario(const std::string& old_name, const std::string& new_name) override {
+    std::vector<std::string> candidate_names = GetScenarioNamesWithPrefix(old_name);
+    for (const std::string& candidate_name : candidate_names) {
+    }
+    RenameSingleScenario(old_name, new_name);
+  }
+
+  void RenameSingleScenario(const std::string& old_name, const std::string& new_name) {
     i64 existing_id = GetScenarioId(old_name);
 
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kUpdateScenarioNameSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
       Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
-      return existing_id;
+      return;
     }
 
     BindString(stmt, 1, new_name);
@@ -356,7 +368,6 @@ class AimDbImpl : public AimDb {
 
     partial_scenario_id_map_.erase(old_name);
     partial_scenario_id_map_[new_name] = existing_id;
-    return existing_id;
   }
 
   void UpdateScenarioSettings(i64 scenario_id, ScenarioSettings settings) override {
@@ -708,6 +719,27 @@ class AimDbImpl : public AimDb {
 
     sqlite3_finalize(stmt);
     return name_to_id_map;
+  }
+
+  std::vector<std::string> GetScenarioNamesWithPrefix(const std::string& prefix) {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, kGetScenarioNamesWithPrefixSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+
+    std::string like_value = std::format("{}%", prefix);
+    BindString(stmt, 1, like_value);
+
+    std::vector<std::string> names;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      names.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
+    }
+
+    sqlite3_finalize(stmt);
+    return names;
   }
 
   std::optional<i64> GetExistingIdFromDb(const std::string& name, const char* sql) {

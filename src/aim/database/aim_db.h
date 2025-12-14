@@ -65,7 +65,7 @@ class AimDb {
   virtual ScenarioSettings GetScenarioSettings(i64 scenario_id) = 0;
   virtual void UpdateScenarioSettings(i64 scenario_id, ScenarioSettings settings) = 0;
   virtual std::unordered_map<std::string, i64> GetScenarioIdMap() = 0;
-  virtual i64 RenameScenario(const std::string& old_name, const std::string& new_name) = 0;
+  virtual void RenameScenario(const std::string& old_name, const std::string& new_name) = 0;
 
   //
   // Stats
