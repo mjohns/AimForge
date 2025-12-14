@@ -1836,7 +1836,7 @@ class ScenarioEditorScreen : public UiScreen {
         auto& profile = profile_list->at(number);
         if (profile.info().description().size() > 0) {
           ImGui::SameLine();
-          ImGui::TextDisabled(profile.info().description().c_str());
+          ImGui::TextDisabled("%s", profile.info().description().c_str());
         }
       }
       if (ImGui::Button("Add##Order")) {
@@ -2017,6 +2017,8 @@ class ScenarioEditorScreen : public UiScreen {
       case RegionLength::kYPercentValue:
         length->set_y_percent_value(value / 100.0f);
         return;
+      case RegionLength::TYPE_NOT_SET:
+        return;
     }
   }
 
@@ -2030,6 +2032,8 @@ class ScenarioEditorScreen : public UiScreen {
         return length->x_percent_value() * 100;
       case RegionLength::kYPercentValue:
         return length->y_percent_value() * 100;
+      case RegionLength::TYPE_NOT_SET:
+        return 0;
     }
     return 0;
   }
