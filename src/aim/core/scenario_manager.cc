@@ -5,6 +5,7 @@
 #include <shellapi.h>
 #endif
 
+#include <cassert>
 #include <memory>
 #include <vector>
 
@@ -185,7 +186,14 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
   void UpdateScenario(const ResourceName& name, const ScenarioDef& def) override {
-    auto& item = scenario_map_[name.full_name()];
+    std::string full_name = name.full_name();
+    NameInfo name_info = GetNameInfo(full_name);
+    if (name_info.suffix.has_value()) {
+      assert(false && "Trying to update scenario with dynamic suffix");
+      return;
+    }
+
+    auto& item = scenario_map_[full_name];
     item.name = name;
     item.def = def;
     RebuildCachedScenarioList();

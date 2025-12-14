@@ -294,16 +294,15 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
 
   auto& progress_items = run->progress_list;
 
-  /*
   std::vector<float> score_levels;
   bool has_score_level = false;
-  for (const auto& item : items) {
-    auto stats = screen.app().stats_manager().GetAggregateStats(item.scenario());
+  for (const auto& item : progress_items) {
+    auto stats = screen.app().stats_manager().GetAggregateStats(item.item.scenario());
     float level = 0;
     if (stats.total_runs > 0) {
-      auto scenario = screen.app().scenario_manager().GetScenario(item.scenario());
-      if (scenario) {
-        level = GetScenarioScoreLevel(stats.high_score_stats.score, scenario->evaluated_def);
+      auto scenario_def = screen.app().scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
+      if (scenario_def) {
+        level = GetScenarioScoreLevel(stats.high_score_stats.score, *scenario_def);
         if (level > 0) {
           has_score_level = true;
         }
@@ -311,7 +310,6 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     }
     score_levels.push_back(level);
   }
-  */
 
   for (int i = 0; i < progress_items.size(); ++i) {
     ImGui::TableNextRow();
@@ -322,11 +320,9 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
 
     ImGui::TableNextColumn();
     std::string label = item.scenario();
-    /*
     if (score_levels[i] > 0) {
       label = std::format("{} -- {}", label, MaybeIntToString(score_levels[i], 1));
     }
-    */
     if (ImGui::Selectable(label.c_str(), is_selected)) {
       run->current_index = i;
       screen.state().scenario_run_option = ScenarioRunOption::START_CURRENT;

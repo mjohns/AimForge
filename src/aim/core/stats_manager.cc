@@ -8,23 +8,6 @@
 namespace aim {
 namespace {
 
-float GetScoreLevel(float score, float start_score, float end_score) {
-  if (start_score <= 0) {
-    return 0;
-  }
-  float num_levels = 5;
-  float strict_range = end_score - start_score;
-  float level_size = strict_range / num_levels;
-
-  // Give a rating of 0 if you are one bucket below the start_score.
-  float zero_score = start_score - level_size;
-  float adjusted_score = score - zero_score;
-  float wide_range = end_score - zero_score;
-
-  float percent = adjusted_score / wide_range;
-  return glm::clamp<float>(num_levels * percent, 0, num_levels + 0.99);
-}
-
 class StatsManagerImpl : public StatsManager {
  public:
   StatsManagerImpl(AimDb* db) : db_(db) {}
@@ -108,17 +91,18 @@ class StatsManagerImpl : public StatsManager {
 }  // namespace
 
 float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
-  if (def.start_score() > 0) {
-    return GetScoreLevel(score, def.start_score(), def.end_score());
+  if (def.start_score() <= 0) {
+    return 0;
   }
-  /*
-  if (def.has_centering_def() || def.has_wall_arc_def() ||
-      def.shot_type().type_case() == ShotType::kTrackingInvincible) {
-    // Default range to tracking from 40% to 75% of time.
-    return GetScoreLevel(score, def.duration_seconds() * 0.399, def.duration_seconds() * 0.75);
+  if (score >= def.end_score()) {
+    return 5;
   }
-  */
-  return 0;
+  if (score < def.start_score()) {
+    return score / def.start_score();
+  }
+
+  float percent_complete = (score - def.start_score()) / (def.end_score() - def.start_score());
+  return 1.0 + 4.0 * percent_complete;
 }
 
 std::unique_ptr<StatsManager> CreateStatsManager(AimDb* db) {

@@ -192,6 +192,10 @@ class ScenarioEditorScreen : public UiScreen {
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->unevaluated_def;
       name_ = initial_scenario->name;
+      // Strip any dynamic suffixes
+      NameInfo name_info = GetNameInfo(name_.full_name());
+      name_ = ResourceName::Parse(name_info.base_name);
+
       if (opts.force_bundle_name.size() > 0) {
         *name_.mutable_bundle_name() = opts.force_bundle_name;
       }
@@ -201,7 +205,7 @@ class ScenarioEditorScreen : public UiScreen {
             app_.scenario_manager().GetAllRelativeNamesInBundle(name_.bundle_name()));
         *name_.mutable_relative_name() = final_name;
       } else {
-        original_name_ = initial_scenario->name;
+        original_name_ = name_;
       }
     }
   }
@@ -330,26 +334,34 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
     def_.set_duration_seconds(duration_seconds);
 
-    /*
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Score range");
     ImGui::SameLine();
     ImGui::InputFloat(ImGui::InputFloatParams("StartScore")
+                          .set_is_optional()
                           .set_zero_is_unset()
+                          .set_min(0)
                           .set_step(0.1, 2)
                           .set_precision(2)
                           .set_width(char_x_ * 12),
                       PROTO_FLOAT_FIELD(ScenarioDef, &def_, start_score));
-    ImGui::SameLine();
-    ImGui::Text("to");
-    ImGui::SameLine();
-    ImGui::InputFloat(ImGui::InputFloatParams("EndScore")
-                          .set_zero_is_unset()
-                          .set_step(0.1, 2)
-                          .set_precision(2)
-                          .set_width(char_x_ * 12),
-                      PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
-    */
+    if (def_.start_score() > 0) {
+      ImGui::SameLine();
+      ImGui::Text("to");
+      ImGui::SameLine();
+      ImGui::InputFloat(ImGui::InputFloatParams("EndScore")
+                            .set_zero_is_unset()
+                            .set_min(0)
+                            .set_step(0.1, 2)
+                            .set_precision(2)
+                            .set_width(char_x_ * 12),
+                        PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
+      if (def_.end_score() < def_.start_score()) {
+        def_.set_end_score(def_.start_score());
+      }
+    } else {
+      def_.clear_end_score();
+    }
 
     Line();
 
@@ -401,6 +413,15 @@ class ScenarioEditorScreen : public UiScreen {
   bool SaveScenario() {
     if (name_.bundle_name().size() == 0 || name_.relative_name().size() == 0) {
       SetErrorMessage("Missing scenario name");
+      return false;
+    }
+
+    NameInfo name_info = GetNameInfo(name_.full_name());
+    if (name_info.suffix.has_value()) {
+      SetErrorMessage(
+          std::format("Unable to save scenario with name ending in '{}'. These scenarios are "
+                      "automatically defined.",
+                      *name_info.suffix));
       return false;
     }
 
