@@ -16,6 +16,7 @@
 #include "absl/strings/string_view.h"
 #include "absl/strings/strip.h"
 #include "aim/common/simple_types.h"
+#include "aim/common/util.h"
 
 namespace aim {
 
@@ -112,6 +113,41 @@ std::optional<std::string> StripCmSuffix(const std::string& scenario_name, float
 std::string AddLevelSuffix(const std::string& base_name, int level) {
   return level < 10 ? std::format("{} L0{}", base_name, level)
                     : std::format("{} L{}", base_name, level);
+}
+
+std::string NameInfo::GetFullName() const {
+  if (suffix) {
+    return std::format("{} {}", base_name, *suffix);
+  }
+  return base_name;
+}
+
+NameInfo GetNameInfo(const std::string& name) {
+  NameInfo info;
+
+  std::string base_name = name;
+
+  float cm_per_360 = 0;
+  auto stripped_cm_name = StripCmSuffix(base_name, &cm_per_360);
+  if (stripped_cm_name) {
+    base_name = *stripped_cm_name;
+    info.cm_per_360 = cm_per_360;
+  }
+
+  float level = 0;
+  auto stripped_level_name = StripLevelSuffix(base_name, &level);
+  if (stripped_level_name) {
+    base_name = *stripped_level_name;
+    info.level = level;
+  }
+
+  info.base_name = base_name;
+  if (base_name != name) {
+    std::string_view suffix = absl::StripPrefix(name, base_name);
+    info.suffix = absl::StripLeadingAsciiWhitespace(suffix);
+  }
+
+  return info;
 }
 
 }  // namespace aim
