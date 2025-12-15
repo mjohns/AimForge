@@ -185,7 +185,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
             PlaylistItem new_item;
             new_item.set_num_plays(item.num_plays());
             std::string new_name = AddLevelSuffix(name_info.base_name, current_level);
-            new_item.set_scenario(new_name + cm_suffix);
+            new_item.set_scenario(std::format(
+                "{} L{}{}", name_info.base_name, MaybeIntToString(current_level, 1), cm_suffix));
             items_to_add.push_back(new_item);
           }
         }

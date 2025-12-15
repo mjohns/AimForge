@@ -31,9 +31,9 @@ TEST(NameUtilTest, StripLevelSuffix) {
 }
 
 TEST(NameUtilTest, AddLevelSuffix) {
-  EXPECT_EQ(AddLevelSuffix("Scenario", 0), "Scenario L00");
-  EXPECT_EQ(AddLevelSuffix("Scenario", 1), "Scenario L01");
-  EXPECT_EQ(AddLevelSuffix("Scenario", 9), "Scenario L09");
+  EXPECT_EQ(AddLevelSuffix("Scenario", 0), "Scenario L0");
+  EXPECT_EQ(AddLevelSuffix("Scenario", 1), "Scenario L1");
+  EXPECT_EQ(AddLevelSuffix("Scenario", 9), "Scenario L9");
   EXPECT_EQ(AddLevelSuffix("Scenario", 10), "Scenario L10");
 }
 

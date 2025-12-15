@@ -359,20 +359,8 @@ class PlaylistManagerImpl : public PlaylistManager {
 std::vector<PlaylistItem> GetPlaylistItems(const ResourceName& playlist_name,
                                            const PlaylistDef& def) {
   std::vector<PlaylistItem> items;
-
-  if (def.has_scenario_levels_def()) {
-    const auto& levels = def.scenario_levels_def();
-    std::string base_name = playlist_name.full_name();
-    for (int i = 1; i <= levels.max_level(); ++i) {
-      items.push_back({});
-      PlaylistItem& item = items.back();
-      item.set_num_plays(levels.has_num_plays_per_level() ? levels.num_plays_per_level() : 1);
-      item.set_scenario(AddLevelSuffix(base_name, i));
-    }
-  } else {
-    for (const PlaylistItem& item : def.items()) {
-      items.push_back(item);
-    }
+  for (const PlaylistItem& item : def.items()) {
+    items.push_back(item);
   }
 
   return items;

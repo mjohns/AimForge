@@ -111,8 +111,7 @@ std::optional<std::string> StripCmSuffix(const std::string& scenario_name, float
 }
 
 std::string AddLevelSuffix(const std::string& base_name, int level) {
-  return level < 10 ? std::format("{} L0{}", base_name, level)
-                    : std::format("{} L{}", base_name, level);
+  return std::format("{} L{}", base_name, level);
 }
 
 std::string NameInfo::GetFullName() const {
