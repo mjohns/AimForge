@@ -84,6 +84,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   void DrawPlaylistScenariosEditor(EditorResult* result) {
     int remove_i = -1;
     bool still_dragging = false;
+    std::vector<PlaylistItem> items_to_add;
     for (int i = 0; i < scenario_items_.size(); ++i) {
       ImGui::IdGuard lid("PlaylistItem", i);
       PlaylistItem& item = scenario_items_[i];
@@ -163,7 +164,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       const char* item_menu = "PlaylistItemMenu";
       if (ImGui::BeginPopupContextItem(item_menu)) {
         if (ImGui::Selectable("Copy")) {
-          scenario_items_.push_back(item);
+          items_to_add.push_back(item);
         }
         if (ImGui::Selectable("Delete")) {
           remove_i = i;
@@ -173,8 +174,20 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           focus_editor_ = true;
         }
         if (ImGui::Selectable("Add levels")) {
-          // std::optional<std::string> base_name = StripLevelSuffix
-          //   item.scenario();
+          NameInfo name_info = GetNameInfo(item.scenario());
+          std::string cm_suffix =
+              name_info.cm_per_360
+                  ? std::format(" {}cm", MaybeIntToString(*name_info.cm_per_360, 1))
+                  : "";
+          float current_level = name_info.level ? *name_info.level : 0;
+          for (int n = 0; n < 5; ++n) {
+            current_level += 1.0f;
+            PlaylistItem new_item;
+            new_item.set_num_plays(item.num_plays());
+            std::string new_name = AddLevelSuffix(name_info.base_name, current_level);
+            new_item.set_scenario(new_name + cm_suffix);
+            items_to_add.push_back(new_item);
+          }
         }
         ImGui::EndPopup();
       }
@@ -188,6 +201,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
 
       item.set_num_plays(num_plays);
     }
+
+    PushBackAll(&scenario_items_, items_to_add);
 
     if (IsValidIndex(scenario_items_, remove_i)) {
       auto it = scenario_items_.begin() + remove_i;
@@ -257,7 +272,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       }
     }
 
-    return app_.playlist_manager().SavePlaylist(final_name, playlist);
+    app_.playlist_manager().UpdatePlaylist(final_name, playlist);
+    return app_.bundle_manager().SaveDirtyBundles();
   }
 
   Application& app_;
