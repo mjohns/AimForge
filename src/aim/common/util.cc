@@ -165,20 +165,29 @@ bool IsInt(float value) {
 }
 
 std::string MaybeIntToString(float value, int decimal_places) {
-  bool is_int = IsInt(value);
-  if (is_int) {
-    return std::format("{}", static_cast<int>(value));
+  std::stringstream ss;
+  ss << std::fixed << std::setprecision(decimal_places) << value;
+  std::string s = ss.str();
+
+  if (!s.contains('.')) {
+    return s;
   }
-  if (decimal_places == 4) {
-    return std::format("{:.4f}", value);
+  int cutoff_at_index = 0;
+  bool found_decimal = false;
+
+  cutoff_at_index = s.size();
+  for (int i = s.size() - 1; i >= 0; --i) {
+    if (s[i] != '0') {
+      break;
+    }
+    cutoff_at_index = i;
   }
-  if (decimal_places == 3) {
-    return std::format("{:.3f}", value);
+
+  s = s.substr(0, cutoff_at_index);
+  if (s.back() == '.') {
+    s.pop_back();
   }
-  if (decimal_places == 2) {
-    return std::format("{:.2f}", value);
-  }
-  return std::format("{:.1f}", value);
+  return s;
 }
 
 float ParseFloat(const std::string& text) {

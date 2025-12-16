@@ -52,7 +52,6 @@ struct StatsDetails {
   int last_n_average = 0;
   StatsDbRow last_n_average_stats;
   StatsDbRow before_last_n_average_stats;
-  StatsDbRow median_stats;
 
   std::vector<double> scores;
   float min_score = 0;
@@ -259,7 +258,6 @@ class StatsScreen : public UiScreen {
         }
         DrawStatsTableRow(high_score_name, details_.stats, details_.previous_high_score_stats);
         DrawStatsTableRow("Average", details_.stats, details_.average_stats);
-        DrawStatsTableRow("Median", details_.stats, details_.median_stats);
       }
 
       std::vector<std::string> compare_to_scenarios = GetCompareToList();
@@ -397,16 +395,16 @@ class StatsScreen : public UiScreen {
     }
     {
       auto font = app_.font_manager().UseLarge();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(scenario_id_);
-
       if (evaluated_scenario_def_) {
         float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
         if (score_level > 0) {
-          ImGui::SameLine();
           ImGui::Button(MaybeIntToString(score_level, 2).c_str());
+          ImGui::SameLine();
         }
       }
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(scenario_id_);
     }
     ImGui::Spacing();
     ImGui::Spacing();
@@ -635,8 +633,8 @@ class StatsScreen : public UiScreen {
   std::vector<std::string> GetCompareToList() {
     std::vector<std::string> result;
 
-    // Compare to different levels of the same scenario.
     /*
+    // Compare to different levels of the same scenario.
     int level = 0;
     auto level_prefix = StripLevelSuffix(scenario_id_, &level);
     if (level_prefix) {
@@ -725,13 +723,6 @@ class StatsScreen : public UiScreen {
     std::sort(details_.sorted_stats.begin(),
               details_.sorted_stats.end(),
               [](const StatsDbRow& lhs, const StatsDbRow& rhs) { return lhs.score < rhs.score; });
-
-    if (details_.sorted_stats.size() > 0) {
-      int mid = details_.sorted_stats.size() / 2;
-      // Maybe average the two mid for a more true median? For now just take the higher one so the
-      // time and other fields make sense.
-      details_.median_stats = details_.sorted_stats[mid];
-    }
 
     return true;
   }
