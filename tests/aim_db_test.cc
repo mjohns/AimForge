@@ -364,6 +364,9 @@ TEST_F(AimDbTest, TestRenameScenario) {
   db_->UpdateRecentView(ObjectType::SCENARIO, "s1");
   db_->UpdateRecentView(ObjectType::SCENARIO, "s2");
 
+  db_->UpdateRecentView(ObjectType::CROSSHAIR, "c1");
+  db_->UpdateRecentView(ObjectType::CROSSHAIR, "c2");
+
   // Should not change a playlist
   db_->UpdateRecentView(ObjectType::PLAYLIST, "s1");
 
@@ -375,6 +378,9 @@ TEST_F(AimDbTest, TestRenameScenario) {
   EXPECT_THAT(db_->GetScenarioId("s1_new"), Eq(s1));
   EXPECT_THAT(db_->GetScenarioId("s2"), Eq(s2));
   EXPECT_THAT(db_->GetScenarioId("s1"), Ne(s1));
+
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::CROSSHAIR, 10),
+              ElementsAre(EqualsViewName("c2"), EqualsViewName("c1")));
 }
 
 TEST_F(AimDbTest, TestRenameScenario_WithDynamicSuffixes) {

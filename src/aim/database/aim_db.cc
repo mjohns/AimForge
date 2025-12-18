@@ -216,9 +216,24 @@ CREATE TABLE IF NOT EXISTS RecentViews (
 );
 )AIMS";
 
+// RecentViews for Scenarios/Playlists using their stable internal integer id.
+const char* kCreateRecentIdViewsTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS RecentIdViews (
+    Type INTEGER,
+    Id INTEGER,
+    TimestampMicros INTEGER,
+    PRIMARY KEY (Type, Id)
+);
+)AIMS";
+
 const char* kInsertRecentViewsSql = R"AIMS(
 INSERT INTO RecentViews (Type, Name, TimestampMicros) VALUES (?, ?, ?)
 ON CONFLICT (Type, Name) DO UPDATE SET TimestampMicros = ?;
+)AIMS";
+
+const char* kInsertRecentIdViewsSql = R"AIMS(
+INSERT INTO RecentIdViews (Type, Id, TimestampMicros) VALUES (?, ?, ?)
+ON CONFLICT (Type, Id) DO UPDATE SET TimestampMicros = ?;
 )AIMS";
 
 const char* kGetRecentViewsForTypeSql = R"AIMS(
@@ -229,8 +244,22 @@ ORDER BY TimestampMicros DESC
 LIMIT ?;
 )AIMS";
 
-const char* kUpdateRecentViewNameSql = R"AIMS(
-UPDATE RecentViews SET Name = ? WHERE Name = ? AND Type = ?;
+const char* kGetRecentViewsForScenarioSql = R"AIMS(
+SELECT Scenarios.ScenarioName, RecentIdViews.TimestampMicros
+FROM RecentIdViews
+JOIN Scenarios ON RecentIdViews.Id = Scenarios.ScenarioId
+WHERE RecentIdViews.Type = ?
+ORDER BY RecentIdViews.TimestampMicros DESC
+LIMIT ?;
+)AIMS";
+
+const char* kGetRecentViewsForPlaylistSql = R"AIMS(
+SELECT Playlists.PlaylistName, RecentIdViews.TimestampMicros
+FROM RecentIdViews
+JOIN Playlists ON RecentIdViews.Id = Playlists.PlaylistId
+WHERE RecentIdViews.Type = ?
+ORDER BY RecentIdViews.TimestampMicros DESC
+LIMIT ?;
 )AIMS";
 
 class AimDbImpl : public AimDb {
@@ -254,6 +283,7 @@ class AimDbImpl : public AimDb {
     ExecuteSqliteQuery(db_, kCreateStatsTable);
     ExecuteSqliteQuery(db_, kCreatePlayTimeTable);
     ExecuteSqliteQuery(db_, kCreateRecentViewsTable);
+    ExecuteSqliteQuery(db_, kCreateRecentIdViewsTable);
     ExecuteSqliteQuery(db_, kCreateLabeledItemsTable);
   }
 
@@ -307,10 +337,6 @@ class AimDbImpl : public AimDb {
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-
-    RenameRecentViews(ObjectType::PLAYLIST, old_name, new_name);
-
-    // TODO: Check rename worked. new_name may have already existed.
 
     partial_playlist_id_map_.erase(old_name);
     partial_playlist_id_map_[new_name] = existing_id;
@@ -408,10 +434,6 @@ class AimDbImpl : public AimDb {
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-
-    RenameRecentViews(ObjectType::SCENARIO, old_name, new_name);
-
-    // TODO: Check rename worked. new_name may have already existed.
 
     partial_scenario_id_map_.erase(old_name);
     partial_scenario_id_map_[new_name] = existing_id;
@@ -646,7 +668,11 @@ class AimDbImpl : public AimDb {
   void UpdateRecentView(ObjectType type, const std::string& name) override {
     if (type == ObjectType::SCENARIO) {
       // Ensure there is an entry for this scenario in the db.
-      GetScenarioId(name);
+      return UpdateRecentIdView(type, GetScenarioId(name));
+    }
+    if (type == ObjectType::PLAYLIST) {
+      // Ensure there is an entry for this scenario in the db.
+      return UpdateRecentIdView(type, GetPlaylistId(name));
     }
 
     sqlite3_stmt* stmt;
@@ -667,9 +693,34 @@ class AimDbImpl : public AimDb {
     sqlite3_finalize(stmt);
   }
 
-  std::vector<RecentViewV2> GetRecentViews(ObjectType t, int limit) override {
+  void UpdateRecentIdView(ObjectType type, i64 id) {
     sqlite3_stmt* stmt;
-    int rc = sqlite3_prepare_v2(db_, kGetRecentViewsForTypeSql, -1, &stmt, nullptr);
+    int rc = sqlite3_prepare_v2(db_, kInsertRecentIdViewsSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return;
+    }
+
+    i64 now_micros = GetNowEpochMicros();
+
+    sqlite3_bind_int(stmt, 1, (int)type);
+    sqlite3_bind_int64(stmt, 2, id);
+    sqlite3_bind_int64(stmt, 3, now_micros);
+    sqlite3_bind_int64(stmt, 4, now_micros);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+  }
+
+  std::vector<RecentViewV2> GetRecentViews(ObjectType t, int limit) override {
+    const char* sql = kGetRecentViewsForTypeSql;
+    if (t == ObjectType::SCENARIO) {
+      sql = kGetRecentViewsForScenarioSql;
+    } else if (t == ObjectType::PLAYLIST) {
+      sql = kGetRecentViewsForPlaylistSql;
+    }
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
       Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
       return {};
@@ -793,21 +844,6 @@ class AimDbImpl : public AimDb {
 
     sqlite3_finalize(stmt);
     return id;
-  }
-
-  void RenameRecentViews(ObjectType type, const std::string& old_id, const std::string& new_id) {
-    sqlite3_stmt* stmt;
-    int rc = sqlite3_prepare_v2(db_, kUpdateRecentViewNameSql, -1, &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
-      return;
-    }
-    BindString(stmt, 1, new_id);
-    BindString(stmt, 2, old_id);
-    sqlite3_bind_int(stmt, 3, (int)type);
-
-    sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
   }
 
   std::unordered_map<std::string, i64> partial_scenario_id_map_;
