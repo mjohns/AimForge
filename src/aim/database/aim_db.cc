@@ -143,22 +143,32 @@ const char* kCreateLabeledItemsTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS LabeledItems (
     Label INTEGER NOT NULL,
     Type INTEGER NOT NULL,
-    Name TEXT NOT NULL,
-    PRIMARY KEY (Label, Type, Name)
+    Id INTEGER NOT NULL,
+    PRIMARY KEY (Label, Type, Id)
 );
 )AIMS";
 
 const char* kInsertLabeledItemSql = R"AIMS(
-INSERT OR REPLACE INTO LabeledItems (Label, Type, Name) VALUES ( ?, ?, ?)
+INSERT OR REPLACE INTO LabeledItems (Label, Type, Id) VALUES ( ?, ?, ?)
 ON CONFLICT DO NOTHING;
 )AIMS";
 
 const char* kDeleteLabeledItemSql = R"AIMS(
-DELETE FROM LabeledItems WHERE Label = ? AND Type = ? AND Name = ?;
+DELETE FROM LabeledItems WHERE Label = ? AND Type = ? AND Id = ?;
 )AIMS";
 
-const char* kGetLabeledItemsSql = R"AIMS(
-SELECT Name FROM LabeledItems WHERE Label = ? AND Type = ?;
+const char* kGetLabeledScenarioItemsSql = R"AIMS(
+SELECT Scenarios.ScenarioName
+FROM LabeledItems
+JOIN Scenarios ON LabeledItems.Id = Scenarios.ScenarioId
+WHERE LabeledItems.Label = ? AND LabeledItems.Type = ?;
+)AIMS";
+
+const char* kGetLabeledPlaylistItemsSql = R"AIMS(
+SELECT Playlists.PlaylistName
+FROM LabeledItems
+JOIN Playlists ON LabeledItems.Id = Playlists.PlaylistId
+WHERE LabeledItems.Label = ? AND LabeledItems.Type = ?;
 )AIMS";
 
 const char* kCreatePlayTimeTable = R"AIMS(
@@ -680,15 +690,7 @@ class AimDbImpl : public AimDb {
     return views;
   }
 
-  void AddLabeledItem(int label, ObjectType type, const std::string& object_id) override {
-    if (object_id.size() == 0) {
-      return;
-    }
-    if (type == ObjectType::SCENARIO) {
-      // Ensure there is an entry for this scenario in the db.
-      GetScenarioId(object_id);
-    }
-
+  void AddLabeledItem(int label, ObjectType type, i64 object_id) override {
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kInsertLabeledItemSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -698,13 +700,13 @@ class AimDbImpl : public AimDb {
 
     sqlite3_bind_int(stmt, 1, label);
     sqlite3_bind_int(stmt, 2, (int)type);
-    BindString(stmt, 3, object_id);
+    sqlite3_bind_int(stmt, 3, object_id);
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
   }
 
-  void RemoveLabeledItem(int label, ObjectType type, const std::string& object_id) override {
+  void RemoveLabeledItem(int label, ObjectType type, i64 object_id) override {
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kDeleteLabeledItemSql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
@@ -713,7 +715,7 @@ class AimDbImpl : public AimDb {
     }
     sqlite3_bind_int(stmt, 1, label);
     sqlite3_bind_int(stmt, 2, (int)type);
-    BindString(stmt, 3, object_id);
+    sqlite3_bind_int64(stmt, 3, object_id);
     rc = sqlite3_step(stmt);
     if (rc != SQLITE_DONE) {
       Logger::get()->warn("Failed to delete labeled item for {}: {}", label, sqlite3_errmsg(db_));
@@ -724,7 +726,12 @@ class AimDbImpl : public AimDb {
   std::vector<std::string> GetLabeledItems(int label, ObjectType type) override {
     sqlite3_stmt* stmt;
 
-    int rc = sqlite3_prepare_v2(db_, kGetLabeledItemsSql, -1, &stmt, nullptr);
+    int rc = sqlite3_prepare_v2(
+        db_,
+        type == ObjectType::SCENARIO ? kGetLabeledScenarioItemsSql : kGetLabeledPlaylistItemsSql,
+        -1,
+        &stmt,
+        nullptr);
     if (rc != SQLITE_OK) {
       Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
       return {};

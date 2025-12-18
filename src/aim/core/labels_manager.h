@@ -28,6 +28,7 @@ class LabelsManager {
   virtual void UnstarItem(ObjectType type, const std::string& object_id) = 0;
   virtual bool IsStarred(ObjectType type, const std::string& object_id) = 0;
   virtual std::shared_ptr<LabeledItems> ListStarredItems(ObjectType type) = 0;
+  virtual void ClearCache() = 0;
 };
 
 std::unique_ptr<LabelsManager> CreateLabelsManager(AimDb* db);

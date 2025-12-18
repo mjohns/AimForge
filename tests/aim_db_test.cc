@@ -321,24 +321,40 @@ TEST_F(AimDbTest, RecentViews) {
 TEST_F(AimDbTest, LabeledItems) {
   EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO), IsEmpty());
 
-  db_->AddLabeledItem(1, ObjectType::SCENARIO, "1");
-  EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO), UnorderedElementsAre("1"));
+  i64 s1 = db_->GetScenarioId("Scenario1");
+  i64 s2 = db_->GetScenarioId("Scenario2");
+  i64 s3 = db_->GetScenarioId("Scenario3");
+  i64 s4 = db_->GetScenarioId("Scenario4");
+  i64 s5 = db_->GetScenarioId("Scenario5");
 
-  db_->AddLabeledItem(1, ObjectType::SCENARIO, "2");
-  db_->AddLabeledItem(1, ObjectType::SCENARIO, "3");
+  i64 p1 = db_->GetPlaylistId("Playlist1");
+  i64 p2 = db_->GetPlaylistId("Playlist2");
+  i64 p3 = db_->GetPlaylistId("Playlist3");
+  i64 p4 = db_->GetPlaylistId("Playlist4");
+  i64 p5 = db_->GetPlaylistId("Playlist5");
 
-  EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO), UnorderedElementsAre("1", "2", "3"));
+  db_->AddLabeledItem(1, ObjectType::SCENARIO, s1);
+  EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO), UnorderedElementsAre("Scenario1"));
 
-  db_->AddLabeledItem(2, ObjectType::SCENARIO, "4");
-  db_->AddLabeledItem(2, ObjectType::SCENARIO, "5");
-  db_->AddLabeledItem(2, ObjectType::PLAYLIST, "4");
+  db_->AddLabeledItem(1, ObjectType::SCENARIO, s2);
+  db_->AddLabeledItem(1, ObjectType::SCENARIO, s3);
 
-  EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::SCENARIO), UnorderedElementsAre("4", "5"));
-  EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::PLAYLIST), UnorderedElementsAre("4"));
-  EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO), UnorderedElementsAre("1", "2", "3"));
+  EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO),
+              UnorderedElementsAre("Scenario1", "Scenario2", "Scenario3"));
 
-  db_->RemoveLabeledItem(2, ObjectType::SCENARIO, "5");
-  EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::SCENARIO), UnorderedElementsAre("4"));
+  db_->AddLabeledItem(2, ObjectType::SCENARIO, s4);
+  db_->AddLabeledItem(2, ObjectType::SCENARIO, 456456456);
+  db_->AddLabeledItem(2, ObjectType::SCENARIO, s5);
+  db_->AddLabeledItem(2, ObjectType::PLAYLIST, p4);
+
+  EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::SCENARIO),
+              UnorderedElementsAre("Scenario4", "Scenario5"));
+  EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::PLAYLIST), UnorderedElementsAre("Playlist4"));
+  EXPECT_THAT(db_->GetLabeledItems(1, ObjectType::SCENARIO),
+              UnorderedElementsAre("Scenario1", "Scenario2", "Scenario3"));
+
+  db_->RemoveLabeledItem(2, ObjectType::SCENARIO, s5);
+  EXPECT_THAT(db_->GetLabeledItems(2, ObjectType::SCENARIO), UnorderedElementsAre("Scenario4"));
 }
 
 TEST_F(AimDbTest, TestRenameScenario) {

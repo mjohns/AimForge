@@ -31,15 +31,42 @@ class LabelsManagerImpl : public LabelsManager {
     return ListLabeledItems(kStarredLabel, type);
   }
 
+  void ClearCache() override {
+    labeled_items_cache_.clear();
+  }
+
  private:
+  std::optional<i64> GetId(ObjectType type, const std::string& object_id) {
+    switch (type) {
+      case ObjectType::SCENARIO:
+        return db_->GetScenarioId(object_id);
+      case ObjectType::PLAYLIST:
+        return db_->GetPlaylistId(object_id);
+      default:
+        break;
+    }
+    return {};
+  }
+
   void AddLabeledItem(int label, ObjectType type, const std::string& object_id) {
-    db_->AddLabeledItem(label, type, object_id);
+    std::optional<i64> id = GetId(type, object_id);
+    if (!id.has_value()) {
+      // Invalid type.
+      return;
+    }
+
+    db_->AddLabeledItem(label, type, *id);
     auto& items_by_label = labeled_items_cache_[type];
     items_by_label.erase(label);
   }
 
   void RemoveLabeledItem(int label, ObjectType type, const std::string& object_id) {
-    db_->RemoveLabeledItem(label, type, object_id);
+    std::optional<i64> id = GetId(type, object_id);
+    if (!id.has_value()) {
+      // Invalid type.
+      return;
+    }
+    db_->RemoveLabeledItem(label, type, *id);
     auto& items_by_label = labeled_items_cache_[type];
     items_by_label.erase(label);
   }
