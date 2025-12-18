@@ -327,7 +327,10 @@ int Application::Initialize() {
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
   scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameScenario, db_.get()));
   scenario_manager_->RegisterRenameListener(
-      [=](const std::string& old_name, const std::string& new_name) { history_manager_->ClearCache(); });
+      [=](const std::string& old_name, const std::string& new_name) {
+        history_manager_->ClearCache();
+        labels_manager_->ClearCache();
+      });
 
   /*
   bundle_manager_->SaveBundle("AF");
