@@ -302,7 +302,7 @@ class HomeScreen : public UiScreen {
     if (ImGui::Selectable(std::format("{} Crosshairs", kIconMyLocation).c_str(), false)) {
       PushNextScreen(CreateCrosshairEditorScreen(&app_));
     }
-    if (ImGui::Selectable(std::format("{} Play time", kIconAvTimer).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Play time", kIconHourglassEmpty).c_str(), false)) {
       app_screen_ = AppScreen::PLAY_TIME;
     }
 
@@ -463,6 +463,7 @@ class HomeScreen : public UiScreen {
     ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
 
     // TODO: Display breakdowns
+  //  ImGui::TextFmt("{}", kIconBolt);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;

@@ -21,7 +21,7 @@ bool FontManager::LoadFonts() {
   auto font_path = fonts_path_ / "Roboto-Regular.ttf";
   auto bold_font_path = fonts_path_ / "Roboto-Bold.ttf";
   auto material_icons_path = fonts_path_ / "MaterialIcons-Regular.ttf";
-  // auto material_icons_path = fonts_path_ / "MaterialIconsOutlined-Regular.otf";
+  // auto material_icons_path = fonts_path_ / "MaterialSymbolsOutlined.ttf";
 
   ImGuiIO& io = ImGui::GetIO();
   default_font_ = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), default_font_size());

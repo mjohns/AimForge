@@ -398,7 +398,7 @@ class StatsScreen : public UiScreen {
       if (evaluated_scenario_def_) {
         float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
         if (score_level > 0) {
-          ImGui::Button(MaybeIntToString(score_level, 2).c_str());
+          ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), kIconBolt));
           ImGui::SameLine();
         }
       }
