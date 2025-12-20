@@ -1,7 +1,5 @@
 edition = "2023";
 
-import "scenario.proto";
-
 package aim;
 
 message PlaylistDef {
@@ -10,22 +8,22 @@ message PlaylistDef {
   // Standard playlist with explicit items.
   repeated PlaylistItem items = 2;
 
-  // Playlist with levels that increment difficulty by a specified amount.
-  // The name of the scenarios is based on the name of the playlist with
-  // the suffix L01, L02 .. added.
-  ScenarioLevelsDef scenario_levels_def = 3;
-
-  BenchmarkDef benchmark_def = 4;
+  LevelsPlaylistDef levels = 4;
 }
 
-message ScenarioLevelsDef {
+message LevelsPlaylistDef {
   // Specifies the changes to the scenario per level.
-  ScenarioOverrides scenario_overrides = 1;
-  int32 max_level = 2;
-  int32 num_plays_per_level = 3;
-}
+  string base_scenario = 1;
 
-message BenchmarkDef {}
+  // If unspecified defaults to 1.
+  float min_level = 2;
+  float max_level = 3;
+  // The amount to increment for each playlist item. i.e. 0.5 -> 1, 1.5, 2, ..
+  float level_step = 4;
+
+
+  int32 num_plays_per_level = 5;
+}
 
 message PlaylistItem {
   string scenario = 1;

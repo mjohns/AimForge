@@ -156,7 +156,7 @@ class PlaylistManagerImpl : public PlaylistManager {
       return;
     }
     Playlist& playlist = it->second;
-    if (playlist.def().has_scenario_levels_def()) {
+    if (playlist.def().has_levels()) {
       // Can't add scenarios to levels playlist
       return;
     }
@@ -359,6 +359,24 @@ class PlaylistManagerImpl : public PlaylistManager {
 std::vector<PlaylistItem> GetPlaylistItems(const ResourceName& playlist_name,
                                            const PlaylistDef& def) {
   std::vector<PlaylistItem> items;
+
+  if (def.has_levels()) {
+    items.reserve(100);
+    float start_level = 1.0;
+    if (def.levels().min_level() > 0) {
+      start_level = def.levels().min_level();
+    }
+    float step = 1;
+    if (def.levels().level_step() > 0) {
+      step = def.levels().level_step();
+    }
+    while (true) {
+        // TODO: implement
+        break;
+    }
+  }
+
+  items.reserve(def.items_size());
   for (const PlaylistItem& item : def.items()) {
     items.push_back(item);
   }

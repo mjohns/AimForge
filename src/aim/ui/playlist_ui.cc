@@ -227,7 +227,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
 void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run, Screen& screen) {
   const char* popup_id = "ScenarioItemMenu";
-  bool is_levels_playlist = run.playlist.def().has_scenario_levels_def();
+  bool is_levels_playlist = run.playlist.def().has_levels();
   if (ImGui::BeginPopupContextItem(popup_id)) {
     if (ImGui::Selectable("Edit")) {
       ScenarioEditorOptions opts;
@@ -257,7 +257,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run,
       for (int i = 0; i < recent_playlists.size(); ++i) {
         const std::string& playlist_name = recent_playlists[i];
         auto maybe_playlist = screen.app().playlist_manager().GetPlaylist(playlist_name);
-        if (!maybe_playlist.has_value() || maybe_playlist->def().has_scenario_levels_def()) {
+        if (!maybe_playlist.has_value() || maybe_playlist->def().has_levels()) {
           continue;
         }
         if (playlist_count >= 6) {
