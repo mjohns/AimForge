@@ -6,6 +6,7 @@
 
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/name_util.h"
 #include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
 #include "aim/core/perf.h"
@@ -96,6 +97,8 @@ class StatsScreen : public UiScreen {
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
+
+    compare_to_scenarios_ = GetCompareToList();
   }
 
  protected:
@@ -260,8 +263,7 @@ class StatsScreen : public UiScreen {
         DrawStatsTableRow("Average", details_.stats, details_.average_stats);
       }
 
-      std::vector<std::string> compare_to_scenarios = GetCompareToList();
-      for (const std::string& scenario : compare_to_scenarios) {
+      for (const std::string& scenario : compare_to_scenarios_) {
         auto compare_stats = app_.stats_manager().GetAggregateStats(scenario);
         if (compare_stats.total_runs > 0) {
           DrawStatsTableRow(scenario, details_.stats, compare_stats.high_score_stats);
@@ -316,7 +318,7 @@ class StatsScreen : public UiScreen {
 
     // cm/360
     ImGui::TableNextColumn();
-    ImGui::Text(MaybeIntToString(comparison_stats.mm_per_360 * 10));
+    ImGui::Text(MaybeIntToString(comparison_stats.mm_per_360 / 10));
 
     // time
     ImGui::TableNextColumn();
@@ -631,20 +633,13 @@ class StatsScreen : public UiScreen {
 
  private:
   std::vector<std::string> GetCompareToList() {
-    std::vector<std::string> result;
-
-    /*
-    // Compare to different levels of the same scenario.
-    int level = 0;
-    auto level_prefix = StripLevelSuffix(scenario_id_, &level);
-    if (level_prefix) {
-      int num_to_show = 11;
-      int start = std::max<int>(level - (num_to_show / 2), 0);
-      for (int i = start; i <= start + num_to_show; ++i) {
-        result.push_back(AddLevelSuffix(*level_prefix, i));
-      }
+    NameInfo name_info = GetNameInfo(scenario_id_);
+    std::vector<NameInfo> candidate_scenarios;
+    for (const std::string& candidate : app_.db().GetScenarioNamesWithPrefix(name_info.base_name)) {
+      candidate_scenarios.push_back(GetNameInfo(candidate));
     }
-    */
+
+    std::vector<std::string> result = GetSortedLevelNames(name_info, candidate_scenarios);
 
     if (reference_scenario_id_.size() > 0) {
       if (!VectorContains(result, reference_scenario_id_)) {
@@ -750,6 +745,8 @@ class StatsScreen : public UiScreen {
   bool sort_by_score_ = false;
   std::optional<std::vector<HistoryRow>> history_rows_;
   i64 screen_start_time_millis_;
+
+  std::vector<std::string> compare_to_scenarios_;
 
   bool initialized_selected_tab_ = false;
 };

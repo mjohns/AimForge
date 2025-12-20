@@ -1,6 +1,8 @@
 #include "aim/common/name_util.h"
 
+#include <algorithm>
 #include <optional>
+#include <random>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -120,4 +122,66 @@ TEST(NameUtilTest, GetNameInfo_StripAll) {
   EXPECT_THAT(info.cm_per_360, Optional(35));
 
   EXPECT_THAT(info.GetFullName(), StrEq("Scenario L1.5 35cm"));
+}
+
+TEST(NameUtilTest, GetSortedLevelNames) {
+  NameInfo cm35 = GetNameInfo("S 35cm");
+  NameInfo cm35_ln1 = GetNameInfo("S L-1 35cm");
+  NameInfo cm35_l0 = GetNameInfo("S L0 35cm");
+  NameInfo cm35_l1 = GetNameInfo("S L1 35cm");
+  NameInfo cm35_l2 = GetNameInfo("S L2 35cm");
+  NameInfo cm35_l3 = GetNameInfo("S L3 35cm");
+  NameInfo cm35_l4 = GetNameInfo("S L4 35cm");
+  NameInfo cm35_l5_5 = GetNameInfo("S L5.5 35cm");
+  NameInfo cm35_l10 = GetNameInfo("S L10 35cm");
+  NameInfo cm35_l11 = GetNameInfo("S L11 35cm");
+
+  NameInfo cm45 = GetNameInfo("S 45cm");
+  NameInfo cm45_l1 = GetNameInfo("S L1 45cm");
+  NameInfo cm45_l2 = GetNameInfo("S L2 45cm");
+  NameInfo cm45_l3 = GetNameInfo("S L3 45cm");
+  NameInfo cm45_l4 = GetNameInfo("S L4 45cm");
+  NameInfo cm45_l5_5 = GetNameInfo("S L5.5 45cm");
+  NameInfo cm45_l10 = GetNameInfo("S L10 45cm");
+  NameInfo cm45_l11 = GetNameInfo("S L11 45cm");
+
+  NameInfo l1 = GetNameInfo("S L1");
+  NameInfo l2 = GetNameInfo("S L2");
+  NameInfo l3 = GetNameInfo("S L3");
+  NameInfo l4 = GetNameInfo("S L4");
+  NameInfo l5_5 = GetNameInfo("S L5.5");
+  NameInfo l10 = GetNameInfo("S L10");
+  NameInfo l11 = GetNameInfo("S L11");
+
+  NameInfo base_name = GetNameInfo("S");
+
+  std::vector<NameInfo> names{
+      cm35,      cm35_ln1, cm35_l0, cm35_l1, cm35_l2, cm35_l3, cm35_l4,   cm35_l5_5, cm35_l10,
+      cm35_l11,  cm45,     cm45_l1, cm45_l2, cm45_l3, cm45_l4, cm45_l5_5, cm45_l10,  cm45_l11,
+      base_name, l1,       l2,      l3,      l4,      l5_5,    l10,       l11,
+  };
+  std::random_device rd;
+  std::mt19937 g(rd());
+
+  std::shuffle(names.begin(), names.end(), g);
+
+  EXPECT_THAT(GetSortedLevelNames(cm35_l1, names),
+              ElementsAre(StrEq(cm35_ln1.GetFullName()),
+                          StrEq(cm35_l0.GetFullName()),
+                          StrEq(cm35_l1.GetFullName()),
+                          StrEq(cm35_l2.GetFullName()),
+                          StrEq(cm35_l3.GetFullName()),
+                          StrEq(cm35_l4.GetFullName()),
+                          StrEq(cm35_l5_5.GetFullName()),
+                          StrEq(cm35_l10.GetFullName()),
+                          StrEq(cm35_l11.GetFullName())));
+
+  EXPECT_THAT(GetSortedLevelNames(base_name, names),
+              ElementsAre(StrEq(l1.GetFullName()),
+                          StrEq(l2.GetFullName()),
+                          StrEq(l3.GetFullName()),
+                          StrEq(l4.GetFullName()),
+                          StrEq(l5_5.GetFullName()),
+                          StrEq(l10.GetFullName()),
+                          StrEq(l11.GetFullName())));
 }

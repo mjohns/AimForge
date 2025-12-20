@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 
+#include <algorithm>
 #include <format>
 #include <functional>
 #include <memory>
@@ -19,6 +20,17 @@
 #include "aim/common/util.h"
 
 namespace aim {
+namespace {
+
+std::vector<std::string> GetFullNames(const std::vector<NameInfo>& name_infos) {
+  std::vector<std::string> result;
+  for (const auto& info : name_infos) {
+    result.push_back(info.GetFullName());
+  }
+  return result;
+}
+
+}  // namespace
 
 std::string MakeUniqueName(const std::string& name, const std::vector<std::string>& used_names) {
   std::unordered_set<std::string> used_names_set(used_names.begin(), used_names.end());
@@ -110,8 +122,8 @@ std::optional<std::string> StripCmSuffix(const std::string& scenario_name, float
   return std::string(stripped);
 }
 
-std::string AddLevelSuffix(const std::string& base_name, int level) {
-  return std::format("{} L{}", base_name, level);
+std::string AddLevelSuffix(const std::string& base_name, float level) {
+  return std::format("{} L{}", base_name, MaybeIntToString(level, 2));
 }
 
 std::string NameInfo::GetFullName() const {
@@ -147,6 +159,27 @@ NameInfo GetNameInfo(const std::string& name) {
   }
 
   return info;
+}
+
+std::vector<std::string> GetSortedLevelNames(const NameInfo& name,
+                                             const std::vector<NameInfo>& candidates) {
+  std::vector<NameInfo> names;
+  for (const NameInfo& candidate : candidates) {
+    if (candidate.base_name != name.base_name || candidate.cm_per_360 != name.cm_per_360) {
+      continue;
+    }
+    if (candidate.level) {
+      names.push_back(candidate);
+    }
+  }
+
+  std::sort(names.begin(), names.end(), [](const NameInfo& lhs, const NameInfo& rhs) {
+    float left = lhs.level.value_or(0.0f);
+    float right = rhs.level.value_or(0.0f);
+    return left < right;
+  });
+
+  return GetFullNames(names);
 }
 
 }  // namespace aim

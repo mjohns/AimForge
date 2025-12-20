@@ -50,6 +50,9 @@ bool FontManager::LoadFonts() {
     Logger::get()->error("Unable to load large font from: {}", font_path.string());
     return false;
   }
+  icons_config.GlyphOffset.y = 8;
+  io.Fonts->AddFontFromFileTTF(
+      material_icons_path.string().c_str(), large_font_size(), &icons_config, icons_ranges);
 
   medium_font_ = io.Fonts->AddFontFromFileTTF(font_path.string().c_str(), medium_font_size());
   if (medium_font_ == nullptr) {
