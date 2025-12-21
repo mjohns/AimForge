@@ -16,8 +16,15 @@ class ScopedFont {
   }
 
   ~ScopedFont() {
-    if (font_ != nullptr) {
-      ImGui::PopFont();
+    Pop();
+  }
+
+  void Pop() {
+    if (!popped_) {
+      popped_ = true;
+      if (font_ != nullptr) {
+        ImGui::PopFont();
+      }
     }
   }
 
@@ -27,6 +34,7 @@ class ScopedFont {
   ScopedFont& operator=(ScopedFont&& other) = delete;
 
  private:
+  bool popped_ = false;
   ImFont* font_ = nullptr;
 };
 

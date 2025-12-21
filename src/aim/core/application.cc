@@ -80,6 +80,9 @@ Application::~Application() {
   if (state_) {
     scenario_manager_->ClearCurrentScenario();
   }
+  if (logo_texture_) {
+    logo_texture_ = {};
+  }
 
   if (logger_) {
     logger_->flush();
@@ -255,6 +258,8 @@ int Application::Initialize() {
   } else {
     logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
   }
+  logo_texture_ = std::make_unique<Texture>(file_system_->GetBasePath("resources/images/logo.png"),
+                                            gpu_device_);
 
   SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
   float window_display_scale = SDL_GetWindowDisplayScale(sdl_window_);

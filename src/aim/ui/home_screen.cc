@@ -17,6 +17,7 @@
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/scenario_ui.h"
+#include "aim/ui/top_bar.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
@@ -36,8 +37,6 @@ enum class AppScreen : int {
 class HomeScreen : public UiScreen {
  public:
   explicit HomeScreen(Application& app) : UiScreen(app) {
-    logo_texture_ = std::make_unique<Texture>(
-        app.file_system()->GetBasePath("resources/images/logo.png"), app.gpu_device());
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
     scenario_browser_component1_ =
@@ -127,59 +126,10 @@ class HomeScreen : public UiScreen {
 
   void DrawScreenInternal() {
     ImGui::IdGuard cid("HomePage");
-    ScreenInfo screen = app_.screen_info();
 
-    int large_font_size = app_.font_manager().large_font_size();
-    ImGui::BeginChild("Header", ImVec2(0, large_font_size * 1.3));
-    if (logo_texture_ && logo_texture_->is_loaded()) {
-      int size = app_.font_manager().large_font_size();
-      ImGui::Image(logo_texture_->GetImTextureId(),
-                   ImVec2(size + 2, size + 2),
-                   ImVec2(0.0f, 0.0f),
-                   ImVec2(1.0f, 1.0f));
-      ImGui::SameLine();
-    }
-    {
-      auto font = app_.font_manager().UseLargeBold();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("AimForge");
-    }
-
-    auto current_scenario = app_.scenario_manager().GetCurrentScenario();
-    if (current_scenario) {
-      auto font = app_.font_manager().UseMedium();
-      float available_height = ImGui::GetContentRegionAvail().y + ImGui::GetCursorPosY();
-      float button_height = ImGui::GetFrameHeight();
-
-      ImGui::SameLine();
-      float y_off = (available_height - button_height) / 2.0f;
-      if (y_off > 0) {
-        // ImGui::Dummy(ImVec2(0, y_off));
-        //  TODO: This vertical centering is not working.
-        // ImGui::SetCursorPosY(ImGui::GetCursorPosY() + y_off);
-      }
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("                ");
-      if (app_.scenario_manager().has_running_scenario()) {
-        ImGui::SameLine();
-        if (ImGui::Button(std::format("{}", kIconPlayArrow))) {
-          state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button(std::format("{}", kIconRefresh))) {
-          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-        }
-      } else {
-        ImGui::SameLine();
-        if (ImGui::Button(std::format("{}", kIconPlayArrow))) {
-          state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-        }
-      }
-      ImGui::SameLine();
-      ImGui::Text(current_scenario->id());
-    }
-
-    ImGui::EndChild();
+    DrawTopBar(this);
+    ImGui::Spacing();
+    ImGui::Spacing();
 
     ImGuiTableFlags main_column_flags = ImGuiTableFlags_SizingStretchProp |
                                         ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter |
@@ -468,7 +418,6 @@ class HomeScreen : public UiScreen {
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;
 
-  std::unique_ptr<Texture> logo_texture_;
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component1_;

@@ -29,6 +29,7 @@
 #include "aim/database/aim_db.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
+#include "aim/graphics/textures.h"
 #include "imgui.h"
 #include "spdlog/spdlog.h"
 
@@ -165,6 +166,10 @@ class Application {
     return *state_.get();
   }
 
+  Texture& logo_texture() {
+    return *logo_texture_;
+  }
+
   void EnableVsync();
   void DisableVsync();
 
@@ -202,6 +207,7 @@ class Application {
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
   std::string imgui_ini_filename_;
+  std::unique_ptr<Texture> logo_texture_;
 
   std::vector<std::shared_ptr<Screen>> screen_stack_;
   std::unique_ptr<ApplicationState> state_;

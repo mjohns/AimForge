@@ -15,11 +15,19 @@
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/settings_screen.h"
+#include "aim/ui/top_bar.h"
 #include "imgui.h"
 #include "implot.h"
 
 namespace aim {
 namespace {
+
+enum class SelectedScreen : int {
+  STATS = 1,
+  HISTORY = 2,
+  PERF = 3,
+};
+
 constexpr i64 kDayMicros = 86400000000;
 
 struct HistoryRow {
@@ -153,84 +161,90 @@ class StatsScreen : public UiScreen {
     }
 
     i64 age_millis = GetNowEpochMillis() - screen_start_time_millis_;
-    if (!IsScreenOlderThan(100)) {
+    if (!IsScreenOlderThan(200)) {
       return;
     }
 
-    DrawTopBar();
-
-    if (BeginMainWindow("MainWindow", 0.9)) {
-      DrawMainContent();
+    if (app_.BeginFullscreenWindow()) {
+      DrawScreenInternal();
     }
     ImGui::End();
   }
 
-  void DrawMainContent() {
+  void DrawScreenInternal() {
+    DrawTopBar(this);
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    ImGuiTableFlags main_column_flags = ImGuiTableFlags_SizingStretchProp |
+                                        ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter |
+                                        ImGuiTableFlags_BordersV;
+
+    if (ImGui::BeginTable("MainColumns", 2, main_column_flags)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, ImGui::GetFontSize() * 12);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableNextRow();
+
+      ImGui::TableNextColumn();
+      DrawLeftNav();
+
+      ImGui::TableNextColumn();
+
+      if (ImGui::BeginChild("PrimaryContent")) {
+        if (selected_screen_ == SelectedScreen::STATS) {
+          DrawStatsPanel();
+        }
+        if (selected_screen_ == SelectedScreen::PERF) {
+          DrawPerformanceStats();
+        }
+        if (selected_screen_ == SelectedScreen::HISTORY) {
+          DrawHistoryPanel();
+        }
+      }
+      ImGui::EndChild();
+
+      ImGui::EndTable();
+    }
+  }
+
+  void DrawLeftNav() {
+    if (ImGui::Selectable(std::format("{} Home", kIconHome).c_str(), false)) {
+      ReturnHome();
+    }
+    if (ImGui::Selectable(std::format("{} Stats", kIconAssignment).c_str(),
+                          selected_screen_ == SelectedScreen::STATS)) {
+      selected_screen_ = SelectedScreen::STATS;
+    }
+    if (ImGui::Selectable(std::format("{} History", kIconBarChart).c_str(),
+                          selected_screen_ == SelectedScreen::HISTORY)) {
+      selected_screen_ = SelectedScreen::HISTORY;
+    }
+    if (performance_stats_) {
+      if (ImGui::Selectable(std::format("{} Performance", kIconAvgTime).c_str(),
+                            selected_screen_ == SelectedScreen::PERF)) {
+        selected_screen_ = SelectedScreen::PERF;
+      }
+    }
+    if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
+      PushNextScreen(CreateSettingsScreen(&app_, scenario_id_));
+    }
+
+    ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
+    if (ImGui::Selectable(std::format("{} Restart", kIconRestartAlt).c_str(), false)) {
+      throw ApplicationRestartException();
+    }
+    if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
+      // Show a screen to confirm?
+      throw ApplicationExitException();
+    }
+  }
+
+  void DrawHistoryPanel() {
     delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       app_.stats_manager().DeleteAllStats(scenario_id);
       PopSelf();
     });
-
-    if (details_.all_stats.size() > 1) {
-      if (ImGui::BeginTabBar("StatsTabBar")) {
-        ImGuiTabItemFlags first_tab_flags = ImGuiTabItemFlags_None;
-        if (!initialized_selected_tab_) {
-          initialized_selected_tab_ = true;
-          first_tab_flags = ImGuiTabItemFlags_SetSelected;
-        }
-        if (ImGui::BeginTabItem("Current run", nullptr, first_tab_flags)) {
-          DrawStats();
-          ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("History")) {
-          DrawHistory();
-          ImGui::EndTabItem();
-        }
-        if (performance_stats_) {
-          if (ImGui::BeginTabItem("Perf")) {
-            DrawPerformanceStats();
-            ImGui::EndTabItem();
-          }
-        }
-        ImGui::EndTabBar();
-      }
-    } else {
-      DrawStats();
-    }
-  }
-
-  void DrawTopBar() {
-    float width = char_x_ * 30;
-    float middle = app_.screen_info().width / 2.0;
-    // ImGui::SetNextWindowBgAlpha();
-    ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
-    ImGui::SetNextWindowSize(ImVec2(width, -1));
-    ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-
-    if (ImGui::Button(std::format("{} Home", kIconHome))) {
-      ReturnHome();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Restart", kIconRefresh))) {
-      app_.scenario_manager().SetCurrentScenario(scenario_id_);
-      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-      ReturnHome();
-    }
-    if (playlist_run_) {
-      ImGui::SameLine();
-      if (ImGui::Button(std::format("{} Next", kIconArrowForward))) {
-        state_.scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
-        ReturnHome();
-      }
-    }
-
-    ImGui::SameLine();
-    ImGui::SetButtonCursorAtRight(kIconSettings);
-    if (ImGui::Button(kIconSettings)) {
-      PushNextScreen(CreateSettingsScreen(&app_, scenario_id_));
-    }
-
-    ImGui::End();
+    DrawHistory();
   }
 
   void DrawStatsTable() {
@@ -395,19 +409,6 @@ class StatsScreen : public UiScreen {
       percent_diff = comparison.score_diff_percent;
       percent_diff_string = comparison.score_diff_percent_string;
     }
-    {
-      auto font = app_.font_manager().UseLarge();
-      if (evaluated_scenario_def_) {
-        float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
-        if (score_level > 0) {
-          ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), kIconBolt));
-          ImGui::SameLine();
-        }
-      }
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(scenario_id_);
-    }
     ImGui::Spacing();
     ImGui::Spacing();
     if (percent_diff > 0) {
@@ -425,6 +426,14 @@ class StatsScreen : public UiScreen {
       auto font = app_.font_manager().UseLarge();
       ImGui::SameLine();
       ImGui::Button(std::format("{}###pervious_high_diff", percent_diff_string));
+    }
+    if (evaluated_scenario_def_) {
+      float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
+      if (score_level > 0) {
+        auto font = app_.font_manager().UseLarge();
+        ImGui::SameLine();
+        ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), kIconBolt));
+      }
     }
 
     {
@@ -463,41 +472,28 @@ class StatsScreen : public UiScreen {
     }
   }
 
-  void DrawStats() {
-    float percent = 0.8;
-    float padding = (ImGui::GetContentRegionAvail().x * (1 - percent)) / 2.0f;
-    if (ImGui::BeginTable("TopPanelTable", 4, 0)) {
-      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, padding);
-      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
-      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
-      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, padding);
-      ImGui::TableNextRow();
-
-      ImGui::TableNextRow();
-      ImGui::TableNextColumn();
-      ImGui::TableNextColumn();
-
+  void DrawStatsPanel() {
+    if (!playlist_run_) {
       DrawCurrentStatsPanel();
+      DrawStatsTable();
+      return;
+    }
+
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+    if (ImGui::BeginTable("StatsPanelTable", 2, flags)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableNextRow();
 
       ImGui::TableNextColumn();
-      if (playlist_run_) {
-        ImGui::TextFmt("{}", playlist_run_->playlist_name());
-        // Clicking the button may mutate current_index so save outside loop.
-        int start = playlist_run_->current_index;
-        for (int i = start; i < start + 6; ++i) {
-          ImGui::IdGuard cid(i);
-          if (IsValidIndex(playlist_run_->progress_list, i)) {
-            DrawPlaylistItem(i, playlist_run_->progress_list[i], playlist_run_.get());
-          }
-        }
-      }
+      DrawCurrentStatsPanel();
+      DrawStatsTable();
+
+      ImGui::TableNextColumn();
+      PlaylistRunComponent("PlaylistRun", playlist_run_, *this);
 
       ImGui::EndTable();
     }
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-    DrawStatsTable();
   }
 
   void DrawPlaylistItem(int i, const PlaylistItemProgress& progress, PlaylistRun* run) {
@@ -748,7 +744,7 @@ class StatsScreen : public UiScreen {
 
   std::vector<std::string> compare_to_scenarios_;
 
-  bool initialized_selected_tab_ = false;
+  SelectedScreen selected_screen_ = SelectedScreen::STATS;
 };
 
 }  // namespace

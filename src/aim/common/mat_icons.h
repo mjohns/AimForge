@@ -45,6 +45,11 @@ static const char* kIconRedo = "\xEE\x85\x9A";
 static const char* kIconBolt = "\uEA0B";
 static const char* kIconFlashOn = "\uE3E7";
 static const char* kIconHourglassEmpty = "\uE88B";
+static const char* kIconAssignment = "\uE85D";
+static const char* kIconAvgTime = "\uF813";
+//static const char* kIconChartData = "\uE473";
+static const char* kIconBarChart = "\uE26B";
+
 
 // static const char* kIconPointScan = "\xEF\x9C\x8C";
 // static const char* kIconCloseSmall = "\xEF\x94\x88";
