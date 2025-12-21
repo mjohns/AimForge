@@ -2772,7 +2772,7 @@ class ScenarioEditorScreen : public UiScreen {
       params.def = def_;
     }
     params.def.set_duration_seconds(1000000);
-    params.id = name_.full_name();
+    params.name = name_.full_name();
     params.force_start_immediately = true;
     params.from_scenario_editor = true;
     PushNextScreen(CreateScenario(params, &app_));

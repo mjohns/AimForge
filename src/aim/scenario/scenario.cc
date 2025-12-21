@@ -88,7 +88,7 @@ void Scenario::FlushPlayTime() {
 
 Scenario::Scenario(const CreateScenarioParams& params, Application* app)
     : Screen(*app),
-      id_(params.id),
+      id_(params.name),
       def_(params.def),
       timer_(kReplayFps),
       camera_(Camera(CameraParams(params.def.room()))),

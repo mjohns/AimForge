@@ -88,7 +88,7 @@ class HomeScreen : public UiScreen {
     ScenarioItem current_scenario = *GetCurrentScenario();
     app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, current_scenario.id());
     CreateScenarioParams params;
-    params.id = current_scenario.id();
+    params.name = current_scenario.id();
     std::optional<ScenarioDef> evaluated_def =
         app_.scenario_manager().GetEvaluatedScenarioDef(current_scenario.id());
     if (!evaluated_def) {

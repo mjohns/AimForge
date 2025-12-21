@@ -27,7 +27,7 @@ enum ScenarioRunState {
 };
 
 struct CreateScenarioParams {
-  std::string id;
+  std::string name;
   ScenarioDef def;
   bool force_start_immediately = false;
   bool from_scenario_editor = false;

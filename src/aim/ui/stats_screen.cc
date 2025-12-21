@@ -91,7 +91,7 @@ StatsComparison GetStatsComparison(const StatsDbRow& current_stats,
 class StatsScreen : public UiScreen {
  public:
   StatsScreen(std::string scenario_id, i64 run_id, Application* app)
-      : UiScreen(*app), scenario_id_(scenario_id), run_id_(run_id) {
+      : UiScreen(*app), scenario_name_(scenario_id), run_id_(run_id) {
     screen_start_time_millis_ = GetNowEpochMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_id);
     evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_id);
@@ -117,7 +117,7 @@ class StatsScreen : public UiScreen {
     }
     bool playlist_has_scenario = false;
     for (auto& item : playlist_run_->progress_list) {
-      if (item.item.scenario() == scenario_id_) {
+      if (item.item.scenario() == scenario_name_) {
         playlist_has_scenario = true;
         break;
       }
@@ -220,13 +220,13 @@ class StatsScreen : public UiScreen {
       selected_screen_ = SelectedScreen::HISTORY;
     }
     if (performance_stats_) {
-      if (ImGui::Selectable(std::format("{} Performance", kIconAvgTime).c_str(),
+      if (ImGui::Selectable(std::format("{} Performance", kIconRobot).c_str(),
                             selected_screen_ == SelectedScreen::PERF)) {
         selected_screen_ = SelectedScreen::PERF;
       }
     }
     if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
-      PushNextScreen(CreateSettingsScreen(&app_, scenario_id_));
+      PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
     }
 
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
@@ -294,7 +294,11 @@ class StatsScreen : public UiScreen {
     ImGui::TableNextRow();
 
     ImGui::TableNextColumn();
-    ImGui::Text(name);
+    if (name == scenario_name_) {
+      ImGui::Text("*" + name);
+    } else {
+      ImGui::Text(name);
+    }
 
     auto comparison = GetStatsComparison(current_stats, comparison_stats);
 
@@ -360,7 +364,8 @@ class StatsScreen : public UiScreen {
   void DrawPerformanceStats() {
     auto& worst_times_ = performance_stats_->worst_times;
     ImGui::TextFmt("Worst frame n={}", worst_times_.frame_number);
-    ImGui::TextFmt("Total time: {:.2f}ms", (worst_times_.end - worst_times_.start) / 1000.0);
+    float total_ms = (worst_times_.end - worst_times_.start) / 1000.0;
+    ImGui::TextFmt("Total time: {:.2f}ms, ~fps={}", total_ms, MaybeIntToString(1000 / total_ms));
     ImGui::TextFmt("Events time: {:.2f}ms",
                    (worst_times_.events_end - worst_times_.events_start) / 1000.0);
     ImGui::TextFmt("Update time: {:.2f}ms",
@@ -470,11 +475,15 @@ class StatsScreen : public UiScreen {
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
     }
+
   }
 
   void DrawStatsPanel() {
     if (!playlist_run_) {
       DrawCurrentStatsPanel();
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Spacing();
       DrawStatsTable();
       return;
     }
@@ -487,6 +496,9 @@ class StatsScreen : public UiScreen {
 
       ImGui::TableNextColumn();
       DrawCurrentStatsPanel();
+      ImGui::Spacing();
+      ImGui::Spacing();
+      ImGui::Spacing();
       DrawStatsTable();
 
       ImGui::TableNextColumn();
@@ -509,7 +521,7 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawHistory() {
-    if (ImPlot::BeginPlot(std::format("##Scores_{}", scenario_id_).c_str())) {
+    if (ImPlot::BeginPlot(std::format("##Scores_{}", scenario_name_).c_str())) {
       // ImPlot::SetupAxisLimits(ImAxis_X1,0,1.0);
       // ImPlot::SetupAxisLimits(ImAxis_Y1,0,1.6);
       float max_score = details_.previous_high_score_stats.score;
@@ -533,7 +545,7 @@ class StatsScreen : public UiScreen {
   void DrawHistoryListTable() {
     if (ImGui::Button("Clear history")) {
       delete_history_confirmation_dialog_.NotifyOpen(
-          std::format("Delete history for \"{}\"?", scenario_id_), scenario_id_);
+          std::format("Delete history for \"{}\"?", scenario_name_), scenario_name_);
     }
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Sort by score");
@@ -608,7 +620,7 @@ class StatsScreen : public UiScreen {
           ImGui::BeginDisabled();
         }
         if (ImGui::Button(kIconDelete)) {
-          app_.stats_manager().DeleteStats(scenario_id_, row.stats_id);
+          app_.stats_manager().DeleteStats(scenario_name_, row.stats_id);
           reset_stats_ = true;
         }
         if (!allow_delete) {
@@ -624,12 +636,12 @@ class StatsScreen : public UiScreen {
     if (IsEscapeKeyDown(event)) {
       PopSelf();
     }
-    HandleDefaultScenarioEvents(event, user_is_typing, scenario_id_);
+    HandleDefaultScenarioEvents(event, user_is_typing, scenario_name_);
   }
 
  private:
   std::vector<std::string> GetCompareToList() {
-    NameInfo name_info = GetNameInfo(scenario_id_);
+    NameInfo name_info = GetNameInfo(scenario_name_);
     std::vector<NameInfo> candidate_scenarios;
     for (const std::string& candidate : app_.db().GetScenarioNamesWithPrefix(name_info.base_name)) {
       candidate_scenarios.push_back(GetNameInfo(candidate));
@@ -646,7 +658,7 @@ class StatsScreen : public UiScreen {
   }
 
   bool InitializeStatsDetails() {
-    auto all_stats = app_.stats_manager().GetStats(scenario_id_);
+    auto all_stats = app_.stats_manager().GetStats(scenario_name_);
     details_.all_stats.reserve(all_stats.size());
     details_.scores.reserve(all_stats.size());
 
@@ -718,7 +730,7 @@ class StatsScreen : public UiScreen {
     return true;
   }
 
-  std::string scenario_id_;
+  std::string scenario_name_;
   i64 run_id_;
 
   StatsDetails details_;
