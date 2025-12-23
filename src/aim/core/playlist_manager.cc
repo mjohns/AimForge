@@ -325,7 +325,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     *run->playlist.mutable_def() = new_def;
     run->progress_list.clear();
 
-    auto items = GetPlaylistItems(playlist_name, new_def);
+    auto items = GetPlaylistItems(new_def);
     for (int i = 0; i < items.size(); ++i) {
       auto& item = items[i];
       PlaylistItemProgress progress;
@@ -356,23 +356,38 @@ class PlaylistManagerImpl : public PlaylistManager {
 
 }  // namespace
 
-std::vector<PlaylistItem> GetPlaylistItems(const ResourceName& playlist_name,
-                                           const PlaylistDef& def) {
+std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
   std::vector<PlaylistItem> items;
 
   if (def.has_levels()) {
-    items.reserve(100);
-    float start_level = 1.0;
-    if (def.levels().min_level() > 0) {
-      start_level = def.levels().min_level();
+    if (def.levels().base_scenario().empty()) {
+      return items;
+    }
+    NameInfo base_name = GetNameInfo(def.levels().base_scenario());
+    items.reserve(50);
+    float current_level = 1.0;
+    if (def.levels().has_min_level()) {
+      current_level = def.levels().min_level();
     }
     float step = 1;
     if (def.levels().level_step() > 0) {
       step = def.levels().level_step();
     }
     while (true) {
-        // TODO: implement
-        break;
+      if (current_level > def.levels().max_level() || items.size() > 200) {
+        return items;
+      }
+
+      NameInfo level_info = base_name;
+      level_info.level = current_level;
+
+      items.emplace_back();
+      auto& item = items.back();
+
+      item.set_num_plays(FirstNonZero(def.levels().num_plays_per_level(), 1));
+      item.set_scenario(level_info.GetFullName());
+
+      current_level += step;
     }
   }
 
@@ -385,7 +400,7 @@ std::vector<PlaylistItem> GetPlaylistItems(const ResourceName& playlist_name,
 }
 
 std::vector<PlaylistItem> Playlist::items() const {
-  return GetPlaylistItems(name, def_);
+  return GetPlaylistItems(def_);
 }
 
 std::unique_ptr<PlaylistManager> CreatePlaylistManager(FileSystem* fs) {

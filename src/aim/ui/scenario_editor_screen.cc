@@ -417,11 +417,10 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     NameInfo name_info = GetNameInfo(name_.full_name());
-    if (name_info.suffix.has_value()) {
+    if (name_info.HasDynamicSuffix()) {
       SetErrorMessage(
-          std::format("Unable to save scenario with name ending in '{}'. These scenarios are "
-                      "automatically defined.",
-                      *name_info.suffix));
+          "Unable to save scenario with name ending in 'L#' or '#cm'. These scenarios are "
+          "automatically defined.");
       return false;
     }
 
@@ -2554,7 +2553,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(0.2)
                           .set_width(char_x_ * 10),
-                      PROTO_PERCENT_FIELD(TargetDef, t, new_target_delay_seconds));
+                      PROTO_FLOAT_FIELD(TargetDef, t, new_target_delay_seconds));
 
     ImGui::InputFloat(ImGui::InputFloatParams("RemoveTargetAfterSeconds")
                           .set_label("Remove after time")
@@ -2565,7 +2564,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(0.2)
                           .set_width(char_x_ * 10),
-                      PROTO_PERCENT_FIELD(TargetDef, t, remove_target_after_seconds));
+                      PROTO_FLOAT_FIELD(TargetDef, t, remove_target_after_seconds));
 
     ImGui::InputFloat(ImGui::InputFloatParams("StaggerInitialTargetsSeconds")
                           .set_label("Initial stagger time")
@@ -2576,7 +2575,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(0.2)
                           .set_width(char_x_ * 10),
-                      PROTO_PERCENT_FIELD(TargetDef, t, stagger_initial_targets_seconds));
+                      PROTO_FLOAT_FIELD(TargetDef, t, stagger_initial_targets_seconds));
     ImGui::SameLine();
     ImGui::HelpMarker(
         "Time in seconds between each target being added at the start of the scenario.");

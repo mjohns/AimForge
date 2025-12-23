@@ -14,6 +14,16 @@
 namespace aim {
 namespace {
 
+enum class PlaylistType {
+  DEFAULT,
+  LEVELS,
+};
+
+const std::vector<std::pair<PlaylistType, std::string>> kPlaylistTypes{
+    {PlaylistType::DEFAULT, "Default"},
+    {PlaylistType::LEVELS, "Levels"},
+};
+
 class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
  public:
   explicit PlaylistEditorComponentImpl(Screen& screen, const std::string& playlist_name)
@@ -29,6 +39,9 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
         for (auto& i : maybe_playlist->items()) {
           scenario_items_.push_back(i);
         }
+      }
+      if (maybe_playlist->def().has_levels()) {
+        levels_ = maybe_playlist->def().levels();
       }
     }
   }
@@ -56,6 +69,26 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::SetNextItemWidth(400);
     ImGui::InputText("###PlaylistNameInput", &new_playlist_name_);
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Type");
+    ImGui::SameLine();
+    PlaylistType type = levels_.has_value() ? PlaylistType::LEVELS : PlaylistType::DEFAULT;
+    if (ImGui::SimpleTypeDropdown("##TypeSelector", &type, kPlaylistTypes, char_x_ * 10)) {
+      if (type == PlaylistType::LEVELS) {
+        levels_ = LevelsPlaylistDef();
+        auto& levels = *levels_;
+        levels.set_max_level(10);
+        levels.set_num_plays_per_level(1);
+      }
+      if (type == PlaylistType::DEFAULT) {
+        levels_ = {};
+      }
+    }
+
+    if (type == PlaylistType::LEVELS) {
+      DrawLevelsEditor();
+    }
+
     if (ImGui::Button("Save")) {
       if (SavePlaylist()) {
         result->editor_closed = true;
@@ -71,16 +104,79 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       return;
     }
 
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-
-    ImGui::BeginChild("PlaylistScrollableContent");
-    DrawPlaylistScenariosEditor(result);
-    ImGui::EndChild();
+    if (type == PlaylistType::DEFAULT) {
+      ImGui::Spacing();
+      ImGui::Separator();
+      ImGui::Spacing();
+      ImGui::BeginChild("PlaylistScrollableContent");
+      DrawPlaylistScenariosEditor(result);
+      ImGui::EndChild();
+    }
   }
 
  private:
+  void DrawLevelsEditor() {
+    if (!levels_) {
+      levels_ = LevelsPlaylistDef();
+    }
+
+    auto& levels = *levels_;
+    if (levels.max_level() < 1) {
+      levels.set_max_level(1);
+    }
+
+    scenario_items_.clear();
+
+    ImGui::IdGuard cid("LevelsEditor");
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Base scenario");
+    ImGui::SameLine();
+    ImGui::InputText("###BaseScenarioInput", levels.mutable_base_scenario());
+    if (levels.base_scenario().size() > 0) {
+      ImGui::Indent();
+      auto scenario_names = app_.scenario_manager().scenario_names();
+      std::optional<std::string> selected_scenario =
+          ScenarioSelector(levels.base_scenario(), *scenario_names);
+      if (selected_scenario) {
+        // set base_name
+        levels.set_base_scenario(*selected_scenario);
+      }
+      ImGui::Unindent();
+    }
+
+    ImGui::Separator();
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Max level")
+                          .set_step(1, 2)
+                          .set_min(2)
+                          .set_default(10)
+                          .set_precision(2)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, max_level));
+    ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Plays per level")
+                        .set_step(1, 2)
+                        .set_min(1)
+                        .set_default(1)
+                        .set_width(char_x_ * 10),
+                    PROTO_INT_FIELD(LevelsPlaylistDef, &levels, num_plays_per_level));
+
+    ImGui::Separator();
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Min level")
+                          .set_is_optional()
+                          .set_step(1, 2)
+                          .set_default(1)
+                          .set_precision(2)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, min_level));
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Step")
+                          .set_step(0.5, 2)
+                          .set_default(1)
+                          .set_is_optional()
+                          .set_precision(2)
+                          .set_width(char_x_ * 10),
+                      PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, level_step));
+  }
+
   void DrawPlaylistScenariosEditor(EditorResult* result) {
     int remove_i = -1;
     bool still_dragging = false;
@@ -254,7 +350,11 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   bool SavePlaylist() {
     PlaylistDef playlist;
 
-    playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
+    if (levels_) {
+      *playlist.mutable_levels() = *levels_;
+    } else {
+      playlist.mutable_items()->Add(scenario_items_.begin(), scenario_items_.end());
+    }
 
     ResourceName final_name(bundle_name_, new_playlist_name_);
     bool name_changed = final_name != original_playlist_name_;
@@ -287,6 +387,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   std::string bundle_name_;
   std::string source_base_scenario_;
 
+  std::optional<LevelsPlaylistDef> levels_;
   std::string scenario_search_text_;
   std::string new_playlist_name_;
   float char_x_ = 0;

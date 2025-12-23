@@ -19,7 +19,7 @@
 #include "protobuf-matchers/protocol-buffer-matchers.h"
 
 using namespace aim;
-using google::protobuf::Message;
+using ::google::protobuf::Message;
 using ::protobuf_matchers::EqualsProto;
 using ::testing::AllOf;
 using ::testing::ElementsAre;

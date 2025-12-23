@@ -13,12 +13,15 @@ std::string MakeUniqueName(const std::string& name, const std::vector<std::strin
 
 struct NameInfo {
   std::string base_name;
-  std::optional<std::string> suffix;
   std::optional<float> cm_per_360;
   std::optional<float> level;
 
   // Combines the base name and suffixes into the final name.
   std::string GetFullName() const;
+
+  bool HasDynamicSuffix() const {
+    return cm_per_360 || level;
+  }
 };
 
 NameInfo GetNameInfo(const std::string& name);

@@ -88,7 +88,6 @@ TEST(NameUtilTest, GetLevelFromWord) {
 TEST(NameUtilTest, GetNameInfo_NoSuffix) {
   NameInfo info = GetNameInfo("Scenario One");
   EXPECT_THAT(info.base_name, StrEq("Scenario One"));
-  EXPECT_FALSE(info.suffix.has_value());
   EXPECT_FALSE(info.level.has_value());
   EXPECT_FALSE(info.cm_per_360.has_value());
 
@@ -98,7 +97,6 @@ TEST(NameUtilTest, GetNameInfo_NoSuffix) {
 TEST(NameUtilTest, GetNameInfo_StripCm360) {
   NameInfo info = GetNameInfo("Scenario 25cm");
   EXPECT_THAT(info.base_name, StrEq("Scenario"));
-  EXPECT_THAT(info.suffix, Optional(StrEq("25cm")));
   EXPECT_THAT(info.cm_per_360, Optional(25));
   EXPECT_FALSE(info.level.has_value());
   EXPECT_THAT(info.GetFullName(), StrEq("Scenario 25cm"));
@@ -107,7 +105,6 @@ TEST(NameUtilTest, GetNameInfo_StripCm360) {
 TEST(NameUtilTest, GetNameInfo_StripLevel) {
   NameInfo info = GetNameInfo("Scenario L1.5");
   EXPECT_THAT(info.base_name, StrEq("Scenario"));
-  EXPECT_THAT(info.suffix, Optional(StrEq("L1.5")));
   EXPECT_THAT(info.level, Optional(1.5));
   EXPECT_FALSE(info.cm_per_360.has_value());
 
@@ -117,7 +114,6 @@ TEST(NameUtilTest, GetNameInfo_StripLevel) {
 TEST(NameUtilTest, GetNameInfo_StripAll) {
   NameInfo info = GetNameInfo("Scenario L1.5 35cm");
   EXPECT_THAT(info.base_name, StrEq("Scenario"));
-  EXPECT_THAT(info.suffix, Optional(StrEq("L1.5 35cm")));
   EXPECT_THAT(info.level, Optional(1.5));
   EXPECT_THAT(info.cm_per_360, Optional(35));
 

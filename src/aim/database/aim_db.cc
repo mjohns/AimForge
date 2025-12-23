@@ -379,7 +379,7 @@ class AimDbImpl : public AimDb {
   void RenameScenario(const std::string& old_name, const std::string& new_name) override {
     NameInfo old_info = GetNameInfo(old_name);
     NameInfo new_info = GetNameInfo(new_name);
-    if (old_info.suffix.has_value() || new_info.suffix.has_value()) {
+    if (old_info.HasDynamicSuffix() || new_info.HasDynamicSuffix()) {
       // The base scenarios should be renamed and not the dynamic variations. This determination
       // should be handled at the application layer.
       assert(false && "Renaming non base scenarios");
@@ -389,8 +389,9 @@ class AimDbImpl : public AimDb {
     std::vector<std::string> candidate_names = GetScenarioNamesWithPrefix(old_name);
     for (const std::string& candidate_name : candidate_names) {
       NameInfo info = GetNameInfo(candidate_name);
-      if (info.base_name == old_name && info.suffix.has_value()) {
-        RenameSingleScenario(candidate_name, std::format("{} {}", new_name, *info.suffix));
+      if (info.base_name == old_name && info.HasDynamicSuffix()) {
+        info.base_name = new_name;
+        RenameSingleScenario(candidate_name, info.GetFullName());
       }
     }
 

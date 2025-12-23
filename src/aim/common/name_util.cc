@@ -127,16 +127,20 @@ std::string AddLevelSuffix(const std::string& base_name, float level) {
 }
 
 std::string NameInfo::GetFullName() const {
-  if (suffix) {
-    return std::format("{} {}", base_name, *suffix);
+  std::string result = base_name;
+  if (level) {
+    result = AddLevelSuffix(result, *level);
   }
-  return base_name;
+  if (cm_per_360) {
+    result = std::format("{} {}cm", result, MaybeIntToString(*cm_per_360, 1));
+  }
+  return result;
 }
 
 NameInfo GetNameInfo(const std::string& name) {
   NameInfo info;
 
-  std::string base_name = name;
+  std::string base_name(absl::StripAsciiWhitespace(name));
 
   float cm_per_360 = 0;
   auto stripped_cm_name = StripCmSuffix(base_name, &cm_per_360);
@@ -153,11 +157,6 @@ NameInfo GetNameInfo(const std::string& name) {
   }
 
   info.base_name = base_name;
-  if (base_name != name) {
-    std::string_view suffix = absl::StripPrefix(name, base_name);
-    info.suffix = absl::StripLeadingAsciiWhitespace(suffix);
-  }
-
   return info;
 }
 

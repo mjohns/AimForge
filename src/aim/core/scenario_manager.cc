@@ -188,7 +188,7 @@ class ScenarioManagerImpl : public ScenarioManager {
   void UpdateScenario(const ResourceName& name, const ScenarioDef& def) override {
     std::string full_name = name.full_name();
     NameInfo name_info = GetNameInfo(full_name);
-    if (name_info.suffix.has_value()) {
+    if (name_info.HasDynamicSuffix()) {
       assert(false && "Trying to update scenario with dynamic suffix");
       return;
     }

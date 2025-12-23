@@ -48,14 +48,20 @@ void DrawTopBar(UiScreen* screen) {
       app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
       screen->ReturnHome();
     }
-    ImGui::HelpTooltip("Start new run");
+    {
+      auto normal_font = app.font_manager().UseDefault();
+      ImGui::HelpTooltip("Start new run");
+    }
 
     ImGui::SameLine();
     if (ImGui::Button(std::format("{}", kIconArrowForward))) {
       app.state().scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
       screen->ReturnHome();
     }
-    ImGui::HelpTooltip("Playlist next");
+    {
+      auto normal_font = app.font_manager().UseDefault();
+      ImGui::HelpTooltip("Playlist next");
+    }
 
     ImGui::SameLine();
     ImGui::Text(current_scenario->id());

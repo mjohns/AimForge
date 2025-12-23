@@ -43,8 +43,7 @@ struct Playlist {
   PlaylistDef def_;
 };
 
-std::vector<PlaylistItem> GetPlaylistItems(const ResourceName& playlist_name,
-                                           const PlaylistDef& def);
+std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def);
 
 struct PlaylistRun {
   Playlist playlist;

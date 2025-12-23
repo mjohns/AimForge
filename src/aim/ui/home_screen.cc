@@ -1,8 +1,5 @@
 #include "home_screen.h"
 
-#include <backends/imgui_impl_sdl3.h>
-#include <misc/cpp/imgui_stdlib.h>
-
 #include "SDL3/SDL.h"
 #include "absl/strings/str_split.h"
 #include "absl/strings/string_view.h"
@@ -17,11 +14,13 @@
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/scenario_ui.h"
-#include "aim/ui/top_bar.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
+#include "aim/ui/top_bar.h"
 #include "aim/ui/ui_screen.h"
+#include "imgui/backends/imgui_impl_sdl3.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {
@@ -271,7 +270,6 @@ class HomeScreen : public UiScreen {
     // ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
 
     // Place exit at bottom
-    // float
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
     if (ImGui::Selectable(std::format("{} Restart", kIconRestartAlt).c_str(), false)) {
       throw ApplicationRestartException();
@@ -413,7 +411,7 @@ class HomeScreen : public UiScreen {
     ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
 
     // TODO: Display breakdowns
-  //  ImGui::TextFmt("{}", kIconBolt);
+    //  ImGui::TextFmt("{}", kIconBolt);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;
