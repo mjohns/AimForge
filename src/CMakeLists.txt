@@ -17,7 +17,6 @@ if(WIN32)
     target_link_libraries(${NAME} PRIVATE shell32)
 endif(WIN32)
 
-
 target_link_libraries(${NAME} PUBLIC aim SDL3::SDL3 imgui glm::glm-header-only)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

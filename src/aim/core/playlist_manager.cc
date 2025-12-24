@@ -129,7 +129,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     playlist_run_map_.erase(name);
   }
 
-  void SetCurrentPlaylist(const std::string& name) {
+  void SetCurrentPlaylist(const std::string& name) override {
     current_playlist_name_ = name;
   }
 
