@@ -475,7 +475,6 @@ class StatsScreen : public UiScreen {
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
     }
-
   }
 
   void DrawStatsPanel() {

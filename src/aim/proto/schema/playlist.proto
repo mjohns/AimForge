@@ -21,7 +21,6 @@ message LevelsPlaylistDef {
   // The amount to increment for each playlist item. i.e. 0.5 -> 1, 1.5, 2, ..
   float level_step = 4;
 
-
   int32 num_plays_per_level = 5;
 }
 

@@ -116,15 +116,16 @@ class SettingsManagerImpl : public SettingsManager {
     }
     return names;
   }
-  SettingsUpdater CreateUpdater() {
+
+  SettingsUpdater CreateUpdater() override {
     return SettingsUpdater(this, history_manager_);
   }
 
-  void RenameScenario(const std::string& old_name, const std::string& new_name) {
+  void RenameScenario(const std::string& old_name, const std::string& new_name) override {
     scenario_settings_cache_.erase(old_name);
   }
 
-  std::vector<std::string> ListThemes() {
+  std::vector<std::string> ListThemes() override {
     if (!std::filesystem::exists(theme_dir_) || !std::filesystem::is_directory(theme_dir_)) {
       return {};
     }
@@ -154,7 +155,7 @@ class SettingsManagerImpl : public SettingsManager {
     return theme_names;
   }
 
-  std::vector<std::string> ListTextures() {
+  std::vector<std::string> ListTextures() override {
     std::vector<std::string> texture_names;
     for (const auto& entry : std::filesystem::directory_iterator(texture_dir_)) {
       std::string filename = entry.path().filename().string();
@@ -165,7 +166,7 @@ class SettingsManagerImpl : public SettingsManager {
     return texture_names;
   }
 
-  Crosshair GetCrosshair(const std::string& name) {
+  Crosshair GetCrosshair(const std::string& name) override {
     auto it = crosshair_cache_.find(name);
     if (it != crosshair_cache_.end()) {
       return it->second;
@@ -185,15 +186,15 @@ class SettingsManagerImpl : public SettingsManager {
     return crosshair;
   }
 
-  bool CrosshairExists(const std::string& name) {
+  bool CrosshairExists(const std::string& name) override {
     return std::filesystem::exists(GetCrosshairPath(name));
   }
 
-  bool ThemeExists(const std::string& name) {
+  bool ThemeExists(const std::string& name) override {
     return std::filesystem::exists(GetThemePath(name));
   }
 
-  bool SaveCrosshair(const std::string& name, const Crosshair& crosshair) {
+  bool SaveCrosshair(const std::string& name, const Crosshair& crosshair) override {
     bool saved = WriteJsonMessageToFile(GetCrosshairPath(name), crosshair);
     if (saved) {
       crosshair_cache_[name] = crosshair;
@@ -201,25 +202,17 @@ class SettingsManagerImpl : public SettingsManager {
     return saved;
   }
 
-  std::filesystem::path GetCrosshairPath(const std::string& name) {
-    return crosshair_dir_ / std::format("{}.json", name);
-  }
-
-  std::filesystem::path GetThemePath(const std::string& name) {
-    return theme_dir_ / std::format("{}.json", name);
-  }
-
-  bool DeleteCrosshair(const std::string& name) {
+  bool DeleteCrosshair(const std::string& name) override {
     return std::filesystem::remove(GetCrosshairPath(name));
   }
 
-  void RenameCrosshair(const std::string& old_name, const std::string& new_name) {
+  void RenameCrosshair(const std::string& old_name, const std::string& new_name) override {
     std::filesystem::rename(GetCrosshairPath(old_name), GetCrosshairPath(new_name));
     crosshair_cache_.erase(old_name);
     crosshair_cache_.erase(new_name);
   }
 
-  Theme GetTheme(const std::string& theme_name) {
+  Theme GetTheme(const std::string& theme_name) override {
     std::string current_theme_name = theme_name;
     for (int i = 0; i < 20; ++i) {
       Theme theme = GetThemeNoReferenceFollow(current_theme_name);
@@ -232,7 +225,7 @@ class SettingsManagerImpl : public SettingsManager {
     return GetDefaultTheme();
   }
 
-  Theme GetThemeNoReferenceFollow(const std::string& theme_name) {
+  Theme GetThemeNoReferenceFollow(const std::string& theme_name) override {
     if (theme_name.size() == 0) {
       return GetDefaultTheme();
     }
@@ -261,7 +254,7 @@ class SettingsManagerImpl : public SettingsManager {
     return GetDefaultTheme();
   }
 
-  Theme GetCurrentTheme() {
+  Theme GetCurrentTheme() override {
     Settings* settings = GetMutableCurrentSettings();
     if (settings == nullptr) {
       return GetDefaultTheme();
@@ -269,7 +262,7 @@ class SettingsManagerImpl : public SettingsManager {
     return GetTheme(settings->theme_name());
   }
 
-  bool SaveTheme(const std::string& theme_name, const Theme& theme) {
+  bool SaveTheme(const std::string& theme_name, const Theme& theme) override {
     bool saved = WriteJsonMessageToFile(GetThemePath(theme_name), theme);
     if (saved) {
       theme_cache_.erase(theme_name);
@@ -277,17 +270,17 @@ class SettingsManagerImpl : public SettingsManager {
     return saved;
   }
 
-  bool DeleteTheme(const std::string& name) {
+  bool DeleteTheme(const std::string& name) override {
     return std::filesystem::remove(GetThemePath(name));
   }
 
-  void RenameTheme(const std::string& old_name, const std::string& new_name) {
+  void RenameTheme(const std::string& old_name, const std::string& new_name) override {
     std::filesystem::rename(GetThemePath(old_name), GetThemePath(new_name));
     theme_cache_.erase(old_name);
     theme_cache_.erase(new_name);
   }
 
-  void MaybeInvalidateThemeCache() {
+  void MaybeInvalidateThemeCache() override {
     bool something_changed = false;
     for (auto& map_entry : theme_cache_) {
       auto& cache_entry = map_entry.second;
@@ -304,12 +297,12 @@ class SettingsManagerImpl : public SettingsManager {
     }
   }
 
-  float GetDpi() {
+  float GetDpi() override {
     float dpi = settings_.dpi();
     return dpi > 0 ? dpi : kDefaultDpi;
   }
 
-  Settings GetCurrentSettingsForScenario(const std::string& scenario_name) {
+  Settings GetCurrentSettingsForScenario(const std::string& scenario_name) override {
     if (settings_.disable_per_scenario_settings() || scenario_name.size() == 0) {
       return settings_;
     }
@@ -360,24 +353,24 @@ class SettingsManagerImpl : public SettingsManager {
     return settings_;
   }
 
-  Settings GetCurrentSettings() {
+  Settings GetCurrentSettings() override {
     return settings_;
   }
 
-  Settings* GetMutableCurrentSettings() {
+  Settings* GetMutableCurrentSettings() override {
     return &settings_;
   }
 
-  Crosshair GetCurrentCrosshair() {
+  Crosshair GetCurrentCrosshair() override {
     Settings settings = GetCurrentSettings();
     return GetCrosshair(settings.current_crosshair_name());
   }
 
-  void MarkDirty() {
+  void MarkDirty() override {
     needs_save_ = true;
   }
 
-  bool MaybeFlushToDisk(const std::string& scenario_id) {
+  bool MaybeFlushToDisk(const std::string& scenario_id) override {
     if (needs_save_) {
       FlushToDisk(scenario_id);
       return true;
@@ -385,6 +378,14 @@ class SettingsManagerImpl : public SettingsManager {
     return false;
   }
 
+  void FlushToDisk(const std::string& scenario_name) override {
+    WriteScenarioSettings(scenario_name);
+    if (WriteJsonMessageToFile(settings_path_, settings_)) {
+      needs_save_ = false;
+    }
+  }
+
+ private:
   void WriteScenarioSettings(const std::string& scenario_name) {
     if (scenario_name.size() > 0) {
       ScenarioSettings scenario_settings;
@@ -401,11 +402,12 @@ class SettingsManagerImpl : public SettingsManager {
     }
   }
 
-  void FlushToDisk(const std::string& scenario_name) {
-    WriteScenarioSettings(scenario_name);
-    if (WriteJsonMessageToFile(settings_path_, settings_)) {
-      needs_save_ = false;
-    }
+  std::filesystem::path GetCrosshairPath(const std::string& name) {
+    return crosshair_dir_ / std::format("{}.json", name);
+  }
+
+  std::filesystem::path GetThemePath(const std::string& name) {
+    return theme_dir_ / std::format("{}.json", name);
   }
 
   std::filesystem::path settings_path_;

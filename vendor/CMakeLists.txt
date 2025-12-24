@@ -41,7 +41,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   protobuf
   GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-  GIT_TAG        v29.3
+  GIT_TAG        v33.2
 )
 
 FetchContent_Declare(
