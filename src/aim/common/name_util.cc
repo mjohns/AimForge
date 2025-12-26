@@ -137,7 +137,15 @@ std::string NameInfo::GetFullName() const {
   return result;
 }
 
-NameInfo GetNameInfo(const std::string& name) {
+NameInfo GetScenarioNameInfo(const std::string& name) {
+  return GetNameInfo(name, true);
+}
+
+NameInfo GetPlaylistNameInfo(const std::string& name) {
+  return GetNameInfo(name, false);
+}
+
+NameInfo GetNameInfo(const std::string& name, bool support_levels) {
   NameInfo info;
 
   std::string base_name(absl::StripAsciiWhitespace(name));
@@ -149,11 +157,13 @@ NameInfo GetNameInfo(const std::string& name) {
     info.cm_per_360 = cm_per_360;
   }
 
-  float level = 0;
-  auto stripped_level_name = StripLevelSuffix(base_name, &level);
-  if (stripped_level_name) {
-    base_name = *stripped_level_name;
-    info.level = level;
+  if (support_levels) {
+    float level = 0;
+    auto stripped_level_name = StripLevelSuffix(base_name, &level);
+    if (stripped_level_name) {
+      base_name = *stripped_level_name;
+      info.level = level;
+    }
   }
 
   info.base_name = base_name;

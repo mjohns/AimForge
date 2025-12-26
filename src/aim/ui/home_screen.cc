@@ -196,38 +196,9 @@ class HomeScreen : public UiScreen {
       RunCurrentScenario();
       return;
     }
-    PlaylistItemProgress* progress = run->GetMutableCurrentPlaylistItemProgress();
-    if (progress == nullptr) {
-      return;
-    }
-    if (!progress->IsDone()) {
-      // Still more attempts needed.
-      RunCurrentScenario();
-      return;
-    }
-
-    // Try to find next item in scenario to do.
-    int next_index = run->current_index + 1;
-    if (!IsValidIndex(run->progress_list, next_index)) {
-      bool found_pending_item = false;
-      // Check to see if any previous item in the list is not done
-      for (int i = 0; i < run->progress_list.size(); ++i) {
-        if (!run->progress_list[i].IsDone()) {
-          next_index = i;
-          found_pending_item = true;
-          break;
-        }
-      }
-
-      if (!found_pending_item) {
-        // Playlist is done.
-        return;
-      }
-    }
-    run->current_index = next_index;
-    auto scenario_id = run->progress_list[next_index].item.scenario();
-    if (!app_.scenario_manager().SetCurrentScenario(scenario_id)) {
-      return;
+    std::optional<std::string> next_scenario = run->Next();
+    if (next_scenario) {
+      app_.scenario_manager().SetCurrentScenario(*next_scenario);
     }
     RunCurrentScenario();
   }

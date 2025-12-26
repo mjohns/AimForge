@@ -28,6 +28,7 @@ struct PlaylistItemProgress {
 
 struct Playlist {
   ResourceName name;
+  std::optional<float> cm_per_360;
 
   PlaylistDef* mutable_def() {
     return &def_;
@@ -52,26 +53,16 @@ struct PlaylistRun {
     return playlist.name.full_name();
   };
 
+  void IncrementRunDone(const std::string& scenario_name);
+  void Shuffle(Random& rand);
+
+  // Returns the next scenario in the playlist and updates index if necessary. This will be the
+  // current scenario if the number of specified runs aren't complete.
+  std::optional<std::string> Next();
+  std::optional<int> NextIndex();
+
   int current_index = 0;
   std::vector<PlaylistItemProgress> progress_list;
-  bool is_shuffled = false;
-
-  PlaylistItemProgress* GetMutableCurrentPlaylistItemProgress() {
-    return IsCurrentIndexValid() ? &progress_list[current_index] : nullptr;
-  }
-
-  void Shuffle(Random& rand) {
-    std::shuffle(progress_list.begin(), progress_list.end(), *rand.random_generator());
-    is_shuffled = true;
-  }
-
-  bool IsCurrentIndexValid() {
-    return IsValidIndex(progress_list, current_index);
-  }
-
-  std::string current_scenario_name() {
-    return IsCurrentIndexValid() ? progress_list[current_index].item.scenario() : "";
-  }
 };
 
 class PlaylistManager {
@@ -89,15 +80,12 @@ class PlaylistManager {
 
   virtual void AddPlaylistsForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
-  virtual std::shared_ptr<PlaylistRun> GetCurrentRun() = 0;
-
+  virtual void SetCurrentPlaylist(const std::string& name) = 0;
   virtual const std::string& current_playlist_name() const = 0;
 
   virtual std::shared_ptr<PlaylistRun> GetRun(const std::string& name) = 0;
-
-  virtual void ClearCurrentRun(const std::string& name) = 0;
-
-  virtual void SetCurrentPlaylist(const std::string& name) = 0;
+  virtual void ClearRun(const std::string& name) = 0;
+  virtual std::shared_ptr<PlaylistRun> GetCurrentRun() = 0;
 
   virtual std::shared_ptr<std::vector<std::string>> playlist_names() const = 0;
 
@@ -108,8 +96,8 @@ class PlaylistManager {
                                      const std::string& scenario_name) = 0;
 
   virtual bool SavePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
-  virtual void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
 
+  virtual void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
   void UpdatePlaylist(const std::string& name, const PlaylistDef& def) {
     return UpdatePlaylist(ResourceName::Parse(name), def);
   }

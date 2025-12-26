@@ -38,33 +38,6 @@ constexpr const i16 kReplayFps = 240;
 constexpr const int kDefaultTargetRenderFps = 600;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
-std::optional<int> GetPlaylistIndexForScenario(PlaylistRun* playlist_run,
-                                               const std::string& scenario_name) {
-  std::optional<int> scenario_index;
-  if (playlist_run->current_scenario_name() == scenario_name) {
-    return playlist_run->current_index;
-  }
-
-  // The scenario is not at the current index. Find the best instance of the scenario in the
-  // playlist to increment and reset current index.
-  std::optional<int> first_instance;
-  for (int i = 0; i < playlist_run->progress_list.size(); ++i) {
-    auto& item = playlist_run->progress_list[i];
-    if (item.item.scenario() != scenario_name) {
-      continue;
-    }
-    if (!first_instance) {
-      first_instance = i;
-    }
-    bool is_done = item.runs_done >= item.item.num_plays();
-    if (!is_done) {
-      return i;
-    }
-  }
-
-  return first_instance;
-}
-
 }  // namespace
 
 Scenario::~Scenario() {
@@ -455,14 +428,7 @@ void Scenario::HandleScenarioDone() {
 
   std::shared_ptr<PlaylistRun> playlist_run = app_.playlist_manager().GetCurrentRun();
   if (playlist_run) {
-    std::optional<int> scenario_index = GetPlaylistIndexForScenario(playlist_run.get(), id_);
-    if (scenario_index) {
-      playlist_run->current_index = *scenario_index;
-      PlaylistItemProgress* progress = playlist_run->GetMutableCurrentPlaylistItemProgress();
-      if (progress != nullptr) {
-        progress->runs_done++;
-      }
-    }
+    playlist_run->IncrementRunDone(id_);
   }
 
   FlushPlayTime();

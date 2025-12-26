@@ -1,5 +1,6 @@
 #include "playlist_manager.h"
 
+#include <algorithm>
 #include <filesystem>
 
 #include "absl/strings/strip.h"
@@ -125,7 +126,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     return nullptr;
   }
 
-  void ClearCurrentRun(const std::string& name) override {
+  void ClearRun(const std::string& name) override {
     playlist_run_map_.erase(name);
   }
 
@@ -146,6 +147,15 @@ class PlaylistManagerImpl : public PlaylistManager {
     if (it != playlist_map_.end()) {
       return it->second;
     }
+    NameInfo name_info = GetPlaylistNameInfo(playlist_name);
+    if (name_info.cm_per_360) {
+      auto playlist = GetPlaylist(name_info.base_name);
+      if (playlist) {
+        playlist->cm_per_360 = name_info.cm_per_360;
+        return playlist;
+      }
+    }
+
     return {};
   }
 
@@ -405,6 +415,59 @@ std::vector<PlaylistItem> Playlist::items() const {
 
 std::unique_ptr<PlaylistManager> CreatePlaylistManager(FileSystem* fs) {
   return std::make_unique<PlaylistManagerImpl>(fs);
+}
+
+void PlaylistRun::Shuffle(Random& rand) {
+  std::shuffle(progress_list.begin(), progress_list.end(), *rand.random_generator());
+}
+
+void PlaylistRun::IncrementRunDone(const std::string& scenario_name) {
+  if (IsValidIndex(progress_list, current_index)) {
+    auto& item = progress_list[current_index];
+    if (item.item.scenario() == scenario_name) {
+      item.runs_done++;
+      return;
+    }
+  }
+
+  // The scenario is not at the current index. Find the first instance of the scenario in the
+  // playlist and increment
+  for (int i = 0; i < progress_list.size(); ++i) {
+    auto& item = progress_list[i];
+    if (item.item.scenario() == scenario_name) {
+      item.runs_done++;
+      current_index = i;
+      return;
+    }
+  }
+}
+
+std::optional<std::string> PlaylistRun::Next() {
+  auto next_index = NextIndex();
+  if (next_index) {
+    current_index = *next_index;
+    auto& item = progress_list[current_index];
+    return item.item.scenario();
+  }
+  return {};
+}
+
+std::optional<int> PlaylistRun::NextIndex() {
+  if (progress_list.empty()) {
+    return {};
+  }
+  int i = current_index;
+  if (!IsValidIndex(progress_list, i)) {
+    i = 0;
+  }
+  for (int n = 0; n < progress_list.size(); ++n) {
+    auto& item = progress_list[i];
+    if (!item.IsDone()) {
+      return i;
+    }
+    i = (i + 1) % progress_list.size();
+  }
+  return {};
 }
 
 }  // namespace aim

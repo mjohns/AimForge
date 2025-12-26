@@ -61,7 +61,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     ImGui::SameLine();
     if (ImGui::Button(kIconRedo)) {
-      app_.playlist_manager().ClearCurrentRun(run->playlist_name());
+      app_.playlist_manager().ClearRun(run->playlist_name());
       run = app_.playlist_manager().GetCurrentRun();
     }
     ImGui::HelpTooltip("Reset current run");
