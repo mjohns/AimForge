@@ -8,6 +8,7 @@
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
+#include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
@@ -302,10 +303,15 @@ class SettingsManagerImpl : public SettingsManager {
     return dpi > 0 ? dpi : kDefaultDpi;
   }
 
-  Settings GetCurrentSettingsForScenario(const std::string& scenario_name) override {
-    if (settings_.disable_per_scenario_settings() || scenario_name.size() == 0) {
+  Settings GetCurrentSettingsForScenario(const std::string& scenario_name_raw) override {
+    if (settings_.disable_per_scenario_settings() || scenario_name_raw.size() == 0) {
       return settings_;
     }
+    // Only store scenario settings for the base name and share for all levels / cm suffixes.
+    // TODO: Add an option in settings to configure this behavior
+    NameInfo name_info = GetScenarioNameInfo(scenario_name_raw);
+    const std::string& scenario_name = name_info.base_name;
+
     auto it = scenario_settings_cache_.find(scenario_name);
     ScenarioSettings scenario_settings;
     bool missing_scenario_settings = false;
@@ -370,9 +376,9 @@ class SettingsManagerImpl : public SettingsManager {
     needs_save_ = true;
   }
 
-  bool MaybeFlushToDisk(const std::string& scenario_id) override {
+  bool MaybeFlushToDisk(const std::string& scenario_name) override {
     if (needs_save_) {
-      FlushToDisk(scenario_id);
+      FlushToDisk(scenario_name);
       return true;
     }
     return false;
@@ -386,8 +392,10 @@ class SettingsManagerImpl : public SettingsManager {
   }
 
  private:
-  void WriteScenarioSettings(const std::string& scenario_name) {
-    if (scenario_name.size() > 0) {
+  void WriteScenarioSettings(const std::string& scenario_name_raw) {
+    if (scenario_name_raw.size() > 0) {
+      NameInfo name_info = GetScenarioNameInfo(scenario_name_raw);
+      const std::string& scenario_name = name_info.base_name;
       ScenarioSettings scenario_settings;
       scenario_settings.set_crosshair_size(settings_.crosshair_size());
       scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
