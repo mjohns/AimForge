@@ -13,6 +13,45 @@
 namespace aim {
 namespace {
 
+template <typename Fn>
+std::optional<int> FindFirstProgressItem(const std::vector<PlaylistItemProgress>& progress_list,
+                                         int current_index,
+                                         Fn fn) {
+  if (progress_list.empty()) {
+    return {};
+  }
+  int i = current_index;
+  if (!IsValidIndex(progress_list, i)) {
+    i = 0;
+  }
+  for (int n = 0; n < progress_list.size(); ++n) {
+    auto& item = progress_list[i];
+    bool matches = fn(item);
+    if (matches) {
+      return i;
+    }
+    i = (i + 1) % progress_list.size();
+  }
+  return {};
+}
+
+std::optional<int> GetIncrementRunDoneIndex(PlaylistRun* run, const std::string& scenario_name) {
+  auto& progress_list = run->progress_list;
+  int current_index = run->current_index;
+
+  std::optional<int> first_not_done =
+      FindFirstProgressItem(progress_list, current_index, [&](const PlaylistItemProgress& item) {
+        return !item.IsDone() && item.item.scenario() == scenario_name;
+      });
+  if (first_not_done) {
+    return first_not_done;
+  }
+  // Now return the first of any matching the scenario.
+  return FindFirstProgressItem(progress_list, current_index, [&](const PlaylistItemProgress& item) {
+    return item.item.scenario() == scenario_name;
+  });
+}
+
 std::filesystem::path GetPlaylistPath(const std::filesystem::path& bundle_path,
                                       const std::string& name) {
   return bundle_path / "playlists" / (name + ".json");
@@ -422,35 +461,11 @@ void PlaylistRun::Shuffle(Random& rand) {
 }
 
 void PlaylistRun::IncrementRunDone(const std::string& scenario_name) {
-  if (IsValidIndex(progress_list, current_index)) {
-    auto& item = progress_list[current_index];
-    if (item.item.scenario() == scenario_name) {
-      item.runs_done++;
-      return;
-    }
-  }
-
-  // The scenario is not at the current index. Find the first instance of the scenario in the
-  // playlist and increment
-  std::optional<int> first_done;
-  for (int i = 0; i < progress_list.size(); ++i) {
-    auto& item = progress_list[i];
-    if (item.item.scenario() == scenario_name) {
-      if (!item.IsDone()) {
-        item.runs_done++;
-        current_index = i;
-        return;
-      }
-      if (!first_done) {
-        first_done = i;
-      }
-    }
-  }
-
-  if (first_done) {
-    auto& item = progress_list[*first_done];
+  std::optional<int> index = GetIncrementRunDoneIndex(this, scenario_name);
+  if (index) {
+    auto& item = progress_list[*index];
     item.runs_done++;
-    current_index = *first_done;
+    current_index = *index;
   }
 }
 
@@ -468,16 +483,15 @@ std::optional<int> PlaylistRun::NextIndex() {
   if (progress_list.empty()) {
     return {};
   }
-  int i = current_index;
-  if (!IsValidIndex(progress_list, i)) {
-    i = 0;
+  std::optional<int> first_not_done =
+      FindFirstProgressItem(progress_list, current_index, [&](const PlaylistItemProgress& item) {
+        return !item.IsDone();
+      });
+  if (first_not_done) {
+    return first_not_done;
   }
-  for (int n = 0; n < progress_list.size(); ++n) {
-    auto& item = progress_list[i];
-    if (!item.IsDone()) {
-      return i;
-    }
-    i = (i + 1) % progress_list.size();
+  if (IsValidIndex(progress_list, current_index)) {
+    return current_index;
   }
   return progress_list.size() - 1;
 }

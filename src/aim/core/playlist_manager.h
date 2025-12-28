@@ -21,7 +21,7 @@ struct PlaylistItemProgress {
   PlaylistItem item;
   int runs_done = 0;
 
-  bool IsDone() {
+  bool IsDone() const {
     return runs_done >= item.num_plays();
   }
 };
