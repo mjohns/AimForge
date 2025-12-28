@@ -1,0 +1,6674 @@
+{
+  "playlists": [
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "AF AlternateClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF AlternateClick Vertical"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF SnakeClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF StaticClick 3ts"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF MicroClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF StaticPulse"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF ReflexClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF ClusterClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF AlternateClick Wide"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF StaticClick 2ts"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF StaticPoke 3ts"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF StaticPoke 2ts"
+          }
+        ]
+      },
+      "name": "Clicking"
+    },
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "AF BarrelClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF LinearClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF BarrelPulse"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF FireworkClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF WaterfallClick"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF WaterfallPulse"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF WanderClick"
+          }
+        ]
+      },
+      "name": "Dynamic Clicking"
+    },
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Vertical"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering 180"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Arc Shallow"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF GlideTrack"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Always Left"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Always Right"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Look Down"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Look Up"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Strafe"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Angle 60"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Angle 60 Down"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Angle 90"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Always Right Angle 20"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Always Left Angle 20"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Accel"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF VertArc"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF Centering Circle Clockwise"
+          }
+        ]
+      },
+      "name": "Smoothness"
+    },
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "AF StaticTs"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF ShrinkTs"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF BarrelSwitch"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF LinearSwitch"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "AF ShrinkTs Regen"
+          }
+        ]
+      },
+      "name": "Target Switching"
+    }
+  ],
+  "scenarios": [
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 155
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regionOrder": [
+              0,
+              1
+            ],
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Right"
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.08
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.300000072
+                  }
+                },
+                "xOffset": {
+                  "value": 43
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Left"
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.08
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.3
+                  }
+                },
+                "xOffset": {
+                  "value": -43
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.5,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "AlternateClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 155
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 43
+            },
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "value": 23.5
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Top Right",
+                  "weight": 1
+                },
+                "xOffset": {
+                  "xPercentValue": 0.34
+                },
+                "yOffset": {
+                  "yPercentValue": 0.34
+                }
+              },
+              {
+                "circle": {
+                  "diameter": {
+                    "value": 24
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Top Left",
+                  "weight": 1
+                },
+                "xOffset": {
+                  "xPercentValue": -0.34
+                },
+                "yOffset": {
+                  "yPercentValue": 0.34
+                }
+              },
+              {
+                "circle": {
+                  "diameter": {
+                    "value": 24
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Bottom Left",
+                  "weight": 1
+                },
+                "xOffset": {
+                  "xPercentValue": -0.34
+                },
+                "yOffset": {
+                  "yPercentValue": -0.34
+                }
+              },
+              {
+                "circle": {
+                  "diameter": {
+                    "value": 24
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Bottom Right",
+                  "weight": 1
+                },
+                "xOffset": {
+                  "xPercentValue": 0.34
+                },
+                "yOffset": {
+                  "yPercentValue": -0.34
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.5,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "AlternateClick Corners"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 15,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regionOrder": [
+              0,
+              1
+            ],
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.1
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.3
+                  }
+                },
+                "xOffset": {
+                  "xPercentValue": 0.4
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.1
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.3
+                  }
+                },
+                "xOffset": {
+                  "xPercentValue": -0.4
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 225
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 25,
+              "targetRadius": 1.5
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "AlternateClick Linear Wide"
+    },
+    {
+      "def": {
+        "description": "Alternate clicks focusing on vertical movement.",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regionOrder": [
+              0,
+              1
+            ],
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.3
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.1
+                  }
+                },
+                "xOffset": {
+                  "value": 0
+                },
+                "yOffset": {
+                  "yPercentValue": 0.2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.3
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.1
+                  }
+                },
+                "xOffset": {
+                  "value": 0
+                },
+                "yOffset": {
+                  "yPercentValue": -0.2
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 1.5
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "AlternateClick Vertical"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 12,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 300,
+              "turnRateJitter": 70,
+              "turnTime": 2.19999981,
+              "turnTimeJitter": 0.5
+            }
+          ],
+          "targetPlacementStrategy": {
+            "regionOrder": [
+              0,
+              1
+            ],
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Left"
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.100000054
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.4
+                  }
+                },
+                "xOffset": {
+                  "xPercentValue": -0.300000072
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Right"
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.100000031
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.4
+                  }
+                },
+                "xOffset": {
+                  "value": 30
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "AlternateClick Wander"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 225
+          }
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regionOrder": [
+              0,
+              1
+            ],
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Right"
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.08
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.3
+                  }
+                },
+                "xOffset": {
+                  "value": 60
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "Left"
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.08
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.3
+                  }
+                },
+                "xOffset": {
+                  "value": -60
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.5,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "AlternateClick Wide"
+    },
+    {
+      "def": {
+        "barrelDef": {
+          "directionRadiusPercent": 0.3,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "xPercentValue": 0.92
+                  },
+                  "innerDiameter": {
+                    "xPercentValue": 0.76
+                  }
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 75
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": "Large Fast"
+              },
+              "speed": 60,
+              "speedJitter": 0,
+              "targetRadius": 2.8,
+              "targetRadiusJitter": 0
+            },
+            {
+              "info": {
+                "description": "Small Slow"
+              },
+              "speed": 50,
+              "speedJitter": 3,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "targetOrder": [
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "name": "BarrelClick"
+    },
+    {
+      "def": {
+        "barrelDef": {
+          "directionRadiusPercent": 0.7,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "xPercentValue": 0.92
+                  },
+                  "innerDiameter": {
+                    "xPercentValue": 0.6
+                  }
+                },
+                "info": {
+                  "description": "Spawn target on outside edge"
+                }
+              }
+            ]
+          }
+        },
+        "description": "",
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 75
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 59,
+              "speedJitter": 10,
+              "targetRadius": 1.40000057,
+              "targetRadiusGrowthSize": 5.60000086,
+              "targetRadiusGrowthTimeSeconds": 1.79999983,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "staggerInitialTargetsSeconds": 0.1
+        }
+      },
+      "name": "BarrelPulse"
+    },
+    {
+      "def": {
+        "barrelDef": {
+          "directionRadiusPercent": 0.45,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "xPercentValue": 0.92
+                  },
+                  "innerDiameter": {
+                    "xPercentValue": 0.6
+                  }
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 75
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": "Large Fast"
+              },
+              "speed": 60,
+              "speedJitter": 0,
+              "targetRadius": 2.8,
+              "targetRadiusJitter": 0
+            },
+            {
+              "info": {
+                "description": "Small Slow"
+              },
+              "speed": 50,
+              "speedJitter": 3,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "targetOrder": [
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "name": "BarrelSwitch"
+    },
+    {
+      "def": {
+        "barrelDef": {
+          "directionRadiusPercent": 0.65,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 2
+                  },
+                  "yLength": {
+                    "value": 2
+                  }
+                },
+                "xOffset": {
+                  "value": -20
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 60
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 59,
+              "speedJitter": 0,
+              "targetRadius": 2.00000024,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "BarrelTrack"
+    },
+    {
+      "def": {
+        "barrelDef": {
+          "directionRadiusPercent": 0.65,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 2
+                  },
+                  "yLength": {
+                    "value": 2
+                  }
+                },
+                "xOffset": {
+                  "value": -20
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 60
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -40,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 62,
+              "speedJitter": 0,
+              "targetRadius": 2.00000024,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "BarrelTrack Close"
+    },
+    {
+      "def": {
+        "barrelDef": {
+          "directionRadiusPercent": 0.45,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "xPercentValue": 0.92
+                  },
+                  "innerDiameter": {
+                    "xPercentValue": 0.6
+                  }
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 75
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": "Large Fast"
+              },
+              "speed": 60,
+              "speedJitter": 0,
+              "targetRadius": 2.8,
+              "targetRadiusJitter": 0
+            },
+            {
+              "info": {
+                "description": "Small Slow"
+              },
+              "speed": 50,
+              "speedJitter": 3,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "targetOrder": [
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "name": "BarrelTs"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "BounceTrack"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 35
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "reflect": true,
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "BounceTrack Down"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "value": -80
+              },
+              "y": {
+                "value": 0
+              }
+            },
+            {
+              "x": {
+                "value": 80
+              },
+              "y": {
+                "value": 0
+              }
+            }
+          ]
+        },
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 200
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 10
+              },
+              "speed": 53,
+              "speedJitter": 0,
+              "targetRadius": 1.30000007,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "xPercentValue": -0.48
+              },
+              "y": {
+                "value": -30
+              }
+            },
+            {
+              "x": {
+                "xPercentValue": 0.48
+              },
+              "y": {
+                "value": -30
+              }
+            }
+          ]
+        },
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": -30
+          },
+          "cylinderRoom": {
+            "height": 100,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 65,
+            "widthPerimeterPercent": 0.6
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 30,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 16.7000065
+              },
+              "speed": 76,
+              "speedJitter": 0,
+              "targetRadius": 1.40000033,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering 180"
+    },
+    {
+      "def": {
+        "description": "",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 150
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 10
+              },
+              "speed": 62,
+              "speedJitter": 0,
+              "targetRadius": 1.30000007,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallStrafeDef": {
+          "acceleration": 65,
+          "bounds": {
+            "height": {
+              "value": 10
+            },
+            "width": {
+              "value": 120
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 1
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Centering Accel"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -40
+              }
+            },
+            {
+              "x": {
+                "xPercentValue": -1
+              },
+              "y": {
+                "value": -40
+              }
+            }
+          ]
+        },
+        "description": "",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": -40
+          },
+          "cylinderRoom": {
+            "height": 130,
+            "hideSides": true,
+            "radius": 200,
+            "width": 500000
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 14.9999809
+              },
+              "speed": 43,
+              "speedJitter": 0,
+              "targetRadius": 1.9,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Always Left"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 40,
+        "linearDef": {
+          "angle": 20,
+          "angleJitter": 0,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 1
+                  },
+                  "yLength": {
+                    "value": 1
+                  }
+                },
+                "xOffset": {
+                  "value": -3
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 80,
+            "hideSides": true,
+            "radius": 200,
+            "width": 500000
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 22,
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 49,
+              "speedJitter": 0,
+              "targetRadius": 1.70000017,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Always Left Angle 20"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 40,
+        "linearDef": {
+          "angle": 20,
+          "angleJitter": 0,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 1
+                  },
+                  "yLength": {
+                    "value": 1
+                  }
+                },
+                "xOffset": {
+                  "value": -3
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 39,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 80,
+            "hideSides": true,
+            "radius": 200,
+            "width": 500000
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 22,
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 49,
+              "speedJitter": 0,
+              "targetRadius": 1.70000017,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Always Left Angle 20  Offset"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -40
+              }
+            },
+            {
+              "x": {
+                "xPercentValue": 1
+              },
+              "y": {
+                "value": -40
+              }
+            }
+          ]
+        },
+        "description": "",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": -40
+          },
+          "cylinderRoom": {
+            "height": 130,
+            "hideSides": true,
+            "radius": 200,
+            "width": 500000
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 14.9999809
+              },
+              "speed": 43,
+              "speedJitter": 0,
+              "targetRadius": 1.9,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Always Right"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 40,
+        "linearDef": {
+          "angle": 20,
+          "angleJitter": 0,
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 1
+                  },
+                  "yLength": {
+                    "value": 1
+                  }
+                },
+                "xOffset": {
+                  "value": 3
+                },
+                "yOffset": {
+                  "value": 0
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 80,
+            "hideSides": true,
+            "radius": 200,
+            "width": 500000
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 22,
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 49,
+              "speedJitter": 0,
+              "targetRadius": 1.70000017,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Always Right Angle 20"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": 45,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 45"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": -45,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 45 Down"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": 60,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 60"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": -60,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 60 Down"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": 75,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 75"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": -75,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 75 Down"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "angle": 90,
+          "angleJitter": 0,
+          "angleLength": {
+            "xPercentValue": 0.96999985
+          }
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 95
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 2.2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Angle 90"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -20
+          },
+          "simpleRoom": {
+            "height": 100,
+            "width": 260
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "yPercentValue": 0.5
+          },
+          "startOnGround": true,
+          "width": {
+            "xPercentValue": 0.799999833
+          }
+        }
+      },
+      "name": "Centering Arc Shallow"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -71,
+            "z": -20
+          },
+          "cameraUp": {
+            "x": 0.6,
+            "y": 1.49011612e-08,
+            "z": 1
+          },
+          "simpleRoom": {
+            "height": 100,
+            "width": 260
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 1.49999988,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "yPercentValue": 0.5
+          },
+          "startOnGround": true,
+          "width": {
+            "xPercentValue": 0.799999833
+          }
+        }
+      },
+      "name": "Centering Arc Shallow Skewed"
+    },
+    {
+      "def": {
+        "circleDef": {
+          "radius": {
+            "xPercentValue": 0.4
+          },
+          "rotateClockwise": true,
+          "startDegrees": 0
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 65
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 40,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Circle Clockwise"
+    },
+    {
+      "def": {
+        "circleDef": {
+          "radius": {
+            "xPercentValue": 0.4
+          },
+          "rotateClockwise": true,
+          "startDegrees": 0
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 65
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 14,
+              "speedJitter": 0,
+              "targetRadius": 0.999999762,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Circle Clockwise Slow"
+    },
+    {
+      "def": {
+        "circleDef": {
+          "radius": {
+            "xPercentValue": 0.4
+          },
+          "rotateClockwise": false,
+          "startDegrees": 0
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 65
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 40,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Circle CounterClockwise"
+    },
+    {
+      "def": {
+        "circleDef": {
+          "depth": {
+            "value": 13
+          },
+          "radius": {
+            "xPercentValue": 0.47
+          },
+          "rotateClockwise": true,
+          "startDegrees": 0
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 120
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -69,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 71,
+              "speedJitter": 0,
+              "targetRadius": 2.49999952,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering CloseCircle Clockwise"
+    },
+    {
+      "def": {
+        "circleDef": {
+          "radius": {
+            "xPercentValue": 0.4
+          },
+          "rotateClockwise": true,
+          "startDegrees": 0,
+          "stretchX": 0.599999964
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 65
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 57,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Egg Clockwise"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "value": 75
+              },
+              "y": {
+                "value": -50
+              }
+            },
+            {
+              "x": {
+                "value": -75
+              },
+              "y": {
+                "value": -50
+              }
+            }
+          ]
+        },
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 20
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 180
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 45,
+              "speedJitter": 0,
+              "targetRadius": 1.90000021,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Look Down"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "value": 75
+              },
+              "y": {
+                "value": 50
+              }
+            },
+            {
+              "x": {
+                "value": -75
+              },
+              "y": {
+                "value": 50
+              }
+            }
+          ]
+        },
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 180
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 45,
+              "speedJitter": 0,
+              "targetRadius": 1.80000019,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Look Up"
+    },
+    {
+      "def": {
+        "circleDef": {
+          "radius": {
+            "xPercentValue": 0.4
+          },
+          "rotateClockwise": true,
+          "startDegrees": 0,
+          "stretchY": 0.599999964
+        },
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 65
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 57,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Oval Clockwise"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cylinderRoom": {
+            "height": 150,
+            "radius": 200,
+            "sideAngleDegrees": 30,
+            "width": 300
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15
+              },
+              "speed": 75,
+              "speedJitter": 0,
+              "targetRadius": 1.70000184,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.5
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.06
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Centering Strafe"
+    },
+    {
+      "def": {
+        "centeringDef": {
+          "wallPoints": [
+            {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -75
+              }
+            },
+            {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 75
+              }
+            }
+          ]
+        },
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 200,
+            "width": 120
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 38,
+              "speedJitter": 0,
+              "targetRadius": 1.30000007,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Centering Vertical"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 7
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 17,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.7,
+              "targetRadiusJitter": 0.3
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "ClusterClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 360,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 10
+            },
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "value": 9
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "barrelRoom": {
+            "radius": 120
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 24,
+              "speedJitter": 2,
+              "targetRadius": 1.5999999,
+              "targetRadiusGrowthSize": 4.39999866,
+              "targetRadiusGrowthTimeSeconds": 2.50000143,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "staggerInitialTargetsSeconds": 0.25
+        }
+      },
+      "name": "FireworkClick"
+    },
+    {
+      "def": {
+        "centeringDef": {},
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -50,
+            "z": 0
+          },
+          "cameraUp": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+          },
+          "simpleRoom": {
+            "height": 140,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 88,
+              "speedJitter": 0,
+              "targetRadius": 2.00000048,
+              "targetRadiusJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "FlyBy"
+    },
+    {
+      "def": {
+        "description": "",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 240,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 65,
+            "widthPerimeterPercent": 0.599999964
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 8.59997559
+              },
+              "speed": 95,
+              "speedJitter": 0,
+              "targetRadius": 1.80000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "acceleration": 133,
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.9
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 19,
+              "distance": {
+                "xPercentValue": 0.669999838
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 50
+                  },
+                  "yLength": {
+                    "value": 50
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "GlideTrack"
+    },
+    {
+      "def": {
+        "description": "A small target with a larger hit box than the visuals.\n\nAllows you to focus on a small precise target while being more\nforgiving with scoring",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 240,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 65,
+            "widthPerimeterPercent": 0.599999964
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 95,
+              "speedJitter": 0,
+              "targetHitRadiusMultiplier": 2.79999948,
+              "targetRadius": 1.30000007,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "acceleration": 133,
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.69
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 19,
+              "distance": {
+                "xPercentValue": 0.669999838
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "GlideTrack Focus"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 11,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 50
+                  },
+                  "yLength": {
+                    "value": 69
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 150
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 48,
+              "speedJitter": 0,
+              "targetRadius": 1.8,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "LinearClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 11,
+          "leftRightInitialDirection": "DIRECTION_IN",
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 50
+                  },
+                  "yLength": {
+                    "value": 69
+                  }
+                }
+              }
+            ]
+          },
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "overrides": {},
+        "room": {
+          "barrelRoom": {
+            "radius": 75
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 48,
+              "speedJitter": 0,
+              "targetRadius": 1.8,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "LinearClick Barrel"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 11,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 50
+                  },
+                  "yLength": {
+                    "value": 69
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 150
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.6,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 48,
+              "speedJitter": 0,
+              "targetRadius": 2.19999981,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "LinearSwitch"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 11,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "value": 50
+                  },
+                  "yLength": {
+                    "value": 69
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 150
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.700000048,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 48,
+              "speedJitter": 0,
+              "targetRadius": 2.19999981,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "LinearTs"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 3
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.075
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.075
+                  }
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.05,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "MicroClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 1,
+              "speedJitter": 0,
+              "targetRadius": 1.30000031,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 300,
+              "turnRateJitter": 70,
+              "turnTime": 2.2,
+              "turnTimeJitter": 0.5
+            }
+          ],
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "value": 15
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "MicroClick Wander"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "poke": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 3
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.075
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.075
+                  }
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.05,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "MicroPoke"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newTargetDelaySeconds": 0.3,
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true,
+          "removeTargetAfterSeconds": 0.599999905
+        }
+      },
+      "name": "ReflexClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.6,
+          "trackingKill": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 2,
+              "targetRadiusAtKill": 0.999999762,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "ShrinkTs"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "healthRegenRate": 1,
+          "healthSeconds": 0.6,
+          "trackingKill": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 2,
+              "targetRadiusAtKill": 0.999999762,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "ShrinkTs Regen"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 0,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 40
+                },
+                "depthJitter": {
+                  "value": 35
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.829999864
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.48
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -122,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 270
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.5,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 6,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 40,
+              "speedJitter": 0,
+              "targetRadius": 1.8,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "SkyTs Wide"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 0,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 40
+                },
+                "depthJitter": {
+                  "value": 35
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.829999864
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.48
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 130,
+            "hideSides": false,
+            "radius": 130,
+            "sideAngleDegrees": 39,
+            "widthPerimeterPercent": 0.45
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.5,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 6,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 40,
+              "speedJitter": 0,
+              "targetRadius": 1.8,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "SkyTs Wide Curve"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 0,
+          "angleJitter": 0,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 50
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 40
+                },
+                "depthJitter": {
+                  "value": 35
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.829999864
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.48
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -122,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 270
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.5,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 6,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 40,
+              "speedJitter": 0,
+              "targetRadius": 2.19999981,
+              "targetRadiusAtKill": 1.39999986,
+              "targetRadiusJitter": 1.49011612e-08
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "SkyTs Wide Shrink"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "fixedDistanceFromLastTarget": {
+              "value": 10
+            },
+            "minDistance": {
+              "value": 8
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.5,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "SnakeClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "poke": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "fixedDistanceFromLastTarget": {
+              "value": 10
+            },
+            "minDistance": {
+              "value": 8
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": true,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.5,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "SnakePoke"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 200,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 75,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 130,
+            "hideSides": false,
+            "radius": 175,
+            "sideAngleDegrees": 14,
+            "width": 210
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "startScore": 150,
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 27
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.69
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.36
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 0
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 3,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "Static5 WideCurve"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.18,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "StaticClick 2ts"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 138,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "startScore": 112,
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "StaticClick 3ts"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 138,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "startScore": 112,
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetHitRadiusMultiplier": 3,
+              "targetRadius": 1.4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        }
+      },
+      "name": "StaticClick 3ts Pure Speed"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "poke": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 2,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.18,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "StaticPoke 2ts"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "poke": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 3,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 1.4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "StaticPoke 3ts"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 4,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speedJitter": 0,
+              "targetRadius": 1.0999999,
+              "targetRadiusGrowthFinalSizeTimeSeconds": 0.2,
+              "targetRadiusGrowthSize": 4.00000048,
+              "targetRadiusGrowthTimeSeconds": 1.89999986,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "StaticPulse"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 190
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.5,
+          "trackingKill": true
+        },
+        "staticDef": {
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "ellipse": {
+                  "xDiameter": {
+                    "xPercentValue": 0.6
+                  },
+                  "yDiameter": {
+                    "yPercentValue": 0.32
+                  }
+                },
+                "info": {
+                  "description": "",
+                  "weight": 2
+                }
+              },
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": "",
+                  "weight": 1
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.65
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.55
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "StaticTs"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 150,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 45,
+            "width": 340
+          }
+        },
+        "shotType": {
+          "clickMulti": true,
+          "clickRateSeconds": 0.5,
+          "healthClicks": 1000
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15
+              },
+              "speed": 121,
+              "speedJitter": 0,
+              "targetRadius": 2.80000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.5
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Strafe Click"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cylinderRoom": {
+            "height": 150,
+            "radius": 200,
+            "sideAngleDegrees": 45,
+            "width": 330
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15
+              },
+              "speed": 190,
+              "speedJitter": 0,
+              "targetRadius": 4.0999994299999996,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.7
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.1
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Strafe Fast"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "levelOverrides": {
+          "speedMultiplier": 1.05
+        },
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 150,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 45,
+            "width": 340
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15
+              },
+              "speed": 121,
+              "speedJitter": 0,
+              "targetRadius": 2.80000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.5
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Strafe Mixed"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": -20
+          },
+          "cylinderRoom": {
+            "height": 150,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 45,
+            "width": 340
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 15
+              },
+              "speed": 121,
+              "speedJitter": 0,
+              "targetRadius": 2.80000019,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Strafe Mixed Look Up"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 40,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 150,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 12,
+            "widthPerimeterPercent": 0.200000033
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 20,
+        "strafeDef": {
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_RANDOM",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 0.240000099
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.05
+              },
+              "info": {
+                "description": "Short",
+                "weight": 8
+              }
+            },
+            {
+              "distance": {
+                "xPercentValue": 0.360000044
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.02
+              },
+              "info": {
+                "description": "Mid",
+                "weight": 2
+              }
+            },
+            {
+              "distance": {
+                "xPercentValue": 0.420000046
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.01
+              },
+              "info": {
+                "description": "Rare Long",
+                "weight": 1
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15
+              },
+              "speed": 80,
+              "speedJitter": 0,
+              "targetRadius": 3.99999905,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Strafe Mixed2"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cylinderRoom": {
+            "height": 150,
+            "radius": 200,
+            "sideAngleDegrees": 40,
+            "width": 320
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 15
+              },
+              "speed": 121,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.7
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ]
+        }
+      },
+      "name": "Strafe Precise"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cylinderRoom": {
+            "height": 150,
+            "radius": 200,
+            "sideAngleDegrees": 40,
+            "width": 320
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 15
+              },
+              "speed": 100,
+              "speedJitter": 0,
+              "targetRadius": 4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Default Strafe",
+                "weight": 4
+              }
+            },
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Quick Strafe",
+                "weight": 3
+              }
+            },
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Long Strafe (Punish predict)",
+                "weight": 1
+              }
+            }
+          ]
+        }
+      },
+      "name": "Strafe Shifty"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cylinderRoom": {
+            "height": 150,
+            "radius": 200,
+            "sideAngleDegrees": 40,
+            "width": 320
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 15
+              },
+              "speed": 100,
+              "speedJitter": 0,
+              "targetRadius": 4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.7
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Long",
+                "weight": 9
+              }
+            },
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Teleport",
+                "weight": 2
+              },
+              "pauseAtEndChance": 1,
+              "pauseSeconds": 0.700000048,
+              "pauseSecondsJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "Strafe Teleport"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 118,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "acceleration": 166,
+          "accelerationJitter": 140,
+          "height": {
+            "yPercentValue": 0.5
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 70
+          }
+        }
+      },
+      "name": "VertArc"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 35
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "value": 94.6000061
+          },
+          "reflect": true,
+          "startOnGround": true,
+          "width": {
+            "value": 70
+          }
+        }
+      },
+      "name": "VertArc Down"
+    },
+    {
+      "def": {
+        "description": "VertArc but with \"camera up\" rotated so that the Arc is coming from the left wall out to the right.",
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "cameraUp": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "value": 94.6000061
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 70
+          }
+        }
+      },
+      "name": "VertArc Left"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "VertArc Line"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 35
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "VertArc Line Down"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "cameraUp": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "VertArc Line Left"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 35
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "VertArc Line Reverse"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "cameraUp": {
+            "x": -1,
+            "y": 0,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "xPercentValue": 0.72
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 1
+          }
+        }
+      },
+      "name": "VertArc Line Right"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 35
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "value": 94.6000061
+          },
+          "startOnGround": true,
+          "width": {
+            "value": 70
+          }
+        }
+      },
+      "name": "VertArc Reverse"
+    },
+    {
+      "def": {
+        "description": "VertArc but with \"camera up\" rotated so that the Arc is coming from the left wall out to the right.",
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "cameraUp": {
+            "x": -1,
+            "y": 0,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "value": 94.6000061
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 70
+          }
+        }
+      },
+      "name": "VertArc Right"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": -45
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 25,
+        "targetDef": {
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "speed": 128,
+              "speedJitter": 0,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ]
+        },
+        "wallArcDef": {
+          "height": {
+            "value": 88.6000061
+          },
+          "heightJitter": {
+            "value": 17
+          },
+          "reflect": false,
+          "startOnGround": true,
+          "width": {
+            "value": 70
+          }
+        }
+      },
+      "name": "VertArc Varied"
+    },
+    {
+      "def": {
+        "description": "AF Strafe Shifty but with the camera rotated so that the strafing is vertical.",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cameraUp": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 150,
+            "hideSides": true,
+            "radius": 200,
+            "width": 320
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {},
+              "pill": {
+                "height": 15
+              },
+              "speed": 100,
+              "speedJitter": 0,
+              "targetRadius": 4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.85
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Default Strafe",
+                "weight": 4
+              }
+            },
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Quick Strafe",
+                "weight": 3
+              }
+            },
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "info": {
+                "description": "Long Strafe (Punish predict)",
+                "weight": 1
+              }
+            }
+          ]
+        }
+      },
+      "name": "VerticalStrafe Shifty"
+    },
+    {
+      "def": {
+        "description": "AF Strafe Teleport but with the camera rotated so that the strafing is vertical.",
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cameraUp": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 150,
+            "hideSides": true,
+            "radius": 200,
+            "width": 320
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15
+              },
+              "speed": 100,
+              "speedJitter": 0,
+              "targetRadius": 4,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallStrafeDef": {
+          "bounds": {
+            "height": {
+              "yPercentValue": 0.85
+            },
+            "width": {
+              "xPercentValue": 0.7
+            }
+          },
+          "profiles": [
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.7
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.02
+              },
+              "info": {
+                "description": "Long",
+                "weight": 9
+              }
+            },
+            {
+              "angle": 0,
+              "angleJitter": 0,
+              "distance": {
+                "xPercentValue": 0.709999859
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.02
+              },
+              "info": {
+                "description": "Teleport",
+                "weight": 2
+              },
+              "pauseAtEndChance": 1,
+              "pauseSeconds": 0.700000048,
+              "pauseSecondsJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "VerticalStrafe Teleport"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 12,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 300,
+              "turnRateJitter": 80,
+              "turnTime": 2.19999981,
+              "turnTimeJitter": 0.6
+            }
+          ],
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 43
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.599999905
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.599999905
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "WanderClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -122,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 210
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 6,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 18,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": true
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 160,
+              "turnRateJitter": 100,
+              "turnTime": 2.19999981,
+              "turnTimeJitter": 0.6
+            }
+          ],
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 43
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 38
+                },
+                "depthJitter": {
+                  "value": 15
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.599999905
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.48
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "WanderClick Depth"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "clickMulti": true,
+          "healthClicks": 3
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 12,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusAtKill": 1.20000029,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 300,
+              "turnRateJitter": 80,
+              "turnTime": 2.19999981,
+              "turnTimeJitter": 0.6
+            }
+          ],
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 43
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.599999905
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.599999905
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "WanderMultiClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "barrelRoom": {
+            "radius": 75
+          },
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 39,
+              "speedJitter": 0,
+              "targetRadius": 1.40000033,
+              "targetRadiusGrowthSize": 5.00000143,
+              "targetRadiusGrowthTimeSeconds": 2.69999933,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "staggerInitialTargetsSeconds": 0.2
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 160,
+              "turnRateJitter": 40,
+              "turnTime": 2.5,
+              "turnTimeJitter": 0.8
+            }
+          ],
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 43
+            },
+            "regions": [
+              {
+                "circle": {
+                  "diameter": {
+                    "xPercentValue": 0.639999866
+                  }
+                },
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "WanderPulse"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.6,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 12,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 300,
+              "turnRateJitter": 70,
+              "turnTime": 2.2,
+              "turnTimeJitter": 0.5
+            }
+          ],
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.599999905
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.599999905
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "WanderSwitch"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 120,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 35,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": "",
+                "weight": 2
+              },
+              "turnRate": 200,
+              "turnRateJitter": 60,
+              "turnTime": 2.69999981,
+              "turnTimeJitter": 0.499999911
+            },
+            {
+              "info": {
+                "description": "",
+                "weight": 1
+              },
+              "turnRate": 80,
+              "turnRateJitter": 10,
+              "turnTime": 0.999999762,
+              "turnTimeJitter": 0
+            }
+          ]
+        }
+      },
+      "name": "WanderTrack"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 150,
+            "width": 170
+          }
+        },
+        "shotType": {
+          "healthSeconds": 0.6,
+          "trackingKill": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 12,
+              "speedJitter": 0,
+              "targetRadius": 2.30000019,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        },
+        "wallWanderDef": {
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "turnRate": 300,
+              "turnRateJitter": 70,
+              "turnTime": 2.2,
+              "turnTimeJitter": 0.5
+            }
+          ],
+          "targetPlacementStrategy": {
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.599999905
+                  },
+                  "yLength": {
+                    "yPercentValue": 0.599999905
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "WanderTs"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 90,
+          "angleJitter": 5,
+          "leftRightInitialDirection": "DIRECTION_RANDOM",
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.6
+                  },
+                  "yLength": {
+                    "value": 20
+                  }
+                },
+                "xOffset": {
+                  "value": 0
+                },
+                "yOffset": {
+                  "value": 60
+                }
+              }
+            ]
+          },
+          "upDownInitialDirection": "DIRECTION_NEGATIVE"
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 250,
+            "width": 100
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 50,
+              "speedJitter": 8,
+              "targetRadius": 2,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "removeTargetAfterSeconds": 2.5,
+          "staggerInitialTargetsSeconds": 0.3
+        }
+      },
+      "name": "WaterfallClick"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 90,
+          "angleJitter": 5,
+          "leftRightInitialDirection": "DIRECTION_RANDOM",
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.6
+                  },
+                  "yLength": {
+                    "value": 20
+                  }
+                },
+                "xOffset": {
+                  "value": 0
+                },
+                "yOffset": {
+                  "value": 60
+                }
+              }
+            ]
+          },
+          "upDownInitialDirection": "DIRECTION_NEGATIVE"
+        },
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 250,
+            "width": 100
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 11,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 45,
+              "speedJitter": 8,
+              "targetRadius": 2.19999981,
+              "targetRadiusJitter": 1.00000012
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "removeTargetAfterSeconds": 2.5,
+          "staggerInitialTargetsSeconds": 0.3
+        }
+      },
+      "name": "WaterfallClick Clusters"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "linearDef": {
+          "angle": 90,
+          "angleJitter": 5,
+          "targetPlacementStrategy": {
+            "minDistance": {
+              "value": 20
+            },
+            "regions": [
+              {
+                "depth": {
+                  "value": 0
+                },
+                "depthJitter": {
+                  "value": 0
+                },
+                "info": {
+                  "description": ""
+                },
+                "rectangle": {
+                  "xLength": {
+                    "xPercentValue": 0.6
+                  },
+                  "yLength": {
+                    "value": 20
+                  }
+                },
+                "xOffset": {
+                  "value": 0
+                },
+                "yOffset": {
+                  "value": 60
+                }
+              }
+            ]
+          }
+        },
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -200,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 250,
+            "width": 100
+          }
+        },
+        "shotType": {
+          "clickSingle": true
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 5,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "speed": 60,
+              "speedJitter": 8,
+              "targetRadius": 1.39999986,
+              "targetRadiusGrowthSize": 5.0000009500000004,
+              "targetRadiusGrowthTimeSeconds": 2.39999962,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false,
+          "removeTargetAfterSeconds": 2.5,
+          "staggerInitialTargetsSeconds": 0.3
+        }
+      },
+      "name": "WaterfallPulse"
+    }
+  ]
+}

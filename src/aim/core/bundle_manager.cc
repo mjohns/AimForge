@@ -67,6 +67,15 @@ class BundleManagerImpl : public BundleManager {
     return WriteBinaryMessageToFile(file_path, bundle_file);
   }
 
+  bool SaveJsonBundle(const std::string& bundle_name) override {
+    BundleFile bundle_file;
+    playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
+    scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
+
+    std::filesystem::path file_path = fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle.json");
+    return WriteJsonMessageToFile(file_path, bundle_file);
+  }
+
   std::unordered_set<std::string> GetDirtyBundles() override {
     std::unordered_set<std::string> dirty_bundles;
     InsertAll(&dirty_bundles, scenario_manager_->GetDirtyBundles());
