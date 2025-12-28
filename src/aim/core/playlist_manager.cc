@@ -432,13 +432,25 @@ void PlaylistRun::IncrementRunDone(const std::string& scenario_name) {
 
   // The scenario is not at the current index. Find the first instance of the scenario in the
   // playlist and increment
+  std::optional<int> first_done;
   for (int i = 0; i < progress_list.size(); ++i) {
     auto& item = progress_list[i];
     if (item.item.scenario() == scenario_name) {
-      item.runs_done++;
-      current_index = i;
-      return;
+      if (!item.IsDone()) {
+        item.runs_done++;
+        current_index = i;
+        return;
+      }
+      if (!first_done) {
+        first_done = i;
+      }
     }
+  }
+
+  if (first_done) {
+    auto& item = progress_list[*first_done];
+    item.runs_done++;
+    current_index = *first_done;
   }
 }
 
@@ -467,7 +479,7 @@ std::optional<int> PlaylistRun::NextIndex() {
     }
     i = (i + 1) % progress_list.size();
   }
-  return {};
+  return progress_list.size() - 1;
 }
 
 }  // namespace aim

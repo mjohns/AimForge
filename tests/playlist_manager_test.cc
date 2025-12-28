@@ -78,11 +78,14 @@ TEST(PlaylistManagerTest, GetLevelsPlaylistItems_Cm360Suffix) {
                           EqualsProto(MakeItem("Base Scenario L5 25cm"))));
 }
 
-TEST(PlaylistManagerTest, PlaylistRun_BasicNext) {
+TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone) {
   PlaylistDef def;
-  *def.add_items() = MakeItem("S1", 1);
-  *def.add_items() = MakeItem("S2", 2);
-  *def.add_items() = MakeItem("S3", 3);
+  auto item1 = MakeItem("S1", 1);
+  auto item2 = MakeItem("S2", 2);
+  auto item3 = MakeItem("S3", 3);
+  *def.add_items() = item1;
+  *def.add_items() = item2;
+  *def.add_items() = item3;
 
   std::string playlist = "Playlist One";
 
@@ -95,22 +98,22 @@ TEST(PlaylistManagerTest, PlaylistRun_BasicNext) {
   EXPECT_THAT(run->current_index, Eq(0));
 
   EXPECT_THAT(run->progress_list,
-              ElementsAre(EqualsProgressItem(MakeItem("S1", 1), 0),
-                          EqualsProgressItem(MakeItem("S2", 2), 0),
-                          EqualsProgressItem(MakeItem("S3", 3), 0)));
+              ElementsAre(EqualsProgressItem(item1, 0),
+                          EqualsProgressItem(item2, 0),
+                          EqualsProgressItem(item3, 0)));
 
   run->IncrementRunDone("S1");
   EXPECT_THAT(run->progress_list,
-              ElementsAre(EqualsProgressItem(MakeItem("S1", 1), 1),
-                          EqualsProgressItem(MakeItem("S2", 2), 0),
-                          EqualsProgressItem(MakeItem("S3", 3), 0)));
+              ElementsAre(EqualsProgressItem(item1, 1),
+                          EqualsProgressItem(item2, 0),
+                          EqualsProgressItem(item3, 0)));
   EXPECT_THAT(run->current_index, Eq(0));
 
   run->IncrementRunDone("S1");
   EXPECT_THAT(run->progress_list,
-              ElementsAre(EqualsProgressItem(MakeItem("S1", 1), 2),
-                          EqualsProgressItem(MakeItem("S2", 2), 0),
-                          EqualsProgressItem(MakeItem("S3", 3), 0)));
+              ElementsAre(EqualsProgressItem(item1, 2),
+                          EqualsProgressItem(item2, 0),
+                          EqualsProgressItem(item3, 0)));
   EXPECT_THAT(run->current_index, Eq(0));
 
   run->IncrementRunDone("S2");
@@ -122,7 +125,56 @@ TEST(PlaylistManagerTest, PlaylistRun_BasicNext) {
   EXPECT_THAT(run->current_index, Eq(0));
 
   EXPECT_THAT(run->progress_list,
-              ElementsAre(EqualsProgressItem(MakeItem("S1", 1), 3),
-                          EqualsProgressItem(MakeItem("S2", 2), 1),
-                          EqualsProgressItem(MakeItem("S3", 3), 2)));
+              ElementsAre(EqualsProgressItem(item1, 3),
+                          EqualsProgressItem(item2, 1),
+                          EqualsProgressItem(item3, 2)));
+
+  run->IncrementRunDone("invalid");
+  EXPECT_THAT(run->progress_list,
+              ElementsAre(EqualsProgressItem(item1, 3),
+                          EqualsProgressItem(item2, 1),
+                          EqualsProgressItem(item3, 2)));
+}
+
+TEST(PlaylistManagerTest, PlaylistRun_Next) {
+  PlaylistDef def;
+  auto item1 = MakeItem("S1", 1);
+  auto item2 = MakeItem("S2", 2);
+  auto item3 = MakeItem("S3", 3);
+
+  *def.add_items() = item1;
+  *def.add_items() = item2;
+  *def.add_items() = item3;
+
+  std::string playlist = "Playlist One";
+
+  auto mgr = CreatePlaylistManager(nullptr);
+  mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
+
+  auto run = mgr->GetRun(playlist);
+  ASSERT_TRUE(run);
+
+  EXPECT_THAT(run->Next(), Optional(StrEq("S1")));
+  run->IncrementRunDone("S1");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S2")));
+  run->IncrementRunDone("S2");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S2")));
+  run->IncrementRunDone("S2");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+  run->IncrementRunDone("S2");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+  run->IncrementRunDone("S1");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+  run->IncrementRunDone("S3");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+  run->IncrementRunDone("S3");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+  run->IncrementRunDone("S3");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+
+  // All runs done. Keep returning the last item.
+  run->IncrementRunDone("S3");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
+  run->IncrementRunDone("S2");
+  EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
 }
