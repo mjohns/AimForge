@@ -270,7 +270,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           focus_editor_ = true;
         }
         if (ImGui::Selectable("Add levels")) {
-          NameInfo name_info = GetNameInfo(item.scenario());
+          NameInfo name_info = GetScenarioNameInfo(item.scenario());
           std::string cm_suffix =
               name_info.cm_per_360
                   ? std::format(" {}cm", MaybeIntToString(*name_info.cm_per_360, 1))

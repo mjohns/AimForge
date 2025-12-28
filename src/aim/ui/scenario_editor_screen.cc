@@ -193,7 +193,7 @@ class ScenarioEditorScreen : public UiScreen {
       def_ = initial_scenario->unevaluated_def;
       name_ = initial_scenario->name;
       // Strip any dynamic suffixes
-      NameInfo name_info = GetNameInfo(name_.full_name());
+      NameInfo name_info = GetScenarioNameInfo(name_.full_name());
       name_ = ResourceName::Parse(name_info.base_name);
 
       if (opts.force_bundle_name.size() > 0) {
@@ -416,7 +416,7 @@ class ScenarioEditorScreen : public UiScreen {
       return false;
     }
 
-    NameInfo name_info = GetNameInfo(name_.full_name());
+    NameInfo name_info = GetScenarioNameInfo(name_.full_name());
     if (name_info.HasDynamicSuffix()) {
       SetErrorMessage(
           "Unable to save scenario with name ending in 'L#' or '#cm'. These scenarios are "

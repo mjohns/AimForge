@@ -412,7 +412,7 @@ std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
     if (def.levels().base_scenario().empty()) {
       return items;
     }
-    NameInfo base_name = GetNameInfo(def.levels().base_scenario());
+    NameInfo base_name = GetScenarioNameInfo(def.levels().base_scenario());
     items.reserve(50);
     float current_level = 1.0;
     if (def.levels().has_min_level()) {
