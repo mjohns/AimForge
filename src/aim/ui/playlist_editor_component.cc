@@ -136,7 +136,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       ImGui::Indent();
       auto scenario_names = app_.scenario_manager().scenario_names();
       std::optional<std::string> selected_scenario =
-          ScenarioSelector(levels.base_scenario(), *scenario_names);
+          SearchSelector(levels.base_scenario(), *scenario_names);
       if (selected_scenario) {
         // set base_name
         levels.set_base_scenario(*selected_scenario);
@@ -323,7 +323,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     if (scenario_search_text_.size() > 0) {
       ImGui::Indent();
       auto scenario_names = app_.scenario_manager().scenario_names();
-      ScenarioSelectorOptions options;
+      SearchSelectorOptions options;
       options.additional_predicate = [&](const std::string& scenario_name) {
         bool already_in_playlist =
             std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
@@ -333,7 +333,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       };
 
       std::optional<std::string> selected_scenario =
-          ScenarioSelector(scenario_search_text_, *scenario_names, options);
+          SearchSelector(scenario_search_text_, *scenario_names, options);
       if (selected_scenario) {
         PlaylistItem item;
         item.set_scenario(*selected_scenario);

@@ -8,21 +8,21 @@
 
 namespace aim {
 
-std::optional<std::string> ScenarioSelector(const std::string& search_text,
-                                            const std::vector<std::string>& scenarios,
-                                            ScenarioSelectorOptions options) {
+std::optional<std::string> SearchSelector(const std::string& search_text,
+                                            const std::vector<std::string>& items,
+                                            SearchSelectorOptions options) {
   SearchQuery query = GetSearchQuery(search_text);
 
-  std::optional<std::string> selected_scenario;
+  std::optional<std::string> selected_item;
   int num_matches = 0;
-  for (int i = 0; i < scenarios.size(); ++i) {
+  for (int i = 0; i < items.size(); ++i) {
     if (num_matches >= options.max_results) {
       break;
     }
-    ImGui::IdGuard id("ScenarioSearch", i);
-    const std::string& scenario = scenarios[i];
-    if (StringMatchesSearch(scenario, query.search_words, options.empty_search_text_matches_all)) {
-      std::string actual_name = scenario;
+    ImGui::IdGuard id("SearchSelector", i);
+    const std::string& item = items[i];
+    if (StringMatchesSearch(item, query.search_words, options.empty_search_text_matches_all)) {
+      std::string actual_name = item;
       if (query.level) {
         actual_name = std::format("{} L{}", actual_name, MaybeIntToString(*query.level, 2));
       }
@@ -38,12 +38,12 @@ std::optional<std::string> ScenarioSelector(const std::string& search_text,
 
       num_matches++;
       if (ImGui::Button(actual_name.c_str())) {
-        selected_scenario = actual_name;
+        selected_item = actual_name;
       }
     }
   }
 
-  return selected_scenario;
+  return selected_item;
 }
 
 }  // namespace aim
