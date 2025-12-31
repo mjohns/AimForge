@@ -119,7 +119,7 @@ class BundleFunctionalTest : public ::testing::Test {
 
     fs_ = std::make_unique<FileSystem>(temp_dir_path_, temp_dir_path_);
     scenario_manager_ = CreateScenarioManager(fs_.get());
-    playlist_manager_ = CreatePlaylistManager(fs_.get());
+    playlist_manager_ = CreatePlaylistManager();
     bundle_manager_ =
         CreateBundleManager(fs_.get(), playlist_manager_.get(), scenario_manager_.get());
 

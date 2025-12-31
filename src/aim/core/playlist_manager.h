@@ -70,7 +70,6 @@ class PlaylistManager {
   PlaylistManager() {}
   virtual ~PlaylistManager() {}
 
-  virtual void LoadPlaylistsFromDisk() = 0;
   virtual void StartReload() = 0;
   virtual void LoadPlaylistsFromBundle(const std::string& bundle_name,
                                        const BundleFile& bundle) = 0;
@@ -95,8 +94,6 @@ class PlaylistManager {
   virtual void AddScenarioToPlaylist(const std::string& playlist_name,
                                      const std::string& scenario_name) = 0;
 
-  virtual bool SavePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
-
   virtual void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
   void UpdatePlaylist(const std::string& name, const PlaylistDef& def) {
     return UpdatePlaylist(ResourceName::Parse(name), def);
@@ -112,6 +109,6 @@ class PlaylistManager {
   virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
 };
 
-std::unique_ptr<PlaylistManager> CreatePlaylistManager(FileSystem* fs);
+std::unique_ptr<PlaylistManager> CreatePlaylistManager();
 
 }  // namespace aim

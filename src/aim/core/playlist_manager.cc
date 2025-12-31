@@ -1,7 +1,6 @@
 #include "playlist_manager.h"
 
 #include <algorithm>
-#include <filesystem>
 
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
@@ -52,62 +51,10 @@ std::optional<int> GetIncrementRunDoneIndex(PlaylistRun* run, const std::string&
   });
 }
 
-std::filesystem::path GetPlaylistPath(const std::filesystem::path& bundle_path,
-                                      const std::string& name) {
-  return bundle_path / "playlists" / (name + ".json");
-}
-
-std::optional<std::filesystem::path> GetPlaylistPath(FileSystem* fs, const ResourceName& resource) {
-  auto maybe_bundle = fs->GetBundle(resource.bundle_name());
-  if (!maybe_bundle.has_value()) {
-    return {};
-  }
-  std::filesystem::path playlist_dir = maybe_bundle->path / "playlists";
-  if (!std::filesystem::exists(playlist_dir)) {
-    std::filesystem::create_directory(playlist_dir);
-  }
-  return GetPlaylistPath(maybe_bundle->path, resource.relative_name());
-}
-
-std::vector<Playlist> LoadPlaylists(const std::string& bundle_name,
-                                    const std::filesystem::path& base_dir) {
-  if (!std::filesystem::exists(base_dir)) {
-    return {};
-  }
-  std::vector<Playlist> playlists;
-  for (const auto& entry : std::filesystem::recursive_directory_iterator(base_dir)) {
-    if (std::filesystem::is_regular_file(entry)) {
-      std::string filename = entry.path().filename().string();
-      if (!filename.ends_with(".json")) {
-        continue;
-      }
-      Playlist p;
-      p.name.set(bundle_name, absl::StripSuffix(filename, ".json"));
-
-      if (!ReadJsonMessageFromFile(entry.path(), p.mutable_def())) {
-        Logger::get()->warn("Unable to read playlist {}", entry.path().string());
-        continue;
-      }
-      playlists.push_back(p);
-    }
-  }
-  return playlists;
-}
-
 class PlaylistManagerImpl : public PlaylistManager {
  public:
-  explicit PlaylistManagerImpl(FileSystem* fs) : fs_(fs) {
+  explicit PlaylistManagerImpl() {
     playlist_names_ = std::make_shared<std::vector<std::string>>();
-  }
-
-  void LoadPlaylistsFromDisk() override {
-    for (BundleInfo& bundle : fs_->GetBundles()) {
-      for (auto& playlist : LoadPlaylists(bundle.name, bundle.path / "playlists")) {
-        playlist_map_[playlist.name.full_name()] = playlist;
-      }
-    }
-    UpdatePlaylistListFromMap();
-    playlist_run_map_.clear();
   }
 
   void StartReload() override {}
@@ -154,10 +101,10 @@ class PlaylistManagerImpl : public PlaylistManager {
     if (existing_run != nullptr) {
       return existing_run;
     }
-    auto it = playlist_map_.find(name);
-    if (it != playlist_map_.end()) {
+    auto playlist = GetPlaylist(name);
+    if (playlist) {
       auto run = std::make_shared<PlaylistRun>();
-      *run = InitializeRun(it->second);
+      *run = InitializeRun(*playlist);
       playlist_run_map_[name] = run;
       return run;
     }
@@ -191,6 +138,7 @@ class PlaylistManagerImpl : public PlaylistManager {
       auto playlist = GetPlaylist(name_info.base_name);
       if (playlist) {
         playlist->cm_per_360 = name_info.cm_per_360;
+        playlist->name = ResourceName::Parse(playlist_name);
         return playlist;
       }
     }
@@ -221,22 +169,6 @@ class PlaylistManagerImpl : public PlaylistManager {
       progress.item = *item;
       run->progress_list.push_back(progress);
     }
-  }
-
-  bool SavePlaylist(const ResourceName& name, const PlaylistDef& def) override {
-    auto path = GetPlaylistPath(fs_, name);
-    if (!path.has_value()) {
-      return false;
-    }
-    bool updated = WriteJsonMessageToFile(*path, def);
-    if (updated) {
-      auto& p = playlist_map_[name.full_name()];
-      p.name = name;
-      *p.mutable_def() = def;
-      UpdatePlaylistListFromMap();
-      UpdatePlaylistRun(name, def);
-    }
-    return updated;
   }
 
   void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) override {
@@ -279,7 +211,6 @@ class PlaylistManagerImpl : public PlaylistManager {
 
   void RenameScenarioInAllPlaylists(const std::string& old_name,
                                     const std::string& new_name) override {
-    // Need to make an explicit copy of the shared ptr as SavePlaylist can invalidate it.
     auto playlists_copy = playlists_;
     for (const Playlist& playlist : *playlists_copy) {
       bool changed = false;
@@ -374,7 +305,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     *run->playlist.mutable_def() = new_def;
     run->progress_list.clear();
 
-    auto items = GetPlaylistItems(new_def);
+    auto items = run->playlist.items();
     for (int i = 0; i < items.size(); ++i) {
       auto& item = items[i];
       PlaylistItemProgress progress;
@@ -393,19 +324,14 @@ class PlaylistManagerImpl : public PlaylistManager {
   }
 
   std::string current_playlist_name_;
-  std::filesystem::path base_dir_;
-  std::filesystem::path user_dir_;
   std::shared_ptr<std::vector<Playlist>> playlists_;
   std::shared_ptr<std::vector<std::string>> playlist_names_;
   std::unordered_map<std::string, Playlist> playlist_map_;
-  FileSystem* fs_;
   std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
   std::unordered_set<std::string> dirty_bundles_;
 };
 
-}  // namespace
-
-std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
+std::vector<PlaylistItem> GetPlaylistItemsNoSuffix(const PlaylistDef& def) {
   std::vector<PlaylistItem> items;
 
   if (def.has_levels()) {
@@ -448,12 +374,26 @@ std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
   return items;
 }
 
-std::vector<PlaylistItem> Playlist::items() const {
-  return GetPlaylistItems(def_);
+}  // namespace
+
+std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
+  return GetPlaylistItemsNoSuffix(def);
 }
 
-std::unique_ptr<PlaylistManager> CreatePlaylistManager(FileSystem* fs) {
-  return std::make_unique<PlaylistManagerImpl>(fs);
+std::vector<PlaylistItem> Playlist::items() const {
+  auto item_list = GetPlaylistItemsNoSuffix(def_);
+  if (cm_per_360) {
+    for (auto& item : item_list) {
+      NameInfo name_info = GetScenarioNameInfo(item.scenario());
+      name_info.cm_per_360 = cm_per_360;
+      item.set_scenario(name_info.GetFullName());
+    }
+  }
+  return item_list;
+}
+
+std::unique_ptr<PlaylistManager> CreatePlaylistManager() {
+  return std::make_unique<PlaylistManagerImpl>();
 }
 
 void PlaylistRun::Shuffle(Random& rand) {

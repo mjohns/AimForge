@@ -96,7 +96,7 @@ bool CopyPlaylist(Playlist source,
   }
   */
   }
-  app.playlist_manager().SavePlaylist(new_playlist_name, dest);
+  app.playlist_manager().UpdatePlaylist(new_playlist_name, dest);
   app.playlist_manager().SetCurrentPlaylist(new_playlist_name.full_name());
   app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_playlist_name.full_name());
   return true;

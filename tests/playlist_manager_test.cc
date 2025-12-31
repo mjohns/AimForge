@@ -37,13 +37,41 @@ auto EqualsRunsDone(int runs_done) {
 }
 
 TEST(PlaylistManagerTest, GetLevelsPlaylistItems_NoBaseName) {
-  PlaylistDef playlist;
-  auto& levels = *playlist.mutable_levels();
+  PlaylistDef def;
+  auto& levels = *def.mutable_levels();
 
   // No base name
   levels.set_max_level(2);
 
-  EXPECT_THAT(GetPlaylistItems(playlist), IsEmpty());
+  auto mgr = CreatePlaylistManager();
+  std::string playlist_name = "Playlist One";
+  mgr->UpdatePlaylist(ResourceName::Parse(playlist_name), def);
+
+  auto playlist = mgr->GetPlaylist(playlist_name);
+  ASSERT_TRUE(playlist.has_value());
+  EXPECT_THAT(playlist->items(), IsEmpty());
+}
+
+TEST(PlaylistManagerTest, GetLevelsPlaylistItems_CmPer360) {
+  PlaylistDef def;
+  auto& levels = *def.mutable_levels();
+
+  levels.set_max_level(5);
+  levels.set_base_scenario("Base Scenario");
+
+  auto mgr = CreatePlaylistManager();
+  std::string playlist_name = "Playlist One";
+  mgr->UpdatePlaylist(ResourceName::Parse(playlist_name), def);
+
+  auto playlist = mgr->GetPlaylist("Playlist One 25cm");
+  ASSERT_TRUE(playlist.has_value());
+  EXPECT_THAT(playlist->name.full_name(), StrEq("Playlist One 25cm"));
+  EXPECT_THAT(playlist->items(),
+              ElementsAre(EqualsProto(MakeItem("Base Scenario L1 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L2 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L3 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L4 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L5 25cm"))));
 }
 
 TEST(PlaylistManagerTest, GetLevelsPlaylistItems) {
@@ -89,7 +117,7 @@ TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone) {
 
   std::string playlist = "Playlist One";
 
-  auto mgr = CreatePlaylistManager(nullptr);
+  auto mgr = CreatePlaylistManager();
   mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
 
   auto run = mgr->GetRun(playlist);
@@ -151,7 +179,7 @@ TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone_MultipleOfSameScenario) {
 
   std::string playlist = "Playlist One";
 
-  auto mgr = CreatePlaylistManager(nullptr);
+  auto mgr = CreatePlaylistManager();
   mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
 
   auto run = mgr->GetRun(playlist);
@@ -222,7 +250,7 @@ TEST(PlaylistManagerTest, PlaylistRun_Next) {
 
   std::string playlist = "Playlist One";
 
-  auto mgr = CreatePlaylistManager(nullptr);
+  auto mgr = CreatePlaylistManager();
   mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
 
   auto run = mgr->GetRun(playlist);

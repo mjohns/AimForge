@@ -52,7 +52,17 @@ class PlaylistComponentImpl : public PlaylistComponent {
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("%s", playlist_name.c_str());
+    ImGui::Text(current_playlist_name_info_.base_name);
+    ImGui::SameLine();
+    if (!current_playlist_name_info_.cm_per_360) {
+      if (ImGui::Button(kIconMouse)) {
+        current_playlist_name_info_.cm_per_360 = 35;
+        app_.playlist_manager().SetCurrentPlaylist(current_playlist_name_info_.GetFullName());
+        app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, current_playlist_name_info_.GetFullName());
+      }
+      ImGui::HelpTooltip("Set cm/360 playlist variation");
+    }
+
     ImGui::SameLine();
     if (ImGui::Button(kIconEdit)) {
       showing_editor_ = true;
@@ -82,11 +92,13 @@ class PlaylistComponentImpl : public PlaylistComponent {
   void ResetForNewCurrentPlaylist() {
     editor_component_ = {};
     showing_editor_ = false;
+    current_playlist_name_info_ = GetPlaylistNameInfo(current_playlist_name_);
   }
 
   bool showing_editor_ = false;
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
+  NameInfo current_playlist_name_info_;
   UiScreen& screen_;
   Application& app_;
 };
@@ -378,7 +390,7 @@ bool AddPlaylistDialog::Draw(Application& app) {
       if (ImGui::Button("Add")) {
         auto taken_names = app.playlist_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
         *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
-        app.playlist_manager().SavePlaylist(name_, PlaylistDef());
+        app.playlist_manager().UpdatePlaylist(name_, PlaylistDef());
         app.playlist_manager().SetCurrentPlaylist(name_.full_name());
         app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
         did_add = true;
