@@ -9,6 +9,7 @@
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/playlist_editor_component.h"
 #include "aim/ui/scenario_editor_screen.h"
+#include "aim/ui/select_sensitivity_variation_dialog.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -51,23 +52,32 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text(current_playlist_name_info_.base_name);
-    ImGui::SameLine();
-    if (!current_playlist_name_info_.cm_per_360) {
-      if (ImGui::Button(kIconMouse)) {
-        current_playlist_name_info_.cm_per_360 = 35;
-        app_.playlist_manager().SetCurrentPlaylist(current_playlist_name_info_.GetFullName());
-        app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, current_playlist_name_info_.GetFullName());
+    std::optional<float> selected_sensitivity;
+    if (select_sensitivity_variation_dialog_.Draw(&selected_sensitivity)) {
+      NameInfo name_info = GetNameInfo(current_playlist_name_);
+      name_info.cm_per_360 = selected_sensitivity;
+      std::string new_name = name_info.GetFullName();
+      if (new_name != current_playlist_name_) {
+        app_.playlist_manager().SetCurrentPlaylist(new_name);
+        app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_name);
       }
-      ImGui::HelpTooltip("Set cm/360 playlist variation");
     }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(current_playlist_name_);
 
     ImGui::SameLine();
     if (ImGui::Button(kIconEdit)) {
       showing_editor_ = true;
     }
     ImGui::HelpTooltip("Edit playlist");
+
+    ImGui::SameLine();
+    if (ImGui::Button(kIconMouse)) {
+      NameInfo name_info = GetNameInfo(current_playlist_name_);
+      select_sensitivity_variation_dialog_.NotifyOpen(name_info.cm_per_360);
+    }
+    ImGui::HelpTooltip("Set cm/360 playlist variation");
 
     ImGui::SameLine();
     if (ImGui::Button(kIconRedo)) {
@@ -92,13 +102,14 @@ class PlaylistComponentImpl : public PlaylistComponent {
   void ResetForNewCurrentPlaylist() {
     editor_component_ = {};
     showing_editor_ = false;
-    current_playlist_name_info_ = GetPlaylistNameInfo(current_playlist_name_);
   }
 
   bool showing_editor_ = false;
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
   NameInfo current_playlist_name_info_;
+  SelectSensitivityVariationDialog select_sensitivity_variation_dialog_{
+      "SelectPlaylistSensitivityDialog"};
   UiScreen& screen_;
   Application& app_;
 };
