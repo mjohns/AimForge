@@ -13,8 +13,6 @@ message HealthBarSettings {
 message Settings {
   float dpi = 1;
   float cm_per_360 = 2;
-  // The cm_per_360 per scenario run will be adjusted by a random value in +/- jitter.
-  float cm_per_360_jitter = 3;
   string theme_name = 4;
   float metronome_bpm = 5;
 

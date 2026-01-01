@@ -97,13 +97,13 @@ class QuickSettingsScreen : public UiScreen {
       }
 
       ImGui::Spacing();
-      ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
-                                    .set_label("cm/360")
-                                    .set_step(1, 5)
-                                    .set_width(char_size.x * 9)
-                                    .set_min(1)
-                                    .set_default(35),
-                                PROTO_JITTERED_FIELD(Settings, &updater_.settings, cm_per_360));
+      ImGui::InputFloat(ImGui::InputFloatParams("CmPer360")
+                            .set_label("cm/360")
+                            .set_step(1, 5)
+                            .set_width(char_size.x * 9)
+                            .set_min(1)
+                            .set_default(35),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, cm_per_360));
 
       ImGui::Spacing();
       ImGui::Spacing();

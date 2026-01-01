@@ -58,13 +58,13 @@ class SettingsScreen : public UiScreen {
     }
     if (ImGui::BeginTabItem("Settings")) {
       ImGui::Spacing();
-      ImGui::InputJitteredFloat(ImGui::InputFloatParams("CmPer360")
-                                    .set_label("cm/360")
-                                    .set_step(1, 5)
-                                    .set_width(char_x_ * 9)
-                                    .set_min(1)
-                                    .set_default(35),
-                                PROTO_JITTERED_FIELD(Settings, &updater_.settings, cm_per_360));
+      ImGui::InputFloat(ImGui::InputFloatParams("CmPer360")
+                            .set_label("cm/360")
+                            .set_step(1, 5)
+                            .set_width(char_x_ * 9)
+                            .set_min(1)
+                            .set_default(35),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, cm_per_360));
 
       ImGui::InputFloat(ImGui::InputFloatParams("Dpi")
                             .set_label("DPI")

@@ -16,7 +16,7 @@ struct SearchSelectorOptions {
 
 // Returns the selected item.
 std::optional<std::string> SearchSelector(const std::string& search_text,
-                                            const std::vector<std::string>& items,
-                                            SearchSelectorOptions options = {});
+                                          const std::vector<std::string>& items,
+                                          SearchSelectorOptions options = {});
 
 }  // namespace aim

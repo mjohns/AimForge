@@ -330,9 +330,6 @@ class SettingsManagerImpl : public SettingsManager {
     if (scenario_settings.has_cm_per_360()) {
       settings_.set_cm_per_360(scenario_settings.cm_per_360());
     }
-    if (scenario_settings.has_cm_per_360_jitter()) {
-      settings_.set_cm_per_360_jitter(scenario_settings.cm_per_360_jitter());
-    }
     if (scenario_settings.has_theme_name()) {
       settings_.set_theme_name(scenario_settings.theme_name());
     }
@@ -400,7 +397,6 @@ class SettingsManagerImpl : public SettingsManager {
       scenario_settings.set_crosshair_size(settings_.crosshair_size());
       scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
       scenario_settings.set_cm_per_360(settings_.cm_per_360());
-      scenario_settings.set_cm_per_360_jitter(settings_.cm_per_360_jitter());
       scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
       scenario_settings.set_theme_name(settings_.theme_name());
       scenario_settings.set_auto_hold_tracking(settings_.auto_hold_tracking());

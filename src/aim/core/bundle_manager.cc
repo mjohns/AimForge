@@ -72,7 +72,8 @@ class BundleManagerImpl : public BundleManager {
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
 
-    std::filesystem::path file_path = fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle.json");
+    std::filesystem::path file_path =
+        fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle.json");
     return WriteJsonMessageToFile(file_path, bundle_file);
   }
 
