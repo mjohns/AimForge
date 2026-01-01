@@ -139,14 +139,33 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
-    ImGui::SetNextItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##PlaylistSearchInput", kIconSearch, &playlist_search_text_);
-    if (playlist_search_text_.size() > 0) {
-      ImGui::SameLine();
-      if (ImGui::Button(kIconCancel)) {
-        playlist_search_text_ = "";
+
+    ImGui::Spacing();
+    if (ImGui::Button(std::format("{} Add playlist", kIconAdd))) {
+      add_dialog_.NotifyOpen();
+    }
+
+    if (app_.history_manager().recent_playlists().size() > 0) {
+      ImGui::Spacing();
+      ImGui::Separator();
+      ImGui::Spacing();
+
+      // Draw the 10 most recent items.
+      ImGui::LoopId loop_id;
+      int i = 0;
+      for (const std::string& name : app_.history_manager().recent_playlists()) {
+        i++;
+        if (i >= 10) {
+          break;
+        }
+        auto id_guard = loop_id.Get();
+        DrawPlaylistItem(name, result);
       }
     }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
 
     ImGui::SetNextItemWidth(char_size.x * 8);
     if (ImGui::SimpleTypeDropdown("##PlaylistViewType",
@@ -158,11 +177,18 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
                                   })) {
       app_.local_store().PutInt(kPlaylistViewTypeKey, (int)view_type_);
     }
-    ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Add", kIconAdd))) {
-      add_dialog_.NotifyOpen();
-    }
+
     ImGui::Spacing();
+
+    ImGui::SetNextItemWidth(char_size.x * 30);
+    ImGui::InputTextWithHint("##PlaylistSearchInput", kIconSearch, &playlist_search_text_);
+    if (playlist_search_text_.size() > 0) {
+      ImGui::SameLine();
+      if (ImGui::Button(kIconCancel)) {
+        playlist_search_text_ = "";
+      }
+    }
+
     ImGui::Spacing();
 
     ImGui::BeginChild("PlaylistsContent");
