@@ -66,11 +66,13 @@ class PlaylistComponentImpl : public PlaylistComponent {
     ImGui::AlignTextToFramePadding();
     ImGui::Text(current_playlist_name_);
 
-    ImGui::SameLine();
-    if (ImGui::Button(kIconEdit)) {
-      showing_editor_ = true;
+    if (!run->playlist.cm_per_360) {
+      ImGui::SameLine();
+      if (ImGui::Button(kIconEdit)) {
+        showing_editor_ = true;
+      }
+      ImGui::HelpTooltip("Edit playlist");
     }
-    ImGui::HelpTooltip("Edit playlist");
 
     ImGui::SameLine();
     if (ImGui::Button(kIconMouse)) {

@@ -330,12 +330,16 @@ int Application::Initialize() {
       std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
   scenario_manager_->RegisterRenameListener(
       std::bind_front(&SettingsManager::RenameScenario, settings_manager_.get()));
+
   scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameScenario, db_.get()));
-  scenario_manager_->RegisterRenameListener(
-      [=](const std::string& old_name, const std::string& new_name) {
-        history_manager_->ClearCache();
-        labels_manager_->ClearCache();
-      });
+  scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenamePlaylist, db_.get()));
+
+  auto clear_caches_on_rename = [=](const std::string& old_name, const std::string& new_name) {
+    history_manager_->ClearCache();
+    labels_manager_->ClearCache();
+  };
+  scenario_manager_->RegisterRenameListener(clear_caches_on_rename);
+  playlist_manager_->RegisterRenameListener(clear_caches_on_rename);
 
   // bundle_manager_->SaveJsonBundle("AF");
   // bundle_manager_->SaveJsonBundle("SERF");

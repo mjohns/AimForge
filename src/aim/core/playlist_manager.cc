@@ -206,6 +206,11 @@ class PlaylistManagerImpl : public PlaylistManager {
       playlist_map_.erase(old_name.full_name());
       UpdatePlaylistListFromMap();
     }
+
+    for (auto& listener : rename_listeners_) {
+      listener(old_name.full_name(), new_name.full_name());
+    }
+
     return true;
   }
 
@@ -244,6 +249,11 @@ class PlaylistManagerImpl : public PlaylistManager {
 
   void ClearDirtyBundles() override {
     dirty_bundles_.clear();
+  }
+
+  void RegisterRenameListener(std::function<void(const std::string& old_name,
+                                                 const std::string& new_name)> listener) override {
+    rename_listeners_.push_back(std::move(listener));
   }
 
  private:
@@ -329,6 +339,8 @@ class PlaylistManagerImpl : public PlaylistManager {
   std::unordered_map<std::string, Playlist> playlist_map_;
   std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
   std::unordered_set<std::string> dirty_bundles_;
+  std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
+      rename_listeners_;
 };
 
 std::vector<PlaylistItem> GetPlaylistItemsNoSuffix(const PlaylistDef& def) {

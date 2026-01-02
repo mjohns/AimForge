@@ -2,16 +2,15 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <functional>
 #include <optional>
 #include <string>
-#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 #include "aim/common/random.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
-#include "aim/core/file_system.h"
 #include "aim/proto/bundle.pb.h"
 #include "aim/proto/playlist.pb.h"
 
@@ -107,6 +106,9 @@ class PlaylistManager {
                                             const std::string& new_name) = 0;
 
   virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
+
+  virtual void RegisterRenameListener(
+      std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;
 };
 
 std::unique_ptr<PlaylistManager> CreatePlaylistManager();
