@@ -1,12 +1,14 @@
 #include "playlist_manager.h"
 
 #include <algorithm>
+#include <format>
 
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
+#include "aim/core/scenario_manager.h"
 #include "google/protobuf/util/message_differencer.h"
 
 namespace aim {
@@ -148,7 +150,9 @@ class PlaylistManagerImpl : public PlaylistManager {
 
   void AddScenarioToPlaylist(const std::string& playlist_name,
                              const std::string& scenario_name) override {
-    auto it = playlist_map_.find(playlist_name);
+    // Make sure we add the scenarios to the base playlist.
+    NameInfo name_info = GetPlaylistNameInfo(playlist_name);
+    auto it = playlist_map_.find(name_info.base_name);
     if (it == playlist_map_.end()) {
       return;
     }
@@ -241,6 +245,92 @@ class PlaylistManagerImpl : public PlaylistManager {
       }
     }
     return names;
+  }
+
+  bool CopyPlaylist(const std::string& source_playlist_full_name,
+                    const std::string& new_playlist_full_name,
+                    ScenarioManager* scenario_manager,
+                    CopyPlaylistOptions options) override {
+    auto source_playlist = GetPlaylist(source_playlist_full_name);
+    if (!source_playlist) {
+      return false;
+    }
+
+    // Copy all scenarios if necessary.
+    ResourceName new_playlist_name = ResourceName::Parse(new_playlist_full_name);
+    auto taken_names = GetAllRelativeNamesInBundle(new_playlist_name.bundle_name());
+    *new_playlist_name.mutable_relative_name() =
+        MakeUniqueName(new_playlist_name.relative_name(), taken_names);
+
+    PlaylistDef dest = source_playlist->def();
+    dest.clear_levels();
+    if (options.deep_copy) {
+      std::unordered_map<std::string, ResourceName> new_name_map;
+      std::unordered_map<std::string, ScenarioDef> new_scenario_map;
+      dest.clear_items();
+      for (const auto& source_item : source_playlist->items()) {
+        auto source_scenario = scenario_manager->GetScenario(source_item.scenario());
+        if (!source_scenario) {
+          // Skip invalid scenarios.
+          continue;
+        }
+        ResourceName new_scenario_name = source_scenario->name;
+        *new_scenario_name.mutable_bundle_name() = new_playlist_name.bundle_name();
+
+        std::string* relative_name = new_scenario_name.mutable_relative_name();
+        if (options.remove_prefix.size() > 0) {
+          *relative_name = absl::StripLeadingAsciiWhitespace(
+              absl::StripPrefix(*relative_name, options.remove_prefix));
+        }
+        if (options.add_prefix.size() > 0) {
+          *relative_name = std::format("{} {}", options.add_prefix, *relative_name);
+        }
+
+        ScenarioDef new_def;
+        if (options.as_references) {
+          new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
+        } else {
+          new_def = source_scenario->unevaluated_def;
+        }
+        auto maybe_final_scenario_name =
+            scenario_manager->SaveScenarioWithUniqueName(new_scenario_name, new_def);
+        if (maybe_final_scenario_name) {
+          new_name_map[source_item.scenario()] = *maybe_final_scenario_name;
+          new_scenario_map[maybe_final_scenario_name->full_name()] = new_def;
+          PlaylistItem item = source_item;
+          item.set_scenario(maybe_final_scenario_name->full_name());
+          *dest.add_items() = item;
+        }
+      }
+      if (!options.as_references) {
+        // Make sure any copied scenarios which were references that pointed to other scenarios in
+        // the playlist are updated to point to the version in the new playlist.
+        for (const auto& item : dest.items()) {
+          ScenarioDef& def = new_scenario_map[item.scenario()];
+          std::string old_referenced_scenario = def.reference_def().scenario_id();
+          if (old_referenced_scenario.size() > 0) {
+            auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
+            if (new_referenced_scenario != new_name_map.end()) {
+              def.mutable_reference_def()->set_scenario_id(
+                  new_referenced_scenario->second.full_name());
+              scenario_manager->SaveScenario(ResourceName::Parse(item.scenario()), def);
+            }
+          }
+        }
+      }
+    } else {
+      // Not a deep copy. If it was a levels scenario copy the items over as is.
+      /*
+    if (source.def().has_scenario_levels_def()) {
+      for (const auto& source_item : source.items()) {
+        *dest.add_items() = source_item;
+      }
+    }
+    */
+    }
+    UpdatePlaylist(new_playlist_name, dest);
+    SetCurrentPlaylist(new_playlist_name.full_name());
+    return true;
   }
 
   std::unordered_set<std::string> GetDirtyBundles() override {

@@ -1,11 +1,13 @@
 #pragma once
 
 #include <memory>
-#include <optional>
+#include <string>
 
-#include "aim/core/application.h"
+#include "aim/core/screen.h"
 
 namespace aim {
+
+class Application;
 
 class UiScreen : public Screen {
  public:

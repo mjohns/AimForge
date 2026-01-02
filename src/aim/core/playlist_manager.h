@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <filesystem>
 #include <functional>
 #include <optional>
@@ -15,6 +14,15 @@
 #include "aim/proto/playlist.pb.h"
 
 namespace aim {
+
+class ScenarioManager;
+
+struct CopyPlaylistOptions {
+  std::string remove_prefix;
+  std::string add_prefix;
+  bool deep_copy = false;
+  bool as_references = false;
+};
 
 struct PlaylistItemProgress {
   PlaylistItem item;
@@ -106,6 +114,11 @@ class PlaylistManager {
                                             const std::string& new_name) = 0;
 
   virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
+
+  virtual bool CopyPlaylist(const std::string& source_playlist_name,
+                            const std::string& target_playlist_name,
+                            ScenarioManager* scenario_manager,
+                            CopyPlaylistOptions options) = 0;
 
   virtual void RegisterRenameListener(
       std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;

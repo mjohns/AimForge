@@ -11,98 +11,6 @@
 #include "imgui.h"
 
 namespace aim {
-namespace {
-
-struct CopyPlaylistOptions {
-  std::string remove_prefix;
-  std::string add_prefix;
-  bool deep_copy = false;
-  bool as_references = false;
-};
-
-bool CopyPlaylist(Playlist source,
-                  ResourceName new_playlist_name,
-                  const CopyPlaylistOptions& opts,
-                  Application& app) {
-  // Copy all scenarios if necessary.
-  auto taken_names =
-      app.playlist_manager().GetAllRelativeNamesInBundle(new_playlist_name.bundle_name());
-  *new_playlist_name.mutable_relative_name() =
-      MakeUniqueName(new_playlist_name.relative_name(), taken_names);
-
-  PlaylistDef dest = source.def();
-  dest.clear_levels();
-  if (opts.deep_copy) {
-    std::unordered_map<std::string, ResourceName> new_name_map;
-    std::unordered_map<std::string, ScenarioDef> new_scenario_map;
-    dest.clear_items();
-    for (const auto& source_item : source.items()) {
-      auto source_scenario = app.scenario_manager().GetScenario(source_item.scenario());
-      if (!source_scenario) {
-        // Skip invalid scenarios.
-        continue;
-      }
-      ResourceName new_scenario_name = source_scenario->name;
-      *new_scenario_name.mutable_bundle_name() = new_playlist_name.bundle_name();
-
-      std::string* relative_name = new_scenario_name.mutable_relative_name();
-      if (opts.remove_prefix.size() > 0) {
-        *relative_name = absl::StripLeadingAsciiWhitespace(
-            absl::StripPrefix(*relative_name, opts.remove_prefix));
-      }
-      if (opts.add_prefix.size() > 0) {
-        *relative_name = std::format("{} {}", opts.add_prefix, *relative_name);
-      }
-
-      ScenarioDef new_def;
-      if (opts.as_references) {
-        new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
-      } else {
-        new_def = source_scenario->unevaluated_def;
-      }
-      auto maybe_final_scenario_name =
-          app.scenario_manager().SaveScenarioWithUniqueName(new_scenario_name, new_def);
-      if (maybe_final_scenario_name) {
-        new_name_map[source_item.scenario()] = *maybe_final_scenario_name;
-        new_scenario_map[maybe_final_scenario_name->full_name()] = new_def;
-        PlaylistItem item = source_item;
-        item.set_scenario(maybe_final_scenario_name->full_name());
-        *dest.add_items() = item;
-      }
-    }
-    if (!opts.as_references) {
-      // Make sure any copied scenarios which were references that pointed to other scenarios in the
-      // playlist are updated to point to the version in the new playlist.
-      for (const auto& item : dest.items()) {
-        ScenarioDef& def = new_scenario_map[item.scenario()];
-        std::string old_referenced_scenario = def.reference_def().scenario_id();
-        if (old_referenced_scenario.size() > 0) {
-          auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
-          if (new_referenced_scenario != new_name_map.end()) {
-            def.mutable_reference_def()->set_scenario_id(
-                new_referenced_scenario->second.full_name());
-            app.scenario_manager().SaveScenario(ResourceName::Parse(item.scenario()), def);
-          }
-        }
-      }
-    }
-  } else {
-    // Not a deep copy. If it was a levels scenario copy the items over as is.
-    /*
-  if (source.def().has_scenario_levels_def()) {
-    for (const auto& source_item : source.items()) {
-      *dest.add_items() = source_item;
-    }
-  }
-  */
-  }
-  app.playlist_manager().UpdatePlaylist(new_playlist_name, dest);
-  app.playlist_manager().SetCurrentPlaylist(new_playlist_name.full_name());
-  app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_playlist_name.full_name());
-  return true;
-}
-
-}  // namespace
 
 bool CopyPlaylistDialog::Draw(Application& app) {
   ImGui::IdGuard cid("CopyPlaylistDialogContent");
@@ -172,8 +80,11 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         opts.remove_prefix = remove_prefix_;
         opts.deep_copy = deep_copy_;
         opts.as_references = deep_copy_ && as_references_;
-        CopyPlaylist(*source_, new_name_, opts, app);
-        did_copy = true;
+        did_copy = app.playlist_manager().CopyPlaylist(
+            source_->name.full_name(), new_name_.full_name(), &app.scenario_manager(), opts);
+        if (did_copy) {
+          app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_name_.full_name());
+        }
         ImGui::CloseCurrentPopup();
         source_ = {};
       }
