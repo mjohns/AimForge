@@ -15,6 +15,8 @@
 #include "aim/common/util.h"
 #include "aim/common/wall.h"
 #include "aim/core/camera.h"
+#include "aim/core/playlist_manager.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/scenario.h"

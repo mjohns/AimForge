@@ -21,8 +21,6 @@
 #include "aim/core/labels_manager.h"
 #include "aim/core/local_store.h"
 #include "aim/core/play_time_manager.h"
-#include "aim/core/playlist_manager.h"
-#include "aim/core/scenario_manager.h"
 #include "aim/core/screen.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
@@ -34,6 +32,9 @@
 #include "spdlog/spdlog.h"
 
 namespace aim {
+
+class ScenarioManager;
+class PlaylistManager;
 
 class ApplicationExitException : public std::runtime_error {
  public:

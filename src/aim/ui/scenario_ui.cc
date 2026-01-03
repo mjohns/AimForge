@@ -1,13 +1,14 @@
 #include "scenario_ui.h"
 
-#include <imgui.h>
-
 #include <algorithm>
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
+#include "aim/core/playlist_manager.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/ui/scenario_editor_screen.h"
+#include "imgui.h"
 
 namespace aim {
 namespace {

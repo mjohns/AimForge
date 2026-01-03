@@ -16,6 +16,8 @@
 #include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
+#include "aim/core/playlist_manager.h"
+#include "aim/core/scenario_manager.h"
 #include "imgui.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 #include "imgui/backends/imgui_impl_sdlgpu3.h"

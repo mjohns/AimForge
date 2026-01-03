@@ -15,6 +15,7 @@
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/metronome.h"
+#include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/proto/common.pb.h"
