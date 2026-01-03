@@ -2,6 +2,7 @@
 
 #include <optional>
 
+#include "aim/core/scenario_manager.h"
 #include "gmock/gmock.h"
 #include "google/protobuf/message.h"
 #include "gtest/gtest.h"
@@ -19,6 +20,12 @@ using ::testing::IsEmpty;
 using ::testing::Optional;
 using ::testing::Property;
 using ::testing::StrEq;
+
+ScenarioDef MakeScenario(float value) {
+  ScenarioDef def;
+  def.mutable_room()->mutable_simple_room()->set_height(value);
+  return def;
+}
 
 PlaylistItem MakeItem(const std::string& name, int num_plays = 1) {
   PlaylistItem item;
@@ -45,7 +52,7 @@ TEST(PlaylistManagerTest, GetLevelsPlaylistItems_NoBaseName) {
 
   auto mgr = CreatePlaylistManager();
   std::string playlist_name = "Playlist One";
-  mgr->UpdatePlaylist(ResourceName::Parse(playlist_name), def);
+  mgr->UpdatePlaylist(playlist_name, def);
 
   auto playlist = mgr->GetPlaylist(playlist_name);
   ASSERT_TRUE(playlist.has_value());
@@ -61,7 +68,7 @@ TEST(PlaylistManagerTest, GetLevelsPlaylistItems_CmPer360) {
 
   auto mgr = CreatePlaylistManager();
   std::string playlist_name = "Playlist One";
-  mgr->UpdatePlaylist(ResourceName::Parse(playlist_name), def);
+  mgr->UpdatePlaylist(playlist_name, def);
 
   auto playlist = mgr->GetPlaylist("Playlist One 25cm");
   ASSERT_TRUE(playlist.has_value());
@@ -118,7 +125,7 @@ TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone) {
   std::string playlist = "Playlist One";
 
   auto mgr = CreatePlaylistManager();
-  mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
+  mgr->UpdatePlaylist(playlist, def);
 
   auto run = mgr->GetRun(playlist);
   ASSERT_TRUE(run);
@@ -180,7 +187,7 @@ TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone_MultipleOfSameScenario) {
   std::string playlist = "Playlist One";
 
   auto mgr = CreatePlaylistManager();
-  mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
+  mgr->UpdatePlaylist(playlist, def);
 
   auto run = mgr->GetRun(playlist);
   ASSERT_TRUE(run);
@@ -251,7 +258,7 @@ TEST(PlaylistManagerTest, PlaylistRun_Next) {
   std::string playlist = "Playlist One";
 
   auto mgr = CreatePlaylistManager();
-  mgr->UpdatePlaylist(ResourceName::Parse(playlist), def);
+  mgr->UpdatePlaylist(playlist, def);
 
   auto run = mgr->GetRun(playlist);
   ASSERT_TRUE(run);
@@ -279,4 +286,57 @@ TEST(PlaylistManagerTest, PlaylistRun_Next) {
   EXPECT_THAT(run->Next(), Optional(StrEq("S3")));
   run->IncrementRunDone("S2");
   EXPECT_THAT(run->Next(), Optional(StrEq("S2")));
+}
+
+TEST(PlaylistManagerTest, CopyBasicPlaylist) {
+  ScenarioDef scenario_def1 = MakeScenario(1);
+  ScenarioDef scenario_def2 = MakeScenario(1);
+  ScenarioDef scenario_def3 = MakeScenario(1);
+
+  auto scenario_mgr = CreateScenarioManager();
+  scenario_mgr->UpdateScenario("B S1", scenario_def1);
+  scenario_mgr->UpdateScenario("B S2", scenario_def2);
+  scenario_mgr->UpdateScenario("B S3", scenario_def3);
+
+  PlaylistDef def;
+  auto item1 = MakeItem("B S1", 1);
+  auto item2 = MakeItem("B S2", 2);
+  auto item3 = MakeItem("B S3", 3);
+
+  *def.add_items() = item1;
+  *def.add_items() = item2;
+  *def.add_items() = item3;
+
+  auto mgr = CreatePlaylistManager();
+  mgr->UpdatePlaylist("B P1", def);
+
+  CopyPlaylistOptions opts;
+  EXPECT_THAT(mgr->CopyPlaylist("B P1", "B P2", scenario_mgr.get(), opts), Optional(StrEq("B P2")));
+
+  auto playlist1 = mgr->GetPlaylist("B P1");
+  auto playlist2 = mgr->GetPlaylist("B P2");
+  ASSERT_TRUE(playlist1.has_value());
+  ASSERT_TRUE(playlist2.has_value());
+
+  ASSERT_THAT(playlist2->items(),
+              ElementsAre(EqualsProto(item1), EqualsProto(item2), EqualsProto(item3)));
+
+  // Creates playlist with non conflicting new name
+  EXPECT_THAT(mgr->CopyPlaylist("B P1", "B P2", scenario_mgr.get(), opts),
+              Optional(StrEq("B P2 (1)")));
+
+  auto playlist2_dup = mgr->GetPlaylist("B P2 (1)");
+  ASSERT_TRUE(playlist2_dup.has_value());
+
+  ASSERT_THAT(playlist2_dup->items(),
+              ElementsAre(EqualsProto(item1), EqualsProto(item2), EqualsProto(item3)));
+
+  opts.deep_copy = true;
+  EXPECT_THAT(mgr->CopyPlaylist("B P1", "B P3", scenario_mgr.get(), opts), Optional(StrEq("B P3")));
+
+  auto playlist3 = mgr->GetPlaylist("B P3");
+  ASSERT_THAT(playlist3->items(),
+              ElementsAre(EqualsProto(MakeItem("B S1 (1)", 1)),
+                          EqualsProto(MakeItem("B S2 (1)", 2)),
+                          EqualsProto(MakeItem("B S3 (1)", 3))));
 }

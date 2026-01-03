@@ -115,10 +115,10 @@ class PlaylistManager {
 
   virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
 
-  virtual bool CopyPlaylist(const std::string& source_playlist_name,
-                            const std::string& target_playlist_name,
-                            ScenarioManager* scenario_manager,
-                            CopyPlaylistOptions options) = 0;
+  virtual std::optional<std::string> CopyPlaylist(const std::string& source_playlist_name,
+                                                  const std::string& target_playlist_name,
+                                                  ScenarioManager* scenario_manager,
+                                                  CopyPlaylistOptions options) = 0;
 
   virtual void RegisterRenameListener(
       std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;

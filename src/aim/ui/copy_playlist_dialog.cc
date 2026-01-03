@@ -80,13 +80,15 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         opts.remove_prefix = remove_prefix_;
         opts.deep_copy = deep_copy_;
         opts.as_references = deep_copy_ && as_references_;
-        did_copy = app.playlist_manager().CopyPlaylist(
+        std::optional<std::string> final_name = app.playlist_manager().CopyPlaylist(
             source_->name.full_name(), new_name_.full_name(), &app.scenario_manager(), opts);
-        if (did_copy) {
+        if (final_name) {
+          new_name_ = ResourceName::Parse(*final_name);
           did_copy = app.bundle_manager().SaveDirtyBundles();
         }
         if (did_copy) {
           app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_name_.full_name());
+          app.playlist_manager().SetCurrentPlaylist(new_name_.full_name());
         }
         ImGui::CloseCurrentPopup();
         source_ = {};

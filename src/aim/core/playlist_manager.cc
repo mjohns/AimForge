@@ -247,13 +247,13 @@ class PlaylistManagerImpl : public PlaylistManager {
     return names;
   }
 
-  bool CopyPlaylist(const std::string& source_playlist_full_name,
-                    const std::string& new_playlist_full_name,
-                    ScenarioManager* scenario_manager,
-                    CopyPlaylistOptions options) override {
+  std::optional<std::string> CopyPlaylist(const std::string& source_playlist_full_name,
+                                          const std::string& new_playlist_full_name,
+                                          ScenarioManager* scenario_manager,
+                                          CopyPlaylistOptions options) override {
     auto source_playlist = GetPlaylist(source_playlist_full_name);
     if (!source_playlist) {
-      return false;
+      return {};
     }
 
     // Copy all scenarios if necessary.
@@ -327,8 +327,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     */
     }
     UpdatePlaylist(new_playlist_name, dest);
-    SetCurrentPlaylist(new_playlist_name.full_name());
-    return true;
+    return new_playlist_name.full_name();
   }
 
   std::unordered_set<std::string> GetDirtyBundles() override {
@@ -533,7 +532,8 @@ std::optional<int> PlaylistRun::NextIndex() {
   if (IsValidIndex(progress_list, current_index)) {
     return current_index;
   }
-  return progress_list.size() - 1;
+  int last_index = progress_list.size() - 1;
+  return last_index;
 }
 
 }  // namespace aim
