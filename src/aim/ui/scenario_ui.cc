@@ -211,9 +211,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         if (ImGui::MenuItem("Reload")) {
           result->reload_scenarios = true;
         }
-        if (ImGui::MenuItem("Open file")) {
-          app_->scenario_manager().OpenFile(scenario.name);
-        }
         ImGui::EndMenu();
       }
       ImGui::EndPopup();

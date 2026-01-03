@@ -311,7 +311,7 @@ class PlaylistManagerImpl : public PlaylistManager {
             if (new_referenced_scenario != new_name_map.end()) {
               def.mutable_reference_def()->set_scenario_id(
                   new_referenced_scenario->second.full_name());
-              scenario_manager->SaveScenario(ResourceName::Parse(item.scenario()), def);
+              scenario_manager->UpdateScenario(ResourceName::Parse(item.scenario()), def);
             }
           }
         }

@@ -49,7 +49,6 @@ class ScenarioManager {
 
   virtual std::shared_ptr<std::vector<std::string>> scenario_names() const = 0;
 
-  virtual bool SaveScenario(const ResourceName& name, const ScenarioDef& def) = 0;
   virtual void UpdateScenario(const ResourceName& name, const ScenarioDef& def) = 0;
   void UpdateScenario(const std::string& name, const ScenarioDef& def) {
     return UpdateScenario(ResourceName::Parse(name), def);
@@ -81,16 +80,12 @@ class ScenarioManager {
 
   virtual bool has_running_scenario() const = 0;
 
-  virtual void LoadScenariosFromDisk() = 0;
-
   virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
-
-  virtual void OpenFile(const ResourceName& name) = 0;
 
   virtual void RegisterRenameListener(
       std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;
 };
 
-std::unique_ptr<ScenarioManager> CreateScenarioManager(FileSystem* fs);
+std::unique_ptr<ScenarioManager> CreateScenarioManager();
 
 }  // namespace aim

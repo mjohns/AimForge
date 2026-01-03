@@ -27,11 +27,6 @@ struct ScenarioCacheItem {
   ScenarioDef def;
 };
 
-std::filesystem::path GetScenarioPath(const std::filesystem::path& bundle_path,
-                                      const std::string& name) {
-  return bundle_path / "scenarios" / (name + ".json");
-}
-
 void SortScenarios(std::vector<ScenarioItem>* scenarios) {
   std::sort(scenarios->begin(),
             scenarios->end(),
@@ -44,47 +39,9 @@ void SortScenarioNames(std::vector<std::string>* scenarios) {
             [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
 }
 
-std::optional<std::filesystem::path> GetScenarioPath(FileSystem* fs, const ResourceName& resource) {
-  auto maybe_bundle = fs->GetBundle(resource.bundle_name());
-  if (!maybe_bundle.has_value()) {
-    return {};
-  }
-  std::filesystem::path scenario_dir = maybe_bundle->path / "scenarios";
-  if (!std::filesystem::exists(scenario_dir)) {
-    std::filesystem::create_directory(scenario_dir);
-  }
-  return GetScenarioPath(maybe_bundle->path, resource.relative_name());
-}
-
-void LoadScenariosForBundle(const std::string& bundle_name,
-                            const std::filesystem::path& base_dir,
-                            std::unordered_map<std::string, ScenarioCacheItem>* scenario_map) {
-  if (!std::filesystem::exists(base_dir)) {
-    return;
-  }
-  std::vector<ScenarioItem> scenarios;
-  for (const auto& entry : std::filesystem::directory_iterator(base_dir)) {
-    if (!std::filesystem::is_regular_file(entry)) {
-      continue;
-    }
-    std::string filename = entry.path().filename().string();
-    if (!filename.ends_with(".json")) {
-      continue;
-    }
-    ResourceName name(bundle_name, std::string(absl::StripSuffix(filename, ".json")));
-
-    auto& item = (*scenario_map)[name.full_name()];
-    item.name = name;
-    if (!ReadJsonMessageFromFile(entry.path(), &item.def)) {
-      Logger::get()->warn("Unable to read scenario {}", entry.path().string());
-      continue;
-    }
-  }
-}
-
 class ScenarioManagerImpl : public ScenarioManager {
  public:
-  explicit ScenarioManagerImpl(FileSystem* fs) : fs_(fs) {
+  explicit ScenarioManagerImpl() {
     scenario_names_ = std::make_shared<std::vector<std::string>>();
   }
 
@@ -200,26 +157,6 @@ class ScenarioManagerImpl : public ScenarioManager {
     dirty_bundles_.insert(name.bundle_name());
   }
 
-  bool SaveScenario(const ResourceName& name, const ScenarioDef& def) override {
-    bool saved = SaveScenarioNoRebuild(name, def);
-    if (saved) {
-      RebuildCachedScenarioList();
-    }
-    return saved;
-  }
-
-  bool SaveScenarioNoRebuild(const ResourceName& name, const ScenarioDef& def) {
-    auto path = GetScenarioPath(fs_, name);
-    if (!path.has_value()) {
-      return false;
-    }
-    bool saved = WriteJsonMessageToFile(*path, def);
-    if (saved) {
-      UpdateCachedScenario(name, def);
-    }
-    return saved;
-  }
-
   // Return the name the scenario was saved with if successful.
   ResourceName SaveScenarioWithUniqueName(const ResourceName& name_in,
                                           const ScenarioDef& def) override {
@@ -266,17 +203,16 @@ class ScenarioManagerImpl : public ScenarioManager {
     return true;
   }
 
-  void OpenFile(const ResourceName& name) override {
-    auto maybe_path = GetScenarioPath(fs_, name);
-    if (maybe_path.has_value()) {
-#ifdef _WIN32
+  void OpenFile(const ResourceName& name) {
+      /*
+ifdef _WIN32
       std::wstring arguments = L"/select, \"" + maybe_path->wstring() + L"\"";
       auto rc = ShellExecuteW(NULL, L"open", L"explorer", arguments.c_str(), NULL, SW_SHOWNORMAL);
       if (!SUCCEEDED(rc)) {
         Logger::get()->warn("Failed to open scenario file {}", maybe_path->string());
       }
-#endif
-    }
+endif
+      */
   }
 
   bool has_running_scenario() const override {
@@ -344,17 +280,6 @@ class ScenarioManagerImpl : public ScenarioManager {
                                        : ApplyScenarioOverrides(*referenced);
   }
 
-  void LoadScenariosFromDisk() override {
-    scenario_map_.clear();
-    for (BundleInfo& bundle : fs_->GetBundles()) {
-      LoadScenariosForBundle(bundle.name, bundle.path / "scenarios", &scenario_map_);
-    }
-
-    RebuildCachedScenarioList();
-    // WriteBinaryMessageToFile(fs_->GetUserDataPath("scenarios.bin"), scenario_file);
-    // WriteJsonMessageToFile(fs_->GetUserDataPath("scenarios.json"), scenario_file);
-  }
-
   void StartReload() override {
     scenario_map_.clear();
   }
@@ -393,7 +318,6 @@ class ScenarioManagerImpl : public ScenarioManager {
   std::shared_ptr<std::vector<std::string>> scenario_names_;
   std::unordered_map<std::string, ScenarioCacheItem> scenario_map_;
 
-  FileSystem* fs_;
   std::shared_ptr<Screen> current_running_scenario_;
 
   std::string current_scenario_id_;
@@ -405,8 +329,8 @@ class ScenarioManagerImpl : public ScenarioManager {
 
 }  // namespace
 
-std::unique_ptr<ScenarioManager> CreateScenarioManager(FileSystem* fs) {
-  return std::make_unique<ScenarioManagerImpl>(fs);
+std::unique_ptr<ScenarioManager> CreateScenarioManager() {
+  return std::make_unique<ScenarioManagerImpl>();
 }
 
 }  // namespace aim

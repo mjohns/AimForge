@@ -190,7 +190,7 @@ int Application::Initialize() {
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
   stats_manager_ = CreateStatsManager(db_.get());
-  scenario_manager_ = CreateScenarioManager(file_system_.get());
+  scenario_manager_ = CreateScenarioManager();
   playlist_manager_ = CreatePlaylistManager();
   bundle_manager_ =
       CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());

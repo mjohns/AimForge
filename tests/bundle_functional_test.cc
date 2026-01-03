@@ -118,7 +118,7 @@ class BundleFunctionalTest : public ::testing::Test {
         << "Failed to create temporary directory: " << temp_dir_path_;
 
     fs_ = std::make_unique<FileSystem>(temp_dir_path_, temp_dir_path_);
-    scenario_manager_ = CreateScenarioManager(fs_.get());
+    scenario_manager_ = CreateScenarioManager();
     playlist_manager_ = CreatePlaylistManager();
     bundle_manager_ =
         CreateBundleManager(fs_.get(), playlist_manager_.get(), scenario_manager_.get());
