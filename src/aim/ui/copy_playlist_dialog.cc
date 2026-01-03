@@ -83,6 +83,9 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         did_copy = app.playlist_manager().CopyPlaylist(
             source_->name.full_name(), new_name_.full_name(), &app.scenario_manager(), opts);
         if (did_copy) {
+          did_copy = app.bundle_manager().SaveDirtyBundles();
+        }
+        if (did_copy) {
           app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_name_.full_name());
         }
         ImGui::CloseCurrentPopup();

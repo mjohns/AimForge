@@ -292,15 +292,13 @@ class PlaylistManagerImpl : public PlaylistManager {
         } else {
           new_def = source_scenario->unevaluated_def;
         }
-        auto maybe_final_scenario_name =
+        auto final_scenario_name =
             scenario_manager->SaveScenarioWithUniqueName(new_scenario_name, new_def);
-        if (maybe_final_scenario_name) {
-          new_name_map[source_item.scenario()] = *maybe_final_scenario_name;
-          new_scenario_map[maybe_final_scenario_name->full_name()] = new_def;
-          PlaylistItem item = source_item;
-          item.set_scenario(maybe_final_scenario_name->full_name());
-          *dest.add_items() = item;
-        }
+        new_name_map[source_item.scenario()] = final_scenario_name;
+        new_scenario_map[final_scenario_name.full_name()] = new_def;
+        PlaylistItem item = source_item;
+        item.set_scenario(final_scenario_name.full_name());
+        *dest.add_items() = item;
       }
       if (!options.as_references) {
         // Make sure any copied scenarios which were references that pointed to other scenarios in

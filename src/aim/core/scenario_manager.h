@@ -55,9 +55,9 @@ class ScenarioManager {
     return UpdateScenario(ResourceName::Parse(name), def);
   }
 
-  // Return the name the scenario was saved with if successful.
-  virtual std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name,
-                                                                 const ScenarioDef& def) = 0;
+  // Returns the name the scenario was saved with
+  virtual ResourceName SaveScenarioWithUniqueName(const ResourceName& name,
+                                                  const ScenarioDef& def) = 0;
   virtual void DeleteScenario(const ResourceName& name) = 0;
 
   virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;

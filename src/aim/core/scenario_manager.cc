@@ -221,13 +221,13 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
   // Return the name the scenario was saved with if successful.
-  std::optional<ResourceName> SaveScenarioWithUniqueName(const ResourceName& name_in,
-                                                         const ScenarioDef& def) override {
+  ResourceName SaveScenarioWithUniqueName(const ResourceName& name_in,
+                                          const ScenarioDef& def) override {
     ResourceName name = name_in;
     *name.mutable_relative_name() =
         MakeUniqueName(name.relative_name(), GetAllRelativeNamesInBundle(name.bundle_name()));
-    bool saved = SaveScenario(name, def);
-    return saved ? name : std::optional<ResourceName>{};
+    UpdateScenario(name, def);
+    return name;
   }
 
   void DeleteScenario(const ResourceName& name) override {
