@@ -6,7 +6,6 @@
 #include <unordered_set>
 #include <vector>
 
-#include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/core/screen.h"
@@ -48,7 +47,7 @@ class ScenarioManager {
 
   // Returns the name the scenario was saved with
   virtual std::string SaveScenarioWithUniqueName(const std::string& name,
-                                                  const ScenarioDef& def) = 0;
+                                                 const ScenarioDef& def) = 0;
   virtual void DeleteScenario(const std::string& name) = 0;
 
   virtual bool RenameScenario(const std::string& old_name, const std::string& new_name) = 0;

@@ -32,4 +32,6 @@ std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
 std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
     const std::filesystem::path& dir1, const std::filesystem::path& dir2);
 
+void OpenFileInExplorer(const std::filesystem::path& path);
+
 }  // namespace aim

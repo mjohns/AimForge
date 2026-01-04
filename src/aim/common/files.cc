@@ -1,13 +1,17 @@
 #include "files.h"
 
-#include <google/protobuf/json/json.h>
-#include <google/protobuf/util/json_util.h>
-#include <nlohmann/json.h>
+#ifdef _WIN32
+#include <Windows.h>
+#include <shellapi.h>
+#endif
 
 #include <filesystem>
 #include <fstream>
 
 #include "aim/common/log.h"
+#include "google/protobuf/json/json.h"
+#include "google/protobuf/util/json_util.h"
+#include "nlohmann/json.h"
 
 namespace aim {
 
@@ -146,6 +150,13 @@ std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
     const std::filesystem::path& dir1, const std::filesystem::path& dir2) {
   std::vector<std::filesystem::path> dirs = {dir1, dir2};
   return GetMostRecentUpdateTime(dirs);
+}
+
+void OpenFileInExplorer(const std::filesystem::path& path) {
+#ifdef _WIN32
+  std::wstring arguments = L"/select, \"" + path.wstring() + L"\"";
+  ShellExecuteW(NULL, L"open", L"explorer", arguments.c_str(), NULL, SW_SHOWNORMAL);
+#endif
 }
 
 }  // namespace aim

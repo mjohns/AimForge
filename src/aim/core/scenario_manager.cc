@@ -1,10 +1,5 @@
 #include "scenario_manager.h"
 
-#ifdef _WIN32
-#include <Windows.h>
-#include <shellapi.h>
-#endif
-
 #include <cassert>
 #include <memory>
 #include <vector>
@@ -15,6 +10,7 @@
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/name_util.h"
+#include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/file_system.h"
 #include "aim/scenario/scenario_overrides.h"
@@ -198,18 +194,6 @@ class ScenarioManagerImpl : public ScenarioManager {
     dirty_bundles_.insert(GetBundleName(new_name));
     RebuildCachedScenarioList();
     return true;
-  }
-
-  void OpenFile(const ResourceName& name) {
-    /*
-ifdef _WIN32
-    std::wstring arguments = L"/select, \"" + maybe_path->wstring() + L"\"";
-    auto rc = ShellExecuteW(NULL, L"open", L"explorer", arguments.c_str(), NULL, SW_SHOWNORMAL);
-    if (!SUCCEEDED(rc)) {
-      Logger::get()->warn("Failed to open scenario file {}", maybe_path->string());
-    }
-endif
-    */
   }
 
   bool has_running_scenario() const override {
