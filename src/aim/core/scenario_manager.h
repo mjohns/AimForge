@@ -55,10 +55,10 @@ class ScenarioManager {
   virtual bool SetCurrentScenario(const std::string& scenario_name) = 0;
 
   std::optional<ScenarioItem> GetCurrentScenario() {
-    return GetScenario(GetCurrentScenarioId());
+    return GetScenario(GetCurrentScenarioName());
   }
 
-  virtual const std::string& GetCurrentScenarioId() = 0;
+  virtual const std::string& GetCurrentScenarioName() = 0;
 
   virtual void ClearCurrentScenario() = 0;
 

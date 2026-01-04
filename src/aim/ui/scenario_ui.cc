@@ -154,7 +154,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
 
   void DrawScenarioItem(const ScenarioItem& scenario, ScenarioBrowserResult* result) {
     if (ImGui::Button(scenario.name)) {
-      if (app_->scenario_manager().GetCurrentScenarioId() == scenario.name) {
+      if (app_->scenario_manager().GetCurrentScenarioName() == scenario.name) {
         result->scenario_to_start = scenario.name;
       } else {
         app_->scenario_manager().SetCurrentScenario(scenario.name);

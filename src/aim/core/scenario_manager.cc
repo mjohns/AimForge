@@ -114,20 +114,20 @@ class ScenarioManagerImpl : public ScenarioManager {
     dirty_bundles_.clear();
   }
 
-  const std::string& GetCurrentScenarioId() override {
-    return current_scenario_id_;
+  const std::string& GetCurrentScenarioName() override {
+    return current_scenario_name_;
   }
 
   void ClearCurrentScenario() override {
-    current_scenario_id_ = "";
+    current_scenario_name_ = "";
     current_running_scenario_ = {};
   }
 
   bool SetCurrentScenario(const std::string& scenario_name) override {
-    if (scenario_name != current_scenario_id_) {
+    if (scenario_name != current_scenario_name_) {
       current_running_scenario_ = {};
     }
-    current_scenario_id_ = scenario_name;
+    current_scenario_name_ = scenario_name;
     return GetScenario(scenario_name).has_value();
   }
 
@@ -166,8 +166,8 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
   bool RenameScenario(const std::string& old_name, const std::string& new_name) override {
-    if (current_scenario_id_ == old_name) {
-      current_scenario_id_ = new_name;
+    if (current_scenario_name_ == old_name) {
+      current_scenario_name_ = new_name;
     }
 
     auto old_item = scenario_map_.find(old_name);
@@ -301,7 +301,7 @@ class ScenarioManagerImpl : public ScenarioManager {
 
   std::shared_ptr<Screen> current_running_scenario_;
 
-  std::string current_scenario_id_;
+  std::string current_scenario_name_;
   std::unordered_set<std::string> dirty_bundles_;
 
   std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
