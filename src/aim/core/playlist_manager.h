@@ -104,7 +104,7 @@ class PlaylistManager {
 
   virtual bool DeletePlaylist(const std::string& name) = 0;
 
-  virtual bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) = 0;
+  virtual bool RenamePlaylist(const std::string& old_name, const std::string& new_name) = 0;
 
   virtual void RenameScenarioInAllPlaylists(const std::string& old_name,
                                             const std::string& new_name) = 0;

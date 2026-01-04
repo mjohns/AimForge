@@ -364,7 +364,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       std::vector<std::string> taken_names =
           app_.playlist_manager().GetAllRelativeNamesInBundle(bundle_name_);
       final_name.set(bundle_name_, MakeUniqueName(new_playlist_name_, taken_names));
-      if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_, final_name)) {
+      if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_.full_name(),
+                                                  final_name.full_name())) {
         return false;
       }
       app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, final_name.full_name());

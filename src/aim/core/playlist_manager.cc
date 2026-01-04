@@ -188,27 +188,27 @@ class PlaylistManagerImpl : public PlaylistManager {
     return true;
   }
 
-  bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) override {
-    if (current_playlist_name_ == old_name.full_name()) {
-      current_playlist_name_ = new_name.full_name();
+  bool RenamePlaylist(const std::string& old_name, const std::string& new_name) override {
+    if (current_playlist_name_ == old_name) {
+      current_playlist_name_ = new_name;
     }
-    if (playlist_run_map_.contains(old_name.full_name())) {
-      auto run = playlist_run_map_[old_name.full_name()];
-      run->playlist.name = new_name;
-      playlist_run_map_[new_name.full_name()] = run;
-      playlist_run_map_.erase(old_name.full_name());
+    if (playlist_run_map_.contains(old_name)) {
+      auto run = playlist_run_map_[old_name];
+      run->playlist.name = ResourceName::Parse(new_name);
+      playlist_run_map_[new_name] = run;
+      playlist_run_map_.erase(old_name);
     }
-    auto it = playlist_map_.find(old_name.full_name());
+    auto it = playlist_map_.find(old_name);
     if (it != playlist_map_.end()) {
-      auto& new_playlist = playlist_map_[new_name.full_name()];
-      new_playlist.name = new_name;
+      auto& new_playlist = playlist_map_[new_name];
+      new_playlist.name = ResourceName::Parse(new_name);
       *new_playlist.mutable_def() = *it->second.mutable_def();
-      playlist_map_.erase(old_name.full_name());
+      playlist_map_.erase(old_name);
       UpdatePlaylistListFromMap();
     }
 
     for (auto& listener : rename_listeners_) {
-      listener(old_name.full_name(), new_name.full_name());
+      listener(old_name, new_name);
     }
 
     return true;
