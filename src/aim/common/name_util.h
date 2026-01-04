@@ -24,7 +24,6 @@ struct NameInfo {
   }
 };
 
-NameInfo GetNameInfo(const std::string& name, bool support_levels = true);
 NameInfo GetPlaylistNameInfo(const std::string& name);
 NameInfo GetScenarioNameInfo(const std::string& name);
 

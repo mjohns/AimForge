@@ -54,7 +54,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     std::optional<float> selected_sensitivity;
     if (select_sensitivity_variation_dialog_.Draw(&selected_sensitivity)) {
-      NameInfo name_info = GetNameInfo(current_playlist_name_);
+      NameInfo name_info = GetPlaylistNameInfo(current_playlist_name_);
       name_info.cm_per_360 = selected_sensitivity;
       std::string new_name = name_info.GetFullName();
       if (new_name != current_playlist_name_) {
@@ -76,7 +76,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     ImGui::SameLine();
     if (ImGui::Button(kIconMouse)) {
-      NameInfo name_info = GetNameInfo(current_playlist_name_);
+      NameInfo name_info = GetPlaylistNameInfo(current_playlist_name_);
       select_sensitivity_variation_dialog_.NotifyOpen(name_info.cm_per_360);
     }
     ImGui::HelpTooltip("Set cm/360 playlist variation");

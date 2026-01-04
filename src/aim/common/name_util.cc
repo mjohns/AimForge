@@ -22,6 +22,31 @@
 namespace aim {
 namespace {
 
+NameInfo GetNameInfo(const std::string& name, bool support_levels = true) {
+  NameInfo info;
+
+  std::string base_name(absl::StripAsciiWhitespace(name));
+
+  float cm_per_360 = 0;
+  auto stripped_cm_name = StripCmSuffix(base_name, &cm_per_360);
+  if (stripped_cm_name) {
+    base_name = *stripped_cm_name;
+    info.cm_per_360 = cm_per_360;
+  }
+
+  if (support_levels) {
+    float level = 0;
+    auto stripped_level_name = StripLevelSuffix(base_name, &level);
+    if (stripped_level_name) {
+      base_name = *stripped_level_name;
+      info.level = level;
+    }
+  }
+
+  info.base_name = base_name;
+  return info;
+}
+
 std::vector<std::string> GetFullNames(const std::vector<NameInfo>& name_infos) {
   std::vector<std::string> result;
   for (const auto& info : name_infos) {
@@ -143,31 +168,6 @@ NameInfo GetScenarioNameInfo(const std::string& name) {
 
 NameInfo GetPlaylistNameInfo(const std::string& name) {
   return GetNameInfo(name, false);
-}
-
-NameInfo GetNameInfo(const std::string& name, bool support_levels) {
-  NameInfo info;
-
-  std::string base_name(absl::StripAsciiWhitespace(name));
-
-  float cm_per_360 = 0;
-  auto stripped_cm_name = StripCmSuffix(base_name, &cm_per_360);
-  if (stripped_cm_name) {
-    base_name = *stripped_cm_name;
-    info.cm_per_360 = cm_per_360;
-  }
-
-  if (support_levels) {
-    float level = 0;
-    auto stripped_level_name = StripLevelSuffix(base_name, &level);
-    if (stripped_level_name) {
-      base_name = *stripped_level_name;
-      info.level = level;
-    }
-  }
-
-  info.base_name = base_name;
-  return info;
 }
 
 std::vector<std::string> GetSortedLevelNames(const NameInfo& name,

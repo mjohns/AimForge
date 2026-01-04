@@ -1,6 +1,7 @@
 #include "playlist_manager.h"
 
 #include <algorithm>
+#include <cassert>
 #include <format>
 
 #include "absl/strings/strip.h"
@@ -64,9 +65,13 @@ class PlaylistManagerImpl : public PlaylistManager {
   void LoadPlaylistsFromBundle(const std::string& bundle_name, const BundleFile& bundle) override {
     for (const BundlePlaylist& playlist : bundle.playlists()) {
       ResourceName name(bundle_name, playlist.name());
-      auto& item = playlist_map_[name.full_name()];
-      item.name = name.full_name();
-      *item.mutable_def() = playlist.def();
+      std::string full_name = name.full_name();
+      NameInfo info = GetPlaylistNameInfo(full_name);
+      if (!info.HasDynamicSuffix()) {
+        auto& item = playlist_map_[full_name];
+        item.name = full_name;
+        *item.mutable_def() = playlist.def();
+      }
     }
   }
 
@@ -172,6 +177,12 @@ class PlaylistManagerImpl : public PlaylistManager {
   }
 
   void UpdatePlaylist(const std::string& name, const PlaylistDef& def) override {
+    NameInfo info = GetPlaylistNameInfo(name);
+    if (info.HasDynamicSuffix()) {
+      assert(false && "Trying to update playlist with dynamic suffix");
+      return;
+    }
+
     auto& p = playlist_map_[name];
     p.name = name;
     *p.mutable_def() = def;
@@ -306,8 +317,7 @@ class PlaylistManagerImpl : public PlaylistManager {
           if (old_referenced_scenario.size() > 0) {
             auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
             if (new_referenced_scenario != new_name_map.end()) {
-              def.mutable_reference_def()->set_scenario_id(
-                  new_referenced_scenario->second);
+              def.mutable_reference_def()->set_scenario_id(new_referenced_scenario->second);
               scenario_manager->UpdateScenario(item.scenario(), def);
             }
           }
