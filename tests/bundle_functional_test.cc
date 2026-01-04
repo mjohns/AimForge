@@ -34,7 +34,7 @@ using ::testing::UnorderedElementsAre;
 namespace {
 
 auto EqualsScenario(const ScenarioItem& expected) {
-  return AllOf(Property(&ScenarioItem::id, StrEq(expected.id())),
+  return AllOf(Field(&ScenarioItem::name, StrEq(expected.name)),
                Field(&ScenarioItem::unevaluated_def, EqualsProto(expected.unevaluated_def)));
 }
 
@@ -199,13 +199,13 @@ TEST_F(BundleFunctionalTest, GetLevelScenario) {
       scenario_manager_->GetScenario(scenario_name.full_name());
   ASSERT_TRUE(base_scenario.has_value());
   EXPECT_THAT(base_scenario->unevaluated_def, EqualsProto(def));
-  EXPECT_THAT(base_scenario->name.full_name(), StrEq("Bundle Scenario"));
+  EXPECT_THAT(base_scenario->name, StrEq("Bundle Scenario"));
   EXPECT_FALSE(base_scenario->level.has_value());
 
   std::optional<ScenarioItem> scenario_l1 = scenario_manager_->GetScenario("Bundle Scenario L1");
   ASSERT_TRUE(scenario_l1.has_value());
   EXPECT_THAT(scenario_l1->unevaluated_def, EqualsProto(def));
-  EXPECT_THAT(scenario_l1->name.full_name(), StrEq("Bundle Scenario L1"));
+  EXPECT_THAT(scenario_l1->name, StrEq("Bundle Scenario L1"));
   ASSERT_TRUE(scenario_l1->level.has_value());
   EXPECT_THAT(*scenario_l1->level, Eq(1));
 
@@ -213,7 +213,7 @@ TEST_F(BundleFunctionalTest, GetLevelScenario) {
       scenario_manager_->GetScenario("Bundle Scenario L1 25cm");
   ASSERT_TRUE(scenario_l1_with_cm.has_value());
   EXPECT_THAT(scenario_l1_with_cm->unevaluated_def, EqualsProto(def));
-  EXPECT_THAT(scenario_l1_with_cm->name.full_name(), StrEq("Bundle Scenario L1 25cm"));
+  EXPECT_THAT(scenario_l1_with_cm->name, StrEq("Bundle Scenario L1 25cm"));
   ASSERT_TRUE(scenario_l1_with_cm->level.has_value());
   EXPECT_THAT(*scenario_l1_with_cm->level, Eq(1));
   ASSERT_TRUE(scenario_l1_with_cm->forced_cm_per_360.has_value());
@@ -223,7 +223,7 @@ TEST_F(BundleFunctionalTest, GetLevelScenario) {
       scenario_manager_->GetScenario("Bundle Scenario L-1");
   ASSERT_TRUE(scenario_neg_l1.has_value());
   EXPECT_THAT(scenario_neg_l1->unevaluated_def, EqualsProto(def));
-  EXPECT_THAT(scenario_neg_l1->name.full_name(), StrEq("Bundle Scenario L-1"));
+  EXPECT_THAT(scenario_neg_l1->name, StrEq("Bundle Scenario L-1"));
   ASSERT_TRUE(scenario_neg_l1->level.has_value());
   EXPECT_THAT(*scenario_neg_l1->level, Eq(-1));
 

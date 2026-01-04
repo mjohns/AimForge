@@ -23,14 +23,14 @@ namespace aim {
 namespace {
 
 struct ScenarioCacheItem {
-  ResourceName name;
+  std::string name;
   ScenarioDef def;
 };
 
 void SortScenarios(std::vector<ScenarioItem>* scenarios) {
   std::sort(scenarios->begin(),
             scenarios->end(),
-            [](const ScenarioItem& lhs, const ScenarioItem& rhs) { return lhs.id() < rhs.id(); });
+            [](const ScenarioItem& lhs, const ScenarioItem& rhs) { return lhs.name < rhs.name; });
 }
 
 void SortScenarioNames(std::vector<std::string>* scenarios) {
@@ -69,35 +69,33 @@ class ScenarioManagerImpl : public ScenarioManager {
     return names;
   }
 
-  std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) override {
-    auto it = scenario_map_.find(scenario_id);
+  std::optional<ScenarioItem> GetScenario(const std::string& scenario_name) override {
+    auto it = scenario_map_.find(scenario_name);
     if (it == scenario_map_.end()) {
       // See if it should be an automatic cm/360 version of a scenario.
       float cm_per_360;
-      std::optional<std::string> base_scenario_name = StripCmSuffix(scenario_id, &cm_per_360);
+      std::optional<std::string> base_scenario_name = StripCmSuffix(scenario_name, &cm_per_360);
       if (base_scenario_name && cm_per_360 > 0) {
         auto base_scenario = GetScenario(*base_scenario_name);
         if (!base_scenario) {
           return {};
         }
         ScenarioItem item = *base_scenario;
-        item.name = ResourceName::Parse(scenario_id);
-        item.scenario_id = scenario_id;
+        item.name = scenario_name;
         item.forced_cm_per_360 = cm_per_360;
         return item;
       }
 
       // Now check if it is a level scenario.
       float level = 0;
-      base_scenario_name = StripLevelSuffix(scenario_id, &level);
+      base_scenario_name = StripLevelSuffix(scenario_name, &level);
       if (base_scenario_name) {
         auto base_scenario = GetScenario(*base_scenario_name);
         if (!base_scenario) {
           return {};
         }
         ScenarioItem item = *base_scenario;
-        item.name = ResourceName::Parse(scenario_id);
-        item.scenario_id = scenario_id;
+        item.name = scenario_name;
         item.level = level;
         return item;
       }
@@ -107,7 +105,6 @@ class ScenarioManagerImpl : public ScenarioManager {
 
     ScenarioItem item;
     item.name = it->second.name;
-    item.scenario_id = item.name.full_name();
     item.unevaluated_def = it->second.def;
 
     return item;
@@ -130,12 +127,12 @@ class ScenarioManagerImpl : public ScenarioManager {
     current_running_scenario_ = {};
   }
 
-  bool SetCurrentScenario(const std::string& scenario_id) override {
-    if (scenario_id != current_scenario_id_) {
+  bool SetCurrentScenario(const std::string& scenario_name) override {
+    if (scenario_name != current_scenario_id_) {
       current_running_scenario_ = {};
     }
-    current_scenario_id_ = scenario_id;
-    return GetScenario(scenario_id).has_value();
+    current_scenario_id_ = scenario_name;
+    return GetScenario(scenario_name).has_value();
   }
 
   std::shared_ptr<std::vector<std::string>> scenario_names() const override {
@@ -150,7 +147,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     }
 
     auto& item = scenario_map_[name];
-    item.name = ResourceName::Parse(name);
+    item.name = name;
     item.def = def;
     RebuildCachedScenarioList();
     dirty_bundles_.insert(GetBundleName(name));
@@ -169,6 +166,7 @@ class ScenarioManagerImpl : public ScenarioManager {
   void DeleteScenario(const std::string& name) override {
     scenario_map_.erase(name);
     RebuildCachedScenarioList();
+    dirty_bundles_.insert(GetBundleName(name));
   }
 
   bool RenameScenario(const std::string& old_name, const std::string& new_name) override {
@@ -180,7 +178,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     if (old_item != scenario_map_.end()) {
       ScenarioCacheItem& item = scenario_map_[new_name];
       item = old_item->second;
-      item.name = ResourceName::Parse(new_name);
+      item.name = new_name;
       scenario_map_.erase(old_name);
     }
 
@@ -287,7 +285,7 @@ endif
     for (const BundleScenario& scenario : bundle.scenarios()) {
       ResourceName name(bundle_name, scenario.name());
       auto& item = scenario_map_[name.full_name()];
-      item.name = name;
+      item.name = name.full_name();
       item.def = scenario.def();
     }
   }
@@ -298,7 +296,7 @@ endif
 
   void UpdateCachedScenario(const std::string& name, const ScenarioDef& new_def) {
     auto& item = scenario_map_[name];
-    item.name = ResourceName::Parse(name);
+    item.name = name;
     item.def = new_def;
   }
 
@@ -307,7 +305,7 @@ endif
     new_scenario_names->reserve(scenario_map_.size());
 
     for (auto& entry : scenario_map_) {
-      new_scenario_names->push_back(entry.second.name.full_name());
+      new_scenario_names->push_back(entry.second.name);
     }
     SortScenarioNames(new_scenario_names.get());
 

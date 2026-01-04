@@ -271,7 +271,7 @@ class PlaylistManagerImpl : public PlaylistManager {
           // Skip invalid scenarios.
           continue;
         }
-        ResourceName new_scenario_name = source_scenario->name;
+        ResourceName new_scenario_name = ResourceName::Parse(source_scenario->name);
         *new_scenario_name.mutable_bundle_name() = new_playlist_name.bundle_name();
 
         std::string* relative_name = new_scenario_name.mutable_relative_name();

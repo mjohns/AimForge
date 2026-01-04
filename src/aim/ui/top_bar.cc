@@ -57,7 +57,7 @@ void DrawTopBar(UiScreen* screen) {
     }
 
     ImGui::SameLine();
-    ImGui::Text(current_scenario->id());
+    ImGui::Text(current_scenario->name);
 
     ImGui::SameLine();
     if (ImGui::Button(std::format("{}", kIconArrowForward))) {
@@ -75,7 +75,7 @@ void DrawTopBar(UiScreen* screen) {
   ImVec2 char_size = ImGui::CalcTextSize("A");
   ImGui::SetCursorAtRight(char_size.x * 2);
   if (ImGui::Selectable(kIconSettings, false)) {
-    std::string current_scenario_name = current_scenario ? current_scenario->id() : "";
+    std::string current_scenario_name = current_scenario ? current_scenario->name : "";
     screen->PushNextScreen(CreateSettingsScreen(&app, current_scenario_name));
   }
 

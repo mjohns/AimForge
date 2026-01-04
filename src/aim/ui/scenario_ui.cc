@@ -55,8 +55,8 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
-        app_->scenario_manager().DeleteScenario(maybe_scenario->name.full_name());
-        app_->bundle_manager().SaveBundle(maybe_scenario->name.bundle_name());
+        app_->scenario_manager().DeleteScenario(maybe_scenario->name);
+        app_->bundle_manager().SaveDirtyBundles();
         result->reload_scenarios = true;
       }
     });
@@ -153,11 +153,11 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   }
 
   void DrawScenarioItem(const ScenarioItem& scenario, ScenarioBrowserResult* result) {
-    if (ImGui::Button(scenario.id())) {
-      if (app_->scenario_manager().GetCurrentScenarioId() == scenario.id()) {
-        result->scenario_to_start = scenario.id();
+    if (ImGui::Button(scenario.name)) {
+      if (app_->scenario_manager().GetCurrentScenarioId() == scenario.name) {
+        result->scenario_to_start = scenario.name;
       } else {
-        app_->scenario_manager().SetCurrentScenario(scenario.id());
+        app_->scenario_manager().SetCurrentScenario(scenario.name);
       }
     }
     const char* popup_id = "ScenarioItemMenu";
@@ -172,7 +172,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
           }
         }
         if (selected_playlist.size() > 0) {
-          app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.id());
+          app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.name);
           app_->bundle_manager().SaveBundle(ResourceName::Parse(selected_playlist).bundle_name());
         }
         ImGui::EndMenu();
@@ -185,7 +185,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
           if (ImGui::MenuItem(playlist_name.c_str())) {
             selected_playlist = playlist_name;
             ScenarioEditorOptions opts;
-            opts.scenario_id = scenario.id();
+            opts.scenario_id = scenario.name;
             opts.is_new_copy = true;
             opts.add_to_playlist = playlist_name;
             opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
@@ -195,19 +195,19 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         ImGui::EndMenu();
       }
       if (ImGui::Selectable("Edit")) {
-        result->scenario_to_edit = scenario.id();
+        result->scenario_to_edit = scenario.name;
       }
       if (ImGui::Selectable("Copy")) {
-        result->scenario_to_edit_copy = scenario.id();
+        result->scenario_to_edit_copy = scenario.name;
       }
       if (ImGui::Selectable("Delete")) {
-        delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", scenario.id()),
-                                               scenario.id());
+        delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", scenario.name),
+                                               scenario.name);
       }
       if (ImGui::BeginMenu("Advanced")) {
         if (ImGui::MenuItem("View latest run")) {
-          result->scenario_stats_to_view = scenario.id();
-          result->run_id = app_->stats_manager().GetLatestRunId(scenario.id());
+          result->scenario_stats_to_view = scenario.name;
+          result->run_id = app_->stats_manager().GetLatestRunId(scenario.name);
         }
         if (ImGui::MenuItem("Reload")) {
           result->reload_scenarios = true;
@@ -219,14 +219,14 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
 
     ImGui::SameLine();
-    if (app_->labels_manager().IsStarred(ObjectType::SCENARIO, scenario.id())) {
+    if (app_->labels_manager().IsStarred(ObjectType::SCENARIO, scenario.name)) {
       if (ImGui::Selectable(kIconStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-        app_->labels_manager().UnstarItem(ObjectType::SCENARIO, scenario.id());
+        app_->labels_manager().UnstarItem(ObjectType::SCENARIO, scenario.name);
         UpdateFilteredScenarios();
       }
     } else {
       if (ImGui::Selectable(kIconStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-        app_->labels_manager().StarItem(ObjectType::SCENARIO, scenario.id());
+        app_->labels_manager().StarItem(ObjectType::SCENARIO, scenario.name);
         // UpdateFilteredScenarios(); Is this necessary? You can't click this from the starred list.
       }
     }

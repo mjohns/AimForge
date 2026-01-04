@@ -85,11 +85,11 @@ class HomeScreen : public UiScreen {
       return;
     }
     ScenarioItem current_scenario = *GetCurrentScenario();
-    app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, current_scenario.id());
+    app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, current_scenario.name);
     CreateScenarioParams params;
-    params.name = current_scenario.id();
+    params.name = current_scenario.name;
     std::optional<ScenarioDef> evaluated_def =
-        app_.scenario_manager().GetEvaluatedScenarioDef(current_scenario.id());
+        app_.scenario_manager().GetEvaluatedScenarioDef(current_scenario.name);
     if (!evaluated_def) {
       // TODO: Error dialog for invalid scenarios.
       return;
@@ -168,8 +168,8 @@ class HomeScreen : public UiScreen {
     }
     if (IsMappableKeyDownEvent(event)) {
       auto current_scenario = GetCurrentScenario();
-      std::string scenario_id = current_scenario ? current_scenario->id() : "";
-      HandleDefaultScenarioEvents(event, user_is_typing, scenario_id);
+      std::string scenario_name = current_scenario ? current_scenario->name : "";
+      HandleDefaultScenarioEvents(event, user_is_typing, scenario_name);
 
       if (event.key.key == SDLK_ESCAPE) {
         state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
@@ -185,7 +185,7 @@ class HomeScreen : public UiScreen {
   std::string GetCurrentScenarioId() {
     auto scenario = app_.scenario_manager().GetCurrentScenario();
     if (scenario.has_value()) {
-      return scenario->id();
+      return scenario->name;
     }
     return "";
   }

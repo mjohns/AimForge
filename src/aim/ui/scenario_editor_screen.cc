@@ -193,7 +193,7 @@ class ScenarioEditorScreen : public UiScreen {
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_id);
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->unevaluated_def;
-      name_ = initial_scenario->name;
+      name_ = ResourceName::Parse(initial_scenario->name);
       // Strip any dynamic suffixes
       NameInfo name_info = GetScenarioNameInfo(name_.full_name());
       name_ = ResourceName::Parse(name_info.base_name);

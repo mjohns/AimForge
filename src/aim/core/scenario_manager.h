@@ -16,18 +16,13 @@
 namespace aim {
 
 struct ScenarioItem {
-  ResourceName name;
-  std::string scenario_id;
+  std::string name;
 
   // References have not been evaluated.
   ScenarioDef unevaluated_def;
 
   std::optional<float> forced_cm_per_360{};
   std::optional<float> level{};
-
-  const std::string& id() const {
-    return scenario_id;
-  }
 };
 
 class ScenarioManager {
@@ -43,9 +38,9 @@ class ScenarioManager {
 
   virtual void AddScenariosForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
-  virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_id) = 0;
+  virtual std::optional<ScenarioItem> GetScenario(const std::string& scenario_name) = 0;
 
-  virtual std::optional<ScenarioDef> GetEvaluatedScenarioDef(const std::string& scenario_id) = 0;
+  virtual std::optional<ScenarioDef> GetEvaluatedScenarioDef(const std::string& scenario_name) = 0;
 
   virtual std::shared_ptr<std::vector<std::string>> scenario_names() const = 0;
 
@@ -58,7 +53,7 @@ class ScenarioManager {
 
   virtual bool RenameScenario(const std::string& old_name, const std::string& new_name) = 0;
 
-  virtual bool SetCurrentScenario(const std::string& scenario_id) = 0;
+  virtual bool SetCurrentScenario(const std::string& scenario_name) = 0;
 
   std::optional<ScenarioItem> GetCurrentScenario() {
     return GetScenario(GetCurrentScenarioId());
