@@ -83,7 +83,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     ImGui::SameLine();
     if (ImGui::Button(kIconRedo)) {
-      app_.playlist_manager().ClearRun(run->playlist_name());
+      app_.playlist_manager().ClearRun(run->playlist.name);
       run = app_.playlist_manager().GetCurrentRun();
     }
     ImGui::HelpTooltip("Reset current run");
@@ -129,7 +129,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      screen_.app().playlist_manager().DeletePlaylist(playlist.name.full_name());
+      screen_.app().playlist_manager().DeletePlaylist(playlist.name);
       // result->reload_playlists = true;
     });
 
@@ -296,7 +296,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run,
         ScenarioEditorOptions opts;
         opts.scenario_id = scenario_id;
         opts.is_new_copy = true;
-        opts.add_to_playlist = run.playlist_name();
+        opts.add_to_playlist = run.playlist.name;
         opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
         screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
       }
@@ -316,7 +316,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run,
         }
         ImGui::IdGuard playlist_id(playlist_name, i);
         playlist_count++;
-        if (run.playlist_name() != playlist_name && ImGui::MenuItem(playlist_name.c_str())) {
+        if (run.playlist.name != playlist_name && ImGui::MenuItem(playlist_name.c_str())) {
           selected_playlist = playlist_name;
         }
       }

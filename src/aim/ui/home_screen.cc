@@ -340,8 +340,8 @@ class HomeScreen : public UiScreen {
         playlist_list_component_->Show(&result);
         if (result.open_playlist.has_value()) {
           auto playlist = *result.open_playlist;
-          app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, playlist.name.full_name());
-          app_.playlist_manager().SetCurrentPlaylist(playlist.name.full_name());
+          app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, playlist.name);
+          app_.playlist_manager().SetCurrentPlaylist(playlist.name);
         }
       }
       ImGui::EndChild();
@@ -360,7 +360,7 @@ class HomeScreen : public UiScreen {
       return;
     }
     std::string scenario_id;
-    if (playlist_component_->Show(run->playlist_name(), &scenario_id)) {
+    if (playlist_component_->Show(run->playlist.name, &scenario_id)) {
       if (app_.scenario_manager().SetCurrentScenario(scenario_id)) {
         state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       }

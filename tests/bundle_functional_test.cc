@@ -45,7 +45,7 @@ auto EqualsResourceName(const ResourceName& expected) {
 
 auto EqualsPlaylist(const Playlist& expected) {
   return AllOf(Property(&Playlist::def, EqualsProto(expected.def())),
-               Field(&Playlist::name, EqualsResourceName(expected.name)));
+               Field(&Playlist::name, StrEq(expected.name)));
 }
 
 }  // namespace

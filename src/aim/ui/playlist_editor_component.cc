@@ -31,10 +31,11 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       : app_(screen.app()), screen_(screen) {
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetRun(playlist_name);
     if (run != nullptr) {
-      new_playlist_name_ = run->playlist.name.relative_name();
+      ResourceName name = ResourceName::Parse(run->playlist.name);
+      new_playlist_name_ = name.relative_name();
       original_playlist_name_ = run->playlist.name;
-      bundle_name_ = run->playlist.name.bundle_name();
-      auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name.full_name());
+      bundle_name_ = name.bundle_name();
+      auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name);
       if (maybe_playlist) {
         original_playlist_def_ = maybe_playlist->def();
         for (auto& i : maybe_playlist->items()) {
@@ -358,13 +359,13 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     }
 
     ResourceName final_name(bundle_name_, new_playlist_name_);
-    bool name_changed = final_name != original_playlist_name_;
+    bool name_changed = final_name.full_name() != original_playlist_name_;
     if (name_changed) {
       // Need to move file.
       std::vector<std::string> taken_names =
           app_.playlist_manager().GetAllRelativeNamesInBundle(bundle_name_);
       final_name.set(bundle_name_, MakeUniqueName(new_playlist_name_, taken_names));
-      if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_.full_name(),
+      if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_,
                                                   final_name.full_name())) {
         return false;
       }
@@ -385,7 +386,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   int dragging_i_ = -1;
   int editing_i_ = -1;
   bool focus_editor_ = false;
-  ResourceName original_playlist_name_;
+  std::string original_playlist_name_;
   std::string bundle_name_;
   std::string source_base_scenario_;
 

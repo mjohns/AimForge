@@ -34,7 +34,7 @@ struct PlaylistItemProgress {
 };
 
 struct Playlist {
-  ResourceName name;
+  std::string name;
   std::optional<float> cm_per_360;
 
   PlaylistDef* mutable_def() {
@@ -55,10 +55,6 @@ std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def);
 
 struct PlaylistRun {
   Playlist playlist;
-
-  std::string playlist_name() {
-    return playlist.name.full_name();
-  };
 
   void IncrementRunDone(const std::string& scenario_name);
   void Shuffle(Random& rand);

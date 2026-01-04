@@ -23,7 +23,7 @@ bool CopyPlaylistDialog::Draw(Application& app) {
                                &show_popup,
                                ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
                                    ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
-      ImGui::TextFmt("Copy \"{}\" to", source_->name.full_name());
+      ImGui::TextFmt("Copy \"{}\" to", source_->name);
       ImGui::SimpleDropdown("BundlePicker",
                             new_name_.mutable_bundle_name(),
                             bundle_names_,
@@ -81,7 +81,7 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         opts.deep_copy = deep_copy_;
         opts.as_references = deep_copy_ && as_references_;
         std::optional<std::string> final_name = app.playlist_manager().CopyPlaylist(
-            source_->name.full_name(), new_name_.full_name(), &app.scenario_manager(), opts);
+            source_->name, new_name_.full_name(), &app.scenario_manager(), opts);
         if (final_name) {
           new_name_ = ResourceName::Parse(*final_name);
           did_copy = app.bundle_manager().SaveDirtyBundles();
@@ -111,7 +111,7 @@ bool CopyPlaylistDialog::Draw(Application& app) {
     remove_prefix_;
     add_prefix_;
     bundle_names_ = app.file_system()->GetBundleNames();
-    new_name_ = source_->name;
+    new_name_ = ResourceName::Parse(source_->name);
     *new_name_.mutable_relative_name() += " Copy";
   }
   return did_copy;

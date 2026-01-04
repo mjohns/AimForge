@@ -72,7 +72,7 @@ TEST(PlaylistManagerTest, GetLevelsPlaylistItems_CmPer360) {
 
   auto playlist = mgr->GetPlaylist("Playlist One 25cm");
   ASSERT_TRUE(playlist.has_value());
-  EXPECT_THAT(playlist->name.full_name(), StrEq("Playlist One 25cm"));
+  EXPECT_THAT(playlist->name, StrEq("Playlist One 25cm"));
   EXPECT_THAT(playlist->items(),
               ElementsAre(EqualsProto(MakeItem("Base Scenario L1 25cm")),
                           EqualsProto(MakeItem("Base Scenario L2 25cm")),
