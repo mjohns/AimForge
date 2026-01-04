@@ -126,10 +126,6 @@ class PlaylistManagerImpl : public PlaylistManager {
     return playlist_names_;
   }
 
-  std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const override {
-    return GetPlaylist(playlist_name.full_name());
-  }
-
   std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const override {
     auto it = playlist_map_.find(playlist_name);
     if (it != playlist_map_.end()) {

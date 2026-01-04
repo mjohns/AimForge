@@ -13,3 +13,8 @@ target_link_libraries(
     protobuf-matchers
     aim
 )
+
+if(MSVC)
+    # Disables warnings from protobuf lib
+    target_compile_options(${NAME} PRIVATE /wd4091)
+endif()

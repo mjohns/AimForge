@@ -309,7 +309,7 @@ TEST_F(BundleFunctionalTest, CreatePlaylist) {
   def.add_items()->set_scenario("Bundle Scenario1");
   def.add_items()->set_scenario("Bundle Scenario2");
 
-  playlist_manager_->UpdatePlaylist(playlist_name, def);
+  playlist_manager_->UpdatePlaylist(playlist_name.full_name(), def);
 
   ASSERT_THAT(*playlist_manager_->playlist_names(), ElementsAre("Bundle Playlist"));
 

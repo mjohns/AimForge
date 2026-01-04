@@ -34,7 +34,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       new_playlist_name_ = run->playlist.name.relative_name();
       original_playlist_name_ = run->playlist.name;
       bundle_name_ = run->playlist.name.bundle_name();
-      auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name);
+      auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name.full_name());
       if (maybe_playlist) {
         original_playlist_def_ = maybe_playlist->def();
         for (auto& i : maybe_playlist->items()) {
@@ -374,7 +374,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       }
     }
 
-    app_.playlist_manager().UpdatePlaylist(final_name, playlist);
+    app_.playlist_manager().UpdatePlaylist(final_name.full_name(), playlist);
     return app_.bundle_manager().SaveDirtyBundles();
   }
 

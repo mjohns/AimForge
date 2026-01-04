@@ -96,14 +96,10 @@ class PlaylistManager {
   virtual std::shared_ptr<std::vector<std::string>> playlist_names() const = 0;
 
   virtual std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const = 0;
-  virtual std::optional<Playlist> GetPlaylist(const ResourceName& playlist_name) const = 0;
 
   virtual void AddScenarioToPlaylist(const std::string& playlist_name,
                                      const std::string& scenario_name) = 0;
 
-  void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) {
-      return UpdatePlaylist(name.full_name(), def);
-  }
   virtual void UpdatePlaylist(const std::string& name, const PlaylistDef& def) = 0;
 
   virtual bool DeletePlaylist(const std::string& name) = 0;

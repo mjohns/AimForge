@@ -429,7 +429,7 @@ bool AddPlaylistDialog::Draw(Application& app) {
       if (ImGui::Button("Add")) {
         auto taken_names = app.playlist_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
         *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
-        app.playlist_manager().UpdatePlaylist(name_, PlaylistDef());
+        app.playlist_manager().UpdatePlaylist(name_.full_name(), PlaylistDef());
         app.playlist_manager().SetCurrentPlaylist(name_.full_name());
         app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
         did_add = true;
