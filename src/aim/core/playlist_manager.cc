@@ -262,7 +262,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     PlaylistDef dest = source_playlist->def();
     dest.clear_levels();
     if (options.deep_copy) {
-      std::unordered_map<std::string, ResourceName> new_name_map;
+      std::unordered_map<std::string, std::string> new_name_map;
       std::unordered_map<std::string, ScenarioDef> new_scenario_map;
       dest.clear_items();
       for (const auto& source_item : source_playlist->items()) {
@@ -289,12 +289,12 @@ class PlaylistManagerImpl : public PlaylistManager {
         } else {
           new_def = source_scenario->unevaluated_def;
         }
-        auto final_scenario_name =
-            scenario_manager->SaveScenarioWithUniqueName(new_scenario_name, new_def);
+        std::string final_scenario_name =
+            scenario_manager->SaveScenarioWithUniqueName(new_scenario_name.full_name(), new_def);
         new_name_map[source_item.scenario()] = final_scenario_name;
-        new_scenario_map[final_scenario_name.full_name()] = new_def;
+        new_scenario_map[final_scenario_name] = new_def;
         PlaylistItem item = source_item;
-        item.set_scenario(final_scenario_name.full_name());
+        item.set_scenario(final_scenario_name);
         *dest.add_items() = item;
       }
       if (!options.as_references) {
@@ -307,8 +307,8 @@ class PlaylistManagerImpl : public PlaylistManager {
             auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
             if (new_referenced_scenario != new_name_map.end()) {
               def.mutable_reference_def()->set_scenario_id(
-                  new_referenced_scenario->second.full_name());
-              scenario_manager->UpdateScenario(ResourceName::Parse(item.scenario()), def);
+                  new_referenced_scenario->second);
+              scenario_manager->UpdateScenario(item.scenario(), def);
             }
           }
         }
@@ -370,10 +370,9 @@ class PlaylistManagerImpl : public PlaylistManager {
       new_playlists->push_back(entry.second);
       new_playlist_names->push_back(entry.second.name);
     }
-    std::sort(
-        new_playlists->begin(), new_playlists->end(), [](const Playlist& lhs, const Playlist& rhs) {
-          return lhs.name < rhs.name;
-        });
+    std::sort(new_playlists->begin(),
+              new_playlists->end(),
+              [](const Playlist& lhs, const Playlist& rhs) { return lhs.name < rhs.name; });
     std::sort(new_playlist_names->begin(),
               new_playlist_names->end(),
               [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });

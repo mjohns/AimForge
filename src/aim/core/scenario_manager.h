@@ -49,20 +49,14 @@ class ScenarioManager {
 
   virtual std::shared_ptr<std::vector<std::string>> scenario_names() const = 0;
 
-  virtual void UpdateScenario(const ResourceName& name, const ScenarioDef& def) = 0;
-  void UpdateScenario(const std::string& name, const ScenarioDef& def) {
-    return UpdateScenario(ResourceName::Parse(name), def);
-  }
+  virtual void UpdateScenario(const std::string& name, const ScenarioDef& def) = 0;
 
   // Returns the name the scenario was saved with
-  virtual ResourceName SaveScenarioWithUniqueName(const ResourceName& name,
+  virtual std::string SaveScenarioWithUniqueName(const std::string& name,
                                                   const ScenarioDef& def) = 0;
-  virtual void DeleteScenario(const ResourceName& name) = 0;
+  virtual void DeleteScenario(const std::string& name) = 0;
 
-  virtual bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) = 0;
-  bool RenameScenario(const std::string& old_name, const std::string& new_name) {
-    return RenameScenario(ResourceName::Parse(old_name), ResourceName::Parse(new_name));
-  }
+  virtual bool RenameScenario(const std::string& old_name, const std::string& new_name) = 0;
 
   virtual bool SetCurrentScenario(const std::string& scenario_id) = 0;
 

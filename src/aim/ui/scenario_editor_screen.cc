@@ -441,7 +441,7 @@ class ScenarioEditorScreen : public UiScreen {
 
       if (original_name_.has_value()) {
         bundles_to_save.insert(original_name_->bundle_name());
-        mgr.RenameScenario(*original_name_, name_);
+        mgr.RenameScenario(original_name_->full_name(), name_.full_name());
       }
     }
 
@@ -450,7 +450,7 @@ class ScenarioEditorScreen : public UiScreen {
       bundles_to_save.insert(ResourceName::Parse(add_to_playlist_).bundle_name());
     }
 
-    mgr.UpdateScenario(name_, def_);
+    mgr.UpdateScenario(name_.full_name(), def_);
     for (const std::string& bundle_name : bundles_to_save) {
       if (!app_.bundle_manager().SaveBundle(bundle_name)) {
         SetErrorMessage(std::format("Unable to save in bundle {}.", bundle_name));

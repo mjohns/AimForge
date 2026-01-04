@@ -146,7 +146,7 @@ TEST_F(BundleFunctionalTest, CreateScenario) {
   def.mutable_overrides()->set_speed_multiplier(2);
   def.mutable_target_def()->add_profiles()->set_speed(1);
 
-  scenario_manager_->UpdateScenario(scenario_name, def);
+  scenario_manager_->UpdateScenario(scenario_name.full_name(), def);
 
   ASSERT_THAT(*scenario_manager_->scenario_names(), ElementsAre("Bundle Scenario"));
 
@@ -193,7 +193,7 @@ TEST_F(BundleFunctionalTest, GetLevelScenario) {
   def.mutable_level_overrides()->set_speed_multiplier(2);
   def.mutable_target_def()->add_profiles()->set_speed(1);
 
-  scenario_manager_->UpdateScenario(scenario_name, def);
+  scenario_manager_->UpdateScenario(scenario_name.full_name(), def);
 
   std::optional<ScenarioItem> base_scenario =
       scenario_manager_->GetScenario(scenario_name.full_name());
@@ -249,7 +249,7 @@ TEST_F(BundleFunctionalTest, GetEvaluatedLevelScenario) {
   def.mutable_level_overrides()->set_speed_multiplier(2);
   def.mutable_target_def()->add_profiles()->set_speed(1);
 
-  scenario_manager_->UpdateScenario(scenario_name, def);
+  scenario_manager_->UpdateScenario(scenario_name.full_name(), def);
 
   std::optional<ScenarioDef> scenario =
       scenario_manager_->GetEvaluatedScenarioDef(scenario_name.full_name());
@@ -272,8 +272,7 @@ TEST_F(BundleFunctionalTest, GetEvaluatedLevelScenario) {
   ref.mutable_level_overrides()->set_speed_multiplier(3);
   ref.mutable_reference_def()->set_scenario_id("Bundle Scenario L1");
 
-  ResourceName ref_name("Bundle", "Ref");
-  scenario_manager_->UpdateScenario(ref_name, ref);
+  scenario_manager_->UpdateScenario("Bundle Ref", ref);
 
   auto create_evaluated_ref_def = [](float speed) {
     ScenarioDef def;

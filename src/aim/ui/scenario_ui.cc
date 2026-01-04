@@ -55,7 +55,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
       auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
       if (maybe_scenario.has_value()) {
-        app_->scenario_manager().DeleteScenario(maybe_scenario->name);
+        app_->scenario_manager().DeleteScenario(maybe_scenario->name.full_name());
         app_->bundle_manager().SaveBundle(maybe_scenario->name.bundle_name());
         result->reload_scenarios = true;
       }

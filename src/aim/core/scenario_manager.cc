@@ -142,77 +142,76 @@ class ScenarioManagerImpl : public ScenarioManager {
     return scenario_names_;
   }
 
-  void UpdateScenario(const ResourceName& name, const ScenarioDef& def) override {
-    std::string full_name = name.full_name();
-    NameInfo name_info = GetScenarioNameInfo(full_name);
+  void UpdateScenario(const std::string& name, const ScenarioDef& def) override {
+    NameInfo name_info = GetScenarioNameInfo(name);
     if (name_info.HasDynamicSuffix()) {
       assert(false && "Trying to update scenario with dynamic suffix");
       return;
     }
 
-    auto& item = scenario_map_[full_name];
-    item.name = name;
+    auto& item = scenario_map_[name];
+    item.name = ResourceName::Parse(name);
     item.def = def;
     RebuildCachedScenarioList();
-    dirty_bundles_.insert(name.bundle_name());
+    dirty_bundles_.insert(GetBundleName(name));
   }
 
   // Return the name the scenario was saved with if successful.
-  ResourceName SaveScenarioWithUniqueName(const ResourceName& name_in,
-                                          const ScenarioDef& def) override {
-    ResourceName name = name_in;
+  std::string SaveScenarioWithUniqueName(const std::string& name_in,
+                                         const ScenarioDef& def) override {
+    ResourceName name = ResourceName::Parse(name_in);
     *name.mutable_relative_name() =
         MakeUniqueName(name.relative_name(), GetAllRelativeNamesInBundle(name.bundle_name()));
-    UpdateScenario(name, def);
-    return name;
+    UpdateScenario(name.full_name(), def);
+    return name.full_name();
   }
 
-  void DeleteScenario(const ResourceName& name) override {
-    scenario_map_.erase(name.full_name());
+  void DeleteScenario(const std::string& name) override {
+    scenario_map_.erase(name);
     RebuildCachedScenarioList();
   }
 
-  bool RenameScenario(const ResourceName& old_name, const ResourceName& new_name) override {
-    if (current_scenario_id_ == old_name.full_name()) {
-      current_scenario_id_ = new_name.full_name();
+  bool RenameScenario(const std::string& old_name, const std::string& new_name) override {
+    if (current_scenario_id_ == old_name) {
+      current_scenario_id_ = new_name;
     }
 
-    auto old_item = scenario_map_.find(old_name.full_name());
+    auto old_item = scenario_map_.find(old_name);
     if (old_item != scenario_map_.end()) {
-      ScenarioCacheItem& item = scenario_map_[new_name.full_name()];
+      ScenarioCacheItem& item = scenario_map_[new_name];
       item = old_item->second;
-      item.name = new_name;
-      scenario_map_.erase(old_name.full_name());
+      item.name = ResourceName::Parse(new_name);
+      scenario_map_.erase(old_name);
     }
 
     for (auto& listener : scenario_rename_listeners_) {
-      listener(old_name.full_name(), new_name.full_name());
+      listener(old_name, new_name);
     }
 
     // Fix any references to the renamed scenario.
     for (auto& entry : scenario_map_) {
       ScenarioCacheItem& item = entry.second;
-      if (item.def.reference_def().scenario_id() == old_name.full_name()) {
-        item.def.mutable_reference_def()->set_scenario_id(new_name.full_name());
+      if (item.def.reference_def().scenario_id() == old_name) {
+        item.def.mutable_reference_def()->set_scenario_id(new_name);
       }
     }
 
-    dirty_bundles_.insert(old_name.bundle_name());
-    dirty_bundles_.insert(new_name.bundle_name());
+    dirty_bundles_.insert(GetBundleName(old_name));
+    dirty_bundles_.insert(GetBundleName(new_name));
     RebuildCachedScenarioList();
     return true;
   }
 
   void OpenFile(const ResourceName& name) {
-      /*
+    /*
 ifdef _WIN32
-      std::wstring arguments = L"/select, \"" + maybe_path->wstring() + L"\"";
-      auto rc = ShellExecuteW(NULL, L"open", L"explorer", arguments.c_str(), NULL, SW_SHOWNORMAL);
-      if (!SUCCEEDED(rc)) {
-        Logger::get()->warn("Failed to open scenario file {}", maybe_path->string());
-      }
+    std::wstring arguments = L"/select, \"" + maybe_path->wstring() + L"\"";
+    auto rc = ShellExecuteW(NULL, L"open", L"explorer", arguments.c_str(), NULL, SW_SHOWNORMAL);
+    if (!SUCCEEDED(rc)) {
+      Logger::get()->warn("Failed to open scenario file {}", maybe_path->string());
+    }
 endif
-      */
+    */
   }
 
   bool has_running_scenario() const override {
@@ -297,9 +296,9 @@ endif
     RebuildCachedScenarioList();
   }
 
-  void UpdateCachedScenario(const ResourceName& name, const ScenarioDef& new_def) {
-    auto& item = scenario_map_[name.full_name()];
-    item.name = name;
+  void UpdateCachedScenario(const std::string& name, const ScenarioDef& new_def) {
+    auto& item = scenario_map_[name];
+    item.name = ResourceName::Parse(name);
     item.def = new_def;
   }
 
