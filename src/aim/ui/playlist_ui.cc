@@ -129,7 +129,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      screen_.app().playlist_manager().DeletePlaylist(playlist.name);
+      screen_.app().playlist_manager().DeletePlaylist(playlist.name.full_name());
       // result->reload_playlists = true;
     });
 

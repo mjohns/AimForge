@@ -28,6 +28,8 @@ NameInfo GetNameInfo(const std::string& name, bool support_levels = true);
 NameInfo GetPlaylistNameInfo(const std::string& name);
 NameInfo GetScenarioNameInfo(const std::string& name);
 
+std::string GetBundleName(const std::string& name);
+
 std::optional<std::string> StripLevelSuffix(const std::string& scenario_name,
                                             float* level_out = nullptr);
 

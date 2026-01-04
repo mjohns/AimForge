@@ -39,6 +39,14 @@ TEST(NameUtilTest, AddLevelSuffix) {
   EXPECT_EQ(AddLevelSuffix("Scenario", 10), "Scenario L10");
 }
 
+TEST(NameUtilTest, GetBundleName) {
+  EXPECT_THAT(GetBundleName("Bundle"), StrEq("Bundle"));
+  EXPECT_THAT(GetBundleName("Bundle Two"), StrEq("Bundle"));
+  EXPECT_THAT(GetBundleName("Bundle   Two"), StrEq("Bundle"));
+  EXPECT_THAT(GetBundleName("Bundle "), StrEq("Bundle"));
+  EXPECT_THAT(GetBundleName(""), StrEq(""));
+}
+
 TEST(NameUtilTest, StripCmSuffix) {
   EXPECT_FALSE(StripCmSuffix("Scenario No Suffix 1").has_value());
 

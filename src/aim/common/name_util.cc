@@ -191,4 +191,12 @@ std::vector<std::string> GetSortedLevelNames(const NameInfo& name,
   return GetFullNames(names);
 }
 
+std::string GetBundleName(const std::string& name) {
+  size_t first_space = name.find(' ');
+  if (first_space == std::string::npos) {
+    return name;
+  }
+  return name.substr(0, first_space);
+}
+
 }  // namespace aim

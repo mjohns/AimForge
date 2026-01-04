@@ -101,12 +101,12 @@ class PlaylistManager {
   virtual void AddScenarioToPlaylist(const std::string& playlist_name,
                                      const std::string& scenario_name) = 0;
 
-  virtual void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) = 0;
-  void UpdatePlaylist(const std::string& name, const PlaylistDef& def) {
-    return UpdatePlaylist(ResourceName::Parse(name), def);
+  void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) {
+      return UpdatePlaylist(name.full_name(), def);
   }
+  virtual void UpdatePlaylist(const std::string& name, const PlaylistDef& def) = 0;
 
-  virtual bool DeletePlaylist(const ResourceName& name) = 0;
+  virtual bool DeletePlaylist(const std::string& name) = 0;
 
   virtual bool RenamePlaylist(const ResourceName& old_name, const ResourceName& new_name) = 0;
 

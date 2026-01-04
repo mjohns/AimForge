@@ -175,20 +175,20 @@ class PlaylistManagerImpl : public PlaylistManager {
     }
   }
 
-  void UpdatePlaylist(const ResourceName& name, const PlaylistDef& def) override {
-    auto& p = playlist_map_[name.full_name()];
-    p.name = name;
+  void UpdatePlaylist(const std::string& name, const PlaylistDef& def) override {
+    auto& p = playlist_map_[name];
+    p.name = ResourceName::Parse(name);
     *p.mutable_def() = def;
     UpdatePlaylistListFromMap();
-    UpdatePlaylistRun(name, def);
-    dirty_bundles_.insert(name.bundle_name());
+    UpdatePlaylistRun(p.name, def);
+    dirty_bundles_.insert(GetBundleName(name));
   }
 
-  bool DeletePlaylist(const ResourceName& name) override {
-    playlist_map_.erase(name.full_name());
-    playlist_run_map_.erase(name.full_name());
+  bool DeletePlaylist(const std::string& name) override {
+    playlist_map_.erase(name);
+    playlist_run_map_.erase(name);
     UpdatePlaylistListFromMap();
-    dirty_bundles_.insert(name.bundle_name());
+    dirty_bundles_.insert(GetBundleName(name));
     return true;
   }
 
@@ -326,7 +326,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     }
     */
     }
-    UpdatePlaylist(new_playlist_name, dest);
+    UpdatePlaylist(new_playlist_name.full_name(), dest);
     return new_playlist_name.full_name();
   }
 
