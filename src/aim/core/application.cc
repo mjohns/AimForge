@@ -167,8 +167,8 @@ int Application::Initialize() {
 
   file_system_ = std::make_unique<FileSystem>();
   {
-    auto max_size = 1048576 * 10;
-    auto max_files = 4;
+    auto max_size = 1048576 * 2;
+    auto max_files = 3;
     const std::string logger_name = "aim";
     logger_ = spdlog::get(logger_name);
     if (!logger_) {
