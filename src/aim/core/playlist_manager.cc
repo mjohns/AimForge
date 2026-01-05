@@ -200,6 +200,9 @@ class PlaylistManagerImpl : public PlaylistManager {
   }
 
   bool RenamePlaylist(const std::string& old_name, const std::string& new_name) override {
+    if (playlist_map_.contains(new_name)) {
+      return false;
+    }
     if (current_playlist_name_ == old_name) {
       current_playlist_name_ = new_name;
     }
@@ -221,7 +224,6 @@ class PlaylistManagerImpl : public PlaylistManager {
     for (auto& listener : rename_listeners_) {
       listener(old_name, new_name);
     }
-
     return true;
   }
 

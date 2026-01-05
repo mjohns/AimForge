@@ -53,14 +53,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
 
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    if (ImGui::BeginPopupModal("Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-      ImGui::Text("Unable to save playlist");
 
-      if (ImGui::Button("OK", ImVec2(120, 0))) {
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
-    }
+    notification_popup_.Draw();
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
@@ -97,7 +91,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
         result->playlist_updated = true;
         return;
       }
-      ImGui::OpenPopup("Error");
     }
 
     ImGui::SameLine();
@@ -359,6 +352,12 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     }
 
     ResourceName final_name(bundle_name_, new_playlist_name_);
+    NameInfo final_name_info = GetPlaylistNameInfo(final_name.full_name());
+    if (final_name_info.HasDynamicSuffix()) {
+      notification_popup_.NotifyOpen("Cannot name playlist with explicit cm/360 suffix.");
+      return false;
+    }
+
     bool name_changed = final_name.full_name() != original_playlist_name_;
     if (name_changed) {
       // Need to move file.
@@ -367,6 +366,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       final_name.set(bundle_name_, MakeUniqueName(new_playlist_name_, taken_names));
       if (!app_.playlist_manager().RenamePlaylist(original_playlist_name_,
                                                   final_name.full_name())) {
+        notification_popup_.NotifyOpen(
+            std::format("Playlist with name \"{}\" already exists", final_name.full_name()));
         return false;
       }
       app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, final_name.full_name());
@@ -377,7 +378,11 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     }
 
     app_.playlist_manager().UpdatePlaylist(final_name.full_name(), playlist);
-    return app_.bundle_manager().SaveDirtyBundles();
+    bool saved = app_.bundle_manager().SaveDirtyBundles();
+    if (!saved) {
+      notification_popup_.NotifyOpen("Failed to save playlist to disk");
+    }
+    return saved;
   }
 
   Application& app_;
@@ -395,6 +400,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   std::string new_playlist_name_;
   float char_x_ = 0;
   PlaylistDef original_playlist_def_;
+  ImGui::NotificationPopup notification_popup_{"Notification"};
 };
 
 }  // namespace
