@@ -190,7 +190,7 @@ class ScenarioEditorScreen : public UiScreen {
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app_.file_system()->GetBundleNames();
 
-    auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_id);
+    auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
     if (initial_scenario.has_value()) {
       def_ = initial_scenario->unevaluated_def;
       name_ = ResourceName::Parse(initial_scenario->name);

@@ -386,7 +386,7 @@ class StatsScreen : public UiScreen {
       ImGui::Separator();
       ImGui::Spacing();
 
-      ImGui::Text("Total Times");
+      ImGui::Text("Total Times (ms)");
       ImGui::Indent();
       DumpHistogram(performance_stats_->total_time_histogram);
       ImGui::Unindent();
@@ -395,7 +395,7 @@ class StatsScreen : public UiScreen {
       ImGui::Separator();
       ImGui::Spacing();
 
-      ImGui::Text("Render Times");
+      ImGui::Text("Render Times (ms)");
       ImGui::Indent();
       DumpHistogram(performance_stats_->render_time_histogram);
       ImGui::Unindent();

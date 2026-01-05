@@ -185,7 +185,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
           if (ImGui::MenuItem(playlist_name.c_str())) {
             selected_playlist = playlist_name;
             ScenarioEditorOptions opts;
-            opts.scenario_id = scenario.name;
+            opts.scenario_name = scenario.name;
             opts.is_new_copy = true;
             opts.add_to_playlist = playlist_name;
             opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();

@@ -205,13 +205,13 @@ class HomeScreen : public UiScreen {
 
   void DrawLeftNav() {
     AppScreen original_app_screen = app_screen_;
-    if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
-                          app_screen_ == AppScreen::SCENARIOS)) {
-      app_screen_ = AppScreen::SCENARIOS;
-    }
     if (ImGui::Selectable(std::format("{} Playlists", kIconList).c_str(),
                           app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
+    }
+    if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
+                          app_screen_ == AppScreen::SCENARIOS)) {
+      app_screen_ = AppScreen::SCENARIOS;
     }
     if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, GetCurrentScenarioId()));
@@ -276,12 +276,12 @@ class HomeScreen : public UiScreen {
       }
       if (result.scenario_to_edit.size() > 0) {
         ScenarioEditorOptions opts;
-        opts.scenario_id = result.scenario_to_edit;
+        opts.scenario_name = result.scenario_to_edit;
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
       if (result.scenario_to_edit_copy.size() > 0) {
         ScenarioEditorOptions opts;
-        opts.scenario_id = result.scenario_to_edit_copy;
+        opts.scenario_name = result.scenario_to_edit_copy;
         opts.is_new_copy = true;
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }

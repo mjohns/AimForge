@@ -8,6 +8,7 @@
 
 int main(int, char**) {
   using namespace aim;
+  std::locale::global(std::locale("en_US.UTF-8"));
 
 #ifdef _WIN32
   HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);

@@ -11,7 +11,7 @@
 namespace aim {
 
 struct ScenarioEditorOptions {
-  std::string scenario_id;
+  std::string scenario_name;
   bool is_new_copy = false;
   std::string add_to_playlist;
   std::string force_bundle_name;

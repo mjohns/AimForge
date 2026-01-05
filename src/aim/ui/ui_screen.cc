@@ -60,7 +60,7 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
       KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
     ReturnHome();
     ScenarioEditorOptions opts;
-    opts.scenario_id = scenario_id;
+    opts.scenario_name = scenario_id;
     PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {

@@ -160,7 +160,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
       } else {
         ReturnHome();
         ScenarioEditorOptions opts;
-        opts.scenario_id = id_;
+        opts.scenario_name = id_;
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
     }
