@@ -7,7 +7,6 @@
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
-#include "aim/common/scope_guard.h"
 #include "aim/common/util.h"
 #include "aim/core/perf.h"
 #include "aim/core/scenario_manager.h"

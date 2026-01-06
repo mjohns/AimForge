@@ -6,10 +6,10 @@
 #include <memory>
 
 #include "SDL3/SDL.h"
+#include "absl/cleanup/cleanup.h"
 #include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
-#include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
@@ -287,7 +287,7 @@ void Scenario::OnWaitingForClickTick() {
     return;
   }
   timer_.OnStartRender();
-  auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
+  auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
   app_.NewImGuiFrame();
   app_.BeginFullscreenWindow();
@@ -392,7 +392,7 @@ void Scenario::OnRunningTick() {
 
   timer_.OnStartRender();
   current_times_.render_start = timer_.GetElapsedMicros();
-  auto end_render_guard = ScopeGuard::Create([&] { timer_.OnEndRender(); });
+  auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
   app_.NewImGuiFrame();
   app_.BeginFullscreenWindow();

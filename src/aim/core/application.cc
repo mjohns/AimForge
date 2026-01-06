@@ -9,11 +9,11 @@
 #include "SDL3/SDL.h"
 #include "SDL3_image/SDL_image.h"
 #include "SDL3_mixer/SDL_mixer.h"
+#include "absl/cleanup/cleanup.h"
 #include "absl/log/log.h"
 #include "absl/log/log_sink.h"
 #include "absl/log/log_sink_registry.h"
 #include "aim/common/log.h"
-#include "aim/common/scope_guard.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/play_time_manager.h"
@@ -143,7 +143,7 @@ int Application::Initialize() {
   stopwatch.Start();
 
   state_->initialization_times.total.start = stopwatch.GetElapsedMicros();
-  ScopeGuard initialization_done_guard(
+  auto init_done_cleanup = absl::MakeCleanup(
       [&]() { state_->initialization_times.total.end = stopwatch.GetElapsedMicros(); });
 
   state_->initialization_times.sdl.start = stopwatch.GetElapsedMicros();

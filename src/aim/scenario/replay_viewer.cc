@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "SDL3/SDL.h"
-#include "aim/common/scope_guard.h"
+#include "absl/cleanup/cleanup.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/scenario_timer.h"
@@ -114,7 +114,7 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
     }
 
     timer.OnStartRender();
-    auto end_render_guard = ScopeGuard::Create([&] { timer.OnEndRender(); });
+    auto end_render_guard = absl::MakeCleanup([&] { timer.OnEndRender(); });
 
     app->NewImGuiFrame();
     app->BeginFullscreenWindow();
