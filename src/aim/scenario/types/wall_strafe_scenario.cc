@@ -18,7 +18,12 @@ class StrafeMovementController : public BasicWallMovementController {
  public:
   StrafeMovementController(
       float speed, float acceleration, Wall wall, ScenarioDef def, Application& app)
-      : BasicWallMovementController(speed), acceleration_(acceleration), original_acceleration_(acceleration), wall_(wall), def_(def), app_(app) {}
+      : BasicWallMovementController(speed),
+        acceleration_(acceleration),
+        original_acceleration_(acceleration),
+        wall_(wall),
+        def_(def),
+        app_(app) {}
 
  protected:
   void UpdateDirectionAndSpeed(Target& t, float delta_seconds) override {
@@ -288,8 +293,8 @@ class WallStrafeScenario : public BaseScenario {
       pos = target_placer_->GetNextPosition();
     }
     target->SetWallPosition(pos, def_.room());
-    target->movement_controller =
-        std::make_shared<StrafeMovementController>(target->speed, target->acceleration, wall_, def_, app_);
+    target->movement_controller = std::make_shared<StrafeMovementController>(
+        target->speed, target->acceleration, wall_, def_, app_);
   }
 
   void UpdateTargetPositions() override {

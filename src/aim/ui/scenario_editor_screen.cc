@@ -489,8 +489,9 @@ class ScenarioEditorScreen : public UiScreen {
         def_.clear_target_def();
       }
     }
-    DrawShotTypeEditor(is_single_target_tracking);
 
+    Line();
+    DrawShotTypeEditor(is_single_target_tracking);
     Line();
 
     if (scenario_type == ScenarioDef::kStaticDef) {

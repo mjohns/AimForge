@@ -24,7 +24,7 @@ bool SelectSensitivityVariationDialog::Draw(std::optional<float>* selected_cm_pe
       std::string sens1 = std::format("{}cm", i);
       std::string sens2 = std::format("{}cm", i + 5);
       if (ImGui::Button(sens1)) {
-        *selected_cm_per_360 = (float) i;
+        *selected_cm_per_360 = (float)i;
         selected = true;
       }
       ImGui::SameLine();
