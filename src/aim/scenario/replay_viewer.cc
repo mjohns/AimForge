@@ -1,13 +1,13 @@
 #include "replay_viewer.h"
 
-#include <SDL3/SDL.h>
-#include <backends/imgui_impl_sdl3.h>
-
 #include <algorithm>
 
+#include "SDL3/SDL.h"
 #include "aim/common/scope_guard.h"
+#include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/scenario/scenario_timer.h"
+#include "imgui/backends/imgui_impl_sdl3.h"
 
 namespace aim {
 namespace {

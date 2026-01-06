@@ -20,11 +20,7 @@
 #include "aim/core/history_manager.h"
 #include "aim/core/labels_manager.h"
 #include "aim/core/local_store.h"
-#include "aim/core/play_time_manager.h"
 #include "aim/core/screen.h"
-#include "aim/core/settings_manager.h"
-#include "aim/core/stats_manager.h"
-#include "aim/database/aim_db.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "aim/graphics/textures.h"
@@ -35,6 +31,10 @@ namespace aim {
 
 class ScenarioManager;
 class PlaylistManager;
+class AimDb;
+class StatsManager;
+class SettingsManager;
+class PlayTimeManager;
 
 class ApplicationExitException : public std::runtime_error {
  public:
@@ -58,7 +58,6 @@ class AimAbslLogSink : public absl::LogSink {
 class Application {
  public:
   ~Application();
-  AIM_NO_COPY(Application);
 
   static std::unique_ptr<Application> Create();
   void RunMainLoop();

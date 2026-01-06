@@ -11,6 +11,7 @@
 #include "aim/common/util.h"
 #include "aim/core/perf.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/proto/stats.pb.h"
 #include "aim/ui/playlist_ui.h"

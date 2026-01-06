@@ -2,6 +2,7 @@
 
 #include "SDL3/SDL.h"
 #include "absl/strings/ascii.h"
+#include "aim/core/settings_manager.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/quick_settings_screen.h"

@@ -383,6 +383,8 @@ inline constexpr TargetProfile::Impl_::Impl_(
         target_radius_jitter_{0},
         speed_{0},
         speed_jitter_{0},
+        accelaration_{0},
+        accelaration_jitter_{0},
         target_radius_at_kill_{0},
         target_hit_radius_multiplier_{0},
         target_radius_growth_time_seconds_{0},
@@ -1653,12 +1655,14 @@ const ::uint32_t
         0x085, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_._oneof_case_[0]),
-        16, // hasbit index offset
+        18, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.info_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.accelaration_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.accelaration_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_at_kill_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_hit_radius_multiplier_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_growth_time_seconds_),
@@ -1676,6 +1680,8 @@ const ::uint32_t
         7,
         8,
         9,
+        10,
+        11,
         ~0u,
 };
 
@@ -1956,20 +1962,21 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\n\030new_target_delay_seconds\030\006 \001(\002\022#\n\033remo"
     "ve_target_after_seconds\030\007 \001(\002\022\'\n\037stagger"
     "_initial_targets_seconds\030\010 \001(\002\"\037\n\rPillTa"
-    "rgetDef\022\016\n\006height\030\001 \001(\002\"\376\002\n\rTargetProfil"
+    "rgetDef\022\016\n\006height\030\001 \001(\002\"\261\003\n\rTargetProfil"
     "e\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022\025\n\rtar"
     "get_radius\030\002 \001(\002\022\034\n\024target_radius_jitter"
     "\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 "
-    "\001(\002\022\035\n\025target_radius_at_kill\030\010 \001(\002\022$\n\034ta"
-    "rget_hit_radius_multiplier\030\t \001(\002\022)\n!targ"
-    "et_radius_growth_time_seconds\030\014 \001(\002\022!\n\031t"
-    "arget_radius_growth_size\030\r \001(\002\0224\n,target"
-    "_radius_growth_final_size_time_seconds\030\016"
-    " \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.PillTargetDefH\000"
-    "B\006\n\004type*v\n\tDirection\022\024\n\020DIRECTION_RANDO"
-    "M\020\000\022\026\n\022DIRECTION_POSITIVE\020\001\022\026\n\022DIRECTION"
-    "_NEGATIVE\020\002\022\020\n\014DIRECTION_IN\020\003\022\021\n\rDIRECTI"
-    "ON_OUT\020\004b\010editionsp\350\007"
+    "\001(\002\022\024\n\014accelaration\030\006 \001(\002\022\033\n\023accelaratio"
+    "n_jitter\030\007 \001(\002\022\035\n\025target_radius_at_kill\030"
+    "\010 \001(\002\022$\n\034target_hit_radius_multiplier\030\t "
+    "\001(\002\022)\n!target_radius_growth_time_seconds"
+    "\030\014 \001(\002\022!\n\031target_radius_growth_size\030\r \001("
+    "\002\0224\n,target_radius_growth_final_size_tim"
+    "e_seconds\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.Pill"
+    "TargetDefH\000B\006\n\004type*v\n\tDirection\022\024\n\020DIRE"
+    "CTION_RANDOM\020\000\022\026\n\022DIRECTION_POSITIVE\020\001\022\026"
+    "\n\022DIRECTION_NEGATIVE\020\002\022\020\n\014DIRECTION_IN\020\003"
+    "\022\021\n\rDIRECTION_OUT\020\004b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_scenario_2eproto_deps[1] = {
@@ -1979,7 +1986,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    8461,
+    8512,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -17227,16 +17234,16 @@ TargetProfile::GetClassData() const {
   return TargetProfile_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 11, 2, 0, 2>
+const ::_pbi::TcParseTable<4, 13, 2, 0, 2>
 TargetProfile::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_._has_bits_),
     0, // no _extensions_
     14, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294952032,  // skipmap
+    4294951936,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    11,  // num_field_entries
+    13,  // num_field_entries
     2,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     TargetProfile_class_data_.base(),
@@ -17267,29 +17274,35 @@ TargetProfile::_table_ = {
     {::_pbi::TcParser::FastF32S1,
      {45, 4, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // float accelaration = 6;
+    {::_pbi::TcParser::FastF32S1,
+     {53, 5, 0,
+      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_)}},
+    // float accelaration_jitter = 7;
+    {::_pbi::TcParser::FastF32S1,
+     {61, 6, 0,
+      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_jitter_)}},
     // float target_radius_at_kill = 8;
     {::_pbi::TcParser::FastF32S1,
-     {69, 5, 0,
+     {69, 7, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_)}},
     // float target_hit_radius_multiplier = 9;
     {::_pbi::TcParser::FastF32S1,
-     {77, 6, 0,
+     {77, 8, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_multiplier_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     // float target_radius_growth_time_seconds = 12;
     {::_pbi::TcParser::FastF32S1,
-     {101, 7, 0,
+     {101, 9, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_time_seconds_)}},
     // float target_radius_growth_size = 13;
     {::_pbi::TcParser::FastF32S1,
-     {109, 8, 0,
+     {109, 10, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_size_)}},
     // float target_radius_growth_final_size_time_seconds = 14;
     {::_pbi::TcParser::FastF32S1,
-     {117, 9, 0,
+     {117, 11, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_final_size_time_seconds_)}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
@@ -17305,18 +17318,22 @@ TargetProfile::_table_ = {
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float speed_jitter = 5;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float accelaration = 6;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float accelaration_jitter = 7;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_jitter_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float target_radius_at_kill = 8;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float target_hit_radius_multiplier = 9;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_multiplier_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_hit_radius_multiplier_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.PillTargetDef pill = 10;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.type_.pill_), _Internal::kOneofCaseOffset + 0, 1, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // float target_radius_growth_time_seconds = 12;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_time_seconds_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_time_seconds_), _Internal::kHasBitsOffset + 9, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float target_radius_growth_size = 13;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_size_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_size_), _Internal::kHasBitsOffset + 10, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float target_radius_growth_final_size_time_seconds = 14;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_final_size_time_seconds_), _Internal::kHasBitsOffset + 9, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_growth_final_size_time_seconds_), _Internal::kHasBitsOffset + 11, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::ProfileInfo>()},
@@ -17339,13 +17356,13 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
   }
   if (BatchCheckHasBit(cached_has_bits, 0x000000feU)) {
     ::memset(&_impl_.target_radius_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.target_radius_growth_time_seconds_) -
-        reinterpret_cast<char*>(&_impl_.target_radius_)) + sizeof(_impl_.target_radius_growth_time_seconds_));
+        reinterpret_cast<char*>(&_impl_.target_radius_at_kill_) -
+        reinterpret_cast<char*>(&_impl_.target_radius_)) + sizeof(_impl_.target_radius_at_kill_));
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x00000300U)) {
-    ::memset(&_impl_.target_radius_growth_size_, 0, static_cast<::size_t>(
+  if (BatchCheckHasBit(cached_has_bits, 0x00000f00U)) {
+    ::memset(&_impl_.target_hit_radius_multiplier_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.target_radius_growth_final_size_time_seconds_) -
-        reinterpret_cast<char*>(&_impl_.target_radius_growth_size_)) + sizeof(_impl_.target_radius_growth_final_size_time_seconds_));
+        reinterpret_cast<char*>(&_impl_.target_hit_radius_multiplier_)) + sizeof(_impl_.target_radius_growth_final_size_time_seconds_));
   }
   clear_type();
   _impl_._has_bits_.Clear();
@@ -17406,15 +17423,29 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
         5, this_._internal_speed_jitter(), target);
   }
 
-  // float target_radius_at_kill = 8;
+  // float accelaration = 6;
   if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(
+        6, this_._internal_accelaration(), target);
+  }
+
+  // float accelaration_jitter = 7;
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(
+        7, this_._internal_accelaration_jitter(), target);
+  }
+
+  // float target_radius_at_kill = 8;
+  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         8, this_._internal_target_radius_at_kill(), target);
   }
 
   // float target_hit_radius_multiplier = 9;
-  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         9, this_._internal_target_hit_radius_multiplier(), target);
@@ -17428,21 +17459,21 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
   }
 
   // float target_radius_growth_time_seconds = 12;
-  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000200U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         12, this_._internal_target_radius_growth_time_seconds(), target);
   }
 
   // float target_radius_growth_size = 13;
-  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000400U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         13, this_._internal_target_radius_growth_size(), target);
   }
 
   // float target_radius_growth_final_size_time_seconds = 14;
-  if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000800U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         14, this_._internal_target_radius_growth_final_size_time_seconds(), target);
@@ -17473,7 +17504,7 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += ::absl::popcount(0x000003feU & cached_has_bits) * 5;
+  total_size += ::absl::popcount(0x00000ffeU & cached_has_bits) * 5;
    {
     // .aim.ProfileInfo info = 1;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
@@ -17533,20 +17564,26 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg,
       _this->_impl_.speed_jitter_ = from._impl_.speed_jitter_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000020U)) {
-      _this->_impl_.target_radius_at_kill_ = from._impl_.target_radius_at_kill_;
+      _this->_impl_.accelaration_ = from._impl_.accelaration_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000040U)) {
-      _this->_impl_.target_hit_radius_multiplier_ = from._impl_.target_hit_radius_multiplier_;
+      _this->_impl_.accelaration_jitter_ = from._impl_.accelaration_jitter_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000080U)) {
-      _this->_impl_.target_radius_growth_time_seconds_ = from._impl_.target_radius_growth_time_seconds_;
+      _this->_impl_.target_radius_at_kill_ = from._impl_.target_radius_at_kill_;
     }
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x00000300U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00000f00U)) {
     if (CheckHasBit(cached_has_bits, 0x00000100U)) {
-      _this->_impl_.target_radius_growth_size_ = from._impl_.target_radius_growth_size_;
+      _this->_impl_.target_hit_radius_multiplier_ = from._impl_.target_hit_radius_multiplier_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+      _this->_impl_.target_radius_growth_time_seconds_ = from._impl_.target_radius_growth_time_seconds_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000400U)) {
+      _this->_impl_.target_radius_growth_size_ = from._impl_.target_radius_growth_size_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000800U)) {
       _this->_impl_.target_radius_growth_final_size_time_seconds_ = from._impl_.target_radius_growth_final_size_time_seconds_;
     }
   }
