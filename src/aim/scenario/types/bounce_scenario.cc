@@ -198,7 +198,7 @@ class MovementControllerImpl : public MovementController {
       min_y += wall.GetRegionLength(d.floor_height());
     }
     bounce_controller_ =
-        std::make_unique<BounceController>(min_y, wall.height / 2.0f, d.acceleration());
+        std::make_unique<BounceController>(min_y, wall.height / 2.0f, acceleration);
 
     DirectionParams params;
     params.acceleration = acceleration;

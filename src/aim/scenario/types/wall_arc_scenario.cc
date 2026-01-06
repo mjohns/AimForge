@@ -70,7 +70,7 @@ class WallArcScenario : public BaseScenario {
     float now_seconds = timer_.GetElapsedSeconds();
 
     if (now_seconds >= bounce_end_time_) {
-      StartNewBounce(target->speed);
+      StartNewBounce(target->speed, target->acceleration);
     }
 
     float time_from_start = now_seconds - bounce_start_time_;
@@ -135,11 +135,10 @@ class WallArcScenario : public BaseScenario {
   }
 
  private:
-  void StartNewBounce(float speed) {
+  void StartNewBounce(float speed, float acceleration) {
     height_ = app_.rand().GetJittered(wall_.GetRegionLength(def_.wall_arc_def().height()),
                                       wall_.GetRegionLength(def_.wall_arc_def().height_jitter()));
-    acceleration_ = app_.rand().GetJittered(def_.wall_arc_def().acceleration(),
-                                            def_.wall_arc_def().acceleration_jitter());
+    acceleration_ = acceleration;
     if (acceleration_ <= 0) {
       acceleration_ = 1;
     }

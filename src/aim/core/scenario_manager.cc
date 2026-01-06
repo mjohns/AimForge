@@ -41,29 +41,13 @@ class ScenarioManagerImpl : public ScenarioManager {
     scenario_names_ = std::make_shared<std::vector<std::string>>();
   }
 
-  ScenarioDef NormalizeDef(ScenarioDef def) {
-    SetAcceleration(def, def.wall_strafe_def().acceleration());
-    SetAcceleration(def, def.strafe_def().acceleration());
-    SetAcceleration(def, def.bounce_def().acceleration());
-    SetAcceleration(def, def.wall_arc_def().acceleration());
-    return def;
-  }
-
-  void SetAcceleration(ScenarioDef& def, float accel) {
-    if (accel > 0) {
-      for (auto& t : *def.mutable_target_def()->mutable_profiles()) {
-        t.set_acceleration(accel);
-      }
-    }
-  }
-
   void AddScenariosForBundle(const std::string& bundle_name, BundleFile* bundle_file) override {
     for (const std::string& full_name : *scenario_names_) {
       ResourceName name = ResourceName::Parse(full_name);
       if (name.bundle_name() == bundle_name) {
         BundleScenario& bundle_scenario = *bundle_file->add_scenarios();
         bundle_scenario.set_name(name.relative_name());
-        *bundle_scenario.mutable_def() = NormalizeDef(scenario_map_[full_name].def);
+        *bundle_scenario.mutable_def() = scenario_map_[full_name].def;
       }
     }
   }

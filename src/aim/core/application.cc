@@ -347,6 +347,7 @@ int Application::Initialize() {
   scenario_manager_->RegisterRenameListener(clear_caches_on_rename);
   playlist_manager_->RegisterRenameListener(clear_caches_on_rename);
 
+  /*
    bundle_manager_->SaveJsonBundle("AF");
    bundle_manager_->SaveJsonBundle("SERF");
    bundle_manager_->SaveJsonBundle("VDIM");
@@ -356,6 +357,7 @@ int Application::Initialize() {
    bundle_manager_->SaveBundle("SERF");
    bundle_manager_->SaveBundle("VDIM");
    bundle_manager_->SaveBundle("SMOOTH");
+   */
 
   return 0;
 }

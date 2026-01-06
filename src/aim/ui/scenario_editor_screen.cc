@@ -733,14 +733,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::IdGuard cid("WallArcEditor");
     WallArcScenarioDef& d = *def_.mutable_wall_arc_def();
 
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
-                                  .set_step(5, 50)
-                                  .set_min(1)
-                                  .set_precision(0)
-                                  .set_default(1)
-                                  .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(WallArcScenarioDef, &d, acceleration));
-
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
     ImGui::SameLine();
@@ -1105,16 +1097,6 @@ class ScenarioEditorScreen : public UiScreen {
         "Scale all the distances in the profiles by the given multiplier. To reduce the distance "
         "by half use 0.5");
 
-    ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
-                          .set_label("Acceleration")
-                          .set_is_optional()
-                          .set_step(5, 50)
-                          .set_min(1)
-                          .set_precision(0)
-                          .set_default(1)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, acceleration));
-
     Line();
 
     ImGui::Text("Left/right profiles");
@@ -1296,18 +1278,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "Scale all the times in the profiles by the given multiplier. To reduce the times by "
-        "half "
-        "use 0.5");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
-                          .set_label("Acceleration")
-                          .set_is_optional()
-                          .set_step(5, 50)
-                          .set_min(1)
-                          .set_precision(0)
-                          .set_default(1)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(BounceScenarioDef, &d, acceleration));
+        "half use 0.5");
 
     Line();
 
@@ -1386,18 +1357,6 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     Line();
-
-    ImGui::InputFloat(ImGui::InputFloatParams("Acceleration")
-                          .set_label("Acceleration")
-                          .set_is_optional()
-                          .set_step(5, 50)
-                          .set_min(1)
-                          .set_precision(0)
-                          .set_default(1)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(WallStrafeScenarioDef, &w, acceleration));
-    ImGui::SameLine();
-    ImGui::HelpMarker("The target will accelerate in and out of changes of direction");
 
     ImGui::InputFloat(ImGui::InputFloatParams("DistanceMult")
                           .set_label("Distance multiplier")

@@ -47,6 +47,12 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
       profile.set_speed(profile.speed() * mult);
     }
   }
+  if (overrides.has_acceleration_multiplier()) {
+    float mult = get_multiplier(overrides.acceleration_multiplier());
+    for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
+      profile.set_acceleration(profile.acceleration() * mult);
+    }
+  }
   if (overrides.has_distance_multiplier()) {
     float mult = get_multiplier(overrides.distance_multiplier());
     for (auto& profile : *result.mutable_wall_strafe_def()->mutable_profiles()) {
@@ -59,21 +65,6 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
     if (original.has_bounce_def()) {
       float distance = FirstGreaterThanZero(original.bounce_def().distance_multiplier(), 1.0);
       result.mutable_bounce_def()->set_distance_multiplier(distance * mult);
-    }
-  }
-  if (overrides.has_acceleration_multiplier()) {
-    float mult = get_multiplier(overrides.acceleration_multiplier());
-    if (original.has_wall_strafe_def()) {
-      float accel = original.wall_strafe_def().acceleration();
-      if (accel > 0) {
-        result.mutable_wall_strafe_def()->set_acceleration(accel * mult);
-      }
-    }
-    if (original.has_strafe_def()) {
-      float accel = original.strafe_def().acceleration();
-      if (accel > 0) {
-        result.mutable_strafe_def()->set_acceleration(accel * mult);
-      }
     }
   }
   if (overrides.has_time_scale_multiplier()) {

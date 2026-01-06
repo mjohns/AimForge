@@ -3156,8 +3156,6 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     kWidthFieldNumber = 1,
     kHeightFieldNumber = 2,
     kHeightJitterFieldNumber = 3,
-    kAccelerationFieldNumber = 4,
-    kAccelerationJitterFieldNumber = 5,
     kStartOnGroundFieldNumber = 6,
     kReflectFieldNumber = 7,
   };
@@ -3206,28 +3204,6 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* PROTOBUF_NONNULL _internal_mutable_height_jitter();
 
   public:
-  // float acceleration = 4;
-  bool has_acceleration() const;
-  void clear_acceleration() ;
-  float acceleration() const;
-  void set_acceleration(float value);
-
-  private:
-  float _internal_acceleration() const;
-  void _internal_set_acceleration(float value);
-
-  public:
-  // float acceleration_jitter = 5;
-  bool has_acceleration_jitter() const;
-  void clear_acceleration_jitter() ;
-  float acceleration_jitter() const;
-  void set_acceleration_jitter(float value);
-
-  private:
-  float _internal_acceleration_jitter() const;
-  void _internal_set_acceleration_jitter(float value);
-
-  public:
   // bool start_on_ground = 6;
   bool has_start_on_ground() const;
   void clear_start_on_ground() ;
@@ -3254,7 +3230,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
+  static const ::google::protobuf::internal::TcParseTable<3, 5,
                                    3, 0,
                                    2>
       _table_;
@@ -3279,8 +3255,6 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* PROTOBUF_NULLABLE width_;
     ::aim::RegionLength* PROTOBUF_NULLABLE height_;
     ::aim::RegionLength* PROTOBUF_NULLABLE height_jitter_;
-    float acceleration_;
-    float acceleration_jitter_;
     bool start_on_ground_;
     bool reflect_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -8032,7 +8006,6 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     kProfileOrderFieldNumber = 5,
     kBoundsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
-    kAccelerationFieldNumber = 6,
     kDistanceMultiplierFieldNumber = 7,
   };
   // repeated .aim.WallStrafeProfile profiles = 4;
@@ -8100,17 +8073,6 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // float acceleration = 6;
-  bool has_acceleration() const;
-  void clear_acceleration() ;
-  float acceleration() const;
-  void set_acceleration(float value);
-
-  private:
-  float _internal_acceleration() const;
-  void _internal_set_acceleration(float value);
-
-  public:
   // float distance_multiplier = 7;
   bool has_distance_multiplier() const;
   void clear_distance_multiplier() ;
@@ -8126,7 +8088,7 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 6,
+  static const ::google::protobuf::internal::TcParseTable<3, 5,
                                    3, 0,
                                    2>
       _table_;
@@ -8153,7 +8115,6 @@ class WallStrafeScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
-    float acceleration_;
     float distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -8316,7 +8277,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
     kRelativeBoundsFieldNumber = 2,
     kTargetPlacementStrategyFieldNumber = 4,
     kTimeScaleMultiplierFieldNumber = 11,
-    kAccelerationFieldNumber = 12,
     kLeftRightInitialDirectionFieldNumber = 13,
     kUpDownInitialDirectionFieldNumber = 14,
     kForwardBackInitialDirectionFieldNumber = 15,
@@ -8483,17 +8443,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   void _internal_set_time_scale_multiplier(float value);
 
   public:
-  // float acceleration = 12;
-  bool has_acceleration() const;
-  void clear_acceleration() ;
-  float acceleration() const;
-  void set_acceleration(float value);
-
-  private:
-  float _internal_acceleration() const;
-  void _internal_set_acceleration(float value);
-
-  public:
   // .aim.Direction left_right_initial_direction = 13;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
@@ -8542,7 +8491,7 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
+  static const ::google::protobuf::internal::TcParseTable<4, 14,
                                    6, 0,
                                    2>
       _table_;
@@ -8577,7 +8526,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
     ::aim::Bounds* PROTOBUF_NULLABLE relative_bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
     float time_scale_multiplier_;
-    float acceleration_;
     int left_right_initial_direction_;
     int up_down_initial_direction_;
     int forward_back_initial_direction_;
@@ -9185,7 +9133,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     kTargetPlacementStrategyFieldNumber = 2,
     kFloorHeightFieldNumber = 13,
     kTimeScaleMultiplierFieldNumber = 9,
-    kAccelerationFieldNumber = 10,
     kLeftRightInitialDirectionFieldNumber = 11,
     kForwardBackInitialDirectionFieldNumber = 12,
     kDistanceMultiplierFieldNumber = 14,
@@ -9351,17 +9298,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_time_scale_multiplier(float value);
 
   public:
-  // float acceleration = 10;
-  bool has_acceleration() const;
-  void clear_acceleration() ;
-  float acceleration() const;
-  void set_acceleration(float value);
-
-  private:
-  float _internal_acceleration() const;
-  void _internal_set_acceleration(float value);
-
-  public:
   // .aim.Direction left_right_initial_direction = 11;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
@@ -9399,7 +9335,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 14,
+  static const ::google::protobuf::internal::TcParseTable<4, 13,
                                    6, 0,
                                    2>
       _table_;
@@ -9434,7 +9370,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
     ::aim::RegionLength* PROTOBUF_NULLABLE floor_height_;
     float time_scale_multiplier_;
-    float acceleration_;
     int left_right_initial_direction_;
     int forward_back_initial_direction_;
     float distance_multiplier_;
@@ -18866,45 +18801,16 @@ WallStrafeScenarioDef::_internal_mutable_profile_order() {
   return &_impl_.profile_order_;
 }
 
-// float acceleration = 6;
-inline bool WallStrafeScenarioDef::has_acceleration() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
-inline void WallStrafeScenarioDef::clear_acceleration() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline float WallStrafeScenarioDef::acceleration() const {
-  // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.acceleration)
-  return _internal_acceleration();
-}
-inline void WallStrafeScenarioDef::set_acceleration(float value) {
-  _internal_set_acceleration(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  // @@protoc_insertion_point(field_set:aim.WallStrafeScenarioDef.acceleration)
-}
-inline float WallStrafeScenarioDef::_internal_acceleration() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.acceleration_;
-}
-inline void WallStrafeScenarioDef::_internal_set_acceleration(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = value;
-}
-
 // float distance_multiplier = 7;
 inline bool WallStrafeScenarioDef::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void WallStrafeScenarioDef::clear_distance_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000010U);
 }
 inline float WallStrafeScenarioDef::distance_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.WallStrafeScenarioDef.distance_multiplier)
@@ -18912,7 +18818,7 @@ inline float WallStrafeScenarioDef::distance_multiplier() const {
 }
 inline void WallStrafeScenarioDef::set_distance_multiplier(float value) {
   _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.WallStrafeScenarioDef.distance_multiplier)
 }
 inline float WallStrafeScenarioDef::_internal_distance_multiplier() const {
@@ -20078,14 +19984,14 @@ inline void StrafeScenarioDef::_internal_set_time_scale_multiplier(float value) 
 
 // float distance_multiplier = 16;
 inline bool StrafeScenarioDef::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00004000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
   return value;
 }
 inline void StrafeScenarioDef::clear_distance_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00004000U);
+                  0x00002000U);
 }
 inline float StrafeScenarioDef::distance_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.distance_multiplier)
@@ -20093,7 +19999,7 @@ inline float StrafeScenarioDef::distance_multiplier() const {
 }
 inline void StrafeScenarioDef::set_distance_multiplier(float value) {
   _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.distance_multiplier)
 }
 inline float StrafeScenarioDef::_internal_distance_multiplier() const {
@@ -20105,45 +20011,16 @@ inline void StrafeScenarioDef::_internal_set_distance_multiplier(float value) {
   _impl_.distance_multiplier_ = value;
 }
 
-// float acceleration = 12;
-inline bool StrafeScenarioDef::has_acceleration() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
-  return value;
-}
-inline void StrafeScenarioDef::clear_acceleration() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
-}
-inline float StrafeScenarioDef::acceleration() const {
-  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.acceleration)
-  return _internal_acceleration();
-}
-inline void StrafeScenarioDef::set_acceleration(float value) {
-  _internal_set_acceleration(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
-  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.acceleration)
-}
-inline float StrafeScenarioDef::_internal_acceleration() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.acceleration_;
-}
-inline void StrafeScenarioDef::_internal_set_acceleration(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = value;
-}
-
 // .aim.Direction left_right_initial_direction = 13;
 inline bool StrafeScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void StrafeScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000400U);
 }
 inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_initial_direction)
@@ -20151,7 +20028,7 @@ inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const 
 }
 inline void StrafeScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_left_right_initial_direction() const {
@@ -20165,14 +20042,14 @@ inline void StrafeScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction up_down_initial_direction = 14;
 inline bool StrafeScenarioDef::has_up_down_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void StrafeScenarioDef::clear_up_down_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00000800U);
 }
 inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_initial_direction)
@@ -20180,7 +20057,7 @@ inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
 }
 inline void StrafeScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
   _internal_set_up_down_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.up_down_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_up_down_initial_direction() const {
@@ -20194,14 +20071,14 @@ inline void StrafeScenarioDef::_internal_set_up_down_initial_direction(::aim::Di
 
 // .aim.Direction forward_back_initial_direction = 15;
 inline bool StrafeScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
   return value;
 }
 inline void StrafeScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
+                  0x00001000U);
 }
 inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_initial_direction)
@@ -20209,7 +20086,7 @@ inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() cons
 }
 inline void StrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_forward_back_initial_direction() const {
@@ -21218,14 +21095,14 @@ inline void BounceScenarioDef::_internal_set_time_scale_multiplier(float value) 
 
 // float distance_multiplier = 14;
 inline bool BounceScenarioDef::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
   return value;
 }
 inline void BounceScenarioDef::clear_distance_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
+                  0x00001000U);
 }
 inline float BounceScenarioDef::distance_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.distance_multiplier)
@@ -21233,7 +21110,7 @@ inline float BounceScenarioDef::distance_multiplier() const {
 }
 inline void BounceScenarioDef::set_distance_multiplier(float value) {
   _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.distance_multiplier)
 }
 inline float BounceScenarioDef::_internal_distance_multiplier() const {
@@ -21245,45 +21122,16 @@ inline void BounceScenarioDef::_internal_set_distance_multiplier(float value) {
   _impl_.distance_multiplier_ = value;
 }
 
-// float acceleration = 10;
-inline bool BounceScenarioDef::has_acceleration() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
-  return value;
-}
-inline void BounceScenarioDef::clear_acceleration() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
-}
-inline float BounceScenarioDef::acceleration() const {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.acceleration)
-  return _internal_acceleration();
-}
-inline void BounceScenarioDef::set_acceleration(float value) {
-  _internal_set_acceleration(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
-  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.acceleration)
-}
-inline float BounceScenarioDef::_internal_acceleration() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.acceleration_;
-}
-inline void BounceScenarioDef::_internal_set_acceleration(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = value;
-}
-
 // .aim.Direction left_right_initial_direction = 11;
 inline bool BounceScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void BounceScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000400U);
 }
 inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
@@ -21291,7 +21139,7 @@ inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const 
 }
 inline void BounceScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_left_right_initial_direction() const {
@@ -21305,14 +21153,14 @@ inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction forward_back_initial_direction = 12;
 inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void BounceScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00000800U);
 }
 inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
@@ -21320,7 +21168,7 @@ inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() cons
 }
 inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_forward_back_initial_direction() const {
@@ -21732,74 +21580,16 @@ inline void WallArcScenarioDef::set_allocated_height_jitter(::aim::RegionLength*
   // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.height_jitter)
 }
 
-// float acceleration = 4;
-inline bool WallArcScenarioDef::has_acceleration() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
-inline void WallArcScenarioDef::clear_acceleration() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline float WallArcScenarioDef::acceleration() const {
-  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.acceleration)
-  return _internal_acceleration();
-}
-inline void WallArcScenarioDef::set_acceleration(float value) {
-  _internal_set_acceleration(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.acceleration)
-}
-inline float WallArcScenarioDef::_internal_acceleration() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.acceleration_;
-}
-inline void WallArcScenarioDef::_internal_set_acceleration(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_ = value;
-}
-
-// float acceleration_jitter = 5;
-inline bool WallArcScenarioDef::has_acceleration_jitter() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
-inline void WallArcScenarioDef::clear_acceleration_jitter() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_jitter_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline float WallArcScenarioDef::acceleration_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.acceleration_jitter)
-  return _internal_acceleration_jitter();
-}
-inline void WallArcScenarioDef::set_acceleration_jitter(float value) {
-  _internal_set_acceleration_jitter(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.acceleration_jitter)
-}
-inline float WallArcScenarioDef::_internal_acceleration_jitter() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.acceleration_jitter_;
-}
-inline void WallArcScenarioDef::_internal_set_acceleration_jitter(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.acceleration_jitter_ = value;
-}
-
 // bool start_on_ground = 6;
 inline bool WallArcScenarioDef::has_start_on_ground() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   return value;
 }
 inline void WallArcScenarioDef::clear_start_on_ground() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_on_ground_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000008U);
 }
 inline bool WallArcScenarioDef::start_on_ground() const {
   // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.start_on_ground)
@@ -21807,7 +21597,7 @@ inline bool WallArcScenarioDef::start_on_ground() const {
 }
 inline void WallArcScenarioDef::set_start_on_ground(bool value) {
   _internal_set_start_on_ground(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.start_on_ground)
 }
 inline bool WallArcScenarioDef::_internal_start_on_ground() const {
@@ -21821,14 +21611,14 @@ inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
 
 // bool reflect = 7;
 inline bool WallArcScenarioDef::has_reflect() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void WallArcScenarioDef::clear_reflect() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.reflect_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000010U);
 }
 inline bool WallArcScenarioDef::reflect() const {
   // @@protoc_insertion_point(field_get:aim.WallArcScenarioDef.reflect)
@@ -21836,7 +21626,7 @@ inline bool WallArcScenarioDef::reflect() const {
 }
 inline void WallArcScenarioDef::set_reflect(bool value) {
   _internal_set_reflect(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.WallArcScenarioDef.reflect)
 }
 inline bool WallArcScenarioDef::_internal_reflect() const {

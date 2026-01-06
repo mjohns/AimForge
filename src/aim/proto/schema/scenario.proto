@@ -335,7 +335,6 @@ message WallStrafeScenarioDef {
   // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 profile_order = 5;
 
-  float acceleration = 6;
   // Multiply all strafe distances by the specified value. Defaults to 1.
   float distance_multiplier = 7;
 }
@@ -379,8 +378,6 @@ message StrafeScenarioDef {
   float time_scale_multiplier = 11;
   float distance_multiplier = 16;
 
-  float acceleration = 12;
-
   Direction left_right_initial_direction = 13;
   Direction up_down_initial_direction = 14;
   Direction forward_back_initial_direction = 15;
@@ -418,8 +415,6 @@ message BounceScenarioDef {
   float time_scale_multiplier = 9;
   float distance_multiplier = 14;
 
-  float acceleration = 10;
-
   Direction left_right_initial_direction = 11;
   Direction forward_back_initial_direction = 12;
 
@@ -432,10 +427,6 @@ message WallArcScenarioDef {
   RegionLength width = 1;
   RegionLength height = 2;
   RegionLength height_jitter = 3;
-
-  // The acceleration at the top of the arc.
-  float acceleration = 4;
-  float acceleration_jitter = 5;
 
   bool start_on_ground = 6;
 
