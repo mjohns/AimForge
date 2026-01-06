@@ -8,9 +8,9 @@
 #include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/name_util.h"
+#include "aim/common/proto_util.h"
 #include "aim/common/util.h"
 #include "aim/core/scenario_manager.h"
-#include "google/protobuf/util/message_differencer.h"
 
 namespace aim {
 namespace {
@@ -398,7 +398,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     if (!run) {
       return;
     }
-    if (google::protobuf::util::MessageDifferencer::Equivalent(new_def, run->playlist.def())) {
+    if (IsEquivalentProto(new_def, run->playlist.def())) {
       return;
     }
     run->playlist.name = playlist_name;

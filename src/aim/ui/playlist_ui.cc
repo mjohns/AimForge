@@ -11,7 +11,6 @@
 #include "aim/ui/playlist_editor_component.h"
 #include "aim/ui/scenario_editor_screen.h"
 #include "aim/ui/select_sensitivity_variation_dialog.h"
-#include "google/protobuf/util/message_differencer.h"
 #include "imgui.h"
 #include "imgui_internal.h"
 

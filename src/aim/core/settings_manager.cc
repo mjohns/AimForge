@@ -15,7 +15,6 @@
 #include "aim/proto/theme.pb.h"
 #include "google/protobuf/json/json.h"
 #include "google/protobuf/util/json_util.h"
-#include "google/protobuf/util/message_differencer.h"
 #include "nlohmann/json.h"
 
 namespace aim {
@@ -509,7 +508,7 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_name) {
     Logger::get()->warn("No settings available at save time");
     return;
   }
-  if (google::protobuf::util::MessageDifferencer::Equivalent(*current_settings, settings)) {
+  if (IsEquivalentProto(*current_settings, settings)) {
     return;
   }
   std::string theme_name = settings.theme_name();

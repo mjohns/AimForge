@@ -7,7 +7,6 @@
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
 #include "aim/ui/scenario_editor_screen.h"
-#include "google/protobuf/util/message_differencer.h"
 #include "imgui.h"
 
 namespace aim {
