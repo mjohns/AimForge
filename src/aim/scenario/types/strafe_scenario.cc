@@ -16,7 +16,8 @@ namespace {
 
 class MovementControllerImpl : public MovementController {
  public:
-  MovementControllerImpl(float speed, Wall wall, ScenarioDef def, Application& app)
+  MovementControllerImpl(
+      float speed, float acceleration, Wall wall, ScenarioDef def, Application& app)
       : def_(def), app_(app) {
     auto d = def_.strafe_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
@@ -43,9 +44,7 @@ class MovementControllerImpl : public MovementController {
     }
 
     DirectionParams params;
-    if (d.has_acceleration()) {
-      params.acceleration = d.acceleration();
-    }
+    params.acceleration = acceleration;
     if (d.has_time_scale_multiplier()) {
       params.time_scale_multiplier = d.time_scale_multiplier();
     }
@@ -164,8 +163,8 @@ class StrafeScenario : public BaseScenario {
       }
     }
     target->SetWallPosition(pos, def_.room());
-    target->movement_controller =
-        std::make_shared<MovementControllerImpl>(target->speed, wall_, def_, app_);
+    target->movement_controller = std::make_shared<MovementControllerImpl>(
+        target->speed, target->acceleration, wall_, def_, app_);
   }
 
   void UpdateTargetPositions() override {

@@ -501,11 +501,10 @@ message TargetProfile {
   float target_radius_jitter = 3;
 
   float speed = 4;
-  // Speed will be adjusted +/- jitter amount.
   float speed_jitter = 5;
 
-  float accelaration = 6;
-  float accelaration_jitter = 7;
+  float acceleration = 6;
+  float acceleration_jitter = 7;
 
   // Target will shrink from target_radius to this value based on health amount.
   float target_radius_at_kill = 8;

@@ -561,6 +561,7 @@ Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   }
 
   target.speed = app_.rand().GetJittered(profile.speed(), profile.speed_jitter());
+  target.acceleration = app_.rand().GetJittered(profile.acceleration(), profile.acceleration_jitter());
   target.health_seconds = def_.shot_type().health_seconds();
   if (def_.shot_type().has_health_clicks()) {
     target.health_clicks = def_.shot_type().health_clicks();

@@ -1,0 +1,1342 @@
+{
+  "playlists": [
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Wrist"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Fingertips"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Arm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Wrist"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Fingertips"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Arm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Precise"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Fast"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Mixed"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Wrist LowFov"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Slow"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Mixed"
+          }
+        ]
+      },
+      "name": "Horizontal Acceleration"
+    },
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Wrist 15cm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Fingertips 25cm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Arm 35cm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Wrist 45cm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Fingertips"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Arm"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Precise"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Fast"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Mixed"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Wrist LowFov"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Wide Strafe Slow"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Mixed"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Smooth Strafe Arm 25cm"
+          }
+        ]
+      },
+      "name": "Horizontal Acceleration2"
+    },
+    {
+      "def": {},
+      "name": "Reactive Mixed1 Gauntlet"
+    },
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L1"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L2"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L3"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L4"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L5"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L6"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L7"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L8"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L9"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L10"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L11"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L12"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L13"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L14"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L15"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L16"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L17"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L18"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L19"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L20"
+          },
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Reactive Mixed1 GauntletV2 L21"
+          }
+        ]
+      },
+      "name": "Reactive Mixed1 Gauntlet V2"
+    },
+    {
+      "def": {
+        "items": [
+          {
+            "numPlays": 1,
+            "scenario": "SMOOTH Centering Wrist"
+          }
+        ]
+      },
+      "name": "Tracking Horizontal Reactive"
+    }
+  ],
+  "scenarios": [
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 43,
+            "widthPerimeterPercent": 0.470000088
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 231,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.95
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 231,
+              "info": {
+                "description": ""
+              },
+              "speed": 58,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Arm"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 18,
+            "widthPerimeterPercent": 0.170000121
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 231,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.95
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 231,
+              "info": {
+                "description": ""
+              },
+              "speed": 58,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Fingertips"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "levelOverrides": {},
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 61,
+            "widthPerimeterPercent": 0.400000125
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "strafeDef": {
+          "acceleration": 231,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.97
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 231,
+              "accelerationJitter": 0,
+              "info": {
+                "description": ""
+              },
+              "speed": 60,
+              "speedJitter": 0,
+              "targetRadius": 3.5,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Centering Wrist"
+    },
+    {
+      "def": {
+        "durationSeconds": 40,
+        "endScore": 45,
+        "levelOverrides": {
+          "speedMultiplier": 1.05
+        },
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 61,
+            "widthPerimeterPercent": 0.400000125
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.97
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "centerBias": 0.2,
+              "distance": {
+                "xPercentValue": 0.200000063
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.0700000599
+              },
+              "info": {
+                "description": "Standard Strafe",
+                "weight": 3
+              }
+            },
+            {
+              "distance": {
+                "xPercentValue": 0.130000055
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.04
+              },
+              "info": {
+                "description": "Shorter Strafe",
+                "weight": 2
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15.9999847
+              },
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 5.50000525,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L01"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L01"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L02"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L02"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L03"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L03"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L04"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L04"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L05"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L05"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L06"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L06"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L07"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L07"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L08"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L08"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L09"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L09"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L10"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L10"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L11"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L11"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L12"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L12"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L13"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L13"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L14"
+    },
+    {
+      "def": {
+        "overrides": {
+          "speedMultiplier": 1.05
+        },
+        "referenceDef": {
+          "scenarioId": "SMOOTH Reactive Mixed1 Gauntlet L14"
+        }
+      },
+      "name": "Reactive Mixed1 Gauntlet L15"
+    },
+    {
+      "def": {
+        "durationSeconds": 40,
+        "endScore": 60,
+        "levelOverrides": {
+          "speedMultiplier": 1.05
+        },
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 61,
+            "widthPerimeterPercent": 0.400000125
+          }
+        },
+        "shotType": {
+          "trackingInvincible": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.97
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "centerBias": 0.2,
+              "distance": {
+                "xPercentValue": 0.200000063
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.0700000599
+              },
+              "info": {
+                "description": "Standard Strafe",
+                "weight": 3
+              }
+            },
+            {
+              "distance": {
+                "xPercentValue": 0.130000055
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.04
+              },
+              "info": {
+                "description": "Shorter Strafe",
+                "weight": 2
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "info": {
+                "description": ""
+              },
+              "pill": {
+                "height": 15.9999847
+              },
+              "speed": 70,
+              "speedJitter": 0,
+              "targetRadius": 5.50000525,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Reactive Mixed1 GauntletV2"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 16,
+            "widthPerimeterPercent": 0.230000153
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 91,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 91,
+              "info": {
+                "description": ""
+              },
+              "speed": 104,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Strafe Arm"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 5,
+            "widthPerimeterPercent": 0.100000136
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 116,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 116,
+              "info": {
+                "description": ""
+              },
+              "speed": 72,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Strafe Fingertips"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 90,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 38,
+            "widthPerimeterPercent": 0.2700001
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 121,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_NEGATIVE",
+          "leftRightProfiles": [
+            {
+              "accelerationMultiplier": 1,
+              "accelerationMultiplierJitter": 0.15,
+              "distance": {
+                "xPercentValue": 0.64
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.304999977
+              },
+              "info": {
+                "description": ""
+              },
+              "speedMultiplier": 1,
+              "speedMultiplierJitter": 0.15
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 121,
+              "info": {
+                "description": ""
+              },
+              "speed": 184,
+              "speedJitter": 0,
+              "targetRadius": 5.35000277,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Strafe Mixed"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 89,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 31,
+            "widthPerimeterPercent": 0.240000114
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 111,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.95
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 111,
+              "info": {
+                "description": ""
+              },
+              "speed": 96,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Strafe Wrist"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": -134,
+            "z": 0
+          },
+          "simpleRoom": {
+            "height": 130,
+            "width": 202
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 111,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.95
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 111,
+              "info": {
+                "description": ""
+              },
+              "speed": 105,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Strafe Wrist LowFov"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 90,
+            "hideSides": true,
+            "radius": 200,
+            "widthPerimeterPercent": 0.779999912
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 71,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 71,
+              "info": {
+                "description": ""
+              },
+              "speed": 180,
+              "speedJitter": 0,
+              "targetRadius": 4.39999914,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Wide Strafe Fast"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 90,
+            "hideSides": true,
+            "radius": 200,
+            "widthPerimeterPercent": 0.859999895
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 71,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_NEGATIVE",
+          "leftRightProfiles": [
+            {
+              "accelerationMultiplier": 1,
+              "accelerationMultiplierJitter": 0.15,
+              "distance": {
+                "xPercentValue": 0.64
+              },
+              "distanceJitter": {
+                "xPercentValue": 0.150000036
+              },
+              "info": {
+                "description": ""
+              },
+              "speedMultiplier": 1,
+              "speedMultiplierJitter": 0.15
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 71,
+              "info": {
+                "description": ""
+              },
+              "speed": 180,
+              "speedJitter": 0,
+              "targetRadius": 3.99999785,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Wide Strafe Mixed"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 90,
+            "hideSides": false,
+            "radius": 200,
+            "sideAngleDegrees": 54,
+            "widthPerimeterPercent": 0.50000006
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 41,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 41,
+              "info": {
+                "description": ""
+              },
+              "speed": 99,
+              "speedJitter": 0,
+              "targetRadius": 3.49999833,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Wide Strafe Precise"
+    },
+    {
+      "def": {
+        "durationSeconds": 60,
+        "endScore": 45,
+        "overrides": {},
+        "room": {
+          "cameraPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "cylinderRoom": {
+            "height": 90,
+            "hideSides": true,
+            "radius": 200,
+            "widthPerimeterPercent": 0.57
+          }
+        },
+        "shotType": {
+          "trackingProximity": true
+        },
+        "startScore": 30,
+        "strafeDef": {
+          "acceleration": 46,
+          "bounds": {
+            "width": {
+              "xPercentValue": 0.93
+            }
+          },
+          "leftRightInitialDirection": "DIRECTION_POSITIVE",
+          "leftRightProfiles": [
+            {
+              "distance": {
+                "xPercentValue": 1
+              },
+              "distanceJitter": {
+                "xPercentValue": 0
+              },
+              "info": {
+                "description": ""
+              }
+            }
+          ],
+          "upDownInitialDirection": "DIRECTION_RANDOM"
+        },
+        "targetDef": {
+          "newestTargetIsGhost": false,
+          "numTargets": 1,
+          "profiles": [
+            {
+              "acceleration": 46,
+              "info": {
+                "description": ""
+              },
+              "speed": 73,
+              "speedJitter": 0,
+              "targetRadius": 3.99999785,
+              "targetRadiusJitter": 0
+            }
+          ],
+          "removeClosestOnMiss": false
+        }
+      },
+      "name": "Smooth Wide Strafe Slow"
+    }
+  ]
+}

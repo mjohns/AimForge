@@ -1433,6 +1433,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 65,
               "info": {},
               "pill": {
                 "height": 10
@@ -2822,6 +2823,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 133,
               "info": {
                 "description": ""
               },
@@ -2911,6 +2913,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 133,
               "info": {
                 "description": ""
               },
@@ -5287,6 +5290,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 166,
               "info": {},
               "speed": 118,
               "speedJitter": 0,

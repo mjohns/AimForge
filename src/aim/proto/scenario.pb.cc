@@ -383,8 +383,8 @@ inline constexpr TargetProfile::Impl_::Impl_(
         target_radius_jitter_{0},
         speed_{0},
         speed_jitter_{0},
-        accelaration_{0},
-        accelaration_jitter_{0},
+        acceleration_{0},
+        acceleration_jitter_{0},
         target_radius_at_kill_{0},
         target_hit_radius_multiplier_{0},
         target_radius_growth_time_seconds_{0},
@@ -1661,8 +1661,8 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.speed_jitter_),
-        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.accelaration_),
-        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.accelaration_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.acceleration_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.acceleration_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_at_kill_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_hit_radius_multiplier_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetProfile, _impl_.target_radius_growth_time_seconds_),
@@ -1966,7 +1966,7 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "e\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022\025\n\rtar"
     "get_radius\030\002 \001(\002\022\034\n\024target_radius_jitter"
     "\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter\030\005 "
-    "\001(\002\022\024\n\014accelaration\030\006 \001(\002\022\033\n\023accelaratio"
+    "\001(\002\022\024\n\014acceleration\030\006 \001(\002\022\033\n\023acceleratio"
     "n_jitter\030\007 \001(\002\022\035\n\025target_radius_at_kill\030"
     "\010 \001(\002\022$\n\034target_hit_radius_multiplier\030\t "
     "\001(\002\022)\n!target_radius_growth_time_seconds"
@@ -17274,14 +17274,14 @@ TargetProfile::_table_ = {
     {::_pbi::TcParser::FastF32S1,
      {45, 4, 0,
       PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_)}},
-    // float accelaration = 6;
+    // float acceleration = 6;
     {::_pbi::TcParser::FastF32S1,
      {53, 5, 0,
-      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_)}},
-    // float accelaration_jitter = 7;
+      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.acceleration_)}},
+    // float acceleration_jitter = 7;
     {::_pbi::TcParser::FastF32S1,
      {61, 6, 0,
-      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_jitter_)}},
+      PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.acceleration_jitter_)}},
     // float target_radius_at_kill = 8;
     {::_pbi::TcParser::FastF32S1,
      {69, 7, 0,
@@ -17318,10 +17318,10 @@ TargetProfile::_table_ = {
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float speed_jitter = 5;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.speed_jitter_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float accelaration = 6;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float accelaration_jitter = 7;
-    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.accelaration_jitter_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float acceleration = 6;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.acceleration_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float acceleration_jitter = 7;
+    {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.acceleration_jitter_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float target_radius_at_kill = 8;
     {PROTOBUF_FIELD_OFFSET(TargetProfile, _impl_.target_radius_at_kill_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float target_hit_radius_multiplier = 9;
@@ -17423,18 +17423,18 @@ PROTOBUF_NOINLINE void TargetProfile::Clear() {
         5, this_._internal_speed_jitter(), target);
   }
 
-  // float accelaration = 6;
+  // float acceleration = 6;
   if (CheckHasBit(cached_has_bits, 0x00000020U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        6, this_._internal_accelaration(), target);
+        6, this_._internal_acceleration(), target);
   }
 
-  // float accelaration_jitter = 7;
+  // float acceleration_jitter = 7;
   if (CheckHasBit(cached_has_bits, 0x00000040U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        7, this_._internal_accelaration_jitter(), target);
+        7, this_._internal_acceleration_jitter(), target);
   }
 
   // float target_radius_at_kill = 8;
@@ -17564,10 +17564,10 @@ void TargetProfile::MergeImpl(::google::protobuf::MessageLite& to_msg,
       _this->_impl_.speed_jitter_ = from._impl_.speed_jitter_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000020U)) {
-      _this->_impl_.accelaration_ = from._impl_.accelaration_;
+      _this->_impl_.acceleration_ = from._impl_.acceleration_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000040U)) {
-      _this->_impl_.accelaration_jitter_ = from._impl_.accelaration_jitter_;
+      _this->_impl_.acceleration_jitter_ = from._impl_.acceleration_jitter_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000080U)) {
       _this->_impl_.target_radius_at_kill_ = from._impl_.target_radius_at_kill_;

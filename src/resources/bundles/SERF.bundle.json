@@ -51,6 +51,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 231,
               "info": {
                 "description": ""
               },
@@ -114,6 +115,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 256,
               "info": {
                 "description": ""
               },
@@ -254,6 +256,7 @@
           "numTargets": 1,
           "profiles": [
             {
+              "acceleration": 190,
               "info": {
                 "description": ""
               },
@@ -563,6 +566,7 @@
           "numTargets": 4,
           "profiles": [
             {
+              "acceleration": 265,
               "info": {
                 "description": ""
               },

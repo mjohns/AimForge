@@ -3443,8 +3443,8 @@ class TargetProfile final : public ::google::protobuf::Message
     kTargetRadiusJitterFieldNumber = 3,
     kSpeedFieldNumber = 4,
     kSpeedJitterFieldNumber = 5,
-    kAccelarationFieldNumber = 6,
-    kAccelarationJitterFieldNumber = 7,
+    kAccelerationFieldNumber = 6,
+    kAccelerationJitterFieldNumber = 7,
     kTargetRadiusAtKillFieldNumber = 8,
     kTargetHitRadiusMultiplierFieldNumber = 9,
     kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
@@ -3511,26 +3511,26 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_speed_jitter(float value);
 
   public:
-  // float accelaration = 6;
-  bool has_accelaration() const;
-  void clear_accelaration() ;
-  float accelaration() const;
-  void set_accelaration(float value);
+  // float acceleration = 6;
+  bool has_acceleration() const;
+  void clear_acceleration() ;
+  float acceleration() const;
+  void set_acceleration(float value);
 
   private:
-  float _internal_accelaration() const;
-  void _internal_set_accelaration(float value);
+  float _internal_acceleration() const;
+  void _internal_set_acceleration(float value);
 
   public:
-  // float accelaration_jitter = 7;
-  bool has_accelaration_jitter() const;
-  void clear_accelaration_jitter() ;
-  float accelaration_jitter() const;
-  void set_accelaration_jitter(float value);
+  // float acceleration_jitter = 7;
+  bool has_acceleration_jitter() const;
+  void clear_acceleration_jitter() ;
+  float acceleration_jitter() const;
+  void set_acceleration_jitter(float value);
 
   private:
-  float _internal_accelaration_jitter() const;
-  void _internal_set_accelaration_jitter(float value);
+  float _internal_acceleration_jitter() const;
+  void _internal_set_acceleration_jitter(float value);
 
   public:
   // float target_radius_at_kill = 8;
@@ -3643,8 +3643,8 @@ class TargetProfile final : public ::google::protobuf::Message
     float target_radius_jitter_;
     float speed_;
     float speed_jitter_;
-    float accelaration_;
-    float accelaration_jitter_;
+    float acceleration_;
+    float acceleration_jitter_;
     float target_radius_at_kill_;
     float target_hit_radius_multiplier_;
     float target_radius_growth_time_seconds_;
@@ -22841,62 +22841,62 @@ inline void TargetProfile::_internal_set_speed_jitter(float value) {
   _impl_.speed_jitter_ = value;
 }
 
-// float accelaration = 6;
-inline bool TargetProfile::has_accelaration() const {
+// float acceleration = 6;
+inline bool TargetProfile::has_acceleration() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
-inline void TargetProfile::clear_accelaration() {
+inline void TargetProfile::clear_acceleration() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accelaration_ = 0;
+  _impl_.acceleration_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000020U);
 }
-inline float TargetProfile::accelaration() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.accelaration)
-  return _internal_accelaration();
+inline float TargetProfile::acceleration() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.acceleration)
+  return _internal_acceleration();
 }
-inline void TargetProfile::set_accelaration(float value) {
-  _internal_set_accelaration(value);
+inline void TargetProfile::set_acceleration(float value) {
+  _internal_set_acceleration(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000020U);
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.accelaration)
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.acceleration)
 }
-inline float TargetProfile::_internal_accelaration() const {
+inline float TargetProfile::_internal_acceleration() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.accelaration_;
+  return _impl_.acceleration_;
 }
-inline void TargetProfile::_internal_set_accelaration(float value) {
+inline void TargetProfile::_internal_set_acceleration(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accelaration_ = value;
+  _impl_.acceleration_ = value;
 }
 
-// float accelaration_jitter = 7;
-inline bool TargetProfile::has_accelaration_jitter() const {
+// float acceleration_jitter = 7;
+inline bool TargetProfile::has_acceleration_jitter() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
-inline void TargetProfile::clear_accelaration_jitter() {
+inline void TargetProfile::clear_acceleration_jitter() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accelaration_jitter_ = 0;
+  _impl_.acceleration_jitter_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000040U);
 }
-inline float TargetProfile::accelaration_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.accelaration_jitter)
-  return _internal_accelaration_jitter();
+inline float TargetProfile::acceleration_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.TargetProfile.acceleration_jitter)
+  return _internal_acceleration_jitter();
 }
-inline void TargetProfile::set_accelaration_jitter(float value) {
-  _internal_set_accelaration_jitter(value);
+inline void TargetProfile::set_acceleration_jitter(float value) {
+  _internal_set_acceleration_jitter(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000040U);
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.accelaration_jitter)
+  // @@protoc_insertion_point(field_set:aim.TargetProfile.acceleration_jitter)
 }
-inline float TargetProfile::_internal_accelaration_jitter() const {
+inline float TargetProfile::_internal_acceleration_jitter() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.accelaration_jitter_;
+  return _impl_.acceleration_jitter_;
 }
-inline void TargetProfile::_internal_set_accelaration_jitter(float value) {
+inline void TargetProfile::_internal_set_acceleration_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accelaration_jitter_ = value;
+  _impl_.acceleration_jitter_ = value;
 }
 
 // float target_radius_at_kill = 8;

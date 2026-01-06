@@ -2600,6 +2600,15 @@ class ScenarioEditorScreen : public UiScreen {
                                   .set_width(char_x_ * 10),
                               PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
 
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
+                                  .set_step(5, 50)
+                                  .set_min(1)
+                                  .set_precision(0)
+                                  .set_default(200)
+                                  .set_is_optional()
+                                  .set_width(char_x_ * 10),
+                              PROTO_JITTERED_FIELD(TargetProfile, profile, acceleration));
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Use pill shape");
     ImGui::SameLine();

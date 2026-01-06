@@ -61,6 +61,7 @@ struct Target {
 
   std::shared_ptr<MovementController> movement_controller;
   float speed = 0;
+  float acceleration = 0;
 
   float remove_after_time_seconds = -1;
   bool kill_sound_played = false;
