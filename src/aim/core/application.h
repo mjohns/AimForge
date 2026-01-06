@@ -22,7 +22,6 @@
 #include "aim/core/local_store.h"
 #include "aim/core/screen.h"
 #include "aim/graphics/crosshair.h"
-#include "aim/graphics/renderer.h"
 #include "aim/graphics/textures.h"
 #include "imgui.h"
 #include "spdlog/spdlog.h"
@@ -35,6 +34,8 @@ class AimDb;
 class StatsManager;
 class SettingsManager;
 class PlayTimeManager;
+class Renderer;
+class RenderContext;
 
 class ApplicationExitException : public std::runtime_error {
  public:

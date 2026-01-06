@@ -9,6 +9,7 @@
 #include "aim/core/camera.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
+#include "aim/graphics/renderer.h"
 
 namespace aim {
 namespace {

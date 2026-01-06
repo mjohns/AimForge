@@ -21,6 +21,7 @@
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/graphics/crosshair.h"
+#include "aim/graphics/renderer.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"

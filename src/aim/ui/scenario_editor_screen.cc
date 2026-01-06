@@ -19,6 +19,7 @@
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
+#include "aim/graphics/renderer.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/scenario/scenario_overrides.h"
