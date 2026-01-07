@@ -309,41 +309,6 @@ struct WallWanderProfileDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallWanderProfileDefaultTypeInternal _WallWanderProfile_default_instance_;
 
-inline constexpr WallStrafeProfile::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        info_{nullptr},
-        distance_{nullptr},
-        distance_jitter_{nullptr},
-        angle_{0},
-        angle_jitter_{0},
-        direction_change_percent_{0},
-        pause_at_end_chance_{0},
-        pause_seconds_{0},
-        pause_seconds_jitter_{0},
-        speed_multiplier_{0},
-        acceleration_multiplier_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR WallStrafeProfile::WallStrafeProfile(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(WallStrafeProfile_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct WallStrafeProfileDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR WallStrafeProfileDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~WallStrafeProfileDefaultTypeInternal() {}
-  union {
-    WallStrafeProfile _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallStrafeProfileDefaultTypeInternal _WallStrafeProfile_default_instance_;
-
 inline constexpr WallArcScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -701,6 +666,41 @@ struct BounceProfileDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BounceProfileDefaultTypeInternal _BounceProfile_default_instance_;
 
+inline constexpr AngleStrafeProfile::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        info_{nullptr},
+        distance_{nullptr},
+        distance_jitter_{nullptr},
+        angle_{0},
+        angle_jitter_{0},
+        direction_change_percent_{0},
+        pause_at_end_chance_{0},
+        pause_seconds_{0},
+        pause_seconds_jitter_{0},
+        speed_multiplier_{0},
+        acceleration_multiplier_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR AngleStrafeProfile::AngleStrafeProfile(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(AngleStrafeProfile_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct AngleStrafeProfileDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AngleStrafeProfileDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AngleStrafeProfileDefaultTypeInternal() {}
+  union {
+    AngleStrafeProfile _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AngleStrafeProfileDefaultTypeInternal _AngleStrafeProfile_default_instance_;
+
 inline constexpr TargetRegion::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -878,36 +878,6 @@ struct WallWanderScenarioDefDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallWanderScenarioDefDefaultTypeInternal _WallWanderScenarioDef_default_instance_;
 
-inline constexpr WallStrafeScenarioDef::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        profiles_{},
-        profile_order_{},
-        _profile_order_cached_byte_size_{0},
-        bounds_{nullptr},
-        target_placement_strategy_{nullptr},
-        distance_multiplier_{0} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR WallStrafeScenarioDef::WallStrafeScenarioDef(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(WallStrafeScenarioDef_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct WallStrafeScenarioDefDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR WallStrafeScenarioDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~WallStrafeScenarioDefDefaultTypeInternal() {}
-  union {
-    WallStrafeScenarioDef _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WallStrafeScenarioDefDefaultTypeInternal _WallStrafeScenarioDef_default_instance_;
-
 inline constexpr StrafeScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -1068,6 +1038,36 @@ struct BarrelScenarioDefDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BarrelScenarioDefDefaultTypeInternal _BarrelScenarioDef_default_instance_;
+
+inline constexpr AngleStrafeScenarioDef::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        profiles_{},
+        profile_order_{},
+        _profile_order_cached_byte_size_{0},
+        bounds_{nullptr},
+        target_placement_strategy_{nullptr},
+        distance_multiplier_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR AngleStrafeScenarioDef::AngleStrafeScenarioDef(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(AngleStrafeScenarioDef_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct AngleStrafeScenarioDefDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AngleStrafeScenarioDefDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AngleStrafeScenarioDefDefaultTypeInternal() {}
+  union {
+    AngleStrafeScenarioDef _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AngleStrafeScenarioDefDefaultTypeInternal _AngleStrafeScenarioDef_default_instance_;
 
 inline constexpr ScenarioDef::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -1428,19 +1428,19 @@ const ::uint32_t
         3,
         0,
         0x081, // bitmap
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_._has_bits_),
         14, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.info_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.distance_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.distance_jitter_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.angle_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.angle_jitter_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.direction_change_percent_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.pause_at_end_chance_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.pause_seconds_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.pause_seconds_jitter_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.speed_multiplier_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeProfile, _impl_.acceleration_multiplier_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.info_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.distance_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.distance_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.angle_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.angle_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.direction_change_percent_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.pause_at_end_chance_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.pause_seconds_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.pause_seconds_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.speed_multiplier_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeProfile, _impl_.acceleration_multiplier_),
         0,
         1,
         2,
@@ -1462,13 +1462,13 @@ const ::uint32_t
         1,
         2,
         0x081, // bitmap
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_._has_bits_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeScenarioDef, _impl_._has_bits_),
         8, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.bounds_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.target_placement_strategy_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.profiles_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.profile_order_),
-        PROTOBUF_FIELD_OFFSET(::aim::WallStrafeScenarioDef, _impl_.distance_multiplier_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeScenarioDef, _impl_.bounds_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeScenarioDef, _impl_.target_placement_strategy_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeScenarioDef, _impl_.profiles_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeScenarioDef, _impl_.profile_order_),
+        PROTOBUF_FIELD_OFFSET(::aim::AngleStrafeScenarioDef, _impl_.distance_multiplier_),
         2,
         3,
         0,
@@ -1695,9 +1695,9 @@ static const ::_pbi::MigrationSchema
         {280, sizeof(::aim::LinearScenarioDef)},
         {293, sizeof(::aim::SineScenarioDef)},
         {302, sizeof(::aim::ProfileInfo)},
-        {313, sizeof(::aim::WallStrafeProfile)},
+        {313, sizeof(::aim::AngleStrafeProfile)},
         {338, sizeof(::aim::Bounds)},
-        {347, sizeof(::aim::WallStrafeScenarioDef)},
+        {347, sizeof(::aim::AngleStrafeScenarioDef)},
         {360, sizeof(::aim::StrafeProfile)},
         {383, sizeof(::aim::StrafeScenarioDef)},
         {414, sizeof(::aim::BounceProfile)},
@@ -1733,9 +1733,9 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_LinearScenarioDef_default_instance_._instance,
     &::aim::_SineScenarioDef_default_instance_._instance,
     &::aim::_ProfileInfo_default_instance_._instance,
-    &::aim::_WallStrafeProfile_default_instance_._instance,
+    &::aim::_AngleStrafeProfile_default_instance_._instance,
     &::aim::_Bounds_default_instance_._instance,
-    &::aim::_WallStrafeScenarioDef_default_instance_._instance,
+    &::aim::_AngleStrafeScenarioDef_default_instance_._instance,
     &::aim::_StrafeProfile_default_instance_._instance,
     &::aim::_StrafeScenarioDef_default_instance_._instance,
     &::aim::_BounceProfile_default_instance_._instance,
@@ -1809,7 +1809,7 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\n\021health_regen_rate\030\r \001(\002\022&\n\036remove_if_b"
     "elow_health_seconds\030\016 \001(\002\022\025\n\rhealth_clic"
     "ks\030\020 \001(\005\022\032\n\022click_rate_seconds\030\021 \001(\002B\006\n\004"
-    "type\"\301\007\n\013ScenarioDef\022\023\n\013description\030\001 \001("
+    "type\"\303\007\n\013ScenarioDef\022\023\n\013description\030\001 \001("
     "\t\022\030\n\020duration_seconds\030\002 \001(\002\022\027\n\004room\030\003 \001("
     "\0132\t.aim.Room\022\"\n\ntarget_def\030\005 \001(\0132\016.aim.T"
     "argetDef\022)\n\toverrides\030\007 \001(\0132\026.aim.Scenar"
@@ -1822,143 +1822,143 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     ".aim.CenteringScenarioDefH\000\022,\n\nbarrel_de"
     "f\030  \001(\0132\026.aim.BarrelScenarioDefH\000\022,\n\nlin"
     "ear_def\030! \001(\0132\026.aim.LinearScenarioDefH\000\022"
-    "5\n\017wall_strafe_def\030\" \001(\0132\032.aim.WallStraf"
-    "eScenarioDefH\000\022/\n\014wall_arc_def\030# \001(\0132\027.a"
-    "im.WallArcScenarioDefH\000\0225\n\017wall_wander_d"
-    "ef\030$ \001(\0132\032.aim.WallWanderScenarioDefH\000\0222"
-    "\n\rreference_def\030% \001(\0132\031.aim.ReferenceSce"
-    "narioDefH\000\022,\n\ncircle_def\030& \001(\0132\026.aim.Cir"
-    "cleScenarioDefH\000\022(\n\010sine_def\030\' \001(\0132\024.aim"
-    ".SineScenarioDefH\000\0220\n\014waypoint_def\030( \001(\013"
-    "2\030.aim.WaypointScenarioDefH\000\022,\n\nstrafe_d"
-    "ef\030) \001(\0132\026.aim.StrafeScenarioDefH\000\022,\n\nbo"
-    "unce_def\030* \001(\0132\026.aim.BounceScenarioDefH\000"
-    "B\006\n\004type\"+\n\024ReferenceScenarioDef\022\023\n\013scen"
-    "ario_id\030\001 \001(\t\"T\n\021StaticScenarioDef\022\?\n\031ta"
+    "7\n\020angle_strafe_def\030\" \001(\0132\033.aim.AngleStr"
+    "afeScenarioDefH\000\022/\n\014wall_arc_def\030# \001(\0132\027"
+    ".aim.WallArcScenarioDefH\000\0225\n\017wall_wander"
+    "_def\030$ \001(\0132\032.aim.WallWanderScenarioDefH\000"
+    "\0222\n\rreference_def\030% \001(\0132\031.aim.ReferenceS"
+    "cenarioDefH\000\022,\n\ncircle_def\030& \001(\0132\026.aim.C"
+    "ircleScenarioDefH\000\022(\n\010sine_def\030\' \001(\0132\024.a"
+    "im.SineScenarioDefH\000\0220\n\014waypoint_def\030( \001"
+    "(\0132\030.aim.WaypointScenarioDefH\000\022,\n\nstrafe"
+    "_def\030) \001(\0132\026.aim.StrafeScenarioDefH\000\022,\n\n"
+    "bounce_def\030* \001(\0132\026.aim.BounceScenarioDef"
+    "H\000B\006\n\004type\"+\n\024ReferenceScenarioDef\022\023\n\013sc"
+    "enario_id\030\001 \001(\t\"T\n\021StaticScenarioDef\022\?\n\031"
+    "target_placement_strategy\030\001 \001(\0132\034.aim.Ta"
+    "rgetPlacementStrategy\"\366\001\n\021CircleScenario"
+    "Def\022!\n\006radius\030\001 \001(\0132\021.aim.RegionLength\022\025"
+    "\n\rstart_degrees\030\002 \001(\002\022\030\n\020rotate_clockwis"
+    "e\030\003 \001(\010\022 \n\005depth\030\004 \001(\0132\021.aim.RegionLengt"
+    "h\022\034\n\024switch_after_seconds\030\005 \001(\002\022\021\n\tstret"
+    "ch_y\030\006 \001(\002\022\021\n\tstretch_x\030\007 \001(\002\022\'\n\014final_r"
+    "adius\030\010 \001(\0132\021.aim.RegionLength\"\212\001\n\024Cente"
+    "ringScenarioDef\022$\n\013wall_points\030\001 \003(\0132\017.a"
+    "im.RegionVec2\022\r\n\005angle\030\004 \001(\002\022\024\n\014angle_ji"
+    "tter\030\005 \001(\002\022\'\n\014angle_length\030\006 \001(\0132\021.aim.R"
+    "egionLength\"o\n\023WaypointScenarioDef\022\?\n\031ta"
     "rget_placement_strategy\030\001 \001(\0132\034.aim.Targ"
-    "etPlacementStrategy\"\366\001\n\021CircleScenarioDe"
-    "f\022!\n\006radius\030\001 \001(\0132\021.aim.RegionLength\022\025\n\r"
-    "start_degrees\030\002 \001(\002\022\030\n\020rotate_clockwise\030"
-    "\003 \001(\010\022 \n\005depth\030\004 \001(\0132\021.aim.RegionLength\022"
-    "\034\n\024switch_after_seconds\030\005 \001(\002\022\021\n\tstretch"
-    "_y\030\006 \001(\002\022\021\n\tstretch_x\030\007 \001(\002\022\'\n\014final_rad"
-    "ius\030\010 \001(\0132\021.aim.RegionLength\"\212\001\n\024Centeri"
-    "ngScenarioDef\022$\n\013wall_points\030\001 \003(\0132\017.aim"
-    ".RegionVec2\022\r\n\005angle\030\004 \001(\002\022\024\n\014angle_jitt"
-    "er\030\005 \001(\002\022\'\n\014angle_length\030\006 \001(\0132\021.aim.Reg"
-    "ionLength\"o\n\023WaypointScenarioDef\022\?\n\031targ"
-    "et_placement_strategy\030\001 \001(\0132\034.aim.Target"
-    "PlacementStrategy\022\027\n\017start_in_center\030\002 \001"
-    "(\010\"v\n\021BarrelScenarioDef\022\?\n\031target_placem"
-    "ent_strategy\030\001 \001(\0132\034.aim.TargetPlacement"
-    "Strategy\022 \n\030direction_radius_percent\030\002 \001"
-    "(\002\"\342\001\n\021LinearScenarioDef\022\r\n\005angle\030\001 \001(\002\022"
-    "\024\n\014angle_jitter\030\002 \001(\002\022\?\n\031target_placemen"
-    "t_strategy\030\005 \001(\0132\034.aim.TargetPlacementSt"
-    "rategy\0224\n\034left_right_initial_direction\030\006"
-    " \001(\0162\016.aim.Direction\0221\n\031up_down_initial_"
-    "direction\030\007 \001(\0162\016.aim.Direction\"j\n\017SineS"
-    "cenarioDef\022!\n\006height\030\001 \001(\0132\021.aim.RegionL"
-    "ength\022 \n\005width\030\002 \001(\0132\021.aim.RegionLength\022"
-    "\022\n\ngoing_left\030\003 \001(\010\"c\n\013ProfileInfo\022\016\n\006we"
-    "ight\030\001 \001(\002\022\024\n\014next_profile\030\002 \001(\005\022\031\n\021min_"
-    "selection_gap\030\003 \001(\005\022\023\n\013description\030\004 \001(\t"
-    "\"\330\002\n\021WallStrafeProfile\022\036\n\004info\030\001 \001(\0132\020.a"
-    "im.ProfileInfo\022#\n\010distance\030\002 \001(\0132\021.aim.R"
-    "egionLength\022*\n\017distance_jitter\030\003 \001(\0132\021.a"
-    "im.RegionLength\022\r\n\005angle\030\007 \001(\002\022\024\n\014angle_"
-    "jitter\030\010 \001(\002\022 \n\030direction_change_percent"
-    "\030\t \001(\002\022\033\n\023pause_at_end_chance\030\n \001(\002\022\025\n\rp"
-    "ause_seconds\030\013 \001(\002\022\034\n\024pause_seconds_jitt"
-    "er\030\014 \001(\002\022\030\n\020speed_multiplier\030\r \001(\002\022\037\n\027ac"
-    "celeration_multiplier\030\016 \001(\002\"o\n\006Bounds\022 \n"
-    "\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006heigh"
-    "t\030\002 \001(\0132\021.aim.RegionLength\022 \n\005depth\030\003 \001("
-    "\0132\021.aim.RegionLength\"\323\001\n\025WallStrafeScena"
-    "rioDef\022\033\n\006bounds\030\001 \001(\0132\013.aim.Bounds\022\?\n\031t"
-    "arget_placement_strategy\030\002 \001(\0132\034.aim.Tar"
-    "getPlacementStrategy\022(\n\010profiles\030\004 \003(\0132\026"
-    ".aim.WallStrafeProfile\022\025\n\rprofile_order\030"
-    "\005 \003(\005\022\033\n\023distance_multiplier\030\007 \001(\002\"\274\002\n\rS"
-    "trafeProfile\022\036\n\004info\030\001 \001(\0132\020.aim.Profile"
-    "Info\022\014\n\004time\030\002 \001(\002\022\023\n\013time_jitter\030\003 \001(\002\022"
-    "\023\n\013center_bias\030\004 \001(\002\022#\n\010distance\030\005 \001(\0132\021"
-    ".aim.RegionLength\022*\n\017distance_jitter\030\006 \001"
-    "(\0132\021.aim.RegionLength\022\030\n\020speed_multiplie"
-    "r\030\007 \001(\002\022\037\n\027speed_multiplier_jitter\030\010 \001(\002"
-    "\022\037\n\027acceleration_multiplier\030\t \001(\002\022&\n\036acc"
-    "eleration_multiplier_jitter\030\n \001(\002\"\353\004\n\021St"
-    "rafeScenarioDef\022\033\n\006bounds\030\001 \001(\0132\013.aim.Bo"
-    "unds\022$\n\017relative_bounds\030\002 \001(\0132\013.aim.Boun"
-    "ds\022\?\n\031target_placement_strategy\030\004 \001(\0132\034."
-    "aim.TargetPlacementStrategy\022/\n\023left_righ"
-    "t_profiles\030\005 \003(\0132\022.aim.StrafeProfile\022 \n\030"
-    "left_right_profile_order\030\006 \003(\005\0221\n\025forwar"
-    "d_back_profiles\030\007 \003(\0132\022.aim.StrafeProfil"
-    "e\022\"\n\032forward_back_profile_order\030\010 \003(\005\022,\n"
-    "\020up_down_profiles\030\t \003(\0132\022.aim.StrafeProf"
-    "ile\022\035\n\025up_down_profile_order\030\n \003(\005\022\035\n\025ti"
-    "me_scale_multiplier\030\013 \001(\002\022\033\n\023distance_mu"
-    "ltiplier\030\020 \001(\002\0224\n\034left_right_initial_dir"
-    "ection\030\r \001(\0162\016.aim.Direction\0221\n\031up_down_"
-    "initial_direction\030\016 \001(\0162\016.aim.Direction\022"
-    "6\n\036forward_back_initial_direction\030\017 \001(\0162"
-    "\016.aim.Direction\"\211\002\n\rBounceProfile\022\036\n\004inf"
-    "o\030\001 \001(\0132\020.aim.ProfileInfo\022!\n\006height\030\002 \001("
-    "\0132\021.aim.RegionLength\022(\n\rheight_jitter\030\003 "
-    "\001(\0132\021.aim.RegionLength\022\025\n\rdelay_seconds\030"
-    "\004 \001(\002\022\034\n\024delay_seconds_jitter\030\005 \001(\002\022\033\n\023o"
-    "nly_delay_on_floor\030\006 \001(\010\022\030\n\020speed_multip"
-    "lier\030\007 \001(\002\022\037\n\027acceleration_multiplier\030\010 "
-    "\001(\002\"\271\004\n\021BounceScenarioDef\022\033\n\006bounds\030\001 \001("
-    "\0132\013.aim.Bounds\022\?\n\031target_placement_strat"
-    "egy\030\002 \001(\0132\034.aim.TargetPlacementStrategy\022"
-    "+\n\017bounce_profiles\030\003 \003(\0132\022.aim.BouncePro"
-    "file\022\034\n\024bounce_profile_order\030\004 \003(\005\022/\n\023le"
-    "ft_right_profiles\030\005 \003(\0132\022.aim.StrafeProf"
-    "ile\022 \n\030left_right_profile_order\030\006 \003(\005\0221\n"
-    "\025forward_back_profiles\030\007 \003(\0132\022.aim.Straf"
-    "eProfile\022\"\n\032forward_back_profile_order\030\010"
-    " \003(\005\022\035\n\025time_scale_multiplier\030\t \001(\002\022\033\n\023d"
-    "istance_multiplier\030\016 \001(\002\0224\n\034left_right_i"
-    "nitial_direction\030\013 \001(\0162\016.aim.Direction\0226"
-    "\n\036forward_back_initial_direction\030\014 \001(\0162\016"
-    ".aim.Direction\022\'\n\014floor_height\030\r \001(\0132\021.a"
-    "im.RegionLength\"\255\001\n\022WallArcScenarioDef\022 "
-    "\n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006heig"
-    "ht\030\002 \001(\0132\021.aim.RegionLength\022(\n\rheight_ji"
-    "tter\030\003 \001(\0132\021.aim.RegionLength\022\027\n\017start_o"
-    "n_ground\030\006 \001(\010\022\017\n\007reflect\030\007 \001(\010\"\215\001\n\021Wall"
-    "WanderProfile\022\036\n\004info\030\001 \001(\0132\020.aim.Profil"
-    "eInfo\022\021\n\tturn_time\030\002 \001(\002\022\030\n\020turn_time_ji"
-    "tter\030\003 \001(\002\022\021\n\tturn_rate\030\004 \001(\002\022\030\n\020turn_ra"
-    "te_jitter\030\005 \001(\002\"\270\001\n\025WallWanderScenarioDe"
-    "f\022\?\n\031target_placement_strategy\030\001 \001(\0132\034.a"
-    "im.TargetPlacementStrategy\022(\n\010profiles\030\002"
-    " \003(\0132\026.aim.WallWanderProfile\022\025\n\rprofile_"
-    "order\030\003 \003(\005\022\035\n\025time_scale_multiplier\030\004 \001"
-    "(\002\"\214\002\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132\022.aim"
-    ".TargetProfile\022\023\n\013num_targets\030\002 \001(\005\022\036\n\026r"
-    "emove_closest_on_miss\030\003 \001(\010\022\024\n\014target_or"
-    "der\030\004 \003(\005\022\036\n\026newest_target_is_ghost\030\005 \001("
-    "\010\022 \n\030new_target_delay_seconds\030\006 \001(\002\022#\n\033r"
-    "emove_target_after_seconds\030\007 \001(\002\022\'\n\037stag"
-    "ger_initial_targets_seconds\030\010 \001(\002\"\037\n\rPil"
-    "lTargetDef\022\016\n\006height\030\001 \001(\002\"\261\003\n\rTargetPro"
-    "file\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022\025\n\r"
-    "target_radius\030\002 \001(\002\022\034\n\024target_radius_jit"
-    "ter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_jitter"
-    "\030\005 \001(\002\022\024\n\014acceleration\030\006 \001(\002\022\033\n\023accelera"
-    "tion_jitter\030\007 \001(\002\022\035\n\025target_radius_at_ki"
-    "ll\030\010 \001(\002\022$\n\034target_hit_radius_multiplier"
-    "\030\t \001(\002\022)\n!target_radius_growth_time_seco"
-    "nds\030\014 \001(\002\022!\n\031target_radius_growth_size\030\r"
-    " \001(\002\0224\n,target_radius_growth_final_size_"
-    "time_seconds\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022.aim.P"
-    "illTargetDefH\000B\006\n\004type*v\n\tDirection\022\024\n\020D"
-    "IRECTION_RANDOM\020\000\022\026\n\022DIRECTION_POSITIVE\020"
-    "\001\022\026\n\022DIRECTION_NEGATIVE\020\002\022\020\n\014DIRECTION_I"
-    "N\020\003\022\021\n\rDIRECTION_OUT\020\004b\010editionsp\350\007"
+    "etPlacementStrategy\022\027\n\017start_in_center\030\002"
+    " \001(\010\"v\n\021BarrelScenarioDef\022\?\n\031target_plac"
+    "ement_strategy\030\001 \001(\0132\034.aim.TargetPlaceme"
+    "ntStrategy\022 \n\030direction_radius_percent\030\002"
+    " \001(\002\"\342\001\n\021LinearScenarioDef\022\r\n\005angle\030\001 \001("
+    "\002\022\024\n\014angle_jitter\030\002 \001(\002\022\?\n\031target_placem"
+    "ent_strategy\030\005 \001(\0132\034.aim.TargetPlacement"
+    "Strategy\0224\n\034left_right_initial_direction"
+    "\030\006 \001(\0162\016.aim.Direction\0221\n\031up_down_initia"
+    "l_direction\030\007 \001(\0162\016.aim.Direction\"j\n\017Sin"
+    "eScenarioDef\022!\n\006height\030\001 \001(\0132\021.aim.Regio"
+    "nLength\022 \n\005width\030\002 \001(\0132\021.aim.RegionLengt"
+    "h\022\022\n\ngoing_left\030\003 \001(\010\"c\n\013ProfileInfo\022\016\n\006"
+    "weight\030\001 \001(\002\022\024\n\014next_profile\030\002 \001(\005\022\031\n\021mi"
+    "n_selection_gap\030\003 \001(\005\022\023\n\013description\030\004 \001"
+    "(\t\"\331\002\n\022AngleStrafeProfile\022\036\n\004info\030\001 \001(\0132"
+    "\020.aim.ProfileInfo\022#\n\010distance\030\002 \001(\0132\021.ai"
+    "m.RegionLength\022*\n\017distance_jitter\030\003 \001(\0132"
+    "\021.aim.RegionLength\022\r\n\005angle\030\007 \001(\002\022\024\n\014ang"
+    "le_jitter\030\010 \001(\002\022 \n\030direction_change_perc"
+    "ent\030\t \001(\002\022\033\n\023pause_at_end_chance\030\n \001(\002\022\025"
+    "\n\rpause_seconds\030\013 \001(\002\022\034\n\024pause_seconds_j"
+    "itter\030\014 \001(\002\022\030\n\020speed_multiplier\030\r \001(\002\022\037\n"
+    "\027acceleration_multiplier\030\016 \001(\002\"o\n\006Bounds"
+    "\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n\006he"
+    "ight\030\002 \001(\0132\021.aim.RegionLength\022 \n\005depth\030\003"
+    " \001(\0132\021.aim.RegionLength\"\325\001\n\026AngleStrafeS"
+    "cenarioDef\022\033\n\006bounds\030\001 \001(\0132\013.aim.Bounds\022"
+    "\?\n\031target_placement_strategy\030\002 \001(\0132\034.aim"
+    ".TargetPlacementStrategy\022)\n\010profiles\030\004 \003"
+    "(\0132\027.aim.AngleStrafeProfile\022\025\n\rprofile_o"
+    "rder\030\005 \003(\005\022\033\n\023distance_multiplier\030\007 \001(\002\""
+    "\274\002\n\rStrafeProfile\022\036\n\004info\030\001 \001(\0132\020.aim.Pr"
+    "ofileInfo\022\014\n\004time\030\002 \001(\002\022\023\n\013time_jitter\030\003"
+    " \001(\002\022\023\n\013center_bias\030\004 \001(\002\022#\n\010distance\030\005 "
+    "\001(\0132\021.aim.RegionLength\022*\n\017distance_jitte"
+    "r\030\006 \001(\0132\021.aim.RegionLength\022\030\n\020speed_mult"
+    "iplier\030\007 \001(\002\022\037\n\027speed_multiplier_jitter\030"
+    "\010 \001(\002\022\037\n\027acceleration_multiplier\030\t \001(\002\022&"
+    "\n\036acceleration_multiplier_jitter\030\n \001(\002\"\353"
+    "\004\n\021StrafeScenarioDef\022\033\n\006bounds\030\001 \001(\0132\013.a"
+    "im.Bounds\022$\n\017relative_bounds\030\002 \001(\0132\013.aim"
+    ".Bounds\022\?\n\031target_placement_strategy\030\004 \001"
+    "(\0132\034.aim.TargetPlacementStrategy\022/\n\023left"
+    "_right_profiles\030\005 \003(\0132\022.aim.StrafeProfil"
+    "e\022 \n\030left_right_profile_order\030\006 \003(\005\0221\n\025f"
+    "orward_back_profiles\030\007 \003(\0132\022.aim.StrafeP"
+    "rofile\022\"\n\032forward_back_profile_order\030\010 \003"
+    "(\005\022,\n\020up_down_profiles\030\t \003(\0132\022.aim.Straf"
+    "eProfile\022\035\n\025up_down_profile_order\030\n \003(\005\022"
+    "\035\n\025time_scale_multiplier\030\013 \001(\002\022\033\n\023distan"
+    "ce_multiplier\030\020 \001(\002\0224\n\034left_right_initia"
+    "l_direction\030\r \001(\0162\016.aim.Direction\0221\n\031up_"
+    "down_initial_direction\030\016 \001(\0162\016.aim.Direc"
+    "tion\0226\n\036forward_back_initial_direction\030\017"
+    " \001(\0162\016.aim.Direction\"\211\002\n\rBounceProfile\022\036"
+    "\n\004info\030\001 \001(\0132\020.aim.ProfileInfo\022!\n\006height"
+    "\030\002 \001(\0132\021.aim.RegionLength\022(\n\rheight_jitt"
+    "er\030\003 \001(\0132\021.aim.RegionLength\022\025\n\rdelay_sec"
+    "onds\030\004 \001(\002\022\034\n\024delay_seconds_jitter\030\005 \001(\002"
+    "\022\033\n\023only_delay_on_floor\030\006 \001(\010\022\030\n\020speed_m"
+    "ultiplier\030\007 \001(\002\022\037\n\027acceleration_multipli"
+    "er\030\010 \001(\002\"\271\004\n\021BounceScenarioDef\022\033\n\006bounds"
+    "\030\001 \001(\0132\013.aim.Bounds\022\?\n\031target_placement_"
+    "strategy\030\002 \001(\0132\034.aim.TargetPlacementStra"
+    "tegy\022+\n\017bounce_profiles\030\003 \003(\0132\022.aim.Boun"
+    "ceProfile\022\034\n\024bounce_profile_order\030\004 \003(\005\022"
+    "/\n\023left_right_profiles\030\005 \003(\0132\022.aim.Straf"
+    "eProfile\022 \n\030left_right_profile_order\030\006 \003"
+    "(\005\0221\n\025forward_back_profiles\030\007 \003(\0132\022.aim."
+    "StrafeProfile\022\"\n\032forward_back_profile_or"
+    "der\030\010 \003(\005\022\035\n\025time_scale_multiplier\030\t \001(\002"
+    "\022\033\n\023distance_multiplier\030\016 \001(\002\0224\n\034left_ri"
+    "ght_initial_direction\030\013 \001(\0162\016.aim.Direct"
+    "ion\0226\n\036forward_back_initial_direction\030\014 "
+    "\001(\0162\016.aim.Direction\022\'\n\014floor_height\030\r \001("
+    "\0132\021.aim.RegionLength\"\255\001\n\022WallArcScenario"
+    "Def\022 \n\005width\030\001 \001(\0132\021.aim.RegionLength\022!\n"
+    "\006height\030\002 \001(\0132\021.aim.RegionLength\022(\n\rheig"
+    "ht_jitter\030\003 \001(\0132\021.aim.RegionLength\022\027\n\017st"
+    "art_on_ground\030\006 \001(\010\022\017\n\007reflect\030\007 \001(\010\"\215\001\n"
+    "\021WallWanderProfile\022\036\n\004info\030\001 \001(\0132\020.aim.P"
+    "rofileInfo\022\021\n\tturn_time\030\002 \001(\002\022\030\n\020turn_ti"
+    "me_jitter\030\003 \001(\002\022\021\n\tturn_rate\030\004 \001(\002\022\030\n\020tu"
+    "rn_rate_jitter\030\005 \001(\002\"\270\001\n\025WallWanderScena"
+    "rioDef\022\?\n\031target_placement_strategy\030\001 \001("
+    "\0132\034.aim.TargetPlacementStrategy\022(\n\010profi"
+    "les\030\002 \003(\0132\026.aim.WallWanderProfile\022\025\n\rpro"
+    "file_order\030\003 \003(\005\022\035\n\025time_scale_multiplie"
+    "r\030\004 \001(\002\"\214\002\n\tTargetDef\022$\n\010profiles\030\001 \003(\0132"
+    "\022.aim.TargetProfile\022\023\n\013num_targets\030\002 \001(\005"
+    "\022\036\n\026remove_closest_on_miss\030\003 \001(\010\022\024\n\014targ"
+    "et_order\030\004 \003(\005\022\036\n\026newest_target_is_ghost"
+    "\030\005 \001(\010\022 \n\030new_target_delay_seconds\030\006 \001(\002"
+    "\022#\n\033remove_target_after_seconds\030\007 \001(\002\022\'\n"
+    "\037stagger_initial_targets_seconds\030\010 \001(\002\"\037"
+    "\n\rPillTargetDef\022\016\n\006height\030\001 \001(\002\"\261\003\n\rTarg"
+    "etProfile\022\036\n\004info\030\001 \001(\0132\020.aim.ProfileInf"
+    "o\022\025\n\rtarget_radius\030\002 \001(\002\022\034\n\024target_radiu"
+    "s_jitter\030\003 \001(\002\022\r\n\005speed\030\004 \001(\002\022\024\n\014speed_j"
+    "itter\030\005 \001(\002\022\024\n\014acceleration\030\006 \001(\002\022\033\n\023acc"
+    "eleration_jitter\030\007 \001(\002\022\035\n\025target_radius_"
+    "at_kill\030\010 \001(\002\022$\n\034target_hit_radius_multi"
+    "plier\030\t \001(\002\022)\n!target_radius_growth_time"
+    "_seconds\030\014 \001(\002\022!\n\031target_radius_growth_s"
+    "ize\030\r \001(\002\0224\n,target_radius_growth_final_"
+    "size_time_seconds\030\016 \001(\002\022\"\n\004pill\030\n \001(\0132\022."
+    "aim.PillTargetDefH\000B\006\n\004type*v\n\tDirection"
+    "\022\024\n\020DIRECTION_RANDOM\020\000\022\026\n\022DIRECTION_POSI"
+    "TIVE\020\001\022\026\n\022DIRECTION_NEGATIVE\020\002\022\020\n\014DIRECT"
+    "ION_IN\020\003\022\021\n\rDIRECTION_OUT\020\004b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_scenario_2eproto_deps[1] = {
@@ -1968,7 +1968,7 @@ static ::absl::once_flag descriptor_table_scenario_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_scenario_2eproto = {
     false,
     false,
-    8395,
+    8400,
     descriptor_table_protodef_scenario_2eproto,
     "scenario.proto",
     &descriptor_table_scenario_2eproto_once,
@@ -7244,18 +7244,18 @@ void ScenarioDef::set_allocated_linear_def(::aim::LinearScenarioDef* PROTOBUF_NU
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.linear_def)
 }
-void ScenarioDef::set_allocated_wall_strafe_def(::aim::WallStrafeScenarioDef* PROTOBUF_NULLABLE wall_strafe_def) {
+void ScenarioDef::set_allocated_angle_strafe_def(::aim::AngleStrafeScenarioDef* PROTOBUF_NULLABLE angle_strafe_def) {
   ::google::protobuf::Arena* message_arena = GetArena();
   clear_type();
-  if (wall_strafe_def) {
-    ::google::protobuf::Arena* submessage_arena = wall_strafe_def->GetArena();
+  if (angle_strafe_def) {
+    ::google::protobuf::Arena* submessage_arena = angle_strafe_def->GetArena();
     if (message_arena != submessage_arena) {
-      wall_strafe_def = ::google::protobuf::internal::GetOwnedMessage(message_arena, wall_strafe_def, submessage_arena);
+      angle_strafe_def = ::google::protobuf::internal::GetOwnedMessage(message_arena, angle_strafe_def, submessage_arena);
     }
-    set_has_wall_strafe_def();
-    _impl_.type_.wall_strafe_def_ = wall_strafe_def;
+    set_has_angle_strafe_def();
+    _impl_.type_.angle_strafe_def_ = angle_strafe_def;
   }
-  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.wall_strafe_def)
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.angle_strafe_def)
 }
 void ScenarioDef::set_allocated_wall_arc_def(::aim::WallArcScenarioDef* PROTOBUF_NULLABLE wall_arc_def) {
   ::google::protobuf::Arena* message_arena = GetArena();
@@ -7431,8 +7431,8 @@ ScenarioDef::ScenarioDef(
       case kLinearDef:
         _impl_.type_.linear_def_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.type_.linear_def_);
         break;
-      case kWallStrafeDef:
-        _impl_.type_.wall_strafe_def_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.type_.wall_strafe_def_);
+      case kAngleStrafeDef:
+        _impl_.type_.angle_strafe_def_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.type_.angle_strafe_def_);
         break;
       case kWallArcDef:
         _impl_.type_.wall_arc_def_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.type_.wall_arc_def_);
@@ -7538,11 +7538,11 @@ void ScenarioDef::clear_type() {
       }
       break;
     }
-    case kWallStrafeDef: {
+    case kAngleStrafeDef: {
       if (GetArena() == nullptr) {
-        delete _impl_.type_.wall_strafe_def_;
+        delete _impl_.type_.angle_strafe_def_;
       } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
-        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.wall_strafe_def_);
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.type_.angle_strafe_def_);
       }
       break;
     }
@@ -7759,8 +7759,8 @@ ScenarioDef::_table_ = {
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.barrel_def_), _Internal::kOneofCaseOffset + 0, 7, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.LinearScenarioDef linear_def = 33;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.linear_def_), _Internal::kOneofCaseOffset + 0, 8, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.WallStrafeScenarioDef wall_strafe_def = 34;
-    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.wall_strafe_def_), _Internal::kOneofCaseOffset + 0, 9, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.AngleStrafeScenarioDef angle_strafe_def = 34;
+    {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.angle_strafe_def_), _Internal::kOneofCaseOffset + 0, 9, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.WallArcScenarioDef wall_arc_def = 35;
     {PROTOBUF_FIELD_OFFSET(ScenarioDef, _impl_.type_.wall_arc_def_), _Internal::kOneofCaseOffset + 0, 10, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.WallWanderScenarioDef wall_wander_def = 36;
@@ -7788,7 +7788,7 @@ ScenarioDef::_table_ = {
       {::_pbi::TcParser::GetTable<::aim::CenteringScenarioDef>()},
       {::_pbi::TcParser::GetTable<::aim::BarrelScenarioDef>()},
       {::_pbi::TcParser::GetTable<::aim::LinearScenarioDef>()},
-      {::_pbi::TcParser::GetTable<::aim::WallStrafeScenarioDef>()},
+      {::_pbi::TcParser::GetTable<::aim::AngleStrafeScenarioDef>()},
       {::_pbi::TcParser::GetTable<::aim::WallArcScenarioDef>()},
       {::_pbi::TcParser::GetTable<::aim::WallWanderScenarioDef>()},
       {::_pbi::TcParser::GetTable<::aim::ReferenceScenarioDef>()},
@@ -7967,9 +7967,9 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
           stream);
       break;
     }
-    case kWallStrafeDef: {
+    case kAngleStrafeDef: {
       target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-          34, *this_._impl_.type_.wall_strafe_def_, this_._impl_.type_.wall_strafe_def_->GetCachedSize(), target,
+          34, *this_._impl_.type_.angle_strafe_def_, this_._impl_.type_.angle_strafe_def_->GetCachedSize(), target,
           stream);
       break;
     }
@@ -8107,10 +8107,10 @@ PROTOBUF_NOINLINE void ScenarioDef::Clear() {
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.linear_def_);
       break;
     }
-    // .aim.WallStrafeScenarioDef wall_strafe_def = 34;
-    case kWallStrafeDef: {
+    // .aim.AngleStrafeScenarioDef angle_strafe_def = 34;
+    case kAngleStrafeDef: {
       total_size += 2 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.wall_strafe_def_);
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.type_.angle_strafe_def_);
       break;
     }
     // .aim.WallArcScenarioDef wall_arc_def = 35;
@@ -8288,11 +8288,11 @@ void ScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg,
         }
         break;
       }
-      case kWallStrafeDef: {
+      case kAngleStrafeDef: {
         if (oneof_needs_init) {
-          _this->_impl_.type_.wall_strafe_def_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.type_.wall_strafe_def_);
+          _this->_impl_.type_.angle_strafe_def_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.type_.angle_strafe_def_);
         } else {
-          _this->_impl_.type_.wall_strafe_def_->MergeFrom(*from._impl_.type_.wall_strafe_def_);
+          _this->_impl_.type_.angle_strafe_def_->MergeFrom(*from._impl_.type_.angle_strafe_def_);
         }
         break;
       }
@@ -11441,39 +11441,39 @@ void ProfileInfo::InternalSwap(ProfileInfo* PROTOBUF_RESTRICT PROTOBUF_NONNULL o
 }
 // ===================================================================
 
-class WallStrafeProfile::_Internal {
+class AngleStrafeProfile::_Internal {
  public:
   using HasBits =
-      decltype(::std::declval<WallStrafeProfile>()._impl_._has_bits_);
+      decltype(::std::declval<AngleStrafeProfile>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_._has_bits_);
+      8 * PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_._has_bits_);
 };
 
-WallStrafeProfile::WallStrafeProfile(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+AngleStrafeProfile::AngleStrafeProfile(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, WallStrafeProfile_class_data_.base()) {
+    : ::google::protobuf::Message(arena, AngleStrafeProfile_class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.WallStrafeProfile)
+  // @@protoc_insertion_point(arena_constructor:aim.AngleStrafeProfile)
 }
-PROTOBUF_NDEBUG_INLINE WallStrafeProfile::Impl_::Impl_(
+PROTOBUF_NDEBUG_INLINE AngleStrafeProfile::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-    [[maybe_unused]] const ::aim::WallStrafeProfile& from_msg)
+    [[maybe_unused]] const ::aim::AngleStrafeProfile& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0} {}
 
-WallStrafeProfile::WallStrafeProfile(
+AngleStrafeProfile::AngleStrafeProfile(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
-    const WallStrafeProfile& from)
+    const AngleStrafeProfile& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, WallStrafeProfile_class_data_.base()) {
+    : ::google::protobuf::Message(arena, AngleStrafeProfile_class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  WallStrafeProfile* const _this = this;
+  AngleStrafeProfile* const _this = this;
   (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
@@ -11496,14 +11496,14 @@ WallStrafeProfile::WallStrafeProfile(
                offsetof(Impl_, angle_) +
                sizeof(Impl_::acceleration_multiplier_));
 
-  // @@protoc_insertion_point(copy_constructor:aim.WallStrafeProfile)
+  // @@protoc_insertion_point(copy_constructor:aim.AngleStrafeProfile)
 }
-PROTOBUF_NDEBUG_INLINE WallStrafeProfile::Impl_::Impl_(
+PROTOBUF_NDEBUG_INLINE AngleStrafeProfile::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0} {}
 
-inline void WallStrafeProfile::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
+inline void AngleStrafeProfile::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, info_),
@@ -11512,12 +11512,12 @@ inline void WallStrafeProfile::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena)
                offsetof(Impl_, info_) +
                sizeof(Impl_::acceleration_multiplier_));
 }
-WallStrafeProfile::~WallStrafeProfile() {
-  // @@protoc_insertion_point(destructor:aim.WallStrafeProfile)
+AngleStrafeProfile::~AngleStrafeProfile() {
+  // @@protoc_insertion_point(destructor:aim.AngleStrafeProfile)
   SharedDtor(*this);
 }
-inline void WallStrafeProfile::SharedDtor(MessageLite& self) {
-  WallStrafeProfile& this_ = static_cast<WallStrafeProfile&>(self);
+inline void AngleStrafeProfile::SharedDtor(MessageLite& self) {
+  AngleStrafeProfile& this_ = static_cast<AngleStrafeProfile&>(self);
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     this_.CheckHasBitConsistency();
   }
@@ -11529,53 +11529,53 @@ inline void WallStrafeProfile::SharedDtor(MessageLite& self) {
   this_._impl_.~Impl_();
 }
 
-inline void* PROTOBUF_NONNULL WallStrafeProfile::PlacementNew_(
+inline void* PROTOBUF_NONNULL AngleStrafeProfile::PlacementNew_(
     const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
-  return ::new (mem) WallStrafeProfile(arena);
+  return ::new (mem) AngleStrafeProfile(arena);
 }
-constexpr auto WallStrafeProfile::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(WallStrafeProfile),
-                                            alignof(WallStrafeProfile));
+constexpr auto AngleStrafeProfile::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(AngleStrafeProfile),
+                                            alignof(AngleStrafeProfile));
 }
-constexpr auto WallStrafeProfile::InternalGenerateClassData_() {
+constexpr auto AngleStrafeProfile::InternalGenerateClassData_() {
   return ::google::protobuf::internal::ClassDataFull{
       ::google::protobuf::internal::ClassData{
-          &_WallStrafeProfile_default_instance_._instance,
+          &_AngleStrafeProfile_default_instance_._instance,
           &_table_.header,
           nullptr,  // OnDemandRegisterArenaDtor
           nullptr,  // IsInitialized
-          &WallStrafeProfile::MergeImpl,
-          ::google::protobuf::Message::GetNewImpl<WallStrafeProfile>(),
+          &AngleStrafeProfile::MergeImpl,
+          ::google::protobuf::Message::GetNewImpl<AngleStrafeProfile>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-          &WallStrafeProfile::SharedDtor,
-          ::google::protobuf::Message::GetClearImpl<WallStrafeProfile>(), &WallStrafeProfile::ByteSizeLong,
-              &WallStrafeProfile::_InternalSerialize,
+          &AngleStrafeProfile::SharedDtor,
+          ::google::protobuf::Message::GetClearImpl<AngleStrafeProfile>(), &AngleStrafeProfile::ByteSizeLong,
+              &AngleStrafeProfile::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_._cached_size_),
+          PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_._cached_size_),
           false,
       },
-      &WallStrafeProfile::kDescriptorMethods,
+      &AngleStrafeProfile::kDescriptorMethods,
       &descriptor_table_scenario_2eproto,
       nullptr,  // tracker
   };
 }
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
-    ::google::protobuf::internal::ClassDataFull WallStrafeProfile_class_data_ =
-        WallStrafeProfile::InternalGenerateClassData_();
+    ::google::protobuf::internal::ClassDataFull AngleStrafeProfile_class_data_ =
+        AngleStrafeProfile::InternalGenerateClassData_();
 
 PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
-WallStrafeProfile::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&WallStrafeProfile_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(WallStrafeProfile_class_data_.tc_table);
-  return WallStrafeProfile_class_data_.base();
+AngleStrafeProfile::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&AngleStrafeProfile_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(AngleStrafeProfile_class_data_.tc_table);
+  return AngleStrafeProfile_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
 const ::_pbi::TcParseTable<4, 11, 3, 0, 2>
-WallStrafeProfile::_table_ = {
+AngleStrafeProfile::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_._has_bits_),
     0, // no _extensions_
     14, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
@@ -11584,87 +11584,87 @@ WallStrafeProfile::_table_ = {
     11,  // num_field_entries
     3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
-    WallStrafeProfile_class_data_.base(),
+    AngleStrafeProfile_class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::WallStrafeProfile>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::AngleStrafeProfile>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
     // .aim.ProfileInfo info = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 0, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.info_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.info_)}},
     // .aim.RegionLength distance = 2;
     {::_pbi::TcParser::FastMtS1,
      {18, 1, 1,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.distance_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.distance_)}},
     // .aim.RegionLength distance_jitter = 3;
     {::_pbi::TcParser::FastMtS1,
      {26, 2, 2,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.distance_jitter_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.distance_jitter_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     // float angle = 7;
     {::_pbi::TcParser::FastF32S1,
      {61, 3, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.angle_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.angle_)}},
     // float angle_jitter = 8;
     {::_pbi::TcParser::FastF32S1,
      {69, 4, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.angle_jitter_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.angle_jitter_)}},
     // float direction_change_percent = 9;
     {::_pbi::TcParser::FastF32S1,
      {77, 5, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.direction_change_percent_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.direction_change_percent_)}},
     // float pause_at_end_chance = 10;
     {::_pbi::TcParser::FastF32S1,
      {85, 6, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.pause_at_end_chance_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.pause_at_end_chance_)}},
     // float pause_seconds = 11;
     {::_pbi::TcParser::FastF32S1,
      {93, 7, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.pause_seconds_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.pause_seconds_)}},
     // float pause_seconds_jitter = 12;
     {::_pbi::TcParser::FastF32S1,
      {101, 8, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.pause_seconds_jitter_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.pause_seconds_jitter_)}},
     // float speed_multiplier = 13;
     {::_pbi::TcParser::FastF32S1,
      {109, 9, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.speed_multiplier_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.speed_multiplier_)}},
     // float acceleration_multiplier = 14;
     {::_pbi::TcParser::FastF32S1,
      {117, 10, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleration_multiplier_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.acceleration_multiplier_)}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
     // .aim.ProfileInfo info = 1;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.info_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.info_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength distance = 2;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.distance_), _Internal::kHasBitsOffset + 1, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.distance_), _Internal::kHasBitsOffset + 1, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength distance_jitter = 3;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.distance_jitter_), _Internal::kHasBitsOffset + 2, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.distance_jitter_), _Internal::kHasBitsOffset + 2, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // float angle = 7;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.angle_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.angle_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float angle_jitter = 8;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.angle_jitter_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.angle_jitter_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float direction_change_percent = 9;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.direction_change_percent_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.direction_change_percent_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float pause_at_end_chance = 10;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.pause_at_end_chance_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.pause_at_end_chance_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float pause_seconds = 11;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.pause_seconds_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.pause_seconds_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float pause_seconds_jitter = 12;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.pause_seconds_jitter_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.pause_seconds_jitter_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float speed_multiplier = 13;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.speed_multiplier_), _Internal::kHasBitsOffset + 9, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.speed_multiplier_), _Internal::kHasBitsOffset + 9, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float acceleration_multiplier = 14;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleration_multiplier_), _Internal::kHasBitsOffset + 10, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.acceleration_multiplier_), _Internal::kHasBitsOffset + 10, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::ProfileInfo>()},
@@ -11674,8 +11674,8 @@ WallStrafeProfile::_table_ = {
   {{
   }},
 };
-PROTOBUF_NOINLINE void WallStrafeProfile::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.WallStrafeProfile)
+PROTOBUF_NOINLINE void AngleStrafeProfile::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.AngleStrafeProfile)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -11711,20 +11711,20 @@ PROTOBUF_NOINLINE void WallStrafeProfile::Clear() {
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-::uint8_t* PROTOBUF_NONNULL WallStrafeProfile::_InternalSerialize(
+::uint8_t* PROTOBUF_NONNULL AngleStrafeProfile::_InternalSerialize(
     const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
     ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
-  const WallStrafeProfile& this_ = static_cast<const WallStrafeProfile&>(base);
+  const AngleStrafeProfile& this_ = static_cast<const AngleStrafeProfile&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-::uint8_t* PROTOBUF_NONNULL WallStrafeProfile::_InternalSerialize(
+::uint8_t* PROTOBUF_NONNULL AngleStrafeProfile::_InternalSerialize(
     ::uint8_t* PROTOBUF_NONNULL target,
     ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-  const WallStrafeProfile& this_ = *this;
+  const AngleStrafeProfile& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     this_.CheckHasBitConsistency();
   }
-  // @@protoc_insertion_point(serialize_to_array_start:aim.WallStrafeProfile)
+  // @@protoc_insertion_point(serialize_to_array_start:aim.AngleStrafeProfile)
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
@@ -11811,18 +11811,18 @@ PROTOBUF_NOINLINE void WallStrafeProfile::Clear() {
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
             this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:aim.WallStrafeProfile)
+  // @@protoc_insertion_point(serialize_to_array_end:aim.AngleStrafeProfile)
   return target;
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-::size_t WallStrafeProfile::ByteSizeLong(const MessageLite& base) {
-  const WallStrafeProfile& this_ = static_cast<const WallStrafeProfile&>(base);
+::size_t AngleStrafeProfile::ByteSizeLong(const MessageLite& base) {
+  const AngleStrafeProfile& this_ = static_cast<const AngleStrafeProfile&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-::size_t WallStrafeProfile::ByteSizeLong() const {
-  const WallStrafeProfile& this_ = *this;
+::size_t AngleStrafeProfile::ByteSizeLong() const {
+  const AngleStrafeProfile& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  // @@protoc_insertion_point(message_byte_size_start:aim.WallStrafeProfile)
+  // @@protoc_insertion_point(message_byte_size_start:aim.AngleStrafeProfile)
   ::size_t total_size = 0;
 
   ::uint32_t cached_has_bits = 0;
@@ -11853,16 +11853,16 @@ PROTOBUF_NOINLINE void WallStrafeProfile::Clear() {
                                              &this_._impl_._cached_size_);
 }
 
-void WallStrafeProfile::MergeImpl(::google::protobuf::MessageLite& to_msg,
+void AngleStrafeProfile::MergeImpl(::google::protobuf::MessageLite& to_msg,
                             const ::google::protobuf::MessageLite& from_msg) {
    auto* const _this =
-      static_cast<WallStrafeProfile*>(&to_msg);
-  auto& from = static_cast<const WallStrafeProfile&>(from_msg);
+      static_cast<AngleStrafeProfile*>(&to_msg);
+  auto& from = static_cast<const AngleStrafeProfile&>(from_msg);
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     from.CheckHasBitConsistency();
   }
   ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.WallStrafeProfile)
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.AngleStrafeProfile)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
@@ -11925,27 +11925,27 @@ void WallStrafeProfile::MergeImpl(::google::protobuf::MessageLite& to_msg,
       from._internal_metadata_);
 }
 
-void WallStrafeProfile::CopyFrom(const WallStrafeProfile& from) {
-  // @@protoc_insertion_point(class_specific_copy_from_start:aim.WallStrafeProfile)
+void AngleStrafeProfile::CopyFrom(const AngleStrafeProfile& from) {
+  // @@protoc_insertion_point(class_specific_copy_from_start:aim.AngleStrafeProfile)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 
-void WallStrafeProfile::InternalSwap(WallStrafeProfile* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
+void AngleStrafeProfile::InternalSwap(AngleStrafeProfile* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.acceleration_multiplier_)
-      + sizeof(WallStrafeProfile::_impl_.acceleration_multiplier_)
-      - PROTOBUF_FIELD_OFFSET(WallStrafeProfile, _impl_.info_)>(
+      PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.acceleration_multiplier_)
+      + sizeof(AngleStrafeProfile::_impl_.acceleration_multiplier_)
+      - PROTOBUF_FIELD_OFFSET(AngleStrafeProfile, _impl_.info_)>(
           reinterpret_cast<char*>(&_impl_.info_),
           reinterpret_cast<char*>(&other->_impl_.info_));
 }
 
-::google::protobuf::Metadata WallStrafeProfile::GetMetadata() const {
+::google::protobuf::Metadata AngleStrafeProfile::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================
@@ -12307,42 +12307,42 @@ void Bounds::InternalSwap(Bounds* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
 }
 // ===================================================================
 
-class WallStrafeScenarioDef::_Internal {
+class AngleStrafeScenarioDef::_Internal {
  public:
   using HasBits =
-      decltype(::std::declval<WallStrafeScenarioDef>()._impl_._has_bits_);
+      decltype(::std::declval<AngleStrafeScenarioDef>()._impl_._has_bits_);
   static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_._has_bits_);
+      8 * PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_._has_bits_);
 };
 
-WallStrafeScenarioDef::WallStrafeScenarioDef(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+AngleStrafeScenarioDef::AngleStrafeScenarioDef(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, WallStrafeScenarioDef_class_data_.base()) {
+    : ::google::protobuf::Message(arena, AngleStrafeScenarioDef_class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
   SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.WallStrafeScenarioDef)
+  // @@protoc_insertion_point(arena_constructor:aim.AngleStrafeScenarioDef)
 }
-PROTOBUF_NDEBUG_INLINE WallStrafeScenarioDef::Impl_::Impl_(
+PROTOBUF_NDEBUG_INLINE AngleStrafeScenarioDef::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-    [[maybe_unused]] const ::aim::WallStrafeScenarioDef& from_msg)
+    [[maybe_unused]] const ::aim::AngleStrafeScenarioDef& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
         profiles_{visibility, arena, from.profiles_},
         profile_order_{visibility, arena, from.profile_order_},
         _profile_order_cached_byte_size_{0} {}
 
-WallStrafeScenarioDef::WallStrafeScenarioDef(
+AngleStrafeScenarioDef::AngleStrafeScenarioDef(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
-    const WallStrafeScenarioDef& from)
+    const AngleStrafeScenarioDef& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, WallStrafeScenarioDef_class_data_.base()) {
+    : ::google::protobuf::Message(arena, AngleStrafeScenarioDef_class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  WallStrafeScenarioDef* const _this = this;
+  AngleStrafeScenarioDef* const _this = this;
   (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
@@ -12356,9 +12356,9 @@ WallStrafeScenarioDef::WallStrafeScenarioDef(
                 : nullptr;
   _impl_.distance_multiplier_ = from._impl_.distance_multiplier_;
 
-  // @@protoc_insertion_point(copy_constructor:aim.WallStrafeScenarioDef)
+  // @@protoc_insertion_point(copy_constructor:aim.AngleStrafeScenarioDef)
 }
-PROTOBUF_NDEBUG_INLINE WallStrafeScenarioDef::Impl_::Impl_(
+PROTOBUF_NDEBUG_INLINE AngleStrafeScenarioDef::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0},
@@ -12366,7 +12366,7 @@ PROTOBUF_NDEBUG_INLINE WallStrafeScenarioDef::Impl_::Impl_(
         profile_order_{visibility, arena},
         _profile_order_cached_byte_size_{0} {}
 
-inline void WallStrafeScenarioDef::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
+inline void AngleStrafeScenarioDef::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, bounds_),
@@ -12375,12 +12375,12 @@ inline void WallStrafeScenarioDef::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE ar
                offsetof(Impl_, bounds_) +
                sizeof(Impl_::distance_multiplier_));
 }
-WallStrafeScenarioDef::~WallStrafeScenarioDef() {
-  // @@protoc_insertion_point(destructor:aim.WallStrafeScenarioDef)
+AngleStrafeScenarioDef::~AngleStrafeScenarioDef() {
+  // @@protoc_insertion_point(destructor:aim.AngleStrafeScenarioDef)
   SharedDtor(*this);
 }
-inline void WallStrafeScenarioDef::SharedDtor(MessageLite& self) {
-  WallStrafeScenarioDef& this_ = static_cast<WallStrafeScenarioDef&>(self);
+inline void AngleStrafeScenarioDef::SharedDtor(MessageLite& self) {
+  AngleStrafeScenarioDef& this_ = static_cast<AngleStrafeScenarioDef&>(self);
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     this_.CheckHasBitConsistency();
   }
@@ -12391,69 +12391,69 @@ inline void WallStrafeScenarioDef::SharedDtor(MessageLite& self) {
   this_._impl_.~Impl_();
 }
 
-inline void* PROTOBUF_NONNULL WallStrafeScenarioDef::PlacementNew_(
+inline void* PROTOBUF_NONNULL AngleStrafeScenarioDef::PlacementNew_(
     const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
-  return ::new (mem) WallStrafeScenarioDef(arena);
+  return ::new (mem) AngleStrafeScenarioDef(arena);
 }
-constexpr auto WallStrafeScenarioDef::InternalNewImpl_() {
+constexpr auto AngleStrafeScenarioDef::InternalNewImpl_() {
   constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_) +
-          decltype(WallStrafeScenarioDef::_impl_.profiles_)::
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.profiles_) +
+          decltype(AngleStrafeScenarioDef::_impl_.profiles_)::
               InternalGetArenaOffset(
                   ::google::protobuf::Message::internal_visibility()),
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profile_order_) +
-          decltype(WallStrafeScenarioDef::_impl_.profile_order_)::
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.profile_order_) +
+          decltype(AngleStrafeScenarioDef::_impl_.profile_order_)::
               InternalGetArenaOffset(
                   ::google::protobuf::Message::internal_visibility()),
   });
   if (arena_bits.has_value()) {
     return ::google::protobuf::internal::MessageCreator::ZeroInit(
-        sizeof(WallStrafeScenarioDef), alignof(WallStrafeScenarioDef), *arena_bits);
+        sizeof(AngleStrafeScenarioDef), alignof(AngleStrafeScenarioDef), *arena_bits);
   } else {
-    return ::google::protobuf::internal::MessageCreator(&WallStrafeScenarioDef::PlacementNew_,
-                                 sizeof(WallStrafeScenarioDef),
-                                 alignof(WallStrafeScenarioDef));
+    return ::google::protobuf::internal::MessageCreator(&AngleStrafeScenarioDef::PlacementNew_,
+                                 sizeof(AngleStrafeScenarioDef),
+                                 alignof(AngleStrafeScenarioDef));
   }
 }
-constexpr auto WallStrafeScenarioDef::InternalGenerateClassData_() {
+constexpr auto AngleStrafeScenarioDef::InternalGenerateClassData_() {
   return ::google::protobuf::internal::ClassDataFull{
       ::google::protobuf::internal::ClassData{
-          &_WallStrafeScenarioDef_default_instance_._instance,
+          &_AngleStrafeScenarioDef_default_instance_._instance,
           &_table_.header,
           nullptr,  // OnDemandRegisterArenaDtor
           nullptr,  // IsInitialized
-          &WallStrafeScenarioDef::MergeImpl,
-          ::google::protobuf::Message::GetNewImpl<WallStrafeScenarioDef>(),
+          &AngleStrafeScenarioDef::MergeImpl,
+          ::google::protobuf::Message::GetNewImpl<AngleStrafeScenarioDef>(),
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-          &WallStrafeScenarioDef::SharedDtor,
-          ::google::protobuf::Message::GetClearImpl<WallStrafeScenarioDef>(), &WallStrafeScenarioDef::ByteSizeLong,
-              &WallStrafeScenarioDef::_InternalSerialize,
+          &AngleStrafeScenarioDef::SharedDtor,
+          ::google::protobuf::Message::GetClearImpl<AngleStrafeScenarioDef>(), &AngleStrafeScenarioDef::ByteSizeLong,
+              &AngleStrafeScenarioDef::_InternalSerialize,
 #endif  // PROTOBUF_CUSTOM_VTABLE
-          PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_._cached_size_),
+          PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_._cached_size_),
           false,
       },
-      &WallStrafeScenarioDef::kDescriptorMethods,
+      &AngleStrafeScenarioDef::kDescriptorMethods,
       &descriptor_table_scenario_2eproto,
       nullptr,  // tracker
   };
 }
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
-    ::google::protobuf::internal::ClassDataFull WallStrafeScenarioDef_class_data_ =
-        WallStrafeScenarioDef::InternalGenerateClassData_();
+    ::google::protobuf::internal::ClassDataFull AngleStrafeScenarioDef_class_data_ =
+        AngleStrafeScenarioDef::InternalGenerateClassData_();
 
 PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
-WallStrafeScenarioDef::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&WallStrafeScenarioDef_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(WallStrafeScenarioDef_class_data_.tc_table);
-  return WallStrafeScenarioDef_class_data_.base();
+AngleStrafeScenarioDef::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&AngleStrafeScenarioDef_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(AngleStrafeScenarioDef_class_data_.tc_table);
+  return AngleStrafeScenarioDef_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
 const ::_pbi::TcParseTable<3, 5, 3, 0, 2>
-WallStrafeScenarioDef::_table_ = {
+AngleStrafeScenarioDef::_table_ = {
   {
-    PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_._has_bits_),
     0, // no _extensions_
     7, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
@@ -12462,60 +12462,60 @@ WallStrafeScenarioDef::_table_ = {
     5,  // num_field_entries
     3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
-    WallStrafeScenarioDef_class_data_.base(),
+    AngleStrafeScenarioDef_class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
     #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::WallStrafeScenarioDef>(),  // to_prefetch
+    ::_pbi::TcParser::GetTable<::aim::AngleStrafeScenarioDef>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
     // .aim.Bounds bounds = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 2, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.bounds_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.bounds_)}},
     // .aim.TargetPlacementStrategy target_placement_strategy = 2;
     {::_pbi::TcParser::FastMtS1,
      {18, 3, 1,
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.target_placement_strategy_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.target_placement_strategy_)}},
     {::_pbi::TcParser::MiniParse, {}},
-    // repeated .aim.WallStrafeProfile profiles = 4;
+    // repeated .aim.AngleStrafeProfile profiles = 4;
     {::_pbi::TcParser::FastMtR1,
      {34, 0, 2,
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.profiles_)}},
     // repeated int32 profile_order = 5;
     {::_pbi::TcParser::FastV32P1,
      {42, 1, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profile_order_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.profile_order_)}},
     {::_pbi::TcParser::MiniParse, {}},
     // float distance_multiplier = 7;
     {::_pbi::TcParser::FastF32S1,
      {61, 4, 0,
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.distance_multiplier_)}},
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.distance_multiplier_)}},
   }}, {{
     65535, 65535
   }}, {{
     // .aim.Bounds bounds = 1;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.bounds_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.bounds_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.TargetPlacementStrategy target_placement_strategy = 2;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 3, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // repeated .aim.WallStrafeProfile profiles = 4;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profiles_), _Internal::kHasBitsOffset + 0, 2, (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.target_placement_strategy_), _Internal::kHasBitsOffset + 3, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated .aim.AngleStrafeProfile profiles = 4;
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.profiles_), _Internal::kHasBitsOffset + 0, 2, (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated int32 profile_order = 5;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.profile_order_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.profile_order_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcRepeated | ::_fl::kPackedInt32)},
     // float distance_multiplier = 7;
-    {PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.distance_multiplier_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.distance_multiplier_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::Bounds>()},
       {::_pbi::TcParser::GetTable<::aim::TargetPlacementStrategy>()},
-      {::_pbi::TcParser::GetTable<::aim::WallStrafeProfile>()},
+      {::_pbi::TcParser::GetTable<::aim::AngleStrafeProfile>()},
   }},
   {{
   }},
 };
-PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.WallStrafeScenarioDef)
+PROTOBUF_NOINLINE void AngleStrafeScenarioDef::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.AngleStrafeScenarioDef)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -12544,20 +12544,20 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-::uint8_t* PROTOBUF_NONNULL WallStrafeScenarioDef::_InternalSerialize(
+::uint8_t* PROTOBUF_NONNULL AngleStrafeScenarioDef::_InternalSerialize(
     const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
     ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
-  const WallStrafeScenarioDef& this_ = static_cast<const WallStrafeScenarioDef&>(base);
+  const AngleStrafeScenarioDef& this_ = static_cast<const AngleStrafeScenarioDef&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-::uint8_t* PROTOBUF_NONNULL WallStrafeScenarioDef::_InternalSerialize(
+::uint8_t* PROTOBUF_NONNULL AngleStrafeScenarioDef::_InternalSerialize(
     ::uint8_t* PROTOBUF_NONNULL target,
     ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-  const WallStrafeScenarioDef& this_ = *this;
+  const AngleStrafeScenarioDef& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     this_.CheckHasBitConsistency();
   }
-  // @@protoc_insertion_point(serialize_to_array_start:aim.WallStrafeScenarioDef)
+  // @@protoc_insertion_point(serialize_to_array_start:aim.AngleStrafeScenarioDef)
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
@@ -12576,7 +12576,7 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
         stream);
   }
 
-  // repeated .aim.WallStrafeProfile profiles = 4;
+  // repeated .aim.AngleStrafeProfile profiles = 4;
   if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
     for (unsigned i = 0, n = static_cast<unsigned>(
                              this_._internal_profiles_size());
@@ -12612,18 +12612,18 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
             this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:aim.WallStrafeScenarioDef)
+  // @@protoc_insertion_point(serialize_to_array_end:aim.AngleStrafeScenarioDef)
   return target;
 }
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-::size_t WallStrafeScenarioDef::ByteSizeLong(const MessageLite& base) {
-  const WallStrafeScenarioDef& this_ = static_cast<const WallStrafeScenarioDef&>(base);
+::size_t AngleStrafeScenarioDef::ByteSizeLong(const MessageLite& base) {
+  const AngleStrafeScenarioDef& this_ = static_cast<const AngleStrafeScenarioDef&>(base);
 #else   // PROTOBUF_CUSTOM_VTABLE
-::size_t WallStrafeScenarioDef::ByteSizeLong() const {
-  const WallStrafeScenarioDef& this_ = *this;
+::size_t AngleStrafeScenarioDef::ByteSizeLong() const {
+  const AngleStrafeScenarioDef& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
-  // @@protoc_insertion_point(message_byte_size_start:aim.WallStrafeScenarioDef)
+  // @@protoc_insertion_point(message_byte_size_start:aim.AngleStrafeScenarioDef)
   ::size_t total_size = 0;
 
   ::uint32_t cached_has_bits = 0;
@@ -12634,7 +12634,7 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
   cached_has_bits = this_._impl_._has_bits_[0];
   total_size += static_cast<bool>(0x00000010U & cached_has_bits) * 5;
   if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
-    // repeated .aim.WallStrafeProfile profiles = 4;
+    // repeated .aim.AngleStrafeProfile profiles = 4;
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       total_size += 1UL * this_._internal_profiles_size();
       for (const auto& msg : this_._internal_profiles()) {
@@ -12663,16 +12663,16 @@ PROTOBUF_NOINLINE void WallStrafeScenarioDef::Clear() {
                                              &this_._impl_._cached_size_);
 }
 
-void WallStrafeScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg,
+void AngleStrafeScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg,
                             const ::google::protobuf::MessageLite& from_msg) {
    auto* const _this =
-      static_cast<WallStrafeScenarioDef*>(&to_msg);
-  auto& from = static_cast<const WallStrafeScenarioDef&>(from_msg);
+      static_cast<AngleStrafeScenarioDef*>(&to_msg);
+  auto& from = static_cast<const AngleStrafeScenarioDef&>(from_msg);
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     from.CheckHasBitConsistency();
   }
   ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.WallStrafeScenarioDef)
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.AngleStrafeScenarioDef)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
@@ -12712,29 +12712,29 @@ void WallStrafeScenarioDef::MergeImpl(::google::protobuf::MessageLite& to_msg,
       from._internal_metadata_);
 }
 
-void WallStrafeScenarioDef::CopyFrom(const WallStrafeScenarioDef& from) {
-  // @@protoc_insertion_point(class_specific_copy_from_start:aim.WallStrafeScenarioDef)
+void AngleStrafeScenarioDef::CopyFrom(const AngleStrafeScenarioDef& from) {
+  // @@protoc_insertion_point(class_specific_copy_from_start:aim.AngleStrafeScenarioDef)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 
-void WallStrafeScenarioDef::InternalSwap(WallStrafeScenarioDef* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
+void AngleStrafeScenarioDef::InternalSwap(AngleStrafeScenarioDef* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.profiles_.InternalSwap(&other->_impl_.profiles_);
   _impl_.profile_order_.InternalSwap(&other->_impl_.profile_order_);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.distance_multiplier_)
-      + sizeof(WallStrafeScenarioDef::_impl_.distance_multiplier_)
-      - PROTOBUF_FIELD_OFFSET(WallStrafeScenarioDef, _impl_.bounds_)>(
+      PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.distance_multiplier_)
+      + sizeof(AngleStrafeScenarioDef::_impl_.distance_multiplier_)
+      - PROTOBUF_FIELD_OFFSET(AngleStrafeScenarioDef, _impl_.bounds_)>(
           reinterpret_cast<char*>(&_impl_.bounds_),
           reinterpret_cast<char*>(&other->_impl_.bounds_));
 }
 
-::google::protobuf::Metadata WallStrafeScenarioDef::GetMetadata() const {
+::google::protobuf::Metadata AngleStrafeScenarioDef::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================

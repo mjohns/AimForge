@@ -17,8 +17,8 @@ std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated
       return CreateBarrelScenario(params, app);
     case ScenarioDef::kLinearDef:
       return CreateLinearScenario(params, app);
-    case ScenarioDef::kWallStrafeDef:
-      return CreateWallStrafeScenario(params, app);
+    case ScenarioDef::kAngleStrafeDef:
+      return CreateAngleStrafeScenario(params, app);
     case ScenarioDef::kWallArcDef:
       return CreateWallArcScenario(params, app);
     case ScenarioDef::kWallWanderDef:

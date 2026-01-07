@@ -118,7 +118,7 @@ const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kCircleDef, "Circle"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kSineDef, "Sine"},
-    {ScenarioDef::kWallStrafeDef, "Wall Strafe"},
+    {ScenarioDef::kAngleStrafeDef, "Wall Strafe"},
 };
 
 const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
@@ -164,8 +164,8 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   if (def.has_wall_wander_def()) {
     return def.wall_wander_def().target_placement_strategy();
   }
-  if (def.has_wall_strafe_def()) {
-    return def.wall_strafe_def().target_placement_strategy();
+  if (def.has_angle_strafe_def()) {
+    return def.angle_strafe_def().target_placement_strategy();
   }
   if (def.has_strafe_def()) {
     return def.strafe_def().target_placement_strategy();
@@ -499,8 +499,8 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kCenteringDef) {
       DrawCenteringEditor();
     }
-    if (scenario_type == ScenarioDef::kWallStrafeDef) {
-      DrawWallStrafeEditor();
+    if (scenario_type == ScenarioDef::kAngleStrafeDef) {
+      DrawAngleStrafeEditor();
     }
     if (scenario_type == ScenarioDef::kStrafeDef) {
       DrawStrafeEditor();
@@ -539,10 +539,10 @@ class ScenarioEditorScreen : public UiScreen {
     if (scenario_type == ScenarioDef::kCenteringDef) {
       def_.mutable_centering_def();
     }
-    if (scenario_type == ScenarioDef::kWallStrafeDef) {
-      auto* wall_strafe = def_.mutable_wall_strafe_def();
+    if (scenario_type == ScenarioDef::kAngleStrafeDef) {
+      auto* angle_strafe = def_.mutable_angle_strafe_def();
       if (target_placement.regions_size() > 0) {
-        *wall_strafe->mutable_target_placement_strategy() = target_placement;
+        *angle_strafe->mutable_target_placement_strategy() = target_placement;
       }
     }
     if (scenario_type == ScenarioDef::kStrafeDef) {
@@ -1344,9 +1344,9 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawWallStrafeEditor() {
-    ImGui::IdGuard cid("WallStrafeEditor");
-    WallStrafeScenarioDef& w = *def_.mutable_wall_strafe_def();
+  void DrawAngleStrafeEditor() {
+    ImGui::IdGuard cid("AngleStrafeEditor");
+    AngleStrafeScenarioDef& w = *def_.mutable_angle_strafe_def();
     DrawBoundsEditor("##Bounds", w.mutable_bounds());
 
     if (w.profiles_size() == 0) {
@@ -1363,7 +1363,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(1)
                           .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(WallStrafeScenarioDef, &w, distance_multiplier));
+                      PROTO_FLOAT_FIELD(AngleStrafeScenarioDef, &w, distance_multiplier));
     ImGui::SameLine();
     ImGui::HelpMarker("Multiply all strafe distances by the provided value");
 
@@ -1375,7 +1375,7 @@ class ScenarioEditorScreen : public UiScreen {
                     "Profile",
                     w.mutable_profile_order(),
                     w.mutable_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawWallStrafeProfile, this));
+                    std::bind_front(&ScenarioEditorScreen::DrawAngleStrafeProfile, this));
     ImGui::Unindent();
 
     ImGui::Spacing();
@@ -1396,7 +1396,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
   }
 
-  void DrawWallStrafeProfile(WallStrafeProfile* p) {
+  void DrawAngleStrafeProfile(AngleStrafeProfile* p) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Distance");
     ImGui::SameLine();
@@ -1413,7 +1413,7 @@ class ScenarioEditorScreen : public UiScreen {
                                   .set_precision(0)
                                   .set_default(0)
                                   .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(WallStrafeProfile, p, angle));
+                              PROTO_JITTERED_FIELD(AngleStrafeProfile, p, angle));
 
     if (p->angle() > 0 || p->angle_jitter() > 0) {
       ImGui::InputFloat(ImGui::InputFloatParams("DirectionChangePercent")
@@ -1423,7 +1423,7 @@ class ScenarioEditorScreen : public UiScreen {
                             .set_precision(0)
                             .set_default(50)
                             .set_width(char_x_ * 12),
-                        PROTO_PERCENT_FIELD(WallStrafeProfile, p, direction_change_percent));
+                        PROTO_PERCENT_FIELD(AngleStrafeProfile, p, direction_change_percent));
     } else {
       p->clear_direction_change_percent();
     }
@@ -1436,7 +1436,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(1)
                           .set_width(char_x_ * 12),
-                      PROTO_FLOAT_FIELD(WallStrafeProfile, p, speed_multiplier));
+                      PROTO_FLOAT_FIELD(AngleStrafeProfile, p, speed_multiplier));
     ImGui::InputFloat(ImGui::InputFloatParams("AccelMultiplier")
                           .set_label("Acceleration multiplier")
                           .set_is_optional()
@@ -1445,7 +1445,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_precision(2)
                           .set_default(1)
                           .set_width(char_x_ * 12),
-                      PROTO_FLOAT_FIELD(WallStrafeProfile, p, acceleration_multiplier));
+                      PROTO_FLOAT_FIELD(AngleStrafeProfile, p, acceleration_multiplier));
 
     bool is_pause = p->pause_at_end_chance() > 0;
     ImGui::AlignTextToFramePadding();
@@ -1465,7 +1465,7 @@ class ScenarioEditorScreen : public UiScreen {
                             .set_default(50)
                             .set_precision(0)
                             .set_width(char_x_ * 10),
-                        PROTO_PERCENT_FIELD(WallStrafeProfile, p, pause_at_end_chance));
+                        PROTO_PERCENT_FIELD(AngleStrafeProfile, p, pause_at_end_chance));
 
       ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Pause seconds")
                                     .set_step(0.05, .25)
@@ -1473,7 +1473,7 @@ class ScenarioEditorScreen : public UiScreen {
                                     .set_precision(2)
                                     .set_default(0.3)
                                     .set_width(char_x_ * 10),
-                                PROTO_JITTERED_FIELD(WallStrafeProfile, p, pause_seconds));
+                                PROTO_JITTERED_FIELD(AngleStrafeProfile, p, pause_seconds));
     } else {
       p->clear_pause_seconds();
       p->clear_pause_seconds_jitter();

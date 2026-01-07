@@ -94,7 +94,7 @@ class StrafeMovementController : public BasicWallMovementController {
     }
     initialized_ = true;
 
-    auto d = def_.wall_strafe_def();
+    auto d = def_.angle_strafe_def();
     bounds_ = wall_.GetWallBounds(d.bounds());
 
     last_direction_change_position_ = pos;
@@ -110,7 +110,7 @@ class StrafeMovementController : public BasicWallMovementController {
 
   void ChangeDirectionNoTargetUpdate(const glm::vec2& current_pos) {
     is_stopping_ = false;
-    WallStrafeProfile profile = GetNextProfile();
+    AngleStrafeProfile profile = GetNextProfile();
 
     if (profile.pause_at_end_chance() > 0 && app_.rand().FlipCoin(profile.pause_at_end_chance())) {
       float pause_time =
@@ -132,8 +132,8 @@ class StrafeMovementController : public BasicWallMovementController {
 
     float distance = app_.rand().GetJittered(wall_.GetRegionLength(profile.distance()),
                                              wall_.GetRegionLength(profile.distance_jitter()));
-    if (def_.wall_strafe_def().has_distance_multiplier()) {
-      distance *= def_.wall_strafe_def().distance_multiplier();
+    if (def_.angle_strafe_def().has_distance_multiplier()) {
+      distance *= def_.angle_strafe_def().distance_multiplier();
     }
 
     glm::vec2 new_direction;
@@ -237,11 +237,11 @@ class StrafeMovementController : public BasicWallMovementController {
     }
   }
 
-  WallStrafeProfile GetNextProfile() {
-    auto d = def_.wall_strafe_def();
+  AngleStrafeProfile GetNextProfile() {
+    auto d = def_.angle_strafe_def();
     auto maybe_profile =
         SelectProfile(d.profile_order(), d.profiles(), &selection_context_, app_.rand());
-    WallStrafeProfile fallback;
+    AngleStrafeProfile fallback;
     return maybe_profile.value_or(fallback);
   }
 
@@ -271,11 +271,11 @@ class StrafeMovementController : public BasicWallMovementController {
   bool initialized_ = false;
 };
 
-class WallStrafeScenario : public BaseScenario {
+class AngleStrafeScenario : public BaseScenario {
  public:
-  explicit WallStrafeScenario(const CreateScenarioParams& params, Application* app)
+  explicit AngleStrafeScenario(const CreateScenarioParams& params, Application* app)
       : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
-    auto& d = params.def.wall_strafe_def();
+    auto& d = params.def.angle_strafe_def();
     if (d.has_target_placement_strategy()) {
       target_placer_ =
           CreateWallTargetPlacer(wall_, d.target_placement_strategy(), &target_manager_, &app_);
@@ -308,9 +308,9 @@ class WallStrafeScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWallStrafeScenario(const CreateScenarioParams& params,
+std::unique_ptr<Scenario> CreateAngleStrafeScenario(const CreateScenarioParams& params,
                                                    Application* app) {
-  return std::make_unique<WallStrafeScenario>(params, app);
+  return std::make_unique<AngleStrafeScenario>(params, app);
 }
 
 }  // namespace aim
