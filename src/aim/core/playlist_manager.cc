@@ -240,6 +240,11 @@ class PlaylistManagerImpl : public PlaylistManager {
         }
       }
 
+      if (def.has_levels() && def.levels().base_scenario() == old_name) {
+        def.mutable_levels()->set_base_scenario(new_name);
+        changed = true;
+      }
+
       if (changed) {
         dirty_bundles_.insert(GetBundleName(playlist.name));
       }
