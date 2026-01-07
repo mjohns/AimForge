@@ -14,6 +14,7 @@
 #include "aim/common/search.h"
 #include "aim/common/util.h"
 #include "aim/common/wall.h"
+#include "aim/core/bundle_manager.h"
 #include "aim/core/camera.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
@@ -431,8 +432,6 @@ class ScenarioEditorScreen : public UiScreen {
 
     bool is_new_file =
         !original_name_.has_value() || original_name_->full_name() != name_.full_name();
-    std::unordered_set<std::string> bundles_to_save;
-    bundles_to_save.insert(name_.bundle_name());
     if (is_new_file) {
       auto existing_scenario_with_name = mgr.GetScenario(name_.full_name());
       if (existing_scenario_with_name.has_value()) {
@@ -441,22 +440,18 @@ class ScenarioEditorScreen : public UiScreen {
       }
 
       if (original_name_.has_value()) {
-        bundles_to_save.insert(original_name_->bundle_name());
         mgr.RenameScenario(original_name_->full_name(), name_.full_name());
       }
     }
 
     if (add_to_playlist_.size() > 0) {
       app_.playlist_manager().AddScenarioToPlaylist(add_to_playlist_, name_.full_name());
-      bundles_to_save.insert(ResourceName::Parse(add_to_playlist_).bundle_name());
     }
 
     mgr.UpdateScenario(name_.full_name(), def_);
-    for (const std::string& bundle_name : bundles_to_save) {
-      if (!app_.bundle_manager().SaveBundle(bundle_name)) {
-        SetErrorMessage(std::format("Unable to save in bundle {}.", bundle_name));
-        return false;
-      }
+    if (!app_.bundle_manager().SaveDirtyBundles()) {
+      SetErrorMessage("Unable to save bundle to disk.");
+      return false;
     }
 
     app_.scenario_manager().SetCurrentScenario(name_.full_name());

@@ -4,7 +4,6 @@
 #include <optional>
 #include <random>
 #include <stdexcept>
-#include <unordered_map>
 
 #include "SDL3/SDL.h"
 #include "absl/log/log.h"
@@ -14,7 +13,6 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/core/application_state.h"
-#include "aim/core/bundle_manager.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/history_manager.h"
@@ -28,6 +26,7 @@
 
 namespace aim {
 
+class BundleManager;
 class ScenarioManager;
 class PlaylistManager;
 class AimDb;

@@ -1,11 +1,10 @@
 #include "playlist_ui.h"
 
-#include <algorithm>
-
 #include "absl/strings/strip.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
+#include "aim/core/bundle_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/playlist_editor_component.h"
@@ -322,8 +321,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_id, PlaylistRun& run,
       }
       if (selected_playlist.size() > 0) {
         screen.app().playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario_id);
-        screen.app().bundle_manager().SaveBundle(
-            ResourceName::Parse(selected_playlist).bundle_name());
+        screen.app().bundle_manager().SaveDirtyBundles();
       }
       ImGui::EndMenu();
     }

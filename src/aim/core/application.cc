@@ -19,6 +19,7 @@
 #include "aim/core/play_time_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/core/bundle_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/database/aim_db.h"
