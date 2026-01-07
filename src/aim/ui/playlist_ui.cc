@@ -31,6 +31,11 @@ class PlaylistComponentImpl : public PlaylistComponent {
   bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
     ImGui::IdGuard cid("PlaylistComponent");
 
+    delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
+      screen_.app().playlist_manager().DeletePlaylist(playlist.name);
+    });
+    copy_dialog_.Draw(app_);
+
     if (playlist_name != current_playlist_name_) {
       current_playlist_name_ = playlist_name;
       ResetForNewCurrentPlaylist();
@@ -50,6 +55,9 @@ class PlaylistComponentImpl : public PlaylistComponent {
     }
 
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
+    if (!run) {
+      return false;
+    }
 
     std::optional<float> selected_sensitivity;
     if (select_sensitivity_variation_dialog_.Draw(&selected_sensitivity)) {
@@ -80,18 +88,33 @@ class PlaylistComponentImpl : public PlaylistComponent {
     }
     ImGui::HelpTooltip("Set cm/360 playlist variation");
 
-    ImGui::SameLine();
-    if (ImGui::Button(kIconRedo)) {
-      app_.playlist_manager().ClearRun(run->playlist.name);
-      run = app_.playlist_manager().GetCurrentRun();
+    const char* menu_id = "CurrentPlaylistMenu";
+    if (ImGui::BeginPopupContextItem(menu_id)) {
+      if (ImGui::Selectable("Copy")) {
+        copy_dialog_.NotifyOpen(run->playlist);
+      }
+      if (ImGui::Selectable("Shuffle")) {
+        run->Shuffle(app_.rand());
+      }
+      if (ImGui::Selectable("Reset run")) {
+        app_.playlist_manager().ClearRun(run->playlist.name);
+        run = app_.playlist_manager().GetCurrentRun();
+      }
+
+      ImGui::Spacing();
+      ImGui::Separator();
+      ImGui::Spacing();
+      if (ImGui::Selectable("Delete")) {
+        delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
+                                               run->playlist);
+      }
+      ImGui::EndPopup();
     }
-    ImGui::HelpTooltip("Reset current run");
 
     ImGui::SameLine();
-    if (ImGui::Button(kIconShuffle)) {
-      run->Shuffle(app_.rand());
+    if (ImGui::Selectable(kIconMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      ImGui::OpenPopup(menu_id);
     }
-    ImGui::HelpTooltip("Shuffle playlist order");
 
     ImGui::Spacing();
     ImGui::Spacing();
@@ -113,6 +136,9 @@ class PlaylistComponentImpl : public PlaylistComponent {
       "SelectPlaylistSensitivityDialog"};
   UiScreen& screen_;
   Application& app_;
+
+  ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+  CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
 };
 
 class PlaylistListComponentImpl : public PlaylistListComponent {
