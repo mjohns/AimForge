@@ -381,3 +381,44 @@ TEST(PlaylistManagerTest, CopyPlaylist_DeepCopy_ToNewBundle) {
                           EqualsProto(MakeItem("B2 S3", 3)),
                           EqualsProto(MakeItem("B2 S3", 2))));
 }
+
+TEST(PlaylistManagerTest, CopyPlaylist_DeepCopy_NewUniqueNames) {
+  ScenarioDef scenario_def1 = MakeScenario(1);
+  ScenarioDef scenario_def2 = MakeScenario(1);
+  ScenarioDef scenario_def3 = MakeScenario(1);
+
+  auto scenario_mgr = CreateScenarioManager();
+  scenario_mgr->UpdateScenario("B S1", scenario_def1);
+  scenario_mgr->UpdateScenario("B S2", scenario_def2);
+  scenario_mgr->UpdateScenario("B S3", scenario_def3);
+
+  PlaylistDef def;
+  auto item1 = MakeItem("B S1", 1);
+  auto item2 = MakeItem("B S2", 2);
+  auto item3 = MakeItem("B S3", 3);
+  auto item4 = MakeItem("B S3", 2);
+
+  *def.add_items() = item1;
+  *def.add_items() = item2;
+  *def.add_items() = item3;
+  *def.add_items() = item4;
+
+  auto mgr = CreatePlaylistManager();
+  mgr->UpdatePlaylist("B P1", def);
+
+  CopyPlaylistOptions opts;
+  opts.deep_copy = true;
+  EXPECT_THAT(mgr->CopyPlaylist("B P1", "B P2", scenario_mgr.get(), opts),
+              Optional(StrEq("B P2")));
+
+  auto playlist1 = mgr->GetPlaylist("B P1");
+  auto playlist2 = mgr->GetPlaylist("B P2");
+  ASSERT_TRUE(playlist1.has_value());
+  ASSERT_TRUE(playlist2.has_value());
+
+  ASSERT_THAT(playlist2->items(),
+              ElementsAre(EqualsProto(MakeItem("B S1 (1)", 1)),
+                          EqualsProto(MakeItem("B S2 (1)", 2)),
+                          EqualsProto(MakeItem("B S3 (1)", 3)),
+                          EqualsProto(MakeItem("B S3 (1)", 2))));
+}

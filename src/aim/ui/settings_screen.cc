@@ -7,6 +7,7 @@
 #include <optional>
 
 #include "aim/common/field.h"
+#include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/crosshair_editor_screen.h"
@@ -187,6 +188,10 @@ class SettingsScreen : public UiScreen {
                 HealthBarSettings, updater_.settings.mutable_health_bar(), height_above_target));
 
         ImGui::Unindent();
+
+        if (ImGui::Button("Open folder")) {
+          OpenFileInExplorer(app_.file_system()->GetUserDataPath("settings.json"));
+        }
       }
 
       ImGui::EndTabItem();
