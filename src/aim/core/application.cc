@@ -218,8 +218,8 @@ int Application::Initialize() {
   }
 
   // Prime aggregate stats cache for all recent scenarios.
-  for (const std::string& scenario_id : history_manager_->recent_scenarios()) {
-    stats_manager_->GetAggregateStats(scenario_id);
+  for (const std::string& scenario_name : history_manager_->recent_scenarios()) {
+    stats_manager_->GetAggregateStats(scenario_name);
   }
 
   std::vector<std::filesystem::path> sound_dirs = {

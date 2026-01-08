@@ -1504,22 +1504,22 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kScenarioIdFieldNumber = 1,
+    kScenarioNameFieldNumber = 1,
   };
-  // string scenario_id = 1;
-  bool has_scenario_id() const;
-  void clear_scenario_id() ;
-  const ::std::string& scenario_id() const;
+  // string scenario_name = 1;
+  bool has_scenario_name() const;
+  void clear_scenario_name() ;
+  const ::std::string& scenario_name() const;
   template <typename Arg_ = const ::std::string&, typename... Args_>
-  void set_scenario_id(Arg_&& arg, Args_... args);
-  ::std::string* PROTOBUF_NONNULL mutable_scenario_id();
-  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_scenario_id();
-  void set_allocated_scenario_id(::std::string* PROTOBUF_NULLABLE value);
+  void set_scenario_name(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_scenario_name();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_scenario_name();
+  void set_allocated_scenario_name(::std::string* PROTOBUF_NULLABLE value);
 
   private:
-  const ::std::string& _internal_scenario_id() const;
-  PROTOBUF_ALWAYS_INLINE void _internal_set_scenario_id(const ::std::string& value);
-  ::std::string* PROTOBUF_NONNULL _internal_mutable_scenario_id();
+  const ::std::string& _internal_scenario_name() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_scenario_name(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_scenario_name();
 
   public:
   // @@protoc_insertion_point(class_scope:aim.ReferenceScenarioDef)
@@ -1527,7 +1527,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<0, 1,
-                                   0, 44,
+                                   0, 46,
                                    2>
       _table_;
 
@@ -1548,7 +1548,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
         const ReferenceScenarioDef& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::internal::ArenaStringPtr scenario_id_;
+    ::google::protobuf::internal::ArenaStringPtr scenario_name_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -15950,73 +15950,73 @@ inline ScenarioDef::TypeCase ScenarioDef::type_case() const {
 
 // ReferenceScenarioDef
 
-// string scenario_id = 1;
-inline bool ReferenceScenarioDef::has_scenario_id() const {
+// string scenario_name = 1;
+inline bool ReferenceScenarioDef::has_scenario_name() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
   return value;
 }
-inline void ReferenceScenarioDef::clear_scenario_id() {
+inline void ReferenceScenarioDef::clear_scenario_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.scenario_id_.ClearToEmpty();
+  _impl_.scenario_name_.ClearToEmpty();
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000001U);
 }
-inline const ::std::string& ReferenceScenarioDef::scenario_id() const
+inline const ::std::string& ReferenceScenarioDef::scenario_name() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.scenario_id)
-  return _internal_scenario_id();
+  // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.scenario_name)
+  return _internal_scenario_name();
 }
 template <typename Arg_, typename... Args_>
-PROTOBUF_ALWAYS_INLINE void ReferenceScenarioDef::set_scenario_id(Arg_&& arg, Args_... args) {
+PROTOBUF_ALWAYS_INLINE void ReferenceScenarioDef::set_scenario_name(Arg_&& arg, Args_... args) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  _impl_.scenario_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.scenario_id)
+  _impl_.scenario_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.scenario_name)
 }
-inline ::std::string* PROTOBUF_NONNULL ReferenceScenarioDef::mutable_scenario_id()
+inline ::std::string* PROTOBUF_NONNULL ReferenceScenarioDef::mutable_scenario_name()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  ::std::string* _s = _internal_mutable_scenario_id();
-  // @@protoc_insertion_point(field_mutable:aim.ReferenceScenarioDef.scenario_id)
+  ::std::string* _s = _internal_mutable_scenario_name();
+  // @@protoc_insertion_point(field_mutable:aim.ReferenceScenarioDef.scenario_name)
   return _s;
 }
-inline const ::std::string& ReferenceScenarioDef::_internal_scenario_id() const {
+inline const ::std::string& ReferenceScenarioDef::_internal_scenario_name() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.scenario_id_.Get();
+  return _impl_.scenario_name_.Get();
 }
-inline void ReferenceScenarioDef::_internal_set_scenario_id(const ::std::string& value) {
+inline void ReferenceScenarioDef::_internal_set_scenario_name(const ::std::string& value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.scenario_id_.Set(value, GetArena());
+  _impl_.scenario_name_.Set(value, GetArena());
 }
-inline ::std::string* PROTOBUF_NONNULL ReferenceScenarioDef::_internal_mutable_scenario_id() {
+inline ::std::string* PROTOBUF_NONNULL ReferenceScenarioDef::_internal_mutable_scenario_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.scenario_id_.Mutable( GetArena());
+  return _impl_.scenario_name_.Mutable( GetArena());
 }
-inline ::std::string* PROTOBUF_NULLABLE ReferenceScenarioDef::release_scenario_id() {
+inline ::std::string* PROTOBUF_NULLABLE ReferenceScenarioDef::release_scenario_name() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.ReferenceScenarioDef.scenario_id)
+  // @@protoc_insertion_point(field_release:aim.ReferenceScenarioDef.scenario_name)
   if (!CheckHasBit(_impl_._has_bits_[0], 0x00000001U)) {
     return nullptr;
   }
   ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
-  auto* released = _impl_.scenario_id_.Release();
+  auto* released = _impl_.scenario_name_.Release();
   if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.scenario_id_.Set("", GetArena());
+    _impl_.scenario_name_.Set("", GetArena());
   }
   return released;
 }
-inline void ReferenceScenarioDef::set_allocated_scenario_id(::std::string* PROTOBUF_NULLABLE value) {
+inline void ReferenceScenarioDef::set_allocated_scenario_name(::std::string* PROTOBUF_NULLABLE value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (value != nullptr) {
     SetHasBit(_impl_._has_bits_[0], 0x00000001U);
   } else {
     ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
   }
-  _impl_.scenario_id_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.scenario_id_.IsDefault()) {
-    _impl_.scenario_id_.Set("", GetArena());
+  _impl_.scenario_name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.scenario_name_.IsDefault()) {
+    _impl_.scenario_name_.Set("", GetArena());
   }
-  // @@protoc_insertion_point(field_set_allocated:aim.ReferenceScenarioDef.scenario_id)
+  // @@protoc_insertion_point(field_set_allocated:aim.ReferenceScenarioDef.scenario_name)
 }
 
 // -------------------------------------------------------------------

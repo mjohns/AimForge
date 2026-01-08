@@ -303,7 +303,7 @@ class PlaylistManagerImpl : public PlaylistManager {
 
         ScenarioDef new_def;
         if (options.as_references) {
-          new_def.mutable_reference_def()->set_scenario_id(source_item.scenario());
+          new_def.mutable_reference_def()->set_scenario_name(source_item.scenario());
         } else {
           new_def = source_scenario->unevaluated_def;
         }
@@ -320,11 +320,11 @@ class PlaylistManagerImpl : public PlaylistManager {
         // the playlist are updated to point to the version in the new playlist.
         for (const auto& item : dest.items()) {
           ScenarioDef& def = new_scenario_map[item.scenario()];
-          std::string old_referenced_scenario = def.reference_def().scenario_id();
+          std::string old_referenced_scenario = def.reference_def().scenario_name();
           if (old_referenced_scenario.size() > 0) {
             auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
             if (new_referenced_scenario != new_name_map.end()) {
-              def.mutable_reference_def()->set_scenario_id(new_referenced_scenario->second);
+              def.mutable_reference_def()->set_scenario_name(new_referenced_scenario->second);
               scenario_manager->UpdateScenario(item.scenario(), def);
             }
           }

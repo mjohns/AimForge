@@ -91,18 +91,18 @@ StatsComparison GetStatsComparison(const StatsDbRow& current_stats,
 
 class StatsScreen : public UiScreen {
  public:
-  StatsScreen(std::string scenario_id, i64 run_id, Application* app)
-      : UiScreen(*app), scenario_name_(scenario_id), run_id_(run_id) {
+  StatsScreen(std::string scenario_name, i64 run_id, Application* app)
+      : UiScreen(*app), scenario_name_(scenario_name), run_id_(run_id) {
     screen_start_time_millis_ = GetNowEpochMillis();
-    scenario_ = app->scenario_manager().GetScenario(scenario_id);
-    evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_id);
+    scenario_ = app->scenario_manager().GetScenario(scenario_name);
+    evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
     if (scenario_) {
-      reference_scenario_id_ = scenario_->unevaluated_def.reference_def().scenario_id();
+      reference_scenario_name_ = scenario_->unevaluated_def.reference_def().scenario_name();
     }
 
     is_valid_ = InitializeStatsDetails();
 
-    performance_stats_ = state_.GetPerformanceStats(scenario_id, run_id);
+    performance_stats_ = state_.GetPerformanceStats(scenario_name, run_id);
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
@@ -241,8 +241,8 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawHistoryPanel() {
-    delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
-      app_.stats_manager().DeleteAllStats(scenario_id);
+    delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
+      app_.stats_manager().DeleteAllStats(scenario_name);
       PopSelf();
     });
     DrawHistory();
@@ -649,9 +649,9 @@ class StatsScreen : public UiScreen {
 
     std::vector<std::string> result = GetSortedLevelNames(name_info, candidate_scenarios);
 
-    if (reference_scenario_id_.size() > 0) {
-      if (!VectorContains(result, reference_scenario_id_)) {
-        result.push_back(reference_scenario_id_);
+    if (reference_scenario_name_.size() > 0) {
+      if (!VectorContains(result, reference_scenario_name_)) {
+        result.push_back(reference_scenario_name_);
       }
     }
     return result;
@@ -740,7 +740,7 @@ class StatsScreen : public UiScreen {
   float char_x_ = 0;
   std::optional<ScenarioItem> scenario_;
   std::optional<ScenarioDef> evaluated_scenario_def_;
-  std::string reference_scenario_id_;
+  std::string reference_scenario_name_;
 
   std::optional<QuickSettingsType> show_settings_;
   std::string show_settings_release_key_;
@@ -761,10 +761,10 @@ class StatsScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_id,
+std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_name,
                                             i64 run_id,
                                             Application* app) {
-  return std::make_unique<StatsScreen>(scenario_id, run_id, app);
+  return std::make_unique<StatsScreen>(scenario_name, run_id, app);
 }
 
 }  // namespace aim

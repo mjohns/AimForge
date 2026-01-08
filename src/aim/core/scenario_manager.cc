@@ -185,8 +185,8 @@ class ScenarioManagerImpl : public ScenarioManager {
     // Fix any references to the renamed scenario.
     for (auto& entry : scenario_map_) {
       ScenarioCacheItem& item = entry.second;
-      if (item.def.reference_def().scenario_id() == old_name) {
-        item.def.mutable_reference_def()->set_scenario_id(new_name);
+      if (item.def.reference_def().scenario_name() == old_name) {
+        item.def.mutable_reference_def()->set_scenario_name(new_name);
       }
     }
 
@@ -213,27 +213,27 @@ class ScenarioManagerImpl : public ScenarioManager {
     scenario_rename_listeners_.push_back(std::move(listener));
   }
 
-  std::optional<ScenarioDef> GetEvaluatedScenarioDef(const std::string& scenario_id) override {
+  std::optional<ScenarioDef> GetEvaluatedScenarioDef(const std::string& scenario_name) override {
     std::unordered_set<std::string> visited_scenarios;
-    return GetEvaluatedScenarioDef(scenario_id, &visited_scenarios, /*depth=*/1);
+    return GetEvaluatedScenarioDef(scenario_name, &visited_scenarios, /*depth=*/1);
   }
 
  private:
   std::optional<ScenarioDef> GetEvaluatedScenarioDef(
-      const std::string& scenario_id,
+      const std::string& scenario_name,
       std::unordered_set<std::string>* visited_scenarios,
       int depth) {
     if (depth > 200) {
-      Logger::get()->warn("Stopping evaluation at depth 200 for {}", scenario_id);
+      Logger::get()->warn("Stopping evaluation at depth 200 for {}", scenario_name);
       return {};
     }
-    bool added = visited_scenarios->insert(scenario_id).second;
+    bool added = visited_scenarios->insert(scenario_name).second;
     if (!added) {
-      Logger::get()->warn("Stopping evaluation due to cycle for {}", scenario_id);
+      Logger::get()->warn("Stopping evaluation due to cycle for {}", scenario_name);
       return {};
     }
 
-    auto scenario = GetScenario(scenario_id);
+    auto scenario = GetScenario(scenario_name);
     if (!scenario) {
       return {};
     }
@@ -245,7 +245,7 @@ class ScenarioManagerImpl : public ScenarioManager {
     }
 
     auto referenced =
-        GetEvaluatedScenarioDef(def.reference_def().scenario_id(), visited_scenarios, depth++);
+        GetEvaluatedScenarioDef(def.reference_def().scenario_name(), visited_scenarios, depth++);
     if (!referenced) {
       return {};
     }

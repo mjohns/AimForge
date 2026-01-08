@@ -613,20 +613,20 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("The name of the scenario to reference");
     ImGui::SameLine();
-    ImGui::InputText("##ScenarioReference", r.mutable_scenario_id());
+    ImGui::InputText("##ScenarioReference", r.mutable_scenario_name());
 
-    if (r.scenario_id().size() > 0) {
-      auto matching_scenario = app_.scenario_manager().GetScenario(r.scenario_id());
+    if (r.scenario_name().size() > 0) {
+      auto matching_scenario = app_.scenario_manager().GetScenario(r.scenario_name());
       if (!matching_scenario) {
         // Show search results for scenarios.
         int num_matches = 0;
-        auto search_words = GetSearchWords(r.scenario_id());
+        auto search_words = GetSearchWords(r.scenario_name());
         ImGui::Indent();
-        for (const std::string& scenario_id : *app_.scenario_manager().scenario_names()) {
-          if (StringMatchesSearch(scenario_id, search_words)) {
+        for (const std::string& scenario_name : *app_.scenario_manager().scenario_names()) {
+          if (StringMatchesSearch(scenario_name, search_words)) {
             num_matches++;
-            if (ImGui::Button(scenario_id)) {
-              r.set_scenario_id(scenario_id);
+            if (ImGui::Button(scenario_name)) {
+              r.set_scenario_name(scenario_name);
             }
           }
         }
@@ -648,14 +648,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Spacing();
 
     if (ImGui::Button("Bake")) {
-      auto parent = app_.scenario_manager().GetEvaluatedScenarioDef(r.scenario_id());
+      auto parent = app_.scenario_manager().GetEvaluatedScenarioDef(r.scenario_name());
       if (parent) {
         auto overrides = def_.overrides();
         def_ = ApplyScenarioOverrides(*parent);
         *def_.mutable_overrides() = overrides;
         def_ = ApplyScenarioOverrides(def_);
       } else {
-        SetErrorMessage(std::format("Referenced scenario \"{}\" is invalid.", r.scenario_id()));
+        SetErrorMessage(std::format("Referenced scenario \"{}\" is invalid.", r.scenario_name()));
       }
     }
     ImGui::SameLine();
@@ -2724,10 +2724,10 @@ class ScenarioEditorScreen : public UiScreen {
     CreateScenarioParams params;
     if (def_.has_reference_def()) {
       auto base_scenario =
-          app_.scenario_manager().GetEvaluatedScenarioDef(def_.reference_def().scenario_id());
+          app_.scenario_manager().GetEvaluatedScenarioDef(def_.reference_def().scenario_name());
       if (!base_scenario) {
         SetErrorMessage(std::format("Unable to find referenced scenario \"{}\"",
-                                    def_.reference_def().scenario_id()));
+                                    def_.reference_def().scenario_name()));
         return;
       }
       params.def = ApplyScenarioOverrides(*base_scenario);
