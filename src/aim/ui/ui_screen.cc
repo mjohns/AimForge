@@ -50,18 +50,18 @@ void UiScreen::OnDetach() {
 
 void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
                                            bool user_is_typing,
-                                           const std::string& scenario_id) {
+                                           const std::string& scenario_name) {
   if (user_is_typing || !IsMappableKeyDownEvent(event)) {
     return;
   }
 
-  auto settings = app_.settings_manager().GetCurrentSettingsForScenario(scenario_id);
+  auto settings = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name);
   std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
-  if (scenario_id.size() > 0 &&
+  if (scenario_name.size() > 0 &&
       KeyMappingMatchesEvent(event_name, settings.keybinds().edit_scenario())) {
     ReturnHome();
     ScenarioEditorOptions opts;
-    opts.scenario_name = scenario_id;
+    opts.scenario_name = scenario_name;
     PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
@@ -74,11 +74,11 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_settings())) {
     PushNextScreen(
-        CreateQuickSettingsScreen(scenario_id, QuickSettingsType::DEFAULT, event_name, &app_));
+        CreateQuickSettingsScreen(scenario_name, QuickSettingsType::DEFAULT, event_name, &app_));
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_metronome())) {
     PushNextScreen(
-        CreateQuickSettingsScreen(scenario_id, QuickSettingsType::METRONOME, event_name, &app_));
+        CreateQuickSettingsScreen(scenario_name, QuickSettingsType::METRONOME, event_name, &app_));
   }
 }
 

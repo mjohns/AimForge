@@ -16,12 +16,12 @@ namespace {
 
 class QuickSettingsScreen : public UiScreen {
  public:
-  explicit QuickSettingsScreen(const std::string& scenario_id,
+  explicit QuickSettingsScreen(const std::string& scenario_name,
                                Application& app,
                                QuickSettingsType type,
                                const std::string& release_key)
       : UiScreen(app),
-        scenario_id_(scenario_id),
+        scenario_name_(scenario_name),
         updater_(app.settings_manager().CreateUpdater()),
         type_(type),
         release_key_(release_key) {
@@ -41,7 +41,7 @@ class QuickSettingsScreen : public UiScreen {
       }
     }
     if (IsMappableKeyUpEvent(event) && KeyNameMatchesEvent(event, release_key_)) {
-      updater_.SaveIfChangesMade(scenario_id_);
+      updater_.SaveIfChangesMade(scenario_name_);
       PopSelf();
     }
   }
@@ -64,7 +64,7 @@ class QuickSettingsScreen : public UiScreen {
   void DrawScreenInternal() {
     const ScreenInfo& screen = app_.screen_info();
     if (ImGui::Button(std::format("{} Settings", kIconSettings))) {
-      PushNextScreen(CreateSettingsScreen(&app_, scenario_id_));
+      PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
       went_to_settings_ = true;
     }
     ImGui::Columns(3, "SettingsColumns", false);
@@ -171,7 +171,7 @@ class QuickSettingsScreen : public UiScreen {
   }
 
  private:
-  std::string scenario_id_;
+  std::string scenario_name_;
   SettingsUpdater updater_;
   QuickSettingsType type_;
   std::vector<std::string> theme_names_;
@@ -182,11 +182,11 @@ class QuickSettingsScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_id,
+std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_name,
                                                     QuickSettingsType type,
                                                     const std::string& release_key,
                                                     Application* app) {
-  return std::make_unique<QuickSettingsScreen>(scenario_id, *app, type, release_key);
+  return std::make_unique<QuickSettingsScreen>(scenario_name, *app, type, release_key);
 }
 
 }  // namespace aim

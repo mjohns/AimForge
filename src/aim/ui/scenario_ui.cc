@@ -54,8 +54,8 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   void Show(ScenarioBrowserResult* result) override {
     ImGui::IdGuard cid(id_);
 
-    delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_id) {
-      auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_id);
+    delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
+      auto maybe_scenario = app_->scenario_manager().GetScenario(scenario_name);
       if (maybe_scenario.has_value()) {
         app_->scenario_manager().DeleteScenario(maybe_scenario->name);
         app_->bundle_manager().SaveDirtyBundles();
@@ -118,11 +118,11 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       while (clipper.Step()) {
         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
           ImGui::IdGuard lid("ScenarioItem", i);
-          const std::string& scenario_id =
+          const std::string& scenario_name =
               IsValidIndex(filtered_scenario_names_, i) ? filtered_scenario_names_[i] : "";
 
           std::optional<ScenarioItem> maybe_scenario =
-              app_->scenario_manager().GetScenario(scenario_id);
+              app_->scenario_manager().GetScenario(scenario_name);
 
           ImGui::TableNextRow();
 
@@ -130,14 +130,14 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
           if (maybe_scenario) {
             /*
           if (ImGui::Button(kIconPlayArrow)) {
-            result->scenario_to_start = scenario_id;
+            result->scenario_to_start = scenario_name;
           }
           ImGui::SameLine();
           */
             DrawScenarioItem(*maybe_scenario, result);
           } else {
             ImGui::AlignTextToFramePadding();
-            ImGui::Text(scenario_id);
+            ImGui::Text(scenario_name);
           }
         }
       }
@@ -238,10 +238,10 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     return handled_search_text_ != search_text_;
   }
 
-  void GetQuickAccessScenarios(std::vector<std::string>* scenario_ids) {
+  void GetQuickAccessScenarios(std::vector<std::string>* scenario_names) {
     int limit = 25;
     int max_recent_maybe_starred = 8;
-    scenario_ids->reserve(limit);
+    scenario_names->reserve(limit);
 
     auto starred_items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
     auto recent_scenarios = app_->history_manager().recent_scenarios();
@@ -249,20 +249,20 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     max_recent_maybe_starred =
         std::max<int>(max_recent_maybe_starred, limit - starred_items->items.size());
 
-    std::unordered_set<std::string> added_scenario_ids;
+    std::unordered_set<std::string> added_scenario_names;
 
-    for (const std::string& scenario_id : recent_scenarios) {
-      if (scenario_ids->size() >= limit) {
+    for (const std::string& scenario_name : recent_scenarios) {
+      if (scenario_names->size() >= limit) {
         break;
       }
-      bool only_starred = scenario_ids->size() >= max_recent_maybe_starred;
+      bool only_starred = scenario_names->size() >= max_recent_maybe_starred;
 
-      auto scenario = app_->scenario_manager().GetScenario(scenario_id);
+      auto scenario = app_->scenario_manager().GetScenario(scenario_name);
       if (scenario.has_value()) {
-        bool add = !only_starred || starred_items->item_set.contains(scenario_id);
+        bool add = !only_starred || starred_items->item_set.contains(scenario_name);
         if (add) {
-          added_scenario_ids.insert(scenario_id);
-          scenario_ids->push_back(scenario_id);
+          added_scenario_names.insert(scenario_name);
+          scenario_names->push_back(scenario_name);
         }
       }
     }
@@ -279,9 +279,9 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     auto search_words = GetSearchWords(search_text_);
     if (view_type_ == ScenarioViewType::STARRED) {
       auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
-      for (const std::string& scenario_id : items->items) {
-        if (StringMatchesSearch(scenario_id, search_words)) {
-          filtered_scenario_names_.push_back(scenario_id);
+      for (const std::string& scenario_name : items->items) {
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          filtered_scenario_names_.push_back(scenario_name);
         }
       }
     } else if (view_type_ == ScenarioViewType::RECENT) {
@@ -291,9 +291,9 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         }
       }
     } else {
-      for (const std::string& scenario_id : *app_->scenario_manager().scenario_names()) {
-        if (StringMatchesSearch(scenario_id, search_words)) {
-          filtered_scenario_names_.push_back(scenario_id);
+      for (const std::string& scenario_name : *app_->scenario_manager().scenario_names()) {
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          filtered_scenario_names_.push_back(scenario_name);
         }
       }
     }

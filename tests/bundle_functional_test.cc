@@ -270,7 +270,7 @@ TEST_F(BundleFunctionalTest, GetEvaluatedLevelScenario) {
   ScenarioDef ref;
   ref.mutable_overrides()->set_speed_multiplier(0.5);
   ref.mutable_level_overrides()->set_speed_multiplier(3);
-  ref.mutable_reference_def()->set_scenario_id("Bundle Scenario L1");
+  ref.mutable_reference_def()->set_scenario_name("Bundle Scenario L1");
 
   scenario_manager_->UpdateScenario("Bundle Ref", ref);
 

@@ -4,9 +4,11 @@
 #include <optional>
 #include <string>
 
-#include "aim/core/application.h"
+#include "aim/common/simple_types.h"
 
 namespace aim {
+
+class Application;
 
 struct ScenarioBrowserResult {
   std::string scenario_to_start;
