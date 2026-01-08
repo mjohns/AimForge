@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cassert>
 #include <format>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
@@ -14,6 +16,67 @@
 
 namespace aim {
 namespace {
+
+struct CopiedScenario {
+  std::string old_name;
+  std::string new_name;
+  ScenarioDef def;
+};
+
+std::unordered_map<std::string, CopiedScenario> CopyPlaylistScenarios(
+    const std::unordered_set<std::string>& scenarios_to_copy,
+    const std::string& bundle_name,
+    ScenarioManager* scenario_manager,
+    CopyPlaylistOptions options) {
+  std::unordered_map<std::string, CopiedScenario> copied_scenario_map;
+  std::unordered_map<std::string, std::string> new_name_map;
+  for (const std::string& source_scenario_name : scenarios_to_copy) {
+    auto source_scenario = scenario_manager->GetScenario(source_scenario_name);
+    if (!source_scenario) {
+      // Skip invalid scenarios.
+      continue;
+    }
+    ResourceName new_scenario_name = ResourceName::Parse(source_scenario->name);
+    *new_scenario_name.mutable_bundle_name() = bundle_name;
+
+    std::string* relative_name = new_scenario_name.mutable_relative_name();
+    if (options.remove_prefix.size() > 0) {
+      *relative_name = absl::StripLeadingAsciiWhitespace(
+          absl::StripPrefix(*relative_name, options.remove_prefix));
+    }
+    if (options.add_prefix.size() > 0) {
+      *relative_name = std::format("{} {}", options.add_prefix, *relative_name);
+    }
+
+    CopiedScenario& copied_scenario = copied_scenario_map[source_scenario_name];
+    copied_scenario.old_name = source_scenario_name;
+    ScenarioDef& new_def = copied_scenario.def;
+    if (options.as_references) {
+      new_def.mutable_reference_def()->set_scenario_name(source_scenario_name);
+    } else {
+      new_def = source_scenario->unevaluated_def;
+    }
+    copied_scenario.new_name =
+        scenario_manager->SaveScenarioWithUniqueName(new_scenario_name.full_name(), new_def);
+    new_name_map[source_scenario_name] = copied_scenario.new_name;
+  }
+  if (!options.as_references) {
+    // Make sure any copied scenarios which were references that pointed to other scenarios in
+    // the playlist are updated to point to the version in the new playlist.
+    for (auto& entry : copied_scenario_map) {
+      ScenarioDef& def = entry.second.def;
+      std::string old_referenced_scenario = def.reference_def().scenario_name();
+      if (old_referenced_scenario.size() > 0) {
+        auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
+        if (new_referenced_scenario != new_name_map.end()) {
+          def.mutable_reference_def()->set_scenario_name(new_referenced_scenario->second);
+          scenario_manager->UpdateScenario(entry.second.new_name, def);
+        }
+      }
+    }
+  }
+  return copied_scenario_map;
+}
 
 template <typename Fn>
 std::optional<int> FindFirstProgressItem(const std::vector<PlaylistItemProgress>& progress_list,
@@ -278,68 +341,39 @@ class PlaylistManagerImpl : public PlaylistManager {
         MakeUniqueName(new_playlist_name.relative_name(), taken_names);
 
     PlaylistDef dest = source_playlist->def();
-    dest.clear_levels();
+
     if (options.deep_copy) {
-      std::unordered_map<std::string, std::string> new_name_map;
-      std::unordered_map<std::string, ScenarioDef> new_scenario_map;
-      dest.clear_items();
-      for (const auto& source_item : source_playlist->items()) {
-        auto source_scenario = scenario_manager->GetScenario(source_item.scenario());
-        if (!source_scenario) {
-          // Skip invalid scenarios.
-          continue;
+      bool is_levels = dest.has_levels();
+      std::unordered_set<std::string> scenarios_to_copy;
+      if (is_levels) {
+        scenarios_to_copy.insert(dest.levels().base_scenario());
+      } else {
+        for (const auto& source_item : source_playlist->items()) {
+          scenarios_to_copy.insert(source_item.scenario());
         }
-        ResourceName new_scenario_name = ResourceName::Parse(source_scenario->name);
-        *new_scenario_name.mutable_bundle_name() = new_playlist_name.bundle_name();
-
-        std::string* relative_name = new_scenario_name.mutable_relative_name();
-        if (options.remove_prefix.size() > 0) {
-          *relative_name = absl::StripLeadingAsciiWhitespace(
-              absl::StripPrefix(*relative_name, options.remove_prefix));
-        }
-        if (options.add_prefix.size() > 0) {
-          *relative_name = std::format("{} {}", options.add_prefix, *relative_name);
-        }
-
-        ScenarioDef new_def;
-        if (options.as_references) {
-          new_def.mutable_reference_def()->set_scenario_name(source_item.scenario());
-        } else {
-          new_def = source_scenario->unevaluated_def;
-        }
-        std::string final_scenario_name =
-            scenario_manager->SaveScenarioWithUniqueName(new_scenario_name.full_name(), new_def);
-        new_name_map[source_item.scenario()] = final_scenario_name;
-        new_scenario_map[final_scenario_name] = new_def;
-        PlaylistItem item = source_item;
-        item.set_scenario(final_scenario_name);
-        *dest.add_items() = item;
       }
-      if (!options.as_references) {
-        // Make sure any copied scenarios which were references that pointed to other scenarios in
-        // the playlist are updated to point to the version in the new playlist.
-        for (const auto& item : dest.items()) {
-          ScenarioDef& def = new_scenario_map[item.scenario()];
-          std::string old_referenced_scenario = def.reference_def().scenario_name();
-          if (old_referenced_scenario.size() > 0) {
-            auto new_referenced_scenario = new_name_map.find(old_referenced_scenario);
-            if (new_referenced_scenario != new_name_map.end()) {
-              def.mutable_reference_def()->set_scenario_name(new_referenced_scenario->second);
-              scenario_manager->UpdateScenario(item.scenario(), def);
-            }
+      std::unordered_map<std::string, CopiedScenario> copied_scenario_map = CopyPlaylistScenarios(
+          scenarios_to_copy, new_playlist_name.bundle_name(), scenario_manager, options);
+
+      dest.clear_items();
+      if (is_levels) {
+        auto it = copied_scenario_map.find(dest.levels().base_scenario());
+        if (it != copied_scenario_map.end()) {
+          dest.mutable_levels()->set_base_scenario(it->second.new_name);
+        }
+      } else {
+        for (const auto& source_item : source_playlist->items()) {
+          auto it = copied_scenario_map.find(source_item.scenario());
+          if (it != copied_scenario_map.end()) {
+            const CopiedScenario& copied_scenario = it->second;
+            PlaylistItem item = source_item;
+            item.set_scenario(copied_scenario.new_name);
+            *dest.add_items() = item;
           }
         }
       }
-    } else {
-      // Not a deep copy. If it was a levels scenario copy the items over as is.
-      /*
-    if (source.def().has_scenario_levels_def()) {
-      for (const auto& source_item : source.items()) {
-        *dest.add_items() = source_item;
-      }
     }
-    */
-    }
+
     UpdatePlaylist(new_playlist_name.full_name(), dest);
     return new_playlist_name.full_name();
   }
