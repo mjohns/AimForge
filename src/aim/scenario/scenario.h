@@ -63,10 +63,6 @@ class Scenario : public Screen {
     return run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START;
   }
 
-  const std::string& scenario_id() {
-    return id_;
-  }
-
   void OnEvent(const SDL_Event& event, bool user_is_typing) override;
   void OnTick() override;
   void OnTickStart() override;
@@ -111,7 +107,7 @@ class Scenario : public Screen {
   TargetProfile GetNextTargetProfile();
   Target GetTargetTemplate(const TargetProfile& profile);
 
-  std::string id_;
+  std::string scenario_name_;
   ScenarioDef def_;
   std::unique_ptr<Metronome> metronome_;
   ScenarioTimer timer_;

@@ -26,9 +26,9 @@ class ApplicationState {
 
   std::optional<ScenarioRunOption> scenario_run_option;
 
-  std::optional<RunPerformanceStats> GetPerformanceStats(const std::string& scenario_id,
+  std::optional<RunPerformanceStats> GetPerformanceStats(const std::string& scenario_name,
                                                          i64 run_id);
-  void AddPerformanceStats(const std::string& scenario_id,
+  void AddPerformanceStats(const std::string& scenario_name,
                            i64 run_id,
                            const RunPerformanceStats& stats);
 

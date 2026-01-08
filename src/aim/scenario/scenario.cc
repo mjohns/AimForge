@@ -60,13 +60,13 @@ void Scenario::FlushPlayTime() {
     details.is_complete_run = is_done();
     details.shot_type = GetShotType();
     details.cm_per_360 = effective_cm_per_360_;
-    app_.play_time_manager().AddPlayTime(id_, elapsed, details);
+    app_.play_time_manager().AddPlayTime(scenario_name_, elapsed, details);
   }
 }
 
 Scenario::Scenario(const CreateScenarioParams& params, Application* app)
     : Screen(*app),
-      id_(params.name),
+      scenario_name_(params.name),
       def_(params.def),
       timer_(kReplayFps),
       camera_(Camera(CameraParams(params.def.room()))),
@@ -74,7 +74,7 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       force_start_immediately_(params.force_start_immediately),
       from_scenario_editor_(params.from_scenario_editor) {
   theme_ = app->settings_manager().GetCurrentTheme();
-  settings_ = app_.settings_manager().GetCurrentSettingsForScenario(id_);
+  settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
 
   if (ShouldRecordReplay()) {
     replay_ = google::protobuf::Arena::Create<Replay>(&replay_arena_);
@@ -84,7 +84,7 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
 }
 
 void Scenario::RefreshState() {
-  settings_ = app_.settings_manager().GetCurrentSettingsForScenario(id_);
+  settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
   app_.sound_manager()->LoadSounds(settings_);
   float render_fps = FirstGreaterThanZero(settings_.max_render_fps(), kDefaultTargetRenderFps);
   max_render_age_micros_ = (1 / (float)(render_fps + 1)) * 1000 * 1000;
@@ -97,7 +97,7 @@ void Scenario::RefreshState() {
   effective_cm_per_360_ = settings_.cm_per_360();
 
   float forced_cm_per_360;
-  auto should_force_cm_per_360 = StripCmSuffix(id_, &forced_cm_per_360);
+  auto should_force_cm_per_360 = StripCmSuffix(scenario_name_, &forced_cm_per_360);
   if (should_force_cm_per_360) {
     effective_cm_per_360_ = forced_cm_per_360;
   }
@@ -164,7 +164,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
       } else {
         ReturnHome();
         ScenarioEditorOptions opts;
-        opts.scenario_name = id_;
+        opts.scenario_name = scenario_name_;
         PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
       }
     }
@@ -174,11 +174,11 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
       PopSelf();
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
-      PushNextScreen(CreateQuickSettingsScreen(id_, QuickSettingsType::DEFAULT, event_name, &app_));
+      PushNextScreen(CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::DEFAULT, event_name, &app_));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
       PushNextScreen(
-          CreateQuickSettingsScreen(id_, QuickSettingsType::METRONOME, event_name, &app_));
+          CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::METRONOME, event_name, &app_));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
       is_adjusting_crosshair_ = true;
@@ -294,7 +294,7 @@ void Scenario::OnWaitingForClickTick() {
   app_.BeginFullscreenWindow();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
-  ImGui::Text("%s", id_.c_str());
+  ImGui::Text("%s", scenario_name_.c_str());
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
   if (settings_.metronome_bpm() > 0) {
     ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
@@ -312,10 +312,10 @@ void Scenario::OnWaitingForClickTick() {
     ImGui::Text(message);
   }
 
-  ImVec2 text_size = ImGui::CalcTextSize(id_.c_str());
+  ImVec2 text_size = ImGui::CalcTextSize(scenario_name_.c_str());
   ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
   ImGui::SetCursorPosY(app_.screen_info().center.y + text_size.y * 1);
-  ImGui::Text("%s", id_.c_str());
+  ImGui::Text("%s", scenario_name_.c_str());
 
   std::string message = std::format("cm/360: {}", MaybeIntToString(effective_cm_per_360_, 1));
   text_size = ImGui::CalcTextSize(message.c_str());
@@ -433,7 +433,7 @@ void Scenario::HandleScenarioDone() {
 
   std::shared_ptr<PlaylistRun> playlist_run = app_.playlist_manager().GetCurrentRun();
   if (playlist_run) {
-    playlist_run->IncrementRunDone(id_);
+    playlist_run->IncrementRunDone(scenario_name_);
   }
 
   FlushPlayTime();
@@ -442,9 +442,9 @@ void Scenario::HandleScenarioDone() {
   std::optional<StatsDbRow> maybe_stats_row = GetStatsRow();
   if (maybe_stats_row) {
     StatsDbRow stats_row = *maybe_stats_row;
-    app_.stats_manager().AddStats(id_, &stats_row);
-    state_.AddPerformanceStats(id_, stats_row.stats_id, perf_stats_);
-    PushNextScreen(CreateStatsScreen(id_, stats_row.stats_id, &app_));
+    app_.stats_manager().AddStats(scenario_name_, &stats_row);
+    state_.AddPerformanceStats(scenario_name_, stats_row.stats_id, perf_stats_);
+    PushNextScreen(CreateStatsScreen(scenario_name_, stats_row.stats_id, &app_));
   }
 }
 
@@ -474,7 +474,7 @@ void Scenario::DoneAdjustingCrosshairSize() {
     if (crosshair_size_ != current_settings->crosshair_size()) {
       current_settings->set_crosshair_size(crosshair_size_);
       app_.settings_manager().MarkDirty();
-      app_.settings_manager().MaybeFlushToDisk(id_);
+      app_.settings_manager().MaybeFlushToDisk(scenario_name_);
       RefreshState();
     }
   }
