@@ -2,6 +2,7 @@
 
 #include <filesystem>
 
+#include "absl/algorithm/container.h"
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
@@ -46,6 +47,7 @@ class BundleManagerImpl : public BundleManager {
     playlist_manager_->StartReload();
     for (auto& entry : bundle_path_map) {
       std::string bundle_name = entry.first;
+      bundle_names_.insert(bundle_name);
       std::filesystem::path bundle_path = entry.second;
 
       BundleFile bundle_file;
@@ -64,6 +66,7 @@ class BundleManagerImpl : public BundleManager {
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
 
     std::filesystem::path file_path = fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle");
+    bundle_names_.insert(bundle_name);
     return WriteBinaryMessageToFile(file_path, bundle_file);
   }
 
@@ -100,10 +103,17 @@ class BundleManagerImpl : public BundleManager {
     return !some_failed;
   }
 
+  std::vector<std::string> GetBundleNames() override {
+    std::vector<std::string> names(bundle_names_.begin(), bundle_names_.end());
+    absl::c_sort(names);
+    return names;
+  }
+
  private:
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   ScenarioManager* scenario_manager_;
+  std::unordered_set<std::string> bundle_names_;
 };
 
 }  // namespace

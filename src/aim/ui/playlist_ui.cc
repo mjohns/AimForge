@@ -472,7 +472,7 @@ bool AddPlaylistDialog::Draw(Application& app) {
     ImGui::OpenPopup(id_.c_str());
     open_ = false;
     is_open_ = true;
-    bundle_names_ = app.file_system()->GetBundleNames();
+    bundle_names_ = app.bundle_manager().GetBundleNames();
     name_.set("USER", "New playlist");
   }
   return did_add;

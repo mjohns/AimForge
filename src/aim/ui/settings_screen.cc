@@ -1,7 +1,5 @@
 #include "settings_screen.h"
 
-#include <misc/cpp/imgui_stdlib.h>
-
 #include <format>
 #include <functional>
 #include <optional>
@@ -12,6 +10,7 @@
 #include "aim/core/settings_manager.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/theme_editor_screen.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {
