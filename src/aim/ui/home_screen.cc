@@ -6,9 +6,9 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
 #include "aim/common/util.h"
-#include "aim/core/play_time_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
+#include "aim/core/play_time_manager.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
@@ -246,11 +246,11 @@ class HomeScreen : public UiScreen {
     // Place exit at bottom
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
     if (ImGui::Selectable(std::format("{} Restart", kIconRestartAlt).c_str(), false)) {
-      throw ApplicationRestartException();
+      app_.RequestRestart();
     }
     if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
       // Show a screen to confirm?
-      throw ApplicationExitException();
+      app_.RequestExit();
     }
   }
 

@@ -3,7 +3,6 @@
 #include <memory>
 #include <optional>
 #include <random>
-#include <stdexcept>
 
 #include "SDL3/SDL.h"
 #include "absl/log/log.h"
@@ -36,16 +35,6 @@ class PlayTimeManager;
 class Renderer;
 class RenderContext;
 
-class ApplicationExitException : public std::runtime_error {
- public:
-  ApplicationExitException() : std::runtime_error("exit") {}
-};
-
-class ApplicationRestartException : public std::runtime_error {
- public:
-  ApplicationRestartException() : std::runtime_error("restart") {}
-};
-
 class AimAbslLogSink : public absl::LogSink {
  public:
   AimAbslLogSink(std::shared_ptr<spdlog::logger> logger) : logger_(std::move(logger)) {}
@@ -60,7 +49,9 @@ class Application {
   ~Application();
 
   static std::unique_ptr<Application> Create();
-  void RunMainLoop();
+
+  // Returns whether the program should exit.
+  bool RunMainLoop();
 
   // Should only be called using methods in Screen
   std::shared_ptr<Screen> PopScreenInternal();
@@ -173,6 +164,9 @@ class Application {
   void EnableVsync();
   void DisableVsync();
 
+  void RequestExit();
+  void RequestRestart();
+
  private:
   Application();
 
@@ -211,6 +205,9 @@ class Application {
 
   std::vector<std::shared_ptr<Screen>> screen_stack_;
   std::unique_ptr<ApplicationState> state_;
+
+  bool should_exit_ = false;
+  bool should_restart_ = false;
 };
 
 }  // namespace aim

@@ -18,16 +18,13 @@ int main(int, char**) {
 #endif
 
   while (true) {
-    try {
-      auto app = Application::Create();
-      app->PushScreenInternal(CreateHomeScreen(app.get()));
-      app->RunMainLoop();
+    auto app = Application::Create();
+    app->PushScreenInternal(CreateHomeScreen(app.get()));
+    bool should_exit = app->RunMainLoop();
+    if (should_exit) {
       break;
-    } catch (ApplicationExitException e) {
-      break;
-    } catch (ApplicationRestartException e) {
-      // Continue to next loop iteration.
     }
+    // Continue to next loop iteration.
   }
 
 #ifdef _WIN32

@@ -232,11 +232,10 @@ class StatsScreen : public UiScreen {
 
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
     if (ImGui::Selectable(std::format("{} Restart", kIconRestartAlt).c_str(), false)) {
-      throw ApplicationRestartException();
+      app_.RequestRestart();
     }
     if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
-      // Show a screen to confirm?
-      throw ApplicationExitException();
+      app_.RequestExit();
     }
   }
 

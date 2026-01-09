@@ -16,10 +16,10 @@
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
+#include "aim/core/bundle_manager.h"
 #include "aim/core/play_time_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
-#include "aim/core/bundle_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/database/aim_db.h"
@@ -513,11 +513,16 @@ void Application::PushScreenInternal(std::shared_ptr<Screen> screen) {
   screen_stack_.push_back(std::move(screen));
 }
 
-void Application::RunMainLoop() {
-  bool running = true;
-  while (running) {
+bool Application::RunMainLoop() {
+  while (true) {
+    if (should_exit_) {
+      return true;
+    }
+    if (should_restart_) {
+      return false;
+    }
     if (screen_stack_.size() == 0) {
-      return;
+      return true;
     }
     std::shared_ptr<Screen> current_screen = screen_stack_.back();
     for (int i = 0; i < screen_stack_.size() - 1; ++i) {
@@ -532,7 +537,7 @@ void Application::RunMainLoop() {
       while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL3_ProcessEvent(&event);
         if (event.type == SDL_EVENT_QUIT) {
-          return;
+          return true;
         }
         current_screen->OnEvent(event, io.WantTextInput);
       }
@@ -544,6 +549,16 @@ void Application::RunMainLoop() {
 
     current_screen->UpdateScreenStack();
   }
+
+  return true;
+}
+
+void Application::RequestExit() {
+  should_exit_ = true;
+}
+
+void Application::RequestRestart() {
+  should_restart_ = true;
 }
 
 }  // namespace aim
