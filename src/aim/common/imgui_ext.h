@@ -362,14 +362,10 @@ struct InputFloatParams {
   }
 
   InputFloatParams& set_precision(int decimal_places) {
-    if (decimal_places == 1) {
-      format = "%.1f";
-    } else if (decimal_places == 2) {
-      format = "%.2f";
-    } else if (decimal_places == 3) {
-      format = "%.3f";
-    } else {
+    if (decimal_places == 0) {
       format = "%.0f";
+    } else {
+      format = "%.3g";
     }
     return *this;
   }
