@@ -668,7 +668,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_label("Target radius multiplier")
                           .set_step(0.01, 0.25)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),
@@ -678,7 +678,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_label("Speed multiplier")
                           .set_step(0.01, 0.25)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),
@@ -688,7 +688,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_label("Acceleration multiplier")
                           .set_step(0.01, 0.25)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),
@@ -698,7 +698,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_label("Time scale multiplier")
                           .set_step(0.01, 0.25)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),
@@ -707,7 +707,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_label("Distance multiplier")
                           .set_step(0.01, 0.25)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),
@@ -1025,7 +1025,7 @@ class ScenarioEditorScreen : public UiScreen {
                                   .set_is_optional()
                                   .set_step(0.05, 0.2)
                                   .set_min(0)
-                                  .set_precision(2)
+                                  .set_precision(3)
                                   .set_default(1)
                                   .set_width(char_x_ * 10),
                               PROTO_JITTERED_FIELD(StrafeProfile, p, speed_multiplier));
@@ -1033,7 +1033,7 @@ class ScenarioEditorScreen : public UiScreen {
                                   .set_is_optional()
                                   .set_step(0.05, 0.2)
                                   .set_min(0)
-                                  .set_precision(2)
+                                  .set_precision(3)
                                   .set_default(1)
                                   .set_width(char_x_ * 10),
                               PROTO_JITTERED_FIELD(StrafeProfile, p, acceleration_multiplier));
@@ -1072,7 +1072,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(0.05, 0.1)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, time_scale_multiplier));
@@ -1085,7 +1085,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(0.05, 0.1)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, distance_multiplier));
@@ -1211,7 +1211,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(0.05, 0.2)
                           .set_min(0)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(BounceProfile, p, speed_multiplier));
@@ -1220,7 +1220,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(0.05, 0.2)
                           .set_min(0)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(BounceProfile, p, acceleration_multiplier));
@@ -1268,7 +1268,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(0.05, 0.1)
                           .set_min(0.01)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(BounceScenarioDef, &d, time_scale_multiplier));
@@ -1433,7 +1433,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(.05, .2)
                           .set_min(0)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 12),
                       PROTO_FLOAT_FIELD(AngleStrafeProfile, p, speed_multiplier));
@@ -1442,7 +1442,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_is_optional()
                           .set_step(.05, .2)
                           .set_min(0)
-                          .set_precision(2)
+                          .set_precision(3)
                           .set_default(1)
                           .set_width(char_x_ * 12),
                       PROTO_FLOAT_FIELD(AngleStrafeProfile, p, acceleration_multiplier));
@@ -2662,7 +2662,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_label("Hit radius multiplier")
                           .set_step(0.1, 0.5)
                           .set_min(0.1)
-                          .set_precision(1)
+                          .set_precision(2)
                           .set_default(1)
                           .set_is_optional()
                           .set_width(char_x_ * 10),

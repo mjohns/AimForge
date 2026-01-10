@@ -367,7 +367,7 @@ struct InputFloatParams {
     } else if (decimal_places == 2) {
       format = "%.2f";
     } else if (decimal_places == 3) {
-      format = "%.2f";
+      format = "%.3f";
     } else {
       format = "%.0f";
     }

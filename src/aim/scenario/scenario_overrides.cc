@@ -55,8 +55,10 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
   }
   if (overrides.has_distance_multiplier()) {
     float mult = get_multiplier(overrides.distance_multiplier());
-    for (auto& profile : *result.mutable_angle_strafe_def()->mutable_profiles()) {
-      MultiplyRegionLength(profile.mutable_distance(), mult);
+    if (original.has_angle_strafe_def()) {
+      for (auto& profile : *result.mutable_angle_strafe_def()->mutable_profiles()) {
+        MultiplyRegionLength(profile.mutable_distance(), mult);
+      }
     }
     if (original.has_strafe_def()) {
       float distance = FirstGreaterThanZero(original.strafe_def().distance_multiplier(), 1.0);

@@ -33,6 +33,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
       screen_.app().playlist_manager().DeletePlaylist(playlist.name);
+      screen_.app().bundle_manager().SaveDirtyBundles();
     });
     copy_dialog_.Draw(app_);
 
@@ -155,7 +156,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   void Show(PlaylistListResult* result) override {
     delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
       screen_.app().playlist_manager().DeletePlaylist(playlist.name);
-      // result->reload_playlists = true;
+      screen_.app().bundle_manager().SaveDirtyBundles();
     });
 
     if (copy_dialog_.Draw(app_)) {
@@ -364,6 +365,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
   auto& progress_items = run->progress_list;
 
   std::vector<float> score_levels;
+  std::vector<float> scores;
   bool has_score_level = false;
   for (const auto& item : progress_items) {
     auto stats = screen.app().stats_manager().GetAggregateStats(item.item.scenario());
@@ -379,13 +381,15 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
       }
     }
     score_levels.push_back(level);
+    scores.push_back(stats.high_score_stats.score);
   }
 
-  ImGuiTableFlags flags = ImGuiTableFlags_RowBg;
-  if (!ImGui::BeginTable("PlaylistRuns", has_score_level ? 3 : 2, flags)) {
+  ImGuiTableFlags flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV | ImGuiTableFlags_Borders;
+  if (!ImGui::BeginTable("PlaylistRuns", has_score_level ? 4 : 3, flags)) {
     return;
   }
   ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+  ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, progress_width);
   ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, progress_width);
   if (has_score_level) {
     ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, progress_width);
@@ -407,6 +411,11 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
       screen.ReturnHome();
     }
     PlaylistRunRightClickMenu(item.scenario(), *run, screen);
+
+    ImGui::TableNextColumn();
+    if (scores[i] > 0) {
+      ImGui::Text(MaybeIntToString(scores[i], 1));
+    }
 
     if (has_score_level) {
       ImGui::TableNextColumn();
