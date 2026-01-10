@@ -435,9 +435,12 @@ class StatsScreen : public UiScreen {
     if (evaluated_scenario_def_) {
       float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
       if (score_level > 0) {
-        auto font = app_.font_manager().UseLarge();
+        auto font1 = app_.font_manager().UseLarge();
         ImGui::SameLine();
         ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), kIconBolt));
+        auto font2 = app_.font_manager().UseDefault();
+        ImGui::HelpTooltip(std::format("Target score: {}",
+                                       MaybeIntToString(evaluated_scenario_def_->end_score(), 1)));
       }
     }
 
