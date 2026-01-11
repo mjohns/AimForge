@@ -4,6 +4,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
+#include "aim/common/times.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/ui/copy_playlist_dialog.h"
@@ -359,6 +360,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
 
 void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> run, Screen& screen) {
   ImGui::IdGuard cid(id);
+  i64 now_micros = GetNowEpochMicros();
   std::string sample_progress_text = "00/00";
   float progress_width = ImGui::CalcTextSize(sample_progress_text.c_str()).x;
 
@@ -366,6 +368,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
 
   std::vector<float> score_levels;
   std::vector<float> scores;
+  std::vector<std::string> scores_help;
   bool has_score_level = false;
   for (const auto& item : progress_items) {
     auto stats = screen.app().stats_manager().GetAggregateStats(item.item.scenario());
@@ -382,9 +385,12 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     }
     score_levels.push_back(level);
     scores.push_back(stats.high_score_stats.score);
+    scores_help.push_back(
+        GetHowLongAgoString(stats.high_score_stats.epoch_seconds * 1000 * 1000, now_micros));
   }
 
-  ImGuiTableFlags flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV | ImGuiTableFlags_Borders;
+  ImGuiTableFlags flags =
+      ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV | ImGuiTableFlags_Borders;
   if (!ImGui::BeginTable("PlaylistRuns", has_score_level ? 4 : 3, flags)) {
     return;
   }
@@ -415,6 +421,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     ImGui::TableNextColumn();
     if (scores[i] > 0) {
       ImGui::Text(MaybeIntToString(scores[i], 1));
+      ImGui::HelpTooltip(scores_help[i]);
     }
 
     if (has_score_level) {
