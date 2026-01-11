@@ -1,5 +1,8 @@
 #pragma once
 
+#include <utility>
+#include <vector>
+
 #include "aim/common/imgui_ext.h"
 #include "imgui.h"
 
@@ -92,36 +95,56 @@ struct RunPerformanceStats {
 };
 
 static void DumpHistogram(const TimeHistogram& h) {
-  if (h.bucket_100 > 0) {
-    ImGui::TextFmt("0ms - 0.1ms   : {:L}", h.bucket_100);
+  std::vector<std::pair<std::string, i64>> values{
+      {"0.1ms", h.bucket_100},
+      {"0.3ms", h.bucket_300},
+      {"0.5ms", h.bucket_500},
+      {"0.7ms", h.bucket_700},
+      {"1ms", h.bucket_1000},
+      {"1.5ms", h.bucket_1500},
+      {"2ms", h.bucket_2000},
+      {"3ms", h.bucket_3000},
+      {"5ms", h.bucket_5000},
+      {"5ms+", h.bucket_5000_plus},
+  };
+
+  ImGuiTableFlags flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders;
+  if (!ImGui::BeginTable("HistogramDump", 3, flags)) {
+    return;
   }
-  if (h.bucket_300 > 0) {
-    ImGui::TextFmt("0.1ms - 0.3ms : {:L}", h.bucket_300);
+  ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+  ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+  ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+
+  i64 total = 0;
+  for (int i = 0; i < values.size(); ++i) {
+    total += values[i].second;
   }
-  if (h.bucket_500 > 0) {
-    ImGui::TextFmt("0.3ms - 0.5ms : {:L}", h.bucket_500);
+
+  std::string prev_label = "0ms";
+  for (int i = 0; i < values.size(); ++i) {
+    i64 value = values[i].second;
+    std::string current_label = values[i].first;
+    if (value > 0) {
+      ImGui::TableNextRow();
+      ImGui::IdGuard id(i);
+      ImGui::TableNextColumn();
+      if (i == values.size() - 1) {
+        ImGui::TextFmt("{}", current_label);
+      } else {
+        ImGui::TextFmt("{} - {}", prev_label, current_label);
+      }
+
+      ImGui::TableNextColumn();
+      ImGui::TextFmt("{:L}", value);
+
+      ImGui::TableNextColumn();
+      ImGui::TextFmt("{:.1f}%", (100 * value) / (double)total);
+    }
+    prev_label = current_label;
   }
-  if (h.bucket_700 > 0) {
-    ImGui::TextFmt("0.5ms - 0.7ms : {:L}", h.bucket_700);
-  }
-  if (h.bucket_1000 > 0) {
-    ImGui::TextFmt("0.7ms - 1ms   : {:L}", h.bucket_1000);
-  }
-  if (h.bucket_1500 > 0) {
-    ImGui::TextFmt("1ms - 1.5ms   : {:L}", h.bucket_1500);
-  }
-  if (h.bucket_2000 > 0) {
-    ImGui::TextFmt("1.5ms - 2ms   : {:L}", h.bucket_2000);
-  }
-  if (h.bucket_3000 > 0) {
-    ImGui::TextFmt("2ms - 3ms     : {:L}", h.bucket_3000);
-  }
-  if (h.bucket_5000 > 0) {
-    ImGui::TextFmt("3ms - 5ms     : {:L}", h.bucket_5000);
-  }
-  if (h.bucket_5000_plus > 0) {
-    ImGui::TextFmt("5ms+          : {:L}", h.bucket_5000_plus);
-  }
+
+  ImGui::EndTable();
 }
 
 }  // namespace aim
