@@ -81,6 +81,9 @@ void AimAbslLogSink::Send(const absl::LogEntry& entry) {
 Application::Application() {
   state_ = std::make_unique<ApplicationState>();
   file_system_ = std::make_unique<FileSystem>();
+  local_store_ = std::make_unique<LocalStore>(file_system_.get());
+  scenario_manager_ = CreateScenarioManager();
+  playlist_manager_ = CreatePlaylistManager();
 
   {
     auto max_size = 1048576 * 2;
@@ -231,6 +234,15 @@ std::optional<std::string> Application::InitializeWindow() {
 
   // SDL_ShowWindow(sdl_window_);
 
+  trace.Add("SetIcon");
+  auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
+  icon_ = IMG_Load(logo_path.string().c_str());
+  if (icon_ != nullptr) {
+    SDL_SetWindowIcon(sdl_window_, icon_);
+  } else {
+    logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
+  }
+
   trace.Add("ImGui Start");
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
@@ -276,26 +288,13 @@ int Application::Initialize() {
   auto init_done_cleanup = absl::MakeCleanup(
       [&]() { state_->initialization_times.total.end = stopwatch.GetElapsedMicros(); });
 
-  {
-    auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
-    icon_ = IMG_Load(logo_path.string().c_str());
-    if (icon_ != nullptr) {
-      SDL_SetWindowIcon(sdl_window_, icon_);
-    } else {
-      logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
-    }
-  }
-
   InitializeAimForgeFolder(file_system_.get());
 
   state_->initialization_times.db.start = stopwatch.GetElapsedMicros();
   db_ = CreateAimDb(file_system_->GetUserDataPath("db/aim.db"));
-  local_store_ = std::make_unique<LocalStore>(file_system_.get());
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
   stats_manager_ = CreateStatsManager(db_.get());
-  scenario_manager_ = CreateScenarioManager();
-  playlist_manager_ = CreatePlaylistManager();
   bundle_manager_ =
       CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());
   history_manager_ = CreateHistoryManager(db_.get());
@@ -313,10 +312,12 @@ int Application::Initialize() {
     return -1;
   }
 
+  /*
   // Prime aggregate stats cache for all recent scenarios.
   for (const std::string& scenario_name : history_manager_->recent_scenarios()) {
     stats_manager_->GetAggregateStats(scenario_name);
   }
+  */
 
   std::vector<std::filesystem::path> sound_dirs = {
       file_system_->GetUserDataPath("resources/sounds"),
