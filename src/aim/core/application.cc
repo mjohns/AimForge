@@ -80,6 +80,26 @@ void AimAbslLogSink::Send(const absl::LogEntry& entry) {
 
 Application::Application() {
   state_ = std::make_unique<ApplicationState>();
+  file_system_ = std::make_unique<FileSystem>();
+
+  {
+    auto max_size = 1048576 * 2;
+    auto max_files = 3;
+    const std::string logger_name = "aim";
+    logger_ = spdlog::get(logger_name);
+    if (!logger_) {
+      logger_ =
+          spdlog::rotating_logger_mt(logger_name,
+                                     file_system_->GetUserDataPath("logs/log_file.txt").string(),
+                                     max_size,
+                                     max_files);
+      logger_->flush_on(spdlog::level::warn);
+    }
+    Logger::getInstance().SetLogger(logger_);
+
+    absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);
+    absl::AddLogSink(absl_log_sink_.get());
+  }
 }
 
 Application::~Application() {
@@ -140,6 +160,115 @@ Application::~Application() {
   }
 }
 
+std::optional<std::string> Application::InitializeWindow() {
+  Stopwatch stopwatch;
+  stopwatch.Start();
+
+  auto& trace = state_->initialization_times.window_trace;
+
+  state_->initialization_times.window.start = stopwatch.GetElapsedMicros();
+  auto init_done_cleanup = absl::MakeCleanup(
+      [&]() { state_->initialization_times.window.end = stopwatch.GetElapsedMicros(); });
+
+  state_->initialization_times.sdl.start = stopwatch.GetElapsedMicros();
+
+  trace.Add("SDL_Init");
+  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
+    return std::format("SDL initialization failed: {}", SDL_GetError());
+  }
+
+
+  state_->initialization_times.audio.start = stopwatch.GetElapsedMicros();
+  trace.Add("Mix_Init");
+  if (Mix_Init(MIX_INIT_OGG) == 0) {
+    return std::format("SDL audio initialization failed: {}", SDL_GetError());
+  }
+
+
+  SDL_AudioSpec spec;
+  spec.freq = MIX_DEFAULT_FREQUENCY;
+  spec.format = MIX_DEFAULT_FORMAT;
+  spec.channels = MIX_DEFAULT_CHANNELS;
+  trace.Add("Mix_OpenAudio");
+  if (!Mix_OpenAudio(0, &spec)) {
+    return std::format("Could not open audio device: {}", SDL_GetError());
+  }
+
+  state_->initialization_times.audio.end = stopwatch.GetElapsedMicros();
+
+  SDL_WindowFlags window_flags =
+      (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+  trace.Add("SDL_CreateWindow");
+  sdl_window_ = SDL_CreateWindow("AimForge", 0, 0, window_flags);
+  if (sdl_window_ == nullptr) {
+    return std::format("Failed to create window: {}", SDL_GetError());
+  }
+  trace.Add("SDL_CreateGPUDevice");
+  gpu_device_ = SDL_CreateGPUDevice(
+      SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+      true,
+      nullptr);
+  if (gpu_device_ == nullptr) {
+    return std::format("Failed to create GPU device: {}", SDL_GetError());
+  }
+
+  trace.Add("SDL_ClaimWindowForGPUDevice");
+  if (!SDL_ClaimWindowForGPUDevice(gpu_device_, sdl_window_)) {
+    return std::format("Failed to claim window for GPU device: {}", SDL_GetError());
+  }
+  EnableVsync();
+
+  trace.Add("SDL_GetWindowSize");
+  SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
+  float window_display_scale = SDL_GetWindowDisplayScale(sdl_window_);
+  float window_pixel_density = SDL_GetWindowPixelDensity(sdl_window_);
+  window_pixel_width_ = window_width_ * window_pixel_density;
+  window_pixel_height_ = window_height_ * window_pixel_density;
+  logger_->debug("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
+                 window_display_scale,
+                 window_pixel_density);
+
+  state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
+
+  // SDL_ShowWindow(sdl_window_);
+
+  trace.Add("ImGui Start");
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImPlot::CreateContext();
+  ImGuiIO& io = ImGui::GetIO();
+  (void)io;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+  imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
+  io.IniFilename = imgui_ini_filename_.c_str();
+
+  ImGuiStyle& style = ImGui::GetStyle();
+  style.WindowRounding = 6;
+  style.FrameRounding = 4;
+  // style.Colors.
+
+  // ImGui::StyleColorsDark();
+  ImGui::StyleColorsClassic();
+  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
+  style.AntiAliasedLines = true;
+  style.AntiAliasedFill = true;
+
+  trace.Add("ImGui InitSDL");
+  // Setup Platform/Renderer backends
+  ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);
+  ImGui_ImplSDLGPU3_InitInfo init_info = {};
+  init_info.Device = gpu_device_;
+  init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
+  ImGui_ImplSDLGPU3_Init(&init_info);
+
+  trace.Add("InitDone");
+  return {};
+}
+
 int Application::Initialize() {
   Stopwatch stopwatch;
   stopwatch.Start();
@@ -148,48 +277,16 @@ int Application::Initialize() {
   auto init_done_cleanup = absl::MakeCleanup(
       [&]() { state_->initialization_times.total.end = stopwatch.GetElapsedMicros(); });
 
-  state_->initialization_times.sdl.start = stopwatch.GetElapsedMicros();
-  // Setup SDL
-  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
-    Logger::get()->error("Error: SDL_Init(): {}", SDL_GetError());
-    return -1;
-  }
-
-  if (Mix_Init(MIX_INIT_OGG) == 0) {
-    logger_->error("SDL_mixer OGG init failed: {}", SDL_GetError());
-    return -1;
-  }
-
-  SDL_AudioSpec spec;
-  spec.freq = MIX_DEFAULT_FREQUENCY;
-  spec.format = MIX_DEFAULT_FORMAT;
-  spec.channels = MIX_DEFAULT_CHANNELS;
-  if (!Mix_OpenAudio(0, &spec)) {
-    logger_->error("Couldn't open audio: {}", SDL_GetError());
-    return 1;
-  }
-
-  state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
-
-  file_system_ = std::make_unique<FileSystem>();
   {
-    auto max_size = 1048576 * 2;
-    auto max_files = 3;
-    const std::string logger_name = "aim";
-    logger_ = spdlog::get(logger_name);
-    if (!logger_) {
-      logger_ =
-          spdlog::rotating_logger_mt(logger_name,
-                                     file_system_->GetUserDataPath("logs/log_file.txt").string(),
-                                     max_size,
-                                     max_files);
-      logger_->flush_on(spdlog::level::warn);
+    auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
+    icon_ = IMG_Load(logo_path.string().c_str());
+    if (icon_ != nullptr) {
+      SDL_SetWindowIcon(sdl_window_, icon_);
+    } else {
+      logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
     }
-    Logger::getInstance().SetLogger(logger_);
-
-    absl_log_sink_ = std::make_unique<AimAbslLogSink>(logger_);
-    absl::AddLogSink(absl_log_sink_.get());
   }
+
   InitializeAimForgeFolder(file_system_.get());
 
   state_->initialization_times.db.start = stopwatch.GetElapsedMicros();
@@ -227,28 +324,6 @@ int Application::Initialize() {
   };
   sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
 
-  SDL_WindowFlags window_flags =
-      (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-  sdl_window_ = SDL_CreateWindow("AimForge", 0, 0, window_flags);
-  if (sdl_window_ == nullptr) {
-    logger_->error("SDL_CreateWindow(): {}", SDL_GetError());
-    return -1;
-  }
-  gpu_device_ = SDL_CreateGPUDevice(
-      SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-      true,
-      nullptr);
-  if (gpu_device_ == nullptr) {
-    logger_->error("SDL_CreateGpuDevice(): {}", SDL_GetError());
-    return -1;
-  }
-
-  if (!SDL_ClaimWindowForGPUDevice(gpu_device_, sdl_window_)) {
-    logger_->error("Error: SDL_ClaimWindowForGPUDevice(): {}", SDL_GetError());
-    return -1;
-  }
-  EnableVsync();
-
   auto settings = settings_manager_->GetCurrentSettings();
   if (settings.max_render_fps() <= 0) {
     const SDL_DisplayMode* display_mode = SDL_GetCurrentDisplayMode(SDL_GetPrimaryDisplay());
@@ -259,26 +334,8 @@ int Application::Initialize() {
     }
   }
 
-  auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
-  icon_ = IMG_Load(logo_path.string().c_str());
-  if (icon_ != nullptr) {
-    SDL_SetWindowIcon(sdl_window_, icon_);
-  } else {
-    logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
-  }
   logo_texture_ = std::make_unique<Texture>(file_system_->GetBasePath("resources/images/logo.png"),
                                             gpu_device_);
-
-  SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
-  float window_display_scale = SDL_GetWindowDisplayScale(sdl_window_);
-  float window_pixel_density = SDL_GetWindowPixelDensity(sdl_window_);
-  window_pixel_width_ = window_width_ * window_pixel_density;
-  window_pixel_height_ = window_height_ * window_pixel_density;
-  logger_->debug("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
-                 window_display_scale,
-                 window_pixel_density);
-
-  // SDL_ShowWindow(sdl_window_);
 
   std::vector<std::filesystem::path> texture_dirs = {
       file_system_->GetUserDataPath("resources/textures"),
@@ -289,42 +346,11 @@ int Application::Initialize() {
       file_system_->GetUserDataPath("resources/crosshairs"), gpu_device_);
   renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
 
-  // Setup Dear ImGui context
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImPlot::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
-  (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-
-  imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
-  io.IniFilename = imgui_ini_filename_.c_str();
-
-  ImGuiStyle& style = ImGui::GetStyle();
-  style.WindowRounding = 6;
-  style.FrameRounding = 4;
-  // style.Colors.
-
   font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
   if (!font_manager_->LoadFonts()) {
     logger_->error("Failed to load fonts");
     return -1;
   }
-
-  // ImGui::StyleColorsDark();
-  ImGui::StyleColorsClassic();
-  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
-  style.AntiAliasedLines = true;
-  style.AntiAliasedFill = true;
-
-  // Setup Platform/Renderer backends
-  ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);
-  ImGui_ImplSDLGPU3_InitInfo init_info = {};
-  init_info.Device = gpu_device_;
-  init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
-  ImGui_ImplSDLGPU3_Init(&init_info);
 
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
 
@@ -483,6 +509,13 @@ void Application::DisableVsync() {
 
 std::unique_ptr<Application> Application::Create() {
   auto application = std::unique_ptr<Application>(new Application());
+  auto maybe_error = application->InitializeWindow();
+  if (maybe_error) {
+    SDL_ShowSimpleMessageBox(
+        SDL_MESSAGEBOX_ERROR, "AimForge Initialization Error", maybe_error->c_str(), nullptr);
+    return {};
+  }
+
   int rc = application->Initialize();
   if (rc != 0) {
     exit(rc);

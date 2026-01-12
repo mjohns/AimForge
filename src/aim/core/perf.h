@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/times.h"
 #include "imgui.h"
 
 namespace aim {
@@ -21,11 +22,57 @@ struct TimeSpan {
   }
 };
 
+struct TimeTrace {
+  TimeTrace() {
+    traces_.reserve(20);
+  }
+
+  void Add(const std::string& label) {
+    if (!stopwatch_) {
+      stopwatch_ = Stopwatch();
+      stopwatch_->Start();
+    }
+    traces_.push_back({label, stopwatch_->GetElapsedMicros()});
+  }
+
+  std::vector<std::string> GetTrace() {
+    std::vector<std::string> result;
+    result.reserve(traces_.size());
+
+    std::string prev;
+    i64 prev_time = -1;
+
+    for (const auto& trace : traces_) {
+      std::string label = std::format("{} -> {}", prev, trace.first);
+      prev = trace.first;
+
+      if (prev_time < 0) {
+        // Skip item for first entry.
+        prev_time = trace.second;
+        continue;
+      }
+      i64 duration_micros = trace.second - prev_time;
+      prev_time = trace.second;
+
+      result.push_back(std::format("{}: {:.2f}s", label, duration_micros / 1000000.0f));
+    }
+
+    return result;
+  }
+
+ private:
+  std::optional<Stopwatch> stopwatch_;
+  std::vector<std::pair<std::string, i64>> traces_;
+};
+
 struct InitializationTimes {
+  TimeSpan window;
   TimeSpan total;
   TimeSpan load_bundles;
   TimeSpan sdl;
+  TimeSpan audio;
   TimeSpan db;
+  TimeTrace window_trace;
 };
 
 struct FrameTimes {

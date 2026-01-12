@@ -1,4 +1,5 @@
 #include "aim/core/application.h"
+#include "aim/core/process_lock.h"
 #include "aim/ui/home_screen.h"
 
 #ifdef _WIN32
@@ -17,8 +18,15 @@ int main(int, char**) {
   }
 #endif
 
+  // Ensure only 1 instance of the program is running.
+  auto process_lock = CreateProcessLock();
+
   while (true) {
     auto app = Application::Create();
+    if (!app) {
+      break;
+    }
+
     app->PushScreenInternal(CreateHomeScreen(app.get()));
     bool should_exit = app->RunMainLoop();
     if (should_exit) {

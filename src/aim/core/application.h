@@ -172,6 +172,9 @@ class Application {
 
   int Initialize();
 
+  // Returns error message if failed to initialize.
+  std::optional<std::string> InitializeWindow();
+
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
