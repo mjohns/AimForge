@@ -34,6 +34,8 @@ message Settings {
   float use_vsync = 15;
 
   SoundSettings sound = 16;
+
+  repeated BundleInfo bundles = 17;
 }
 
 message SoundSettings {
@@ -72,4 +74,20 @@ message Keybinds {
   KeyMapping adjust_crosshair_size = 5;
   KeyMapping quick_metronome = 6;
   KeyMapping edit_scenario = 7;
+}
+
+message BundleFileLocation {
+  oneof type {
+    bool binary_dir = 1;
+    bool user_dir = 2;
+    string explicit_path = 3;
+  }
+}
+
+message BundleInfo {
+  string bundle_name = 1;
+  BundleFileLocation bundle_file_location = 2;
+  bool readonly = 3;
+  // The scenarios/playlists from this bundle will not be loaded but the file will be preserved.
+  bool archived = 4;
 }

@@ -309,7 +309,7 @@ class AngleStrafeScenario : public BaseScenario {
 }  // namespace
 
 std::unique_ptr<Scenario> CreateAngleStrafeScenario(const CreateScenarioParams& params,
-                                                   Application* app) {
+                                                    Application* app) {
   return std::make_unique<AngleStrafeScenario>(params, app);
 }
 

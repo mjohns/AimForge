@@ -19,7 +19,7 @@ std::unique_ptr<Scenario> CreateBarrelScenario(const CreateScenarioParams& param
 std::unique_ptr<Scenario> CreateLinearScenario(const CreateScenarioParams& params,
                                                Application* app);
 std::unique_ptr<Scenario> CreateAngleStrafeScenario(const CreateScenarioParams& params,
-                                                   Application* app);
+                                                    Application* app);
 std::unique_ptr<Scenario> CreateWallArcScenario(const CreateScenarioParams& params,
                                                 Application* app);
 std::unique_ptr<Scenario> CreateWallWanderScenario(const CreateScenarioParams& params,

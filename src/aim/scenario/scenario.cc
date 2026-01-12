@@ -174,11 +174,12 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
       PopSelf();
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
-      PushNextScreen(CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::DEFAULT, event_name, &app_));
+      PushNextScreen(
+          CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::DEFAULT, event_name, &app_));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
-      PushNextScreen(
-          CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::METRONOME, event_name, &app_));
+      PushNextScreen(CreateQuickSettingsScreen(
+          scenario_name_, QuickSettingsType::METRONOME, event_name, &app_));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
       is_adjusting_crosshair_ = true;
