@@ -1,3 +1,5 @@
+#include "SDL3/SDL.h"
+#include "absl/cleanup/cleanup.h"
 #include "aim/core/application.h"
 #include "aim/core/process_lock.h"
 #include "aim/ui/home_screen.h"
@@ -16,10 +18,21 @@ int main(int, char**) {
   if (!SUCCEEDED(hr)) {
     return -1;
   }
+  auto co_init_cleanup = absl::MakeCleanup([]() { CoUninitialize(); });
 #endif
 
   // Ensure only 1 instance of the program is running.
   auto process_lock = CreateProcessLock();
+  auto existing_pid_with_lock = process_lock->CreateLockFile();
+  if (existing_pid_with_lock) {
+    std::string error_msg =
+        std::format("An existing instance of AimForge is already running with process id: {}",
+                    *existing_pid_with_lock);
+    SDL_ShowSimpleMessageBox(
+        SDL_MESSAGEBOX_ERROR, "AimForge already open", error_msg.c_str(), nullptr);
+    return 0;
+  }
+  auto pid_cleanup = absl::MakeCleanup([&]() { process_lock->ReleaseLockFile(); });
 
   while (true) {
     auto app = Application::Create();
@@ -34,10 +47,6 @@ int main(int, char**) {
     }
     // Continue to next loop iteration.
   }
-
-#ifdef _WIN32
-  CoUninitialize();
-#endif
 
   return 0;
 }
