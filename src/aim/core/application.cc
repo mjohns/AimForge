@@ -105,7 +105,8 @@ Application::Application() {
 Application::~Application() {
   // Clear anything holding onto screens before shutting down SDL.
   screen_stack_.clear();
-  if (state_) {
+  if (scenario_manager_) {
+    // Ensure that the currently running scenario is cleared so the shared_ptr can be released.
     scenario_manager_->ClearCurrentScenario();
   }
   if (logo_texture_) {
@@ -177,13 +178,11 @@ std::optional<std::string> Application::InitializeWindow() {
     return std::format("SDL initialization failed: {}", SDL_GetError());
   }
 
-
   state_->initialization_times.audio.start = stopwatch.GetElapsedMicros();
   trace.Add("Mix_Init");
   if (Mix_Init(MIX_INIT_OGG) == 0) {
     return std::format("SDL audio initialization failed: {}", SDL_GetError());
   }
-
 
   SDL_AudioSpec spec;
   spec.freq = MIX_DEFAULT_FREQUENCY;
