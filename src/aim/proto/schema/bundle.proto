@@ -19,3 +19,13 @@ message BundleFile {
   repeated BundleScenario scenarios = 1;
   repeated BundlePlaylist playlists = 2;
 }
+
+message BundleInfo {
+    string bundle_name = 1;
+    bool readonly = 2;
+}
+
+// Structure for bundles.json file.
+message BundleInfoFile {
+    repeated BundleInfo bundles = 1;
+}

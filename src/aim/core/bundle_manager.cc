@@ -1,11 +1,13 @@
 #include "bundle_manager.h"
 
+#include <cctype>
 #include <filesystem>
 
 #include "absl/algorithm/container.h"
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
+#include "aim/common/proto_util.h"
 #include "aim/common/util.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
@@ -14,9 +16,14 @@
 namespace aim {
 namespace {
 
+bool IsValidBundleNameChar(char c) {
+  return std::isalnum(static_cast<unsigned char>(c)) || c == '_';
+}
+
 void AddBundlesFromDirectory(
     const std::filesystem::path& base_dir,
-    std::unordered_map<std::string, std::filesystem::path>* bundle_path_map) {
+    std::unordered_map<std::string, std::filesystem::path>* bundle_path_map,
+    std::vector<std::string>* error_messages) {
   if (!std::filesystem::exists(base_dir)) {
     return;
   }
@@ -27,8 +34,40 @@ void AddBundlesFromDirectory(
       continue;
     }
     std::string bundle_name(absl::StripSuffix(filename, ".bundle"));
-    (*bundle_path_map)[bundle_name] = entry.path();
+    if (IsValidBundleName(bundle_name)) {
+      (*bundle_path_map)[bundle_name] = entry.path();
+    } else {
+      error_messages->push_back(std::format("Invalid bundle name \"{}\"", bundle_name));
+    }
   }
+}
+
+bool BundleInfoNameLessThan(const BundleInfo& lhs, const BundleInfo& rhs) {
+  return lhs.bundle_name() < rhs.bundle_name();
+}
+
+BundleInfoFile NormalizeBundleInfoFile(
+    const BundleInfoFile& original_file,
+    const std::unordered_map<std::string, std::filesystem::path>& bundle_path_map) {
+  BundleInfoFile file = original_file;
+
+  std::unordered_set<std::string> existing_bundle_names;
+  for (auto& bundle : file.bundles()) {
+    existing_bundle_names.insert(bundle.bundle_name());
+  }
+
+  // Add all missing bundles as readonly.
+  for (const auto& entry : bundle_path_map) {
+    const std::string& bundle_name = entry.first;
+    if (!existing_bundle_names.contains(bundle_name)) {
+      auto* item = file.add_bundles();
+      item->set_bundle_name(bundle_name);
+      item->set_readonly(true);
+    }
+  }
+
+  absl::c_sort(*file.mutable_bundles(), &BundleInfoNameLessThan);
+  return file;
 }
 
 class BundleManagerImpl : public BundleManager {
@@ -36,12 +75,32 @@ class BundleManagerImpl : public BundleManager {
   explicit BundleManagerImpl(FileSystem* fs,
                              PlaylistManager* playlist_manager,
                              ScenarioManager* scenario_manager)
-      : fs_(fs), playlist_manager_(playlist_manager), scenario_manager_(scenario_manager) {}
+      : fs_(fs),
+        playlist_manager_(playlist_manager),
+        scenario_manager_(scenario_manager),
+        bundle_info_file_path_(fs->GetUserDataPath("bundles/bundles.json")) {}
 
-  void LoadBundlesFromDisk() override {
+  std::vector<std::string> LoadBundlesFromDisk() override {
+    std::vector<std::string> error_messages;
+
     std::unordered_map<std::string, std::filesystem::path> bundle_path_map;
-    AddBundlesFromDirectory(fs_->GetBasePath("bundles"), &bundle_path_map);
-    AddBundlesFromDirectory(fs_->GetUserDataPath("bundles"), &bundle_path_map);
+    AddBundlesFromDirectory(fs_->GetBasePath("bundles"), &bundle_path_map, &error_messages);
+    AddBundlesFromDirectory(fs_->GetUserDataPath("bundles"), &bundle_path_map, &error_messages);
+
+    BundleInfoFile bundle_info_file;
+    if (std::filesystem::exists(bundle_info_file_path_)) {
+      if (!ReadJsonMessageFromFile(bundle_info_file_path_, &bundle_info_file)) {
+        error_messages.push_back("Unable to parse bundles.json");
+        return error_messages;
+      }
+    }
+
+    BundleInfoFile normalized_bundle_info_file =
+        NormalizeBundleInfoFile(bundle_info_file, bundle_path_map);
+    if (!IsEquivalentProto(bundle_info_file, normalized_bundle_info_file)) {
+      WriteJsonMessageToFile(bundle_info_file_path_, normalized_bundle_info_file);
+      bundle_info_file = normalized_bundle_info_file;
+    }
 
     scenario_manager_->StartReload();
     playlist_manager_->StartReload();
@@ -54,13 +113,19 @@ class BundleManagerImpl : public BundleManager {
       if (ReadBinaryMessageFromFile(bundle_path, &bundle_file)) {
         scenario_manager_->LoadScenariosFromBundle(bundle_name, bundle_file);
         playlist_manager_->LoadPlaylistsFromBundle(bundle_name, bundle_file);
+      } else {
+        error_messages.push_back(std::format("Unable to parse bundle \"{}\"", bundle_name));
       }
     }
     scenario_manager_->FinishReload();
     playlist_manager_->FinishReload();
+    return error_messages;
   }
 
   bool SaveBundle(const std::string& bundle_name) override {
+    if (readonly_bundle_names_.contains(bundle_name)) {
+      return false;
+    }
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
@@ -71,6 +136,9 @@ class BundleManagerImpl : public BundleManager {
   }
 
   bool SaveJsonBundle(const std::string& bundle_name) override {
+    if (readonly_bundle_names_.contains(bundle_name)) {
+      return false;
+    }
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
@@ -109,11 +177,32 @@ class BundleManagerImpl : public BundleManager {
     return names;
   }
 
+  std::vector<BundleInfo> GetBundleInfos() override {
+    std::vector<BundleInfo> result;
+    result.reserve(bundle_info_map_.size());
+    for (const auto& entry : bundle_info_map_) {
+      result.push_back(entry.second);
+    }
+    absl::c_sort(result, &BundleInfoNameLessThan);
+    return result;
+  }
+
+  bool IsBundleReadonly(const std::string& bundle_name) override {
+    auto it = bundle_info_map_.find(bundle_name);
+    if (it != bundle_info_map_.end()) {
+      return it->second.readonly();
+    }
+    return true;
+  }
+
  private:
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   ScenarioManager* scenario_manager_;
   std::unordered_set<std::string> bundle_names_;
+  std::unordered_set<std::string> readonly_bundle_names_;
+  std::filesystem::path bundle_info_file_path_;
+  std::unordered_map<std::string, BundleInfo> bundle_info_map_;
 };
 
 }  // namespace
@@ -122,6 +211,19 @@ std::unique_ptr<BundleManager> CreateBundleManager(FileSystem* fs,
                                                    PlaylistManager* playlist_manager,
                                                    ScenarioManager* scenario_manager) {
   return std::make_unique<BundleManagerImpl>(fs, playlist_manager, scenario_manager);
+}
+
+bool IsValidBundleName(const std::string& bundle_name) {
+  if (bundle_name.empty()) {
+    return false;
+  }
+  for (char c : bundle_name) {
+    // Check if it's alphanumeric OR an underscore
+    if (!IsValidBundleNameChar(c)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 }  // namespace aim

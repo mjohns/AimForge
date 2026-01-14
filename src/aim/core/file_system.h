@@ -7,11 +7,6 @@
 
 namespace aim {
 
-struct BundleInfo {
-  std::string name;
-  std::filesystem::path path;
-};
-
 class FileSystem {
  public:
   FileSystem();

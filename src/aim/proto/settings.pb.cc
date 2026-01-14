@@ -128,32 +128,6 @@ struct HealthBarSettingsDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 HealthBarSettingsDefaultTypeInternal _HealthBarSettings_default_instance_;
 
-inline constexpr BundleFileLocation::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : type_{},
-        _cached_size_{0},
-        _oneof_case_{} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR BundleFileLocation::BundleFileLocation(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(BundleFileLocation_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct BundleFileLocationDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR BundleFileLocationDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~BundleFileLocationDefaultTypeInternal() {}
-  union {
-    BundleFileLocation _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BundleFileLocationDefaultTypeInternal _BundleFileLocation_default_instance_;
-
 inline constexpr ScenarioSettings::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -221,36 +195,6 @@ struct KeybindsDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 KeybindsDefaultTypeInternal _Keybinds_default_instance_;
 
-inline constexpr BundleInfo::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        bundle_name_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
-        bundle_file_location_{nullptr},
-        readonly_{false},
-        archived_{false} {}
-
-template <typename>
-PROTOBUF_CONSTEXPR BundleInfo::BundleInfo(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(BundleInfo_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct BundleInfoDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR BundleInfoDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~BundleInfoDefaultTypeInternal() {}
-  union {
-    BundleInfo _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BundleInfoDefaultTypeInternal _BundleInfo_default_instance_;
-
 inline constexpr Settings::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -271,8 +215,7 @@ inline constexpr Settings::Impl_::Impl_(
         auto_hold_tracking_{false},
         disable_per_scenario_settings_{false},
         max_render_fps_{0},
-        use_vsync_{0},
-        bundles_{} {}
+        use_vsync_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR Settings::Settings(::_pbi::ConstantInitialized)
@@ -316,7 +259,7 @@ const ::uint32_t
         4,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_._has_bits_),
-        18, // hasbit index offset
+        17, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.dpi_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.cm_per_360_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.theme_name_),
@@ -331,7 +274,6 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.max_render_fps_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.use_vsync_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.sound_),
-        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.bundles_),
         5,
         6,
         0,
@@ -346,7 +288,6 @@ const ::uint32_t
         12,
         13,
         4,
-        14,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_._has_bits_),
         8, // hasbit index offset
@@ -407,35 +348,16 @@ const ::uint32_t
         4,
         5,
         6,
-        0x004, // bitmap
-        PROTOBUF_FIELD_OFFSET(::aim::BundleFileLocation, _impl_._oneof_case_[0]),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleFileLocation, _impl_.type_),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleFileLocation, _impl_.type_),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleFileLocation, _impl_.type_),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleFileLocation, _impl_.type_),
-        0x081, // bitmap
-        PROTOBUF_FIELD_OFFSET(::aim::BundleInfo, _impl_._has_bits_),
-        7, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::aim::BundleInfo, _impl_.bundle_name_),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleInfo, _impl_.bundle_file_location_),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleInfo, _impl_.readonly_),
-        PROTOBUF_FIELD_OFFSET(::aim::BundleInfo, _impl_.archived_),
-        0,
-        1,
-        2,
-        3,
 };
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, sizeof(::aim::HealthBarSettings)},
         {13, sizeof(::aim::Settings)},
-        {46, sizeof(::aim::SoundSettings)},
-        {59, sizeof(::aim::ScenarioSettings)},
-        {78, sizeof(::aim::KeyMapping)},
-        {89, sizeof(::aim::Keybinds)},
-        {106, sizeof(::aim::BundleFileLocation)},
-        {112, sizeof(::aim::BundleInfo)},
+        {44, sizeof(::aim::SoundSettings)},
+        {57, sizeof(::aim::ScenarioSettings)},
+        {76, sizeof(::aim::KeyMapping)},
+        {87, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_HealthBarSettings_default_instance_._instance,
@@ -444,15 +366,13 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_ScenarioSettings_default_instance_._instance,
     &::aim::_KeyMapping_default_instance_._instance,
     &::aim::_Keybinds_default_instance_._instance,
-    &::aim::_BundleFileLocation_default_instance_._instance,
-    &::aim::_BundleInfo_default_instance_._instance,
 };
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
     "\n\016settings.proto\022\003aim\"s\n\021HealthBarSettin"
     "gs\022\014\n\004show\030\001 \001(\010\022\024\n\014only_damaged\030\002 \001(\010\022\016"
     "\n\006height\030\003 \001(\002\022\r\n\005width\030\004 \001(\002\022\033\n\023height_"
-    "above_target\030\005 \001(\002\"\256\003\n\010Settings\022\013\n\003dpi\030\001"
+    "above_target\030\005 \001(\002\"\214\003\n\010Settings\022\013\n\003dpi\030\001"
     " \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\022\n\ntheme_name\030\004"
     " \001(\t\022\025\n\rmetronome_bpm\030\005 \001(\002\022\026\n\016crosshair"
     "_size\030\006 \001(\002\022\036\n\026current_crosshair_name\030\007 "
@@ -462,44 +382,37 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "im.HealthBarSettings\022%\n\035disable_per_scen"
     "ario_settings\030\r \001(\010\022\026\n\016max_render_fps\030\016 "
     "\001(\002\022\021\n\tuse_vsync\030\017 \001(\002\022!\n\005sound\030\020 \001(\0132\022."
-    "aim.SoundSettings\022 \n\007bundles\030\021 \003(\0132\017.aim"
-    ".BundleInfo\"i\n\rSoundSettings\022\033\n\023master_v"
-    "olume_level\030\001 \001(\002\022\013\n\003hit\030\n \001(\t\022\014\n\004kill\030\013"
-    " \001(\t\022\021\n\tmetronome\030\014 \001(\t\022\r\n\005shoot\030\r \001(\t\"\344"
-    "\001\n\020ScenarioSettings\022\022\n\ncm_per_360\030\001 \001(\002\022"
-    "\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n\ntheme_name"
-    "\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016crossha"
-    "ir_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t\022\032\n"
-    "\022auto_hold_tracking\030\007 \001(\010\022*\n\nhealth_bar\030"
-    "\010 \001(\0132\026.aim.HealthBarSettings\"T\n\nKeyMapp"
-    "ing\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022"
-    "\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010"
-    "Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMapping\022"
-    ")\n\020restart_scenario\030\002 \001(\0132\017.aim.KeyMappi"
-    "ng\022&\n\rnext_scenario\030\003 \001(\0132\017.aim.KeyMappi"
-    "ng\022\'\n\016quick_settings\030\004 \001(\0132\017.aim.KeyMapp"
-    "ing\022.\n\025adjust_crosshair_size\030\005 \001(\0132\017.aim"
-    ".KeyMapping\022(\n\017quick_metronome\030\006 \001(\0132\017.a"
-    "im.KeyMapping\022&\n\redit_scenario\030\007 \001(\0132\017.a"
-    "im.KeyMapping\"_\n\022BundleFileLocation\022\024\n\nb"
-    "inary_dir\030\001 \001(\010H\000\022\022\n\010user_dir\030\002 \001(\010H\000\022\027\n"
-    "\rexplicit_path\030\003 \001(\tH\000B\006\n\004type\"|\n\nBundle"
-    "Info\022\023\n\013bundle_name\030\001 \001(\t\0225\n\024bundle_file"
-    "_location\030\002 \001(\0132\027.aim.BundleFileLocation"
-    "\022\020\n\010readonly\030\003 \001(\010\022\020\n\010archived\030\004 \001(\010b\010ed"
-    "itionsp\350\007"
+    "aim.SoundSettings\"i\n\rSoundSettings\022\033\n\023ma"
+    "ster_volume_level\030\001 \001(\002\022\013\n\003hit\030\n \001(\t\022\014\n\004"
+    "kill\030\013 \001(\t\022\021\n\tmetronome\030\014 \001(\t\022\r\n\005shoot\030\r"
+    " \001(\t\"\344\001\n\020ScenarioSettings\022\022\n\ncm_per_360\030"
+    "\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n\nthem"
+    "e_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016c"
+    "rosshair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 "
+    "\001(\t\022\032\n\022auto_hold_tracking\030\007 \001(\010\022*\n\nhealt"
+    "h_bar\030\010 \001(\0132\026.aim.HealthBarSettings\"T\n\nK"
+    "eyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030"
+    "\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001("
+    "\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMa"
+    "pping\022)\n\020restart_scenario\030\002 \001(\0132\017.aim.Ke"
+    "yMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.aim.Ke"
+    "yMapping\022\'\n\016quick_settings\030\004 \001(\0132\017.aim.K"
+    "eyMapping\022.\n\025adjust_crosshair_size\030\005 \001(\013"
+    "2\017.aim.KeyMapping\022(\n\017quick_metronome\030\006 \001"
+    "(\0132\017.aim.KeyMapping\022&\n\redit_scenario\030\007 \001"
+    "(\0132\017.aim.KeyMappingb\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1529,
+    1272,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
     nullptr,
     0,
-    8,
+    6,
     schemas,
     file_default_instances,
     TableStruct_settings_2eproto::offsets,
@@ -855,8 +768,7 @@ PROTOBUF_NDEBUG_INLINE Settings::Impl_::Impl_(
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
         theme_name_(arena, from.theme_name_),
-        current_crosshair_name_(arena, from.current_crosshair_name_),
-        bundles_{visibility, arena, from.bundles_} {}
+        current_crosshair_name_(arena, from.current_crosshair_name_) {}
 
 Settings::Settings(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
@@ -896,8 +808,7 @@ PROTOBUF_NDEBUG_INLINE Settings::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0},
         theme_name_(arena),
-        current_crosshair_name_(arena),
-        bundles_{visibility, arena} {}
+        current_crosshair_name_(arena) {}
 
 inline void Settings::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -933,20 +844,8 @@ inline void* PROTOBUF_NONNULL Settings::PlacementNew_(
   return ::new (mem) Settings(arena);
 }
 constexpr auto Settings::InternalNewImpl_() {
-  constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
-      PROTOBUF_FIELD_OFFSET(Settings, _impl_.bundles_) +
-          decltype(Settings::_impl_.bundles_)::
-              InternalGetArenaOffset(
-                  ::google::protobuf::Message::internal_visibility()),
-  });
-  if (arena_bits.has_value()) {
-    return ::google::protobuf::internal::MessageCreator::CopyInit(
-        sizeof(Settings), alignof(Settings), *arena_bits);
-  } else {
-    return ::google::protobuf::internal::MessageCreator(&Settings::PlacementNew_,
-                                 sizeof(Settings),
-                                 alignof(Settings));
-  }
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(Settings),
+                                            alignof(Settings));
 }
 constexpr auto Settings::InternalGenerateClassData_() {
   return ::google::protobuf::internal::ClassDataFull{
@@ -982,17 +881,17 @@ Settings::GetClassData() const {
   return Settings_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 15, 4, 61, 2>
+const ::_pbi::TcParseTable<4, 14, 3, 61, 2>
 Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
-    17, 120,  // max_field_number, fast_idx_mask
+    16, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294837252,  // skipmap
+    4294902788,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    15,  // num_field_entries
-    4,  // num_aux_entries
+    14,  // num_field_entries
+    3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     Settings_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1090,14 +989,11 @@ Settings::_table_ = {
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.use_vsync_), _Internal::kHasBitsOffset + 13, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.SoundSettings sound = 16;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.sound_), _Internal::kHasBitsOffset + 4, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // repeated .aim.BundleInfo bundles = 17;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.bundles_), _Internal::kHasBitsOffset + 14, 3, (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::Keybinds>()},
       {::_pbi::TcParser::GetTable<::aim::HealthBarSettings>()},
       {::_pbi::TcParser::GetTable<::aim::SoundSettings>()},
-      {::_pbi::TcParser::GetTable<::aim::BundleInfo>()},
   }},
   {{
     "\14\0\0\12\0\0\26\0\0\0\0\0\0\0\0\0"
@@ -1139,13 +1035,10 @@ PROTOBUF_NOINLINE void Settings::Clear() {
         reinterpret_cast<char*>(&_impl_.metronome_bpm_) -
         reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.metronome_bpm_));
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x00007f00U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00003f00U)) {
     ::memset(&_impl_.crosshair_size_, 0, static_cast<::size_t>(
         reinterpret_cast<char*>(&_impl_.use_vsync_) -
         reinterpret_cast<char*>(&_impl_.crosshair_size_)) + sizeof(_impl_.use_vsync_));
-    if (CheckHasBitForRepeated(cached_has_bits, 0x00004000U)) {
-      _impl_.bundles_.Clear();
-    }
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1270,19 +1163,6 @@ PROTOBUF_NOINLINE void Settings::Clear() {
         stream);
   }
 
-  // repeated .aim.BundleInfo bundles = 17;
-  if (CheckHasBitForRepeated(cached_has_bits, 0x00004000U)) {
-    for (unsigned i = 0, n = static_cast<unsigned>(
-                             this_._internal_bundles_size());
-         i < n; i++) {
-      const auto& repfield = this_._internal_bundles().Get(i);
-      target =
-          ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-              17, repfield, repfield.GetCachedSize(),
-              target, stream);
-    }
-  }
-
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -1335,15 +1215,6 @@ PROTOBUF_NOINLINE void Settings::Clear() {
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       total_size += 2 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.sound_);
-    }
-  }
-   {
-    // repeated .aim.BundleInfo bundles = 17;
-    if (CheckHasBitForRepeated(cached_has_bits, 0x00004000U)) {
-      total_size += 2UL * this_._internal_bundles_size();
-      for (const auto& msg : this_._internal_bundles()) {
-        total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
-      }
     }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -1406,7 +1277,7 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg,
       _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
     }
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x00007f00U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00003f00U)) {
     if (CheckHasBit(cached_has_bits, 0x00000100U)) {
       _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
     }
@@ -1424,11 +1295,6 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg,
     }
     if (CheckHasBit(cached_has_bits, 0x00002000U)) {
       _this->_impl_.use_vsync_ = from._impl_.use_vsync_;
-    }
-    if (CheckHasBitForRepeated(cached_has_bits, 0x00004000U)) {
-      _this->_internal_mutable_bundles()->InternalMergeFromWithArena(
-          ::google::protobuf::MessageLite::internal_visibility(), arena,
-          from._internal_bundles());
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1458,7 +1324,6 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) 
       - PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_)>(
           reinterpret_cast<char*>(&_impl_.keybinds_),
           reinterpret_cast<char*>(&other->_impl_.keybinds_));
-  _impl_.bundles_.InternalSwap(&other->_impl_.bundles_);
 }
 
 ::google::protobuf::Metadata Settings::GetMetadata() const {
@@ -3147,721 +3012,6 @@ void Keybinds::InternalSwap(Keybinds* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) 
 }
 
 ::google::protobuf::Metadata Keybinds::GetMetadata() const {
-  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
-}
-// ===================================================================
-
-class BundleFileLocation::_Internal {
- public:
-  static constexpr ::int32_t kOneofCaseOffset =
-      PROTOBUF_FIELD_OFFSET(::aim::BundleFileLocation, _impl_._oneof_case_);
-};
-
-BundleFileLocation::BundleFileLocation(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, BundleFileLocation_class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.BundleFileLocation)
-}
-PROTOBUF_NDEBUG_INLINE BundleFileLocation::Impl_::Impl_(
-    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
-    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-    [[maybe_unused]] const ::aim::BundleFileLocation& from_msg)
-      : type_{},
-        _cached_size_{0},
-        _oneof_case_{from._oneof_case_[0]} {}
-
-BundleFileLocation::BundleFileLocation(
-    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
-    const BundleFileLocation& from)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, BundleFileLocation_class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  BundleFileLocation* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  switch (type_case()) {
-    case TYPE_NOT_SET:
-      break;
-      case kBinaryDir:
-        _impl_.type_.binary_dir_ = from._impl_.type_.binary_dir_;
-        break;
-      case kUserDir:
-        _impl_.type_.user_dir_ = from._impl_.type_.user_dir_;
-        break;
-      case kExplicitPath:
-        new (&_impl_.type_.explicit_path_) decltype(_impl_.type_.explicit_path_){arena, from._impl_.type_.explicit_path_};
-        break;
-  }
-
-  // @@protoc_insertion_point(copy_constructor:aim.BundleFileLocation)
-}
-PROTOBUF_NDEBUG_INLINE BundleFileLocation::Impl_::Impl_(
-    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
-    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
-      : type_{},
-        _cached_size_{0},
-        _oneof_case_{} {}
-
-inline void BundleFileLocation::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-}
-BundleFileLocation::~BundleFileLocation() {
-  // @@protoc_insertion_point(destructor:aim.BundleFileLocation)
-  SharedDtor(*this);
-}
-inline void BundleFileLocation::SharedDtor(MessageLite& self) {
-  BundleFileLocation& this_ = static_cast<BundleFileLocation&>(self);
-  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
-    this_.CheckHasBitConsistency();
-  }
-  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  ABSL_DCHECK(this_.GetArena() == nullptr);
-  if (this_.has_type()) {
-    this_.clear_type();
-  }
-  this_._impl_.~Impl_();
-}
-
-void BundleFileLocation::clear_type() {
-// @@protoc_insertion_point(one_of_clear_start:aim.BundleFileLocation)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  switch (type_case()) {
-    case kBinaryDir: {
-      // No need to clear
-      break;
-    }
-    case kUserDir: {
-      // No need to clear
-      break;
-    }
-    case kExplicitPath: {
-      _impl_.type_.explicit_path_.Destroy();
-      break;
-    }
-    case TYPE_NOT_SET: {
-      break;
-    }
-  }
-  _impl_._oneof_case_[0] = TYPE_NOT_SET;
-}
-
-
-inline void* PROTOBUF_NONNULL BundleFileLocation::PlacementNew_(
-    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
-  return ::new (mem) BundleFileLocation(arena);
-}
-constexpr auto BundleFileLocation::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(BundleFileLocation),
-                                            alignof(BundleFileLocation));
-}
-constexpr auto BundleFileLocation::InternalGenerateClassData_() {
-  return ::google::protobuf::internal::ClassDataFull{
-      ::google::protobuf::internal::ClassData{
-          &_BundleFileLocation_default_instance_._instance,
-          &_table_.header,
-          nullptr,  // OnDemandRegisterArenaDtor
-          nullptr,  // IsInitialized
-          &BundleFileLocation::MergeImpl,
-          ::google::protobuf::Message::GetNewImpl<BundleFileLocation>(),
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-          &BundleFileLocation::SharedDtor,
-          ::google::protobuf::Message::GetClearImpl<BundleFileLocation>(), &BundleFileLocation::ByteSizeLong,
-              &BundleFileLocation::_InternalSerialize,
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          PROTOBUF_FIELD_OFFSET(BundleFileLocation, _impl_._cached_size_),
-          false,
-      },
-      &BundleFileLocation::kDescriptorMethods,
-      &descriptor_table_settings_2eproto,
-      nullptr,  // tracker
-  };
-}
-
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
-    ::google::protobuf::internal::ClassDataFull BundleFileLocation_class_data_ =
-        BundleFileLocation::InternalGenerateClassData_();
-
-PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
-BundleFileLocation::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&BundleFileLocation_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(BundleFileLocation_class_data_.tc_table);
-  return BundleFileLocation_class_data_.base();
-}
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 3, 0, 44, 2>
-BundleFileLocation::_table_ = {
-  {
-    0,  // no _has_bits_
-    0, // no _extensions_
-    3, 0,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
-    BundleFileLocation_class_data_.base(),
-    nullptr,  // post_loop_handler
-    ::_pbi::TcParser::GenericFallback,  // fallback
-    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::BundleFileLocation>(),  // to_prefetch
-    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
-  }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // bool binary_dir = 1;
-    {PROTOBUF_FIELD_OFFSET(BundleFileLocation, _impl_.type_.binary_dir_), _Internal::kOneofCaseOffset + 0, 0, (0 | ::_fl::kFcOneof | ::_fl::kBool)},
-    // bool user_dir = 2;
-    {PROTOBUF_FIELD_OFFSET(BundleFileLocation, _impl_.type_.user_dir_), _Internal::kOneofCaseOffset + 0, 0, (0 | ::_fl::kFcOneof | ::_fl::kBool)},
-    // string explicit_path = 3;
-    {PROTOBUF_FIELD_OFFSET(BundleFileLocation, _impl_.type_.explicit_path_), _Internal::kOneofCaseOffset + 0, 0, (0 | ::_fl::kFcOneof | ::_fl::kUtf8String | ::_fl::kRepAString)},
-  }},
-  // no aux_entries
-  {{
-    "\26\0\0\15\0\0\0\0"
-    "aim.BundleFileLocation"
-    "explicit_path"
-  }},
-};
-PROTOBUF_NOINLINE void BundleFileLocation::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.BundleFileLocation)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  clear_type();
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-::uint8_t* PROTOBUF_NONNULL BundleFileLocation::_InternalSerialize(
-    const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
-    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
-  const BundleFileLocation& this_ = static_cast<const BundleFileLocation&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-::uint8_t* PROTOBUF_NONNULL BundleFileLocation::_InternalSerialize(
-    ::uint8_t* PROTOBUF_NONNULL target,
-    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-  const BundleFileLocation& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
-    this_.CheckHasBitConsistency();
-  }
-  // @@protoc_insertion_point(serialize_to_array_start:aim.BundleFileLocation)
-  ::uint32_t cached_has_bits = 0;
-  (void)cached_has_bits;
-
-  switch (this_.type_case()) {
-    case kBinaryDir: {
-      target = stream->EnsureSpace(target);
-      target = ::_pbi::WireFormatLite::WriteBoolToArray(
-          1, this_._internal_binary_dir(), target);
-      break;
-    }
-    case kUserDir: {
-      target = stream->EnsureSpace(target);
-      target = ::_pbi::WireFormatLite::WriteBoolToArray(
-          2, this_._internal_user_dir(), target);
-      break;
-    }
-    case kExplicitPath: {
-      const ::std::string& _s = this_._internal_explicit_path();
-      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.BundleFileLocation.explicit_path");
-      target = stream->WriteStringMaybeAliased(3, _s, target);
-      break;
-    }
-    default:
-      break;
-  }
-  if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
-    target =
-        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-            this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:aim.BundleFileLocation)
-  return target;
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-::size_t BundleFileLocation::ByteSizeLong(const MessageLite& base) {
-  const BundleFileLocation& this_ = static_cast<const BundleFileLocation&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-::size_t BundleFileLocation::ByteSizeLong() const {
-  const BundleFileLocation& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  // @@protoc_insertion_point(message_byte_size_start:aim.BundleFileLocation)
-  ::size_t total_size = 0;
-
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void)cached_has_bits;
-
-  switch (this_.type_case()) {
-    // bool binary_dir = 1;
-    case kBinaryDir: {
-      total_size += 2;
-      break;
-    }
-    // bool user_dir = 2;
-    case kUserDir: {
-      total_size += 2;
-      break;
-    }
-    // string explicit_path = 3;
-    case kExplicitPath: {
-      total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                      this_._internal_explicit_path());
-      break;
-    }
-    case TYPE_NOT_SET: {
-      break;
-    }
-  }
-  return this_.MaybeComputeUnknownFieldsSize(total_size,
-                                             &this_._impl_._cached_size_);
-}
-
-void BundleFileLocation::MergeImpl(::google::protobuf::MessageLite& to_msg,
-                            const ::google::protobuf::MessageLite& from_msg) {
-   auto* const _this =
-      static_cast<BundleFileLocation*>(&to_msg);
-  auto& from = static_cast<const BundleFileLocation&>(from_msg);
-  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
-    from.CheckHasBitConsistency();
-  }
-  ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.BundleFileLocation)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void)cached_has_bits;
-
-  if (const uint32_t oneof_from_case =
-          from._impl_._oneof_case_[0]) {
-    const uint32_t oneof_to_case = _this->_impl_._oneof_case_[0];
-    const bool oneof_needs_init = oneof_to_case != oneof_from_case;
-    if (oneof_needs_init) {
-      if (oneof_to_case != 0) {
-        _this->clear_type();
-      }
-      _this->_impl_._oneof_case_[0] = oneof_from_case;
-    }
-
-    switch (oneof_from_case) {
-      case kBinaryDir: {
-        _this->_impl_.type_.binary_dir_ = from._impl_.type_.binary_dir_;
-        break;
-      }
-      case kUserDir: {
-        _this->_impl_.type_.user_dir_ = from._impl_.type_.user_dir_;
-        break;
-      }
-      case kExplicitPath: {
-        if (oneof_needs_init) {
-          _this->_impl_.type_.explicit_path_.InitDefault();
-        }
-        _this->_impl_.type_.explicit_path_.Set(from._internal_explicit_path(), arena);
-        break;
-      }
-      case TYPE_NOT_SET:
-        break;
-    }
-  }
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-}
-
-void BundleFileLocation::CopyFrom(const BundleFileLocation& from) {
-  // @@protoc_insertion_point(class_specific_copy_from_start:aim.BundleFileLocation)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-
-void BundleFileLocation::InternalSwap(BundleFileLocation* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
-  using ::std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.type_, other->_impl_.type_);
-  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
-}
-
-::google::protobuf::Metadata BundleFileLocation::GetMetadata() const {
-  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
-}
-// ===================================================================
-
-class BundleInfo::_Internal {
- public:
-  using HasBits =
-      decltype(::std::declval<BundleInfo>()._impl_._has_bits_);
-  static constexpr ::int32_t kHasBitsOffset =
-      8 * PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_._has_bits_);
-};
-
-BundleInfo::BundleInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, BundleInfo_class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  SharedCtor(arena);
-  // @@protoc_insertion_point(arena_constructor:aim.BundleInfo)
-}
-PROTOBUF_NDEBUG_INLINE BundleInfo::Impl_::Impl_(
-    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
-    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-    [[maybe_unused]] const ::aim::BundleInfo& from_msg)
-      : _has_bits_{from._has_bits_},
-        _cached_size_{0},
-        bundle_name_(arena, from.bundle_name_) {}
-
-BundleInfo::BundleInfo(
-    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
-    const BundleInfo& from)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, BundleInfo_class_data_.base()) {
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena) {
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  BundleInfo* const _this = this;
-  (void)_this;
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.bundle_file_location_ = (CheckHasBit(cached_has_bits, 0x00000002U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.bundle_file_location_)
-                : nullptr;
-  ::memcpy(reinterpret_cast<char*>(&_impl_) +
-               offsetof(Impl_, readonly_),
-           reinterpret_cast<const char*>(&from._impl_) +
-               offsetof(Impl_, readonly_),
-           offsetof(Impl_, archived_) -
-               offsetof(Impl_, readonly_) +
-               sizeof(Impl_::archived_));
-
-  // @@protoc_insertion_point(copy_constructor:aim.BundleInfo)
-}
-PROTOBUF_NDEBUG_INLINE BundleInfo::Impl_::Impl_(
-    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
-    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
-      : _cached_size_{0},
-        bundle_name_(arena) {}
-
-inline void BundleInfo::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
-  new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char*>(&_impl_) +
-               offsetof(Impl_, bundle_file_location_),
-           0,
-           offsetof(Impl_, archived_) -
-               offsetof(Impl_, bundle_file_location_) +
-               sizeof(Impl_::archived_));
-}
-BundleInfo::~BundleInfo() {
-  // @@protoc_insertion_point(destructor:aim.BundleInfo)
-  SharedDtor(*this);
-}
-inline void BundleInfo::SharedDtor(MessageLite& self) {
-  BundleInfo& this_ = static_cast<BundleInfo&>(self);
-  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
-    this_.CheckHasBitConsistency();
-  }
-  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
-  ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.bundle_name_.Destroy();
-  delete this_._impl_.bundle_file_location_;
-  this_._impl_.~Impl_();
-}
-
-inline void* PROTOBUF_NONNULL BundleInfo::PlacementNew_(
-    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
-  return ::new (mem) BundleInfo(arena);
-}
-constexpr auto BundleInfo::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(BundleInfo),
-                                            alignof(BundleInfo));
-}
-constexpr auto BundleInfo::InternalGenerateClassData_() {
-  return ::google::protobuf::internal::ClassDataFull{
-      ::google::protobuf::internal::ClassData{
-          &_BundleInfo_default_instance_._instance,
-          &_table_.header,
-          nullptr,  // OnDemandRegisterArenaDtor
-          nullptr,  // IsInitialized
-          &BundleInfo::MergeImpl,
-          ::google::protobuf::Message::GetNewImpl<BundleInfo>(),
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-          &BundleInfo::SharedDtor,
-          ::google::protobuf::Message::GetClearImpl<BundleInfo>(), &BundleInfo::ByteSizeLong,
-              &BundleInfo::_InternalSerialize,
-#endif  // PROTOBUF_CUSTOM_VTABLE
-          PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_._cached_size_),
-          false,
-      },
-      &BundleInfo::kDescriptorMethods,
-      &descriptor_table_settings_2eproto,
-      nullptr,  // tracker
-  };
-}
-
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
-    ::google::protobuf::internal::ClassDataFull BundleInfo_class_data_ =
-        BundleInfo::InternalGenerateClassData_();
-
-PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
-BundleInfo::GetClassData() const {
-  ::google::protobuf::internal::PrefetchToLocalCache(&BundleInfo_class_data_);
-  ::google::protobuf::internal::PrefetchToLocalCache(BundleInfo_class_data_.tc_table);
-  return BundleInfo_class_data_.base();
-}
-PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 1, 34, 2>
-BundleInfo::_table_ = {
-  {
-    PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_._has_bits_),
-    0, // no _extensions_
-    4, 24,  // max_field_number, fast_idx_mask
-    offsetof(decltype(_table_), field_lookup_table),
-    4294967280,  // skipmap
-    offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
-    1,  // num_aux_entries
-    offsetof(decltype(_table_), aux_entries),
-    BundleInfo_class_data_.base(),
-    nullptr,  // post_loop_handler
-    ::_pbi::TcParser::GenericFallback,  // fallback
-    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
-    ::_pbi::TcParser::GetTable<::aim::BundleInfo>(),  // to_prefetch
-    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
-  }, {{
-    // bool archived = 4;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(BundleInfo, _impl_.archived_), 3>(),
-     {32, 3, 0,
-      PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.archived_)}},
-    // string bundle_name = 1;
-    {::_pbi::TcParser::FastUS1,
-     {10, 0, 0,
-      PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.bundle_name_)}},
-    // .aim.BundleFileLocation bundle_file_location = 2;
-    {::_pbi::TcParser::FastMtS1,
-     {18, 1, 0,
-      PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.bundle_file_location_)}},
-    // bool readonly = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(BundleInfo, _impl_.readonly_), 2>(),
-     {24, 2, 0,
-      PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.readonly_)}},
-  }}, {{
-    65535, 65535
-  }}, {{
-    // string bundle_name = 1;
-    {PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.bundle_name_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // .aim.BundleFileLocation bundle_file_location = 2;
-    {PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.bundle_file_location_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // bool readonly = 3;
-    {PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.readonly_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-    // bool archived = 4;
-    {PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.archived_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-  }},
-  {{
-      {::_pbi::TcParser::GetTable<::aim::BundleFileLocation>()},
-  }},
-  {{
-    "\16\13\0\0\0\0\0\0"
-    "aim.BundleInfo"
-    "bundle_name"
-  }},
-};
-PROTOBUF_NOINLINE void BundleInfo::Clear() {
-// @@protoc_insertion_point(message_clear_start:aim.BundleInfo)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      _impl_.bundle_name_.ClearNonDefaultToEmpty();
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      ABSL_DCHECK(_impl_.bundle_file_location_ != nullptr);
-      _impl_.bundle_file_location_->Clear();
-    }
-  }
-  ::memset(&_impl_.readonly_, 0, static_cast<::size_t>(
-      reinterpret_cast<char*>(&_impl_.archived_) -
-      reinterpret_cast<char*>(&_impl_.readonly_)) + sizeof(_impl_.archived_));
-  _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-::uint8_t* PROTOBUF_NONNULL BundleInfo::_InternalSerialize(
-    const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
-    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
-  const BundleInfo& this_ = static_cast<const BundleInfo&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-::uint8_t* PROTOBUF_NONNULL BundleInfo::_InternalSerialize(
-    ::uint8_t* PROTOBUF_NONNULL target,
-    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-  const BundleInfo& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
-    this_.CheckHasBitConsistency();
-  }
-  // @@protoc_insertion_point(serialize_to_array_start:aim.BundleInfo)
-  ::uint32_t cached_has_bits = 0;
-  (void)cached_has_bits;
-
-  cached_has_bits = this_._impl_._has_bits_[0];
-  // string bundle_name = 1;
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    const ::std::string& _s = this_._internal_bundle_name();
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.BundleInfo.bundle_name");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
-  }
-
-  // .aim.BundleFileLocation bundle_file_location = 2;
-  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        2, *this_._impl_.bundle_file_location_, this_._impl_.bundle_file_location_->GetCachedSize(), target,
-        stream);
-  }
-
-  // bool readonly = 3;
-  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        3, this_._internal_readonly(), target);
-  }
-
-  // bool archived = 4;
-  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(
-        4, this_._internal_archived(), target);
-  }
-
-  if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
-    target =
-        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-            this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:aim.BundleInfo)
-  return target;
-}
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-::size_t BundleInfo::ByteSizeLong(const MessageLite& base) {
-  const BundleInfo& this_ = static_cast<const BundleInfo&>(base);
-#else   // PROTOBUF_CUSTOM_VTABLE
-::size_t BundleInfo::ByteSizeLong() const {
-  const BundleInfo& this_ = *this;
-#endif  // PROTOBUF_CUSTOM_VTABLE
-  // @@protoc_insertion_point(message_byte_size_start:aim.BundleInfo)
-  ::size_t total_size = 0;
-
-  ::uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void)cached_has_bits;
-
-  ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-  cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += ::absl::popcount(0x0000000cU & cached_has_bits) * 2;
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    // string bundle_name = 1;
-    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                      this_._internal_bundle_name());
-    }
-    // .aim.BundleFileLocation bundle_file_location = 2;
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.bundle_file_location_);
-    }
-  }
-  return this_.MaybeComputeUnknownFieldsSize(total_size,
-                                             &this_._impl_._cached_size_);
-}
-
-void BundleInfo::MergeImpl(::google::protobuf::MessageLite& to_msg,
-                            const ::google::protobuf::MessageLite& from_msg) {
-   auto* const _this =
-      static_cast<BundleInfo*>(&to_msg);
-  auto& from = static_cast<const BundleInfo&>(from_msg);
-  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
-    from.CheckHasBitConsistency();
-  }
-  ::google::protobuf::Arena* arena = _this->GetArena();
-  // @@protoc_insertion_point(class_specific_merge_from_start:aim.BundleInfo)
-  ABSL_DCHECK_NE(&from, _this);
-  ::uint32_t cached_has_bits = 0;
-  (void)cached_has_bits;
-
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
-    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      _this->_internal_set_bundle_name(from._internal_bundle_name());
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      ABSL_DCHECK(from._impl_.bundle_file_location_ != nullptr);
-      if (_this->_impl_.bundle_file_location_ == nullptr) {
-        _this->_impl_.bundle_file_location_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.bundle_file_location_);
-      } else {
-        _this->_impl_.bundle_file_location_->MergeFrom(*from._impl_.bundle_file_location_);
-      }
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
-      _this->_impl_.readonly_ = from._impl_.readonly_;
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      _this->_impl_.archived_ = from._impl_.archived_;
-    }
-  }
-  _this->_impl_._has_bits_[0] |= cached_has_bits;
-  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-}
-
-void BundleInfo::CopyFrom(const BundleInfo& from) {
-  // @@protoc_insertion_point(class_specific_copy_from_start:aim.BundleInfo)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-
-void BundleInfo::InternalSwap(BundleInfo* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
-  using ::std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.bundle_name_, &other->_impl_.bundle_name_, arena);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.archived_)
-      + sizeof(BundleInfo::_impl_.archived_)
-      - PROTOBUF_FIELD_OFFSET(BundleInfo, _impl_.bundle_file_location_)>(
-          reinterpret_cast<char*>(&_impl_.bundle_file_location_),
-          reinterpret_cast<char*>(&other->_impl_.bundle_file_location_));
-}
-
-::google::protobuf::Metadata BundleInfo::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // @@protoc_insertion_point(namespace_scope)
