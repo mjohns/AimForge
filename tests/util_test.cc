@@ -11,12 +11,6 @@ using ::testing::Eq;
 using ::testing::Optional;
 using ::testing::StrEq;
 
-TEST(UtilTest, ParseInt) {
-  EXPECT_THAT(ParseInt("1"), Eq(1));
-  EXPECT_THAT(ParseInt("-1"), Eq(-1));
-  EXPECT_THAT(ParseInt("145"), Eq(145));
-}
-
 TEST(UtilTest, MaybeIntToString) {
   EXPECT_THAT(MaybeIntToString(1), StrEq("1"));
   EXPECT_THAT(MaybeIntToString(10), StrEq("10"));

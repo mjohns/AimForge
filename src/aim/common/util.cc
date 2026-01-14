@@ -159,11 +159,6 @@ glm::vec3 ToVec3(const StoredRgb& v) {
       (float)v.r() / kMaxRgbValue, (float)v.g() / kMaxRgbValue, (float)v.b() / kMaxRgbValue);
 }
 
-bool IsInt(float value) {
-  int int_value = value;
-  return (value - int_value) == 0;
-}
-
 std::string MaybeIntToString(float value, int decimal_places) {
   std::stringstream ss;
   ss << std::fixed << std::setprecision(decimal_places) << value;
@@ -188,14 +183,6 @@ std::string MaybeIntToString(float value, int decimal_places) {
     s.pop_back();
   }
   return s;
-}
-
-float ParseFloat(const std::string& text) {
-  return strtod(text.c_str(), nullptr);
-}
-
-i64 ParseInt(const std::string& text) {
-  return std::stoll(text);
 }
 
 float FirstNonZero(float v1, float v2) {

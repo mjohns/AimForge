@@ -218,7 +218,6 @@ bool IsValidBundleName(const std::string& bundle_name) {
     return false;
   }
   for (char c : bundle_name) {
-    // Check if it's alphanumeric OR an underscore
     if (!IsValidBundleNameChar(c)) {
       return false;
     }
