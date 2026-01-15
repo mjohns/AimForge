@@ -102,6 +102,10 @@ class BundleManagerImpl : public BundleManager {
       bundle_info_file = normalized_bundle_info_file;
     }
 
+    for (const auto& bundle_info : bundle_info_file.bundles()) {
+      bundle_info_map_[bundle_info.bundle_name()] = bundle_info;
+    }
+
     scenario_manager_->StartReload();
     playlist_manager_->StartReload();
     for (auto& entry : bundle_path_map) {

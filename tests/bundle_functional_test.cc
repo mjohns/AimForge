@@ -52,7 +52,7 @@ auto EqualsPlaylist(const Playlist& expected) {
 
 class BundleFunctionalTest : public ::testing::Test {
  protected:
-  std::filesystem::path temp_dir_path_;  // Path to the unique temporary directory for this test
+  std::filesystem::path temp_dir_path_;
   std::unique_ptr<FileSystem> fs_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
@@ -117,7 +117,12 @@ class BundleFunctionalTest : public ::testing::Test {
     ASSERT_TRUE(std::filesystem::create_directory(temp_dir_path_))
         << "Failed to create temporary directory: " << temp_dir_path_;
 
-    fs_ = std::make_unique<FileSystem>(temp_dir_path_, temp_dir_path_);
+    auto base_path = temp_dir_path_ / "base";
+    auto user_path = temp_dir_path_ / "user";
+    fs_ = std::make_unique<FileSystem>(base_path, user_path);
+    std::filesystem::create_directory(base_path);
+    std::filesystem::create_directory(user_path);
+
     scenario_manager_ = CreateScenarioManager();
     playlist_manager_ = CreatePlaylistManager();
     bundle_manager_ =
@@ -126,8 +131,8 @@ class BundleFunctionalTest : public ::testing::Test {
     scenario_manager_->RegisterRenameListener(
         std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
 
-    auto bundles_dir = fs_->GetUserDataPath("bundles");
-    std::filesystem::create_directory(bundles_dir);
+    std::filesystem::create_directory(fs_->GetUserDataPath("bundles"));
+    std::filesystem::create_directory(fs_->GetBasePath("bundles"));
   }
 
   void TearDown() override {
@@ -372,4 +377,34 @@ TEST_F(BundleFunctionalTest, RenameScenarioInPlaylist) {
 
   playlist_manager_->UpdatePlaylist(
       "B2 Playlist", PlaylistWithItems({"B3 Scenario3", "B1 Scenario2", "B2 Scenario2"}));
+}
+
+TEST_F(BundleFunctionalTest, LoadInitialBundles) {
+  BundleFile af_bundle;
+  af_bundle.add_playlists()->set_name("Playlist1");
+  BundleFile user_bundle;
+  user_bundle.add_playlists()->set_name("Playlist2");
+  BundleFile other_bundle;
+  other_bundle.add_playlists()->set_name("Playlist3");
+
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetBasePath("bundles/AF.bundle"), af_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/USER.bundle"), user_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/OTHER.bundle"), other_bundle));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+
+  BundleInfo af_info;
+  af_info.set_bundle_name("AF");
+  af_info.set_readonly(true);
+
+  BundleInfo other_info;
+  other_info.set_bundle_name("OTHER");
+  other_info.set_readonly(true);
+
+  BundleInfo user_info;
+  user_info.set_bundle_name("USER");
+  user_info.set_readonly(true);
+
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info), EqualsProto(other_info), EqualsProto(user_info)));
 }
