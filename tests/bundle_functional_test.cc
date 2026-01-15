@@ -405,6 +405,7 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
   user_info.set_bundle_name("USER");
   user_info.set_readonly(true);
 
+  EXPECT_THAT(bundle_manager_->GetBundleNames(), ElementsAre("AF", "OTHER", "USER"));
   EXPECT_THAT(bundle_manager_->GetBundleInfos(),
               ElementsAre(EqualsProto(af_info), EqualsProto(other_info), EqualsProto(user_info)));
 
@@ -432,4 +433,6 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
                           EqualsProto(new_info),
                           EqualsProto(other_info),
                           EqualsProto(user_info)));
+
+  EXPECT_THAT(bundle_manager_->GetBundleNames(), ElementsAre("AF", "NEW", "OTHER", "USER"));
 }

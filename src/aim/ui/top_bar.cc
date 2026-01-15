@@ -59,6 +59,7 @@ void DrawTopBar(UiScreen* screen) {
     ImGui::SameLine();
     ImGui::Text(current_scenario->name);
 
+    /*
     ImGui::SameLine();
     if (ImGui::Button(std::format("{}", kIconArrowForward))) {
       app.state().scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
@@ -68,6 +69,7 @@ void DrawTopBar(UiScreen* screen) {
       auto normal_font = app.font_manager().UseDefault();
       ImGui::HelpTooltip("Playlist next");
     }
+    */
   }
 
   ImGui::SameLine();

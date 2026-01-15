@@ -81,7 +81,6 @@ class BundleManagerImpl : public BundleManager {
         bundle_info_file_path_(fs->GetUserDataPath("bundles/bundles.json")) {}
 
   std::vector<std::string> LoadBundlesFromDisk() override {
-    bundle_names_.clear();
     bundle_info_map_.clear();
 
     std::vector<std::string> error_messages;
@@ -113,7 +112,6 @@ class BundleManagerImpl : public BundleManager {
     playlist_manager_->StartReload();
     for (auto& entry : bundle_path_map) {
       std::string bundle_name = entry.first;
-      bundle_names_.insert(bundle_name);
       std::filesystem::path bundle_path = entry.second;
 
       BundleFile bundle_file;
@@ -135,7 +133,6 @@ class BundleManagerImpl : public BundleManager {
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
 
     std::filesystem::path file_path = fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle");
-    bundle_names_.insert(bundle_name);
     return WriteBinaryMessageToFile(file_path, bundle_file);
   }
 
@@ -173,7 +170,10 @@ class BundleManagerImpl : public BundleManager {
   }
 
   std::vector<std::string> GetBundleNames() override {
-    std::vector<std::string> names(bundle_names_.begin(), bundle_names_.end());
+    std::vector<std::string> names;
+    for (auto& entry : bundle_info_map_) {
+      names.push_back(entry.first);
+    }
     absl::c_sort(names);
     return names;
   }
@@ -200,7 +200,6 @@ class BundleManagerImpl : public BundleManager {
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   ScenarioManager* scenario_manager_;
-  std::unordered_set<std::string> bundle_names_;
   std::filesystem::path bundle_info_file_path_;
   std::unordered_map<std::string, BundleInfo> bundle_info_map_;
 };
