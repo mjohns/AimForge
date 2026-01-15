@@ -407,4 +407,29 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
 
   EXPECT_THAT(bundle_manager_->GetBundleInfos(),
               ElementsAre(EqualsProto(af_info), EqualsProto(other_info), EqualsProto(user_info)));
+
+  // Make sure bundles.json recognizes a newly added bundle file.
+
+  BundleFile new_bundle;
+  new_bundle.add_playlists()->set_name("Playlist4");
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/NEW.bundle"), new_bundle));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+
+  BundleInfo new_info;
+  new_info.set_bundle_name("NEW");
+  new_info.set_readonly(true);
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info),
+                          EqualsProto(new_info),
+                          EqualsProto(other_info),
+                          EqualsProto(user_info)));
+
+  // Reload bundles.json again and make sure it is set correctly.
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info),
+                          EqualsProto(new_info),
+                          EqualsProto(other_info),
+                          EqualsProto(user_info)));
 }

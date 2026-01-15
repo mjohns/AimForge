@@ -81,6 +81,9 @@ class BundleManagerImpl : public BundleManager {
         bundle_info_file_path_(fs->GetUserDataPath("bundles/bundles.json")) {}
 
   std::vector<std::string> LoadBundlesFromDisk() override {
+    bundle_names_.clear();
+    bundle_info_map_.clear();
+
     std::vector<std::string> error_messages;
 
     std::unordered_map<std::string, std::filesystem::path> bundle_path_map;
@@ -127,9 +130,6 @@ class BundleManagerImpl : public BundleManager {
   }
 
   bool SaveBundle(const std::string& bundle_name) override {
-    if (readonly_bundle_names_.contains(bundle_name)) {
-      return false;
-    }
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
@@ -140,9 +140,6 @@ class BundleManagerImpl : public BundleManager {
   }
 
   bool SaveJsonBundle(const std::string& bundle_name) override {
-    if (readonly_bundle_names_.contains(bundle_name)) {
-      return false;
-    }
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
@@ -204,7 +201,6 @@ class BundleManagerImpl : public BundleManager {
   PlaylistManager* playlist_manager_;
   ScenarioManager* scenario_manager_;
   std::unordered_set<std::string> bundle_names_;
-  std::unordered_set<std::string> readonly_bundle_names_;
   std::filesystem::path bundle_info_file_path_;
   std::unordered_map<std::string, BundleInfo> bundle_info_map_;
 };
