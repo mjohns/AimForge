@@ -436,3 +436,66 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
 
   EXPECT_THAT(bundle_manager_->GetBundleNames(), ElementsAre("AF", "NEW", "OTHER", "USER"));
 }
+
+TEST_F(BundleFunctionalTest, TestUpdateBundleInfo) {
+  BundleFile af_bundle;
+  af_bundle.add_playlists()->set_name("Playlist1");
+  BundleFile user_bundle;
+  user_bundle.add_playlists()->set_name("Playlist2");
+
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetBasePath("bundles/AF.bundle"), af_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/USER.bundle"), user_bundle));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+
+  BundleInfo af_info;
+  af_info.set_bundle_name("AF");
+  af_info.set_readonly(true);
+
+  BundleInfo user_info;
+  user_info.set_bundle_name("USER");
+  user_info.set_readonly(true);
+
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info), EqualsProto(user_info)));
+
+  user_info.set_readonly(false);
+  bundle_manager_->UpdateBundleInfo(user_info);
+
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info), EqualsProto(user_info)));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info), EqualsProto(user_info)));
+}
+
+TEST_F(BundleFunctionalTest, TestDeleteBundle) {
+  BundleFile af_bundle;
+  af_bundle.add_playlists()->set_name("Playlist1");
+  BundleFile user_bundle;
+  user_bundle.add_playlists()->set_name("Playlist2");
+
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetBasePath("bundles/AF.bundle"), af_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/USER.bundle"), user_bundle));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+
+  BundleInfo af_info;
+  af_info.set_bundle_name("AF");
+  af_info.set_readonly(true);
+
+  BundleInfo user_info;
+  user_info.set_bundle_name("USER");
+  user_info.set_readonly(true);
+
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(),
+              ElementsAre(EqualsProto(af_info), EqualsProto(user_info)));
+
+  bundle_manager_->DeleteBundle("USER");
+
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(), ElementsAre(EqualsProto(af_info)));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(), ElementsAre(EqualsProto(af_info)));
+}

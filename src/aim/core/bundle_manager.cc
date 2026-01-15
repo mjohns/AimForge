@@ -131,9 +131,7 @@ class BundleManagerImpl : public BundleManager {
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
-
-    std::filesystem::path file_path = fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle");
-    return WriteBinaryMessageToFile(file_path, bundle_file);
+    return WriteBinaryMessageToFile(GetMutableBundleFilePath(bundle_name), bundle_file);
   }
 
   bool SaveJsonBundle(const std::string& bundle_name) override {
@@ -178,6 +176,22 @@ class BundleManagerImpl : public BundleManager {
     return names;
   }
 
+  void UpdateBundleInfo(const BundleInfo& info) override {
+    assert(IsValidBundleName(info.bundle_name()) && "Saving info with invalid bundle name");
+    if (info.bundle_name().empty()) {
+      return;
+    }
+    bundle_info_map_[info.bundle_name()] = info;
+    SaveBundlesJsonFile();
+  }
+
+  void DeleteBundle(const std::string& bundle_name) override {
+    bundle_info_map_.erase(bundle_name);
+    std::filesystem::remove(GetMutableBundleFilePath(bundle_name));
+    SaveBundlesJsonFile();
+    LoadBundlesFromDisk();
+  }
+
   std::vector<BundleInfo> GetBundleInfos() override {
     std::vector<BundleInfo> result;
     result.reserve(bundle_info_map_.size());
@@ -197,6 +211,19 @@ class BundleManagerImpl : public BundleManager {
   }
 
  private:
+  std::filesystem::path GetMutableBundleFilePath(const std::string& bundle_name) {
+    return fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle");
+  }
+
+  void SaveBundlesJsonFile() {
+    BundleInfoFile file;
+    for (auto& entry : bundle_info_map_) {
+      *file.add_bundles() = entry.second;
+    }
+    absl::c_sort(*file.mutable_bundles(), &BundleInfoNameLessThan);
+    WriteJsonMessageToFile(bundle_info_file_path_, file);
+  }
+
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   ScenarioManager* scenario_manager_;
