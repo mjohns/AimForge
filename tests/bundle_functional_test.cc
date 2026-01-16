@@ -498,4 +498,12 @@ TEST_F(BundleFunctionalTest, TestDeleteBundle) {
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
   EXPECT_THAT(bundle_manager_->GetBundleInfos(), ElementsAre(EqualsProto(af_info)));
+
+  // Can't delete bin version of AF.
+  bundle_manager_->DeleteBundle("AF");
+
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(), ElementsAre(EqualsProto(af_info)));
+
+  EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
+  EXPECT_THAT(bundle_manager_->GetBundleInfos(), ElementsAre(EqualsProto(af_info)));
 }

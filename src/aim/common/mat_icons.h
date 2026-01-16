@@ -51,6 +51,7 @@ static const char* kIconAssignment = "\uE85D";
 static const char* kIconBarChart = "\uE26B";
 static const char* kIconRobot = "\uF06C";
 static const char* kIconMouse = "\uE323";
+static const char* kIconDataset = "\uf8ee";
 
 // static const char* kIconPointScan = "\xEF\x9C\x8C";
 // static const char* kIconCloseSmall = "\xEF\x94\x88";

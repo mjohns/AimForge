@@ -13,6 +13,7 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
+#include "aim/ui/bundle_ui.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_editor_screen.h"
@@ -34,6 +35,7 @@ enum class AppScreen : int {
   SCENARIOS = 1,
   PLAYLISTS = 2,
   PLAY_TIME = 3,
+  BUNDLES = 4,
 };
 
 class HomeScreen : public UiScreen {
@@ -41,6 +43,7 @@ class HomeScreen : public UiScreen {
   explicit HomeScreen(Application& app) : UiScreen(app) {
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
+    bundle_ui_component_ = CreateBundleUiComponent(this);
     scenario_browser_component1_ =
         CreateScenarioBrowserComponent("ScenarioBrowser1", ScenarioBrowserType::FULL, &app);
     scenario_browser_component2_ =
@@ -154,6 +157,9 @@ class HomeScreen : public UiScreen {
         if (app_screen_ == AppScreen::PLAYLISTS) {
           DrawPlaylistsScreen();
         }
+        if (app_screen_ == AppScreen::BUNDLES) {
+          DrawBundlesScreen();
+        }
         if (app_screen_ == AppScreen::PLAY_TIME) {
           DrawPlayTimeScreen();
         }
@@ -215,6 +221,10 @@ class HomeScreen : public UiScreen {
     if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
                           app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
+    }
+    if (ImGui::Selectable(std::format("{} Bundles", kIconDataset).c_str(),
+                          app_screen_ == AppScreen::BUNDLES)) {
+      app_screen_ = AppScreen::BUNDLES;
     }
     if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, GetCurrentScenarioId()));
@@ -339,6 +349,10 @@ class HomeScreen : public UiScreen {
     }
   }
 
+  void DrawBundlesScreen() {
+    bundle_ui_component_->Show();
+  }
+
   void DrawPlaylistsScreen() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
 
@@ -399,6 +413,7 @@ class HomeScreen : public UiScreen {
 
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
+  std::unique_ptr<BundleUiComponent> bundle_ui_component_;
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component1_;
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component2_;
   std::unique_ptr<ScenarioBrowserComponent> quick_access_scenario_browser_component_;
