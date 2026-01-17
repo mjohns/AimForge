@@ -25,6 +25,69 @@ enum class PlaylistViewType : int {
   STARRED = 3,
 };
 
+class AddPlaylistDialog {
+ public:
+  explicit AddPlaylistDialog(const std::string& id) : id_(id) {}
+
+  void NotifyOpen() {
+    open_ = true;
+  }
+
+  bool Draw(Application& app) {
+    ImGui::IdGuard cid("AddPlaylistDialogContent");
+    bool did_add = false;
+    if (is_open_) {
+      ImGui::SetNextWindowPos(
+          ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+      if (ImGui::BeginPopupModal(id_.c_str(),
+                                 &is_open_,
+                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+        ImGui::SimpleDropdown("BundlePicker",
+                              name_.mutable_bundle_name(),
+                              bundle_names_,
+                              ImGui::GetFrameHeight() * 9);
+        ImGui::SameLine();
+        ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+
+        if (ImGui::Button("Add")) {
+          auto taken_names =
+              app.playlist_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
+          *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
+          app.playlist_manager().UpdatePlaylist(name_.full_name(), PlaylistDef());
+          app.playlist_manager().SetCurrentPlaylist(name_.full_name());
+          app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
+          did_add = true;
+          ImGui::CloseCurrentPopup();
+          is_open_ = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel")) {
+          is_open_ = false;
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+      }
+    }
+    if (open_) {
+      ImGui::OpenPopup(id_.c_str());
+      open_ = false;
+      is_open_ = true;
+      bundle_names_ = app.bundle_manager().GetBundleNames();
+      name_.set("USER", "New playlist");
+    }
+    return did_add;
+  }
+
+ private:
+  bool open_ = false;
+  bool is_open_ = false;
+
+  ResourceName name_;
+  std::vector<std::string> bundle_names_;
+  std::string id_;
+};
+
 class PlaylistComponentImpl : public PlaylistComponent {
  public:
   explicit PlaylistComponentImpl(UiScreen& screen) : app_(screen.app()), screen_(screen) {}
@@ -449,49 +512,6 @@ std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen) {
 
 std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(UiScreen* screen) {
   return std::make_unique<PlaylistListComponentImpl>(*screen);
-}
-
-bool AddPlaylistDialog::Draw(Application& app) {
-  ImGui::IdGuard cid("AddPlaylistDialogContent");
-  bool did_add = false;
-  if (is_open_) {
-    ImGui::SetNextWindowPos(
-        ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    if (ImGui::BeginPopupModal(id_.c_str(),
-                               &is_open_,
-                               ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                   ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
-      ImGui::SimpleDropdown(
-          "BundlePicker", name_.mutable_bundle_name(), bundle_names_, ImGui::GetFrameHeight() * 9);
-      ImGui::SameLine();
-      ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
-
-      if (ImGui::Button("Add")) {
-        auto taken_names = app.playlist_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
-        *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
-        app.playlist_manager().UpdatePlaylist(name_.full_name(), PlaylistDef());
-        app.playlist_manager().SetCurrentPlaylist(name_.full_name());
-        app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
-        did_add = true;
-        ImGui::CloseCurrentPopup();
-        is_open_ = false;
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("Cancel")) {
-        is_open_ = false;
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
-    }
-  }
-  if (open_) {
-    ImGui::OpenPopup(id_.c_str());
-    open_ = false;
-    is_open_ = true;
-    bundle_names_ = app.bundle_manager().GetBundleNames();
-    name_.set("USER", "New playlist");
-  }
-  return did_add;
 }
 
 }  // namespace aim
