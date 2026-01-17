@@ -11,13 +11,13 @@ FetchContent_Declare(
 FetchContent_Declare(
   SDL3
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
-  GIT_TAG release-3.2.0
+  GIT_TAG release-3.4.0
 )
 
 FetchContent_Declare(
   SDL3_image
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL_image.git"
-  GIT_TAG release-3.2.0
+  GIT_TAG prerelease-3.3.4
 )
 
 FetchContent_Declare(
@@ -35,7 +35,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   glm
   GIT_REPOSITORY https://github.com/g-truc/glm.git
-  GIT_TAG 1.0.1
+  GIT_TAG 1.0.3
 )
 
 FetchContent_Declare(
