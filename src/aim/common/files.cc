@@ -173,4 +173,25 @@ void OpenFolderInExplorer(const std::filesystem::path& fs_path) {
 #endif
 }
 
+void MoveFileToTrash(const std::filesystem::path& fs_path) {
+  std::string path = fs_path.string();
+
+#ifdef _WIN32
+  // Path must be double-null terminated for SHFileOperation
+  path.append(1, '\0');
+
+  SHFILEOPSTRUCTA file_op = {0};
+  file_op.wFunc = FO_DELETE;
+  file_op.pFrom = path.c_str();
+  file_op.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION;  // FOF_ALLOWUNDO makes it go to trash
+  SHFileOperationA(&file_op);
+#elif __APPLE__
+  // TODO: Support actual trash on apple
+  std::filesystem::remove(fs_path);
+#else
+  std::string command = "gio trash " + filePath;
+  std::system(command.c_str());
+#endif
+}
+
 }  // namespace aim

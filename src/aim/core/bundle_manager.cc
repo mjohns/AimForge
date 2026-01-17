@@ -11,7 +11,6 @@
 #include "aim/common/util.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
-#include "google/protobuf/util/message_differencer.h"
 
 namespace aim {
 namespace {
@@ -187,7 +186,7 @@ class BundleManagerImpl : public BundleManager {
 
   void DeleteBundle(const std::string& bundle_name) override {
     bundle_info_map_.erase(bundle_name);
-    std::filesystem::remove(GetMutableBundleFilePath(bundle_name));
+    MoveFileToTrash(GetMutableBundleFilePath(bundle_name));
     SaveBundlesJsonFile();
     LoadBundlesFromDisk();
   }

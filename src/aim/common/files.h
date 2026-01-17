@@ -35,4 +35,6 @@ std::optional<std::filesystem::file_time_type> GetMostRecentUpdateTime(
 void OpenFileInExplorer(const std::filesystem::path& path);
 void OpenFolderInExplorer(const std::filesystem::path& path);
 
+void MoveFileToTrash(const std::filesystem::path& path);
+
 }  // namespace aim
