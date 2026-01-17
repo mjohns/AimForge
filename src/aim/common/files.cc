@@ -159,4 +159,18 @@ void OpenFileInExplorer(const std::filesystem::path& path) {
 #endif
 }
 
+void OpenFolderInExplorer(const std::filesystem::path& fs_path) {
+  std::string path = fs_path.string();
+#ifdef _WIN32
+  std::string command = "explorer " + path;
+  std::system(command.c_str());
+#elif __APPLE__
+  std::string command = "open " + path;
+  std::system(command.c_str());
+#else
+  std::string command = "xdg-open " + path;
+  std::system(command.c_str());
+#endif
+}
+
 }  // namespace aim
