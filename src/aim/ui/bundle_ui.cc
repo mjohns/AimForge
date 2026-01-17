@@ -138,7 +138,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
   void DrawSelectedBundle() {
     auto maybe_bundle_info = app_.bundle_manager().GetBundleInfo(selected_bundle_name_);
     if (!maybe_bundle_info) {
-      ImGui::Text("Could not find bundle: %s", selected_bundle_name_);
+      ImGui::Text("Could not find bundle: %s", selected_bundle_name_.c_str());
       return;
     }
     BundleInfo info = *maybe_bundle_info;

@@ -106,8 +106,6 @@ bool CopyPlaylistDialog::Draw(Application& app) {
     ImGui::OpenPopup(id_.c_str());
     open_ = false;
     deep_copy_ = false;
-    remove_prefix_;
-    add_prefix_;
     bundle_names_ = app.bundle_manager().GetBundleNames();
     new_name_ = ResourceName::Parse(source_->name);
     *new_name_.mutable_relative_name() += " Copy";
