@@ -192,6 +192,14 @@ class BundleManagerImpl : public BundleManager {
     LoadBundlesFromDisk();
   }
 
+  std::optional<BundleInfo> GetBundleInfo(const std::string& bundle_name) override {
+    auto it = bundle_info_map_.find(bundle_name);
+    if (it != bundle_info_map_.end()) {
+      return it->second;
+    }
+    return {};
+  }
+
   std::vector<BundleInfo> GetBundleInfos() override {
     std::vector<BundleInfo> result;
     result.reserve(bundle_info_map_.size());
