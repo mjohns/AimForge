@@ -44,7 +44,8 @@ constexpr const int kDefaultTargetRenderFps = 600;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
 bool ShouldRecordReplay(ScenarioDef& def, const Settings& settings) {
-  return true;
+  return def.duration_seconds() < 80 && def.target_def().num_targets() > 0 &&
+         def.target_def().num_targets() < 20;
 }
 
 }  // namespace

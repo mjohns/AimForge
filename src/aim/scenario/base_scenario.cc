@@ -149,7 +149,8 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
       }
     }
 
-    proximity_tracking_sound_->DoTick(normalized_distance_from_center);
+    proximity_tracking_sound_->DoTick(
+        timer_.GetElapsedSeconds(), normalized_distance_from_center, replay_.get());
   } else {
     TrackingHoldDone();
   }
@@ -201,7 +202,8 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
         }
       }
     }
-    tracking_sound_->DoTick(maybe_hit_target_id.has_value());
+    tracking_sound_->DoTick(
+        timer_.GetElapsedSeconds(), maybe_hit_target_id.has_value(), replay_.get());
   } else {
     TrackingHoldDone();
   }
@@ -408,7 +410,6 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
     target = target_manager_.AddTarget(target);
     AddNewTargetEvent(target);
   }
-
 }
 
 std::optional<StatsDbRow> BaseScenario::GetStatsRow() {

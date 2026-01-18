@@ -62,7 +62,9 @@ struct TimedInvokerParams {
 class TimedInvoker {
  public:
   TimedInvoker(TimedInvokerParams params, std::function<void()> fn);
-  void MaybeInvoke(i64 now_micros);
+
+  // Returns if it was invoked.
+  bool MaybeInvoke(i64 now_micros);
 
  private:
   void Invoke(i64 now_micros);
