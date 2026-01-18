@@ -30,6 +30,7 @@ void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, Repla
 }  // namespace
 
 void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
+  float approximate_mb = replay.GetApproximateSizeMb();
   Theme theme = app->settings_manager().GetCurrentTheme();
   Settings settings = app->settings_manager().GetCurrentSettings();
   Crosshair crosshair = app->settings_manager().GetCurrentCrosshair();

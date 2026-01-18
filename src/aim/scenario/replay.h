@@ -68,6 +68,8 @@ struct ReplayV2 {
   std::vector<TargetData> target_data;
   std::vector<PitchYaw> pitch_yaws;
   std::vector<ReplayTargetMetadata> target_metadata;
+
+  float GetApproximateSizeMb() const;
 };
 
 class ReplayRecorder {
@@ -80,7 +82,7 @@ class ReplayRecorder {
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
 
   const ReplayV2& replay() const {
-    return replay_;
+    return *replay_;
   }
 
  private:
@@ -89,7 +91,7 @@ class ReplayRecorder {
   i32 num_targets_;
 
   std::unordered_map<u16, u16> target_data_channel_map_;
-  ReplayV2 replay_;
+  std::unique_ptr<ReplayV2> replay_;
 };
 
 }  // namespace aim
