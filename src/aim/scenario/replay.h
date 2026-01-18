@@ -12,8 +12,8 @@ namespace aim {
 struct Target;
 
 struct TargetData {
-  float radius;
-  glm::vec3 position;
+  float radius = 0;
+  glm::vec3 position{};
 };
 
 enum class ReplayEventType : u16 {
@@ -57,13 +57,14 @@ union ReplayEventData {
 
 struct ReplayEvent {
   ReplayEventType type;
-  ReplayEventData data;
-  float time_seconds;
+  ReplayEventData data{};
+  float time_seconds = 0;
 };
 
 struct ReplayV2 {
   Room room;
   u16 replay_fps;
+  u16 num_targets;
   std::vector<ReplayEvent> events;
   std::vector<TargetData> target_data;
   std::vector<PitchYaw> pitch_yaws;
@@ -80,6 +81,8 @@ class ReplayRecorder {
   void RemoveTarget(float now_seconds, u16 target_id);
   void PlaySound(float now_seconds, ReplaySoundType sound);
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
+
+  void SnapshotTargets(i64 frame_number, const std::vector<Target>& targets);
 
   const ReplayV2& replay() const {
     return *replay_;

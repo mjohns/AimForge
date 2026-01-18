@@ -377,6 +377,8 @@ Target BaseScenario::GetNewTarget() {
 }
 
 void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
+  AddRemoveTargetEvent(old_target_id);
+
   Target target = GetNewTarget();
   if (def_.target_def().newest_target_is_ghost()) {
     target_manager_.MarkAllAsNonGhost();
@@ -407,7 +409,6 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
     AddNewTargetEvent(target);
   }
 
-  AddRemoveTargetEvent(old_target_id);
 }
 
 std::optional<StatsDbRow> BaseScenario::GetStatsRow() {

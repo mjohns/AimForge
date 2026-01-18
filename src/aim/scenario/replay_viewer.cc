@@ -44,6 +44,8 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
   int processed_events_up_to_index = 0;
   int processed_targets_up_to_index = 0;
 
+  std::unordered_map<u16, u16> target_data_channel_map;
+
   TargetManager target_manager(replay.room);
   Camera camera(CameraParams(replay.room));
 
@@ -68,18 +70,39 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
     }
     timer.OnStartFrame();
 
-    uint64_t replay_frame_number = timer.GetReplayFrameNumber();
-    int pitch_yaws_index = replay_frame_number * 2;
-    if (replay_frame_number >= replay.pitch_yaws.size()) {
-      // return NavigationEvent::Done();
-      return;
+    bool force_render = false;
+    if (timer.IsNewReplayFrame()) {
+      force_render = true;
+      i64 replay_frame_number = timer.GetReplayFrameNumber();
+      if (replay_frame_number >= replay.pitch_yaws.size()) {
+        // return NavigationEvent::Done();
+        return;
+      }
+
+      const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
+      camera.UpdatePitchYaw(pitch_yaw);
+
+      {
+        i64 start_index = replay_frame_number * replay.num_targets;
+        int end_index = start_index + replay.num_targets;
+        for (auto& entry : target_data_channel_map) {
+          u16 data_channel = entry.second;
+          u16 target_id = entry.first;
+
+          Target* target = target_manager.GetMutableTarget(target_id);
+          if (target != nullptr) {
+            i64 i = start_index + data_channel;
+            if (IsValidIndex(replay.target_data, i)) {
+              const TargetData& data = replay.target_data[i];
+              target->position = data.position;
+              target->radius = data.radius;
+            }
+          }
+        }
+      }
     }
 
-    const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
-    camera.UpdatePitchYaw(pitch_yaw);
     LookAtInfo look_at = camera.GetLookAt();
-
-    bool force_render = false;
     float now_seconds = timer.GetElapsedSeconds();
 
     for (int i = processed_events_up_to_index; i < events.size(); ++i) {
@@ -92,6 +115,7 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
       switch (event.type) {
         case ReplayEventType::REMOVE_TARGET:
           target_manager.RemoveTarget(event.data.remove_target.target_id);
+          target_data_channel_map.erase(event.data.remove_target.target_id);
           force_render = true;
           break;
         case ReplayEventType::PLAY_SOUND:
@@ -111,6 +135,11 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
       t.id = metadata.target_id;
       t.radius = metadata.initial_data.radius;
       t.position = metadata.initial_data.position;
+      if (metadata.pill_height > 0) {
+        t.is_pill = true;
+        t.height = metadata.pill_height;
+      }
+      target_data_channel_map[t.id] = metadata.data_channel;
       target_manager.AddTarget(t);
       force_render = true;
       processed_targets_up_to_index = i + 1;

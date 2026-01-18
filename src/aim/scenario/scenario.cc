@@ -44,7 +44,7 @@ constexpr const int kDefaultTargetRenderFps = 600;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
 bool ShouldRecordReplay(ScenarioDef& def, const Settings& settings) {
-  return def.has_static_def();
+  return true;
 }
 
 }  // namespace
@@ -363,7 +363,9 @@ void Scenario::OnRunningTick() {
   if (timer_.IsNewReplayFrame()) {
     // Store the look at vector before the mouse updates for the old frame.
     if (replay_) {
-      replay_->SetPitchYaw(timer_.GetReplayFrameNumber(), camera_.GetPitch(), camera_.GetYaw());
+      i64 replay_frame_number = timer_.GetReplayFrameNumber();
+      replay_->SetPitchYaw(replay_frame_number, camera_.GetPitch(), camera_.GetYaw());
+      replay_->SnapshotTargets(replay_frame_number, target_manager_.GetTargets());
     }
   }
 

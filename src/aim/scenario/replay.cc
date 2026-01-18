@@ -1,5 +1,7 @@
 #include "replay.h"
 
+#include <cassert>
+
 #include "aim/core/target.h"
 
 namespace aim {
@@ -12,8 +14,9 @@ ReplayRecorder::ReplayRecorder(const Room& room,
   replay_ = std::make_unique<ReplayV2>();
   replay_->room = room;
   replay_->replay_fps = replay_fps;
+  replay_->num_targets = num_targets;
 
-  i32 max_replay_frame_number = replay_fps * duration_seconds;
+  i32 max_replay_frame_number = replay_fps * duration_seconds + 1;
   i32 total_target_data_count = max_replay_frame_number * num_targets;
 
   replay_->target_data.resize(total_target_data_count);
@@ -39,6 +42,8 @@ void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
     }
   }
 
+  target_data_channel_map_[target.id] = available_channel;
+
   replay_->target_metadata.push_back({});
   ReplayTargetMetadata& metadata = replay_->target_metadata.back();
   metadata.add_time_seconds = now_seconds;
@@ -46,6 +51,9 @@ void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
   metadata.data_channel = available_channel;
   metadata.initial_data.position = target.position;
   metadata.initial_data.radius = target.radius;
+  if (target.is_pill) {
+    metadata.pill_height = target.height;
+  }
 }
 
 void ReplayRecorder::PlaySound(float now_seconds, ReplaySoundType sound) {
@@ -75,12 +83,36 @@ void ReplayRecorder::SetPitchYaw(i64 frame_number, float pitch, float yaw) {
   }
 }
 
+void ReplayRecorder::SnapshotTargets(i64 frame_number, const std::vector<Target>& targets) {
+  int start_index = frame_number * num_targets_;
+
+  int end_index = start_index + num_targets_;
+  if (end_index > replay_->target_data.size()) {
+    assert(false && "Trying to snapshot beyond memory reserved up front");
+    return;
+  }
+
+  assert(targets.size() <= num_targets_ && "Too many targets");
+  for (const Target& target : targets) {
+    auto it = target_data_channel_map_.find(target.id);
+    if (it != target_data_channel_map_.end()) {
+      u16 data_channel = it->second;
+      assert(data_channel < num_targets_ && "Invalid data channel");
+      if (data_channel < num_targets_) {
+        TargetData& data = replay_->target_data[start_index + data_channel];
+        data.position = target.position;
+        data.radius = target.radius;
+      }
+    }
+  }
+}
+
 float ReplayV2::GetApproximateSizeMb() const {
   i64 size_bytes = pitch_yaws.size() * sizeof(PitchYaw);
   size_bytes += target_data.size() * sizeof(TargetData);
   size_bytes += target_metadata.size() * sizeof(ReplayTargetMetadata);
   size_bytes += events.size() * sizeof(ReplayEvent);
-  
+
   return size_bytes / 1000000.0f;
 }
 
