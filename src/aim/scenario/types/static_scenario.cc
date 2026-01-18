@@ -1,11 +1,8 @@
-#include <SDL3/SDL.h>
-#include <imgui.h>
-
-#include <glm/gtc/constants.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/trigonometric.hpp>
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
+#include "glm/gtc/constants.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/trigonometric.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 #include <memory>
 #include <random>
 
@@ -15,7 +12,6 @@
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/proto/common.pb.h"
-#include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
@@ -39,10 +35,6 @@ class StaticScenario : public BaseScenario {
   void FillInNewTarget(Target* target) override {
     glm::vec3 wall_pos = wall_target_placer_->GetNextPosition();
     target->SetWallPosition(wall_pos, def_.room());
-  }
-
-  bool ShouldRecordReplay() override {
-    return true;
   }
 
  private:

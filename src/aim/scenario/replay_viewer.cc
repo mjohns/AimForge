@@ -13,31 +13,41 @@
 namespace aim {
 namespace {
 
-bool CompareEventsByTime(const ReplayEvent& lhs, const ReplayEvent& rhs) {
-  return lhs.time_seconds() < rhs.time_seconds();
+void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, ReplaySoundType type) {
+  switch (type) {
+    case ReplaySoundType::KILL:
+      sound_manager->PlayKillSound(settings.kill());
+      break;
+    case ReplaySoundType::HIT:
+      sound_manager->PlayHitSound(settings.hit());
+      break;
+    case ReplaySoundType::SHOOT:
+      sound_manager->PlayShootSound(settings.shoot());
+      break;
+  }
 }
 
 }  // namespace
 
-void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
+void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
   Theme theme = app->settings_manager().GetCurrentTheme();
   Settings settings = app->settings_manager().GetCurrentSettings();
   Crosshair crosshair = app->settings_manager().GetCurrentCrosshair();
   float crosshair_size = settings.crosshair_size();
 
   ScreenInfo screen = app->screen_info();
-  glm::mat4 projection = GetPerspectiveTransformation(screen, replay.room().horizontal_fov());
+  glm::mat4 projection = GetPerspectiveTransformation(screen, replay.room.horizontal_fov());
 
-  std::vector<ReplayEvent> events(replay.events().begin(), replay.events().end());
-  std::sort(events.begin(), events.end(), CompareEventsByTime);
+  const std::vector<ReplayEvent>& events = replay.events;
 
   int processed_events_up_to_index = 0;
+  int processed_targets_up_to_index = 0;
 
-  TargetManager target_manager(replay.room());
-  Camera camera(CameraParams(replay.room()));
+  TargetManager target_manager(replay.room);
+  Camera camera(CameraParams(replay.room));
 
   FrameTimes times;
-  ScenarioTimer timer(replay.replay_fps());
+  ScenarioTimer timer(replay.replay_fps);
   timer.StartLoop();
   timer.ResumeRun();
   while (true) {
@@ -59,54 +69,50 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
 
     uint64_t replay_frame_number = timer.GetReplayFrameNumber();
     int pitch_yaws_index = replay_frame_number * 2;
-    if (pitch_yaws_index + 1 >= replay.pitch_yaws_size()) {
+    if (replay_frame_number >= replay.pitch_yaws.size()) {
       // return NavigationEvent::Done();
       return;
     }
 
-    camera.UpdatePitch(replay.pitch_yaws(pitch_yaws_index));
-    camera.UpdateYaw(replay.pitch_yaws(pitch_yaws_index + 1));
+    const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
+    camera.UpdatePitchYaw(pitch_yaw);
     LookAtInfo look_at = camera.GetLookAt();
 
     bool force_render = false;
-    bool has_kill = false;
-    bool has_shot = false;
     float now_seconds = timer.GetElapsedSeconds();
+
     for (int i = processed_events_up_to_index; i < events.size(); ++i) {
-      ReplayEvent& event = events[i];
-      if (event.time_seconds() > now_seconds) {
+      const ReplayEvent& event = events[i];
+      if (event.time_seconds > now_seconds) {
         break;
       }
 
       // Process the event.
-      if (event.has_kill_target()) {
-        target_manager.RemoveTarget(event.kill_target().target_id());
-        has_kill = true;
-        force_render = true;
-      }
-      if (event.has_remove_target()) {
-        target_manager.RemoveTarget(event.remove_target().target_id());
-        force_render = true;
-      }
-      if (event.has_shot_fired()) {
-        has_shot = true;
-      }
-      if (event.has_add_target()) {
-        Target t;
-        t.id = event.add_target().target_id();
-        t.radius = event.add_target().radius();
-        t.position = ToVec3(event.add_target().position());
-        target_manager.AddTarget(t);
-        force_render = true;
+      switch (event.type) {
+        case ReplayEventType::REMOVE_TARGET:
+          target_manager.RemoveTarget(event.data.remove_target.target_id);
+          force_render = true;
+          break;
+        case ReplayEventType::PLAY_SOUND:
+          PlaySound(app->sound_manager(), settings.sound(), event.data.play_sound.sound);
+          break;
       }
       processed_events_up_to_index = i + 1;
     }
 
-    if (has_shot) {
-      app->sound_manager()->PlayShootSound(settings.sound().shoot());
-    }
-    if (has_kill) {
-      app->sound_manager()->PlayKillSound(settings.sound().kill());
+    for (int i = processed_targets_up_to_index; i < replay.target_metadata.size(); ++i) {
+      const ReplayTargetMetadata& metadata = replay.target_metadata[i];
+      if (metadata.add_time_seconds > now_seconds) {
+        break;
+      }
+
+      Target t;
+      t.id = metadata.target_id;
+      t.radius = metadata.initial_data.radius;
+      t.position = metadata.initial_data.position;
+      target_manager.AddTarget(t);
+      force_render = true;
+      processed_targets_up_to_index = i + 1;
     }
 
     bool do_render = force_render || timer.LastFrameRenderStartedMicrosAgo() > 2500;
@@ -129,7 +135,7 @@ void ReplayViewer::PlayReplay(const Replay& replay, Application* app) {
     RenderContext ctx;
     if (app->StartRender(&ctx)) {
       app->renderer()->DrawScenario(projection,
-                                    replay.room(),
+                                    replay.room,
                                     theme,
                                     settings.health_bar(),
                                     target_manager.GetTargets(),

@@ -10,8 +10,8 @@
 #include "aim/core/screen.h"
 #include "aim/core/target.h"
 #include "aim/database/aim_db.h"
-#include "aim/proto/replay.pb.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/scenario/replay.h"
 #include "aim/scenario/scenario_timer.h"
 #include "glm/mat4x4.hpp"
 #include "glm/vec3.hpp"
@@ -81,10 +81,6 @@ class Scenario : public Screen {
     return {};
   }
 
-  virtual bool ShouldRecordReplay() {
-    return false;
-  }
-
   virtual ShotType::TypeCase GetDefaultShotType() {
     return ShotType::kClickSingle;
   }
@@ -95,9 +91,7 @@ class Scenario : public Screen {
 
   // Replay recording methods
   void AddNewTargetEvent(const Target& target);
-  void AddKillTargetEvent(u16 target_id);
   void AddRemoveTargetEvent(u16 target_id);
-  void AddShotFiredEvent();
 
   void PlayShootSound();
   void PlayHitSound();
@@ -116,8 +110,7 @@ class Scenario : public Screen {
   LookAtInfo look_at_;
   glm::mat4 projection_;
 
-  google::protobuf::Arena replay_arena_;
-  Replay* replay_ = nullptr;
+  std::unique_ptr<ReplayRecorder> replay_;
   Theme theme_;
   bool has_started_ = false;
   ScenarioRunState run_state_ = ScenarioRunState::NOT_STARTED;

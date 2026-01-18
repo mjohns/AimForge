@@ -23,8 +23,8 @@
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "aim/proto/common.pb.h"
-#include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
+#include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/scenario_editor_screen.h"
@@ -42,6 +42,10 @@ namespace {
 constexpr const i16 kReplayFps = 240;
 constexpr const int kDefaultTargetRenderFps = 600;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
+
+bool ShouldRecordReplay(ScenarioDef& def, const Settings& settings) {
+  return def.has_static_def();
+}
 
 }  // namespace
 
@@ -76,10 +80,11 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
   theme_ = app->settings_manager().GetCurrentTheme();
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
 
-  if (ShouldRecordReplay()) {
-    replay_ = google::protobuf::Arena::Create<Replay>(&replay_arena_);
-    *replay_->mutable_room() = def_.room();
-    replay_->set_replay_fps(timer_.GetReplayFps());
+  if (ShouldRecordReplay(def_, settings_)) {
+    replay_ = std::make_unique<ReplayRecorder>(def_.room(),
+                                               timer_.GetReplayFps(),
+                                               static_cast<i32>(def_.duration_seconds()),
+                                               def_.target_def().num_targets());
   }
 }
 
@@ -358,8 +363,7 @@ void Scenario::OnRunningTick() {
   if (timer_.IsNewReplayFrame()) {
     // Store the look at vector before the mouse updates for the old frame.
     if (replay_) {
-      replay_->add_pitch_yaws(camera_.GetPitch());
-      replay_->add_pitch_yaws(camera_.GetYaw());
+      replay_->SetPitchYaw(timer_.GetReplayFrameNumber(), camera_.GetPitch(), camera_.GetYaw());
     }
   }
 
@@ -438,6 +442,12 @@ void Scenario::HandleScenarioDone() {
   }
 
   FlushPlayTime();
+
+  if (replay_) {
+    ReplayViewer viewer;
+    viewer.PlayReplay(replay_->replay(), &app_);
+  }
+
   PopSelf();
 
   std::optional<StatsDbRow> maybe_stats_row = GetStatsRow();
@@ -482,58 +492,43 @@ void Scenario::DoneAdjustingCrosshairSize() {
 }
 
 void Scenario::AddNewTargetEvent(const Target& target) {
-  if (replay_ != nullptr) {
-    auto event = replay_->add_events();
-    event->set_time_seconds(timer_.GetElapsedSeconds());
-    auto add_target = event->mutable_add_target();
-    add_target->set_target_id(target.id);
-    *(add_target->mutable_position()) = ToStoredVec3(target.position);
-    add_target->set_radius(target.radius);
+  if (replay_) {
+    replay_->AddTarget(timer_.GetElapsedSeconds(), target);
   }
-}
-
-void Scenario::AddKillTargetEvent(u16 target_id) {
-  if (!replay_) {
-    return;
-  }
-  auto event = replay_->add_events();
-  event->set_time_seconds(timer_.GetElapsedSeconds());
-  event->mutable_kill_target()->set_target_id(target_id);
 }
 
 void Scenario::AddRemoveTargetEvent(u16 target_id) {
-  if (!replay_) {
-    return;
+  if (replay_) {
+    replay_->RemoveTarget(timer_.GetElapsedSeconds(), target_id);
   }
-  auto event = replay_->add_events();
-  event->set_time_seconds(timer_.GetElapsedSeconds());
-  event->mutable_remove_target()->set_target_id(target_id);
-}
-
-void Scenario::AddShotFiredEvent() {
-  if (!replay_) {
-    return;
-  }
-  auto event = replay_->add_events();
-  event->set_time_seconds(timer_.GetElapsedSeconds());
-  *event->mutable_shot_fired() = ShotFiredEvent();
 }
 
 void Scenario::PlayShootSound() {
   app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
-  AddShotFiredEvent();
+  if (replay_) {
+    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::SHOOT);
+  }
 }
 
 void Scenario::PlayHitSound() {
   app_.sound_manager()->PlayHitSound(settings_.sound().shoot());
+  if (replay_) {
+    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::HIT);
+  }
 }
 
 void Scenario::PlayMissSound() {
   app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
+  if (replay_) {
+    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::SHOOT);
+  }
 }
 
 void Scenario::PlayKillSound() {
   app_.sound_manager()->PlayKillSound(settings_.sound().kill());
+  if (replay_) {
+    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::KILL);
+  }
 }
 
 TargetProfile Scenario::GetNextTargetProfile() {

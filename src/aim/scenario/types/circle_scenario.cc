@@ -1,7 +1,6 @@
 #include <memory>
 #include <random>
 
-#include "SDL3/SDL.h"
 #include "aim/common/geometry.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
@@ -9,7 +8,6 @@
 #include "aim/core/camera.h"
 #include "aim/core/target.h"
 #include "aim/proto/common.pb.h"
-#include "aim/proto/replay.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"

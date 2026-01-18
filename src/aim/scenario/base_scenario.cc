@@ -407,11 +407,7 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
     AddNewTargetEvent(target);
   }
 
-  if (is_kill) {
-    AddKillTargetEvent(old_target_id);
-  } else {
-    AddRemoveTargetEvent(old_target_id);
-  }
+  AddRemoveTargetEvent(old_target_id);
 }
 
 std::optional<StatsDbRow> BaseScenario::GetStatsRow() {

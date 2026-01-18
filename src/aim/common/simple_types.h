@@ -58,4 +58,9 @@ struct ScreenInfo {
   ImVec2 center;
 };
 
+struct PitchYaw {
+  float pitch = 0;
+  float yaw = 0;
+};
+
 }  // namespace aim
