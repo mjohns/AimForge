@@ -120,8 +120,8 @@ message TargetPlacementStrategy {
 }
 
 message ScenarioOverrides {
-  float duration_seconds = 1;
-  int32 num_targets = 2;
+  reserved 1, 2;
+
   float target_radius_multiplier = 3;
   float speed_multiplier = 4;
   float acceleration_multiplier = 5;
@@ -171,8 +171,9 @@ message ShotType {
 }
 
 message ScenarioDef {
+  reserved 13;
   string description = 1;
-  float duration_seconds = 2;
+  int32 duration_seconds = 2;
   Room room = 3;
   TargetDef target_def = 5;
 

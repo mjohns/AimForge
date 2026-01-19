@@ -97,15 +97,6 @@ ScenarioDef ApplyScenarioOverrides(const ScenarioDef& original) {
   ScenarioDef result = ApplyLeveledOverrides(original, original.overrides(), {});
   result.clear_overrides();
 
-  const ScenarioOverrides& overrides = original.overrides();
-
-  // Apply non leveled overrides.
-  if (overrides.has_duration_seconds()) {
-    result.set_duration_seconds(overrides.duration_seconds());
-  }
-  if (overrides.has_num_targets()) {
-    result.mutable_target_def()->set_num_targets(overrides.num_targets());
-  }
   return result;
 }
 

@@ -48,6 +48,9 @@ class ScenarioManagerImpl : public ScenarioManager {
         BundleScenario& bundle_scenario = *bundle_file->add_scenarios();
         bundle_scenario.set_name(name.relative_name());
         *bundle_scenario.mutable_def() = scenario_map_[full_name].def;
+
+        // Backfill
+        // ScenarioDef* s = bundle_scenario.mutable_def();
       }
     }
   }

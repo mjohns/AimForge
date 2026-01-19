@@ -986,36 +986,12 @@ class ScenarioOverrides final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kDurationSecondsFieldNumber = 1,
-    kNumTargetsFieldNumber = 2,
     kTargetRadiusMultiplierFieldNumber = 3,
     kSpeedMultiplierFieldNumber = 4,
     kAccelerationMultiplierFieldNumber = 5,
     kTimeScaleMultiplierFieldNumber = 6,
     kDistanceMultiplierFieldNumber = 7,
   };
-  // float duration_seconds = 1;
-  bool has_duration_seconds() const;
-  void clear_duration_seconds() ;
-  float duration_seconds() const;
-  void set_duration_seconds(float value);
-
-  private:
-  float _internal_duration_seconds() const;
-  void _internal_set_duration_seconds(float value);
-
-  public:
-  // int32 num_targets = 2;
-  bool has_num_targets() const;
-  void clear_num_targets() ;
-  ::int32_t num_targets() const;
-  void set_num_targets(::int32_t value);
-
-  private:
-  ::int32_t _internal_num_targets() const;
-  void _internal_set_num_targets(::int32_t value);
-
-  public:
   // float target_radius_multiplier = 3;
   bool has_target_radius_multiplier() const;
   void clear_target_radius_multiplier() ;
@@ -1075,7 +1051,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
+  static const ::google::protobuf::internal::TcParseTable<3, 5,
                                    0, 0,
                                    2>
       _table_;
@@ -1097,8 +1073,6 @@ class ScenarioOverrides final : public ::google::protobuf::Message
         const ScenarioOverrides& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    float duration_seconds_;
-    ::int32_t num_targets_;
     float target_radius_multiplier_;
     float speed_multiplier_;
     float acceleration_multiplier_;
@@ -9863,15 +9837,15 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::ScenarioOverrides* PROTOBUF_NONNULL _internal_mutable_level_overrides();
 
   public:
-  // float duration_seconds = 2;
+  // int32 duration_seconds = 2;
   bool has_duration_seconds() const;
   void clear_duration_seconds() ;
-  float duration_seconds() const;
-  void set_duration_seconds(float value);
+  ::int32_t duration_seconds() const;
+  void set_duration_seconds(::int32_t value);
 
   private:
-  float _internal_duration_seconds() const;
-  void _internal_set_duration_seconds(float value);
+  ::int32_t _internal_duration_seconds() const;
+  void _internal_set_duration_seconds(::int32_t value);
 
   public:
   // float accuracy_penalty_modifier = 9;
@@ -10203,7 +10177,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::ScenarioOverrides* PROTOBUF_NULLABLE overrides_;
     ::aim::ShotType* PROTOBUF_NULLABLE shot_type_;
     ::aim::ScenarioOverrides* PROTOBUF_NULLABLE level_overrides_;
-    float duration_seconds_;
+    ::int32_t duration_seconds_;
     float accuracy_penalty_modifier_;
     float start_score_;
     float end_score_;
@@ -13570,74 +13544,16 @@ inline void TargetPlacementStrategy::set_allocated_fixed_distance_from_last_targ
 
 // ScenarioOverrides
 
-// float duration_seconds = 1;
-inline bool ScenarioOverrides::has_duration_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
-  return value;
-}
-inline void ScenarioOverrides::clear_duration_seconds() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.duration_seconds_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
-}
-inline float ScenarioOverrides::duration_seconds() const {
-  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.duration_seconds)
-  return _internal_duration_seconds();
-}
-inline void ScenarioOverrides::set_duration_seconds(float value) {
-  _internal_set_duration_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.duration_seconds)
-}
-inline float ScenarioOverrides::_internal_duration_seconds() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.duration_seconds_;
-}
-inline void ScenarioOverrides::_internal_set_duration_seconds(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.duration_seconds_ = value;
-}
-
-// int32 num_targets = 2;
-inline bool ScenarioOverrides::has_num_targets() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  return value;
-}
-inline void ScenarioOverrides::clear_num_targets() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_targets_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t ScenarioOverrides::num_targets() const {
-  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.num_targets)
-  return _internal_num_targets();
-}
-inline void ScenarioOverrides::set_num_targets(::int32_t value) {
-  _internal_set_num_targets(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.num_targets)
-}
-inline ::int32_t ScenarioOverrides::_internal_num_targets() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.num_targets_;
-}
-inline void ScenarioOverrides::_internal_set_num_targets(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_targets_ = value;
-}
-
 // float target_radius_multiplier = 3;
 inline bool ScenarioOverrides::has_target_radius_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
   return value;
 }
 inline void ScenarioOverrides::clear_target_radius_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000001U);
 }
 inline float ScenarioOverrides::target_radius_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.target_radius_multiplier)
@@ -13645,7 +13561,7 @@ inline float ScenarioOverrides::target_radius_multiplier() const {
 }
 inline void ScenarioOverrides::set_target_radius_multiplier(float value) {
   _internal_set_target_radius_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
   // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.target_radius_multiplier)
 }
 inline float ScenarioOverrides::_internal_target_radius_multiplier() const {
@@ -13659,14 +13575,14 @@ inline void ScenarioOverrides::_internal_set_target_radius_multiplier(float valu
 
 // float speed_multiplier = 4;
 inline bool ScenarioOverrides::has_speed_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
   return value;
 }
 inline void ScenarioOverrides::clear_speed_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000002U);
 }
 inline float ScenarioOverrides::speed_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.speed_multiplier)
@@ -13674,7 +13590,7 @@ inline float ScenarioOverrides::speed_multiplier() const {
 }
 inline void ScenarioOverrides::set_speed_multiplier(float value) {
   _internal_set_speed_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.speed_multiplier)
 }
 inline float ScenarioOverrides::_internal_speed_multiplier() const {
@@ -13688,14 +13604,14 @@ inline void ScenarioOverrides::_internal_set_speed_multiplier(float value) {
 
 // float acceleration_multiplier = 5;
 inline bool ScenarioOverrides::has_acceleration_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   return value;
 }
 inline void ScenarioOverrides::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000004U);
 }
 inline float ScenarioOverrides::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.acceleration_multiplier)
@@ -13703,7 +13619,7 @@ inline float ScenarioOverrides::acceleration_multiplier() const {
 }
 inline void ScenarioOverrides::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.acceleration_multiplier)
 }
 inline float ScenarioOverrides::_internal_acceleration_multiplier() const {
@@ -13717,14 +13633,14 @@ inline void ScenarioOverrides::_internal_set_acceleration_multiplier(float value
 
 // float time_scale_multiplier = 6;
 inline bool ScenarioOverrides::has_time_scale_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   return value;
 }
 inline void ScenarioOverrides::clear_time_scale_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.time_scale_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000008U);
 }
 inline float ScenarioOverrides::time_scale_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.time_scale_multiplier)
@@ -13732,7 +13648,7 @@ inline float ScenarioOverrides::time_scale_multiplier() const {
 }
 inline void ScenarioOverrides::set_time_scale_multiplier(float value) {
   _internal_set_time_scale_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.time_scale_multiplier)
 }
 inline float ScenarioOverrides::_internal_time_scale_multiplier() const {
@@ -13746,14 +13662,14 @@ inline void ScenarioOverrides::_internal_set_time_scale_multiplier(float value) 
 
 // float distance_multiplier = 7;
 inline bool ScenarioOverrides::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void ScenarioOverrides::clear_distance_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.distance_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000010U);
 }
 inline float ScenarioOverrides::distance_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.distance_multiplier)
@@ -13761,7 +13677,7 @@ inline float ScenarioOverrides::distance_multiplier() const {
 }
 inline void ScenarioOverrides::set_distance_multiplier(float value) {
   _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.distance_multiplier)
 }
 inline float ScenarioOverrides::_internal_distance_multiplier() const {
@@ -14260,7 +14176,7 @@ inline void ScenarioDef::set_allocated_description(::std::string* PROTOBUF_NULLA
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.description)
 }
 
-// float duration_seconds = 2;
+// int32 duration_seconds = 2;
 inline bool ScenarioDef::has_duration_seconds() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
@@ -14271,20 +14187,20 @@ inline void ScenarioDef::clear_duration_seconds() {
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000040U);
 }
-inline float ScenarioDef::duration_seconds() const {
+inline ::int32_t ScenarioDef::duration_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.duration_seconds)
   return _internal_duration_seconds();
 }
-inline void ScenarioDef::set_duration_seconds(float value) {
+inline void ScenarioDef::set_duration_seconds(::int32_t value) {
   _internal_set_duration_seconds(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.duration_seconds)
 }
-inline float ScenarioDef::_internal_duration_seconds() const {
+inline ::int32_t ScenarioDef::_internal_duration_seconds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.duration_seconds_;
 }
-inline void ScenarioDef::_internal_set_duration_seconds(float value) {
+inline void ScenarioDef::_internal_set_duration_seconds(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.duration_seconds_ = value;
 }
