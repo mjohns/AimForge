@@ -94,6 +94,7 @@ class AimDb {
   //
 
   virtual void UpdateRecentView(ObjectType type, const std::string& name) = 0;
+  virtual void DeleteRecentView(ObjectType type, const std::string& name) = 0;
   virtual std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) = 0;
 
   //

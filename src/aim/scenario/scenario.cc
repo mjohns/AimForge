@@ -446,7 +446,7 @@ void Scenario::HandleScenarioDone() {
 
   FlushPlayTime();
 
-   PopSelf();
+  PopSelf();
 
   std::optional<StatsDbRow> maybe_stats_row = GetStatsRow();
   if (maybe_stats_row) {

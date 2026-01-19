@@ -20,6 +20,15 @@ class HistoryManagerImpl : public HistoryManager {
     db_->UpdateRecentView(type, name);
   }
 
+  void DeleteRecentView(ObjectType type, const std::string& name) override {
+    if (type == ObjectType::SCENARIO) {
+      scenarios_need_reload_ = true;
+    } else if (type == ObjectType::PLAYLIST) {
+      playlists_need_reload_ = true;
+    }
+    db_->DeleteRecentView(type, name);
+  }
+
   const std::vector<std::string>& recent_scenarios() override {
     if (scenarios_need_reload_) {
       scenarios_need_reload_ = false;

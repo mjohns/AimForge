@@ -236,6 +236,14 @@ INSERT INTO RecentIdViews (Type, Id, TimestampMicros) VALUES (?, ?, ?)
 ON CONFLICT (Type, Id) DO UPDATE SET TimestampMicros = ?;
 )AIMS";
 
+const char* kDeleteRecentViewSql = R"AIMS(
+DELETE FROM RecentViews WHERE Type = ? AND Name = ?;
+)AIMS";
+
+const char* kDeleteRecentIdViewSql = R"AIMS(
+DELETE FROM RecentIdViews WHERE Type = ? AND Id = ?;
+)AIMS";
+
 const char* kGetRecentViewsForTypeSql = R"AIMS(
 SELECT Name, TimestampMicros
 FROM RecentViews
@@ -668,11 +676,9 @@ class AimDbImpl : public AimDb {
 
   void UpdateRecentView(ObjectType type, const std::string& name) override {
     if (type == ObjectType::SCENARIO) {
-      // Ensure there is an entry for this scenario in the db.
       return UpdateRecentIdView(type, GetScenarioId(name));
     }
     if (type == ObjectType::PLAYLIST) {
-      // Ensure there is an entry for this scenario in the db.
       return UpdateRecentIdView(type, GetPlaylistId(name));
     }
 
@@ -708,6 +714,44 @@ class AimDbImpl : public AimDb {
     sqlite3_bind_int64(stmt, 2, id);
     sqlite3_bind_int64(stmt, 3, now_micros);
     sqlite3_bind_int64(stmt, 4, now_micros);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+  }
+
+  void DeleteRecentView(ObjectType type, const std::string& name) override {
+    if (type == ObjectType::SCENARIO) {
+      return DeleteRecentIdView(type, GetScenarioId(name));
+    }
+    if (type == ObjectType::PLAYLIST) {
+      return DeleteRecentIdView(type, GetPlaylistId(name));
+    }
+
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kDeleteRecentViewSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return;
+    }
+
+
+    sqlite3_bind_int(stmt, 1, (int)type);
+    BindString(stmt, 2, name);
+
+    rc = sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+  }
+
+  void DeleteRecentIdView(ObjectType type, i64 id) {
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_prepare_v2(db_, kDeleteRecentIdViewSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+      return;
+    }
+
+    sqlite3_bind_int(stmt, 1, (int)type);
+    sqlite3_bind_int64(stmt, 2, id);
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
