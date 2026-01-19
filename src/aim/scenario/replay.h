@@ -65,6 +65,7 @@ struct Replay {
   Room room;
   u16 replay_fps;
   u16 num_targets;
+  std::string scenario_name;
   std::vector<ReplayEvent> events;
   std::vector<ReplayTargetData> target_data;
   std::vector<PitchYaw> pitch_yaws;
@@ -75,7 +76,11 @@ struct Replay {
 
 class ReplayRecorder {
  public:
-  ReplayRecorder(const Room& room, u16 replay_fps, i32 duration_seconds, i32 num_targets);
+  ReplayRecorder(const std::string& scenario_name,
+                 const Room& room,
+                 u16 replay_fps,
+                 i32 duration_seconds,
+                 i32 num_targets);
 
   void AddTarget(float now_seconds, const Target& target);
   void RemoveTarget(float now_seconds, u16 target_id);

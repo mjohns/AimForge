@@ -82,7 +82,8 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
 
   if (ShouldRecordReplay(def_, settings_)) {
-    replay_ = std::make_unique<ReplayRecorder>(def_.room(),
+    replay_ = std::make_unique<ReplayRecorder>(scenario_name_,
+                                               def_.room(),
                                                timer_.GetReplayFps(),
                                                static_cast<i32>(def_.duration_seconds()),
                                                def_.target_def().num_targets());

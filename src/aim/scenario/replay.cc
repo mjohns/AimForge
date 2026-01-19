@@ -6,17 +6,19 @@
 
 namespace aim {
 
-ReplayRecorder::ReplayRecorder(const Room& room,
+ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
+                               const Room& room,
                                u16 replay_fps,
                                i32 duration_seconds,
                                i32 num_targets)
     : replay_fps_(replay_fps), num_targets_(num_targets) {
   replay_ = std::make_shared<Replay>();
+  replay_->scenario_name = scenario_name;
   replay_->room = room;
   replay_->replay_fps = replay_fps;
   replay_->num_targets = num_targets;
 
-  i32 max_replay_frame_number = replay_fps * duration_seconds + 1;
+  i32 max_replay_frame_number = replay_fps * duration_seconds;
   i32 total_target_data_count = max_replay_frame_number * num_targets;
 
   replay_->target_data.resize(total_target_data_count);
@@ -85,10 +87,10 @@ void ReplayRecorder::SetPitchYaw(i64 frame_number, float pitch, float yaw) {
 
 void ReplayRecorder::SnapshotTargets(i64 frame_number, const std::vector<Target>& targets) {
   int start_index = frame_number * num_targets_;
-
   int end_index = start_index + num_targets_;
-  if (end_index > replay_->target_data.size()) {
-    assert(false && "Trying to snapshot beyond memory reserved up front");
+
+  bool is_valid_max_index = end_index <= replay_->target_data.size();
+  if (!is_valid_max_index) {
     return;
   }
 

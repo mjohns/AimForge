@@ -36,7 +36,8 @@ class ReplayViewerScreen : public Screen {
         timer_(replay->replay_fps),
         camera_(Camera(CameraParams(replay->room))),
         target_manager_(replay->room) {
-    settings_ = app->settings_manager().GetCurrentSettings();
+    float approximate_mb = replay->GetApproximateSizeMb();
+    settings_ = app->settings_manager().GetCurrentSettingsForScenario(replay->scenario_name);
     crosshair_ = app->settings_manager().GetCurrentCrosshair();
     theme_ = app->settings_manager().GetCurrentTheme();
 
