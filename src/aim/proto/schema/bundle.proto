@@ -21,11 +21,11 @@ message BundleFile {
 }
 
 message BundleInfo {
-    string bundle_name = 1;
-    bool readonly = 2;
+  string bundle_name = 1;
+  bool readonly = 2;
 }
 
 // Structure for bundles.json file.
 message BundleInfoFile {
-    repeated BundleInfo bundles = 1;
+  repeated BundleInfo bundles = 1;
 }

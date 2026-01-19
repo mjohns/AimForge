@@ -1,8 +1,3 @@
-#include "glm/gtc/constants.hpp"
-#include "glm/mat4x4.hpp"
-#include "glm/trigonometric.hpp"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
 #include <memory>
 #include <random>
 
@@ -16,6 +11,11 @@
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
+#include "glm/gtc/constants.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/trigonometric.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace aim {
 namespace {

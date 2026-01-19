@@ -4,8 +4,8 @@
 #include <string>
 
 #include "aim/core/application.h"
-#include "aim/ui/ui_screen.h"
 #include "aim/scenario/replay.h"
+#include "aim/ui/ui_screen.h"
 
 namespace aim {
 

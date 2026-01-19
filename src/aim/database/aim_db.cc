@@ -734,7 +734,6 @@ class AimDbImpl : public AimDb {
       return;
     }
 
-
     sqlite3_bind_int(stmt, 1, (int)type);
     BindString(stmt, 2, name);
 
