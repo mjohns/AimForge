@@ -4,6 +4,7 @@
 
 #include "SDL3/SDL.h"
 #include "absl/cleanup/cleanup.h"
+#include "aim/core/application.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
@@ -27,73 +28,57 @@ void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, Repla
   }
 }
 
-}  // namespace
+class ReplayViewerScreen : public Screen {
+ public:
+  ReplayViewerScreen(std::shared_ptr<Replay> replay, Application* app)
+      : Screen(*app),
+        replay_(replay),
+        timer_(replay->replay_fps),
+        camera_(Camera(CameraParams(replay->room))),
+        target_manager_(replay->room) {
+    settings_ = app->settings_manager().GetCurrentSettings();
+    crosshair_ = app->settings_manager().GetCurrentCrosshair();
+    theme_ = app->settings_manager().GetCurrentTheme();
 
-void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
-  float approximate_mb = replay.GetApproximateSizeMb();
-  Theme theme = app->settings_manager().GetCurrentTheme();
-  Settings settings = app->settings_manager().GetCurrentSettings();
-  Crosshair crosshair = app->settings_manager().GetCurrentCrosshair();
-  float crosshair_size = settings.crosshair_size();
+    projection_ = GetPerspectiveTransformation(app_.screen_info(), replay->room.horizontal_fov());
+  }
 
-  ScreenInfo screen = app->screen_info();
-  glm::mat4 projection = GetPerspectiveTransformation(screen, replay.room.horizontal_fov());
-
-  const std::vector<ReplayEvent>& events = replay.events;
-
-  int processed_events_up_to_index = 0;
-  int processed_targets_up_to_index = 0;
-
-  std::unordered_map<u16, u16> target_data_channel_map;
-
-  TargetManager target_manager(replay.room);
-  Camera camera(CameraParams(replay.room));
-
-  FrameTimes times;
-  ScenarioTimer timer(replay.replay_fps);
-  timer.StartLoop();
-  timer.ResumeRun();
-  while (true) {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL3_ProcessEvent(&event);
-      if (event.type == SDL_EVENT_QUIT) {
-        app->RequestExit();
-      }
-      if (event.type == SDL_EVENT_KEY_DOWN) {
-        SDL_Keycode keycode = event.key.key;
-        if (keycode == SDLK_ESCAPE) {
-          //    return NavigationEvent::Done();
-          return;
-        }
-      }
+  void OnEvent(const SDL_Event& event, bool user_is_typing) {
+    if (IsEscapeKeyDown(event)) {
+      PopSelf();
     }
-    timer.OnStartFrame();
+  }
+
+  void OnTick() override {
+    const Replay& replay = *replay_;
+    const std::vector<ReplayEvent>& events = replay.events;
+
+    timer_.OnStartFrame();
 
     bool force_render = false;
-    if (timer.IsNewReplayFrame()) {
+    if (timer_.IsNewReplayFrame()) {
       force_render = true;
-      i64 replay_frame_number = timer.GetReplayFrameNumber();
+      i64 replay_frame_number = timer_.GetReplayFrameNumber();
       if (replay_frame_number >= replay.pitch_yaws.size()) {
-        // return NavigationEvent::Done();
+        PopSelf();
         return;
       }
 
       const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
-      camera.UpdatePitchYaw(pitch_yaw);
+      camera_.UpdatePitchYaw(pitch_yaw);
 
       {
         i64 start_index = replay_frame_number * replay.num_targets;
         int end_index = start_index + replay.num_targets;
-        for (auto& entry : target_data_channel_map) {
+        for (auto& entry : target_data_channel_map_) {
           u16 data_channel = entry.second;
           u16 target_id = entry.first;
 
-          Target* target = target_manager.GetMutableTarget(target_id);
+          Target* target = target_manager_.GetMutableTarget(target_id);
           if (target != nullptr) {
             i64 i = start_index + data_channel;
             if (IsValidIndex(replay.target_data, i)) {
-              const TargetData& data = replay.target_data[i];
+              const ReplayTargetData& data = replay.target_data[i];
               target->position = data.position;
               target->radius = data.radius;
             }
@@ -102,10 +87,10 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
       }
     }
 
-    LookAtInfo look_at = camera.GetLookAt();
-    float now_seconds = timer.GetElapsedSeconds();
+    LookAtInfo look_at = camera_.GetLookAt();
+    float now_seconds = timer_.GetElapsedSeconds();
 
-    for (int i = processed_events_up_to_index; i < events.size(); ++i) {
+    for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
       const ReplayEvent& event = events[i];
       if (event.time_seconds > now_seconds) {
         break;
@@ -114,18 +99,18 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
       // Process the event.
       switch (event.type) {
         case ReplayEventType::REMOVE_TARGET:
-          target_manager.RemoveTarget(event.data.remove_target.target_id);
-          target_data_channel_map.erase(event.data.remove_target.target_id);
+          target_manager_.RemoveTarget(event.data.remove_target.target_id);
+          target_data_channel_map_.erase(event.data.remove_target.target_id);
           force_render = true;
           break;
         case ReplayEventType::PLAY_SOUND:
-          PlaySound(app->sound_manager(), settings.sound(), event.data.play_sound.sound);
+          PlaySound(app_.sound_manager(), settings_.sound(), event.data.play_sound.sound);
           break;
       }
-      processed_events_up_to_index = i + 1;
+      processed_events_up_to_index_ = i + 1;
     }
 
-    for (int i = processed_targets_up_to_index; i < replay.target_metadata.size(); ++i) {
+    for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
       const ReplayTargetMetadata& metadata = replay.target_metadata[i];
       if (metadata.add_time_seconds > now_seconds) {
         break;
@@ -139,43 +124,72 @@ void ReplayViewer::PlayReplay(const ReplayV2& replay, Application* app) {
         t.is_pill = true;
         t.height = metadata.pill_height;
       }
-      target_data_channel_map[t.id] = metadata.data_channel;
-      target_manager.AddTarget(t);
+      target_data_channel_map_[t.id] = metadata.data_channel;
+      target_manager_.AddTarget(t);
       force_render = true;
-      processed_targets_up_to_index = i + 1;
+      processed_targets_up_to_index_ = i + 1;
     }
 
-    bool do_render = force_render || timer.LastFrameRenderStartedMicrosAgo() > 2500;
+    bool do_render = force_render || timer_.LastFrameRenderStartedMicrosAgo() > 2500;
     if (!do_render) {
-      continue;
+      return;
     }
 
-    timer.OnStartRender();
-    auto end_render_guard = absl::MakeCleanup([&] { timer.OnEndRender(); });
+    timer_.OnStartRender();
+    auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
-    app->NewImGuiFrame();
-    app->BeginFullscreenWindow();
-    app->crosshair_manager().Draw(crosshair, crosshair_size, theme, screen.center);
+    app_.NewImGuiFrame();
+    app_.BeginFullscreenWindow();
+    app_.crosshair_manager().Draw(
+        crosshair_, settings_.crosshair_size(), theme_, app_.screen_info().center);
 
-    float elapsed_seconds = timer.GetElapsedSeconds();
+    float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::End();
 
     RenderContext ctx;
-    if (app->StartRender(&ctx)) {
-      app->renderer()->DrawScenario(projection,
+    if (app_.StartRender(&ctx)) {
+      FrameTimes times;
+      app_.renderer()->DrawScenario(projection_,
                                     replay.room,
-                                    theme,
-                                    settings.health_bar(),
-                                    target_manager.GetTargets(),
+                                    theme_,
+                                    settings_.health_bar(),
+                                    target_manager_.GetTargets(),
                                     look_at,
                                     &ctx,
-                                    timer.run_stopwatch(),
+                                    timer_.run_stopwatch(),
                                     &times);
-      app->FinishRender(&ctx);
+      app_.FinishRender(&ctx);
     }
   }
+
+  void OnAttach() override {
+    timer_.StartLoop();
+    timer_.ResumeRun();
+  }
+
+ private:
+  std::shared_ptr<Replay> replay_;
+
+  Camera camera_;
+  TargetManager target_manager_;
+  ScenarioTimer timer_;
+  glm::mat4 projection_;
+
+  Theme theme_;
+  Settings settings_;
+  Crosshair crosshair_;
+
+  int processed_events_up_to_index_ = 0;
+  int processed_targets_up_to_index_ = 0;
+  std::unordered_map<u16, u16> target_data_channel_map_;
+};
+
+}  // namespace
+
+std::unique_ptr<Screen> CreateReplayViewerScreen(std::shared_ptr<Replay> replay, Application* app) {
+  return std::make_unique<ReplayViewerScreen>(std::move(replay), app);
 }
 
 }  // namespace aim

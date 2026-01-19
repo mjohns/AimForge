@@ -11,7 +11,7 @@ ReplayRecorder::ReplayRecorder(const Room& room,
                                i32 duration_seconds,
                                i32 num_targets)
     : replay_fps_(replay_fps), num_targets_(num_targets) {
-  replay_ = std::make_unique<ReplayV2>();
+  replay_ = std::make_shared<Replay>();
   replay_->room = room;
   replay_->replay_fps = replay_fps;
   replay_->num_targets = num_targets;
@@ -99,7 +99,7 @@ void ReplayRecorder::SnapshotTargets(i64 frame_number, const std::vector<Target>
       u16 data_channel = it->second;
       assert(data_channel < num_targets_ && "Invalid data channel");
       if (data_channel < num_targets_) {
-        TargetData& data = replay_->target_data[start_index + data_channel];
+        ReplayTargetData& data = replay_->target_data[start_index + data_channel];
         data.position = target.position;
         data.radius = target.radius;
       }
@@ -107,9 +107,9 @@ void ReplayRecorder::SnapshotTargets(i64 frame_number, const std::vector<Target>
   }
 }
 
-float ReplayV2::GetApproximateSizeMb() const {
+float Replay::GetApproximateSizeMb() const {
   i64 size_bytes = pitch_yaws.size() * sizeof(PitchYaw);
-  size_bytes += target_data.size() * sizeof(TargetData);
+  size_bytes += target_data.size() * sizeof(ReplayTargetData);
   size_bytes += target_metadata.size() * sizeof(ReplayTargetMetadata);
   size_bytes += events.size() * sizeof(ReplayEvent);
 

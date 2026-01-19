@@ -11,7 +11,7 @@ namespace aim {
 
 struct Target;
 
-struct TargetData {
+struct ReplayTargetData {
   float radius = 0;
   glm::vec3 position{};
 };
@@ -45,7 +45,7 @@ struct ReplayTargetMetadata {
   float add_time_seconds;
   u16 target_id;
   u16 data_channel;
-  TargetData initial_data;
+  ReplayTargetData initial_data;
   float pill_height;
 };
 
@@ -61,12 +61,12 @@ struct ReplayEvent {
   float time_seconds = 0;
 };
 
-struct ReplayV2 {
+struct Replay {
   Room room;
   u16 replay_fps;
   u16 num_targets;
   std::vector<ReplayEvent> events;
-  std::vector<TargetData> target_data;
+  std::vector<ReplayTargetData> target_data;
   std::vector<PitchYaw> pitch_yaws;
   std::vector<ReplayTargetMetadata> target_metadata;
 
@@ -84,8 +84,8 @@ class ReplayRecorder {
 
   void SnapshotTargets(i64 frame_number, const std::vector<Target>& targets);
 
-  const ReplayV2& replay() const {
-    return *replay_;
+  std::shared_ptr<Replay> replay() {
+    return replay_;
   }
 
  private:
@@ -94,7 +94,7 @@ class ReplayRecorder {
   i32 num_targets_;
 
   std::unordered_map<u16, u16> target_data_channel_map_;
-  std::unique_ptr<ReplayV2> replay_;
+  std::shared_ptr<Replay> replay_;
 };
 
 }  // namespace aim

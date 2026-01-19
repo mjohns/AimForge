@@ -446,19 +446,15 @@ void Scenario::HandleScenarioDone() {
 
   FlushPlayTime();
 
-  if (replay_) {
-    ReplayViewer viewer;
-    viewer.PlayReplay(replay_->replay(), &app_);
-  }
-
-  PopSelf();
+   PopSelf();
 
   std::optional<StatsDbRow> maybe_stats_row = GetStatsRow();
   if (maybe_stats_row) {
     StatsDbRow stats_row = *maybe_stats_row;
     app_.stats_manager().AddStats(scenario_name_, &stats_row);
     state_.AddPerformanceStats(scenario_name_, stats_row.stats_id, perf_stats_);
-    PushNextScreen(CreateStatsScreen(scenario_name_, stats_row.stats_id, &app_));
+    PushNextScreen(CreateStatsScreen(
+        scenario_name_, stats_row.stats_id, replay_ ? replay_->replay() : nullptr, &app_));
   }
 }
 

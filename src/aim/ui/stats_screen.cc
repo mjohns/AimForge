@@ -13,6 +13,8 @@
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/proto/stats.pb.h"
+#include "aim/scenario/replay.h"
+#include "aim/scenario/replay_viewer.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/settings_screen.h"
@@ -91,8 +93,11 @@ StatsComparison GetStatsComparison(const StatsDbRow& current_stats,
 
 class StatsScreen : public UiScreen {
  public:
-  StatsScreen(std::string scenario_name, i64 run_id, Application* app)
-      : UiScreen(*app), scenario_name_(scenario_name), run_id_(run_id) {
+  StatsScreen(std::string scenario_name,
+              i64 run_id,
+              std::shared_ptr<Replay> replay,
+              Application* app)
+      : UiScreen(*app), scenario_name_(scenario_name), run_id_(run_id), replay_(replay) {
     screen_start_time_millis_ = GetNowEpochMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_name);
     evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
@@ -225,6 +230,9 @@ class StatsScreen : public UiScreen {
                             selected_screen_ == SelectedScreen::PERF)) {
         selected_screen_ = SelectedScreen::PERF;
       }
+    }
+    if (replay_ && ImGui::Selectable(std::format("{} Replay", kIconLiveTv).c_str(), false)) {
+      PushNextScreen(CreateReplayViewerScreen(replay_, &app_));
     }
     if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
@@ -759,14 +767,22 @@ class StatsScreen : public UiScreen {
   std::vector<std::string> compare_to_scenarios_;
 
   SelectedScreen selected_screen_ = SelectedScreen::STATS;
+  std::shared_ptr<Replay> replay_;
 };
 
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_name,
                                             i64 run_id,
+                                            std::shared_ptr<Replay> replay,
                                             Application* app) {
-  return std::make_unique<StatsScreen>(scenario_name, run_id, app);
+  return std::make_unique<StatsScreen>(scenario_name, run_id, std::move(replay), app);
+}
+
+std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_name,
+                                            i64 run_id,
+                                            Application* app) {
+  return CreateStatsScreen(scenario_name, run_id, nullptr, app);
 }
 
 }  // namespace aim
