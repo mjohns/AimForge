@@ -4,11 +4,18 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
+#include "aim/core/playlist_manager.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/proto/bundle.pb.h"
 #include "imgui.h"
 
 namespace aim {
 namespace {
+
+struct CachedBundleDetails {
+  i64 num_playlists = 0;
+  i64 num_scenarios = 0;
+};
 
 class AddBundleDialog {
  public:
@@ -111,9 +118,15 @@ class BundleUiComponentImpl : public BundleUiComponent {
     if (ImGui::BeginTable("BundleColumns", 2, flags)) {
       ImGui::TableNextColumn();
 
+      ImGui::Spacing();
+
       if (ImGui::Button(std::format("{} Add", kIconAdd))) {
         add_dialog_.NotifyOpen({});
       }
+
+      ImGui::Spacing();
+      ImGui::Separator();
+      ImGui::Spacing();
 
       DrawBundlesList();
 
@@ -156,6 +169,20 @@ class BundleUiComponentImpl : public BundleUiComponent {
       need_update = true;
     }
 
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    CachedBundleDetails details = GetBundleDetails(selected_bundle_name_);
+    ImGui::TextFmt("{} scenarios", details.num_scenarios);
+    if (details.num_playlists > 0) {
+      ImGui::TextFmt("{} playlists", details.num_playlists);
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
     if (ImGui::Button(std::format("{} Copy", kIconContentCopy))) {
       add_dialog_.NotifyOpen(selected_bundle_name_);
     }
@@ -181,12 +208,35 @@ class BundleUiComponentImpl : public BundleUiComponent {
       }
     }
   }
+
+  CachedBundleDetails GetBundleDetails(const std::string& bundle_name) {
+    auto it = bundle_details_map_.find(bundle_name);
+    if (it != bundle_details_map_.end()) {
+      return it->second;
+    }
+
+    CachedBundleDetails& details = bundle_details_map_[bundle_name];
+    std::string bundle_name_prefix = bundle_name + " ";
+    for (const std::string& name : *app_.playlist_manager().playlist_names()) {
+      if (name.starts_with(bundle_name_prefix)) {
+        details.num_playlists++;
+      }
+    }
+    for (const std::string& name : *app_.scenario_manager().scenario_names()) {
+      if (name.starts_with(bundle_name_prefix)) {
+        details.num_scenarios++;
+      }
+    }
+    return details;
+  }
+
   UiScreen& screen_;
   Application& app_;
 
   ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
-  std::string selected_bundle_name_;
+  std::string selected_bundle_name_ = "AF";
   AddBundleDialog add_dialog_{"AddBundleDialog"};
+  std::unordered_map<std::string, CachedBundleDetails> bundle_details_map_;
 };
 
 }  // namespace
