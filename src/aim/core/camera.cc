@@ -127,4 +127,8 @@ Camera::Camera(const CameraParams& params)
   is_default_orientation_ = front_.y == 1 && up_.z == 1;
 }
 
+float GetMaxPitch() {
+  return kMaxPitch;
+}
+
 }  // namespace aim

@@ -21,8 +21,13 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
   i32 max_replay_frame_number = replay_fps * duration_seconds;
   i32 total_target_data_count = max_replay_frame_number * num_targets;
 
-  replay_->target_data.resize(total_target_data_count);
-  replay_->pitch_yaws.resize(max_replay_frame_number);
+  ReplayTargetData invalid_target_data;
+  invalid_target_data.radius = -1;
+  replay_->target_data.resize(total_target_data_count, invalid_target_data);
+
+  PitchYaw invalid_pitch_yaw;
+  invalid_pitch_yaw.pitch = GetMaxPitch() * 3;
+  replay_->pitch_yaws.resize(max_replay_frame_number, invalid_pitch_yaw);
 
   // Make this large enough that it reasonably won't need to allocate more memory during a run.
   // Maybe we should drop certain event types (like sound) if it is approaching the limit.

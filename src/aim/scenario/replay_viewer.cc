@@ -57,36 +57,8 @@ class ReplayViewerScreen : public Screen {
     timer_.OnStartFrame();
 
     bool force_render = false;
-    if (timer_.IsNewReplayFrame()) {
-      force_render = true;
-      i64 replay_frame_number = timer_.GetReplayFrameNumber();
-      if (replay_frame_number >= replay.pitch_yaws.size()) {
-        PopSelf();
-        return;
-      }
+    i64 replay_frame_number = timer_.GetReplayFrameNumber();
 
-      const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
-      camera_.UpdatePitchYaw(pitch_yaw);
-
-      {
-        i64 start_index = replay_frame_number * replay.num_targets;
-        int end_index = start_index + replay.num_targets;
-        for (auto& entry : target_data_channel_map_) {
-          u16 data_channel = entry.second;
-          u16 target_id = entry.first;
-
-          Target* target = target_manager_.GetMutableTarget(target_id);
-          if (target != nullptr) {
-            i64 i = start_index + data_channel;
-            if (IsValidIndex(replay.target_data, i)) {
-              const ReplayTargetData& data = replay.target_data[i];
-              target->position = data.position;
-              target->radius = data.radius;
-            }
-          }
-        }
-      }
-    }
 
     LookAtInfo look_at = camera_.GetLookAt();
     float now_seconds = timer_.GetElapsedSeconds();
@@ -126,9 +98,49 @@ class ReplayViewerScreen : public Screen {
         t.height = metadata.pill_height;
       }
       target_data_channel_map_[t.id] = metadata.data_channel;
+      target_added_on_frame_[t.id] = replay_frame_number;
       target_manager_.AddTarget(t);
       force_render = true;
       processed_targets_up_to_index_ = i + 1;
+    }
+
+    if (timer_.IsNewReplayFrame()) {
+      force_render = true;
+      if (replay_frame_number >= replay.pitch_yaws.size()) {
+        PopSelf();
+        return;
+      }
+
+      const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
+      if (pitch_yaw.pitch < (GetMaxPitch() + 0.1f)) {
+        camera_.UpdatePitchYaw(pitch_yaw);
+      }
+
+      {
+        i64 start_index = replay_frame_number * replay.num_targets;
+        int end_index = start_index + replay.num_targets;
+        for (auto& entry : target_data_channel_map_) {
+          u16 data_channel = entry.second;
+          u16 target_id = entry.first;
+
+          i64 added_on_frame = target_added_on_frame_[target_id];
+
+          // Don't start updating until next frame after adding.
+          bool old_enough_target = replay_frame_number > added_on_frame;
+          Target* target = target_manager_.GetMutableTarget(target_id);
+
+          if (old_enough_target && target != nullptr) {
+            i64 i = start_index + data_channel;
+            if (IsValidIndex(replay.target_data, i)) {
+              const ReplayTargetData& data = replay.target_data[i];
+              if (data.radius >= 0) {
+                target->position = data.position;
+                target->radius = data.radius;
+              }
+            }
+          }
+        }
+      }
     }
 
     bool do_render = force_render || timer_.LastFrameRenderStartedMicrosAgo() > 2500;
@@ -185,6 +197,7 @@ class ReplayViewerScreen : public Screen {
   int processed_events_up_to_index_ = 0;
   int processed_targets_up_to_index_ = 0;
   std::unordered_map<u16, u16> target_data_channel_map_;
+  std::unordered_map<u16, i64> target_added_on_frame_;
 };
 
 }  // namespace

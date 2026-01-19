@@ -12,7 +12,7 @@ namespace aim {
 struct Target;
 
 struct ReplayTargetData {
-  float radius = 0;
+  float radius = -1;
   glm::vec3 position{};
 };
 
