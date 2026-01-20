@@ -88,7 +88,7 @@ class CenteringScenario : public BaseScenario {
     auto waypoint_supplier =
         std::make_unique<CenteringWaypointSupplier>(start_point_, wall_points_);
     target->movement_controller =
-        CreateWallWaypointMovementController(target->speed, std::move(waypoint_supplier));
+        CreateWallWaypointMovementController(target->speed, target->acceleration, std::move(waypoint_supplier));
   }
 
   void UpdateTargetPositions() override {

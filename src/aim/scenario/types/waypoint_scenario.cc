@@ -53,8 +53,8 @@ class WaypointScenario : public BaseScenario {
 
     auto waypoint_supplier =
         std::make_unique<WallTargetPlacerWaypointSupplier>(pos, std::move(placer));
-    target->movement_controller =
-        CreateWallWaypointMovementController(target->speed, std::move(waypoint_supplier));
+    target->movement_controller = CreateWallWaypointMovementController(
+        target->speed, target->acceleration, std::move(waypoint_supplier));
   }
 
   void UpdateTargetPositions() override {

@@ -49,4 +49,5 @@ std::string GetLastWord(const std::string& value);
 std::vector<std::string> GetSortedLevelNames(const NameInfo& name,
                                              const std::vector<NameInfo>& candidates);
 
+
 }  // namespace aim
