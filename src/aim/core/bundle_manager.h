@@ -29,6 +29,9 @@ class BundleManager {
   virtual bool SaveJsonBundle(const std::string& bundle_name) = 0;
   virtual bool SaveDirtyBundles() = 0;
   virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
+
+  virtual bool CopyBundle(const std::string& source_bundle_name,
+                          const std::string& target_bundle_name) = 0;
 };
 
 std::unique_ptr<BundleManager> CreateBundleManager(FileSystem* fs,

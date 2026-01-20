@@ -133,6 +133,52 @@ class BundleManagerImpl : public BundleManager {
     return WriteBinaryMessageToFile(GetMutableBundleFilePath(bundle_name), bundle_file);
   }
 
+  bool CopyBundle(const std::string& source_bundle_name,
+                  const std::string& target_bundle_name) override {
+    std::string source_bundle_prefix = source_bundle_name + " ";
+    std::string target_bundle_prefix = target_bundle_name + " ";
+
+    BundleFile bundle_file;
+    playlist_manager_->AddPlaylistsForBundle(source_bundle_name, &bundle_file);
+    scenario_manager_->AddScenariosForBundle(source_bundle_name, &bundle_file);
+
+    auto change_bundle_name = [&](const std::string& name) {
+      std::string_view result_view = name;
+      if (!absl::ConsumePrefix(&result_view, source_bundle_prefix)) {
+        return name;
+      }
+      return absl::StrCat(target_bundle_prefix, result_view);
+    };
+
+    // Update any internal references to the old bundle name to point to the new bundle.
+
+    for (BundleScenario& s : *bundle_file.mutable_scenarios()) {
+      if (s.def().reference_def().scenario_name().starts_with(source_bundle_prefix)) {
+        s.mutable_def()->mutable_reference_def()->set_scenario_name(
+            change_bundle_name(s.def().reference_def().scenario_name()));
+      }
+    }
+
+    for (BundlePlaylist& p : *bundle_file.mutable_playlists()) {
+      for (PlaylistItem& item : *p.mutable_def()->mutable_items()) {
+        if (item.scenario().starts_with(source_bundle_prefix)) {
+          item.set_scenario(change_bundle_name(item.scenario()));
+        }
+      }
+      if (p.def().levels().base_scenario().starts_with(source_bundle_prefix)) {
+        p.mutable_def()->mutable_levels()->set_base_scenario(
+            change_bundle_name(p.def().levels().base_scenario()));
+      }
+    }
+
+    bool saved =
+        WriteBinaryMessageToFile(GetMutableBundleFilePath(target_bundle_name), bundle_file);
+    if (saved) {
+      LoadBundlesFromDisk();
+    }
+    return saved;
+  }
+
   bool SaveJsonBundle(const std::string& bundle_name) override {
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);

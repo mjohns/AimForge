@@ -59,10 +59,13 @@ class AddBundleDialog {
         }
 
         if (ImGui::Button(bundle_to_copy_ ? "Copy" : "Add")) {
-          // TODO: Do copy
           BundleInfo info;
           info.set_bundle_name(bundle_name_);
           app.bundle_manager().UpdateBundleInfo(info);
+
+          if (bundle_to_copy_) {
+            app.bundle_manager().CopyBundle(*bundle_to_copy_, bundle_name_);
+          }
 
           added_name = bundle_name_;
           ImGui::CloseCurrentPopup();
