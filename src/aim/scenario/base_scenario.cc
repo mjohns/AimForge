@@ -27,28 +27,11 @@ float GetPartialHitValue(const Target& target) {
 void BaseScenario::Initialize() {
   int num_targets = def_.target_def().num_targets();
   for (int i = 0; i < num_targets; ++i) {
-    Target target = GetNewTarget();
-    if (def_.target_def().newest_target_is_ghost() && i == (num_targets - 1)) {
-      target.is_ghost = true;
-    }
-
     float stagger_seconds = def_.target_def().stagger_initial_targets_seconds();
     if (stagger_seconds > 0) {
-      RunAfterSeconds(i * stagger_seconds, [=]() {
-        Target new_target = target;
-        if (new_target.growth_info) {
-          new_target.growth_info->start_time_seconds = timer_.GetElapsedSeconds();
-        }
-        if (def_.target_def().remove_target_after_seconds() > 0) {
-          new_target.remove_after_time_seconds =
-              timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();
-        }
-        new_target = target_manager_.AddTarget(new_target);
-        AddNewTargetEvent(new_target);
-      });
+      RunAfterSeconds(i * stagger_seconds, [=]() { AddNewTargetDuringRun(0); });
     } else {
-      target = target_manager_.AddTarget(target);
-      AddNewTargetEvent(target);
+      AddNewTargetDuringRun(0);
     }
   }
 }
@@ -99,7 +82,7 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     if (target != nullptr && ShouldCountPartialKills()) {
       stats_.num_hits += GetPartialHitValue(*target);
     }
-    AddNewTargetDuringRun(target_id, /*is_kill=*/false);
+    AddNewTargetDuringRun(target_id);
   }
 
   UpdateTargetPositions();
@@ -364,7 +347,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           std::optional<u16> target_id_to_remove =
               target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
           if (target_id_to_remove.has_value()) {
-            AddNewTargetDuringRun(*target_id_to_remove, /*is_kill=*/false);
+            AddNewTargetDuringRun(*target_id_to_remove);
           }
         }
       }
@@ -378,8 +361,11 @@ Target BaseScenario::GetNewTarget() {
   return t;
 }
 
-void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
-  AddRemoveTargetEvent(old_target_id);
+void BaseScenario::AddNewTargetDuringRun(u16 old_target_id) {
+  if (old_target_id > 0) {
+    AddRemoveTargetEvent(old_target_id);
+    target_manager_.RemoveTarget(old_target_id);
+  }
 
   Target target = GetNewTarget();
   if (def_.target_def().newest_target_is_ghost()) {
@@ -388,7 +374,6 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
   }
 
   if (def_.target_def().new_target_delay_seconds() > 0) {
-    target_manager_.RemoveTarget(old_target_id);
     RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
       Target new_target = target;
       if (new_target.growth_info) {
@@ -402,7 +387,6 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id, bool is_kill) {
       AddNewTargetEvent(new_target);
     });
   } else {
-    target_manager_.RemoveTarget(old_target_id);
     if (def_.target_def().remove_target_after_seconds() > 0) {
       target.remove_after_time_seconds =
           timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();

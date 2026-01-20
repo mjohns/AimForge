@@ -47,6 +47,7 @@ struct ReplayTargetMetadata {
   u16 data_channel;
   ReplayTargetData initial_data;
   float pill_height;
+  bool is_ghost = false;
 };
 
 union ReplayEventData {

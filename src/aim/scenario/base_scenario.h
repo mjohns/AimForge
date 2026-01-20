@@ -45,7 +45,7 @@ class BaseScenario : public Scenario {
   void HandleClickHits(UpdateStateData* data);
   void HandleTrackingHits(UpdateStateData* data, std::vector<u16>* target_ids_to_remove);
   void HandleProximityTrackingHits(UpdateStateData* data);
-  void AddNewTargetDuringRun(u16 old_target_id, bool is_kill = true);
+  void AddNewTargetDuringRun(u16 old_target_id);
   void TrackingHoldDone();
   Target GetNewTarget();
   bool ShouldCountPartialKills();

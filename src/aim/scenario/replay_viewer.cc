@@ -59,7 +59,6 @@ class ReplayViewerScreen : public Screen {
     bool force_render = false;
     i64 replay_frame_number = timer_.GetReplayFrameNumber();
 
-
     LookAtInfo look_at = camera_.GetLookAt();
     float now_seconds = timer_.GetElapsedSeconds();
 
@@ -93,6 +92,7 @@ class ReplayViewerScreen : public Screen {
       t.id = metadata.target_id;
       t.radius = metadata.initial_data.radius;
       t.position = metadata.initial_data.position;
+      t.is_ghost = metadata.is_ghost;
       if (metadata.pill_height > 0) {
         t.is_pill = true;
         t.height = metadata.pill_height;

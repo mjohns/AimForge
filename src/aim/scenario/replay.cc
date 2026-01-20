@@ -37,6 +37,9 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
 
 void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
   // Find available data channel.
+  if (now_seconds > 0) {
+    now_seconds = now_seconds;
+  }
   std::vector<bool> taken_channels(num_targets_, false);
   for (auto& entry : target_data_channel_map_) {
     taken_channels[entry.second] = true;
@@ -58,6 +61,7 @@ void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
   metadata.data_channel = available_channel;
   metadata.initial_data.position = target.position;
   metadata.initial_data.radius = target.radius;
+  metadata.is_ghost = target.is_ghost;
   if (target.is_pill) {
     metadata.pill_height = target.height;
   }
@@ -101,6 +105,9 @@ void ReplayRecorder::SnapshotTargets(i64 frame_number, const std::vector<Target>
 
   assert(targets.size() <= num_targets_ && "Too many targets");
   for (const Target& target : targets) {
+    if (target.hidden) {
+      continue;
+    }
     auto it = target_data_channel_map_.find(target.id);
     if (it != target_data_channel_map_.end()) {
       u16 data_channel = it->second;
