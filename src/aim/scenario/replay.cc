@@ -74,7 +74,7 @@ void ReplayRecorder::PlaySound(float now_seconds, ReplaySoundType sound) {
 
 void ReplayRecorder::RemoveTarget(float now_seconds, u16 target_id) {
   ReplayEvent& event = AddEvent(now_seconds, ReplayEventType::REMOVE_TARGET);
-  event.data.remove_target.target_id = target_id;
+  event.data.target_id = target_id;
   target_data_channel_map_.erase(target_id);
 }
 

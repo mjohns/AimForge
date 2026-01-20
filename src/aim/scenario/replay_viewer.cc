@@ -62,26 +62,6 @@ class ReplayViewerScreen : public Screen {
     LookAtInfo look_at = camera_.GetLookAt();
     float now_seconds = timer_.GetElapsedSeconds();
 
-    for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
-      const ReplayEvent& event = events[i];
-      if (event.time_seconds > now_seconds) {
-        break;
-      }
-
-      // Process the event.
-      switch (event.type) {
-        case ReplayEventType::REMOVE_TARGET:
-          target_manager_.RemoveTarget(event.data.remove_target.target_id);
-          target_data_channel_map_.erase(event.data.remove_target.target_id);
-          force_render = true;
-          break;
-        case ReplayEventType::PLAY_SOUND:
-          PlaySound(app_.sound_manager(), settings_.sound(), event.data.play_sound.sound);
-          break;
-      }
-      processed_events_up_to_index_ = i + 1;
-    }
-
     for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
       const ReplayTargetMetadata& metadata = replay.target_metadata[i];
       if (metadata.add_time_seconds > now_seconds) {
@@ -99,9 +79,32 @@ class ReplayViewerScreen : public Screen {
       }
       target_data_channel_map_[t.id] = metadata.data_channel;
       target_added_on_frame_[t.id] = replay_frame_number;
+      if (t.is_ghost) {
+        target_manager_.MarkAllAsNonGhost();
+      }
       target_manager_.AddTarget(t);
       force_render = true;
       processed_targets_up_to_index_ = i + 1;
+    }
+
+    for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
+      const ReplayEvent& event = events[i];
+      if (event.time_seconds > now_seconds) {
+        break;
+      }
+
+      // Process the event.
+      switch (event.type) {
+        case ReplayEventType::REMOVE_TARGET:
+          target_manager_.RemoveTarget(event.data.target_id);
+          target_data_channel_map_.erase(event.data.target_id);
+          force_render = true;
+          break;
+        case ReplayEventType::PLAY_SOUND:
+          PlaySound(app_.sound_manager(), settings_.sound(), event.data.play_sound.sound);
+          break;
+      }
+      processed_events_up_to_index_ = i + 1;
     }
 
     if (timer_.IsNewReplayFrame()) {

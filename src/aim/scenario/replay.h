@@ -17,18 +17,8 @@ struct ReplayTargetData {
 };
 
 enum class ReplayEventType : u16 {
-  ADD_TARGET = 1,
-  REMOVE_TARGET = 2,
-  PLAY_SOUND = 3,
-  EXPLICIT_TARGET_DATA = 4,
-};
-
-struct AddTargetEvent {
-  u16 target_id;
-};
-
-struct RemoveTargetEvent {
-  u16 target_id;
+  REMOVE_TARGET = 1,
+  PLAY_SOUND = 2,
 };
 
 enum class ReplaySoundType : u16 {
@@ -51,9 +41,8 @@ struct ReplayTargetMetadata {
 };
 
 union ReplayEventData {
-  AddTargetEvent add_target;
   PlaySoundEvent play_sound;
-  RemoveTargetEvent remove_target;
+  u16 target_id;
 };
 
 struct ReplayEvent {
