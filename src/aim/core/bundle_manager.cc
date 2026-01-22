@@ -85,7 +85,8 @@ class BundleManagerImpl : public BundleManager {
     std::vector<std::string> error_messages;
 
     std::unordered_map<std::string, std::filesystem::path> bundle_path_map;
-    AddBundlesFromDirectory(fs_->GetBasePath("bundles"), &bundle_path_map, &error_messages);
+    AddBundlesFromDirectory(
+        fs_->GetBasePath("resources/bundles"), &bundle_path_map, &error_messages);
     AddBundlesFromDirectory(fs_->GetUserDataPath("bundles"), &bundle_path_map, &error_messages);
 
     BundleInfoFile bundle_info_file;

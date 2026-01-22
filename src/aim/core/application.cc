@@ -41,11 +41,13 @@ void CopyInitialDirIfNotExists(const std::string& dir_name,
                                const std::string& dest_dir,
                                FileSystem* fs) {
   auto user_path = fs->GetUserDataPath(dest_dir);
-  if (!std::filesystem::exists(user_path)) {
-    auto base_path = fs->GetBasePath("resources/" + dir_name);
-    if (std::filesystem::exists(base_path)) {
-      std::filesystem::copy(base_path, user_path, std::filesystem::copy_options::recursive);
-    }
+  if (std::filesystem::exists(user_path)) {
+    return;
+  }
+  CreateDirectories(user_path);
+  auto base_path = fs->GetBasePath("resources/" + dir_name);
+  if (std::filesystem::exists(base_path)) {
+    std::filesystem::copy(base_path, user_path, std::filesystem::copy_options::recursive);
   }
 }
 
@@ -54,6 +56,17 @@ std::optional<std::string> InitializeAimForgeFolder(FileSystem* fs) {
   if (!CreateDirectories(resources_path)) {
     return std::format("Unable to create folder \"{}\"", resources_path.string());
   }
+
+  auto db_path = fs->GetUserDataPath("db");
+  if (!CreateDirectories(db_path)) {
+    return std::format("Unable to create folder \"{}\"", db_path.string());
+  }
+
+  auto bundles_path = fs->GetUserDataPath("bundles");
+  if (!CreateDirectories(bundles_path)) {
+    return std::format("Unable to create folder \"{}\"", bundles_path.string());
+  }
+
   auto ini_path = fs->GetUserDataPath(kImguiIniFile);
   if (!std::filesystem::exists(ini_path)) {
     auto initial_ini_path = fs->GetBasePath("resources/imgui.ini");
@@ -86,7 +99,6 @@ void AimAbslLogSink::Send(const absl::LogEntry& entry) {
 Application::Application() {
   state_ = std::make_unique<ApplicationState>();
   file_system_ = std::make_unique<FileSystem>();
-  local_store_ = std::make_unique<LocalStore>(file_system_.get());
   scenario_manager_ = CreateScenarioManager();
   playlist_manager_ = CreatePlaylistManager();
 
@@ -295,6 +307,7 @@ std::optional<std::string> Application::InitializeCritical(const Stopwatch& stop
   if (maybe_error) {
     return maybe_error;
   }
+  local_store_ = std::make_unique<LocalStore>(file_system_.get());
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
   stats_manager_ = CreateStatsManager(db_.get());

@@ -195,16 +195,12 @@ void MoveFileToTrash(const std::filesystem::path& fs_path) {
 }
 
 bool CreateDirectories(const std::filesystem::path& path) {
-  std::filesystem::path path_to_create = path;
-  if (!std::filesystem::is_directory(path)) {
-    path_to_create = path.parent_path();
-  }
   std::error_code ec;
-  if (std::filesystem::exists(path_to_create, ec)) {
+  if (std::filesystem::exists(path, ec)) {
     // Already exists. No need to create.
     return true;
   }
-  return std::filesystem::create_directories(path_to_create, ec);
+  return std::filesystem::create_directories(path, ec);
 }
 
 }  // namespace aim
