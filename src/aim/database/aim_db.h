@@ -49,6 +49,8 @@ class AimDb {
  public:
   virtual ~AimDb() {}
 
+  virtual std::optional<std::string> GetInitializationError() = 0;
+
   //
   // Playlists
   //

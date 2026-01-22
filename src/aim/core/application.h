@@ -11,6 +11,7 @@
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
+#include "aim/common/times.h"
 #include "aim/core/application_state.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
@@ -170,10 +171,11 @@ class Application {
  private:
   Application();
 
-  int Initialize();
 
+  std::optional<std::string> InitializeWindow(const Stopwatch& stopwatch);
   // Returns error message if failed to initialize.
-  std::optional<std::string> InitializeWindow();
+  std::optional<std::string> InitializeCritical(const Stopwatch& stopwatch);
+  void Initialize();
 
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;

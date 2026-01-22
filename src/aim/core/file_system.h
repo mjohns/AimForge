@@ -1,9 +1,6 @@
 #pragma once
 
 #include <filesystem>
-#include <optional>
-#include <string>
-#include <vector>
 
 namespace aim {
 
@@ -13,6 +10,7 @@ class FileSystem {
   FileSystem(const std::filesystem::path& base_dir, const std::filesystem::path& pref_dir);
 
   std::filesystem::path GetUserDataPath(const std::filesystem::path& file_name);
+  std::filesystem::path GetUserDataPath();
   std::filesystem::path GetBasePath(const std::filesystem::path& file_name);
 
  private:

@@ -13,6 +13,7 @@
 #include "absl/log/log.h"
 #include "absl/log/log_sink.h"
 #include "absl/log/log_sink_registry.h"
+#include "aim/common/files.h"
 #include "aim/common/log.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
@@ -48,7 +49,11 @@ void CopyInitialDirIfNotExists(const std::string& dir_name,
   }
 }
 
-void InitializeAimForgeFolder(FileSystem* fs) {
+std::optional<std::string> InitializeAimForgeFolder(FileSystem* fs) {
+  auto resources_path = fs->GetUserDataPath("resources");
+  if (!CreateDirectories(resources_path)) {
+    return std::format("Unable to create folder \"{}\"", resources_path.string());
+  }
   auto ini_path = fs->GetUserDataPath(kImguiIniFile);
   if (!std::filesystem::exists(ini_path)) {
     auto initial_ini_path = fs->GetBasePath("resources/imgui.ini");
@@ -56,12 +61,12 @@ void InitializeAimForgeFolder(FileSystem* fs) {
       std::filesystem::copy(initial_ini_path, ini_path);
     }
   }
-  std::filesystem::create_directory(fs->GetUserDataPath("resources"));
-  CopyInitialDirIfNotExists("bundles", "bundles", fs);
+
   CopyInitialDirIfNotExists("themes", "resources/themes", fs);
   CopyInitialDirIfNotExists("textures", "resources/textures", fs);
   CopyInitialDirIfNotExists("sounds", "resources/sounds", fs);
   CopyInitialDirIfNotExists("crosshairs", "resources/crosshairs", fs);
+  return {};
 }
 
 }  // namespace
@@ -164,10 +169,7 @@ Application::~Application() {
   }
 }
 
-std::optional<std::string> Application::InitializeWindow() {
-  Stopwatch stopwatch;
-  stopwatch.Start();
-
+std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwatch) {
   auto& trace = state_->initialization_times.window_trace;
 
   state_->initialization_times.window.start = stopwatch.GetElapsedMicros();
@@ -280,18 +282,19 @@ std::optional<std::string> Application::InitializeWindow() {
   return {};
 }
 
-int Application::Initialize() {
-  Stopwatch stopwatch;
-  stopwatch.Start();
-
-  state_->initialization_times.total.start = stopwatch.GetElapsedMicros();
-  auto init_done_cleanup = absl::MakeCleanup(
-      [&]() { state_->initialization_times.total.end = stopwatch.GetElapsedMicros(); });
-
-  InitializeAimForgeFolder(file_system_.get());
-
-  state_->initialization_times.db.start = stopwatch.GetElapsedMicros();
+// Initiliaziation that should not fail unless the application can not realistically function.
+// Should be fast and able to use UiScreen after this is called.
+std::optional<std::string> Application::InitializeCritical(const Stopwatch& stopwatch) {
+  auto maybe_error = InitializeAimForgeFolder(file_system_.get());
+  if (maybe_error) {
+    logger_->warn("Failed to initialize aim forge folder. {}", *maybe_error);
+    return maybe_error;
+  }
   db_ = CreateAimDb(file_system_->GetUserDataPath("db/aim.db"));
+  maybe_error = db_->GetInitializationError();
+  if (maybe_error) {
+    return maybe_error;
+  }
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
   stats_manager_ = CreateStatsManager(db_.get());
@@ -305,12 +308,47 @@ int Application::Initialize() {
                                             file_system_->GetUserDataPath("resources/crosshairs"),
                                             db_.get(),
                                             history_manager_.get());
-  state_->initialization_times.db.end = stopwatch.GetElapsedMicros();
+  std::vector<std::filesystem::path> sound_dirs = {
+      file_system_->GetUserDataPath("resources/sounds"),
+  };
+  sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
+
+  auto fonts_path = file_system_->GetBasePath("resources/fonts");
+  font_manager_ = std::make_unique<FontManager>(fonts_path);
+  if (!font_manager_->LoadFonts()) {
+    return std::format("Unable to load fonts from \"{}\"", fonts_path.string());
+  }
+
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
-    logger_->error("Loading settings failed: {}", settings_status.message());
-    return -1;
+    return "Unable to load settings.json";
   }
+
+  std::vector<std::filesystem::path> texture_dirs = {
+      file_system_->GetUserDataPath("resources/textures"),
+      file_system_->GetBasePath("resources/textures"),
+  };
+  std::filesystem::path shader_dir = file_system_->GetBasePath("shaders/compiled");
+  if (!std::filesystem::exists(shader_dir)) {
+    return std::format("Compiled shader folder missing at \"{}\".", shader_dir.string());
+  }
+  renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
+  if (!renderer_) {
+    return "Failed to initialize renderer.";
+  }
+
+  crosshair_manager_ = std::make_unique<CrosshairManager>(
+      file_system_->GetUserDataPath("resources/crosshairs"), gpu_device_);
+
+  logo_texture_ = std::make_unique<Texture>(file_system_->GetBasePath("resources/images/logo.png"),
+                                            gpu_device_);
+
+  return {};
+}
+
+void Application::Initialize() {
+  Stopwatch stopwatch;
+  stopwatch.Start();
 
   /*
   // Prime aggregate stats cache for all recent scenarios.
@@ -318,11 +356,6 @@ int Application::Initialize() {
     stats_manager_->GetAggregateStats(scenario_name);
   }
   */
-
-  std::vector<std::filesystem::path> sound_dirs = {
-      file_system_->GetUserDataPath("resources/sounds"),
-  };
-  sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
 
   auto settings = settings_manager_->GetCurrentSettings();
   if (settings.max_render_fps() <= 0) {
@@ -332,24 +365,6 @@ int Application::Initialize() {
       updater.settings.set_max_render_fps(std::round(display_mode->refresh_rate * 2));
       updater.SaveIfChangesMade("");
     }
-  }
-
-  logo_texture_ = std::make_unique<Texture>(file_system_->GetBasePath("resources/images/logo.png"),
-                                            gpu_device_);
-
-  std::vector<std::filesystem::path> texture_dirs = {
-      file_system_->GetUserDataPath("resources/textures"),
-      file_system_->GetBasePath("resources/textures"),
-  };
-  std::filesystem::path shader_dir = file_system_->GetBasePath("shaders/compiled");
-  crosshair_manager_ = std::make_unique<CrosshairManager>(
-      file_system_->GetUserDataPath("resources/crosshairs"), gpu_device_);
-  renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
-
-  font_manager_ = std::make_unique<FontManager>(file_system_->GetBasePath("resources/fonts"));
-  if (!font_manager_->LoadFonts()) {
-    logger_->error("Failed to load fonts");
-    return -1;
   }
 
   sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
@@ -374,15 +389,6 @@ int Application::Initialize() {
   };
   scenario_manager_->RegisterRenameListener(clear_caches_on_rename);
   playlist_manager_->RegisterRenameListener(clear_caches_on_rename);
-
-  bundle_manager_->SaveBundle("AF");
-  bundle_manager_->SaveBundle("SERF");
-  bundle_manager_->SaveBundle("REACT");
-  bundle_manager_->SaveBundle("USER");
-  bundle_manager_->SaveBundle("VDIM");
-  bundle_manager_->SaveBundle("SMOOTH");
-
-  return 0;
 }
 
 void Application::Render(ImVec4 clear_color) {
@@ -503,19 +509,30 @@ void Application::DisableVsync() {
 }
 
 std::unique_ptr<Application> Application::Create() {
+  Stopwatch stopwatch;
+  stopwatch.Start();
   auto application = std::unique_ptr<Application>(new Application());
-  auto maybe_error = application->InitializeWindow();
+  application->state().initialization_times.total.start = stopwatch.GetElapsedMicros();
+
+  auto maybe_error = application->InitializeWindow(stopwatch);
+  if (maybe_error) {
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                             "AimForge Window Initialization Error",
+                             maybe_error->c_str(),
+                             nullptr);
+    return {};
+  }
+
+  maybe_error = application->InitializeCritical(stopwatch);
   if (maybe_error) {
     SDL_ShowSimpleMessageBox(
         SDL_MESSAGEBOX_ERROR, "AimForge Initialization Error", maybe_error->c_str(), nullptr);
     return {};
   }
 
-  int rc = application->Initialize();
-  if (rc != 0) {
-    exit(rc);
-  }
+  application->Initialize();
   application->logger()->flush();
+  application->state().initialization_times.total.end = stopwatch.GetElapsedMicros();
   return application;
 }
 

@@ -37,4 +37,6 @@ void OpenFolderInExplorer(const std::filesystem::path& path);
 
 void MoveFileToTrash(const std::filesystem::path& path);
 
+bool CreateDirectories(const std::filesystem::path& path);
+
 }  // namespace aim

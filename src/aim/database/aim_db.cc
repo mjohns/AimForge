@@ -279,20 +279,52 @@ class AimDbImpl : public AimDb {
 
     if (rc != SQLITE_OK) {
       Logger::get()->warn("Cannot open aim db: {}", sqlite3_errmsg(db_));
+      initialization_error_ = std::format("Cannot open AimDb at path \"{}\".\nsqlite_error: {}",
+                                          db_path.string(),
+                                          sqlite3_errmsg(db_));
       sqlite3_close(db_);
       db_ = nullptr;
       return;
     }
 
-    ExecuteSqliteQuery(db_, kCreateScenariosTable);
-    ExecuteSqliteQuery(db_, kCreateScenariosByNameIndex);
-    ExecuteSqliteQuery(db_, kCreatePlaylistsTable);
-    ExecuteSqliteQuery(db_, kCreatePlaylistsByNameIndex);
-    ExecuteSqliteQuery(db_, kCreateStatsTable);
-    ExecuteSqliteQuery(db_, kCreatePlayTimeTable);
-    ExecuteSqliteQuery(db_, kCreateRecentViewsTable);
-    ExecuteSqliteQuery(db_, kCreateRecentIdViewsTable);
-    ExecuteSqliteQuery(db_, kCreateLabeledItemsTable);
+    std::string error_message;
+    if (!ExecuteSqliteQuery(db_, kCreateScenariosTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreateScenariosByNameIndex, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreatePlaylistsTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreatePlaylistsByNameIndex, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreateStatsTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreatePlayTimeTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreateRecentViewsTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreateRecentIdViewsTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+    if (!ExecuteSqliteQuery(db_, kCreateLabeledItemsTable, &error_message)) {
+      initialization_error_ = error_message;
+    }
+  }
+
+  std::optional<std::string> GetInitializationError() override {
+    if (initialization_error_) {
+      return initialization_error_;
+    }
+    if (db_ == nullptr) {
+      return "Unable to create AimDb.";
+    }
+    return {};
   }
 
   i64 CreatePlaylistEntry(const std::string& name) {
@@ -893,6 +925,8 @@ class AimDbImpl : public AimDb {
   std::unordered_map<std::string, i64> partial_scenario_id_map_;
   std::unordered_map<std::string, i64> partial_playlist_id_map_;
   sqlite3* db_ = nullptr;
+
+  std::optional<std::string> initialization_error_;
 };
 
 }  // namespace
