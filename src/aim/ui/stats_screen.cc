@@ -237,14 +237,6 @@ class StatsScreen : public UiScreen {
     if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
     }
-
-    ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 2);
-    if (ImGui::Selectable(std::format("{} Restart", kIconRestartAlt).c_str(), false)) {
-      app_.RequestRestart();
-    }
-    if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
-      app_.RequestExit();
-    }
   }
 
   void DrawHistoryPanel() {
