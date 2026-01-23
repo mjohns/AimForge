@@ -58,6 +58,9 @@ class BundleFunctionalTest : public ::testing::Test {
   std::unique_ptr<PlaylistManager> playlist_manager_;
   std::unique_ptr<BundleManager> bundle_manager_;
 
+  std::filesystem::path base_bundle_path_;
+  std::filesystem::path user_bundle_path_;
+
   PlaylistDef PlaylistWithItems(const std::vector<std::string> scenario_names) {
     PlaylistDef def;
     for (const std::string& name : scenario_names) {
@@ -100,6 +103,14 @@ class BundleFunctionalTest : public ::testing::Test {
     return result;
   }
 
+  std::filesystem::path BaseBundlePath(const std::string& bundle_name) {
+    return base_bundle_path_ / (bundle_name + ".bundle");
+  }
+
+  std::filesystem::path UserBundlePath(const std::string& bundle_name) {
+    return user_bundle_path_ / (bundle_name + ".bundle");
+  }
+
   void SetUp() override {
     std::filesystem::path base_temp_path = std::filesystem::temp_directory_path();
 
@@ -120,6 +131,9 @@ class BundleFunctionalTest : public ::testing::Test {
     auto base_path = temp_dir_path_ / "base";
     auto user_path = temp_dir_path_ / "user";
     fs_ = std::make_unique<FileSystem>(base_path, user_path);
+    user_bundle_path_ = fs_->GetUserDataPath("bundles");
+    base_bundle_path_ = fs_->GetBasePath("resources/bundles");
+
     std::filesystem::create_directory(base_path);
     std::filesystem::create_directory(user_path);
 
@@ -131,8 +145,8 @@ class BundleFunctionalTest : public ::testing::Test {
     scenario_manager_->RegisterRenameListener(
         std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
 
-    std::filesystem::create_directory(fs_->GetUserDataPath("bundles"));
-    std::filesystem::create_directory(fs_->GetBasePath("bundles"));
+    CreateDirectories(user_bundle_path_);
+    CreateDirectories(base_bundle_path_);
   }
 
   void TearDown() override {
@@ -387,9 +401,9 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
   BundleFile other_bundle;
   other_bundle.add_playlists()->set_name("Playlist3");
 
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetBasePath("bundles/AF.bundle"), af_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/USER.bundle"), user_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/OTHER.bundle"), other_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(BaseBundlePath("AF"), af_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("USER"), user_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("OTHER"), other_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
@@ -413,7 +427,7 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
 
   BundleFile new_bundle;
   new_bundle.add_playlists()->set_name("Playlist4");
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/NEW.bundle"), new_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("NEW"), new_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
@@ -443,8 +457,8 @@ TEST_F(BundleFunctionalTest, TestUpdateBundleInfo) {
   BundleFile user_bundle;
   user_bundle.add_playlists()->set_name("Playlist2");
 
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetBasePath("bundles/AF.bundle"), af_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/USER.bundle"), user_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(BaseBundlePath("AF"), af_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("USER"), user_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
@@ -476,8 +490,8 @@ TEST_F(BundleFunctionalTest, TestDeleteBundle) {
   BundleFile user_bundle;
   user_bundle.add_playlists()->set_name("Playlist2");
 
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetBasePath("bundles/AF.bundle"), af_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(fs_->GetUserDataPath("bundles/USER.bundle"), user_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(BaseBundlePath("AF"), af_bundle));
+  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("USER"), user_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
