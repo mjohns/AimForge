@@ -327,6 +327,43 @@ class ScenarioEditorScreen : public UiScreen {
       DrawMainEditor();
     }
     ImGui::End();
+
+    if (comparison_window_open_) {
+      if (ImGui::Begin("Compare", &comparison_window_open_)) {
+        DrawComparisonWindow();
+      }
+      ImGui::End();
+    }
+  }
+
+  void DrawComparisonWindow() {
+    ImGui::IdGuard cid("ComparisonWindow");
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Scenario");
+    ImGui::SameLine();
+    ImGui::InputText("##CompareScenario", &comparison_scenario_);
+    auto matching_scenario = app_.scenario_manager().GetScenario(comparison_scenario_);
+    if (!matching_scenario && comparison_scenario_.size() > 0) {
+      // Show search results for scenarios.
+      int num_matches = 0;
+      auto search_words = GetSearchWords(comparison_scenario_);
+      ImGui::Indent();
+      for (const std::string& scenario_name : *app_.scenario_manager().scenario_names()) {
+        if (num_matches > 15) {
+          break;
+        }
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          num_matches++;
+          if (ImGui::Button(scenario_name)) {
+            comparison_scenario_ = scenario_name;
+          }
+        }
+      }
+      if (num_matches == 0) {
+        ImGui::Text("No matching scenarios found");
+      }
+      ImGui::Unindent();
+    }
   }
 
   void DrawDetailsEditor() {
@@ -411,6 +448,14 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::Button("View Json")) {
       SetErrorMessage(MessageToJson(def_, 6));
     }
+
+    if (ImGui::Button("Compare")) {
+      comparison_window_open_ = !comparison_window_open_;
+    }
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Open a window displaying values from another scenario. Useful if you want to copy the "
+        "strafe patterns from another scenario.");
   }
 
   // Returns whether the screen should close
@@ -2749,6 +2794,9 @@ class ScenarioEditorScreen : public UiScreen {
 
   bool editing_room_ = false;
   bool editing_description_ = false;
+
+  bool comparison_window_open_ = false;
+  std::string comparison_scenario_;
 };
 
 }  // namespace

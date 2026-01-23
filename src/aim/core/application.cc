@@ -384,8 +384,6 @@ void Application::Initialize() {
 
   state_->initialization_times.load_bundles.start = stopwatch.GetElapsedMicros();
   bundle_manager_->LoadBundlesFromDisk();
-  // playlist_manager_->LoadPlaylistsFromDisk();
-  // scenario_manager_->LoadScenariosFromDisk();
   state_->initialization_times.load_bundles.end = stopwatch.GetElapsedMicros();
 
   scenario_manager_->RegisterRenameListener(
