@@ -23,11 +23,11 @@ constexpr const float kDefaultDpi = 800;
 
 Settings GetDefaultSettings() {
   Settings settings;
-  settings.set_dpi(kDefaultDpi);
   settings.set_cm_per_360(45);
   settings.set_current_crosshair_name("AF Dot");
   settings.set_crosshair_size(15);
   settings.mutable_health_bar()->set_show(true);
+  settings.set_theme_name("AF Concrete");
 
   Keybinds* binds = settings.mutable_keybinds();
   binds->mutable_fire()->set_mapping1("Left Click");
