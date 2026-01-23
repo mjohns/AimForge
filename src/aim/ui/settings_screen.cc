@@ -187,11 +187,13 @@ class SettingsScreen : public UiScreen {
                 HealthBarSettings, updater_.settings.mutable_health_bar(), height_above_target));
 
         ImGui::Unindent();
-
-        if (ImGui::Button("Open folder")) {
-          OpenFileInExplorer(app_.file_system()->GetUserDataPath("settings.json"));
-        }
       }
+
+      if (ImGui::Button("Open folder")) {
+        OpenFolderInExplorer(app_.file_system()->GetUserDataPath());
+      }
+      ImGui::HelpTooltip(
+          std::format("Open \"{}\"", app_.file_system()->GetUserDataPath().string()));
 
       ImGui::EndTabItem();
     }

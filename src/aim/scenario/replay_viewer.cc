@@ -44,7 +44,7 @@ class ReplayViewerScreen : public Screen {
     projection_ = GetPerspectiveTransformation(app_.screen_info(), replay->room.horizontal_fov());
   }
 
-  void OnEvent(const SDL_Event& event, bool user_is_typing) {
+  void OnEvent(const SDL_Event& event, bool user_is_typing) override {
     if (IsEscapeKeyDown(event)) {
       PopSelf();
     }

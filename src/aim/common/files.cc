@@ -7,6 +7,9 @@
 
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
 #include "aim/common/log.h"
 #include "google/protobuf/json/json.h"
@@ -160,17 +163,16 @@ void OpenFileInExplorer(const std::filesystem::path& path) {
 }
 
 void OpenFolderInExplorer(const std::filesystem::path& fs_path) {
-  std::string path = fs_path.string();
+  std::ostringstream cmd;
 #ifdef _WIN32
-  std::string command = "explorer " + path;
-  std::system(command.c_str());
+  cmd << "explorer";
 #elif __APPLE__
-  std::string command = "open " + path;
-  std::system(command.c_str());
+  cmd << "open";
 #else
-  std::string command = "xdg-open " + path;
-  std::system(command.c_str());
+  cmd << "xdg-open";
 #endif
+  cmd << " " << std::quoted(fs_path.string());
+  std::system(cmd.str().c_str());
 }
 
 void MoveFileToTrash(const std::filesystem::path& fs_path) {

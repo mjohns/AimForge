@@ -10,18 +10,15 @@ find_package(OpenGL REQUIRED)
 
 target_link_libraries(${NAME}
   PUBLIC SDL3::SDL3
-         SDL3_mixer::SDL3_mixer
-         SDL3_image::SDL3_image
-         stb
-         json
-         glm::glm-header-only
-         imgui
-         implot
-         glad
-         sqlite3
-         protobuf::libprotobuf
-         spdlog
-         ${OPENGL_LIBRARIES})
+          SDL3_mixer::SDL3_mixer
+          SDL3_image::SDL3_image
+          json
+          glm::glm-header-only
+          imgui
+          implot
+          sqlite3
+          protobuf::libprotobuf
+          spdlog)
 
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 

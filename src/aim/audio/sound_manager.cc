@@ -1,5 +1,6 @@
 #include "sound_manager.h"
 
+#include "SDL3_mixer/SDL_mixer.h"
 #include "glm/common.hpp"
 
 namespace aim {

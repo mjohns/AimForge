@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "SDL3_mixer/SDL_mixer.h"
+
 namespace aim {
 
 std::unique_ptr<Sound> Sound::Load(const std::filesystem::path& sound_path) {

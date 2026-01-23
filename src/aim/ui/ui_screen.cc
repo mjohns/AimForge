@@ -36,6 +36,7 @@ void UiScreen::OnTick() {
 
 void UiScreen::Render() {
   app_.Render();
+  app_.logger()->flush();
 }
 
 void UiScreen::OnAttach() {

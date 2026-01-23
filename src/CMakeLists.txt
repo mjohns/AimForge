@@ -1,7 +1,6 @@
 set(NAME "AimForge")
 
 add_subdirectory(aim)
-
 add_executable(
     ${NAME}
     main.cc )
@@ -17,7 +16,7 @@ if(WIN32)
     target_link_libraries(${NAME} PRIVATE shell32)
 endif(WIN32)
 
-target_link_libraries(${NAME} PUBLIC aim SDL3::SDL3 imgui glm::glm-header-only)
+target_link_libraries(${NAME} PUBLIC aim absl::cleanup SDL3::SDL3 imgui glm::glm-header-only)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set (OUTPUT_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
