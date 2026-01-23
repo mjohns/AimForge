@@ -38,6 +38,80 @@ enum class AppScreen : int {
   BUNDLES = 4,
 };
 
+class SetInitialDpiDialog {
+ public:
+  void NotifyOpen() {
+    if (!is_open_) {
+      open_ = true;
+    }
+  }
+
+  std::optional<int> Draw() {
+    const char* popup_id = "SetDpiDialog";
+    ImGui::IdGuard cid("SetInitialDpiDialog");
+    std::optional<int> set_dpi;
+    if (is_open_) {
+      ImGui::SetNextWindowPos(
+          ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+      if (ImGui::BeginPopupModal(popup_id,
+                                 &is_open_,
+                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Select Mouse DPI");
+        ImGui::SameLine();
+        ImGui::HelpMarker("DPI is used to calculate sensitivity given a cm/360 value.");
+
+        if (ImGui::Button("400")) {
+          set_dpi = 400;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("800")) {
+          set_dpi = 800;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("1600")) {
+          set_dpi = 1600;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("3200")) {
+          set_dpi = 3200;
+        }
+
+        ImGui::InputInt("##DpiInput", &dpi_input_value_, 100, 200);
+        ImGui::SameLine();
+        bool is_valid = dpi_input_value_ > 0;
+        if (!is_valid) {
+          ImGui::BeginDisabled();
+        }
+        if (ImGui::Button("Set")) {
+          set_dpi = dpi_input_value_;
+        }
+        if (!is_valid) {
+          ImGui::EndDisabled();
+        }
+
+        if (set_dpi) {
+          ImGui::CloseCurrentPopup();
+          is_open_ = false;
+        }
+        ImGui::EndPopup();
+      }
+    }
+    if (open_) {
+      ImGui::OpenPopup(popup_id);
+      open_ = false;
+      is_open_ = true;
+    }
+    return set_dpi;
+  }
+
+ private:
+  bool open_ = false;
+  bool is_open_ = false;
+  int dpi_input_value_ = 800;
+};
+
 class HomeScreen : public UiScreen {
  public:
   explicit HomeScreen(Application& app) : UiScreen(app) {
@@ -131,6 +205,18 @@ class HomeScreen : public UiScreen {
 
   void DrawScreenInternal() {
     ImGui::IdGuard cid("HomePage");
+
+    std::optional<int> set_dpi = set_dpi_dialog_.Draw();
+    if (set_dpi) {
+      auto updater = app_.settings_manager().CreateUpdater();
+      updater.settings.set_dpi(*set_dpi);
+      updater.SaveIfChangesMade("");
+    }
+
+    Settings settings = app_.settings_manager().GetCurrentSettings();
+    if (settings.dpi() <= 0) {
+      set_dpi_dialog_.NotifyOpen();
+    }
 
     DrawTopBar(this);
     ImGui::Spacing();
@@ -422,6 +508,8 @@ class HomeScreen : public UiScreen {
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component1_;
   std::unique_ptr<ScenarioBrowserComponent> scenario_browser_component2_;
   std::unique_ptr<ScenarioBrowserComponent> quick_access_scenario_browser_component_;
+  bool request_dpi_ = false;
+  SetInitialDpiDialog set_dpi_dialog_;
 };
 
 }  // namespace
