@@ -9,7 +9,7 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/stats_manager.h"
-#include "aim/ui/scenario_editor_screen.h"
+#include "aim/editor/scenario_editor_screen.h"
 #include "imgui.h"
 
 namespace aim {

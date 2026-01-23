@@ -16,7 +16,7 @@
 #include "aim/ui/bundle_ui.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/playlist_ui.h"
-#include "aim/ui/scenario_editor_screen.h"
+#include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/stats_screen.h"

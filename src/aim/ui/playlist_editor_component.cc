@@ -8,7 +8,7 @@
 #include "aim/common/search.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/playlist_manager.h"
-#include "aim/ui/scenario_editor_screen.h"
+#include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/search_selector.h"
 #include "imgui.h"
 

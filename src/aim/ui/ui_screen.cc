@@ -6,7 +6,7 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/ui/quick_settings_screen.h"
-#include "aim/ui/scenario_editor_screen.h"
+#include "aim/editor/scenario_editor_screen.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 

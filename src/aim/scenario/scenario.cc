@@ -27,7 +27,7 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/ui/quick_settings_screen.h"
-#include "aim/ui/scenario_editor_screen.h"
+#include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/ui_screen.h"
 #include "glm/mat4x4.hpp"
