@@ -703,4 +703,14 @@ static void InputStoredColor(const std::string& id, aim::StoredColor* stored_col
                     PROTO_FLOAT_FIELD(aim::StoredColor, stored_color, multiplier));
 }
 
+static void SpacedSeparator() {
+  ImGui::Spacing();
+  ImGui::Separator();
+  ImGui::Spacing();
+}
+
+static float GetDefaultCharSizeX() {
+  return ImGui::CalcTextSize("A").x;
+}
+
 }  // namespace ImGui
