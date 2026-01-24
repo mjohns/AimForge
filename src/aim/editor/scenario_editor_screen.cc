@@ -21,6 +21,7 @@
 #include "aim/core/settings_manager.h"
 #include "aim/editor/profile_list_editor.h"
 #include "aim/editor/scenario_editor_common.h"
+#include "aim/editor/target_editor.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "aim/scenario/scenario.h"
@@ -30,105 +31,6 @@
 
 namespace aim {
 namespace {
-
-struct BoundsDimensions {
-  bool draw_width = true;
-  bool draw_height = true;
-  bool draw_depth = true;
-};
-
-void Line() {
-  ImGui::Spacing();
-  ImGui::Separator();
-  ImGui::Spacing();
-}
-
-const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
-    {Room::kSimpleRoom, "Box"},
-    {Room::kCylinderRoom, "Cylinder"},
-    {Room::kBarrelRoom, "Barrel"},
-};
-
-const std::vector<std::pair<RegionLength::TypeCase, std::string>> kRegionLengthTypes{
-    {RegionLength::kValue, "value"},
-    {RegionLength::kXPercentValue, "width%"},
-    {RegionLength::kYPercentValue, "height%"},
-    {RegionLength::kDepthPercentValue, "depth%"},
-};
-
-enum class TimeOrDistance { TIME, DISTANCE };
-const std::vector<std::pair<TimeOrDistance, std::string>> kTimeOrDistance{
-    {TimeOrDistance::DISTANCE, "Distance"},
-    {TimeOrDistance::TIME, "Time"},
-};
-
-const std::vector<std::pair<Direction, std::string>> kLeftRightDirections{
-    {Direction::DIRECTION_POSITIVE, "Right"},
-    {Direction::DIRECTION_NEGATIVE, "Left"},
-    {Direction::DIRECTION_IN, "Towards center"},
-    {Direction::DIRECTION_OUT, "Away from center"},
-    {Direction::DIRECTION_RANDOM, "Random"},
-};
-
-const std::vector<std::pair<Direction, std::string>> kUpDownDirections{
-    {Direction::DIRECTION_POSITIVE, "Up"},
-    {Direction::DIRECTION_NEGATIVE, "Down"},
-    {Direction::DIRECTION_IN, "Towards center"},
-    {Direction::DIRECTION_OUT, "Away from center"},
-    {Direction::DIRECTION_RANDOM, "Random"},
-};
-
-const std::vector<std::pair<Direction, std::string>> kForwardBackDirections{
-    {Direction::DIRECTION_POSITIVE, "Forward"},
-    {Direction::DIRECTION_NEGATIVE, "Back"},
-    {Direction::DIRECTION_IN, "Towards center"},
-    {Direction::DIRECTION_OUT, "Away from center"},
-    {Direction::DIRECTION_RANDOM, "Random"},
-};
-
-const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
-    {ShotType::kClickSingle, "Click"},
-    {ShotType::kTrackingInvincible, "Tracking"},
-    {ShotType::kTrackingKill, "Tracking kill"},
-    {ShotType::kPoke, "Poke"},
-    {ShotType::kTrackingProximity, "Proximity tracking"},
-    {ShotType::kClickMulti, "Multi click"},
-};
-
-const std::vector<std::pair<ShotType::TypeCase, std::string>> kSingleTargetTrackingShotTypes{
-    {ShotType::kTrackingInvincible, "Tracking"},
-    {ShotType::kTrackingProximity, "Proximity tracking"},
-};
-
-const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
-    ScenarioDef::kCenteringDef,
-    ScenarioDef::kWallArcDef,
-    ScenarioDef::kCircleDef,
-    ScenarioDef::kSineDef,
-};
-
-const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
-    {ScenarioDef::kStaticDef, "Static"},
-    {ScenarioDef::kStrafeDef, "Strafe"},
-    {ScenarioDef::kBounceDef, "Bounce"},
-    {ScenarioDef::kLinearDef, "Linear"},
-    {ScenarioDef::kReferenceDef, "Reference"},
-    {ScenarioDef::kWallWanderDef, "Wall Wander"},
-    {ScenarioDef::kCenteringDef, "Centering"},
-    {ScenarioDef::kWaypointDef, "Waypoint"},
-    {ScenarioDef::kBarrelDef, "Barrel"},
-    {ScenarioDef::kCircleDef, "Circle"},
-    {ScenarioDef::kWallArcDef, "Wall Arc"},
-    {ScenarioDef::kSineDef, "Sine"},
-    {ScenarioDef::kAngleStrafeDef, "Wall Strafe"},
-};
-
-const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
-    {TargetRegion::kRectangle, "Rectangle"},
-    {TargetRegion::kCircle, "Circle"},
-    {TargetRegion::kEllipse, "Ellipse"},
-    {TargetRegion::kPoint, "Point"},
-};
 
 Room GetDefaultSimpleRoom() {
   Room r;
@@ -257,7 +159,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::EndChild();
 
       ImGui::TableNextColumn();
-      DrawTargetEditor();
+      DrawTargetEditor(def_);
 
       ImGui::EndTable();
     }
@@ -381,7 +283,7 @@ class ScenarioEditorScreen : public UiScreen {
       def_.clear_end_score();
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Overrides");
     ImGui::Indent();
@@ -393,14 +295,14 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker("Apply and remove the overrides.");
     ImGui::Unindent();
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Level overrides");
     ImGui::Indent();
     DrawOverridesEditor("LevelOverrides", def_.mutable_level_overrides(), /*is_levels=*/true);
     ImGui::Unindent();
 
-    Line();
+    ImGui::SpacedSeparator();
 
     if (ImGui::Button("Edit room")) {
       editing_room_ = true;
@@ -410,7 +312,7 @@ class ScenarioEditorScreen : public UiScreen {
       editing_description_ = true;
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     if (original_name_.has_value()) {
       if (ImGui::Button("Make changes in new copy")) {
@@ -508,9 +410,9 @@ class ScenarioEditorScreen : public UiScreen {
       }
     }
 
-    Line();
+    ImGui::SpacedSeparator();
     DrawShotTypeEditor(is_single_target_tracking);
-    Line();
+    ImGui::SpacedSeparator();
 
     if (scenario_type == ScenarioDef::kStaticDef) {
       DrawStaticEditor();
@@ -619,7 +521,7 @@ class ScenarioEditorScreen : public UiScreen {
       return;
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     // Make sure only the appropriate fields are set on the def.
     ScenarioDef old_def = def_;
@@ -659,7 +561,7 @@ class ScenarioEditorScreen : public UiScreen {
       }
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Overrides");
     ImGui::Indent();
@@ -835,7 +737,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(CircleScenarioDef, &d, switch_after_seconds));
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::InputFloat(ImGui::InputFloatParams("StretchY")
                           .set_label("Stretch Y")
@@ -856,7 +758,7 @@ class ScenarioEditorScreen : public UiScreen {
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(CircleScenarioDef, &d, stretch_x));
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Depth");
@@ -908,7 +810,7 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawWallWanderProfile, this));
     ImGui::Unindent();
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial target location");
@@ -957,7 +859,7 @@ class ScenarioEditorScreen : public UiScreen {
         "UpDownDirectionTypeDropdown", &up_down_direction_type, kUpDownDirections, char_x_ * 20);
     d.set_up_down_initial_direction(up_down_direction_type);
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial target location");
@@ -999,7 +901,7 @@ class ScenarioEditorScreen : public UiScreen {
       region->mutable_inner_diameter()->set_x_percent_value(0.6);
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Initial target location");
@@ -1075,7 +977,7 @@ class ScenarioEditorScreen : public UiScreen {
       d.clear_relative_bounds();
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
                           .set_label("Time scale multiplier")
@@ -1104,7 +1006,7 @@ class ScenarioEditorScreen : public UiScreen {
         "Scale all the distances in the profiles by the given multiplier. To reduce the distance "
         "by half use 0.5");
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Left/right profiles");
     ImGui::Indent();
@@ -1127,7 +1029,7 @@ class ScenarioEditorScreen : public UiScreen {
                               char_x_ * 18);
     d.set_left_right_initial_direction(left_right_direction);
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Up/down profiles");
     ImGui::Indent();
@@ -1149,7 +1051,7 @@ class ScenarioEditorScreen : public UiScreen {
     d.set_up_down_initial_direction(up_down_direction);
 
     if (d.bounds().has_depth()) {
-      Line();
+      ImGui::SpacedSeparator();
       ImGui::Text("Forward/back profiles");
       ImGui::Indent();
       DrawProfileList(
@@ -1176,7 +1078,7 @@ class ScenarioEditorScreen : public UiScreen {
       d.clear_forward_back_initial_direction();
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     bool use_target_placement = d.has_target_placement_strategy();
     ImGui::AlignTextToFramePadding();
@@ -1243,7 +1145,7 @@ class ScenarioEditorScreen : public UiScreen {
     dimensions.draw_height = false;
     DrawBoundsEditor("##Bounds", d.mutable_bounds(), dimensions);
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Floor height");
@@ -1271,7 +1173,7 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawBounceProfile, this));
     ImGui::Unindent();
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
                           .set_label("Time scale multiplier")
@@ -1287,7 +1189,7 @@ class ScenarioEditorScreen : public UiScreen {
         "Scale all the times in the profiles by the given multiplier. To reduce the times by "
         "half use 0.5");
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Left/right profiles");
     ImGui::Indent();
@@ -1311,7 +1213,7 @@ class ScenarioEditorScreen : public UiScreen {
     d.set_left_right_initial_direction(left_right_direction);
 
     if (d.bounds().has_depth()) {
-      Line();
+      ImGui::SpacedSeparator();
       ImGui::Text("Forward/back profiles");
       ImGui::Indent();
       DrawProfileList(
@@ -1338,7 +1240,7 @@ class ScenarioEditorScreen : public UiScreen {
       d.clear_forward_back_initial_direction();
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     bool use_target_placement = d.has_target_placement_strategy();
     ImGui::AlignTextToFramePadding();
@@ -1363,7 +1265,7 @@ class ScenarioEditorScreen : public UiScreen {
       w.add_profiles();
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::InputFloat(ImGui::InputFloatParams("DistanceMult")
                           .set_label("Distance multiplier")
@@ -1377,7 +1279,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("Multiply all strafe distances by the provided value");
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::Text("Strafe profiles");
     ImGui::Indent();
@@ -1390,7 +1292,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::Spacing();
 
-    Line();
+    ImGui::SpacedSeparator();
 
     bool use_target_placement = w.has_target_placement_strategy();
     ImGui::AlignTextToFramePadding();
@@ -1603,7 +1505,7 @@ class ScenarioEditorScreen : public UiScreen {
                     std::bind_front(&ScenarioEditorScreen::DrawTargetRegion, this, support_depth));
     ImGui::Unindent();
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Min distance");
@@ -2081,7 +1983,7 @@ class ScenarioEditorScreen : public UiScreen {
       editing_room_ = false;
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     Room& room = *def_.mutable_room();
 
@@ -2195,7 +2097,7 @@ class ScenarioEditorScreen : public UiScreen {
       }
     }
 
-    Line();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Camera position");
@@ -2263,249 +2165,6 @@ class ScenarioEditorScreen : public UiScreen {
     }
 
     ImGui::End();
-  }
-
-  void DrawTargetEditor() {
-    ImGui::IdGuard cid("TargetEditor");
-    TargetDef* t = def_.mutable_target_def();
-
-    bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, def_.type_case());
-    if (is_single_target_tracking) {
-      if (t->profiles_size() == 0) {
-        t->add_profiles()->set_speed(40);
-      }
-      if (t->profiles_size() > 1) {
-        TargetProfile first_profile = t->profiles(0);
-        t->clear_profiles();
-        *t->add_profiles() = first_profile;
-      }
-
-      TargetProfile p = t->profiles(0);
-
-      t->Clear();
-      *t->add_profiles() = p;
-      t->set_num_targets(1);
-
-      DrawTargetProfile(t->mutable_profiles(0));
-      return;
-    }
-
-    int num_targets = t->num_targets();
-    if (num_targets <= 0) {
-      num_targets = 1;
-    }
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Number");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 8);
-    ImGui::InputInt("##NumberEntry", &num_targets, 1, 1);
-    t->set_num_targets(num_targets);
-
-    if (t->profiles_size() == 0) {
-      t->add_profiles();
-    }
-
-    Line();
-
-    ImGui::Text("Target profiles");
-    ImGui::Indent();
-    DrawProfileList("ProfileList",
-                    "Profile",
-                    t->mutable_target_order(),
-                    t->mutable_profiles(),
-                    std::bind_front(&ScenarioEditorScreen::DrawTargetProfile, this));
-    ImGui::Unindent();
-
-    Line();
-
-    ImGui::AlignTextToFramePadding();
-
-    ImGui::Text("Remove closest target on miss");
-    ImGui::SameLine();
-    bool remove_closest = t->remove_closest_on_miss();
-    ImGui::Checkbox("##RemoveClosest", &remove_closest);
-    t->set_remove_closest_on_miss(remove_closest);
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Newest target is ghost");
-    ImGui::SameLine();
-    bool is_ghost = t->newest_target_is_ghost();
-    ImGui::Checkbox("##IsGhost", &is_ghost);
-    t->set_newest_target_is_ghost(is_ghost);
-    ImGui::SameLine();
-    ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
-
-    Line();
-
-    ImGui::InputFloat(ImGui::InputFloatParams("NewTargetDelaySeconds")
-                          .set_label("New target delay")
-                          .set_is_optional()
-                          .set_zero_is_unset()
-                          .set_step(0.05, 0.25)
-                          .set_min(0.01)
-                          .set_precision(2)
-                          .set_default(0.2)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TargetDef, t, new_target_delay_seconds));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("RemoveTargetAfterSeconds")
-                          .set_label("Remove after time")
-                          .set_is_optional()
-                          .set_zero_is_unset()
-                          .set_step(0.05, 0.25)
-                          .set_min(0.01)
-                          .set_precision(2)
-                          .set_default(0.2)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TargetDef, t, remove_target_after_seconds));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("StaggerInitialTargetsSeconds")
-                          .set_label("Initial stagger time")
-                          .set_is_optional()
-                          .set_zero_is_unset()
-                          .set_step(0.05, 0.25)
-                          .set_min(0.01)
-                          .set_precision(2)
-                          .set_default(0.2)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TargetDef, t, stagger_initial_targets_seconds));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Time in seconds between each target being added at the start of the scenario.");
-  }
-
-  void DrawTargetProfile(TargetProfile* profile) {
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Radius")
-                                  .set_step(0.05, 0.5)
-                                  .set_min(0.01)
-                                  .set_precision(2)
-                                  .set_default(2)
-                                  .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(TargetProfile, profile, target_radius));
-
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed")
-                                  .set_step(1, 10)
-                                  .set_min(0)
-                                  .set_precision(1)
-                                  .set_zero_is_unset()
-                                  .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
-
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
-                                  .set_step(5, 50)
-                                  .set_min(1)
-                                  .set_precision(0)
-                                  .set_default(200)
-                                  .set_is_optional()
-                                  .set_width(char_x_ * 10),
-                              PROTO_JITTERED_FIELD(TargetProfile, profile, acceleration));
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Use pill shape");
-    ImGui::SameLine();
-    bool use_pill = profile->has_pill();
-    ImGui::Checkbox("##UsePill", &use_pill);
-    ImGui::SameLine();
-    ImGui::HelpMarker("Switch from sphere target to a pill (capsule) shaped target.");
-    if (use_pill) {
-      ImGui::Indent();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Height");
-      ImGui::SameLine();
-      float height = profile->pill().height();
-      if (height <= 0) {
-        height = 20;
-      }
-      ImGui::SetNextItemWidth(char_x_ * 12);
-      ImGui::InputFloat("##PillHeightEntry", &height, 0.1, 1, "%.1f");
-      profile->mutable_pill()->set_height(height);
-
-      ImGui::Unindent();
-    } else {
-      profile->clear_pill();
-    }
-
-    bool has_growth = profile->target_radius_growth_time_seconds() > 0;
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Pulse");
-    ImGui::SameLine();
-    ImGui::Checkbox("##PulseCheckbox", &has_growth);
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Target will grow to a certain size over some duration. If it is not killed by "
-        "then, it will be removed.");
-    if (has_growth) {
-      ImGui::Indent();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Time seconds");
-      ImGui::SameLine();
-      float growth_time = FirstGreaterThanZero(profile->target_radius_growth_time_seconds(), 2);
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputFloat("##GrowthTime", &growth_time, 0.1, 0.5, "%.1f");
-      profile->set_target_radius_growth_time_seconds(std::max(growth_time, 0.1f));
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Final radius");
-      ImGui::SameLine();
-      float final_radius =
-          FirstGreaterThanZero(profile->target_radius_growth_size(), profile->target_radius() * 3);
-      ImGui::SetNextItemWidth(char_x_ * 10);
-      ImGui::InputFloat("##FinalGrowthRadius", &final_radius, 0.1, 0.5, "%.1f");
-      profile->set_target_radius_growth_size(std::max(final_radius, 0.1f));
-
-      ImGui::InputFloat(
-          ImGui::InputFloatParams::WithLabelAsId("Time at final size")
-              .set_step(0.1, 0.5)
-              .set_min(0)
-              .set_precision(1)
-              .set_default(0)
-              .set_is_optional()
-              .set_width(char_x_ * 10),
-          PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_growth_final_size_time_seconds));
-      ImGui::SameLine();
-      ImGui::HelpMarker(
-          "Time target will stay at final size before being removed. Defaults to 0. i.e. remove "
-          "immediately upon reaching final size. This time is in addition to the pulse time.");
-      ImGui::Unindent();
-    } else {
-      profile->clear_target_radius_growth_time_seconds();
-      profile->clear_target_radius_growth_final_size_time_seconds();
-      profile->clear_target_radius_growth_size();
-    }
-
-    if (def_.shot_type().type_case() == ShotType::kClickMulti ||
-        def_.shot_type().type_case() == ShotType::kTrackingKill) {
-      ImGui::InputFloat(ImGui::InputFloatParams("TargetRadiusAtill")
-                            .set_label("Target radius at kill")
-                            .set_step(0.1, 0.5)
-                            .set_min(0.1)
-                            .set_precision(1)
-                            .set_default(profile->target_radius())
-                            .set_is_optional()
-                            .set_width(char_x_ * 10),
-                        PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_at_kill));
-      ImGui::SameLine();
-      ImGui::HelpMarker(
-          "The radius of the target will change to the specified value incrementally based on "
-          "how much health remains");
-    } else {
-      profile->clear_target_radius_at_kill();
-    }
-
-    ImGui::InputFloat(ImGui::InputFloatParams("HitRadiusMultiplier")
-                          .set_label("Hit radius multiplier")
-                          .set_step(0.1, 0.5)
-                          .set_min(0.1)
-                          .set_precision(2)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(TargetProfile, profile, target_hit_radius_multiplier));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Updates the target's hit radius to not match the visuals. To make the hit box twice as "
-        "large use a value of 2.");
   }
 
   void Render() override {
