@@ -1,11 +1,12 @@
 #pragma once
 
-#include <memory>
-#include <optional>
 #include <string>
+#include <utility>
+#include <vector>
 
-#include "aim/core/application.h"
-#include "aim/core/scenario_manager.h"
+#include "aim/common/field.h"
+#include "aim/common/imgui_ext.h"
+#include "aim/proto/common.pb.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/ui/ui_screen.h"
 
@@ -18,6 +19,27 @@ struct BoundsDimensions {
 };
 
 TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def);
+
+void DrawRegionLengthEditor(const std::string& id,
+                            RegionLength::TypeCase default_type,
+                            RegionLength* length,
+                            float default_value = 0,
+                            bool is_point = false);
+void DrawRegionLengthPointEditor(const std::string& id,
+                                 RegionLength::TypeCase default_type,
+                                 RegionLength* length);
+void DrawJitteredRegionLengthEditor(const std::string& id,
+                                    RegionLength::TypeCase default_type,
+                                    RegionLength* length,
+                                    RegionLength* jitter_length,
+                                    float default_value);
+void DrawOptionalRegionLengthEditor(const std::string& id,
+                                    RegionLength::TypeCase default_type,
+                                    PtrField<RegionLength> length,
+                                    float default_value);
+void DrawRegionVec2Editor(const std::string& id, RegionVec2* v);
+
+void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v);
 
 inline const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kSimpleRoom, "Box"},
