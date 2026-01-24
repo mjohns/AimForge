@@ -47,6 +47,8 @@ void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions di
 
 void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v);
 
+void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_levels = false);
+
 inline const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
     {Room::kSimpleRoom, "Box"},
     {Room::kCylinderRoom, "Cylinder"},

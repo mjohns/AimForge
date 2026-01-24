@@ -480,53 +480,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
   }
 
-  void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_levels = false) {
-    ImGui::IdGuard cid(id);
-    ImGui::InputFloat(ImGui::InputFloatParams("TargetRadiusMult")
-                          .set_label("Target radius multiplier")
-                          .set_step(0.01, 0.25)
-                          .set_min(0.01)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, target_radius_multiplier));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("SpeedMult")
-                          .set_label("Speed multiplier")
-                          .set_step(0.01, 0.25)
-                          .set_min(0.01)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, speed_multiplier));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("AccelMult")
-                          .set_label("Acceleration multiplier")
-                          .set_step(0.01, 0.25)
-                          .set_min(0.01)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, acceleration_multiplier));
-
-    ImGui::InputFloat(ImGui::InputFloatParams("TimeScale")
-                          .set_label("Time scale multiplier")
-                          .set_step(0.01, 0.25)
-                          .set_min(0.01)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, time_scale_multiplier));
-    ImGui::InputFloat(ImGui::InputFloatParams("Distance")
-                          .set_label("Distance multiplier")
-                          .set_step(0.01, 0.25)
-                          .set_min(0.01)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, distance_multiplier));
-  }
-
   void DrawRoomEditor() {
     ImGui::IdGuard cid("RoomEditor");
     ImGui::SetNextWindowBgAlpha(0.4f);

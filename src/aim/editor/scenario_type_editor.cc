@@ -964,6 +964,8 @@ void DrawScenarioTypeEditor(ScenarioDef& def, std::string* error_message_out) {
     }
   }
 
+
+
   ImGui::SpacedSeparator();
   DrawShotTypeEditor(def, is_single_target_tracking);
   ImGui::SpacedSeparator();
