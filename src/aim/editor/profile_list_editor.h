@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/proto/scenario.pb.h"
 #include "google/protobuf/message.h"

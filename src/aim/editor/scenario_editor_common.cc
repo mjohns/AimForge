@@ -4,9 +4,138 @@
 
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/editor/profile_list_editor.h"
 #include "imgui.h"
 
 namespace aim {
+namespace {
+
+void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
+  if (region->type_case() == TargetRegion::TYPE_NOT_SET) {
+    region->mutable_rectangle();
+  }
+  auto region_type = region->type_case();
+  ImGui::SimpleTypeDropdown("RegionTypeDropdown", &region_type, kRegionTypes, char_x * 15);
+
+  if (region_type == TargetRegion::kPoint) {
+    DrawRegionVec2Editor("Point", region->mutable_point());
+  }
+
+  if (region_type == TargetRegion::kRectangle) {
+    auto* t = region->mutable_rectangle();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, t->mutable_x_length(), 50);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, t->mutable_y_length(), 50);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Inner");
+    ImGui::SameLine();
+    bool use_inner = t->has_inner_x_length() || t->has_inner_y_length();
+    ImGui::Checkbox("##InnerCheckbox", &use_inner);
+    if (use_inner) {
+      ImGui::IdGuard lid("InnerInputs");
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Width");
+      ImGui::SameLine();
+      DrawRegionLengthEditor(
+          "InnerWidth", RegionLength::kXPercentValue, t->mutable_inner_x_length(), 25);
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Height");
+      ImGui::SameLine();
+      DrawRegionLengthEditor(
+          "InnterHeight", RegionLength::kYPercentValue, t->mutable_inner_y_length(), 25);
+
+      ImGui::Unindent();
+    } else {
+      t->clear_inner_x_length();
+      t->clear_inner_y_length();
+    }
+  }
+
+  if (region_type == TargetRegion::kCircle) {
+    auto* t = region->mutable_circle();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Diameter");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("Diameter", RegionLength::kXPercentValue, t->mutable_diameter(), 50);
+
+    // TODO: Optional region length
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Inner diameter");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor(
+        "InnerDiameter",
+        RegionLength::kXPercentValue,
+        PROTO_PTR_FIELD(RegionLength, CircleTargetRegion, t, inner_diameter),
+        25);
+  }
+
+  if (region_type == TargetRegion::kEllipse) {
+    auto* t = region->mutable_ellipse();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("X diameter");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("XDiameter", RegionLength::kXPercentValue, t->mutable_x_diameter(), 50);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Y diameter");
+    ImGui::SameLine();
+    DrawRegionLengthEditor("YDiameter", RegionLength::kYPercentValue, t->mutable_y_diameter(), 50);
+  }
+
+  if (support_depth) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Depth");
+    ImGui::SameLine();
+    DrawJitteredRegionLengthEditor("Depth",
+                                   RegionLength::kDepthPercentValue,
+                                   region->mutable_depth(),
+                                   region->mutable_depth_jitter(),
+                                   30);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The distance away from the wall towards the camera. The greater the value, the "
+        "further it is from the wall.");
+  } else {
+    region->clear_depth();
+    region->clear_depth_jitter();
+  }
+
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Offset");
+  ImGui::SameLine();
+  bool use_offsets = region->has_x_offset() || region->has_y_offset();
+  ImGui::Checkbox("##OffsetsCheckbox", &use_offsets);
+  if (use_offsets) {
+    ImGui::Indent();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("X offset");
+    ImGui::SameLine();
+    DrawRegionLengthPointEditor(
+        "XOffset", RegionLength::kXPercentValue, region->mutable_x_offset());
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Y offset");
+    ImGui::SameLine();
+    DrawRegionLengthPointEditor(
+        "YOffset", RegionLength::kYPercentValue, region->mutable_y_offset());
+    ImGui::Unindent();
+  } else {
+    region->clear_x_offset();
+    region->clear_y_offset();
+  }
+}
+
+}  // namespace
 
 void SetRegionLengthValue(RegionLength* length, RegionLength::TypeCase type, float value) {
   switch (type) {
@@ -172,6 +301,89 @@ void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v) {
   ImGui::InputFloat(params.set_label("Y").set_id("##YInput"), PROTO_FLOAT_FIELD(StoredVec3, v, y));
 
   ImGui::InputFloat(params.set_label("Z").set_id("##ZInput"), PROTO_FLOAT_FIELD(StoredVec3, v, z));
+}
+
+void DrawTargetPlacementStrategyEditor(const std::string& id,
+                                       TargetPlacementStrategy* s,
+                                       bool support_depth) {
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::IdGuard cid(id);
+  if (s->regions_size() == 0) {
+    s->add_regions();
+  }
+
+  ImGui::Text("Target locations");
+  ImGui::Indent();
+  DrawProfileList("RegionList",
+                  "Region",
+                  s->mutable_region_order(),
+                  s->mutable_regions(),
+                  std::bind_front(&DrawTargetRegion, char_x, support_depth));
+  ImGui::Unindent();
+
+  ImGui::SpacedSeparator();
+
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Min distance");
+  ImGui::SameLine();
+
+  DrawOptionalRegionLengthEditor(
+      "MinDistanceInput",
+      RegionLength::kXPercentValue,
+      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, min_distance),
+      1);
+  ImGui::SameLine();
+  ImGui::HelpMarker("Minimum distance between targets.");
+
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Fixed distance");
+  ImGui::SameLine();
+  DrawOptionalRegionLengthEditor(
+      "FixedDistanceInput",
+      RegionLength::kXPercentValue,
+      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target),
+      10);
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "New target will be placed at a fixed distance from the last target that was added.");
+}
+
+void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions dimensions) {
+  ImGui::IdGuard cid(id);
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Bounds");
+  ImGui::Indent();
+
+  if (dimensions.draw_width) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Width");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor("Width",
+                                   RegionLength::kXPercentValue,
+                                   PROTO_PTR_FIELD(RegionLength, Bounds, bounds, width),
+                                   90);
+  }
+
+  if (dimensions.draw_height) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Height");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor("Height",
+                                   RegionLength::kYPercentValue,
+                                   PROTO_PTR_FIELD(RegionLength, Bounds, bounds, height),
+                                   90);
+  }
+
+  if (dimensions.draw_depth) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Depth");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor("Depth",
+                                   RegionLength::kDepthPercentValue,
+                                   PROTO_PTR_FIELD(RegionLength, Bounds, bounds, depth),
+                                   40);
+  }
+  ImGui::Unindent();
 }
 
 }  // namespace aim

@@ -39,6 +39,12 @@ void DrawOptionalRegionLengthEditor(const std::string& id,
                                     float default_value);
 void DrawRegionVec2Editor(const std::string& id, RegionVec2* v);
 
+void DrawTargetPlacementStrategyEditor(const std::string& id,
+                                       TargetPlacementStrategy* s,
+                                       bool support_depth = true);
+
+void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions dimensions = {});
+
 void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v);
 
 inline const std::vector<std::pair<Room::TypeCase, std::string>> kRoomTypes{
