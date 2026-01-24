@@ -7,10 +7,14 @@
 #include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/search.h"
 #include "aim/common/util.h"
 #include "aim/common/wall.h"
+#include "aim/core/application.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/editor/profile_list_editor.h"
 #include "aim/editor/scenario_editor_common.h"
+#include "aim/scenario/scenario_overrides.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
@@ -938,73 +942,70 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
   }
 }
 
-}  // namespace
+void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_message_out) {
+  // Make sure only the appropriate fields are set on the def.
+  ScenarioDef old_def = def;
 
-void DrawScenarioTypeEditor(ScenarioDef& def, std::string* error_message_out) {
-  float char_x = ImGui::GetDefaultCharSizeX();
-  ImGui::IdGuard cid("ScenarioTypeEditor");
+  def = {};
+  def.set_description(old_def.description());
+  *def.mutable_overrides() = old_def.overrides();
+  *def.mutable_reference_def() = old_def.reference_def();
+
+  ReferenceScenarioDef& r = *def.mutable_reference_def();
   ImGui::AlignTextToFramePadding();
-  ImGui::Text("Scenario type");
+  ImGui::Text("Scenario");
   ImGui::SameLine();
+  ImGui::HelpMarker("The name of the scenario to reference");
+  ImGui::SameLine();
+  ImGui::InputText("##ScenarioReference", r.mutable_scenario_name());
 
-  if (def.type_case() == ScenarioDef::TYPE_NOT_SET) {
-    def.mutable_static_def();
-  }
-
-  auto scenario_type = def.type_case();
-  bool is_new_type = ImGui::SimpleTypeDropdown(
-      "ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x * 15);
-  InitializeScenarioType(def, scenario_type);
-
-  bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, scenario_type);
-  if (is_single_target_tracking) {
-    if (is_new_type) {
-      def.mutable_shot_type()->set_tracking_invincible(true);
-      def.clear_target_def();
+  if (app != nullptr && r.scenario_name().size() > 0) {
+    auto matching_scenario = app->scenario_manager().GetScenario(r.scenario_name());
+    if (!matching_scenario) {
+      // Show search results for scenarios.
+      int num_matches = 0;
+      auto search_words = GetSearchWords(r.scenario_name());
+      ImGui::Indent();
+      for (const std::string& scenario_name : *app->scenario_manager().scenario_names()) {
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          num_matches++;
+          if (ImGui::Button(scenario_name)) {
+            r.set_scenario_name(scenario_name);
+          }
+        }
+      }
+      if (num_matches == 0) {
+        ImGui::Text("No matching scenarios found");
+      }
+      ImGui::Unindent();
     }
   }
 
-
-
-  ImGui::SpacedSeparator();
-  DrawShotTypeEditor(def, is_single_target_tracking);
   ImGui::SpacedSeparator();
 
-  if (scenario_type == ScenarioDef::kStaticDef) {
-    DrawStaticEditor(*def.mutable_static_def());
-  }
-  if (scenario_type == ScenarioDef::kWaypointDef) {
-    DrawWaypointEditor(*def.mutable_waypoint_def());
-  }
-  if (scenario_type == ScenarioDef::kCenteringDef) {
-    DrawCenteringEditor(*def.mutable_centering_def());
-  }
-  if (scenario_type == ScenarioDef::kAngleStrafeDef) {
-    DrawAngleStrafeEditor(*def.mutable_angle_strafe_def());
-  }
-  if (scenario_type == ScenarioDef::kStrafeDef) {
-    DrawStrafeEditor(*def.mutable_strafe_def());
-  }
-  if (scenario_type == ScenarioDef::kBounceDef) {
-    DrawBounceEditor(*def.mutable_bounce_def());
-  }
-  if (scenario_type == ScenarioDef::kLinearDef) {
-    DrawLinearEditor(*def.mutable_linear_def());
-  }
-  if (scenario_type == ScenarioDef::kBarrelDef) {
-    DrawBarrelEditor(def);
-  }
-  if (scenario_type == ScenarioDef::kWallArcDef) {
-    DrawWallArcEditor(*def.mutable_wall_arc_def());
-  }
-  if (scenario_type == ScenarioDef::kWallWanderDef) {
-    DrawWallWanderEditor(*def.mutable_wall_wander_def());
-  }
-  if (scenario_type == ScenarioDef::kCircleDef) {
-    DrawCircleEditor(*def.mutable_circle_def());
-  }
-  if (scenario_type == ScenarioDef::kSineDef) {
-    DrawSineEditor(*def.mutable_sine_def());
+  ImGui::Text("Overrides");
+  ImGui::Indent();
+  DrawOverridesEditor("ReferenceOverrides", def.mutable_overrides());
+  ImGui::Unindent();
+
+  ImGui::Spacing();
+  ImGui::Spacing();
+
+  if (app != nullptr) {
+    if (ImGui::Button("Bake")) {
+      auto parent = app->scenario_manager().GetEvaluatedScenarioDef(r.scenario_name());
+      if (parent) {
+        auto overrides = def.overrides();
+        def = ApplyScenarioOverrides(*parent);
+        *def.mutable_overrides() = overrides;
+        def = ApplyScenarioOverrides(def);
+      } else {
+        *error_message_out =
+            std::format("Referenced scenario \"{}\" is invalid.", r.scenario_name());
+      }
+    }
+    ImGui::SameLine();
+    ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
   }
 }
 
@@ -1048,6 +1049,80 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
   }
   if (scenario_type == ScenarioDef::kReferenceDef) {
     def.mutable_reference_def();
+  }
+}
+
+}  // namespace
+
+void DrawScenarioTypeEditor(ScenarioDef& def, Application* app, std::string* error_message_out) {
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::IdGuard cid("ScenarioTypeEditor");
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Scenario type");
+  ImGui::SameLine();
+
+  if (def.type_case() == ScenarioDef::TYPE_NOT_SET) {
+    def.mutable_static_def();
+  }
+
+  auto scenario_type = def.type_case();
+  bool is_new_type = ImGui::SimpleTypeDropdown(
+      "ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x * 15);
+  InitializeScenarioType(def, scenario_type);
+
+  bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, scenario_type);
+  if (is_single_target_tracking) {
+    if (is_new_type) {
+      def.mutable_shot_type()->set_tracking_invincible(true);
+      def.clear_target_def();
+    }
+  }
+
+  ImGui::SpacedSeparator();
+
+  if (scenario_type != ScenarioDef::kReferenceDef) {
+    DrawShotTypeEditor(def, is_single_target_tracking);
+    ImGui::SpacedSeparator();
+  }
+
+  if (scenario_type == ScenarioDef::kReferenceDef) {
+    DrawReferenceEditor(def, app, error_message_out);
+  }
+  if (scenario_type == ScenarioDef::kStaticDef) {
+    DrawStaticEditor(*def.mutable_static_def());
+  }
+  if (scenario_type == ScenarioDef::kWaypointDef) {
+    DrawWaypointEditor(*def.mutable_waypoint_def());
+  }
+  if (scenario_type == ScenarioDef::kCenteringDef) {
+    DrawCenteringEditor(*def.mutable_centering_def());
+  }
+  if (scenario_type == ScenarioDef::kAngleStrafeDef) {
+    DrawAngleStrafeEditor(*def.mutable_angle_strafe_def());
+  }
+  if (scenario_type == ScenarioDef::kStrafeDef) {
+    DrawStrafeEditor(*def.mutable_strafe_def());
+  }
+  if (scenario_type == ScenarioDef::kBounceDef) {
+    DrawBounceEditor(*def.mutable_bounce_def());
+  }
+  if (scenario_type == ScenarioDef::kLinearDef) {
+    DrawLinearEditor(*def.mutable_linear_def());
+  }
+  if (scenario_type == ScenarioDef::kBarrelDef) {
+    DrawBarrelEditor(def);
+  }
+  if (scenario_type == ScenarioDef::kWallArcDef) {
+    DrawWallArcEditor(*def.mutable_wall_arc_def());
+  }
+  if (scenario_type == ScenarioDef::kWallWanderDef) {
+    DrawWallWanderEditor(*def.mutable_wall_wander_def());
+  }
+  if (scenario_type == ScenarioDef::kCircleDef) {
+    DrawCircleEditor(*def.mutable_circle_def());
+  }
+  if (scenario_type == ScenarioDef::kSineDef) {
+    DrawSineEditor(*def.mutable_sine_def());
   }
 }
 

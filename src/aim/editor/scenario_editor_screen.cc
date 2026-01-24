@@ -135,7 +135,10 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::TableNextColumn();
       ImGui::BeginChild("SecondColumnContainer", ImVec2(0, 0));
       std::string error_message;
-      DrawScenarioTypeEditor(def_, &error_message);
+      DrawScenarioTypeEditor(def_, &app_, &error_message);
+      if (error_message.size() > 0) {
+        SetErrorMessage(error_message);
+      }
       ImGui::EndChild();
 
       ImGui::TableNextColumn();
@@ -237,7 +240,7 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::BeginTabItem("Scenario type")) {
       ImGui::Spacing();
       std::string error_message;
-      DrawScenarioTypeEditor(compare_def, &error_message);
+      DrawScenarioTypeEditor(compare_def, /*app=*/nullptr, &error_message);
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Targets")) {
@@ -403,81 +406,11 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawReferenceEditor() {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Scenario type");
-    ImGui::SameLine();
-
-    auto scenario_type = def_.type_case();
-    ImGui::SimpleTypeDropdown("ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x_ * 15);
-    InitializeScenarioType(def_, scenario_type);
-
-    if (scenario_type != ScenarioDef::kReferenceDef) {
-      return;
+    std::string error_message;
+    DrawScenarioTypeEditor(def_, &app_, &error_message);
+    if (error_message.size() > 0) {
+      SetErrorMessage(error_message);
     }
-
-    ImGui::SpacedSeparator();
-
-    // Make sure only the appropriate fields are set on the def.
-    ScenarioDef old_def = def_;
-
-    def_ = {};
-    def_.set_description(old_def.description());
-    *def_.mutable_overrides() = old_def.overrides();
-    *def_.mutable_reference_def() = old_def.reference_def();
-
-    ReferenceScenarioDef& r = *def_.mutable_reference_def();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Scenario");
-    ImGui::SameLine();
-    ImGui::HelpMarker("The name of the scenario to reference");
-    ImGui::SameLine();
-    ImGui::InputText("##ScenarioReference", r.mutable_scenario_name());
-
-    if (r.scenario_name().size() > 0) {
-      auto matching_scenario = app_.scenario_manager().GetScenario(r.scenario_name());
-      if (!matching_scenario) {
-        // Show search results for scenarios.
-        int num_matches = 0;
-        auto search_words = GetSearchWords(r.scenario_name());
-        ImGui::Indent();
-        for (const std::string& scenario_name : *app_.scenario_manager().scenario_names()) {
-          if (StringMatchesSearch(scenario_name, search_words)) {
-            num_matches++;
-            if (ImGui::Button(scenario_name)) {
-              r.set_scenario_name(scenario_name);
-            }
-          }
-        }
-        if (num_matches == 0) {
-          ImGui::Text("No matching scenarios found");
-        }
-        ImGui::Unindent();
-      }
-    }
-
-    ImGui::SpacedSeparator();
-
-    ImGui::Text("Overrides");
-    ImGui::Indent();
-    DrawOverridesEditor("ReferenceOverrides", def_.mutable_overrides());
-    ImGui::Unindent();
-
-    ImGui::Spacing();
-    ImGui::Spacing();
-
-    if (ImGui::Button("Bake")) {
-      auto parent = app_.scenario_manager().GetEvaluatedScenarioDef(r.scenario_name());
-      if (parent) {
-        auto overrides = def_.overrides();
-        def_ = ApplyScenarioOverrides(*parent);
-        *def_.mutable_overrides() = overrides;
-        def_ = ApplyScenarioOverrides(def_);
-      } else {
-        SetErrorMessage(std::format("Referenced scenario \"{}\" is invalid.", r.scenario_name()));
-      }
-    }
-    ImGui::SameLine();
-    ImGui::HelpMarker("Expand and remove the reference. Will now be an equivalent normal scenario");
   }
 
   void DrawRoomEditor() {
