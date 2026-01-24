@@ -24,7 +24,6 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
   ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Radius")
                                 .set_step(0.05, 0.5)
                                 .set_min(0.01)
-                                .set_precision(2)
                                 .set_default(2)
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(TargetProfile, profile, target_radius));
@@ -32,7 +31,6 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
   ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed")
                                 .set_step(1, 10)
                                 .set_min(0)
-                                .set_precision(1)
                                 .set_zero_is_unset()
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
@@ -40,7 +38,6 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
   ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
                                 .set_step(5, 50)
                                 .set_min(1)
-                                .set_precision(0)
                                 .set_default(200)
                                 .set_is_optional()
                                 .set_width(char_x * 10),
@@ -104,7 +101,6 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
         ImGui::InputFloatParams::WithLabelAsId("Time at final size")
             .set_step(0.1, 0.5)
             .set_min(0)
-            .set_precision(1)
             .set_default(0)
             .set_is_optional()
             .set_width(char_x * 10),
@@ -126,7 +122,6 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
                           .set_label("Target radius at kill")
                           .set_step(0.1, 0.5)
                           .set_min(0.1)
-                          .set_precision(1)
                           .set_default(profile->target_radius())
                           .set_is_optional()
                           .set_width(char_x * 10),
@@ -143,7 +138,6 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
                         .set_label("Hit radius multiplier")
                         .set_step(0.1, 0.5)
                         .set_min(0.1)
-                        .set_precision(2)
                         .set_default(1)
                         .set_is_optional()
                         .set_width(char_x * 10),
@@ -235,7 +229,6 @@ void DrawTargetEditor(ScenarioDef& def) {
                         .set_zero_is_unset()
                         .set_step(0.05, 0.25)
                         .set_min(0.01)
-                        .set_precision(2)
                         .set_default(0.2)
                         .set_width(char_x * 10),
                     PROTO_FLOAT_FIELD(TargetDef, t, new_target_delay_seconds));
@@ -246,7 +239,6 @@ void DrawTargetEditor(ScenarioDef& def) {
                         .set_zero_is_unset()
                         .set_step(0.05, 0.25)
                         .set_min(0.01)
-                        .set_precision(2)
                         .set_default(0.2)
                         .set_width(char_x * 10),
                     PROTO_FLOAT_FIELD(TargetDef, t, remove_target_after_seconds));
@@ -257,7 +249,6 @@ void DrawTargetEditor(ScenarioDef& def) {
                         .set_zero_is_unset()
                         .set_step(0.05, 0.25)
                         .set_min(0.01)
-                        .set_precision(2)
                         .set_default(0.2)
                         .set_width(char_x * 10),
                     PROTO_FLOAT_FIELD(TargetDef, t, stagger_initial_targets_seconds));

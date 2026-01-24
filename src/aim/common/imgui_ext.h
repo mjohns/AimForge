@@ -362,11 +362,7 @@ struct InputFloatParams {
   }
 
   InputFloatParams& set_precision(int decimal_places) {
-    if (decimal_places == 0) {
-      format = "%.0f";
-    } else {
-      format = "%.3g";
-    }
+    format = "%.3g";
     return *this;
   }
 
@@ -432,7 +428,7 @@ struct InputFloatParams {
 
   float step = 1;
   float fast_step = 5;
-  const char* format = "%.0f";
+  const char* format = "%.3g";
   float width = -1;
   std::optional<float> default_value;
 
