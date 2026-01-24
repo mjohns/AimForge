@@ -3,6 +3,7 @@
 #include <string>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/proto/scenario.pb.h"
 #include "google/protobuf/message.h"
 #include "imgui.h"
 
