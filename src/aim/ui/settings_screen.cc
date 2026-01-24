@@ -129,7 +129,6 @@ class SettingsScreen : public UiScreen {
                             .set_label("Crosshair size")
                             .set_min(0.1)
                             .set_step(0.1, 1)
-                            .set_precision(1)
                             .set_default(15)
                             .set_width(char_x_ * 9),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
@@ -162,7 +161,6 @@ class SettingsScreen : public UiScreen {
                 .set_label("Width")
                 .set_min(0.1)
                 .set_step(0.1, 1)
-                .set_precision(1)
                 .set_default(6)
                 .set_width(char_x_ * 9),
             PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), width));
@@ -171,7 +169,6 @@ class SettingsScreen : public UiScreen {
                 .set_label("Height")
                 .set_min(0.1)
                 .set_step(0.1, 1)
-                .set_precision(1)
                 .set_default(1.5)
                 .set_width(char_x_ * 9),
             PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), height));
@@ -180,7 +177,6 @@ class SettingsScreen : public UiScreen {
                 .set_label("Height above target")
                 .set_min(0.1)
                 .set_step(0.1, 1)
-                .set_precision(1)
                 .set_default(0.6)
                 .set_width(char_x_ * 9),
             PROTO_FLOAT_FIELD(

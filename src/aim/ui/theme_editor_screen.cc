@@ -408,7 +408,6 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::InputFloat(ImGui::InputFloatParams("ColorMultiplier")
                           .set_step(0.01, 0.2)
-                          .set_precision(2)
                           .set_max(2)
                           .set_width(char_x_ * 10)
                           .set_zero_is_unset(),

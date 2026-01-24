@@ -83,8 +83,7 @@ void DrawRegionLengthEditor(const std::string& id,
   ImGui::IdGuard cid(id);
 
   Field<float> field = CreateFloatField(&value);
-  auto params =
-      ImGui::InputFloatParams("ValueInput").set_step(1, 5).set_precision(0).set_width(char_x * 9);
+  auto params = ImGui::InputFloatParams("ValueInput").set_step(1, 5).set_width(char_x * 9);
   if (!is_point) {
     params.set_min(0);
   }
@@ -121,14 +120,13 @@ void DrawJitteredRegionLengthEditor(const std::string& id,
   Field<float> field = CreateFloatField(&value);
   Field<float> jitter_field = CreateFloatField(&jitter_value);
 
-  auto params =
-      ImGui::InputFloatParams("ValueInput").set_step(1, 5).set_precision(0).set_width(char_x * 9);
+  auto params = ImGui::InputFloatParams("ValueInput").set_step(1, 5).set_width(char_x * 9);
 
   ImGui::InputFloat(params, field);
   ImGui::SameLine();
   ImGui::Text("+/-");
   ImGui::SameLine();
-  params.set_id("JitteredValueInput").set_precision(1).set_step(0.5, 2.5);
+  params.set_id("JitteredValueInput").set_step(0.5, 2.5);
   ImGui::InputFloat(params, jitter_field);
 
   ImGui::SameLine();

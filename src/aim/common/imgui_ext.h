@@ -361,11 +361,6 @@ struct InputFloatParams {
     return InputFloatParams(label).set_label(label);
   }
 
-  InputFloatParams& set_precision(int decimal_places) {
-    format = "%.3g";
-    return *this;
-  }
-
   InputFloatParams& set_step(float step, float fast_step) {
     this->step = step;
     this->fast_step = fast_step;
@@ -692,7 +687,6 @@ static void InputStoredColor(const std::string& id, aim::StoredColor* stored_col
   ImGui::SameLine();
   ImGui::InputFloat(ImGui::InputFloatParams("ColorMultiplier")
                         .set_step(0.01, 0.2)
-                        .set_precision(2)
                         .set_max(2)
                         .set_width(char_x * 10)
                         .set_zero_is_unset(),

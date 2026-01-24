@@ -18,7 +18,7 @@ bool SelectSensitivityVariationDialog::Draw(std::optional<float>* selected_cm_pe
                              &draw_popup_,
                              ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
                                  ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
-    ImVec2 char_size = ImGui::CalcTextSize("A");
+    float char_x = ImGui::GetDefaultCharSizeX();
     for (int i = 10; i <= 70; i += 10) {
       std::string sens1 = std::format("{}cm", i);
       std::string sens2 = std::format("{}cm", i + 5);
@@ -37,8 +37,7 @@ bool SelectSensitivityVariationDialog::Draw(std::optional<float>* selected_cm_pe
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("cm/360")
                           .set_step(1, 5)
-                          .set_precision(1)
-                          .set_width(char_size.x * 10)
+                          .set_width(char_x * 10)
                           .set_min(1),
                       CreateFloatField(&input_cm_per_360_));
     ImGui::SameLine();

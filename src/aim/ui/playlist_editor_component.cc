@@ -145,7 +145,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
                           .set_step(1, 2)
                           .set_min(2)
                           .set_default(10)
-                          .set_precision(2)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, max_level));
     ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Plays per level")
@@ -160,14 +159,12 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
                           .set_is_optional()
                           .set_step(1, 2)
                           .set_default(1)
-                          .set_precision(2)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, min_level));
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Step")
                           .set_step(0.5, 2)
                           .set_default(1)
                           .set_is_optional()
-                          .set_precision(2)
                           .set_width(char_x_ * 10),
                       PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, level_step));
   }
