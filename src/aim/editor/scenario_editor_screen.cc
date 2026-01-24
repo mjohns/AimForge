@@ -223,6 +223,30 @@ class ScenarioEditorScreen : public UiScreen {
       }
       ImGui::Unindent();
     }
+
+    auto maybe_compare_def = app_.scenario_manager().GetEvaluatedScenarioDef(comparison_scenario_);
+    if (!maybe_compare_def) {
+      return;
+    }
+
+    if (!ImGui::BeginTabBar("CompareTabBar")) {
+      return;
+    }
+    ScenarioDef compare_def = *maybe_compare_def;
+
+    if (ImGui::BeginTabItem("Scenario type")) {
+      ImGui::Spacing();
+      std::string error_message;
+      DrawScenarioTypeEditor(compare_def, &error_message);
+      ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Targets")) {
+      ImGui::Spacing();
+      DrawTargetEditor(compare_def);
+      ImGui::EndTabItem();
+    }
+
+    ImGui::EndTabBar();
   }
 
   void DrawDetailsEditor() {

@@ -703,4 +703,14 @@ static float GetDefaultCharSizeX() {
   return ImGui::CalcTextSize("A").x;
 }
 
+static void ReadonlyLabeledFloat(const std::string& label, float value, int width_multiple = 8) {
+  IdGuard cid("RoFloat_" + label);
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text(label);
+  ImGui::SameLine();
+  float char_x = GetDefaultCharSizeX();
+  ImGui::SetNextItemWidth(char_x * width_multiple);
+  ImGui::InputFloat("##ValueOut", &value, 0.0f, 0.0f, "%.3g", ImGuiInputTextFlags_ReadOnly);
+}
+
 }  // namespace ImGui
