@@ -449,6 +449,24 @@ class StatsScreen : public UiScreen {
       std::string hit_percent = GetHitPercentageString(stats);
       if (hit_percent.size() > 0) {
         ImGui::Text(hit_percent);
+        if (stats.info.has_proximity_percentiles()) {
+          std::string prox_string = "Proximity percentiles:\n";
+          auto add_percentile = [&](const std::string& percentile, u32 percent_value) {
+            prox_string += std::format("{}th: {}%\n", percentile, percent_value);
+          };
+          const auto& p = stats.info.proximity_percentiles();
+          add_percentile("90", p.p90());
+          add_percentile("80", p.p80());
+          add_percentile("70", p.p70());
+          add_percentile("60", p.p60());
+          add_percentile("50", p.p50());
+          add_percentile("40", p.p40());
+          add_percentile("30", p.p30());
+          add_percentile("20", p.p20());
+          add_percentile("10", p.p10());
+          ImGui::SameLine();
+          ImGui::HelpMarker(prox_string);
+        }
       }
     }
     auto avg_comparison = GetStatsComparison(details_.stats, details_.average_stats);
