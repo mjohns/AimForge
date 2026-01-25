@@ -37,7 +37,7 @@ class Texture {
   }
 
   ImTextureID GetImTextureId() {
-    return (ImTextureID)&texture_sampler_binding_;
+    return (ImTextureID)texture_;
   }
 
   SDL_GPUTextureSamplerBinding* texture_sampler_binding() {

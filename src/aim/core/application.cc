@@ -287,7 +287,10 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   ImGui_ImplSDLGPU3_InitInfo init_info = {};
   init_info.Device = gpu_device_;
   init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
+  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;  // Only used in multi-viewports mode.
+  init_info.SwapchainComposition =
+      SDL_GPU_SWAPCHAINCOMPOSITION_SDR;  // Only used in multi-viewports mode.
+  init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
   ImGui_ImplSDLGPU3_Init(&init_info);
 
   trace.Add("InitDone");
@@ -410,21 +413,14 @@ void Application::Render(ImVec4 clear_color) {
   SDL_GPUCommandBuffer* command_buffer = SDL_AcquireGPUCommandBuffer(gpu_device_);
 
   SDL_GPUTexture* swapchain_texture;
-  SDL_AcquireGPUSwapchainTexture(command_buffer,
-                                 sdl_window_,
-                                 &swapchain_texture,
-                                 nullptr,
-                                 nullptr);  // Acquire a swapchain texture
+  SDL_WaitAndAcquireGPUSwapchainTexture(command_buffer,
+                                        sdl_window_,
+                                        &swapchain_texture,
+                                        nullptr,
+                                        nullptr);  // Acquire a swapchain texture
 
   if (swapchain_texture != nullptr && !is_minimized) {
-    SDL_GPUColorTargetInfo color_target_info = {0};
-    color_target_info.texture = swapchain_texture;
-    color_target_info.clear_color =
-        SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
-    color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-    color_target_info.store_op = SDL_GPU_STOREOP_STORE;
-
-    // This is mandatory: call Imgui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
+    // This is mandatory: call ImGui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
     // buffer!
     ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
 

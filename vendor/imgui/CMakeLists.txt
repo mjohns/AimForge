@@ -17,9 +17,7 @@ add_library(imgui STATIC
   imgui/backends/imgui_impl_sdl3.cpp
   imgui/backends/imgui_impl_sdlgpu3_shaders.h
   imgui/backends/imgui_impl_sdlgpu3.h
-  imgui/backends/imgui_impl_sdlgpu3.cpp
-  imgui/backends/imgui_impl_opengl3.h
-  imgui/backends/imgui_impl_opengl3.cpp)
+  imgui/backends/imgui_impl_sdlgpu3.cpp)
 
 target_include_directories(imgui PUBLIC .)
 target_include_directories(imgui PUBLIC imgui)
