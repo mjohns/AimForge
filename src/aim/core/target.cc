@@ -111,7 +111,7 @@ std::optional<uint16_t> TargetManager::GetNearestHitTarget(const Camera& camera,
     }
     bool is_hit = false;
     float hit_distance;
-    float radius = target.hit_radius_multiplier * target.radius;
+    float radius = target.radius;
     if (target.is_pill) {
       Pill pill;
       pill.position = target.position;

@@ -538,9 +538,6 @@ TargetProfile Scenario::GetNextTargetProfile() {
 Target Scenario::GetTargetTemplate(const TargetProfile& profile) {
   Target target;
   target.radius = app_.rand().GetJittered(profile.target_radius(), profile.target_radius_jitter());
-  if (profile.target_hit_radius_multiplier() > 0) {
-    target.hit_radius_multiplier = profile.target_hit_radius_multiplier();
-  }
   if (profile.target_radius_at_kill() > 0) {
     RadiusAtKill k;
     k.start_radius = target.radius;

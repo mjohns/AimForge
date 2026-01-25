@@ -57,7 +57,6 @@ struct Target {
   glm::vec3 GetWallPosition3();
 
   float radius = 1.0f;
-  float hit_radius_multiplier = 1.0f;
 
   std::shared_ptr<MovementController> movement_controller;
   float speed = 0;

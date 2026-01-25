@@ -3061,7 +3061,6 @@ class TargetProfile final : public ::google::protobuf::Message
     kAccelerationFieldNumber = 6,
     kAccelerationJitterFieldNumber = 7,
     kTargetRadiusAtKillFieldNumber = 8,
-    kTargetHitRadiusMultiplierFieldNumber = 9,
     kTargetRadiusGrowthTimeSecondsFieldNumber = 12,
     kTargetRadiusGrowthSizeFieldNumber = 13,
     kTargetRadiusGrowthFinalSizeTimeSecondsFieldNumber = 14,
@@ -3159,17 +3158,6 @@ class TargetProfile final : public ::google::protobuf::Message
   void _internal_set_target_radius_at_kill(float value);
 
   public:
-  // float target_hit_radius_multiplier = 9;
-  bool has_target_hit_radius_multiplier() const;
-  void clear_target_hit_radius_multiplier() ;
-  float target_hit_radius_multiplier() const;
-  void set_target_hit_radius_multiplier(float value);
-
-  private:
-  float _internal_target_hit_radius_multiplier() const;
-  void _internal_set_target_hit_radius_multiplier(float value);
-
-  public:
   // float target_radius_growth_time_seconds = 12;
   bool has_target_radius_growth_time_seconds() const;
   void clear_target_radius_growth_time_seconds() ;
@@ -3231,7 +3219,7 @@ class TargetProfile final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 13,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
                                    2, 0,
                                    2>
       _table_;
@@ -3261,7 +3249,6 @@ class TargetProfile final : public ::google::protobuf::Message
     float acceleration_;
     float acceleration_jitter_;
     float target_radius_at_kill_;
-    float target_hit_radius_multiplier_;
     float target_radius_growth_time_seconds_;
     float target_radius_growth_size_;
     float target_radius_growth_final_size_time_seconds_;
@@ -22634,45 +22621,16 @@ inline void TargetProfile::_internal_set_target_radius_at_kill(float value) {
   _impl_.target_radius_at_kill_ = value;
 }
 
-// float target_hit_radius_multiplier = 9;
-inline bool TargetProfile::has_target_hit_radius_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
-  return value;
-}
-inline void TargetProfile::clear_target_hit_radius_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_hit_radius_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
-}
-inline float TargetProfile::target_hit_radius_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.TargetProfile.target_hit_radius_multiplier)
-  return _internal_target_hit_radius_multiplier();
-}
-inline void TargetProfile::set_target_hit_radius_multiplier(float value) {
-  _internal_set_target_hit_radius_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
-  // @@protoc_insertion_point(field_set:aim.TargetProfile.target_hit_radius_multiplier)
-}
-inline float TargetProfile::_internal_target_hit_radius_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.target_hit_radius_multiplier_;
-}
-inline void TargetProfile::_internal_set_target_hit_radius_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_hit_radius_multiplier_ = value;
-}
-
 // float target_radius_growth_time_seconds = 12;
 inline bool TargetProfile::has_target_radius_growth_time_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   return value;
 }
 inline void TargetProfile::clear_target_radius_growth_time_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_time_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000100U);
 }
 inline float TargetProfile::target_radius_growth_time_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_time_seconds)
@@ -22680,7 +22638,7 @@ inline float TargetProfile::target_radius_growth_time_seconds() const {
 }
 inline void TargetProfile::set_target_radius_growth_time_seconds(float value) {
   _internal_set_target_radius_growth_time_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_time_seconds)
 }
 inline float TargetProfile::_internal_target_radius_growth_time_seconds() const {
@@ -22694,14 +22652,14 @@ inline void TargetProfile::_internal_set_target_radius_growth_time_seconds(float
 
 // float target_radius_growth_size = 13;
 inline bool TargetProfile::has_target_radius_growth_size() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   return value;
 }
 inline void TargetProfile::clear_target_radius_growth_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_size_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000200U);
 }
 inline float TargetProfile::target_radius_growth_size() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_size)
@@ -22709,7 +22667,7 @@ inline float TargetProfile::target_radius_growth_size() const {
 }
 inline void TargetProfile::set_target_radius_growth_size(float value) {
   _internal_set_target_radius_growth_size(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_size)
 }
 inline float TargetProfile::_internal_target_radius_growth_size() const {
@@ -22723,14 +22681,14 @@ inline void TargetProfile::_internal_set_target_radius_growth_size(float value) 
 
 // float target_radius_growth_final_size_time_seconds = 14;
 inline bool TargetProfile::has_target_radius_growth_final_size_time_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void TargetProfile::clear_target_radius_growth_final_size_time_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_growth_final_size_time_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000400U);
 }
 inline float TargetProfile::target_radius_growth_final_size_time_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetProfile.target_radius_growth_final_size_time_seconds)
@@ -22738,7 +22696,7 @@ inline float TargetProfile::target_radius_growth_final_size_time_seconds() const
 }
 inline void TargetProfile::set_target_radius_growth_final_size_time_seconds(float value) {
   _internal_set_target_radius_growth_final_size_time_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.TargetProfile.target_radius_growth_final_size_time_seconds)
 }
 inline float TargetProfile::_internal_target_radius_growth_final_size_time_seconds() const {

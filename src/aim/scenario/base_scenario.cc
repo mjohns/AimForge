@@ -113,7 +113,7 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
               : GetMissedShotDistance(camera_.GetPosition(), camera_.GetLookAt().front, position);
 
       if (maybe_distance) {
-        float max_distance = target.radius * target.hit_radius_multiplier;
+        float max_distance = target.radius;
         float value = (max_distance - *maybe_distance) / max_distance;
         if (value > 0) {
           // Max value for score is 750.
