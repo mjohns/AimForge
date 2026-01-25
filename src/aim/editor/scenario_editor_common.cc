@@ -408,6 +408,8 @@ void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_l
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, distance_multiplier));
   ImGui::InputFloat(default_params.clone().set_id_and_label("Pulse time multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, growth_time_multiplier));
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Remove after time multiplier"),
+                    PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, remove_target_after_seconds_multiplier));
 }
 
 }  // namespace aim

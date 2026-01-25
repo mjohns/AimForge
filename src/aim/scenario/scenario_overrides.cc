@@ -54,6 +54,13 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
       }
     }
   }
+  if (overrides.has_remove_target_after_seconds_multiplier()) {
+    float mult = get_multiplier(overrides.remove_target_after_seconds_multiplier());
+    if (result.target_def().has_remove_target_after_seconds()) {
+      result.mutable_target_def()->set_remove_target_after_seconds(
+          result.target_def().remove_target_after_seconds() * mult);
+    }
+  }
   if (overrides.has_speed_multiplier()) {
     float mult = get_multiplier(overrides.speed_multiplier());
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {

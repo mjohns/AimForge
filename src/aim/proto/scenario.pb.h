@@ -992,6 +992,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     kTimeScaleMultiplierFieldNumber = 6,
     kDistanceMultiplierFieldNumber = 7,
     kGrowthTimeMultiplierFieldNumber = 8,
+    kRemoveTargetAfterSecondsMultiplierFieldNumber = 9,
   };
   // float target_radius_multiplier = 3;
   bool has_target_radius_multiplier() const;
@@ -1059,11 +1060,22 @@ class ScenarioOverrides final : public ::google::protobuf::Message
   void _internal_set_growth_time_multiplier(float value);
 
   public:
+  // float remove_target_after_seconds_multiplier = 9;
+  bool has_remove_target_after_seconds_multiplier() const;
+  void clear_remove_target_after_seconds_multiplier() ;
+  float remove_target_after_seconds_multiplier() const;
+  void set_remove_target_after_seconds_multiplier(float value);
+
+  private:
+  float _internal_remove_target_after_seconds_multiplier() const;
+  void _internal_set_remove_target_after_seconds_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioOverrides)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 6,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
                                    0, 0,
                                    2>
       _table_;
@@ -1091,6 +1103,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     float time_scale_multiplier_;
     float distance_multiplier_;
     float growth_time_multiplier_;
+    float remove_target_after_seconds_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -13716,6 +13729,35 @@ inline float ScenarioOverrides::_internal_growth_time_multiplier() const {
 inline void ScenarioOverrides::_internal_set_growth_time_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.growth_time_multiplier_ = value;
+}
+
+// float remove_target_after_seconds_multiplier = 9;
+inline bool ScenarioOverrides::has_remove_target_after_seconds_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  return value;
+}
+inline void ScenarioOverrides::clear_remove_target_after_seconds_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_target_after_seconds_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000040U);
+}
+inline float ScenarioOverrides::remove_target_after_seconds_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.remove_target_after_seconds_multiplier)
+  return _internal_remove_target_after_seconds_multiplier();
+}
+inline void ScenarioOverrides::set_remove_target_after_seconds_multiplier(float value) {
+  _internal_set_remove_target_after_seconds_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.remove_target_after_seconds_multiplier)
+}
+inline float ScenarioOverrides::_internal_remove_target_after_seconds_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_target_after_seconds_multiplier_;
+}
+inline void ScenarioOverrides::_internal_set_remove_target_after_seconds_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_target_after_seconds_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------
