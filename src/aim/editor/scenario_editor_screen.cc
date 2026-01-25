@@ -100,8 +100,8 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SameLine();
     bool is_new_scenario = !original_name_.has_value();
-    std::string save_text =
-        is_new_scenario ? std::format("{} Create", icons::kSave) : std::format("{} Update", icons::kSave);
+    std::string save_text = is_new_scenario ? std::format("{} Create", icons::kSave)
+                                            : std::format("{} Update", icons::kSave);
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
         PopSelf();

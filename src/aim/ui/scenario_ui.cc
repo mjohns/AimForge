@@ -140,7 +140,8 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
             ImGui::Text(scenario_name);
             ImGui::SameLine();
             if (view_type_ == ScenarioViewType::RECENT) {
-              if (ImGui::Selectable(icons::kDelete, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+              if (ImGui::Selectable(
+                      icons::kDelete, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
                 app_->history_manager().DeleteRecentView(ObjectType::SCENARIO, scenario_name);
                 UpdateFilteredScenarios();
               }

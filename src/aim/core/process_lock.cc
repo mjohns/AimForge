@@ -52,17 +52,17 @@ std::string GetProcessNameFromPid(i64 pid) {
   }
   return std::string(processName);
 #elif __APPLE__
-    char pathBuffer[PROC_PIDPATHINFO_MAXSIZE];
+  char pathBuffer[PROC_PIDPATHINFO_MAXSIZE];
 
-    // proc_name retrieves the name of the process for the given PID
-    // It populates the buffer and returns the length of the string
-    int result = proc_name(pid, pathBuffer, sizeof(pathBuffer));
+  // proc_name retrieves the name of the process for the given PID
+  // It populates the buffer and returns the length of the string
+  int result = proc_name(pid, pathBuffer, sizeof(pathBuffer));
 
-    if (result > 0) {
-        return std::string(pathBuffer);
-    } else {
-        return "Unknown (or insufficient permissions)";
-    }
+  if (result > 0) {
+    return std::string(pathBuffer);
+  } else {
+    return "Unknown (or insufficient permissions)";
+  }
 #else
   char path[PATH_MAX];
   char dest[PATH_MAX];

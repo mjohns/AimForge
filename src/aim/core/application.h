@@ -10,8 +10,8 @@
 #include "aim/audio/sound_manager.h"
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
-#include "aim/common/util.h"
 #include "aim/common/times.h"
+#include "aim/common/util.h"
 #include "aim/core/application_state.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
@@ -170,7 +170,6 @@ class Application {
 
  private:
   Application();
-
 
   std::optional<std::string> InitializeWindow(const Stopwatch& stopwatch);
   // Returns error message if failed to initialize.
