@@ -29,6 +29,7 @@
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/scenario/scenario_overrides.h"
+#include "aim/ui/search_selector.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
@@ -203,30 +204,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Scenario");
     ImGui::SameLine();
-    ImGui::InputText("##CompareScenario", &comparison_scenario_);
-    auto matching_scenario = app_.scenario_manager().GetScenario(comparison_scenario_);
-    if (!matching_scenario && comparison_scenario_.size() > 0) {
-      // Show search results for scenarios.
-      int num_matches = 0;
-      auto search_words = GetSearchWords(comparison_scenario_);
-      ImGui::Indent();
-      for (const std::string& scenario_name : *app_.scenario_manager().scenario_names()) {
-        if (num_matches > 15) {
-          break;
-        }
-        if (StringMatchesSearch(scenario_name, search_words)) {
-          num_matches++;
-          if (ImGui::Button(scenario_name)) {
-            comparison_scenario_ = scenario_name;
-          }
-        }
-      }
-      if (num_matches == 0) {
-        ImGui::Text("No matching scenarios found");
-      }
-      ImGui::Unindent();
-    }
-
+    ScenarioSearchInput(app_, &comparison_scenario_);
     auto maybe_compare_def = app_.scenario_manager().GetEvaluatedScenarioDef(comparison_scenario_);
     if (!maybe_compare_def) {
       return;

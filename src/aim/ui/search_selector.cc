@@ -3,8 +3,12 @@
 #include <format>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
+#include "aim/core/application.h"
+#include "aim/core/scenario_manager.h"
 #include "imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 
@@ -44,6 +48,29 @@ std::optional<std::string> SearchSelector(const std::string& search_text,
   }
 
   return selected_item;
+}
+
+void ScenarioSearchInput(Application& app,
+                         std::string* scenario_name,
+                         SearchSelectorOptions options) {
+  // Never show too many results here.
+  options.max_results = std::min(options.max_results, 20);
+
+  ImGui::InputText("##ScenarioSearchInput", scenario_name);
+  auto matching_scenario = app.scenario_manager().GetScenario(*scenario_name);
+  if (matching_scenario) {
+    return;
+  }
+  if (scenario_name->size() > 0) {
+    ImGui::SameLine();
+    ImGui::Text("%s", kIconWarning);
+    ImGui::HelpTooltip("No matching scenarios");
+  }
+  auto scenario_names = app.scenario_manager().scenario_names();
+  auto selected_scenario = SearchSelector(*scenario_name, *scenario_names, options);
+  if (selected_scenario) {
+    *scenario_name = *selected_scenario;
+  }
 }
 
 }  // namespace aim

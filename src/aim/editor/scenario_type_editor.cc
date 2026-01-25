@@ -15,6 +15,7 @@
 #include "aim/editor/profile_list_editor.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/scenario/scenario_overrides.h"
+#include "aim/ui/search_selector.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
@@ -957,28 +958,11 @@ void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_
   ImGui::SameLine();
   ImGui::HelpMarker("The name of the scenario to reference");
   ImGui::SameLine();
-  ImGui::InputText("##ScenarioReference", r.mutable_scenario_name());
 
-  if (app != nullptr && r.scenario_name().size() > 0) {
-    auto matching_scenario = app->scenario_manager().GetScenario(r.scenario_name());
-    if (!matching_scenario) {
-      // Show search results for scenarios.
-      int num_matches = 0;
-      auto search_words = GetSearchWords(r.scenario_name());
-      ImGui::Indent();
-      for (const std::string& scenario_name : *app->scenario_manager().scenario_names()) {
-        if (StringMatchesSearch(scenario_name, search_words)) {
-          num_matches++;
-          if (ImGui::Button(scenario_name)) {
-            r.set_scenario_name(scenario_name);
-          }
-        }
-      }
-      if (num_matches == 0) {
-        ImGui::Text("No matching scenarios found");
-      }
-      ImGui::Unindent();
-    }
+  if (app != nullptr) {
+    ScenarioSearchInput(*app, r.mutable_scenario_name());
+  } else {
+    ImGui::InputText("##ScenarioReference", r.mutable_scenario_name());
   }
 
   ImGui::SpacedSeparator();

@@ -8,6 +8,7 @@ namespace aim {
 // MaterialIcons reference.
 // https://fonts.google.com/icons
 
+static const char* kIconWarning = "\ue002";
 static const char* kIconHelp = "\xEE\xA2\x87";
 static const char* kIconInfo = "\xEE\xA2\x8E";
 static const char* kIconCancel = "\xEE\x97\x89";

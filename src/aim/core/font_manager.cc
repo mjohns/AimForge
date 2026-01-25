@@ -31,7 +31,7 @@ bool FontManager::LoadFonts() {
   }
 
   // See https://github.com/ocornut/imgui/issues/3247
-  static const ImWchar icons_ranges[] = {0xE005, 0xFFFF, 0};
+  static const ImWchar icons_ranges[] = {0xE000, 0xFFFF, 0};
   ImFontConfig icons_config;
   icons_config.MergeMode = true;
   icons_config.PixelSnapH = true;
