@@ -300,7 +300,7 @@ class HomeScreen : public UiScreen {
 
   void DrawLeftNav() {
     AppScreen original_app_screen = app_screen_;
-    if (ImGui::Selectable(std::format("{} Playlists", kIconList).c_str(),
+    if (ImGui::Selectable(std::format("{} Playlists", icons::kList).c_str(),
                           app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
     }

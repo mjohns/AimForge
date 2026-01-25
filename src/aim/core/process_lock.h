@@ -7,6 +7,9 @@
 
 namespace aim {
 
+i64 GetPid();
+std::string GetProcessNameFromPid(i64 pid);
+
 // Class to ensure that only one instance of the program is running and accessing/writing to the
 // database.
 class ProcessLock {

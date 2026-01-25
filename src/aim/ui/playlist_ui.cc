@@ -494,7 +494,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
             1.0f,
             -FLT_MIN,
             "%s",
-            std::format("{}{}", MaybeIntToString(score_levels[i], 1), kIconBolt).c_str());
+            std::format("{}{}", MaybeIntToString(score_levels[i], 1), icons::kBolt).c_str());
       }
     }
 
