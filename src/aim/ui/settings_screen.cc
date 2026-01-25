@@ -403,7 +403,7 @@ class SettingsScreen : public UiScreen {
 
     float start_x = ImGui::GetCursorPosX();
 
-    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+    if (ImGui::Button(std::format("{} Save", icons::kSave))) {
       app_.settings_manager().MarkDirty();
       updater_.SaveIfChangesMade(scenario_id_);
       PopSelf();

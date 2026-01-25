@@ -86,11 +86,11 @@ class CrosshairEditorScreen : public UiScreen {
   void DrawCrosshairListEditor() {
     ImGui::IdGuard cid("CrosshairListEditor");
     ImGui::LoopId loop_id;
-    if (ImGui::Button(std::format("{} Back", kIconArrowBack))) {
+    if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
       PopSelf();
     }
     Line();
-    if (ImGui::Button(std::format("{} New crosshair", kIconAdd))) {
+    if (ImGui::Button(std::format("{} New crosshair", icons::kAdd))) {
       OpenNewCrosshair();
     }
     Line();
@@ -171,7 +171,7 @@ class CrosshairEditorScreen : public UiScreen {
   }
 
   void DrawCrosshairEditor() {
-    if (ImGui::Button(std::format("{} Back", kIconArrowBack))) {
+    if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
       BackToCrosshairList();
     }
     Line();
@@ -185,7 +185,7 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::InputText("##NameInput", &current_crosshair_name_);
 
     ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+    if (ImGui::Button(std::format("{} Save", icons::kSave))) {
       if (SaveCurrentCrosshair()) {
         BackToCrosshairList();
       }
@@ -221,7 +221,7 @@ class CrosshairEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::TextFmt("Layer {}", i + 1);
       ImGui::SameLine();
-      if (ImGui::Selectable(kIconMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      if (ImGui::Selectable(icons::kMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
         ImGui::OpenPopup(item_menu_id);
       }
       CrosshairLayer& l = *c.mutable_layers(i);
@@ -230,7 +230,7 @@ class CrosshairEditorScreen : public UiScreen {
       ImGui::Unindent();
     }
 
-    if (ImGui::Button(std::format("{} layer", kIconAdd))) {
+    if (ImGui::Button(std::format("{} layer", icons::kAdd))) {
       c.add_layers();
     }
 

@@ -73,10 +73,10 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##ScenarioSearchInput", kIconSearch, &search_text_);
+    ImGui::InputTextWithHint("##ScenarioSearchInput", icons::kSearch, &search_text_);
     if (search_text_.size() > 0) {
       ImGui::SameLine();
-      if (ImGui::Button(kIconCancel)) {
+      if (ImGui::Button(icons::kCancel)) {
         search_text_ = "";
       }
     }
@@ -129,7 +129,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
           ImGui::TableNextColumn();
           if (maybe_scenario) {
             /*
-          if (ImGui::Button(kIconPlayArrow)) {
+          if (ImGui::Button(icons::kPlayArrow)) {
             result->scenario_to_start = scenario_name;
           }
           ImGui::SameLine();
@@ -140,7 +140,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
             ImGui::Text(scenario_name);
             ImGui::SameLine();
             if (view_type_ == ScenarioViewType::RECENT) {
-              if (ImGui::Selectable(kIconDelete, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+              if (ImGui::Selectable(icons::kDelete, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
                 app_->history_manager().DeleteRecentView(ObjectType::SCENARIO, scenario_name);
                 UpdateFilteredScenarios();
               }
@@ -237,12 +237,12 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
 
   void DrawStarItemSelectable(const std::string& scenario_name) {
     if (app_->labels_manager().IsStarred(ObjectType::SCENARIO, scenario_name)) {
-      if (ImGui::Selectable(kIconStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      if (ImGui::Selectable(icons::kStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
         app_->labels_manager().UnstarItem(ObjectType::SCENARIO, scenario_name);
         UpdateFilteredScenarios();
       }
     } else {
-      if (ImGui::Selectable(kIconStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      if (ImGui::Selectable(icons::kStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
         app_->labels_manager().StarItem(ObjectType::SCENARIO, scenario_name);
         // UpdateFilteredScenarios(); Is this necessary? You can't click this from the starred list.
       }

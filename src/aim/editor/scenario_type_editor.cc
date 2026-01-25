@@ -798,7 +798,7 @@ void DrawCenteringEditor(CenteringScenarioDef& c) {
       ImGui::AlignTextToFramePadding();
       ImGui::TextFmt("Point {}", i + 1);
       ImGui::SameLine();
-      if (ImGui::Button(kIconCancel)) {
+      if (ImGui::Button(icons::kCancel)) {
         remove_at_i = i;
       }
       ImGui::Indent();

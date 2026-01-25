@@ -50,7 +50,7 @@ void DrawProfileList(const std::string& id,
       auto last_size = ImGui::GetItemRectSize();
 
       ImGui::SameLine();
-      if (ImGui::Button(kIconCancel)) {
+      if (ImGui::Button(icons::kCancel)) {
         remove_at_i = i;
       }
 
@@ -109,7 +109,7 @@ void DrawProfileList(const std::string& id,
     ImGui::SetNextItemWidth(char_x * 22);
     ImGui::InputText("##DescriptionInput", p->mutable_info()->mutable_description());
     ImGui::SameLine();
-    if (ImGui::Button(kIconMoreVert)) {
+    if (ImGui::Button(icons::kMoreVert)) {
       ImGui::OpenPopup(item_menu_id);
     }
 

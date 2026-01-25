@@ -123,7 +123,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
 
       ImGui::Spacing();
 
-      if (ImGui::Button(std::format("{} Add", kIconAdd))) {
+      if (ImGui::Button(std::format("{} Add", icons::kAdd))) {
         add_dialog_.NotifyOpen({});
       }
 
@@ -186,11 +186,11 @@ class BundleUiComponentImpl : public BundleUiComponent {
     ImGui::Separator();
     ImGui::Spacing();
 
-    if (ImGui::Button(std::format("{} Copy", kIconContentCopy))) {
+    if (ImGui::Button(std::format("{} Copy", icons::kContentCopy))) {
       add_dialog_.NotifyOpen(selected_bundle_name_);
     }
 
-    if (ImGui::Button(std::format("{} Delete", kIconDelete))) {
+    if (ImGui::Button(std::format("{} Delete", icons::kDelete))) {
       delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", selected_bundle_name_),
                                              selected_bundle_name_);
     }

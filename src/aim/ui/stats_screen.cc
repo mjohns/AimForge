@@ -214,27 +214,27 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawLeftNav() {
-    if (ImGui::Selectable(std::format("{} Home", kIconHome).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Home", icons::kHome).c_str(), false)) {
       ReturnHome();
     }
-    if (ImGui::Selectable(std::format("{} Stats", kIconAssignment).c_str(),
+    if (ImGui::Selectable(std::format("{} Stats", icons::kAssignment).c_str(),
                           selected_screen_ == SelectedScreen::STATS)) {
       selected_screen_ = SelectedScreen::STATS;
     }
-    if (ImGui::Selectable(std::format("{} History", kIconBarChart).c_str(),
+    if (ImGui::Selectable(std::format("{} History", icons::kBarChart).c_str(),
                           selected_screen_ == SelectedScreen::HISTORY)) {
       selected_screen_ = SelectedScreen::HISTORY;
     }
     if (performance_stats_) {
-      if (ImGui::Selectable(std::format("{} Performance", kIconRobot).c_str(),
+      if (ImGui::Selectable(std::format("{} Performance", icons::kSmartToy).c_str(),
                             selected_screen_ == SelectedScreen::PERF)) {
         selected_screen_ = SelectedScreen::PERF;
       }
     }
-    if (replay_ && ImGui::Selectable(std::format("{} Replay", kIconLiveTv).c_str(), false)) {
+    if (replay_ && ImGui::Selectable(std::format("{} Replay", icons::kLiveTv).c_str(), false)) {
       PushNextScreen(CreateReplayViewerScreen(replay_, &app_));
     }
-    if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
     }
   }
@@ -437,7 +437,7 @@ class StatsScreen : public UiScreen {
       if (score_level > 0) {
         auto font1 = app_.font_manager().UseLarge();
         ImGui::SameLine();
-        ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), kIconBolt));
+        ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), icons::kBolt));
         auto font2 = app_.font_manager().UseDefault();
         ImGui::HelpTooltip(std::format("Target score: {}",
                                        MaybeIntToString(evaluated_scenario_def_->end_score(), 1)));
@@ -617,11 +617,11 @@ class StatsScreen : public UiScreen {
         }
 
         ImGui::TableNextColumn();
-        ImGui::SetButtonCursorAtRight(kIconDelete);
+        ImGui::SetButtonCursorAtRight(icons::kDelete);
         if (!allow_delete) {
           ImGui::BeginDisabled();
         }
-        if (ImGui::Button(kIconDelete)) {
+        if (ImGui::Button(icons::kDelete)) {
           app_.stats_manager().DeleteStats(scenario_name_, row.stats_id);
           reset_stats_ = true;
         }

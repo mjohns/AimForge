@@ -304,24 +304,24 @@ class HomeScreen : public UiScreen {
                           app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
     }
-    if (ImGui::Selectable(std::format("{} Scenarios", kIconCenterFocusWeak).c_str(),
+    if (ImGui::Selectable(std::format("{} Scenarios", icons::kCenterFocusWeak).c_str(),
                           app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
     }
-    if (ImGui::Selectable(std::format("{} Bundles", kIconDataset).c_str(),
+    if (ImGui::Selectable(std::format("{} Bundles", icons::kDataset).c_str(),
                           app_screen_ == AppScreen::BUNDLES)) {
       app_screen_ = AppScreen::BUNDLES;
     }
-    if (ImGui::Selectable(std::format("{} Settings", kIconSettings).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, GetCurrentScenarioId()));
     }
-    if (ImGui::Selectable(std::format("{} Themes", kIconPalette).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Themes", icons::kPalette).c_str(), false)) {
       PushNextScreen(CreateThemeEditorScreen(&app_));
     }
-    if (ImGui::Selectable(std::format("{} Crosshairs", kIconMyLocation).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Crosshairs", icons::kMyLocation).c_str(), false)) {
       PushNextScreen(CreateCrosshairEditorScreen(&app_));
     }
-    if (ImGui::Selectable(std::format("{} Play time", kIconHourglassEmpty).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Play time", icons::kHourglassEmpty).c_str(), false)) {
       app_screen_ = AppScreen::PLAY_TIME;
     }
 
@@ -355,7 +355,7 @@ class HomeScreen : public UiScreen {
       ImGui::EndPopup();
     }
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight());
-    if (ImGui::Selectable(std::format("{} Exit", kIconLogout).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Exit", icons::kLogout).c_str(), false)) {
       // Show a screen to confirm?
       app_.RequestExit();
     }
@@ -413,15 +413,15 @@ class HomeScreen : public UiScreen {
         ImGui::Text(current_scenario->id());
 
         if (app_.scenario_manager().has_running_scenario()) {
-          if (ImGui::Button(std::format("{} Resume", kIconPlayArrow))) {
+          if (ImGui::Button(std::format("{} Resume", icons::kPlayArrow))) {
             state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
           }
           ImGui::SameLine();
-          if (ImGui::Button(std::format("{} Restart", kIconRefresh))) {
+          if (ImGui::Button(std::format("{} Restart", icons::kRefresh))) {
             state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
           }
         } else {
-          if (ImGui::Button(std::format("{} Play", kIconPlayArrow))) {
+          if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
             state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
           }
         }
@@ -497,7 +497,7 @@ class HomeScreen : public UiScreen {
     ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
 
     // TODO: Display breakdowns
-    //  ImGui::TextFmt("{}", kIconBolt);
+    //  ImGui::TextFmt("{}", icons::kBolt);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;

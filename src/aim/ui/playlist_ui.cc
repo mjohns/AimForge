@@ -140,14 +140,14 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     if (!run->playlist.cm_per_360) {
       ImGui::SameLine();
-      if (ImGui::Button(kIconEdit)) {
+      if (ImGui::Button(icons::kEdit)) {
         showing_editor_ = true;
       }
       ImGui::HelpTooltip("Edit playlist");
     }
 
     ImGui::SameLine();
-    if (ImGui::Button(kIconMouse)) {
+    if (ImGui::Button(icons::kMouse)) {
       NameInfo name_info = GetPlaylistNameInfo(current_playlist_name_);
       select_sensitivity_variation_dialog_.NotifyOpen(name_info.cm_per_360);
     }
@@ -177,7 +177,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
     }
 
     ImGui::SameLine();
-    if (ImGui::Selectable(kIconMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+    if (ImGui::Selectable(icons::kMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
       ImGui::OpenPopup(menu_id);
     }
 
@@ -233,7 +233,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImVec2 char_size = ImGui::CalcTextSize("A");
 
     ImGui::Spacing();
-    if (ImGui::Button(std::format("{} Add playlist", kIconAdd))) {
+    if (ImGui::Button(std::format("{} Add playlist", icons::kAdd))) {
       add_dialog_.NotifyOpen();
     }
 
@@ -273,10 +273,10 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImGui::Spacing();
 
     ImGui::SetNextItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##PlaylistSearchInput", kIconSearch, &playlist_search_text_);
+    ImGui::InputTextWithHint("##PlaylistSearchInput", icons::kSearch, &playlist_search_text_);
     if (playlist_search_text_.size() > 0) {
       ImGui::SameLine();
-      if (ImGui::Button(kIconCancel)) {
+      if (ImGui::Button(icons::kCancel)) {
         playlist_search_text_ = "";
       }
     }
@@ -344,11 +344,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
     ImGui::SameLine();
     if (app_.labels_manager().IsStarred(ObjectType::PLAYLIST, playlist_name)) {
-      if (ImGui::Selectable(kIconStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      if (ImGui::Selectable(icons::kStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
         app_.labels_manager().UnstarItem(ObjectType::PLAYLIST, playlist_name);
       }
     } else {
-      if (ImGui::Selectable(kIconStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      if (ImGui::Selectable(icons::kStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
         app_.labels_manager().StarItem(ObjectType::PLAYLIST, playlist_name);
       }
     }

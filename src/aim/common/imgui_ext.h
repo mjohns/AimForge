@@ -301,7 +301,7 @@ class NotificationPopup {
 };
 
 static void HelpMarker(const std::string& text) {
-  ImGui::TextDisabled("%s", aim::kIconHelp);
+  ImGui::TextDisabled("%s", aim::icons::kHelp);
   if (ImGui::BeginItemTooltip()) {
     ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
     ImGui::Text(text);
@@ -691,7 +691,7 @@ static void InputStoredColor(const std::string& id, aim::StoredColor* stored_col
   }
 
   ImGui::SameLine();
-  ImGui::Text("%s", aim::kIconClose);
+  ImGui::Text("%s", aim::icons::kClose);
   ImGui::HelpTooltip("Multiply color by value");
 
   ImGui::SameLine();

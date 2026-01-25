@@ -1,65 +1,10 @@
 #pragma once
 
 namespace aim {
-
-// To convert codepoint to hex.
-// https://www.cogsci.ed.ac.uk/~richard/utf-8.cgi?input=e872&mode=hex
+namespace icons {
 
 // MaterialIcons reference.
 // https://fonts.google.com/icons
-
-static const char* kIconWarning = "\ue002";
-static const char* kIconHelp = "\xEE\xA2\x87";
-static const char* kIconInfo = "\xEE\xA2\x8E";
-static const char* kIconCancel = "\xEE\x97\x89";
-static const char* kIconAdd = "\xEE\x85\x85";
-static const char* kIconClose = "\xEE\x97\x8D";
-static const char* kIconDelete = "\xEE\xA1\xB2";
-static const char* kIconMoreVert = "\xEE\x97\x94";
-static const char* kIconRefresh = "\xEE\x97\x95";
-static const char* kIconRestartAlt = "\xEF\x81\x93";
-static const char* kIconMenu = "\xEE\x97\x92";
-static const char* kIconSettings = "\xEE\xA2\xB8";
-static const char* kIconSearch = "\xEE\xA2\xB6";
-static const char* kIconHome = "\xEE\xA2\x8A";
-static const char* kIconPlayCircle = "\xEE\x87\x84";
-static const char* kIconPlayArrow = "\xEE\x80\xB7";
-static const char* kIconArrowForward = "\xEE\x97\x88";
-static const char* kIconArrowBack = "\xEE\x97\x84";
-static const char* kIconEdit = "\xEE\x8F\x89";
-static const char* kIconLogout = "\xEE\xA6\xBA";
-static const char* kIconPalette = "\xEE\x90\x8A";
-static const char* kIconList = "\xEE\xA2\x96";
-static const char* kIconTarget = "\xEE\x9C\x99";
-static const char* kIconFilterCenterFocus = "\xEE\x8F\x9C";
-static const char* kIconCenterFocusWeak = "\xEE\x8E\xB5";
-static const char* kIconSave = "\xEE\x85\xA1";
-static const char* kIconShuffle = "\xEE\x81\x83";
-static const char* kIconShuffleOn = "\xEE\xA7\xA1";
-static const char* kIconMyLocation = "\xEE\x95\x9C";
-static const char* kIconStar = "\xEE\xA0\xB8";
-static const char* kIconStarOutline = "\xEF\x81\xAF";
-static const char* kIconEmergency = "\xEE\x87\xAB";
-static const char* kIconContentCopy = "\xEE\x85\x8D";
-static const char* kIconAvTimer = "\xEE\x80\x9B";
-static const char* kIconRedo = "\xEE\x85\x9A";
-static const char* kIconBolt = "\uEA0B";
-static const char* kIconFlashOn = "\uE3E7";
-static const char* kIconHourglassEmpty = "\uE88B";
-static const char* kIconAssignment = "\uE85D";
-// static const char* kIconAvgTime = "\uF813";
-// static const char* kIconChartData = "\uE473";
-static const char* kIconBarChart = "\uE26B";
-static const char* kIconRobot = "\uF06C";
-static const char* kIconMouse = "\uE323";
-static const char* kIconDataset = "\uf8ee";
-static const char* kIconLiveTv = "\ue639";
-
-// static const char* kIconPointScan = "\xEF\x9C\x8C";
-// static const char* kIconCloseSmall = "\xEF\x94\x88";
-// static const char* kIconAsterisk = "\xEF\x94\xA5";
-
-namespace icons {
 
 inline const char* k10k = "\ue951";
 inline const char* k10mp = "\ue952";
@@ -2295,6 +2240,5 @@ inline const char* kZoomInMap = "\ueb2d";
 inline const char* kZoomOut = "\ue900";
 inline const char* kZoomOutMap = "\ue56b";
 
-} // namespace icons
-
+}  // namespace icons
 }  // namespace aim

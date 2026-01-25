@@ -86,7 +86,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     notification_popup_.Draw();
 
-    if (ImGui::Button(kIconPlayCircle)) {
+    if (ImGui::Button(icons::kPlayCircle)) {
       PlayScenario();
     }
     ImGui::HelpTooltip("Try playing the edited version of the scenario.");
@@ -101,7 +101,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     bool is_new_scenario = !original_name_.has_value();
     std::string save_text =
-        is_new_scenario ? std::format("{} Create", kIconAdd) : std::format("{} Update", kIconSave);
+        is_new_scenario ? std::format("{} Create", icons::kSave) : std::format("{} Update", icons::kSave);
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
         PopSelf();
@@ -117,7 +117,7 @@ class ScenarioEditorScreen : public UiScreen {
   }
 
   void DrawDescriptionEditor() {
-    if (ImGui::Button(std::format("{} Back to editor", kIconArrowBack))) {
+    if (ImGui::Button(std::format("{} Back to editor", icons::kArrowBack))) {
       editing_description_ = false;
     }
     ImGui::InputTextMultiline("##DescriptionInput",
@@ -400,7 +400,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SetNextWindowPos(ImVec2(char_x_ * 0.3, (app_.screen_info().height - height) / 2.0));
     ImGui::SetNextWindowSize(ImVec2(width, height));
     if (ImGui::Begin("Room", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
-      if (ImGui::Button(std::format("{} Back to editor", kIconArrowBack))) {
+      if (ImGui::Button(std::format("{} Back to editor", icons::kArrowBack))) {
         editing_room_ = false;
       }
       ImGui::SpacedSeparator();

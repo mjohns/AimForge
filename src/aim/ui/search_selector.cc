@@ -63,7 +63,7 @@ void ScenarioSearchInput(Application& app,
   }
   if (scenario_name->size() > 0) {
     ImGui::SameLine();
-    ImGui::Text("%s", kIconWarning);
+    ImGui::Text("%s", icons::kWarning);
     ImGui::HelpTooltip("No matching scenarios");
   }
   auto scenario_names = app.scenario_manager().scenario_names();

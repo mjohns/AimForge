@@ -194,7 +194,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           editing_i_ = -1;
         }
         ImGui::SameLine();
-        if (ImGui::Button(kIconSave)) {
+        if (ImGui::Button(icons::kSave)) {
           editing_i_ = -1;
         }
       } else {
@@ -309,7 +309,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::SetNextItemWidth(char_x_ * 18);
     ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
     ImGui::SameLine();
-    if (ImGui::Button(kIconCancel)) {
+    if (ImGui::Button(icons::kCancel)) {
       scenario_search_text_ = "";
     }
     if (scenario_search_text_.size() > 0) {

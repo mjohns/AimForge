@@ -63,13 +63,13 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::SetNextWindowSize(ImVec2(width, -1));
     ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 
-    if (ImGui::Button(std::format("{} Save", kIconSave))) {
+    if (ImGui::Button(std::format("{} Save", icons::kSave))) {
       if (SaveCurrentTheme()) {
         BackToThemeList();
       }
     }
     ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Back", kIconArrowBack))) {
+    if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
       BackToThemeList();
     }
 
@@ -315,11 +315,11 @@ class ThemeEditorScreen : public UiScreen {
   void DrawThemeListEditor() {
     ImGui::IdGuard cid("ThemeListEditor");
     ImGui::LoopId loop_id;
-    if (ImGui::Button(std::format("{} Back", kIconArrowBack))) {
+    if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
       PopSelf();
     }
     Line();
-    if (ImGui::Button(std::format("{} New theme", kIconAdd))) {
+    if (ImGui::Button(std::format("{} New theme", icons::kAdd))) {
       OpenNewTheme();
     }
     Line();
@@ -402,7 +402,7 @@ class ThemeEditorScreen : public UiScreen {
     }
 
     ImGui::SameLine();
-    ImGui::Text("%s", kIconClose);
+    ImGui::Text("%s", icons::kClose);
     ImGui::HelpTooltip("Multiply color by value");
 
     ImGui::SameLine();
