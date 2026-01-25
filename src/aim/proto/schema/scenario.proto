@@ -170,6 +170,10 @@ message ShotType {
 
   // If specified, you can only click at the given rate.
   float click_rate_seconds = 17;
+
+  // Adjust the accuracy penalty modifier. Defaults to 1. 0.5 would take off half as much points
+  // from the score. 0 would have no accuracy penalty.
+  float accuracy_penalty_multiplier = 18;
 }
 
 message ScenarioDef {
@@ -186,9 +190,6 @@ message ScenarioDef {
 
   ShotType shot_type = 8;
 
-  // Adjust the accuracy penalty modifier. Defaults to 1. 0.5 would take off half as much points
-  // from the score.
-  float accuracy_penalty_modifier = 9;
 
   // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.
   float start_score = 10;

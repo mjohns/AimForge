@@ -445,8 +445,8 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
       float hit_percent = stats_.num_hits / stats_.num_shots;
       // float duration_modifier = 60.0f / def_.duration_seconds();
       float accuracy_penalty = 1.0 - sqrt(hit_percent);
-      if (def_.has_accuracy_penalty_modifier()) {
-        accuracy_penalty *= def_.accuracy_penalty_modifier();
+      if (def_.shot_type().has_accuracy_penalty_multiplier()) {
+        accuracy_penalty *= def_.shot_type().accuracy_penalty_multiplier();
       }
       score = stats_.num_hits * (1 - accuracy_penalty);
       break;

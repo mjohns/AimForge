@@ -631,6 +631,7 @@ class ShotType final : public ::google::protobuf::Message
     kRemoveIfBelowHealthSecondsFieldNumber = 14,
     kHealthClicksFieldNumber = 16,
     kClickRateSecondsFieldNumber = 17,
+    kAccuracyPenaltyMultiplierFieldNumber = 18,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -715,6 +716,17 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_click_rate_seconds(float value);
 
   public:
+  // float accuracy_penalty_multiplier = 18;
+  bool has_accuracy_penalty_multiplier() const;
+  void clear_accuracy_penalty_multiplier() ;
+  float accuracy_penalty_multiplier() const;
+  void set_accuracy_penalty_multiplier(float value);
+
+  private:
+  float _internal_accuracy_penalty_multiplier() const;
+  void _internal_set_accuracy_penalty_multiplier(float value);
+
+  public:
   // bool poke = 1;
   bool has_poke() const;
   void clear_poke() ;
@@ -795,7 +807,7 @@ class ShotType final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 13,
+  static const ::google::protobuf::internal::TcParseTable<4, 14,
                                    0, 0,
                                    2>
       _table_;
@@ -824,6 +836,7 @@ class ShotType final : public ::google::protobuf::Message
     float remove_if_below_health_seconds_;
     ::int32_t health_clicks_;
     float click_rate_seconds_;
+    float accuracy_penalty_multiplier_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -9742,7 +9755,6 @@ class ScenarioDef final : public ::google::protobuf::Message
     kShotTypeFieldNumber = 8,
     kLevelOverridesFieldNumber = 12,
     kDurationSecondsFieldNumber = 2,
-    kAccuracyPenaltyModifierFieldNumber = 9,
     kStartScoreFieldNumber = 10,
     kEndScoreFieldNumber = 11,
     kStaticDefFieldNumber = 30,
@@ -9859,17 +9871,6 @@ class ScenarioDef final : public ::google::protobuf::Message
   private:
   ::int32_t _internal_duration_seconds() const;
   void _internal_set_duration_seconds(::int32_t value);
-
-  public:
-  // float accuracy_penalty_modifier = 9;
-  bool has_accuracy_penalty_modifier() const;
-  void clear_accuracy_penalty_modifier() ;
-  float accuracy_penalty_modifier() const;
-  void set_accuracy_penalty_modifier(float value);
-
-  private:
-  float _internal_accuracy_penalty_modifier() const;
-  void _internal_set_accuracy_penalty_modifier(float value);
 
   public:
   // float start_score = 10;
@@ -10162,7 +10163,7 @@ class ScenarioDef final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 23,
+  static const ::google::protobuf::internal::TcParseTable<4, 22,
                                    18, 51,
                                    7>
       _table_;
@@ -10191,7 +10192,6 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::aim::ShotType* PROTOBUF_NULLABLE shot_type_;
     ::aim::ScenarioOverrides* PROTOBUF_NULLABLE level_overrides_;
     ::int32_t duration_seconds_;
-    float accuracy_penalty_modifier_;
     float start_score_;
     float end_score_;
     union TypeUnion {
@@ -14165,6 +14165,35 @@ inline void ShotType::_internal_set_click_rate_seconds(float value) {
   _impl_.click_rate_seconds_ = value;
 }
 
+// float accuracy_penalty_multiplier = 18;
+inline bool ShotType::has_accuracy_penalty_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  return value;
+}
+inline void ShotType::clear_accuracy_penalty_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.accuracy_penalty_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000080U);
+}
+inline float ShotType::accuracy_penalty_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty_multiplier)
+  return _internal_accuracy_penalty_multiplier();
+}
+inline void ShotType::set_accuracy_penalty_multiplier(float value) {
+  _internal_set_accuracy_penalty_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty_multiplier)
+}
+inline float ShotType::_internal_accuracy_penalty_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.accuracy_penalty_multiplier_;
+}
+inline void ShotType::_internal_set_accuracy_penalty_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.accuracy_penalty_multiplier_ = value;
+}
+
 inline bool ShotType::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -14771,45 +14800,16 @@ inline void ScenarioDef::set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLA
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.shot_type)
 }
 
-// float accuracy_penalty_modifier = 9;
-inline bool ScenarioDef::has_accuracy_penalty_modifier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
-  return value;
-}
-inline void ScenarioDef::clear_accuracy_penalty_modifier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accuracy_penalty_modifier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
-}
-inline float ScenarioDef::accuracy_penalty_modifier() const {
-  // @@protoc_insertion_point(field_get:aim.ScenarioDef.accuracy_penalty_modifier)
-  return _internal_accuracy_penalty_modifier();
-}
-inline void ScenarioDef::set_accuracy_penalty_modifier(float value) {
-  _internal_set_accuracy_penalty_modifier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
-  // @@protoc_insertion_point(field_set:aim.ScenarioDef.accuracy_penalty_modifier)
-}
-inline float ScenarioDef::_internal_accuracy_penalty_modifier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.accuracy_penalty_modifier_;
-}
-inline void ScenarioDef::_internal_set_accuracy_penalty_modifier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accuracy_penalty_modifier_ = value;
-}
-
 // float start_score = 10;
 inline bool ScenarioDef::has_start_score() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   return value;
 }
 inline void ScenarioDef::clear_start_score() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_score_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000080U);
 }
 inline float ScenarioDef::start_score() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.start_score)
@@ -14817,7 +14817,7 @@ inline float ScenarioDef::start_score() const {
 }
 inline void ScenarioDef::set_start_score(float value) {
   _internal_set_start_score(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.start_score)
 }
 inline float ScenarioDef::_internal_start_score() const {
@@ -14831,14 +14831,14 @@ inline void ScenarioDef::_internal_set_start_score(float value) {
 
 // float end_score = 11;
 inline bool ScenarioDef::has_end_score() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   return value;
 }
 inline void ScenarioDef::clear_end_score() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.end_score_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000100U);
 }
 inline float ScenarioDef::end_score() const {
   // @@protoc_insertion_point(field_get:aim.ScenarioDef.end_score)
@@ -14846,7 +14846,7 @@ inline float ScenarioDef::end_score() const {
 }
 inline void ScenarioDef::set_end_score(float value) {
   _internal_set_end_score(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.ScenarioDef.end_score)
 }
 inline float ScenarioDef::_internal_end_score() const {

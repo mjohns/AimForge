@@ -887,6 +887,19 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
   }
 
   if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
+    ImGui::InputFloat(
+        ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
+            .set_is_optional()
+            .set_step(0.01, 0.25)
+            .set_min(0)
+            .set_default(1)
+            .set_width(char_x * 10),
+        PROTO_FLOAT_FIELD(ShotType, def.mutable_shot_type(), accuracy_penalty_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "0 means no penalty for missed shots. Default (1) is score-sqrt(accuracy%). 0.5 is half "
+        "the default penalty.");
+
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
                           .set_is_optional()
                           .set_step(0.05, 0.2)
