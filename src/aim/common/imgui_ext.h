@@ -361,6 +361,10 @@ struct InputFloatParams {
     return InputFloatParams(label).set_label(label);
   }
 
+  InputFloatParams clone() const {
+    return *this;
+  }
+
   InputFloatParams& set_step(float step, float fast_step) {
     this->step = step;
     this->fast_step = fast_step;
@@ -405,6 +409,12 @@ struct InputFloatParams {
 
   InputFloatParams& set_id(const std::string& id) {
     this->id = id;
+    return *this;
+  }
+
+  InputFloatParams& set_id_and_label(const std::string& label) {
+    this->id = label;
+    this->label = label;
     return *this;
   }
 

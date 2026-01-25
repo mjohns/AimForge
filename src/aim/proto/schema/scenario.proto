@@ -127,6 +127,7 @@ message ScenarioOverrides {
   float acceleration_multiplier = 5;
   float time_scale_multiplier = 6;
   float distance_multiplier = 7;
+  float growth_time_multiplier = 8;
 }
 
 message ShotType {

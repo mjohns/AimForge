@@ -41,6 +41,19 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
       }
     }
   }
+  if (overrides.has_growth_time_multiplier()) {
+    float mult = get_multiplier(overrides.growth_time_multiplier());
+    for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
+      if (profile.has_target_radius_growth_time_seconds()) {
+        profile.set_target_radius_growth_time_seconds(profile.target_radius_growth_time_seconds() *
+                                                      mult);
+      }
+      if (profile.has_target_radius_growth_final_size_time_seconds()) {
+        profile.set_target_radius_growth_final_size_time_seconds(
+            profile.target_radius_growth_final_size_time_seconds() * mult);
+      }
+    }
+  }
   if (overrides.has_speed_multiplier()) {
     float mult = get_multiplier(overrides.speed_multiplier());
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {

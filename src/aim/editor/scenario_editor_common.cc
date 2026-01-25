@@ -389,49 +389,25 @@ void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions di
 void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_levels) {
   float char_x = ImGui::GetDefaultCharSizeX();
   ImGui::IdGuard cid(id);
-  ImGui::InputFloat(ImGui::InputFloatParams("TargetRadiusMult")
-                        .set_label("Target radius multiplier")
-                        .set_step(0.01, 0.25)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_is_optional()
-                        .set_width(char_x * 10),
+  const ImGui::InputFloatParams default_params = ImGui::InputFloatParams("Default")
+                                                     .set_step(0.01, 0.25)
+                                                     .set_min(0.01)
+                                                     .set_default(1)
+                                                     .set_is_optional()
+                                                     .set_width(char_x * 10);
+
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Target radius multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, target_radius_multiplier));
-
-  ImGui::InputFloat(ImGui::InputFloatParams("SpeedMult")
-                        .set_label("Speed multiplier")
-                        .set_step(0.01, 0.25)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_is_optional()
-                        .set_width(char_x * 10),
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Speed multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, speed_multiplier));
-
-  ImGui::InputFloat(ImGui::InputFloatParams("AccelMult")
-                        .set_label("Acceleration multiplier")
-                        .set_step(0.01, 0.25)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_is_optional()
-                        .set_width(char_x * 10),
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Acceleration multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, acceleration_multiplier));
-
-  ImGui::InputFloat(ImGui::InputFloatParams("TimeScale")
-                        .set_label("Time scale multiplier")
-                        .set_step(0.01, 0.25)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_is_optional()
-                        .set_width(char_x * 10),
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Time scale multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, time_scale_multiplier));
-  ImGui::InputFloat(ImGui::InputFloatParams("Distance")
-                        .set_label("Distance multiplier")
-                        .set_step(0.01, 0.25)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_is_optional()
-                        .set_width(char_x * 10),
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Distance multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, distance_multiplier));
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Pulse time multiplier"),
+                    PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, growth_time_multiplier));
 }
 
 }  // namespace aim
