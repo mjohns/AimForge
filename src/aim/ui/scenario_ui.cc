@@ -23,20 +23,17 @@ enum class ScenarioViewType : int {
 
 class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
  public:
-  explicit ScenarioBrowserComponentImpl(ScenarioBrowserType type,
-                                        const std::string& id,
-                                        Application* app)
-      : type_(type), id_(id), app_(app) {
-    if (type_ == ScenarioBrowserType::FULL) {
-      auto maybe_initial_view_type = app_->local_store().GetInt(GetViewTypeKey());
-      if (maybe_initial_view_type) {
-        view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
-      } else {
-        view_type_ = ScenarioViewType::ALL;
-      }
-
-      search_text_ = app_->local_store().Get(GetSearchTextKey());
+  explicit ScenarioBrowserComponentImpl(const std::string& id, Application* app)
+      : id_(id), app_(app) {
+    auto maybe_initial_view_type = app_->local_store().GetInt(GetViewTypeKey());
+    if (maybe_initial_view_type) {
+      view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
+    } else {
+      view_type_ = ScenarioViewType::ALL;
     }
+
+    search_text_ = app_->local_store().Get(GetSearchTextKey());
+
     UpdateFilteredScenarios();
     initial_search_text_ = search_text_;
   }
@@ -63,14 +60,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       }
     });
 
-    if (type_ == ScenarioBrowserType::QUICK_ACCESS) {
-      if (ImGui::BeginChild("ScenarioContent")) {
-        DrawScenariosTable(result);
-      }
-      ImGui::EndChild();
-      return;
-    }
-
     ImGui::AlignTextToFramePadding();
     ImGui::Text("%s", icons::kFilterList);
     ImGui::SameLine();
@@ -95,7 +84,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
         search_text_ = "";
       }
     }
-
 
     ImGui::Spacing();
     ImGui::Spacing();
@@ -257,42 +245,8 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     return handled_search_text_ != search_text_;
   }
 
-  void GetQuickAccessScenarios(std::vector<std::string>* scenario_names) {
-    int limit = 25;
-    int max_recent_maybe_starred = 8;
-    scenario_names->reserve(limit);
-
-    auto starred_items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
-    auto recent_scenarios = app_->history_manager().recent_scenarios();
-
-    max_recent_maybe_starred =
-        std::max<int>(max_recent_maybe_starred, limit - starred_items->items.size());
-
-    std::unordered_set<std::string> added_scenario_names;
-
-    for (const std::string& scenario_name : recent_scenarios) {
-      if (scenario_names->size() >= limit) {
-        break;
-      }
-      bool only_starred = scenario_names->size() >= max_recent_maybe_starred;
-
-      auto scenario = app_->scenario_manager().GetScenario(scenario_name);
-      if (scenario.has_value()) {
-        bool add = !only_starred || starred_items->item_set.contains(scenario_name);
-        if (add) {
-          added_scenario_names.insert(scenario_name);
-          scenario_names->push_back(scenario_name);
-        }
-      }
-    }
-  }
-
   void UpdateFilteredScenarios() {
     filtered_scenario_names_.clear();
-    if (type_ == ScenarioBrowserType::QUICK_ACCESS) {
-      GetQuickAccessScenarios(&filtered_scenario_names_);
-      return;
-    }
 
     filtered_scenario_names_.reserve(app_->scenario_manager().scenario_names()->size());
     auto search_words = GetSearchWords(search_text_);
@@ -319,7 +273,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     handled_search_text_ = search_text_;
   }
 
-  ScenarioBrowserType type_;
   std::string search_text_;
   std::string initial_search_text_;
 
@@ -342,9 +295,41 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
 }  // namespace
 
 std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(const std::string& id,
-                                                                         ScenarioBrowserType type,
                                                                          Application* app) {
-  return std::make_unique<ScenarioBrowserComponentImpl>(type, id, app);
+  return std::make_unique<ScenarioBrowserComponentImpl>(id, app);
+}
+
+void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
+  ImGui::IdGuard cid(id);
+  auto maybe_current_scenario = app.scenario_manager().GetCurrentScenario();
+  if (!maybe_current_scenario) {
+    return;
+  }
+  const ScenarioItem& item = *maybe_current_scenario;
+  ImGui::Text(item.name);
+  ImGui::SameLine();
+  if (ImGui::Button(icons::kEdit)) {
+    ScenarioEditorOptions opts;
+    opts.scenario_name = item.name;
+    app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+  }
+
+  if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
+    app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+  }
+  if (app.scenario_manager().has_running_scenario()) {
+    ImGui::SameLine();
+    if (ImGui::Button("Resume")) {
+      app.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
+    }
+  }
+  std::string description = item.unevaluated_def.description();
+  if (description.size() > 0) {
+    if (ImGui::TreeNode("Description")) {
+      ImGui::Text(description);
+      ImGui::TreePop();
+    }
+  }
 }
 
 }  // namespace aim

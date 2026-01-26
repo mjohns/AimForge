@@ -20,11 +20,6 @@ struct ScenarioBrowserResult {
   i64 run_id;
 };
 
-enum ScenarioBrowserType {
-  FULL,
-  QUICK_ACCESS,
-};
-
 class ScenarioBrowserComponent {
  public:
   virtual ~ScenarioBrowserComponent() {}
@@ -36,7 +31,8 @@ class ScenarioBrowserComponent {
 };
 
 std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(const std::string& id,
-                                                                         ScenarioBrowserType type,
                                                                          Application* app);
+
+void DrawCurrentScenarioComponent(const std::string& id, Application& app);
 
 }  // namespace aim

@@ -181,6 +181,14 @@ class PlaylistComponentImpl : public PlaylistComponent {
       ImGui::OpenPopup(menu_id);
     }
 
+    std::string description = run->playlist.def().description();
+    if (description.size() > 0) {
+      if (ImGui::TreeNode("Description")) {
+        ImGui::Text(description);
+        ImGui::TreePop();
+      }
+    }
+
     ImGui::Spacing();
     ImGui::Spacing();
     PlaylistRunComponent("PlaylistRun", run, screen_);
@@ -263,12 +271,12 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImGui::Text("%s", icons::kFilterList);
     ImGui::SameLine();
     if (ImGui::ChipSelector("##PlaylistViewType",
-                                  &view_type_,
-                                  {
-                                      {PlaylistViewType::ALL, "All"},
-                                      {PlaylistViewType::RECENT, "Recent"},
-                                      {PlaylistViewType::STARRED, "Starred"},
-                                  })) {
+                            &view_type_,
+                            {
+                                {PlaylistViewType::ALL, "All"},
+                                {PlaylistViewType::RECENT, "Recent"},
+                                {PlaylistViewType::STARRED, "Starred"},
+                            })) {
       app_.local_store().PutInt(kPlaylistViewTypeKey, (int)view_type_);
     }
 

@@ -38,6 +38,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       auto maybe_playlist = app_.playlist_manager().GetPlaylist(run->playlist.name);
       if (maybe_playlist) {
         original_playlist_def_ = maybe_playlist->def();
+        description_ = original_playlist_def_.description();
         for (auto& i : maybe_playlist->items()) {
           scenario_items_.push_back(i);
         }
@@ -79,6 +80,14 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       if (type == PlaylistType::DEFAULT) {
         levels_ = {};
       }
+    }
+
+    if (ImGui::TreeNode("Description")) {
+      ImGui::InputTextMultiline("##DescriptionInput",
+                                &description_,
+                                ImGui::GetContentRegionAvail(),
+                                ImGuiInputTextFlags_AllowTabInput);
+      ImGui::TreePop();
     }
 
     if (type == PlaylistType::LEVELS) {
@@ -341,6 +350,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
 
   bool SavePlaylist() {
     PlaylistDef playlist;
+    playlist.set_description(description_);
 
     if (levels_) {
       *playlist.mutable_levels() = *levels_;
@@ -398,6 +408,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   float char_x_ = 0;
   PlaylistDef original_playlist_def_;
   ImGui::NotificationPopup notification_popup_{"Notification"};
+  std::string description_;
 };
 
 }  // namespace
