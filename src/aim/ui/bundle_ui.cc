@@ -123,7 +123,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
 
       ImGui::Spacing();
 
-      if (ImGui::Button(std::format("{} Add", icons::kAdd))) {
+      if (ImGui::Button(std::format("{} Add bundle", icons::kAdd))) {
         add_dialog_.NotifyOpen({});
       }
 
@@ -146,9 +146,10 @@ class BundleUiComponentImpl : public BundleUiComponent {
       DrawSelectedBundle();
     }
 
-    if (ImGui::Button("Open bundles folder")) {
+    if (ImGui::Button(std::format("{} Folder", icons::kOpenInNew))) {
       OpenFolderInExplorer(app_.file_system()->GetUserDataPath("bundles"));
     }
+    ImGui::HelpTooltip("Open bundles folder in file explorer");
   }
 
   void DrawSelectedBundle() {
