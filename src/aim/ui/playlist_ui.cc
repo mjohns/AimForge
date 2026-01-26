@@ -278,7 +278,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImGui::InputTextWithHint("##PlaylistSearchInput", icons::kSearch, &playlist_search_text_);
     if (playlist_search_text_.size() > 0) {
       ImGui::SameLine();
-      if (ImGui::Button(icons::kCancel)) {
+      if (ImGui::SelectableButton(icons::kClear)) {
         playlist_search_text_ = "";
       }
     }

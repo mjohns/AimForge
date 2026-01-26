@@ -91,7 +91,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     ImGui::InputTextWithHint("##ScenarioSearchInput", icons::kSearch, &search_text_);
     if (search_text_.size() > 0) {
       ImGui::SameLine();
-      if (ImGui::Button(icons::kCancel)) {
+      if (ImGui::SelectableButton(icons::kClear)) {
         search_text_ = "";
       }
     }
