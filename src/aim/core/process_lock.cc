@@ -26,61 +26,6 @@
 namespace aim {
 namespace {
 
-i64 GetPid() {
-#ifdef _WIN32
-  return GetCurrentProcessId();
-#else
-  return getpid();
-#endif
-}
-
-std::string GetProcessNameFromPid(i64 pid) {
-#ifdef _WIN32
-  char processName[MAX_PATH] = "<unknown>";
-
-  // Get a handle to the process
-  HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
-
-  if (hProcess != NULL) {
-    HMODULE hMod;
-    DWORD cbNeeded;
-    // Get the process's main module (the .exe)
-    if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded)) {
-      GetModuleBaseNameA(hProcess, hMod, processName, sizeof(processName));
-    }
-    CloseHandle(hProcess);
-  }
-  return std::string(processName);
-#elif __APPLE__
-  char pathBuffer[PROC_PIDPATHINFO_MAXSIZE];
-
-  // proc_name retrieves the name of the process for the given PID
-  // It populates the buffer and returns the length of the string
-  int result = proc_name(pid, pathBuffer, sizeof(pathBuffer));
-
-  if (result > 0) {
-    return std::string(pathBuffer);
-  } else {
-    return "Unknown (or insufficient permissions)";
-  }
-#else
-  char path[PATH_MAX];
-  char dest[PATH_MAX];
-  // Construct path to the 'exe' link
-  snprintf(path, sizeof(path), "/proc/%lld/exe", pid);
-
-  // Read where the symbolic link points
-  ssize_t bytes = readlink(path, dest, sizeof(dest) - 1);
-  if (bytes != -1) {
-    dest[bytes] = '\0';
-    std::string fullPath(dest);
-    // Return only the filename, not the full path
-    return fullPath.substr(fullPath.find_last_of("/") + 1);
-  }
-  return "Unknown";
-#endif
-}
-
 class ProcessLockImpl : public ProcessLock {
  public:
   ProcessLockImpl() : pid_(GetPid()) {
@@ -124,7 +69,7 @@ class ProcessLockImpl : public ProcessLock {
 
     // Check if the pid is a valid AimForge process.
     std::string process_name = GetProcessNameFromPid(existing_pid);
-    if (process_name == "AimForge.exe") {
+    if (process_name == "AimForge.exe" || process_name == "AimForge") {
       return existing_pid;
     }
 
@@ -139,6 +84,59 @@ class ProcessLockImpl : public ProcessLock {
 
 std::unique_ptr<ProcessLock> CreateProcessLock() {
   return std::make_unique<ProcessLockImpl>();
+}
+
+i64 GetPid() {
+#ifdef _WIN32
+  return GetCurrentProcessId();
+#else
+  return getpid();
+#endif
+}
+
+std::string GetProcessNameFromPid(i64 pid) {
+#ifdef _WIN32
+  char processName[MAX_PATH] = "<unknown>";
+
+  // Get a handle to the process
+  HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+
+  if (hProcess != NULL) {
+    HMODULE hMod;
+    DWORD cbNeeded;
+    // Get the process's main module (the .exe)
+    if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded)) {
+      GetModuleBaseNameA(hProcess, hMod, processName, sizeof(processName));
+    }
+    CloseHandle(hProcess);
+  }
+  return std::string(processName);
+#elif __APPLE__
+  char pathBuffer[PROC_PIDPATHINFO_MAXSIZE];
+
+  // proc_name retrieves the name of the process for the given PID
+  // It populates the buffer and returns the length of the string
+  int result = proc_name(pid, pathBuffer, sizeof(pathBuffer));
+
+  if (result > 0) {
+    return std::string(pathBuffer);
+  }
+#else
+  char path[PATH_MAX];
+  char dest[PATH_MAX];
+  // Construct path to the 'exe' link
+  snprintf(path, sizeof(path), "/proc/%lld/exe", pid);
+
+  // Read where the symbolic link points
+  ssize_t bytes = readlink(path, dest, sizeof(dest) - 1);
+  if (bytes != -1) {
+    dest[bytes] = '\0';
+    std::string fullPath(dest);
+    // Return only the filename, not the full path
+    return fullPath.substr(fullPath.find_last_of("/") + 1);
+  }
+#endif
+  return "Unknown";
 }
 
 }  // namespace aim
