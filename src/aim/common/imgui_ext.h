@@ -433,7 +433,7 @@ struct InputFloatParams {
 
   float step = 1;
   float fast_step = 5;
-  const char* format = "%.3g";
+  const char* format = "%.6g";
   float width = -1;
   std::optional<float> default_value;
 
@@ -721,6 +721,48 @@ static void ReadonlyLabeledFloat(const std::string& label, float value, int widt
   float char_x = GetDefaultCharSizeX();
   ImGui::SetNextItemWidth(char_x * width_multiple);
   ImGui::InputFloat("##ValueOut", &value, 0.0f, 0.0f, "%.3g", ImGuiInputTextFlags_ReadOnly);
+}
+
+static bool Chip(const std::string& label, bool selected) {
+  ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+
+  // Adjust size based on text
+  ImVec2 size = ImGui::CalcTextSize(label.c_str());
+  ImVec2 frame_padding = ImGui::GetStyle().FramePadding;
+  ImGui::SetNextItemWidth(size.x + frame_padding.x * 2.0f);
+  bool clicked = false;
+  if (ImGui::Selectable(label.c_str(), selected, ImGuiSelectableFlags_None, size)) {
+    clicked = true;
+  }
+
+  ImGui::PopStyleVar();
+  return clicked;
+}
+
+template <typename T>
+bool ChipSelector(const std::string& id,
+                  T* current_value,
+                  const std::vector<std::pair<T, std::string>>& values) {
+  ImGui::IdGuard cid(id);
+
+  T selected_value = *current_value;
+  bool is_first = true;
+  for (auto& entry : values) {
+    T value_type = entry.first;
+    const std::string& label = entry.second;
+    if (is_first) {
+      is_first = false;
+    } else {
+      ImGui::SameLine();
+    }
+    if (Chip(label.c_str(), *current_value == value_type)) {
+      selected_value = value_type;
+    }
+  }
+
+  bool item_was_changed = selected_value != *current_value;
+  *current_value = selected_value;
+  return item_was_changed;
 }
 
 }  // namespace ImGui

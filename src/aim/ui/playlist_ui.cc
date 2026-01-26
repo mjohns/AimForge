@@ -259,13 +259,15 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImGui::Separator();
     ImGui::Spacing();
 
-    ImGui::SetNextItemWidth(char_size.x * 8);
-    if (ImGui::SimpleTypeDropdown("##PlaylistViewType",
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("%s", icons::kFilterList);
+    ImGui::SameLine();
+    if (ImGui::ChipSelector("##PlaylistViewType",
                                   &view_type_,
                                   {
+                                      {PlaylistViewType::ALL, "All"},
                                       {PlaylistViewType::RECENT, "Recent"},
                                       {PlaylistViewType::STARRED, "Starred"},
-                                      {PlaylistViewType::ALL, "All"},
                                   })) {
       app_.local_store().PutInt(kPlaylistViewTypeKey, (int)view_type_);
     }

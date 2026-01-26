@@ -71,6 +71,21 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       return;
     }
 
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("%s", icons::kFilterList);
+    ImGui::SameLine();
+    bool view_type_changed = ImGui::ChipSelector("##ScenarioViewType",
+                                                 &view_type_,
+                                                 {
+                                                     {ScenarioViewType::ALL, "All"},
+                                                     {ScenarioViewType::RECENT, "Recent"},
+                                                     {ScenarioViewType::STARRED, "Starred"},
+                                                 });
+    if (view_type_changed) {
+      app_->local_store().PutInt(GetViewTypeKey(), (int)view_type_);
+      UpdateFilteredScenarios();
+    }
+
     ImVec2 char_size = ImGui::CalcTextSize("A");
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##ScenarioSearchInput", icons::kSearch, &search_text_);
@@ -81,18 +96,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       }
     }
 
-    ImGui::SetNextItemWidth(char_size.x * 8);
-    bool view_type_changed = ImGui::SimpleTypeDropdown("##ScenarioViewType",
-                                                       &view_type_,
-                                                       {
-                                                           {ScenarioViewType::RECENT, "Recent"},
-                                                           {ScenarioViewType::STARRED, "Starred"},
-                                                           {ScenarioViewType::ALL, "All"},
-                                                       });
-    if (view_type_changed) {
-      app_->local_store().PutInt(GetViewTypeKey(), (int)view_type_);
-      UpdateFilteredScenarios();
-    }
 
     ImGui::Spacing();
     ImGui::Spacing();
