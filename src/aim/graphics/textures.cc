@@ -39,7 +39,7 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   create_info.width = image.width();
   create_info.height = image.height();
   create_info.layer_count_or_depth = 1;
-  create_info.num_levels = 6;
+  create_info.num_levels = 1;
   create_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
   texture_ = SDL_CreateGPUTexture(device, &create_info);
 
@@ -71,7 +71,7 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   SDL_UploadToGPUTexture(copy_pass, &texture_transfer_info, &region, true);
 
   SDL_EndGPUCopyPass(copy_pass);
-  SDL_GenerateMipmapsForGPUTexture(upload_cmd_buffer, texture_);
+  // SDL_GenerateMipmapsForGPUTexture(upload_cmd_buffer, texture_);
   SDL_SubmitGPUCommandBuffer(upload_cmd_buffer);
 
   SDL_ReleaseGPUTransferBuffer(device, transfer_buffer);
