@@ -338,21 +338,6 @@ class HomeScreen : public UiScreen {
       ImGui::Text(item);
     }
     */
-
-    // Place exit at bottom
-    const char* exit_popup_id = "ExitMenu";
-    if (ImGui::BeginPopupContextItem(exit_popup_id)) {
-      if (ImGui::Selectable("Restart")) {
-        app_.RequestRestart();
-      }
-      ImGui::EndPopup();
-    }
-    ImGui::SetCursorAtBottom(ImGui::GetFrameHeight());
-    if (ImGui::Selectable(std::format("{} Exit", icons::kLogout).c_str(), false)) {
-      // Show a screen to confirm?
-      app_.RequestExit();
-    }
-    ImGui::OpenPopupOnItemClick(exit_popup_id, ImGuiPopupFlags_MouseButtonRight);
   }
 
   void DrawScenariosScreen() {

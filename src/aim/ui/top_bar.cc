@@ -74,11 +74,32 @@ void DrawTopBar(UiScreen* screen) {
 
   ImGui::SameLine();
 
-  ImVec2 char_size = ImGui::CalcTextSize("A");
-  ImGui::SetCursorAtRight(char_size.x * 2);
-  if (ImGui::Selectable(icons::kSettings, false)) {
-    std::string current_scenario_name = current_scenario ? current_scenario->name : "";
-    screen->PushNextScreen(CreateSettingsScreen(&app, current_scenario_name));
+  const char* menu_id = "top_bar_menu";
+  if (ImGui::BeginPopupContextItem(menu_id)) {
+    auto normal_font = app.font_manager().UseDefault();
+    if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str())) {
+      std::string current_scenario_name = current_scenario ? current_scenario->name : "";
+      screen->PushNextScreen(CreateSettingsScreen(&app, current_scenario_name));
+    }
+
+    ImGui::SpacedSeparator();
+
+    if (ImGui::Selectable(std::format("{} Restart", icons::kRefresh).c_str())) {
+      app.RequestRestart();
+    }
+
+    if (ImGui::Selectable(std::format("{} Exit", icons::kLogout).c_str())) {
+      // Show a screen to confirm?
+      app.RequestExit();
+    }
+
+    normal_font.Pop();
+    ImGui::EndPopup();
+  }
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::SetCursorAtRight(char_x * 2);
+  if (ImGui::SelectableButton(icons::kMoreVert)) {
+    ImGui::OpenPopup(menu_id);
   }
 
   font.Pop();
