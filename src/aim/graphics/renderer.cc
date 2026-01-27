@@ -26,13 +26,6 @@ struct ProgressBarUniform {
   float progress = 0.0;
 };
 
-struct SimpleSphereWithLightingUniform {
-  glm::vec4 base_color{};
-  glm::vec4 light_color{};
-  glm::vec4 light_direction{};
-  glm::mat4 transform{};
-};
-
 struct HealthBar {
   glm::mat4 transform{1.0f};
   float health_percent = 0.f;
@@ -760,36 +753,6 @@ class RendererImpl : public Renderer {
 
     glm::vec4 color4(color, 1.0f);
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-
-    SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
-  }
-
-  void DrawSimpleSphereWithLighting(const glm::mat4& view_projection,
-                                    const glm::vec3& position,
-                                    float radius,
-                                    const glm::vec3& color,
-                                    const glm::vec3& camera_position,
-                                    RenderContext* ctx) {
-    SDL_GPUBufferBinding binding{};
-    binding.buffer = sphere_vertex_buffer_;
-    binding.offset = 0;
-    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-    SimpleSphereWithLightingUniform uniform_data{};
-    uniform_data.transform = glm::mat4(1.0f);
-    uniform_data.transform = glm::translate(uniform_data.transform, position);
-    uniform_data.transform = glm::scale(uniform_data.transform, glm::vec3(radius));
-    uniform_data.transform = view_projection * uniform_data.transform;
-
-    uniform_data.base_color = glm::vec4(color, 0.6f);
-    uniform_data.light_color = glm::vec4(1.0f);
-
-    glm::vec3 light_position = camera_position;
-    // light_position.z += 15;
-    uniform_data.light_direction = glm::vec4(glm::normalize(light_position - position), 1.0f);
-
-    SDL_PushGPUVertexUniformData(
-        ctx->command_buffer, 0, &uniform_data, sizeof(SimpleSphereWithLightingUniform));
 
     SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
   }
