@@ -155,11 +155,39 @@ class ThemeEditor {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Walls");
       ImGui::Indent();
-      DrawWallAppearanceEditor("Front", current_theme_.mutable_front_appearance());
+
+      if (current_theme_.front_appearance().has_texture()) {
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Use same texture on all walls");
+        ImGui::SameLine();
+        ImGui::Checkbox("##SameTextureCheck", &share_texture_and_scale_);
+      } else {
+        share_texture_and_scale_ = false;
+      }
+
+      DrawWallAppearanceEditor(
+          "Front", current_theme_.mutable_front_appearance(), /*is_front=*/true);
       DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
       DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
       DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
       DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
+
+      if (share_texture_and_scale_) {
+        const WallAppearance& front = current_theme_.front_appearance();
+        if (!front.has_texture()) {
+          share_texture_and_scale_ = false;
+        } else {
+          for (WallAppearance* appearance : {
+                   current_theme_.mutable_side_appearance(),
+                   current_theme_.mutable_floor_appearance(),
+                   current_theme_.mutable_roof_appearance(),
+                   current_theme_.mutable_back_appearance(),
+               }) {
+            appearance->mutable_texture()->set_scale(front.texture().scale());
+            appearance->mutable_texture()->set_texture_name(front.texture().texture_name());
+          }
+        }
+      }
       ImGui::Unindent();
     }
   }
@@ -231,7 +259,9 @@ class ThemeEditor {
                       PROTO_FLOAT_FIELD(StoredColor, stored_color, multiplier));
   }
 
-  void DrawWallAppearanceEditor(const std::string& header, WallAppearance* appearance) {
+  void DrawWallAppearanceEditor(const std::string& header,
+                                WallAppearance* appearance,
+                                bool is_front = false) {
     ImGui::IdGuard cid("WallAppearance" + header);
 
     float char_x = ImGui::GetDefaultCharSizeX();
@@ -243,8 +273,12 @@ class ThemeEditor {
       selected_type = kTextureItem;
     }
 
-    std::vector<std::string> types = {kSolidColorItem, kTextureItem};
-    ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_x * 20);
+    bool show_texture_options = is_front || !share_texture_and_scale_;
+
+    if (show_texture_options) {
+      std::vector<std::string> types = {kSolidColorItem, kTextureItem};
+      ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_x * 20);
+    }
 
     if (selected_type == kSolidColorItem) {
       ImGui::AlignTextToFramePadding();
@@ -253,16 +287,18 @@ class ThemeEditor {
       ImGui::InputStoredColor("##Color", appearance->mutable_color(), char_x);
     }
     if (selected_type == kTextureItem) {
-      WallTexture* texture = appearance->mutable_texture();
-      ImGui::SimpleDropdown(
-          "TextureNameDropdown", texture->mutable_texture_name(), texture_names_, char_x * 20);
+      if (show_texture_options) {
+        WallTexture* texture = appearance->mutable_texture();
+        ImGui::SimpleDropdown(
+            "TextureNameDropdown", texture->mutable_texture_name(), texture_names_, char_x * 20);
 
-      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Scale")
-                            .set_step(0.05, 0.2)
-                            .set_is_optional()
-                            .set_min(0.05)
-                            .set_width(char_x * 9),
-                        PROTO_FLOAT_FIELD(WallTexture, texture, scale));
+        ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Scale")
+                              .set_step(0.05, 0.2)
+                              .set_is_optional()
+                              .set_min(0.05)
+                              .set_width(char_x * 9),
+                          PROTO_FLOAT_FIELD(WallTexture, texture, scale));
+      }
     }
 
     ImGui::AlignTextToFramePadding();
@@ -289,6 +325,8 @@ class ThemeEditor {
   Theme current_theme_;
   const std::vector<std::string> theme_names_;
   const std::vector<std::string> texture_names_;
+
+  bool share_texture_and_scale_ = false;
 };
 
 class ThemeEditorScreen : public UiScreen {
