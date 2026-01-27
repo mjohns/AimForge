@@ -305,7 +305,7 @@ class ThemeEditorScreen : public UiScreen {
       PopSelf();
     }
     Line();
-    if (ImGui::Button(std::format("{} New theme", icons::kAdd))) {
+    if (ImGui::Button(std::format("{} Add theme", icons::kAdd))) {
       OpenNewTheme();
     }
     Line();
@@ -429,93 +429,88 @@ class ThemeEditorScreen : public UiScreen {
       ImGui::SimpleDropdown(
           "TextureNameDropdown", texture->mutable_texture_name(), texture_names_, char_x_ * 20);
 
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Scale")
+                            .set_step(0.05, 0.2)
+                            .set_is_optional()
+                            .set_min(0.05)
+                            .set_width(char_x_ * 9),
+                        PROTO_FLOAT_FIELD(WallTexture, texture, scale));
+    }
+
       ImGui::AlignTextToFramePadding();
-      ImGui::Text("Scale");
+      ImGui::Text("Mix percent");
       ImGui::SameLine();
       ImGui::SetNextItemWidth(char_x_ * 9);
-      float scale = texture->scale();
-      ImGui::InputFloat("##TextureScale", &scale, 0.1, 1, "%.1f");
-      if (scale > 0) {
-        texture->set_scale(scale);
+      float mix_percent = appearance->mix_percent();
+      ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.6g");
+      if (mix_percent > 0) {
+        appearance->set_mix_percent(mix_percent);
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Mix color");
+        ImGui::SameLine();
+        DrawStoredColorEditor("MixColor", appearance->mutable_mix_color());
       } else {
-        texture->clear_scale();
+        appearance->clear_mix_percent();
+      }
+      ImGui::Unindent();
+    }
+
+    void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
+
+    void Render() override {
+      if (!editing_theme_) {
+        UiScreen::Render();
+        return;
+      }
+
+      RenderContext ctx;
+      Stopwatch stopwatch;
+      FrameTimes frame_times;
+      if (app_.StartRender(&ctx)) {
+        HealthBarSettings health_bar;
+        health_bar.set_show(true);
+        health_bar.set_width(8);
+        health_bar.set_height(2);
+        app_.renderer()->DrawScenario(projection_,
+                                      default_room_,
+                                      current_theme_,
+                                      health_bar,
+                                      target_manager_.GetTargets(),
+                                      look_at_,
+                                      &ctx,
+                                      stopwatch,
+                                      &frame_times);
+        app_.FinishRender(&ctx);
       }
     }
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Mix percent");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 9);
-    float mix_percent = appearance->mix_percent();
-    ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.2f");
-    if (mix_percent > 0) {
-      appearance->set_mix_percent(mix_percent);
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Mix color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("MixColor", appearance->mutable_mix_color());
-    } else {
-      appearance->clear_mix_percent();
-    }
-    ImGui::Unindent();
-  }
-
-  void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
-
-  void Render() override {
-    if (!editing_theme_) {
-      UiScreen::Render();
-      return;
+   private:
+    void LoadThemeList() {
+      theme_names_ = app_.settings_manager().ListThemes();
+      std::sort(theme_names_.begin(),
+                theme_names_.end(),
+                [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
     }
 
-    RenderContext ctx;
-    Stopwatch stopwatch;
-    FrameTimes frame_times;
-    if (app_.StartRender(&ctx)) {
-      HealthBarSettings health_bar;
-      health_bar.set_show(true);
-      health_bar.set_width(8);
-      health_bar.set_height(2);
-      app_.renderer()->DrawScenario(projection_,
-                                    default_room_,
-                                    current_theme_,
-                                    health_bar,
-                                    target_manager_.GetTargets(),
-                                    look_at_,
-                                    &ctx,
-                                    stopwatch,
-                                    &frame_times);
-      app_.FinishRender(&ctx);
-    }
-  }
+    Room default_room_;
+    TargetManager target_manager_;
+    glm::mat4 projection_;
+    LookAtInfo look_at_;
 
- private:
-  void LoadThemeList() {
-    theme_names_ = app_.settings_manager().ListThemes();
-    std::sort(theme_names_.begin(),
-              theme_names_.end(),
-              [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
-  }
+    std::vector<std::string> theme_names_;
+    std::vector<std::string> texture_names_;
 
-  Room default_room_;
-  TargetManager target_manager_;
-  glm::mat4 projection_;
-  LookAtInfo look_at_;
+    Theme current_theme_;
+    std::string original_theme_name_;
+    std::string current_theme_name_;
+    bool is_new_theme_ = false;
+    bool editing_theme_ = false;
 
-  std::vector<std::string> theme_names_;
-  std::vector<std::string> texture_names_;
+    float char_x_;
 
-  Theme current_theme_;
-  std::string original_theme_name_;
-  std::string current_theme_name_;
-  bool is_new_theme_ = false;
-  bool editing_theme_ = false;
-
-  float char_x_;
-
-  ImGui::NotificationPopup notification_popup_{"Notification"};
-  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
-};
+    ImGui::NotificationPopup notification_popup_{"Notification"};
+    ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+  };
 
 }  // namespace
 
