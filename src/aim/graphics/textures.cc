@@ -31,7 +31,8 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   sampler_create_info.address_mode_w = SDL_GPU_SAMPLERADDRESSMODE_REPEAT;
   sampler_create_info.enable_anisotropy = true;
   sampler_create_info.max_anisotropy = 16;
-  sampler_create_info.max_lod = 1000;
+  sampler_create_info.min_lod = 0;
+  sampler_create_info.max_lod = 1000.0f;
   //sampler_create_info.mip_lod_bias = 0.1;
 
   sampler_ = SDL_CreateGPUSampler(device, &sampler_create_info);
