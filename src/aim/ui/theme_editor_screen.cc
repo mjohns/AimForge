@@ -3,6 +3,7 @@
 #include <format>
 #include <optional>
 
+#include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
@@ -241,41 +242,26 @@ class ThemeEditorScreen : public UiScreen {
       ImGui::SameLine();
       DrawStoredColorEditor("HealthColor", health_bar.mutable_health_color());
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Health alpha");
-      ImGui::SameLine();
-      bool has_health_alpha = health_bar.has_health_alpha();
-      float health_alpha = health_bar.health_alpha();
-      ImGui::OptionalInputFloat(
-          "HealthAlpha", &has_health_alpha, &health_alpha, 0.05, 0.2, "%.2f", char_x_ * 9);
-      if (has_health_alpha) {
-        health_bar.set_health_alpha(health_alpha);
-      } else {
-        health_bar.clear_health_alpha();
-      }
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Health alpha")
+                            .set_is_optional()
+                            .set_step(0.05, 0.2)
+                            .set_min(0)
+                            .set_default(0.8)
+                            .set_width(char_x_ * 9),
+                        PROTO_FLOAT_FIELD(HealthBarAppearance, &health_bar, health_alpha));
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Background color");
       ImGui::SameLine();
       DrawStoredColorEditor("HealthBackgroundColor", health_bar.mutable_background_color());
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Background alpha");
-      ImGui::SameLine();
-      bool has_background_alpha = health_bar.has_background_alpha();
-      float background_alpha = health_bar.background_alpha();
-      ImGui::OptionalInputFloat("BackgroundAlpha",
-                                &has_background_alpha,
-                                &background_alpha,
-                                0.05,
-                                0.2,
-                                "%.2f",
-                                char_x_ * 9);
-      if (has_background_alpha) {
-        health_bar.set_background_alpha(background_alpha);
-      } else {
-        health_bar.clear_background_alpha();
-      }
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Background alpha")
+                            .set_is_optional()
+                            .set_step(0.05, 0.2)
+                            .set_min(0)
+                            .set_default(0.8)
+                            .set_width(char_x_ * 9),
+                        PROTO_FLOAT_FIELD(HealthBarAppearance, &health_bar, background_alpha));
       ImGui::Unindent();
 
       Line();

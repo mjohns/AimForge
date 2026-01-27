@@ -79,14 +79,6 @@ void Text(const std::string& val);
 
 bool Button(const std::string& label, const ImVec2& size = ImVec2(0, 0));
 
-void OptionalInputFloat(const std::string& id,
-                        bool* has_value,
-                        float* value,
-                        float step,
-                        float fast_step,
-                        const char* format,
-                        float input_width);
-
 void InputJitteredFloat(const std::string& id,
                         float* value,
                         float* jitter_value,
@@ -94,6 +86,7 @@ void InputJitteredFloat(const std::string& id,
                         float fast_step,
                         const char* format,
                         float input_width);
+
 bool SimpleDropdown(const std::string& id,
                     std::string* value,
                     const std::vector<std::string>& values,

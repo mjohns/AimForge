@@ -321,15 +321,6 @@ class SettingsScreen : public UiScreen {
     }
   }
 
-  void OptionalInputFloat(const std::string& id,
-                          bool* has_value,
-                          float* value,
-                          float step,
-                          float fast_step,
-                          const char* format = "%.1f") {
-    ImGui::OptionalInputFloat(id, has_value, value, step, fast_step, format, char_x_ * 10);
-  }
-
   void KeyMappingEntry(KeybindItem* item, int i, float width) {
     std::string value;
     if (item->is_capturing_index == i) {
