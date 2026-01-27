@@ -91,17 +91,19 @@ class StatsManagerImpl : public StatsManager {
 }  // namespace
 
 float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
-  if (def.start_score() <= 0) {
+  float start_score = def.score_targets().start();
+  float end_score = def.score_targets().end();
+  if (start_score <= 0) {
     return 0;
   }
-  if (score >= def.end_score()) {
+  if (score >= end_score) {
     return 5;
   }
-  if (score < def.start_score()) {
-    return score / def.start_score();
+  if (score < start_score) {
+    return score / start_score;
   }
 
-  float percent_complete = (score - def.start_score()) / (def.end_score() - def.start_score());
+  float percent_complete = (score - start_score) / (end_score - start_score);
   return 1.0 + 4.0 * percent_complete;
 }
 

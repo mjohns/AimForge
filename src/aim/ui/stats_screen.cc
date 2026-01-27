@@ -439,8 +439,9 @@ class StatsScreen : public UiScreen {
         ImGui::SameLine();
         ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), icons::kBolt));
         auto font2 = app_.font_manager().UseDefault();
-        ImGui::HelpTooltip(std::format("Target score: {}",
-                                       MaybeIntToString(evaluated_scenario_def_->end_score(), 1)));
+        ImGui::HelpTooltip(
+            std::format("Target score: {}",
+                        MaybeIntToString(evaluated_scenario_def_->score_targets().end(), 1)));
       }
     }
 

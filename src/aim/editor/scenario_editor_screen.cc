@@ -240,30 +240,27 @@ class ScenarioEditorScreen : public UiScreen {
     def_.set_duration_seconds(duration_seconds);
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Score range");
+    ImGui::Text("Score targets");
     ImGui::SameLine();
-    ImGui::InputFloat(ImGui::InputFloatParams("StartScore")
-                          .set_is_optional()
-                          .set_zero_is_unset()
-                          .set_min(0)
-                          .set_step(0.1, 2)
-                          .set_width(char_x_ * 12),
-                      PROTO_FLOAT_FIELD(ScenarioDef, &def_, start_score));
-    if (def_.start_score() > 0) {
-      ImGui::SameLine();
-      ImGui::Text("to");
-      ImGui::SameLine();
-      ImGui::InputFloat(ImGui::InputFloatParams("EndScore")
-                            .set_zero_is_unset()
-                            .set_min(0)
-                            .set_step(0.1, 2)
-                            .set_width(char_x_ * 12),
-                        PROTO_FLOAT_FIELD(ScenarioDef, &def_, end_score));
-      if (def_.end_score() < def_.start_score()) {
-        def_.set_end_score(def_.start_score());
-      }
+    bool has_score_targets = def_.has_score_targets();
+    ImGui::SameLine();
+    ImGui::Checkbox("##ScoreTargetsCheckbox", &has_score_targets);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Defines targets for scores. A score at \"start\" value gives 1.0. \"end\" gives the max "
+        "5.0. Useful for level based playlists where you can keep trying to get a 5.0 for "
+        "progressively higher levels.");
+    if (has_score_targets) {
+      ImGui::InputFloat(
+          ImGui::InputFloatParams::WithLabelAsId("Start").set_min(0).set_step(0.1, 2).set_width(
+              char_x_ * 12),
+          PROTO_FLOAT_FIELD(ScoreTargets, def_.mutable_score_targets(), start));
+      ImGui::InputFloat(
+          ImGui::InputFloatParams::WithLabelAsId("End").set_min(0).set_step(0.1, 2).set_width(
+              char_x_ * 12),
+          PROTO_FLOAT_FIELD(ScoreTargets, def_.mutable_score_targets(), end));
     } else {
-      def_.clear_end_score();
+      def_.clear_score_targets();
     }
 
     ImGui::SpacedSeparator();

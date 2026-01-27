@@ -176,8 +176,15 @@ message ShotType {
   float accuracy_penalty_multiplier = 18;
 }
 
+    // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.
+    // A score at start will have a level of 1 and end is 5.
+message ScoreTargets {
+    float start = 1;
+    float end = 2;
+}
+
 message ScenarioDef {
-  reserved 13;
+  reserved 10, 11, 13;
   string description = 1;
   int32 duration_seconds = 2;
   Room room = 3;
@@ -190,10 +197,7 @@ message ScenarioDef {
 
   ShotType shot_type = 8;
 
-
-  // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.
-  float start_score = 10;
-  float end_score = 11;
+  ScoreTargets score_targets = 9;
 
   oneof type {
     StaticScenarioDef static_def = 30;

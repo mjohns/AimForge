@@ -21,6 +21,63 @@ enum class ScenarioViewType : int {
   ALL = 3,
 };
 
+void DrawScenarioRightClickMenu(const char* popup_id,
+                            const std::string& scenario_name,
+                            ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
+                            Application& app) {
+  if (ImGui::BeginPopupContextItem(popup_id)) {
+    if (ImGui::BeginMenu("Add to")) {
+      ImGui::LoopId playlist_loop_id;
+      std::string selected_playlist;
+      for (auto& playlist_name : app.history_manager().recent_playlists()) {
+        auto id = playlist_loop_id.Get();
+        if (ImGui::MenuItem(playlist_name.c_str())) {
+          selected_playlist = playlist_name;
+        }
+      }
+      if (selected_playlist.size() > 0) {
+        app.playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario_name);
+        app.bundle_manager().SaveBundle(ResourceName::Parse(selected_playlist).bundle_name());
+      }
+      ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Add copy to")) {
+      ImGui::LoopId playlist_loop_id;
+      std::string selected_playlist;
+      for (auto& playlist_name : app.history_manager().recent_playlists()) {
+        auto id = playlist_loop_id.Get();
+        if (ImGui::MenuItem(playlist_name.c_str())) {
+          selected_playlist = playlist_name;
+          ScenarioEditorOptions opts;
+          opts.scenario_name = scenario_name;
+          opts.is_new_copy = true;
+          opts.add_to_playlist = playlist_name;
+          opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
+          app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+        }
+      }
+      ImGui::EndMenu();
+    }
+    if (ImGui::Selectable("Edit")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = scenario_name;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+    }
+    if (ImGui::Selectable("Copy")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = scenario_name;
+      opts.is_new_copy = true;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+    }
+    ImGui::SpacedSeparator();
+    if (ImGui::Selectable("Delete")) {
+      delete_confirmation_dialog->NotifyOpen(std::format("Delete \"{}\"?", scenario_name),
+                                             scenario_name);
+    }
+    ImGui::EndPopup();
+  }
+}
+
 class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
  public:
   explicit ScenarioBrowserComponentImpl(const std::string& id, Application* app)
@@ -177,61 +234,7 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       }
     }
     const char* popup_id = "ScenarioItemMenu";
-    if (ImGui::BeginPopupContextItem(popup_id)) {
-      if (ImGui::BeginMenu("Add to")) {
-        ImGui::LoopId playlist_loop_id;
-        std::string selected_playlist;
-        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
-          auto id = playlist_loop_id.Get();
-          if (ImGui::MenuItem(playlist_name.c_str())) {
-            selected_playlist = playlist_name;
-          }
-        }
-        if (selected_playlist.size() > 0) {
-          app_->playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario.name);
-          app_->bundle_manager().SaveBundle(ResourceName::Parse(selected_playlist).bundle_name());
-        }
-        ImGui::EndMenu();
-      }
-      if (ImGui::BeginMenu("Add copy to")) {
-        ImGui::LoopId playlist_loop_id;
-        std::string selected_playlist;
-        for (auto& playlist_name : app_->history_manager().recent_playlists()) {
-          auto id = playlist_loop_id.Get();
-          if (ImGui::MenuItem(playlist_name.c_str())) {
-            selected_playlist = playlist_name;
-            ScenarioEditorOptions opts;
-            opts.scenario_name = scenario.name;
-            opts.is_new_copy = true;
-            opts.add_to_playlist = playlist_name;
-            opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
-            app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
-          }
-        }
-        ImGui::EndMenu();
-      }
-      if (ImGui::Selectable("Edit")) {
-        result->scenario_to_edit = scenario.name;
-      }
-      if (ImGui::Selectable("Copy")) {
-        result->scenario_to_edit_copy = scenario.name;
-      }
-      if (ImGui::Selectable("Delete")) {
-        delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", scenario.name),
-                                               scenario.name);
-      }
-      if (ImGui::BeginMenu("Advanced")) {
-        if (ImGui::MenuItem("View latest run")) {
-          result->scenario_stats_to_view = scenario.name;
-          result->run_id = app_->stats_manager().GetLatestRunId(scenario.name);
-        }
-        if (ImGui::MenuItem("Reload")) {
-          result->reload_scenarios = true;
-        }
-        ImGui::EndMenu();
-      }
-      ImGui::EndPopup();
-    }
+    DrawScenarioRightClickMenu(popup_id, scenario.name, &delete_confirmation_dialog_, *app_);
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
 
     ImGui::SameLine();
@@ -323,6 +326,10 @@ void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
     ScenarioEditorOptions opts;
     opts.scenario_name = item.name;
     app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+  }
+
+  ImGui::SameLine();
+  if (ImGui::SelectableButton(icons::kMoreVert)) {
   }
 
   if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
