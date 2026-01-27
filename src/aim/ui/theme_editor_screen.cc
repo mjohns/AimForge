@@ -27,6 +27,270 @@ Room GetDefaultRoom() {
   return r;
 }
 
+class ThemeEditor {
+ public:
+  ThemeEditor(const std::string& theme_name,
+              Theme current_theme,
+              std::vector<std::string> theme_names,
+              std::vector<std::string> texture_names,
+              Application& app)
+      : app_(app),
+        original_theme_name_(theme_name),
+        current_theme_name_(theme_name),
+        current_theme_(current_theme),
+        theme_names_(std::move(theme_names)),
+        texture_names_(std::move(texture_names)) {}
+
+  // Returns whether still editing.
+  void Draw() {
+    float char_x = ImGui::GetDefaultCharSizeX();
+    ImGui::IdGuard cid("CurrentThemeEditor");
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Theme");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x * 20);
+    ImGui::InputText("##NameInput", &current_theme_name_);
+
+    bool is_reference = current_theme_.has_reference();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Reference");
+    ImGui::SameLine();
+    ImGui::Checkbox("##ReferenceCheck", &is_reference);
+    ImGui::SameLine();
+    // TODO: Improve help text to be more clear
+    ImGui::HelpMarker(
+        "Use settings from another theme. Useful when you using per scenario theme settings and "
+        "you want to create a \"Default Static\" theme which you can change and have all static "
+        "scenarios use the new theme.");
+
+    ImGui::SpacedSeparator();
+
+    if (is_reference) {
+      std::string original_name = current_theme_.name();
+      std::string original_reference = current_theme_.reference();
+
+      current_theme_.Clear();
+      current_theme_.set_name(original_name);
+      current_theme_.set_reference(original_reference);
+
+      std::string* reference = current_theme_.mutable_reference();
+      if (reference->size() == 0) {
+        *reference = theme_names_[0];
+      }
+      ImGui::SimpleDropdown("ReferenceThemeSelector", reference, theme_names_, char_x * 20);
+    } else {
+      current_theme_.clear_reference();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Targets");
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("TargetColor", current_theme_.mutable_target_color());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Ghost color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("GhostTargetColor", current_theme_.mutable_ghost_target_color());
+
+      ImGui::Unindent();
+
+      ImGui::SpacedSeparator();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Crosshair");
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("CrosshairColor", current_theme_.mutable_crosshair()->mutable_color());
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Outline color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("OutlineCrosshairColor",
+                            current_theme_.mutable_crosshair()->mutable_outline_color());
+
+      ImGui::Unindent();
+
+      ImGui::SpacedSeparator();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Health bar");
+      HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Health color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("HealthColor", health_bar.mutable_health_color());
+
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Health alpha")
+                            .set_is_optional()
+                            .set_step(0.05, 0.2)
+                            .set_min(0)
+                            .set_default(0.8)
+                            .set_width(char_x * 9),
+                        PROTO_FLOAT_FIELD(HealthBarAppearance, &health_bar, health_alpha));
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Background color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("HealthBackgroundColor", health_bar.mutable_background_color());
+
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Background alpha")
+                            .set_is_optional()
+                            .set_step(0.05, 0.2)
+                            .set_min(0)
+                            .set_default(0.8)
+                            .set_width(char_x * 9),
+                        PROTO_FLOAT_FIELD(HealthBarAppearance, &health_bar, background_alpha));
+      ImGui::Unindent();
+
+      ImGui::SpacedSeparator();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Walls");
+      ImGui::Indent();
+      DrawWallAppearanceEditor("Front", current_theme_.mutable_front_appearance());
+      DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
+      DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
+      DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
+      DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
+      ImGui::Unindent();
+    }
+  }
+
+  Theme GetThemeToToRender() {
+    if (current_theme_.reference().size() > 0) {
+      return app_.settings_manager().GetTheme(current_theme_.reference());
+    }
+    return current_theme_;
+  }
+
+  bool Save(std::string* error_message) {
+    bool theme_exists = app_.settings_manager().ThemeExists(current_theme_name_);
+    bool is_new_theme = !app_.settings_manager().ThemeExists(original_theme_name_);
+    bool is_rename = !is_new_theme && current_theme_name_ != original_theme_name_;
+    if (is_new_theme || is_rename) {
+      if (theme_exists) {
+        *error_message = std::format("Theme \"{}\" already exists", current_theme_name_);
+        return false;
+      }
+    }
+
+    if (is_rename) {
+      app_.settings_manager().RenameTheme(original_theme_name_, current_theme_name_);
+    }
+
+    if (!app_.settings_manager().SaveTheme(current_theme_name_, current_theme_)) {
+      *error_message = std::format("Unable to save theme \"{}\"", current_theme_name_);
+      return false;
+    }
+    return true;
+  }
+
+ private:
+  void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
+    ImGui::IdGuard cid(id);
+    float char_x = ImGui::GetDefaultCharSizeX();
+
+    float color[3];
+    StoredRgb c = ToStoredRgb(*stored_color);
+    color[0] = c.r() / 255.0;
+    color[1] = c.g() / 255.0;
+    color[2] = c.b() / 255.0;
+    if (ImGui::ColorEdit3(
+            "##ColorEditor", color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
+      StoredRgb result = FloatToStoredRgb(color[0], color[1], color[2]);
+      if (stored_color->has_hex()) {
+        stored_color->set_hex(ToHexString(result));
+        stored_color->clear_r();
+        stored_color->clear_b();
+        stored_color->clear_g();
+      } else {
+        stored_color->set_r(result.r());
+        stored_color->set_g(result.g());
+        stored_color->set_b(result.b());
+      }
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("%s", icons::kClose);
+    ImGui::HelpTooltip("Multiply color by value");
+
+    ImGui::SameLine();
+    ImGui::InputFloat(ImGui::InputFloatParams("ColorMultiplier")
+                          .set_step(0.01, 0.2)
+                          .set_max(2)
+                          .set_width(char_x * 10)
+                          .set_zero_is_unset(),
+                      PROTO_FLOAT_FIELD(StoredColor, stored_color, multiplier));
+  }
+
+  void DrawWallAppearanceEditor(const std::string& header, WallAppearance* appearance) {
+    ImGui::IdGuard cid("WallAppearance" + header);
+
+    float char_x = ImGui::GetDefaultCharSizeX();
+    ImGui::SetNextItemWidth(char_x * 20);
+    ImGui::Text(header);
+    ImGui::Indent();
+    std::string selected_type = kSolidColorItem;
+    if (appearance->has_texture()) {
+      selected_type = kTextureItem;
+    }
+
+    std::vector<std::string> types = {kSolidColorItem, kTextureItem};
+    ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_x * 20);
+
+    if (selected_type == kSolidColorItem) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Color");
+      ImGui::SameLine();
+      ImGui::InputStoredColor("##Color", appearance->mutable_color(), char_x);
+    }
+    if (selected_type == kTextureItem) {
+      WallTexture* texture = appearance->mutable_texture();
+      ImGui::SimpleDropdown(
+          "TextureNameDropdown", texture->mutable_texture_name(), texture_names_, char_x * 20);
+
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Scale")
+                            .set_step(0.05, 0.2)
+                            .set_is_optional()
+                            .set_min(0.05)
+                            .set_width(char_x * 9),
+                        PROTO_FLOAT_FIELD(WallTexture, texture, scale));
+    }
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Mix percent");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x * 9);
+    float mix_percent = appearance->mix_percent();
+    ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.6g");
+    if (mix_percent > 0) {
+      appearance->set_mix_percent(mix_percent);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Mix color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("MixColor", appearance->mutable_mix_color());
+    } else {
+      appearance->clear_mix_percent();
+    }
+    ImGui::Unindent();
+  }
+
+  Application& app_;
+  std::string current_theme_name_;
+  const std::string original_theme_name_;
+  Theme current_theme_;
+  const std::vector<std::string> theme_names_;
+  const std::vector<std::string> texture_names_;
+};
+
 class ThemeEditorScreen : public UiScreen {
  public:
   explicit ThemeEditorScreen(Application& app)
@@ -65,8 +329,12 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 
     if (ImGui::Button(std::format("{} Save", icons::kSave))) {
-      if (SaveCurrentTheme()) {
+      std::string error_message = "Could not save theme";
+      if (theme_editor_->Save(&error_message)) {
+        LoadThemeList();
         BackToThemeList();
+      } else {
+        notification_popup_.NotifyOpen(error_message);
       }
     }
     ImGui::SameLine();
@@ -75,38 +343,6 @@ class ThemeEditorScreen : public UiScreen {
     }
 
     ImGui::End();
-  }
-
-  void Line() {
-    ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-    ImGui::Spacing();
-  }
-
-  bool SaveCurrentTheme() {
-    bool theme_exists = app_.settings_manager().ThemeExists(current_theme_name_);
-    bool is_rename = !is_new_theme_ && current_theme_name_ != original_theme_name_;
-    if (is_new_theme_ || is_rename) {
-      if (theme_exists) {
-        notification_popup_.NotifyOpen(
-            std::format("Theme \"{}\" already exists", current_theme_name_));
-        return false;
-      }
-    }
-
-    if (is_rename) {
-      app_.settings_manager().RenameTheme(original_theme_name_, current_theme_name_);
-    }
-
-    if (!app_.settings_manager().SaveTheme(current_theme_name_, current_theme_)) {
-      notification_popup_.NotifyOpen(
-          std::format("Unable to save theme \"{}\"", current_theme_name_));
-      return false;
-    }
-    LoadThemeList();
-    return true;
   }
 
   bool BeginMainWindow(const std::string& name) {
@@ -125,7 +361,7 @@ class ThemeEditorScreen : public UiScreen {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
 
-    if (!editing_theme_) {
+    if (!theme_editor_) {
       BeginMainWindow("ThemeList");
       notification_popup_.Draw();
       delete_confirmation_dialog_.Draw("Delete", [=](const std::string& to_delete) {
@@ -139,6 +375,10 @@ class ThemeEditorScreen : public UiScreen {
     }
 
     DrawTopBar();
+    // TopBar may have deleted theme if navigating back.
+    if (!theme_editor_) {
+      return;
+    }
 
     float width = char_x_ * 40;
     float height = app_.screen_info().height * 0.95;
@@ -151,151 +391,25 @@ class ThemeEditorScreen : public UiScreen {
                      ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
     notification_popup_.Draw();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Theme");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 20);
-    ImGui::InputText("##NameInput", &current_theme_name_);
+    theme_editor_->Draw();
 
-    bool is_reference = current_theme_.has_reference();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Reference");
-    ImGui::SameLine();
-    ImGui::Checkbox("##ReferenceCheck", &is_reference);
-    ImGui::SameLine();
-    // TODO: Improve help text to be more clear
-    ImGui::HelpMarker(
-        "Use settings from another theme. Useful when you using per scenario theme settings and "
-        "you want to create a \"Default Static\" theme which you can change and have all static "
-        "scenarios use the new theme.");
+    Crosshair crosshair;
+    crosshair.add_layers()->mutable_dot()->set_outline_thickness(2);
 
-    Line();
+    ImGui::End();
 
-    if (is_reference) {
-      std::string original_name = current_theme_.name();
-      std::string original_reference = current_theme_.reference();
-
-      current_theme_.Clear();
-      current_theme_.set_name(original_name);
-      current_theme_.set_reference(original_reference);
-
-      std::string* reference = current_theme_.mutable_reference();
-      if (reference->size() == 0) {
-        *reference = theme_names_[0];
-      }
-      ImGui::SimpleDropdown("ReferenceThemeSelector", reference, theme_names_, char_x_ * 20);
-
-      if (ImGui::Button("Edit referenced theme")) {
-        std::string referenced_copy = *reference;
-        BackToThemeList();
-        OpenExistingTheme(referenced_copy);
-      }
-
-      ImGui::End();
-    } else {
-      current_theme_.clear_reference();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Targets");
-      ImGui::Indent();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("TargetColor", current_theme_.mutable_target_color());
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Ghost color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("GhostTargetColor", current_theme_.mutable_ghost_target_color());
-
-      ImGui::Unindent();
-
-      Line();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Crosshair");
-      ImGui::Indent();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("CrosshairColor", current_theme_.mutable_crosshair()->mutable_color());
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Outline color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("OutlineCrosshairColor",
-                            current_theme_.mutable_crosshair()->mutable_outline_color());
-
-      ImGui::Unindent();
-
-      Line();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Health bar");
-      HealthBarAppearance& health_bar = *current_theme_.mutable_health_bar();
-      ImGui::Indent();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Health color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("HealthColor", health_bar.mutable_health_color());
-
-      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Health alpha")
-                            .set_is_optional()
-                            .set_step(0.05, 0.2)
-                            .set_min(0)
-                            .set_default(0.8)
-                            .set_width(char_x_ * 9),
-                        PROTO_FLOAT_FIELD(HealthBarAppearance, &health_bar, health_alpha));
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Background color");
-      ImGui::SameLine();
-      DrawStoredColorEditor("HealthBackgroundColor", health_bar.mutable_background_color());
-
-      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Background alpha")
-                            .set_is_optional()
-                            .set_step(0.05, 0.2)
-                            .set_min(0)
-                            .set_default(0.8)
-                            .set_width(char_x_ * 9),
-                        PROTO_FLOAT_FIELD(HealthBarAppearance, &health_bar, background_alpha));
-      ImGui::Unindent();
-
-      Line();
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Walls");
-      ImGui::Indent();
-      DrawWallAppearanceEditor("Front", current_theme_.mutable_front_appearance());
-      DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
-      DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
-      DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
-      DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
-      ImGui::Unindent();
-
-      ImGui::Spacing();
-      ImGui::Spacing();
-
-      Crosshair crosshair;
-      crosshair.add_layers()->mutable_dot()->set_outline_thickness(2);
-
-      ImGui::End();
-
-      ImGui::SetNextWindowPos(
-          ImVec2(app_.screen_info().center.x - 30, app_.screen_info().center.y - 30));
-      ImGui::SetNextWindowSize(ImVec2(60, 60));
-      ImGui::SetNextWindowBgAlpha(0);
-      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-      ImGui::Begin(
-          "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-      ImDrawList* draw_list = ImGui::GetWindowDrawList();
-      app_.crosshair_manager().Draw(crosshair, 25, current_theme_, app_.screen_info().center);
-      ImGui::End();
-      ImGui::PopStyleVar();
-    }
+    ImGui::SetNextWindowPos(
+        ImVec2(app_.screen_info().center.x - 30, app_.screen_info().center.y - 30));
+    ImGui::SetNextWindowSize(ImVec2(60, 60));
+    ImGui::SetNextWindowBgAlpha(0);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::Begin(
+        "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    app_.crosshair_manager().Draw(
+        crosshair, 25, theme_editor_->GetThemeToToRender(), app_.screen_info().center);
+    ImGui::End();
+    ImGui::PopStyleVar();
   }
 
   void DrawThemeListEditor() {
@@ -304,11 +418,11 @@ class ThemeEditorScreen : public UiScreen {
     if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
       PopSelf();
     }
-    Line();
+    ImGui::SpacedSeparator();
     if (ImGui::Button(std::format("{} Add theme", icons::kAdd))) {
       OpenNewTheme();
     }
-    Line();
+    ImGui::SpacedSeparator();
     ImGui::BeginChild("ThemesListContent");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Themes");
@@ -338,179 +452,80 @@ class ThemeEditorScreen : public UiScreen {
   }
 
   void OpenExistingTheme(const std::string& name) {
-    current_theme_name_ = name;
-    original_theme_name_ = name;
-    is_new_theme_ = false;
-    current_theme_ = app_.settings_manager().GetThemeNoReferenceFollow(name);
-    editing_theme_ = true;
+    Theme current_theme = app_.settings_manager().GetThemeNoReferenceFollow(name);
+    theme_editor_ =
+        std::make_unique<ThemeEditor>(name, current_theme, theme_names_, texture_names_, app_);
   }
 
   void OpenThemeCopy(const std::string& name) {
-    current_theme_name_ = MakeUniqueName(name + " Copy", theme_names_);
-    original_theme_name_ = current_theme_name_;
-    is_new_theme_ = true;
-    current_theme_ = app_.settings_manager().GetThemeNoReferenceFollow(name);
-    editing_theme_ = true;
+    std::string new_name = MakeUniqueName(name + " Copy", theme_names_);
+    Theme current_theme = app_.settings_manager().GetThemeNoReferenceFollow(name);
+    theme_editor_ =
+        std::make_unique<ThemeEditor>(new_name, current_theme, theme_names_, texture_names_, app_);
   }
 
   void OpenNewTheme() {
-    current_theme_name_ = MakeUniqueName("New theme", theme_names_);
-    original_theme_name_ = current_theme_name_;
-    is_new_theme_ = true;
-    current_theme_ = GetDefaultTheme();
-    editing_theme_ = true;
+    std::string name = MakeUniqueName("New theme", theme_names_);
+    Theme current_theme = app_.settings_manager().GetThemeNoReferenceFollow(name);
+    theme_editor_ =
+        std::make_unique<ThemeEditor>(name, current_theme, theme_names_, texture_names_, app_);
   }
 
   void BackToThemeList() {
-    current_theme_ = {};
-    current_theme_name_ = "";
-    is_new_theme_ = false;
-    editing_theme_ = false;
+    theme_editor_ = {};
   }
 
-  void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
-    ImGui::IdGuard cid(id);
+  void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
 
-    float color[3];
-    StoredRgb c = ToStoredRgb(*stored_color);
-    color[0] = c.r() / 255.0;
-    color[1] = c.g() / 255.0;
-    color[2] = c.b() / 255.0;
-    if (ImGui::ColorEdit3(
-            "##ColorEditor", color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
-      StoredRgb result = FloatToStoredRgb(color[0], color[1], color[2]);
-      if (stored_color->has_hex()) {
-        stored_color->set_hex(ToHexString(result));
-        stored_color->clear_r();
-        stored_color->clear_b();
-        stored_color->clear_g();
-      } else {
-        stored_color->set_r(result.r());
-        stored_color->set_g(result.g());
-        stored_color->set_b(result.b());
-      }
+  void Render() override {
+    if (!theme_editor_) {
+      UiScreen::Render();
+      return;
     }
 
-    ImGui::SameLine();
-    ImGui::Text("%s", icons::kClose);
-    ImGui::HelpTooltip("Multiply color by value");
-
-    ImGui::SameLine();
-    ImGui::InputFloat(ImGui::InputFloatParams("ColorMultiplier")
-                          .set_step(0.01, 0.2)
-                          .set_max(2)
-                          .set_width(char_x_ * 10)
-                          .set_zero_is_unset(),
-                      PROTO_FLOAT_FIELD(StoredColor, stored_color, multiplier));
+    RenderContext ctx;
+    Stopwatch stopwatch;
+    FrameTimes frame_times;
+    if (app_.StartRender(&ctx)) {
+      HealthBarSettings health_bar;
+      health_bar.set_show(true);
+      health_bar.set_width(8);
+      health_bar.set_height(2);
+      app_.renderer()->DrawScenario(projection_,
+                                    default_room_,
+                                    theme_editor_->GetThemeToToRender(),
+                                    health_bar,
+                                    target_manager_.GetTargets(),
+                                    look_at_,
+                                    &ctx,
+                                    stopwatch,
+                                    &frame_times);
+      app_.FinishRender(&ctx);
+    }
   }
 
-  void DrawWallAppearanceEditor(const std::string& header, WallAppearance* appearance) {
-    ImGui::IdGuard cid("WallAppearance" + header);
+ private:
+  void LoadThemeList() {
+    theme_names_ = app_.settings_manager().ListThemes();
+    std::sort(theme_names_.begin(),
+              theme_names_.end(),
+              [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
+  }
 
-    ImGui::SetNextItemWidth(char_x_ * 20);
-    ImGui::Text(header);
-    ImGui::Indent();
-    std::string selected_type = kSolidColorItem;
-    if (appearance->has_texture()) {
-      selected_type = kTextureItem;
-    }
+  Room default_room_;
+  TargetManager target_manager_;
+  glm::mat4 projection_;
+  LookAtInfo look_at_;
 
-    std::vector<std::string> types = {kSolidColorItem, kTextureItem};
-    ImGui::SimpleDropdown("WallTypeDropdown", &selected_type, types, char_x_ * 20);
+  std::vector<std::string> theme_names_;
+  std::vector<std::string> texture_names_;
 
-    if (selected_type == kSolidColorItem) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Color");
-      ImGui::SameLine();
-      ImGui::InputStoredColor("##Color", appearance->mutable_color(), char_x_);
-    }
-    if (selected_type == kTextureItem) {
-      WallTexture* texture = appearance->mutable_texture();
-      ImGui::SimpleDropdown(
-          "TextureNameDropdown", texture->mutable_texture_name(), texture_names_, char_x_ * 20);
+  float char_x_;
+  std::unique_ptr<ThemeEditor> theme_editor_;
 
-      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Scale")
-                            .set_step(0.05, 0.2)
-                            .set_is_optional()
-                            .set_min(0.05)
-                            .set_width(char_x_ * 9),
-                        PROTO_FLOAT_FIELD(WallTexture, texture, scale));
-    }
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Mix percent");
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x_ * 9);
-      float mix_percent = appearance->mix_percent();
-      ImGui::InputFloat("##MixPercent", &mix_percent, 0.02, 0.2, "%.6g");
-      if (mix_percent > 0) {
-        appearance->set_mix_percent(mix_percent);
-        ImGui::AlignTextToFramePadding();
-        ImGui::Text("Mix color");
-        ImGui::SameLine();
-        DrawStoredColorEditor("MixColor", appearance->mutable_mix_color());
-      } else {
-        appearance->clear_mix_percent();
-      }
-      ImGui::Unindent();
-    }
-
-    void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
-
-    void Render() override {
-      if (!editing_theme_) {
-        UiScreen::Render();
-        return;
-      }
-
-      RenderContext ctx;
-      Stopwatch stopwatch;
-      FrameTimes frame_times;
-      if (app_.StartRender(&ctx)) {
-        HealthBarSettings health_bar;
-        health_bar.set_show(true);
-        health_bar.set_width(8);
-        health_bar.set_height(2);
-        app_.renderer()->DrawScenario(projection_,
-                                      default_room_,
-                                      current_theme_,
-                                      health_bar,
-                                      target_manager_.GetTargets(),
-                                      look_at_,
-                                      &ctx,
-                                      stopwatch,
-                                      &frame_times);
-        app_.FinishRender(&ctx);
-      }
-    }
-
-   private:
-    void LoadThemeList() {
-      theme_names_ = app_.settings_manager().ListThemes();
-      std::sort(theme_names_.begin(),
-                theme_names_.end(),
-                [](const std::string& lhs, const std::string& rhs) { return lhs < rhs; });
-    }
-
-    Room default_room_;
-    TargetManager target_manager_;
-    glm::mat4 projection_;
-    LookAtInfo look_at_;
-
-    std::vector<std::string> theme_names_;
-    std::vector<std::string> texture_names_;
-
-    Theme current_theme_;
-    std::string original_theme_name_;
-    std::string current_theme_name_;
-    bool is_new_theme_ = false;
-    bool editing_theme_ = false;
-
-    float char_x_;
-
-    ImGui::NotificationPopup notification_popup_{"Notification"};
-    ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
-  };
+  ImGui::NotificationPopup notification_popup_{"Notification"};
+  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+};
 
 }  // namespace
 
