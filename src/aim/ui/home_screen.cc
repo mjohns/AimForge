@@ -322,6 +322,7 @@ class HomeScreen : public UiScreen {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
+    /*
     for (int i = 0; i < 30; ++i) {
       ImGui::Spacing();
     }
@@ -333,7 +334,6 @@ class HomeScreen : public UiScreen {
     ImGui::TextFmt("audio {:.1f}s", app_.state().initialization_times.audio.GetSeconds());
     ImGui::TextFmt("window {:.1f}s", app_.state().initialization_times.window.GetSeconds());
     // ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
-    /*
     for (const auto& item : app_.state().initialization_times.window_trace.GetTrace()) {
       ImGui::Text(item);
     }

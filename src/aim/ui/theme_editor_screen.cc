@@ -124,7 +124,7 @@ class ThemeEditorScreen : public UiScreen {
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
 
-    if (current_theme_name_.size() == 0) {
+    if (!editing_theme_) {
       BeginMainWindow("ThemeList");
       notification_popup_.Draw();
       delete_confirmation_dialog_.Draw("Delete", [=](const std::string& to_delete) {
@@ -356,6 +356,7 @@ class ThemeEditorScreen : public UiScreen {
     original_theme_name_ = name;
     is_new_theme_ = false;
     current_theme_ = app_.settings_manager().GetThemeNoReferenceFollow(name);
+    editing_theme_ = true;
   }
 
   void OpenThemeCopy(const std::string& name) {
@@ -363,6 +364,7 @@ class ThemeEditorScreen : public UiScreen {
     original_theme_name_ = current_theme_name_;
     is_new_theme_ = true;
     current_theme_ = app_.settings_manager().GetThemeNoReferenceFollow(name);
+    editing_theme_ = true;
   }
 
   void OpenNewTheme() {
@@ -370,12 +372,14 @@ class ThemeEditorScreen : public UiScreen {
     original_theme_name_ = current_theme_name_;
     is_new_theme_ = true;
     current_theme_ = GetDefaultTheme();
+    editing_theme_ = true;
   }
 
   void BackToThemeList() {
     current_theme_ = {};
     current_theme_name_ = "";
     is_new_theme_ = false;
+    editing_theme_ = false;
   }
 
   void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
@@ -473,7 +477,7 @@ class ThemeEditorScreen : public UiScreen {
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {}
 
   void Render() override {
-    if (current_theme_name_.size() == 0) {
+    if (!editing_theme_) {
       UiScreen::Render();
       return;
     }
@@ -500,11 +504,6 @@ class ThemeEditorScreen : public UiScreen {
   }
 
  private:
-  void UpdateCurrentTheme(const std::string& theme_name) {
-    current_theme_name_ = theme_name;
-    current_theme_ = app_.settings_manager().GetTheme(current_theme_name_);
-  }
-
   void LoadThemeList() {
     theme_names_ = app_.settings_manager().ListThemes();
     std::sort(theme_names_.begin(),
@@ -524,6 +523,7 @@ class ThemeEditorScreen : public UiScreen {
   std::string original_theme_name_;
   std::string current_theme_name_;
   bool is_new_theme_ = false;
+  bool editing_theme_ = false;
 
   float char_x_;
 
