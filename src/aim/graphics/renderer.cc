@@ -407,16 +407,19 @@ class RendererImpl : public Renderer {
 
  private:
   void RenderDrawData(const DrawData& draw_data, RenderContext* ctx) {
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render Scene");
     RenderSolidColorWallsDrawData(draw_data, ctx);
     RenderTextureWallsDrawData(draw_data, ctx);
     RenderSphereDrawData(draw_data, ctx);
     RenderHealthBarDrawData(draw_data, ctx);
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
   void RenderSolidColorWallsDrawData(const DrawData& draw_data, RenderContext* ctx) {
     if (draw_data.solid_color_walls.empty()) {
       return;
     }
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render SolidColorWalls");
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
     bool has_quad = false;
     bool has_cylinder = false;
@@ -452,11 +455,14 @@ class RendererImpl : public Renderer {
     if (has_cylinder) {
       draw_walls(true);
     }
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
+
   void RenderTextureWallsDrawData(const DrawData& draw_data, RenderContext* ctx) {
     if (draw_data.texture_walls.empty()) {
       return;
     }
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render TextureWalls");
     Texture* last_bound_texture = nullptr;
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
     bool has_quad = false;
@@ -507,12 +513,15 @@ class RendererImpl : public Renderer {
     if (has_cylinder) {
       draw_walls(true);
     }
+
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
   void RenderHealthBarDrawData(const DrawData& draw_data, RenderContext* ctx) {
     if (draw_data.health_bars.empty()) {
       return;
     }
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render HealthBars");
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, progress_bar_pipeline_);
 
     SDL_GPUBufferBinding binding{};
@@ -540,6 +549,7 @@ class RendererImpl : public Renderer {
 
       SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
     }
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
   void RenderSphereDrawData(const DrawData& draw_data, RenderContext* ctx) {
@@ -548,6 +558,8 @@ class RendererImpl : public Renderer {
     if (!has_spheres && !has_cylinders) {
       return;
     }
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render Spheres");
+
     // Cylinders and spheres both use the sphere pipline with different geometry.
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
 
@@ -602,6 +614,7 @@ class RendererImpl : public Renderer {
         }
       }
     }
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
   void AddDrawRoom(const glm::mat4& view_projection,

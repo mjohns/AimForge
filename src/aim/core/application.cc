@@ -222,7 +222,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   trace.Add("SDL_CreateGPUDevice");
   gpu_device_ = SDL_CreateGPUDevice(
       SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-      true,
+      true, // debug
       nullptr);
   if (gpu_device_ == nullptr) {
     return std::format("Failed to create GPU device: {}", SDL_GetError());
@@ -478,13 +478,16 @@ void Application::FinishRender(RenderContext* render_context) {
   target_info.store_op = SDL_GPU_STOREOP_STORE;
   target_info.mip_level = 0;
   target_info.layer_or_depth_plane = 0;
-  target_info.cycle = false;
+  target_info.cycle = true;
 
+  SDL_PushGPUDebugGroup(render_context->command_buffer, "Render ImGui");
   auto* imgui_render_pass =
       SDL_BeginGPURenderPass(render_context->command_buffer, &target_info, 1, nullptr);
   ImDrawData* draw_data = ImGui::GetDrawData();
   ImGui_ImplSDLGPU3_RenderDrawData(draw_data, render_context->command_buffer, imgui_render_pass);
   SDL_EndGPURenderPass(imgui_render_pass);
+  SDL_PopGPUDebugGroup(render_context->command_buffer);
+
   SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
 }
 
