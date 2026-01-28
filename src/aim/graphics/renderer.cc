@@ -383,7 +383,7 @@ class RendererImpl : public Renderer {
     times->render_room_end = stopwatch.GetElapsedMicros();
 
     times->render_targets_start = stopwatch.GetElapsedMicros();
-    DrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data, ctx);
+    AddDrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data);
     times->render_targets_end = stopwatch.GetElapsedMicros();
 
     RenderDrawData(draw_data, ctx);
@@ -919,13 +919,12 @@ class RendererImpl : public Renderer {
                           0);
   }
 
-  void DrawTargets(const glm::mat4& view_projection,
-                   const LookAtInfo& look_at,
-                   const Theme& theme,
-                   const HealthBarSettings& health_bar_settings,
-                   const std::vector<Target>& targets,
-                   DrawData* draw_data,
-                   RenderContext* ctx) {
+  void AddDrawTargets(const glm::mat4& view_projection,
+                      const LookAtInfo& look_at,
+                      const Theme& theme,
+                      const HealthBarSettings& health_bar_settings,
+                      const std::vector<Target>& targets,
+                      DrawData* draw_data) {
     glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
     glm::vec3 ghost_target_color =
         theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);

@@ -433,6 +433,10 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
 
 void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> run, Screen& screen) {
   ImGui::IdGuard cid(id);
+  if (!ImGui::BeginChild("PlaylistRunComponent")) {
+    ImGui::EndChild();
+    return;
+  }
   i64 now_micros = GetNowEpochMicros();
   std::string sample_progress_text = "00/00";
   float progress_width = ImGui::CalcTextSize(sample_progress_text.c_str()).x;
@@ -514,6 +518,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
   }
 
   ImGui::EndTable();
+  ImGui::EndChild();
 }
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen) {
