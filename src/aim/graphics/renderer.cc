@@ -31,6 +31,25 @@ struct HealthBar {
   float health_percent = 0.f;
 };
 
+struct SolidColorWallDrawData {
+  glm::mat4 transform;
+  glm::vec4 color;
+  bool is_cylinder = false;
+};
+
+struct TextureWallDrawData {
+  glm::mat4 transform;
+  glm::vec4 color;
+  bool is_cylinder = false;
+  glm::vec2 tex_scale;
+  Texture* texture;
+};
+
+struct DrawData {
+  std::vector<SolidColorWallDrawData> solid_color_walls;
+  std::vector<TextureWallDrawData> texture_walls;
+};
+
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
   return a + (mix_percent * (b - a));
 }
@@ -341,8 +360,10 @@ class RendererImpl : public Renderer {
     */
 
     const glm::mat4 view_projection = projection * look_at.transform;
+    DrawData draw_data;
     times->render_room_start = stopwatch.GetElapsedMicros();
-    DrawRoom(view_projection, theme, room, ctx);
+    AddDrawRoom(view_projection, theme, room, &draw_data);
+    RenderDrawData(draw_data, ctx);
     times->render_room_end = stopwatch.GetElapsedMicros();
 
     times->render_targets_start = stopwatch.GetElapsedMicros();
@@ -365,25 +386,74 @@ class RendererImpl : public Renderer {
   }
 
  private:
-  void DrawRoom(const glm::mat4& view_projection,
-                const Theme& theme,
-                const Room& room,
-                RenderContext* ctx) {
-    if (room.has_simple_room()) {
-      DrawSimpleRoom(view_projection, theme, room.simple_room(), ctx);
-    }
-    if (room.has_cylinder_room()) {
-      DrawCylinderRoom(view_projection, theme, room.cylinder_room(), ctx);
-    }
-    if (room.has_barrel_room()) {
-      DrawBarrelRoom(view_projection, theme, room.barrel_room(), ctx);
+  void RenderDrawData(const DrawData& draw_data, RenderContext* ctx) {
+    if (draw_data.solid_color_walls.size() > 0) {
+      SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
+      bool has_quad = false;
+      bool has_cylinder = false;
+      for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
+        if (data.is_cylinder) {
+          has_cylinder = true;
+        } else {
+          has_quad = true;
+        }
+      }
+
+      if (has_quad) {
+        SDL_GPUBufferBinding binding{};
+        binding.buffer = quad_vertex_buffer_;
+        binding.offset = 0;
+        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+        for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
+          if (!data.is_cylinder) {
+            SDL_PushGPUVertexUniformData(
+                ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+            SDL_PushGPUFragmentUniformData(
+                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+            SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
+          }
+        }
+      }
+
+      if (has_cylinder) {
+        SDL_GPUBufferBinding binding{};
+        binding.buffer = cylinder_wall_vertex_buffer_;
+        binding.offset = 0;
+        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+        for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
+          if (data.is_cylinder) {
+            SDL_PushGPUVertexUniformData(
+                ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+            SDL_PushGPUFragmentUniformData(
+                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+            SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_wall_vertices_, 1, 0, 0);
+          }
+        }
+      }
     }
   }
 
-  void DrawSimpleRoom(const glm::mat4& view_projection,
-                      const Theme& theme,
-                      const SimpleRoom& room,
-                      RenderContext* ctx) {
+  void AddDrawRoom(const glm::mat4& view_projection,
+                   const Theme& theme,
+                   const Room& room,
+                   DrawData* draw_data) {
+    if (room.has_simple_room()) {
+      AddDrawSimpleRoom(view_projection, theme, room.simple_room(), draw_data);
+    }
+    if (room.has_cylinder_room()) {
+      AddDrawCylinderRoom(view_projection, theme, room.cylinder_room(), draw_data);
+    }
+    if (room.has_barrel_room()) {
+      AddDrawBarrelRoom(view_projection, theme, room.barrel_room(), draw_data);
+    }
+  }
+
+  void AddDrawSimpleRoom(const glm::mat4& view_projection,
+                         const Theme& theme,
+                         const SimpleRoom& room,
+                         DrawData* draw_data) {
     float height = room.height();
     float width = room.width();
 
@@ -394,8 +464,11 @@ class RendererImpl : public Renderer {
       // Front wall
       glm::mat4 model(1.f);
       model = glm::scale(model, glm::vec3(width, 1.0f, height));
-      DrawWall(
-          view_projection * model, {width, height}, theme.front_appearance(), not_cylinder, ctx);
+      AddDrawWall(view_projection * model,
+                  {width, height},
+                  theme.front_appearance(),
+                  not_cylinder,
+                  draw_data);
     }
 
     /*
@@ -418,8 +491,11 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(0, -0.5 * depth, -0.5 * height));
       model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(width, 1.0f, depth));
-      DrawWall(
-          view_projection * model, {width, depth}, theme.floor_appearance(), not_cylinder, ctx);
+      AddDrawWall(view_projection * model,
+                  {width, depth},
+                  theme.floor_appearance(),
+                  not_cylinder,
+                  draw_data);
     }
 
     {
@@ -428,8 +504,11 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(-0.5 * width, -0.5 * depth, 0));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
       model = glm::scale(model, glm::vec3(depth, 1.0f, height));
-      DrawWall(
-          view_projection * model, {depth, height}, theme.side_appearance(), not_cylinder, ctx);
+      AddDrawWall(view_projection * model,
+                  {depth, height},
+                  theme.side_appearance(),
+                  not_cylinder,
+                  draw_data);
     }
 
     {
@@ -438,8 +517,11 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(0.5 * width, -0.5 * depth, 0));
       model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0, 0, 1));
       model = glm::scale(model, glm::vec3(depth, 1.0f, height));
-      DrawWall(
-          view_projection * model, {depth, height}, theme.side_appearance(), not_cylinder, ctx);
+      AddDrawWall(view_projection * model,
+                  {depth, height},
+                  theme.side_appearance(),
+                  not_cylinder,
+                  draw_data);
     }
 
     {
@@ -448,14 +530,18 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(0, -0.5 * depth, 0.5 * height));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(width, 1.0f, depth));
-      DrawWall(view_projection * model, {width, depth}, theme.roof_appearance(), not_cylinder, ctx);
+      AddDrawWall(view_projection * model,
+                  {width, depth},
+                  theme.roof_appearance(),
+                  not_cylinder,
+                  draw_data);
     }
   }
 
-  void DrawCylinderRoom(const glm::mat4& view_projection,
-                        const Theme& theme,
-                        const CylinderRoom& room,
-                        RenderContext* ctx) {
+  void AddDrawCylinderRoom(const glm::mat4& view_projection,
+                           const Theme& theme,
+                           const CylinderRoom& room,
+                           DrawData* draw_data) {
     float quad_scale = room.radius() * 2.5;
     float height = room.height();
 
@@ -465,8 +551,11 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(0, 0, -0.505 * height));
       model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-      DrawWall(
-          view_projection * model, {quad_scale, quad_scale}, theme.floor_appearance(), false, ctx);
+      AddDrawWall(view_projection * model,
+                  {quad_scale, quad_scale},
+                  theme.floor_appearance(),
+                  false,
+                  draw_data);
     }
 
     {
@@ -475,8 +564,11 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(0, 0, 0.505 * height));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-      DrawWall(
-          view_projection * model, {quad_scale, quad_scale}, theme.roof_appearance(), false, ctx);
+      AddDrawWall(view_projection * model,
+                  {quad_scale, quad_scale},
+                  theme.roof_appearance(),
+                  false,
+                  draw_data);
     }
 
     if (!room.hide_sides()) {
@@ -498,8 +590,11 @@ class RendererImpl : public Renderer {
         model = glm::rotate(model, glm::radians(90.0f + side_angle_degrees), glm::vec3(0, 0, 1));
         model = glm::translate(model, glm::vec3(-0.5 * kMaxDistance, 0, 0));
         model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
-        DrawWall(
-            view_projection * model, {kMaxDistance, height}, theme.side_appearance(), false, ctx);
+        AddDrawWall(view_projection * model,
+                    {kMaxDistance, height},
+                    theme.side_appearance(),
+                    false,
+                    draw_data);
       }
 
       {
@@ -510,48 +605,41 @@ class RendererImpl : public Renderer {
         model = glm::rotate(model, glm::radians(-90.0f - side_angle_degrees), glm::vec3(0, 0, 1));
         model = glm::translate(model, glm::vec3(0.5 * kMaxDistance, 0, 0));
         model = glm::scale(model, glm::vec3(kMaxDistance, 1.0f, height));
-        DrawWall(
-            view_projection * model, {kMaxDistance, height}, theme.side_appearance(), false, ctx);
+        AddDrawWall(view_projection * model,
+                    {kMaxDistance, height},
+                    theme.side_appearance(),
+                    false,
+                    draw_data);
       }
     }
 
     {
       glm::mat4 model(1.f);
       model = glm::scale(model, glm::vec3(room.radius(), room.radius(), height));
-      DrawWall(view_projection * model,
-               {glm::two_pi<float>() * room.radius(), height},
-               theme.front_appearance(),
-               /* is_cylinder_wall= */ true,
-               ctx);
+      AddDrawWall(view_projection * model,
+                  {glm::two_pi<float>() * room.radius(), height},
+                  theme.front_appearance(),
+                  /* is_cylinder_wall= */ true,
+                  draw_data);
     }
   }
 
-  void DrawBarrelRoom(const glm::mat4& view_projection,
-                      const Theme& theme,
-                      const BarrelRoom& room,
-                      RenderContext* ctx) {
+  void AddDrawBarrelRoom(const glm::mat4& view_projection,
+                         const Theme& theme,
+                         const BarrelRoom& room,
+                         DrawData* draw_data) {
     float quad_scale = room.radius() * 100;
 
     {
       // Front wall
       glm::mat4 model(1.f);
       model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-      DrawWall(
-          view_projection * model, {quad_scale, quad_scale}, theme.front_appearance(), false, ctx);
+      AddDrawWall(view_projection * model,
+                  {quad_scale, quad_scale},
+                  theme.front_appearance(),
+                  false,
+                  draw_data);
     }
-    /*
-{
-  // Back wall
-  glm::mat4 model(1.f);
-  model = glm::translate(model, glm::vec3(0, -1 * kMaxDistance, 0));
-  model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
-  model = glm::scale(model, glm::vec3(quad_scale, 1.0f, quad_scale));
-  DrawWall(model,
-           view,
-           {quad_scale, quad_scale},
-           theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
-}
-*/
 
     {
       glm::mat4 model(1.f);
@@ -559,12 +647,51 @@ class RendererImpl : public Renderer {
       model = glm::translate(model, glm::vec3(0, -0.51 * kMaxDistance, 0));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(room.radius(), room.radius(), kMaxDistance));
-      DrawWall(view_projection * model,
-               {glm::two_pi<float>() * room.radius(), kMaxDistance},
-               theme.side_appearance(),
-               /* is_cylinder_wall= */ true,
-               ctx);
+      AddDrawWall(view_projection * model,
+                  {glm::two_pi<float>() * room.radius(), kMaxDistance},
+                  theme.side_appearance(),
+                  /* is_cylinder_wall= */ true,
+                  draw_data);
     }
+  }
+
+  void AddDrawWall(const glm::mat4& transform,
+                   const Wall& wall,
+                   const WallAppearance& appearance,
+                   bool is_cylinder_wall,
+                   DrawData* draw_data) {
+    if (appearance.has_texture()) {
+      Texture* texture = texture_manager_.GetTexture(appearance.texture().texture_name());
+      if (texture == nullptr) {
+        // Too spammy to log this error?
+        AddDrawWallSolidColor(transform, glm::vec3(0.7), is_cylinder_wall, draw_data);
+        return;
+      }
+
+      TextureWallDrawData data;
+      data.is_cylinder = is_cylinder_wall;
+      data.transform = transform;
+      data.texture = texture;
+
+      glm::vec2& tex_scale = data.tex_scale;
+
+      float tex_scale_height = 100;
+      float tex_scale_width = (texture->width() * tex_scale_height) / (float)texture->height();
+
+      tex_scale.x = wall.width / tex_scale_width;
+      tex_scale.y = wall.height / tex_scale_height;
+
+      if (appearance.texture().has_scale()) {
+        tex_scale *= appearance.texture().scale();
+      }
+
+      glm::vec3 mix_color = ToVec3(appearance.mix_color());
+      data.color = glm::vec4(mix_color, appearance.mix_percent());
+
+      draw_data->texture_walls.push_back(data);
+      return;
+    }
+    AddDrawWallSolidColor(transform, GetSolidColor(appearance), is_cylinder_wall, draw_data);
   }
 
   void DrawWall(const glm::mat4& transform,
@@ -624,6 +751,17 @@ class RendererImpl : public Renderer {
     DrawWallSolidColor(transform, GetSolidColor(appearance), is_cylinder_wall, ctx);
   }
 
+  void AddDrawWallSolidColor(const glm::mat4& transform,
+                             const glm::vec3& color,
+                             bool is_cylinder_wall,
+                             DrawData* draw_data) {
+    SolidColorWallDrawData data;
+    data.transform = transform;
+    data.color = glm::vec4(color, 1.0f);
+    data.is_cylinder = is_cylinder_wall;
+    draw_data->solid_color_walls.push_back(data);
+  }
+
   void DrawWallSolidColor(const glm::mat4& transform,
                           const glm::vec3& color,
                           bool is_cylinder_wall,
@@ -637,7 +775,6 @@ class RendererImpl : public Renderer {
 
     glm::vec4 color4(color, 1.0f);
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-
     SDL_DrawGPUPrimitives(ctx->render_pass,
                           is_cylinder_wall ? num_cylinder_wall_vertices_ : kQuadNumVertices,
                           1,

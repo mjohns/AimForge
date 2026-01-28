@@ -33,7 +33,7 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   sampler_create_info.max_anisotropy = 16;
   sampler_create_info.min_lod = 0;
   sampler_create_info.max_lod = 1000.0f;
-  //sampler_create_info.mip_lod_bias = 0.1;
+  // sampler_create_info.mip_lod_bias = 0.1;
 
   sampler_ = SDL_CreateGPUSampler(device, &sampler_create_info);
 
@@ -43,7 +43,8 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   create_info.width = image.width();
   create_info.height = image.height();
   create_info.layer_count_or_depth = 1;
-  create_info.num_levels = 11;
+  // TODO: set the levels based on the dimensions of the texture.
+  create_info.num_levels = 6;
   create_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
   texture_ = SDL_CreateGPUTexture(device, &create_info);
 
