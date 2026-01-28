@@ -433,6 +433,82 @@ class RendererImpl : public Renderer {
         }
       }
     }
+
+    if (draw_data.texture_walls.size() > 0) {
+      Texture* last_bound_texture = nullptr;
+      SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
+      bool has_quad = false;
+      bool has_cylinder = false;
+      for (const TextureWallDrawData& data : draw_data.texture_walls) {
+        if (data.is_cylinder) {
+          has_cylinder = true;
+        } else {
+          has_quad = true;
+        }
+      }
+
+      if (has_quad) {
+        SDL_GPUBufferBinding binding{};
+        binding.buffer = quad_vertex_buffer_;
+        binding.offset = 0;
+        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+        for (const TextureWallDrawData& data : draw_data.texture_walls) {
+          if (!data.is_cylinder) {
+            TexScaleAndTransform tex_scale_and_transform{};
+            tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
+            tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
+            tex_scale_and_transform.transform = data.transform;
+
+            SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                         0,
+                                         &tex_scale_and_transform.tex_scale[0],
+                                         sizeof(TexScaleAndTransform));
+
+            SDL_PushGPUFragmentUniformData(
+                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+            if (data.texture != last_bound_texture) {
+              last_bound_texture = data.texture;
+              SDL_BindGPUFragmentSamplers(
+                  ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
+            }
+
+            SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
+          }
+        }
+      }
+
+      if (has_cylinder) {
+        SDL_GPUBufferBinding binding{};
+        binding.buffer = cylinder_wall_vertex_buffer_;
+        binding.offset = 0;
+        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+        for (const TextureWallDrawData& data : draw_data.texture_walls) {
+          if (data.is_cylinder) {
+            TexScaleAndTransform tex_scale_and_transform{};
+            tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
+            tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
+            tex_scale_and_transform.transform = data.transform;
+
+            SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                         0,
+                                         &tex_scale_and_transform.tex_scale[0],
+                                         sizeof(TexScaleAndTransform));
+
+            SDL_PushGPUFragmentUniformData(
+                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+            if (data.texture != last_bound_texture) {
+              last_bound_texture = data.texture;
+              SDL_BindGPUFragmentSamplers(
+                  ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
+            }
+
+            SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_wall_vertices_, 1, 0, 0);
+          }
+        }
+      }
+    }
   }
 
   void AddDrawRoom(const glm::mat4& view_projection,
