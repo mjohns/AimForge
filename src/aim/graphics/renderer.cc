@@ -26,11 +26,6 @@ struct ProgressBarUniform {
   float progress = 0.0;
 };
 
-struct HealthBar {
-  glm::mat4 transform{1.0f};
-  float health_percent = 0.f;
-};
-
 struct SolidColorWallDrawData {
   glm::mat4 transform;
   glm::vec4 color;
@@ -53,6 +48,11 @@ struct CylinderDrawData {
   glm::mat4 transform;
 };
 
+struct HealthBarDrawData {
+  glm::mat4 transform;
+  float health_percent;
+};
+
 struct DrawData {
   std::vector<SolidColorWallDrawData> solid_color_walls;
   std::vector<TextureWallDrawData> texture_walls;
@@ -62,6 +62,9 @@ struct DrawData {
   std::vector<CylinderDrawData> ghost_cylinders;
   glm::vec3 target_color;
   glm::vec3 ghost_target_color;
+  glm::vec4 health_color;
+  glm::vec4 health_background_color;
+  std::vector<HealthBarDrawData> health_bars;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -528,6 +531,40 @@ class RendererImpl : public Renderer {
     }
 
     RenderSphereDrawData(draw_data, ctx);
+    RenderHealthBarDrawData(draw_data, ctx);
+  }
+
+  void RenderHealthBarDrawData(const DrawData& draw_data, RenderContext* ctx) {
+    if (draw_data.health_bars.empty()) {
+      return;
+    }
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, progress_bar_pipeline_);
+
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = quad_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+    for (const HealthBarDrawData& data : draw_data.health_bars) {
+      TexScaleAndTransform tex_scale_and_transform{};
+      tex_scale_and_transform.tex_scale.x = 1;
+      tex_scale_and_transform.tex_scale.y = 1;
+      tex_scale_and_transform.transform = data.transform;
+
+      SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                   0,
+                                   &tex_scale_and_transform.tex_scale[0],
+                                   sizeof(TexScaleAndTransform));
+
+      ProgressBarUniform uniform;
+      uniform.left_color = draw_data.health_color;
+      uniform.right_color = draw_data.health_background_color;
+      uniform.progress = data.health_percent;
+      SDL_PushGPUFragmentUniformData(
+          ctx->command_buffer, 0, &uniform.left_color[0], sizeof(ProgressBarUniform));
+
+      SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
+    }
   }
 
   void RenderSphereDrawData(const DrawData& draw_data, RenderContext* ctx) {
@@ -905,7 +942,6 @@ class RendererImpl : public Renderer {
       return;
     }
 
-    std::vector<HealthBar> health_bars;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
         glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;
@@ -930,8 +966,7 @@ class RendererImpl : public Renderer {
         } else {
           AddDrawSphere(
               view_projection, target.position, target.radius, target.is_ghost, draw_data);
-          // DrawSimpleSphereWithLighting(
-          //    view_projection, target.position, target.radius, color, look_at.position, ctx);
+
           if (health_bar_settings.show() && target.HasHealth()) {
             bool is_damaged = target.GetHealthPercent() < 1;
             if (!health_bar_settings.only_damaged() || is_damaged) {
@@ -943,8 +978,8 @@ class RendererImpl : public Renderer {
               glm::vec3 health_bar_center =
                   target.position + up * (height_above_target + target.radius + height / 2.0f);
 
-              auto& health_bar = health_bars.emplace_back();
-              auto& transform = health_bar.transform;
+              HealthBarDrawData health_bar;
+              glm::mat4 transform(1.0f);
               transform = glm::translate(transform, health_bar_center);
 
               // Rotate to face towards camera
@@ -957,26 +992,23 @@ class RendererImpl : public Renderer {
               }
 
               transform = glm::scale(transform, glm::vec3(width, 1, height));
-              transform = view_projection * transform;
-
+              health_bar.transform = view_projection * transform;
               health_bar.health_percent = target.GetHealthPercent();
+              draw_data->health_bars.push_back(health_bar);
             }
           }
         }
       }
     }
 
-    for (auto& bar : health_bars) {
+    if (draw_data->health_bars.size() > 0) {
       auto& h = theme.health_bar();
       auto left = ToVec3(h.health_color());
       auto right = ToVec3(h.background_color());
-      DrawProgressBar(
-          bar.transform,
-          glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f),
-          glm::vec4(
-              right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f),
-          bar.health_percent,
-          ctx);
+      draw_data->health_color =
+          glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f);
+      draw_data->health_background_color = glm::vec4(
+          right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f);
     }
   }
 
@@ -1048,38 +1080,6 @@ class RendererImpl : public Renderer {
     SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
 
     SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
-  }
-
-  void DrawProgressBar(const glm::mat4& transform,
-                       const glm::vec4& left_color,
-                       const glm::vec4& right_color,
-                       float progress,
-                       RenderContext* ctx) {
-    SDL_BindGPUGraphicsPipeline(ctx->render_pass, progress_bar_pipeline_);
-
-    SDL_GPUBufferBinding binding{};
-    binding.buffer = quad_vertex_buffer_;
-    binding.offset = 0;
-    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-    TexScaleAndTransform tex_scale_and_transform{};
-    tex_scale_and_transform.tex_scale.x = 1;
-    tex_scale_and_transform.tex_scale.y = 1;
-    tex_scale_and_transform.transform = transform;
-
-    SDL_PushGPUVertexUniformData(ctx->command_buffer,
-                                 0,
-                                 &tex_scale_and_transform.tex_scale[0],
-                                 sizeof(TexScaleAndTransform));
-
-    ProgressBarUniform uniform;
-    uniform.left_color = left_color;
-    uniform.right_color = right_color;
-    uniform.progress = progress;
-    SDL_PushGPUFragmentUniformData(
-        ctx->command_buffer, 0, &uniform.left_color[0], sizeof(ProgressBarUniform));
-
-    SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
   }
 
   bool CreateSpherePipeline() {
