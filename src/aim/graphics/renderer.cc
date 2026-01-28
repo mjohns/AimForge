@@ -407,131 +407,106 @@ class RendererImpl : public Renderer {
 
  private:
   void RenderDrawData(const DrawData& draw_data, RenderContext* ctx) {
-    if (draw_data.solid_color_walls.size() > 0) {
-      SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
-      bool has_quad = false;
-      bool has_cylinder = false;
-      for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
-        if (data.is_cylinder) {
-          has_cylinder = true;
-        } else {
-          has_quad = true;
-        }
-      }
-
-      if (has_quad) {
-        SDL_GPUBufferBinding binding{};
-        binding.buffer = quad_vertex_buffer_;
-        binding.offset = 0;
-        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-        for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
-          if (!data.is_cylinder) {
-            SDL_PushGPUVertexUniformData(
-                ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
-            SDL_PushGPUFragmentUniformData(
-                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
-            SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
-          }
-        }
-      }
-
-      if (has_cylinder) {
-        SDL_GPUBufferBinding binding{};
-        binding.buffer = cylinder_wall_vertex_buffer_;
-        binding.offset = 0;
-        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-        for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
-          if (data.is_cylinder) {
-            SDL_PushGPUVertexUniformData(
-                ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
-            SDL_PushGPUFragmentUniformData(
-                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
-            SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_wall_vertices_, 1, 0, 0);
-          }
-        }
-      }
-    }
-
-    if (draw_data.texture_walls.size() > 0) {
-      Texture* last_bound_texture = nullptr;
-      SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
-      bool has_quad = false;
-      bool has_cylinder = false;
-      for (const TextureWallDrawData& data : draw_data.texture_walls) {
-        if (data.is_cylinder) {
-          has_cylinder = true;
-        } else {
-          has_quad = true;
-        }
-      }
-
-      if (has_quad) {
-        SDL_GPUBufferBinding binding{};
-        binding.buffer = quad_vertex_buffer_;
-        binding.offset = 0;
-        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-        for (const TextureWallDrawData& data : draw_data.texture_walls) {
-          if (!data.is_cylinder) {
-            TexScaleAndTransform tex_scale_and_transform{};
-            tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
-            tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
-            tex_scale_and_transform.transform = data.transform;
-
-            SDL_PushGPUVertexUniformData(ctx->command_buffer,
-                                         0,
-                                         &tex_scale_and_transform.tex_scale[0],
-                                         sizeof(TexScaleAndTransform));
-
-            SDL_PushGPUFragmentUniformData(
-                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
-            if (data.texture != last_bound_texture) {
-              last_bound_texture = data.texture;
-              SDL_BindGPUFragmentSamplers(
-                  ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
-            }
-
-            SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
-          }
-        }
-      }
-
-      if (has_cylinder) {
-        SDL_GPUBufferBinding binding{};
-        binding.buffer = cylinder_wall_vertex_buffer_;
-        binding.offset = 0;
-        SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-        for (const TextureWallDrawData& data : draw_data.texture_walls) {
-          if (data.is_cylinder) {
-            TexScaleAndTransform tex_scale_and_transform{};
-            tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
-            tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
-            tex_scale_and_transform.transform = data.transform;
-
-            SDL_PushGPUVertexUniformData(ctx->command_buffer,
-                                         0,
-                                         &tex_scale_and_transform.tex_scale[0],
-                                         sizeof(TexScaleAndTransform));
-
-            SDL_PushGPUFragmentUniformData(
-                ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
-            if (data.texture != last_bound_texture) {
-              last_bound_texture = data.texture;
-              SDL_BindGPUFragmentSamplers(
-                  ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
-            }
-
-            SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_wall_vertices_, 1, 0, 0);
-          }
-        }
-      }
-    }
-
+    RenderSolidColorWallsDrawData(draw_data, ctx);
+    RenderTextureWallsDrawData(draw_data, ctx);
     RenderSphereDrawData(draw_data, ctx);
     RenderHealthBarDrawData(draw_data, ctx);
+  }
+
+  void RenderSolidColorWallsDrawData(const DrawData& draw_data, RenderContext* ctx) {
+    if (draw_data.solid_color_walls.empty()) {
+      return;
+    }
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
+    bool has_quad = false;
+    bool has_cylinder = false;
+    for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
+      if (data.is_cylinder) {
+        has_cylinder = true;
+      } else {
+        has_quad = true;
+      }
+    }
+
+    auto draw_walls = [&](bool draw_cylinders) {
+      SDL_GPUBufferBinding binding{};
+      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
+      binding.offset = 0;
+      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+      for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
+        if (data.is_cylinder == draw_cylinders) {
+          SDL_PushGPUVertexUniformData(
+              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+          SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+          int num_vertices = draw_cylinders ? num_cylinder_wall_vertices_ : kQuadNumVertices;
+          SDL_DrawGPUPrimitives(ctx->render_pass, num_vertices, 1, 0, 0);
+        }
+      }
+    };
+
+    if (has_quad) {
+      draw_walls(false);
+    }
+
+    if (has_cylinder) {
+      draw_walls(true);
+    }
+  }
+  void RenderTextureWallsDrawData(const DrawData& draw_data, RenderContext* ctx) {
+    if (draw_data.texture_walls.empty()) {
+      return;
+    }
+    Texture* last_bound_texture = nullptr;
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
+    bool has_quad = false;
+    bool has_cylinder = false;
+    for (const TextureWallDrawData& data : draw_data.texture_walls) {
+      if (data.is_cylinder) {
+        has_cylinder = true;
+      } else {
+        has_quad = true;
+      }
+    }
+
+    auto draw_walls = [&](bool draw_cylinders) {
+      SDL_GPUBufferBinding binding{};
+      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
+      binding.offset = 0;
+      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+      for (const TextureWallDrawData& data : draw_data.texture_walls) {
+        if (data.is_cylinder == draw_cylinders) {
+          TexScaleAndTransform tex_scale_and_transform{};
+          tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
+          tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
+          tex_scale_and_transform.transform = data.transform;
+
+          SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                       0,
+                                       &tex_scale_and_transform.tex_scale[0],
+                                       sizeof(TexScaleAndTransform));
+
+          SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+          if (data.texture != last_bound_texture) {
+            last_bound_texture = data.texture;
+            SDL_BindGPUFragmentSamplers(
+                ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
+          }
+
+          int num_vertices = draw_cylinders ? num_cylinder_wall_vertices_ : kQuadNumVertices;
+          SDL_DrawGPUPrimitives(ctx->render_pass, num_vertices, 1, 0, 0);
+        }
+      }
+    };
+
+    if (has_quad) {
+      draw_walls(false);
+    }
+
+    if (has_cylinder) {
+      draw_walls(true);
+    }
   }
 
   void RenderHealthBarDrawData(const DrawData& draw_data, RenderContext* ctx) {
