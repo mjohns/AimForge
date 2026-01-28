@@ -45,9 +45,23 @@ struct TextureWallDrawData {
   Texture* texture;
 };
 
+struct SphereDrawData {
+  glm::mat4 transform;
+};
+
+struct CylinderDrawData {
+  glm::mat4 transform;
+};
+
 struct DrawData {
   std::vector<SolidColorWallDrawData> solid_color_walls;
   std::vector<TextureWallDrawData> texture_walls;
+  std::vector<SphereDrawData> spheres;
+  std::vector<SphereDrawData> ghost_spheres;
+  std::vector<CylinderDrawData> cylinders;
+  std::vector<CylinderDrawData> ghost_cylinders;
+  glm::vec3 target_color;
+  glm::vec3 ghost_target_color;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -363,12 +377,13 @@ class RendererImpl : public Renderer {
     DrawData draw_data;
     times->render_room_start = stopwatch.GetElapsedMicros();
     AddDrawRoom(view_projection, theme, room, &draw_data);
-    RenderDrawData(draw_data, ctx);
     times->render_room_end = stopwatch.GetElapsedMicros();
 
     times->render_targets_start = stopwatch.GetElapsedMicros();
-    DrawTargets(view_projection, look_at, theme, health_bar, targets, ctx);
+    DrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data, ctx);
     times->render_targets_end = stopwatch.GetElapsedMicros();
+
+    RenderDrawData(draw_data, ctx);
 
     SDL_EndGPURenderPass(ctx->render_pass);
     ctx->render_pass = nullptr;
@@ -508,6 +523,70 @@ class RendererImpl : public Renderer {
 
             SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_wall_vertices_, 1, 0, 0);
           }
+        }
+      }
+    }
+
+    RenderSphereDrawData(draw_data, ctx);
+  }
+
+  void RenderSphereDrawData(const DrawData& draw_data, RenderContext* ctx) {
+    bool has_spheres = !draw_data.spheres.empty() || !draw_data.ghost_spheres.empty();
+    bool has_cylinders = !draw_data.cylinders.empty() || !draw_data.ghost_cylinders.empty();
+    if (!has_spheres && !has_cylinders) {
+      return;
+    }
+    // Cylinders and spheres both use the sphere pipline with different geometry.
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
+
+    if (has_spheres) {
+      SDL_GPUBufferBinding binding{};
+      binding.buffer = sphere_vertex_buffer_;
+      binding.offset = 0;
+      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+      if (draw_data.spheres.size() > 0) {
+        glm::vec4 color4(draw_data.target_color, 1.0f);
+        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+        for (const SphereDrawData& data : draw_data.spheres) {
+          SDL_PushGPUVertexUniformData(
+              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+          SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
+        }
+      }
+      if (draw_data.ghost_spheres.size() > 0) {
+        glm::vec4 color4(draw_data.ghost_target_color, 1.0f);
+        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+        for (const SphereDrawData& data : draw_data.ghost_spheres) {
+          SDL_PushGPUVertexUniformData(
+              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+          SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
+        }
+      }
+    }
+
+    if (has_cylinders) {
+      SDL_GPUBufferBinding binding{};
+      binding.buffer = cylinder_vertex_buffer_;
+      binding.offset = 0;
+      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
+      if (draw_data.cylinders.size() > 0) {
+        glm::vec4 color4(draw_data.target_color, 1.0f);
+        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+        for (const CylinderDrawData& data : draw_data.cylinders) {
+          SDL_PushGPUVertexUniformData(
+              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+          SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
+        }
+      }
+      if (draw_data.ghost_cylinders.size() > 0) {
+        glm::vec4 color4(draw_data.ghost_target_color, 1.0f);
+        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
+        for (const CylinderDrawData& data : draw_data.ghost_cylinders) {
+          SDL_PushGPUVertexUniformData(
+              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
+          SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
         }
       }
     }
@@ -772,63 +851,6 @@ class RendererImpl : public Renderer {
     AddDrawWallSolidColor(transform, GetSolidColor(appearance), is_cylinder_wall, draw_data);
   }
 
-  void DrawWall(const glm::mat4& transform,
-                const Wall& wall,
-                const WallAppearance& appearance,
-                bool is_cylinder_wall,
-                RenderContext* ctx) {
-    if (appearance.has_texture()) {
-      Texture* texture = texture_manager_.GetTexture(appearance.texture().texture_name());
-      if (texture == nullptr) {
-        // Too spammy to log this error?
-        DrawWallSolidColor(transform, glm::vec3(0.7), is_cylinder_wall, ctx);
-        return;
-      }
-
-      glm::vec2 tex_scale;
-
-      float tex_scale_height = 100;
-      float tex_scale_width = (texture->width() * tex_scale_height) / (float)texture->height();
-
-      tex_scale.x = wall.width / tex_scale_width;
-      tex_scale.y = wall.height / tex_scale_height;
-
-      if (appearance.texture().has_scale()) {
-        tex_scale *= appearance.texture().scale();
-      }
-
-      SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
-      SDL_GPUBufferBinding binding{};
-      binding.buffer = is_cylinder_wall ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
-      binding.offset = 0;
-      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-      TexScaleAndTransform tex_scale_and_transform{};
-      tex_scale_and_transform.tex_scale.x = tex_scale.x;
-      tex_scale_and_transform.tex_scale.y = tex_scale.y;
-      tex_scale_and_transform.transform = transform;
-
-      SDL_PushGPUVertexUniformData(ctx->command_buffer,
-                                   0,
-                                   &tex_scale_and_transform.tex_scale[0],
-                                   sizeof(TexScaleAndTransform));
-
-      glm::vec3 mix_color = ToVec3(appearance.mix_color());
-      glm::vec4 color4(mix_color, appearance.mix_percent());
-      SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-      SDL_BindGPUFragmentSamplers(ctx->render_pass, 0, texture->texture_sampler_binding(), 1);
-
-      SDL_DrawGPUPrimitives(ctx->render_pass,
-                            is_cylinder_wall ? num_cylinder_wall_vertices_ : kQuadNumVertices,
-                            1,
-                            0,
-                            0);
-      return;
-    }
-
-    DrawWallSolidColor(transform, GetSolidColor(appearance), is_cylinder_wall, ctx);
-  }
-
   void AddDrawWallSolidColor(const glm::mat4& transform,
                              const glm::vec3& color,
                              bool is_cylinder_wall,
@@ -865,7 +887,14 @@ class RendererImpl : public Renderer {
                    const Theme& theme,
                    const HealthBarSettings& health_bar_settings,
                    const std::vector<Target>& targets,
+                   DrawData* draw_data,
                    RenderContext* ctx) {
+    glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
+    glm::vec3 ghost_target_color =
+        theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
+    draw_data->ghost_target_color = ghost_target_color;
+    draw_data->target_color = target_color;
+
     bool should_draw = false;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
@@ -875,12 +904,6 @@ class RendererImpl : public Renderer {
     if (!should_draw) {
       return;
     }
-
-    glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
-    glm::vec3 ghost_target_color =
-        theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
-
-    SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
 
     std::vector<HealthBar> health_bars;
     for (const Target& target : targets) {
@@ -892,14 +915,21 @@ class RendererImpl : public Renderer {
           c.up = target.pill_up;
           c.height = target.height - target.radius;
           c.position = target.position;
-          DrawCylinder(view_projection, c, color, ctx);
+          AddDrawCylinder(view_projection, c, target.is_ghost, draw_data);
 
-          DrawSphere(
-              view_projection, c.position + c.up * (c.height * 0.5f), target.radius, color, ctx);
-          DrawSphere(
-              view_projection, c.position + c.up * (c.height * -0.5f), target.radius, color, ctx);
+          AddDrawSphere(view_projection,
+                        c.position + c.up * (c.height * 0.5f),
+                        target.radius,
+                        target.is_ghost,
+                        draw_data);
+          AddDrawSphere(view_projection,
+                        c.position + c.up * (c.height * -0.5f),
+                        target.radius,
+                        target.is_ghost,
+                        draw_data);
         } else {
-          DrawSphere(view_projection, target.position, target.radius, color, ctx);
+          AddDrawSphere(
+              view_projection, target.position, target.radius, target.is_ghost, draw_data);
           // DrawSimpleSphereWithLighting(
           //    view_projection, target.position, target.radius, color, look_at.position, ctx);
           if (health_bar_settings.show() && target.HasHealth()) {
@@ -950,32 +980,52 @@ class RendererImpl : public Renderer {
     }
   }
 
-  void DrawSphere(const glm::mat4& view_projection,
-                  const glm::vec3& position,
-                  float radius,
-                  const glm::vec3& color,
-                  RenderContext* ctx) {
-    SDL_GPUBufferBinding binding{};
-    binding.buffer = sphere_vertex_buffer_;
-    binding.offset = 0;
-    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
+  void AddDrawSphere(const glm::mat4& view_projection,
+                     const glm::vec3& position,
+                     float radius,
+                     bool is_ghost,
+                     DrawData* draw_data) {
+    SphereDrawData data;
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, position);
     transform = glm::scale(transform, glm::vec3(radius));
-    transform = view_projection * transform;
-    SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
+    data.transform = view_projection * transform;
 
-    glm::vec4 color4(color, 1.0f);
-    SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-
-    SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
+    if (is_ghost) {
+      draw_data->ghost_spheres.push_back(data);
+    } else {
+      draw_data->spheres.push_back(data);
+    }
   }
 
-  void DrawCylinder(const glm::mat4& view_projection,
-                    const Cylinder& c,
-                    const glm::vec3& color,
-                    RenderContext* ctx) {
+  void AddDrawCylinder(const glm::mat4& view_projection,
+                       const Cylinder& c,
+                       bool is_ghost,
+                       DrawData* draw_data) {
+    CylinderDrawData data;
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, c.position);
+    if (c.up != glm::vec3(0, 0, 1) && c.up != glm::vec3(0, 0, -1)) {
+      glm::vec3 up = glm::vec3(0, 0, 1);
+      glm::vec3 rotate_axis = glm::normalize(glm::cross(up, c.up));
+      float angle = glm::acos(glm::dot(up, c.up));
+      model = glm::rotate(model, angle, rotate_axis);
+    }
+    model = glm::scale(model, glm::vec3(c.radius, c.radius, c.height));
+
+    data.transform = view_projection * model;
+
+    if (is_ghost) {
+      draw_data->ghost_cylinders.push_back(data);
+    } else {
+      draw_data->cylinders.push_back(data);
+    }
+  }
+
+  void DrawCylinder2(const glm::mat4& view_projection,
+                     const Cylinder& c,
+                     const glm::vec3& color,
+                     RenderContext* ctx) {
     SDL_GPUBufferBinding binding{};
     binding.buffer = cylinder_vertex_buffer_;
     binding.offset = 0;
