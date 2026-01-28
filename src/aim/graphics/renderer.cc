@@ -327,7 +327,7 @@ class RendererImpl : public Renderer {
 
     target_info.texture = msaa_render_texture_;
     target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
-    target_info.resolve_texture = msaa_resolve_texture_;
+    target_info.resolve_texture = ctx->swapchain_texture;
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
     target_info.cycle = true;
@@ -373,6 +373,7 @@ class RendererImpl : public Renderer {
     SDL_EndGPURenderPass(ctx->render_pass);
     ctx->render_pass = nullptr;
 
+    /*
     SDL_GPUBlitInfo blit_info{};
     blit_info.source.texture = msaa_resolve_texture_;
     blit_info.source.w = viewport_width_;
@@ -383,6 +384,7 @@ class RendererImpl : public Renderer {
     blit_info.load_op = SDL_GPU_LOADOP_DONT_CARE;
     blit_info.filter = SDL_GPU_FILTER_LINEAR;
     SDL_BlitGPUTexture(ctx->command_buffer, &blit_info);
+    */
   }
 
  private:
