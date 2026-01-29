@@ -3,7 +3,6 @@
 #include <iostream>
 #include <optional>
 
-#include "SDL3_image/SDL_image.h"
 #include "aim/common/log.h"
 #include "aim/graphics/image.h"
 

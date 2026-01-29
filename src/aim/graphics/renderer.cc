@@ -411,13 +411,8 @@ class RendererImpl : public Renderer {
                     FrameTimes* times) override {
     const glm::mat4 view_projection = projection * look_at.transform;
     DrawData draw_data;
-    times->render_room_start = stopwatch.GetElapsedMicros();
     AddDrawRoom(view_projection, theme, room, &draw_data);
-    times->render_room_end = stopwatch.GetElapsedMicros();
-
-    times->render_targets_start = stopwatch.GetElapsedMicros();
     AddDrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data);
-    times->render_targets_end = stopwatch.GetElapsedMicros();
 
     SolidColorInstances solid_color_instances;
     UploadSolidColorInstanceData(draw_data, &solid_color_instances, ctx);

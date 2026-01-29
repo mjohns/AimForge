@@ -1,25 +1,16 @@
 #pragma once
 
-#include <SDL3_image/SDL_image.h>
-
 #include <filesystem>
 
-#include "aim/common/log.h"
+#include "SDL3/SDL.h"
 
 namespace aim {
 
+SDL_Surface* LoadImageSurface(const std::filesystem::path& path);
+
 class Image {
  public:
-  explicit Image(const std::filesystem::path& path) {
-    surface_ = IMG_Load(path.string().c_str());
-    if (surface_ == nullptr) {
-      Logger::get()->warn(
-          "Failed to load image {}, IMG_GetError(): {}", path.string(), SDL_GetError());
-      return;
-    }
-    width_ = surface_->w;
-    height_ = surface_->h;
-  }
+  explicit Image(const std::filesystem::path& path);
 
   ~Image() {
     if (surface_ != nullptr) {

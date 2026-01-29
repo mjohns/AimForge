@@ -7,7 +7,6 @@
 #include <memory>
 
 #include "SDL3/SDL.h"
-#include "SDL3_image/SDL_image.h"
 #include "SDL3_mixer/SDL_mixer.h"
 #include "absl/cleanup/cleanup.h"
 #include "absl/log/log.h"
@@ -25,6 +24,7 @@
 #include "aim/core/stats_manager.h"
 #include "aim/database/aim_db.h"
 #include "aim/graphics/renderer.h"
+#include "aim/graphics/image.h"
 #include "imgui.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 #include "imgui/backends/imgui_impl_sdlgpu3.h"
@@ -250,7 +250,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
 
   trace.Add("SetIcon");
   auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
-  icon_ = IMG_Load(logo_path.string().c_str());
+  icon_ = LoadImageSurface(logo_path.string().c_str());
   if (icon_ != nullptr) {
     SDL_SetWindowIcon(sdl_window_, icon_);
   } else {
