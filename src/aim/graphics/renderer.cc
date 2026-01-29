@@ -688,6 +688,7 @@ class RendererImpl : public Renderer {
       return;
     }
 
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Upload SolidColor");
     SDL_GPUTransferBufferCreateInfo transfer_info{};
     transfer_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
     transfer_info.size = sizeof(SolidColorInstanceData) * instances->instances.size();
@@ -713,6 +714,7 @@ class RendererImpl : public Renderer {
     SDL_UploadToGPUBuffer(copy_pass, &source, &destination, false);
 
     SDL_EndGPUCopyPass(copy_pass);
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
   void RenderSolidColorDrawData(const DrawData& draw_data,
