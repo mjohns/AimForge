@@ -15,6 +15,13 @@
 namespace aim {
 namespace {
 
+constexpr const u32 kMaxSolidColorInstances = 1000;
+
+struct SolidColorInstanceData {
+  glm::mat4 transform;
+  glm::vec4 color;
+};
+
 struct TexScaleAndTransform {
   glm::vec4 tex_scale{};
   glm::mat4 transform{};
@@ -178,6 +185,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, sphere_pipeline_);
       sphere_pipeline_ = nullptr;
     }
+    if (solid_color_pipeline_ != nullptr) {
+      SDL_ReleaseGPUGraphicsPipeline(device_, solid_color_pipeline_);
+      solid_color_pipeline_ = nullptr;
+    }
     if (solid_quad_pipeline_ != nullptr) {
       SDL_ReleaseGPUGraphicsPipeline(device_, solid_quad_pipeline_);
       solid_quad_pipeline_ = nullptr;
@@ -190,9 +201,13 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, progress_bar_pipeline_);
       progress_bar_pipeline_ = nullptr;
     }
-    if (quad_vertex_buffer_ != nullptr) {
-      SDL_ReleaseGPUBuffer(device_, quad_vertex_buffer_);
-      quad_vertex_buffer_ = nullptr;
+    if (texture_quad_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, texture_quad_vertex_buffer_);
+      texture_quad_vertex_buffer_ = nullptr;
+    }
+    if (solid_quad_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, solid_quad_vertex_buffer_);
+      solid_quad_vertex_buffer_ = nullptr;
     }
     if (cylinder_wall_vertex_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, cylinder_wall_vertex_buffer_);
@@ -205,6 +220,10 @@ class RendererImpl : public Renderer {
     if (sphere_vertex_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, sphere_vertex_buffer_);
       sphere_vertex_buffer_ = nullptr;
+    }
+    if (solid_color_instance_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, solid_color_instance_buffer_);
+      solid_color_instance_buffer_ = nullptr;
     }
     if (depth_texture_ != nullptr) {
       SDL_ReleaseGPUTexture(device_, depth_texture_);
@@ -230,6 +249,14 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUShader(device_, solid_color_fragment_shader_);
       solid_color_fragment_shader_ = nullptr;
     }
+    if (solid_color_instanced_vertex_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, solid_color_instanced_vertex_shader_);
+      solid_color_instanced_vertex_shader_ = nullptr;
+    }
+    if (solid_color_instanced_fragment_shader_ != nullptr) {
+      SDL_ReleaseGPUShader(device_, solid_color_instanced_fragment_shader_);
+      solid_color_instanced_fragment_shader_ = nullptr;
+    }
     if (position_and_tex_coord_vertex_shader_ != nullptr) {
       SDL_ReleaseGPUShader(device_, position_and_tex_coord_vertex_shader_);
       position_and_tex_coord_vertex_shader_ = nullptr;
@@ -253,6 +280,10 @@ class RendererImpl : public Renderer {
         LoadShader(device_, shader_dir, "solid_color.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
     solid_color_fragment_shader_ =
         LoadShader(device_, shader_dir, "solid_color.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
+    solid_color_instanced_vertex_shader_ = LoadShader(
+        device_, shader_dir, "solid_color_instanced.vert", SDL_GPU_SHADERSTAGE_VERTEX, 0, 0, 1);
+    solid_color_instanced_fragment_shader_ =
+        LoadShader(device_, shader_dir, "solid_color_instanced.frag", SDL_GPU_SHADERSTAGE_FRAGMENT);
     texture_fragment_shader_ =
         LoadShader(device_, shader_dir, "texture.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1, 1);
     progress_bar_fragment_shader_ =
@@ -298,6 +329,9 @@ class RendererImpl : public Renderer {
     if (!CreateSpherePipeline()) {
       return false;
     }
+    if (!CreateSolidColorPipeline()) {
+      return false;
+    }
     if (!CreateSolidQuadPipeline()) {
       return false;
     }
@@ -316,6 +350,14 @@ class RendererImpl : public Renderer {
     SDL_GPUTransferBuffer* cylinder_wall_transfer_buffer =
         CreateCylinderWallVertexBuffer(copy_pass);
     SDL_GPUTransferBuffer* cylinder_transfer_buffer = CreateCylinderVertexBuffer(copy_pass);
+
+    {
+      u32 instance_buffer_size = sizeof(SolidColorInstanceData) * kMaxSolidColorInstances;
+      SDL_GPUBufferCreateInfo buffer_info{};
+      buffer_info.usage = SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ;
+      buffer_info.size = instance_buffer_size;
+      solid_color_instance_buffer_ = SDL_CreateGPUBuffer(device_, &buffer_info);
+    }
 
     SDL_EndGPUCopyPass(copy_pass);
     SDL_SubmitGPUCommandBuffer(upload_command_buffer);
@@ -433,7 +475,7 @@ class RendererImpl : public Renderer {
 
     auto draw_walls = [&](bool draw_cylinders) {
       SDL_GPUBufferBinding binding{};
-      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
+      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : texture_quad_vertex_buffer_;
       binding.offset = 0;
       SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
 
@@ -477,7 +519,7 @@ class RendererImpl : public Renderer {
 
     auto draw_walls = [&](bool draw_cylinders) {
       SDL_GPUBufferBinding binding{};
-      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
+      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : texture_quad_vertex_buffer_;
       binding.offset = 0;
       SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
 
@@ -525,7 +567,7 @@ class RendererImpl : public Renderer {
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, progress_bar_pipeline_);
 
     SDL_GPUBufferBinding binding{};
-    binding.buffer = quad_vertex_buffer_;
+    binding.buffer = texture_quad_vertex_buffer_;
     binding.offset = 0;
     SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
 
@@ -893,7 +935,7 @@ class RendererImpl : public Renderer {
                           RenderContext* ctx) {
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_quad_pipeline_);
     SDL_GPUBufferBinding binding{};
-    binding.buffer = is_cylinder_wall ? cylinder_wall_vertex_buffer_ : quad_vertex_buffer_;
+    binding.buffer = is_cylinder_wall ? cylinder_wall_vertex_buffer_ : texture_quad_vertex_buffer_;
     binding.offset = 0;
     SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
     SDL_PushGPUVertexUniformData(ctx->command_buffer, 0, &transform[0][0], sizeof(glm::mat4));
@@ -1097,8 +1139,45 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
     sphere_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
-    if (sphere_pipeline_ == NULL) {
+    if (sphere_pipeline_ == nullptr) {
       Logger::get()->error("ERROR: SpherePipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+                           SDL_GetError());
+      return false;
+    }
+
+    return true;
+  }
+
+  bool CreateSolidColorPipeline() {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info = CreateDefaultPipelineInfo(
+        solid_color_instanced_vertex_shader_, solid_color_instanced_fragment_shader_);
+
+    SDL_GPUColorTargetDescription color_target_desc[1];
+    color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+    color_target_desc[0].blend_state = DefaultBlendState();
+    pipeline_info.target_info.color_target_descriptions = color_target_desc;
+
+    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
+    vertex_buffer_descriptions[0].slot = 0;
+    vertex_buffer_descriptions[0].pitch = sizeof(float) * 3;
+    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+    vertex_buffer_descriptions[0].instance_step_rate = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_buffers = 1;
+    pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
+
+    SDL_GPUVertexAttribute vertex_attributes[1];
+    vertex_attributes[0].location = 0;
+    vertex_attributes[0].buffer_slot = 0;
+    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+    vertex_attributes[0].offset = 0;
+
+    pipeline_info.vertex_input_state.num_vertex_attributes = 1;
+    pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
+
+    solid_color_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+    if (solid_color_pipeline_ == nullptr) {
+      Logger::get()->error("ERROR: SolidColorPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
                            SDL_GetError());
       return false;
     }
@@ -1299,7 +1378,7 @@ class RendererImpl : public Renderer {
     };
 
     int size = sizeof(VertexAndTexCoord) * vertices.size();
-    return UploadBuffer(vertices.data(), size, copy_pass, &quad_vertex_buffer_);
+    return UploadBuffer(vertices.data(), size, copy_pass, &texture_quad_vertex_buffer_);
   }
 
   SDL_GPUTransferBuffer* CreateCylinderWallVertexBuffer(SDL_GPUCopyPass* copy_pass) {
@@ -1344,7 +1423,41 @@ class RendererImpl : public Renderer {
     region.buffer = vertex_buffer;
     region.offset = 0;
     region.size = size;
-    SDL_UploadToGPUBuffer(copy_pass, &location, &region, false);
+    SDL_UploadToGPUBuffer(copy_pass, &location, &region, /*cycle=*/false);
+
+    *vertex_buffer_out = vertex_buffer;
+    return transfer_buffer;
+  }
+
+  SDL_GPUTransferBuffer* UploadBuffer(void* data,
+                                      int size,
+                                      SDL_GPUCopyPass* copy_pass,
+                                      SDL_GPUBuffer** vertex_buffer_out) {
+    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
+    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+    vertex_buffer_create_info.size = size;
+
+    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
+
+    // Set up buffer data
+    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
+    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+    transfer_buffer_create_info.size = size;
+    SDL_GPUTransferBuffer* transfer_buffer =
+        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
+
+    void* transfer_data = (void*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
+    SDL_memcpy(transfer_data, data, size);
+    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
+
+    SDL_GPUTransferBufferLocation location{};
+    location.transfer_buffer = transfer_buffer;
+    location.offset = 0;
+    SDL_GPUBufferRegion region{};
+    region.buffer = vertex_buffer;
+    region.offset = 0;
+    region.size = size;
+    SDL_UploadToGPUBuffer(copy_pass, &location, &region, /*cycle=*/false);
 
     *vertex_buffer_out = vertex_buffer;
     return transfer_buffer;
@@ -1363,11 +1476,14 @@ class RendererImpl : public Renderer {
 
   SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
+  SDL_GPUShader* solid_color_instanced_fragment_shader_ = nullptr;
+  SDL_GPUShader* solid_color_instanced_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
   SDL_GPUShader* texture_fragment_shader_ = nullptr;
   SDL_GPUShader* interpolate_color_fragment_shader_ = nullptr;
   SDL_GPUShader* progress_bar_fragment_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* sphere_pipeline_;
+  SDL_GPUGraphicsPipeline* solid_color_pipeline_;
   SDL_GPUGraphicsPipeline* solid_quad_pipeline_;
   SDL_GPUGraphicsPipeline* texture_quad_pipeline_;
   SDL_GPUGraphicsPipeline* progress_bar_pipeline_;
@@ -1375,10 +1491,12 @@ class RendererImpl : public Renderer {
   SDL_GPUDevice* device_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
 
-  SDL_GPUBuffer* quad_vertex_buffer_ = nullptr;
+  SDL_GPUBuffer* texture_quad_vertex_buffer_ = nullptr;
+  SDL_GPUBuffer* solid_quad_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* cylinder_wall_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* cylinder_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* sphere_vertex_buffer_ = nullptr;
+  SDL_GPUBuffer* solid_color_instance_buffer_ = nullptr;
 
   SDL_GPUTexture* depth_texture_ = nullptr;
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
