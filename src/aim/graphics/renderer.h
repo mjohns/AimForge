@@ -21,6 +21,7 @@ struct RenderContext {
   SDL_GPUCommandBuffer* command_buffer = nullptr;
   SDL_GPUTexture* swapchain_texture = nullptr;
   SDL_GPURenderPass* render_pass = nullptr;
+  SDL_GPUTransferBuffer* solid_color_transfer_buffer = nullptr;
 };
 
 class Renderer {

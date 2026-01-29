@@ -222,7 +222,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   trace.Add("SDL_CreateGPUDevice");
   gpu_device_ = SDL_CreateGPUDevice(
       SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-      true, // debug
+      true,  // debug
       nullptr);
   if (gpu_device_ == nullptr) {
     return std::format("Failed to create GPU device: {}", SDL_GetError());
@@ -489,6 +489,10 @@ void Application::FinishRender(RenderContext* render_context) {
   SDL_PopGPUDebugGroup(render_context->command_buffer);
 
   SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
+
+  if (render_context->solid_color_transfer_buffer != nullptr) {
+    SDL_ReleaseGPUTransferBuffer(gpu_device_, render_context->solid_color_transfer_buffer);
+  }
 }
 
 void Application::NewImGuiFrame() {
