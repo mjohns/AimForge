@@ -246,22 +246,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUTexture(device_, msaa_render_texture_);
       msaa_render_texture_ = nullptr;
     }
-    if (msaa_resolve_texture_ != nullptr) {
-      SDL_ReleaseGPUTexture(device_, msaa_resolve_texture_);
-      msaa_resolve_texture_ = nullptr;
-    }
     texture_manager_.clear();
   }
 
   void CleanupShaders() {
-    if (solid_color_vertex_shader_ != nullptr) {
-      SDL_ReleaseGPUShader(device_, solid_color_vertex_shader_);
-      solid_color_vertex_shader_ = nullptr;
-    }
-    if (solid_color_fragment_shader_ != nullptr) {
-      SDL_ReleaseGPUShader(device_, solid_color_fragment_shader_);
-      solid_color_fragment_shader_ = nullptr;
-    }
     if (solid_color_instanced_vertex_shader_ != nullptr) {
       SDL_ReleaseGPUShader(device_, solid_color_instanced_vertex_shader_);
       solid_color_instanced_vertex_shader_ = nullptr;
@@ -278,10 +266,6 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUShader(device_, texture_fragment_shader_);
       texture_fragment_shader_ = nullptr;
     }
-    if (interpolate_color_fragment_shader_ != nullptr) {
-      SDL_ReleaseGPUShader(device_, interpolate_color_fragment_shader_);
-      interpolate_color_fragment_shader_ = nullptr;
-    }
     if (progress_bar_fragment_shader_ != nullptr) {
       SDL_ReleaseGPUShader(device_, progress_bar_fragment_shader_);
       progress_bar_fragment_shader_ = nullptr;
@@ -289,10 +273,6 @@ class RendererImpl : public Renderer {
   }
 
   bool Initialize(const std::filesystem::path& shader_dir) {
-    solid_color_vertex_shader_ =
-        LoadShader(device_, shader_dir, "solid_color.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
-    solid_color_fragment_shader_ =
-        LoadShader(device_, shader_dir, "solid_color.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
     solid_color_instanced_vertex_shader_ = LoadShader(
         device_, shader_dir, "solid_color_instanced.vert", SDL_GPU_SHADERSTAGE_VERTEX, 0, 0, 1);
     solid_color_instanced_fragment_shader_ =
@@ -303,8 +283,6 @@ class RendererImpl : public Renderer {
         LoadShader(device_, shader_dir, "progress_bar.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
     position_and_tex_coord_vertex_shader_ = LoadShader(
         device_, shader_dir, "position_and_texture_coord.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
-    interpolate_color_fragment_shader_ =
-        LoadShader(device_, shader_dir, "interpolate_color.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
 
     SDL_GPUTextureCreateInfo depth_texture_info{};
     depth_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
@@ -329,6 +307,7 @@ class RendererImpl : public Renderer {
     render_texture_info.sample_count = msaa_sample_count_;
     msaa_render_texture_ = SDL_CreateGPUTexture(device_, &render_texture_info);
 
+    /*
     SDL_GPUTextureCreateInfo resolve_texture_info{};
     resolve_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
     resolve_texture_info.width = viewport_width_;
@@ -338,6 +317,7 @@ class RendererImpl : public Renderer {
     resolve_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
     resolve_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET | SDL_GPU_TEXTUREUSAGE_SAMPLER;
     msaa_resolve_texture_ = SDL_CreateGPUTexture(device_, &resolve_texture_info);
+    */
 
     if (!CreateSolidColorPipeline()) {
       return false;
@@ -1209,48 +1189,6 @@ class RendererImpl : public Renderer {
     return true;
   }
 
-  bool CreateProgressBarQuadPipeline() {
-    SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
-        CreateDefaultPipelineInfo(position_and_tex_coord_vertex_shader_, texture_fragment_shader_);
-
-    SDL_GPUColorTargetDescription color_target_desc[1];
-    color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
-    color_target_desc[0].blend_state = DefaultBlendState();
-    pipeline_info.target_info.color_target_descriptions = color_target_desc;
-
-    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[1];
-    vertex_buffer_descriptions[0].slot = 0;
-    vertex_buffer_descriptions[0].pitch = sizeof(VertexAndTexCoord);
-    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
-    vertex_buffer_descriptions[0].instance_step_rate = 0;
-
-    pipeline_info.vertex_input_state.num_vertex_buffers = 1;
-    pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
-
-    SDL_GPUVertexAttribute vertex_attributes[2];
-    vertex_attributes[0].location = 0;
-    vertex_attributes[0].buffer_slot = 0;
-    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
-    vertex_attributes[0].offset = 0;
-
-    vertex_attributes[1].location = 1;
-    vertex_attributes[1].buffer_slot = 0;
-    vertex_attributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
-    vertex_attributes[1].offset = sizeof(float) * 3;
-
-    pipeline_info.vertex_input_state.num_vertex_attributes = 2;
-    pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
-
-    texture_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
-    if (texture_quad_pipeline_ == nullptr) {
-      Logger::get()->error("ERROR: TextureQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
-                           SDL_GetError());
-      return false;
-    }
-
-    return true;
-  }
-
   SDL_GPUGraphicsPipelineCreateInfo CreateDefaultPipelineInfo(SDL_GPUShader* vertex_shader,
                                                               SDL_GPUShader* fragment_shader,
                                                               bool use_depth = true) {
@@ -1412,13 +1350,10 @@ class RendererImpl : public Renderer {
     return SDL_GPU_SAMPLECOUNT_2;
   }
 
-  SDL_GPUShader* solid_color_fragment_shader_ = nullptr;
-  SDL_GPUShader* solid_color_vertex_shader_ = nullptr;
   SDL_GPUShader* solid_color_instanced_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_instanced_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
   SDL_GPUShader* texture_fragment_shader_ = nullptr;
-  SDL_GPUShader* interpolate_color_fragment_shader_ = nullptr;
   SDL_GPUShader* progress_bar_fragment_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* solid_color_pipeline_;
   SDL_GPUGraphicsPipeline* texture_quad_pipeline_;
@@ -1434,7 +1369,6 @@ class RendererImpl : public Renderer {
 
   SDL_GPUTexture* depth_texture_ = nullptr;
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
-  SDL_GPUTexture* msaa_resolve_texture_ = nullptr;
 
   SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_2;
 
