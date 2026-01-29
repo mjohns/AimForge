@@ -22,6 +22,28 @@ struct SolidColorInstanceData {
   glm::vec4 color;
 };
 
+struct SolidColorInstances {
+  std::vector<SolidColorInstanceData> instances;
+
+  // Instances will be packed in the following order and summing num_* equals the size of instances
+  // vector.
+  u32 num_spheres = 0;
+  u32 num_cylinders = 0;
+  u32 num_quads = 0;
+
+  u32 GetSpheresOffset() const {
+    return 0;
+  }
+
+  u32 GetCylindersOffset() const {
+    return num_spheres;
+  }
+
+  u32 GetQuadsOffset() const {
+    return num_spheres + num_cylinders;
+  }
+};
+
 struct TexScaleAndTransform {
   glm::vec4 tex_scale{};
   glm::mat4 transform{};
@@ -379,6 +401,19 @@ class RendererImpl : public Renderer {
                     RenderContext* ctx,
                     const Stopwatch& stopwatch,
                     FrameTimes* times) override {
+    const glm::mat4 view_projection = projection * look_at.transform;
+    DrawData draw_data;
+    times->render_room_start = stopwatch.GetElapsedMicros();
+    AddDrawRoom(view_projection, theme, room, &draw_data);
+    times->render_room_end = stopwatch.GetElapsedMicros();
+
+    times->render_targets_start = stopwatch.GetElapsedMicros();
+    AddDrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data);
+    times->render_targets_end = stopwatch.GetElapsedMicros();
+
+    SolidColorInstances solid_color_instances;
+    UploadSolidColorInstanceData(draw_data, &solid_color_instances, ctx);
+
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
     target_info.clear_color = SDL_FColor{0, 0, 0, 1.0};
@@ -418,17 +453,7 @@ class RendererImpl : public Renderer {
     SDL_SetGPUScissor(ctx->render_pass, &scissor_rect);
     */
 
-    const glm::mat4 view_projection = projection * look_at.transform;
-    DrawData draw_data;
-    times->render_room_start = stopwatch.GetElapsedMicros();
-    AddDrawRoom(view_projection, theme, room, &draw_data);
-    times->render_room_end = stopwatch.GetElapsedMicros();
-
-    times->render_targets_start = stopwatch.GetElapsedMicros();
-    AddDrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data);
-    times->render_targets_end = stopwatch.GetElapsedMicros();
-
-    RenderDrawData(draw_data, ctx);
+    RenderDrawData(draw_data, solid_color_instances, ctx);
 
     SDL_EndGPURenderPass(ctx->render_pass);
     ctx->render_pass = nullptr;
@@ -448,11 +473,13 @@ class RendererImpl : public Renderer {
   }
 
  private:
-  void RenderDrawData(const DrawData& draw_data, RenderContext* ctx) {
+  void RenderDrawData(const DrawData& draw_data,
+                      const SolidColorInstances& solid_color_instances,
+                      RenderContext* ctx) {
     SDL_PushGPUDebugGroup(ctx->command_buffer, "Render Scene");
     RenderSolidColorWallsDrawData(draw_data, ctx);
     RenderTextureWallsDrawData(draw_data, ctx);
-    RenderSphereDrawData(draw_data, ctx);
+    RenderSphereDrawData(draw_data, solid_color_instances, ctx);
     RenderHealthBarDrawData(draw_data, ctx);
     SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
@@ -594,68 +621,111 @@ class RendererImpl : public Renderer {
     SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
-  void RenderSphereDrawData(const DrawData& draw_data, RenderContext* ctx) {
-    bool has_spheres = !draw_data.spheres.empty() || !draw_data.ghost_spheres.empty();
-    bool has_cylinders = !draw_data.cylinders.empty() || !draw_data.ghost_cylinders.empty();
+  void UploadSolidColorInstanceData(const DrawData& draw_data,
+                                    SolidColorInstances* instances,
+                                    RenderContext* ctx) {
+    instances->num_spheres = draw_data.spheres.size() + draw_data.ghost_spheres.size();
+    for (const SphereDrawData& data : draw_data.spheres) {
+      instances->instances.emplace_back();
+      SolidColorInstanceData& instance = instances->instances.back();
+      instance.color = glm::vec4(draw_data.target_color, 1.0f);
+      instance.transform = data.transform;
+    }
+    for (const SphereDrawData& data : draw_data.ghost_spheres) {
+      instances->instances.emplace_back();
+      SolidColorInstanceData& instance = instances->instances.back();
+      instance.color = glm::vec4(draw_data.ghost_target_color, 1.0f);
+      instance.transform = data.transform;
+    }
+
+    instances->num_cylinders = draw_data.cylinders.size() + draw_data.ghost_cylinders.size();
+    for (const CylinderDrawData& data : draw_data.cylinders) {
+      instances->instances.emplace_back();
+      SolidColorInstanceData& instance = instances->instances.back();
+      instance.color = glm::vec4(draw_data.target_color, 1.0f);
+      instance.transform = data.transform;
+    }
+    for (const CylinderDrawData& data : draw_data.ghost_cylinders) {
+      instances->instances.emplace_back();
+      SolidColorInstanceData& instance = instances->instances.back();
+      instance.color = glm::vec4(draw_data.ghost_target_color, 1.0f);
+      instance.transform = data.transform;
+    }
+
+    // Make sure we fit in the preallocated buffer size.
+    if (instances->instances.size() > kMaxSolidColorInstances) {
+      instances->instances.resize(kMaxSolidColorInstances);
+    }
+
+    if (instances->instances.empty()) {
+      return;
+    }
+
+    SDL_GPUTransferBufferCreateInfo transfer_info{};
+    transfer_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
+    transfer_info.size = sizeof(SolidColorInstanceData) * instances->instances.size();
+    SDL_GPUTransferBuffer* staging_buffer = SDL_CreateGPUTransferBuffer(device_, &transfer_info);
+
+    // TODO: Explore using a ring buffer and keeping the transfer buffer always active. i.e. make it
+    // 3x the size and alternate the 1/3rd to use each frame.
+    u32 data_size = sizeof(SolidColorInstanceData) * instances->instances.size();
+    void* mapped_ptr = SDL_MapGPUTransferBuffer(device_, staging_buffer, /*cycle=*/false);
+    SDL_memcpy(mapped_ptr, instances->instances.data(), data_size);
+    SDL_UnmapGPUTransferBuffer(device_, staging_buffer);
+
+    SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(ctx->command_buffer);
+
+    SDL_GPUTransferBufferLocation source = {.transfer_buffer = staging_buffer, .offset = 0};
+    SDL_GPUBufferRegion destination = {
+        .buffer = solid_color_instance_buffer_,
+        .offset = 0,
+        .size = data_size,
+    };
+    SDL_UploadToGPUBuffer(copy_pass, &source, &destination, false);
+
+    SDL_EndGPUCopyPass(copy_pass);
+  }
+
+  void RenderSphereDrawData(const DrawData& draw_data,
+                            const SolidColorInstances& instances,
+                            RenderContext* ctx) {
+    bool has_spheres = instances.num_spheres > 0;
+    bool has_cylinders = instances.num_cylinders > 0;
     if (!has_spheres && !has_cylinders) {
       return;
     }
+
     SDL_PushGPUDebugGroup(ctx->command_buffer, "Render Spheres");
 
-    // Cylinders and spheres both use the sphere pipline with different geometry.
-    SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
+    SDL_BindGPUGraphicsPipeline(ctx->render_pass, solid_color_pipeline_);
+    // Bind instance data.
+    SDL_BindGPUVertexStorageBuffers(ctx->render_pass, 0, &solid_color_instance_buffer_, 1);
 
     if (has_spheres) {
       SDL_GPUBufferBinding binding{};
       binding.buffer = sphere_vertex_buffer_;
       binding.offset = 0;
       SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-      if (draw_data.spheres.size() > 0) {
-        glm::vec4 color4(draw_data.target_color, 1.0f);
-        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-        for (const SphereDrawData& data : draw_data.spheres) {
-          SDL_PushGPUVertexUniformData(
-              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
-          SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
-        }
-      }
-      if (draw_data.ghost_spheres.size() > 0) {
-        glm::vec4 color4(draw_data.ghost_target_color, 1.0f);
-        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-        for (const SphereDrawData& data : draw_data.ghost_spheres) {
-          SDL_PushGPUVertexUniformData(
-              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
-          SDL_DrawGPUPrimitives(ctx->render_pass, num_sphere_vertices_, 1, 0, 0);
-        }
-      }
+      SDL_DrawGPUPrimitives(ctx->render_pass,
+                            num_sphere_vertices_,
+                            instances.num_spheres,
+                            0,
+                            instances.GetSpheresOffset());
     }
 
     if (has_cylinders) {
+      SDL_BindGPUGraphicsPipeline(ctx->render_pass, sphere_pipeline_);
       SDL_GPUBufferBinding binding{};
       binding.buffer = cylinder_vertex_buffer_;
       binding.offset = 0;
       SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-      if (draw_data.cylinders.size() > 0) {
-        glm::vec4 color4(draw_data.target_color, 1.0f);
-        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-        for (const CylinderDrawData& data : draw_data.cylinders) {
-          SDL_PushGPUVertexUniformData(
-              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
-          SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
-        }
-      }
-      if (draw_data.ghost_cylinders.size() > 0) {
-        glm::vec4 color4(draw_data.ghost_target_color, 1.0f);
-        SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &color4[0], sizeof(glm::vec4));
-        for (const CylinderDrawData& data : draw_data.ghost_cylinders) {
-          SDL_PushGPUVertexUniformData(
-              ctx->command_buffer, 0, &data.transform[0][0], sizeof(glm::mat4));
-          SDL_DrawGPUPrimitives(ctx->render_pass, num_cylinder_vertices_, 1, 0, 0);
-        }
-      }
+      SDL_DrawGPUPrimitives(ctx->render_pass,
+                            num_cylinder_vertices_,
+                            instances.num_cylinders,
+                            0,
+                            instances.GetCylindersOffset());
     }
+
     SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
@@ -1393,40 +1463,6 @@ class RendererImpl : public Renderer {
     num_cylinder_vertices_ = vertices.size();
     int size = sizeof(glm::vec3) * vertices.size();
     return UploadBuffer(vertices.data(), size, copy_pass, &cylinder_vertex_buffer_);
-  }
-
-  SDL_GPUTransferBuffer* UploadBuffer(void* data,
-                                      int size,
-                                      SDL_GPUCopyPass* copy_pass,
-                                      SDL_GPUBuffer** vertex_buffer_out) {
-    SDL_GPUBufferCreateInfo vertex_buffer_create_info{};
-    vertex_buffer_create_info.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
-    vertex_buffer_create_info.size = size;
-
-    SDL_GPUBuffer* vertex_buffer = SDL_CreateGPUBuffer(device_, &vertex_buffer_create_info);
-
-    // Set up buffer data
-    SDL_GPUTransferBufferCreateInfo transfer_buffer_create_info{};
-    transfer_buffer_create_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
-    transfer_buffer_create_info.size = size;
-    SDL_GPUTransferBuffer* transfer_buffer =
-        SDL_CreateGPUTransferBuffer(device_, &transfer_buffer_create_info);
-
-    void* transfer_data = (void*)SDL_MapGPUTransferBuffer(device_, transfer_buffer, false);
-    SDL_memcpy(transfer_data, data, size);
-    SDL_UnmapGPUTransferBuffer(device_, transfer_buffer);
-
-    SDL_GPUTransferBufferLocation location{};
-    location.transfer_buffer = transfer_buffer;
-    location.offset = 0;
-    SDL_GPUBufferRegion region{};
-    region.buffer = vertex_buffer;
-    region.offset = 0;
-    region.size = size;
-    SDL_UploadToGPUBuffer(copy_pass, &location, &region, /*cycle=*/false);
-
-    *vertex_buffer_out = vertex_buffer;
-    return transfer_buffer;
   }
 
   SDL_GPUTransferBuffer* UploadBuffer(void* data,
