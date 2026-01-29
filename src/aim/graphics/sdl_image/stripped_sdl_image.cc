@@ -19,6 +19,8 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
+#include "stripped_sdl_image.h"
+
 // Stripped down version of IMG_stb.c and is_png/is_jpeg from IMG_jpg/png.c.
 // https://github.com/libsdl-org/SDL_image/commits/main/src/IMG_stb.c
 
@@ -55,7 +57,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "SDL3/SDL.h"
-#include "sdl_stb_image.h"
+#include "internal_sdl_stb_image.h"
 
 static int IMG_LoadSTB_IO_read(void *user, char *data, int size) {
   size_t amount = SDL_ReadIO((SDL_IOStream *)user, data, size);

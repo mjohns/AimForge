@@ -2,7 +2,7 @@
 
 #include "absl/cleanup/cleanup.h"
 #include "aim/common/log.h"
-#include "aim/graphics/stripped_sdl_image.h"
+#include "aim/graphics/sdl_image/stripped_sdl_image.h"
 
 namespace aim {
 
