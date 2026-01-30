@@ -19,7 +19,7 @@ namespace {
 
 constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 1500.0f;
-constexpr const u32 kMaxSolidColorInstances = 1000;
+constexpr const u32 kMaxSolidColorInstances = 1500;
 
 struct SolidColorInstanceData {
   glm::mat4 transform;
