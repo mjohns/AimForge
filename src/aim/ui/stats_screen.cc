@@ -225,17 +225,17 @@ class StatsScreen : public UiScreen {
                           selected_screen_ == SelectedScreen::HISTORY)) {
       selected_screen_ = SelectedScreen::HISTORY;
     }
-    if (performance_stats_) {
-      if (ImGui::Selectable(std::format("{} Performance", icons::kSmartToy).c_str(),
-                            selected_screen_ == SelectedScreen::PERF)) {
-        selected_screen_ = SelectedScreen::PERF;
-      }
-    }
     if (replay_ && ImGui::Selectable(std::format("{} Replay", icons::kLiveTv).c_str(), false)) {
       PushNextScreen(CreateReplayViewerScreen(replay_, &app_));
     }
     if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str(), false)) {
       PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
+    }
+    if (performance_stats_) {
+      if (ImGui::Selectable(std::format("{} Performance", icons::kSmartToy).c_str(),
+                            selected_screen_ == SelectedScreen::PERF)) {
+        selected_screen_ = SelectedScreen::PERF;
+      }
     }
   }
 
