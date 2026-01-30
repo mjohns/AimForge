@@ -363,7 +363,9 @@ class StatsScreen : public UiScreen {
 
   void DrawPerformanceStats() {
     auto& worst_times_ = performance_stats_->worst_times;
-    ImGui::TextFmt("Worst frame n={}", worst_times_.frame_number);
+    ImGui::TextFmt("Worst frame n={:L}, at_time={:.1f}s",
+                   worst_times_.frame_number,
+                   performance_stats_->worst_times_micros / 1000000.0f);
     float total_ms = (worst_times_.end - worst_times_.start) / 1000.0;
     ImGui::TextFmt("Total time: {:.2f}ms, ~fps={}", total_ms, MaybeIntToString(1000 / total_ms));
     ImGui::TextFmt("Events time: {:.2f}ms",
