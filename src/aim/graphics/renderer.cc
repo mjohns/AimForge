@@ -84,6 +84,10 @@ struct CylinderDrawData {
   glm::mat4 transform;
 };
 
+struct HealthBarPartDrawData {
+  glm::mat4 transform;
+};
+
 struct HealthBarDrawData {
   glm::mat4 transform;
   float health_percent;
@@ -101,6 +105,8 @@ struct DrawData {
   glm::vec4 health_color;
   glm::vec4 health_background_color;
   std::vector<HealthBarDrawData> health_bars;
+  std::vector<HealthBarPartDrawData> health_parts;
+  std::vector<HealthBarPartDrawData> health_background_parts;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -580,6 +586,26 @@ class RendererImpl : public Renderer {
       }
     }
 
+    for (const HealthBarPartDrawData& data : draw_data.health_parts) {
+      if (instances->instances.size() < kMaxSolidColorInstances) {
+        instances->instances.emplace_back();
+        SolidColorInstanceData& instance = instances->instances.back();
+        instance.color = draw_data.health_color;
+        instance.transform = data.transform;
+        instances->num_quads++;
+      }
+    }
+
+    for (const HealthBarPartDrawData& data : draw_data.health_background_parts) {
+      if (instances->instances.size() < kMaxSolidColorInstances) {
+        instances->instances.emplace_back();
+        SolidColorInstanceData& instance = instances->instances.back();
+        instance.color = draw_data.health_background_color;
+        instance.transform = data.transform;
+        instances->num_quads++;
+      }
+    }
+
     for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
       if (instances->instances.size() < kMaxSolidColorInstances) {
         if (!data.is_cylinder) {
@@ -1055,6 +1081,70 @@ class RendererImpl : public Renderer {
           glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f);
       draw_data->health_background_color = glm::vec4(
           right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f);
+    }
+  }
+
+  void AddDrawHealthBar(const glm::mat4& view_projection,
+                        float health_percent,
+                        const glm::vec3& position,
+                        float radius,
+                        const LookAtInfo& look_at,
+                        const HealthBarSettings& health_bar_settings,
+                        DrawData* draw_data) {
+    float width = FirstGreaterThanZero(health_bar_settings.width(), 6);
+    float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
+    float height_above_target =
+        FirstGreaterThanZero(health_bar_settings.height_above_target(), 0.6);
+    glm::vec3 up = glm::vec3(0, 0, 1);
+    glm::vec3 health_bar_center = position + up * (height_above_target + radius + height / 2.0f);
+
+    HealthBarDrawData health_bar;
+    glm::mat4 transform(1.0f);
+    transform = glm::translate(transform, health_bar_center);
+
+    // Rotate to face towards camera
+    glm::vec3 to_camera = look_at.position - position;
+    to_camera.z = 0;
+    if (glm::length(to_camera) > 0.01) {
+      float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), up);
+      transform = glm::rotate(transform, angle, up);
+    }
+
+    transform = glm::scale(transform, glm::vec3(width, 1, height));
+
+    if (health_percent >= 1) {
+      // All health
+      HealthBarPartDrawData data;
+      data.transform = view_projection * transform;
+      draw_data->health_parts.push_back(data);
+      return;
+    }
+
+    if (health_percent <= 0) {
+      // All background
+      HealthBarPartDrawData data;
+      data.transform = view_projection * transform;
+      draw_data->health_background_parts.push_back(data);
+      return;
+    }
+
+    {
+      glm::mat4 health_transform =
+          glm::translate(health_transform, glm::vec3((health_percent - 1) / 0.5f, 0.0f, 0.0f));
+      health_transform = glm::scale(health_transform, glm::vec3(health_percent, 1, 1));
+      HealthBarPartDrawData data;
+      data.transform = view_projection * health_transform;
+      draw_data->health_parts.push_back(data);
+    }
+
+    {
+      glm::mat4 background_transform =
+          glm::translate(background_transform, glm::vec3(health_percent / 0.5f, 0.0f, 0.0f));
+      background_transform =
+          glm::scale(background_transform, glm::vec3((1 - health_percent), 1, 1));
+      HealthBarPartDrawData data;
+      data.transform = view_projection * background_transform;
+      draw_data->health_background_parts.push_back(data);
     }
   }
 
