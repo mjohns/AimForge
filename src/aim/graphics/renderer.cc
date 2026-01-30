@@ -786,12 +786,15 @@ class RendererImpl : public Renderer {
                     const Stopwatch& stopwatch,
                     FrameTimes* times) override {
     const glm::mat4 view_projection = projection * look_at.transform;
+
+    times->build_draw_data.start = stopwatch.GetElapsedMicros();
     DrawData draw_data;
     draw_data_builder_.GetDrawDataForScenario(
         view_projection, room, theme, health_bar, targets, look_at, &draw_data);
+    times->build_draw_data.end = stopwatch.GetElapsedMicros();
 
     SolidColorInstances solid_color_instances;
-    UploadSolidColorInstanceData(draw_data, &solid_color_instances, ctx);
+    UploadSolidColorInstanceData(draw_data, &solid_color_instances, times, stopwatch, ctx);
 
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
@@ -832,7 +835,9 @@ class RendererImpl : public Renderer {
     SDL_SetGPUScissor(ctx->render_pass, &scissor_rect);
     */
 
+    times->render_draw_data.start = stopwatch.GetElapsedMicros();
     RenderDrawData(draw_data, solid_color_instances, ctx);
+    times->render_draw_data.end = stopwatch.GetElapsedMicros();
 
     SDL_EndGPURenderPass(ctx->render_pass);
     ctx->render_pass = nullptr;
@@ -940,7 +945,10 @@ class RendererImpl : public Renderer {
 
   void UploadSolidColorInstanceData(const DrawData& draw_data,
                                     SolidColorInstances* instances,
+                                    FrameTimes* times,
+                                    const Stopwatch& stopwatch,
                                     RenderContext* ctx) {
+    times->pack_instance_data.start = stopwatch.GetElapsedMicros();
     instances->instances.reserve(draw_data.solid_spheres.size() + draw_data.solid_cylinders.size() +
                                  draw_data.solid_quads.size() +
                                  draw_data.solid_cylinder_walls.size());
@@ -954,6 +962,8 @@ class RendererImpl : public Renderer {
     AddSolidColorInstancesOfType(
         instances->instances, draw_data.solid_cylinder_walls, &instances->num_cylinder_walls);
 
+    times->pack_instance_data.end = stopwatch.GetElapsedMicros();
+
     // Make sure we fit in the preallocated buffer size and draw nothing worst case. The above loops
     // should ensure we don't add too many items to the vector.
     if (instances->instances.size() > kMaxSolidColorInstances) {
@@ -965,6 +975,9 @@ class RendererImpl : public Renderer {
       return;
     }
 
+    times->upload_instance_data.start = stopwatch.GetElapsedMicros();
+
+    times->upload_instance_data_create_buffer.start = stopwatch.GetElapsedMicros();
     SDL_PushGPUDebugGroup(ctx->command_buffer, "Upload SolidColor");
     SDL_GPUTransferBufferCreateInfo transfer_info{};
     transfer_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
@@ -972,14 +985,18 @@ class RendererImpl : public Renderer {
     SDL_GPUTransferBuffer* staging_buffer = SDL_CreateGPUTransferBuffer(device_, &transfer_info);
     // Set so it can be released at the end.
     ctx->solid_color_transfer_buffer = staging_buffer;
+    times->upload_instance_data_create_buffer.end = stopwatch.GetElapsedMicros();
 
     // TODO: Explore using a ring buffer and keeping the transfer buffer always active. i.e. make it
     // 3x the size and alternate the 1/3rd to use each frame.
+    times->upload_instance_data_memcpy.start = stopwatch.GetElapsedMicros();
     u32 data_size = sizeof(SolidColorInstanceData) * instances->instances.size();
-    void* mapped_ptr = SDL_MapGPUTransferBuffer(device_, staging_buffer, /*cycle=*/false);
+    void* mapped_ptr = SDL_MapGPUTransferBuffer(device_, staging_buffer, /*cycle=*/true);
     SDL_memcpy(mapped_ptr, instances->instances.data(), data_size);
     SDL_UnmapGPUTransferBuffer(device_, staging_buffer);
+    times->upload_instance_data_memcpy.end = stopwatch.GetElapsedMicros();
 
+    times->upload_instance_data_copy_pass.start = stopwatch.GetElapsedMicros();
     SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(ctx->command_buffer);
 
     SDL_GPUTransferBufferLocation source = {.transfer_buffer = staging_buffer, .offset = 0};
@@ -992,6 +1009,8 @@ class RendererImpl : public Renderer {
 
     SDL_EndGPUCopyPass(copy_pass);
     SDL_PopGPUDebugGroup(ctx->command_buffer);
+    times->upload_instance_data.end = stopwatch.GetElapsedMicros();
+    times->upload_instance_data_copy_pass.start = times->upload_instance_data.end;
   }
 
   void RenderSolidColorDrawData(const DrawData& draw_data,

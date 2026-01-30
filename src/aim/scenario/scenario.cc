@@ -476,6 +476,7 @@ void Scenario::UpdatePerfStats() {
                                               current_times_.render_start);
   if (current_times_.total > perf_stats_.worst_times.total) {
     perf_stats_.worst_times = current_times_;
+    perf_stats_.worst_times_micros = timer_.GetElapsedMicros();
   }
 }
 

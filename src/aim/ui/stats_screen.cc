@@ -373,23 +373,34 @@ class StatsScreen : public UiScreen {
     if (worst_times_.render_start > 0) {
       ImGui::TextFmt("Render time: {:.2f}ms",
                      (worst_times_.render_end - worst_times_.render_start) / 1000.0);
-      ImGui::TextFmt("Render room time: {:.2f}ms",
-                     (worst_times_.render_room_end - worst_times_.render_room_start) / 1000.0);
-      ImGui::TextFmt(
-          "Render targets time: {:.2f}ms",
-          (worst_times_.render_targets_end - worst_times_.render_targets_start) / 1000.0);
-      ImGui::TextFmt("Render imgui time: {:.2f}ms",
-                     (worst_times_.render_imgui_end - worst_times_.render_imgui_start) / 1000.0);
-
-      ImGui::Spacing();
-      ImGui::Separator();
-      ImGui::Spacing();
-
-      ImGui::Text("Total Times (ms)");
       ImGui::Indent();
-      DumpHistogram(performance_stats_->total_time_histogram);
+      ImGui::TextFmt("Build draw data: {:.2f}ms",
+                     worst_times_.build_draw_data.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Pack instance data: {:.2f}ms",
+                     worst_times_.pack_instance_data.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Upload instance data: {:.2f}ms",
+                     worst_times_.upload_instance_data.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Upload instance data (create buffer): {:.2f}ms",
+                     worst_times_.upload_instance_data_create_buffer.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Upload instance data (copy pass): {:.2f}ms",
+                     worst_times_.upload_instance_data_copy_pass.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Upload instance data (memcpy): {:.2f}ms",
+                     worst_times_.upload_instance_data_memcpy.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Render draw data: {:.2f}ms",
+                     worst_times_.render_draw_data.GetSeconds() * 1000.0);
       ImGui::Unindent();
+    }
 
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    ImGui::Text("Total Times (ms)");
+    ImGui::Indent();
+    DumpHistogram(performance_stats_->total_time_histogram);
+    ImGui::Unindent();
+
+    if (worst_times_.render_start > 0) {
       ImGui::Spacing();
       ImGui::Separator();
       ImGui::Spacing();

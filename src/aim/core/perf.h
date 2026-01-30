@@ -85,12 +85,14 @@ struct FrameTimes {
   i64 update_end = 0;
   i64 render_start = 0;
   i64 render_end = 0;
-  i64 render_room_start = 0;
-  i64 render_room_end = 0;
-  i64 render_targets_start = 0;
-  i64 render_targets_end = 0;
-  i64 render_imgui_start = 0;
-  i64 render_imgui_end = 0;
+
+  TimeSpan build_draw_data;
+  TimeSpan pack_instance_data;
+  TimeSpan upload_instance_data;
+  TimeSpan upload_instance_data_copy_pass;
+  TimeSpan upload_instance_data_memcpy;
+  TimeSpan upload_instance_data_create_buffer;
+  TimeSpan render_draw_data;
 
   i64 total = 0;
   i64 frame_number = 0;
@@ -137,6 +139,7 @@ struct TimeHistogram {
 
 struct RunPerformanceStats {
   FrameTimes worst_times{};
+  i64 worst_times_micros = 0;
   TimeHistogram total_time_histogram{};
   TimeHistogram render_time_histogram{};
 };
