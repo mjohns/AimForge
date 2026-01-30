@@ -58,12 +58,6 @@ struct TexScaleAndTransform {
   glm::mat4 transform{};
 };
 
-struct SolidColorWallDrawData {
-  glm::mat4 transform;
-  glm::vec4 color;
-  bool is_cylinder = false;
-};
-
 struct TextureWallDrawData {
   glm::mat4 transform;
   glm::vec4 color;
@@ -72,31 +66,13 @@ struct TextureWallDrawData {
   Texture* texture;
 };
 
-struct SphereDrawData {
-  glm::mat4 transform;
-};
-
-struct CylinderDrawData {
-  glm::mat4 transform;
-};
-
-struct HealthBarPartDrawData {
-  glm::mat4 transform;
-};
-
 struct DrawData {
-  std::vector<SolidColorWallDrawData> solid_color_walls;
   std::vector<TextureWallDrawData> texture_walls;
-  std::vector<SphereDrawData> spheres;
-  std::vector<SphereDrawData> ghost_spheres;
-  std::vector<CylinderDrawData> cylinders;
-  std::vector<CylinderDrawData> ghost_cylinders;
-  glm::vec3 target_color;
-  glm::vec3 ghost_target_color;
-  glm::vec4 health_color;
-  glm::vec4 health_background_color;
-  std::vector<HealthBarPartDrawData> health_parts;
-  std::vector<HealthBarPartDrawData> health_background_parts;
+
+  std::vector<SolidColorInstanceData> solid_spheres;
+  std::vector<SolidColorInstanceData> solid_cylinders;
+  std::vector<SolidColorInstanceData> solid_quads;
+  std::vector<SolidColorInstanceData> solid_cylinder_walls;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -486,85 +462,30 @@ class RendererImpl : public Renderer {
   void UploadSolidColorInstanceData(const DrawData& draw_data,
                                     SolidColorInstances* instances,
                                     RenderContext* ctx) {
-    for (const SphereDrawData& data : draw_data.spheres) {
+    instances->instances.reserve(kMaxSolidColorInstances);
+
+    for (const auto& data : draw_data.solid_spheres) {
       if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.emplace_back();
-        SolidColorInstanceData& instance = instances->instances.back();
-        instance.color = glm::vec4(draw_data.target_color, 1.0f);
-        instance.transform = data.transform;
+        instances->instances.push_back(data);
         instances->num_spheres++;
       }
     }
-    for (const SphereDrawData& data : draw_data.ghost_spheres) {
+    for (const auto& data : draw_data.solid_cylinders) {
       if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.emplace_back();
-        SolidColorInstanceData& instance = instances->instances.back();
-        instance.color = glm::vec4(draw_data.ghost_target_color, 1.0f);
-        instance.transform = data.transform;
-        instances->num_spheres++;
-      }
-    }
-
-    for (const CylinderDrawData& data : draw_data.cylinders) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.emplace_back();
-        SolidColorInstanceData& instance = instances->instances.back();
-        instance.color = glm::vec4(draw_data.target_color, 1.0f);
-        instance.transform = data.transform;
+        instances->instances.push_back(data);
         instances->num_cylinders++;
       }
     }
-    for (const CylinderDrawData& data : draw_data.ghost_cylinders) {
+    for (const auto& data : draw_data.solid_quads) {
       if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.emplace_back();
-        SolidColorInstanceData& instance = instances->instances.back();
-        instance.color = glm::vec4(draw_data.ghost_target_color, 1.0f);
-        instance.transform = data.transform;
-        instances->num_cylinders++;
-      }
-    }
-
-    for (const HealthBarPartDrawData& data : draw_data.health_parts) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.emplace_back();
-        SolidColorInstanceData& instance = instances->instances.back();
-        instance.color = draw_data.health_color;
-        instance.transform = data.transform;
+        instances->instances.push_back(data);
         instances->num_quads++;
       }
     }
-
-    for (const HealthBarPartDrawData& data : draw_data.health_background_parts) {
+    for (const auto& data : draw_data.solid_cylinder_walls) {
       if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.emplace_back();
-        SolidColorInstanceData& instance = instances->instances.back();
-        instance.color = draw_data.health_background_color;
-        instance.transform = data.transform;
-        instances->num_quads++;
-      }
-    }
-
-    for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        if (!data.is_cylinder) {
-          instances->instances.emplace_back();
-          SolidColorInstanceData& instance = instances->instances.back();
-          instance.color = data.color;
-          instance.transform = data.transform;
-          instances->num_quads++;
-        }
-      }
-    }
-
-    for (const SolidColorWallDrawData& data : draw_data.solid_color_walls) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        if (data.is_cylinder) {
-          instances->instances.emplace_back();
-          SolidColorInstanceData& instance = instances->instances.back();
-          instance.color = data.color;
-          instance.transform = data.transform;
-          instances->num_cylinder_walls++;
-        }
+        instances->instances.push_back(data);
+        instances->num_cylinder_walls++;
       }
     }
 
@@ -923,11 +844,14 @@ class RendererImpl : public Renderer {
                              const glm::vec3& color,
                              bool is_cylinder_wall,
                              DrawData* draw_data) {
-    SolidColorWallDrawData data;
+    SolidColorInstanceData data;
     data.transform = transform;
     data.color = glm::vec4(color, 1.0f);
-    data.is_cylinder = is_cylinder_wall;
-    draw_data->solid_color_walls.push_back(data);
+    if (is_cylinder_wall) {
+      draw_data->solid_cylinder_walls.push_back(data);
+    } else {
+      draw_data->solid_quads.push_back(data);
+    }
   }
 
   void AddDrawTargets(const glm::mat4& view_projection,
@@ -939,15 +863,12 @@ class RendererImpl : public Renderer {
     glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
     glm::vec3 ghost_target_color =
         theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
-    draw_data->ghost_target_color = ghost_target_color;
-    draw_data->target_color = target_color;
 
     auto& h = theme.health_bar();
     auto left = ToVec3(h.health_color());
     auto right = ToVec3(h.background_color());
-    draw_data->health_color =
-        glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f);
-    draw_data->health_background_color = glm::vec4(
+    glm::vec4 health_color(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f);
+    glm::vec4 health_background_color(
         right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f);
 
     bool should_draw = false;
@@ -964,28 +885,29 @@ class RendererImpl : public Renderer {
       if (!target.ShouldDraw()) {
         continue;
       }
+      const glm::vec3& color = target.is_ghost ? ghost_target_color : target_color;
       if (target.is_pill) {
         Cylinder c;
         c.radius = target.radius;
         c.up = target.pill_up;
         c.height = target.height - target.radius;
         c.position = target.position;
-        AddDrawCylinder(view_projection, c, target.is_ghost, draw_data);
+        AddDrawCylinder(view_projection, c, color, draw_data);
 
         AddDrawSphere(view_projection,
                       c.position + c.up * (c.height * 0.5f),
                       target.radius,
-                      target.is_ghost,
+                      color,
                       draw_data);
         AddDrawSphere(view_projection,
                       c.position + c.up * (c.height * -0.5f),
                       target.radius,
-                      target.is_ghost,
+                      color,
                       draw_data);
         continue;
       }
 
-      AddDrawSphere(view_projection, target.position, target.radius, target.is_ghost, draw_data);
+      AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
 
       if (health_bar_settings.show() && target.HasHealth()) {
         bool is_damaged = target.GetHealthPercent() < 1;
@@ -996,6 +918,8 @@ class RendererImpl : public Renderer {
                            target.radius,
                            look_at,
                            health_bar_settings,
+                           health_color,
+                           health_background_color,
                            draw_data);
         }
       }
@@ -1008,6 +932,8 @@ class RendererImpl : public Renderer {
                         float radius,
                         const LookAtInfo& look_at,
                         const HealthBarSettings& health_bar_settings,
+                        const glm::vec4& health_color,
+                        const glm::vec4& health_background_color,
                         DrawData* draw_data) {
     float width = FirstGreaterThanZero(health_bar_settings.width(), 6);
     float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
@@ -1031,17 +957,19 @@ class RendererImpl : public Renderer {
 
     if (health_percent >= 1) {
       // All health
-      HealthBarPartDrawData data;
+      draw_data->solid_quads.emplace_back();
+      SolidColorInstanceData& data = draw_data->solid_quads.back();
       data.transform = view_projection * transform;
-      draw_data->health_parts.push_back(data);
+      data.color = health_color;
       return;
     }
 
     if (health_percent <= 0) {
       // All background
-      HealthBarPartDrawData data;
+      draw_data->solid_quads.emplace_back();
+      SolidColorInstanceData& data = draw_data->solid_quads.back();
       data.transform = view_projection * transform;
-      draw_data->health_background_parts.push_back(data);
+      data.color = health_background_color;
       return;
     }
 
@@ -1049,9 +977,10 @@ class RendererImpl : public Renderer {
       glm::mat4 health_transform =
           glm::translate(transform, glm::vec3((health_percent - 1) * 0.5f, 0.0f, 0.0f));
       health_transform = glm::scale(health_transform, glm::vec3(health_percent, 1, 1));
-      HealthBarPartDrawData data;
+      draw_data->solid_quads.emplace_back();
+      SolidColorInstanceData& data = draw_data->solid_quads.back();
       data.transform = view_projection * health_transform;
-      draw_data->health_parts.push_back(data);
+      data.color = health_color;
     }
 
     {
@@ -1059,35 +988,34 @@ class RendererImpl : public Renderer {
           glm::translate(transform, glm::vec3(health_percent * 0.5f, 0.0f, 0.0f));
       background_transform =
           glm::scale(background_transform, glm::vec3((1 - health_percent), 1, 1));
-      HealthBarPartDrawData data;
+      draw_data->solid_quads.emplace_back();
+      SolidColorInstanceData& data = draw_data->solid_quads.back();
       data.transform = view_projection * background_transform;
-      draw_data->health_background_parts.push_back(data);
+      data.color = health_background_color;
     }
   }
 
   void AddDrawSphere(const glm::mat4& view_projection,
                      const glm::vec3& position,
                      float radius,
-                     bool is_ghost,
+                     const glm::vec3& color,
                      DrawData* draw_data) {
-    SphereDrawData data;
+    draw_data->solid_spheres.emplace_back();
+    SolidColorInstanceData& data = draw_data->solid_spheres.back();
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, position);
     transform = glm::scale(transform, glm::vec3(radius));
     data.transform = view_projection * transform;
-
-    if (is_ghost) {
-      draw_data->ghost_spheres.push_back(data);
-    } else {
-      draw_data->spheres.push_back(data);
-    }
+    data.color = glm::vec4(color, 1.0f);
   }
 
   void AddDrawCylinder(const glm::mat4& view_projection,
                        const Cylinder& c,
-                       bool is_ghost,
+                       const glm::vec3& color,
                        DrawData* draw_data) {
-    CylinderDrawData data;
+    draw_data->solid_cylinders.emplace_back();
+    SolidColorInstanceData& data = draw_data->solid_cylinders.back();
+
     glm::mat4 model(1.0f);
     model = glm::translate(model, c.position);
     if (c.up != glm::vec3(0, 0, 1) && c.up != glm::vec3(0, 0, -1)) {
@@ -1099,12 +1027,7 @@ class RendererImpl : public Renderer {
     model = glm::scale(model, glm::vec3(c.radius, c.radius, c.height));
 
     data.transform = view_projection * model;
-
-    if (is_ghost) {
-      draw_data->ghost_cylinders.push_back(data);
-    } else {
-      draw_data->cylinders.push_back(data);
-    }
+    data.color = glm::vec4(color, 1.0f);
   }
 
   bool CreateSolidColorPipeline() {
