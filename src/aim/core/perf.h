@@ -93,6 +93,7 @@ struct FrameTimes {
   TimeSpan upload_instance_data_memcpy;
   TimeSpan upload_instance_data_create_buffer;
   TimeSpan render_draw_data;
+  TimeSpan render_finish;
 
   i64 total = 0;
   i64 frame_number = 0;

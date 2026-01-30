@@ -664,6 +664,10 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUBuffer(device_, solid_color_instance_buffer_);
       solid_color_instance_buffer_ = nullptr;
     }
+    if (solid_color_instance_transfer_buffer_ != nullptr) {
+      SDL_ReleaseGPUTransferBuffer(device_, solid_color_instance_transfer_buffer_);
+      solid_color_instance_transfer_buffer_ = nullptr;
+    }
     if (depth_texture_ != nullptr) {
       SDL_ReleaseGPUTexture(device_, depth_texture_);
       depth_texture_ = nullptr;
@@ -764,6 +768,11 @@ class RendererImpl : public Renderer {
       buffer_info.usage = SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ;
       buffer_info.size = instance_buffer_size;
       solid_color_instance_buffer_ = SDL_CreateGPUBuffer(device_, &buffer_info);
+
+      SDL_GPUTransferBufferCreateInfo transfer_info{};
+      transfer_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
+      transfer_info.size = instance_buffer_size;
+      solid_color_instance_transfer_buffer_ = SDL_CreateGPUTransferBuffer(device_, &transfer_info);
     }
 
     SDL_EndGPUCopyPass(copy_pass);
@@ -977,29 +986,21 @@ class RendererImpl : public Renderer {
 
     times->upload_instance_data.start = stopwatch.GetElapsedMicros();
 
-    times->upload_instance_data_create_buffer.start = stopwatch.GetElapsedMicros();
     SDL_PushGPUDebugGroup(ctx->command_buffer, "Upload SolidColor");
-    SDL_GPUTransferBufferCreateInfo transfer_info{};
-    transfer_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
-    transfer_info.size = sizeof(SolidColorInstanceData) * instances->instances.size();
-    SDL_GPUTransferBuffer* staging_buffer = SDL_CreateGPUTransferBuffer(device_, &transfer_info);
-    // Set so it can be released at the end.
-    ctx->solid_color_transfer_buffer = staging_buffer;
-    times->upload_instance_data_create_buffer.end = stopwatch.GetElapsedMicros();
 
-    // TODO: Explore using a ring buffer and keeping the transfer buffer always active. i.e. make it
-    // 3x the size and alternate the 1/3rd to use each frame.
     times->upload_instance_data_memcpy.start = stopwatch.GetElapsedMicros();
     u32 data_size = sizeof(SolidColorInstanceData) * instances->instances.size();
-    void* mapped_ptr = SDL_MapGPUTransferBuffer(device_, staging_buffer, /*cycle=*/true);
+    void* mapped_ptr =
+        SDL_MapGPUTransferBuffer(device_, solid_color_instance_transfer_buffer_, /*cycle=*/true);
     SDL_memcpy(mapped_ptr, instances->instances.data(), data_size);
-    SDL_UnmapGPUTransferBuffer(device_, staging_buffer);
+    SDL_UnmapGPUTransferBuffer(device_, solid_color_instance_transfer_buffer_);
     times->upload_instance_data_memcpy.end = stopwatch.GetElapsedMicros();
 
     times->upload_instance_data_copy_pass.start = stopwatch.GetElapsedMicros();
     SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(ctx->command_buffer);
 
-    SDL_GPUTransferBufferLocation source = {.transfer_buffer = staging_buffer, .offset = 0};
+    SDL_GPUTransferBufferLocation source = {
+        .transfer_buffer = solid_color_instance_transfer_buffer_, .offset = 0};
     SDL_GPUBufferRegion destination = {
         .buffer = solid_color_instance_buffer_,
         .offset = 0,
@@ -1331,7 +1332,9 @@ class RendererImpl : public Renderer {
   SDL_GPUBuffer* texture_quad_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* cylinder_wall_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* packed_vertex_buffer_ = nullptr;
+
   SDL_GPUBuffer* solid_color_instance_buffer_ = nullptr;
+  SDL_GPUTransferBuffer* solid_color_instance_transfer_buffer_ = nullptr;
 
   SDL_GPUTexture* depth_texture_ = nullptr;
   SDL_GPUTexture* msaa_render_texture_ = nullptr;

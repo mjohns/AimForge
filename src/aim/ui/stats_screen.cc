@@ -380,14 +380,13 @@ class StatsScreen : public UiScreen {
                      worst_times_.pack_instance_data.GetSeconds() * 1000.0);
       ImGui::TextFmt("Upload instance data: {:.2f}ms",
                      worst_times_.upload_instance_data.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Upload instance data (create buffer): {:.2f}ms",
-                     worst_times_.upload_instance_data_create_buffer.GetSeconds() * 1000.0);
       ImGui::TextFmt("Upload instance data (copy pass): {:.2f}ms",
                      worst_times_.upload_instance_data_copy_pass.GetSeconds() * 1000.0);
       ImGui::TextFmt("Upload instance data (memcpy): {:.2f}ms",
                      worst_times_.upload_instance_data_memcpy.GetSeconds() * 1000.0);
       ImGui::TextFmt("Render draw data: {:.2f}ms",
                      worst_times_.render_draw_data.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Render finish: {:.2f}ms", worst_times_.render_finish.GetSeconds() * 1000.0);
       ImGui::Unindent();
     }
 

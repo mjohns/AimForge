@@ -489,10 +489,6 @@ void Application::FinishRender(RenderContext* render_context) {
   SDL_PopGPUDebugGroup(render_context->command_buffer);
 
   SDL_SubmitGPUCommandBuffer(render_context->command_buffer);
-
-  if (render_context->solid_color_transfer_buffer != nullptr) {
-    SDL_ReleaseGPUTransferBuffer(gpu_device_, render_context->solid_color_transfer_buffer);
-  }
 }
 
 void Application::NewImGuiFrame() {
