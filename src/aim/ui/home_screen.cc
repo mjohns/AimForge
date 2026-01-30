@@ -9,6 +9,7 @@
 #include "aim/core/play_time_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
+#include "aim/editor/scenario_editor_common.h"
 #include "aim/editor/scenario_editor_screen.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
@@ -461,6 +462,7 @@ class HomeScreen : public UiScreen {
     float total_play_time_seconds =
         play_times.total.complete_run_time_seconds + play_times.total.partial_run_time_seconds;
     float total_partial_play_time_seconds = play_times.total.partial_run_time_seconds;
+    ImGui::Spacing();
     ImGui::Text("Total time: %.1f hours", total_play_time_seconds / 3600.0f);
     ImGui::TextFmt("Partial run time: {:.1f} hours ({:.0f}%)",
                    total_partial_play_time_seconds / 3600.0f,
@@ -468,8 +470,35 @@ class HomeScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
 
-    // TODO: Display breakdowns
-    //  ImGui::TextFmt("{}", icons::kBolt);
+    ImGui::SpacedSeparator();
+
+    auto print_time_for_type = [](const std::string& type, const PlayTimes& times) {
+      int total_seconds = times.complete_run_time_seconds + times.partial_run_time_seconds;
+      ImGui::TextFmt("{}: {:.1f} hours", type, total_seconds / 3600.0);
+    };
+
+    ImGui::Text("By shot type");
+    ImGui::Indent();
+    const std::unordered_map<ShotType::TypeCase, PlayTimes>& by_shot_type =
+        play_times.play_times_by_shot_type;
+    for (const auto& entry : kShotTypes) {
+      auto it = by_shot_type.find(entry.first);
+      if (it != by_shot_type.end()) {
+        print_time_for_type(entry.second, it->second);
+      }
+    }
+
+    ImGui::Unindent();
+
+    ImGui::SpacedSeparator();
+
+    ImGui::Text("By cm/360");
+    ImGui::Indent();
+    const std::unordered_map<int, PlayTimes>& by_cm_per_360 = play_times.play_times_by_cm_per_360;
+    for (const auto& entry : by_cm_per_360) {
+      print_time_for_type(std::format("{}cm", entry.first), entry.second);
+    }
+    ImGui::Unindent();
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;
