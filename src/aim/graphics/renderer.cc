@@ -17,6 +17,8 @@
 namespace aim {
 namespace {
 
+constexpr const int kQuadNumVertices = 6;
+constexpr const float kMaxDistance = 1500.0f;
 constexpr const u32 kMaxSolidColorInstances = 1000;
 
 struct SolidColorInstanceData {
@@ -56,12 +58,6 @@ struct TexScaleAndTransform {
   glm::mat4 transform{};
 };
 
-struct ProgressBarUniform {
-  glm::vec4 left_color{};
-  glm::vec4 right_color{};
-  float progress = 0.0;
-};
-
 struct SolidColorWallDrawData {
   glm::mat4 transform;
   glm::vec4 color;
@@ -88,11 +84,6 @@ struct HealthBarPartDrawData {
   glm::mat4 transform;
 };
 
-struct HealthBarDrawData {
-  glm::mat4 transform;
-  float health_percent;
-};
-
 struct DrawData {
   std::vector<SolidColorWallDrawData> solid_color_walls;
   std::vector<TextureWallDrawData> texture_walls;
@@ -104,7 +95,6 @@ struct DrawData {
   glm::vec3 ghost_target_color;
   glm::vec4 health_color;
   glm::vec4 health_background_color;
-  std::vector<HealthBarDrawData> health_bars;
   std::vector<HealthBarPartDrawData> health_parts;
   std::vector<HealthBarPartDrawData> health_background_parts;
 };
@@ -119,9 +109,6 @@ glm::vec3 GetSolidColor(const WallAppearance& appearance) {
   }
   return Lerp(ToVec3(appearance.color()), ToVec3(appearance.mix_color()), appearance.mix_percent());
 }
-
-constexpr const int kQuadNumVertices = 6;
-constexpr const float kMaxDistance = 1500.0f;
 
 SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
                           const std::filesystem::path& shader_dir,
@@ -224,10 +211,6 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, texture_quad_pipeline_);
       texture_quad_pipeline_ = nullptr;
     }
-    if (progress_bar_pipeline_ != nullptr) {
-      SDL_ReleaseGPUGraphicsPipeline(device_, progress_bar_pipeline_);
-      progress_bar_pipeline_ = nullptr;
-    }
     if (texture_quad_vertex_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, texture_quad_vertex_buffer_);
       texture_quad_vertex_buffer_ = nullptr;
@@ -272,10 +255,6 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUShader(device_, texture_fragment_shader_);
       texture_fragment_shader_ = nullptr;
     }
-    if (progress_bar_fragment_shader_ != nullptr) {
-      SDL_ReleaseGPUShader(device_, progress_bar_fragment_shader_);
-      progress_bar_fragment_shader_ = nullptr;
-    }
   }
 
   bool Initialize(const std::filesystem::path& shader_dir) {
@@ -285,8 +264,6 @@ class RendererImpl : public Renderer {
         LoadShader(device_, shader_dir, "solid_color_instanced.frag", SDL_GPU_SHADERSTAGE_FRAGMENT);
     texture_fragment_shader_ =
         LoadShader(device_, shader_dir, "texture.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1, 1);
-    progress_bar_fragment_shader_ =
-        LoadShader(device_, shader_dir, "progress_bar.frag", SDL_GPU_SHADERSTAGE_FRAGMENT, 1);
     position_and_tex_coord_vertex_shader_ = LoadShader(
         device_, shader_dir, "position_and_texture_coord.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1);
 
@@ -329,9 +306,6 @@ class RendererImpl : public Renderer {
       return false;
     }
     if (!CreateTextureQuadPipeline()) {
-      return false;
-    }
-    if (!CreateTextureQuadPipeline(/*is_progress_bar=*/true)) {
       return false;
     }
 
@@ -447,7 +421,6 @@ class RendererImpl : public Renderer {
     SDL_PushGPUDebugGroup(ctx->command_buffer, "Render Scene");
     RenderTextureWallsDrawData(draw_data, ctx);
     RenderSolidColorDrawData(draw_data, solid_color_instances, ctx);
-    RenderHealthBarDrawData(draw_data, ctx);
     SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
@@ -507,41 +480,6 @@ class RendererImpl : public Renderer {
       draw_walls(true);
     }
 
-    SDL_PopGPUDebugGroup(ctx->command_buffer);
-  }
-
-  void RenderHealthBarDrawData(const DrawData& draw_data, RenderContext* ctx) {
-    if (draw_data.health_bars.empty()) {
-      return;
-    }
-    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render HealthBars");
-    SDL_BindGPUGraphicsPipeline(ctx->render_pass, progress_bar_pipeline_);
-
-    SDL_GPUBufferBinding binding{};
-    binding.buffer = texture_quad_vertex_buffer_;
-    binding.offset = 0;
-    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-    for (const HealthBarDrawData& data : draw_data.health_bars) {
-      TexScaleAndTransform tex_scale_and_transform{};
-      tex_scale_and_transform.tex_scale.x = 1;
-      tex_scale_and_transform.tex_scale.y = 1;
-      tex_scale_and_transform.transform = data.transform;
-
-      SDL_PushGPUVertexUniformData(ctx->command_buffer,
-                                   0,
-                                   &tex_scale_and_transform.tex_scale[0],
-                                   sizeof(TexScaleAndTransform));
-
-      ProgressBarUniform uniform;
-      uniform.left_color = draw_data.health_color;
-      uniform.right_color = draw_data.health_background_color;
-      uniform.progress = data.health_percent;
-      SDL_PushGPUFragmentUniformData(
-          ctx->command_buffer, 0, &uniform.left_color[0], sizeof(ProgressBarUniform));
-
-      SDL_DrawGPUPrimitives(ctx->render_pass, kQuadNumVertices, 1, 0, 0);
-    }
     SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
@@ -1004,6 +942,14 @@ class RendererImpl : public Renderer {
     draw_data->ghost_target_color = ghost_target_color;
     draw_data->target_color = target_color;
 
+    auto& h = theme.health_bar();
+    auto left = ToVec3(h.health_color());
+    auto right = ToVec3(h.background_color());
+    draw_data->health_color =
+        glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f);
+    draw_data->health_background_color = glm::vec4(
+        right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f);
+
     bool should_draw = false;
     for (const Target& target : targets) {
       if (target.ShouldDraw()) {
@@ -1015,72 +961,44 @@ class RendererImpl : public Renderer {
     }
 
     for (const Target& target : targets) {
-      if (target.ShouldDraw()) {
-        glm::vec3 color = target.is_ghost ? ghost_target_color : target_color;
-        if (target.is_pill) {
-          Cylinder c;
-          c.radius = target.radius;
-          c.up = target.pill_up;
-          c.height = target.height - target.radius;
-          c.position = target.position;
-          AddDrawCylinder(view_projection, c, target.is_ghost, draw_data);
+      if (!target.ShouldDraw()) {
+        continue;
+      }
+      if (target.is_pill) {
+        Cylinder c;
+        c.radius = target.radius;
+        c.up = target.pill_up;
+        c.height = target.height - target.radius;
+        c.position = target.position;
+        AddDrawCylinder(view_projection, c, target.is_ghost, draw_data);
 
-          AddDrawSphere(view_projection,
-                        c.position + c.up * (c.height * 0.5f),
-                        target.radius,
-                        target.is_ghost,
-                        draw_data);
-          AddDrawSphere(view_projection,
-                        c.position + c.up * (c.height * -0.5f),
-                        target.radius,
-                        target.is_ghost,
-                        draw_data);
-        } else {
-          AddDrawSphere(
-              view_projection, target.position, target.radius, target.is_ghost, draw_data);
+        AddDrawSphere(view_projection,
+                      c.position + c.up * (c.height * 0.5f),
+                      target.radius,
+                      target.is_ghost,
+                      draw_data);
+        AddDrawSphere(view_projection,
+                      c.position + c.up * (c.height * -0.5f),
+                      target.radius,
+                      target.is_ghost,
+                      draw_data);
+        continue;
+      }
 
-          if (health_bar_settings.show() && target.HasHealth()) {
-            bool is_damaged = target.GetHealthPercent() < 1;
-            if (!health_bar_settings.only_damaged() || is_damaged) {
-              float width = FirstGreaterThanZero(health_bar_settings.width(), 6);
-              float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
-              float height_above_target =
-                  FirstGreaterThanZero(health_bar_settings.height_above_target(), 0.6);
-              glm::vec3 up = glm::vec3(0, 0, 1);
-              glm::vec3 health_bar_center =
-                  target.position + up * (height_above_target + target.radius + height / 2.0f);
+      AddDrawSphere(view_projection, target.position, target.radius, target.is_ghost, draw_data);
 
-              HealthBarDrawData health_bar;
-              glm::mat4 transform(1.0f);
-              transform = glm::translate(transform, health_bar_center);
-
-              // Rotate to face towards camera
-              glm::vec3 to_camera = look_at.position - target.position;
-              to_camera.z = 0;
-              if (glm::length(to_camera) > 0.01) {
-                float angle =
-                    glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), up);
-                transform = glm::rotate(transform, angle, up);
-              }
-
-              transform = glm::scale(transform, glm::vec3(width, 1, height));
-              health_bar.transform = view_projection * transform;
-              health_bar.health_percent = target.GetHealthPercent();
-              draw_data->health_bars.push_back(health_bar);
-            }
-          }
+      if (health_bar_settings.show() && target.HasHealth()) {
+        bool is_damaged = target.GetHealthPercent() < 1;
+        if (!health_bar_settings.only_damaged() || is_damaged) {
+          AddDrawHealthBar(view_projection,
+                           target.GetHealthPercent(),
+                           target.position,
+                           target.radius,
+                           look_at,
+                           health_bar_settings,
+                           draw_data);
         }
       }
-    }
-
-    if (draw_data->health_bars.size() > 0) {
-      auto& h = theme.health_bar();
-      auto left = ToVec3(h.health_color());
-      auto right = ToVec3(h.background_color());
-      draw_data->health_color =
-          glm::vec4(left.r, left.g, left.b, h.has_health_alpha() ? h.health_alpha() : 1.0f);
-      draw_data->health_background_color = glm::vec4(
-          right.r, right.g, right.b, h.has_background_alpha() ? h.background_alpha() : 1.0f);
     }
   }
 
@@ -1098,7 +1016,6 @@ class RendererImpl : public Renderer {
     glm::vec3 up = glm::vec3(0, 0, 1);
     glm::vec3 health_bar_center = position + up * (height_above_target + radius + height / 2.0f);
 
-    HealthBarDrawData health_bar;
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, health_bar_center);
 
@@ -1130,7 +1047,7 @@ class RendererImpl : public Renderer {
 
     {
       glm::mat4 health_transform =
-          glm::translate(health_transform, glm::vec3((health_percent - 1) / 0.5f, 0.0f, 0.0f));
+          glm::translate(transform, glm::vec3((health_percent - 1) * 0.5f, 0.0f, 0.0f));
       health_transform = glm::scale(health_transform, glm::vec3(health_percent, 1, 1));
       HealthBarPartDrawData data;
       data.transform = view_projection * health_transform;
@@ -1139,7 +1056,7 @@ class RendererImpl : public Renderer {
 
     {
       glm::mat4 background_transform =
-          glm::translate(background_transform, glm::vec3(health_percent / 0.5f, 0.0f, 0.0f));
+          glm::translate(transform, glm::vec3(health_percent * 0.5f, 0.0f, 0.0f));
       background_transform =
           glm::scale(background_transform, glm::vec3((1 - health_percent), 1, 1));
       HealthBarPartDrawData data;
@@ -1227,10 +1144,9 @@ class RendererImpl : public Renderer {
     return true;
   }
 
-  bool CreateTextureQuadPipeline(bool is_progress_bar = false) {
-    SDL_GPUGraphicsPipelineCreateInfo pipeline_info = CreateDefaultPipelineInfo(
-        position_and_tex_coord_vertex_shader_,
-        is_progress_bar ? progress_bar_fragment_shader_ : texture_fragment_shader_);
+  bool CreateTextureQuadPipeline() {
+    SDL_GPUGraphicsPipelineCreateInfo pipeline_info =
+        CreateDefaultPipelineInfo(position_and_tex_coord_vertex_shader_, texture_fragment_shader_);
 
     SDL_GPUColorTargetDescription color_target_desc[1];
     color_target_desc[0].format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
@@ -1260,20 +1176,11 @@ class RendererImpl : public Renderer {
     pipeline_info.vertex_input_state.num_vertex_attributes = 2;
     pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
-    if (is_progress_bar) {
-      progress_bar_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
-      if (progress_bar_pipeline_ == nullptr) {
-        Logger::get()->error("ERROR: ProgressBarPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
-                             SDL_GetError());
-        return false;
-      }
-    } else {
-      texture_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
-      if (texture_quad_pipeline_ == nullptr) {
-        Logger::get()->error("ERROR: TextureQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
-                             SDL_GetError());
-        return false;
-      }
+    texture_quad_pipeline_ = SDL_CreateGPUGraphicsPipeline(device_, &pipeline_info);
+    if (texture_quad_pipeline_ == nullptr) {
+      Logger::get()->error("ERROR: TextureQuadPipeline SDL_CreateGPUGraphicsPipeline failed: {}",
+                           SDL_GetError());
+      return false;
     }
 
     return true;
@@ -1444,10 +1351,8 @@ class RendererImpl : public Renderer {
   SDL_GPUShader* solid_color_instanced_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
   SDL_GPUShader* texture_fragment_shader_ = nullptr;
-  SDL_GPUShader* progress_bar_fragment_shader_ = nullptr;
   SDL_GPUGraphicsPipeline* solid_color_pipeline_;
   SDL_GPUGraphicsPipeline* texture_quad_pipeline_;
-  SDL_GPUGraphicsPipeline* progress_bar_pipeline_;
   TextureManager texture_manager_;
   SDL_GPUDevice* device_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
