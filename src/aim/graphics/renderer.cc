@@ -326,6 +326,9 @@ class RendererImpl : public Renderer {
                     FrameTimes* times) override {
     const glm::mat4 view_projection = projection * look_at.transform;
     DrawData draw_data;
+    draw_data.solid_quads.reserve(6 + targets.size() * 2);
+    draw_data.solid_spheres.reserve(targets.size() * 2);
+    draw_data.solid_cylinders.reserve(targets.size());
     AddDrawRoom(view_projection, theme, room, &draw_data);
     AddDrawTargets(view_projection, look_at, theme, health_bar, targets, &draw_data);
 
@@ -459,35 +462,39 @@ class RendererImpl : public Renderer {
     SDL_PopGPUDebugGroup(ctx->command_buffer);
   }
 
+  void AddSolidColorInstancesOfType(std::vector<SolidColorInstanceData>& dest,
+                                    const std::vector<SolidColorInstanceData>& values,
+                                    u32* num_of_type) {
+    i64 start_size = dest.size();
+    i64 new_potential_max = dest.size() + values.size();
+    i64 num_over_max = new_potential_max - kMaxSolidColorInstances;
+    if (num_over_max <= 0) {
+      dest.insert(dest.end(), values.begin(), values.end());
+    } else {
+      i64 num_to_include = values.size() - num_over_max;
+      if (num_to_include > 0) {
+        dest.insert(dest.end(), values.begin(), values.begin() + num_to_include);
+      }
+    }
+    i64 end_size = dest.size();
+    *num_of_type = end_size - start_size;
+  };
+
   void UploadSolidColorInstanceData(const DrawData& draw_data,
                                     SolidColorInstances* instances,
                                     RenderContext* ctx) {
-    instances->instances.reserve(kMaxSolidColorInstances);
+    instances->instances.reserve(draw_data.solid_spheres.size() + draw_data.solid_cylinders.size() +
+                                 draw_data.solid_quads.size() +
+                                 draw_data.solid_cylinder_walls.size());
 
-    for (const auto& data : draw_data.solid_spheres) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.push_back(data);
-        instances->num_spheres++;
-      }
-    }
-    for (const auto& data : draw_data.solid_cylinders) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.push_back(data);
-        instances->num_cylinders++;
-      }
-    }
-    for (const auto& data : draw_data.solid_quads) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.push_back(data);
-        instances->num_quads++;
-      }
-    }
-    for (const auto& data : draw_data.solid_cylinder_walls) {
-      if (instances->instances.size() < kMaxSolidColorInstances) {
-        instances->instances.push_back(data);
-        instances->num_cylinder_walls++;
-      }
-    }
+    AddSolidColorInstancesOfType(
+        instances->instances, draw_data.solid_spheres, &instances->num_spheres);
+    AddSolidColorInstancesOfType(
+        instances->instances, draw_data.solid_cylinders, &instances->num_cylinders);
+    AddSolidColorInstancesOfType(
+        instances->instances, draw_data.solid_quads, &instances->num_quads);
+    AddSolidColorInstancesOfType(
+        instances->instances, draw_data.solid_cylinder_walls, &instances->num_cylinder_walls);
 
     // Make sure we fit in the preallocated buffer size and draw nothing worst case. The above loops
     // should ensure we don't add too many items to the vector.
