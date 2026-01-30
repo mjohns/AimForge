@@ -99,7 +99,11 @@ SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
   SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_INVALID;
 
   std::string shader_extension;
-  if (backend_formats & SDL_GPU_SHADERFORMAT_SPIRV) {
+  if (backend_formats & SDL_GPU_SHADERFORMAT_DXIL) {
+    shader_extension = "dxil";
+    format = SDL_GPU_SHADERFORMAT_DXIL;
+    entrypoint = "main";
+  } else if (backend_formats & SDL_GPU_SHADERFORMAT_SPIRV) {
     shader_extension = "spv";
     format = SDL_GPU_SHADERFORMAT_SPIRV;
     entrypoint = "main";
@@ -107,10 +111,6 @@ SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
     shader_extension = "msl";
     format = SDL_GPU_SHADERFORMAT_MSL;
     entrypoint = "main0";
-  } else if (backend_formats & SDL_GPU_SHADERFORMAT_DXIL) {
-    shader_extension = "dxil";
-    format = SDL_GPU_SHADERFORMAT_DXIL;
-    entrypoint = "main";
   } else {
     Logger::get()->warn("Unrecognized backend shader format!");
     return nullptr;
