@@ -1,6 +1,9 @@
 #include "home_screen.h"
 
+#include <ranges>
+
 #include "SDL3/SDL.h"
+#include "absl/algorithm/container.h"
 #include "absl/strings/str_split.h"
 #include "absl/strings/string_view.h"
 #include "aim/common/mat_icons.h"
@@ -472,21 +475,28 @@ class HomeScreen : public UiScreen {
 
     ImGui::SpacedSeparator();
 
-    auto print_time_for_type = [](const std::string& type, const PlayTimes& times) {
-      int total_seconds = times.complete_run_time_seconds + times.partial_run_time_seconds;
-      ImGui::TextFmt("{}: {:.1f} hours", type, total_seconds / 3600.0);
+    auto sort_and_print_values = [](std::vector<std::pair<int, std::string>>& values) {
+      absl::c_sort(values);
+      for (const auto& entry : std::views::reverse(values)) {
+        ImGui::TextFmt("{}: {:.1f} hours", entry.second, entry.first / 3600.0f);
+      }
     };
 
     ImGui::Text("By shot type");
     ImGui::Indent();
     const std::unordered_map<ShotType::TypeCase, PlayTimes>& by_shot_type =
         play_times.play_times_by_shot_type;
+
+    std::vector<std::pair<int, std::string>> by_shot_types;
     for (const auto& entry : kShotTypes) {
       auto it = by_shot_type.find(entry.first);
       if (it != by_shot_type.end()) {
-        print_time_for_type(entry.second, it->second);
+        by_shot_types.emplace_back(
+            it->second.complete_run_time_seconds + it->second.partial_run_time_seconds,
+            entry.second);
       }
     }
+    sort_and_print_values(by_shot_types);
 
     ImGui::Unindent();
 
@@ -495,9 +505,13 @@ class HomeScreen : public UiScreen {
     ImGui::Text("By cm/360");
     ImGui::Indent();
     const std::unordered_map<int, PlayTimes>& by_cm_per_360 = play_times.play_times_by_cm_per_360;
+    std::vector<std::pair<int, std::string>> by_cm_per_360s;
     for (const auto& entry : by_cm_per_360) {
-      print_time_for_type(std::format("{}cm", entry.first), entry.second);
+      by_cm_per_360s.emplace_back(
+          entry.second.complete_run_time_seconds + entry.second.partial_run_time_seconds,
+          std::format("{}cm", entry.first));
     }
+    sort_and_print_values(by_cm_per_360s);
     ImGui::Unindent();
   }
 
