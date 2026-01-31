@@ -19,4 +19,6 @@ TEST(TexturesTest, GetMaxMipLevels) {
 
   EXPECT_THAT(GetMaxMipLevels(1024, 1024), Eq(11));
   EXPECT_THAT(GetVulkanCalculatedMipLevel(1024, 1024), Eq(11));
+  EXPECT_THAT(GetMaxMipLevels(1026, 1024), Eq(11));
+  EXPECT_THAT(GetVulkanCalculatedMipLevel(1026, 1024), Eq(11));
 }

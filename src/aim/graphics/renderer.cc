@@ -648,17 +648,13 @@ class RendererImpl : public Renderer {
       SDL_ReleaseGPUGraphicsPipeline(device_, texture_quad_pipeline_);
       texture_quad_pipeline_ = nullptr;
     }
-    if (texture_quad_vertex_buffer_ != nullptr) {
-      SDL_ReleaseGPUBuffer(device_, texture_quad_vertex_buffer_);
-      texture_quad_vertex_buffer_ = nullptr;
-    }
-    if (cylinder_wall_vertex_buffer_ != nullptr) {
-      SDL_ReleaseGPUBuffer(device_, cylinder_wall_vertex_buffer_);
-      cylinder_wall_vertex_buffer_ = nullptr;
-    }
     if (packed_vertex_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, packed_vertex_buffer_);
       packed_vertex_buffer_ = nullptr;
+    }
+    if (packed_textured_vertex_buffer_ != nullptr) {
+      SDL_ReleaseGPUBuffer(device_, packed_textured_vertex_buffer_);
+      packed_textured_vertex_buffer_ = nullptr;
     }
     if (solid_color_instance_buffer_ != nullptr) {
       SDL_ReleaseGPUBuffer(device_, solid_color_instance_buffer_);
@@ -756,11 +752,13 @@ class RendererImpl : public Renderer {
     std::vector<VertexAndTexCoord> cylinder_wall_vertices = GenerateCylinderWallVertices(400);
     num_cylinder_wall_vertices_ = cylinder_wall_vertices.size();
 
-    SDL_GPUTransferBuffer* texture_quad_transfer_buffer = CreateTextureQuadVertexBuffer(copy_pass);
-    SDL_GPUTransferBuffer* cylinder_wall_transfer_buffer =
-        CreateCylinderWallVertexBuffer(cylinder_wall_vertices, copy_pass);
+    std::vector<VertexAndTexCoord> quad_vertices = GenerateQuadVertices();
+    assert(quad_vertices.size() == kQuadNumVertices && "kQuadNumVertices is not correct");
+
     SDL_GPUTransferBuffer* packed_transfer_buffer =
-        CreatePackedGeometryVertexBuffer(cylinder_wall_vertices, copy_pass);
+        CreatePackedGeometryVertexBuffer(quad_vertices, cylinder_wall_vertices, copy_pass);
+    SDL_GPUTransferBuffer* packed_textured_transfer_buffer =
+        CreatePackedTexturedGeometryVertexBuffer(quad_vertices, cylinder_wall_vertices, copy_pass);
 
     {
       u32 instance_buffer_size = sizeof(SolidColorInstanceData) * kMaxSolidColorInstances;
@@ -777,9 +775,8 @@ class RendererImpl : public Renderer {
 
     SDL_EndGPUCopyPass(copy_pass);
     SDL_SubmitGPUCommandBuffer(upload_command_buffer);
-    SDL_ReleaseGPUTransferBuffer(device_, texture_quad_transfer_buffer);
-    SDL_ReleaseGPUTransferBuffer(device_, cylinder_wall_transfer_buffer);
     SDL_ReleaseGPUTransferBuffer(device_, packed_transfer_buffer);
+    SDL_ReleaseGPUTransferBuffer(device_, packed_textured_transfer_buffer);
 
     CleanupShaders();
     return true;
@@ -881,54 +878,39 @@ class RendererImpl : public Renderer {
     }
     SDL_PushGPUDebugGroup(ctx->command_buffer, "Render TextureWalls");
     Texture* last_bound_texture = nullptr;
+
     SDL_BindGPUGraphicsPipeline(ctx->render_pass, texture_quad_pipeline_);
-    bool has_quad = false;
-    bool has_cylinder = false;
+
+    SDL_GPUBufferBinding binding{};
+    binding.buffer = packed_textured_vertex_buffer_;
+    binding.offset = 0;
+    SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
+
     for (const TextureWallDrawData& data : draw_data.texture_walls) {
+      TexScaleAndTransform tex_scale_and_transform{};
+      tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
+      tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
+      tex_scale_and_transform.transform = data.transform;
+
+      SDL_PushGPUVertexUniformData(ctx->command_buffer,
+                                   0,
+                                   &tex_scale_and_transform.tex_scale[0],
+                                   sizeof(TexScaleAndTransform));
+
+      SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
+      if (data.texture != last_bound_texture) {
+        last_bound_texture = data.texture;
+        SDL_BindGPUFragmentSamplers(
+            ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
+      }
+
+      int num_vertices = kQuadNumVertices;
+      int offset = textured_quad_vertices_offset_;
       if (data.is_cylinder) {
-        has_cylinder = true;
-      } else {
-        has_quad = true;
+        num_vertices = num_cylinder_wall_vertices_;
+        offset = textured_cylinder_wall_vertices_offset_;
       }
-    }
-
-    auto draw_walls = [&](bool draw_cylinders) {
-      SDL_GPUBufferBinding binding{};
-      binding.buffer = draw_cylinders ? cylinder_wall_vertex_buffer_ : texture_quad_vertex_buffer_;
-      binding.offset = 0;
-      SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
-
-      for (const TextureWallDrawData& data : draw_data.texture_walls) {
-        if (data.is_cylinder == draw_cylinders) {
-          TexScaleAndTransform tex_scale_and_transform{};
-          tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
-          tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
-          tex_scale_and_transform.transform = data.transform;
-
-          SDL_PushGPUVertexUniformData(ctx->command_buffer,
-                                       0,
-                                       &tex_scale_and_transform.tex_scale[0],
-                                       sizeof(TexScaleAndTransform));
-
-          SDL_PushGPUFragmentUniformData(ctx->command_buffer, 0, &data.color[0], sizeof(glm::vec4));
-          if (data.texture != last_bound_texture) {
-            last_bound_texture = data.texture;
-            SDL_BindGPUFragmentSamplers(
-                ctx->render_pass, 0, data.texture->texture_sampler_binding(), 1);
-          }
-
-          int num_vertices = draw_cylinders ? num_cylinder_wall_vertices_ : kQuadNumVertices;
-          SDL_DrawGPUPrimitives(ctx->render_pass, num_vertices, 1, 0, 0);
-        }
-      }
-    };
-
-    if (has_quad) {
-      draw_walls(false);
-    }
-
-    if (has_cylinder) {
-      draw_walls(true);
+      SDL_DrawGPUPrimitives(ctx->render_pass, num_vertices, 1, offset, 0);
     }
 
     SDL_PopGPUDebugGroup(ctx->command_buffer);
@@ -1189,23 +1171,11 @@ class RendererImpl : public Renderer {
   }
 
   SDL_GPUTransferBuffer* CreatePackedGeometryVertexBuffer(
-      const std::vector<VertexAndTexCoord>& cylinder_wall_vertices, SDL_GPUCopyPass* copy_pass) {
+      const std::vector<VertexAndTexCoord>& quad_vertices,
+      const std::vector<VertexAndTexCoord>& cylinder_wall_vertices,
+      SDL_GPUCopyPass* copy_pass) {
     std::vector<float> sphere_vertices = GenerateSphereVertices(3);
     num_sphere_vertices_ = sphere_vertices.size() / 3;
-
-    glm::vec3 bottom_right(0.5f, 0.0f, -0.5f);
-    glm::vec3 bottom_left(-0.5f, 0.0f, -0.5f);
-    glm::vec3 top_left(-0.5f, 0.0f, 0.5f);
-    glm::vec3 top_right(0.5f, 0.0f, 0.5f);
-
-    std::vector<glm::vec3> quad_vertices{
-        bottom_right,
-        top_right,
-        top_left,
-        top_left,
-        bottom_left,
-        bottom_right,
-    };
 
     std::vector<glm::vec3> cylinder_vertices = GenerateCylinderVertices(100);
     num_cylinder_vertices_ = cylinder_vertices.size();
@@ -1214,10 +1184,10 @@ class RendererImpl : public Renderer {
     packed_data.reserve(sphere_vertices.size() + (quad_vertices.size() * 3) +
                         (cylinder_vertices.size() * 3) + (cylinder_wall_vertices.size() * 3));
 
-    for (const glm::vec3& v : quad_vertices) {
-      packed_data.push_back(v.x);
-      packed_data.push_back(v.y);
-      packed_data.push_back(v.z);
+    for (const VertexAndTexCoord& vt : quad_vertices) {
+      packed_data.push_back(vt.vertex.x);
+      packed_data.push_back(vt.vertex.y);
+      packed_data.push_back(vt.vertex.z);
     }
     for (const glm::vec3& v : cylinder_vertices) {
       packed_data.push_back(v.x);
@@ -1240,39 +1210,21 @@ class RendererImpl : public Renderer {
     return UploadBuffer(packed_data.data(), size, copy_pass, &packed_vertex_buffer_);
   }
 
-  SDL_GPUTransferBuffer* CreateTextureQuadVertexBuffer(SDL_GPUCopyPass* copy_pass) {
-    VertexAndTexCoord bottom_right;
-    VertexAndTexCoord bottom_left;
-    VertexAndTexCoord top_left;
-    VertexAndTexCoord top_right;
+  SDL_GPUTransferBuffer* CreatePackedTexturedGeometryVertexBuffer(
+      const std::vector<VertexAndTexCoord>& quad_vertices,
+      const std::vector<VertexAndTexCoord>& cylinder_wall_vertices,
+      SDL_GPUCopyPass* copy_pass) {
+    std::vector<VertexAndTexCoord> packed_data;
+    packed_data.reserve(quad_vertices.size() + cylinder_wall_vertices.size());
+    packed_data.insert(packed_data.end(), quad_vertices.begin(), quad_vertices.end());
+    packed_data.insert(
+        packed_data.end(), cylinder_wall_vertices.begin(), cylinder_wall_vertices.end());
 
-    bottom_right.vertex = glm::vec3(0.5f, 0.0f, -0.5f);
-    bottom_left.vertex = glm::vec3(-0.5f, 0.0f, -0.5f);
-    top_left.vertex = glm::vec3(-0.5f, 0.0f, 0.5f);
-    top_right.vertex = glm::vec3(0.5f, 0.0f, 0.5f);
+    textured_quad_vertices_offset_ = 0;
+    textured_cylinder_wall_vertices_offset_ = quad_vertices.size();
 
-    bottom_right.tex_coord = glm::vec2(1.0f, 1.0f);
-    bottom_left.tex_coord = glm::vec2(0.0f, 1.0f);
-    top_left.tex_coord = glm::vec2(0.0f, 0.0f);
-    top_right.tex_coord = glm::vec2(1.0f, 0.0f);
-
-    std::vector<VertexAndTexCoord> vertices = {
-        bottom_right,
-        top_right,
-        top_left,
-        top_left,
-        bottom_left,
-        bottom_right,
-    };
-
-    int size = sizeof(VertexAndTexCoord) * vertices.size();
-    return UploadBuffer(vertices.data(), size, copy_pass, &texture_quad_vertex_buffer_);
-  }
-
-  SDL_GPUTransferBuffer* CreateCylinderWallVertexBuffer(std::vector<VertexAndTexCoord> vertices,
-                                                        SDL_GPUCopyPass* copy_pass) {
-    int size = sizeof(VertexAndTexCoord) * vertices.size();
-    return UploadBuffer(vertices.data(), size, copy_pass, &cylinder_wall_vertex_buffer_);
+    int size = sizeof(VertexAndTexCoord) * packed_data.size();
+    return UploadBuffer(packed_data.data(), size, copy_pass, &packed_textured_vertex_buffer_);
   }
 
   SDL_GPUTransferBuffer* UploadBuffer(void* data,
@@ -1329,9 +1281,8 @@ class RendererImpl : public Renderer {
   SDL_GPUDevice* device_ = nullptr;
   SDL_Window* sdl_window_ = nullptr;
 
-  SDL_GPUBuffer* texture_quad_vertex_buffer_ = nullptr;
-  SDL_GPUBuffer* cylinder_wall_vertex_buffer_ = nullptr;
   SDL_GPUBuffer* packed_vertex_buffer_ = nullptr;
+  SDL_GPUBuffer* packed_textured_vertex_buffer_ = nullptr;
 
   SDL_GPUBuffer* solid_color_instance_buffer_ = nullptr;
   SDL_GPUTransferBuffer* solid_color_instance_transfer_buffer_ = nullptr;
@@ -1349,6 +1300,9 @@ class RendererImpl : public Renderer {
   unsigned int cylinder_vertices_offset_;
   unsigned int cylinder_wall_vertices_offset_;
   unsigned int quad_vertices_offset_;
+
+  unsigned int textured_cylinder_wall_vertices_offset_;
+  unsigned int textured_quad_vertices_offset_;
 
   int viewport_width_ = 0;
   int viewport_height_ = 0;

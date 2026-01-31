@@ -14,6 +14,7 @@ struct VertexAndTexCoord {
 };
 
 std::vector<VertexAndTexCoord> GenerateCylinderWallVertices(int num_segments);
+std::vector<VertexAndTexCoord> GenerateQuadVertices();
 
 std::vector<glm::vec3> GenerateCylinderVertices(int num_segments);
 
