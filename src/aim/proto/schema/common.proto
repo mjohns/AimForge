@@ -29,7 +29,7 @@ message StoredColor {
 }
 
 enum PresentMode {
-    PRESENT_MODE_IMMEDIATE = 0;
-    PRESENT_MODE_MAILBOX = 1;
-    PRESENT_MODE_VSYNC = 2;
+  PRESENT_MODE_IMMEDIATE = 0;
+  PRESENT_MODE_MAILBOX = 1;
+  PRESENT_MODE_VSYNC = 2;
 }

@@ -22,9 +22,9 @@ enum class ScenarioViewType : int {
 };
 
 void DrawScenarioRightClickMenu(const char* popup_id,
-                            const std::string& scenario_name,
-                            ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-                            Application& app) {
+                                const std::string& scenario_name,
+                                ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
+                                Application& app) {
   if (ImGui::BeginPopupContextItem(popup_id)) {
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
