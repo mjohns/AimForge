@@ -382,35 +382,6 @@ class HomeScreen : public UiScreen {
         scenario_browser_component_->Reload();
       }
 
-      /*
-      ImGui::TableNextColumn();
-      auto current_scenario = app_.scenario_manager().GetCurrentScenario();
-      if (current_scenario) {
-        ImGui::Text(current_scenario->id());
-
-        if (app_.scenario_manager().has_running_scenario()) {
-          if (ImGui::Button(std::format("{} Resume", icons::kPlayArrow))) {
-            state_.scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
-          }
-          ImGui::SameLine();
-          if (ImGui::Button(std::format("{} Restart", icons::kRefresh))) {
-            state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-          }
-        } else {
-          if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
-            state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-          }
-        }
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::Indent();
-        ImGui::Text(current_scenario->def.description());
-        ImGui::Unindent();
-       }
-        */
 
       ImGui::EndTable();
     }

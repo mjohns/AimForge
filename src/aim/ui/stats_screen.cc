@@ -376,7 +376,7 @@ class StatsScreen : public UiScreen {
     ImGui::Text("Projected fps");
     ImGui::SameLine();
     ImGui::Button(MaybeIntToString(1000 / total_ms));
-    ImGui::HelpTooltip("Projected FPS if all frames were this bad.");
+    ImGui::HelpTooltip("Projected fps if all frames were this bad.");
     ImGui::TextFmt("Total time: {:.2f}ms", total_ms);
     ImGui::TextFmt("Update time: {:.2f}ms",
                    (worst_times_.update_end - worst_times_.update_start) / 1000.0);

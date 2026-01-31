@@ -10,6 +10,8 @@ class PlaylistManager;
 class ScenarioManager;
 class FileSystem;
 
+inline const char* kUserBundleName = "USER";
+
 class BundleManager {
  public:
   BundleManager() {}

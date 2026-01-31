@@ -26,6 +26,7 @@
 #include "aim/proto/common.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/scenario/replay_viewer.h"
+#include "aim/scenario/scenario_factory.h"
 #include "aim/scenario/scenario_timer.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/stats_screen.h"
@@ -77,7 +78,8 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       camera_(Camera(CameraParams(params.def.room()))),
       target_manager_(params.def.room()),
       force_start_immediately_(params.force_start_immediately),
-      from_scenario_editor_(params.from_scenario_editor) {
+      from_scenario_editor_(params.from_scenario_editor),
+      create_params_(params) {
   theme_ = app->settings_manager().GetCurrentTheme();
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
 
@@ -177,8 +179,12 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
     }
     if (!is_waiting_for_click_to_start() &&
         KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
-      state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       PopSelf();
+      std::shared_ptr<Screen> restart_running_scenario = CreateScenario(create_params_, &app_);
+      if (restart_running_scenario) {
+        app_.scenario_manager().SetCurrentRunningScenario(restart_running_scenario);
+        PushNextScreen(restart_running_scenario);
+      }
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
       PushNextScreen(

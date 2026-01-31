@@ -152,6 +152,7 @@ class Scenario : public Screen {
   i64 loop_count_ = 0;
   bool from_scenario_editor_;
   bool play_time_flushed_ = false;
+  const CreateScenarioParams create_params_;
 };
 
 }  // namespace aim
