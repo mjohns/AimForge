@@ -49,7 +49,7 @@ class ScenarioEditorScreen : public UiScreen {
     }
     settings_ = app_.settings_manager().GetCurrentSettings();
     *def_.mutable_room() = GetDefaultSimpleRoom();
-    bundle_names_ = app_.bundle_manager().GetBundleNames();
+    bundle_names_ = app_.bundle_manager().GetWritableBundleNames();
 
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
     if (initial_scenario.has_value()) {

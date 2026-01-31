@@ -164,13 +164,21 @@ class BundleUiComponentImpl : public BundleUiComponent {
 
     bool need_update = false;
 
-    bool readonly = info.readonly();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Readonly");
-    ImGui::SameLine();
-    if (ImGui::Checkbox("##ReadonlyInput", &readonly)) {
-      info.set_readonly(readonly);
-      need_update = true;
+    if (selected_bundle_name_ == kUserBundleName) {
+      // Force user bundle being writable if necessary.
+      if (info.readonly()) {
+        info.set_readonly(false);
+        need_update = true;
+      }
+    } else {
+      bool readonly = info.readonly();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Readonly");
+      ImGui::SameLine();
+      if (ImGui::Checkbox("##ReadonlyInput", &readonly)) {
+        info.set_readonly(readonly);
+        need_update = true;
+      }
     }
 
     ImGui::Spacing();

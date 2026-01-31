@@ -21,6 +21,7 @@ class BundleManager {
   virtual std::vector<std::string> LoadBundlesFromDisk() = 0;
 
   virtual std::vector<std::string> GetBundleNames() = 0;
+  virtual std::vector<std::string> GetWritableBundleNames() = 0;
   virtual std::vector<BundleInfo> GetBundleInfos() = 0;
   virtual bool IsBundleReadonly(const std::string& bundle_name) = 0;
   virtual std::optional<BundleInfo> GetBundleInfo(const std::string& bundle_name) = 0;

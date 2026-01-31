@@ -73,8 +73,8 @@ class AddPlaylistDialog {
       ImGui::OpenPopup(id_.c_str());
       open_ = false;
       is_open_ = true;
-      bundle_names_ = app.bundle_manager().GetBundleNames();
-      name_.set("USER", "New playlist");
+      bundle_names_ = app.bundle_manager().GetWritableBundleNames();
+      name_.set(kUserBundleName, "New playlist");
     }
     return did_add;
   }

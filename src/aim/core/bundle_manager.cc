@@ -128,6 +128,9 @@ class BundleManagerImpl : public BundleManager {
   }
 
   bool SaveBundle(const std::string& bundle_name) override {
+    if (IsBundleReadonly(bundle_name)) {
+      return false;
+    }
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
@@ -217,6 +220,22 @@ class BundleManagerImpl : public BundleManager {
     std::vector<std::string> names;
     for (auto& entry : bundle_info_map_) {
       names.push_back(entry.first);
+    }
+    if (names.empty()) {
+      names.push_back(kUserBundleName);
+    }
+    absl::c_sort(names);
+    return names;
+  }
+  std::vector<std::string> GetWritableBundleNames() override {
+    std::vector<std::string> names;
+    for (auto& entry : bundle_info_map_) {
+      if (!entry.second.readonly()) {
+        names.push_back(entry.first);
+      }
+    }
+    if (names.empty()) {
+      names.push_back(kUserBundleName);
     }
     absl::c_sort(names);
     return names;
