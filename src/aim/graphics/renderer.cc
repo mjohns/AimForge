@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "SDL3/SDL.h"
+#include "absl/algorithm/container.h"
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
 #include "aim/common/simple_types.h"
@@ -167,6 +168,13 @@ class DrawDataBuilder {
     draw_data->solid_cylinders.reserve(targets.size());
     AddDrawRoom(view_projection, theme, room, draw_data);
     AddDrawTargets(view_projection, look_at, theme, health_bar, targets, draw_data);
+
+    // Make sure all textured walls are grouped by Texture* so that the samplers can be bound
+    // minimally and don't need to be switched back and forth.
+    absl::c_sort(draw_data->texture_walls,
+                 [](const TextureWallDrawData& lhs, const TextureWallDrawData& rhs) {
+                   return lhs.texture < rhs.texture;
+                 });
   }
 
  private:
@@ -887,6 +895,7 @@ class RendererImpl : public Renderer {
     SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
 
     for (const TextureWallDrawData& data : draw_data.texture_walls) {
+      assert(data.texture != nullptr && "Trying to render wall with no texture");
       TexScaleAndTransform tex_scale_and_transform{};
       tex_scale_and_transform.tex_scale.x = data.tex_scale.x;
       tex_scale_and_transform.tex_scale.y = data.tex_scale.y;
