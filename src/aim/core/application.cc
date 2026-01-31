@@ -525,6 +525,8 @@ void Application::SetPresentMode(PresentMode present_mode) {
     case PRESENT_MODE_VSYNC:
       gpu_present_mode = SDL_GPU_PRESENTMODE_VSYNC;
       break;
+    default:
+      break;
   }
   SDL_SetGPUSwapchainParameters(
       gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, gpu_present_mode);
