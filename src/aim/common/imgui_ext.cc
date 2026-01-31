@@ -93,6 +93,16 @@ void HelpMarker(const std::string& text) {
   }
 }
 
+void InfoMarker(const std::string& text) {
+  ImGui::Text("%s", aim::icons::kInfo);
+  if (ImGui::BeginItemTooltip()) {
+    ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+    ImGui::Text(text);
+    ImGui::PopTextWrapPos();
+    ImGui::EndTooltip();
+  }
+}
+
 void HelpTooltip(const std::string& text) {
   if (ImGui::BeginItemTooltip()) {
     ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);

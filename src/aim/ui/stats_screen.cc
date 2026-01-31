@@ -232,7 +232,7 @@ class StatsScreen : public UiScreen {
       PushNextScreen(CreateSettingsScreen(&app_, scenario_name_));
     }
     if (performance_stats_) {
-      if (ImGui::Selectable(std::format("{} Performance", icons::kSmartToy).c_str(),
+      if (ImGui::Selectable(std::format("{} Perf", icons::kSmartToy).c_str(),
                             selected_screen_ == SelectedScreen::PERF)) {
         selected_screen_ = SelectedScreen::PERF;
       }
@@ -363,13 +363,21 @@ class StatsScreen : public UiScreen {
 
   void DrawPerformanceStats() {
     auto& worst_times_ = performance_stats_->worst_times;
-    ImGui::TextFmt("Worst frame n={:L}, at_time={:.1f}s",
-                   worst_times_.frame_number,
-                   performance_stats_->worst_times_micros / 1000000.0f);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Worst frame");
+    ImGui::SameLine();
+    ImGui::InfoMarker(std::format("At time {:.1f}s. Frame {:L}",
+                                  performance_stats_->worst_times_micros / 1000000.0f,
+                                  worst_times_.frame_number));
+
     float total_ms = (worst_times_.end - worst_times_.start) / 1000.0;
-    ImGui::TextFmt("Total time: {:.2f}ms, ~fps={}", total_ms, MaybeIntToString(1000 / total_ms));
-    ImGui::TextFmt("Events time: {:.2f}ms",
-                   (worst_times_.events_end - worst_times_.events_start) / 1000.0);
+    ImGui::Indent();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Projected fps");
+    ImGui::SameLine();
+    ImGui::Button(MaybeIntToString(1000 / total_ms));
+    ImGui::HelpTooltip("Projected FPS if all frames were this bad.");
+    ImGui::TextFmt("Total time: {:.2f}ms", total_ms);
     ImGui::TextFmt("Update time: {:.2f}ms",
                    (worst_times_.update_end - worst_times_.update_start) / 1000.0);
     if (worst_times_.render_start > 0) {
@@ -391,6 +399,7 @@ class StatsScreen : public UiScreen {
       ImGui::TextFmt("Render finish: {:.2f}ms", worst_times_.render_finish.GetSeconds() * 1000.0);
       ImGui::Unindent();
     }
+    ImGui::Unindent();
 
     ImGui::Spacing();
     ImGui::Separator();
@@ -478,7 +487,17 @@ class StatsScreen : public UiScreen {
           add_percentile("20", p.p20());
           add_percentile("10", p.p10());
           ImGui::SameLine();
-          ImGui::HelpMarker(prox_string);
+
+          float large_height = ImGui::GetTextLineHeight();
+
+          ImGui::SameLine();
+
+          // Center the info icon vertically and make smaller
+          auto smaller_font = app_.font_manager().UseDefault();
+          float small_height = ImGui::GetFontSize();
+          float offset = (large_height - small_height) * 0.5f;
+          ImGui::SetCursorPosY(ImGui::GetCursorPosY() + offset);
+          ImGui::InfoMarker(prox_string);
         }
       }
     }

@@ -198,6 +198,7 @@ class NotificationPopup {
 };
 
 void HelpMarker(const std::string& text);
+void InfoMarker(const std::string& text);
 void HelpTooltip(const std::string& text);
 
 void DrawItemBounds();
