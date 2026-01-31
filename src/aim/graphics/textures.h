@@ -11,6 +11,8 @@
 
 namespace aim {
 
+int GetMaxMipLevels(int width, int height);
+
 class Texture {
  public:
   explicit Texture(const std::filesystem::path& path, SDL_GPUDevice* device);

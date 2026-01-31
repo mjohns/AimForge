@@ -1,5 +1,6 @@
 #include "textures.h"
 
+    #include <bit>
 #include <iostream>
 #include <optional>
 
@@ -42,8 +43,7 @@ Texture::Texture(const std::filesystem::path& path, SDL_GPUDevice* device) : gpu
   create_info.width = image.width();
   create_info.height = image.height();
   create_info.layer_count_or_depth = 1;
-  // TODO: set the levels based on the dimensions of the texture.
-  create_info.num_levels = 6;
+  create_info.num_levels = GetMaxMipLevels(image.width(), image.height());
   create_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER | SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
   texture_ = SDL_CreateGPUTexture(device, &create_info);
 
@@ -123,6 +123,14 @@ Texture* TextureManager::GetTexture(const std::string& name) {
   // Cache empty pointer so we don't keep trying to read invalid textures.
   texture_cache_[name] = {};
   return nullptr;
+}
+
+int GetMaxMipLevels(int width, int height) {
+  int max_dim = std::max(width, height);
+  if (max_dim <= 0) return 0;
+
+  // bit_width returns the number of bits needed to represent the value
+  return std::bit_width(static_cast<unsigned int>(max_dim));
 }
 
 }  // namespace aim
