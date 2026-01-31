@@ -61,7 +61,18 @@ class ScenarioEditorScreen : public UiScreen {
 
       if (opts.force_bundle_name.size() > 0) {
         *name_.mutable_bundle_name() = opts.force_bundle_name;
+      } else {
+        // Select the first writable bundle for name. Use the current scenarios bundle if it is
+        // writable.
+        if (app_.bundle_manager().IsBundleReadonly(name_.bundle_name())) {
+          if (bundle_names_.empty()) {
+            *name_.mutable_bundle_name() = kUserBundleName;
+          } else {
+            *name_.mutable_bundle_name() = bundle_names_[0];
+          }
+        }
       }
+
       if (opts.is_new_copy) {
         std::string final_name = MakeUniqueName(
             name_.relative_name() + " Copy",

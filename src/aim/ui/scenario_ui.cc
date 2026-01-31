@@ -122,7 +122,6 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
       ScenarioEditorOptions opts;
       opts.scenario_name = "";
       opts.is_new_copy = true;
-      opts.force_bundle_name = "USER";
       app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
     }
 
