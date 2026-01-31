@@ -29,6 +29,7 @@
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
 #include "google/protobuf/unknown_field_set.h"
+#include "common.pb.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
@@ -1594,7 +1595,7 @@ class Settings final : public ::google::protobuf::Message
     kAutoHoldTrackingFieldNumber = 10,
     kDisablePerScenarioSettingsFieldNumber = 13,
     kMaxRenderFpsFieldNumber = 14,
-    kUseVsyncFieldNumber = 15,
+    kPresentModeFieldNumber = 15,
   };
   // string theme_name = 4;
   bool has_theme_name() const;
@@ -1761,15 +1762,15 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_max_render_fps(float value);
 
   public:
-  // float use_vsync = 15;
-  bool has_use_vsync() const;
-  void clear_use_vsync() ;
-  float use_vsync() const;
-  void set_use_vsync(float value);
+  // .aim.PresentMode present_mode = 15;
+  bool has_present_mode() const;
+  void clear_present_mode() ;
+  ::aim::PresentMode present_mode() const;
+  void set_present_mode(::aim::PresentMode value);
 
   private:
-  float _internal_use_vsync() const;
-  void _internal_set_use_vsync(float value);
+  ::aim::PresentMode _internal_present_mode() const;
+  void _internal_set_present_mode(::aim::PresentMode value);
 
   public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
@@ -1811,7 +1812,7 @@ class Settings final : public ::google::protobuf::Message
     bool auto_hold_tracking_;
     bool disable_per_scenario_settings_;
     float max_render_fps_;
-    float use_vsync_;
+    int present_mode_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2553,33 +2554,33 @@ inline void Settings::_internal_set_max_render_fps(float value) {
   _impl_.max_render_fps_ = value;
 }
 
-// float use_vsync = 15;
-inline bool Settings::has_use_vsync() const {
+// .aim.PresentMode present_mode = 15;
+inline bool Settings::has_present_mode() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
   return value;
 }
-inline void Settings::clear_use_vsync() {
+inline void Settings::clear_present_mode() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.use_vsync_ = 0;
+  _impl_.present_mode_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
                   0x00002000U);
 }
-inline float Settings::use_vsync() const {
-  // @@protoc_insertion_point(field_get:aim.Settings.use_vsync)
-  return _internal_use_vsync();
+inline ::aim::PresentMode Settings::present_mode() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.present_mode)
+  return _internal_present_mode();
 }
-inline void Settings::set_use_vsync(float value) {
-  _internal_set_use_vsync(value);
+inline void Settings::set_present_mode(::aim::PresentMode value) {
+  _internal_set_present_mode(value);
   SetHasBit(_impl_._has_bits_[0], 0x00002000U);
-  // @@protoc_insertion_point(field_set:aim.Settings.use_vsync)
+  // @@protoc_insertion_point(field_set:aim.Settings.present_mode)
 }
-inline float Settings::_internal_use_vsync() const {
+inline ::aim::PresentMode Settings::_internal_present_mode() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.use_vsync_;
+  return static_cast<::aim::PresentMode>(_impl_.present_mode_);
 }
-inline void Settings::_internal_set_use_vsync(float value) {
+inline void Settings::_internal_set_present_mode(::aim::PresentMode value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.use_vsync_ = value;
+  _impl_.present_mode_ = value;
 }
 
 // .aim.SoundSettings sound = 16;

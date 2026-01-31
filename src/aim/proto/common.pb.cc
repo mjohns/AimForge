@@ -137,8 +137,8 @@ struct StoredColorDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StoredColorDefaultTypeInternal _StoredColor_default_instance_;
 }  // namespace aim
-static constexpr const ::_pb::EnumDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
-    file_level_enum_descriptors_common_2eproto = nullptr;
+static const ::_pb::EnumDescriptor* PROTOBUF_NONNULL
+    file_level_enum_descriptors_common_2eproto[1];
 static constexpr const ::_pb::ServiceDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
     file_level_service_descriptors_common_2eproto = nullptr;
 const ::uint32_t
@@ -204,14 +204,16 @@ const char descriptor_table_protodef_common_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\",\n\tStoredRgb\022\t\n\001r"
     "\030\001 \001(\005\022\t\n\001g\030\002 \001(\005\022\t\n\001b\030\003 \001(\005\"O\n\013StoredCo"
     "lor\022\t\n\001r\030\001 \001(\005\022\t\n\001g\030\002 \001(\005\022\t\n\001b\030\003 \001(\005\022\013\n\003"
-    "hex\030\004 \001(\t\022\022\n\nmultiplier\030\005 \001(\002b\010editionsp"
-    "\350\007"
+    "hex\030\004 \001(\t\022\022\n\nmultiplier\030\005 \001(\002*[\n\013Present"
+    "Mode\022\032\n\026PRESENT_MODE_IMMEDIATE\020\000\022\030\n\024PRES"
+    "ENT_MODE_MAILBOX\020\001\022\026\n\022PRESENT_MODE_VSYNC"
+    "\020\002b\010editionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_common_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_common_2eproto = {
     false,
     false,
-    242,
+    335,
     descriptor_table_protodef_common_2eproto,
     "common.proto",
     &descriptor_table_common_2eproto_once,
@@ -225,6 +227,12 @@ PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_common_2eproto
     file_level_service_descriptors_common_2eproto,
 };
 namespace aim {
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL PresentMode_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_common_2eproto);
+  return file_level_enum_descriptors_common_2eproto[0];
+}
+PROTOBUF_CONSTINIT const uint32_t PresentMode_internal_data_[] = {
+    196608u, 0u, };
 // ===================================================================
 
 class StoredVec3::_Internal {

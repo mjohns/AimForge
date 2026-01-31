@@ -163,7 +163,7 @@ class Application {
   }
 
   void EnableVsync();
-  void DisableVsync();
+  void SetPresentMode(PresentMode present_mode);
 
   void RequestExit();
   void RequestRestart();

@@ -28,6 +28,7 @@
 #include "google/protobuf/message_lite.h"
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
+#include "google/protobuf/generated_enum_reflection.h"
 #include "google/protobuf/unknown_field_set.h"
 // @@protoc_insertion_point(includes)
 
@@ -53,6 +54,8 @@ extern "C" {
 extern const ::google::protobuf::internal::DescriptorTable descriptor_table_common_2eproto;
 }  // extern "C"
 namespace aim {
+enum PresentMode : int;
+extern const uint32_t PresentMode_internal_data_[];
 class StoredColor;
 struct StoredColorDefaultTypeInternal;
 extern StoredColorDefaultTypeInternal _StoredColor_default_instance_;
@@ -72,10 +75,50 @@ extern const ::google::protobuf::internal::ClassDataFull StoredVec3_class_data_;
 }  // namespace aim
 namespace google {
 namespace protobuf {
+template <>
+internal::EnumTraitsT<::aim::PresentMode_internal_data_>
+    internal::EnumTraitsImpl::value<::aim::PresentMode>;
 }  // namespace protobuf
 }  // namespace google
 
 namespace aim {
+enum PresentMode : int {
+  PRESENT_MODE_IMMEDIATE = 0,
+  PRESENT_MODE_MAILBOX = 1,
+  PRESENT_MODE_VSYNC = 2,
+  PresentMode_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  PresentMode_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t PresentMode_internal_data_[];
+inline constexpr PresentMode PresentMode_MIN =
+    static_cast<PresentMode>(0);
+inline constexpr PresentMode PresentMode_MAX =
+    static_cast<PresentMode>(2);
+inline bool PresentMode_IsValid(int value) {
+  return 0 <= value && value <= 2;
+}
+inline constexpr int PresentMode_ARRAYSIZE = 2 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL PresentMode_descriptor();
+template <typename T>
+const ::std::string& PresentMode_Name(T value) {
+  static_assert(::std::is_same<T, PresentMode>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to PresentMode_Name().");
+  return PresentMode_Name(static_cast<PresentMode>(value));
+}
+template <>
+inline const ::std::string& PresentMode_Name(PresentMode value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<PresentMode_descriptor, 0, 2>(
+      static_cast<int>(value));
+}
+inline bool PresentMode_Parse(
+    ::absl::string_view name, PresentMode* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PresentMode>(PresentMode_descriptor(), name,
+                                           value);
+}
 
 // ===================================================================
 
@@ -1419,6 +1462,19 @@ inline void StoredColor::_internal_set_multiplier(float value) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace aim
 
+
+namespace google {
+namespace protobuf {
+
+template <>
+struct is_proto_enum<::aim::PresentMode> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::aim::PresentMode>() {
+  return ::aim::PresentMode_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

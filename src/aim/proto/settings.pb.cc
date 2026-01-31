@@ -215,7 +215,7 @@ inline constexpr Settings::Impl_::Impl_(
         auto_hold_tracking_{false},
         disable_per_scenario_settings_{false},
         max_render_fps_{0},
-        use_vsync_{0} {}
+        present_mode_{static_cast< ::aim::PresentMode >(0)} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR Settings::Settings(::_pbi::ConstantInitialized)
@@ -272,7 +272,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.health_bar_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.disable_per_scenario_settings_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.max_render_fps_),
-        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.use_vsync_),
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.present_mode_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.sound_),
         5,
         6,
@@ -369,49 +369,54 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
 };
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\016settings.proto\022\003aim\"s\n\021HealthBarSettin"
-    "gs\022\014\n\004show\030\001 \001(\010\022\024\n\014only_damaged\030\002 \001(\010\022\016"
-    "\n\006height\030\003 \001(\002\022\r\n\005width\030\004 \001(\002\022\033\n\023height_"
-    "above_target\030\005 \001(\002\"\214\003\n\010Settings\022\013\n\003dpi\030\001"
-    " \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\022\n\ntheme_name\030\004"
-    " \001(\t\022\025\n\rmetronome_bpm\030\005 \001(\002\022\026\n\016crosshair"
-    "_size\030\006 \001(\002\022\036\n\026current_crosshair_name\030\007 "
-    "\001(\t\022\036\n\026disable_click_to_start\030\010 \001(\010\022\037\n\010k"
-    "eybinds\030\t \001(\0132\r.aim.Keybinds\022\032\n\022auto_hol"
-    "d_tracking\030\n \001(\010\022*\n\nhealth_bar\030\014 \001(\0132\026.a"
-    "im.HealthBarSettings\022%\n\035disable_per_scen"
-    "ario_settings\030\r \001(\010\022\026\n\016max_render_fps\030\016 "
-    "\001(\002\022\021\n\tuse_vsync\030\017 \001(\002\022!\n\005sound\030\020 \001(\0132\022."
-    "aim.SoundSettings\"i\n\rSoundSettings\022\033\n\023ma"
-    "ster_volume_level\030\001 \001(\002\022\013\n\003hit\030\n \001(\t\022\014\n\004"
-    "kill\030\013 \001(\t\022\021\n\tmetronome\030\014 \001(\t\022\r\n\005shoot\030\r"
-    " \001(\t\"\344\001\n\020ScenarioSettings\022\022\n\ncm_per_360\030"
-    "\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n\nthem"
-    "e_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016c"
-    "rosshair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 "
-    "\001(\t\022\032\n\022auto_hold_tracking\030\007 \001(\010\022*\n\nhealt"
-    "h_bar\030\010 \001(\0132\026.aim.HealthBarSettings\"T\n\nK"
-    "eyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030"
-    "\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001("
-    "\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMa"
-    "pping\022)\n\020restart_scenario\030\002 \001(\0132\017.aim.Ke"
-    "yMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.aim.Ke"
-    "yMapping\022\'\n\016quick_settings\030\004 \001(\0132\017.aim.K"
-    "eyMapping\022.\n\025adjust_crosshair_size\030\005 \001(\013"
-    "2\017.aim.KeyMapping\022(\n\017quick_metronome\030\006 \001"
-    "(\0132\017.aim.KeyMapping\022&\n\redit_scenario\030\007 \001"
-    "(\0132\017.aim.KeyMappingb\010editionsp\350\007"
+    "\n\016settings.proto\022\003aim\032\014common.proto\"s\n\021H"
+    "ealthBarSettings\022\014\n\004show\030\001 \001(\010\022\024\n\014only_d"
+    "amaged\030\002 \001(\010\022\016\n\006height\030\003 \001(\002\022\r\n\005width\030\004 "
+    "\001(\002\022\033\n\023height_above_target\030\005 \001(\002\"\241\003\n\010Set"
+    "tings\022\013\n\003dpi\030\001 \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\022"
+    "\n\ntheme_name\030\004 \001(\t\022\025\n\rmetronome_bpm\030\005 \001("
+    "\002\022\026\n\016crosshair_size\030\006 \001(\002\022\036\n\026current_cro"
+    "sshair_name\030\007 \001(\t\022\036\n\026disable_click_to_st"
+    "art\030\010 \001(\010\022\037\n\010keybinds\030\t \001(\0132\r.aim.Keybin"
+    "ds\022\032\n\022auto_hold_tracking\030\n \001(\010\022*\n\nhealth"
+    "_bar\030\014 \001(\0132\026.aim.HealthBarSettings\022%\n\035di"
+    "sable_per_scenario_settings\030\r \001(\010\022\026\n\016max"
+    "_render_fps\030\016 \001(\002\022&\n\014present_mode\030\017 \001(\0162"
+    "\020.aim.PresentMode\022!\n\005sound\030\020 \001(\0132\022.aim.S"
+    "oundSettings\"i\n\rSoundSettings\022\033\n\023master_"
+    "volume_level\030\001 \001(\002\022\013\n\003hit\030\n \001(\t\022\014\n\004kill\030"
+    "\013 \001(\t\022\021\n\tmetronome\030\014 \001(\t\022\r\n\005shoot\030\r \001(\t\""
+    "\344\001\n\020ScenarioSettings\022\022\n\ncm_per_360\030\001 \001(\002"
+    "\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n\ntheme_nam"
+    "e\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016crossh"
+    "air_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t\022\032"
+    "\n\022auto_hold_tracking\030\007 \001(\010\022*\n\nhealth_bar"
+    "\030\010 \001(\0132\026.aim.HealthBarSettings\"T\n\nKeyMap"
+    "ping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t"
+    "\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n"
+    "\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMapping"
+    "\022)\n\020restart_scenario\030\002 \001(\0132\017.aim.KeyMapp"
+    "ing\022&\n\rnext_scenario\030\003 \001(\0132\017.aim.KeyMapp"
+    "ing\022\'\n\016quick_settings\030\004 \001(\0132\017.aim.KeyMap"
+    "ping\022.\n\025adjust_crosshair_size\030\005 \001(\0132\017.ai"
+    "m.KeyMapping\022(\n\017quick_metronome\030\006 \001(\0132\017."
+    "aim.KeyMapping\022&\n\redit_scenario\030\007 \001(\0132\017."
+    "aim.KeyMappingb\010editionsp\350\007"
+};
+static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
+    descriptor_table_settings_2eproto_deps[1] = {
+        &::descriptor_table_common_2eproto,
 };
 static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1272,
+    1307,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
-    nullptr,
-    0,
+    descriptor_table_settings_2eproto_deps,
+    1,
     6,
     schemas,
     file_default_instances,
@@ -797,9 +802,9 @@ Settings::Settings(
                offsetof(Impl_, dpi_),
            reinterpret_cast<const char*>(&from._impl_) +
                offsetof(Impl_, dpi_),
-           offsetof(Impl_, use_vsync_) -
+           offsetof(Impl_, present_mode_) -
                offsetof(Impl_, dpi_) +
-               sizeof(Impl_::use_vsync_));
+               sizeof(Impl_::present_mode_));
 
   // @@protoc_insertion_point(copy_constructor:aim.Settings)
 }
@@ -815,9 +820,9 @@ inline void Settings::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, keybinds_),
            0,
-           offsetof(Impl_, use_vsync_) -
+           offsetof(Impl_, present_mode_) -
                offsetof(Impl_, keybinds_) +
-               sizeof(Impl_::use_vsync_));
+               sizeof(Impl_::present_mode_));
 }
 Settings::~Settings() {
   // @@protoc_insertion_point(destructor:aim.Settings)
@@ -954,10 +959,10 @@ Settings::_table_ = {
     {::_pbi::TcParser::FastF32S1,
      {117, 12, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_)}},
-    // float use_vsync = 15;
-    {::_pbi::TcParser::FastF32S1,
-     {125, 13, 0,
-      PROTOBUF_FIELD_OFFSET(Settings, _impl_.use_vsync_)}},
+    // .aim.PresentMode present_mode = 15;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(Settings, _impl_.present_mode_), 13>(),
+     {120, 13, 0,
+      PROTOBUF_FIELD_OFFSET(Settings, _impl_.present_mode_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -985,8 +990,8 @@ Settings::_table_ = {
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_), _Internal::kHasBitsOffset + 11, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // float max_render_fps = 14;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_), _Internal::kHasBitsOffset + 12, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float use_vsync = 15;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.use_vsync_), _Internal::kHasBitsOffset + 13, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.PresentMode present_mode = 15;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.present_mode_), _Internal::kHasBitsOffset + 13, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
     // .aim.SoundSettings sound = 16;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.sound_), _Internal::kHasBitsOffset + 4, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
@@ -1037,8 +1042,8 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
   if (BatchCheckHasBit(cached_has_bits, 0x00003f00U)) {
     ::memset(&_impl_.crosshair_size_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.use_vsync_) -
-        reinterpret_cast<char*>(&_impl_.crosshair_size_)) + sizeof(_impl_.use_vsync_));
+        reinterpret_cast<char*>(&_impl_.present_mode_) -
+        reinterpret_cast<char*>(&_impl_.crosshair_size_)) + sizeof(_impl_.present_mode_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1149,11 +1154,11 @@ PROTOBUF_NOINLINE void Settings::Clear() {
         14, this_._internal_max_render_fps(), target);
   }
 
-  // float use_vsync = 15;
+  // .aim.PresentMode present_mode = 15;
   if (CheckHasBit(cached_has_bits, 0x00002000U)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        15, this_._internal_use_vsync(), target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        15, this_._internal_present_mode(), target);
   }
 
   // .aim.SoundSettings sound = 16;
@@ -1188,7 +1193,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += ::absl::popcount(0x000031e0U & cached_has_bits) * 5;
+  total_size += ::absl::popcount(0x000011e0U & cached_has_bits) * 5;
   total_size += ::absl::popcount(0x00000e00U & cached_has_bits) * 2;
   if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
     // string theme_name = 4;
@@ -1215,6 +1220,13 @@ PROTOBUF_NOINLINE void Settings::Clear() {
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       total_size += 2 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.sound_);
+    }
+  }
+   {
+    // .aim.PresentMode present_mode = 15;
+    if (CheckHasBit(cached_has_bits, 0x00002000U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_present_mode());
     }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -1294,7 +1306,7 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg,
       _this->_impl_.max_render_fps_ = from._impl_.max_render_fps_;
     }
     if (CheckHasBit(cached_has_bits, 0x00002000U)) {
-      _this->_impl_.use_vsync_ = from._impl_.use_vsync_;
+      _this->_impl_.present_mode_ = from._impl_.present_mode_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1319,8 +1331,8 @@ void Settings::InternalSwap(Settings* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) 
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.theme_name_, &other->_impl_.theme_name_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.current_crosshair_name_, &other->_impl_.current_crosshair_name_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Settings, _impl_.use_vsync_)
-      + sizeof(Settings::_impl_.use_vsync_)
+      PROTOBUF_FIELD_OFFSET(Settings, _impl_.present_mode_)
+      + sizeof(Settings::_impl_.present_mode_)
       - PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_)>(
           reinterpret_cast<char*>(&_impl_.keybinds_),
           reinterpret_cast<char*>(&other->_impl_.keybinds_));

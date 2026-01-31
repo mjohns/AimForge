@@ -8,6 +8,7 @@
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/core/settings_manager.h"
+#include "aim/proto/common.pb.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
@@ -20,6 +21,12 @@ struct KeybindItem {
   std::string help_text;
   KeyMapping* mapping;
   int is_capturing_index = 0;
+};
+
+const std::vector<std::pair<PresentMode, std::string>> kPresentModes{
+    {PresentMode::PRESENT_MODE_IMMEDIATE, "Immediate"},
+    {PresentMode::PRESENT_MODE_VSYNC, "Vsync"},
+    {PresentMode::PRESENT_MODE_MAILBOX, "Mailbox"},
 };
 
 const char* kQuickSettingsHelpText =
@@ -86,8 +93,12 @@ class SettingsScreen : public UiScreen {
           "State updates and event polling are not tied to fps. A good target can be 2x monitor "
           "refresh rate to reduce tearing.");
 
-      ImGui::InputBool(ImGui::InputBoolParams("EnableVsync").set_label("Enable vsync"),
-                       PROTO_BOOL_FIELD(Settings, &updater_.settings, use_vsync));
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Present mode");
+      ImGui::SameLine();
+      PresentMode present_mode = updater_.settings.present_mode();
+      ImGui::SimpleTypeDropdown("GpuPresentModes", &present_mode, kPresentModes, char_x_ * 10);
+      updater_.settings.set_present_mode(present_mode);
 
       ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
                             .set_label("Metronome BPM")
@@ -185,7 +196,7 @@ class SettingsScreen : public UiScreen {
         ImGui::Unindent();
       }
 
-      if (ImGui::Button("Open folder")) {
+      if (ImGui::Button(std::format("{} Folder", icons::kOpenInNew))) {
         OpenFolderInExplorer(app_.file_system()->GetUserDataPath());
       }
       ImGui::HelpTooltip(

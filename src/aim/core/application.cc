@@ -513,9 +513,21 @@ void Application::EnableVsync() {
       gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_VSYNC);
 }
 
-void Application::DisableVsync() {
+void Application::SetPresentMode(PresentMode present_mode) {
+  SDL_GPUPresentMode gpu_present_mode = SDL_GPU_PRESENTMODE_IMMEDIATE;
+  switch (present_mode) {
+    case PRESENT_MODE_IMMEDIATE:
+      gpu_present_mode = SDL_GPU_PRESENTMODE_IMMEDIATE;
+      break;
+    case PRESENT_MODE_MAILBOX:
+      gpu_present_mode = SDL_GPU_PRESENTMODE_MAILBOX;
+      break;
+    case PRESENT_MODE_VSYNC:
+      gpu_present_mode = SDL_GPU_PRESENTMODE_VSYNC;
+      break;
+  }
   SDL_SetGPUSwapchainParameters(
-      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_IMMEDIATE);
+      gpu_device_, sdl_window_, SDL_GPU_SWAPCHAINCOMPOSITION_SDR, gpu_present_mode);
 }
 
 std::unique_ptr<Application> Application::Create() {

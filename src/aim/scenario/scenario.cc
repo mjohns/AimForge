@@ -215,11 +215,7 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
 }
 
 void Scenario::OnAttach() {
-  if (settings_.use_vsync()) {
-    app_.EnableVsync();
-  } else {
-    app_.DisableVsync();
-  }
+  app_.SetPresentMode(settings_.present_mode());
   SDL_SetWindowRelativeMouseMode(app_.sdl_window(), true);
   RefreshState();
   timer_.StartLoop();

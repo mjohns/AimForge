@@ -27,3 +27,9 @@ message StoredColor {
   string hex = 4;
   float multiplier = 5;
 }
+
+enum PresentMode {
+    PRESENT_MODE_IMMEDIATE = 0;
+    PRESENT_MODE_MAILBOX = 1;
+    PRESENT_MODE_VSYNC = 2;
+}

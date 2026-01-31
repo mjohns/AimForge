@@ -1,5 +1,7 @@
 edition = "2023";
 
+import "common.proto";
+
 package aim;
 
 message HealthBarSettings {
@@ -31,7 +33,9 @@ message Settings {
   bool disable_per_scenario_settings = 13;
 
   float max_render_fps = 14;
-  float use_vsync = 15;
+
+  // Vsync, immediate, mailbox
+  PresentMode present_mode = 15;
 
   SoundSettings sound = 16;
 }
