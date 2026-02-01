@@ -128,8 +128,17 @@ class BundleManagerImpl : public BundleManager {
   }
 
   bool SaveBundle(const std::string& bundle_name) override {
-    if (IsBundleReadonly(bundle_name)) {
-      return false;
+    auto existing_bundle_info = GetBundleInfo(bundle_name);
+    if (existing_bundle_info) {
+      bool is_readonly = existing_bundle_info->readonly();
+      if (is_readonly) {
+        return false;
+      }
+    } else {
+      // Create the new bundle as writable.
+      BundleInfo new_info;
+      new_info.set_bundle_name(bundle_name);
+      UpdateBundleInfo(new_info);
     }
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
@@ -242,8 +251,8 @@ class BundleManagerImpl : public BundleManager {
   }
 
   void UpdateBundleInfo(const BundleInfo& info) override {
-    assert(IsValidBundleName(info.bundle_name()) && "Saving info with invalid bundle name");
-    if (info.bundle_name().empty()) {
+    if (!IsValidBundleName(info.bundle_name())) {
+      assert(false && "Saving bundle with invalid name");
       return;
     }
     bundle_info_map_[info.bundle_name()] = info;
