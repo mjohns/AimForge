@@ -19,6 +19,7 @@
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/ui/bundle_ui.h"
+#include "aim/core/version.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_ui.h"
@@ -342,6 +343,9 @@ class HomeScreen : public UiScreen {
       ImGui::Text(item);
     }
     */
+
+    ImGui::SetCursorAtBottom();
+    ImGui::Text("%s", kAimForgeVersion);
   }
 
   void DrawScenariosScreen() {
