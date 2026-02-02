@@ -52,35 +52,37 @@ class ScenarioEditorScreen : public UiScreen {
     bundle_names_ = app_.bundle_manager().GetWritableBundleNames();
 
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
+    bool source_is_readonly = false;
     if (initial_scenario.has_value()) {
-      def_ = initial_scenario->unevaluated_def;
-      name_ = ResourceName::Parse(initial_scenario->name);
-      // Strip any dynamic suffixes
-      NameInfo name_info = GetScenarioNameInfo(name_.full_name());
-      name_ = ResourceName::Parse(name_info.base_name);
+        def_ = initial_scenario->unevaluated_def;
+        name_ = ResourceName::Parse(initial_scenario->name);
+    }
 
-      if (opts.force_bundle_name.size() > 0) {
-        *name_.mutable_bundle_name() = opts.force_bundle_name;
-      } else {
-        // Select the first writable bundle for name. Use the current scenarios bundle if it is
-        // writable.
-        if (app_.bundle_manager().IsBundleReadonly(name_.bundle_name())) {
-          if (bundle_names_.empty()) {
-            *name_.mutable_bundle_name() = kUserBundleName;
-          } else {
-            *name_.mutable_bundle_name() = bundle_names_[0];
-          }
+    // Strip any dynamic suffixes
+    NameInfo name_info = GetScenarioNameInfo(name_.full_name());
+    name_ = ResourceName::Parse(name_info.base_name);
+
+    if (opts.force_bundle_name.size() > 0) {
+      *name_.mutable_bundle_name() = opts.force_bundle_name;
+    } else {
+      // Select the first writable bundle for name. Use the current scenarios bundle if it is
+      // writable.
+      if (app_.bundle_manager().IsBundleReadonly(name_.bundle_name())) {
+        if (bundle_names_.empty()) {
+          *name_.mutable_bundle_name() = kUserBundleName;
+        } else {
+          *name_.mutable_bundle_name() = bundle_names_[0];
         }
       }
+    }
 
-      if (opts.is_new_copy) {
-        std::string final_name = MakeUniqueName(
-            name_.relative_name() + " Copy",
-            app_.scenario_manager().GetAllRelativeNamesInBundle(name_.bundle_name()));
-        *name_.mutable_relative_name() = final_name;
-      } else {
-        original_name_ = name_;
-      }
+    if (opts.is_new_copy) {
+      std::string final_name =
+          MakeUniqueName(name_.relative_name() + " Copy",
+                         app_.scenario_manager().GetAllRelativeNamesInBundle(name_.bundle_name()));
+      *name_.mutable_relative_name() = final_name;
+    } else {
+      original_name_ = name_;
     }
   }
 

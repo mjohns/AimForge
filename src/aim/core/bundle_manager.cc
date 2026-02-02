@@ -289,7 +289,7 @@ class BundleManagerImpl : public BundleManager {
     if (it != bundle_info_map_.end()) {
       return it->second.readonly();
     }
-    return true;
+    return false;
   }
 
  private:

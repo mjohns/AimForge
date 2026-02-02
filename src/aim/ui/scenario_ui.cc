@@ -327,9 +327,11 @@ void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
     app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
   }
 
+  /*
   ImGui::SameLine();
   if (ImGui::SelectableButton(icons::kMoreVert)) {
   }
+  */
 
   if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
     app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;

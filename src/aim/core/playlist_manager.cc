@@ -309,7 +309,7 @@ class PlaylistManagerImpl : public PlaylistManager {
       }
 
       if (changed) {
-        dirty_bundles_.insert(GetBundleName(playlist.name));
+        UpdatePlaylist(playlist.name, def);
       }
     }
   }
