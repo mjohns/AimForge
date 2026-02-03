@@ -54,10 +54,12 @@ void DrawProfileList(const std::string& id,
         remove_at_i = i;
       }
 
-      auto& profile = profile_list->at(number);
-      if (profile.info().description().size() > 0) {
-        ImGui::SameLine();
-        ImGui::TextDisabled("%s", profile.info().description().c_str());
+      if (IsValidIndex(*profile_list, number)) {
+        auto& profile = profile_list->at(number);
+        if (profile.info().description().size() > 0) {
+          ImGui::SameLine();
+          ImGui::TextDisabled("%s", profile.info().description().c_str());
+        }
       }
     }
     if (ImGui::Button("Add##Order")) {

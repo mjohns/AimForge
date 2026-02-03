@@ -326,6 +326,10 @@ void DrawStrafeProfile(float char_x,
                         .set_default(0.1)
                         .set_width(char_x * 10),
                     PROTO_FLOAT_FIELD(StrafeProfile, p, center_bias));
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "If close to the edge will shorten/lengthen the next strafe to encourage moving towards the "
+      "center. 0.10 means lengthen the strafe by 10%");
 }
 
 void DrawStrafeEditor(StrafeScenarioDef& d) {

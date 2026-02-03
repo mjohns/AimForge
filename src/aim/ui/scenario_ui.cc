@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/name_util.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
 #include "aim/core/bundle_manager.h"
@@ -26,6 +27,18 @@ void DrawScenarioRightClickMenu(const char* popup_id,
                                 ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
                                 Application& app) {
   if (ImGui::BeginPopupContextItem(popup_id)) {
+    bool is_readonly = app.bundle_manager().IsBundleReadonly(GetBundleName(scenario_name));
+    if (!is_readonly && ImGui::Selectable("Edit")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = scenario_name;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+    }
+    if (ImGui::Selectable("Copy")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = scenario_name;
+      opts.is_new_copy = true;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+    }
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
       std::string selected_playlist;
@@ -41,6 +54,7 @@ void DrawScenarioRightClickMenu(const char* popup_id,
       }
       ImGui::EndMenu();
     }
+    /*
     if (ImGui::BeginMenu("Add copy to")) {
       ImGui::LoopId playlist_loop_id;
       std::string selected_playlist;
@@ -58,21 +72,13 @@ void DrawScenarioRightClickMenu(const char* popup_id,
       }
       ImGui::EndMenu();
     }
-    if (ImGui::Selectable("Edit")) {
-      ScenarioEditorOptions opts;
-      opts.scenario_name = scenario_name;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
-    }
-    if (ImGui::Selectable("Copy")) {
-      ScenarioEditorOptions opts;
-      opts.scenario_name = scenario_name;
-      opts.is_new_copy = true;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
-    }
-    ImGui::SpacedSeparator();
-    if (ImGui::Selectable("Delete")) {
-      delete_confirmation_dialog->NotifyOpen(std::format("Delete \"{}\"?", scenario_name),
-                                             scenario_name);
+    */
+    if (!is_readonly) {
+      ImGui::SpacedSeparator();
+      if (ImGui::Selectable("Delete")) {
+        delete_confirmation_dialog->NotifyOpen(std::format("Delete \"{}\"?", scenario_name),
+                                               scenario_name);
+      }
     }
     ImGui::EndPopup();
   }
