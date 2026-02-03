@@ -147,8 +147,7 @@ class WanderMovementController : public BasicWallMovementController {
 
   void UpdateTurn(bool is_bounce = false) {
     WallWanderProfile profile = GetNextProfile(&selection_context);
-    float duration = std::max<float>(
-        app_.rand().GetJittered(profile.turn_time(), profile.turn_time_jitter()), 0.3f);
+    float duration = app_.rand().GetJittered(profile.turn_time(), profile.turn_time_jitter());
     if (is_bounce) {
       duration = 0.4;
     }
