@@ -29,13 +29,6 @@ class StrafeMovementController : public BasicWallMovementController {
   void UpdateDirectionAndSpeed(Target& t, float delta_seconds) override {
     glm::vec2& pos = *t.wall_position;
     MaybeInitialize(pos);
-    if (paused_until_time_ > 0) {
-      bool should_unpause = GetNowSeconds() >= paused_until_time_;
-      if (!should_unpause) {
-        return;
-      }
-      paused_until_time_ = -1;
-    }
 
     float distance = glm::length(pos - last_direction_change_position_);
 
@@ -112,22 +105,15 @@ class StrafeMovementController : public BasicWallMovementController {
     is_stopping_ = false;
     AngleStrafeProfile profile = GetNextProfile();
 
-    if (profile.pause_at_end_chance() > 0 && app_.rand().FlipCoin(profile.pause_at_end_chance())) {
-      float pause_time =
-          app_.rand().GetJittered(profile.pause_seconds(), profile.pause_seconds_jitter());
-      if (pause_time > 0) {
-        pause_at_next_direction_change_ = true;
-        pause_for_seconds_ = pause_time;
-      }
-    }
-
     acceleration_ = original_acceleration_;
     if (profile.has_acceleration_multiplier()) {
-      acceleration_ *= profile.acceleration_multiplier();
+      acceleration_ *= app_.rand().GetJittered(profile.acceleration_multiplier(),
+                                               profile.acceleration_multiplier_jitter());
     }
     max_velocity_ = original_speed_;
     if (profile.has_speed_multiplier()) {
-      max_velocity_ *= profile.speed_multiplier();
+      max_velocity_ *=
+          app_.rand().GetJittered(profile.speed_multiplier(), profile.speed_multiplier_jitter());
     }
 
     float distance = app_.rand().GetJittered(wall_.GetRegionLength(profile.distance()),
@@ -222,18 +208,12 @@ class StrafeMovementController : public BasicWallMovementController {
   }
 
   void ChangeTargetDirection(Target* target) {
-    if (pause_at_next_direction_change_) {
-      paused_until_time_ = GetNowSeconds() + pause_for_seconds_;
-      pause_at_next_direction_change_ = false;
-      pause_for_seconds_ = 0;
-    }
-
     ChangeDirectionNoTargetUpdate(*target->wall_position);
 
     if (acceleration_ > 0) {
       speed_ = 0;
     } else {
-      speed_ = original_speed_;
+      speed_ = max_velocity_;
     }
   }
 
@@ -262,10 +242,6 @@ class StrafeMovementController : public BasicWallMovementController {
   glm::vec2 last_direction_change_position_;
   float current_target_travel_distance_;
 
-  float pause_at_next_direction_change_ = false;
-  float pause_for_seconds_ = 0;
-
-  float paused_until_time_ = -1;
   ProfileSelectionContext selection_context_;
 
   bool initialized_ = false;

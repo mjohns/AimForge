@@ -126,7 +126,7 @@ inline const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenari
     {ScenarioDef::kCircleDef, "Circle"},
     {ScenarioDef::kWallArcDef, "Wall Arc"},
     {ScenarioDef::kSineDef, "Sine"},
-    {ScenarioDef::kAngleStrafeDef, "Wall Strafe"},
+    {ScenarioDef::kAngleStrafeDef, "Angle Strafe"},
 };
 
 inline const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{

@@ -6255,11 +6255,10 @@ class AngleStrafeProfile final : public ::google::protobuf::Message
     kAngleFieldNumber = 7,
     kAngleJitterFieldNumber = 8,
     kDirectionChangePercentFieldNumber = 9,
-    kPauseAtEndChanceFieldNumber = 10,
-    kPauseSecondsFieldNumber = 11,
-    kPauseSecondsJitterFieldNumber = 12,
     kSpeedMultiplierFieldNumber = 13,
     kAccelerationMultiplierFieldNumber = 14,
+    kSpeedMultiplierJitterFieldNumber = 15,
+    kAccelerationMultiplierJitterFieldNumber = 16,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -6339,39 +6338,6 @@ class AngleStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_direction_change_percent(float value);
 
   public:
-  // float pause_at_end_chance = 10;
-  bool has_pause_at_end_chance() const;
-  void clear_pause_at_end_chance() ;
-  float pause_at_end_chance() const;
-  void set_pause_at_end_chance(float value);
-
-  private:
-  float _internal_pause_at_end_chance() const;
-  void _internal_set_pause_at_end_chance(float value);
-
-  public:
-  // float pause_seconds = 11;
-  bool has_pause_seconds() const;
-  void clear_pause_seconds() ;
-  float pause_seconds() const;
-  void set_pause_seconds(float value);
-
-  private:
-  float _internal_pause_seconds() const;
-  void _internal_set_pause_seconds(float value);
-
-  public:
-  // float pause_seconds_jitter = 12;
-  bool has_pause_seconds_jitter() const;
-  void clear_pause_seconds_jitter() ;
-  float pause_seconds_jitter() const;
-  void set_pause_seconds_jitter(float value);
-
-  private:
-  float _internal_pause_seconds_jitter() const;
-  void _internal_set_pause_seconds_jitter(float value);
-
-  public:
   // float speed_multiplier = 13;
   bool has_speed_multiplier() const;
   void clear_speed_multiplier() ;
@@ -6394,11 +6360,33 @@ class AngleStrafeProfile final : public ::google::protobuf::Message
   void _internal_set_acceleration_multiplier(float value);
 
   public:
+  // float speed_multiplier_jitter = 15;
+  bool has_speed_multiplier_jitter() const;
+  void clear_speed_multiplier_jitter() ;
+  float speed_multiplier_jitter() const;
+  void set_speed_multiplier_jitter(float value);
+
+  private:
+  float _internal_speed_multiplier_jitter() const;
+  void _internal_set_speed_multiplier_jitter(float value);
+
+  public:
+  // float acceleration_multiplier_jitter = 16;
+  bool has_acceleration_multiplier_jitter() const;
+  void clear_acceleration_multiplier_jitter() ;
+  float acceleration_multiplier_jitter() const;
+  void set_acceleration_multiplier_jitter(float value);
+
+  private:
+  float _internal_acceleration_multiplier_jitter() const;
+  void _internal_set_acceleration_multiplier_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.AngleStrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 11,
+  static const ::google::protobuf::internal::TcParseTable<4, 10,
                                    3, 0,
                                    2>
       _table_;
@@ -6426,11 +6414,10 @@ class AngleStrafeProfile final : public ::google::protobuf::Message
     float angle_;
     float angle_jitter_;
     float direction_change_percent_;
-    float pause_at_end_chance_;
-    float pause_seconds_;
-    float pause_seconds_jitter_;
     float speed_multiplier_;
     float acceleration_multiplier_;
+    float speed_multiplier_jitter_;
+    float acceleration_multiplier_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -18336,103 +18323,16 @@ inline void AngleStrafeProfile::_internal_set_direction_change_percent(float val
   _impl_.direction_change_percent_ = value;
 }
 
-// float pause_at_end_chance = 10;
-inline bool AngleStrafeProfile::has_pause_at_end_chance() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
-  return value;
-}
-inline void AngleStrafeProfile::clear_pause_at_end_chance() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.pause_at_end_chance_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
-}
-inline float AngleStrafeProfile::pause_at_end_chance() const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.pause_at_end_chance)
-  return _internal_pause_at_end_chance();
-}
-inline void AngleStrafeProfile::set_pause_at_end_chance(float value) {
-  _internal_set_pause_at_end_chance(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.pause_at_end_chance)
-}
-inline float AngleStrafeProfile::_internal_pause_at_end_chance() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.pause_at_end_chance_;
-}
-inline void AngleStrafeProfile::_internal_set_pause_at_end_chance(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.pause_at_end_chance_ = value;
-}
-
-// float pause_seconds = 11;
-inline bool AngleStrafeProfile::has_pause_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
-  return value;
-}
-inline void AngleStrafeProfile::clear_pause_seconds() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.pause_seconds_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
-}
-inline float AngleStrafeProfile::pause_seconds() const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.pause_seconds)
-  return _internal_pause_seconds();
-}
-inline void AngleStrafeProfile::set_pause_seconds(float value) {
-  _internal_set_pause_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.pause_seconds)
-}
-inline float AngleStrafeProfile::_internal_pause_seconds() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.pause_seconds_;
-}
-inline void AngleStrafeProfile::_internal_set_pause_seconds(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.pause_seconds_ = value;
-}
-
-// float pause_seconds_jitter = 12;
-inline bool AngleStrafeProfile::has_pause_seconds_jitter() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
-  return value;
-}
-inline void AngleStrafeProfile::clear_pause_seconds_jitter() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.pause_seconds_jitter_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
-}
-inline float AngleStrafeProfile::pause_seconds_jitter() const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.pause_seconds_jitter)
-  return _internal_pause_seconds_jitter();
-}
-inline void AngleStrafeProfile::set_pause_seconds_jitter(float value) {
-  _internal_set_pause_seconds_jitter(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.pause_seconds_jitter)
-}
-inline float AngleStrafeProfile::_internal_pause_seconds_jitter() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.pause_seconds_jitter_;
-}
-inline void AngleStrafeProfile::_internal_set_pause_seconds_jitter(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.pause_seconds_jitter_ = value;
-}
-
 // float speed_multiplier = 13;
 inline bool AngleStrafeProfile::has_speed_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void AngleStrafeProfile::clear_speed_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.speed_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000040U);
 }
 inline float AngleStrafeProfile::speed_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.speed_multiplier)
@@ -18440,7 +18340,7 @@ inline float AngleStrafeProfile::speed_multiplier() const {
 }
 inline void AngleStrafeProfile::set_speed_multiplier(float value) {
   _internal_set_speed_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.speed_multiplier)
 }
 inline float AngleStrafeProfile::_internal_speed_multiplier() const {
@@ -18452,16 +18352,45 @@ inline void AngleStrafeProfile::_internal_set_speed_multiplier(float value) {
   _impl_.speed_multiplier_ = value;
 }
 
+// float speed_multiplier_jitter = 15;
+inline bool AngleStrafeProfile::has_speed_multiplier_jitter() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  return value;
+}
+inline void AngleStrafeProfile::clear_speed_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline float AngleStrafeProfile::speed_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.speed_multiplier_jitter)
+  return _internal_speed_multiplier_jitter();
+}
+inline void AngleStrafeProfile::set_speed_multiplier_jitter(float value) {
+  _internal_set_speed_multiplier_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.speed_multiplier_jitter)
+}
+inline float AngleStrafeProfile::_internal_speed_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.speed_multiplier_jitter_;
+}
+inline void AngleStrafeProfile::_internal_set_speed_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_jitter_ = value;
+}
+
 // float acceleration_multiplier = 14;
 inline bool AngleStrafeProfile::has_acceleration_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   return value;
 }
 inline void AngleStrafeProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000080U);
 }
 inline float AngleStrafeProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.acceleration_multiplier)
@@ -18469,7 +18398,7 @@ inline float AngleStrafeProfile::acceleration_multiplier() const {
 }
 inline void AngleStrafeProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.acceleration_multiplier)
 }
 inline float AngleStrafeProfile::_internal_acceleration_multiplier() const {
@@ -18479,6 +18408,35 @@ inline float AngleStrafeProfile::_internal_acceleration_multiplier() const {
 inline void AngleStrafeProfile::_internal_set_acceleration_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = value;
+}
+
+// float acceleration_multiplier_jitter = 16;
+inline bool AngleStrafeProfile::has_acceleration_multiplier_jitter() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  return value;
+}
+inline void AngleStrafeProfile::clear_acceleration_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline float AngleStrafeProfile::acceleration_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.AngleStrafeProfile.acceleration_multiplier_jitter)
+  return _internal_acceleration_multiplier_jitter();
+}
+inline void AngleStrafeProfile::set_acceleration_multiplier_jitter(float value) {
+  _internal_set_acceleration_multiplier_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.AngleStrafeProfile.acceleration_multiplier_jitter)
+}
+inline float AngleStrafeProfile::_internal_acceleration_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_multiplier_jitter_;
+}
+inline void AngleStrafeProfile::_internal_set_acceleration_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_jitter_ = value;
 }
 
 // -------------------------------------------------------------------

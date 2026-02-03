@@ -635,53 +635,20 @@ void DrawAngleStrafeProfile(float char_x, AngleStrafeProfile* p) {
     p->clear_direction_change_percent();
   }
 
-  ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
-                        .set_label("Speed multiplier")
-                        .set_is_optional()
-                        .set_step(.05, .2)
-                        .set_min(0)
-                        .set_default(1)
-                        .set_width(char_x * 12),
-                    PROTO_FLOAT_FIELD(AngleStrafeProfile, p, speed_multiplier));
-  ImGui::InputFloat(ImGui::InputFloatParams("AccelMultiplier")
-                        .set_label("Acceleration multiplier")
-                        .set_is_optional()
-                        .set_step(.05, .2)
-                        .set_min(0)
-                        .set_default(1)
-                        .set_width(char_x * 12),
-                    PROTO_FLOAT_FIELD(AngleStrafeProfile, p, acceleration_multiplier));
-
-  bool is_pause = p->pause_at_end_chance() > 0;
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Pause at end");
-  ImGui::SameLine();
-  ImGui::Checkbox("##PauseCheck", &is_pause);
-  ImGui::SameLine();
-  ImGui::HelpMarker(
-      "Specify a probability that the target will stop for a certain duration at the end of "
-      "this strafe before changing direction.");
-  if (is_pause) {
-    ImGui::Indent();
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Percent chance")
-                          .set_step(1, 10)
-                          .set_min(0)
-                          .set_max(100)
-                          .set_default(50)
-                          .set_width(char_x * 10),
-                      PROTO_PERCENT_FIELD(AngleStrafeProfile, p, pause_at_end_chance));
-
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Pause seconds")
-                                  .set_step(0.05, .25)
-                                  .set_min(0.01)
-                                  .set_default(0.3)
-                                  .set_width(char_x * 10),
-                              PROTO_JITTERED_FIELD(AngleStrafeProfile, p, pause_seconds));
-  } else {
-    p->clear_pause_seconds();
-    p->clear_pause_seconds_jitter();
-    p->clear_pause_at_end_chance();
-  }
+  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed multiplier")
+                                .set_is_optional()
+                                .set_step(0.05, 0.2)
+                                .set_min(0)
+                                .set_default(1)
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(AngleStrafeProfile, p, speed_multiplier));
+  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration multiplier")
+                                .set_is_optional()
+                                .set_step(0.05, 0.2)
+                                .set_min(0)
+                                .set_default(1)
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(AngleStrafeProfile, p, acceleration_multiplier));
 }
 
 void DrawAngleStrafeEditor(AngleStrafeScenarioDef& w) {
