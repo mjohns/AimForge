@@ -389,13 +389,8 @@ void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions di
 void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_levels) {
   float char_x = ImGui::GetDefaultCharSizeX();
   ImGui::IdGuard cid(id);
-  const ImGui::InputFloatParams default_params = ImGui::InputFloatParams("Default")
-                                                     .set_step(0.01, 0.25)
-                                                     .set_min(0.01)
-                                                     .set_default(1)
-                                                     .set_is_optional()
-                                                     .set_width(char_x * 10);
-
+  const ImGui::InputFloatParams default_params =
+      GetDefaultMultiplierInputParams("Default").set_is_optional().set_width(char_x * 10);
   ImGui::InputFloat(default_params.clone().set_id_and_label("Target radius multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, target_radius_multiplier));
   ImGui::InputFloat(default_params.clone().set_id_and_label("Speed multiplier"),
@@ -411,6 +406,13 @@ void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_l
   ImGui::InputFloat(
       default_params.clone().set_id_and_label("Remove after time multiplier"),
       PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, remove_target_after_seconds_multiplier));
+}
+
+ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label) {
+  return ImGui::InputFloatParams::WithLabelAsId(label)
+      .set_step(0.01, 0.25)
+      .set_min(0.01)
+      .set_default(1);
 }
 
 }  // namespace aim

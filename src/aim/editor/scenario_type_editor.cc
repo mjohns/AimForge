@@ -352,33 +352,6 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
 
   ImGui::SpacedSeparator();
 
-  ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
-                        .set_label("Time scale multiplier")
-                        .set_is_optional()
-                        .set_step(0.05, 0.1)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_width(char_x * 10),
-                    PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, time_scale_multiplier));
-  ImGui::SameLine();
-  ImGui::HelpMarker(
-      "Scale all the times in the profiles by the given multiplier. To reduce the times by "
-      "half use 0.5");
-
-  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Distance multiplier")
-                        .set_is_optional()
-                        .set_step(0.05, 0.1)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_width(char_x * 10),
-                    PROTO_FLOAT_FIELD(StrafeScenarioDef, &d, distance_multiplier));
-  ImGui::SameLine();
-  ImGui::HelpMarker(
-      "Scale all the distances in the profiles by the given multiplier. To reduce the distance "
-      "by half use 0.5");
-
-  ImGui::SpacedSeparator();
-
   ImGui::Text("Left/right profiles");
   ImGui::Indent();
   DrawProfileList("LeftRightProfileList",
@@ -535,21 +508,6 @@ void DrawBounceEditor(BounceScenarioDef& d) {
 
   ImGui::SpacedSeparator();
 
-  ImGui::InputFloat(ImGui::InputFloatParams("TimeScaleMultiplier")
-                        .set_label("Time scale multiplier")
-                        .set_is_optional()
-                        .set_step(0.05, 0.1)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_width(char_x * 10),
-                    PROTO_FLOAT_FIELD(BounceScenarioDef, &d, time_scale_multiplier));
-  ImGui::SameLine();
-  ImGui::HelpMarker(
-      "Scale all the times in the profiles by the given multiplier. To reduce the times by "
-      "half use 0.5");
-
-  ImGui::SpacedSeparator();
-
   ImGui::Text("Left/right profiles");
   ImGui::Indent();
   DrawProfileList("LeftRightProfileList",
@@ -663,19 +621,6 @@ void DrawAngleStrafeEditor(AngleStrafeScenarioDef& w) {
   if (w.profiles_size() == 0) {
     w.add_profiles();
   }
-
-  ImGui::SpacedSeparator();
-
-  ImGui::InputFloat(ImGui::InputFloatParams("DistanceMult")
-                        .set_label("Distance multiplier")
-                        .set_is_optional()
-                        .set_step(0.01, 0.1)
-                        .set_min(0.01)
-                        .set_default(1)
-                        .set_width(char_x * 10),
-                    PROTO_FLOAT_FIELD(AngleStrafeScenarioDef, &w, distance_multiplier));
-  ImGui::SameLine();
-  ImGui::HelpMarker("Multiply all strafe distances by the provided value");
 
   ImGui::SpacedSeparator();
 

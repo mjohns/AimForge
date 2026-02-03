@@ -20,6 +20,8 @@ struct BoundsDimensions {
 
 TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def);
 
+ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label);
+
 void DrawRegionLengthEditor(const std::string& id,
                             RegionLength::TypeCase default_type,
                             RegionLength* length,

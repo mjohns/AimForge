@@ -20,6 +20,30 @@ void MultiplyRegionLength(RegionLength* l, float mult) {
   }
 }
 
+template <typename T>
+void ApplyDistanceMultiplier(T& profile_list, float mult) {
+  for (auto& profile : profile_list) {
+    if (profile.has_distance()) {
+      MultiplyRegionLength(profile.mutable_distance(), mult);
+    }
+    if (profile.has_distance_jitter()) {
+      MultiplyRegionLength(profile.mutable_distance_jitter(), mult);
+    }
+  }
+}
+
+template <typename T>
+void ApplyTimeScaleMultiplier(T& profile_list, float mult) {
+  for (auto& profile : profile_list) {
+    if (profile.has_time()) {
+      profile.set_time(profile.time() * mult);
+    }
+    if (profile.has_time_jitter()) {
+      profile.set_time_jitter(profile.time_jitter() * mult);
+    }
+  }
+}
+
 ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
                                   const ScenarioOverrides& overrides,
                                   std::optional<float> levels) {
@@ -75,34 +99,39 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
   }
   if (overrides.has_distance_multiplier()) {
     float mult = get_multiplier(overrides.distance_multiplier());
-    if (original.has_angle_strafe_def()) {
-      for (auto& profile : *result.mutable_angle_strafe_def()->mutable_profiles()) {
-        MultiplyRegionLength(profile.mutable_distance(), mult);
-      }
-    }
     if (original.has_strafe_def()) {
-      float distance = FirstGreaterThanZero(original.strafe_def().distance_multiplier(), 1.0);
-      result.mutable_strafe_def()->set_distance_multiplier(distance * mult);
+      ApplyDistanceMultiplier(*result.mutable_strafe_def()->mutable_left_right_profiles(), mult);
+      ApplyDistanceMultiplier(*result.mutable_strafe_def()->mutable_up_down_profiles(), mult);
+      ApplyDistanceMultiplier(*result.mutable_strafe_def()->mutable_forward_back_profiles(), mult);
     }
     if (original.has_bounce_def()) {
-      float distance = FirstGreaterThanZero(original.bounce_def().distance_multiplier(), 1.0);
-      result.mutable_bounce_def()->set_distance_multiplier(distance * mult);
+      ApplyDistanceMultiplier(*result.mutable_bounce_def()->mutable_left_right_profiles(), mult);
+      ApplyDistanceMultiplier(*result.mutable_bounce_def()->mutable_forward_back_profiles(), mult);
+    }
+    if (original.has_angle_strafe_def()) {
+      ApplyDistanceMultiplier(*result.mutable_angle_strafe_def()->mutable_profiles(), mult);
     }
   }
   if (overrides.has_time_scale_multiplier()) {
     float mult = get_multiplier(overrides.time_scale_multiplier());
     if (original.has_strafe_def()) {
-      float time_scale = FirstGreaterThanZero(original.strafe_def().time_scale_multiplier(), 1.0);
-      result.mutable_strafe_def()->set_time_scale_multiplier(time_scale * mult);
+      ApplyTimeScaleMultiplier(*result.mutable_strafe_def()->mutable_left_right_profiles(), mult);
+      ApplyTimeScaleMultiplier(*result.mutable_strafe_def()->mutable_up_down_profiles(), mult);
+      ApplyTimeScaleMultiplier(*result.mutable_strafe_def()->mutable_forward_back_profiles(), mult);
     }
     if (original.has_bounce_def()) {
-      float time_scale = FirstGreaterThanZero(original.bounce_def().time_scale_multiplier(), 1.0);
-      result.mutable_bounce_def()->set_time_scale_multiplier(time_scale * mult);
+      ApplyTimeScaleMultiplier(*result.mutable_bounce_def()->mutable_left_right_profiles(), mult);
+      ApplyTimeScaleMultiplier(*result.mutable_bounce_def()->mutable_forward_back_profiles(), mult);
     }
     if (original.has_wall_wander_def()) {
-      float time_scale =
-          FirstGreaterThanZero(original.wall_wander_def().time_scale_multiplier(), 1.0);
-      result.mutable_wall_wander_def()->set_time_scale_multiplier(time_scale * mult);
+      for (auto& profile : *result.mutable_wall_wander_def()->mutable_profiles()) {
+        if (profile.has_turn_time()) {
+          profile.set_turn_time(profile.turn_time() * mult);
+        }
+        if (profile.has_turn_time_jitter()) {
+          profile.set_turn_time_jitter(profile.turn_time_jitter() * mult);
+        }
+      }
     }
   }
   return result;

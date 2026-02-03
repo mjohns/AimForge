@@ -218,13 +218,6 @@ void StrafeController::ChangeDirection(
     }
   }
 
-  if (use_time && time_scale_multiplier_ > 0) {
-    value *= time_scale_multiplier_;
-  }
-  if (!use_time && distance_multiplier_ > 0) {
-    value *= distance_multiplier_;
-  }
-
   /*
   // Start at full speed
   float acceleration = unscaled_acceleration_ * acceleration_multiplier_;

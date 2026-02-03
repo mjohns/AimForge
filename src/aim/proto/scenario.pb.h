@@ -7952,7 +7952,6 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     kProfilesFieldNumber = 2,
     kProfileOrderFieldNumber = 3,
     kTargetPlacementStrategyFieldNumber = 1,
-    kTimeScaleMultiplierFieldNumber = 4,
   };
   // repeated .aim.WallWanderProfile profiles = 2;
   int profiles_size() const;
@@ -8004,22 +8003,11 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // float time_scale_multiplier = 4;
-  bool has_time_scale_multiplier() const;
-  void clear_time_scale_multiplier() ;
-  float time_scale_multiplier() const;
-  void set_time_scale_multiplier(float value);
-
-  private:
-  float _internal_time_scale_multiplier() const;
-  void _internal_set_time_scale_multiplier(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.WallWanderScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<2, 4,
+  static const ::google::protobuf::internal::TcParseTable<2, 3,
                                    2, 0,
                                    2>
       _table_;
@@ -8045,7 +8033,6 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<::int32_t> profile_order_;
     ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
-    float time_scale_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -8206,11 +8193,9 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
     kBoundsFieldNumber = 1,
     kRelativeBoundsFieldNumber = 2,
     kTargetPlacementStrategyFieldNumber = 4,
-    kTimeScaleMultiplierFieldNumber = 11,
     kLeftRightInitialDirectionFieldNumber = 13,
     kUpDownInitialDirectionFieldNumber = 14,
     kForwardBackInitialDirectionFieldNumber = 15,
-    kDistanceMultiplierFieldNumber = 16,
   };
   // repeated .aim.StrafeProfile left_right_profiles = 5;
   int left_right_profiles_size() const;
@@ -8362,17 +8347,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // float time_scale_multiplier = 11;
-  bool has_time_scale_multiplier() const;
-  void clear_time_scale_multiplier() ;
-  float time_scale_multiplier() const;
-  void set_time_scale_multiplier(float value);
-
-  private:
-  float _internal_time_scale_multiplier() const;
-  void _internal_set_time_scale_multiplier(float value);
-
-  public:
   // .aim.Direction left_right_initial_direction = 13;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
@@ -8406,22 +8380,11 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   void _internal_set_forward_back_initial_direction(::aim::Direction value);
 
   public:
-  // float distance_multiplier = 16;
-  bool has_distance_multiplier() const;
-  void clear_distance_multiplier() ;
-  float distance_multiplier() const;
-  void set_distance_multiplier(float value);
-
-  private:
-  float _internal_distance_multiplier() const;
-  void _internal_set_distance_multiplier(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.StrafeScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 14,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
                                    6, 0,
                                    2>
       _table_;
@@ -8455,11 +8418,9 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::Bounds* PROTOBUF_NULLABLE relative_bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
-    float time_scale_multiplier_;
     int left_right_initial_direction_;
     int up_down_initial_direction_;
     int forward_back_initial_direction_;
-    float distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -9062,10 +9023,8 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     kBoundsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
     kFloorHeightFieldNumber = 13,
-    kTimeScaleMultiplierFieldNumber = 9,
     kLeftRightInitialDirectionFieldNumber = 11,
     kForwardBackInitialDirectionFieldNumber = 12,
-    kDistanceMultiplierFieldNumber = 14,
   };
   // repeated .aim.BounceProfile bounce_profiles = 3;
   int bounce_profiles_size() const;
@@ -9217,17 +9176,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* PROTOBUF_NONNULL _internal_mutable_floor_height();
 
   public:
-  // float time_scale_multiplier = 9;
-  bool has_time_scale_multiplier() const;
-  void clear_time_scale_multiplier() ;
-  float time_scale_multiplier() const;
-  void set_time_scale_multiplier(float value);
-
-  private:
-  float _internal_time_scale_multiplier() const;
-  void _internal_set_time_scale_multiplier(float value);
-
-  public:
   // .aim.Direction left_right_initial_direction = 11;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
@@ -9250,22 +9198,11 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_forward_back_initial_direction(::aim::Direction value);
 
   public:
-  // float distance_multiplier = 14;
-  bool has_distance_multiplier() const;
-  void clear_distance_multiplier() ;
-  float distance_multiplier() const;
-  void set_distance_multiplier(float value);
-
-  private:
-  float _internal_distance_multiplier() const;
-  void _internal_set_distance_multiplier(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.BounceScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 13,
+  static const ::google::protobuf::internal::TcParseTable<4, 11,
                                    6, 0,
                                    2>
       _table_;
@@ -9299,10 +9236,8 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
     ::aim::RegionLength* PROTOBUF_NULLABLE floor_height_;
-    float time_scale_multiplier_;
     int left_right_initial_direction_;
     int forward_back_initial_direction_;
-    float distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -9666,7 +9601,6 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
     kProfileOrderFieldNumber = 5,
     kBoundsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
-    kDistanceMultiplierFieldNumber = 7,
   };
   // repeated .aim.AngleStrafeProfile profiles = 4;
   int profiles_size() const;
@@ -9733,22 +9667,11 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // float distance_multiplier = 7;
-  bool has_distance_multiplier() const;
-  void clear_distance_multiplier() ;
-  float distance_multiplier() const;
-  void set_distance_multiplier(float value);
-
-  private:
-  float _internal_distance_multiplier() const;
-  void _internal_set_distance_multiplier(float value);
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.AngleStrafeScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
+  static const ::google::protobuf::internal::TcParseTable<3, 4,
                                    3, 0,
                                    2>
       _table_;
@@ -9775,7 +9698,6 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
-    float distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -19048,35 +18970,6 @@ AngleStrafeScenarioDef::_internal_mutable_profile_order() {
   return &_impl_.profile_order_;
 }
 
-// float distance_multiplier = 7;
-inline bool AngleStrafeScenarioDef::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
-inline void AngleStrafeScenarioDef::clear_distance_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline float AngleStrafeScenarioDef::distance_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.distance_multiplier)
-  return _internal_distance_multiplier();
-}
-inline void AngleStrafeScenarioDef::set_distance_multiplier(float value) {
-  _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.distance_multiplier)
-}
-inline float AngleStrafeScenarioDef::_internal_distance_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.distance_multiplier_;
-}
-inline void AngleStrafeScenarioDef::_internal_set_distance_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_multiplier_ = value;
-}
-
 // -------------------------------------------------------------------
 
 // StrafeProfile
@@ -20200,74 +20093,16 @@ StrafeScenarioDef::_internal_mutable_up_down_profile_order() {
   return &_impl_.up_down_profile_order_;
 }
 
-// float time_scale_multiplier = 11;
-inline bool StrafeScenarioDef::has_time_scale_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
-  return value;
-}
-inline void StrafeScenarioDef::clear_time_scale_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.time_scale_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
-}
-inline float StrafeScenarioDef::time_scale_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.time_scale_multiplier)
-  return _internal_time_scale_multiplier();
-}
-inline void StrafeScenarioDef::set_time_scale_multiplier(float value) {
-  _internal_set_time_scale_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
-  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.time_scale_multiplier)
-}
-inline float StrafeScenarioDef::_internal_time_scale_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.time_scale_multiplier_;
-}
-inline void StrafeScenarioDef::_internal_set_time_scale_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.time_scale_multiplier_ = value;
-}
-
-// float distance_multiplier = 16;
-inline bool StrafeScenarioDef::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
-  return value;
-}
-inline void StrafeScenarioDef::clear_distance_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
-}
-inline float StrafeScenarioDef::distance_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.distance_multiplier)
-  return _internal_distance_multiplier();
-}
-inline void StrafeScenarioDef::set_distance_multiplier(float value) {
-  _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
-  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.distance_multiplier)
-}
-inline float StrafeScenarioDef::_internal_distance_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.distance_multiplier_;
-}
-inline void StrafeScenarioDef::_internal_set_distance_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_multiplier_ = value;
-}
-
 // .aim.Direction left_right_initial_direction = 13;
 inline bool StrafeScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   return value;
 }
 inline void StrafeScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000200U);
 }
 inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_initial_direction)
@@ -20275,7 +20110,7 @@ inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const 
 }
 inline void StrafeScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_left_right_initial_direction() const {
@@ -20289,14 +20124,14 @@ inline void StrafeScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction up_down_initial_direction = 14;
 inline bool StrafeScenarioDef::has_up_down_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void StrafeScenarioDef::clear_up_down_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000400U);
 }
 inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_initial_direction)
@@ -20304,7 +20139,7 @@ inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
 }
 inline void StrafeScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
   _internal_set_up_down_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.up_down_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_up_down_initial_direction() const {
@@ -20318,14 +20153,14 @@ inline void StrafeScenarioDef::_internal_set_up_down_initial_direction(::aim::Di
 
 // .aim.Direction forward_back_initial_direction = 15;
 inline bool StrafeScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void StrafeScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00000800U);
 }
 inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_initial_direction)
@@ -20333,7 +20168,7 @@ inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() cons
 }
 inline void StrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_forward_back_initial_direction() const {
@@ -21311,74 +21146,16 @@ BounceScenarioDef::_internal_mutable_forward_back_profile_order() {
   return &_impl_.forward_back_profile_order_;
 }
 
-// float time_scale_multiplier = 9;
-inline bool BounceScenarioDef::has_time_scale_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
-  return value;
-}
-inline void BounceScenarioDef::clear_time_scale_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.time_scale_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
-}
-inline float BounceScenarioDef::time_scale_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.time_scale_multiplier)
-  return _internal_time_scale_multiplier();
-}
-inline void BounceScenarioDef::set_time_scale_multiplier(float value) {
-  _internal_set_time_scale_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
-  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.time_scale_multiplier)
-}
-inline float BounceScenarioDef::_internal_time_scale_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.time_scale_multiplier_;
-}
-inline void BounceScenarioDef::_internal_set_time_scale_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.time_scale_multiplier_ = value;
-}
-
-// float distance_multiplier = 14;
-inline bool BounceScenarioDef::has_distance_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
-  return value;
-}
-inline void BounceScenarioDef::clear_distance_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
-}
-inline float BounceScenarioDef::distance_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.distance_multiplier)
-  return _internal_distance_multiplier();
-}
-inline void BounceScenarioDef::set_distance_multiplier(float value) {
-  _internal_set_distance_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
-  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.distance_multiplier)
-}
-inline float BounceScenarioDef::_internal_distance_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.distance_multiplier_;
-}
-inline void BounceScenarioDef::_internal_set_distance_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.distance_multiplier_ = value;
-}
-
 // .aim.Direction left_right_initial_direction = 11;
 inline bool BounceScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   return value;
 }
 inline void BounceScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000200U);
 }
 inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
@@ -21386,7 +21163,7 @@ inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const 
 }
 inline void BounceScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_left_right_initial_direction() const {
@@ -21400,14 +21177,14 @@ inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction forward_back_initial_direction = 12;
 inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void BounceScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000400U);
 }
 inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
@@ -21415,7 +21192,7 @@ inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() cons
 }
 inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_forward_back_initial_direction() const {
@@ -22311,35 +22088,6 @@ inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
 WallWanderScenarioDef::_internal_mutable_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.profile_order_;
-}
-
-// float time_scale_multiplier = 4;
-inline bool WallWanderScenarioDef::has_time_scale_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
-inline void WallWanderScenarioDef::clear_time_scale_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.time_scale_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline float WallWanderScenarioDef::time_scale_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.time_scale_multiplier)
-  return _internal_time_scale_multiplier();
-}
-inline void WallWanderScenarioDef::set_time_scale_multiplier(float value) {
-  _internal_set_time_scale_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.time_scale_multiplier)
-}
-inline float WallWanderScenarioDef::_internal_time_scale_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.time_scale_multiplier_;
-}
-inline void WallWanderScenarioDef::_internal_set_time_scale_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.time_scale_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -46,8 +46,6 @@ class WallDepthMovementController : public MovementController {
 
 struct DirectionParams {
   float acceleration = 0;
-  float time_scale_multiplier = 0;
-  float distance_multiplier = 0;
 };
 
 class StrafeController {
@@ -66,8 +64,6 @@ class StrafeController {
         relative_min_(relative_min),
         relative_max_(relative_max),
         unscaled_acceleration_(params.acceleration),
-        time_scale_multiplier_(params.time_scale_multiplier),
-        distance_multiplier_(params.distance_multiplier),
         wall_(wall) {}
 
   float GetUpdatedPosition(Target& t,
@@ -95,8 +91,6 @@ class StrafeController {
   std::optional<float> relative_max_;
   float initial_position_ = 0;
   float unscaled_acceleration_;
-  float time_scale_multiplier_;
-  float distance_multiplier_;
   float absolute_center_;
   float center_ = 0;
 

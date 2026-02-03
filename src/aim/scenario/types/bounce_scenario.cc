@@ -202,12 +202,6 @@ class MovementControllerImpl : public MovementController {
 
     DirectionParams params;
     params.acceleration = acceleration;
-    if (d.has_time_scale_multiplier()) {
-      params.time_scale_multiplier = d.time_scale_multiplier();
-    }
-    if (d.has_distance_multiplier()) {
-      params.distance_multiplier = d.distance_multiplier();
-    }
 
     if (d.left_right_profiles_size() > 0) {
       left_right_controller_ = StrafeController(
