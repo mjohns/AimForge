@@ -25,7 +25,7 @@ class LinearMovementController : public BasicWallMovementController {
 
     if (radius_ > 0) {
       float length = glm::length(new_position);
-      if ((length - t.radius) >= radius_) {
+      if (length >= (radius_ - t.radius)) {
         glm::vec2 next_position_with_current_direction = new_position + direction_;
         float next_length = glm::length(next_position_with_current_direction);
         if (next_length > length) {

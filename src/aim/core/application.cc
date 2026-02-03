@@ -249,7 +249,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   // SDL_ShowWindow(sdl_window_);
 
   trace.Add("SetIcon");
-  auto logo_path = file_system_->GetBasePath("resources/images/logo.svg");
+  auto logo_path = file_system_->GetBasePath("resources/images/logo.png");
   icon_ = LoadImageSurface(logo_path.string().c_str());
   if (icon_ != nullptr) {
     SDL_SetWindowIcon(sdl_window_, icon_);

@@ -387,7 +387,7 @@ class DrawDataBuilder {
     {
       glm::mat4 model(1.f);
       // Leave a little gap between the wall and the barrel to prevent any z-fighting.
-      model = glm::translate(model, glm::vec3(0, -0.51 * kMaxDistance, 0));
+      model = glm::translate(model, glm::vec3(0, -0.5 * kMaxDistance, 0));
       model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
       model = glm::scale(model, glm::vec3(room.radius(), room.radius(), kMaxDistance));
       AddDrawWall(view_projection * model,

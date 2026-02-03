@@ -22,12 +22,14 @@ class CenteringWaypointSupplier : public WallWaypointSupplier {
       : starting_point_(starting_point), points_(points) {}
 
   glm::vec3 GetNextPosition() override {
-    glm::vec2 point;
+    glm::vec2 point{};
     if (counter_ == 0) {
       point = starting_point_;
     } else {
-      int i = counter_ % points_.size();
-      point = points_[i];
+      if (points_.size() > 0) {
+        int i = counter_ % points_.size();
+        point = points_[i];
+      }
     }
     counter_++;
     return glm::vec3(point.x, point.y, 0);

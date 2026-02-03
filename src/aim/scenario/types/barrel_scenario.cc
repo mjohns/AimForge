@@ -31,7 +31,7 @@ class BarrelMovementController : public BasicWallMovementController {
     float room_radius = def_.room().barrel_room().radius();
 
     if (!direction_initialized_ ||
-        !IsPointInCircle(*t.wall_position, room_radius - (t.radius * 0.5))) {
+        !IsPointInCircle(*t.wall_position, room_radius - t.radius)) {
       // Need to change direction back into barrel.
       glm::vec2 new_direction_pos = GetRandomPositionInCircle(
           0,
