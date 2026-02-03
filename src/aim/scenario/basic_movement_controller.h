@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
 #include "aim/common/random.h"
 #include "aim/common/wall.h"
 #include "aim/core/target.h"
@@ -8,6 +11,9 @@
 #include "glm/vec3.hpp"
 
 namespace aim {
+
+std::unique_ptr<MovementController> CreateCompositeMovementController(
+    std::vector<std::unique_ptr<MovementController>> controllers);
 
 class BasicWallMovementController : public MovementController {
  public:

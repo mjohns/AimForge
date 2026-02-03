@@ -6,6 +6,24 @@
 
 namespace aim {
 
+class CompositeMovementController : public MovementController {
+ public:
+  CompositeMovementController(std::vector<std::unique_ptr<MovementController>> controllers)
+      : controllers_(std::move(controllers)) {}
+
+  void UpdatePosition(float now_seconds,
+                      Target& t,
+                      const Room& room,
+                      float delta_seconds) override {
+    for (auto& controller : controllers_) {
+      controller->UpdatePosition(now_seconds, t, room, delta_seconds);
+    }
+  }
+
+ private:
+  std::vector<std::unique_ptr<MovementController>> controllers_;
+};
+
 BasicWallMovementController::BasicWallMovementController() {}
 
 BasicWallMovementController::BasicWallMovementController(float speed, const glm::vec2& direction)
@@ -246,6 +264,11 @@ void StrafeController::ChangeDirection(
       next_direction_change_pos_ = std::min<float>(max_, current_position + value);
     }
   }
+}
+
+std::unique_ptr<MovementController> CreateCompositeMovementController(
+    std::vector<std::unique_ptr<MovementController>> controllers) {
+  return std::make_unique<CompositeMovementController>(std::move(controllers));
 }
 
 }  // namespace aim
