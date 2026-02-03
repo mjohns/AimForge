@@ -16,7 +16,11 @@ BasicWallMovementController::BasicWallMovementController(float speed)
 
 BasicWallMovementController::~BasicWallMovementController() {}
 
-void BasicWallMovementController::UpdatePosition(Target& t, const Room& room, float delta_seconds) {
+void BasicWallMovementController::UpdatePosition(float now_seconds,
+                                                 Target& t,
+                                                 const Room& room,
+                                                 float delta_seconds) {
+  now_seconds_ = now_seconds;
   if (!t.wall_position.has_value()) {
     t.wall_position = glm::vec2(0.0f);
   }
@@ -31,7 +35,11 @@ WallDepthMovementController::WallDepthMovementController(float speed)
 
 WallDepthMovementController::~WallDepthMovementController() {}
 
-void WallDepthMovementController::UpdatePosition(Target& t, const Room& room, float delta_seconds) {
+void WallDepthMovementController::UpdatePosition(float now_seconds,
+                                                 Target& t,
+                                                 const Room& room,
+                                                 float delta_seconds) {
+  now_seconds_ = now_seconds;
   if (!t.wall_position.has_value()) {
     t.wall_position = glm::vec2(0.0f);
   }

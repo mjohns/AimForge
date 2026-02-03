@@ -31,22 +31,13 @@ struct Target;
 
 class MovementController {
  public:
-  MovementController();
+  MovementController() {}
   virtual ~MovementController() {}
 
-  void DoTick(Target& t, const Room& room, float now_seconds);
-
- protected:
-  virtual void UpdatePosition(Target& t, const Room& room, float delta_seconds) = 0;
-
-  float GetNowSeconds() {
-    return now_seconds_;
-  }
-
-  float last_update_time_seconds_ = -1;
-
- private:
-  float now_seconds_ = 0;
+  virtual void UpdatePosition(float now_seconds,
+                              Target& t,
+                              const Room& room,
+                              float delta_seconds) = 0;
 };
 
 struct Target {
@@ -59,6 +50,7 @@ struct Target {
   float radius = 1.0f;
 
   std::shared_ptr<MovementController> movement_controller;
+  float last_update_time_seconds = -1;
   float speed = 0;
   float acceleration = 0;
 

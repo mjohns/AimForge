@@ -17,14 +17,21 @@ class BasicWallMovementController : public MovementController {
 
   virtual ~BasicWallMovementController();
 
- protected:
-  void UpdatePosition(Target& t, const Room& room, float delta_seconds) override;
+  void UpdatePosition(float now_seconds, Target& t, const Room& room, float delta_seconds) override;
 
+ protected:
   virtual void UpdateDirectionAndSpeed(Target& t, float delta_seconds) = 0;
+
+  float GetNowSeconds() {
+    return now_seconds_;
+  }
 
   float speed_ = 0;
   glm::vec2 direction_{1.0f, 0.0f};
   const float original_speed_ = 0;
+
+ private:
+  float now_seconds_ = 0;
 };
 
 // Movement controller that allows the target to also change depth as it moves on the wall.
@@ -34,14 +41,21 @@ class WallDepthMovementController : public MovementController {
 
   virtual ~WallDepthMovementController();
 
- protected:
-  void UpdatePosition(Target& t, const Room& room, float delta_seconds) override;
+  void UpdatePosition(float now_seconds, Target& t, const Room& room, float delta_seconds) override;
 
+ protected:
   virtual void UpdateDirectionAndSpeed(Target& t, float delta_seconds) = 0;
+
+  float GetNowSeconds() {
+    return now_seconds_;
+  }
 
   float speed_ = 0;
   glm::vec3 direction_{1.0f, 0.0f, 0.0f};
   const float original_speed_ = 0;
+
+ private:
+  float now_seconds_ = 0;
 };
 
 struct DirectionParams {

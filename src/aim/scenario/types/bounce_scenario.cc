@@ -219,14 +219,15 @@ class MovementControllerImpl : public MovementController {
     }
   }
 
- protected:
-  void UpdatePosition(Target& t, const Room& room, float delta_seconds) override {
+  void UpdatePosition(float now_seconds,
+                      Target& t,
+                      const Room& room,
+                      float delta_seconds) override {
     if (!t.wall_position.has_value()) {
       t.wall_position = glm::vec2(0.0f);
     }
 
     glm::vec2& pos = *t.wall_position;
-    float now_seconds = GetNowSeconds();
 
     if (left_right_controller_) {
       pos.x =
