@@ -1,6 +1,6 @@
 #include "textures.h"
 
-    #include <bit>
+#include <bit>
 #include <iostream>
 #include <optional>
 

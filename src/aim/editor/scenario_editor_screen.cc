@@ -54,8 +54,8 @@ class ScenarioEditorScreen : public UiScreen {
     auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
     bool source_is_readonly = false;
     if (initial_scenario.has_value()) {
-        def_ = initial_scenario->unevaluated_def;
-        name_ = ResourceName::Parse(initial_scenario->name);
+      def_ = initial_scenario->unevaluated_def;
+      name_ = ResourceName::Parse(initial_scenario->name);
     }
 
     // Strip any dynamic suffixes

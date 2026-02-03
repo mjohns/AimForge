@@ -12,6 +12,7 @@
 #include "aim/core/play_time_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
+#include "aim/core/version.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/editor/scenario_editor_screen.h"
 #include "aim/graphics/textures.h"
@@ -19,7 +20,6 @@
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/ui/bundle_ui.h"
-#include "aim/core/version.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_ui.h"
@@ -385,7 +385,6 @@ class HomeScreen : public UiScreen {
         // TODO: Update to use listeners on ScenarioManager for updates.
         scenario_browser_component_->Reload();
       }
-
 
       ImGui::EndTable();
     }

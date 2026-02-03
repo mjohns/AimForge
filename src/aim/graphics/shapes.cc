@@ -225,30 +225,30 @@ std::vector<glm::vec3> GenerateCylinderVertices(int num_segments) {
 }
 
 std::vector<VertexAndTexCoord> GenerateQuadVertices() {
-    VertexAndTexCoord bottom_right;
-    VertexAndTexCoord bottom_left;
-    VertexAndTexCoord top_left;
-    VertexAndTexCoord top_right;
+  VertexAndTexCoord bottom_right;
+  VertexAndTexCoord bottom_left;
+  VertexAndTexCoord top_left;
+  VertexAndTexCoord top_right;
 
-    bottom_right.vertex = glm::vec3(0.5f, 0.0f, -0.5f);
-    bottom_left.vertex = glm::vec3(-0.5f, 0.0f, -0.5f);
-    top_left.vertex = glm::vec3(-0.5f, 0.0f, 0.5f);
-    top_right.vertex = glm::vec3(0.5f, 0.0f, 0.5f);
+  bottom_right.vertex = glm::vec3(0.5f, 0.0f, -0.5f);
+  bottom_left.vertex = glm::vec3(-0.5f, 0.0f, -0.5f);
+  top_left.vertex = glm::vec3(-0.5f, 0.0f, 0.5f);
+  top_right.vertex = glm::vec3(0.5f, 0.0f, 0.5f);
 
-    bottom_right.tex_coord = glm::vec2(1.0f, 1.0f);
-    bottom_left.tex_coord = glm::vec2(0.0f, 1.0f);
-    top_left.tex_coord = glm::vec2(0.0f, 0.0f);
-    top_right.tex_coord = glm::vec2(1.0f, 0.0f);
+  bottom_right.tex_coord = glm::vec2(1.0f, 1.0f);
+  bottom_left.tex_coord = glm::vec2(0.0f, 1.0f);
+  top_left.tex_coord = glm::vec2(0.0f, 0.0f);
+  top_right.tex_coord = glm::vec2(1.0f, 0.0f);
 
-    std::vector<VertexAndTexCoord> vertices = {
-        bottom_right,
-        top_right,
-        top_left,
-        top_left,
-        bottom_left,
-        bottom_right,
-    };
-    return vertices;
+  std::vector<VertexAndTexCoord> vertices = {
+      bottom_right,
+      top_right,
+      top_left,
+      top_left,
+      bottom_left,
+      bottom_right,
+  };
+  return vertices;
 }
 
 }  // namespace aim
