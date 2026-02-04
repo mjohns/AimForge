@@ -10,6 +10,16 @@
 namespace aim {
 namespace {
 
+template <typename T>
+std::unordered_map<T, std::string> BuildDisplayNameMap(
+    const std::vector<std::pair<T, std::string>>& values) {
+  std::unordered_map<T, std::string> result;
+  for (const auto& entry : values) {
+    result[entry.first] = entry.second;
+  }
+  return result;
+}
+
 void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
   if (region->type_case() == TargetRegion::TYPE_NOT_SET) {
     region->mutable_rectangle();
@@ -414,5 +424,11 @@ ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label
       .set_min(0.01)
       .set_default(1);
 }
+
+const std::unordered_map<ScenarioDef::TypeCase, std::string> kScenarioTypeDisplayNameMap =
+    BuildDisplayNameMap(kScenarioTypes);
+
+const std::unordered_map<ShotType::TypeCase, std::string> kShotTypeDisplayNameMap =
+    BuildDisplayNameMap(kShotTypes);
 
 }  // namespace aim

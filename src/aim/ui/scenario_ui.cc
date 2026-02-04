@@ -12,6 +12,7 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/stats_manager.h"
+#include "aim/editor/scenario_editor_common.h"
 #include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "imgui.h"
@@ -364,6 +365,8 @@ class ScenariosComponentImpl : public ScenariosComponent {
       return;
     }
     const ScenarioItem& item = *maybe_current_scenario;
+    std::optional<ScenarioDef> evaluated_def =
+        app_.scenario_manager().GetEvaluatedScenarioDef(item.name);
     ImGui::Spacing();
     if (ImGui::Button(std::format("{}", icons::kPlayArrow))) {
       app_.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
@@ -377,6 +380,42 @@ class ScenariosComponentImpl : public ScenariosComponent {
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
     if (ImGui::SelectableButton(icons::kMoreVert)) {
       ImGui::OpenPopup(popup_id);
+    }
+
+    ImGui::SpacedSeparator();
+    auto stats = app_.stats_manager().GetAggregateStats(item.name);
+    if (stats.total_runs == 1) {
+      ImGui::TextFmt("1 run");
+    } else {
+      ImGui::TextFmt("{} runs", stats.total_runs);
+    }
+
+    if (evaluated_def) {
+      std::vector<std::string> chips;
+      auto type_it = kScenarioTypeDisplayNameMap.find(evaluated_def->type_case());
+      if (type_it != kScenarioTypeDisplayNameMap.end()) {
+        chips.push_back(type_it->second);
+      }
+
+      auto shot_type_it = kShotTypeDisplayNameMap.find(evaluated_def->shot_type().type_case());
+      if (shot_type_it != kShotTypeDisplayNameMap.end()) {
+        chips.push_back(shot_type_it->second);
+      }
+
+      if (chips.size() > 0) {
+        ImGui::SpacedSeparator();
+        // TODO: Use better visual type other than disabled button.
+        ImGui::BeginDisabled();
+        ImGui::LoopId lid;
+        for (int i = 0; i < chips.size(); ++i) {
+          auto id = lid.Get();
+          if (i > 0) {
+            ImGui::SameLine();
+          }
+          ImGui::Button(chips[i]);
+        }
+        ImGui::EndDisabled();
+      }
     }
 
     std::string description = item.unevaluated_def.description();
@@ -394,12 +433,14 @@ class ScenariosComponentImpl : public ScenariosComponent {
     if (!matching_playlists_->empty()) {
       ImGui::SpacedSeparator();
       ImGui::Text("Related playlists");
+      ImGui::Indent();
       for (const std::string& playlist_name : *matching_playlists_) {
         if (ImGui::Button(playlist_name)) {
           app_.playlist_manager().SetCurrentPlaylist(playlist_name);
           app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
         }
       }
+      ImGui::Unindent();
     }
   }
 

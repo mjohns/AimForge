@@ -102,6 +102,7 @@ inline const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kTrackingProximity, "Proximity tracking"},
     {ShotType::kClickMulti, "Multi click"},
 };
+extern const std::unordered_map<ShotType::TypeCase, std::string> kShotTypeDisplayNameMap;
 
 inline const std::vector<std::pair<ShotType::TypeCase, std::string>> kSingleTargetTrackingShotTypes{
     {ShotType::kTrackingInvincible, "Tracking"},
@@ -130,6 +131,7 @@ inline const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenari
     {ScenarioDef::kSineDef, "Sine"},
     {ScenarioDef::kAngleStrafeDef, "Angle Strafe"},
 };
+extern const std::unordered_map<ScenarioDef::TypeCase, std::string> kScenarioTypeDisplayNameMap;
 
 inline const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegionTypes{
     {TargetRegion::kRectangle, "Rectangle"},

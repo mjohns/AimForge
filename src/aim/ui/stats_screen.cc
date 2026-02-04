@@ -503,13 +503,15 @@ class StatsScreen : public UiScreen {
         }
       }
     }
-    auto avg_comparison = GetStatsComparison(details_.stats, details_.average_stats);
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Average");
-    ImGui::BeginDisabled();
-    ImGui::SameLine();
-    ImGui::Button(std::format("{}###avg_diff_button", avg_comparison.score_diff_percent_string));
-    ImGui::EndDisabled();
+    if (all_stats.size() > 1) {
+      auto avg_comparison = GetStatsComparison(details_.stats, details_.average_stats);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Average");
+      ImGui::BeginDisabled();
+      ImGui::SameLine();
+      ImGui::Button(std::format("{}###avg_diff_button", avg_comparison.score_diff_percent_string));
+      ImGui::EndDisabled();
+    }
 
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
