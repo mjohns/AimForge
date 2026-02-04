@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "absl/algorithm/container.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
@@ -372,11 +373,33 @@ class ScenariosComponentImpl : public ScenariosComponent {
       ImGui::SpacedSeparator();
       ImGui::TextWrapped(description);
     }
+
+    if (matching_playlists_scenario_name_ != item.name || !matching_playlists_) {
+      matching_playlists_ = app_.playlist_manager().FindPlaylistsContainingScenario(item.name);
+      matching_playlists_scenario_name_ = item.name;
+      absl::c_sort(*matching_playlists_);
+    }
+
+    if (!matching_playlists_->empty()) {
+      ImGui::SpacedSeparator();
+      ImGui::Text("Playlists");
+      ImGui::Indent();
+      for (const std::string& playlist_name : *matching_playlists_) {
+        if (ImGui::Button(playlist_name)) {
+          app_.playlist_manager().SetCurrentPlaylist(playlist_name);
+          app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
+        }
+      }
+      ImGui::Unindent();
+    }
   }
 
   Application& app_;
   ScenarioBrowserComponent scenario_browser_;
   ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+
+  std::optional<std::vector<std::string>> matching_playlists_;
+  std::string matching_playlists_scenario_name_;
 };
 
 }  // namespace

@@ -17,6 +17,14 @@ enum ScenarioRunOption {
   PLAYLIST_NEXT,
 };
 
+enum class AppScreen : int {
+  SCENARIOS = 1,
+  PLAYLISTS = 2,
+  PLAY_TIME = 3,
+  BUNDLES = 4,
+};
+
+
 class ApplicationState {
  public:
   ApplicationState() {}
@@ -25,6 +33,7 @@ class ApplicationState {
   ApplicationState& operator=(const ApplicationState&) = delete;
 
   std::optional<ScenarioRunOption> scenario_run_option;
+  std::optional<AppScreen> go_to_app_screen;
 
   std::optional<RunPerformanceStats> GetPerformanceStats(const std::string& scenario_name,
                                                          i64 run_id);

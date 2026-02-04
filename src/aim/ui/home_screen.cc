@@ -36,13 +36,6 @@ namespace {
 
 const char* kSelectedAppScreenKey = "SelectedAppScreen";
 
-enum class AppScreen : int {
-  SCENARIOS = 1,
-  PLAYLISTS = 2,
-  PLAY_TIME = 3,
-  BUNDLES = 4,
-};
-
 class SetInitialDpiDialog {
  public:
   void NotifyOpen() {
@@ -145,6 +138,10 @@ class HomeScreen : public UiScreen {
   }
 
   void OnTickStart() override {
+    if (state_.go_to_app_screen) {
+      app_screen_ = *state_.go_to_app_screen;
+      state_.go_to_app_screen = {};
+    }
     auto run_option = state_.scenario_run_option;
     if (run_option) {
       if (*run_option == ScenarioRunOption::START_CURRENT) {

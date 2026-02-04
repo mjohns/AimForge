@@ -314,6 +314,31 @@ class PlaylistManagerImpl : public PlaylistManager {
     }
   }
 
+  std::vector<std::string> FindPlaylistsContainingScenario(
+      const std::string& scenario_name) const override {
+    std::string base_name = GetScenarioNameInfo(scenario_name).base_name;
+    std::vector<std::string> matching_playlists;
+    for (const Playlist& playlist : *playlists_) {
+      bool is_match = false;
+      for (const auto& item : playlist.def().items()) {
+        if (GetScenarioNameInfo(item.scenario()).base_name == base_name) {
+          is_match = true;
+        }
+      }
+
+      if (!playlist.def().levels().base_scenario().empty()) {
+        if (GetScenarioNameInfo(playlist.def().levels().base_scenario()).base_name == base_name) {
+          is_match = true;
+        }
+      }
+
+      if (is_match) {
+        matching_playlists.push_back(playlist.name);
+      }
+    }
+    return matching_playlists;
+  }
+
   std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) override {
     std::vector<std::string> names;
     for (const Playlist& playlist : *playlists_) {
