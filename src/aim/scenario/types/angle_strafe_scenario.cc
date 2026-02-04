@@ -265,9 +265,19 @@ class AngleStrafeScenario : public BaseScenario {
     if (target_placer_) {
       pos = target_placer_->GetNextPosition();
     }
+    const AngleStrafeScenarioDef& d = def_.angle_strafe_def();
     target->SetWallPosition(pos, def_.room());
-    target->movement_controller = std::make_shared<StrafeMovementController>(
-        target->speed, target->acceleration, wall_, def_, app_);
+    std::vector<std::unique_ptr<MovementController>> controllers;
+    controllers.push_back(std::make_unique<StrafeMovementController>(
+        target->speed, target->acceleration, wall_, def_, app_));
+    controllers.push_back(CreateForwardBackMovementController(*target,
+                                                              wall_,
+                                                              d.bounds(),
+                                                              d.forward_back_profiles(),
+                                                              d.forward_back_profile_order(),
+                                                              d.forward_back_initial_direction(),
+                                                              app_));
+    target->movement_controller = CreateCompositeMovementController(std::move(controllers));
   }
 
   void UpdateTargetPositions() override {

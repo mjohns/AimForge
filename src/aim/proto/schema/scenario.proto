@@ -346,6 +346,7 @@ message AngleStrafeScenarioDef {
 
   repeated StrafeProfile forward_back_profiles = 6;
   repeated int32 forward_back_profile_order = 7;
+  Direction forward_back_initial_direction = 8;
 }
 
 message StrafeProfile {

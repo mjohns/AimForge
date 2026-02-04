@@ -9599,8 +9599,11 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   enum : int {
     kProfilesFieldNumber = 4,
     kProfileOrderFieldNumber = 5,
+    kForwardBackProfilesFieldNumber = 6,
+    kForwardBackProfileOrderFieldNumber = 7,
     kBoundsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
+    kForwardBackInitialDirectionFieldNumber = 8,
   };
   // repeated .aim.AngleStrafeProfile profiles = 4;
   int profiles_size() const;
@@ -9637,6 +9640,41 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_profile_order();
 
   public:
+  // repeated .aim.StrafeProfile forward_back_profiles = 6;
+  int forward_back_profiles_size() const;
+  private:
+  int _internal_forward_back_profiles_size() const;
+
+  public:
+  void clear_forward_back_profiles() ;
+  ::aim::StrafeProfile* PROTOBUF_NONNULL mutable_forward_back_profiles(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL mutable_forward_back_profiles();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& _internal_forward_back_profiles() const;
+  ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL _internal_mutable_forward_back_profiles();
+  public:
+  const ::aim::StrafeProfile& forward_back_profiles(int index) const;
+  ::aim::StrafeProfile* PROTOBUF_NONNULL add_forward_back_profiles();
+  const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& forward_back_profiles() const;
+  // repeated int32 forward_back_profile_order = 7;
+  int forward_back_profile_order_size() const;
+  private:
+  int _internal_forward_back_profile_order_size() const;
+
+  public:
+  void clear_forward_back_profile_order() ;
+  ::int32_t forward_back_profile_order(int index) const;
+  void set_forward_back_profile_order(int index, ::int32_t value);
+  void add_forward_back_profile_order(::int32_t value);
+  const ::google::protobuf::RepeatedField<::int32_t>& forward_back_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_forward_back_profile_order();
+
+  private:
+  const ::google::protobuf::RepeatedField<::int32_t>& _internal_forward_back_profile_order() const;
+  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_forward_back_profile_order();
+
+  public:
   // .aim.Bounds bounds = 1;
   bool has_bounds() const;
   void clear_bounds() ;
@@ -9667,12 +9705,23 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
+  // .aim.Direction forward_back_initial_direction = 8;
+  bool has_forward_back_initial_direction() const;
+  void clear_forward_back_initial_direction() ;
+  ::aim::Direction forward_back_initial_direction() const;
+  void set_forward_back_initial_direction(::aim::Direction value);
+
+  private:
+  ::aim::Direction _internal_forward_back_initial_direction() const;
+  void _internal_set_forward_back_initial_direction(::aim::Direction value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.AngleStrafeScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 4,
-                                   3, 0,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
+                                   4, 0,
                                    2>
       _table_;
 
@@ -9696,8 +9745,12 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedPtrField< ::aim::AngleStrafeProfile > profiles_;
     ::google::protobuf::RepeatedField<::int32_t> profile_order_;
     ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
+    ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > forward_back_profiles_;
+    ::google::protobuf::RepeatedField<::int32_t> forward_back_profile_order_;
+    ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
+    int forward_back_initial_direction_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -18668,7 +18721,7 @@ inline void Bounds::set_allocated_depth(::aim::RegionLength* PROTOBUF_NULLABLE v
 
 // .aim.Bounds bounds = 1;
 inline bool AngleStrafeScenarioDef::has_bounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   PROTOBUF_ASSUME(!value || _impl_.bounds_ != nullptr);
   return value;
 }
@@ -18676,7 +18729,7 @@ inline void AngleStrafeScenarioDef::clear_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounds_ != nullptr) _impl_.bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000010U);
 }
 inline const ::aim::Bounds& AngleStrafeScenarioDef::_internal_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -18695,16 +18748,16 @@ inline void AngleStrafeScenarioDef::unsafe_arena_set_allocated_bounds(
   }
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AngleStrafeScenarioDef.bounds)
 }
 inline ::aim::Bounds* PROTOBUF_NULLABLE AngleStrafeScenarioDef::release_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* released = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -18724,7 +18777,7 @@ inline ::aim::Bounds* PROTOBUF_NULLABLE AngleStrafeScenarioDef::unsafe_arena_rel
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.AngleStrafeScenarioDef.bounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* temp = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   return temp;
@@ -18739,7 +18792,7 @@ inline ::aim::Bounds* PROTOBUF_NONNULL AngleStrafeScenarioDef::_internal_mutable
 }
 inline ::aim::Bounds* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* _msg = _internal_mutable_bounds();
   // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.bounds)
   return _msg;
@@ -18756,9 +18809,9 @@ inline void AngleStrafeScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
 
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
@@ -18767,7 +18820,7 @@ inline void AngleStrafeScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 2;
 inline bool AngleStrafeScenarioDef::has_target_placement_strategy() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
   return value;
 }
@@ -18775,7 +18828,7 @@ inline void AngleStrafeScenarioDef::clear_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000020U);
 }
 inline const ::aim::TargetPlacementStrategy& AngleStrafeScenarioDef::_internal_target_placement_strategy() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -18794,16 +18847,16 @@ inline void AngleStrafeScenarioDef::unsafe_arena_set_allocated_target_placement_
   }
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AngleStrafeScenarioDef.target_placement_strategy)
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE AngleStrafeScenarioDef::release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -18823,7 +18876,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE AngleStrafeScenarioDef:
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.AngleStrafeScenarioDef.target_placement_strategy)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   return temp;
@@ -18838,7 +18891,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL AngleStrafeScenarioDef::
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_target_placement_strategy()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
   // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.target_placement_strategy)
   return _msg;
@@ -18855,9 +18908,9 @@ inline void AngleStrafeScenarioDef::set_allocated_target_placement_strategy(::ai
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
@@ -18968,6 +19021,141 @@ inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
 AngleStrafeScenarioDef::_internal_mutable_profile_order() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.profile_order_;
+}
+
+// repeated .aim.StrafeProfile forward_back_profiles = 6;
+inline int AngleStrafeScenarioDef::_internal_forward_back_profiles_size() const {
+  return _internal_forward_back_profiles().size();
+}
+inline int AngleStrafeScenarioDef::forward_back_profiles_size() const {
+  return _internal_forward_back_profiles_size();
+}
+inline void AngleStrafeScenarioDef::clear_forward_back_profiles() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_profiles_.Clear();
+  ClearHasBitForRepeated(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline ::aim::StrafeProfile* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profiles(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.forward_back_profiles)
+  return _internal_mutable_forward_back_profiles()->Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profiles()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_mutable_list:aim.AngleStrafeScenarioDef.forward_back_profiles)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_forward_back_profiles();
+}
+inline const ::aim::StrafeProfile& AngleStrafeScenarioDef::forward_back_profiles(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.forward_back_profiles)
+  return _internal_forward_back_profiles().Get(index);
+}
+inline ::aim::StrafeProfile* PROTOBUF_NONNULL AngleStrafeScenarioDef::add_forward_back_profiles()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::aim::StrafeProfile* _add =
+      _internal_mutable_forward_back_profiles()->InternalAddWithArena(
+          ::google::protobuf::MessageLite::internal_visibility(), GetArena());
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_add:aim.AngleStrafeScenarioDef.forward_back_profiles)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& AngleStrafeScenarioDef::forward_back_profiles() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.AngleStrafeScenarioDef.forward_back_profiles)
+  return _internal_forward_back_profiles();
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>&
+AngleStrafeScenarioDef::_internal_forward_back_profiles() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.forward_back_profiles_;
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL
+AngleStrafeScenarioDef::_internal_mutable_forward_back_profiles() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.forward_back_profiles_;
+}
+
+// repeated int32 forward_back_profile_order = 7;
+inline int AngleStrafeScenarioDef::_internal_forward_back_profile_order_size() const {
+  return _internal_forward_back_profile_order().size();
+}
+inline int AngleStrafeScenarioDef::forward_back_profile_order_size() const {
+  return _internal_forward_back_profile_order_size();
+}
+inline void AngleStrafeScenarioDef::clear_forward_back_profile_order() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_profile_order_.Clear();
+  ClearHasBitForRepeated(_impl_._has_bits_[0],
+                  0x00000008U);
+}
+inline ::int32_t AngleStrafeScenarioDef::forward_back_profile_order(int index) const {
+  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.forward_back_profile_order)
+  return _internal_forward_back_profile_order().Get(index);
+}
+inline void AngleStrafeScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
+  _internal_mutable_forward_back_profile_order()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.forward_back_profile_order)
+}
+inline void AngleStrafeScenarioDef::add_forward_back_profile_order(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_forward_back_profile_order()->Add(value);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
+  // @@protoc_insertion_point(field_add:aim.AngleStrafeScenarioDef.forward_back_profile_order)
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>& AngleStrafeScenarioDef::forward_back_profile_order() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.AngleStrafeScenarioDef.forward_back_profile_order)
+  return _internal_forward_back_profile_order();
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profile_order()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
+  // @@protoc_insertion_point(field_mutable_list:aim.AngleStrafeScenarioDef.forward_back_profile_order)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_forward_back_profile_order();
+}
+inline const ::google::protobuf::RepeatedField<::int32_t>&
+AngleStrafeScenarioDef::_internal_forward_back_profile_order() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.forward_back_profile_order_;
+}
+inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
+AngleStrafeScenarioDef::_internal_mutable_forward_back_profile_order() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.forward_back_profile_order_;
+}
+
+// .aim.Direction forward_back_initial_direction = 8;
+inline bool AngleStrafeScenarioDef::has_forward_back_initial_direction() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  return value;
+}
+inline void AngleStrafeScenarioDef::clear_forward_back_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000040U);
+}
+inline ::aim::Direction AngleStrafeScenarioDef::forward_back_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.forward_back_initial_direction)
+  return _internal_forward_back_initial_direction();
+}
+inline void AngleStrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
+  _internal_set_forward_back_initial_direction(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.forward_back_initial_direction)
+}
+inline ::aim::Direction AngleStrafeScenarioDef::_internal_forward_back_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::Direction>(_impl_.forward_back_initial_direction_);
+}
+inline void AngleStrafeScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = value;
 }
 
 // -------------------------------------------------------------------

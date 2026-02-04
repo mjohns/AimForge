@@ -1,10 +1,16 @@
 #include "basic_movement_controller.h"
 
 #include "aim/common/util.h"
+#include "aim/core/application.h"
 #include "aim/core/target.h"
 #include "glm/vec2.hpp"
+#include "google/protobuf/message_lite.h"
+
+using google::protobuf::RepeatedField;
+using google::protobuf::RepeatedPtrField;
 
 namespace aim {
+namespace {
 
 class CompositeMovementController : public MovementController {
  public:
@@ -23,6 +29,47 @@ class CompositeMovementController : public MovementController {
  private:
   std::vector<std::unique_ptr<MovementController>> controllers_;
 };
+
+class ForwardBackStrafeMovementController : public MovementController {
+ public:
+  ForwardBackStrafeMovementController(const Target& target,
+                                      Wall wall,
+                                      const Bounds& bounds_def,
+                                      const RepeatedPtrField<StrafeProfile>& profiles,
+                                      const RepeatedField<int>& orders,
+                                      Direction initial_direction,
+                                      Application& app)
+      : profiles_(profiles), orders_(orders), app_(app) {
+    const WallBounds bounds = wall.GetWallBounds(bounds_def);
+
+    DirectionParams params;
+    params.acceleration = target.acceleration;
+
+    if (bounds.max_depth > 0 && profiles.size() > 0) {
+      strafe_controller_ = StrafeController(
+          bounds.min_depth, bounds.max_depth, {}, {}, initial_direction, params, wall);
+    }
+  }
+
+  void UpdatePosition(float now_seconds,
+                      Target& t,
+                      const Room& room,
+                      float delta_seconds) override {
+    if (strafe_controller_) {
+      t.wall_depth = strafe_controller_->GetUpdatedPosition(
+          t, app_.rand(), profiles_, orders_, t.wall_depth, now_seconds, delta_seconds);
+      t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room, t.wall_depth);
+    }
+  }
+
+ private:
+  RepeatedPtrField<StrafeProfile> profiles_;
+  RepeatedField<int> orders_;
+  Application& app_;
+  std::optional<StrafeController> strafe_controller_;
+};
+
+}  // namespace
 
 BasicWallMovementController::BasicWallMovementController() {}
 
@@ -71,14 +118,13 @@ void WallDepthMovementController::UpdatePosition(float now_seconds,
   t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room, t.wall_depth);
 }
 
-float StrafeController::GetUpdatedPosition(
-    Target& t,
-    Random& rand,
-    const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
-    const google::protobuf::RepeatedField<int>& order,
-    float current_position,
-    float now_seconds,
-    float delta_seconds) {
+float StrafeController::GetUpdatedPosition(Target& t,
+                                           Random& rand,
+                                           const RepeatedPtrField<StrafeProfile>& profiles,
+                                           const RepeatedField<int>& order,
+                                           float current_position,
+                                           float now_seconds,
+                                           float delta_seconds) {
   bool is_first = false;
   if (!initialized_) {
     initialized_ = true;
@@ -179,13 +225,12 @@ bool StrafeController::GetInitialGoingLeft(Direction dir, float current_position
   }
 }
 
-void StrafeController::ChangeDirection(
-    Random& rand,
-    float now_seconds,
-    const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
-    const google::protobuf::RepeatedField<int>& order,
-    float target_speed,
-    float current_position) {
+void StrafeController::ChangeDirection(Random& rand,
+                                       float now_seconds,
+                                       const RepeatedPtrField<StrafeProfile>& profiles,
+                                       const RepeatedField<int>& order,
+                                       float target_speed,
+                                       float current_position) {
   direction_change_count_++;
   auto p = SelectProfile(order, profiles, &selection_context_, rand);
   if (!p.has_value()) {
@@ -269,6 +314,18 @@ void StrafeController::ChangeDirection(
 std::unique_ptr<MovementController> CreateCompositeMovementController(
     std::vector<std::unique_ptr<MovementController>> controllers) {
   return std::make_unique<CompositeMovementController>(std::move(controllers));
+}
+
+std::unique_ptr<MovementController> CreateForwardBackMovementController(
+    const Target& target,
+    Wall wall,
+    const Bounds& bounds_def,
+    const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
+    const google::protobuf::RepeatedField<int>& orders,
+    Direction initial_direction,
+    Application& app) {
+  return std::make_unique<ForwardBackStrafeMovementController>(
+      target, wall, bounds_def, profiles, orders, initial_direction, app);
 }
 
 }  // namespace aim

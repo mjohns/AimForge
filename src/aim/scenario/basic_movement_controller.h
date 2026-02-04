@@ -5,6 +5,7 @@
 
 #include "aim/common/random.h"
 #include "aim/common/wall.h"
+#include "aim/core/application.h"
 #include "aim/core/target.h"
 #include "aim/proto/scenario.pb.h"
 #include "glm/vec2.hpp"
@@ -128,5 +129,14 @@ class StrafeController {
   int direction_change_count_ = 0;
   Wall wall_;
 };
+
+std::unique_ptr<MovementController> CreateForwardBackMovementController(
+    const Target& target,
+    Wall wall,
+    const Bounds& bounds_def,
+    const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
+    const google::protobuf::RepeatedField<int>& orders,
+    Direction initial_direction,
+    Application& app);
 
 }  // namespace aim
