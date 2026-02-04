@@ -326,7 +326,7 @@ class ScenariosComponentImpl : public ScenariosComponent {
       scenario_browser_.Show(&delete_confirmation_dialog_);
 
       ImGui::TableNextColumn();
-      DrawCurrentScenarioComponent("CurrentScenarioComponent", app_);
+      DrawCurrentScenarioComponent();
 
       ImGui::EndTable();
     }
@@ -337,34 +337,38 @@ class ScenariosComponentImpl : public ScenariosComponent {
   }
 
  private:
-  void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
-    ImGui::IdGuard cid(id);
-    auto maybe_current_scenario = app.scenario_manager().GetCurrentScenario();
+  void DrawCurrentScenarioComponent() {
+    ImGui::IdGuard cid("CurrentScenario");
+    auto maybe_current_scenario = app_.scenario_manager().GetCurrentScenario();
     if (!maybe_current_scenario) {
       return;
     }
     const ScenarioItem& item = *maybe_current_scenario;
     ImGui::Text(item.name);
+    /*
     ImGui::SameLine();
     if (ImGui::Button(icons::kEdit)) {
       ScenarioEditorOptions opts;
       opts.scenario_name = item.name;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
-    }
-
-    /*
-    ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kMoreVert)) {
+      app_.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
     }
     */
 
-    if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
-      app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+    ImGui::SameLine();
+    const char* popup_id = "CurrentScenarioMenu";
+    DrawScenarioRightClickMenu(popup_id, item.name, &delete_confirmation_dialog_, app_);
+    ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+    if (ImGui::SelectableButton(icons::kMoreVert)) {
+      ImGui::OpenPopup(popup_id);
     }
-    if (app.scenario_manager().has_running_scenario()) {
+
+    if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
+      app_.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+    }
+    if (app_.scenario_manager().has_running_scenario()) {
       ImGui::SameLine();
       if (ImGui::Button("Resume")) {
-        app.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
+        app_.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
       }
     }
     std::string description = item.unevaluated_def.description();
