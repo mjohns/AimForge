@@ -81,6 +81,8 @@ class SettingsScreen : public UiScreen {
                             .set_default(800),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, dpi));
 
+      ImGui::SpacedSeparator();
+
       ImGui::InputFloat(ImGui::InputFloatParams("Fps")
                             .set_label("Max render fps")
                             .set_is_optional()
@@ -108,15 +110,18 @@ class SettingsScreen : public UiScreen {
                             .set_width(char_x_ * 10),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
 
+      ImGui::SpacedSeparator();
+
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Theme");
       ImGui::SameLine();
       ImGui::SimpleDropdown(
           "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_x_ * 20);
       ImGui::SameLine();
-      if (ImGui::Button("Edit themes")) {
+      if (ImGui::Button(std::format("{}##EditThemes", icons::kEdit))) {
         PushNextScreen(CreateThemeEditorScreen(&app_));
       }
+      ImGui::HelpTooltip("Open theme editor");
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Crosshair");
@@ -132,9 +137,19 @@ class SettingsScreen : public UiScreen {
         crosshair_names_ = app_.settings_manager().ListCrosshairs();
       }
       ImGui::SameLine();
-      if (ImGui::Button("Edit crosshairs")) {
+      if (ImGui::Button(std::format("{}##EditCrosshairs", icons::kEdit))) {
         PushNextScreen(CreateCrosshairEditorScreen(&app_));
       }
+      ImGui::HelpTooltip("Open crosshair editor");
+      ImGui::SameLine();
+      if (ImGui::Button(std::format("{}##EditCrosshairColor", icons::kPalette))) {
+        ThemeEditorOptions opts;
+        opts.selected_theme = updater_.settings.theme_name();
+        PushNextScreen(CreateThemeEditorScreen(&app_, opts));
+      }
+      ImGui::HelpTooltip(
+          "Edit the color of the crosshair in the current theme. Crosshair colors are stored with "
+          "the theme.");
 
       ImGui::InputFloat(ImGui::InputFloatParams("CrosshairSize")
                             .set_label("Crosshair size")
@@ -143,6 +158,8 @@ class SettingsScreen : public UiScreen {
                             .set_default(15)
                             .set_width(char_x_ * 9),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
+
+      ImGui::SpacedSeparator();
 
       ImGui::InputBool(
           ImGui::InputBoolParams("DisablePerScenarioSettings")
@@ -155,6 +172,8 @@ class SettingsScreen : public UiScreen {
 
       ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+
+      ImGui::SpacedSeparator();
 
       ImGui::InputBool(
           ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
@@ -195,6 +214,8 @@ class SettingsScreen : public UiScreen {
 
         ImGui::Unindent();
       }
+
+      ImGui::SpacedSeparator();
 
       if (ImGui::Button(std::format("{} Folder", icons::kOpenInNew))) {
         OpenFolderInExplorer(app_.file_system()->GetUserDataPath());

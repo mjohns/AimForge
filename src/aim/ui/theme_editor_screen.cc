@@ -7,6 +7,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
+#include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
@@ -331,7 +332,7 @@ class ThemeEditor {
 
 class ThemeEditorScreen : public UiScreen {
  public:
-  explicit ThemeEditorScreen(Application& app)
+  explicit ThemeEditorScreen(Application& app, ThemeEditorOptions options)
       : UiScreen(app), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
     texture_names_ = app.settings_manager().ListTextures();
     LoadThemeList();
@@ -355,6 +356,10 @@ class ThemeEditorScreen : public UiScreen {
 
     target_manager_.AddTarget(t);
     target_manager_.AddTarget(g);
+
+    if (options.selected_theme.size() > 0) {
+      OpenExistingTheme(options.selected_theme);
+    }
   }
 
  protected:
@@ -567,8 +572,8 @@ class ThemeEditorScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app) {
-  return std::make_unique<ThemeEditorScreen>(*app);
+std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app, ThemeEditorOptions options) {
+  return std::make_unique<ThemeEditorScreen>(*app, options);
 }
 
 }  // namespace aim

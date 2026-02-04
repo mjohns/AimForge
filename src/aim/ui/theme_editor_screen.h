@@ -1,12 +1,19 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
-#include "aim/core/application.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
 
-std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app);
+class Application;
+
+struct ThemeEditorOptions {
+  std::string selected_theme;
+};
+
+std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app,
+                                                  ThemeEditorOptions options = {});
 
 }  // namespace aim
