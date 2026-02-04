@@ -6,15 +6,27 @@
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
+#include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/editor/scenario_editor_screen.h"
+#include "aim/ui/stats_screen.h"
 #include "imgui.h"
 
 namespace aim {
 namespace {
+
+struct ScenarioBrowserResult {
+  std::string scenario_to_start;
+  std::string scenario_to_edit;
+  std::string scenario_to_edit_copy;
+  bool reload_scenarios = false;
+
+  std::string scenario_stats_to_view;
+  i64 run_id;
+};
 
 enum class ScenarioViewType : int {
   RECENT = 1,
@@ -84,10 +96,9 @@ void DrawScenarioRightClickMenu(const char* popup_id,
   }
 }
 
-class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
+class ScenarioBrowserComponent {
  public:
-  explicit ScenarioBrowserComponentImpl(const std::string& id, Application* app)
-      : id_(id), app_(app) {
+  explicit ScenarioBrowserComponent(const std::string& id, Application* app) : id_(id), app_(app) {
     auto maybe_initial_view_type = app_->local_store().GetInt(GetViewTypeKey());
     if (maybe_initial_view_type) {
       view_type_ = static_cast<ScenarioViewType>(*maybe_initial_view_type);
@@ -101,17 +112,17 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
     initial_search_text_ = search_text_;
   }
 
-  ~ScenarioBrowserComponentImpl() {
+  ~ScenarioBrowserComponent() {
     if (initial_search_text_ != search_text_) {
       app_->local_store().Put(GetSearchTextKey(), search_text_);
     }
   }
 
-  void Reload() override {
+  void Reload() {
     UpdateFilteredScenarios();
   }
 
-  void Show(ScenarioBrowserResult* result) override {
+  void Show(ScenarioBrowserResult* result) {
     ImGui::IdGuard cid(id_);
 
     delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
@@ -311,50 +322,102 @@ class ScenarioBrowserComponentImpl : public ScenarioBrowserComponent {
   ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
 };
 
+class ScenariosComponentImpl : public ScenariosComponent {
+ public:
+  ScenariosComponentImpl(Application& app)
+      : app_(app), scenario_browser_("ScenarioBrowser", &app) {}
+
+  void Show() override {
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+
+    if (ImGui::BeginTable("ScenarioColumns", 2, flags)) {
+      ImGui::TableNextColumn();
+      ScenarioBrowserResult result;
+      scenario_browser_.Show(&result);
+
+      ImGui::TableNextColumn();
+      DrawCurrentScenarioComponent("CurrentScenarioComponent", app_);
+
+      if (result.scenario_to_start.size() > 0) {
+        if (app_.scenario_manager().SetCurrentScenario(result.scenario_to_start)) {
+          app_.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+        }
+      }
+      if (result.scenario_stats_to_view.size() > 0) {
+        app_.GetCurrentScreen()->PushNextScreen(
+            CreateStatsScreen(result.scenario_stats_to_view, result.run_id, &app_));
+      }
+      if (result.scenario_to_edit.size() > 0) {
+        ScenarioEditorOptions opts;
+        opts.scenario_name = result.scenario_to_edit;
+        app_.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+      }
+      if (result.scenario_to_edit_copy.size() > 0) {
+        ScenarioEditorOptions opts;
+        opts.scenario_name = result.scenario_to_edit_copy;
+        opts.is_new_copy = true;
+        app_.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+      }
+      if (result.reload_scenarios) {
+        scenario_browser_.Reload();
+      }
+
+      ImGui::EndTable();
+    }
+  }
+
+  void Reload() override {
+    scenario_browser_.Reload();
+  }
+
+ private:
+  void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
+    ImGui::IdGuard cid(id);
+    auto maybe_current_scenario = app.scenario_manager().GetCurrentScenario();
+    if (!maybe_current_scenario) {
+      return;
+    }
+    const ScenarioItem& item = *maybe_current_scenario;
+    ImGui::Text(item.name);
+    ImGui::SameLine();
+    if (ImGui::Button(icons::kEdit)) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = item.name;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+    }
+
+    /*
+    ImGui::SameLine();
+    if (ImGui::SelectableButton(icons::kMoreVert)) {
+    }
+    */
+
+    if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
+      app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+    }
+    if (app.scenario_manager().has_running_scenario()) {
+      ImGui::SameLine();
+      if (ImGui::Button("Resume")) {
+        app.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
+      }
+    }
+    std::string description = item.unevaluated_def.description();
+    if (description.size() > 0) {
+      if (ImGui::TreeNode("Description")) {
+        ImGui::Text(description);
+        ImGui::TreePop();
+      }
+    }
+  }
+
+  Application& app_;
+  ScenarioBrowserComponent scenario_browser_;
+};
+
 }  // namespace
 
-std::unique_ptr<ScenarioBrowserComponent> CreateScenarioBrowserComponent(const std::string& id,
-                                                                         Application* app) {
-  return std::make_unique<ScenarioBrowserComponentImpl>(id, app);
-}
-
-void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
-  ImGui::IdGuard cid(id);
-  auto maybe_current_scenario = app.scenario_manager().GetCurrentScenario();
-  if (!maybe_current_scenario) {
-    return;
-  }
-  const ScenarioItem& item = *maybe_current_scenario;
-  ImGui::Text(item.name);
-  ImGui::SameLine();
-  if (ImGui::Button(icons::kEdit)) {
-    ScenarioEditorOptions opts;
-    opts.scenario_name = item.name;
-    app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
-  }
-
-  /*
-  ImGui::SameLine();
-  if (ImGui::SelectableButton(icons::kMoreVert)) {
-  }
-  */
-
-  if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
-    app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
-  }
-  if (app.scenario_manager().has_running_scenario()) {
-    ImGui::SameLine();
-    if (ImGui::Button("Resume")) {
-      app.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
-    }
-  }
-  std::string description = item.unevaluated_def.description();
-  if (description.size() > 0) {
-    if (ImGui::TreeNode("Description")) {
-      ImGui::Text(description);
-      ImGui::TreePop();
-    }
-  }
+std::unique_ptr<ScenariosComponent> CreateScenariosComponent(Application& app) {
+  return std::make_unique<ScenariosComponentImpl>(app);
 }
 
 }  // namespace aim
