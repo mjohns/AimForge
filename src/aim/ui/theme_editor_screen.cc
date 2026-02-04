@@ -184,8 +184,13 @@ class ThemeEditor {
                    current_theme_.mutable_roof_appearance(),
                    current_theme_.mutable_back_appearance(),
                }) {
-            appearance->mutable_texture()->set_scale(front.texture().scale());
-            appearance->mutable_texture()->set_texture_name(front.texture().texture_name());
+            auto* tex = appearance->mutable_texture();
+            if (front.texture().has_scale()) {
+              tex->set_scale(front.texture().scale());
+            } else {
+              tex->clear_scale();
+            }
+            tex->set_texture_name(front.texture().texture_name());
           }
         }
       }
@@ -297,6 +302,7 @@ class ThemeEditor {
                               .set_step(0.05, 0.2)
                               .set_is_optional()
                               .set_min(0.05)
+                              .set_default(1)
                               .set_width(char_x * 9),
                           PROTO_FLOAT_FIELD(WallTexture, texture, scale));
       }

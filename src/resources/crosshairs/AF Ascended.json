@@ -1,0 +1,17 @@
+{
+  "layers": [
+    {
+      "alpha": 1,
+      "image": {
+        "fileName": "ascended.png"
+      },
+      "overrideColor": {
+        "b": 0,
+        "g": 0,
+        "r": 0
+      },
+      "scale": 0.549999893
+    }
+  ],
+  "name": "Dot"
+}

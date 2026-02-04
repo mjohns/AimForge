@@ -1,5 +1,9 @@
 {
-  "backAppearance": {},
+  "backAppearance": {
+    "texture": {
+      "textureName": "AF Brick.jpg"
+    }
+  },
   "crosshair": {
     "color": {
       "hex": "#289ec6"
@@ -10,9 +14,8 @@
   },
   "floorAppearance": {
     "mixColor": {},
-    "mixPercent": 0.559999943,
+    "mixPercent": 0.539999962,
     "texture": {
-      "scale": 2.5,
       "textureName": "AF Brick.jpg"
     }
   },
@@ -20,7 +23,6 @@
     "mixColor": {},
     "mixPercent": 0.4,
     "texture": {
-      "scale": 1.3,
       "textureName": "AF Brick.jpg"
     }
   },
@@ -42,20 +44,18 @@
       "r": 196
     }
   },
-  "name": "Brick",
+  "name": "AF Brick",
   "roofAppearance": {
     "mixColor": {},
     "mixPercent": 0.42,
     "texture": {
-      "scale": 2.5,
       "textureName": "AF Brick.jpg"
     }
   },
   "sideAppearance": {
     "mixColor": {},
-    "mixPercent": 0.64,
+    "mixPercent": 0.580000043,
     "texture": {
-      "scale": 2.5,
       "textureName": "AF Brick.jpg"
     }
   },

@@ -1,11 +1,12 @@
 {
   "layers": [
     {
-      "alpha": 0.800000191,
+      "alpha": 0.700000286,
       "dot": {
         "outlineThickness": 1
       },
       "scale": 1
     }
-  ]
+  ],
+  "name": "Dot"
 }

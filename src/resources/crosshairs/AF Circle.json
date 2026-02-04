@@ -3,10 +3,11 @@
     {
       "alpha": 1,
       "circle": {
-        "thickness": 1.5,
+        "thickness": 2.5,
         "useOutlineColor": false
       },
       "scale": 1
     }
-  ]
+  ],
+  "name": "Dot"
 }

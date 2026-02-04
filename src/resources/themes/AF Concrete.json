@@ -1,5 +1,7 @@
 {
-  "backAppearance": {},
+  "backAppearance": {
+    "color": {}
+  },
   "crosshair": {
     "color": {
       "hex": "#000000"
@@ -40,7 +42,7 @@
       "r": 213
     }
   },
-  "name": "Concrete Moon",
+  "name": "AF Concrete",
   "roofAppearance": {
     "mixColor": {},
     "mixPercent": 0.42,
