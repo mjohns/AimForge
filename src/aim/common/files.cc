@@ -163,16 +163,16 @@ void OpenFileInExplorer(const std::filesystem::path& path) {
 }
 
 void OpenFolderInExplorer(const std::filesystem::path& fs_path) {
-  std::ostringstream cmd;
+  std::string cmd;
 #ifdef _WIN32
-  cmd << "explorer";
+  cmd = "explorer";
 #elif __APPLE__
-  cmd << "open";
+  cmd = "open";
 #else
-  cmd << "xdg-open";
+  cmd = "xdg-open";
 #endif
-  cmd << " " << std::quoted(fs_path.string());
-  std::system(cmd.str().c_str());
+  cmd = std::format("{} \"{}\"", cmd, fs_path.string());
+  std::system(cmd.c_str());
 }
 
 void MoveFileToTrash(const std::filesystem::path& fs_path) {

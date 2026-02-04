@@ -6,6 +6,10 @@ void TextDisabled(const std::string& val) {
   TextDisabled("%s", val.c_str());
 }
 
+void TextWrapped(const std::string& val) {
+  TextWrapped("%s", val.c_str());
+}
+
 void Text(const std::string& val) {
   Text("%s", val.c_str());
 }

@@ -74,6 +74,7 @@ struct LoopId {
 };
 
 void TextDisabled(const std::string& val);
+void TextWrapped(const std::string& val);
 
 void Text(const std::string& val);
 
