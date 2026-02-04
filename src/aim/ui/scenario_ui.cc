@@ -18,16 +18,6 @@
 namespace aim {
 namespace {
 
-struct ScenarioBrowserResult {
-  std::string scenario_to_start;
-  std::string scenario_to_edit;
-  std::string scenario_to_edit_copy;
-  bool reload_scenarios = false;
-
-  std::string scenario_stats_to_view;
-  i64 run_id;
-};
-
 enum class ScenarioViewType : int {
   RECENT = 1,
   STARRED = 2,
@@ -122,8 +112,7 @@ class ScenarioBrowserComponent {
     UpdateFilteredScenarios();
   }
 
-  void Show(ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-            ScenarioBrowserResult* result) {
+  void Show(ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog) {
     ImGui::IdGuard cid(id_);
 
     ImGui::Spacing();
@@ -134,289 +123,263 @@ class ScenarioBrowserComponent {
       app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
     }
 
-      ImGui::SpacedSeparator();
+    ImGui::SpacedSeparator();
 
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("%s", icons::kFilterList);
-      ImGui::SameLine();
-      bool view_type_changed = ImGui::ChipSelector("##ScenarioViewType",
-                                                   &view_type_,
-                                                   {
-                                                       {ScenarioViewType::ALL, "All"},
-                                                       {ScenarioViewType::RECENT, "Recent"},
-                                                       {ScenarioViewType::STARRED, "Starred"},
-                                                   });
-      if (view_type_changed) {
-        app_->local_store().PutInt(GetViewTypeKey(), (int)view_type_);
-        UpdateFilteredScenarios();
-      }
-
-      ImVec2 char_size = ImGui::CalcTextSize("A");
-      ImGui::SetNextItemWidth(char_size.x * 30);
-      ImGui::InputTextWithHint("##ScenarioSearchInput", icons::kSearch, &search_text_);
-      if (search_text_.size() > 0) {
-        ImGui::SameLine();
-        if (ImGui::SelectableButton(icons::kClear)) {
-          search_text_ = "";
-        }
-      }
-
-      ImGui::Spacing();
-      ImGui::Spacing();
-
-      if (ImGui::BeginChild("ScenarioContent")) {
-        DrawScenariosTable(delete_confirmation_dialog, result);
-      }
-      ImGui::EndChild();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("%s", icons::kFilterList);
+    ImGui::SameLine();
+    bool view_type_changed = ImGui::ChipSelector("##ScenarioViewType",
+                                                 &view_type_,
+                                                 {
+                                                     {ScenarioViewType::ALL, "All"},
+                                                     {ScenarioViewType::RECENT, "Recent"},
+                                                     {ScenarioViewType::STARRED, "Starred"},
+                                                 });
+    if (view_type_changed) {
+      app_->local_store().PutInt(GetViewTypeKey(), (int)view_type_);
+      UpdateFilteredScenarios();
     }
 
-    void DrawScenariosTable(ImGui::ConfirmationDialog<std::string> * delete_confirmation_dialog,
-                            ScenarioBrowserResult * result) {
-      if (ShouldUpdateFilteredScenarios()) {
-        UpdateFilteredScenarios();
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    ImGui::SetNextItemWidth(char_size.x * 30);
+    ImGui::InputTextWithHint("##ScenarioSearchInput", icons::kSearch, &search_text_);
+    if (search_text_.size() > 0) {
+      ImGui::SameLine();
+      if (ImGui::SelectableButton(icons::kClear)) {
+        search_text_ = "";
       }
+    }
 
-      ImGuiTableFlags flags = ImGuiTableFlags_RowBg;
-      if (ImGui::BeginTable("ScenarioTable", 1, flags)) {
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+    ImGui::Spacing();
+    ImGui::Spacing();
 
-        ImGuiListClipper clipper;
-        clipper.Begin(filtered_scenario_names_.size());
+    if (ImGui::BeginChild("ScenarioContent")) {
+      DrawScenariosTable(delete_confirmation_dialog);
+    }
+    ImGui::EndChild();
+  }
 
-        while (clipper.Step()) {
-          for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
-            ImGui::IdGuard lid("ScenarioItem", i);
-            const std::string& scenario_name =
-                IsValidIndex(filtered_scenario_names_, i) ? filtered_scenario_names_[i] : "";
+  void DrawScenariosTable(ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog) {
+    if (ShouldUpdateFilteredScenarios()) {
+      UpdateFilteredScenarios();
+    }
 
-            std::optional<ScenarioItem> maybe_scenario =
-                app_->scenario_manager().GetScenario(scenario_name);
+    ImGuiTableFlags flags = ImGuiTableFlags_RowBg;
+    if (ImGui::BeginTable("ScenarioTable", 1, flags)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
-            ImGui::TableNextRow();
+      ImGuiListClipper clipper;
+      clipper.Begin(filtered_scenario_names_.size());
 
-            ImGui::TableNextColumn();
-            if (maybe_scenario) {
-              /*
-            if (ImGui::Button(icons::kPlayArrow)) {
-              result->scenario_to_start = scenario_name;
-            }
+      while (clipper.Step()) {
+        for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+          ImGui::IdGuard lid("ScenarioItem", i);
+          const std::string& scenario_name =
+              IsValidIndex(filtered_scenario_names_, i) ? filtered_scenario_names_[i] : "";
+
+          std::optional<ScenarioItem> maybe_scenario =
+              app_->scenario_manager().GetScenario(scenario_name);
+
+          ImGui::TableNextRow();
+
+          ImGui::TableNextColumn();
+          if (maybe_scenario) {
+            /*
+          if (ImGui::Button(icons::kPlayArrow)) {
+            result->scenario_to_start = scenario_name;
+          }
+          ImGui::SameLine();
+          */
+            DrawScenarioItem(*maybe_scenario, delete_confirmation_dialog);
+          } else {
+            ImGui::AlignTextToFramePadding();
+            ImGui::Text(scenario_name);
             ImGui::SameLine();
-            */
-              DrawScenarioItem(*maybe_scenario, delete_confirmation_dialog, result);
-            } else {
-              ImGui::AlignTextToFramePadding();
-              ImGui::Text(scenario_name);
-              ImGui::SameLine();
-              if (view_type_ == ScenarioViewType::RECENT) {
-                if (ImGui::Selectable(
-                        icons::kDelete, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-                  app_->history_manager().DeleteRecentView(ObjectType::SCENARIO, scenario_name);
-                  UpdateFilteredScenarios();
-                }
-                ImGui::HelpTooltip("Delete from recents");
+            if (view_type_ == ScenarioViewType::RECENT) {
+              if (ImGui::Selectable(
+                      icons::kDelete, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+                app_->history_manager().DeleteRecentView(ObjectType::SCENARIO, scenario_name);
+                UpdateFilteredScenarios();
               }
-              if (view_type_ == ScenarioViewType::STARRED) {
-                DrawStarItemSelectable(scenario_name);
-              }
+              ImGui::HelpTooltip("Delete from recents");
+            }
+            if (view_type_ == ScenarioViewType::STARRED) {
+              DrawStarItemSelectable(scenario_name);
             }
           }
         }
-
-        ImGui::EndTable();
       }
-    }
 
-   private:
-    std::string GetViewTypeKey() {
-      return std::format("ScenarioViewType_{}", id_);
+      ImGui::EndTable();
     }
-    std::string GetSearchTextKey() {
-      return std::format("ScenarioSearchText_{}", id_);
-    }
+  }
 
-    void DrawScenarioItem(const ScenarioItem& scenario,
-                          ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-                          ScenarioBrowserResult* result) {
-      if (ImGui::Button(scenario.name)) {
-        if (app_->scenario_manager().GetCurrentScenarioName() == scenario.name) {
-          result->scenario_to_start = scenario.name;
-        } else {
-          app_->scenario_manager().SetCurrentScenario(scenario.name);
-        }
-      }
-      const char* popup_id = "ScenarioItemMenu";
-      DrawScenarioRightClickMenu(popup_id, scenario.name, delete_confirmation_dialog, *app_);
-      ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+ private:
+  std::string GetViewTypeKey() {
+    return std::format("ScenarioViewType_{}", id_);
+  }
+  std::string GetSearchTextKey() {
+    return std::format("ScenarioSearchText_{}", id_);
+  }
 
-      ImGui::SameLine();
-      DrawStarItemSelectable(scenario.name);
-    }
-
-    void DrawStarItemSelectable(const std::string& scenario_name) {
-      if (app_->labels_manager().IsStarred(ObjectType::SCENARIO, scenario_name)) {
-        if (ImGui::Selectable(icons::kStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-          app_->labels_manager().UnstarItem(ObjectType::SCENARIO, scenario_name);
-          UpdateFilteredScenarios();
-        }
+  void DrawScenarioItem(const ScenarioItem& scenario,
+                        ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog) {
+    if (ImGui::Button(scenario.name)) {
+      // If already selected and clicked again, start the scenario. i.e. double click to start
+      // TODO: Improve this UX
+      if (app_->scenario_manager().GetCurrentScenarioName() == scenario.name) {
+        app_->state().scenario_run_option = ScenarioRunOption::START_CURRENT;
       } else {
-        if (ImGui::Selectable(
-                icons::kStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-          app_->labels_manager().StarItem(ObjectType::SCENARIO, scenario_name);
-          // UpdateFilteredScenarios(); Is this necessary? You can't click this from the starred
-          // list.
+        app_->scenario_manager().SetCurrentScenario(scenario.name);
+      }
+    }
+    const char* popup_id = "ScenarioItemMenu";
+    DrawScenarioRightClickMenu(popup_id, scenario.name, delete_confirmation_dialog, *app_);
+    ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+
+    ImGui::SameLine();
+    DrawStarItemSelectable(scenario.name);
+  }
+
+  void DrawStarItemSelectable(const std::string& scenario_name) {
+    if (app_->labels_manager().IsStarred(ObjectType::SCENARIO, scenario_name)) {
+      if (ImGui::Selectable(icons::kStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        app_->labels_manager().UnstarItem(ObjectType::SCENARIO, scenario_name);
+        UpdateFilteredScenarios();
+      }
+    } else {
+      if (ImGui::Selectable(icons::kStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+        app_->labels_manager().StarItem(ObjectType::SCENARIO, scenario_name);
+        // UpdateFilteredScenarios(); Is this necessary? You can't click this from the starred
+        // list.
+      }
+    }
+  }
+
+  bool ShouldUpdateFilteredScenarios() {
+    return handled_search_text_ != search_text_;
+  }
+
+  void UpdateFilteredScenarios() {
+    filtered_scenario_names_.clear();
+
+    filtered_scenario_names_.reserve(app_->scenario_manager().scenario_names()->size());
+    auto search_words = GetSearchWords(search_text_);
+    if (view_type_ == ScenarioViewType::STARRED) {
+      auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
+      for (const std::string& scenario_name : items->items) {
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          filtered_scenario_names_.push_back(scenario_name);
+        }
+      }
+    } else if (view_type_ == ScenarioViewType::RECENT) {
+      for (const std::string& scenario_name : app_->history_manager().recent_scenarios()) {
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          filtered_scenario_names_.push_back(scenario_name);
+        }
+      }
+    } else {
+      for (const std::string& scenario_name : *app_->scenario_manager().scenario_names()) {
+        if (StringMatchesSearch(scenario_name, search_words)) {
+          filtered_scenario_names_.push_back(scenario_name);
         }
       }
     }
+    handled_search_text_ = search_text_;
+  }
 
-    bool ShouldUpdateFilteredScenarios() {
-      return handled_search_text_ != search_text_;
-    }
+  std::string search_text_;
+  std::string initial_search_text_;
 
-    void UpdateFilteredScenarios() {
-      filtered_scenario_names_.clear();
+  ScenarioViewType view_type_ = ScenarioViewType::ALL;
+  std::string handled_search_text_;
+  std::vector<std::string> filtered_scenario_names_;
 
-      filtered_scenario_names_.reserve(app_->scenario_manager().scenario_names()->size());
-      auto search_words = GetSearchWords(search_text_);
-      if (view_type_ == ScenarioViewType::STARRED) {
-        auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
-        for (const std::string& scenario_name : items->items) {
-          if (StringMatchesSearch(scenario_name, search_words)) {
-            filtered_scenario_names_.push_back(scenario_name);
-          }
-        }
-      } else if (view_type_ == ScenarioViewType::RECENT) {
-        for (const std::string& scenario_name : app_->history_manager().recent_scenarios()) {
-          if (StringMatchesSearch(scenario_name, search_words)) {
-            filtered_scenario_names_.push_back(scenario_name);
-          }
-        }
-      } else {
-        for (const std::string& scenario_name : *app_->scenario_manager().scenario_names()) {
-          if (StringMatchesSearch(scenario_name, search_words)) {
-            filtered_scenario_names_.push_back(scenario_name);
-          }
-        }
+  // If greater than 0 will expand/collapse all. Will be decremented each render loop.
+  int expand_all_ = 0;
+  int collapse_all_ = 0;
+  Application* app_;
+
+  std::string id_;
+
+  ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
+};
+
+class ScenariosComponentImpl : public ScenariosComponent {
+ public:
+  ScenariosComponentImpl(Application& app)
+      : app_(app), scenario_browser_("ScenarioBrowser", &app) {}
+
+  void Show() override {
+    delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
+      auto maybe_scenario = app_.scenario_manager().GetScenario(scenario_name);
+      if (maybe_scenario.has_value()) {
+        app_.scenario_manager().DeleteScenario(maybe_scenario->name);
+        app_.bundle_manager().SaveDirtyBundles();
+        Reload();
       }
-      handled_search_text_ = search_text_;
+    });
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+
+    if (ImGui::BeginTable("ScenarioColumns", 2, flags)) {
+      ImGui::TableNextColumn();
+      scenario_browser_.Show(&delete_confirmation_dialog_);
+
+      ImGui::TableNextColumn();
+      DrawCurrentScenarioComponent("CurrentScenarioComponent", app_);
+
+      ImGui::EndTable();
+    }
+  }
+
+  void Reload() override {
+    scenario_browser_.Reload();
+  }
+
+ private:
+  void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
+    ImGui::IdGuard cid(id);
+    auto maybe_current_scenario = app.scenario_manager().GetCurrentScenario();
+    if (!maybe_current_scenario) {
+      return;
+    }
+    const ScenarioItem& item = *maybe_current_scenario;
+    ImGui::Text(item.name);
+    ImGui::SameLine();
+    if (ImGui::Button(icons::kEdit)) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = item.name;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
     }
 
-    std::string search_text_;
-    std::string initial_search_text_;
-
-    ScenarioViewType view_type_ = ScenarioViewType::ALL;
-    std::string handled_search_text_;
-    std::vector<std::string> filtered_scenario_names_;
-
-    // If greater than 0 will expand/collapse all. Will be decremented each render loop.
-    int expand_all_ = 0;
-    int collapse_all_ = 0;
-    Application* app_;
-
-    std::string id_;
-
-    ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
-  };
-
-  class ScenariosComponentImpl : public ScenariosComponent {
-   public:
-    ScenariosComponentImpl(Application& app)
-        : app_(app), scenario_browser_("ScenarioBrowser", &app) {}
-
-    void Show() override {
-      delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
-        auto maybe_scenario = app_.scenario_manager().GetScenario(scenario_name);
-        if (maybe_scenario.has_value()) {
-          app_.scenario_manager().DeleteScenario(maybe_scenario->name);
-          app_.bundle_manager().SaveDirtyBundles();
-          Reload();
-        }
-      });
-      ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
-
-      if (ImGui::BeginTable("ScenarioColumns", 2, flags)) {
-        ImGui::TableNextColumn();
-        ScenarioBrowserResult result;
-        scenario_browser_.Show(&delete_confirmation_dialog_, &result);
-
-        ImGui::TableNextColumn();
-        DrawCurrentScenarioComponent("CurrentScenarioComponent", app_);
-
-        if (result.scenario_to_start.size() > 0) {
-          if (app_.scenario_manager().SetCurrentScenario(result.scenario_to_start)) {
-            app_.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
-          }
-        }
-        if (result.scenario_stats_to_view.size() > 0) {
-          app_.GetCurrentScreen()->PushNextScreen(
-              CreateStatsScreen(result.scenario_stats_to_view, result.run_id, &app_));
-        }
-        if (result.scenario_to_edit.size() > 0) {
-          ScenarioEditorOptions opts;
-          opts.scenario_name = result.scenario_to_edit;
-          app_.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
-        }
-        if (result.scenario_to_edit_copy.size() > 0) {
-          ScenarioEditorOptions opts;
-          opts.scenario_name = result.scenario_to_edit_copy;
-          opts.is_new_copy = true;
-          app_.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
-        }
-        if (result.reload_scenarios) {
-          scenario_browser_.Reload();
-        }
-
-        ImGui::EndTable();
-      }
+    /*
+    ImGui::SameLine();
+    if (ImGui::SelectableButton(icons::kMoreVert)) {
     }
+    */
 
-    void Reload() override {
-      scenario_browser_.Reload();
+    if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
+      app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
     }
-
-   private:
-    void DrawCurrentScenarioComponent(const std::string& id, Application& app) {
-      ImGui::IdGuard cid(id);
-      auto maybe_current_scenario = app.scenario_manager().GetCurrentScenario();
-      if (!maybe_current_scenario) {
-        return;
-      }
-      const ScenarioItem& item = *maybe_current_scenario;
-      ImGui::Text(item.name);
+    if (app.scenario_manager().has_running_scenario()) {
       ImGui::SameLine();
-      if (ImGui::Button(icons::kEdit)) {
-        ScenarioEditorOptions opts;
-        opts.scenario_name = item.name;
-        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
-      }
-
-      /*
-      ImGui::SameLine();
-      if (ImGui::SelectableButton(icons::kMoreVert)) {
-      }
-      */
-
-      if (ImGui::Button(std::format("{} Play", icons::kPlayArrow))) {
-        app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
-      }
-      if (app.scenario_manager().has_running_scenario()) {
-        ImGui::SameLine();
-        if (ImGui::Button("Resume")) {
-          app.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
-        }
-      }
-      std::string description = item.unevaluated_def.description();
-      if (description.size() > 0) {
-        if (ImGui::TreeNode("Description")) {
-          ImGui::Text(description);
-          ImGui::TreePop();
-        }
+      if (ImGui::Button("Resume")) {
+        app.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
       }
     }
+    std::string description = item.unevaluated_def.description();
+    if (description.size() > 0) {
+      if (ImGui::TreeNode("Description")) {
+        ImGui::Text(description);
+        ImGui::TreePop();
+      }
+    }
+  }
 
-    Application& app_;
-    ScenarioBrowserComponent scenario_browser_;
-    ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
-  };
+  Application& app_;
+  ScenarioBrowserComponent scenario_browser_;
+  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+};
 
 }  // namespace
 
