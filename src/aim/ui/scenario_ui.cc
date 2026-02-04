@@ -42,6 +42,17 @@ void DrawScenarioRightClickMenu(const char* popup_id,
       opts.is_new_copy = true;
       app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
     }
+    if (ImGui::Selectable("View stats")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = scenario_name;
+      opts.is_new_copy = true;
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+      app.GetCurrentScreen()->PushNextScreen(
+          CreateStatsScreen(scenario_name,
+                            app.stats_manager().GetLatestRunId(scenario_name),
+                            /*replay=*/nullptr,
+                            &app));
+    }
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
       std::string selected_playlist;
@@ -382,15 +393,13 @@ class ScenariosComponentImpl : public ScenariosComponent {
 
     if (!matching_playlists_->empty()) {
       ImGui::SpacedSeparator();
-      ImGui::Text("Playlists");
-      ImGui::Indent();
+      ImGui::Text("Related playlists");
       for (const std::string& playlist_name : *matching_playlists_) {
         if (ImGui::Button(playlist_name)) {
           app_.playlist_manager().SetCurrentPlaylist(playlist_name);
           app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
         }
       }
-      ImGui::Unindent();
     }
   }
 
