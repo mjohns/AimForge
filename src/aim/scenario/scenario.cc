@@ -180,10 +180,13 @@ void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
     if (!is_waiting_for_click_to_start() &&
         KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
       PopSelf();
-      std::shared_ptr<Screen> restart_running_scenario = CreateScenario(create_params_, &app_);
-      if (restart_running_scenario) {
-        app_.scenario_manager().SetCurrentRunningScenario(restart_running_scenario);
-        PushNextScreen(restart_running_scenario);
+      // In scenario editing make the restart kebind just return to the editor.
+      if (!from_scenario_editor_) {
+        std::shared_ptr<Screen> restart_running_scenario = CreateScenario(create_params_, &app_);
+        if (restart_running_scenario) {
+          app_.scenario_manager().SetCurrentRunningScenario(restart_running_scenario);
+          PushNextScreen(restart_running_scenario);
+        }
       }
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {

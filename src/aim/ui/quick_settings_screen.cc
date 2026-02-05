@@ -115,6 +115,19 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::SimpleDropdown(
           "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_size.x * 20);
 
+      // Display a few of the recent themes as direct buttons to click.
+      ImGui::LoopId lid;
+      for (int i = 1; i < std::min<int>(6, theme_names_.size()); ++i) {
+        if (theme_names_[i] == updater_.settings.theme_name()) {
+          continue;
+        }
+        ImGui::SameLine();
+        auto id = lid.Get("Theme");
+        if (ImGui::Button(theme_names_[i])) {
+          updater_.settings.set_theme_name(theme_names_[i]);
+        }
+      }
+
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Crosshair");
       ImGui::SameLine();
@@ -122,6 +135,18 @@ class QuickSettingsScreen : public UiScreen {
                             updater_.settings.mutable_current_crosshair_name(),
                             crosshair_names_,
                             char_size.x * 15);
+
+      // Display a few of the recent crosshairs as direct buttons to click.
+      for (int i = 0; i < std::min<int>(6, crosshair_names_.size()); ++i) {
+        if (crosshair_names_[i] == updater_.settings.current_crosshair_name()) {
+          continue;
+        }
+        ImGui::SameLine();
+        auto id = lid.Get("Crosshair");
+        if (ImGui::Button(crosshair_names_[i])) {
+          updater_.settings.set_current_crosshair_name(crosshair_names_[i]);
+        }
+      }
 
       ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
