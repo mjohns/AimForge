@@ -491,11 +491,11 @@ void Application::FinishRender(RenderContext* render_context) {
   // Setup and start a render pass
   SDL_GPUColorTargetInfo target_info = {};
   target_info.texture = render_context->swapchain_texture;
-  target_info.load_op = SDL_GPU_LOADOP_DONT_CARE;
+  target_info.load_op = SDL_GPU_LOADOP_LOAD;
   target_info.store_op = SDL_GPU_STOREOP_STORE;
   target_info.mip_level = 0;
   target_info.layer_or_depth_plane = 0;
-  target_info.cycle = true;
+  target_info.cycle = false;
 
   SDL_PushGPUDebugGroup(render_context->command_buffer, "Render ImGui");
   auto* imgui_render_pass =

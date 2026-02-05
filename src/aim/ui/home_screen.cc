@@ -326,7 +326,7 @@ class HomeScreen : public UiScreen {
     }
 
     int fps = (int)ImGui::GetIO().Framerate;
-    if (fps < 60 && app_.GetAppRunTimeSeconds() > 4) {
+    if (fps < 30 && app_.GetAppRunTimeSeconds() > 4) {
       ImGui::AlignTextToFramePadding();
       ImGui::TextFmt("{} Fps {}", icons::kWarning, fps);
     }
