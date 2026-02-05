@@ -58,8 +58,19 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
       std::string selected_playlist;
-      for (auto& playlist_name : app.history_manager().recent_playlists()) {
-        auto id = playlist_loop_id.Get();
+      const auto& recent_playlists = app.history_manager().recent_playlists();
+      int playlist_count = 0;
+      for (int i = 0; i < recent_playlists.size(); ++i) {
+        if (playlist_count >= 6) {
+          break;
+        }
+        const std::string& playlist_name = recent_playlists[i];
+        auto id = playlist_loop_id.Get("AddToPlaylist");
+        auto maybe_playlist = app.playlist_manager().GetPlaylist(playlist_name);
+        if (!maybe_playlist.has_value() || maybe_playlist->def().has_levels()) {
+          continue;
+        }
+        playlist_count++;
         if (ImGui::MenuItem(playlist_name.c_str())) {
           selected_playlist = playlist_name;
         }

@@ -388,6 +388,10 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
       opts.is_new_copy = true;
       screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
     }
+    if (ImGui::Selectable("View")) {
+      screen.app().scenario_manager().SetCurrentScenario(scenario_name);
+      screen.app().state().go_to_app_screen = AppScreen::SCENARIOS;
+    }
     if (!is_levels_playlist) {
       if (ImGui::Selectable("Add copy")) {
         ScenarioEditorOptions opts;
