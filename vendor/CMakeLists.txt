@@ -3,12 +3,6 @@ include(FetchContent)
 # Dependencies
 
 FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY "https://github.com/fmtlib/fmt.git"
-  GIT_TAG 11.0.2
-)
-
-FetchContent_Declare(
   SDL3
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
   GIT_TAG release-3.2.30
@@ -49,8 +43,7 @@ FetchContent_Declare(
 # For SDL2 to be able to override options
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-set(FMT_INSTALL OFF)
-set(SPDLOG_FMT_EXTERNAL ON)
+set(SPDLOG_USE_STD_FORMAT ON)
 set(ABSL_PROPAGATE_CXX_STD ON)
 set(GLM_BUILD_LIBRARY ON)
 
@@ -68,5 +61,5 @@ add_subdirectory(protobuf-matchers)
 
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(fmt SDL3 SDL_mixer spdlog glm protobuf googletest)
+FetchContent_MakeAvailable(SDL3 SDL_mixer spdlog glm protobuf googletest)
 
