@@ -96,7 +96,17 @@ void AimAbslLogSink::Send(const absl::LogEntry& entry) {
   }
 }
 
+float Application::GetAppRunTimeSeconds() const {
+  i64 duration_micros = GetNowEpochMicros() - application_start_time_micros_;
+  if (duration_micros > 0) {
+    float duration_seconds = duration_micros / 1000000.0f;
+    return duration_seconds;
+  }
+  return 0.0f;
+}
+
 Application::Application() {
+  application_start_time_micros_ = GetNowEpochMicros();
   state_ = std::make_unique<ApplicationState>();
   file_system_ = std::make_unique<FileSystem>();
   scenario_manager_ = CreateScenarioManager();

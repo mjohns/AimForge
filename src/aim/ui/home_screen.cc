@@ -324,6 +324,11 @@ class HomeScreen : public UiScreen {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
+    int fps = (int)ImGui::GetIO().Framerate;
+    if (fps < 60 && app_.GetAppRunTimeSeconds() > 4) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::TextFmt("{} Fps {}", icons::kWarning, fps);
+    }
     /*
     for (int i = 0; i < 30; ++i) {
       ImGui::Spacing();
