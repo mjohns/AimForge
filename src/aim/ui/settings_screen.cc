@@ -104,14 +104,6 @@ class SettingsScreen : public UiScreen {
       ImGui::SimpleTypeDropdown("GpuPresentModes", &present_mode, kPresentModes, char_x_ * 10);
       updater_.settings.set_present_mode(present_mode);
 
-      ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
-                            .set_label("Metronome BPM")
-                            .set_min(0)
-                            .set_zero_is_unset()
-                            .set_step(1, 5)
-                            .set_width(char_x_ * 10),
-                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
-
       ImGui::SpacedSeparator();
 
       ImGui::AlignTextToFramePadding();
@@ -176,6 +168,16 @@ class SettingsScreen : public UiScreen {
 
       ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+
+      ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
+                            .set_label("Metronome BPM")
+                            .set_min(0)
+                            .set_zero_is_unset()
+                            .set_step(1, 5)
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
+      ImGui::SameLine();
+      ImGui::HelpMarker("Adjust within a run by holding \"b\" and using the scroll wheel");
 
       ImGui::SpacedSeparator();
 
