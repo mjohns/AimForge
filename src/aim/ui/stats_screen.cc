@@ -342,8 +342,8 @@ class StatsScreen : public UiScreen {
     ImGui::TableNextColumn();
     std::string time_ago;
     if (comparison_stats.epoch_seconds > 0) {
-      ImGui::Text(
-          GetHowLongAgoString(comparison_stats.epoch_seconds * 1000000, GetNowEpochMicros()));
+      ImGui::Text(GetHowLongAgoStringFromEpochSeconds(comparison_stats.epoch_seconds,
+                                                      GetNowEpochSeconds()));
     }
     //    ImGui::HelpTooltip(comparison_stats.timestamp);
   }
@@ -608,7 +608,7 @@ class StatsScreen : public UiScreen {
 
         i64 time_micros = stats.epoch_seconds * 1000000;
         if (time_micros > 0) {
-          row.time_ago = GetHowLongAgoString(time_micros, now_micros);
+          row.time_ago = GetHowLongAgoStringFromEpochMicros(time_micros, now_micros);
         }
         row.timestamp = absl::FormatTime(
             "%Y-%m-%d %H:%M", absl::FromTimeT(stats.epoch_seconds), absl::LocalTimeZone());

@@ -408,8 +408,7 @@ TEST(PlaylistManagerTest, CopyPlaylist_DeepCopy_NewUniqueNames) {
 
   CopyPlaylistOptions opts;
   opts.deep_copy = true;
-  EXPECT_THAT(mgr->CopyPlaylist("B P1", "B P2", scenario_mgr.get(), opts),
-              Optional(StrEq("B P2")));
+  EXPECT_THAT(mgr->CopyPlaylist("B P1", "B P2", scenario_mgr.get(), opts), Optional(StrEq("B P2")));
 
   auto playlist1 = mgr->GetPlaylist("B P1");
   auto playlist2 = mgr->GetPlaylist("B P2");
@@ -421,4 +420,69 @@ TEST(PlaylistManagerTest, CopyPlaylist_DeepCopy_NewUniqueNames) {
                           EqualsProto(MakeItem("B S2 (1)", 2)),
                           EqualsProto(MakeItem("B S3 (1)", 3)),
                           EqualsProto(MakeItem("B S3 (1)", 2))));
+}
+
+TEST(PlaylistManagerTest, RenameScenarioInAllPlaylists_BaseName) {
+  auto mgr = CreatePlaylistManager();
+
+  auto item1 = MakeItem("B S1", 1);
+  auto item2 = MakeItem("B S2", 1);
+  auto item3 = MakeItem("B S3", 1);
+  auto item4 = MakeItem("B S3", 1);
+
+  auto item2_cm = MakeItem("B S2 35cm", 1);
+
+  {
+    PlaylistDef def;
+    *def.add_items() = item1;
+    *def.add_items() = item2;
+    *def.add_items() = item3;
+    *def.add_items() = item4;
+    mgr->UpdatePlaylist("B P1", def);
+  }
+
+  {
+    PlaylistDef def;
+    *def.add_items() = item1;
+    *def.add_items() = item2_cm;
+    *def.add_items() = item3;
+    *def.add_items() = item4;
+    mgr->UpdatePlaylist("B P2", def);
+  }
+
+  mgr->RenameScenarioInAllPlaylists("B S1 25cm", "B S1 New 24cm");
+
+  auto playlist1 = mgr->GetPlaylist("B P1");
+  auto playlist2 = mgr->GetPlaylist("B P2");
+  ASSERT_TRUE(playlist1.has_value());
+  ASSERT_TRUE(playlist2.has_value());
+
+  ASSERT_THAT(playlist1->items(),
+              ElementsAre(EqualsProto(MakeItem("B S1 New")),
+                          EqualsProto(item2),
+                          EqualsProto(item3),
+                          EqualsProto(item4)));
+  ASSERT_THAT(playlist2->items(),
+              ElementsAre(EqualsProto(MakeItem("B S1 New")),
+                          EqualsProto(item2_cm),
+                          EqualsProto(item3),
+                          EqualsProto(item4)));
+
+  mgr->RenameScenarioInAllPlaylists("B S2", "B NewS2");
+
+  playlist1 = mgr->GetPlaylist("B P1");
+  playlist2 = mgr->GetPlaylist("B P2");
+  ASSERT_TRUE(playlist1.has_value());
+  ASSERT_TRUE(playlist2.has_value());
+
+  ASSERT_THAT(playlist1->items(),
+              ElementsAre(EqualsProto(MakeItem("B S1 New")),
+                          EqualsProto(MakeItem("B NewS2")),
+                          EqualsProto(item3),
+                          EqualsProto(item4)));
+  ASSERT_THAT(playlist2->items(),
+              ElementsAre(EqualsProto(MakeItem("B S1 New")),
+                          EqualsProto(MakeItem("B NewS2 35cm")),
+                          EqualsProto(item3),
+                          EqualsProto(item4)));
 }

@@ -22,7 +22,8 @@ static i64 TimesPerSecondToIntervalMicros(float times_per_second) {
   return micros_per_second / times_per_second;
 }
 
-std::string GetHowLongAgoString(i64 start_epoch_micros, i64 end_epoch_micros);
+std::string GetHowLongAgoStringFromEpochMicros(i64 start_epoch_micros, i64 end_epoch_micros);
+std::string GetHowLongAgoStringFromEpochSeconds(i64 start_epoch_seconds, i64 end_epoch_seconds);
 std::optional<i64> ParseTimestampStringAsMicros(const std::string& timestamp);
 
 class Stopwatch {

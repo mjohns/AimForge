@@ -72,6 +72,8 @@ class SettingsScreen : public UiScreen {
                             .set_min(1)
                             .set_default(35),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, cm_per_360));
+      ImGui::SameLine();
+      ImGui::HelpMarker("Adjust within a run by holding \"s\" and using the scroll wheel");
 
       ImGui::InputFloat(ImGui::InputFloatParams("Dpi")
                             .set_label("DPI")
@@ -158,6 +160,8 @@ class SettingsScreen : public UiScreen {
                             .set_default(15)
                             .set_width(char_x_ * 9),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, crosshair_size));
+      ImGui::SameLine();
+      ImGui::HelpMarker("Adjust within a run by holding \"c\" and using the scroll wheel");
 
       ImGui::SpacedSeparator();
 

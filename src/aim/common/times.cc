@@ -89,7 +89,12 @@ void TimedInvoker::Invoke(i64 now_micros) {
   }
 }
 
-std::string GetHowLongAgoString(i64 start, i64 end) {
+std::string GetHowLongAgoStringFromEpochSeconds(i64 start_epoch_seconds, i64 end_epoch_seconds) {
+  return GetHowLongAgoStringFromEpochMicros(start_epoch_seconds * 1000000,
+                                            end_epoch_seconds * 1000000);
+}
+
+std::string GetHowLongAgoStringFromEpochMicros(i64 start, i64 end) {
   i64 duration_micros = start > end ? start - end : end - start;
   auto duration = std::chrono::microseconds(duration_micros);
 

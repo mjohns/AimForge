@@ -183,10 +183,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     std::string description = run->playlist.def().description();
     if (description.size() > 0) {
-      if (ImGui::TreeNode("Description")) {
-        ImGui::Text(description);
-        ImGui::TreePop();
-      }
+      ImGui::TextWrapped(description);
     }
 
     ImGui::Spacing();
@@ -462,8 +459,8 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     }
     score_levels.push_back(level);
     scores.push_back(stats.high_score_stats.score);
-    scores_help.push_back(
-        GetHowLongAgoString(stats.high_score_stats.epoch_seconds * 1000 * 1000, now_micros));
+    scores_help.push_back(GetHowLongAgoStringFromEpochMicros(
+        stats.high_score_stats.epoch_seconds * 1000 * 1000, now_micros));
   }
 
   ImGuiTableFlags flags =

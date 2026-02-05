@@ -292,20 +292,30 @@ class PlaylistManagerImpl : public PlaylistManager {
 
   void RenameScenarioInAllPlaylists(const std::string& old_name,
                                     const std::string& new_name) override {
+    std::string old_base_name = GetScenarioNameInfo(old_name).base_name;
+    std::string new_base_name = GetScenarioNameInfo(new_name).base_name;
+
     auto playlists_copy = playlists_;
     for (const Playlist& playlist : *playlists_copy) {
       bool changed = false;
       PlaylistDef def = playlist.def();
       for (auto& item : *def.mutable_items()) {
-        if (item.scenario() == old_name) {
+        NameInfo item_name_info = GetScenarioNameInfo(item.scenario());
+        if (item_name_info.base_name == old_base_name) {
           changed = true;
-          item.set_scenario(new_name);
+          item_name_info.base_name = new_base_name;
+          item.set_scenario(item_name_info.GetFullName());
         }
       }
 
-      if (def.has_levels() && def.levels().base_scenario() == old_name) {
-        def.mutable_levels()->set_base_scenario(new_name);
-        changed = true;
+      const std::string& level_scenario = def.levels().base_scenario();
+      if (level_scenario.size() > 0) {
+        NameInfo item_name_info = GetScenarioNameInfo(level_scenario);
+        if (item_name_info.base_name == old_base_name) {
+          changed = true;
+          item_name_info.base_name = new_base_name;
+          def.mutable_levels()->set_base_scenario(item_name_info.GetFullName());
+        }
       }
 
       if (changed) {

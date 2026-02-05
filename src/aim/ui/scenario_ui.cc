@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "absl/algorithm/container.h"
+#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
@@ -382,14 +383,6 @@ class ScenariosComponentImpl : public ScenariosComponent {
       ImGui::OpenPopup(popup_id);
     }
 
-    ImGui::SpacedSeparator();
-    auto stats = app_.stats_manager().GetAggregateStats(item.name);
-    if (stats.total_runs == 1) {
-      ImGui::TextFmt("1 run");
-    } else {
-      ImGui::TextFmt("{} runs", stats.total_runs);
-    }
-
     if (evaluated_def) {
       std::vector<std::string> chips;
       auto type_it = kScenarioTypeDisplayNameMap.find(evaluated_def->type_case());
@@ -415,6 +408,18 @@ class ScenariosComponentImpl : public ScenariosComponent {
           ImGui::Button(chips[i]);
         }
         ImGui::EndDisabled();
+      }
+    }
+
+    auto stats = app_.stats_manager().GetAggregateStats(item.name);
+    if (stats.total_runs > 0) {
+      ImGui::SpacedSeparator();
+      std::string last_run_str = GetHowLongAgoStringFromEpochSeconds(
+          stats.last_run_stats.epoch_seconds, GetNowEpochSeconds());
+      if (stats.total_runs == 1) {
+        ImGui::TextFmt("1 run ({})", last_run_str);
+      } else {
+        ImGui::TextFmt("{} runs ({})", stats.total_runs, last_run_str);
       }
     }
 
