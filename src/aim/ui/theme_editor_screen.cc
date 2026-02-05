@@ -492,7 +492,7 @@ class ThemeEditorScreen : public UiScreen {
       PopSelf();
     }
     ImGui::SpacedSeparator();
-    if (ImGui::Button(std::format("{} Add theme", icons::kAdd))) {
+    if (ImGui::Button(std::format("{} Theme", icons::kAdd))) {
       OpenNewTheme();
     }
     ImGui::SpacedSeparator();

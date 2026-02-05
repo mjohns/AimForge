@@ -234,7 +234,7 @@ class ScenarioBrowserComponent {
     ImGui::IdGuard cid(id_);
 
     ImGui::Spacing();
-    if (ImGui::Button(std::format("{} Add scenario", icons::kAdd))) {
+    if (ImGui::Button(std::format("{} Scenario", icons::kAdd))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = "";
       opts.is_new_copy = true;

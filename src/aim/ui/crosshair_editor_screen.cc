@@ -90,7 +90,7 @@ class CrosshairEditorScreen : public UiScreen {
       PopSelf();
     }
     Line();
-    if (ImGui::Button(std::format("{} New crosshair", icons::kAdd))) {
+    if (ImGui::Button(std::format("{} Crosshair", icons::kAdd))) {
       OpenNewCrosshair();
     }
     Line();
@@ -230,7 +230,7 @@ class CrosshairEditorScreen : public UiScreen {
       ImGui::Unindent();
     }
 
-    if (ImGui::Button(std::format("{} layer", icons::kAdd))) {
+    if (ImGui::Button(std::format("{} Layer", icons::kAdd))) {
       c.add_layers();
     }
 

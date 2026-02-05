@@ -50,6 +50,7 @@ class AddPlaylistDialog {
         ImGui::SameLine();
         ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
+        ImGui::Spacing();
         if (ImGui::Button("Add")) {
           auto taken_names =
               app.playlist_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
@@ -238,7 +239,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImVec2 char_size = ImGui::CalcTextSize("A");
 
     ImGui::Spacing();
-    if (ImGui::Button(std::format("{} Add playlist", icons::kAdd))) {
+    if (ImGui::Button(std::format("{} Playlist", icons::kAdd))) {
       add_dialog_.NotifyOpen();
     }
 

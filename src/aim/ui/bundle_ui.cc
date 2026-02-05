@@ -123,7 +123,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
 
       ImGui::Spacing();
 
-      if (ImGui::Button(std::format("{} Add bundle", icons::kAdd))) {
+      if (ImGui::Button(std::format("{} Bundle", icons::kAdd))) {
         add_dialog_.NotifyOpen({});
       }
 

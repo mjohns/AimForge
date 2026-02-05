@@ -67,10 +67,7 @@ bool CopyPlaylistDialog::Draw(Application& app) {
       }
 
       ImGui::Unindent();
-      bool cant_copy = deep_copy_ && add_prefix_.size() == 0;
-      if (cant_copy) {
-        ImGui::BeginDisabled();
-      }
+      ImGui::Spacing();
       if (ImGui::Button("Copy")) {
         // Do copy
         CopyPlaylistOptions opts;
@@ -90,9 +87,6 @@ bool CopyPlaylistDialog::Draw(Application& app) {
         }
         ImGui::CloseCurrentPopup();
         source_ = {};
-      }
-      if (cant_copy) {
-        ImGui::EndDisabled();
       }
       ImGui::SameLine();
       if (ImGui::Button("Cancel")) {
