@@ -10,6 +10,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
+#include "aim/common/proto_util.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/search.h"
 #include "aim/common/util.h"
@@ -278,22 +279,27 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SpacedSeparator();
 
-    ImGui::Text("Overrides");
-    ImGui::Indent();
-    DrawOverridesEditor("Overrides", def_.mutable_overrides());
-    if (ImGui::Button("Bake")) {
-      def_ = ApplyScenarioOverrides(def_);
-    }
-    ImGui::SameLine();
-    ImGui::HelpMarker("Apply and remove the overrides.");
-    ImGui::Unindent();
-
-    ImGui::SpacedSeparator();
-
     ImGui::Text("Level overrides");
+    ImGui::SameLine();
+    ImGui::HelpMarker("Define how the difficulty of the scenario should be updated per level");
     ImGui::Indent();
     DrawOverridesEditor("LevelOverrides", def_.mutable_level_overrides(), /*is_levels=*/true);
     ImGui::Unindent();
+
+
+    ImGui::SpacedSeparator();
+
+    bool overrides_default_open = !IsDefaultInstance(def_.overrides());
+    if (ImGui::TreeNodeEx("Overrides",
+                          overrides_default_open ? ImGuiTreeNodeFlags_DefaultOpen : 0)) {
+      DrawOverridesEditor("Overrides", def_.mutable_overrides());
+      if (ImGui::Button("Bake")) {
+        def_ = ApplyScenarioOverrides(def_);
+      }
+      ImGui::SameLine();
+      ImGui::HelpMarker("Apply and remove the overrides.");
+      ImGui::TreePop();
+    }
 
     ImGui::SpacedSeparator();
 
