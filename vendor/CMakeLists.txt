@@ -53,7 +53,6 @@ set(protobuf_BUILD_LIBPROTOC OFF)
 set(protobuf_WITH_ZLIB OFF)
 
 add_subdirectory(imgui)
-add_subdirectory(glad)
 add_subdirectory(sqlite3)
 add_subdirectory(implot)
 add_subdirectory(json)
