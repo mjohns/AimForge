@@ -140,6 +140,7 @@ class HomeScreen : public UiScreen {
   void OnTickStart() override {
     if (state_.go_to_app_screen) {
       app_screen_ = *state_.go_to_app_screen;
+      app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
       state_.go_to_app_screen = {};
     }
     auto run_option = state_.scenario_run_option;

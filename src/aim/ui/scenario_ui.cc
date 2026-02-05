@@ -51,7 +51,8 @@ class CreateLevelsPlaylistDialog {
         ImGui::SameLine();
         ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
-        if (ImGui::Button("Add")) {
+        ImGui::Spacing();
+        if (ImGui::Button("Create playlist")) {
           auto taken_names =
               app.playlist_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
           *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
