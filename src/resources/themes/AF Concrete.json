@@ -1,6 +1,9 @@
 {
   "backAppearance": {
-    "color": {}
+    "texture": {
+      "scale": 2,
+      "textureName": "AF Concrete.jpg"
+    }
   },
   "crosshair": {
     "color": {
@@ -14,7 +17,7 @@
     "mixColor": {},
     "mixPercent": 0.49999997,
     "texture": {
-      "scale": 2.00000048,
+      "scale": 2,
       "textureName": "AF Concrete.jpg"
     }
   },
@@ -47,7 +50,7 @@
     "mixColor": {},
     "mixPercent": 0.42,
     "texture": {
-      "scale": 2.00000048,
+      "scale": 2,
       "textureName": "AF Concrete.jpg"
     }
   },
@@ -55,7 +58,7 @@
     "mixColor": {},
     "mixPercent": 0.530000031,
     "texture": {
-      "scale": 2.00000048,
+      "scale": 2,
       "textureName": "AF Concrete.jpg"
     }
   },

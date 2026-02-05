@@ -40,7 +40,31 @@ class ThemeEditor {
         current_theme_name_(theme_name),
         current_theme_(current_theme),
         theme_names_(std::move(theme_names)),
-        texture_names_(std::move(texture_names)) {}
+        texture_names_(std::move(texture_names)) {
+    // See if all the walls have the same texture/scale and set flag if so.
+    std::string front_texture_name = current_theme_.front_appearance().texture().texture_name();
+    float front_scale = current_theme_.front_appearance().texture().scale();
+    bool all_textures_same = true;
+    for (const WallAppearance& appearance : {
+             current_theme_.front_appearance(),
+             current_theme_.side_appearance(),
+             current_theme_.roof_appearance(),
+             current_theme_.floor_appearance(),
+             current_theme_.back_appearance(),
+         }) {
+      if (!appearance.has_texture()) {
+        all_textures_same = false;
+        break;
+      }
+      std::string texture_name = appearance.texture().texture_name();
+      float scale = appearance.texture().scale();
+      if (texture_name != front_texture_name || scale != front_scale) {
+        all_textures_same = false;
+        break;
+      }
+    }
+    share_texture_and_scale_ = all_textures_same;
+  }
 
   // Returns whether still editing.
   void Draw() {

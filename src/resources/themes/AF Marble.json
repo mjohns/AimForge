@@ -2,7 +2,7 @@
   "backAppearance": {
     "texture": {
       "scale": 1.29999971,
-      "textureName": "marble 3.jpg"
+      "textureName": "AF Marble.jpg"
     }
   },
   "crosshair": {
@@ -18,7 +18,7 @@
     "mixPercent": 0.49999997,
     "texture": {
       "scale": 1.29999971,
-      "textureName": "marble 3.jpg"
+      "textureName": "AF Marble.jpg"
     }
   },
   "frontAppearance": {
@@ -26,7 +26,7 @@
     "mixPercent": 0.440000027,
     "texture": {
       "scale": 1.29999971,
-      "textureName": "marble 3.jpg"
+      "textureName": "AF Marble.jpg"
     }
   },
   "ghostTargetColor": {
@@ -45,13 +45,13 @@
       "r": 213
     }
   },
-  "name": "AF Marble3",
+  "name": "AF Marble",
   "roofAppearance": {
     "mixColor": {},
     "mixPercent": 0.42,
     "texture": {
       "scale": 1.29999971,
-      "textureName": "marble 3.jpg"
+      "textureName": "AF Marble.jpg"
     }
   },
   "sideAppearance": {
@@ -59,7 +59,7 @@
     "mixPercent": 0.530000031,
     "texture": {
       "scale": 1.29999971,
-      "textureName": "marble 3.jpg"
+      "textureName": "AF Marble.jpg"
     }
   },
   "targetColor": {
