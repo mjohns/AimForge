@@ -60,10 +60,14 @@ class CreateLevelsPlaylistDialog {
           levels->set_base_scenario(scenario_name_);
           levels->set_max_level(30);
           app.playlist_manager().UpdatePlaylist(name_.full_name(), def);
-          app.playlist_manager().SetCurrentPlaylist(name_.full_name());
-          app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
-          app.state().go_to_app_screen = AppScreen::PLAYLISTS;
-          did_add = true;
+          bool saved = app.bundle_manager().SaveDirtyBundles();
+          if (saved) {
+            app.playlist_manager().SetCurrentPlaylist(name_.full_name());
+            app.history_manager().UpdateRecentView(ObjectType::PLAYLIST, name_.full_name());
+            app.state().go_to_app_screen = AppScreen::PLAYLISTS;
+            did_add = true;
+          }
+          // TODO: Error popup if failed to save.
           ImGui::CloseCurrentPopup();
           is_open_ = false;
         }
