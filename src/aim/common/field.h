@@ -26,7 +26,9 @@ static Field<float> MultiplyField(Field<float> unscaled, float multiplier) {
 }
 
 static Field<float> CreateOptionalFloatField(std::optional<float>* optional_value) {
-  std::function<float()> get = [=]() { return *(*optional_value); };
+  std::function<float()> get = [=]() {
+    return optional_value->has_value() ? *(*optional_value) : 0;
+  };
   std::function<void(float)> set = [=](float value) { *optional_value = value; };
   std::function<void()> clear = [=]() { *optional_value = {}; };
   std::function<bool()> has = [=]() { return optional_value->has_value(); };

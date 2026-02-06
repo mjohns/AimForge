@@ -15,6 +15,7 @@
 #include "aim/core/stats_manager.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/editor/scenario_editor_screen.h"
+#include "aim/ui/select_level_variation_dialog.h"
 #include "aim/ui/stats_screen.h"
 #include "imgui.h"
 
@@ -104,10 +105,15 @@ class CreateLevelsPlaylistDialog {
   std::string id_ = "CreateLevelsPlaylistDialog";
 };
 
+struct ScenarioDialogs {
+  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog{"DeleteConfirmationDialog"};
+  CreateLevelsPlaylistDialog create_levels_playlist_dialog;
+  SelectLevelVariationDialog select_level_dialog{"SelectScenarioLevelDialog"};
+};
+
 void DrawScenarioRightClickMenu(const char* popup_id,
                                 const std::string& scenario_name,
-                                ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-                                CreateLevelsPlaylistDialog* create_levels_playlist_dialog,
+                                ScenarioDialogs* dialogs,
                                 Application& app) {
   if (ImGui::BeginPopupContextItem(popup_id)) {
     bool is_readonly = app.bundle_manager().IsBundleReadonly(GetBundleName(scenario_name));
@@ -121,6 +127,10 @@ void DrawScenarioRightClickMenu(const char* popup_id,
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
       app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+    }
+    if (ImGui::Selectable("Select difficulty level")) {
+      NameInfo info = GetScenarioNameInfo(scenario_name);
+      dialogs->select_level_dialog.NotifyOpen(info.level);
     }
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
@@ -161,7 +171,7 @@ void DrawScenarioRightClickMenu(const char* popup_id,
                               &app));
       }
       if (ImGui::Selectable("Create levels playlist")) {
-        create_levels_playlist_dialog->NotifyOpen(scenario_name);
+        dialogs->create_levels_playlist_dialog.NotifyOpen(scenario_name);
       }
       ImGui::EndMenu();
     }
@@ -195,8 +205,8 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (!is_readonly) {
       ImGui::SpacedSeparator();
       if (ImGui::Selectable("Delete")) {
-        delete_confirmation_dialog->NotifyOpen(std::format("Delete \"{}\"?", scenario_name),
-                                               scenario_name);
+        dialogs->delete_confirmation_dialog.NotifyOpen(std::format("Delete \"{}\"?", scenario_name),
+                                                       scenario_name);
       }
     }
     ImGui::EndPopup();
@@ -229,8 +239,7 @@ class ScenarioBrowserComponent {
     UpdateFilteredScenarios();
   }
 
-  void Show(ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-            CreateLevelsPlaylistDialog* create_levels_playlist_dialog) {
+  void Show(ScenarioDialogs* dialogs) {
     ImGui::IdGuard cid(id_);
 
     ImGui::Spacing();
@@ -272,13 +281,12 @@ class ScenarioBrowserComponent {
     ImGui::Spacing();
 
     if (ImGui::BeginChild("ScenarioContent")) {
-      DrawScenariosTable(delete_confirmation_dialog, create_levels_playlist_dialog);
+      DrawScenariosTable(dialogs);
     }
     ImGui::EndChild();
   }
 
-  void DrawScenariosTable(ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-                          CreateLevelsPlaylistDialog* create_levels_playlist_dialog) {
+  void DrawScenariosTable(ScenarioDialogs* dialogs) {
     if (ShouldUpdateFilteredScenarios()) {
       UpdateFilteredScenarios();
     }
@@ -309,8 +317,7 @@ class ScenarioBrowserComponent {
           }
           ImGui::SameLine();
           */
-            DrawScenarioItem(
-                *maybe_scenario, delete_confirmation_dialog, create_levels_playlist_dialog);
+            DrawScenarioItem(*maybe_scenario, dialogs);
           } else {
             ImGui::AlignTextToFramePadding();
             ImGui::Text(scenario_name);
@@ -342,9 +349,7 @@ class ScenarioBrowserComponent {
     return std::format("ScenarioSearchText_{}", id_);
   }
 
-  void DrawScenarioItem(const ScenarioItem& scenario,
-                        ImGui::ConfirmationDialog<std::string>* delete_confirmation_dialog,
-                        CreateLevelsPlaylistDialog* create_levels_playlist_dialog) {
+  void DrawScenarioItem(const ScenarioItem& scenario, ScenarioDialogs* dialogs) {
     if (ImGui::Button(scenario.name)) {
       // If already selected and clicked again, start the scenario. i.e. double click to start
       // TODO: Improve this UX
@@ -355,8 +360,7 @@ class ScenarioBrowserComponent {
       }
     }
     const char* popup_id = "ScenarioItemMenu";
-    DrawScenarioRightClickMenu(
-        popup_id, scenario.name, delete_confirmation_dialog, create_levels_playlist_dialog, *app_);
+    DrawScenarioRightClickMenu(popup_id, scenario.name, dialogs, *app_);
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
 
     ImGui::SameLine();
@@ -433,7 +437,7 @@ class ScenariosComponentImpl : public ScenariosComponent {
       : app_(app), scenario_browser_("ScenarioBrowser", &app) {}
 
   void Show() override {
-    delete_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
+    dialogs_.delete_confirmation_dialog.Draw("Delete", [=](const std::string& scenario_name) {
       auto maybe_scenario = app_.scenario_manager().GetScenario(scenario_name);
       if (maybe_scenario.has_value()) {
         app_.scenario_manager().DeleteScenario(maybe_scenario->name);
@@ -441,13 +445,24 @@ class ScenariosComponentImpl : public ScenariosComponent {
         Reload();
       }
     });
-    create_levels_playlist_dialog_.Draw(app_);
+    dialogs_.create_levels_playlist_dialog.Draw(app_);
+
+    std::optional<float> selected_level_value;
+    bool did_select_level = dialogs_.select_level_dialog.Draw(&selected_level_value);
+    if (did_select_level) {
+      const std::string& current_scenario_name = app_.scenario_manager().GetCurrentScenarioName();
+      if (!current_scenario_name.empty()) {
+        NameInfo name_info = GetScenarioNameInfo(current_scenario_name);
+        name_info.level = selected_level_value;
+        app_.scenario_manager().SetCurrentScenario(name_info.GetFullName());
+      }
+    }
 
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
 
     if (ImGui::BeginTable("ScenarioColumns", 2, flags)) {
       ImGui::TableNextColumn();
-      scenario_browser_.Show(&delete_confirmation_dialog_, &create_levels_playlist_dialog_);
+      scenario_browser_.Show(&dialogs_);
 
       ImGui::TableNextColumn();
       DrawCurrentScenarioPanel();
@@ -479,8 +494,7 @@ class ScenariosComponentImpl : public ScenariosComponent {
 
     ImGui::SameLine();
     const char* popup_id = "CurrentScenarioMenu";
-    DrawScenarioRightClickMenu(
-        popup_id, item.name, &delete_confirmation_dialog_, &create_levels_playlist_dialog_, app_);
+    DrawScenarioRightClickMenu(popup_id, item.name, &dialogs_, app_);
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
     if (ImGui::SelectableButton(icons::kMoreVert)) {
       ImGui::OpenPopup(popup_id);
@@ -554,11 +568,10 @@ class ScenariosComponentImpl : public ScenariosComponent {
 
   Application& app_;
   ScenarioBrowserComponent scenario_browser_;
-  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
 
   std::optional<std::vector<std::string>> matching_playlists_;
   std::string matching_playlists_scenario_name_;
-  CreateLevelsPlaylistDialog create_levels_playlist_dialog_;
+  ScenarioDialogs dialogs_;
 };
 
 }  // namespace
