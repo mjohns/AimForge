@@ -24,7 +24,6 @@ enum class AppScreen : int {
   BUNDLES = 4,
 };
 
-
 class ApplicationState {
  public:
   ApplicationState() {}

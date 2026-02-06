@@ -186,8 +186,7 @@ class BundleManagerImpl : public BundleManager {
       }
     }
 
-    bool saved =
-        WriteJsonMessageToFile(GetMutableBundleFilePath(target_bundle_name), bundle_file);
+    bool saved = WriteJsonMessageToFile(GetMutableBundleFilePath(target_bundle_name), bundle_file);
     if (saved) {
       LoadBundlesFromDisk();
     }

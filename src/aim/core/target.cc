@@ -79,7 +79,6 @@ void TargetManager::MarkAllAsNonGhost() {
   }
 }
 
-
 void TargetManager::UpdateTargetPositions(float now_seconds) {
   for (Target& t : targets_) {
     if (t.movement_controller && t.ShouldDraw()) {

@@ -30,8 +30,7 @@ class AddBundleDialog {
     ImGui::IdGuard cid("AddBundleDialogContent");
     std::optional<std::string> added_name;
     if (is_open_) {
-      if (ImGui::BeginDefaultPopupModal(id_.c_str(),
-                                 &is_open_)) {
+      if (ImGui::BeginDefaultPopupModal(id_.c_str(), &is_open_)) {
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Bundle name");
         ImGui::SameLine();
