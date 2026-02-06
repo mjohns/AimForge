@@ -470,15 +470,18 @@ class StatsScreen : public UiScreen {
 
     {
       auto font = app_.font_manager().UseMedium();
-      std::string hit_percent = GetHitPercentageString(stats);
-      if (hit_percent.size() > 0) {
-        ImGui::Text(hit_percent);
-        if (stats.info.has_proximity_percentiles()) {
-          std::string prox_string = "Proximity percentiles:\n";
+      if (stats.info.has_proximity_percentiles()) {
+        float num_shots = stats.info.num_shots();
+        float num_hits = stats.info.num_hits();
+        if (num_shots > 0) {
+          const auto& p = stats.info.proximity_percentiles();
+          float hit_percent = (100 * num_hits) / num_shots;
+          ImGui::TextFmt("{:.0f}%, {}%, {}%", hit_percent, p.p50(), p.p20());
+
+          std::string prox_string;
           auto add_percentile = [&](const std::string& percentile, u32 percent_value) {
             prox_string += std::format("{}th: {}%\n", percentile, percent_value);
           };
-          const auto& p = stats.info.proximity_percentiles();
           add_percentile("90", p.p90());
           add_percentile("80", p.p80());
           add_percentile("70", p.p70());
@@ -500,6 +503,18 @@ class StatsScreen : public UiScreen {
           float offset = (large_height - small_height) * 0.5f;
           ImGui::SetCursorPosY(ImGui::GetCursorPosY() + offset);
           ImGui::InfoMarker(prox_string);
+
+          ImGui::SameLine();
+          ImGui::SetCursorPosY(ImGui::GetCursorPosY() + offset);
+          ImGui::HelpMarker(
+              "Displays percentage of time within the specified middle % of the target. The 3 "
+              "values displayed are 100% (anywhere on target), 50%, 20%. 50% "
+              "means time in the center half of the target.");
+        }
+      } else {
+        std::string hit_percent = GetHitPercentageString(stats);
+        if (hit_percent.size() > 0) {
+          ImGui::Text(hit_percent);
         }
       }
     }

@@ -2618,14 +2618,11 @@
           "profiles": [
             {
               "acceleration": 231,
-              "accelerationJitter": 0,
               "info": {
                 "description": ""
               },
               "speed": 58,
-              "speedJitter": 0,
-              "targetRadius": 3.49999833,
-              "targetRadiusJitter": 0
+              "targetRadius": 5
             }
           ],
           "removeClosestOnMiss": false
