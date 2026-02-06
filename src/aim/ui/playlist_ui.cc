@@ -134,7 +134,8 @@ class PlaylistComponentImpl : public PlaylistComponent {
     ImGui::AlignTextToFramePadding();
     ImGui::Text(current_playlist_name_);
 
-    if (!run->playlist.cm_per_360) {
+    bool is_readonly = app_.bundle_manager().IsBundleReadonly(GetBundleName(run->playlist.name));
+    if (!run->playlist.cm_per_360 && !is_readonly) {
       ImGui::SameLine();
       if (ImGui::Button(icons::kEdit)) {
         showing_editor_ = true;
@@ -162,12 +163,14 @@ class PlaylistComponentImpl : public PlaylistComponent {
         run = app_.playlist_manager().GetCurrentRun();
       }
 
-      ImGui::Spacing();
-      ImGui::Separator();
-      ImGui::Spacing();
-      if (ImGui::Selectable("Delete")) {
-        delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
-                                               run->playlist);
+      if (!is_readonly) {
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+        if (ImGui::Selectable("Delete")) {
+          delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
+                                                 run->playlist);
+        }
       }
       ImGui::EndPopup();
     }

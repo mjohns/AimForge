@@ -419,6 +419,8 @@ void Application::Initialize() {
     // Initialize first startup to have a playlist selected and in recents.
     history_manager_->UpdateRecentView(ObjectType::PLAYLIST, "VDIM Intermediate S5 - Clicking I");
     history_manager_->UpdateRecentView(ObjectType::PLAYLIST, "AF Static Speed Ladder");
+    history_manager_->UpdateRecentView(ObjectType::PLAYLIST, "AF Horizontal Smoothness Fixed Sens");
+    history_manager_->UpdateRecentView(ObjectType::PLAYLIST, "AF Clicking");
   }
 }
 
