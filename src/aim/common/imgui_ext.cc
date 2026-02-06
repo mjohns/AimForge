@@ -206,6 +206,7 @@ void InputJitteredFloat(const InputFloatParams& params, aim::JitteredField<float
   jitter_params.set_label("")
       .set_min(0)
       .set_is_optional(false)
+      .set_zero_is_unset()
       .set_step(params.step, params.fast_step)
       .set_width(params.width);
   jitter_params.format = params.format;
