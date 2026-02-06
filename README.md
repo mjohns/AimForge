@@ -13,3 +13,11 @@ This allows sharing these bundles without naming collisions.
 
 # Technical Overview
 AimForge is a c++ app built on top of SDL3 (and the GPU api) and ImGui. Stats and settings are tracked using sqlite3 and scenarios and other config files are represented using json serialized protobufs. The app uses a simple custom "engine" that can efficiently render scenarios. It is currently fairly well optimized and can run at 5000 fps or capped at 1200 fps with 500k state updates per second (event polling, hit detection, etc). The code is also simple and focused enough that further optimizations should be straightforward to implement (compared to using something like Unreal). Effort was also put into making sure the worst frame is still good and can be easily viewed after a run in the perf tab. Typically the worst frame has a latency which projects 1300 fps.
+
+# Building
+The project is built with CMake. You can open the folder in Visual Studio (not code) on Windows.
+On Unix like systems you can run:
+```bash
+cmake .
+make
+```
