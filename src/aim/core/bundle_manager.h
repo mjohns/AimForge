@@ -29,7 +29,6 @@ class BundleManager {
 
   virtual void DeleteBundle(const std::string& bundle_name) = 0;
   virtual bool SaveBundle(const std::string& bundle_name) = 0;
-  virtual bool SaveJsonBundle(const std::string& bundle_name) = 0;
   virtual bool SaveDirtyBundles() = 0;
   virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
 

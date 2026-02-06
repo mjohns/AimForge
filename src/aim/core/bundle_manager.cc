@@ -15,6 +15,8 @@
 namespace aim {
 namespace {
 
+constexpr const char* kBundleFileNameSuffix = ".bundle.json";
+
 bool IsValidBundleNameChar(char c) {
   return std::isalnum(static_cast<unsigned char>(c)) || c == '_';
 }
@@ -29,10 +31,10 @@ void AddBundlesFromDirectory(
 
   for (const auto& entry : std::filesystem::directory_iterator(base_dir)) {
     std::string filename = entry.path().filename().string();
-    if (!filename.ends_with(".bundle")) {
+    if (!filename.ends_with(kBundleFileNameSuffix)) {
       continue;
     }
-    std::string bundle_name(absl::StripSuffix(filename, ".bundle"));
+    std::string bundle_name(absl::StripSuffix(filename, kBundleFileNameSuffix));
     if (IsValidBundleName(bundle_name)) {
       (*bundle_path_map)[bundle_name] = entry.path();
     } else {
@@ -115,7 +117,7 @@ class BundleManagerImpl : public BundleManager {
       std::filesystem::path bundle_path = entry.second;
 
       BundleFile bundle_file;
-      if (ReadBinaryMessageFromFile(bundle_path, &bundle_file)) {
+      if (ReadJsonMessageFromFile(bundle_path, &bundle_file)) {
         scenario_manager_->LoadScenariosFromBundle(bundle_name, bundle_file);
         playlist_manager_->LoadPlaylistsFromBundle(bundle_name, bundle_file);
       } else {
@@ -143,7 +145,7 @@ class BundleManagerImpl : public BundleManager {
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
-    return WriteBinaryMessageToFile(GetMutableBundleFilePath(bundle_name), bundle_file);
+    return WriteJsonMessageToFile(GetMutableBundleFilePath(bundle_name), bundle_file);
   }
 
   bool CopyBundle(const std::string& source_bundle_name,
@@ -185,21 +187,11 @@ class BundleManagerImpl : public BundleManager {
     }
 
     bool saved =
-        WriteBinaryMessageToFile(GetMutableBundleFilePath(target_bundle_name), bundle_file);
+        WriteJsonMessageToFile(GetMutableBundleFilePath(target_bundle_name), bundle_file);
     if (saved) {
       LoadBundlesFromDisk();
     }
     return saved;
-  }
-
-  bool SaveJsonBundle(const std::string& bundle_name) override {
-    BundleFile bundle_file;
-    playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
-    scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
-
-    std::filesystem::path file_path =
-        fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle.json");
-    return WriteJsonMessageToFile(file_path, bundle_file);
   }
 
   std::unordered_set<std::string> GetDirtyBundles() override {
@@ -294,9 +286,10 @@ class BundleManagerImpl : public BundleManager {
 
  private:
   std::filesystem::path GetMutableBundleFilePath(const std::string& bundle_name) {
-    return fs_->GetUserDataPath("bundles") / (bundle_name + ".bundle");
+    return fs_->GetUserDataPath("bundles") / (bundle_name + kBundleFileNameSuffix);
   }
 
+  // Saves the bundle metadata file containing info about the bundles avaialable.
   void SaveBundlesJsonFile() {
     BundleInfoFile file;
     for (auto& entry : bundle_info_map_) {

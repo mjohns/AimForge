@@ -104,11 +104,11 @@ class BundleFunctionalTest : public ::testing::Test {
   }
 
   std::filesystem::path BaseBundlePath(const std::string& bundle_name) {
-    return base_bundle_path_ / (bundle_name + ".bundle");
+    return base_bundle_path_ / (bundle_name + ".bundle.json");
   }
 
   std::filesystem::path UserBundlePath(const std::string& bundle_name) {
-    return user_bundle_path_ / (bundle_name + ".bundle");
+    return user_bundle_path_ / (bundle_name + ".bundle.json");
   }
 
   void SetUp() override {
@@ -401,9 +401,9 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
   BundleFile other_bundle;
   other_bundle.add_playlists()->set_name("Playlist3");
 
-  ASSERT_TRUE(WriteBinaryMessageToFile(BaseBundlePath("AF"), af_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("USER"), user_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("OTHER"), other_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(BaseBundlePath("AF"), af_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(UserBundlePath("USER"), user_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(UserBundlePath("OTHER"), other_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
@@ -427,7 +427,7 @@ TEST_F(BundleFunctionalTest, LoadInitialBundles) {
 
   BundleFile new_bundle;
   new_bundle.add_playlists()->set_name("Playlist4");
-  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("NEW"), new_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(UserBundlePath("NEW"), new_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
@@ -457,8 +457,8 @@ TEST_F(BundleFunctionalTest, TestUpdateBundleInfo) {
   BundleFile user_bundle;
   user_bundle.add_playlists()->set_name("Playlist2");
 
-  ASSERT_TRUE(WriteBinaryMessageToFile(BaseBundlePath("AF"), af_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("USER"), user_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(BaseBundlePath("AF"), af_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(UserBundlePath("USER"), user_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
@@ -490,8 +490,8 @@ TEST_F(BundleFunctionalTest, TestDeleteBundle) {
   BundleFile user_bundle;
   user_bundle.add_playlists()->set_name("Playlist2");
 
-  ASSERT_TRUE(WriteBinaryMessageToFile(BaseBundlePath("AF"), af_bundle));
-  ASSERT_TRUE(WriteBinaryMessageToFile(UserBundlePath("USER"), user_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(BaseBundlePath("AF"), af_bundle));
+  ASSERT_TRUE(WriteJsonMessageToFile(UserBundlePath("USER"), user_bundle));
 
   EXPECT_THAT(bundle_manager_->LoadBundlesFromDisk(), IsEmpty());
 
