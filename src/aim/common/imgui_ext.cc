@@ -373,4 +373,13 @@ bool SelectableButton(const std::string& label) {
   return clicked;
 }
 
+bool BeginDefaultPopupModal(const char* id, bool* draw) {
+  ImGui::SetNextWindowPos(
+      ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+  return ImGui::BeginPopupModal(id,
+                                draw,
+                                ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                    ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+}
+
 }  // namespace ImGui

@@ -12,12 +12,7 @@ namespace aim {
 bool SelectLevelVariationDialog::Draw(std::optional<float>* selected_level) {
   bool selected = false;
   ImGui::IdGuard cid("SelectLevelVariationDialog");
-  ImGui::SetNextWindowPos(
-      ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  if (ImGui::BeginPopupModal(id_.c_str(),
-                             &draw_popup_,
-                             ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+  if (ImGui::BeginDefaultPopupModal(id_.c_str(), &draw_popup_)) {
     float char_x = ImGui::GetDefaultCharSizeX();
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Scenario level")
                           .set_is_optional()

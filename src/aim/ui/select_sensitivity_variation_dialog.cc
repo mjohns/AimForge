@@ -12,12 +12,7 @@ namespace aim {
 bool SelectSensitivityVariationDialog::Draw(std::optional<float>* selected_cm_per_360) {
   bool selected = false;
   ImGui::IdGuard cid("SelectSensitivityVariationDialog");
-  ImGui::SetNextWindowPos(
-      ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  if (ImGui::BeginPopupModal(id_.c_str(),
-                             &draw_popup_,
-                             ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+  if (ImGui::BeginDefaultPopupModal(id_.c_str(), &draw_popup_)) {
     float char_x = ImGui::GetDefaultCharSizeX();
     for (int i = 10; i <= 70; i += 10) {
       std::string sens1 = std::format("{}cm", i);

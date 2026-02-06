@@ -428,4 +428,6 @@ bool ChipSelector(const std::string& id,
 
 bool SelectableButton(const std::string& label);
 
+bool BeginDefaultPopupModal(const char* id, bool* draw);
+
 }  // namespace ImGui

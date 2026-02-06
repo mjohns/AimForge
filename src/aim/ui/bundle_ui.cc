@@ -30,12 +30,8 @@ class AddBundleDialog {
     ImGui::IdGuard cid("AddBundleDialogContent");
     std::optional<std::string> added_name;
     if (is_open_) {
-      ImGui::SetNextWindowPos(
-          ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-      if (ImGui::BeginPopupModal(id_.c_str(),
-                                 &is_open_,
-                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+      if (ImGui::BeginDefaultPopupModal(id_.c_str(),
+                                 &is_open_)) {
         ImGui::AlignTextToFramePadding();
         ImGui::Text("Bundle name");
         ImGui::SameLine();

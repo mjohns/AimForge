@@ -15,12 +15,7 @@ bool CopyPlaylistDialog::Draw(Application& app) {
   bool did_copy = false;
   bool show_popup = source_.has_value();
   if (show_popup) {
-    ImGui::SetNextWindowPos(
-        ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    if (ImGui::BeginPopupModal(id_.c_str(),
-                               &show_popup,
-                               ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                   ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+    if (ImGui::BeginDefaultPopupModal(id_.c_str(), &show_popup)) {
       ImGui::TextFmt("Copy \"{}\" to", source_->name);
       ImGui::SimpleDropdown("BundlePicker",
                             new_name_.mutable_bundle_name(),
