@@ -61,6 +61,9 @@ class ScenarioEditorScreen : public UiScreen {
 
     // Strip any dynamic suffixes
     NameInfo name_info = GetScenarioNameInfo(name_.full_name());
+    if (name_info.level.has_value()) {
+      bake_level_ = *name_info.level;
+    }
     name_ = ResourceName::Parse(name_info.base_name);
 
     if (opts.force_bundle_name.size() > 0) {
@@ -286,6 +289,16 @@ class ScenarioEditorScreen : public UiScreen {
     DrawOverridesEditor("LevelOverrides", def_.mutable_level_overrides(), /*is_levels=*/true);
     ImGui::Unindent();
 
+    if (ImGui::Button("Bake level")) {
+      def_ = ApplyScenarioLevelOverrides(def_, bake_level_);
+      bake_level_ = 0;
+    }
+    ImGui::SameLine();
+    ImGui::InputFloat(ImGui::InputFloatParams("BakeLevel").set_step(1, 2).set_width(char_x_ * 8),
+                      CreateFloatField(&bake_level_));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Fully evaluate the specified level updating values within the scenario being edited.");
 
     ImGui::SpacedSeparator();
 
@@ -516,6 +529,7 @@ class ScenarioEditorScreen : public UiScreen {
 
   bool comparison_window_open_ = false;
   std::string comparison_scenario_;
+  float bake_level_ = 1;
 };
 
 }  // namespace
