@@ -750,8 +750,11 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
   ImGui::Text("Shot type");
   ImGui::SameLine();
 
-  auto type = def.shot_type().type_case();
   ShotType& s = *def.mutable_shot_type();
+  if (s.type_case() == ShotType::TYPE_NOT_SET) {
+    s.set_click_single(true);
+  }
+  ShotType::TypeCase type = def.shot_type().type_case();
 
   auto* shot_types = &kShotTypes;
   if (is_single_target_tracking) {

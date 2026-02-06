@@ -60,7 +60,8 @@ bool SimpleDropdown(const std::string& id,
   return item_was_selected;
 }
 
-void NotificationPopup::Draw() {
+bool NotificationPopup::Draw() {
+  bool confirmed = false;
   bool show_popup = text_.size() > 0;
   if (show_popup) {
     ImGui::SetNextWindowPos(
@@ -75,6 +76,7 @@ void NotificationPopup::Draw() {
       ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
 
       if (ImGui::Button("Ok")) {
+        confirmed = true;
         text_ = "";
         ImGui::CloseCurrentPopup();
       }
@@ -85,6 +87,7 @@ void NotificationPopup::Draw() {
     ImGui::OpenPopup(id_.c_str());
     open_ = false;
   }
+  return confirmed;
 }
 
 void HelpMarker(const std::string& text) {

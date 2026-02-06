@@ -36,6 +36,8 @@
 namespace aim {
 namespace {
 
+constexpr const char* kDefaultNewScenarioName = "New Scenario";
+
 class ScenarioEditorScreen : public UiScreen {
  public:
   explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application& app)
@@ -52,42 +54,61 @@ class ScenarioEditorScreen : public UiScreen {
     *def_.mutable_room() = GetDefaultSimpleRoom();
     bundle_names_ = app_.bundle_manager().GetWritableBundleNames();
 
-    auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
-    bool source_is_readonly = false;
-    if (initial_scenario.has_value()) {
-      def_ = initial_scenario->unevaluated_def;
-      name_ = ResourceName::Parse(initial_scenario->name);
-    }
-
-    // Strip any dynamic suffixes
-    NameInfo name_info = GetScenarioNameInfo(name_.full_name());
-    if (name_info.level.has_value()) {
-      bake_level_ = *name_info.level;
-    }
-    name_ = ResourceName::Parse(name_info.base_name);
-
-    if (opts.force_bundle_name.size() > 0) {
-      *name_.mutable_bundle_name() = opts.force_bundle_name;
-    } else {
-      // Select the first writable bundle for name. Use the current scenarios bundle if it is
-      // writable.
-      if (app_.bundle_manager().IsBundleReadonly(name_.bundle_name())) {
-        if (bundle_names_.empty()) {
-          *name_.mutable_bundle_name() = kUserBundleName;
-        } else {
-          *name_.mutable_bundle_name() = bundle_names_[0];
-        }
+    if (!opts.scenario_name.empty()) {
+      // Initialize scenario def if source is found otherwise show error and exit.
+      auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
+      if (initial_scenario.has_value()) {
+        def_ = initial_scenario->unevaluated_def;
+      } else {
+        notification_popup_.NotifyOpen(
+            std::format("Scenario \"{}\" does not exist.", opts.scenario_name));
+        exit_after_notification_ = true;
       }
     }
 
-    if (opts.is_new_copy) {
-      std::string final_name =
-          MakeUniqueName(name_.relative_name() + " Copy",
-                         app_.scenario_manager().GetAllRelativeNamesInBundle(name_.bundle_name()));
-      *name_.mutable_relative_name() = final_name;
+    is_new_scenario_ = opts.is_new_copy;
+
+    std::string default_writable_bundle_name =
+        bundle_names_.empty() ? kUserBundleName : bundle_names_[0];
+    if (opts.scenario_name.empty()) {
+      *name_.mutable_bundle_name() = default_writable_bundle_name;
+      *name_.mutable_relative_name() = kDefaultNewScenarioName;
+      is_new_scenario_ = true;
+    } else {
+      // Stip any dynamic suffixes from the name displayed in the editor.
+      NameInfo name_info = GetScenarioNameInfo(opts.scenario_name);
+      name_ = ResourceName::Parse(name_info.base_name);
+      if (name_info.level.has_value()) {
+        bake_level_ = *name_info.level;
+      }
+
+      if (opts.force_bundle_name.size() > 0) {
+        *name_.mutable_bundle_name() = opts.force_bundle_name;
+      }
+
+      if (app_.bundle_manager().IsBundleReadonly(name_.bundle_name())) {
+        // Bundle is not writable. This needs to be a copy within a writable bundle.
+        *name_.mutable_bundle_name() = default_writable_bundle_name;
+        is_new_scenario_ = true;
+      }
+    }
+
+    if (is_new_scenario_) {
+      MakeRelativeNameUniqueInBundle();
     } else {
       original_name_ = name_;
     }
+  }
+
+  void MakeRelativeNameUniqueInBundle() {
+    std::string candidate_name = name_.relative_name();
+    if (candidate_name != kDefaultNewScenarioName && !candidate_name.ends_with(" Copy")) {
+      candidate_name += " Copy";
+    }
+    auto current_relative_names =
+        app_.scenario_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
+    std::string final_name = MakeUniqueName(candidate_name, current_relative_names);
+    *name_.mutable_relative_name() = final_name;
   }
 
  protected:
@@ -101,7 +122,10 @@ class ScenarioEditorScreen : public UiScreen {
       return;
     }
 
-    notification_popup_.Draw();
+    bool notification_confirmed = notification_popup_.Draw();
+    if (notification_confirmed && exit_after_notification_) {
+      PopSelf();
+    }
 
     if (ImGui::Button(icons::kPlayCircle)) {
       PlayScenario();
@@ -116,9 +140,8 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
 
     ImGui::SameLine();
-    bool is_new_scenario = !original_name_.has_value();
-    std::string save_text = is_new_scenario ? std::format("{} Create", icons::kSave)
-                                            : std::format("{} Update", icons::kSave);
+    std::string save_text = is_new_scenario_ ? std::format("{} Create", icons::kSave)
+                                             : std::format("{} Update", icons::kSave);
     if (ImGui::Button(save_text, ImVec2(char_x_ * 8, 0))) {
       if (SaveScenario()) {
         PopSelf();
@@ -326,10 +349,10 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SpacedSeparator();
 
-    if (original_name_.has_value()) {
+    if (!is_new_scenario_) {
       if (ImGui::Button("Make changes in new copy")) {
-        original_name_ = {};
-        *name_.mutable_relative_name() = name_.relative_name() + " Copy";
+        is_new_scenario_ = true;
+        MakeRelativeNameUniqueInBundle();
       }
       ImGui::HelpTooltip(
           "Save the current changes in a new copy of the scenario leaving the original "
@@ -356,6 +379,8 @@ class ScenarioEditorScreen : public UiScreen {
       return false;
     }
 
+    absl::StripAsciiWhitespace(name_.mutable_relative_name());
+
     NameInfo name_info = GetScenarioNameInfo(name_.full_name());
     if (name_info.HasDynamicSuffix()) {
       SetErrorMessage(
@@ -366,18 +391,19 @@ class ScenarioEditorScreen : public UiScreen {
 
     auto& mgr = app_.scenario_manager();
 
-    bool is_new_file =
-        !original_name_.has_value() || original_name_->full_name() != name_.full_name();
-    if (is_new_file) {
+    bool is_rename = !is_new_scenario_ && original_name_.has_value() &&
+                     original_name_->full_name() != name_.full_name();
+    if (is_rename || is_new_scenario_) {
+      // Make sure new name is not taken.
       auto existing_scenario_with_name = mgr.GetScenario(name_.full_name());
       if (existing_scenario_with_name.has_value()) {
         SetErrorMessage(std::format("Scenario \"{}\" already exists", name_.full_name()));
         return false;
       }
+    }
 
-      if (original_name_.has_value()) {
-        mgr.RenameScenario(original_name_->full_name(), name_.full_name());
-      }
+    if (is_rename) {
+      mgr.RenameScenario(original_name_->full_name(), name_.full_name());
     }
 
     if (add_to_playlist_.size() > 0) {
@@ -530,6 +556,8 @@ class ScenarioEditorScreen : public UiScreen {
   bool comparison_window_open_ = false;
   std::string comparison_scenario_;
   float bake_level_ = 1;
+  bool exit_after_notification_ = false;
+  bool is_new_scenario_ = false;
 };
 
 }  // namespace

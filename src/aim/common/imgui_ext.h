@@ -190,7 +190,8 @@ class NotificationPopup {
     text_ = text;
   }
 
-  void Draw();
+  // Returns true when notification confirm button clicked.
+  bool Draw();
 
  private:
   bool open_ = false;
