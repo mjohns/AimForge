@@ -52,6 +52,7 @@ class StatsManagerImpl : public StatsManager {
   void DeleteStats(const std::string& scenario_name, i64 run_id) override {
     i64 scenario_id = db_->GetScenarioId(scenario_name);
     db_->DeleteStats(scenario_id, run_id);
+    stats_cache_.erase(scenario_id);
   }
 
  private:
