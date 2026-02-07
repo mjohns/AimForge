@@ -97,7 +97,7 @@ inline const std::vector<std::pair<Direction, std::string>> kForwardBackDirectio
 inline const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kClickSingle, "Click"},
     {ShotType::kTrackingInvincible, "Tracking"},
-    {ShotType::kTrackingKill, "Tracking kill"},
+    {ShotType::kTrackingKill, "Switching"},
     {ShotType::kPoke, "Poke"},
     {ShotType::kTrackingProximity, "Proximity tracking"},
     {ShotType::kClickMulti, "Multi click"},
