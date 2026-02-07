@@ -62,7 +62,7 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
       ImGui::Text("Height");
       ImGui::SameLine();
       DrawRegionLengthEditor(
-          "InnterHeight", RegionLength::kYPercentValue, t->mutable_inner_y_length(), 25);
+          "InnerHeight", RegionLength::kYPercentValue, t->mutable_inner_y_length(), 25);
 
       ImGui::Unindent();
     } else {
@@ -110,7 +110,7 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
                                    RegionLength::kDepthPercentValue,
                                    region->mutable_depth(),
                                    region->mutable_depth_jitter(),
-                                   30);
+                                   0);
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The distance away from the wall towards the camera. The greater the value, the "
