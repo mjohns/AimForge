@@ -162,8 +162,6 @@ class Application {
     return *logo_texture_;
   }
 
-  float GetAppRunTimeSeconds() const;
-
   void EnableVsync();
   void SetPresentMode(PresentMode present_mode);
 
@@ -179,6 +177,7 @@ class Application {
   void Initialize();
 
   SDL_Window* sdl_window_ = nullptr;
+  SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
 
   int window_width_ = -1;
@@ -213,7 +212,6 @@ class Application {
 
   bool should_exit_ = false;
   bool should_restart_ = false;
-  i64 application_start_time_micros_ = 0;
 };
 
 }  // namespace aim
