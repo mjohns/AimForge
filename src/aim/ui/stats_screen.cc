@@ -454,6 +454,17 @@ class StatsScreen : public UiScreen {
       auto font = app_.font_manager().UseLarge();
       ImGui::SameLine();
       ImGui::Button(std::format("{}###pervious_high_diff", percent_diff_string));
+
+      font.Pop();
+
+      std::string high_score_time =
+
+          GetHowLongAgoStringFromEpochSeconds(details_.previous_high_score_stats.epoch_seconds,
+                                              GetNowEpochSeconds());
+      bool is_new_high = percent_diff > 0;
+      std::string prefix = is_new_high ? "Previous high score" : "Current high score";
+      ImGui::HelpTooltip(std::format(
+          "{}: {} ({})", prefix, MaybeIntToString(previous_high_score, 2), high_score_time));
     }
     if (evaluated_scenario_def_) {
       float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
