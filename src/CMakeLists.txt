@@ -1,9 +1,18 @@
 set(NAME "AimForge")
 
+
+set(PROJECT_SOURCES
+    main.cc
+)
+
+if(WIN32)
+    list(APPEND PROJECT_SOURCES "logo.rc")
+endif()
+
 add_subdirectory(aim)
 add_executable(
     ${NAME}
-    main.cc )
+    ${PROJECT_SOURCES})
 
 if(WIN32)
     set_target_properties(${NAME}

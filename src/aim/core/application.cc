@@ -176,9 +176,6 @@ Application::~Application() {
   if (sdl_window_ != nullptr) {
     SDL_DestroyWindow(sdl_window_);
   }
-  if (icon_ != nullptr) {
-    SDL_DestroySurface(icon_);
-  }
 
   Mix_CloseAudio();
   Mix_Quit();
@@ -257,15 +254,6 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
 
   // SDL_ShowWindow(sdl_window_);
-
-  trace.Add("SetIcon");
-  auto logo_path = file_system_->GetBasePath("resources/images/logo.png");
-  icon_ = LoadImageSurface(logo_path.string().c_str());
-  if (icon_ != nullptr) {
-    SDL_SetWindowIcon(sdl_window_, icon_);
-  } else {
-    logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
-  }
 
   trace.Add("ImGui Start");
   // Setup Dear ImGui context

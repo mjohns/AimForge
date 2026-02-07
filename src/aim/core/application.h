@@ -179,7 +179,6 @@ class Application {
   void Initialize();
 
   SDL_Window* sdl_window_ = nullptr;
-  SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
 
   int window_width_ = -1;
