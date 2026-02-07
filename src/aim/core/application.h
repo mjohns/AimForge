@@ -162,6 +162,8 @@ class Application {
     return *logo_texture_;
   }
 
+  float GetAppRunTimeSeconds() const;
+
   void EnableVsync();
   void SetPresentMode(PresentMode present_mode);
 
@@ -212,6 +214,7 @@ class Application {
 
   bool should_exit_ = false;
   bool should_restart_ = false;
+  i64 application_start_time_micros_ = 0;
 };
 
 }  // namespace aim

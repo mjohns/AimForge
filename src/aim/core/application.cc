@@ -258,16 +258,20 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
 
   // SDL_ShowWindow(sdl_window_);
 
-#ifndef _WIN32
-  trace.Add("SetIcon");
-  auto logo_path = file_system_->GetBasePath("resources/images/logo.png");
-  icon_ = LoadImageSurface(logo_path.string().c_str());
-  if (icon_ != nullptr) {
-    //SDL_SetWindowIcon(sdl_window_, icon_);
-  } else {
-    logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
-  }
+  bool set_icon = true;
+#ifdef _WIN32
+  set_icon = false;
 #endif
+  if (set_icon) {
+    trace.Add("SetIcon");
+    auto logo_path = file_system_->GetBasePath("resources/images/logo.png");
+    icon_ = LoadImageSurface(logo_path.string().c_str());
+    if (icon_ != nullptr) {
+      // SDL_SetWindowIcon(sdl_window_, icon_);
+    } else {
+      logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
+    }
+  }
 
   trace.Add("ImGui Start");
   // Setup Dear ImGui context
