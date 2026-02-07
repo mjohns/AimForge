@@ -241,18 +241,17 @@ void Scenario::OnDetach() {
 
 void Scenario::OnTickStart() {
   update_data_ = {};
-
-  if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
-    HandleScenarioDone();
+  if (run_state_ == ScenarioRunState::DONE) {
+    // TODO: Maybe should clear in ApplicationState
+    PopSelf();
     return;
   }
   if (!app_.has_input_focus()) {
     PopSelf();
     return;
   }
-  if (run_state_ == ScenarioRunState::DONE) {
-    // TODO: Maybe should clear in ApplicationState
-    PopSelf();
+  if (timer_.GetElapsedSeconds() >= def_.duration_seconds()) {
+    HandleScenarioDone();
     return;
   }
   if (save_crosshair_) {
