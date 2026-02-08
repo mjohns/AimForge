@@ -386,6 +386,8 @@ class StatsScreen : public UiScreen {
       ImGui::TextFmt("Render time: {:.2f}ms",
                      (worst_times_.render_end - worst_times_.render_start) / 1000.0);
       ImGui::Indent();
+      ImGui::TextFmt("New ImGui frame: {:.2f}ms",
+                     worst_times_.render_new_imgui_frame.GetSeconds() * 1000.0);
       ImGui::TextFmt("Build draw data: {:.2f}ms",
                      worst_times_.build_draw_data.GetSeconds() * 1000.0);
       ImGui::TextFmt("Pack instance data: {:.2f}ms",
@@ -398,7 +400,12 @@ class StatsScreen : public UiScreen {
                      worst_times_.upload_instance_data_memcpy.GetSeconds() * 1000.0);
       ImGui::TextFmt("Render draw data: {:.2f}ms",
                      worst_times_.render_draw_data.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Draw crosshair: {:.2f}ms", worst_times_.draw_crosshair.GetSeconds() * 1000.0);
       ImGui::TextFmt("Render finish: {:.2f}ms", worst_times_.render_finish.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Start until build draw data: {:.2f}ms",
+                     (worst_times_.build_draw_data.start - worst_times_.render_start) / 1000.0);
+      ImGui::TextFmt("Render draw data until end: {:.2f}ms",
+                     (worst_times_.render_end - worst_times_.render_draw_data.end) / 1000.0);
       ImGui::Unindent();
     }
     ImGui::Unindent();

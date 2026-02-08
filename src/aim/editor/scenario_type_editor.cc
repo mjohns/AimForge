@@ -449,8 +449,7 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(BounceProfile, p, delay_seconds));
   ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor")
-                       .set_label("Only delay on floor")
-                       .set_false_is_unset(),
+                       .set_label("Only delay on floor"),
                    PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
 
   ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
@@ -870,7 +869,7 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
         "early based on this time.");
 
     ImGui::InputBool(
-        ImGui::InputBoolParams("NoPartialKills").set_label("No partial kills").set_false_is_unset(),
+        ImGui::InputBoolParams("NoPartialKills").set_label("No partial kills"),
         PROTO_BOOL_FIELD(ShotType, def.mutable_shot_type(), no_partial_kills));
   }
 }

@@ -94,6 +94,8 @@ struct FrameTimes {
   TimeSpan upload_instance_data_create_buffer;
   TimeSpan render_draw_data;
   TimeSpan render_finish;
+  TimeSpan render_new_imgui_frame;
+  TimeSpan draw_crosshair;
 
   i64 total = 0;
   i64 frame_number = 0;

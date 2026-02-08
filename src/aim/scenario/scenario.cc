@@ -410,9 +410,13 @@ void Scenario::OnRunningTick() {
   current_times_.render_start = timer_.GetElapsedMicros();
   auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
+  current_times_.render_new_imgui_frame.start = timer_.GetElapsedMicros();
   app_.NewImGuiFrame();
+  current_times_.render_new_imgui_frame.end = timer_.GetElapsedMicros();
   app_.BeginFullscreenWindow();
+  current_times_.draw_crosshair.start = timer_.GetElapsedMicros();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+  current_times_.draw_crosshair.end = timer_.GetElapsedMicros();
 
   float elapsed_seconds = timer_.GetElapsedSeconds();
   ImGui::Text("time: %.1f", elapsed_seconds);

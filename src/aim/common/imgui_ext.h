@@ -309,14 +309,14 @@ struct InputBoolParams {
     return *this;
   }
 
-  InputBoolParams& set_false_is_unset() {
-    false_is_unset = true;
+  InputBoolParams& set_store_explicit_false() {
+    false_is_unset = false;
     return *this;
   }
 
   std::string id;
   std::string label;
-  bool false_is_unset = false;
+  bool false_is_unset = true;
 };
 
 void InputBool(const InputBoolParams& params, aim::Field<bool> field);
