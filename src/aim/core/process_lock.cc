@@ -67,9 +67,9 @@ class ProcessLockImpl : public ProcessLock {
       return {};
     }
 
-    // Check if the pid is a valid AimForge process.
+    // Check if the pid is a valid FpsAimForge process.
     std::string process_name = GetProcessNameFromPid(existing_pid);
-    if (process_name == "AimForge.exe" || process_name == "AimForge") {
+    if (process_name == "FpsAimForge.exe" || process_name == "FpsAimForge") {
       return existing_pid;
     }
 

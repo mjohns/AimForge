@@ -225,7 +225,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   SDL_WindowFlags window_flags =
       (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   trace.Add("SDL_CreateWindow");
-  sdl_window_ = SDL_CreateWindow("AimForge", 0, 0, window_flags);
+  sdl_window_ = SDL_CreateWindow("FpsAimForge", 0, 0, window_flags);
   if (sdl_window_ == nullptr) {
     return std::format("Failed to create window: {}", SDL_GetError());
   }
@@ -566,7 +566,7 @@ std::unique_ptr<Application> Application::Create() {
   auto maybe_error = application->InitializeWindow(stopwatch);
   if (maybe_error) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                             "AimForge Window Initialization Error",
+                             "FpsAimForge Window Initialization Error",
                              maybe_error->c_str(),
                              nullptr);
     return {};
@@ -575,7 +575,7 @@ std::unique_ptr<Application> Application::Create() {
   maybe_error = application->InitializeCritical(stopwatch);
   if (maybe_error) {
     SDL_ShowSimpleMessageBox(
-        SDL_MESSAGEBOX_ERROR, "AimForge Initialization Error", maybe_error->c_str(), nullptr);
+        SDL_MESSAGEBOX_ERROR, "FpsAimForge Initialization Error", maybe_error->c_str(), nullptr);
     return {};
   }
 

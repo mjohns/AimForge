@@ -1,4 +1,4 @@
-set(NAME "AimForge")
+set(NAME "FpsAimForge")
 
 
 set(PROJECT_SOURCES

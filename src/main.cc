@@ -26,10 +26,10 @@ int main(int, char**) {
   auto existing_pid_with_lock = process_lock->CreateLockFile();
   if (existing_pid_with_lock) {
     std::string error_msg =
-        std::format("An existing instance of AimForge is already running with process id: {}",
+        std::format("An existing instance of FpsAimForge is already running with process id: {}",
                     *existing_pid_with_lock);
     SDL_ShowSimpleMessageBox(
-        SDL_MESSAGEBOX_ERROR, "AimForge already open", error_msg.c_str(), nullptr);
+        SDL_MESSAGEBOX_ERROR, "FpsAimForge already open", error_msg.c_str(), nullptr);
     return 0;
   }
   auto pid_cleanup = absl::MakeCleanup([&]() { process_lock->ReleaseLockFile(); });

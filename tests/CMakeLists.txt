@@ -1,4 +1,4 @@
-set(NAME AimForgeTests) 
+set(NAME FpsAimForgeTests) 
 
 file(GLOB_RECURSE TEST_SOURCES *.cc)
 
