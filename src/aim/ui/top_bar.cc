@@ -27,7 +27,7 @@ void DrawTopBar(UiScreen* screen) {
   {
     auto font = app.font_manager().UseLargeBold();
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("AimForge");
+    ImGui::Text("FpsAimForge");
   }
 
   auto font = app.font_manager().UseLarge();

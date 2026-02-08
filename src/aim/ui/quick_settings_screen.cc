@@ -117,7 +117,7 @@ class QuickSettingsScreen : public UiScreen {
 
       // Display a few of the recent themes as direct buttons to click.
       ImGui::LoopId lid;
-      for (int i = 1; i < std::min<int>(6, theme_names_.size()); ++i) {
+      for (int i = 0; i < std::min<int>(6, theme_names_.size()); ++i) {
         if (theme_names_[i] == updater_.settings.theme_name()) {
           continue;
         }

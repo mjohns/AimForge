@@ -50,7 +50,6 @@ class ThemeEditor {
              current_theme_.side_appearance(),
              current_theme_.roof_appearance(),
              current_theme_.floor_appearance(),
-             current_theme_.back_appearance(),
          }) {
       if (!appearance.has_texture()) {
         all_textures_same = false;
@@ -195,7 +194,6 @@ class ThemeEditor {
       DrawWallAppearanceEditor("Sides", current_theme_.mutable_side_appearance());
       DrawWallAppearanceEditor("Floor", current_theme_.mutable_floor_appearance());
       DrawWallAppearanceEditor("Roof", current_theme_.mutable_roof_appearance());
-      DrawWallAppearanceEditor("Back", current_theme_.mutable_back_appearance());
 
       if (share_texture_and_scale_) {
         const WallAppearance& front = current_theme_.front_appearance();
@@ -206,7 +204,6 @@ class ThemeEditor {
                    current_theme_.mutable_side_appearance(),
                    current_theme_.mutable_floor_appearance(),
                    current_theme_.mutable_roof_appearance(),
-                   current_theme_.mutable_back_appearance(),
                }) {
             auto* tex = appearance->mutable_texture();
             if (front.texture().has_scale()) {

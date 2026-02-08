@@ -214,19 +214,18 @@ class DrawDataBuilder {
                   draw_data);
     }
 
-    /*
-    {
+    if (room.has_depth()) {
       // Back wall
       glm::mat4 model(1.f);
       model = glm::translate(model, glm::vec3(0, -1 * depth, 0));
       model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 0, 1));
       model = glm::scale(model, glm::vec3(width, 1.0f, height));
-      DrawWall(model,
-               view,
-               {width, height},
-               theme.has_back_appearance() ? theme.back_appearance() : theme.front_appearance());
+      AddDrawWall(view_projection * model,
+                  {width, height},
+                  theme.front_appearance(),
+                  not_cylinder,
+                  draw_data);
     }
-    */
 
     {
       // Floor wall

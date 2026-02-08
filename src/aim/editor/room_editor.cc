@@ -50,6 +50,15 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::SetNextItemWidth(char_x * 12);
     ImGui::InputFloat("##RoomHeight", &height, 1, 10, "%.0f");
     room.mutable_simple_room()->set_height(height);
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Depth")
+                          .set_is_optional()
+                          .set_default(400)
+                          .set_step(1, 10)
+                          .set_width(char_x * 12),
+                      PROTO_FLOAT_FIELD(SimpleRoom, room.mutable_simple_room(), depth));
+    ImGui::SameLine();
+    ImGui::HelpMarker("If set the room will have a fixed depth and the back wall will be drawn");
   }
 
   if (room.type_case() == Room::kBarrelRoom) {

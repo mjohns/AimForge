@@ -27,7 +27,6 @@ message CylinderRoom {
 // Similar to a cylinder room but turned on its side. The target wall is a circle.
 message BarrelRoom {
   float radius = 1;
-  float depth = 2;
 }
 
 message Room {

@@ -67,7 +67,10 @@ Wall Wall::ForRoom(const Room& room) {
   } else if (room.has_simple_room()) {
     wall.width = room.simple_room().width();
     wall.height = room.simple_room().height();
-    wall.depth = abs(room.camera_position().y());
+    wall.depth = room.simple_room().depth();
+    if (wall.depth <= 0) {
+      wall.depth = abs(room.camera_position().y());
+    }
   }
   return wall;
 }
