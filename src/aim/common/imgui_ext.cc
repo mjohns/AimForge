@@ -385,4 +385,39 @@ bool BeginDefaultPopupModal(const char* id, bool* draw) {
                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
 }
 
+std::optional<std::string> MultilineTextEntryDialog::Draw() {
+  std::optional<std::string> result;
+  auto* viewport = ImGui::GetMainViewport();
+  ImVec2 work_size = viewport->WorkSize;
+  ImGui::SetNextWindowPos(
+      ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+  if (BeginPopupModal(id_.c_str(),
+                      &is_open_,
+                      ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                          ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
+    ImGui::InputTextMultiline("##DescriptionInput",
+                              &text_,
+                              ImVec2(work_size.x * 0.4, work_size.y * 0.5),
+                              ImGuiInputTextFlags_AllowTabInput);
+    ImGui::Spacing();
+    if (ImGui::Button("Set")) {
+      result = text_;
+      is_open_ = false;
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      is_open_ = false;
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
+  }
+  if (open_) {
+    ImGui::OpenPopup(id_.c_str());
+    is_open_ = true;
+    open_ = false;
+  }
+  return result;
+}
+
 }  // namespace ImGui

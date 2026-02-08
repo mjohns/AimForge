@@ -181,6 +181,24 @@ class ConfirmationDialog {
   std::string text_;
 };
 
+class MultilineTextEntryDialog {
+ public:
+  explicit MultilineTextEntryDialog(const std::string& id) : id_(id) {}
+
+  void NotifyOpen(const std::string& text) {
+    open_ = true;
+    text_ = text;
+  }
+
+  std::optional<std::string> Draw();
+
+ private:
+  bool open_ = false;
+  bool is_open_ = false;
+  std::string id_;
+  std::string text_;
+};
+
 class NotificationPopup {
  public:
   explicit NotificationPopup(const std::string& id) : id_(id) {}

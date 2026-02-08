@@ -56,9 +56,31 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
     notification_popup_.Draw();
+    auto maybe_description = description_dialog_.Draw();
+    if (maybe_description) {
+      description_ = *maybe_description;
+    }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
     char_x_ = char_size.x;
+
+    ImGui::Spacing();
+
+    if (ImGui::Button("Save")) {
+      if (SavePlaylist()) {
+        result->editor_closed = true;
+        result->playlist_updated = true;
+        return;
+      }
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      result->editor_closed = true;
+      return;
+    }
+
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text(bundle_name_);
@@ -82,36 +104,29 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       }
     }
 
-    if (ImGui::TreeNode("Description")) {
-      ImGui::InputTextMultiline("##DescriptionInput",
-                                &description_,
-                                ImGui::GetContentRegionAvail(),
-                                ImGuiInputTextFlags_AllowTabInput);
-      ImGui::TreePop();
+    ImGui::SpacedSeparator();
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Description");
+    ImGui::SameLine();
+
+    if (ImGui::Button(icons::kEdit)) {
+      description_dialog_.NotifyOpen(description_);
     }
+
+    if (description_.size() > 0) {
+      ImGui::Indent();
+      ImGui::TextWrapped(description_);
+      ImGui::Unindent();
+    }
+
+    ImGui::SpacedSeparator();
 
     if (type == PlaylistType::LEVELS) {
       DrawLevelsEditor();
     }
 
-    if (ImGui::Button("Save")) {
-      if (SavePlaylist()) {
-        result->editor_closed = true;
-        result->playlist_updated = true;
-        return;
-      }
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Cancel")) {
-      result->editor_closed = true;
-      return;
-    }
-
     if (type == PlaylistType::DEFAULT) {
-      ImGui::Spacing();
-      ImGui::Separator();
-      ImGui::Spacing();
       ImGui::BeginChild("PlaylistScrollableContent");
       DrawPlaylistScenariosEditor(result);
       ImGui::EndChild();
@@ -318,7 +333,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::SetNextItemWidth(char_x_ * 18);
     ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
     ImGui::SameLine();
-    if (ImGui::Button(icons::kCancel)) {
+    if (ImGui::SelectableButton(icons::kClear)) {
       scenario_search_text_ = "";
     }
     if (scenario_search_text_.size() > 0) {
@@ -409,6 +424,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   PlaylistDef original_playlist_def_;
   ImGui::NotificationPopup notification_popup_{"Notification"};
   std::string description_;
+  ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionEditor"};
 };
 
 }  // namespace
