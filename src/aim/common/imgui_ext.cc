@@ -60,32 +60,25 @@ bool SimpleDropdown(const std::string& id,
   return item_was_selected;
 }
 
+void NotificationPopup::NotifyOpen(const std::string& text) {
+  text_ = text;
+  popup_.Open();
+}
+
 bool NotificationPopup::Draw() {
   bool confirmed = false;
-  bool show_popup = text_.size() > 0;
-  if (show_popup) {
-    ImGui::SetNextWindowPos(
-        ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    if (ImGui::BeginPopupModal(id_.c_str(),
-                               &show_popup,
-                               ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                   ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
-      ImGui::Text(text_);
+  if (popup_.Begin()) {
+    ImGui::Text(text_);
 
-      float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
-      ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+    float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
 
-      if (ImGui::Button("Ok")) {
-        confirmed = true;
-        text_ = "";
-        ImGui::CloseCurrentPopup();
-      }
-      ImGui::EndPopup();
+    if (ImGui::Button("Ok")) {
+      confirmed = true;
+      text_ = "";
+      popup_.Close();
     }
-  }
-  if (open_) {
-    ImGui::OpenPopup(id_.c_str());
-    open_ = false;
+    popup_.End();
   }
   return confirmed;
 }
@@ -418,6 +411,31 @@ std::optional<std::string> MultilineTextEntryDialog::Draw() {
     open_ = false;
   }
   return result;
+}
+
+bool Popup::Begin() {
+  if (do_open_) {
+    do_open_ = false;
+    ImGui::OpenPopup(id_.c_str());
+  }
+  ImGui::SetNextWindowPos(
+      ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+  return ImGui::BeginPopupModal(id_.c_str(),
+                                nullptr,
+                                ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+                                    ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+}
+
+void Popup::End() {
+  ImGui::EndPopup();
+}
+
+void Popup::Close() {
+  ImGui::CloseCurrentPopup();
+}
+
+void Popup::Open() {
+  do_open_ = true;
 }
 
 }  // namespace ImGui

@@ -199,24 +199,6 @@ class MultilineTextEntryDialog {
   std::string text_;
 };
 
-class NotificationPopup {
- public:
-  explicit NotificationPopup(const std::string& id) : id_(id) {}
-
-  void NotifyOpen(const std::string& text) {
-    open_ = true;
-    text_ = text;
-  }
-
-  // Returns true when notification confirm button clicked.
-  bool Draw();
-
- private:
-  bool open_ = false;
-  std::string id_;
-  std::string text_;
-};
-
 void HelpMarker(const std::string& text);
 void InfoMarker(const std::string& text);
 void HelpTooltip(const std::string& text);
@@ -448,5 +430,34 @@ bool ChipSelector(const std::string& id,
 bool SelectableButton(const std::string& label);
 
 bool BeginDefaultPopupModal(const char* id, bool* draw);
+
+class Popup {
+ public:
+  explicit Popup(const std::string& id) : id_(id) {}
+
+  bool Begin();
+  void End();
+  void Close();
+  void Open();
+
+ private:
+  std::string id_;
+  bool do_open_ = false;
+};
+
+class NotificationPopup {
+ public:
+  explicit NotificationPopup(const std::string& id) : popup_(id) {}
+
+  void NotifyOpen(const std::string& text);
+
+  // Returns true when notification confirm button clicked.
+  bool Draw();
+
+ private:
+  std::string text_;
+  Popup popup_;
+};
+
 
 }  // namespace ImGui
