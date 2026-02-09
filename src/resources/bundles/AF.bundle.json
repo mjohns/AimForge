@@ -19,9 +19,7 @@
      "profiles": [
       {
        "info": {},
-       "targetRadius": 1.79999971,
-       "targetRadiusJitter": 0,
-       "speedJitter": 0
+       "targetRadius": 1.79999971
       }
      ],
      "numTargets": 2,
@@ -46,15 +44,6 @@
         "xOffset": {
          "value": 43
         },
-        "yOffset": {
-         "value": 0
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "rectangle": {
          "xLength": {
           "xPercentValue": 0.08
@@ -70,15 +59,6 @@
         },
         "xOffset": {
          "value": -43
-        },
-        "yOffset": {
-         "value": 0
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "rectangle": {
          "xLength": {
@@ -119,10 +99,7 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.8,
-       "targetRadiusJitter": 0,
-       "speedJitter": 0
+       "targetRadius": 1.8
       }
      ],
      "numTargets": 2,
@@ -151,12 +128,6 @@
         "yOffset": {
          "yPercentValue": 0.34
         },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "circle": {
          "diameter": {
           "value": 23.5
@@ -173,12 +144,6 @@
         },
         "yOffset": {
          "yPercentValue": 0.34
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "circle": {
          "diameter": {
@@ -197,12 +162,6 @@
         "yOffset": {
          "yPercentValue": -0.34
         },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "circle": {
          "diameter": {
           "value": 24
@@ -219,12 +178,6 @@
         },
         "yOffset": {
          "yPercentValue": -0.34
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "circle": {
          "diameter": {
@@ -260,9 +213,7 @@
       {
        "info": {},
        "targetRadius": 1.8,
-       "targetRadiusJitter": 0,
        "speed": 25,
-       "speedJitter": 0
       }
      ],
      "numTargets": 2,
@@ -287,15 +238,6 @@
         "xOffset": {
          "xPercentValue": 0.4
         },
-        "yOffset": {
-         "value": 0
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "rectangle": {
          "xLength": {
           "xPercentValue": 0.1
@@ -309,15 +251,6 @@
         "info": {},
         "xOffset": {
          "xPercentValue": -0.4
-        },
-        "yOffset": {
-         "value": 0
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "rectangle": {
          "xLength": {
@@ -377,18 +310,8 @@
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
-        "xOffset": {
-         "value": 0
-        },
         "yOffset": {
          "yPercentValue": 0.2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "rectangle": {
          "xLength": {
@@ -408,9 +331,6 @@
          "yPercentValue": -0.2
         },
         "depth": {
-         "value": 0
-        },
-        "depthJitter": {
          "value": 0
         },
         "rectangle": {
@@ -452,18 +372,14 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
        "targetRadius": 2,
-       "targetRadiusJitter": 0,
-       "speed": 12,
-       "speedJitter": 0
+       "speed": 12
       }
      ],
      "numTargets": 2,
      "removeClosestOnMiss": true,
      "newestTargetIsGhost": true
     },
-    "overrides": {},
     "shotType": {
      "clickSingle": true,
      "removeClosestOnMiss": true
