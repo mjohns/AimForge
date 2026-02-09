@@ -457,6 +457,43 @@ class MultilineTextEntryDialog {
   Popup popup_;
 };
 
+template <typename T>
+class ConfirmationDialogV2 {
+ public:
+  explicit ConfirmationDialogV2(const std::string& id) : popup_(id) {}
 
+  void NotifyOpen(const std::string& text, const T& value) {
+    data_ = value;
+    text_ = text;
+    popup_.Open();
+  }
+
+  std::optional<T> Draw(const std::string& confirm_text) {
+    if (!popup_.Begin()) {
+      return {};
+    }
+    std::optional<T> confirmed_result;
+    ImGui::Text(text_);
+
+    float button_width = ImGui::CalcTextSize("OK").x + ImGui::GetStyle().FramePadding.x * 2.0f;
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+
+    if (ImGui::Button(confirm_text.c_str())) {
+      confirmed_result = data_;
+      popup_.Close();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      popup_.Close();
+    }
+    popup_.End();
+    return confirmed_result;
+  }
+
+ private:
+  std::optional<T> data_{};
+  std::string text_;
+  Popup popup_;
+};
 
 }  // namespace ImGui

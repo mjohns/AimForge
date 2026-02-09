@@ -91,10 +91,11 @@ class PlaylistComponentImpl : public PlaylistComponent {
   bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
     ImGui::IdGuard cid("PlaylistComponent");
 
-    delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      screen_.app().playlist_manager().DeletePlaylist(playlist.name);
+    auto playlist_to_delete = delete_confirmation_dialog_.Draw("Delete");
+    if (playlist_to_delete) {
+      screen_.app().playlist_manager().DeletePlaylist(playlist_to_delete->name);
       screen_.app().bundle_manager().SaveDirtyBundles();
-    });
+    }
     copy_dialog_.Draw(app_);
 
     if (playlist_name != current_playlist_name_) {
@@ -206,7 +207,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
   UiScreen& screen_;
   Application& app_;
 
-  ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+  ImGui::ConfirmationDialogV2<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog1"};
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
 };
 
@@ -222,10 +223,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   }
 
   void Show(PlaylistListResult* result) override {
-    delete_confirmation_dialog_.Draw("Delete", [=](const Playlist& playlist) {
-      screen_.app().playlist_manager().DeletePlaylist(playlist.name);
+    auto playlist_to_delete = delete_confirmation_dialog_.Draw("Delete");
+    if (playlist_to_delete) {
+      screen_.app().playlist_manager().DeletePlaylist(playlist_to_delete->name);
       screen_.app().bundle_manager().SaveDirtyBundles();
-    });
+    }
 
     if (copy_dialog_.Draw(app_)) {
       // result->reload_playlists = true;
@@ -361,7 +363,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   }
 
  private:
-  ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+  ImGui::ConfirmationDialogV2<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog2"};
   std::string playlist_search_text_;
   UiScreen& screen_;
   Application& app_;
