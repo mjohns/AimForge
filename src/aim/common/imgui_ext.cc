@@ -227,14 +227,10 @@ void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
 
   bool value = field.get();
   ImGui::Checkbox("##Checkbox", &value);
-  if (params.false_is_unset) {
-    if (value) {
-      field.set(value);
-    } else {
-      field.clear();
-    }
+  if (value) {
+    field.set(true);
   } else {
-    field.set(value);
+    field.clear();
   }
 }
 

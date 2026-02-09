@@ -6943,7 +6943,6 @@ class TargetDef final : public ::google::protobuf::Message
     kProfilesFieldNumber = 1,
     kTargetOrderFieldNumber = 4,
     kNumTargetsFieldNumber = 2,
-    kRemoveClosestOnMissFieldNumber = 3,
     kNewestTargetIsGhostFieldNumber = 5,
     kNewTargetDelaySecondsFieldNumber = 6,
     kRemoveTargetAfterSecondsFieldNumber = 7,
@@ -6995,17 +6994,6 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_num_targets(::int32_t value);
 
   public:
-  // bool remove_closest_on_miss = 3;
-  bool has_remove_closest_on_miss() const;
-  void clear_remove_closest_on_miss() ;
-  bool remove_closest_on_miss() const;
-  void set_remove_closest_on_miss(bool value);
-
-  private:
-  bool _internal_remove_closest_on_miss() const;
-  void _internal_set_remove_closest_on_miss(bool value);
-
-  public:
   // bool newest_target_is_ghost = 5 [features = {
   void clear_newest_target_is_ghost() ;
   bool newest_target_is_ghost() const;
@@ -7053,7 +7041,7 @@ class TargetDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
                                    1, 0,
                                    2>
       _table_;
@@ -7079,7 +7067,6 @@ class TargetDef final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<::int32_t> target_order_;
     ::google::protobuf::internal::CachedSize _target_order_cached_byte_size_;
     ::int32_t num_targets_;
-    bool remove_closest_on_miss_;
     bool newest_target_is_ghost_;
     float new_target_delay_seconds_;
     float remove_target_after_seconds_;
@@ -9921,12 +9908,12 @@ class ScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kDescriptionFieldNumber = 1,
-    kRoomFieldNumber = 3,
-    kTargetDefFieldNumber = 5,
+    kShotTypeFieldNumber = 3,
+    kTargetDefFieldNumber = 4,
+    kRoomFieldNumber = 5,
     kOverridesFieldNumber = 7,
-    kShotTypeFieldNumber = 8,
+    kLevelOverridesFieldNumber = 8,
     kScoreTargetsFieldNumber = 9,
-    kLevelOverridesFieldNumber = 12,
     kDurationSecondsFieldNumber = 2,
     kStaticDefFieldNumber = 30,
     kCenteringDefFieldNumber = 31,
@@ -9957,22 +9944,22 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::std::string* PROTOBUF_NONNULL _internal_mutable_description();
 
   public:
-  // .aim.Room room = 3;
-  bool has_room() const;
-  void clear_room() ;
-  const ::aim::Room& room() const;
-  [[nodiscard]] ::aim::Room* PROTOBUF_NULLABLE release_room();
-  ::aim::Room* PROTOBUF_NONNULL mutable_room();
-  void set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
-  ::aim::Room* PROTOBUF_NULLABLE unsafe_arena_release_room();
+  // .aim.ShotType shot_type = 3;
+  bool has_shot_type() const;
+  void clear_shot_type() ;
+  const ::aim::ShotType& shot_type() const;
+  [[nodiscard]] ::aim::ShotType* PROTOBUF_NULLABLE release_shot_type();
+  ::aim::ShotType* PROTOBUF_NONNULL mutable_shot_type();
+  void set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
+  ::aim::ShotType* PROTOBUF_NULLABLE unsafe_arena_release_shot_type();
 
   private:
-  const ::aim::Room& _internal_room() const;
-  ::aim::Room* PROTOBUF_NONNULL _internal_mutable_room();
+  const ::aim::ShotType& _internal_shot_type() const;
+  ::aim::ShotType* PROTOBUF_NONNULL _internal_mutable_shot_type();
 
   public:
-  // .aim.TargetDef target_def = 5;
+  // .aim.TargetDef target_def = 4;
   bool has_target_def() const;
   void clear_target_def() ;
   const ::aim::TargetDef& target_def() const;
@@ -9985,6 +9972,21 @@ class ScenarioDef final : public ::google::protobuf::Message
   private:
   const ::aim::TargetDef& _internal_target_def() const;
   ::aim::TargetDef* PROTOBUF_NONNULL _internal_mutable_target_def();
+
+  public:
+  // .aim.Room room = 5;
+  bool has_room() const;
+  void clear_room() ;
+  const ::aim::Room& room() const;
+  [[nodiscard]] ::aim::Room* PROTOBUF_NULLABLE release_room();
+  ::aim::Room* PROTOBUF_NONNULL mutable_room();
+  void set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
+  ::aim::Room* PROTOBUF_NULLABLE unsafe_arena_release_room();
+
+  private:
+  const ::aim::Room& _internal_room() const;
+  ::aim::Room* PROTOBUF_NONNULL _internal_mutable_room();
 
   public:
   // .aim.ScenarioOverrides overrides = 7;
@@ -10002,19 +10004,19 @@ class ScenarioDef final : public ::google::protobuf::Message
   ::aim::ScenarioOverrides* PROTOBUF_NONNULL _internal_mutable_overrides();
 
   public:
-  // .aim.ShotType shot_type = 8;
-  bool has_shot_type() const;
-  void clear_shot_type() ;
-  const ::aim::ShotType& shot_type() const;
-  [[nodiscard]] ::aim::ShotType* PROTOBUF_NULLABLE release_shot_type();
-  ::aim::ShotType* PROTOBUF_NONNULL mutable_shot_type();
-  void set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
-  ::aim::ShotType* PROTOBUF_NULLABLE unsafe_arena_release_shot_type();
+  // .aim.ScenarioOverrides level_overrides = 8;
+  bool has_level_overrides() const;
+  void clear_level_overrides() ;
+  const ::aim::ScenarioOverrides& level_overrides() const;
+  [[nodiscard]] ::aim::ScenarioOverrides* PROTOBUF_NULLABLE release_level_overrides();
+  ::aim::ScenarioOverrides* PROTOBUF_NONNULL mutable_level_overrides();
+  void set_allocated_level_overrides(::aim::ScenarioOverrides* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_level_overrides(::aim::ScenarioOverrides* PROTOBUF_NULLABLE value);
+  ::aim::ScenarioOverrides* PROTOBUF_NULLABLE unsafe_arena_release_level_overrides();
 
   private:
-  const ::aim::ShotType& _internal_shot_type() const;
-  ::aim::ShotType* PROTOBUF_NONNULL _internal_mutable_shot_type();
+  const ::aim::ScenarioOverrides& _internal_level_overrides() const;
+  ::aim::ScenarioOverrides* PROTOBUF_NONNULL _internal_mutable_level_overrides();
 
   public:
   // .aim.ScoreTargets score_targets = 9;
@@ -10030,21 +10032,6 @@ class ScenarioDef final : public ::google::protobuf::Message
   private:
   const ::aim::ScoreTargets& _internal_score_targets() const;
   ::aim::ScoreTargets* PROTOBUF_NONNULL _internal_mutable_score_targets();
-
-  public:
-  // .aim.ScenarioOverrides level_overrides = 12;
-  bool has_level_overrides() const;
-  void clear_level_overrides() ;
-  const ::aim::ScenarioOverrides& level_overrides() const;
-  [[nodiscard]] ::aim::ScenarioOverrides* PROTOBUF_NULLABLE release_level_overrides();
-  ::aim::ScenarioOverrides* PROTOBUF_NONNULL mutable_level_overrides();
-  void set_allocated_level_overrides(::aim::ScenarioOverrides* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_level_overrides(::aim::ScenarioOverrides* PROTOBUF_NULLABLE value);
-  ::aim::ScenarioOverrides* PROTOBUF_NULLABLE unsafe_arena_release_level_overrides();
-
-  private:
-  const ::aim::ScenarioOverrides& _internal_level_overrides() const;
-  ::aim::ScenarioOverrides* PROTOBUF_NONNULL _internal_mutable_level_overrides();
 
   public:
   // int32 duration_seconds = 2;
@@ -10349,12 +10336,12 @@ class ScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr description_;
-    ::aim::Room* PROTOBUF_NULLABLE room_;
-    ::aim::TargetDef* PROTOBUF_NULLABLE target_def_;
-    ::aim::ScenarioOverrides* PROTOBUF_NULLABLE overrides_;
     ::aim::ShotType* PROTOBUF_NULLABLE shot_type_;
-    ::aim::ScoreTargets* PROTOBUF_NULLABLE score_targets_;
+    ::aim::TargetDef* PROTOBUF_NULLABLE target_def_;
+    ::aim::Room* PROTOBUF_NULLABLE room_;
+    ::aim::ScenarioOverrides* PROTOBUF_NULLABLE overrides_;
     ::aim::ScenarioOverrides* PROTOBUF_NULLABLE level_overrides_;
+    ::aim::ScoreTargets* PROTOBUF_NULLABLE score_targets_;
     ::int32_t duration_seconds_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
@@ -14542,47 +14529,47 @@ inline void ScenarioDef::_internal_set_duration_seconds(::int32_t value) {
   _impl_.duration_seconds_ = value;
 }
 
-// .aim.Room room = 3;
-inline bool ScenarioDef::has_room() const {
+// .aim.ShotType shot_type = 3;
+inline bool ScenarioDef::has_shot_type() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  PROTOBUF_ASSUME(!value || _impl_.room_ != nullptr);
+  PROTOBUF_ASSUME(!value || _impl_.shot_type_ != nullptr);
   return value;
 }
-inline void ScenarioDef::clear_room() {
+inline void ScenarioDef::clear_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.room_ != nullptr) _impl_.room_->Clear();
+  if (_impl_.shot_type_ != nullptr) _impl_.shot_type_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000002U);
 }
-inline const ::aim::Room& ScenarioDef::_internal_room() const {
+inline const ::aim::ShotType& ScenarioDef::_internal_shot_type() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::Room* p = _impl_.room_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::Room&>(::aim::_Room_default_instance_);
+  const ::aim::ShotType* p = _impl_.shot_type_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ShotType&>(::aim::_ShotType_default_instance_);
 }
-inline const ::aim::Room& ScenarioDef::room() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ScenarioDef.room)
-  return _internal_room();
+inline const ::aim::ShotType& ScenarioDef::shot_type() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.shot_type)
+  return _internal_shot_type();
 }
-inline void ScenarioDef::unsafe_arena_set_allocated_room(
-    ::aim::Room* PROTOBUF_NULLABLE value) {
+inline void ScenarioDef::unsafe_arena_set_allocated_shot_type(
+    ::aim::ShotType* PROTOBUF_NULLABLE value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.room_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.shot_type_);
   }
-  _impl_.room_ = reinterpret_cast<::aim::Room*>(value);
+  _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
   if (value != nullptr) {
     SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
     ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.room)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.shot_type)
 }
-inline ::aim::Room* PROTOBUF_NULLABLE ScenarioDef::release_room() {
+inline ::aim::ShotType* PROTOBUF_NULLABLE ScenarioDef::release_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
-  ::aim::Room* released = _impl_.room_;
-  _impl_.room_ = nullptr;
+  ::aim::ShotType* released = _impl_.shot_type_;
+  _impl_.shot_type_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
     auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
     released = ::google::protobuf::internal::DuplicateIfNonNull(released);
@@ -14596,35 +14583,35 @@ inline ::aim::Room* PROTOBUF_NULLABLE ScenarioDef::release_room() {
   }
   return released;
 }
-inline ::aim::Room* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_release_room() {
+inline ::aim::ShotType* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_release_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.ScenarioDef.room)
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.shot_type)
 
   ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
-  ::aim::Room* temp = _impl_.room_;
-  _impl_.room_ = nullptr;
+  ::aim::ShotType* temp = _impl_.shot_type_;
+  _impl_.shot_type_ = nullptr;
   return temp;
 }
-inline ::aim::Room* PROTOBUF_NONNULL ScenarioDef::_internal_mutable_room() {
+inline ::aim::ShotType* PROTOBUF_NONNULL ScenarioDef::_internal_mutable_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.room_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::Room>(GetArena());
-    _impl_.room_ = reinterpret_cast<::aim::Room*>(p);
+  if (_impl_.shot_type_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ShotType>(GetArena());
+    _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(p);
   }
-  return _impl_.room_;
+  return _impl_.shot_type_;
 }
-inline ::aim::Room* PROTOBUF_NONNULL ScenarioDef::mutable_room()
+inline ::aim::ShotType* PROTOBUF_NONNULL ScenarioDef::mutable_shot_type()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   SetHasBit(_impl_._has_bits_[0], 0x00000002U);
-  ::aim::Room* _msg = _internal_mutable_room();
-  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.room)
+  ::aim::ShotType* _msg = _internal_mutable_shot_type();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.shot_type)
   return _msg;
 }
-inline void ScenarioDef::set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value) {
+inline void ScenarioDef::set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.room_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.shot_type_);
   }
 
   if (value != nullptr) {
@@ -14637,11 +14624,11 @@ inline void ScenarioDef::set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value
     ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
 
-  _impl_.room_ = reinterpret_cast<::aim::Room*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.room)
+  _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.shot_type)
 }
 
-// .aim.TargetDef target_def = 5;
+// .aim.TargetDef target_def = 4;
 inline bool ScenarioDef::has_target_def() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   PROTOBUF_ASSUME(!value || _impl_.target_def_ != nullptr);
@@ -14740,9 +14727,108 @@ inline void ScenarioDef::set_allocated_target_def(::aim::TargetDef* PROTOBUF_NUL
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.target_def)
 }
 
+// .aim.Room room = 5;
+inline bool ScenarioDef::has_room() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  PROTOBUF_ASSUME(!value || _impl_.room_ != nullptr);
+  return value;
+}
+inline void ScenarioDef::clear_room() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.room_ != nullptr) _impl_.room_->Clear();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000008U);
+}
+inline const ::aim::Room& ScenarioDef::_internal_room() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::Room* p = _impl_.room_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::Room&>(::aim::_Room_default_instance_);
+}
+inline const ::aim::Room& ScenarioDef::room() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ScenarioDef.room)
+  return _internal_room();
+}
+inline void ScenarioDef::unsafe_arena_set_allocated_room(
+    ::aim::Room* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.room_);
+  }
+  _impl_.room_ = reinterpret_cast<::aim::Room*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.room)
+}
+inline ::aim::Room* PROTOBUF_NULLABLE ScenarioDef::release_room() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ::aim::Room* released = _impl_.room_;
+  _impl_.room_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::Room* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_release_room() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ScenarioDef.room)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ::aim::Room* temp = _impl_.room_;
+  _impl_.room_ = nullptr;
+  return temp;
+}
+inline ::aim::Room* PROTOBUF_NONNULL ScenarioDef::_internal_mutable_room() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.room_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::Room>(GetArena());
+    _impl_.room_ = reinterpret_cast<::aim::Room*>(p);
+  }
+  return _impl_.room_;
+}
+inline ::aim::Room* PROTOBUF_NONNULL ScenarioDef::mutable_room()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ::aim::Room* _msg = _internal_mutable_room();
+  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.room)
+  return _msg;
+}
+inline void ScenarioDef::set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.room_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = value->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  }
+
+  _impl_.room_ = reinterpret_cast<::aim::Room*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.room)
+}
+
 // .aim.ScenarioOverrides overrides = 7;
 inline bool ScenarioDef::has_overrides() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   PROTOBUF_ASSUME(!value || _impl_.overrides_ != nullptr);
   return value;
 }
@@ -14750,7 +14836,7 @@ inline void ScenarioDef::clear_overrides() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.overrides_ != nullptr) _impl_.overrides_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000010U);
 }
 inline const ::aim::ScenarioOverrides& ScenarioDef::_internal_overrides() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -14769,16 +14855,16 @@ inline void ScenarioDef::unsafe_arena_set_allocated_overrides(
   }
   _impl_.overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.overrides)
 }
 inline ::aim::ScenarioOverrides* PROTOBUF_NULLABLE ScenarioDef::release_overrides() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::ScenarioOverrides* released = _impl_.overrides_;
   _impl_.overrides_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -14798,7 +14884,7 @@ inline ::aim::ScenarioOverrides* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_rel
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.ScenarioDef.overrides)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::ScenarioOverrides* temp = _impl_.overrides_;
   _impl_.overrides_ = nullptr;
   return temp;
@@ -14813,7 +14899,7 @@ inline ::aim::ScenarioOverrides* PROTOBUF_NONNULL ScenarioDef::_internal_mutable
 }
 inline ::aim::ScenarioOverrides* PROTOBUF_NONNULL ScenarioDef::mutable_overrides()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::ScenarioOverrides* _msg = _internal_mutable_overrides();
   // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.overrides)
   return _msg;
@@ -14830,18 +14916,18 @@ inline void ScenarioDef::set_allocated_overrides(::aim::ScenarioOverrides* PROTO
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
 
   _impl_.overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.overrides)
 }
 
-// .aim.ScenarioOverrides level_overrides = 12;
+// .aim.ScenarioOverrides level_overrides = 8;
 inline bool ScenarioDef::has_level_overrides() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   PROTOBUF_ASSUME(!value || _impl_.level_overrides_ != nullptr);
   return value;
 }
@@ -14849,7 +14935,7 @@ inline void ScenarioDef::clear_level_overrides() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.level_overrides_ != nullptr) _impl_.level_overrides_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000020U);
 }
 inline const ::aim::ScenarioOverrides& ScenarioDef::_internal_level_overrides() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -14868,16 +14954,16 @@ inline void ScenarioDef::unsafe_arena_set_allocated_level_overrides(
   }
   _impl_.level_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.level_overrides)
 }
 inline ::aim::ScenarioOverrides* PROTOBUF_NULLABLE ScenarioDef::release_level_overrides() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ScenarioOverrides* released = _impl_.level_overrides_;
   _impl_.level_overrides_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -14897,7 +14983,7 @@ inline ::aim::ScenarioOverrides* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_rel
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.ScenarioDef.level_overrides)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ScenarioOverrides* temp = _impl_.level_overrides_;
   _impl_.level_overrides_ = nullptr;
   return temp;
@@ -14912,7 +14998,7 @@ inline ::aim::ScenarioOverrides* PROTOBUF_NONNULL ScenarioDef::_internal_mutable
 }
 inline ::aim::ScenarioOverrides* PROTOBUF_NONNULL ScenarioDef::mutable_level_overrides()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ScenarioOverrides* _msg = _internal_mutable_level_overrides();
   // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.level_overrides)
   return _msg;
@@ -14929,117 +15015,18 @@ inline void ScenarioDef::set_allocated_level_overrides(::aim::ScenarioOverrides*
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
 
   _impl_.level_overrides_ = reinterpret_cast<::aim::ScenarioOverrides*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.level_overrides)
 }
 
-// .aim.ShotType shot_type = 8;
-inline bool ScenarioDef::has_shot_type() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  PROTOBUF_ASSUME(!value || _impl_.shot_type_ != nullptr);
-  return value;
-}
-inline void ScenarioDef::clear_shot_type() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.shot_type_ != nullptr) _impl_.shot_type_->Clear();
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline const ::aim::ShotType& ScenarioDef::_internal_shot_type() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::ShotType* p = _impl_.shot_type_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::ShotType&>(::aim::_ShotType_default_instance_);
-}
-inline const ::aim::ShotType& ScenarioDef::shot_type() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.ScenarioDef.shot_type)
-  return _internal_shot_type();
-}
-inline void ScenarioDef::unsafe_arena_set_allocated_shot_type(
-    ::aim::ShotType* PROTOBUF_NULLABLE value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.shot_type_);
-  }
-  _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
-  if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.shot_type)
-}
-inline ::aim::ShotType* PROTOBUF_NULLABLE ScenarioDef::release_shot_type() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-
-  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
-  ::aim::ShotType* released = _impl_.shot_type_;
-  _impl_.shot_type_ = nullptr;
-  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
-    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
-    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    if (GetArena() == nullptr) {
-      delete old;
-    }
-  } else {
-    if (GetArena() != nullptr) {
-      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
-    }
-  }
-  return released;
-}
-inline ::aim::ShotType* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_release_shot_type() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.ScenarioDef.shot_type)
-
-  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
-  ::aim::ShotType* temp = _impl_.shot_type_;
-  _impl_.shot_type_ = nullptr;
-  return temp;
-}
-inline ::aim::ShotType* PROTOBUF_NONNULL ScenarioDef::_internal_mutable_shot_type() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.shot_type_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ShotType>(GetArena());
-    _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(p);
-  }
-  return _impl_.shot_type_;
-}
-inline ::aim::ShotType* PROTOBUF_NONNULL ScenarioDef::mutable_shot_type()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  ::aim::ShotType* _msg = _internal_mutable_shot_type();
-  // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.shot_type)
-  return _msg;
-}
-inline void ScenarioDef::set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value) {
-  ::google::protobuf::Arena* message_arena = GetArena();
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.shot_type_);
-  }
-
-  if (value != nullptr) {
-    ::google::protobuf::Arena* submessage_arena = value->GetArena();
-    if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
-    }
-    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
-  }
-
-  _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.ScenarioDef.shot_type)
-}
-
 // .aim.ScoreTargets score_targets = 9;
 inline bool ScenarioDef::has_score_targets() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   PROTOBUF_ASSUME(!value || _impl_.score_targets_ != nullptr);
   return value;
 }
@@ -15047,7 +15034,7 @@ inline void ScenarioDef::clear_score_targets() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.score_targets_ != nullptr) _impl_.score_targets_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000040U);
 }
 inline const ::aim::ScoreTargets& ScenarioDef::_internal_score_targets() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -15066,16 +15053,16 @@ inline void ScenarioDef::unsafe_arena_set_allocated_score_targets(
   }
   _impl_.score_targets_ = reinterpret_cast<::aim::ScoreTargets*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ScenarioDef.score_targets)
 }
 inline ::aim::ScoreTargets* PROTOBUF_NULLABLE ScenarioDef::release_score_targets() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ScoreTargets* released = _impl_.score_targets_;
   _impl_.score_targets_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -15095,7 +15082,7 @@ inline ::aim::ScoreTargets* PROTOBUF_NULLABLE ScenarioDef::unsafe_arena_release_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.ScenarioDef.score_targets)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ScoreTargets* temp = _impl_.score_targets_;
   _impl_.score_targets_ = nullptr;
   return temp;
@@ -15110,7 +15097,7 @@ inline ::aim::ScoreTargets* PROTOBUF_NONNULL ScenarioDef::_internal_mutable_scor
 }
 inline ::aim::ScoreTargets* PROTOBUF_NONNULL ScenarioDef::mutable_score_targets()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ScoreTargets* _msg = _internal_mutable_score_targets();
   // @@protoc_insertion_point(field_mutable:aim.ScenarioDef.score_targets)
   return _msg;
@@ -15127,9 +15114,9 @@ inline void ScenarioDef::set_allocated_score_targets(::aim::ScoreTargets* PROTOB
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
 
   _impl_.score_targets_ = reinterpret_cast<::aim::ScoreTargets*>(value);
@@ -22353,35 +22340,6 @@ inline void TargetDef::_internal_set_num_targets(::int32_t value) {
   _impl_.num_targets_ = value;
 }
 
-// bool remove_closest_on_miss = 3;
-inline bool TargetDef::has_remove_closest_on_miss() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
-inline void TargetDef::clear_remove_closest_on_miss() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_closest_on_miss_ = false;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline bool TargetDef::remove_closest_on_miss() const {
-  // @@protoc_insertion_point(field_get:aim.TargetDef.remove_closest_on_miss)
-  return _internal_remove_closest_on_miss();
-}
-inline void TargetDef::set_remove_closest_on_miss(bool value) {
-  _internal_set_remove_closest_on_miss(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:aim.TargetDef.remove_closest_on_miss)
-}
-inline bool TargetDef::_internal_remove_closest_on_miss() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.remove_closest_on_miss_;
-}
-inline void TargetDef::_internal_set_remove_closest_on_miss(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.remove_closest_on_miss_ = value;
-}
-
 // repeated int32 target_order = 4;
 inline int TargetDef::_internal_target_order_size() const {
   return _internal_target_order().size();
@@ -22437,7 +22395,7 @@ inline void TargetDef::clear_newest_target_is_ghost() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.newest_target_is_ghost_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000008U);
 }
 inline bool TargetDef::newest_target_is_ghost() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.newest_target_is_ghost)
@@ -22445,7 +22403,7 @@ inline bool TargetDef::newest_target_is_ghost() const {
 }
 inline void TargetDef::set_newest_target_is_ghost(bool value) {
   _internal_set_newest_target_is_ghost(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.newest_target_is_ghost)
 }
 inline bool TargetDef::_internal_newest_target_is_ghost() const {
@@ -22459,14 +22417,14 @@ inline void TargetDef::_internal_set_newest_target_is_ghost(bool value) {
 
 // float new_target_delay_seconds = 6;
 inline bool TargetDef::has_new_target_delay_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void TargetDef::clear_new_target_delay_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.new_target_delay_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000010U);
 }
 inline float TargetDef::new_target_delay_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.new_target_delay_seconds)
@@ -22474,7 +22432,7 @@ inline float TargetDef::new_target_delay_seconds() const {
 }
 inline void TargetDef::set_new_target_delay_seconds(float value) {
   _internal_set_new_target_delay_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.new_target_delay_seconds)
 }
 inline float TargetDef::_internal_new_target_delay_seconds() const {
@@ -22488,14 +22446,14 @@ inline void TargetDef::_internal_set_new_target_delay_seconds(float value) {
 
 // float remove_target_after_seconds = 7;
 inline bool TargetDef::has_remove_target_after_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void TargetDef::clear_remove_target_after_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_target_after_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000020U);
 }
 inline float TargetDef::remove_target_after_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.remove_target_after_seconds)
@@ -22503,7 +22461,7 @@ inline float TargetDef::remove_target_after_seconds() const {
 }
 inline void TargetDef::set_remove_target_after_seconds(float value) {
   _internal_set_remove_target_after_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.remove_target_after_seconds)
 }
 inline float TargetDef::_internal_remove_target_after_seconds() const {
@@ -22517,14 +22475,14 @@ inline void TargetDef::_internal_set_remove_target_after_seconds(float value) {
 
 // float stagger_initial_targets_seconds = 8;
 inline bool TargetDef::has_stagger_initial_targets_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void TargetDef::clear_stagger_initial_targets_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stagger_initial_targets_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000040U);
 }
 inline float TargetDef::stagger_initial_targets_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.stagger_initial_targets_seconds)
@@ -22532,7 +22490,7 @@ inline float TargetDef::stagger_initial_targets_seconds() const {
 }
 inline void TargetDef::set_stagger_initial_targets_seconds(float value) {
   _internal_set_stagger_initial_targets_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.stagger_initial_targets_seconds)
 }
 inline float TargetDef::_internal_stagger_initial_targets_seconds() const {

@@ -232,19 +232,17 @@ void InputJitteredFloat(const InputFloatParams& params, aim::JitteredField<float
 struct InputBoolParams {
   explicit InputBoolParams(const std::string& id) : id(id) {}
 
+  static InputBoolParams WithLabelAsId(const std::string& label) {
+    return InputBoolParams(label).set_label(label);
+  }
+
   InputBoolParams& set_label(const std::string& label) {
     this->label = label;
     return *this;
   }
 
-  InputBoolParams& set_store_explicit_false() {
-    false_is_unset = false;
-    return *this;
-  }
-
   std::string id;
   std::string label;
-  bool false_is_unset = true;
 };
 
 void InputBool(const InputBoolParams& params, aim::Field<bool> field);

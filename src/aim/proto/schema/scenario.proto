@@ -120,8 +120,6 @@ message TargetPlacementStrategy {
 }
 
 message ScenarioOverrides {
-  reserved 1, 2;
-
   float target_radius_multiplier = 3;
   float speed_multiplier = 4;
   float acceleration_multiplier = 5;
@@ -187,18 +185,16 @@ message ScoreTargets {
 }
 
 message ScenarioDef {
-  reserved 10, 11, 13;
   string description = 1 [features.field_presence = IMPLICIT];
   int32 duration_seconds = 2;
-  Room room = 3;
-  TargetDef target_def = 5;
+  ShotType shot_type = 3;
+  TargetDef target_def = 4;
+  Room room = 5;
 
   ScenarioOverrides overrides = 7;
 
   // Defines the automatically created variations L1,L2,... and L-1,L-2,...
-  ScenarioOverrides level_overrides = 12;
-
-  ShotType shot_type = 8;
+  ScenarioOverrides level_overrides = 8;
 
   ScoreTargets score_targets = 9;
 
@@ -373,8 +369,6 @@ message StrafeProfile {
 }
 
 message StrafeScenarioDef {
-  reserved 11, 16;
-
   Bounds bounds = 1;
   Bounds relative_bounds = 2;
 
@@ -409,7 +403,6 @@ message BounceProfile {
 }
 
 message BounceScenarioDef {
-  reserved 9, 14;
   Bounds bounds = 1;
 
   TargetPlacementStrategy target_placement_strategy = 2;
@@ -453,7 +446,6 @@ message WallWanderProfile {
 }
 
 message WallWanderScenarioDef {
-  reserved 4;
   TargetPlacementStrategy target_placement_strategy = 1;
 
   repeated WallWanderProfile profiles = 2;
@@ -465,8 +457,6 @@ message WallWanderScenarioDef {
 message TargetDef {
   repeated TargetProfile profiles = 1;
   int32 num_targets = 2;
-  // For clicking scenarios, remove the target if you miss it.
-  bool remove_closest_on_miss = 3;
 
   // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 target_order = 4;
@@ -492,8 +482,6 @@ message PillTargetDef {
 }
 
 message TargetProfile {
-  reserved 9;
-
   ProfileInfo info = 1;
 
   float target_radius = 2;

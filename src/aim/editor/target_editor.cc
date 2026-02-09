@@ -167,7 +167,7 @@ void DrawTargetEditor(ScenarioDef& def) {
     num_targets = 1;
   }
   ImGui::AlignTextToFramePadding();
-  ImGui::Text("Number");
+  ImGui::Text("Number of targets");
   ImGui::SameLine();
   ImGui::SetNextItemWidth(char_x * 8);
   ImGui::InputInt("##NumberEntry", &num_targets, 1, 1);
@@ -191,12 +191,6 @@ void DrawTargetEditor(ScenarioDef& def) {
   ImGui::SpacedSeparator();
 
   ImGui::AlignTextToFramePadding();
-
-  ImGui::Text("Remove closest target on miss");
-  ImGui::SameLine();
-  bool remove_closest = t->remove_closest_on_miss();
-  ImGui::Checkbox("##RemoveClosest", &remove_closest);
-  t->set_remove_closest_on_miss(remove_closest);
 
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Newest target is ghost");

@@ -4,16 +4,8 @@
    "name": "1w2ts Pasu Perfected Goated",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 210
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -25,11 +17,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
+     "numTargets": 2
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 210
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -72,6 +71,19 @@
    "name": "1w2ts Perfected",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.18,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 2
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -82,20 +94,6 @@
       "height": 190,
       "width": 220
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.18,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -150,6 +148,21 @@
    "name": "Aimerz+ Week #5 - Static Switching",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.15,
+     "healthRegenRate": 4.6999979
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 3,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 4
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -160,22 +173,6 @@
       "height": 200,
       "width": 280
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 3,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.15,
-     "healthRegenRate": 4.6999979
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -230,18 +227,9 @@
    "name": "Aimerz+ cheaTS Med S1",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.35
     },
     "targetDef": {
      "profiles": [
@@ -254,12 +242,20 @@
        "acceleration": 191
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.35
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.35,
+      "sideAngleDegrees": 38
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -321,18 +317,8 @@
    "name": "BounceSphere Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -47
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 1.30000019,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -345,11 +331,20 @@
        "acceleration": 151
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -47
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 1.30000019,
+      "hideSides": true
+     }
     },
     "bounceDef": {
      "bounds": {},
@@ -411,16 +406,8 @@
    "name": "CG Adjust Click Micro 2T",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -366,
-      "z": 9
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 130
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -432,11 +419,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
+     "numTargets": 2
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -366,
+      "z": 9
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 130
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -479,16 +473,9 @@
    "name": "CG Adjust Switch Micro Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -366,
-      "z": 9
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 130
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.35
     },
     "targetDef": {
      "profiles": [
@@ -500,12 +487,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.35
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -366,
+      "z": 9
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 130
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -548,18 +541,8 @@
    "name": "Centering II 180 Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -30
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.6,
-      "sideAngleDegrees": 70
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -576,8 +559,18 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -30
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.6,
+      "sideAngleDegrees": 70
+     }
     },
     "centeringDef": {
      "wallPoints": [
@@ -605,18 +598,8 @@
    "name": "Controlsphere",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 150,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -629,11 +612,20 @@
        "acceleration": 175
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 150,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 38
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -703,18 +695,8 @@
    "name": "Controlsphere Blink Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 150,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 39
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -727,11 +709,20 @@
        "acceleration": 330
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 150,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 39
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -824,16 +815,9 @@
    "name": "DotTS 30% Larger",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 250
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.3
     },
     "targetDef": {
      "profiles": [
@@ -845,12 +829,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.3
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 250
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -884,6 +874,21 @@
    "name": "Floating Heads Timing Intermediate",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.39999986,
+       "targetRadiusJitter": 1.49011612e-08,
+       "speed": 26,
+       "speedJitter": 0
+      }
+     ],
+     "numTargets": 6
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -896,22 +901,6 @@
       "widthPerimeterPercent": 0.5,
       "sideAngleDegrees": 49
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 26,
-       "speedJitter": 0
-      }
-     ],
-     "numTargets": 6,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "linearDef": {
      "angle": 0,
@@ -947,6 +936,22 @@
    "name": "Floating Heads Timing Intermediate 3-Click",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickMulti": true,
+     "healthClicks": 3
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.39999986,
+       "targetRadiusJitter": 1.49011612e-08,
+       "speed": 26,
+       "speedJitter": 0
+      }
+     ],
+     "numTargets": 6
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -959,23 +964,6 @@
       "widthPerimeterPercent": 0.5,
       "sideAngleDegrees": 49
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 26,
-       "speedJitter": 0
-      }
-     ],
-     "numTargets": 6,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickMulti": true,
-     "healthClicks": 3
     },
     "linearDef": {
      "angle": 0,
@@ -1011,6 +999,22 @@
    "name": "Floatswitch Intermediate",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.200000018
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.39999986,
+       "targetRadiusJitter": 1.49011612e-08,
+       "speed": 26,
+       "speedJitter": 0
+      }
+     ],
+     "numTargets": 6
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -1023,23 +1027,6 @@
       "widthPerimeterPercent": 0.5,
       "sideAngleDegrees": 49
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 26,
-       "speedJitter": 0
-      }
-     ],
-     "numTargets": 6,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.200000018
     },
     "linearDef": {
      "angle": 0,
@@ -1075,18 +1062,8 @@
    "name": "Leapcorn Pure",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -37
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -1100,13 +1077,22 @@
        "accelerationJitter": 0
       }
      ],
-     "numTargets": 14,
-     "removeClosestOnMiss": false
+     "numTargets": 14
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -37
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 2,
+      "hideSides": true
+     }
     },
     "overrides": {},
-    "shotType": {
-     "clickSingle": true
-    },
     "levelOverrides": {},
     "bounceDef": {
      "bounds": {
@@ -1183,6 +1169,20 @@
    "name": "Pokeball Frenzy Auto Wide Wall 4 Targets Small",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "poke": true,
+     "pokeKillTimeSeconds": 0.07
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.74,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 4
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -1193,21 +1193,6 @@
       "height": 220,
       "width": 440
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.74,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "poke": true,
-     "pokeKillTimeSeconds": 0.07
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -1262,16 +1247,8 @@
    "name": "Pokevox Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -250,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 80,
-      "width": 210
-     }
+    "shotType": {
+     "poke": true
     },
     "targetDef": {
      "profiles": [
@@ -1283,11 +1260,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "poke": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -250,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 80,
+      "width": 210
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -1321,18 +1305,10 @@
    "name": "Popswitch Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -32
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 43
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.35,
+     "healthRegenRate": 1
     },
     "targetDef": {
      "profiles": [
@@ -1345,13 +1321,20 @@
        "acceleration": 121
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.35,
-     "healthRegenRate": 1
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 43
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -1427,18 +1410,8 @@
    "name": "Prediction Cancelling - Midrange I",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -1454,11 +1427,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -1533,6 +1515,17 @@
    "name": "RawMouseControl Reload",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.3
+      }
+     ],
+     "numTargets": 3
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -1543,18 +1536,6 @@
       "height": 130,
       "width": 150
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "targetRadius": 1.3
-      }
-     ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "levelOverrides": {},
     "staticDef": {
@@ -1588,6 +1569,19 @@
    "name": "Reflex Flick - Fair",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2.99999905
+      }
+     ],
+     "numTargets": 1,
+     "newTargetDelaySeconds": 0.3,
+     "removeTargetAfterSeconds": 0.6
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -1599,22 +1593,7 @@
       "width": 200
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.99999905,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 1,
-     "removeClosestOnMiss": true,
-     "newTargetDelaySeconds": 0.3,
-     "removeTargetAfterSeconds": 0.6
-    },
-    "shotType": {
-     "clickSingle": true
-    },
+    "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -1695,16 +1674,8 @@
    "name": "SYW (Smooth Your Wrist) Truly FIXED",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 200
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -1721,8 +1692,16 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 200
+     }
     },
     "centeringDef": {
      "wallPoints": [
@@ -1750,18 +1729,8 @@
    "name": "Silo Easier",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -1774,11 +1743,20 @@
        "acceleration": 225
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 38
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -1841,16 +1819,8 @@
    "name": "Smooth Your Vertical Altered POV Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 110
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -1864,8 +1834,16 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 240,
+      "width": 110
+     }
     },
     "centeringDef": {
      "wallPoints": [
@@ -1893,18 +1871,8 @@
    "name": "Smoothbot Pauer Glider Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 270,
-      "radius": 230,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -1920,11 +1888,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 270,
+      "radius": 230,
+      "widthPerimeterPercent": 0.599999964,
+      "sideAngleDegrees": 65
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -1977,18 +1954,8 @@
    "name": "Smoothsphere Diamond",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 150,
-      "widthPerimeterPercent": 0.8,
-      "sideAngleDegrees": 80
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -2001,11 +1968,20 @@
        "acceleration": 225
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 150,
+      "widthPerimeterPercent": 0.8,
+      "sideAngleDegrees": 80
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -2072,18 +2048,8 @@
    "name": "Star Clicking Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 64
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -2096,11 +2062,20 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 6,
-     "removeClosestOnMiss": false
+     "numTargets": 6
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.45,
+      "sideAngleDegrees": 64
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -2188,16 +2163,9 @@
    "name": "StaticSwitchingVox xSmall",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -250,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 80,
-      "width": 210
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25
     },
     "targetDef": {
      "profiles": [
@@ -2209,12 +2177,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -250,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 80,
+      "width": 210
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -2248,16 +2222,8 @@
    "name": "Tamspeed 2bpes",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -347,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 120
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -2270,11 +2236,18 @@
        "acceleration": 183
       }
      ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
+     "numTargets": 2
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -347,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 120
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -2330,18 +2303,8 @@
    "name": "ToonsClick Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 90,
-      "radius": 170,
-      "widthPerimeterPercent": 0.25,
-      "sideAngleDegrees": 24
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -2354,11 +2317,20 @@
        "acceleration": 266
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 90,
+      "radius": 170,
+      "widthPerimeterPercent": 0.25,
+      "sideAngleDegrees": 24
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -2437,18 +2409,9 @@
    "name": "ToonsTS Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 90,
-      "radius": 170,
-      "widthPerimeterPercent": 0.25,
-      "sideAngleDegrees": 24
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.299999982
     },
     "targetDef": {
      "profiles": [
@@ -2461,12 +2424,20 @@
        "acceleration": 266
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.299999982
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 90,
+      "radius": 170,
+      "widthPerimeterPercent": 0.25,
+      "sideAngleDegrees": 24
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -2538,18 +2509,8 @@
    "name": "Trackstop Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -2565,11 +2526,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -2641,15 +2611,9 @@
    "name": "Trippez Smooth Switching Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 90
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.5
     },
     "targetDef": {
      "profiles": [
@@ -2673,12 +2637,17 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.5
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 90
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -2713,16 +2682,9 @@
    "name": "VPP AdjustSwitch Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 130,
-      "width": 180
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -2734,12 +2696,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
+     "numTargets": 2
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 130,
+      "width": 180
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -2782,16 +2750,8 @@
    "name": "VT 1w2ts Horizontal Small",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 130
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -2802,11 +2762,18 @@
       }
      ],
      "numTargets": 2,
-     "removeClosestOnMiss": true,
      "newestTargetIsGhost": true
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 130
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -2877,16 +2844,8 @@
    "name": "VT 1w2ts Horizontal Wide Small",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 215
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -2897,11 +2856,18 @@
       }
      ],
      "numTargets": 2,
-     "removeClosestOnMiss": true,
      "newestTargetIsGhost": true
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 215
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -2972,16 +2938,8 @@
    "name": "VT 1w2ts Vertical Small",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 140,
-      "width": 140
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -2992,11 +2950,18 @@
       }
      ],
      "numTargets": 2,
-     "removeClosestOnMiss": true,
      "newestTargetIsGhost": true
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 140,
+      "width": 140
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3067,6 +3032,19 @@
    "name": "VT 1w3ts Intermediate S5",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.74,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 3
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -3077,20 +3055,6 @@
       "height": 180,
       "width": 200
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.74,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3145,6 +3109,20 @@
    "name": "VT 1w3ts Intermediate S5 Clusters",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.7,
+       "targetRadiusJitter": 0,
+       "speedJitter": 0
+      }
+     ],
+     "numTargets": 12
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -3156,22 +3134,7 @@
       "width": 200
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.7,
-       "targetRadiusJitter": 0,
-       "speedJitter": 0
-      }
-     ],
-     "numTargets": 12,
-     "removeClosestOnMiss": false
-    },
     "overrides": {},
-    "shotType": {
-     "clickSingle": true
-    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -3225,6 +3188,19 @@
    "name": "VT 1w3ts Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.38,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 3
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -3235,20 +3211,6 @@
       "height": 180,
       "width": 200
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.38,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3303,6 +3265,19 @@
    "name": "VT 1w3ts Intermediate S5 Pokeball",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "poke": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.45,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 3
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -3313,20 +3288,6 @@
       "height": 180,
       "width": 200
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.45,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "poke": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3381,6 +3342,19 @@
    "name": "VT 1w3ts Intermediate S5 Speed",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.69999933,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 3
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -3391,20 +3365,6 @@
       "height": 180,
       "width": 200
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.69999933,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 3,
-     "removeClosestOnMiss": true
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3459,16 +3419,9 @@
    "name": "VT Angleswitch Micro Valorant Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -366,
-      "z": 9
-     },
-     "simpleRoom": {
-      "height": 100,
-      "width": 140
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.35
     },
     "targetDef": {
      "profiles": [
@@ -3481,12 +3434,18 @@
        "acceleration": 121
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.35
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -366,
+      "z": 9
+     },
+     "simpleRoom": {
+      "height": 100,
+      "width": 140
+     }
     },
     "strafeDef": {
      "bounds": {},
@@ -3550,18 +3509,8 @@
    "name": "VT BT180TI Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -32
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 54
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -3574,11 +3523,20 @@
        "acceleration": 136
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.35,
+      "sideAngleDegrees": 54
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -3657,18 +3615,8 @@
    "name": "VT Bounceshot Intermediate 20% smaller",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -32
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 75
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -3681,11 +3629,20 @@
        "acceleration": 121
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 75
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -3760,18 +3717,8 @@
    "name": "VT Closerange Long Strafes Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 150,
-      "radius": 120,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 46
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -3787,11 +3734,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 150,
+      "radius": 120,
+      "widthPerimeterPercent": 0.45,
+      "sideAngleDegrees": 46
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -3836,18 +3792,8 @@
    "name": "VT Closerange Short Strafes Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 150,
-      "radius": 120,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 46
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -3863,11 +3809,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 150,
+      "radius": 120,
+      "widthPerimeterPercent": 0.45,
+      "sideAngleDegrees": 46
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -3912,18 +3867,8 @@
    "name": "VT Controlsphere Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -3936,11 +3881,20 @@
        "acceleration": 330
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 150,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 39
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -4022,18 +3976,8 @@
    "name": "VT Controlsphere Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -4046,11 +3990,20 @@
        "acceleration": 336.6
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 150,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 39
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -4132,18 +4085,8 @@
    "name": "VT Controlsphere Intermediate S5 Precision Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -4156,11 +4099,20 @@
        "acceleration": 217.80011
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 150,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 39
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -4242,18 +4194,8 @@
    "name": "VT Controlsphere Intermediate S5 Reactive Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -4266,11 +4208,20 @@
        "acceleration": 518.099792
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 150,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 39
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -4352,18 +4303,8 @@
    "name": "VT Curveshot Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -37
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -4376,11 +4317,20 @@
        "acceleration": 136
       }
      ],
-     "numTargets": 9,
-     "removeClosestOnMiss": false
+     "numTargets": 9
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -37
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 2,
+      "hideSides": true
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -4455,18 +4405,9 @@
    "name": "VT Curveswitch Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -47
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.4
     },
     "targetDef": {
      "profiles": [
@@ -4479,12 +4420,20 @@
        "acceleration": 121
       }
      ],
-     "numTargets": 10,
-     "removeClosestOnMiss": false
+     "numTargets": 10
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.4
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -47
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 2,
+      "hideSides": true
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -4551,6 +4500,20 @@
    "name": "VT DotTS Intermediate S5",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.19999981,
+       "targetRadiusJitter": 0.25
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -4561,21 +4524,6 @@
       "height": 110,
       "width": 210
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.19999981,
-       "targetRadiusJitter": 0.25
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -4631,16 +4579,9 @@
    "name": "VT DotTS Intermediate S5 Evasive",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 210
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25
     },
     "targetDef": {
      "profiles": [
@@ -4652,12 +4593,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 210
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -4722,6 +4669,20 @@
    "name": "VT DotTS Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 1.95800006,
+       "targetRadiusJitter": 0.25
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -4732,21 +4693,6 @@
       "height": 110,
       "width": 210
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.95800006,
-       "targetRadiusJitter": 0.25
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -4802,6 +4748,21 @@
    "name": "VT DotTS Intermediate S5 Regen",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25,
+     "healthRegenRate": 1
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.19999981,
+       "targetRadiusJitter": 0.25
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -4812,22 +4773,6 @@
       "height": 110,
       "width": 210
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.19999981,
-       "targetRadiusJitter": 0.25
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25,
-     "healthRegenRate": 1
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -4883,6 +4828,20 @@
    "name": "VT DotTS Intermediate S5 Speed",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 3.14599872,
+       "targetRadiusJitter": 0.25
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -4893,21 +4852,6 @@
       "height": 110,
       "width": 210
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 3.14599872,
-       "targetRadiusJitter": 0.25
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -4963,16 +4907,9 @@
    "name": "VT EddieTS Intermedite S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -4985,12 +4922,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -5059,16 +5002,9 @@
    "name": "VT EddieTS Intermedite S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -5081,12 +5017,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -5155,16 +5097,10 @@
    "name": "VT EddieTS Intermedite S5 Regen",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2,
+     "healthRegenRate": 1
     },
     "targetDef": {
      "profiles": [
@@ -5177,13 +5113,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2,
-     "healthRegenRate": 1
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -5252,16 +5193,9 @@
    "name": "VT EddieTS Intermedite S5 Speed",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -5274,12 +5208,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -5348,16 +5288,9 @@
    "name": "VT EddieTS Intermedite S5 Static",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -5369,12 +5302,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -5408,16 +5347,8 @@
    "name": "VT Floating Heads Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -5442,11 +5373,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 240,
+      "width": 390
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -5482,16 +5420,8 @@
    "name": "VT Floating Heads Intermediate S5 3 Targets",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -5516,11 +5446,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 240,
+      "width": 390
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -5556,16 +5493,8 @@
    "name": "VT Floating Heads Intermediate S5 Clusters",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -5590,11 +5519,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 14,
-     "removeClosestOnMiss": false
+     "numTargets": 14
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 240,
+      "width": 390
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -5630,16 +5566,8 @@
    "name": "VT Floating Heads Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -5664,11 +5592,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 240,
+      "width": 390
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -5704,16 +5639,9 @@
    "name": "VT Floatpoke Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
+    "shotType": {
+     "poke": true,
+     "pokeKillTimeSeconds": 0.07
     },
     "targetDef": {
      "profiles": [
@@ -5738,12 +5666,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "poke": true,
-     "pokeKillTimeSeconds": 0.07
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 240,
+      "width": 390
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -5779,16 +5713,9 @@
    "name": "VT FlyTS Intermedite S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.50000006
     },
     "targetDef": {
      "profiles": [
@@ -5801,12 +5728,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.50000006
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -5886,16 +5819,9 @@
    "name": "VT FlyTS Intermedite S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.50000006
     },
     "targetDef": {
      "profiles": [
@@ -5908,12 +5834,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.50000006
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -5993,16 +5925,10 @@
    "name": "VT FlyTS Intermedite S5 Smooth",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.50000006,
+     "healthRegenRate": 1.1
     },
     "targetDef": {
      "profiles": [
@@ -6015,13 +5941,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.50000006,
-     "healthRegenRate": 1.1
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -6101,16 +6032,9 @@
    "name": "VT FlyTS Intermedite S5 Speed",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 110,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.50000006
     },
     "targetDef": {
      "profiles": [
@@ -6123,12 +6047,18 @@
        "acceleration": 131
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.50000006
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -6208,15 +6138,9 @@
    "name": "VT Frogswitch Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 85
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -6240,16 +6164,21 @@
       }
      ],
      "numTargets": 4,
-     "removeClosestOnMiss": false,
      "targetOrder": [
       0,
       0,
       1
      ]
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 85
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -6278,15 +6207,8 @@
    "name": "VT Frogtagon Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 85
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -6321,11 +6243,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 85
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -6354,15 +6282,8 @@
    "name": "VT Frogtagon Intermediate S5 2 Targets",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 85
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -6397,11 +6318,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
+     "numTargets": 2
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 85
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -6430,15 +6357,8 @@
    "name": "VT Frogtagon Intermediate S5 Clusters",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 85
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -6473,11 +6393,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 10,
-     "removeClosestOnMiss": false
+     "numTargets": 10
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 85
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -6506,15 +6432,8 @@
    "name": "VT Frogtagon Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 85
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -6549,11 +6468,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 85
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -6582,18 +6507,8 @@
    "name": "VT Ground Intermediate S5 Bot 1",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -6609,13 +6524,22 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "overrides": {},
-    "shotType": {
-     "trackingInvincible": true
-    },
     "angleStrafeDef": {
      "bounds": {
       "width": {
@@ -6703,18 +6627,8 @@
    "name": "VT Ground Intermediate S5 Bot 1 Precision Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -6730,11 +6644,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -6823,18 +6746,8 @@
    "name": "VT Ground Intermediate S5 Bot 1 Reactive Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -6850,11 +6763,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -6943,18 +6865,8 @@
    "name": "VT Ground Intermediate S5 Bot 2",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -6970,11 +6882,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -7060,18 +6981,8 @@
    "name": "VT Ground Intermediate S5 Bot 2 Precision Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7087,11 +6998,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -7177,18 +7097,8 @@
    "name": "VT Ground Intermediate S5 Bot 2 Reactive Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7204,11 +7114,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -7294,18 +7213,8 @@
    "name": "VT Ground Intermediate S5 Bot 3",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7321,11 +7230,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -7400,18 +7318,8 @@
    "name": "VT Ground Intermediate S5 Bot 3 Precision Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7427,11 +7335,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -7506,18 +7423,8 @@
    "name": "VT Ground Intermediate S5 Bot 3 Reactive Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7533,11 +7440,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -7612,18 +7528,8 @@
    "name": "VT MSFI Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -29
-     },
-     "cylinderRoom": {
-      "height": 100,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7638,11 +7544,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -29
+     },
+     "cylinderRoom": {
+      "height": 100,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -7714,18 +7629,8 @@
    "name": "VT Midrange Long Strafes Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 150,
-      "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 46
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7740,11 +7645,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 150,
+      "radius": 200,
+      "widthPerimeterPercent": 0.35,
+      "sideAngleDegrees": 46
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -7772,18 +7686,8 @@
    "name": "VT Midrange Short Strafes Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 150,
-      "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 46
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7798,11 +7702,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 150,
+      "radius": 200,
+      "widthPerimeterPercent": 0.35,
+      "sideAngleDegrees": 46
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -7847,18 +7760,8 @@
    "name": "VT PGT Intermediate S5 Bot 1",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -18
-     },
-     "cylinderRoom": {
-      "height": 180,
-      "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7871,11 +7774,20 @@
        "acceleration": 106
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -18
+     },
+     "cylinderRoom": {
+      "height": 180,
+      "radius": 200,
+      "widthPerimeterPercent": 0.45,
+      "hideSides": true
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -7950,18 +7862,8 @@
    "name": "VT PGT Intermediate S5 Bot 1 Precision",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -18
-     },
-     "cylinderRoom": {
-      "height": 180,
-      "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -7974,11 +7876,20 @@
        "acceleration": 61
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -18
+     },
+     "cylinderRoom": {
+      "height": 180,
+      "radius": 200,
+      "widthPerimeterPercent": 0.45,
+      "hideSides": true
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -8053,18 +7964,8 @@
    "name": "VT PGT Intermediate S5 Bot 1 Reactive",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -18
-     },
-     "cylinderRoom": {
-      "height": 180,
-      "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8077,11 +7978,20 @@
        "acceleration": 216
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -18
+     },
+     "cylinderRoom": {
+      "height": 180,
+      "radius": 200,
+      "widthPerimeterPercent": 0.45,
+      "hideSides": true
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -8156,18 +8066,8 @@
    "name": "VT PGT Intermediate S5 Bot 2",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8180,11 +8080,20 @@
        "acceleration": 66
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 38
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -8261,18 +8170,8 @@
    "name": "VT PGT Intermediate S5 Bot 2 Precision",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8285,11 +8184,20 @@
        "acceleration": 31
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 38
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -8366,18 +8274,8 @@
    "name": "VT PGT Intermediate S5 Bot 2 Reactive",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8390,11 +8288,20 @@
        "acceleration": 186
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 38
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -8471,18 +8378,8 @@
    "name": "VT PGT Intermediate S5 Bot 3",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8495,11 +8392,20 @@
        "acceleration": 90
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 38
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -8559,18 +8465,8 @@
    "name": "VT PGT Intermediate S5 Bot 3 Precision",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8583,11 +8479,20 @@
        "acceleration": 70
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 38
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -8647,18 +8552,8 @@
    "name": "VT PGT Intermediate S5 Bot 3 Reactive",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -8671,11 +8566,20 @@
        "acceleration": 225
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 38
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -8735,16 +8639,8 @@
    "name": "VT Pasu Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 210,
-      "width": 260
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -8757,13 +8653,20 @@
        "acceleration": 181
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 210,
+      "width": 260
+     }
     },
     "overrides": {},
-    "shotType": {
-     "clickSingle": true
-    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -8841,16 +8744,9 @@
    "name": "VT Pasu Intermediate S5 Multi",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 210,
-      "width": 260
-     }
+    "shotType": {
+     "clickMulti": true,
+     "healthClicks": 3
     },
     "targetDef": {
      "profiles": [
@@ -8863,14 +8759,20 @@
        "acceleration": 181
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 210,
+      "width": 260
+     }
     },
     "overrides": {},
-    "shotType": {
-     "clickMulti": true,
-     "healthClicks": 3
-    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -8948,16 +8850,9 @@
    "name": "VT PasuTs Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 210,
-      "width": 260
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.6
     },
     "targetDef": {
      "profiles": [
@@ -8970,14 +8865,20 @@
        "acceleration": 181
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 210,
+      "width": 260
+     }
     },
     "overrides": {},
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.6
-    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -9043,15 +8944,9 @@
    "name": "VT Penta Bounce Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 90
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.5
     },
     "targetDef": {
      "profiles": [
@@ -9086,12 +8981,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.5
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 90
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -9126,15 +9026,9 @@
    "name": "VT Penta Bounce Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 90
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.5
     },
     "targetDef": {
      "profiles": [
@@ -9169,12 +9063,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.5
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 90
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -9209,15 +9108,10 @@
    "name": "VT Penta Bounce Intermediate S5 Smooth",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 90
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.5,
+     "healthRegenRate": 0.799999952
     },
     "targetDef": {
      "profiles": [
@@ -9252,13 +9146,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.5,
-     "healthRegenRate": 0.799999952
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 90
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -9293,15 +9191,9 @@
    "name": "VT Penta Bounce Intermediate S5 Speed",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 90
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.5
     },
     "targetDef": {
      "profiles": [
@@ -9336,12 +9228,17 @@
        "speedJitter": 2
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.5
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 90
+     }
     },
     "barrelDef": {
      "targetPlacementStrategy": {
@@ -9376,18 +9273,8 @@
    "name": "VT Popcorn Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -43
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -9400,11 +9287,20 @@
        "acceleration": 91
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -43
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 44
+     }
     },
     "bounceDef": {
      "bounds": {},
@@ -9468,18 +9364,8 @@
    "name": "VT Popcorn Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -43
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -9492,11 +9378,20 @@
        "acceleration": 91
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -43
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 44
+     }
     },
     "bounceDef": {
      "bounds": {},
@@ -9560,18 +9455,9 @@
    "name": "VT Popcorn Intermediate S5 Multi",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -43
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
-     }
+    "shotType": {
+     "clickMulti": true,
+     "healthClicks": 3
     },
     "targetDef": {
      "profiles": [
@@ -9584,12 +9470,20 @@
        "acceleration": 91
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "clickMulti": true,
-     "healthClicks": 3
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -43
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 44
+     }
     },
     "bounceDef": {
      "bounds": {},
@@ -9653,18 +9547,8 @@
    "name": "VT Popcorn Intermediate S5 Speed",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -43
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -9677,11 +9561,20 @@
        "acceleration": 61
       }
      ],
-     "numTargets": 6,
-     "removeClosestOnMiss": false
+     "numTargets": 6
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -43
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 44
+     }
     },
     "bounceDef": {
      "bounds": {},
@@ -9745,18 +9638,9 @@
    "name": "VT Popswitch Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -32
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.3
     },
     "targetDef": {
      "profiles": [
@@ -9769,12 +9653,20 @@
        "acceleration": 91
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.3
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 44
+     }
     },
     "bounceDef": {
      "bounds": {},
@@ -9838,18 +9730,8 @@
    "name": "VT Poptrack Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -32
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -9862,11 +9744,20 @@
        "acceleration": 106
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.4,
+      "sideAngleDegrees": 60
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -9941,16 +9832,8 @@
    "name": "VT Quadpulse Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 180,
-      "width": 190
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -9964,13 +9847,20 @@
        "targetRadiusGrowthFinalSizeTimeSeconds": 0.2
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 180,
+      "width": 190
+     }
     },
     "overrides": {},
-    "shotType": {
-     "clickSingle": true
-    },
     "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
@@ -10025,16 +9915,8 @@
    "name": "VT Raw Control Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 140,
-      "width": 250
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10047,11 +9929,18 @@
        "acceleration": 200
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 140,
+      "width": 250
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10130,16 +10019,8 @@
    "name": "VT Raw Control Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 140,
-      "width": 250
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10152,11 +10033,18 @@
        "acceleration": 219.999954
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 140,
+      "width": 250
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10235,16 +10123,8 @@
    "name": "VT Raw Control Intermediate S5 Precision Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 140,
-      "width": 250
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10257,11 +10137,18 @@
        "acceleration": 156
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 140,
+      "width": 250
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10340,16 +10227,8 @@
    "name": "VT Raw Control Intermediate S5 Reactive Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 140,
-      "width": 250
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10362,11 +10241,18 @@
        "acceleration": 269.999908
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 140,
+      "width": 250
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10445,16 +10331,8 @@
    "name": "VT Skyshot Valorant Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -250,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 80,
-      "width": 200
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -10466,11 +10344,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 2,
-     "removeClosestOnMiss": false
+     "numTargets": 2
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -250,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 80,
+      "width": 200
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -10506,18 +10391,8 @@
    "name": "VT Snake Track Intermediate S5",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 32
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10533,11 +10408,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 32
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 0.599999964,
+      "sideAngleDegrees": 65
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10607,18 +10491,8 @@
    "name": "VT Snake Track Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 32
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10634,11 +10508,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 32
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 0.599999964,
+      "sideAngleDegrees": 65
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10708,18 +10591,8 @@
    "name": "VT Snake Track Intermediate S5 Precision Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 32
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10735,11 +10608,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 32
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 0.599999964,
+      "sideAngleDegrees": 65
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10809,18 +10691,8 @@
    "name": "VT Snake Track Intermediate S5 Reactive Focus",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 32
-     },
-     "cylinderRoom": {
-      "height": 160,
-      "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -10836,11 +10708,20 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 32
+     },
+     "cylinderRoom": {
+      "height": 160,
+      "radius": 200,
+      "widthPerimeterPercent": 0.599999964,
+      "sideAngleDegrees": 65
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -10910,18 +10791,9 @@
    "name": "VT Speedswitch 180 Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 25
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.18
     },
     "targetDef": {
      "profiles": [
@@ -10934,12 +10806,20 @@
        "acceleration": 326
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.18
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.3,
+      "sideAngleDegrees": 25
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -11006,16 +10886,9 @@
    "name": "VT Speedswitch 90 Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 130,
-      "width": 180
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.18
     },
     "targetDef": {
      "profiles": [
@@ -11028,12 +10901,18 @@
        "acceleration": 326
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.18
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 130,
+      "width": 180
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -11100,16 +10979,8 @@
    "name": "VT Wide Angle Tracking Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 380
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -11121,11 +10992,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 380
+     }
     },
     "waypointDef": {
      "targetPlacementStrategy": {
@@ -11262,16 +11140,8 @@
    "name": "VT Widepulse Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 220
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -11283,11 +11153,18 @@
        "targetRadiusGrowthSize": 4.00000048
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 220
+     }
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11342,18 +11219,9 @@
    "name": "VT bounceTS Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 1,
-      "z": -32
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "widthPerimeterPercent": 0.33,
-      "sideAngleDegrees": 48
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.299999982
     },
     "targetDef": {
      "profiles": [
@@ -11366,12 +11234,20 @@
        "acceleration": 121
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.299999982
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 1,
+      "z": -32
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "widthPerimeterPercent": 0.33,
+      "sideAngleDegrees": 48
+     }
     },
     "bounceDef": {
      "bounds": {
@@ -11447,16 +11323,9 @@
    "name": "VT skyTs Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -300,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 310
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -11468,12 +11337,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -300,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 310
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -11511,16 +11386,9 @@
    "name": "VT skyTs Intermediate Varied",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -300,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 310
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -11532,12 +11400,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -300,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 310
+     }
     },
     "linearDef": {
      "angle": 0,
@@ -11575,6 +11449,19 @@
    "name": "VT ww5t Intermediate S5",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.80000019,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -11587,20 +11474,6 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.80000019,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11655,6 +11528,19 @@
    "name": "VT ww5t Intermediate S5 Clusters",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.80000019,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 12
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -11667,20 +11553,6 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.80000019,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 12,
-     "removeClosestOnMiss": true
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11735,6 +11607,19 @@
    "name": "VT ww5t Intermediate S5 Hard",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.40000057,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -11747,20 +11632,6 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.40000057,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": true
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11815,6 +11686,20 @@
    "name": "VT ww5t Intermediate S5 Pokeball",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "poke": true,
+     "pokeKillTimeSeconds": 0.08
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.80000019,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -11827,21 +11712,6 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.80000019,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": true
-    },
-    "shotType": {
-     "poke": true,
-     "pokeKillTimeSeconds": 0.08
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11896,6 +11766,19 @@
    "name": "VT ww5t Intermediate S5 Speed",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 4.09999895,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -11908,20 +11791,6 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 4.09999895,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": true
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11976,18 +11845,9 @@
    "name": "WhisphereTS Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.27,
-      "sideAngleDegrees": 33
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.35
     },
     "targetDef": {
      "profiles": [
@@ -12000,12 +11860,20 @@
        "acceleration": 221
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.35
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.27,
+      "sideAngleDegrees": 33
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -12089,16 +11957,8 @@
    "name": "cAt purrClick Normal",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 190
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -12110,11 +11970,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 190
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -12157,16 +12024,9 @@
    "name": "cAt purrSwitch Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 190
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.299999982
     },
     "targetDef": {
      "profiles": [
@@ -12178,12 +12038,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.299999982
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 190
+     }
     },
     "wallWanderDef": {
      "targetPlacementStrategy": {
@@ -12226,16 +12092,8 @@
    "name": "cAt purrTrack Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 200
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -12247,11 +12105,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 200
+     }
     },
     "wallWanderDef": {
      "profiles": [
@@ -12290,16 +12155,8 @@
    "name": "cloverRawControl Easy",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -300,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 130,
-      "width": 190
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -12312,11 +12169,18 @@
        "acceleration": 145
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -300,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 130,
+      "width": 190
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -12379,6 +12243,19 @@
    "name": "dev1T Static Click",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.20000029,
+       "targetRadiusJitter": 0
+      }
+     ],
+     "numTargets": 1
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -12389,20 +12266,6 @@
       "height": 110,
       "width": 160
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.20000029,
-       "targetRadiusJitter": 0
-      }
-     ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "clickSingle": true
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -12436,6 +12299,22 @@
    "name": "patCircleSwitch V2 Intermediate",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.25
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 3,
+       "targetRadiusJitter": 0,
+       "speed": 17,
+       "speedJitter": 0
+      }
+     ],
+     "numTargets": 5
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -12448,23 +12327,6 @@
       "widthPerimeterPercent": 0.3,
       "sideAngleDegrees": 25
      }
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 3,
-       "targetRadiusJitter": 0,
-       "speed": 17,
-       "speedJitter": 0
-      }
-     ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
-    },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.25
     },
     "linearDef": {
      "angle": 0,
@@ -12502,18 +12364,8 @@
    "name": "psalmTS angelic click 30% larger",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 69
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -12526,11 +12378,20 @@
        "acceleration": 91
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 0.5,
+      "sideAngleDegrees": 69
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -12609,16 +12470,8 @@
    "name": "remClick - F",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 230
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -12631,11 +12484,18 @@
        "acceleration": 213
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "clickSingle": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 230
+     }
     },
     "angleStrafeDef": {
      "bounds": {
@@ -12737,16 +12597,9 @@
    "name": "swayTs Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -300,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 120,
-      "width": 200
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -12758,12 +12611,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
+     "numTargets": 4
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -300,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 120,
+      "width": 200
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -12827,18 +12686,9 @@
    "name": "tamTargetSwitch Control Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 140,
-      "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.4
     },
     "targetDef": {
      "profiles": [
@@ -12851,12 +12701,20 @@
        "acceleration": 60
       }
      ],
-     "numTargets": 12,
-     "removeClosestOnMiss": false
+     "numTargets": 12
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.4
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 140,
+      "radius": 200,
+      "widthPerimeterPercent": 2,
+      "hideSides": true
+     }
     },
     "strafeDef": {
      "bounds": {
@@ -12940,6 +12798,24 @@
    "name": "tamTargetSwitch Smooth Intermediate",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.550000072,
+     "healthRegenRate": 1.50000012
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 2.99999928,
+       "targetRadiusJitter": 0,
+       "speed": 79,
+       "speedJitter": 0,
+       "acceleration": 265
+      }
+     ],
+     "numTargets": 4
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -12953,26 +12829,7 @@
       "sideAngleDegrees": 80
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.99999928,
-       "targetRadiusJitter": 0,
-       "speed": 79,
-       "speedJitter": 0,
-       "acceleration": 265
-      }
-     ],
-     "numTargets": 4,
-     "removeClosestOnMiss": false
-    },
     "overrides": {},
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.550000072,
-     "healthRegenRate": 1.50000012
-    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -13075,16 +12932,9 @@
    "name": "waldoTs Intermediate",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 180,
-      "width": 210
-     }
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "profiles": [
@@ -13096,12 +12946,18 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 3,
-     "removeClosestOnMiss": false
+     "numTargets": 3
     },
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.2
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 180,
+      "width": 210
+     }
     },
     "linearDef": {
      "angle": 0,
