@@ -3667,11 +3667,8 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
        "targetRadius": 6,
-       "targetRadiusJitter": 0,
        "speed": 60,
-       "speedJitter": 0,
        "pill": {
         "height": 15.9999847
        }
@@ -3718,7 +3715,7 @@
         "xPercentValue": 0.200000063
        },
        "distanceJitter": {
-        "xPercentValue": 0.0700000599
+        "xPercentValue": 0.07
        }
       },
       {
