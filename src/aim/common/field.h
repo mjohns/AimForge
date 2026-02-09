@@ -43,6 +43,12 @@ static Field<float> CreateFloatField(float* value) {
   return Field<float>(get, set, clear, has);
 }
 
+static Field<bool> CreateBoolField(std::function<bool()> get, std::function<void(bool)> set) {
+  std::function<bool()> has = []() { return true; };
+  std::function<void()> clear = [=]() { set(false); };
+  return Field<bool>(get, set, clear, has);
+}
+
 template <typename T>
 struct JitteredField {
   JitteredField(Field<T> value, Field<T> jitter) : value(value), jitter(jitter) {}
@@ -57,10 +63,12 @@ struct JitteredField {
                 std::bind_front(&ProtoClass::clear_##field_name, instance), \
                 std::bind_front(&ProtoClass::has_##field_name, instance))
 
+#define PROTO_BOOL_FIELD(ProtoClass, instance, field_name)            \
+  CreateBoolField(std::bind_front(&ProtoClass::field_name, instance), \
+                  std::bind_front(&ProtoClass::set_##field_name, instance))
+
 #define PROTO_FLOAT_FIELD(ProtoClass, instance, field_name) \
   PROTO_FIELD(float, ProtoClass, instance, field_name)
-#define PROTO_BOOL_FIELD(ProtoClass, instance, field_name) \
-  PROTO_FIELD(bool, ProtoClass, instance, field_name)
 #define PROTO_INT_FIELD(ProtoClass, instance, field_name) \
   PROTO_FIELD(int, ProtoClass, instance, field_name)
 #define PROTO_STRING_FIELD(ProtoClass, instance, field_name) \

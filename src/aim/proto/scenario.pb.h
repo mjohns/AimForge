@@ -629,10 +629,11 @@ class ShotType final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kPokeKillTimeSecondsFieldNumber = 10,
-    kNoPartialKillsFieldNumber = 11,
     kHealthSecondsFieldNumber = 12,
     kHealthRegenRateFieldNumber = 13,
     kRemoveIfBelowHealthSecondsFieldNumber = 14,
+    kNoPartialKillsFieldNumber = 11,
+    kRemoveClosestOnMissFieldNumber = 19,
     kHealthClicksFieldNumber = 16,
     kClickRateSecondsFieldNumber = 17,
     kAccuracyPenaltyMultiplierFieldNumber = 18,
@@ -652,17 +653,6 @@ class ShotType final : public ::google::protobuf::Message
   private:
   float _internal_poke_kill_time_seconds() const;
   void _internal_set_poke_kill_time_seconds(float value);
-
-  public:
-  // bool no_partial_kills = 11;
-  bool has_no_partial_kills() const;
-  void clear_no_partial_kills() ;
-  bool no_partial_kills() const;
-  void set_no_partial_kills(bool value);
-
-  private:
-  bool _internal_no_partial_kills() const;
-  void _internal_set_no_partial_kills(bool value);
 
   public:
   // float health_seconds = 12;
@@ -696,6 +686,26 @@ class ShotType final : public ::google::protobuf::Message
   private:
   float _internal_remove_if_below_health_seconds() const;
   void _internal_set_remove_if_below_health_seconds(float value);
+
+  public:
+  // bool no_partial_kills = 11 [features = {
+  void clear_no_partial_kills() ;
+  bool no_partial_kills() const;
+  void set_no_partial_kills(bool value);
+
+  private:
+  bool _internal_no_partial_kills() const;
+  void _internal_set_no_partial_kills(bool value);
+
+  public:
+  // bool remove_closest_on_miss = 19 [features = {
+  void clear_remove_closest_on_miss() ;
+  bool remove_closest_on_miss() const;
+  void set_remove_closest_on_miss(bool value);
+
+  private:
+  bool _internal_remove_closest_on_miss() const;
+  void _internal_set_remove_closest_on_miss(bool value);
 
   public:
   // int32 health_clicks = 16;
@@ -811,7 +821,7 @@ class ShotType final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 14,
+  static const ::google::protobuf::internal::TcParseTable<4, 15,
                                    0, 0,
                                    2>
       _table_;
@@ -834,10 +844,11 @@ class ShotType final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     float poke_kill_time_seconds_;
-    bool no_partial_kills_;
     float health_seconds_;
     float health_regen_rate_;
     float remove_if_below_health_seconds_;
+    bool no_partial_kills_;
+    bool remove_closest_on_miss_;
     ::int32_t health_clicks_;
     float click_rate_seconds_;
     float accuracy_penalty_multiplier_;
@@ -1926,8 +1937,7 @@ class ProfileInfo final : public ::google::protobuf::Message
     kNextProfileFieldNumber = 2,
     kMinSelectionGapFieldNumber = 3,
   };
-  // string description = 4;
-  bool has_description() const;
+  // string description = 4 [features = {
   void clear_description() ;
   const ::std::string& description() const;
   template <typename Arg_ = const ::std::string&, typename... Args_>
@@ -2398,8 +2408,7 @@ class CylinderRoom final : public ::google::protobuf::Message
   void _internal_set_width_perimeter_percent(float value);
 
   public:
-  // bool hide_sides = 5;
-  bool has_hide_sides() const;
+  // bool hide_sides = 5 [features = {
   void clear_hide_sides() ;
   bool hide_sides() const;
   void set_hide_sides(bool value);
@@ -3092,8 +3101,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* PROTOBUF_NONNULL _internal_mutable_height_jitter();
 
   public:
-  // bool start_on_ground = 6;
-  bool has_start_on_ground() const;
+  // bool start_on_ground = 6 [features = {
   void clear_start_on_ground() ;
   bool start_on_ground() const;
   void set_start_on_ground(bool value);
@@ -3103,8 +3111,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
   void _internal_set_start_on_ground(bool value);
 
   public:
-  // bool reflect = 7;
-  bool has_reflect() const;
+  // bool reflect = 7 [features = {
   void clear_reflect() ;
   bool reflect() const;
   void set_reflect(bool value);
@@ -4010,8 +4017,7 @@ class SineScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* PROTOBUF_NONNULL _internal_mutable_width();
 
   public:
-  // bool going_left = 3;
-  bool has_going_left() const;
+  // bool going_left = 3 [features = {
   void clear_going_left() ;
   bool going_left() const;
   void set_going_left(bool value);
@@ -5497,8 +5503,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
   void _internal_set_start_degrees(float value);
 
   public:
-  // bool rotate_clockwise = 3;
-  bool has_rotate_clockwise() const;
+  // bool rotate_clockwise = 3 [features = {
   void clear_rotate_clockwise() ;
   bool rotate_clockwise() const;
   void set_rotate_clockwise(bool value);
@@ -6031,8 +6036,7 @@ class BounceProfile final : public ::google::protobuf::Message
   void _internal_set_delay_seconds_jitter(float value);
 
   public:
-  // bool only_delay_on_floor = 6;
-  bool has_only_delay_on_floor() const;
+  // bool only_delay_on_floor = 6 [features = {
   void clear_only_delay_on_floor() ;
   bool only_delay_on_floor() const;
   void set_only_delay_on_floor(bool value);
@@ -7002,8 +7006,7 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_remove_closest_on_miss(bool value);
 
   public:
-  // bool newest_target_is_ghost = 5;
-  bool has_newest_target_is_ghost() const;
+  // bool newest_target_is_ghost = 5 [features = {
   void clear_newest_target_is_ghost() ;
   bool newest_target_is_ghost() const;
   void set_newest_target_is_ghost(bool value);
@@ -7759,8 +7762,7 @@ class WaypointScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // bool start_in_center = 2;
-  bool has_start_in_center() const;
+  // bool start_in_center = 2 [features = {
   void clear_start_in_center() ;
   bool start_in_center() const;
   void set_start_in_center(bool value);
@@ -9940,8 +9942,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kStrafeDefFieldNumber = 41,
     kBounceDefFieldNumber = 42,
   };
-  // string description = 1;
-  bool has_description() const;
+  // string description = 1 [features = {
   void clear_description() ;
   const ::std::string& description() const;
   template <typename Arg_ = const ::std::string&, typename... Args_>
@@ -10604,11 +10605,7 @@ inline void CylinderRoom::_internal_set_width_perimeter_percent(float value) {
   _impl_.width_perimeter_percent_ = value;
 }
 
-// bool hide_sides = 5;
-inline bool CylinderRoom::has_hide_sides() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
+// bool hide_sides = 5 [features = {
 inline void CylinderRoom::clear_hide_sides() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.hide_sides_ = false;
@@ -14152,16 +14149,12 @@ inline void ShotType::_internal_set_poke_kill_time_seconds(float value) {
   _impl_.poke_kill_time_seconds_ = value;
 }
 
-// bool no_partial_kills = 11;
-inline bool ShotType::has_no_partial_kills() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  return value;
-}
+// bool no_partial_kills = 11 [features = {
 inline void ShotType::clear_no_partial_kills() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.no_partial_kills_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
+                  0x00000010U);
 }
 inline bool ShotType::no_partial_kills() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.no_partial_kills)
@@ -14169,7 +14162,7 @@ inline bool ShotType::no_partial_kills() const {
 }
 inline void ShotType::set_no_partial_kills(bool value) {
   _internal_set_no_partial_kills(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.ShotType.no_partial_kills)
 }
 inline bool ShotType::_internal_no_partial_kills() const {
@@ -14183,14 +14176,14 @@ inline void ShotType::_internal_set_no_partial_kills(bool value) {
 
 // float health_seconds = 12;
 inline bool ShotType::has_health_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
   return value;
 }
 inline void ShotType::clear_health_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000002U);
 }
 inline float ShotType::health_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_seconds)
@@ -14198,7 +14191,7 @@ inline float ShotType::health_seconds() const {
 }
 inline void ShotType::set_health_seconds(float value) {
   _internal_set_health_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_seconds)
 }
 inline float ShotType::_internal_health_seconds() const {
@@ -14212,14 +14205,14 @@ inline void ShotType::_internal_set_health_seconds(float value) {
 
 // float health_regen_rate = 13;
 inline bool ShotType::has_health_regen_rate() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   return value;
 }
 inline void ShotType::clear_health_regen_rate() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_regen_rate_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000004U);
 }
 inline float ShotType::health_regen_rate() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_regen_rate)
@@ -14227,7 +14220,7 @@ inline float ShotType::health_regen_rate() const {
 }
 inline void ShotType::set_health_regen_rate(float value) {
   _internal_set_health_regen_rate(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_regen_rate)
 }
 inline float ShotType::_internal_health_regen_rate() const {
@@ -14241,14 +14234,14 @@ inline void ShotType::_internal_set_health_regen_rate(float value) {
 
 // float remove_if_below_health_seconds = 14;
 inline bool ShotType::has_remove_if_below_health_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   return value;
 }
 inline void ShotType::clear_remove_if_below_health_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_if_below_health_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000008U);
 }
 inline float ShotType::remove_if_below_health_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_seconds)
@@ -14256,7 +14249,7 @@ inline float ShotType::remove_if_below_health_seconds() const {
 }
 inline void ShotType::set_remove_if_below_health_seconds(float value) {
   _internal_set_remove_if_below_health_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_seconds)
 }
 inline float ShotType::_internal_remove_if_below_health_seconds() const {
@@ -14270,14 +14263,14 @@ inline void ShotType::_internal_set_remove_if_below_health_seconds(float value) 
 
 // int32 health_clicks = 16;
 inline bool ShotType::has_health_clicks() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void ShotType::clear_health_clicks() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_clicks_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000040U);
 }
 inline ::int32_t ShotType::health_clicks() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_clicks)
@@ -14285,7 +14278,7 @@ inline ::int32_t ShotType::health_clicks() const {
 }
 inline void ShotType::set_health_clicks(::int32_t value) {
   _internal_set_health_clicks(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_clicks)
 }
 inline ::int32_t ShotType::_internal_health_clicks() const {
@@ -14299,14 +14292,14 @@ inline void ShotType::_internal_set_health_clicks(::int32_t value) {
 
 // float click_rate_seconds = 17;
 inline bool ShotType::has_click_rate_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   return value;
 }
 inline void ShotType::clear_click_rate_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.click_rate_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000080U);
 }
 inline float ShotType::click_rate_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.click_rate_seconds)
@@ -14314,7 +14307,7 @@ inline float ShotType::click_rate_seconds() const {
 }
 inline void ShotType::set_click_rate_seconds(float value) {
   _internal_set_click_rate_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.ShotType.click_rate_seconds)
 }
 inline float ShotType::_internal_click_rate_seconds() const {
@@ -14328,14 +14321,14 @@ inline void ShotType::_internal_set_click_rate_seconds(float value) {
 
 // float accuracy_penalty_multiplier = 18;
 inline bool ShotType::has_accuracy_penalty_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   return value;
 }
 inline void ShotType::clear_accuracy_penalty_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.accuracy_penalty_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000100U);
 }
 inline float ShotType::accuracy_penalty_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty_multiplier)
@@ -14343,7 +14336,7 @@ inline float ShotType::accuracy_penalty_multiplier() const {
 }
 inline void ShotType::set_accuracy_penalty_multiplier(float value) {
   _internal_set_accuracy_penalty_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty_multiplier)
 }
 inline float ShotType::_internal_accuracy_penalty_multiplier() const {
@@ -14353,6 +14346,31 @@ inline float ShotType::_internal_accuracy_penalty_multiplier() const {
 inline void ShotType::_internal_set_accuracy_penalty_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.accuracy_penalty_multiplier_ = value;
+}
+
+// bool remove_closest_on_miss = 19 [features = {
+inline void ShotType::clear_remove_closest_on_miss() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_closest_on_miss_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000020U);
+}
+inline bool ShotType::remove_closest_on_miss() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.remove_closest_on_miss)
+  return _internal_remove_closest_on_miss();
+}
+inline void ShotType::set_remove_closest_on_miss(bool value) {
+  _internal_set_remove_closest_on_miss(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  // @@protoc_insertion_point(field_set:aim.ShotType.remove_closest_on_miss)
+}
+inline bool ShotType::_internal_remove_closest_on_miss() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.remove_closest_on_miss_;
+}
+inline void ShotType::_internal_set_remove_closest_on_miss(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.remove_closest_on_miss_ = value;
 }
 
 inline bool ShotType::has_type() const {
@@ -14430,11 +14448,7 @@ inline void ScoreTargets::_internal_set_end(float value) {
 
 // ScenarioDef
 
-// string description = 1;
-inline bool ScenarioDef::has_description() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
-  return value;
-}
+// string description = 1 [features = {
 inline void ScenarioDef::clear_description() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.description_.ClearToEmpty();
@@ -16505,11 +16519,7 @@ inline void CircleScenarioDef::_internal_set_start_degrees(float value) {
   _impl_.start_degrees_ = value;
 }
 
-// bool rotate_clockwise = 3;
-inline bool CircleScenarioDef::has_rotate_clockwise() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
+// bool rotate_clockwise = 3 [features = {
 inline void CircleScenarioDef::clear_rotate_clockwise() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.rotate_clockwise_ = false;
@@ -17139,11 +17149,7 @@ inline void WaypointScenarioDef::set_allocated_target_placement_strategy(::aim::
   // @@protoc_insertion_point(field_set_allocated:aim.WaypointScenarioDef.target_placement_strategy)
 }
 
-// bool start_in_center = 2;
-inline bool WaypointScenarioDef::has_start_in_center() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  return value;
-}
+// bool start_in_center = 2 [features = {
 inline void WaypointScenarioDef::clear_start_in_center() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_in_center_ = false;
@@ -17721,11 +17727,7 @@ inline void SineScenarioDef::set_allocated_width(::aim::RegionLength* PROTOBUF_N
   // @@protoc_insertion_point(field_set_allocated:aim.SineScenarioDef.width)
 }
 
-// bool going_left = 3;
-inline bool SineScenarioDef::has_going_left() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
-  return value;
-}
+// bool going_left = 3 [features = {
 inline void SineScenarioDef::clear_going_left() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.going_left_ = false;
@@ -17841,11 +17843,7 @@ inline void ProfileInfo::_internal_set_min_selection_gap(::int32_t value) {
   _impl_.min_selection_gap_ = value;
 }
 
-// string description = 4;
-inline bool ProfileInfo::has_description() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
-  return value;
-}
+// string description = 4 [features = {
 inline void ProfileInfo::clear_description() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.description_.ClearToEmpty();
@@ -20727,11 +20725,7 @@ inline void BounceProfile::_internal_set_delay_seconds_jitter(float value) {
   _impl_.delay_seconds_jitter_ = value;
 }
 
-// bool only_delay_on_floor = 6;
-inline bool BounceProfile::has_only_delay_on_floor() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
-  return value;
-}
+// bool only_delay_on_floor = 6 [features = {
 inline void BounceProfile::clear_only_delay_on_floor() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.only_delay_on_floor_ = false;
@@ -21792,11 +21786,7 @@ inline void WallArcScenarioDef::set_allocated_height_jitter(::aim::RegionLength*
   // @@protoc_insertion_point(field_set_allocated:aim.WallArcScenarioDef.height_jitter)
 }
 
-// bool start_on_ground = 6;
-inline bool WallArcScenarioDef::has_start_on_ground() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
+// bool start_on_ground = 6 [features = {
 inline void WallArcScenarioDef::clear_start_on_ground() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_on_ground_ = false;
@@ -21821,11 +21811,7 @@ inline void WallArcScenarioDef::_internal_set_start_on_ground(bool value) {
   _impl_.start_on_ground_ = value;
 }
 
-// bool reflect = 7;
-inline bool WallArcScenarioDef::has_reflect() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
+// bool reflect = 7 [features = {
 inline void WallArcScenarioDef::clear_reflect() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.reflect_ = false;
@@ -22446,11 +22432,7 @@ TargetDef::_internal_mutable_target_order() {
   return &_impl_.target_order_;
 }
 
-// bool newest_target_is_ghost = 5;
-inline bool TargetDef::has_newest_target_is_ghost() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
+// bool newest_target_is_ghost = 5 [features = {
 inline void TargetDef::clear_newest_target_is_ghost() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.newest_target_is_ghost_ = false;

@@ -4,6 +4,7 @@
 
 #include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/proto_util.h"
 #include "aim/proto/scenario.pb.h"
 #include "google/protobuf/message.h"
 #include "imgui.h"
@@ -161,6 +162,10 @@ void DrawProfileList(const std::string& id,
     } else {
       p->mutable_info()->clear_weight();
       p->mutable_info()->clear_next_profile();
+    }
+
+    if (IsDefaultInstance(p->info())) {
+      p->clear_info();
     }
 
     draw_profile_fn(&profile_list->at(i));

@@ -19,7 +19,7 @@ message CylinderRoom {
   // Instead of an absolute width, define as percent of perimeter. 0.5 is 180 degree view.
   float width_perimeter_percent = 4;
 
-  bool hide_sides = 5;
+  bool hide_sides = 5 [features.field_presence = IMPLICIT];
   // Defaults to 20.
   float side_angle_degrees = 6;
 }
@@ -152,7 +152,7 @@ message ShotType {
   float poke_kill_time_seconds = 10;
 
   // Partial kills are not counted towards score.
-  bool no_partial_kills = 11;
+  bool no_partial_kills = 11 [features.field_presence = IMPLICIT];
 
   // For tracking kill, the amount of time it takes to kill.
   float health_seconds = 12;
@@ -174,6 +174,9 @@ message ShotType {
   // Adjust the accuracy penalty modifier. Defaults to 1. 0.5 would take off half as much points
   // from the score. 0 would have no accuracy penalty.
   float accuracy_penalty_multiplier = 18;
+
+  // For clicking scenarios, remove the target if you miss it.
+  bool remove_closest_on_miss = 19 [features.field_presence = IMPLICIT];
 }
 
 // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.
@@ -185,7 +188,7 @@ message ScoreTargets {
 
 message ScenarioDef {
   reserved 10, 11, 13;
-  string description = 1;
+  string description = 1 [features.field_presence = IMPLICIT];
   int32 duration_seconds = 2;
   Room room = 3;
   TargetDef target_def = 5;
@@ -230,7 +233,7 @@ message CircleScenarioDef {
   // The starting point in degrees. 0 degrees is straight to the right and it rotates counter
   // clockwise.
   float start_degrees = 2;
-  bool rotate_clockwise = 3;
+  bool rotate_clockwise = 3 [features.field_presence = IMPLICIT];
   RegionLength depth = 4;
   float switch_after_seconds = 5;
 
@@ -253,7 +256,7 @@ message CenteringScenarioDef {
 
 message WaypointScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 1;
-  bool start_in_center = 2;
+  bool start_in_center = 2 [features.field_presence = IMPLICIT];
 }
 
 message BarrelScenarioDef {
@@ -291,7 +294,7 @@ message SineScenarioDef {
   RegionLength height = 1;
   // Period.
   RegionLength width = 2;
-  bool going_left = 3;
+  bool going_left = 3 [features.field_presence = IMPLICIT];
 }
 
 message ProfileInfo {
@@ -302,7 +305,7 @@ message ProfileInfo {
   // 1 means that 1 other profile must be selected before this one can be selected again.
   // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
   int32 min_selection_gap = 3;
-  string description = 4;
+  string description = 4 [features.field_presence = IMPLICIT];
 }
 
 message AngleStrafeProfile {
@@ -399,7 +402,7 @@ message BounceProfile {
 
   float delay_seconds = 4;
   float delay_seconds_jitter = 5;
-  bool only_delay_on_floor = 6;
+  bool only_delay_on_floor = 6 [features.field_presence = IMPLICIT];
 
   float speed_multiplier = 7;
   float acceleration_multiplier = 8;
@@ -433,10 +436,10 @@ message WallArcScenarioDef {
   RegionLength height = 2;
   RegionLength height_jitter = 3;
 
-  bool start_on_ground = 6;
+  bool start_on_ground = 6 [features.field_presence = IMPLICIT];
 
   // Make the arc upside down.
-  bool reflect = 7;
+  bool reflect = 7 [features.field_presence = IMPLICIT];
 }
 
 message WallWanderProfile {
@@ -472,7 +475,7 @@ message TargetDef {
   // displayed with a separate color as determined by theme. This is
   // useful for forced pathing so you know where the target will be
   // but have to click in the correct order.
-  bool newest_target_is_ghost = 5;
+  bool newest_target_is_ghost = 5 [features.field_presence = IMPLICIT];
 
   // New targets will be added after the specified amount of seconds.
   float new_target_delay_seconds = 6;

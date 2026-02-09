@@ -448,8 +448,7 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
                                 .set_default(0)
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(BounceProfile, p, delay_seconds));
-  ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor")
-                       .set_label("Only delay on floor"),
+  ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor").set_label("Only delay on floor"),
                    PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
 
   ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
@@ -805,6 +804,9 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
   }
 
   if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
+    ImGui::InputBool(ImGui::InputBoolParams("RemoveClosest").set_label("Remove on miss"),
+                     PROTO_BOOL_FIELD(ShotType, def.mutable_shot_type(), remove_closest_on_miss));
+
     ImGui::InputFloat(
         ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
             .set_is_optional()
@@ -827,6 +829,11 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
                       PROTO_FLOAT_FIELD(ShotType, def.mutable_shot_type(), click_rate_seconds));
     ImGui::SameLine();
     ImGui::HelpMarker("The amount of time in seconds after shooting before you can shoot again");
+  } else {
+    // Not clicking.
+    def.mutable_shot_type()->clear_click_rate_seconds();
+    def.mutable_shot_type()->clear_accuracy_penalty_multiplier();
+    def.mutable_shot_type()->clear_remove_closest_on_miss();
   }
 
   if (type == ShotType::kTrackingKill) {
@@ -868,9 +875,8 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
         "target, remove the target and  receive partial score. The kill sound will  be played "
         "early based on this time.");
 
-    ImGui::InputBool(
-        ImGui::InputBoolParams("NoPartialKills").set_label("No partial kills"),
-        PROTO_BOOL_FIELD(ShotType, def.mutable_shot_type(), no_partial_kills));
+    ImGui::InputBool(ImGui::InputBoolParams("NoPartialKills").set_label("No partial kills"),
+                     PROTO_BOOL_FIELD(ShotType, def.mutable_shot_type(), no_partial_kills));
   }
 }
 

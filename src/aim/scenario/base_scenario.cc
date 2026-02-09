@@ -342,7 +342,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
 
       } else {
         // Missed shot
-        if (def_.target_def().remove_closest_on_miss()) {
+        if (def_.shot_type().remove_closest_on_miss()) {
           // TODO(mjohns): Count partial kill for multi click?
           std::optional<u16> target_id_to_remove =
               target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);

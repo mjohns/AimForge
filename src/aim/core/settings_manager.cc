@@ -15,7 +15,6 @@
 #include "aim/proto/theme.pb.h"
 #include "google/protobuf/json/json.h"
 #include "google/protobuf/util/json_util.h"
-#include "nlohmann/json.h"
 
 namespace aim {
 namespace {

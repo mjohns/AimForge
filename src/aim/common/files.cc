@@ -14,7 +14,6 @@
 #include "aim/common/log.h"
 #include "google/protobuf/json/json.h"
 #include "google/protobuf/util/json_util.h"
-#include "nlohmann/json.h"
 
 namespace aim {
 
@@ -53,9 +52,7 @@ std::string MessageToJson(const google::protobuf::Message& message, int indent) 
     Logger::get()->error("Unable to serialize message to json: {}", status.message());
     return "";
   }
-  nlohmann::json json_data = nlohmann::json::parse(json_string);
-  std::string formatted_json = json_data.dump(indent, ' ', true);
-  return formatted_json;
+  return json_string;
 }
 
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
