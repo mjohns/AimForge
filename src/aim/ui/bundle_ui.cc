@@ -19,80 +19,70 @@ struct CachedBundleDetails {
 
 class AddBundleDialog {
  public:
-  explicit AddBundleDialog(const std::string& id) : id_(id) {}
+  explicit AddBundleDialog(const std::string& id) : popup_(id) {}
 
   void NotifyOpen(std::optional<std::string> bundle_to_copy) {
-    open_ = true;
     bundle_to_copy_ = bundle_to_copy;
+    bundle_name_ = "";
+    popup_.Open();
   }
 
   std::optional<std::string> Draw(Application& app) {
     ImGui::IdGuard cid("AddBundleDialogContent");
+    if (!popup_.Begin()) {
+      return {};
+    }
+
     std::optional<std::string> added_name;
-    if (is_open_) {
-      if (ImGui::BeginDefaultPopupModal(id_.c_str(), &is_open_)) {
-        ImGui::AlignTextToFramePadding();
-        ImGui::Text("Bundle name");
-        ImGui::SameLine();
-        ImGui::InputText("##BundleNameInput", &bundle_name_);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Bundle name");
+    ImGui::SameLine();
+    ImGui::InputText("##BundleNameInput", &bundle_name_);
 
-        bool name_taken = app.bundle_manager().GetBundleInfo(bundle_name_).has_value();
-        bool is_valid = IsValidBundleName(bundle_name_) && !name_taken;
+    bool name_taken = app.bundle_manager().GetBundleInfo(bundle_name_).has_value();
+    bool is_valid = IsValidBundleName(bundle_name_) && !name_taken;
 
-        if (!is_valid) {
-          ImGui::BeginDisabled();
-        }
+    if (!is_valid) {
+      ImGui::BeginDisabled();
+    }
 
-        if (!bundle_name_.empty() && !is_valid) {
-          if (name_taken) {
-            ImGui::TextFmt("Bundle name \"{}\" already exists", bundle_name_);
-          } else {
-            ImGui::TextFmt(
-                "Bundle name \"{}\" is invalid. Can only contains letters, numbers, and _",
-                bundle_name_);
-          }
-        }
-
-        if (ImGui::Button(bundle_to_copy_ ? "Copy" : "Add")) {
-          BundleInfo info;
-          info.set_bundle_name(bundle_name_);
-          app.bundle_manager().UpdateBundleInfo(info);
-
-          if (bundle_to_copy_) {
-            app.bundle_manager().CopyBundle(*bundle_to_copy_, bundle_name_);
-          }
-
-          added_name = bundle_name_;
-          ImGui::CloseCurrentPopup();
-          is_open_ = false;
-        }
-        if (!is_valid) {
-          ImGui::EndDisabled();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Cancel")) {
-          is_open_ = false;
-          ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
+    if (!bundle_name_.empty() && !is_valid) {
+      if (name_taken) {
+        ImGui::TextFmt("Bundle name \"{}\" already exists", bundle_name_);
+      } else {
+        ImGui::TextFmt("Bundle name \"{}\" is invalid. Can only contains letters, numbers, and _",
+                       bundle_name_);
       }
     }
-    if (open_) {
-      ImGui::OpenPopup(id_.c_str());
-      open_ = false;
-      is_open_ = true;
-      bundle_name_ = "";
+
+    if (ImGui::Button(bundle_to_copy_ ? "Copy" : "Add")) {
+      BundleInfo info;
+      info.set_bundle_name(bundle_name_);
+      app.bundle_manager().UpdateBundleInfo(info);
+
+      if (bundle_to_copy_) {
+        app.bundle_manager().CopyBundle(*bundle_to_copy_, bundle_name_);
+      }
+
+      added_name = bundle_name_;
+      popup_.Close();
     }
+    if (!is_valid) {
+      ImGui::EndDisabled();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+      popup_.Close();
+    }
+
+    popup_.End();
     return added_name;
   }
 
  private:
-  bool open_ = false;
-  bool is_open_ = false;
-
   std::string bundle_name_;
   std::optional<std::string> bundle_to_copy_;
-  std::string id_;
+  ImGui::Popup popup_;
 };
 
 class BundleUiComponentImpl : public BundleUiComponent {
