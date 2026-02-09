@@ -156,16 +156,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::End();
   }
 
-  void DrawDescriptionEditor() {
-    if (ImGui::Button(std::format("{} Back to editor", icons::kArrowBack))) {
-      editing_description_ = false;
-    }
-    ImGui::InputTextMultiline("##DescriptionInput",
-                              def_.mutable_description(),
-                              ImGui::GetContentRegionAvail(),
-                              ImGuiInputTextFlags_AllowTabInput);
-  }
-
   void DrawMainEditor() {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (ImGui::BeginTable("MainEditorColumns", 3, flags)) {
@@ -197,6 +187,11 @@ class ScenarioEditorScreen : public UiScreen {
 
     DrawTopBar();
 
+    auto maybe_description = description_dialog_.Draw();
+    if (maybe_description) {
+      def_.set_description(*maybe_description);
+    }
+
     if (def_.room().type_case() == Room::TYPE_NOT_SET) {
       *def_.mutable_room() = GetDefaultSimpleRoom();
     }
@@ -209,14 +204,6 @@ class ScenarioEditorScreen : public UiScreen {
     float padding = char_x_ * 0.3;
     float editor_start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 1;
     float editor_end_y = app_.screen_info().height - padding;
-
-    if (editing_description_) {
-      if (BeginMainWindow("DescriptionEditor", 0.6)) {
-        DrawDescriptionEditor();
-      }
-      ImGui::End();
-      return;
-    }
 
     if (def_.has_reference_def()) {
       if (BeginMainWindow("ReferenceEditor", 0.6)) {
@@ -339,12 +326,12 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SpacedSeparator();
 
-    if (ImGui::Button("Edit room")) {
+    if (ImGui::Button(std::format("{} room", icons::kEdit))) {
       editing_room_ = true;
     }
 
-    if (ImGui::Button("Edit description")) {
-      editing_description_ = true;
+    if (ImGui::Button(std::format("{} description", icons::kEdit))) {
+      description_dialog_.NotifyOpen(def_.description());
     }
 
     ImGui::SpacedSeparator();
@@ -551,13 +538,13 @@ class ScenarioEditorScreen : public UiScreen {
   ImGui::NotificationPopup notification_popup_{"Notification"};
 
   bool editing_room_ = false;
-  bool editing_description_ = false;
 
   bool comparison_window_open_ = false;
   std::string comparison_scenario_;
   float bake_level_ = 1;
   bool exit_after_notification_ = false;
   bool is_new_scenario_ = false;
+  ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionDialog"};
 };
 
 }  // namespace
