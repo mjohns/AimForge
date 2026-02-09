@@ -240,10 +240,11 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawHistoryPanel() {
-    delete_history_confirmation_dialog_.Draw("Delete", [=](const std::string& scenario_name) {
-      app_.stats_manager().DeleteAllStats(scenario_name);
+    auto scenario_history_to_delete = delete_history_confirmation_dialog_.Draw("Delete");
+    if (scenario_history_to_delete) {
+      app_.stats_manager().DeleteAllStats(*scenario_history_to_delete);
       PopSelf();
-    });
+    }
     DrawHistory();
   }
 

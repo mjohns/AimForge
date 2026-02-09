@@ -434,10 +434,11 @@ class ThemeEditorScreen : public UiScreen {
     if (!theme_editor_) {
       BeginMainWindow("ThemeList");
       notification_popup_.Draw();
-      delete_confirmation_dialog_.Draw("Delete", [=](const std::string& to_delete) {
-        app_.settings_manager().DeleteTheme(to_delete);
+      auto to_delete = delete_confirmation_dialog_.Draw("Delete");
+      if (to_delete) {
+        app_.settings_manager().DeleteTheme(*to_delete);
         LoadThemeList();
-      });
+      }
       DrawThemeListEditor();
 
       ImGui::End();

@@ -432,14 +432,16 @@ class ScenariosComponentImpl : public ScenariosComponent {
       : app_(app), scenario_browser_("ScenarioBrowser", &app) {}
 
   void Show() override {
-    dialogs_.delete_confirmation_dialog.Draw("Delete", [=](const std::string& scenario_name) {
-      auto maybe_scenario = app_.scenario_manager().GetScenario(scenario_name);
+    std::optional<std::string> scenario_to_delete =
+        dialogs_.delete_confirmation_dialog.Draw("Delete");
+    if (scenario_to_delete) {
+      auto maybe_scenario = app_.scenario_manager().GetScenario(*scenario_to_delete);
       if (maybe_scenario.has_value()) {
         app_.scenario_manager().DeleteScenario(maybe_scenario->name);
         app_.bundle_manager().SaveDirtyBundles();
         Reload();
       }
-    });
+    }
     dialogs_.create_levels_playlist_dialog.Draw(app_);
 
     std::optional<float> selected_level_value;

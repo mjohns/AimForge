@@ -38,11 +38,12 @@ class CrosshairEditorScreen : public UiScreen {
 
     BeginMainWindow("CrosshairEditor");
     notification_popup_.Draw();
+    auto to_delete = delete_confirmation_dialog_.Draw("Delete");
+    if (to_delete) {
+      app_.settings_manager().DeleteCrosshair(*to_delete);
+      LoadCrosshairList();
+    }
     if (current_crosshair_name_.size() == 0) {
-      delete_confirmation_dialog_.Draw("Delete", [=](const std::string& to_delete) {
-        app_.settings_manager().DeleteCrosshair(to_delete);
-        LoadCrosshairList();
-      });
       DrawCrosshairListEditor();
     } else {
       DrawCrosshairEditor();

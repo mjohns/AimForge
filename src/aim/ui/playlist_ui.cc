@@ -207,7 +207,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
   UiScreen& screen_;
   Application& app_;
 
-  ImGui::ConfirmationDialogV2<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog1"};
+  ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog1"};
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
 };
 
@@ -363,7 +363,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   }
 
  private:
-  ImGui::ConfirmationDialogV2<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog2"};
+  ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog2"};
   std::string playlist_search_text_;
   UiScreen& screen_;
   Application& app_;
