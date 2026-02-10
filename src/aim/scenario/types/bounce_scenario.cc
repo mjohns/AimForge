@@ -321,8 +321,8 @@ class BounceScenario : public BaseScenario {
     if (wall_target_placer_) {
       pos = wall_target_placer_->GetNextPosition();
     } else {
-      float depth = wall_.GetWallBounds(def_.bounce_def().bounds()).max_depth;
-      if (depth > 0) {
+      if (def_.bounce_def().forward_back_profiles_size() > 0) {
+        float depth = wall_.GetWallBounds(def_.bounce_def().bounds()).max_depth;
         // Start in the middle of the available depth.
         pos.z = depth / 2.0;
       }

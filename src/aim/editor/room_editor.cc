@@ -26,7 +26,7 @@ float GetDefaultSideAngleForDegrees(float degrees) {
   }
 
   float min_side_angle = 9;
-  float max_side_angle = 70;
+  float max_side_angle = 80;
   if (degrees >= max_room_degrees) {
     return max_side_angle;
   }
@@ -65,7 +65,7 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::SameLine();
     float width = room.simple_room().width();
     ImGui::SetNextItemWidth(char_x * 12);
-    ImGui::InputFloat("##RoomWidth", &width, 1, 10, "%.0f");
+    ImGui::InputFloat("##RoomWidth", &width, 1, 25, "%.0f");
     room.mutable_simple_room()->set_width(width);
 
     ImGui::AlignTextToFramePadding();
@@ -73,7 +73,7 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::SameLine();
     float height = room.simple_room().height();
     ImGui::SetNextItemWidth(char_x * 12);
-    ImGui::InputFloat("##RoomHeight", &height, 1, 10, "%.0f");
+    ImGui::InputFloat("##RoomHeight", &height, 1, 25, "%.0f");
     room.mutable_simple_room()->set_height(height);
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Depth")

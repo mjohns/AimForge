@@ -27,7 +27,8 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
   auto region_type = region->type_case();
   ImGui::SimpleTypeDropdown("RegionTypeDropdown", &region_type, kRegionTypes, char_x * 15);
 
-  if (region_type == TargetRegion::kPoint) {
+  bool is_point = region_type == TargetRegion::kPoint;
+  if (is_point) {
     DrawRegionVec2Editor("Point", region->mutable_point());
   }
 
@@ -120,28 +121,30 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     region->clear_depth_jitter();
   }
 
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Offset");
-  ImGui::SameLine();
-  bool use_offsets = region->has_x_offset() || region->has_y_offset();
-  ImGui::Checkbox("##OffsetsCheckbox", &use_offsets);
-  if (use_offsets) {
-    ImGui::Indent();
+  if (!is_point) {
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("X offset");
+    ImGui::Text("Offset");
     ImGui::SameLine();
-    DrawRegionLengthPointEditor(
-        "XOffset", RegionLength::kXPercentValue, region->mutable_x_offset());
+    bool use_offsets = region->has_x_offset() || region->has_y_offset();
+    ImGui::Checkbox("##OffsetsCheckbox", &use_offsets);
+    if (use_offsets) {
+      ImGui::Indent();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("X offset");
+      ImGui::SameLine();
+      DrawRegionLengthPointEditor(
+          "XOffset", RegionLength::kXPercentValue, region->mutable_x_offset());
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Y offset");
-    ImGui::SameLine();
-    DrawRegionLengthPointEditor(
-        "YOffset", RegionLength::kYPercentValue, region->mutable_y_offset());
-    ImGui::Unindent();
-  } else {
-    region->clear_x_offset();
-    region->clear_y_offset();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Y offset");
+      ImGui::SameLine();
+      DrawRegionLengthPointEditor(
+          "YOffset", RegionLength::kYPercentValue, region->mutable_y_offset());
+      ImGui::Unindent();
+    } else {
+      region->clear_x_offset();
+      region->clear_y_offset();
+    }
   }
 }
 

@@ -1,6 +1,609 @@
 {
  "scenarios": [
   {
+   "name": "360 Turn",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.1,
+       "speed": 75,
+       "acceleration": 115,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 76,
+      "radius": 200,
+      "widthDegrees": 360
+     }
+    },
+    "levelOverrides": {},
+    "centeringDef": {
+     "wallPoints": [
+      {
+       "x": {
+        "xPercentValue": -0.49
+       },
+       "y": {
+        "yPercentValue": 0
+       }
+      },
+      {
+       "x": {
+        "xPercentValue": 0.49
+       },
+       "y": {
+        "yPercentValue": 0
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "name": "Box Tracking",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.60000038,
+       "speed": 92
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 114,
+      "width": 248
+     }
+    },
+    "levelOverrides": {},
+    "waypointDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "Bottom Left"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": -0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Top Right"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": 0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Bottom Right"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": -0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Top Left"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": 0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Random Left"
+        },
+        "xOffset": {
+         "xPercentValue": -0.49
+        },
+        "yOffset": {
+         "yPercentValue": -0.2
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "yPercentValue": 0.440000117
+         }
+        }
+       }
+      ],
+      "regionOrder": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       1,
+       2,
+       3
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "Box Tracking Close",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.20000076,
+       "speed": 100
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -60,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 114,
+      "width": 248
+     }
+    },
+    "levelOverrides": {},
+    "waypointDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "Bottom Left"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": -0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Top Right"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": 0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Bottom Right"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": -0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Top Left"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": 0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Random Left"
+        },
+        "xOffset": {
+         "xPercentValue": -0.49
+        },
+        "yOffset": {
+         "yPercentValue": -0.2
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "yPercentValue": 0.440000117
+         }
+        }
+       }
+      ],
+      "regionOrder": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       1,
+       2,
+       3
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "Box Tracking Pure",
+   "def": {
+    "description": "Box tracking but bottom left is always fixed in the corner",
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.6,
+       "speed": 92
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 114,
+      "width": 248
+     }
+    },
+    "levelOverrides": {},
+    "waypointDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "Bottom Left"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": -0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Top Right"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": 0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Bottom Right"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": -0.48
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Top Left"
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": 0.48
+         }
+        }
+       }
+      ],
+      "regionOrder": [
+       0,
+       1,
+       2,
+       3
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "Box Tracking Pure Small",
+   "def": {
+    "description": "Box tracking but bottom left is always fixed in the corner",
+    "overrides": {
+     "targetRadiusMultiplier": 0.900000095
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Box Tracking Pure"
+    }
+   }
+  },
+  {
+   "name": "Box Tracking Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.900000095
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Box Tracking Small"
+    }
+   }
+  },
+  {
+   "name": "Centering 180 Speed 2",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.0999999,
+       "speed": 75.5999908,
+       "acceleration": 220,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 76,
+      "radius": 200,
+      "sideAngleDegrees": 80,
+      "widthDegrees": 180
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.99
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "Centering 180 Speed 3",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.0999999,
+       "speed": 113.399994,
+       "acceleration": 330,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 76,
+      "radius": 200,
+      "sideAngleDegrees": 80,
+      "widthDegrees": 180
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.99
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
    "name": "Centering 45 Speed 2 Stop",
    "def": {
     "durationSeconds": 60,
@@ -11,7 +614,7 @@
      "profiles": [
       {
        "targetRadius": 1.0999999,
-       "speed": 70,
+       "speed": 75.5999908,
        "pill": {
         "height": 20
        }
@@ -31,9 +634,6 @@
       "sideAngleDegrees": 8,
       "widthDegrees": 45
      }
-    },
-    "overrides": {
-     "speedMultiplier": 1.07999992
     },
     "levelOverrides": {},
     "strafeDef": {
@@ -55,6 +655,775 @@
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
      "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "Centering 90 Speed 2",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.0999999,
+       "speed": 75.5999908,
+       "acceleration": 220,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 76,
+      "radius": 200,
+      "sideAngleDegrees": 34,
+      "widthDegrees": 90
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.99
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "DVD Tracking",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 85
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 94
+     }
+    },
+    "levelOverrides": {},
+    "linearDef": {
+     "angle": 25,
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0.210000038
+         }
+        }
+       }
+      ]
+     },
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 110",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 123
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "angle": -20,
+     "angleLength": {
+      "xPercentValue": 0.98
+     }
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 110 Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000119
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Hewchy's VAI 110"
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 135",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 123
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "angle": -45,
+     "angleLength": {
+      "xPercentValue": 0.98
+     }
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 135 Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000119
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Hewchy's VAI 135"
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 160",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 123
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "angle": -70,
+     "angleLength": {
+      "xPercentValue": 0.98
+     }
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 160 Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000119
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Hewchy's VAI 160"
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 20",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 123
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "angle": 70,
+     "angleLength": {
+      "xPercentValue": 0.98
+     }
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 20 Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000119
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Hewchy's VAI 20"
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 45",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 123
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "angle": 45,
+     "angleLength": {
+      "xPercentValue": 0.98
+     }
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 45 Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000119
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Hewchy's VAI 45"
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 70",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 123
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "angle": 20,
+     "angleLength": {
+      "xPercentValue": 0.98
+     }
+    }
+   }
+  },
+  {
+   "name": "Hewchy's VAI 70 Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000119
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Hewchy's VAI 70"
+    }
+   }
+  },
+  {
+   "name": "ST60",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.19999981,
+       "speed": 97.2,
+       "acceleration": 200,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 102,
+      "width": 353
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.965
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "ST60 Thick",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.59999943,
+       "speed": 97.2,
+       "acceleration": 200,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 102,
+      "width": 353
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.965
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "SYW",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.19999981,
+       "speed": 107.999992,
+       "acceleration": 200,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 102,
+      "width": 203
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.965
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "SYW Thin",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 0.699999869,
+       "speed": 107.999992,
+       "acceleration": 200,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 102,
+      "width": 203
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.965
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "Wavy Tracking",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 92,
+       "acceleration": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 143,
+      "width": 130
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 0.73
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.200000033
+       }
+      }
+     ],
+     "upDownProfiles": [
+      {
+       "info": {
+        "weight": 3
+       },
+       "centerBias": 0.3,
+       "distance": {
+        "yPercentValue": 0.6
+       },
+       "distanceJitter": {
+        "yPercentValue": 0.100000031
+       },
+       "speedMultiplier": 0.74999994,
+       "speedMultiplierJitter": 0.1,
+       "accelerationMultiplier": 0.449999869,
+       "accelerationMultiplierJitter": 0.25,
+       "pauseTime": 0.100000016,
+       "pauseChancePercent": 0.5
+      },
+      {
+       "info": {
+        "description": "Slower",
+        "weight": 1
+       },
+       "centerBias": 0.3,
+       "distance": {
+        "yPercentValue": 0.440000027
+       },
+       "distanceJitter": {
+        "yPercentValue": 0.035
+       },
+       "speedMultiplier": 0.199999839,
+       "accelerationMultiplier": 0.149999842
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "Wavy Tracking Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.850000143
+    },
+    "referenceDef": {
+     "scenarioName": "TSK Wavy Tracking"
+    }
+   }
+  },
+  {
+   "name": "Wavy Tracking V2",
+   "def": {
+    "description": "Wavy tracking using a bounce scenario",
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2,
+       "speed": 92,
+       "acceleration": 95
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 143,
+      "width": 130
+     }
+    },
+    "levelOverrides": {},
+    "bounceDef": {
+     "bounceProfiles": [
+      {
+       "height": {
+        "yPercentValue": 0.9
+       },
+       "heightJitter": {
+        "yPercentValue": 0
+       },
+       "speedMultiplier": 0.729999721,
+       "accelerationMultiplier": 0.510000467,
+       "floatTime": 0.04
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 0.400000036
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.13
+       },
+       "speedMultiplier": 1.69999933,
+       "speedMultiplierJitter": 0.15,
+       "accelerationMultiplier": 1.74999928,
+       "accelerationMultiplierJitter": 0.05
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
