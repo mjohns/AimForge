@@ -294,14 +294,15 @@ message SineScenarioDef {
 }
 
 message ProfileInfo {
+  string description = 1 [features.field_presence = IMPLICIT];
   // Proportional weight used to select this profile. If the weight of this profile is 2 and the
   // other is 1, then this profile will be used 2/3 of the time.
-  float weight = 1;
-  int32 next_profile = 2;
+  float weight = 2;
+
+  int32 next_profile = 3;
   // 1 means that 1 other profile must be selected before this one can be selected again.
   // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
-  int32 min_selection_gap = 3;
-  string description = 4 [features.field_presence = IMPLICIT];
+  int32 min_selection_gap = 4;
 }
 
 message AngleStrafeProfile {
@@ -366,6 +367,13 @@ message StrafeProfile {
 
   float acceleration_multiplier = 9;
   float acceleration_multiplier_jitter = 10;
+
+  // Will pause for the specified time at the end of the strafe.
+  float pause_time = 11;
+  float pause_time_jitter = 12;
+
+  // If specified, percent chance pause will happen. 0.5 = 50% chance.
+  float pause_chance_percent = 13;
 }
 
 message StrafeScenarioDef {

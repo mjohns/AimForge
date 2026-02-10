@@ -1932,12 +1932,12 @@ class ProfileInfo final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kDescriptionFieldNumber = 4,
-    kWeightFieldNumber = 1,
-    kNextProfileFieldNumber = 2,
-    kMinSelectionGapFieldNumber = 3,
+    kDescriptionFieldNumber = 1,
+    kWeightFieldNumber = 2,
+    kNextProfileFieldNumber = 3,
+    kMinSelectionGapFieldNumber = 4,
   };
-  // string description = 4 [features = {
+  // string description = 1 [features = {
   void clear_description() ;
   const ::std::string& description() const;
   template <typename Arg_ = const ::std::string&, typename... Args_>
@@ -1952,7 +1952,7 @@ class ProfileInfo final : public ::google::protobuf::Message
   ::std::string* PROTOBUF_NONNULL _internal_mutable_description();
 
   public:
-  // float weight = 1;
+  // float weight = 2;
   bool has_weight() const;
   void clear_weight() ;
   float weight() const;
@@ -1963,7 +1963,7 @@ class ProfileInfo final : public ::google::protobuf::Message
   void _internal_set_weight(float value);
 
   public:
-  // int32 next_profile = 2;
+  // int32 next_profile = 3;
   bool has_next_profile() const;
   void clear_next_profile() ;
   ::int32_t next_profile() const;
@@ -1974,7 +1974,7 @@ class ProfileInfo final : public ::google::protobuf::Message
   void _internal_set_next_profile(::int32_t value);
 
   public:
-  // int32 min_selection_gap = 3;
+  // int32 min_selection_gap = 4;
   bool has_min_selection_gap() const;
   void clear_min_selection_gap() ;
   ::int32_t min_selection_gap() const;
@@ -3673,6 +3673,9 @@ class StrafeProfile final : public ::google::protobuf::Message
     kSpeedMultiplierJitterFieldNumber = 8,
     kAccelerationMultiplierFieldNumber = 9,
     kAccelerationMultiplierJitterFieldNumber = 10,
+    kPauseTimeFieldNumber = 11,
+    kPauseTimeJitterFieldNumber = 12,
+    kPauseChancePercentFieldNumber = 13,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -3796,11 +3799,44 @@ class StrafeProfile final : public ::google::protobuf::Message
   void _internal_set_acceleration_multiplier_jitter(float value);
 
   public:
+  // float pause_time = 11;
+  bool has_pause_time() const;
+  void clear_pause_time() ;
+  float pause_time() const;
+  void set_pause_time(float value);
+
+  private:
+  float _internal_pause_time() const;
+  void _internal_set_pause_time(float value);
+
+  public:
+  // float pause_time_jitter = 12;
+  bool has_pause_time_jitter() const;
+  void clear_pause_time_jitter() ;
+  float pause_time_jitter() const;
+  void set_pause_time_jitter(float value);
+
+  private:
+  float _internal_pause_time_jitter() const;
+  void _internal_set_pause_time_jitter(float value);
+
+  public:
+  // float pause_chance_percent = 13;
+  bool has_pause_chance_percent() const;
+  void clear_pause_chance_percent() ;
+  float pause_chance_percent() const;
+  void set_pause_chance_percent(float value);
+
+  private:
+  float _internal_pause_chance_percent() const;
+  void _internal_set_pause_chance_percent(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.StrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 10,
+  static const ::google::protobuf::internal::TcParseTable<4, 13,
                                    3, 0,
                                    2>
       _table_;
@@ -3832,6 +3868,9 @@ class StrafeProfile final : public ::google::protobuf::Message
     float speed_multiplier_jitter_;
     float acceleration_multiplier_;
     float acceleration_multiplier_jitter_;
+    float pause_time_;
+    float pause_time_jitter_;
+    float pause_chance_percent_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -17864,94 +17903,7 @@ inline void SineScenarioDef::_internal_set_going_left(bool value) {
 
 // ProfileInfo
 
-// float weight = 1;
-inline bool ProfileInfo::has_weight() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  return value;
-}
-inline void ProfileInfo::clear_weight() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.weight_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline float ProfileInfo::weight() const {
-  // @@protoc_insertion_point(field_get:aim.ProfileInfo.weight)
-  return _internal_weight();
-}
-inline void ProfileInfo::set_weight(float value) {
-  _internal_set_weight(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_set:aim.ProfileInfo.weight)
-}
-inline float ProfileInfo::_internal_weight() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.weight_;
-}
-inline void ProfileInfo::_internal_set_weight(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.weight_ = value;
-}
-
-// int32 next_profile = 2;
-inline bool ProfileInfo::has_next_profile() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
-  return value;
-}
-inline void ProfileInfo::clear_next_profile() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.next_profile_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
-}
-inline ::int32_t ProfileInfo::next_profile() const {
-  // @@protoc_insertion_point(field_get:aim.ProfileInfo.next_profile)
-  return _internal_next_profile();
-}
-inline void ProfileInfo::set_next_profile(::int32_t value) {
-  _internal_set_next_profile(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
-  // @@protoc_insertion_point(field_set:aim.ProfileInfo.next_profile)
-}
-inline ::int32_t ProfileInfo::_internal_next_profile() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.next_profile_;
-}
-inline void ProfileInfo::_internal_set_next_profile(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.next_profile_ = value;
-}
-
-// int32 min_selection_gap = 3;
-inline bool ProfileInfo::has_min_selection_gap() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
-inline void ProfileInfo::clear_min_selection_gap() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.min_selection_gap_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::int32_t ProfileInfo::min_selection_gap() const {
-  // @@protoc_insertion_point(field_get:aim.ProfileInfo.min_selection_gap)
-  return _internal_min_selection_gap();
-}
-inline void ProfileInfo::set_min_selection_gap(::int32_t value) {
-  _internal_set_min_selection_gap(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:aim.ProfileInfo.min_selection_gap)
-}
-inline ::int32_t ProfileInfo::_internal_min_selection_gap() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.min_selection_gap_;
-}
-inline void ProfileInfo::_internal_set_min_selection_gap(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.min_selection_gap_ = value;
-}
-
-// string description = 4 [features = {
+// string description = 1 [features = {
 inline void ProfileInfo::clear_description() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.description_.ClearToEmpty();
@@ -18014,6 +17966,93 @@ inline void ProfileInfo::set_allocated_description(::std::string* PROTOBUF_NULLA
     _impl_.description_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ProfileInfo.description)
+}
+
+// float weight = 2;
+inline bool ProfileInfo::has_weight() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  return value;
+}
+inline void ProfileInfo::clear_weight() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.weight_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline float ProfileInfo::weight() const {
+  // @@protoc_insertion_point(field_get:aim.ProfileInfo.weight)
+  return _internal_weight();
+}
+inline void ProfileInfo::set_weight(float value) {
+  _internal_set_weight(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_set:aim.ProfileInfo.weight)
+}
+inline float ProfileInfo::_internal_weight() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.weight_;
+}
+inline void ProfileInfo::_internal_set_weight(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.weight_ = value;
+}
+
+// int32 next_profile = 3;
+inline bool ProfileInfo::has_next_profile() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  return value;
+}
+inline void ProfileInfo::clear_next_profile() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline ::int32_t ProfileInfo::next_profile() const {
+  // @@protoc_insertion_point(field_get:aim.ProfileInfo.next_profile)
+  return _internal_next_profile();
+}
+inline void ProfileInfo::set_next_profile(::int32_t value) {
+  _internal_set_next_profile(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_set:aim.ProfileInfo.next_profile)
+}
+inline ::int32_t ProfileInfo::_internal_next_profile() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.next_profile_;
+}
+inline void ProfileInfo::_internal_set_next_profile(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.next_profile_ = value;
+}
+
+// int32 min_selection_gap = 4;
+inline bool ProfileInfo::has_min_selection_gap() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  return value;
+}
+inline void ProfileInfo::clear_min_selection_gap() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000008U);
+}
+inline ::int32_t ProfileInfo::min_selection_gap() const {
+  // @@protoc_insertion_point(field_get:aim.ProfileInfo.min_selection_gap)
+  return _internal_min_selection_gap();
+}
+inline void ProfileInfo::set_min_selection_gap(::int32_t value) {
+  _internal_set_min_selection_gap(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  // @@protoc_insertion_point(field_set:aim.ProfileInfo.min_selection_gap)
+}
+inline ::int32_t ProfileInfo::_internal_min_selection_gap() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.min_selection_gap_;
+}
+inline void ProfileInfo::_internal_set_min_selection_gap(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_selection_gap_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -19766,6 +19805,93 @@ inline float StrafeProfile::_internal_acceleration_multiplier_jitter() const {
 inline void StrafeProfile::_internal_set_acceleration_multiplier_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_jitter_ = value;
+}
+
+// float pause_time = 11;
+inline bool StrafeProfile::has_pause_time() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  return value;
+}
+inline void StrafeProfile::clear_pause_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_time_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000400U);
+}
+inline float StrafeProfile::pause_time() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.pause_time)
+  return _internal_pause_time();
+}
+inline void StrafeProfile::set_pause_time(float value) {
+  _internal_set_pause_time(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.pause_time)
+}
+inline float StrafeProfile::_internal_pause_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pause_time_;
+}
+inline void StrafeProfile::_internal_set_pause_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_time_ = value;
+}
+
+// float pause_time_jitter = 12;
+inline bool StrafeProfile::has_pause_time_jitter() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  return value;
+}
+inline void StrafeProfile::clear_pause_time_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_time_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000800U);
+}
+inline float StrafeProfile::pause_time_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.pause_time_jitter)
+  return _internal_pause_time_jitter();
+}
+inline void StrafeProfile::set_pause_time_jitter(float value) {
+  _internal_set_pause_time_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.pause_time_jitter)
+}
+inline float StrafeProfile::_internal_pause_time_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pause_time_jitter_;
+}
+inline void StrafeProfile::_internal_set_pause_time_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_time_jitter_ = value;
+}
+
+// float pause_chance_percent = 13;
+inline bool StrafeProfile::has_pause_chance_percent() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  return value;
+}
+inline void StrafeProfile::clear_pause_chance_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_chance_percent_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00001000U);
+}
+inline float StrafeProfile::pause_chance_percent() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.pause_chance_percent)
+  return _internal_pause_chance_percent();
+}
+inline void StrafeProfile::set_pause_chance_percent(float value) {
+  _internal_set_pause_chance_percent(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.pause_chance_percent)
+}
+inline float StrafeProfile::_internal_pause_chance_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pause_chance_percent_;
+}
+inline void StrafeProfile::_internal_set_pause_chance_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pause_chance_percent_ = value;
 }
 
 // -------------------------------------------------------------------

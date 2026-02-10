@@ -330,6 +330,26 @@ void DrawStrafeProfile(float char_x,
   ImGui::HelpMarker(
       "If close to the edge will shorten/lengthen the next strafe to encourage moving towards the "
       "center. 0.10 means lengthen the strafe by 10%");
+
+  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Pause time")
+                                .set_is_optional()
+                                .set_step(0.1, 0.2)
+                                .set_min(0)
+                                .set_default(0.3)
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(StrafeProfile, p, pause_time));
+  ImGui::SameLine();
+  ImGui::HelpMarker("Amount of time to pause at the end of the strafe in seconds");
+
+  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Pause chance")
+                        .set_is_optional()
+                        .set_step(1, 10)
+                        .set_min(1)
+                        .set_default(50)
+                        .set_width(char_x * 10),
+                    PROTO_PERCENT_FIELD(StrafeProfile, p, pause_chance_percent));
+  ImGui::SameLine();
+  ImGui::HelpMarker("Percent chance that the target will pause at the end of the strafe");
 }
 
 void DrawLeftRightStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,

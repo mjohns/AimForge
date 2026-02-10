@@ -128,6 +128,8 @@ class StrafeController {
   bool going_left_ = false;
   int direction_change_count_ = 0;
   Wall wall_;
+  float wait_until_time_ = -1;
+  float pause_time_ = -1;
 };
 
 std::unique_ptr<MovementController> CreateForwardBackMovementController(

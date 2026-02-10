@@ -151,6 +151,13 @@ float StrafeController::GetUpdatedPosition(Target& t,
     }
   }
 
+  if (wait_until_time_ > 0) {
+    if (wait_until_time_ > now_seconds) {
+      return current_position;
+    }
+    wait_until_time_ = -1;
+  }
+
   float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
 
   float stop_min = min_;
@@ -231,11 +238,23 @@ void StrafeController::ChangeDirection(Random& rand,
                                        const RepeatedField<int>& order,
                                        float target_speed,
                                        float current_position) {
+  if (pause_time_ > 0) {
+    wait_until_time_ = now_seconds + pause_time_;
+  }
+
   direction_change_count_++;
   auto p = SelectProfile(order, profiles, &selection_context_, rand);
   if (!p.has_value()) {
     return;
   }
+  pause_time_ = rand.GetJittered(p->pause_time(), p->pause_time_jitter());
+  if (pause_time_ > 0 && p->pause_chance_percent() > 0) {
+    bool should_actually_pause = rand.FlipCoin(p->pause_chance_percent());
+    if (!should_actually_pause) {
+      pause_time_ = 0;
+    }
+  }
+
   speed_multiplier_ = p->has_speed_multiplier()
                           ? rand.GetJittered(p->speed_multiplier(), p->speed_multiplier_jitter())
                           : 1.0;
@@ -301,7 +320,8 @@ void StrafeController::ChangeDirection(Random& rand,
   next_direction_change_pos_ = {};
   next_direction_change_time_ = -1;
   if (use_time) {
-    next_direction_change_time_ = now_seconds + value;
+    // Note. Also include any pause time from the previous strafe in this value.
+    next_direction_change_time_ = now_seconds + value + pause_time_;
   } else {
     if (going_left_) {
       next_direction_change_pos_ = std::max<float>(min_, current_position - value);

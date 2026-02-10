@@ -1,0 +1,64 @@
+{
+ "scenarios": [
+  {
+   "name": "Centering 45 Speed 2 Stop",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.0999999,
+       "speed": 70,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 76,
+      "radius": 200,
+      "widthPerimeterPercent": 0.125,
+      "sideAngleDegrees": 8
+     }
+    },
+    "overrides": {
+     "speedMultiplier": 1.07999992
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.985
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       },
+       "pauseTime": 0.3
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  }
+ ]
+}
+
