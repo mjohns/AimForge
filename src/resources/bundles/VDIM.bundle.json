@@ -10,11 +10,8 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
        "targetRadius": 1.25,
-       "targetRadiusJitter": 0,
-       "speed": 4,
-       "speedJitter": 0
+       "speed": 4
       }
      ],
      "numTargets": 2
@@ -30,11 +27,11 @@
       "width": 210
      }
     },
+    "levelOverrides": {},
     "wallWanderDef": {
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 0
         },
@@ -57,7 +54,6 @@
      },
      "profiles": [
       {
-       "info": {},
        "turnTime": 2.19999981,
        "turnTimeJitter": 0.6,
        "turnRate": 300,
@@ -253,8 +249,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 126
      }
     },
     "strafeDef": {
@@ -342,12 +338,35 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 1.30000019,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 468.000061
      }
     },
     "bounceDef": {
      "bounds": {},
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.829999864
+       },
+       "heightJitter": {
+        "yPercentValue": 0
+       },
+       "delaySecondsJitter": 0
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 9.29999924,
+       "timeJitter": 0,
+       "speedMultiplier": 0.549999893,
+       "accelerationMultiplier": 0.699999869
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -375,29 +394,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.829999864
-       },
-       "heightJitter": {
-        "yPercentValue": 0
-       },
-       "delaySecondsJitter": 0
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 9.29999924,
-       "timeJitter": 0,
-       "speedMultiplier": 0.549999893,
-       "accelerationMultiplier": 0.699999869
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE"
     }
    }
@@ -568,8 +564,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.6,
-      "sideAngleDegrees": 70
+      "sideAngleDegrees": 70,
+      "widthDegrees": 216.000015
      }
     },
     "centeringDef": {
@@ -623,8 +619,8 @@
      "cylinderRoom": {
       "height": 150,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -656,8 +652,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 2
        },
        "time": 5.99999666,
        "timeJitter": 1.4000001,
@@ -666,8 +662,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 2
        },
        "time": 4.49999809,
        "timeJitter": 1.80000031,
@@ -676,8 +672,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 1.1,
        "timeJitter": 0.3,
@@ -720,8 +716,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 150,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 39
+      "sideAngleDegrees": 39,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -746,17 +742,17 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Shifty Strafe"
+        "description": "Shifty Strafe",
+        "weight": 2
        },
        "time": 0.699999928,
        "timeJitter": 0.1
       },
       {
        "info": {
+        "description": "Blink",
         "weight": 1,
-        "minSelectionGap": 2,
-        "description": "Blink"
+        "minSelectionGap": 2
        },
        "time": 0.2,
        "timeJitter": 0.03,
@@ -785,9 +781,9 @@
       },
       {
        "info": {
+        "description": "Big up/down swing",
         "weight": 1,
-        "minSelectionGap": 4,
-        "description": "Big up/down swing"
+        "minSelectionGap": 4
        },
        "time": 2.79999948,
        "timeJitter": 0.5,
@@ -796,8 +792,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "time": 2.30000019,
        "timeJitter": 0.200000018,
@@ -898,8 +894,8 @@
      "cylinderRoom": {
       "height": 200,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 49
+      "sideAngleDegrees": 49,
+      "widthDegrees": 180
      }
     },
     "linearDef": {
@@ -961,8 +957,8 @@
      "cylinderRoom": {
       "height": 200,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 49
+      "sideAngleDegrees": 49,
+      "widthDegrees": 180
      }
     },
     "linearDef": {
@@ -1024,8 +1020,8 @@
      "cylinderRoom": {
       "height": 200,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 49
+      "sideAngleDegrees": 49,
+      "widthDegrees": 180
      }
     },
     "linearDef": {
@@ -1088,8 +1084,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 720
      }
     },
     "overrides": {},
@@ -1099,33 +1095,6 @@
       "depth": {
        "depthPercentValue": 0.3
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.47
-        },
-        "depth": {
-         "value": 16
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.95
-         },
-         "yLength": {
-          "yPercentValue": 0.01
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -1160,6 +1129,33 @@
        "speedMultiplierJitter": 0
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.47
+        },
+        "depth": {
+         "value": 16
+        },
+        "depthJitter": {
+         "value": 11
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.95
+         },
+         "yLength": {
+          "yPercentValue": 0.01
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -1332,8 +1328,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 43
+      "sideAngleDegrees": 43,
+      "widthDegrees": 108.000008
      }
     },
     "bounceDef": {
@@ -1341,33 +1337,6 @@
       "depth": {
        "depthPercentValue": 0.430000037
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.47
-        },
-        "depth": {
-         "value": 16
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.68
-         },
-         "yLength": {
-          "yPercentValue": 0.01
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -1401,6 +1370,33 @@
        "speedMultiplier": 0.399999857
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.47
+        },
+        "depth": {
+         "value": 16
+        },
+        "depthJitter": {
+         "value": 11
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.68
+         },
+         "yLength": {
+          "yPercentValue": 0.01
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -1438,8 +1434,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -1481,16 +1477,16 @@
      "leftRightProfiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "time": 0.5,
        "timeJitter": 0.2
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Longer"
+        "description": "Longer",
+        "weight": 2
        },
        "time": 0.699999928,
        "timeJitter": 0.2
@@ -1618,8 +1614,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Outside Rect"
+         "description": "Outside Rect",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -1644,8 +1640,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Mid Circle"
+         "description": "Mid Circle",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -1754,8 +1750,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -1899,8 +1895,8 @@
      "cylinderRoom": {
       "height": 270,
       "radius": 230,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 215.999985
      }
     },
     "angleStrafeDef": {
@@ -1979,8 +1975,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 150,
-      "widthPerimeterPercent": 0.8,
-      "sideAngleDegrees": 80
+      "sideAngleDegrees": 80,
+      "widthDegrees": 288
      }
     },
     "strafeDef": {
@@ -2002,8 +1998,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shifty Strafe"
+        "description": "Shifty Strafe",
+        "weight": 1
        },
        "time": 0.799999952,
        "timeJitter": 0.1
@@ -2030,8 +2026,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Big up down swing"
+        "description": "Big up down swing",
+        "weight": 1
        },
        "time": 2.39999986,
        "timeJitter": 0.5,
@@ -2073,8 +2069,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 64
+      "sideAngleDegrees": 64,
+      "widthDegrees": 162
      }
     },
     "strafeDef": {
@@ -2120,8 +2116,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 1.50000012,
        "timeJitter": 0.1
@@ -2138,8 +2134,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 3,
-        "description": "Slow Vertical"
+        "description": "Slow Vertical",
+        "weight": 3
        },
        "time": 3.99999833,
        "timeJitter": 0.200000018,
@@ -2148,8 +2144,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "No vertical change"
+        "description": "No vertical change",
+        "weight": 1
        },
        "time": 1.30000007,
        "timeJitter": 0.4,
@@ -2328,8 +2324,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 170,
-      "widthPerimeterPercent": 0.25,
-      "sideAngleDegrees": 24
+      "sideAngleDegrees": 24,
+      "widthDegrees": 90
      }
     },
     "strafeDef": {
@@ -2384,8 +2380,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow Vertical"
+        "description": "Slow Vertical",
+        "weight": 2
        },
        "time": 1.80000019,
        "timeJitter": 0.3,
@@ -2394,8 +2390,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "No Vertical"
+        "description": "No Vertical",
+        "weight": 1
        },
        "time": 1,
        "timeJitter": 0.5,
@@ -2435,8 +2431,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 170,
-      "widthPerimeterPercent": 0.25,
-      "sideAngleDegrees": 24
+      "sideAngleDegrees": 24,
+      "widthDegrees": 90
      }
     },
     "strafeDef": {
@@ -2482,8 +2478,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow Vertical"
+        "description": "Slow Vertical",
+        "weight": 2
        },
        "time": 1.80000019,
        "timeJitter": 0.3,
@@ -2492,8 +2488,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "No Vertical"
+        "description": "No Vertical",
+        "weight": 1
        },
        "time": 1,
        "timeJitter": 0.5,
@@ -2537,8 +2533,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -2577,25 +2573,25 @@
      "leftRightProfiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "time": 0.5,
        "timeJitter": 0.2
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Longer"
+        "description": "Longer",
+        "weight": 2
        },
        "time": 0.699999928,
        "timeJitter": 0.2
       },
       {
        "info": {
+        "description": "Pause",
         "weight": 7,
-        "minSelectionGap": 2,
-        "description": "Pause"
+        "minSelectionGap": 2
        },
        "time": 0.399999917,
        "timeJitter": 0.100000016,
@@ -2628,8 +2624,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 2.1,
        "targetRadiusJitter": 0,
@@ -3491,8 +3487,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Flat"
+        "description": "Flat",
+        "weight": 1
        },
        "time": 0.599999905,
        "timeJitter": 0.3,
@@ -3534,8 +3530,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 54
+      "sideAngleDegrees": 54,
+      "widthDegrees": 126
      }
     },
     "bounceDef": {
@@ -3546,33 +3542,6 @@
       "depth": {
        "depthPercentValue": 0.400000036
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -3606,6 +3575,33 @@
        "accelerationMultiplier": 0.499999881
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 0
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -3640,8 +3636,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 75
+      "sideAngleDegrees": 75,
+      "widthDegrees": 144
      }
     },
     "bounceDef": {
@@ -3649,33 +3645,6 @@
       "depth": {
        "depthPercentValue": 0.430000037
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.47
-        },
-        "depth": {
-         "value": 16
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.95
-         },
-         "yLength": {
-          "yPercentValue": 0.01
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -3708,6 +3677,33 @@
        "speedMultiplier": 0.399999857
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.47
+        },
+        "depth": {
+         "value": 16
+        },
+        "depthJitter": {
+         "value": 11
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.95
+         },
+         "yLength": {
+          "yPercentValue": 0.01
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -3745,8 +3741,8 @@
      "cylinderRoom": {
       "height": 150,
       "radius": 120,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 46
+      "sideAngleDegrees": 46,
+      "widthDegrees": 162
      }
     },
     "angleStrafeDef": {
@@ -3758,8 +3754,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 4,
-        "description": "Short"
+        "description": "Short",
+        "weight": 4
        },
        "distance": {
         "xPercentValue": 0.567599893
@@ -3772,8 +3768,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.361199915
@@ -3820,8 +3816,8 @@
      "cylinderRoom": {
       "height": 150,
       "radius": 120,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 46
+      "sideAngleDegrees": 46,
+      "widthDegrees": 162
      }
     },
     "angleStrafeDef": {
@@ -3833,8 +3829,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 4,
-        "description": "Short"
+        "description": "Short",
+        "weight": 4
        },
        "distance": {
         "xPercentValue": 0.44
@@ -3847,8 +3843,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.28
@@ -3892,8 +3888,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
+      "sideAngleDegrees": 39,
+      "widthDegrees": 108.000008
      }
     },
     "strafeDef": {
@@ -3918,8 +3914,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shifty Strafe"
+        "description": "Shifty Strafe",
+        "weight": 1
        },
        "time": 0.699999928,
        "timeJitter": 0.1
@@ -3946,9 +3942,9 @@
       },
       {
        "info": {
+        "description": "Big up/down swing",
         "weight": 1,
-        "minSelectionGap": 4,
-        "description": "Big up/down swing"
+        "minSelectionGap": 4
        },
        "time": 2.79999948,
        "timeJitter": 0.5,
@@ -3957,8 +3953,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "time": 2.30000019,
        "timeJitter": 0.200000018,
@@ -4001,8 +3997,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
+      "sideAngleDegrees": 39,
+      "widthDegrees": 108.000008
      }
     },
     "strafeDef": {
@@ -4027,8 +4023,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shifty Strafe"
+        "description": "Shifty Strafe",
+        "weight": 1
        },
        "time": 0.699999928,
        "timeJitter": 0.1
@@ -4055,9 +4051,9 @@
       },
       {
        "info": {
+        "description": "Big up/down swing",
         "weight": 1,
-        "minSelectionGap": 4,
-        "description": "Big up/down swing"
+        "minSelectionGap": 4
        },
        "time": 2.79999948,
        "timeJitter": 0.5,
@@ -4066,8 +4062,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "time": 2.30000019,
        "timeJitter": 0.200000018,
@@ -4110,8 +4106,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
+      "sideAngleDegrees": 39,
+      "widthDegrees": 108.000008
      }
     },
     "strafeDef": {
@@ -4136,8 +4132,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shifty Strafe"
+        "description": "Shifty Strafe",
+        "weight": 1
        },
        "time": 0.699999928,
        "timeJitter": 0.1
@@ -4164,9 +4160,9 @@
       },
       {
        "info": {
+        "description": "Big up/down swing",
         "weight": 1,
-        "minSelectionGap": 4,
-        "description": "Big up/down swing"
+        "minSelectionGap": 4
        },
        "time": 2.79999948,
        "timeJitter": 0.5,
@@ -4175,8 +4171,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "time": 2.30000019,
        "timeJitter": 0.200000018,
@@ -4219,8 +4215,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 150,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 39
+      "sideAngleDegrees": 39,
+      "widthDegrees": 108.000008
      }
     },
     "strafeDef": {
@@ -4245,8 +4241,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shifty Strafe"
+        "description": "Shifty Strafe",
+        "weight": 1
        },
        "time": 0.699999928,
        "timeJitter": 0.1
@@ -4273,9 +4269,9 @@
       },
       {
        "info": {
+        "description": "Big up/down swing",
         "weight": 1,
-        "minSelectionGap": 4,
-        "description": "Big up/down swing"
+        "minSelectionGap": 4
        },
        "time": 2.79999948,
        "timeJitter": 0.5,
@@ -4284,8 +4280,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "time": 2.30000019,
        "timeJitter": 0.200000018,
@@ -4328,8 +4324,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 720
      }
     },
     "bounceDef": {
@@ -4337,33 +4333,6 @@
       "depth": {
        "depthPercentValue": 0.3
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.47
-        },
-        "depth": {
-         "value": 16
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.95
-         },
-         "yLength": {
-          "yPercentValue": 0.01
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -4396,6 +4365,33 @@
        "speedMultiplier": 0.299999833
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.47
+        },
+        "depth": {
+         "value": 16
+        },
+        "depthJitter": {
+         "value": 11
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.95
+         },
+         "yLength": {
+          "yPercentValue": 0.01
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -4431,8 +4427,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 720
      }
     },
     "bounceDef": {
@@ -4441,6 +4437,29 @@
        "depthPercentValue": 0.4
       }
      },
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.599999905
+       },
+       "heightJitter": {
+        "yPercentValue": 0.07
+       },
+       "delaySecondsJitter": 0
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 7.49999523,
+       "timeJitter": 1.90000033,
+       "speedMultiplier": 0.649999917,
+       "accelerationMultiplier": 0.699999869
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -4468,29 +4487,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.599999905
-       },
-       "heightJitter": {
-        "yPercentValue": 0.07
-       },
-       "delaySecondsJitter": 0
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 7.49999523,
-       "timeJitter": 1.90000033,
-       "speedMultiplier": 0.649999917,
-       "accelerationMultiplier": 0.699999869
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -4549,8 +4545,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Oval"
+         "description": "Oval",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -4630,8 +4626,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Oval"
+         "description": "Oval",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -4718,8 +4714,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Oval"
+         "description": "Oval",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -4798,8 +4794,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Oval"
+         "description": "Oval",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -4877,8 +4873,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Oval"
+         "description": "Oval",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -5354,8 +5350,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Big"
+        "description": "Big",
+        "weight": 1
        },
        "targetRadius": 2.29999971,
        "targetRadiusJitter": 0,
@@ -5364,8 +5360,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 1.9,
        "targetRadiusJitter": 0,
@@ -5427,8 +5423,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Big"
+        "description": "Big",
+        "weight": 1
        },
        "targetRadius": 2.29999971,
        "targetRadiusJitter": 0,
@@ -5437,8 +5433,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 1.9,
        "targetRadiusJitter": 0,
@@ -5500,8 +5496,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Big"
+        "description": "Big",
+        "weight": 1
        },
        "targetRadius": 2.29999971,
        "targetRadiusJitter": 0,
@@ -5510,8 +5506,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 1.9,
        "targetRadiusJitter": 0,
@@ -5573,8 +5569,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Big"
+        "description": "Big",
+        "weight": 1
        },
        "targetRadius": 2.06999969,
        "targetRadiusJitter": 0,
@@ -5583,8 +5579,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 1.70999992,
        "targetRadiusJitter": 0,
@@ -5647,8 +5643,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Big"
+        "description": "Big",
+        "weight": 1
        },
        "targetRadius": 2.29999971,
        "targetRadiusJitter": 0,
@@ -5657,8 +5653,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 1.9,
        "targetRadiusJitter": 0,
@@ -6214,8 +6210,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Large Fast"
+        "description": "Large Fast",
+        "weight": 5
        },
        "targetRadius": 3.19999957,
        "targetRadiusJitter": 0.1,
@@ -6224,8 +6220,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small Slow"
+        "description": "Small Slow",
+        "weight": 1
        },
        "targetRadius": 2.2,
        "targetRadiusJitter": 0.05,
@@ -6234,8 +6230,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Medium"
+        "description": "Medium",
+        "weight": 3
        },
        "targetRadius": 2.69999933,
        "targetRadiusJitter": 0.1,
@@ -6289,8 +6285,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Large Fast"
+        "description": "Large Fast",
+        "weight": 5
        },
        "targetRadius": 3.19999957,
        "targetRadiusJitter": 0.1,
@@ -6299,8 +6295,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small Slow"
+        "description": "Small Slow",
+        "weight": 1
        },
        "targetRadius": 2.2,
        "targetRadiusJitter": 0.05,
@@ -6309,8 +6305,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Medium"
+        "description": "Medium",
+        "weight": 3
        },
        "targetRadius": 2.69999933,
        "targetRadiusJitter": 0.1,
@@ -6364,8 +6360,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Large Fast"
+        "description": "Large Fast",
+        "weight": 5
        },
        "targetRadius": 3.19999957,
        "targetRadiusJitter": 0.1,
@@ -6374,8 +6370,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small Slow"
+        "description": "Small Slow",
+        "weight": 1
        },
        "targetRadius": 2.2,
        "targetRadiusJitter": 0.05,
@@ -6384,8 +6380,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Medium"
+        "description": "Medium",
+        "weight": 3
        },
        "targetRadius": 2.69999933,
        "targetRadiusJitter": 0.1,
@@ -6439,8 +6435,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Large Fast"
+        "description": "Large Fast",
+        "weight": 5
        },
        "targetRadius": 2.87999964,
        "targetRadiusJitter": 0.1,
@@ -6449,8 +6445,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small Slow"
+        "description": "Small Slow",
+        "weight": 1
        },
        "targetRadius": 1.98,
        "targetRadiusJitter": 0.05,
@@ -6459,8 +6455,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Medium"
+        "description": "Medium",
+        "weight": 3
        },
        "targetRadius": 2.42999935,
        "targetRadiusJitter": 0.1,
@@ -6535,8 +6531,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "overrides": {},
@@ -6576,8 +6572,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.197600067
@@ -6590,8 +6586,8 @@
       },
       {
        "info": {
-        "weight": 5,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.332800061
@@ -6604,9 +6600,9 @@
       },
       {
        "info": {
+        "description": "Teleport",
         "weight": 3,
-        "minSelectionGap": 3,
-        "description": "Teleport"
+        "minSelectionGap": 3
        },
        "distance": {
         "xPercentValue": 0.263200074
@@ -6655,8 +6651,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "angleStrafeDef": {
@@ -6695,8 +6691,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.197600052
@@ -6709,8 +6705,8 @@
       },
       {
        "info": {
-        "weight": 5,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.332800061
@@ -6723,9 +6719,9 @@
       },
       {
        "info": {
+        "description": "Teleport",
         "weight": 3,
-        "minSelectionGap": 3,
-        "description": "Teleport"
+        "minSelectionGap": 3
        },
        "distance": {
         "xPercentValue": 0.343200028
@@ -6774,8 +6770,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "angleStrafeDef": {
@@ -6814,8 +6810,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.197600052
@@ -6828,8 +6824,8 @@
       },
       {
        "info": {
-        "weight": 5,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.332800061
@@ -6842,9 +6838,9 @@
       },
       {
        "info": {
+        "description": "Teleport",
         "weight": 3,
-        "minSelectionGap": 3,
-        "description": "Teleport"
+        "minSelectionGap": 3
        },
        "distance": {
         "xPercentValue": 0.343200028
@@ -6893,8 +6889,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "angleStrafeDef": {
@@ -6933,8 +6929,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 6,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 6
        },
        "distance": {
         "xPercentValue": 0.166400045
@@ -6947,8 +6943,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "distance": {
         "xPercentValue": 0.332800061
@@ -6961,8 +6957,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Real Short"
+        "description": "Real Short",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.114399992
@@ -7009,8 +7005,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "angleStrafeDef": {
@@ -7049,8 +7045,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 6,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 6
        },
        "distance": {
         "xPercentValue": 0.166400045
@@ -7063,8 +7059,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "distance": {
         "xPercentValue": 0.332800061
@@ -7077,8 +7073,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Real Short"
+        "description": "Real Short",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.114399992
@@ -7125,8 +7121,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "angleStrafeDef": {
@@ -7165,8 +7161,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 6,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 6
        },
        "distance": {
         "xPercentValue": 0.166400045
@@ -7179,8 +7175,8 @@
       },
       {
        "info": {
-        "weight": 3,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 3
        },
        "distance": {
         "xPercentValue": 0.332800061
@@ -7193,8 +7189,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Real Short"
+        "description": "Real Short",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.114399992
@@ -7241,8 +7237,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -7284,16 +7280,16 @@
      "leftRightProfiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "time": 0.800000072,
        "timeJitter": 0.3
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Longer"
+        "description": "Longer",
+        "weight": 2
        },
        "time": 1.2,
        "timeJitter": 0.100000016
@@ -7346,8 +7342,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -7389,16 +7385,16 @@
      "leftRightProfiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "time": 0.800000072,
        "timeJitter": 0.3
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Longer"
+        "description": "Longer",
+        "weight": 2
        },
        "time": 1.2,
        "timeJitter": 0.100000016
@@ -7451,8 +7447,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "strafeDef": {
@@ -7494,16 +7490,16 @@
      "leftRightProfiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 5
        },
        "time": 0.800000072,
        "timeJitter": 0.3
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Longer"
+        "description": "Longer",
+        "weight": 2
        },
        "time": 1.2,
        "timeJitter": 0.100000016
@@ -7555,8 +7551,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "angleStrafeDef": {
@@ -7595,8 +7591,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 3,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 3
        },
        "distance": {
         "xPercentValue": 0.160000056
@@ -7609,8 +7605,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 1
        },
        "distance": {
         "xPercentValue": 0.25
@@ -7656,8 +7652,8 @@
      "cylinderRoom": {
       "height": 150,
       "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 46
+      "sideAngleDegrees": 46,
+      "widthDegrees": 126
      }
     },
     "angleStrafeDef": {
@@ -7713,8 +7709,8 @@
      "cylinderRoom": {
       "height": 150,
       "radius": 200,
-      "widthPerimeterPercent": 0.35,
-      "sideAngleDegrees": 46
+      "sideAngleDegrees": 46,
+      "widthDegrees": 126
      }
     },
     "angleStrafeDef": {
@@ -7726,8 +7722,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 4,
-        "description": "Short"
+        "description": "Short",
+        "weight": 4
        },
        "distance": {
         "xPercentValue": 0.12
@@ -7740,8 +7736,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 1
        },
        "distance": {
         "xPercentValue": 0.2
@@ -7785,8 +7781,8 @@
      "cylinderRoom": {
       "height": 180,
       "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 162
      }
     },
     "bounceDef": {
@@ -7794,33 +7790,6 @@
       "depth": {
        "depthPercentValue": 0.34
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 40
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -7853,6 +7822,33 @@
        "accelerationMultiplier": 0.74999994
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 40
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
      "forwardBackInitialDirection": "DIRECTION_NEGATIVE"
     }
@@ -7887,8 +7883,8 @@
      "cylinderRoom": {
       "height": 180,
       "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 162
      }
     },
     "bounceDef": {
@@ -7896,33 +7892,6 @@
       "depth": {
        "depthPercentValue": 0.34
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 40
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -7955,6 +7924,33 @@
        "accelerationMultiplier": 0.74999994
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 40
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
      "forwardBackInitialDirection": "DIRECTION_NEGATIVE"
     }
@@ -7989,8 +7985,8 @@
      "cylinderRoom": {
       "height": 180,
       "radius": 200,
-      "widthPerimeterPercent": 0.45,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 162
      }
     },
     "bounceDef": {
@@ -7998,33 +7994,6 @@
       "depth": {
        "depthPercentValue": 0.34
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 40
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -8057,6 +8026,33 @@
        "accelerationMultiplier": 0.74999994
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 40
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
      "forwardBackInitialDirection": "DIRECTION_NEGATIVE"
     }
@@ -8091,8 +8087,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 180
      }
     },
     "bounceDef": {
@@ -8100,33 +8096,6 @@
       "depth": {
        "depthPercentValue": 0.34
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 40
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -8161,6 +8130,33 @@
        "accelerationMultiplier": 0.74999994
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 40
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
      "forwardBackInitialDirection": "DIRECTION_NEGATIVE"
     }
@@ -8195,8 +8191,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 180
      }
     },
     "bounceDef": {
@@ -8204,33 +8200,6 @@
       "depth": {
        "depthPercentValue": 0.34
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 40
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -8265,6 +8234,33 @@
        "accelerationMultiplier": 0.74999994
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 40
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
      "forwardBackInitialDirection": "DIRECTION_NEGATIVE"
     }
@@ -8299,8 +8295,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 180
      }
     },
     "bounceDef": {
@@ -8308,33 +8304,6 @@
       "depth": {
        "depthPercentValue": 0.34
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 40
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -8369,6 +8338,33 @@
        "accelerationMultiplier": 0.74999994
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 40
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
      "forwardBackInitialDirection": "DIRECTION_NEGATIVE"
     }
@@ -8403,8 +8399,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 180
      }
     },
     "strafeDef": {
@@ -8436,8 +8432,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 1
        },
        "time": 3.89999843,
        "timeJitter": 2.00000024,
@@ -8446,8 +8442,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 1
        },
        "time": 4.39999819,
        "timeJitter": 1.80000031,
@@ -8490,8 +8486,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 180
      }
     },
     "strafeDef": {
@@ -8523,8 +8519,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 1
        },
        "time": 3.89999843,
        "timeJitter": 2.00000024,
@@ -8533,8 +8529,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 1
        },
        "time": 4.39999819,
        "timeJitter": 1.80000031,
@@ -8577,8 +8573,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 180
      }
     },
     "strafeDef": {
@@ -8610,8 +8606,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 1
        },
        "time": 3.89999843,
        "timeJitter": 2.00000024,
@@ -8620,8 +8616,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 1
        },
        "time": 4.39999819,
        "timeJitter": 1.80000031,
@@ -8952,8 +8948,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Large"
+        "description": "Large",
+        "weight": 1
        },
        "targetRadius": 3.09999967,
        "targetRadiusJitter": 0,
@@ -8962,8 +8958,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 2.1,
        "targetRadiusJitter": 0,
@@ -8972,8 +8968,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 1
        },
        "targetRadius": 2.59999943,
        "targetRadiusJitter": 0,
@@ -9034,8 +9030,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Large"
+        "description": "Large",
+        "weight": 1
        },
        "targetRadius": 2.63500166,
        "targetRadiusJitter": 0,
@@ -9044,8 +9040,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 1.78500128,
        "targetRadiusJitter": 0,
@@ -9054,8 +9050,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 1
        },
        "targetRadius": 2.21000123,
        "targetRadiusJitter": 0,
@@ -9117,8 +9113,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Large"
+        "description": "Large",
+        "weight": 1
        },
        "targetRadius": 3.09999967,
        "targetRadiusJitter": 0,
@@ -9127,8 +9123,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 2.1,
        "targetRadiusJitter": 0,
@@ -9137,8 +9133,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 1
        },
        "targetRadius": 2.59999943,
        "targetRadiusJitter": 0,
@@ -9199,8 +9195,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Large"
+        "description": "Large",
+        "weight": 1
        },
        "targetRadius": 4.33999968,
        "targetRadiusJitter": 0,
@@ -9209,8 +9205,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Small"
+        "description": "Small",
+        "weight": 1
        },
        "targetRadius": 2.94,
        "targetRadiusJitter": 0,
@@ -9219,8 +9215,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Mid"
+        "description": "Mid",
+        "weight": 1
        },
        "targetRadius": 3.63999939,
        "targetRadiusJitter": 0,
@@ -9298,12 +9294,37 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
+      "sideAngleDegrees": 44,
+      "widthDegrees": 108.000008
      }
     },
     "bounceDef": {
      "bounds": {},
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.5
+       },
+       "heightJitter": {
+        "yPercentValue": 0.0200000294
+       },
+       "delaySeconds": 0.3,
+       "delaySecondsJitter": 0.05,
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 7.09999561,
+       "timeJitter": 0,
+       "speedMultiplier": 0.649999917,
+       "accelerationMultiplier": 2.84999824
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -9331,31 +9352,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.5
-       },
-       "heightJitter": {
-        "yPercentValue": 0.0200000294
-       },
-       "delaySeconds": 0.3,
-       "delaySecondsJitter": 0.05,
-       "onlyDelayOnFloor": true
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 7.09999561,
-       "timeJitter": 0,
-       "speedMultiplier": 0.649999917,
-       "accelerationMultiplier": 2.84999824
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_IN"
     }
    }
@@ -9389,12 +9385,37 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
+      "sideAngleDegrees": 44,
+      "widthDegrees": 108.000008
      }
     },
     "bounceDef": {
      "bounds": {},
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.5
+       },
+       "heightJitter": {
+        "yPercentValue": 0.0200000294
+       },
+       "delaySeconds": 0.3,
+       "delaySecondsJitter": 0.05,
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 7.09999561,
+       "timeJitter": 0,
+       "speedMultiplier": 0.649999917,
+       "accelerationMultiplier": 2.84999824
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -9422,31 +9443,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.5
-       },
-       "heightJitter": {
-        "yPercentValue": 0.0200000294
-       },
-       "delaySeconds": 0.3,
-       "delaySecondsJitter": 0.05,
-       "onlyDelayOnFloor": true
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 7.09999561,
-       "timeJitter": 0,
-       "speedMultiplier": 0.649999917,
-       "accelerationMultiplier": 2.84999824
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_IN"
     }
    }
@@ -9481,12 +9477,37 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
+      "sideAngleDegrees": 44,
+      "widthDegrees": 108.000008
      }
     },
     "bounceDef": {
      "bounds": {},
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.5
+       },
+       "heightJitter": {
+        "yPercentValue": 0.0200000294
+       },
+       "delaySeconds": 0.3,
+       "delaySecondsJitter": 0.05,
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 7.09999561,
+       "timeJitter": 0,
+       "speedMultiplier": 0.649999917,
+       "accelerationMultiplier": 2.84999824
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -9514,31 +9535,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.5
-       },
-       "heightJitter": {
-        "yPercentValue": 0.0200000294
-       },
-       "delaySeconds": 0.3,
-       "delaySecondsJitter": 0.05,
-       "onlyDelayOnFloor": true
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 7.09999561,
-       "timeJitter": 0,
-       "speedMultiplier": 0.649999917,
-       "accelerationMultiplier": 2.84999824
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_IN"
     }
    }
@@ -9572,12 +9568,37 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
+      "sideAngleDegrees": 44,
+      "widthDegrees": 108.000008
      }
     },
     "bounceDef": {
      "bounds": {},
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.5
+       },
+       "heightJitter": {
+        "yPercentValue": 0.0300000291
+       },
+       "delaySeconds": 0.2,
+       "delaySecondsJitter": 0.1,
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 7.09999561,
+       "timeJitter": 0,
+       "speedMultiplier": 0.649999917,
+       "accelerationMultiplier": 2.84999824
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -9605,31 +9626,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.5
-       },
-       "heightJitter": {
-        "yPercentValue": 0.0300000291
-       },
-       "delaySeconds": 0.2,
-       "delaySecondsJitter": 0.1,
-       "onlyDelayOnFloor": true
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 7.09999561,
-       "timeJitter": 0,
-       "speedMultiplier": 0.649999917,
-       "accelerationMultiplier": 2.84999824
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_IN"
     }
    }
@@ -9664,12 +9660,37 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 44
+      "sideAngleDegrees": 44,
+      "widthDegrees": 108.000008
      }
     },
     "bounceDef": {
      "bounds": {},
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.5
+       },
+       "heightJitter": {
+        "yPercentValue": 0.0200000294
+       },
+       "delaySeconds": 0.25,
+       "delaySecondsJitter": 0.05,
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "info": {},
+       "time": 7.09999561,
+       "timeJitter": 0,
+       "speedMultiplier": 0.649999917,
+       "accelerationMultiplier": 2.84999824
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
@@ -9697,31 +9718,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.5
-       },
-       "heightJitter": {
-        "yPercentValue": 0.0200000294
-       },
-       "delaySeconds": 0.25,
-       "delaySecondsJitter": 0.05,
-       "onlyDelayOnFloor": true
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 7.09999561,
-       "timeJitter": 0,
-       "speedMultiplier": 0.649999917,
-       "accelerationMultiplier": 2.84999824
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_IN"
     }
    }
@@ -9755,8 +9751,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.4,
-      "sideAngleDegrees": 60
+      "sideAngleDegrees": 60,
+      "widthDegrees": 144
      }
     },
     "bounceDef": {
@@ -9764,33 +9760,6 @@
       "depth": {
        "depthPercentValue": 0.480000049
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.45
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "value": 1
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -9823,6 +9792,33 @@
        "speedMultiplier": 0.449999869
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.45
+        },
+        "depth": {
+         "value": 0
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 1
+         },
+         "yLength": {
+          "value": 1
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -9961,8 +9957,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 0.799999952,
        "timeJitter": 0.1
@@ -9980,8 +9976,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 2
        },
        "time": 5.99999666,
        "timeJitter": 1.4000001,
@@ -9990,8 +9986,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 2
        },
        "time": 4.49999809,
        "timeJitter": 1.80000031,
@@ -10000,8 +9996,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 1.1,
        "timeJitter": 0.3,
@@ -10065,8 +10061,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 0.799999952,
        "timeJitter": 0.1
@@ -10084,8 +10080,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 2
        },
        "time": 5.99999666,
        "timeJitter": 1.4000001,
@@ -10094,8 +10090,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 2
        },
        "time": 4.49999809,
        "timeJitter": 1.80000031,
@@ -10104,8 +10100,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 1.1,
        "timeJitter": 0.3,
@@ -10169,8 +10165,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 0.799999952,
        "timeJitter": 0.1
@@ -10188,8 +10184,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 2
        },
        "time": 5.99999666,
        "timeJitter": 1.4000001,
@@ -10198,8 +10194,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 2
        },
        "time": 4.49999809,
        "timeJitter": 1.80000031,
@@ -10208,8 +10204,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 1.1,
        "timeJitter": 0.3,
@@ -10273,8 +10269,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 0.799999952,
        "timeJitter": 0.1
@@ -10292,8 +10288,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 2
        },
        "time": 5.99999666,
        "timeJitter": 1.4000001,
@@ -10302,8 +10298,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 2
        },
        "time": 4.49999809,
        "timeJitter": 1.80000031,
@@ -10312,8 +10308,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 1.1,
        "timeJitter": 0.3,
@@ -10419,8 +10415,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 215.999985
      }
     },
     "strafeDef": {
@@ -10445,8 +10441,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 2.99999928,
        "timeJitter": 0.3
@@ -10519,8 +10515,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 215.999985
      }
     },
     "strafeDef": {
@@ -10545,8 +10541,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 2.99999928,
        "timeJitter": 0.3
@@ -10619,8 +10615,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 215.999985
      }
     },
     "strafeDef": {
@@ -10645,8 +10641,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 2.99999928,
        "timeJitter": 0.3
@@ -10719,8 +10715,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 215.999985
      }
     },
     "strafeDef": {
@@ -10745,8 +10741,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "time": 2.99999928,
        "timeJitter": 0.3
@@ -10817,8 +10813,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 25
+      "sideAngleDegrees": 25,
+      "widthDegrees": 108.000008
      }
     },
     "strafeDef": {
@@ -11245,8 +11241,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 0.33,
-      "sideAngleDegrees": 48
+      "sideAngleDegrees": 48,
+      "widthDegrees": 118.8
      }
     },
     "bounceDef": {
@@ -11254,33 +11250,6 @@
       "depth": {
        "depthPercentValue": 0.490000039
       }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "xOffset": {
-         "xPercentValue": 0
-        },
-        "yOffset": {
-         "yPercentValue": -0.47
-        },
-        "depth": {
-         "depthPercentValue": 0.180000052
-        },
-        "depthJitter": {
-         "depthPercentValue": 0.17
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.95
-         },
-         "yLength": {
-          "yPercentValue": 0.01
-         }
-        }
-       }
-      ]
      },
      "bounceProfiles": [
       {
@@ -11314,6 +11283,33 @@
        "speedMultiplier": 0.399999857
       }
      ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {},
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.47
+        },
+        "depth": {
+         "depthPercentValue": 0.180000052
+        },
+        "depthJitter": {
+         "depthPercentValue": 0.17
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.95
+         },
+         "yLength": {
+          "yPercentValue": 0.01
+         }
+        }
+       }
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -11871,8 +11867,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.27,
-      "sideAngleDegrees": 33
+      "sideAngleDegrees": 33,
+      "widthDegrees": 97.2000046
      }
     },
     "strafeDef": {
@@ -11928,8 +11924,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 5
        },
        "time": 1.80000019,
        "timeJitter": 0.4,
@@ -11938,9 +11934,9 @@
       },
       {
        "info": {
+        "description": "Swing",
         "weight": 1,
-        "minSelectionGap": 3,
-        "description": "Swing"
+        "minSelectionGap": 3
        },
        "time": 3.79999852,
        "timeJitter": 0,
@@ -12205,8 +12201,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Longer"
+        "description": "Longer",
+        "weight": 2
        },
        "time": 1.50000012,
        "timeJitter": 0.5
@@ -12215,8 +12211,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 2
        },
        "time": 5.99999666,
        "timeJitter": 1.4000001,
@@ -12225,8 +12221,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 2
        },
        "time": 4.49999809,
        "timeJitter": 1.80000031,
@@ -12324,8 +12320,8 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "widthPerimeterPercent": 0.3,
-      "sideAngleDegrees": 25
+      "sideAngleDegrees": 25,
+      "widthDegrees": 108.000008
      }
     },
     "linearDef": {
@@ -12389,8 +12385,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 69
+      "sideAngleDegrees": 69,
+      "widthDegrees": 180
      }
     },
     "strafeDef": {
@@ -12445,8 +12441,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 2,
-        "description": "Slow Vertical"
+        "description": "Slow Vertical",
+        "weight": 2
        },
        "time": 1.80000019,
        "timeJitter": 0.3,
@@ -12455,8 +12451,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "No vertical movement"
+        "description": "No vertical movement",
+        "weight": 1
        },
        "time": 1,
        "timeJitter": 0.5,
@@ -12533,8 +12529,8 @@
      "profiles": [
       {
        "info": {
-        "weight": 5,
-        "description": "Little Verticality"
+        "description": "Little Verticality",
+        "weight": 5
        },
        "distance": {
         "xPercentValue": 0.32
@@ -12548,8 +12544,8 @@
       },
       {
        "info": {
-        "weight": 11,
-        "description": "Flat Mid"
+        "description": "Flat Mid",
+        "weight": 11
        },
        "distance": {
         "xPercentValue": 0.35
@@ -12562,8 +12558,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Bigger Vert Down"
+        "description": "Bigger Vert Down",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.35
@@ -12577,8 +12573,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Bigger Vert Up"
+        "description": "Bigger Vert Up",
+        "weight": 1
        },
        "distance": {
         "xPercentValue": 0.35
@@ -12712,8 +12708,8 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 720
      }
     },
     "strafeDef": {
@@ -12769,8 +12765,8 @@
      "upDownProfiles": [
       {
        "info": {
-        "weight": 1,
-        "description": "Slow"
+        "description": "Slow",
+        "weight": 1
        },
        "time": 3.89999843,
        "timeJitter": 2.00000024,
@@ -12779,8 +12775,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Slow2"
+        "description": "Slow2",
+        "weight": 1
        },
        "time": 4.39999819,
        "timeJitter": 1.80000031,
@@ -12825,8 +12821,8 @@
      "cylinderRoom": {
       "height": 110,
       "radius": 200,
-      "widthPerimeterPercent": 0.5,
-      "sideAngleDegrees": 80
+      "sideAngleDegrees": 80,
+      "widthDegrees": 180
      }
     },
     "overrides": {},
@@ -12880,8 +12876,8 @@
       },
       {
        "info": {
-        "weight": 1,
-        "description": "Shorter"
+        "description": "Shorter",
+        "weight": 1
        },
        "distance": {
         "xPercentValue": 0.200000063

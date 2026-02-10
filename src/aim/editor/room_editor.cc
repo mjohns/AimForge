@@ -79,28 +79,26 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::SetNextItemWidth(char_x * 12);
     ImGui::InputFloat("##RoomHeight", &height, 1, 10, "%.0f");
 
-    bool use_width_percent = room.cylinder_room().width_perimeter_percent() > 0;
+    bool use_width_degrees = room.cylinder_room().width_degrees() > 0;
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Width as percent of perimeter?");
+    ImGui::Text("Width as degrees");
     ImGui::SameLine();
-    ImGui::Checkbox("##WidthPercentCheckbox", &use_width_percent);
+    ImGui::Checkbox("##WidthPercentCheckbox", &use_width_degrees);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
     ImGui::SameLine();
-    if (use_width_percent) {
-      float width_percent =
-          FirstGreaterThanZero(room.cylinder_room().width_perimeter_percent() * 100, 40);
-      ImGui::SetNextItemWidth(char_x * 12);
-      ImGui::InputFloat("##WidthPercent", &width_percent, 1, 5, "%.1f");
-      room.mutable_cylinder_room()->set_width_perimeter_percent(width_percent / 100.0);
+    if (use_width_degrees) {
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("WidthDegrees").set_min(1).set_default(90).set_step(1, 5),
+          PROTO_FLOAT_FIELD(CylinderRoom, room.mutable_cylinder_room(), width_degrees));
       room.mutable_cylinder_room()->clear_width();
     } else {
       float width = FirstGreaterThanZero(room.cylinder_room().width(), 100);
       ImGui::SetNextItemWidth(char_x * 12);
       ImGui::InputFloat("##Width", &width, 1, 10, "%.0f");
       room.mutable_cylinder_room()->set_width(width);
-      room.mutable_cylinder_room()->clear_width_perimeter_percent();
+      room.mutable_cylinder_room()->clear_width_degrees();
     }
 
     room.mutable_cylinder_room()->set_height(height);

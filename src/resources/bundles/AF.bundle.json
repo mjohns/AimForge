@@ -11,7 +11,6 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
        "targetRadius": 1.79999971
       }
      ],
@@ -117,8 +116,8 @@
       "regions": [
        {
         "info": {
-         "weight": 1,
-         "description": "Top Right"
+         "description": "Top Right",
+         "weight": 1
         },
         "xOffset": {
          "xPercentValue": 0.34
@@ -134,8 +133,8 @@
        },
        {
         "info": {
-         "weight": 1,
-         "description": "Top Left"
+         "description": "Top Left",
+         "weight": 1
         },
         "xOffset": {
          "xPercentValue": -0.34
@@ -151,8 +150,8 @@
        },
        {
         "info": {
-         "weight": 1,
-         "description": "Bottom Left"
+         "description": "Bottom Left",
+         "weight": 1
         },
         "xOffset": {
          "xPercentValue": -0.34
@@ -168,8 +167,8 @@
        },
        {
         "info": {
-         "weight": 1,
-         "description": "Bottom Right"
+         "description": "Bottom Right",
+         "weight": 1
         },
         "xOffset": {
          "xPercentValue": 0.34
@@ -921,8 +920,8 @@
      "cylinderRoom": {
       "height": 100,
       "radius": 200,
-      "widthPerimeterPercent": 0.6,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 216.000015
      }
     },
     "centeringDef": {
@@ -1183,8 +1182,8 @@
      "cylinderRoom": {
       "height": 240,
       "radius": 200,
-      "widthPerimeterPercent": 0.599999964,
-      "sideAngleDegrees": 65
+      "sideAngleDegrees": 65,
+      "widthDegrees": 215.999985
      }
     },
     "overrides": {},
@@ -1769,8 +1768,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Outside Rect"
+         "description": "Outside Rect",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -1795,8 +1794,8 @@
        },
        {
         "info": {
-         "weight": 2,
-         "description": "Mid Circle"
+         "description": "Mid Circle",
+         "weight": 2
         },
         "depth": {
          "value": 0
@@ -2074,8 +2073,8 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 130,
-      "widthPerimeterPercent": 0.45,
-      "sideAngleDegrees": 39
+      "sideAngleDegrees": 39,
+      "widthDegrees": 162
      }
     },
     "levelOverrides": {},
@@ -2201,8 +2200,8 @@
      "cylinderRoom": {
       "height": 89,
       "radius": 200,
-      "widthPerimeterPercent": 0.470000088,
-      "sideAngleDegrees": 43
+      "sideAngleDegrees": 43,
+      "widthDegrees": 169.200027
      }
     },
     "overrides": {},
@@ -2259,8 +2258,8 @@
      "cylinderRoom": {
       "height": 89,
       "radius": 200,
-      "widthPerimeterPercent": 0.170000121,
-      "sideAngleDegrees": 18
+      "sideAngleDegrees": 18,
+      "widthDegrees": 61.2000427
      }
     },
     "overrides": {},
@@ -2319,8 +2318,8 @@
      "cylinderRoom": {
       "height": 89,
       "radius": 200,
-      "widthPerimeterPercent": 0.230000153,
-      "sideAngleDegrees": 16
+      "sideAngleDegrees": 16,
+      "widthDegrees": 82.8000565
      }
     },
     "overrides": {},
@@ -2379,8 +2378,8 @@
      "cylinderRoom": {
       "height": 89,
       "radius": 200,
-      "widthPerimeterPercent": 0.100000136,
-      "sideAngleDegrees": 5
+      "sideAngleDegrees": 5,
+      "widthDegrees": 36.0000496
      }
     },
     "overrides": {},
@@ -2439,8 +2438,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "widthPerimeterPercent": 0.2700001,
-      "sideAngleDegrees": 38
+      "sideAngleDegrees": 38,
+      "widthDegrees": 97.2000351
      }
     },
     "overrides": {},
@@ -2503,8 +2502,8 @@
      "cylinderRoom": {
       "height": 89,
       "radius": 200,
-      "widthPerimeterPercent": 0.240000114,
-      "sideAngleDegrees": 31
+      "sideAngleDegrees": 31,
+      "widthDegrees": 86.4000397
      }
     },
     "overrides": {},
@@ -2621,8 +2620,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "widthPerimeterPercent": 0.779999912,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 280.799957
      }
     },
     "overrides": {},
@@ -2681,8 +2680,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "widthPerimeterPercent": 0.859999895,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 309.599976
      }
     },
     "overrides": {},
@@ -2742,8 +2741,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "widthPerimeterPercent": 0.50000006,
-      "sideAngleDegrees": 54
+      "sideAngleDegrees": 54,
+      "widthDegrees": 180.000015
      }
     },
     "overrides": {},
@@ -2802,8 +2801,8 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "widthPerimeterPercent": 0.57,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 205.2
      }
     },
     "overrides": {},
@@ -2863,8 +2862,8 @@
      "cylinderRoom": {
       "height": 89,
       "radius": 200,
-      "widthPerimeterPercent": 0.400000125,
-      "sideAngleDegrees": 61
+      "sideAngleDegrees": 61,
+      "widthDegrees": 144.000046
      }
     },
     "overrides": {},
@@ -3779,8 +3778,8 @@
      "cylinderRoom": {
       "height": 53,
       "radius": 200,
-      "widthPerimeterPercent": 0.400000125,
-      "sideAngleDegrees": 61
+      "sideAngleDegrees": 61,
+      "widthDegrees": 144.000046
      }
     },
     "overrides": {},
@@ -3801,8 +3800,8 @@
      "leftRightProfiles": [
       {
        "info": {
-        "weight": 3,
-        "description": "Standard Strafe"
+        "description": "Standard Strafe",
+        "weight": 3
        },
        "centerBias": 0.2,
        "distance": {
@@ -3814,8 +3813,8 @@
       },
       {
        "info": {
-        "weight": 2,
-        "description": "Shorter Strafe"
+        "description": "Shorter Strafe",
+        "weight": 2
        },
        "distance": {
         "xPercentValue": 0.130000055

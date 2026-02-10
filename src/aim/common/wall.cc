@@ -70,7 +70,10 @@ WallRelativeBounds Wall::GetWallRelativeBounds(const Bounds& bounds) const {
 Wall Wall::ForRoom(const Room& room) {
   Wall wall{};
   if (room.has_cylinder_room()) {
-    if (room.cylinder_room().width_perimeter_percent() > 0) {
+    if (room.cylinder_room().width_degrees() > 0) {
+      wall.width = (room.cylinder_room().width_degrees() / 360.0f) * glm::two_pi<float>() *
+                   room.cylinder_room().radius();
+    } else if (room.cylinder_room().width_perimeter_percent() > 0) {
       wall.width = room.cylinder_room().width_perimeter_percent() * glm::two_pi<float>() *
                    room.cylinder_room().radius();
     } else {

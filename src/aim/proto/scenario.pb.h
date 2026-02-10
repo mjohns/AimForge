@@ -2363,6 +2363,7 @@ class CylinderRoom final : public ::google::protobuf::Message
     kWidthPerimeterPercentFieldNumber = 4,
     kHideSidesFieldNumber = 5,
     kSideAngleDegreesFieldNumber = 6,
+    kWidthDegreesFieldNumber = 7,
   };
   // float height = 1;
   bool has_height() const;
@@ -2429,11 +2430,22 @@ class CylinderRoom final : public ::google::protobuf::Message
   void _internal_set_side_angle_degrees(float value);
 
   public:
+  // float width_degrees = 7;
+  bool has_width_degrees() const;
+  void clear_width_degrees() ;
+  float width_degrees() const;
+  void set_width_degrees(float value);
+
+  private:
+  float _internal_width_degrees() const;
+  void _internal_set_width_degrees(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.CylinderRoom)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 6,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
                                    0, 0,
                                    2>
       _table_;
@@ -2461,6 +2473,7 @@ class CylinderRoom final : public ::google::protobuf::Message
     float width_perimeter_percent_;
     bool hide_sides_;
     float side_angle_degrees_;
+    float width_degrees_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -10750,6 +10763,35 @@ inline float CylinderRoom::_internal_width_perimeter_percent() const {
 inline void CylinderRoom::_internal_set_width_perimeter_percent(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.width_perimeter_percent_ = value;
+}
+
+// float width_degrees = 7;
+inline bool CylinderRoom::has_width_degrees() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  return value;
+}
+inline void CylinderRoom::clear_width_degrees() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_degrees_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000040U);
+}
+inline float CylinderRoom::width_degrees() const {
+  // @@protoc_insertion_point(field_get:aim.CylinderRoom.width_degrees)
+  return _internal_width_degrees();
+}
+inline void CylinderRoom::set_width_degrees(float value) {
+  _internal_set_width_degrees(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  // @@protoc_insertion_point(field_set:aim.CylinderRoom.width_degrees)
+}
+inline float CylinderRoom::_internal_width_degrees() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.width_degrees_;
+}
+inline void CylinderRoom::_internal_set_width_degrees(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.width_degrees_ = value;
 }
 
 // bool hide_sides = 5 [features = {

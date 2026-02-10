@@ -51,6 +51,14 @@ class ScenarioManagerImpl : public ScenarioManager {
 
         // Backfill
         // ScenarioDef* s = bundle_scenario.mutable_def();
+        /*
+        ScenarioDef* s = bundle_scenario.mutable_def();
+        if (s->room().cylinder_room().width_perimeter_percent() > 0) {
+          float degrees = s->room().cylinder_room().width_perimeter_percent() * 360;
+          s->mutable_room()->mutable_cylinder_room()->clear_width_perimeter_percent();
+          s->mutable_room()->mutable_cylinder_room()->set_width_degrees(degrees);
+        }
+        */
       }
     }
   }

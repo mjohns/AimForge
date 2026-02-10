@@ -28,8 +28,8 @@
      "cylinderRoom": {
       "height": 76,
       "radius": 200,
-      "widthPerimeterPercent": 0.125,
-      "sideAngleDegrees": 8
+      "sideAngleDegrees": 8,
+      "widthDegrees": 45
      }
     },
     "overrides": {

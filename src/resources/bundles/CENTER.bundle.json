@@ -4,18 +4,8 @@
    "name": "Centering Always Left",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -40
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "width": 500000,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingProximity": true
     },
     "targetDef": {
      "profiles": [
@@ -30,10 +20,20 @@
      ],
      "numTargets": 1
     },
-    "overrides": {},
-    "shotType": {
-     "trackingProximity": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -40
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "width": 500000,
+      "hideSides": true
+     }
     },
+    "overrides": {},
     "levelOverrides": {},
     "centeringDef": {
      "wallPoints": [
@@ -61,6 +61,19 @@
    "name": "Centering Always Left Angle 20",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingProximity": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 4,
+       "speed": 49
+      }
+     ],
+     "numTargets": 1
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -74,21 +87,7 @@
       "hideSides": true
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 4,
-       "speed": 49
-      }
-     ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
-    },
     "overrides": {},
-    "shotType": {
-     "trackingProximity": true
-    },
     "levelOverrides": {
      "speedMultiplier": 1.05
     },
@@ -130,18 +129,8 @@
    "name": "Centering Always Right",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": -40
-     },
-     "cylinderRoom": {
-      "height": 130,
-      "radius": 200,
-      "width": 500000,
-      "hideSides": true
-     }
+    "shotType": {
+     "trackingProximity": true
     },
     "targetDef": {
      "profiles": [
@@ -156,10 +145,20 @@
      ],
      "numTargets": 1
     },
-    "overrides": {},
-    "shotType": {
-     "trackingProximity": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": -40
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "width": 500000,
+      "hideSides": true
+     }
     },
+    "overrides": {},
     "levelOverrides": {
      "speedMultiplier": 1.05
     },
@@ -189,6 +188,19 @@
    "name": "Centering Always Right Angle 20",
    "def": {
     "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "info": {},
+       "targetRadius": 4,
+       "speed": 49
+      }
+     ],
+     "numTargets": 1
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -202,21 +214,7 @@
       "hideSides": true
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 4,
-       "speed": 49
-      }
-     ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
-    },
     "overrides": {},
-    "shotType": {
-     "trackingInvincible": true
-    },
     "levelOverrides": {
      "speedMultiplier": 1.05
     },
@@ -258,15 +256,8 @@
    "name": "Centering Angle 45",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 95
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -278,10 +269,17 @@
      ],
      "numTargets": 1
     },
-    "overrides": {},
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 95
+     }
     },
+    "overrides": {},
     "levelOverrides": {
      "targetRadiusMultiplier": 0.98,
      "speedMultiplier": 1.05
@@ -298,15 +296,8 @@
    "name": "Centering Angle 45 Down",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 95
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -318,8 +309,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 95
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -334,15 +332,8 @@
    "name": "Centering Angle 60",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 95
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -354,8 +345,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 95
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -370,15 +368,8 @@
    "name": "Centering Angle 60 Down",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 95
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -390,8 +381,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 95
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -406,15 +404,8 @@
    "name": "Centering Angle 75",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 95
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -426,8 +417,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 95
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -442,15 +440,8 @@
    "name": "Centering Angle 75 Down",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 95
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -462,8 +453,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 95
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -478,15 +476,8 @@
    "name": "Centering Circle Clockwise",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -498,8 +489,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 65
+     }
     },
     "levelOverrides": {},
     "circleDef": {
@@ -518,15 +516,8 @@
    "name": "Centering Circle Clockwise Slow",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -538,8 +529,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 65
+     }
     },
     "levelOverrides": {},
     "circleDef": {
@@ -558,15 +556,8 @@
    "name": "Centering Circle CounterClockwise",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -578,8 +569,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 65
+     }
     },
     "levelOverrides": {},
     "circleDef": {
@@ -597,15 +595,8 @@
    "name": "Centering CloseCircle Clockwise",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -69,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 120
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -617,8 +608,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -69,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 120
+     }
     },
     "levelOverrides": {},
     "circleDef": {
@@ -637,15 +635,8 @@
    "name": "Centering Egg Clockwise",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -657,8 +648,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 65
+     }
     },
     "levelOverrides": {},
     "circleDef": {
@@ -678,16 +676,8 @@
    "name": "Centering Look Down",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 20
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 180
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -699,8 +689,16 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 20
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 180
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -729,16 +727,8 @@
    "name": "Centering Look Up",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 180
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -750,8 +740,16 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 180
+     }
     },
     "levelOverrides": {},
     "centeringDef": {
@@ -780,15 +778,8 @@
    "name": "Centering Oval Clockwise",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 65
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -800,8 +791,15 @@
      ],
      "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 65
+     }
     },
     "levelOverrides": {},
     "circleDef": {
@@ -821,13 +819,8 @@
    "name": "Centering Strafe",
    "def": {
     "durationSeconds": 60,
-    "room": {
-     "cylinderRoom": {
-      "height": 150,
-      "radius": 200,
-      "width": 300,
-      "sideAngleDegrees": 30
-     }
+    "shotType": {
+     "trackingInvincible": true
     },
     "targetDef": {
      "profiles": [
@@ -840,11 +833,15 @@
        }
       }
      ],
-     "numTargets": 1,
-     "removeClosestOnMiss": false
+     "numTargets": 1
     },
-    "shotType": {
-     "trackingInvincible": true
+    "room": {
+     "cylinderRoom": {
+      "height": 150,
+      "radius": 200,
+      "width": 300,
+      "sideAngleDegrees": 30
+     }
     },
     "levelOverrides": {},
     "angleStrafeDef": {

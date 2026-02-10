@@ -326,11 +326,11 @@ class ScenarioEditorScreen : public UiScreen {
 
     ImGui::SpacedSeparator();
 
-    if (ImGui::Button(std::format("{} room", icons::kEdit))) {
+    if (ImGui::Button(std::format("{} Room", icons::kEdit))) {
       editing_room_ = true;
     }
 
-    if (ImGui::Button(std::format("{} description", icons::kEdit))) {
+    if (ImGui::Button(std::format("{} Description", icons::kEdit))) {
       description_dialog_.NotifyOpen(def_.description());
     }
 

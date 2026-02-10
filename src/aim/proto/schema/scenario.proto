@@ -18,6 +18,8 @@ message CylinderRoom {
   float width = 3;
   // Instead of an absolute width, define as percent of perimeter. 0.5 is 180 degree view.
   float width_perimeter_percent = 4;
+  // Instead of an absolute width, define as degrees. i.e. 180 degree view.
+  float width_degrees = 7;
 
   bool hide_sides = 5 [features.field_presence = IMPLICIT];
   // Defaults to 20.

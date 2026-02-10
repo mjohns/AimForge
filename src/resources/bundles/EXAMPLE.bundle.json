@@ -5,6 +5,19 @@
    "def": {
     "description": "\"Camera up\" is set in the room definition to flip the bounce scenario upside down.\nThis can be used generally for all scenarios to flip them or rotate 45 degrees etc.",
     "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 3.09999895,
+       "speed": 135,
+       "acceleration": 121
+      }
+     ],
+     "numTargets": 14
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -19,29 +32,11 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "widthPerimeterPercent": 2,
-      "hideSides": true
+      "hideSides": true,
+      "widthDegrees": 720
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 3.09999895,
-       "targetRadiusJitter": 0,
-       "speed": 135,
-       "speedJitter": 0,
-       "acceleration": 121,
-       "accelerationJitter": 0
-      }
-     ],
-     "numTargets": 14,
-     "removeClosestOnMiss": false
-    },
     "overrides": {},
-    "shotType": {
-     "clickSingle": true
-    },
     "levelOverrides": {},
     "bounceDef": {
      "bounds": {
@@ -49,10 +44,37 @@
        "depthPercentValue": 0.3
       }
      },
+     "bounceProfiles": [
+      {
+       "info": {
+        "description": "Bounce"
+       },
+       "height": {
+        "yPercentValue": 0.5
+       },
+       "heightJitter": {
+        "yPercentValue": 0.05
+       },
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "time": 2.99999952,
+       "timeJitter": 1.60000026,
+       "speedMultiplier": 0.649999917
+      }
+     ],
+     "forwardBackProfiles": [
+      {
+       "time": 1.80000019,
+       "timeJitter": 0.5,
+       "speedMultiplier": 0.399999857
+      }
+     ],
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "xOffset": {
          "xPercentValue": 0
         },
@@ -76,39 +98,6 @@
        }
       ]
      },
-     "bounceProfiles": [
-      {
-       "info": {
-        "description": "Bounce"
-       },
-       "height": {
-        "yPercentValue": 0.5
-       },
-       "heightJitter": {
-        "yPercentValue": 0.05
-       },
-       "delaySecondsJitter": 0,
-       "onlyDelayOnFloor": true
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 2.99999952,
-       "timeJitter": 1.60000026,
-       "speedMultiplier": 0.649999917,
-       "speedMultiplierJitter": 0
-      }
-     ],
-     "forwardBackProfiles": [
-      {
-       "info": {},
-       "time": 1.80000019,
-       "timeJitter": 0.5,
-       "speedMultiplier": 0.399999857,
-       "speedMultiplierJitter": 0
-      }
-     ],
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
@@ -119,17 +108,8 @@
    "def": {
     "description": "Scenario with custom FOV set in the room settings.",
     "durationSeconds": 60,
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -113,
-      "z": 0
-     },
-     "horizontalFov": 90,
-     "simpleRoom": {
-      "height": 130,
-      "width": 202
-     }
+    "shotType": {
+     "clickSingle": true
     },
     "targetDef": {
      "profiles": [
@@ -143,13 +123,21 @@
        "accelerationJitter": 0
       }
      ],
-     "numTargets": 5,
-     "removeClosestOnMiss": false
+     "numTargets": 5
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -113,
+      "z": 0
+     },
+     "horizontalFov": 90,
+     "simpleRoom": {
+      "height": 130,
+      "width": 202
+     }
     },
     "overrides": {},
-    "shotType": {
-     "clickSingle": true
-    },
     "levelOverrides": {
      "speedMultiplier": 1.05
     },
@@ -182,6 +170,20 @@
    "name": "Performance Stress Test",
    "def": {
     "durationSeconds": 20,
+    "shotType": {
+     "trackingKill": true,
+     "healthSeconds": 0.4
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 2.04999924,
+       "targetRadiusJitter": 1.49011612e-08,
+       "speed": 48
+      }
+     ],
+     "numTargets": 500
+    },
     "room": {
      "cameraPosition": {
       "x": 0,
@@ -193,22 +195,7 @@
       "width": 400
      }
     },
-    "targetDef": {
-     "profiles": [
-      {
-       "targetRadius": 2.04999924,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 48
-      }
-     ],
-     "numTargets": 500,
-     "removeClosestOnMiss": true
-    },
     "overrides": {},
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.4
-    },
     "levelOverrides": {},
     "linearDef": {
      "angle": 0,

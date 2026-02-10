@@ -314,11 +314,11 @@ class DrawDataBuilder {
     }
 
     if (!room.hide_sides()) {
-      float width = room.width();
-      if (room.has_width_perimeter_percent()) {
-        width = room.width_perimeter_percent() * glm::two_pi<float>() * room.radius();
-      }
       float perimeter = room.radius() * glm::two_pi<float>();
+      float width = room.width();
+      if (room.width_degrees() > 0) {
+        width = (room.width_degrees() / 360.0f) * perimeter;
+      }
 
       float radians = (width / perimeter) * glm::pi<float>();
       glm::vec2 to_rotate(0, room.radius());
