@@ -1668,7 +1668,8 @@
        },
        "delaySeconds": 0.15,
        "delaySecondsJitter": 0.1,
-       "onlyDelayOnFloor": true
+       "speedMultiplier": 1,
+       "speedMultiplierJitter": 0.049999997
       }
      ],
      "leftRightProfiles": [

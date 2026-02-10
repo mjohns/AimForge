@@ -1,10 +1,10 @@
 #pragma once
 
 #include <optional>
-#include "glm/vec2.hpp"
 
 #include "aim/common/simple_types.h"
 #include "aim/proto/scenario.pb.h"
+#include "glm/vec2.hpp"
 
 namespace aim {
 

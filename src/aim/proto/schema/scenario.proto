@@ -399,7 +399,10 @@ message BounceProfile {
   bool only_delay_on_floor = 6 [features.field_presence = IMPLICIT];
 
   float speed_multiplier = 7;
-  float acceleration_multiplier = 8;
+  float speed_multiplier_jitter = 8;
+
+  float acceleration_multiplier = 9;
+  float acceleration_multiplier_jitter = 10;
 }
 
 message BounceScenarioDef {

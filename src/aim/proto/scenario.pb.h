@@ -5967,7 +5967,9 @@ class BounceProfile final : public ::google::protobuf::Message
     kDelaySecondsJitterFieldNumber = 5,
     kOnlyDelayOnFloorFieldNumber = 6,
     kSpeedMultiplierFieldNumber = 7,
-    kAccelerationMultiplierFieldNumber = 8,
+    kSpeedMultiplierJitterFieldNumber = 8,
+    kAccelerationMultiplierFieldNumber = 9,
+    kAccelerationMultiplierJitterFieldNumber = 10,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -6057,7 +6059,18 @@ class BounceProfile final : public ::google::protobuf::Message
   void _internal_set_speed_multiplier(float value);
 
   public:
-  // float acceleration_multiplier = 8;
+  // float speed_multiplier_jitter = 8;
+  bool has_speed_multiplier_jitter() const;
+  void clear_speed_multiplier_jitter() ;
+  float speed_multiplier_jitter() const;
+  void set_speed_multiplier_jitter(float value);
+
+  private:
+  float _internal_speed_multiplier_jitter() const;
+  void _internal_set_speed_multiplier_jitter(float value);
+
+  public:
+  // float acceleration_multiplier = 9;
   bool has_acceleration_multiplier() const;
   void clear_acceleration_multiplier() ;
   float acceleration_multiplier() const;
@@ -6068,11 +6081,22 @@ class BounceProfile final : public ::google::protobuf::Message
   void _internal_set_acceleration_multiplier(float value);
 
   public:
+  // float acceleration_multiplier_jitter = 10;
+  bool has_acceleration_multiplier_jitter() const;
+  void clear_acceleration_multiplier_jitter() ;
+  float acceleration_multiplier_jitter() const;
+  void set_acceleration_multiplier_jitter(float value);
+
+  private:
+  float _internal_acceleration_multiplier_jitter() const;
+  void _internal_set_acceleration_multiplier_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.BounceProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
+  static const ::google::protobuf::internal::TcParseTable<4, 10,
                                    3, 0,
                                    2>
       _table_;
@@ -6101,7 +6125,9 @@ class BounceProfile final : public ::google::protobuf::Message
     float delay_seconds_jitter_;
     bool only_delay_on_floor_;
     float speed_multiplier_;
+    float speed_multiplier_jitter_;
     float acceleration_multiplier_;
+    float acceleration_multiplier_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -20783,16 +20809,45 @@ inline void BounceProfile::_internal_set_speed_multiplier(float value) {
   _impl_.speed_multiplier_ = value;
 }
 
-// float acceleration_multiplier = 8;
-inline bool BounceProfile::has_acceleration_multiplier() const {
+// float speed_multiplier_jitter = 8;
+inline bool BounceProfile::has_speed_multiplier_jitter() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  return value;
+}
+inline void BounceProfile::clear_speed_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000080U);
+}
+inline float BounceProfile::speed_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.speed_multiplier_jitter)
+  return _internal_speed_multiplier_jitter();
+}
+inline void BounceProfile::set_speed_multiplier_jitter(float value) {
+  _internal_set_speed_multiplier_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.speed_multiplier_jitter)
+}
+inline float BounceProfile::_internal_speed_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.speed_multiplier_jitter_;
+}
+inline void BounceProfile::_internal_set_speed_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.speed_multiplier_jitter_ = value;
+}
+
+// float acceleration_multiplier = 9;
+inline bool BounceProfile::has_acceleration_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   return value;
 }
 inline void BounceProfile::clear_acceleration_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000100U);
 }
 inline float BounceProfile::acceleration_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.BounceProfile.acceleration_multiplier)
@@ -20800,7 +20855,7 @@ inline float BounceProfile::acceleration_multiplier() const {
 }
 inline void BounceProfile::set_acceleration_multiplier(float value) {
   _internal_set_acceleration_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.BounceProfile.acceleration_multiplier)
 }
 inline float BounceProfile::_internal_acceleration_multiplier() const {
@@ -20810,6 +20865,35 @@ inline float BounceProfile::_internal_acceleration_multiplier() const {
 inline void BounceProfile::_internal_set_acceleration_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_ = value;
+}
+
+// float acceleration_multiplier_jitter = 10;
+inline bool BounceProfile::has_acceleration_multiplier_jitter() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  return value;
+}
+inline void BounceProfile::clear_acceleration_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline float BounceProfile::acceleration_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.acceleration_multiplier_jitter)
+  return _internal_acceleration_multiplier_jitter();
+}
+inline void BounceProfile::set_acceleration_multiplier_jitter(float value) {
+  _internal_set_acceleration_multiplier_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.acceleration_multiplier_jitter)
+}
+inline float BounceProfile::_internal_acceleration_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.acceleration_multiplier_jitter_;
+}
+inline void BounceProfile::_internal_set_acceleration_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.acceleration_multiplier_jitter_ = value;
 }
 
 // -------------------------------------------------------------------

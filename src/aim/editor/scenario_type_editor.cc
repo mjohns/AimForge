@@ -553,22 +553,14 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
   ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor").set_label("Only delay on floor"),
                    PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
 
-  ImGui::InputFloat(ImGui::InputFloatParams("SpeedMultiplier")
-                        .set_label("Speed multiplier")
-                        .set_is_optional()
-                        .set_step(0.05, 0.2)
-                        .set_min(0)
-                        .set_default(1)
-                        .set_width(char_x * 10),
-                    PROTO_FLOAT_FIELD(BounceProfile, p, speed_multiplier));
-  ImGui::InputFloat(ImGui::InputFloatParams("AccelerationMultiplier")
-                        .set_label("Acceleration multiplier")
-                        .set_is_optional()
-                        .set_step(0.05, 0.2)
-                        .set_min(0)
-                        .set_default(1)
-                        .set_width(char_x * 10),
-                    PROTO_FLOAT_FIELD(BounceProfile, p, acceleration_multiplier));
+  ImGui::InputJitteredFloat(
+      GetDefaultMultiplierInputParams("Speed multiplier").set_is_optional().set_width(char_x * 10),
+      PROTO_JITTERED_FIELD(BounceProfile, p, speed_multiplier));
+
+  ImGui::InputJitteredFloat(GetDefaultMultiplierInputParams("Acceleration multiplier")
+                                .set_is_optional()
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(BounceProfile, p, acceleration_multiplier));
 }
 
 void DrawBounceEditor(BounceScenarioDef& d) {
