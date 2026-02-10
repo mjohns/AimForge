@@ -332,87 +332,182 @@ void DrawStrafeProfile(float char_x,
       "center. 0.10 means lengthen the strafe by 10%");
 }
 
-void DrawStrafeEditor(StrafeScenarioDef& d) {
-  float char_x = ImGui::GetDefaultCharSizeX();
-  ImGui::IdGuard cid("StrafeEditor");
-  DrawBoundsEditor("##Bounds", d.mutable_bounds());
-
-  bool has_relative_bounds = d.has_relative_bounds();
+void DrawLeftRightStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
+                                 google::protobuf::RepeatedPtrField<StrafeProfile>* profile_list,
+                                 Bounds* bounds,
+                                 Bounds* relative_bounds,
+                                 Field<Direction> direction_field) {
+  ImGui::IdGuard cid("LeftRightProfiles");
   ImGui::AlignTextToFramePadding();
-  ImGui::Text("Relative bounds");
+  ImGui::Text("Bounds");
   ImGui::SameLine();
-  ImGui::Checkbox("##UseRelativeBounds", &has_relative_bounds);
+  DrawOptionalRegionLengthEditor("Width",
+                                 RegionLength::kXPercentValue,
+                                 PROTO_PTR_FIELD(RegionLength, Bounds, bounds, width),
+                                 90);
   ImGui::SameLine();
-  ImGui::HelpMarker("Constrain movement based on the initial target position");
-  if (has_relative_bounds) {
-    DrawBoundsEditor("##RelativeBounds", d.mutable_relative_bounds());
-  } else {
-    d.clear_relative_bounds();
+  ImGui::HelpMarker("Constrain where the target can strafe on the wall");
+
+  if (relative_bounds != nullptr) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Relative bounds");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor("RelativeWidth",
+                                   RegionLength::kXPercentValue,
+                                   PROTO_PTR_FIELD(RegionLength, Bounds, relative_bounds, width),
+                                   40);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Constrain movement based on the initial target position");
   }
 
-  ImGui::SpacedSeparator();
-
-  ImGui::Text("Left/right profiles");
-  ImGui::Indent();
-  DrawProfileList("LeftRightProfileList",
-                  "Profile",
-                  d.mutable_left_right_profile_order(),
-                  d.mutable_left_right_profiles(),
-                  std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kXPercentValue));
-  ImGui::Unindent();
+  float char_x = ImGui::GetDefaultCharSizeX();
 
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Initial left/right direction");
   ImGui::SameLine();
-  Direction left_right_direction = d.left_right_initial_direction();
+  Direction direction = direction_field.get();
   ImGui::SimpleTypeDropdown(
-      "LeftRightDirectionTypeDropdown", &left_right_direction, kLeftRightDirections, char_x * 18);
-  d.set_left_right_initial_direction(left_right_direction);
+      "LeftRightDirectionTypeDropdown", &direction, kLeftRightDirections, char_x * 18);
+  direction_field.set(direction);
+
+  ImGui::SpacedSeparator();
+
+  DrawProfileList("LeftRightProfileList",
+                  "Profile",
+                  order_list,
+                  profile_list,
+                  std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kXPercentValue));
+}
+
+void DrawUpDownStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
+                              google::protobuf::RepeatedPtrField<StrafeProfile>* profile_list,
+                              Bounds* bounds,
+                              Bounds* relative_bounds,
+                              Field<Direction> direction_field) {
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::IdGuard cid("UpDownProfiles");
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Bounds");
+  ImGui::SameLine();
+  DrawOptionalRegionLengthEditor("Height",
+                                 RegionLength::kYPercentValue,
+                                 PROTO_PTR_FIELD(RegionLength, Bounds, bounds, height),
+                                 90);
+  ImGui::SameLine();
+  ImGui::HelpMarker("Constrain where the target can strafe on the wall");
+
+  if (relative_bounds != nullptr) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Relative bounds");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor("RelativeHeight",
+                                   RegionLength::kYPercentValue,
+                                   PROTO_PTR_FIELD(RegionLength, Bounds, relative_bounds, height),
+                                   40);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Constrain movement based on the initial target position");
+  }
+
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Initial up/down direction");
+  ImGui::SameLine();
+  Direction direction = direction_field.get();
+  ImGui::SimpleTypeDropdown(
+      "UpDownDirectionTypeDropdown", &direction, kUpDownDirections, char_x * 18);
+  direction_field.set(direction);
+
+  ImGui::SpacedSeparator();
+
+  DrawProfileList("UpDownProfileList",
+                  "Profile",
+                  order_list,
+                  profile_list,
+                  std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kYPercentValue));
+}
+
+void DrawForwardBackStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
+                                   google::protobuf::RepeatedPtrField<StrafeProfile>* profile_list,
+                                   Bounds* bounds,
+                                   Bounds* relative_bounds,
+                                   Field<Direction> direction_field) {
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::IdGuard cid("ForwardBackProfiles");
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Bounds");
+  ImGui::SameLine();
+  DrawOptionalRegionLengthEditor("Depth",
+                                 RegionLength::kDepthPercentValue,
+                                 PROTO_PTR_FIELD(RegionLength, Bounds, bounds, depth),
+                                 50);
+  ImGui::SameLine();
+  ImGui::HelpMarker("Constrain where the target can move forward and back");
+
+  if (relative_bounds != nullptr) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Relative bounds");
+    ImGui::SameLine();
+    DrawOptionalRegionLengthEditor("RelativeDepth",
+                                   RegionLength::kDepthPercentValue,
+                                   PROTO_PTR_FIELD(RegionLength, Bounds, relative_bounds, depth),
+                                   20);
+    ImGui::SameLine();
+    ImGui::HelpMarker("Constrain movement based on the initial target position");
+  }
+
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Initial forward/back direction");
+  ImGui::SameLine();
+  Direction direction = direction_field.get();
+  ImGui::SimpleTypeDropdown(
+      "ForwardBackDirectionTypeDropdown", &direction, kForwardBackDirections, char_x * 18);
+  direction_field.set(direction);
+
+  ImGui::SpacedSeparator();
+
+  DrawProfileList("ForwardBackProfileList",
+                  "Profile",
+                  order_list,
+                  profile_list,
+                  std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kDepthPercentValue));
+}
+
+void DrawStrafeEditor(StrafeScenarioDef& d) {
+  ImGui::IdGuard cid("StrafeEditor");
+  float char_x = ImGui::GetDefaultCharSizeX();
+
+  ImGui::Text("Left/right profiles");
+  ImGui::Indent();
+  DrawLeftRightStrafeProfiles(
+      d.mutable_left_right_profile_order(),
+      d.mutable_left_right_profiles(),
+      d.mutable_bounds(),
+      d.mutable_relative_bounds(),
+      PROTO_FIELD(Direction, StrafeScenarioDef, &d, left_right_initial_direction));
+  ImGui::Unindent();
 
   ImGui::SpacedSeparator();
 
   ImGui::Text("Up/down profiles");
   ImGui::Indent();
-  DrawProfileList("UpDownProfileList",
-                  "Profile",
-                  d.mutable_up_down_profile_order(),
-                  d.mutable_up_down_profiles(),
-                  std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kYPercentValue));
+  DrawUpDownStrafeProfiles(
+      d.mutable_up_down_profile_order(),
+      d.mutable_up_down_profiles(),
+      d.mutable_bounds(),
+      d.mutable_relative_bounds(),
+      PROTO_FIELD(Direction, StrafeScenarioDef, &d, up_down_initial_direction));
   ImGui::Unindent();
 
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Initial up/down direction");
-  ImGui::SameLine();
-  Direction up_down_direction = d.up_down_initial_direction();
-  ImGui::SimpleTypeDropdown(
-      "UpDownDirectionTypeDropdown", &up_down_direction, kUpDownDirections, char_x * 18);
-  d.set_up_down_initial_direction(up_down_direction);
+  ImGui::SpacedSeparator();
 
-  if (d.bounds().has_depth()) {
-    ImGui::SpacedSeparator();
-    ImGui::Text("Forward/back profiles");
-    ImGui::Indent();
-    DrawProfileList("ForwardBackProfileList",
-                    "Profile",
-                    d.mutable_forward_back_profile_order(),
-                    d.mutable_forward_back_profiles(),
-                    std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kDepthPercentValue));
-    ImGui::Unindent();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Initial forward/back direction");
-    ImGui::SameLine();
-    Direction forward_back_direction = d.forward_back_initial_direction();
-    ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
-                              &forward_back_direction,
-                              kForwardBackDirections,
-                              char_x * 18);
-    d.set_forward_back_initial_direction(forward_back_direction);
-  } else {
-    d.clear_forward_back_profiles();
-    d.clear_forward_back_profile_order();
-    d.clear_forward_back_initial_direction();
-  }
+  ImGui::Text("Forward/back profiles");
+  ImGui::Indent();
+  DrawForwardBackStrafeProfiles(
+      d.mutable_forward_back_profile_order(),
+      d.mutable_forward_back_profiles(),
+      d.mutable_bounds(),
+      d.mutable_relative_bounds(),
+      PROTO_FIELD(Direction, StrafeScenarioDef, &d, forward_back_initial_direction));
+  ImGui::Unindent();
 
   ImGui::SpacedSeparator();
 
@@ -427,6 +522,13 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
     ImGui::Unindent();
   } else {
     d.clear_target_placement_strategy();
+  }
+
+  if (IsDefaultInstance(d.relative_bounds())) {
+    d.clear_relative_bounds();
+  }
+  if (IsDefaultInstance(d.bounds())) {
+    d.clear_bounds();
   }
 }
 
@@ -472,11 +574,6 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
 void DrawBounceEditor(BounceScenarioDef& d) {
   float char_x = ImGui::GetDefaultCharSizeX();
   ImGui::IdGuard cid("BounceEditor");
-  BoundsDimensions dimensions;
-  dimensions.draw_height = false;
-  DrawBoundsEditor("##Bounds", d.mutable_bounds(), dimensions);
-
-  ImGui::SpacedSeparator();
 
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Floor height");
@@ -508,46 +605,24 @@ void DrawBounceEditor(BounceScenarioDef& d) {
 
   ImGui::Text("Left/right profiles");
   ImGui::Indent();
-  DrawProfileList("LeftRightProfileList",
-                  "Profile",
-                  d.mutable_left_right_profile_order(),
-                  d.mutable_left_right_profiles(),
-                  std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kXPercentValue));
+  DrawLeftRightStrafeProfiles(
+      d.mutable_left_right_profile_order(),
+      d.mutable_left_right_profiles(),
+      d.mutable_bounds(),
+      nullptr,  // d.mutable_relative_bounds(),
+      PROTO_FIELD(Direction, BounceScenarioDef, &d, left_right_initial_direction));
   ImGui::Unindent();
 
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Initial left/right direction");
-  ImGui::SameLine();
-  Direction left_right_direction = d.left_right_initial_direction();
-  ImGui::SimpleTypeDropdown(
-      "LeftRightDirectionTypeDropdown", &left_right_direction, kLeftRightDirections, char_x * 18);
-  d.set_left_right_initial_direction(left_right_direction);
-
-  if (d.bounds().has_depth()) {
-    ImGui::SpacedSeparator();
-    ImGui::Text("Forward/back profiles");
-    ImGui::Indent();
-    DrawProfileList("ForwardBackProfileList",
-                    "Profile",
-                    d.mutable_forward_back_profile_order(),
-                    d.mutable_forward_back_profiles(),
-                    std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kDepthPercentValue));
-    ImGui::Unindent();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Initial forward/back direction");
-    ImGui::SameLine();
-    Direction forward_back_direction = d.forward_back_initial_direction();
-    ImGui::SimpleTypeDropdown("ForwardBackDirectionTypeDropdown",
-                              &forward_back_direction,
-                              kForwardBackDirections,
-                              char_x * 18);
-    d.set_forward_back_initial_direction(forward_back_direction);
-  } else {
-    d.clear_forward_back_profiles();
-    d.clear_forward_back_profile_order();
-    d.clear_forward_back_initial_direction();
-  }
+  ImGui::SpacedSeparator();
+  ImGui::Text("Forward/back profiles");
+  ImGui::Indent();
+  DrawForwardBackStrafeProfiles(
+      d.mutable_forward_back_profile_order(),
+      d.mutable_forward_back_profiles(),
+      d.mutable_bounds(),
+      nullptr,  // d.mutable_relative_bounds(),
+      PROTO_FIELD(Direction, BounceScenarioDef, &d, forward_back_initial_direction));
+  ImGui::Unindent();
 
   ImGui::SpacedSeparator();
 
@@ -562,6 +637,10 @@ void DrawBounceEditor(BounceScenarioDef& d) {
     ImGui::Unindent();
   } else {
     d.clear_target_placement_strategy();
+  }
+
+  if (IsDefaultInstance(d.bounds())) {
+    d.clear_bounds();
   }
 }
 
