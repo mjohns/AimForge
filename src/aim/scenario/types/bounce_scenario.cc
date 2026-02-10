@@ -27,29 +27,22 @@ class BounceController {
                          Random& rand,
                          float now_seconds,
                          float delta_seconds) {
+    float actual_min = min_y_ + t.radius;
     if (!initialized_) {
       initialized_ = true;
       unscaled_max_speed_ = t.speed;
-      StartNewBounce(y, def, wall, rand, now_seconds);
+      StartNewBounce(y, def, wall, rand, now_seconds, actual_min);
     }
 
-    float actual_min = min_y_ + t.radius;
-
     if (wait_until_time_ > 0) {
-      bool can_delay = true;
-      if (only_delay_on_floor_) {
-        bool is_on_floor = y <= (actual_min + 0.2);
-        can_delay = is_on_floor;
-      }
-
-      if (can_delay && wait_until_time_ > now_seconds) {
+      if (wait_until_time_ > now_seconds) {
         return y;
       }
       wait_until_time_ = -1;
     }
 
     if (!going_up_ && y <= actual_min) {
-      StartNewBounce(y, def, wall, rand, now_seconds);
+      StartNewBounce(y, def, wall, rand, now_seconds, actual_min);
       return actual_min;
     }
 
@@ -67,6 +60,10 @@ class BounceController {
         if (acceleration_ > 0) {
           current_speed_ = 0;
         }
+        if (float_time_ > 0) {
+          wait_until_time_ = now_seconds + float_time_;
+        }
+         
         return y;
       }
     }
@@ -109,18 +106,28 @@ class BounceController {
   }
 
  private:
-  void StartNewBounce(
-      float y, const BounceScenarioDef& def, const Wall& wall, Random& rand, float now_seconds) {
+  void StartNewBounce(float y,
+                      const BounceScenarioDef& def,
+                      const Wall& wall,
+                      Random& rand,
+                      float now_seconds,
+                      float actual_min) {
     bounce_number_++;
     BounceProfile profile = GetNextProfile(def, rand);
     going_up_ = true;
     wait_until_time_ = -1;
-    only_delay_on_floor_ = false;
+    float_time_ = rand.GetJittered(profile.float_time(), profile.float_time_jitter());
 
     float delay = rand.GetJittered(profile.delay_seconds(), profile.delay_seconds_jitter());
     if (delay > 0) {
-      wait_until_time_ = now_seconds + delay;
-      only_delay_on_floor_ = profile.only_delay_on_floor();
+      bool can_delay = true;
+      if (profile.only_delay_on_floor()) {
+        bool is_on_floor = y <= (actual_min + 0.2);
+        can_delay = is_on_floor;
+      }
+      if (can_delay) {
+        wait_until_time_ = now_seconds + delay;
+      }
     }
 
     height_ = rand.GetJittered(wall.GetRegionLength(profile.height()),
@@ -177,10 +184,11 @@ class BounceController {
   float max_speed_;
 
   float wait_until_time_ = -1;
-  bool only_delay_on_floor_ = false;
 
   float unscaled_max_speed_;
   float unscaled_acceleration_;
+
+  float float_time_ = 0;
 
   int bounce_number_ = 0;
   ProfileSelectionContext selection_context_{};

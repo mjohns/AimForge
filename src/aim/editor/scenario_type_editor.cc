@@ -542,9 +542,8 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
                                  p->mutable_height_jitter(),
                                  30);
 
-  ImGui::InputJitteredFloat(ImGui::InputFloatParams("Delay")
-                                .set_label("Bounce delay")
-                                .set_step(0.05, 0.2)
+  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Bounce delay")
+                                .set_step(0.01, 0.05)
                                 .set_zero_is_unset()
                                 .set_min(0)
                                 .set_default(0)
@@ -552,6 +551,14 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
                             PROTO_JITTERED_FIELD(BounceProfile, p, delay_seconds));
   ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor").set_label("Only delay on floor"),
                    PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
+
+  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Float time")
+                                .set_step(0.01, 0.05)
+                                .set_zero_is_unset()
+                                .set_min(0)
+                                .set_default(0)
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(BounceProfile, p, float_time));
 
   ImGui::InputJitteredFloat(
       GetDefaultMultiplierInputParams("Speed multiplier").set_is_optional().set_width(char_x * 10),

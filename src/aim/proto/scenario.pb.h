@@ -5970,6 +5970,8 @@ class BounceProfile final : public ::google::protobuf::Message
     kSpeedMultiplierJitterFieldNumber = 8,
     kAccelerationMultiplierFieldNumber = 9,
     kAccelerationMultiplierJitterFieldNumber = 10,
+    kFloatTimeFieldNumber = 11,
+    kFloatTimeJitterFieldNumber = 12,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -6092,11 +6094,33 @@ class BounceProfile final : public ::google::protobuf::Message
   void _internal_set_acceleration_multiplier_jitter(float value);
 
   public:
+  // float float_time = 11;
+  bool has_float_time() const;
+  void clear_float_time() ;
+  float float_time() const;
+  void set_float_time(float value);
+
+  private:
+  float _internal_float_time() const;
+  void _internal_set_float_time(float value);
+
+  public:
+  // float float_time_jitter = 12;
+  bool has_float_time_jitter() const;
+  void clear_float_time_jitter() ;
+  float float_time_jitter() const;
+  void set_float_time_jitter(float value);
+
+  private:
+  float _internal_float_time_jitter() const;
+  void _internal_set_float_time_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.BounceProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 10,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
                                    3, 0,
                                    2>
       _table_;
@@ -6128,6 +6152,8 @@ class BounceProfile final : public ::google::protobuf::Message
     float speed_multiplier_jitter_;
     float acceleration_multiplier_;
     float acceleration_multiplier_jitter_;
+    float float_time_;
+    float float_time_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -20894,6 +20920,64 @@ inline float BounceProfile::_internal_acceleration_multiplier_jitter() const {
 inline void BounceProfile::_internal_set_acceleration_multiplier_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.acceleration_multiplier_jitter_ = value;
+}
+
+// float float_time = 11;
+inline bool BounceProfile::has_float_time() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  return value;
+}
+inline void BounceProfile::clear_float_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.float_time_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000400U);
+}
+inline float BounceProfile::float_time() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.float_time)
+  return _internal_float_time();
+}
+inline void BounceProfile::set_float_time(float value) {
+  _internal_set_float_time(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.float_time)
+}
+inline float BounceProfile::_internal_float_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.float_time_;
+}
+inline void BounceProfile::_internal_set_float_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.float_time_ = value;
+}
+
+// float float_time_jitter = 12;
+inline bool BounceProfile::has_float_time_jitter() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  return value;
+}
+inline void BounceProfile::clear_float_time_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.float_time_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000800U);
+}
+inline float BounceProfile::float_time_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.BounceProfile.float_time_jitter)
+  return _internal_float_time_jitter();
+}
+inline void BounceProfile::set_float_time_jitter(float value) {
+  _internal_set_float_time_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  // @@protoc_insertion_point(field_set:aim.BounceProfile.float_time_jitter)
+}
+inline float BounceProfile::_internal_float_time_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.float_time_jitter_;
+}
+inline void BounceProfile::_internal_set_float_time_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.float_time_jitter_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -403,6 +403,10 @@ message BounceProfile {
 
   float acceleration_multiplier = 9;
   float acceleration_multiplier_jitter = 10;
+
+  // Time to pause vertically at the top of the bounce.
+  float float_time = 11;
+  float float_time_jitter = 12;
 }
 
 message BounceScenarioDef {
