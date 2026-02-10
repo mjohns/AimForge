@@ -210,8 +210,15 @@ struct InputFloatParams {
     return *this;
   }
 
+  InputFloatParams& set_optional_secondary_label(const std::string& value) {
+    optional_secondary_label = value;
+    return *this;
+  }
+
   std::string id;
   std::string label;
+  // If optional. A secondary label that is show after the checkbox when selected.
+  std::string optional_secondary_label;
 
   float step = 1;
   float fast_step = 5;

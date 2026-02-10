@@ -313,7 +313,7 @@ class DrawDataBuilder {
                   draw_data);
     }
 
-    if (!room.hide_sides()) {
+    if (room.has_side_angle_degrees()) {
       float perimeter = room.radius() * glm::two_pi<float>();
       float width = room.width();
       if (room.width_degrees() > 0) {
@@ -322,7 +322,7 @@ class DrawDataBuilder {
 
       float radians = (width / perimeter) * glm::pi<float>();
       glm::vec2 to_rotate(0, room.radius());
-      float side_angle_degrees = room.has_side_angle_degrees() ? room.side_angle_degrees() : 20.0f;
+      float side_angle_degrees = room.side_angle_degrees();
 
       {
         // Left

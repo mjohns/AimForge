@@ -10,10 +10,35 @@
 #include "aim/common/util.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/proto/scenario.pb.h"
+#include "glm/gtc/constants.hpp"
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
 
 namespace aim {
+
+float GetDefaultSideAngleForDegrees(float degrees) {
+  float min_room_degrees = 35;
+  float max_room_degrees = 180;
+
+  if (degrees < min_room_degrees) {
+    // For really small rooms always make the walls very open.
+    return -10;
+  }
+
+  float min_side_angle = 9;
+  float max_side_angle = 70;
+  if (degrees >= max_room_degrees) {
+    return max_side_angle;
+  }
+
+  // Assign a side angle from min (9) to max (70) as the room degrees goes from min (35) to max
+  // (180).
+
+  float percent = (degrees - min_room_degrees) / (max_room_degrees - min_room_degrees);
+
+  float side_angle_range = max_side_angle - min_side_angle;
+  return std::roundf(min_side_angle + side_angle_range * percent);
+}
 
 void DrawRoomEditorInputs(Room& room) {
   ImGuiComboFlags combo_flags = 0;
@@ -88,17 +113,21 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
     ImGui::SameLine();
+    float current_width_degrees = 0;
     if (use_width_degrees) {
       ImGui::InputFloat(
           ImGui::InputFloatParams("WidthDegrees").set_min(1).set_default(90).set_step(1, 5),
           PROTO_FLOAT_FIELD(CylinderRoom, room.mutable_cylinder_room(), width_degrees));
       room.mutable_cylinder_room()->clear_width();
+      current_width_degrees = room.cylinder_room().width_degrees();
     } else {
       float width = FirstGreaterThanZero(room.cylinder_room().width(), 100);
       ImGui::SetNextItemWidth(char_x * 12);
       ImGui::InputFloat("##Width", &width, 1, 10, "%.0f");
       room.mutable_cylinder_room()->set_width(width);
       room.mutable_cylinder_room()->clear_width_degrees();
+      float perimeter = room.cylinder_room().radius() * glm::two_pi<float>();
+      current_width_degrees = width / perimeter;
     }
 
     room.mutable_cylinder_room()->set_height(height);
@@ -110,28 +139,14 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::InputFloat("##RoomRadius", &radius, 1, 10, "%.0f");
     room.mutable_cylinder_room()->set_radius(radius);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Draw sides");
-    ImGui::SameLine();
-    bool has_sides = !room.cylinder_room().hide_sides();
-    ImGui::Checkbox("##DrawSides", &has_sides);
-    room.mutable_cylinder_room()->set_hide_sides(!has_sides);
-
-    if (has_sides) {
-      float side_angle = room.cylinder_room().side_angle_degrees();
-      if (side_angle <= 0) {
-        side_angle = 20;
-      }
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Side angle degrees");
-      ImGui::Indent();
-      ImGui::SetNextItemWidth(char_x * 12);
-      ImGui::InputFloat("##SideAngle", &side_angle, 1, 5, "%.0f");
-      room.mutable_cylinder_room()->set_side_angle_degrees(side_angle);
-      ImGui::Unindent();
-    } else {
-      room.mutable_cylinder_room()->clear_side_angle_degrees();
-    }
+    ImGui::InputFloat(
+        ImGui::InputFloatParams::WithLabelAsId("Sides")
+            .set_is_optional()
+            .set_optional_secondary_label("angle")
+            .set_default(GetDefaultSideAngleForDegrees(current_width_degrees))
+            .set_step(0.5, 3)
+            .set_width(char_x * 10),
+        PROTO_FLOAT_FIELD(CylinderRoom, room.mutable_cylinder_room(), side_angle_degrees));
   }
 
   ImGui::SpacedSeparator();

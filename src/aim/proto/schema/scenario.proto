@@ -21,8 +21,7 @@ message CylinderRoom {
   // Instead of an absolute width, define as degrees. i.e. 180 degree view.
   float width_degrees = 7;
 
-  bool hide_sides = 5 [features.field_presence = IMPLICIT];
-  // Defaults to 20.
+  // Draw sides to the room at the specified angle. These walls are drawn based on the width of the wall.
   float side_angle_degrees = 6;
 }
 

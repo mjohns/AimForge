@@ -161,6 +161,11 @@ void InputFloat(const InputFloatParams& params, aim::Field<float> field) {
       field.clear();
       return;
     }
+    if (params.optional_secondary_label.size() > 0) {
+      ImGui::SameLine();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(params.optional_secondary_label);
+    }
     ImGui::SameLine();
   }
 
