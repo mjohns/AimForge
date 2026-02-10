@@ -407,6 +407,14 @@ message BounceProfile {
   // Time to pause vertically at the top of the bounce.
   float float_time = 11;
   float float_time_jitter = 12;
+
+  // Speed and acceleration overrides for the downward portion of the bounce. Applied in addition to
+  // any other profile specific multipliers.
+  float down_speed_multiplier = 13;
+  float down_speed_multiplier_jitter = 14;
+
+  float down_acceleration_multiplier = 15;
+  float down_acceleration_multiplier_jitter = 16;
 }
 
 message BounceScenarioDef {

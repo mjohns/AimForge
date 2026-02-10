@@ -568,6 +568,16 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
                                 .set_is_optional()
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(BounceProfile, p, acceleration_multiplier));
+
+  ImGui::InputJitteredFloat(GetDefaultMultiplierInputParams("Downward speed multiplier")
+                                .set_is_optional()
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(BounceProfile, p, down_speed_multiplier));
+
+  ImGui::InputJitteredFloat(GetDefaultMultiplierInputParams("Downward acceleration multiplier")
+                                .set_is_optional()
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(BounceProfile, p, down_acceleration_multiplier));
 }
 
 void DrawBounceEditor(BounceScenarioDef& d) {

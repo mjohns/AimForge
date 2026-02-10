@@ -56,6 +56,8 @@ class BounceController {
       bool stopped = current_speed_ <= 0.001 && is_stopping_;
       if (too_high || stopped) {
         going_up_ = false;
+        max_speed_ = down_max_speed_;
+        acceleration_ = down_acceleration_;
         is_stopping_ = false;
         if (acceleration_ > 0) {
           current_speed_ = 0;
@@ -63,7 +65,7 @@ class BounceController {
         if (float_time_ > 0) {
           wait_until_time_ = now_seconds + float_time_;
         }
-         
+
         return y;
       }
     }
@@ -137,16 +139,26 @@ class BounceController {
     if (profile.has_speed_multiplier()) {
       max_speed_ *= profile.speed_multiplier();
     }
+    down_max_speed_ = max_speed_;
+    if (profile.has_down_speed_multiplier()) {
+      down_max_speed_ *= profile.down_speed_multiplier();
+    }
 
     acceleration_ = unscaled_acceleration_;
     if (profile.has_acceleration_multiplier()) {
       acceleration_ *= profile.acceleration_multiplier();
+    }
+    down_acceleration_ = acceleration_;
+    if (profile.has_down_acceleration_multiplier()) {
+      down_acceleration_ *= profile.down_acceleration_multiplier();
     }
 
     float target_y = min_y_ + height_;
     if (y >= target_y) {
       going_up_ = false;
       current_speed_ = 0;
+      max_speed_ = down_max_speed_;
+      acceleration_ = down_acceleration_;
       /*
       if (bounce_number_ == 1) {
         current_speed_ =
@@ -180,8 +192,12 @@ class BounceController {
   bool is_stopping_ = false;
 
   float current_speed_;
+
   float acceleration_;
   float max_speed_;
+
+  float down_acceleration_;
+  float down_max_speed_;
 
   float wait_until_time_ = -1;
 
