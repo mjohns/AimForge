@@ -21,27 +21,7 @@ class MovementControllerImpl : public MovementController {
       : def_(def), app_(app) {
     auto d = def_.strafe_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
-    std::optional<float> relative_min_x;
-    std::optional<float> relative_max_x;
-    std::optional<float> relative_min_y;
-    std::optional<float> relative_max_y;
-    std::optional<float> relative_min_depth;
-    std::optional<float> relative_max_depth;
-    if (d.has_relative_bounds()) {
-      const WallBounds relative_bounds = wall.GetWallBounds(d.relative_bounds());
-      if (d.relative_bounds().has_height()) {
-        relative_min_y = relative_bounds.min_y;
-        relative_max_y = relative_bounds.max_y;
-      }
-      if (d.relative_bounds().has_width()) {
-        relative_min_x = relative_bounds.min_x;
-        relative_max_x = relative_bounds.max_x;
-      }
-      if (d.relative_bounds().has_depth()) {
-        relative_min_depth = relative_bounds.min_depth;
-        relative_max_depth = relative_bounds.max_depth;
-      }
-    }
+    const WallRelativeBounds relative_bounds = wall.GetWallRelativeBounds(d.relative_bounds());
 
     DirectionParams params;
     params.acceleration = acceleration;
@@ -49,8 +29,8 @@ class MovementControllerImpl : public MovementController {
     if (d.left_right_profiles_size() > 0) {
       left_right_controller_ = StrafeController(bounds.min_x,
                                                 bounds.max_x,
-                                                relative_min_x,
-                                                relative_max_x,
+                                                relative_bounds.min_x,
+                                                relative_bounds.max_x,
                                                 d.left_right_initial_direction(),
                                                 params,
                                                 wall);
@@ -59,18 +39,18 @@ class MovementControllerImpl : public MovementController {
     if (d.up_down_profiles_size() > 0) {
       up_down_controller_ = StrafeController(bounds.min_y,
                                              bounds.max_y,
-                                             relative_min_y,
-                                             relative_max_y,
+                                             relative_bounds.min_y,
+                                             relative_bounds.max_y,
                                              d.up_down_initial_direction(),
                                              params,
                                              wall);
     }
 
-    if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
+    if (d.forward_back_profiles_size() > 0) {
       forward_back_controller_ = StrafeController(bounds.min_depth,
                                                   bounds.max_depth,
-                                                  relative_min_depth,
-                                                  relative_max_depth,
+                                                  relative_bounds.min_depth,
+                                                  relative_bounds.max_depth,
                                                   d.forward_back_initial_direction(),
                                                   params,
                                                   wall);

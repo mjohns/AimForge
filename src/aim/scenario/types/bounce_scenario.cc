@@ -193,6 +193,8 @@ class MovementControllerImpl : public MovementController {
       : def_(def), app_(app), wall_(wall) {
     auto d = def_.bounce_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
+    const WallRelativeBounds relative_bounds = wall.GetWallRelativeBounds(d.relative_bounds());
+
     float min_y = -1 * (wall.height / 2.0);
     if (d.has_floor_height()) {
       min_y += wall.GetRegionLength(d.floor_height());
@@ -204,15 +206,20 @@ class MovementControllerImpl : public MovementController {
     params.acceleration = acceleration;
 
     if (d.left_right_profiles_size() > 0) {
-      left_right_controller_ = StrafeController(
-          bounds.min_x, bounds.max_x, {}, {}, d.left_right_initial_direction(), params, wall);
+      left_right_controller_ = StrafeController(bounds.min_x,
+                                                bounds.max_x,
+                                                relative_bounds.min_x,
+                                                relative_bounds.max_x,
+                                                d.left_right_initial_direction(),
+                                                params,
+                                                wall);
     }
 
-    if (bounds.max_depth > 0 && d.forward_back_profiles_size() > 0) {
+    if (d.forward_back_profiles_size() > 0) {
       forward_back_controller_ = StrafeController(bounds.min_depth,
                                                   bounds.max_depth,
-                                                  {},
-                                                  {},
+                                                  relative_bounds.min_depth,
+                                                  relative_bounds.max_depth,
                                                   d.forward_back_initial_direction(),
                                                   params,
                                                   wall);

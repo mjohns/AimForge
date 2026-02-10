@@ -9010,7 +9010,8 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     kForwardBackProfilesFieldNumber = 7,
     kForwardBackProfileOrderFieldNumber = 8,
     kBoundsFieldNumber = 1,
-    kTargetPlacementStrategyFieldNumber = 2,
+    kRelativeBoundsFieldNumber = 2,
+    kTargetPlacementStrategyFieldNumber = 9,
     kFloorHeightFieldNumber = 13,
     kLeftRightInitialDirectionFieldNumber = 11,
     kForwardBackInitialDirectionFieldNumber = 12,
@@ -9135,7 +9136,22 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   ::aim::Bounds* PROTOBUF_NONNULL _internal_mutable_bounds();
 
   public:
-  // .aim.TargetPlacementStrategy target_placement_strategy = 2;
+  // .aim.Bounds relative_bounds = 2;
+  bool has_relative_bounds() const;
+  void clear_relative_bounds() ;
+  const ::aim::Bounds& relative_bounds() const;
+  [[nodiscard]] ::aim::Bounds* PROTOBUF_NULLABLE release_relative_bounds();
+  ::aim::Bounds* PROTOBUF_NONNULL mutable_relative_bounds();
+  void set_allocated_relative_bounds(::aim::Bounds* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_relative_bounds(::aim::Bounds* PROTOBUF_NULLABLE value);
+  ::aim::Bounds* PROTOBUF_NULLABLE unsafe_arena_release_relative_bounds();
+
+  private:
+  const ::aim::Bounds& _internal_relative_bounds() const;
+  ::aim::Bounds* PROTOBUF_NONNULL _internal_mutable_relative_bounds();
+
+  public:
+  // .aim.TargetPlacementStrategy target_placement_strategy = 9;
   bool has_target_placement_strategy() const;
   void clear_target_placement_strategy() ;
   const ::aim::TargetPlacementStrategy& target_placement_strategy() const;
@@ -9191,8 +9207,8 @@ class BounceScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 11,
-                                   6, 0,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
+                                   7, 0,
                                    2>
       _table_;
 
@@ -9223,6 +9239,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<::int32_t> forward_back_profile_order_;
     ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
+    ::aim::Bounds* PROTOBUF_NULLABLE relative_bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
     ::aim::RegionLength* PROTOBUF_NULLABLE floor_height_;
     int left_right_initial_direction_;
@@ -20898,47 +20915,47 @@ inline void BounceScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF_NULL
   // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.bounds)
 }
 
-// .aim.TargetPlacementStrategy target_placement_strategy = 2;
-inline bool BounceScenarioDef::has_target_placement_strategy() const {
+// .aim.Bounds relative_bounds = 2;
+inline bool BounceScenarioDef::has_relative_bounds() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
-  PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
+  PROTOBUF_ASSUME(!value || _impl_.relative_bounds_ != nullptr);
   return value;
 }
-inline void BounceScenarioDef::clear_target_placement_strategy() {
+inline void BounceScenarioDef::clear_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
+  if (_impl_.relative_bounds_ != nullptr) _impl_.relative_bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000080U);
 }
-inline const ::aim::TargetPlacementStrategy& BounceScenarioDef::_internal_target_placement_strategy() const {
+inline const ::aim::Bounds& BounceScenarioDef::_internal_relative_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
+  const ::aim::Bounds* p = _impl_.relative_bounds_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::Bounds&>(::aim::_Bounds_default_instance_);
 }
-inline const ::aim::TargetPlacementStrategy& BounceScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.target_placement_strategy)
-  return _internal_target_placement_strategy();
+inline const ::aim::Bounds& BounceScenarioDef::relative_bounds() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.relative_bounds)
+  return _internal_relative_bounds();
 }
-inline void BounceScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(
-    ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE value) {
+inline void BounceScenarioDef::unsafe_arena_set_allocated_relative_bounds(
+    ::aim::Bounds* PROTOBUF_NULLABLE value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.relative_bounds_);
   }
-  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
     SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   } else {
     ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.target_placement_strategy)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.relative_bounds)
 }
-inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE BounceScenarioDef::release_target_placement_strategy() {
+inline ::aim::Bounds* PROTOBUF_NULLABLE BounceScenarioDef::release_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
-  ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
-  _impl_.target_placement_strategy_ = nullptr;
+  ::aim::Bounds* released = _impl_.relative_bounds_;
+  _impl_.relative_bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
     auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
     released = ::google::protobuf::internal::DuplicateIfNonNull(released);
@@ -20952,35 +20969,35 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE BounceScenarioDef::rele
   }
   return released;
 }
-inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena_release_target_placement_strategy() {
+inline ::aim::Bounds* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena_release_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.target_placement_strategy)
+  // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.relative_bounds)
 
   ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
-  ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
-  _impl_.target_placement_strategy_ = nullptr;
+  ::aim::Bounds* temp = _impl_.relative_bounds_;
+  _impl_.relative_bounds_ = nullptr;
   return temp;
 }
-inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL BounceScenarioDef::_internal_mutable_target_placement_strategy() {
+inline ::aim::Bounds* PROTOBUF_NONNULL BounceScenarioDef::_internal_mutable_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  if (_impl_.target_placement_strategy_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
-    _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
+  if (_impl_.relative_bounds_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::Bounds>(GetArena());
+    _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(p);
   }
-  return _impl_.target_placement_strategy_;
+  return _impl_.relative_bounds_;
 }
-inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL BounceScenarioDef::mutable_target_placement_strategy()
+inline ::aim::Bounds* PROTOBUF_NONNULL BounceScenarioDef::mutable_relative_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   SetHasBit(_impl_._has_bits_[0], 0x00000080U);
-  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
-  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.target_placement_strategy)
+  ::aim::Bounds* _msg = _internal_mutable_relative_bounds();
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.relative_bounds)
   return _msg;
 }
-inline void BounceScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE value) {
+inline void BounceScenarioDef::set_allocated_relative_bounds(::aim::Bounds* PROTOBUF_NULLABLE value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
-    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.relative_bounds_);
   }
 
   if (value != nullptr) {
@@ -20993,8 +21010,8 @@ inline void BounceScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
     ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   }
 
-  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
-  // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.target_placement_strategy)
+  _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.relative_bounds)
 }
 
 // repeated .aim.BounceProfile bounce_profiles = 3;
@@ -21315,16 +21332,115 @@ BounceScenarioDef::_internal_mutable_forward_back_profile_order() {
   return &_impl_.forward_back_profile_order_;
 }
 
+// .aim.TargetPlacementStrategy target_placement_strategy = 9;
+inline bool BounceScenarioDef::has_target_placement_strategy() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
+  return value;
+}
+inline void BounceScenarioDef::clear_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline const ::aim::TargetPlacementStrategy& BounceScenarioDef::_internal_target_placement_strategy() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::TargetPlacementStrategy* p = _impl_.target_placement_strategy_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::TargetPlacementStrategy&>(::aim::_TargetPlacementStrategy_default_instance_);
+}
+inline const ::aim::TargetPlacementStrategy& BounceScenarioDef::target_placement_strategy() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.target_placement_strategy)
+  return _internal_target_placement_strategy();
+}
+inline void BounceScenarioDef::unsafe_arena_set_allocated_target_placement_strategy(
+    ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+  }
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.target_placement_strategy)
+}
+inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE BounceScenarioDef::release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena_release_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.target_placement_strategy)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
+  _impl_.target_placement_strategy_ = nullptr;
+  return temp;
+}
+inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL BounceScenarioDef::_internal_mutable_target_placement_strategy() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.target_placement_strategy_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::TargetPlacementStrategy>(GetArena());
+    _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(p);
+  }
+  return _impl_.target_placement_strategy_;
+}
+inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL BounceScenarioDef::mutable_target_placement_strategy()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
+  // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.target_placement_strategy)
+  return _msg;
+}
+inline void BounceScenarioDef::set_allocated_target_placement_strategy(::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.target_placement_strategy_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = value->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  }
+
+  _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.target_placement_strategy)
+}
+
 // .aim.Direction left_right_initial_direction = 11;
 inline bool BounceScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void BounceScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000400U);
 }
 inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
@@ -21332,7 +21448,7 @@ inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const 
 }
 inline void BounceScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_left_right_initial_direction() const {
@@ -21346,14 +21462,14 @@ inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction forward_back_initial_direction = 12;
 inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void BounceScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000800U);
 }
 inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
@@ -21361,7 +21477,7 @@ inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() cons
 }
 inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_forward_back_initial_direction() const {
@@ -21375,7 +21491,7 @@ inline void BounceScenarioDef::_internal_set_forward_back_initial_direction(::ai
 
 // .aim.RegionLength floor_height = 13;
 inline bool BounceScenarioDef::has_floor_height() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   PROTOBUF_ASSUME(!value || _impl_.floor_height_ != nullptr);
   return value;
 }
@@ -21383,7 +21499,7 @@ inline void BounceScenarioDef::clear_floor_height() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.floor_height_ != nullptr) _impl_.floor_height_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000200U);
 }
 inline const ::aim::RegionLength& BounceScenarioDef::_internal_floor_height() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -21402,16 +21518,16 @@ inline void BounceScenarioDef::unsafe_arena_set_allocated_floor_height(
   }
   _impl_.floor_height_ = reinterpret_cast<::aim::RegionLength*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.floor_height)
 }
 inline ::aim::RegionLength* PROTOBUF_NULLABLE BounceScenarioDef::release_floor_height() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   ::aim::RegionLength* released = _impl_.floor_height_;
   _impl_.floor_height_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -21431,7 +21547,7 @@ inline ::aim::RegionLength* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena_re
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.floor_height)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   ::aim::RegionLength* temp = _impl_.floor_height_;
   _impl_.floor_height_ = nullptr;
   return temp;
@@ -21446,7 +21562,7 @@ inline ::aim::RegionLength* PROTOBUF_NONNULL BounceScenarioDef::_internal_mutabl
 }
 inline ::aim::RegionLength* PROTOBUF_NONNULL BounceScenarioDef::mutable_floor_height()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   ::aim::RegionLength* _msg = _internal_mutable_floor_height();
   // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.floor_height)
   return _msg;
@@ -21463,9 +21579,9 @@ inline void BounceScenarioDef::set_allocated_floor_height(::aim::RegionLength* P
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   }
 
   _impl_.floor_height_ = reinterpret_cast<::aim::RegionLength*>(value);

@@ -1622,6 +1622,99 @@
    }
   },
   {
+   "name": "Popcorn",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 3,
+       "speed": 100,
+       "acceleration": 120
+      }
+     ],
+     "numTargets": 5,
+     "staggerInitialTargetsSeconds": 0.0500000082
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 147,
+      "width": 230
+     }
+    },
+    "levelOverrides": {},
+    "bounceDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.95
+      }
+     },
+     "bounceProfiles": [
+      {
+       "height": {
+        "yPercentValue": 0.4
+       },
+       "heightJitter": {
+        "yPercentValue": 0.15
+       },
+       "delaySeconds": 0.15,
+       "delaySecondsJitter": 0.1,
+       "onlyDelayOnFloor": true
+      }
+     ],
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       },
+       "speedMultiplier": 0.699999928,
+       "speedMultiplierJitter": 0.15
+      }
+     ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.48
+        },
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.98
+         },
+         "yLength": {
+          "yPercentValue": 0.01
+         }
+        }
+       }
+      ]
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
    "name": "Reflex Flick",
    "def": {
     "durationSeconds": 60,

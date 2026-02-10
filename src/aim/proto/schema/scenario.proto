@@ -404,8 +404,7 @@ message BounceProfile {
 
 message BounceScenarioDef {
   Bounds bounds = 1;
-
-  TargetPlacementStrategy target_placement_strategy = 2;
+  Bounds relative_bounds = 2;
 
   repeated BounceProfile bounce_profiles = 3;
   repeated int32 bounce_profile_order = 4;
@@ -415,6 +414,8 @@ message BounceScenarioDef {
 
   repeated StrafeProfile forward_back_profiles = 7;
   repeated int32 forward_back_profile_order = 8;
+
+  TargetPlacementStrategy target_placement_strategy = 9;
 
   Direction left_right_initial_direction = 11;
   Direction forward_back_initial_direction = 12;

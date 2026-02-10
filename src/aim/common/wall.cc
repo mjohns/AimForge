@@ -49,6 +49,24 @@ WallBounds Wall::GetWallBounds(const Bounds& b) const {
   return result;
 }
 
+WallRelativeBounds Wall::GetWallRelativeBounds(const Bounds& bounds) const {
+  WallRelativeBounds relative_bounds;
+  const WallBounds b = GetWallBounds(bounds);
+  if (bounds.has_height()) {
+    relative_bounds.min_y = b.min_y;
+    relative_bounds.max_y = b.max_y;
+  }
+  if (bounds.has_width()) {
+    relative_bounds.min_x = b.min_x;
+    relative_bounds.max_x = b.max_x;
+  }
+  if (bounds.has_depth()) {
+    relative_bounds.min_depth = b.min_depth;
+    relative_bounds.max_depth = b.max_depth;
+  }
+  return relative_bounds;
+}
+
 Wall Wall::ForRoom(const Room& room) {
   Wall wall{};
   if (room.has_cylinder_room()) {

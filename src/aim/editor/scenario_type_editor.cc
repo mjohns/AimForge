@@ -609,7 +609,7 @@ void DrawBounceEditor(BounceScenarioDef& d) {
       d.mutable_left_right_profile_order(),
       d.mutable_left_right_profiles(),
       d.mutable_bounds(),
-      nullptr,  // d.mutable_relative_bounds(),
+      d.mutable_relative_bounds(),
       PROTO_FIELD(Direction, BounceScenarioDef, &d, left_right_initial_direction));
   ImGui::Unindent();
 
@@ -620,7 +620,7 @@ void DrawBounceEditor(BounceScenarioDef& d) {
       d.mutable_forward_back_profile_order(),
       d.mutable_forward_back_profiles(),
       d.mutable_bounds(),
-      nullptr,  // d.mutable_relative_bounds(),
+      d.mutable_relative_bounds(),
       PROTO_FIELD(Direction, BounceScenarioDef, &d, forward_back_initial_direction));
   ImGui::Unindent();
 
@@ -641,6 +641,9 @@ void DrawBounceEditor(BounceScenarioDef& d) {
 
   if (IsDefaultInstance(d.bounds())) {
     d.clear_bounds();
+  }
+  if (IsDefaultInstance(d.relative_bounds())) {
+    d.clear_relative_bounds();
   }
 }
 
