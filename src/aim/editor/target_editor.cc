@@ -18,6 +18,12 @@
 namespace aim {
 namespace {
 
+// Types that don't require speed to be set.
+const std::unordered_set<ScenarioDef::TypeCase> kNoSpeedScenarioTypes = {
+    ScenarioDef::kStaticDef,
+    ScenarioDef::kReferenceDef,
+};
+
 void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
   ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Radius")
                                 .set_step(0.05, 0.5)
@@ -26,20 +32,26 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(TargetProfile, profile, target_radius));
 
-  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed")
-                                .set_step(1, 10)
-                                .set_min(0)
-                                .set_zero_is_unset()
-                                .set_width(char_x * 10),
-                            PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
+  if (kNoSpeedScenarioTypes.contains(def.type_case())) {
+    profile->clear_speed();
+    profile->clear_acceleration();
+  } else {
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed")
+                                  .set_step(1, 10)
+                                  .set_min(0.1)
+                                  .set_default(100)
+                                  .set_zero_is_unset()
+                                  .set_width(char_x * 10),
+                              PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
 
-  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
-                                .set_step(5, 50)
-                                .set_min(1)
-                                .set_default(200)
-                                .set_is_optional()
-                                .set_width(char_x * 10),
-                            PROTO_JITTERED_FIELD(TargetProfile, profile, acceleration));
+    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
+                                  .set_step(5, 50)
+                                  .set_min(1)
+                                  .set_default(200)
+                                  .set_is_optional()
+                                  .set_width(char_x * 10),
+                              PROTO_JITTERED_FIELD(TargetProfile, profile, acceleration));
+  }
 
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Use pill shape");
