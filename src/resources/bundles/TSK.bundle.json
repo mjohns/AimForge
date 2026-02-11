@@ -1875,7 +1875,7 @@
       {
        "targetRadius": 1.19999981,
        "speed": 97.2,
-       "acceleration": 200,
+       "acceleration": 280,
        "pill": {
         "height": 20
        }
@@ -1931,7 +1931,7 @@
       {
        "targetRadius": 1.59999943,
        "speed": 97.2,
-       "acceleration": 200,
+       "acceleration": 280,
        "pill": {
         "height": 20
        }

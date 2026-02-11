@@ -35,6 +35,11 @@ void DrawJitteredRegionLengthEditor(const std::string& id,
                                     RegionLength* length,
                                     RegionLength* jitter_length,
                                     float default_value);
+void DrawOptionalJitteredRegionLengthEditor(const std::string& id,
+                                            RegionLength::TypeCase default_type,
+                                            PtrField<RegionLength> length,
+                                            PtrField<RegionLength> jitter_length,
+                                            float default_value);
 void DrawOptionalRegionLengthEditor(const std::string& id,
                                     RegionLength::TypeCase default_type,
                                     PtrField<RegionLength> length,

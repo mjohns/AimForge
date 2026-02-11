@@ -338,7 +338,6 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 468.000061
      }
     },
@@ -1084,7 +1083,6 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 720
      }
     },
@@ -1538,12 +1536,6 @@
      "targetPlacementStrategy": {
       "regions": [
        {
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "ellipse": {
          "xDiameter": {
           "xPercentValue": 0.09
@@ -4324,7 +4316,6 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 720
      }
     },
@@ -4427,7 +4418,6 @@
      "cylinderRoom": {
       "height": 160,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 720
      }
     },
@@ -7781,7 +7771,6 @@
      "cylinderRoom": {
       "height": 180,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 162
      }
     },
@@ -7883,7 +7872,6 @@
      "cylinderRoom": {
       "height": 180,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 162
      }
     },
@@ -7985,7 +7973,6 @@
      "cylinderRoom": {
       "height": 180,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 162
      }
     },
@@ -12708,7 +12695,6 @@
      "cylinderRoom": {
       "height": 140,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 720
      }
     },

@@ -107,11 +107,12 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Depth");
     ImGui::SameLine();
-    DrawJitteredRegionLengthEditor("Depth",
-                                   RegionLength::kDepthPercentValue,
-                                   region->mutable_depth(),
-                                   region->mutable_depth_jitter(),
-                                   0);
+    DrawOptionalJitteredRegionLengthEditor(
+        "Depth",
+        RegionLength::kDepthPercentValue,
+        PROTO_PTR_FIELD(RegionLength, TargetRegion, region, depth),
+        PROTO_PTR_FIELD(RegionLength, TargetRegion, region, depth_jitter),
+        0);
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The distance away from the wall towards the camera. The greater the value, the "
@@ -277,6 +278,27 @@ void DrawJitteredRegionLengthEditor(const std::string& id,
 
   SetRegionLengthValue(length, type, field.get());
   SetRegionLengthValue(jitter_length, type, jitter_field.get());
+}
+
+void DrawOptionalJitteredRegionLengthEditor(const std::string& id,
+                                            RegionLength::TypeCase default_type,
+                                            PtrField<RegionLength> length,
+                                            PtrField<RegionLength> jitter_length,
+                                            float default_value) {
+  ImGui::IdGuard cid(id);
+  bool has_value = length.has();
+  ImGui::Checkbox("##UseRegionLength", &has_value);
+  if (has_value) {
+    ImGui::SameLine();
+    DrawJitteredRegionLengthEditor("RegionLength",
+                                   default_type,
+                                   length.get_mutable(),
+                                   jitter_length.get_mutable(),
+                                   default_value);
+  } else {
+    length.clear();
+    jitter_length.clear();
+  }
 }
 
 void DrawOptionalRegionLengthEditor(const std::string& id,
