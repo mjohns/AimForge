@@ -45,7 +45,7 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, t->mutable_y_length(), 50);
 
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Inner");
+    ImGui::Text("Exclude inner rectangle");
     ImGui::SameLine();
     bool use_inner = t->has_inner_x_length() || t->has_inner_y_length();
     ImGui::Checkbox("##InnerCheckbox", &use_inner);
@@ -81,7 +81,7 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
 
     // TODO: Optional region length
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Inner diameter");
+    ImGui::Text("Exclude inner diameter");
     ImGui::SameLine();
     DrawOptionalRegionLengthEditor(
         "InnerDiameter",
