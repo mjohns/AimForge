@@ -12,6 +12,50 @@
 
 namespace aim {
 
+template <typename T>
+void DrawOrderListEditor(const std::string& type_name,
+                         google::protobuf::RepeatedField<int>* order_list,
+                         google::protobuf::RepeatedPtrField<T>* profile_list,
+                         float char_x) {
+  if (order_list->size() == 0) {
+    order_list->Add(0);
+  }
+  int remove_at_i = -1;
+  for (int i = 0; i < order_list->size(); ++i) {
+    ImGui::IdGuard lid("Order", i);
+    u32 number = order_list->at(i);
+    u32 step = 1;
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(type_name);
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x * 8);
+    ImGui::InputScalar("##OrderItemInput", ImGuiDataType_U32, &number, &step, nullptr, "%u");
+    number = std::min<u32>(number, profile_list->size() - 1);
+    order_list->Set(i, number);
+
+    auto last_size = ImGui::GetItemRectSize();
+
+    ImGui::SameLine();
+    if (ImGui::SelectableButton(icons::kClear)) {
+      remove_at_i = i;
+    }
+
+    if (IsValidIndex(*profile_list, number)) {
+      auto& profile = profile_list->at(number);
+      if (profile.info().description().size() > 0) {
+        ImGui::SameLine();
+        ImGui::TextDisabled("%s", profile.info().description().c_str());
+      }
+    }
+  }
+  if (ImGui::Button("Add##Order")) {
+    order_list->Add(0);
+  }
+  if (remove_at_i >= 0) {
+    order_list->erase(order_list->begin() + remove_at_i);
+  }
+}
+
 template <typename T, typename DrawFn>
 void DrawProfileList(const std::string& id,
                      const std::string& type_name,
@@ -37,46 +81,30 @@ void DrawProfileList(const std::string& id,
       "first and second profile");
   if (use_order) {
     ImGui::Indent();
-    if (order_list->size() == 0) {
-      order_list->Add(0);
-    }
-    int remove_at_i = -1;
-    for (int i = 0; i < order_list->size(); ++i) {
-      ImGui::IdGuard lid("Order", i);
-      u32 number = order_list->at(i);
-      u32 step = 1;
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(type_name);
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(char_x * 8);
-      ImGui::InputScalar("##OrderItemInput", ImGuiDataType_U32, &number, &step, nullptr, "%u");
-      number = std::min<u32>(number, profile_list->size() - 1);
-      order_list->Set(i, number);
-
-      auto last_size = ImGui::GetItemRectSize();
-
-      ImGui::SameLine();
-      if (ImGui::SelectableButton(icons::kClear)) {
-        remove_at_i = i;
-      }
-
-      if (IsValidIndex(*profile_list, number)) {
-        auto& profile = profile_list->at(number);
-        if (profile.info().description().size() > 0) {
-          ImGui::SameLine();
-          ImGui::TextDisabled("%s", profile.info().description().c_str());
-        }
-      }
-    }
-    if (ImGui::Button("Add##Order")) {
-      order_list->Add(0);
-    }
-    if (remove_at_i >= 0) {
-      order_list->erase(order_list->begin() + remove_at_i);
-    }
+    DrawOrderListEditor(type_name, order_list, profile_list, char_x);
     ImGui::Unindent();
   } else {
     order_list->Clear();
+  }
+
+  ImGui::SpacedSeparator();
+
+  google::protobuf::RepeatedField<int>* start_order_list = profile_list_info->mutable_start_order();
+  bool has_start_order = start_order_list->size() > 0;
+  ImGui::AlignTextToFramePadding();
+  ImGui::TextFmt("Initial {} selection order", lower_type_name);
+  ImGui::SameLine();
+  ImGui::Checkbox("##HasStartOrder", &has_start_order);
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "Specify an explicit initial order of profiles to select. After these profiles are "
+      "selected, selection will then proceed normally.");
+  if (has_start_order) {
+    ImGui::Indent();
+    DrawOrderListEditor(type_name, start_order_list, profile_list, char_x);
+    ImGui::Unindent();
+  } else {
+    start_order_list->Clear();
   }
 
   bool use_weights = order_list->size() == 0 && profile_list->size() > 1;
@@ -133,6 +161,9 @@ void DrawProfileList(const std::string& id,
       }
       ImGui::SetNextItemWidth(char_x * 10);
       ImGui::InputInt("##WeightInput", &weight, 1, 5);
+      if (weight < 0) {
+        weight = 0;
+      }
       p->mutable_info()->set_weight(weight);
 
       if (total_weight > 0) {

@@ -3086,7 +3086,6 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
        "targetRadius": 1.69999981
       }
      ],
@@ -3104,7 +3103,9 @@
       "width": 170
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -3145,6 +3146,20 @@
           "yPercentValue": 0.55
          }
         }
+       },
+       {
+        "info": {
+         "description": "Start center",
+         "weight": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 10
+         },
+         "yLength": {
+          "value": 10
+         }
+        }
        }
       ],
       "minDistance": {
@@ -3152,6 +3167,11 @@
       },
       "fixedDistanceFromLastTarget": {
        "value": 10
+      },
+      "regionsInfo": {
+       "startOrder": [
+        2
+       ]
       }
      }
     }
@@ -3167,9 +3187,7 @@
     "targetDef": {
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.5,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.5
       }
      ],
      "numTargets": 3,
@@ -3186,6 +3204,9 @@
       "width": 170
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -3226,6 +3247,20 @@
           "yPercentValue": 0.55
          }
         }
+       },
+       {
+        "info": {
+         "description": "Start center",
+         "weight": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "value": 10
+         },
+         "yLength": {
+          "value": 10
+         }
+        }
        }
       ],
       "minDistance": {
@@ -3233,6 +3268,11 @@
       },
       "fixedDistanceFromLastTarget": {
        "value": 10
+      },
+      "regionsInfo": {
+       "startOrder": [
+        2
+       ]
       }
      }
     }

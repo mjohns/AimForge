@@ -13,6 +13,8 @@ struct ProfileSelectionContext {
   int counter = 0;
   std::optional<int> next_index{};
   std::unordered_map<int, int> rate_limited_indices{};
+  // Counter used only for an initial order sequence.
+  int start_counter = 0;
 };
 
 template <typename T>
@@ -26,6 +28,13 @@ std::optional<T> SelectProfile(const ProfileListInfo& profiles_info,
   if (profiles.size() == 1) {
     return profiles[0];
   }
+  const auto& start_orders = profiles_info.start_order();
+  if (start_orders.size() > 0 && context->start_counter < start_orders.size()) {
+    int profile_i = start_orders[context->start_counter];
+    context->start_counter++;
+    return profiles[ClampIndex(profiles, profile_i)];
+  }
+
   const auto& orders = profiles_info.explicit_order();
   if (orders.size() > 0) {
     int n = context->counter;

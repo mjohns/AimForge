@@ -290,13 +290,15 @@ class ScenarioManagerImpl : public ScenarioManager {
         *s.mutable_wall_wander_def()
              ->mutable_target_placement_strategy()
              ->mutable_regions_info()
-             ->mutable_explicit_order() = s.wall_wander_def().target_placement_strategy().region_order();
+             ->mutable_explicit_order() =
+      s.wall_wander_def().target_placement_strategy().region_order();
       }
       if (s.waypoint_def().target_placement_strategy().region_order_size() > 0) {
         *s.mutable_waypoint_def()
              ->mutable_target_placement_strategy()
              ->mutable_regions_info()
-             ->mutable_explicit_order() = s.waypoint_def().target_placement_strategy().region_order();
+             ->mutable_explicit_order() =
+      s.waypoint_def().target_placement_strategy().region_order();
       }
       if (s.linear_def().target_placement_strategy().region_order_size() > 0) {
         *s.mutable_linear_def()
@@ -308,7 +310,8 @@ class ScenarioManagerImpl : public ScenarioManager {
         *s.mutable_angle_strafe_def()
              ->mutable_target_placement_strategy()
              ->mutable_regions_info()
-             ->mutable_explicit_order() = s.angle_strafe_def().target_placement_strategy().region_order();
+             ->mutable_explicit_order() =
+      s.angle_strafe_def().target_placement_strategy().region_order();
       }
       if (s.bounce_def().target_placement_strategy().region_order_size() > 0) {
         *s.mutable_bounce_def()
