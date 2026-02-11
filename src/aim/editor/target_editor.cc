@@ -24,6 +24,15 @@ const std::unordered_set<ScenarioDef::TypeCase> kNoSpeedScenarioTypes = {
     ScenarioDef::kReferenceDef,
 };
 
+// These types don't support acceleration (yet).
+const std::unordered_set<ScenarioDef::TypeCase> kAccelerationDisabledScenarioTypes = {
+    ScenarioDef::kLinearDef,
+    ScenarioDef::kBarrelDef,
+    ScenarioDef::kWallWanderDef,
+    ScenarioDef::kCircleDef,
+    ScenarioDef::kSineDef,
+};
+
 void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
   ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Radius")
                                 .set_step(0.05, 0.5)
@@ -44,13 +53,17 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
                                   .set_width(char_x * 10),
                               PROTO_JITTERED_FIELD(TargetProfile, profile, speed));
 
-    ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
-                                  .set_step(5, 50)
-                                  .set_min(1)
-                                  .set_default(200)
-                                  .set_is_optional()
-                                  .set_width(char_x * 10),
-                              PROTO_JITTERED_FIELD(TargetProfile, profile, acceleration));
+    if (kAccelerationDisabledScenarioTypes.contains(def.type_case())) {
+      profile->clear_acceleration();
+    } else {
+      ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration")
+                                    .set_step(5, 50)
+                                    .set_min(1)
+                                    .set_default(200)
+                                    .set_is_optional()
+                                    .set_width(char_x * 10),
+                                PROTO_JITTERED_FIELD(TargetProfile, profile, acceleration));
+    }
   }
 
   ImGui::AlignTextToFramePadding();
