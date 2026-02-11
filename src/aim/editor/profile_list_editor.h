@@ -89,6 +89,7 @@ void DrawProfileList(const std::string& id,
   for (int i = 0; i < profile_list->size(); ++i) {
     ImGui::IdGuard lid(type_name, i);
     auto* p = &profile_list->at(i);
+    ImGui::SpacedSeparator();
     ImGui::AlignTextToFramePadding();
     ImGui::TextFmt("{} #{}", type_name, i);
     const char* item_menu_id = "profile_item_menu";
