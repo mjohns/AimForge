@@ -1166,6 +1166,185 @@
    }
   },
   {
+   "name": "SYV",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.55000043,
+       "speed": 105
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": -20
+     },
+     "simpleRoom": {
+      "height": 270,
+      "width": 102
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "wallPoints": [
+      {
+       "x": {
+        "xPercentValue": 0
+       },
+       "y": {
+        "yPercentValue": -0.49
+       }
+      },
+      {
+       "x": {
+        "xPercentValue": 0
+       },
+       "y": {
+        "yPercentValue": 0.49
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "name": "SYV Big",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 1.24999976
+    },
+    "referenceDef": {
+     "scenarioName": "TSK SYV"
+    }
+   }
+  },
+  {
+   "name": "SYV Down Close",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.55000043,
+       "speed": 113
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -68,
+      "z": 59
+     },
+     "simpleRoom": {
+      "height": 270,
+      "width": 102
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "centeringDef": {
+     "wallPoints": [
+      {
+       "x": {
+        "xPercentValue": 0
+       },
+       "y": {
+        "yPercentValue": -0.49
+       }
+      },
+      {
+       "x": {
+        "xPercentValue": 0
+       },
+       "y": {
+        "yPercentValue": 0.49
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "name": "SYV Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.75
+    },
+    "referenceDef": {
+     "scenarioName": "TSK SYV"
+    }
+   }
+  },
+  {
+   "name": "SYV Stop",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.55000043,
+       "speed": 105
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": -20
+     },
+     "simpleRoom": {
+      "height": 270,
+      "width": 102
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "strafeDef": {
+     "bounds": {
+      "height": {
+       "yPercentValue": 0.98
+      }
+     },
+     "upDownProfiles": [
+      {
+       "distance": {
+        "yPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "yPercentValue": 0
+       },
+       "pauseTime": 0.2
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_RANDOM",
+     "upDownInitialDirection": "DIRECTION_POSITIVE",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
    "name": "SYW",
    "def": {
     "durationSeconds": 60,
@@ -1270,6 +1449,162 @@
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
      "upDownInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "VSTP High",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.3,
+       "speed": 154,
+       "acceleration": 215
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -124,
+      "z": -178
+     },
+     "simpleRoom": {
+      "height": 386,
+      "width": 150
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "bounceDef": {
+     "bounceProfiles": [
+      {
+       "height": {
+        "yPercentValue": 0.8
+       },
+       "heightJitter": {
+        "yPercentValue": 0
+       }
+      }
+     ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": -0.49
+         }
+        }
+       }
+      ]
+     },
+     "leftRightInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "VSTP Soft",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.2,
+       "speed": 154,
+       "acceleration": 215
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -176,
+      "z": -42
+     },
+     "simpleRoom": {
+      "height": 164,
+      "width": 150
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "bounceDef": {
+     "bounceProfiles": [
+      {
+       "height": {
+        "yPercentValue": 0.8
+       },
+       "heightJitter": {
+        "yPercentValue": 0
+       }
+      }
+     ],
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": -0.49
+         }
+        }
+       }
+      ]
+     },
+     "leftRightInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "VSTP Soft Big",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 1.24999976
+    },
+    "referenceDef": {
+     "scenarioName": "TSK VSTP Soft"
+    }
+   }
+  },
+  {
+   "name": "VSTP Soft Small",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 0.750000238
+    },
+    "referenceDef": {
+     "scenarioName": "TSK VSTP Soft"
     }
    }
   },
@@ -1426,6 +1761,180 @@
      "leftRightInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
+   }
+  }
+ ],
+ "playlists": [
+  {
+   "name": "Ultimate Benchmarks - Horizontal",
+   "def": {
+    "description": "",
+    "items": [
+     {
+      "scenario": "TSK ST60 Thick",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK ST60",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK SYW",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK SYW Thin",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Centering 45 Speed 2 Stop",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Centering 90 Speed 2",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Centering 180 Speed 2",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Centering 180 Speed 3",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK 360 Turn",
+      "numPlays": 5
+     }
+    ]
+   }
+  },
+  {
+   "name": "Ultimate Benchmarks - Omni",
+   "def": {
+    "description": "",
+    "items": [
+     {
+      "scenario": "TSK Box Tracking",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK Box Tracking Small",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK Box Tracking Close",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK Wavy Tracking",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK Wavy Tracking Small",
+      "numPlays": 1
+     }
+    ]
+   }
+  },
+  {
+   "name": "Ultimate Benchmarks - VAI",
+   "def": {
+    "description": "",
+    "items": [
+     {
+      "scenario": "TSK Hewchy's VAI 20",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 20 Small",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 160",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 160 Small",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 70",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 70 Small",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 110",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 110 Small",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 45",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 45 Small",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 135",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Hewchy's VAI 135 Small",
+      "numPlays": 5
+     }
+    ]
+   }
+  },
+  {
+   "name": "Ultimate Benchmarks - Vertical",
+   "def": {
+    "description": "",
+    "items": [
+     {
+      "scenario": "TSK SYV Big",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK SYV",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK SYV Small",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK SYV Stop",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK SYV Down Close",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK VSTP Soft Big",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK VSTP Soft",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK VSTP Soft Small",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK VSTP High",
+      "numPlays": 1
+     }
+    ]
    }
   }
  ]
