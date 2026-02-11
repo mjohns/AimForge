@@ -3,7 +3,7 @@
   {
    "name": "360 Turn",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -32,7 +32,9 @@
       "widthDegrees": 360
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "centeringDef": {
      "wallPoints": [
       {
@@ -58,7 +60,7 @@
   {
    "name": "Box Tracking",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -82,7 +84,9 @@
       "width": 248
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "waypointDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -205,7 +209,7 @@
   {
    "name": "Box Tracking Close",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -229,7 +233,9 @@
       "width": 248
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "waypointDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -353,7 +359,7 @@
    "name": "Box Tracking Pure",
    "def": {
     "description": "Box tracking but bottom left is always fixed in the corner",
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -377,7 +383,9 @@
       "width": 248
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "waypointDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -494,7 +502,7 @@
   {
    "name": "Centering 180 Speed 2",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -524,7 +532,9 @@
       "widthDegrees": 180
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -550,7 +560,7 @@
   {
    "name": "Centering 180 Speed 3",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -580,7 +590,9 @@
       "widthDegrees": 180
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -606,7 +618,7 @@
   {
    "name": "Centering 45 Speed 2 Stop",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -635,7 +647,9 @@
       "widthDegrees": 45
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -662,7 +676,7 @@
   {
    "name": "Centering 90 Speed 2",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -692,7 +706,9 @@
       "widthDegrees": 90
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -742,7 +758,9 @@
       "width": 145
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "waypointDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -1151,7 +1169,9 @@
       "width": 145
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "waypointDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -1536,7 +1556,7 @@
   {
    "name": "Hewchy's VAI 110",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1584,7 +1604,7 @@
   {
    "name": "Hewchy's VAI 135",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1632,7 +1652,7 @@
   {
    "name": "Hewchy's VAI 160",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1680,7 +1700,7 @@
   {
    "name": "Hewchy's VAI 20",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1728,7 +1748,7 @@
   {
    "name": "Hewchy's VAI 45",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1776,7 +1796,7 @@
   {
    "name": "Hewchy's VAI 70",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1824,7 +1844,7 @@
   {
    "name": "ST60",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1852,7 +1872,9 @@
       "width": 353
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -1878,7 +1900,7 @@
   {
    "name": "ST60 Thick",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1906,7 +1928,9 @@
       "width": 353
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -1932,7 +1956,7 @@
   {
    "name": "SYV",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -1995,7 +2019,7 @@
   {
    "name": "SYV Down Close",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2058,7 +2082,7 @@
   {
    "name": "SYV Stop",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2111,7 +2135,7 @@
   {
    "name": "SYW",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2139,7 +2163,9 @@
       "width": 203
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -2165,7 +2191,7 @@
   {
    "name": "SYW Thin",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2193,7 +2219,9 @@
       "width": 203
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -2219,7 +2247,7 @@
   {
    "name": "VSTP High",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2286,7 +2314,7 @@
   {
    "name": "VSTP Soft",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2375,7 +2403,7 @@
   {
    "name": "Wavy Tracking",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true
     },
@@ -2400,7 +2428,9 @@
       "width": 130
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
     "strafeDef": {
      "leftRightProfiles": [
       {
@@ -2461,69 +2491,6 @@
     },
     "referenceDef": {
      "scenarioName": "TSK Wavy Tracking"
-    }
-   }
-  },
-  {
-   "name": "Wavy Tracking V2",
-   "def": {
-    "description": "Wavy tracking using a bounce scenario",
-    "durationSeconds": 60,
-    "shotType": {
-     "trackingInvincible": true
-    },
-    "targetDef": {
-     "profiles": [
-      {
-       "targetRadius": 2,
-       "speed": 92,
-       "acceleration": 95
-      }
-     ],
-     "numTargets": 1
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 143,
-      "width": 130
-     }
-    },
-    "levelOverrides": {},
-    "bounceDef": {
-     "bounceProfiles": [
-      {
-       "height": {
-        "yPercentValue": 0.9
-       },
-       "heightJitter": {
-        "yPercentValue": 0
-       },
-       "speedMultiplier": 0.729999721,
-       "accelerationMultiplier": 0.510000467,
-       "floatTime": 0.04
-      }
-     ],
-     "leftRightProfiles": [
-      {
-       "distance": {
-        "xPercentValue": 0.400000036
-       },
-       "distanceJitter": {
-        "xPercentValue": 0.13
-       },
-       "speedMultiplier": 1.69999933,
-       "speedMultiplierJitter": 0.15,
-       "accelerationMultiplier": 1.74999928,
-       "accelerationMultiplierJitter": 0.05
-      }
-     ],
-     "leftRightInitialDirection": "DIRECTION_RANDOM",
-     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   }
