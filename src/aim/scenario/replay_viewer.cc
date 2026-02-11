@@ -28,14 +28,138 @@ void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, Repla
   }
 }
 
+class ReplayView {
+ public:
+  ReplayView(std::shared_ptr<Replay> replay, Application& app)
+      : camera(Camera(CameraParams(replay->room))),
+        target_manager(replay->room),
+        replay_(replay),
+        app_(app) {}
+
+  Camera camera;
+  TargetManager target_manager;
+
+  bool is_done() {
+    return is_done_;
+  }
+
+  void SeekForwardToTime(float now_seconds, std::optional<SoundSettings> sound_settings) {
+    if (is_done_) {
+      return;
+    }
+    const Replay& replay = *replay_;
+    const std::vector<ReplayEvent>& events = replay.events;
+
+    if (replay_->replay_fps <= 0) {
+      assert(false && "Replay FPS not set");
+      is_done_ = true;
+      return;
+    }
+
+    i64 replay_frame_number = now_seconds * replay_->replay_fps;
+
+    for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
+      const ReplayTargetMetadata& metadata = replay.target_metadata[i];
+      if (metadata.add_time_seconds > now_seconds) {
+        break;
+      }
+
+      Target t;
+      t.id = metadata.target_id;
+      t.radius = metadata.initial_data.radius;
+      t.position = metadata.initial_data.position;
+      t.is_ghost = metadata.is_ghost;
+      if (metadata.pill_height > 0) {
+        t.is_pill = true;
+        t.height = metadata.pill_height;
+      }
+      target_data_channel_map_[t.id] = metadata.data_channel;
+      target_added_on_frame_[t.id] = replay_frame_number;
+      if (t.is_ghost) {
+        target_manager.MarkAllAsNonGhost();
+      }
+      target_manager.AddTarget(t);
+      processed_targets_up_to_index_ = i + 1;
+    }
+
+    for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
+      const ReplayEvent& event = events[i];
+      if (event.time_seconds > now_seconds) {
+        break;
+      }
+
+      // Process the event.
+      switch (event.type) {
+        case ReplayEventType::REMOVE_TARGET:
+          target_manager.RemoveTarget(event.data.target_id);
+          target_data_channel_map_.erase(event.data.target_id);
+          break;
+        case ReplayEventType::PLAY_SOUND:
+          if (sound_settings.has_value()) {
+            PlaySound(app_.sound_manager(), *sound_settings, event.data.play_sound.sound);
+          }
+          break;
+      }
+      processed_events_up_to_index_ = i + 1;
+    }
+
+    for (int i = processed_pitch_yaws_up_to_index_;
+         i <= std::min<int>(replay_frame_number, replay.pitch_yaws.size() - 1);
+         ++i) {
+      const PitchYaw& pitch_yaw = replay.pitch_yaws[i];
+      if (pitch_yaw.pitch < (GetMaxPitch() + 0.1f)) {
+        camera.UpdatePitchYaw(pitch_yaw);
+      }
+      processed_pitch_yaws_up_to_index_ = i;
+    }
+
+    if (replay_frame_number >= replay.pitch_yaws.size()) {
+      is_done_ = true;
+      return;
+    }
+
+    {
+      i64 start_index = replay_frame_number * replay.num_targets;
+      int end_index = start_index + replay.num_targets;
+      for (auto& entry : target_data_channel_map_) {
+        u16 data_channel = entry.second;
+        u16 target_id = entry.first;
+
+        i64 added_on_frame = target_added_on_frame_[target_id];
+
+        // Don't start updating until next frame after adding.
+        bool old_enough_target = replay_frame_number > added_on_frame;
+        Target* target = target_manager.GetMutableTarget(target_id);
+
+        if (old_enough_target && target != nullptr) {
+          i64 i = start_index + data_channel;
+          if (IsValidIndex(replay.target_data, i)) {
+            const ReplayTargetData& data = replay.target_data[i];
+            if (data.radius >= 0) {
+              target->position = data.position;
+              target->radius = data.radius;
+            }
+          }
+        }
+      }
+    }
+  }
+
+ private:
+  std::shared_ptr<Replay> replay_;
+  int processed_events_up_to_index_ = 0;
+  int processed_targets_up_to_index_ = 0;
+  int processed_pitch_yaws_up_to_index_ = 0;
+  std::unordered_map<u16, u16> target_data_channel_map_;
+  std::unordered_map<u16, i64> target_added_on_frame_;
+  Application& app_;
+  bool is_done_ = false;
+};
+
 class ReplayViewerScreen : public Screen {
  public:
   ReplayViewerScreen(std::shared_ptr<Replay> replay, Application* app)
-      : Screen(*app),
-        replay_(replay),
-        timer_(replay->replay_fps),
-        camera_(Camera(CameraParams(replay->room))),
-        target_manager_(replay->room) {
+      : Screen(*app), replay_(replay), timer_(replay->replay_fps), replay_view_(replay, *app) {
     float approximate_mb = replay->GetApproximateSizeMb();
     settings_ = app->settings_manager().GetCurrentSettingsForScenario(replay->scenario_name);
     crosshair_ = app->settings_manager().GetCurrentCrosshair();
@@ -56,97 +180,10 @@ class ReplayViewerScreen : public Screen {
 
     timer_.OnStartFrame();
 
-    bool force_render = false;
-    i64 replay_frame_number = timer_.GetReplayFrameNumber();
-
-    LookAtInfo look_at = camera_.GetLookAt();
     float now_seconds = timer_.GetElapsedSeconds();
+    replay_view_.SeekForwardToTime(now_seconds, settings_.sound());
 
-    for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
-      const ReplayTargetMetadata& metadata = replay.target_metadata[i];
-      if (metadata.add_time_seconds > now_seconds) {
-        break;
-      }
-
-      Target t;
-      t.id = metadata.target_id;
-      t.radius = metadata.initial_data.radius;
-      t.position = metadata.initial_data.position;
-      t.is_ghost = metadata.is_ghost;
-      if (metadata.pill_height > 0) {
-        t.is_pill = true;
-        t.height = metadata.pill_height;
-      }
-      target_data_channel_map_[t.id] = metadata.data_channel;
-      target_added_on_frame_[t.id] = replay_frame_number;
-      if (t.is_ghost) {
-        target_manager_.MarkAllAsNonGhost();
-      }
-      target_manager_.AddTarget(t);
-      force_render = true;
-      processed_targets_up_to_index_ = i + 1;
-    }
-
-    for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
-      const ReplayEvent& event = events[i];
-      if (event.time_seconds > now_seconds) {
-        break;
-      }
-
-      // Process the event.
-      switch (event.type) {
-        case ReplayEventType::REMOVE_TARGET:
-          target_manager_.RemoveTarget(event.data.target_id);
-          target_data_channel_map_.erase(event.data.target_id);
-          force_render = true;
-          break;
-        case ReplayEventType::PLAY_SOUND:
-          PlaySound(app_.sound_manager(), settings_.sound(), event.data.play_sound.sound);
-          break;
-      }
-      processed_events_up_to_index_ = i + 1;
-    }
-
-    if (timer_.IsNewReplayFrame()) {
-      force_render = true;
-      if (replay_frame_number >= replay.pitch_yaws.size()) {
-        PopSelf();
-        return;
-      }
-
-      const PitchYaw& pitch_yaw = replay.pitch_yaws[replay_frame_number];
-      if (pitch_yaw.pitch < (GetMaxPitch() + 0.1f)) {
-        camera_.UpdatePitchYaw(pitch_yaw);
-      }
-
-      {
-        i64 start_index = replay_frame_number * replay.num_targets;
-        int end_index = start_index + replay.num_targets;
-        for (auto& entry : target_data_channel_map_) {
-          u16 data_channel = entry.second;
-          u16 target_id = entry.first;
-
-          i64 added_on_frame = target_added_on_frame_[target_id];
-
-          // Don't start updating until next frame after adding.
-          bool old_enough_target = replay_frame_number > added_on_frame;
-          Target* target = target_manager_.GetMutableTarget(target_id);
-
-          if (old_enough_target && target != nullptr) {
-            i64 i = start_index + data_channel;
-            if (IsValidIndex(replay.target_data, i)) {
-              const ReplayTargetData& data = replay.target_data[i];
-              if (data.radius >= 0) {
-                target->position = data.position;
-                target->radius = data.radius;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    bool do_render = force_render || timer_.LastFrameRenderStartedMicrosAgo() > 2500;
+    bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > 2500;
     if (!do_render) {
       return;
     }
@@ -167,16 +204,21 @@ class ReplayViewerScreen : public Screen {
     RenderContext ctx;
     if (app_.StartRender(&ctx)) {
       FrameTimes times;
+      LookAtInfo look_at = replay_view_.camera.GetLookAt();
       app_.renderer()->DrawScenario(projection_,
                                     replay.room,
                                     theme_,
                                     settings_.health_bar(),
-                                    target_manager_.GetTargets(),
+                                    replay_view_.target_manager.GetTargets(),
                                     look_at,
                                     &ctx,
                                     timer_.run_stopwatch(),
                                     &times);
       app_.FinishRender(&ctx);
+    }
+
+    if (replay_view_.is_done()) {
+      PopSelf();
     }
   }
 
@@ -188,8 +230,6 @@ class ReplayViewerScreen : public Screen {
  private:
   std::shared_ptr<Replay> replay_;
 
-  Camera camera_;
-  TargetManager target_manager_;
   ScenarioTimer timer_;
   glm::mat4 projection_;
 
@@ -197,10 +237,7 @@ class ReplayViewerScreen : public Screen {
   Settings settings_;
   Crosshair crosshair_;
 
-  int processed_events_up_to_index_ = 0;
-  int processed_targets_up_to_index_ = 0;
-  std::unordered_map<u16, u16> target_data_channel_map_;
-  std::unordered_map<u16, i64> target_added_on_frame_;
+  ReplayView replay_view_;
 };
 
 }  // namespace
