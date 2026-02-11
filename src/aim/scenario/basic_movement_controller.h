@@ -103,7 +103,8 @@ class StrafeController {
                        const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
                        const google::protobuf::RepeatedField<int>& order,
                        float target_speed,
-                       float current_position);
+                       float current_position,
+                       float* target_radius_out);
 
   Direction initial_direction_;
   float min_;
@@ -130,6 +131,7 @@ class StrafeController {
   Wall wall_;
   float wait_until_time_ = -1;
   float pause_time_ = -1;
+  float original_target_radius_ = -1;
 };
 
 std::unique_ptr<MovementController> CreateForwardBackMovementController(

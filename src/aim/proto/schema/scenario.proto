@@ -375,6 +375,9 @@ message StrafeProfile {
 
   // If specified, percent chance pause will happen. 0.5 = 50% chance.
   float pause_chance_percent = 13;
+
+  float target_radius_multiplier = 14;
+  float target_radius_multiplier_jitter = 15;
 }
 
 message StrafeScenarioDef {

@@ -35,25 +35,47 @@
     "levelOverrides": {
      "targetRadiusMultiplier": 0.950000048
     },
-    "centeringDef": {
-     "wallPoints": [
-      {
-       "x": {
-        "xPercentValue": -0.49
+    "waypointDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
        },
-       "y": {
-        "yPercentValue": 0
+       {
+        "depth": {
+         "depthPercentValue": 0
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.49
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
        }
-      },
-      {
-       "x": {
-        "xPercentValue": 0.49
-       },
-       "y": {
-        "yPercentValue": 0
-       }
-      }
-     ]
+      ],
+      "regionOrder": [
+       0,
+       1
+      ]
+     }
     }
    }
   },
@@ -2401,6 +2423,97 @@
    }
   },
   {
+   "name": "Varied Centering 90 Trio",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "profiles": [
+      {
+       "targetRadius": 1.0999999,
+       "speed": 75.5999908,
+       "pill": {
+        "height": 20
+       }
+      }
+     ],
+     "numTargets": 1
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 76,
+      "radius": 200,
+      "sideAngleDegrees": 34,
+      "widthDegrees": 90
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.950000048
+    },
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.99
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "info": {
+        "description": "Thick"
+       },
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       },
+       "speedMultiplier": 1.34999967,
+       "targetRadiusMultiplier": 1.29999971
+      },
+      {
+       "info": {
+        "description": "Normal"
+       },
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      },
+      {
+       "info": {
+        "description": "Thin"
+       },
+       "distance": {
+        "xPercentValue": 1.1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       },
+       "speedMultiplier": 0.650000334,
+       "targetRadiusMultiplier": 0.650000334
+      }
+     ],
+     "leftRightProfileOrder": [
+      0,
+      1,
+      2
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
    "name": "Wavy Tracking",
    "def": {
     "durationSeconds": 30,
@@ -2607,6 +2720,10 @@
      },
      {
       "scenario": "TSK 360 Turn",
+      "numPlays": 5
+     },
+     {
+      "scenario": "TSK Varied Centering 90 Trio",
       "numPlays": 5
      }
     ]

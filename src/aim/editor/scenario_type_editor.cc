@@ -305,18 +305,11 @@ void DrawStrafeProfile(float char_x,
     p->clear_time();
     p->clear_time_jitter();
   }
-  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Speed multiplier")
+  ImGui::InputJitteredFloat(
+      GetDefaultMultiplierInputParams("Speed multiplier").set_is_optional().set_width(char_x * 10),
+      PROTO_JITTERED_FIELD(StrafeProfile, p, speed_multiplier));
+  ImGui::InputJitteredFloat(GetDefaultMultiplierInputParams("Acceleration multiplier")
                                 .set_is_optional()
-                                .set_step(0.05, 0.2)
-                                .set_min(0)
-                                .set_default(1)
-                                .set_width(char_x * 10),
-                            PROTO_JITTERED_FIELD(StrafeProfile, p, speed_multiplier));
-  ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Acceleration multiplier")
-                                .set_is_optional()
-                                .set_step(0.05, 0.2)
-                                .set_min(0)
-                                .set_default(1)
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(StrafeProfile, p, acceleration_multiplier));
   ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Center bias")
@@ -350,6 +343,11 @@ void DrawStrafeProfile(float char_x,
                     PROTO_PERCENT_FIELD(StrafeProfile, p, pause_chance_percent));
   ImGui::SameLine();
   ImGui::HelpMarker("Percent chance that the target will pause at the end of the strafe");
+
+  ImGui::InputJitteredFloat(GetDefaultMultiplierInputParams("Target radius multiplier")
+                                .set_is_optional()
+                                .set_width(char_x * 10),
+                            PROTO_JITTERED_FIELD(StrafeProfile, p, target_radius_multiplier));
 }
 
 void DrawLeftRightStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,

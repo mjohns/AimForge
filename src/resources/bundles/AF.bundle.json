@@ -2835,20 +2835,16 @@
    "name": "Smooth Horizontal Wrist",
    "def": {
     "description": "Choose a sensitivity that allows full range of motion using only the wrist.",
-    "durationSeconds": 60,
+    "durationSeconds": 45,
     "shotType": {
      "trackingProximity": true
     },
     "targetDef": {
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 60,
-       "speedJitter": 0,
-       "acceleration": 231,
-       "accelerationJitter": 0
+       "acceleration": 231
       }
      ],
      "numTargets": 1
@@ -2878,7 +2874,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2888,7 +2883,8 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },

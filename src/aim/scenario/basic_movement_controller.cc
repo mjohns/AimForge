@@ -131,6 +131,7 @@ float StrafeController::GetUpdatedPosition(Target& t,
     is_first = true;
     // Going left is based on absolute center_ and not adjusted for relative values.
     going_left_ = GetInitialGoingLeft(initial_direction_, current_position, rand);
+    original_target_radius_ = t.radius;
 
     // The first time we are going to call change direction so toggle direction once here
     // so it will be toggled back correctly.
@@ -175,7 +176,7 @@ float StrafeController::GetUpdatedPosition(Target& t,
   bool time_up = next_direction_change_time_ > 0 && now_seconds >= next_direction_change_time_;
   if (is_first || too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
-    ChangeDirection(rand, now_seconds, profiles, order, t.speed, current_position);
+    ChangeDirection(rand, now_seconds, profiles, order, t.speed, current_position, &t.radius);
   }
 
   float max_speed = t.speed * speed_multiplier_;
@@ -237,10 +238,13 @@ void StrafeController::ChangeDirection(Random& rand,
                                        const RepeatedPtrField<StrafeProfile>& profiles,
                                        const RepeatedField<int>& order,
                                        float target_speed,
-                                       float current_position) {
+                                       float current_position,
+                                       float* target_radius_out) {
   if (pause_time_ > 0) {
     wait_until_time_ = now_seconds + pause_time_;
   }
+
+  *target_radius_out = original_target_radius_;
 
   direction_change_count_++;
   auto p = SelectProfile(order, profiles, &selection_context_, rand);
@@ -253,6 +257,12 @@ void StrafeController::ChangeDirection(Random& rand,
     if (!should_actually_pause) {
       pause_time_ = 0;
     }
+  }
+
+  if (p->has_target_radius_multiplier()) {
+    float radius_mult =
+        rand.GetJittered(p->target_radius_multiplier(), p->target_radius_multiplier_jitter());
+    *target_radius_out *= radius_mult;
   }
 
   speed_multiplier_ = p->has_speed_multiplier()

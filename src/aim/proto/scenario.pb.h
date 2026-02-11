@@ -2361,7 +2361,6 @@ class CylinderRoom final : public ::google::protobuf::Message
     kRadiusFieldNumber = 2,
     kWidthFieldNumber = 3,
     kWidthPerimeterPercentFieldNumber = 4,
-    kHideSidesFieldNumber = 5,
     kSideAngleDegreesFieldNumber = 6,
     kWidthDegreesFieldNumber = 7,
   };
@@ -2409,16 +2408,6 @@ class CylinderRoom final : public ::google::protobuf::Message
   void _internal_set_width_perimeter_percent(float value);
 
   public:
-  // bool hide_sides = 5 [features = {
-  void clear_hide_sides() ;
-  bool hide_sides() const;
-  void set_hide_sides(bool value);
-
-  private:
-  bool _internal_hide_sides() const;
-  void _internal_set_hide_sides(bool value);
-
-  public:
   // float side_angle_degrees = 6;
   bool has_side_angle_degrees() const;
   void clear_side_angle_degrees() ;
@@ -2445,7 +2434,7 @@ class CylinderRoom final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
+  static const ::google::protobuf::internal::TcParseTable<3, 6,
                                    0, 0,
                                    2>
       _table_;
@@ -2471,7 +2460,6 @@ class CylinderRoom final : public ::google::protobuf::Message
     float radius_;
     float width_;
     float width_perimeter_percent_;
-    bool hide_sides_;
     float side_angle_degrees_;
     float width_degrees_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -3689,6 +3677,8 @@ class StrafeProfile final : public ::google::protobuf::Message
     kPauseTimeFieldNumber = 11,
     kPauseTimeJitterFieldNumber = 12,
     kPauseChancePercentFieldNumber = 13,
+    kTargetRadiusMultiplierFieldNumber = 14,
+    kTargetRadiusMultiplierJitterFieldNumber = 15,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -3845,11 +3835,33 @@ class StrafeProfile final : public ::google::protobuf::Message
   void _internal_set_pause_chance_percent(float value);
 
   public:
+  // float target_radius_multiplier = 14;
+  bool has_target_radius_multiplier() const;
+  void clear_target_radius_multiplier() ;
+  float target_radius_multiplier() const;
+  void set_target_radius_multiplier(float value);
+
+  private:
+  float _internal_target_radius_multiplier() const;
+  void _internal_set_target_radius_multiplier(float value);
+
+  public:
+  // float target_radius_multiplier_jitter = 15;
+  bool has_target_radius_multiplier_jitter() const;
+  void clear_target_radius_multiplier_jitter() ;
+  float target_radius_multiplier_jitter() const;
+  void set_target_radius_multiplier_jitter(float value);
+
+  private:
+  float _internal_target_radius_multiplier_jitter() const;
+  void _internal_set_target_radius_multiplier_jitter(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.StrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 13,
+  static const ::google::protobuf::internal::TcParseTable<4, 15,
                                    3, 0,
                                    2>
       _table_;
@@ -3884,6 +3896,8 @@ class StrafeProfile final : public ::google::protobuf::Message
     float pause_time_;
     float pause_time_jitter_;
     float pause_chance_percent_;
+    float target_radius_multiplier_;
+    float target_radius_multiplier_jitter_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -10767,14 +10781,14 @@ inline void CylinderRoom::_internal_set_width_perimeter_percent(float value) {
 
 // float width_degrees = 7;
 inline bool CylinderRoom::has_width_degrees() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void CylinderRoom::clear_width_degrees() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.width_degrees_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000020U);
 }
 inline float CylinderRoom::width_degrees() const {
   // @@protoc_insertion_point(field_get:aim.CylinderRoom.width_degrees)
@@ -10782,7 +10796,7 @@ inline float CylinderRoom::width_degrees() const {
 }
 inline void CylinderRoom::set_width_degrees(float value) {
   _internal_set_width_degrees(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.CylinderRoom.width_degrees)
 }
 inline float CylinderRoom::_internal_width_degrees() const {
@@ -10794,41 +10808,16 @@ inline void CylinderRoom::_internal_set_width_degrees(float value) {
   _impl_.width_degrees_ = value;
 }
 
-// bool hide_sides = 5 [features = {
-inline void CylinderRoom::clear_hide_sides() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.hide_sides_ = false;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline bool CylinderRoom::hide_sides() const {
-  // @@protoc_insertion_point(field_get:aim.CylinderRoom.hide_sides)
-  return _internal_hide_sides();
-}
-inline void CylinderRoom::set_hide_sides(bool value) {
-  _internal_set_hide_sides(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  // @@protoc_insertion_point(field_set:aim.CylinderRoom.hide_sides)
-}
-inline bool CylinderRoom::_internal_hide_sides() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.hide_sides_;
-}
-inline void CylinderRoom::_internal_set_hide_sides(bool value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.hide_sides_ = value;
-}
-
 // float side_angle_degrees = 6;
 inline bool CylinderRoom::has_side_angle_degrees() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void CylinderRoom::clear_side_angle_degrees() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.side_angle_degrees_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000010U);
 }
 inline float CylinderRoom::side_angle_degrees() const {
   // @@protoc_insertion_point(field_get:aim.CylinderRoom.side_angle_degrees)
@@ -10836,7 +10825,7 @@ inline float CylinderRoom::side_angle_degrees() const {
 }
 inline void CylinderRoom::set_side_angle_degrees(float value) {
   _internal_set_side_angle_degrees(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.CylinderRoom.side_angle_degrees)
 }
 inline float CylinderRoom::_internal_side_angle_degrees() const {
@@ -19934,6 +19923,64 @@ inline float StrafeProfile::_internal_pause_chance_percent() const {
 inline void StrafeProfile::_internal_set_pause_chance_percent(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.pause_chance_percent_ = value;
+}
+
+// float target_radius_multiplier = 14;
+inline bool StrafeProfile::has_target_radius_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
+  return value;
+}
+inline void StrafeProfile::clear_target_radius_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00002000U);
+}
+inline float StrafeProfile::target_radius_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.target_radius_multiplier)
+  return _internal_target_radius_multiplier();
+}
+inline void StrafeProfile::set_target_radius_multiplier(float value) {
+  _internal_set_target_radius_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.target_radius_multiplier)
+}
+inline float StrafeProfile::_internal_target_radius_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_radius_multiplier_;
+}
+inline void StrafeProfile::_internal_set_target_radius_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_multiplier_ = value;
+}
+
+// float target_radius_multiplier_jitter = 15;
+inline bool StrafeProfile::has_target_radius_multiplier_jitter() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00004000U);
+  return value;
+}
+inline void StrafeProfile::clear_target_radius_multiplier_jitter() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_multiplier_jitter_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00004000U);
+}
+inline float StrafeProfile::target_radius_multiplier_jitter() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.target_radius_multiplier_jitter)
+  return _internal_target_radius_multiplier_jitter();
+}
+inline void StrafeProfile::set_target_radius_multiplier_jitter(float value) {
+  _internal_set_target_radius_multiplier_jitter(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.target_radius_multiplier_jitter)
+}
+inline float StrafeProfile::_internal_target_radius_multiplier_jitter() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_radius_multiplier_jitter_;
+}
+inline void StrafeProfile::_internal_set_target_radius_multiplier_jitter(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_radius_multiplier_jitter_ = value;
 }
 
 // -------------------------------------------------------------------
