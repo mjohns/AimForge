@@ -74,7 +74,13 @@
       "regionOrder": [
        0,
        1
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      }
      }
     }
    }
@@ -223,7 +229,19 @@
        1,
        2,
        3
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        1,
+        2,
+        3
+       ]
+      }
      }
     }
    }
@@ -372,7 +390,19 @@
        1,
        2,
        3
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        1,
+        2,
+        3
+       ]
+      }
      }
     }
    }
@@ -493,7 +523,15 @@
        1,
        2,
        3
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1,
+        2,
+        3
+       ]
+      }
      }
     }
    }
@@ -1148,7 +1186,29 @@
        14,
        15,
        16
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        17,
+        13,
+        14,
+        15,
+        16
+       ]
+      }
      }
     }
    }
@@ -1559,7 +1619,29 @@
        14,
        15,
        16
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        17,
+        13,
+        14,
+        15,
+        16
+       ]
+      }
      }
     }
    }
@@ -2510,7 +2592,8 @@
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
      "upDownInitialDirection": "DIRECTION_RANDOM",
-     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+     "forwardBackInitialDirection": "DIRECTION_RANDOM",
+     "leftRightProfilesInfo": {}
     }
    }
   },

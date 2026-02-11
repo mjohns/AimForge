@@ -217,7 +217,7 @@ class StrafeMovementController : public BasicWallMovementController {
   AngleStrafeProfile GetNextProfile() {
     auto d = def_.angle_strafe_def();
     auto maybe_profile =
-        SelectProfile(d.profile_order(), d.profiles(), &selection_context_, app_.rand());
+        SelectProfile(d.profiles_info(), d.profiles(), &selection_context_, app_.rand());
     AngleStrafeProfile fallback;
     return maybe_profile.value_or(fallback);
   }
@@ -274,7 +274,7 @@ class AngleStrafeScenario : public BaseScenario {
                                                               wall_,
                                                               d.bounds(),
                                                               d.forward_back_profiles(),
-                                                              d.forward_back_profile_order(),
+                                                              d.forward_back_profiles_info(),
                                                               d.forward_back_initial_direction(),
                                                               app_));
     target->movement_controller = CreateCompositeMovementController(std::move(controllers));

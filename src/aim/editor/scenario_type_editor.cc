@@ -179,7 +179,7 @@ void DrawWallWanderEditor(WallWanderScenarioDef& d) {
   ImGui::Indent();
   DrawProfileList("WanderProfileList",
                   "Profile",
-                  d.mutable_profile_order(),
+                  PROTO_PTR_FIELD(ProfileListInfo, WallWanderScenarioDef, d, profiles_info),
                   d.mutable_profiles(),
                   std::bind_front(&DrawWallWanderProfile, char_x));
   ImGui::Unindent();
@@ -350,7 +350,7 @@ void DrawStrafeProfile(float char_x,
                             PROTO_JITTERED_FIELD(StrafeProfile, p, target_radius_multiplier));
 }
 
-void DrawLeftRightStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
+void DrawLeftRightStrafeProfiles(PtrField<ProfileListInfo> profiles_info,
                                  google::protobuf::RepeatedPtrField<StrafeProfile>* profile_list,
                                  Bounds* bounds,
                                  Bounds* relative_bounds,
@@ -392,12 +392,12 @@ void DrawLeftRightStrafeProfiles(google::protobuf::RepeatedField<int>* order_lis
 
   DrawProfileList("LeftRightProfileList",
                   "Profile",
-                  order_list,
+                  profiles_info,
                   profile_list,
                   std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kXPercentValue));
 }
 
-void DrawUpDownStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
+void DrawUpDownStrafeProfiles(PtrField<ProfileListInfo> profiles_info,
                               google::protobuf::RepeatedPtrField<StrafeProfile>* profile_list,
                               Bounds* bounds,
                               Bounds* relative_bounds,
@@ -438,12 +438,12 @@ void DrawUpDownStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
 
   DrawProfileList("UpDownProfileList",
                   "Profile",
-                  order_list,
+                  profiles_info,
                   profile_list,
                   std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kYPercentValue));
 }
 
-void DrawForwardBackStrafeProfiles(google::protobuf::RepeatedField<int>* order_list,
+void DrawForwardBackStrafeProfiles(PtrField<ProfileListInfo> profiles_info,
                                    google::protobuf::RepeatedPtrField<StrafeProfile>* profile_list,
                                    Bounds* bounds,
                                    Bounds* relative_bounds,
@@ -484,7 +484,7 @@ void DrawForwardBackStrafeProfiles(google::protobuf::RepeatedField<int>* order_l
 
   DrawProfileList("ForwardBackProfileList",
                   "Profile",
-                  order_list,
+                  profiles_info,
                   profile_list,
                   std::bind_front(&DrawStrafeProfile, char_x, RegionLength::kDepthPercentValue));
 }
@@ -496,7 +496,7 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
   ImGui::Text("Left/right profiles");
   ImGui::Indent();
   DrawLeftRightStrafeProfiles(
-      d.mutable_left_right_profile_order(),
+      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, d, left_right_profiles_info),
       d.mutable_left_right_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -508,7 +508,7 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
   ImGui::Text("Up/down profiles");
   ImGui::Indent();
   DrawUpDownStrafeProfiles(
-      d.mutable_up_down_profile_order(),
+      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, d, up_down_profiles_info),
       d.mutable_up_down_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -520,7 +520,7 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
   ImGui::Text("Forward/back profiles");
   ImGui::Indent();
   DrawForwardBackStrafeProfiles(
-      d.mutable_forward_back_profile_order(),
+      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, d, forward_back_profiles_info),
       d.mutable_forward_back_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -623,7 +623,7 @@ void DrawBounceEditor(BounceScenarioDef& d) {
   ImGui::Indent();
   DrawProfileList("BounceProfileList",
                   "Profile",
-                  d.mutable_bounce_profile_order(),
+                  PROTO_PTR_FIELD(ProfileListInfo, BounceScenarioDef, d, bounce_profiles_info),
                   d.mutable_bounce_profiles(),
                   std::bind_front(&DrawBounceProfile, char_x));
   ImGui::Unindent();
@@ -633,7 +633,7 @@ void DrawBounceEditor(BounceScenarioDef& d) {
   ImGui::Text("Left/right profiles");
   ImGui::Indent();
   DrawLeftRightStrafeProfiles(
-      d.mutable_left_right_profile_order(),
+      PROTO_PTR_FIELD(ProfileListInfo, BounceScenarioDef, &d, left_right_profiles_info),
       d.mutable_left_right_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -644,7 +644,7 @@ void DrawBounceEditor(BounceScenarioDef& d) {
   ImGui::Text("Forward/back profiles");
   ImGui::Indent();
   DrawForwardBackStrafeProfiles(
-      d.mutable_forward_back_profile_order(),
+      PROTO_PTR_FIELD(ProfileListInfo, BounceScenarioDef, &d, forward_back_profiles_info),
       d.mutable_forward_back_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -735,7 +735,7 @@ void DrawAngleStrafeEditor(AngleStrafeScenarioDef& w) {
   ImGui::Indent();
   DrawProfileList("StrafeProfileList",
                   "Profile",
-                  w.mutable_profile_order(),
+                  PROTO_PTR_FIELD(ProfileListInfo, AngleStrafeScenarioDef, w, profiles_info),
                   w.mutable_profiles(),
                   std::bind_front(&DrawAngleStrafeProfile, char_x));
   ImGui::Unindent();

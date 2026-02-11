@@ -167,7 +167,7 @@ std::vector<u16> TargetManager::visible_target_ids() const {
 
 TargetProfile TargetManager::GetTargetProfile(const TargetDef& def, Random& rand) {
   selection_context_.counter = target_id_counter_;
-  auto maybe_profile = SelectProfile(def.target_order(), def.profiles(), &selection_context_, rand);
+  auto maybe_profile = SelectProfile(def.profiles_info(), def.profiles(), &selection_context_, rand);
   if (maybe_profile.has_value()) {
     return *maybe_profile;
   }

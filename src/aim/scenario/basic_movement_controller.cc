@@ -36,10 +36,10 @@ class ForwardBackStrafeMovementController : public MovementController {
                                       Wall wall,
                                       const Bounds& bounds_def,
                                       const RepeatedPtrField<StrafeProfile>& profiles,
-                                      const RepeatedField<int>& orders,
+                                      const ProfileListInfo& profiles_info,
                                       Direction initial_direction,
                                       Application& app)
-      : profiles_(profiles), orders_(orders), app_(app) {
+      : profiles_(profiles), profiles_info_(profiles_info), app_(app) {
     const WallBounds bounds = wall.GetWallBounds(bounds_def);
 
     DirectionParams params;
@@ -57,14 +57,14 @@ class ForwardBackStrafeMovementController : public MovementController {
                       float delta_seconds) override {
     if (strafe_controller_) {
       t.wall_depth = strafe_controller_->GetUpdatedPosition(
-          t, app_.rand(), profiles_, orders_, t.wall_depth, now_seconds, delta_seconds);
+          t, app_.rand(), profiles_, profiles_info_, t.wall_depth, now_seconds, delta_seconds);
       t.position = WallPositionToWorldPosition(*t.wall_position, t.radius, room, t.wall_depth);
     }
   }
 
  private:
   RepeatedPtrField<StrafeProfile> profiles_;
-  RepeatedField<int> orders_;
+  ProfileListInfo profiles_info_;
   Application& app_;
   std::optional<StrafeController> strafe_controller_;
 };
@@ -121,7 +121,7 @@ void WallDepthMovementController::UpdatePosition(float now_seconds,
 float StrafeController::GetUpdatedPosition(Target& t,
                                            Random& rand,
                                            const RepeatedPtrField<StrafeProfile>& profiles,
-                                           const RepeatedField<int>& order,
+                                           const ProfileListInfo& profiles_info,
                                            float current_position,
                                            float now_seconds,
                                            float delta_seconds) {
@@ -176,7 +176,7 @@ float StrafeController::GetUpdatedPosition(Target& t,
   bool time_up = next_direction_change_time_ > 0 && now_seconds >= next_direction_change_time_;
   if (is_first || too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
-    ChangeDirection(rand, now_seconds, profiles, order, t.speed, current_position, &t.radius);
+    ChangeDirection(rand, now_seconds, profiles, profiles_info, t.speed, current_position, &t.radius);
   }
 
   float max_speed = t.speed * speed_multiplier_;
@@ -236,7 +236,7 @@ bool StrafeController::GetInitialGoingLeft(Direction dir, float current_position
 void StrafeController::ChangeDirection(Random& rand,
                                        float now_seconds,
                                        const RepeatedPtrField<StrafeProfile>& profiles,
-                                       const RepeatedField<int>& order,
+                                       const ProfileListInfo& profiles_info,
                                        float target_speed,
                                        float current_position,
                                        float* target_radius_out) {
@@ -245,7 +245,7 @@ void StrafeController::ChangeDirection(Random& rand,
   }
 
   direction_change_count_++;
-  auto p = SelectProfile(order, profiles, &selection_context_, rand);
+  auto p = SelectProfile(profiles_info, profiles, &selection_context_, rand);
   if (!p.has_value()) {
     return;
   }
@@ -349,11 +349,11 @@ std::unique_ptr<MovementController> CreateForwardBackMovementController(
     Wall wall,
     const Bounds& bounds_def,
     const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
-    const google::protobuf::RepeatedField<int>& orders,
+    const ProfileListInfo& profiles_info,
     Direction initial_direction,
     Application& app) {
   return std::make_unique<ForwardBackStrafeMovementController>(
-      target, wall, bounds_def, profiles, orders, initial_direction, app);
+      target, wall, bounds_def, profiles, profiles_info, initial_direction, app);
 }
 
 }  // namespace aim

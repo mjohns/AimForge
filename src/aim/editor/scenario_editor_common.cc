@@ -208,6 +208,9 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   if (def.has_bounce_def()) {
     return def.bounce_def().target_placement_strategy();
   }
+  if (def.has_barrel_def()) {
+    return def.barrel_def().target_placement_strategy();
+  }
   return {};
 }
 
@@ -351,7 +354,7 @@ void DrawTargetPlacementStrategyEditor(const std::string& id,
   ImGui::Indent();
   DrawProfileList("RegionList",
                   "Region",
-                  s->mutable_region_order(),
+                  PROTO_PTR_FIELD(ProfileListInfo, TargetPlacementStrategy, s, regions_info),
                   s->mutable_regions(),
                   std::bind_front(&DrawTargetRegion, char_x, support_depth));
   ImGui::Unindent();

@@ -183,7 +183,7 @@ void DrawTargetEditor(ScenarioDef& def) {
   ImGui::Indent();
   DrawProfileList("ProfileList",
                   "Profile",
-                  t->mutable_target_order(),
+                  PROTO_PTR_FIELD(ProfileListInfo, TargetDef, t, profiles_info),
                   t->mutable_profiles(),
                   std::bind_front(&DrawTargetProfile, char_x, def));
   ImGui::Unindent();

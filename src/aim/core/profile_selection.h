@@ -16,7 +16,7 @@ struct ProfileSelectionContext {
 };
 
 template <typename T>
-std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& orders,
+std::optional<T> SelectProfile(const ProfileListInfo& profiles_info,
                                const google::protobuf::RepeatedPtrField<T>& profiles,
                                ProfileSelectionContext* context,
                                Random& rand) {
@@ -26,6 +26,7 @@ std::optional<T> SelectProfile(const google::protobuf::RepeatedField<int>& order
   if (profiles.size() == 1) {
     return profiles[0];
   }
+  const auto& orders = profiles_info.explicit_order();
   if (orders.size() > 0) {
     int n = context->counter;
     context->counter++;

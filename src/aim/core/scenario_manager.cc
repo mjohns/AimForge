@@ -51,14 +51,6 @@ class ScenarioManagerImpl : public ScenarioManager {
 
         // Backfill
         // ScenarioDef* s = bundle_scenario.mutable_def();
-        /*
-        ScenarioDef* s = bundle_scenario.mutable_def();
-        if (s->room().cylinder_room().width_perimeter_percent() > 0) {
-          float degrees = s->room().cylinder_room().width_perimeter_percent() * 360;
-          s->mutable_room()->mutable_cylinder_room()->clear_width_perimeter_percent();
-          s->mutable_room()->mutable_cylinder_room()->set_width_degrees(degrees);
-        }
-        */
       }
     }
   }
@@ -281,6 +273,70 @@ class ScenarioManagerImpl : public ScenarioManager {
       ResourceName name(bundle_name, scenario.name());
       auto& item = scenario_map_[name.full_name()];
       item.name = name.full_name();
+
+      /*
+      ScenarioDef s = scenario.def();
+      if (s.target_def().target_order_size() > 0) {
+        *s.mutable_target_def()->mutable_profiles_info()->mutable_explicit_order() =
+            s.target_def().target_order();
+      }
+      if (s.static_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_static_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.static_def().target_placement_strategy().region_order();
+      }
+      if (s.wall_wander_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_wall_wander_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.wall_wander_def().target_placement_strategy().region_order();
+      }
+      if (s.waypoint_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_waypoint_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.waypoint_def().target_placement_strategy().region_order();
+      }
+      if (s.linear_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_linear_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.linear_def().target_placement_strategy().region_order();
+      }
+      if (s.angle_strafe_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_angle_strafe_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.angle_strafe_def().target_placement_strategy().region_order();
+      }
+      if (s.bounce_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_bounce_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.bounce_def().target_placement_strategy().region_order();
+      }
+      if (s.strafe_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_strafe_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.strafe_def().target_placement_strategy().region_order();
+      }
+      if (s.barrel_def().target_placement_strategy().region_order_size() > 0) {
+        *s.mutable_barrel_def()
+             ->mutable_target_placement_strategy()
+             ->mutable_regions_info()
+             ->mutable_explicit_order() = s.barrel_def().target_placement_strategy().region_order();
+      }
+
+      if (s.strafe_def().forward_back_profile_order_size() > 0) {
+        *s.mutable_strafe_def()->mutable_forward_back_profiles_info()->mutable_explicit_order() =
+            s.strafe_def().forward_back_profile_order();
+      }
+
+      dirty_bundles_.insert(bundle_name);
+      item.def = s;
+      */
       item.def = scenario.def();
     }
   }

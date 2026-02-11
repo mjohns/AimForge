@@ -3,6 +3,7 @@
 #include <string>
 
 #include "absl/strings/ascii.h"
+#include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/proto_util.h"
 #include "aim/proto/scenario.pb.h"
@@ -14,7 +15,7 @@ namespace aim {
 template <typename T, typename DrawFn>
 void DrawProfileList(const std::string& id,
                      const std::string& type_name,
-                     google::protobuf::RepeatedField<int>* order_list,
+                     PtrField<ProfileListInfo> profile_list_info_field,
                      google::protobuf::RepeatedPtrField<T>* profile_list,
                      DrawFn&& draw_profile_fn) {
   ImGui::IdGuard cid(id);
@@ -23,6 +24,10 @@ void DrawProfileList(const std::string& id,
   std::string lower_type_name = absl::AsciiStrToLower(type_name);
   ImGui::AlignTextToFramePadding();
   ImGui::TextFmt("Explicit {} selection order", lower_type_name);
+
+  ProfileListInfo* profile_list_info = profile_list_info_field.get_mutable();
+  google::protobuf::RepeatedField<int>* order_list = profile_list_info->mutable_explicit_order();
+
   bool use_order = order_list->size() > 0;
   ImGui::SameLine();
   ImGui::Checkbox("##UseOrder", &use_order);
@@ -191,6 +196,10 @@ void DrawProfileList(const std::string& id,
 
   if (ImGui::Button(std::format("Add {}", lower_type_name).c_str())) {
     profile_list->Add();
+  }
+
+  if (IsDefaultInstance(*profile_list_info)) {
+    profile_list_info_field.clear();
   }
 }
 

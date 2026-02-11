@@ -74,6 +74,12 @@
       ],
       "minDistance": {
        "value": 20
+      },
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
       }
      }
     }
@@ -264,6 +270,12 @@
       ],
       "minDistance": {
        "value": 20
+      },
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
       }
      },
      "leftRightInitialDirection": "DIRECTION_IN",
@@ -344,6 +356,12 @@
       ],
       "minDistance": {
        "value": 20
+      },
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
       }
      }
     }
@@ -438,7 +456,13 @@
       "regionOrder": [
        0,
        1
-      ]
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      }
      },
      "profiles": [
       {
@@ -547,6 +571,12 @@
       ],
       "minDistance": {
        "value": 20
+      },
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
       }
      }
     }
@@ -582,6 +612,13 @@
       }
      ],
      "numTargets": 4,
+     "profilesInfo": {
+      "explicitOrder": [
+       0,
+       0,
+       1
+      ]
+     },
      "targetOrder": [
       0,
       0,
@@ -725,6 +762,13 @@
       }
      ],
      "numTargets": 4,
+     "profilesInfo": {
+      "explicitOrder": [
+       0,
+       0,
+       1
+      ]
+     },
      "targetOrder": [
       0,
       0,
@@ -2620,7 +2664,6 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 280.799957
      }
     },
@@ -2680,7 +2723,6 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 309.599976
      }
     },
@@ -2801,7 +2843,6 @@
      "cylinderRoom": {
       "height": 90,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 205.2
      }
     },
@@ -2994,6 +3035,12 @@
       ],
       "minDistance": {
        "value": 20
+      },
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
       }
      },
      "leftRightProfiles": [
@@ -4396,6 +4443,20 @@
       ],
       "minDistance": {
        "value": 44
+      },
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        2,
+        0,
+        2,
+        0,
+        3,
+        1,
+        3,
+        1,
+        3
+       ]
       }
      }
     }

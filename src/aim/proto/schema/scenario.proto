@@ -110,6 +110,7 @@ message TargetPlacementStrategy {
   repeated TargetRegion regions = 1;
   // If non empty, target regions will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 region_order = 2;
+  ProfileListInfo regions_info = 100;
 
   RegionLength min_distance = 3;
 
@@ -294,6 +295,8 @@ message SineScenarioDef {
   bool going_left = 3 [features.field_presence = IMPLICIT];
 }
 
+// General information for an individual profile in a list. Shared by all profile list types.
+// This will be embedded in the specific profile type like StrafeProfile.
 message ProfileInfo {
   string description = 1 [features.field_presence = IMPLICIT];
   // Proportional weight used to select this profile. If the weight of this profile is 2 and the
@@ -304,6 +307,14 @@ message ProfileInfo {
   // 1 means that 1 other profile must be selected before this one can be selected again.
   // 2 means that 2 other profiles (maybe the same profile both times) must be selected ...
   int32 min_selection_gap = 4;
+}
+
+message ProfileListInfo {
+  // If non empty, profiles will be chosen in the specified pattern repeating. 0 indexed.
+  repeated int32 explicit_order = 1;
+
+  // If non empty, profiles will be chosen in the specified order at the start and then will proceed to normal profile selection.
+  repeated int32 start_order = 2;
 }
 
 message AngleStrafeProfile {
@@ -344,10 +355,12 @@ message AngleStrafeScenarioDef {
   repeated AngleStrafeProfile profiles = 4;
   // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 profile_order = 5;
+  ProfileListInfo profiles_info = 100;
 
   repeated StrafeProfile forward_back_profiles = 6;
   repeated int32 forward_back_profile_order = 7;
   Direction forward_back_initial_direction = 8;
+  ProfileListInfo forward_back_profiles_info = 9;
 }
 
 message StrafeProfile {
@@ -388,12 +401,15 @@ message StrafeScenarioDef {
 
   repeated StrafeProfile left_right_profiles = 5;
   repeated int32 left_right_profile_order = 6;
+  ProfileListInfo left_right_profiles_info = 100;
 
   repeated StrafeProfile forward_back_profiles = 7;
   repeated int32 forward_back_profile_order = 8;
+  ProfileListInfo forward_back_profiles_info = 101;
 
   repeated StrafeProfile up_down_profiles = 9;
   repeated int32 up_down_profile_order = 10;
+  ProfileListInfo up_down_profiles_info = 102;
 
   Direction left_right_initial_direction = 13;
   Direction up_down_initial_direction = 14;
@@ -435,12 +451,15 @@ message BounceScenarioDef {
 
   repeated BounceProfile bounce_profiles = 3;
   repeated int32 bounce_profile_order = 4;
+  ProfileListInfo bounce_profiles_info = 102;
 
   repeated StrafeProfile left_right_profiles = 5;
   repeated int32 left_right_profile_order = 6;
+  ProfileListInfo left_right_profiles_info = 103;
 
   repeated StrafeProfile forward_back_profiles = 7;
   repeated int32 forward_back_profile_order = 8;
+  ProfileListInfo forward_back_profiles_info = 104;
 
   TargetPlacementStrategy target_placement_strategy = 9;
 
@@ -477,6 +496,7 @@ message WallWanderScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 1;
 
   repeated WallWanderProfile profiles = 2;
+  ProfileListInfo profiles_info = 4;
 
   // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 profile_order = 3;
@@ -484,6 +504,7 @@ message WallWanderScenarioDef {
 
 message TargetDef {
   repeated TargetProfile profiles = 1;
+  ProfileListInfo profiles_info = 3;
   int32 num_targets = 2;
 
   // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.

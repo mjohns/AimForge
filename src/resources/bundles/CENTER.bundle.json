@@ -29,8 +29,7 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "width": 500000,
-      "hideSides": true
+      "width": 500000
      }
     },
     "overrides": {},
@@ -83,8 +82,7 @@
      "cylinderRoom": {
       "height": 80,
       "radius": 200,
-      "width": 500000,
-      "hideSides": true
+      "width": 500000
      }
     },
     "overrides": {},
@@ -154,8 +152,7 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "width": 500000,
-      "hideSides": true
+      "width": 500000
      }
     },
     "overrides": {},
@@ -210,8 +207,7 @@
      "cylinderRoom": {
       "height": 80,
       "radius": 200,
-      "width": 500000,
-      "hideSides": true
+      "width": 500000
      }
     },
     "overrides": {},

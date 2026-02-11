@@ -68,7 +68,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
   std::optional<TargetRegion> GetRegionToUse(ProfileSelectionContext* context) {
-    return SelectProfile(strategy_.region_order(), strategy_.regions(), context, app_->rand());
+    return SelectProfile(strategy_.regions_info(), strategy_.regions(), context, app_->rand());
   }
 
   // Returns an x/z pair where to place the target on the wall.

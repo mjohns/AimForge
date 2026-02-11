@@ -73,7 +73,7 @@ class MovementControllerImpl : public MovementController {
           left_right_controller_->GetUpdatedPosition(t,
                                                      app_.rand(),
                                                      def_.strafe_def().left_right_profiles(),
-                                                     def_.strafe_def().left_right_profile_order(),
+                                                     def_.strafe_def().left_right_profiles_info(),
                                                      pos.x,
                                                      now_seconds,
                                                      delta_seconds);
@@ -83,7 +83,7 @@ class MovementControllerImpl : public MovementController {
       pos.y = up_down_controller_->GetUpdatedPosition(t,
                                                       app_.rand(),
                                                       def_.strafe_def().up_down_profiles(),
-                                                      def_.strafe_def().up_down_profile_order(),
+                                                      def_.strafe_def().up_down_profiles_info(),
                                                       pos.y,
                                                       now_seconds,
                                                       delta_seconds);
@@ -94,7 +94,7 @@ class MovementControllerImpl : public MovementController {
           t,
           app_.rand(),
           def_.strafe_def().forward_back_profiles(),
-          def_.strafe_def().forward_back_profile_order(),
+          def_.strafe_def().forward_back_profiles_info(),
           t.wall_depth,
           now_seconds,
           delta_seconds);

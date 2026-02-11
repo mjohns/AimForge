@@ -135,7 +135,7 @@ class WanderMovementController : public BasicWallMovementController {
   }
 
   WallWanderProfile GetNextProfile(ProfileSelectionContext* context) {
-    auto maybe_profile = SelectProfile(def_.wall_wander_def().profile_order(),
+    auto maybe_profile = SelectProfile(def_.wall_wander_def().profiles_info(),
                                        def_.wall_wander_def().profiles(),
                                        context,
                                        app_.rand());

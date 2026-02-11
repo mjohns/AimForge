@@ -174,7 +174,7 @@ class BounceController {
 
   BounceProfile GetNextProfile(const BounceScenarioDef& def, Random& rand) {
     auto p =
-        SelectProfile(def.bounce_profile_order(), def.bounce_profiles(), &selection_context_, rand);
+        SelectProfile(def.bounce_profiles_info(), def.bounce_profiles(), &selection_context_, rand);
     if (!p.has_value()) {
       BounceProfile profile;
       profile.set_delay_seconds(1000);
@@ -265,7 +265,7 @@ class MovementControllerImpl : public MovementController {
           left_right_controller_->GetUpdatedPosition(t,
                                                      app_.rand(),
                                                      def_.bounce_def().left_right_profiles(),
-                                                     def_.bounce_def().left_right_profile_order(),
+                                                     def_.bounce_def().left_right_profiles_info(),
                                                      pos.x,
                                                      now_seconds,
                                                      delta_seconds);
@@ -276,7 +276,7 @@ class MovementControllerImpl : public MovementController {
           t,
           app_.rand(),
           def_.bounce_def().forward_back_profiles(),
-          def_.bounce_def().forward_back_profile_order(),
+          def_.bounce_def().forward_back_profiles_info(),
           t.wall_depth,
           now_seconds,
           delta_seconds);

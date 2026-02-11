@@ -32,7 +32,6 @@
      "cylinderRoom": {
       "height": 130,
       "radius": 200,
-      "hideSides": true,
       "widthDegrees": 720
      }
     },

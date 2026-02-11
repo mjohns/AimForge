@@ -90,7 +90,7 @@ class StrafeController {
   float GetUpdatedPosition(Target& t,
                            Random& rand,
                            const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
-                           const google::protobuf::RepeatedField<int>& order,
+                           const ProfileListInfo& profiles_info,
                            float current_position,
                            float now_seconds,
                            float delta_seconds);
@@ -101,7 +101,7 @@ class StrafeController {
   void ChangeDirection(Random& rand,
                        float now_seconds,
                        const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
-                       const google::protobuf::RepeatedField<int>& order,
+                       const ProfileListInfo& profiles_info,
                        float target_speed,
                        float current_position,
                        float* target_radius_out);
@@ -139,7 +139,7 @@ std::unique_ptr<MovementController> CreateForwardBackMovementController(
     Wall wall,
     const Bounds& bounds_def,
     const google::protobuf::RepeatedPtrField<StrafeProfile>& profiles,
-    const google::protobuf::RepeatedField<int>& orders,
+    const ProfileListInfo& profiles_info,
     Direction initial_direction,
     Application& app);
 
