@@ -2486,7 +2486,8 @@
        },
        "distanceJitter": {
         "xPercentValue": 0
-       }
+       },
+       "targetRadiusMultiplier": 1
       },
       {
        "info": {

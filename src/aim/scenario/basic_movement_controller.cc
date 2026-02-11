@@ -244,8 +244,6 @@ void StrafeController::ChangeDirection(Random& rand,
     wait_until_time_ = now_seconds + pause_time_;
   }
 
-  *target_radius_out = original_target_radius_;
-
   direction_change_count_++;
   auto p = SelectProfile(order, profiles, &selection_context_, rand);
   if (!p.has_value()) {
@@ -262,7 +260,7 @@ void StrafeController::ChangeDirection(Random& rand,
   if (p->has_target_radius_multiplier()) {
     float radius_mult =
         rand.GetJittered(p->target_radius_multiplier(), p->target_radius_multiplier_jitter());
-    *target_radius_out *= radius_mult;
+    *target_radius_out = radius_mult * original_target_radius_;
   }
 
   speed_multiplier_ = p->has_speed_multiplier()
