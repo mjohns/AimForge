@@ -4,6 +4,7 @@
 
 #include "SDL3/SDL.h"
 #include "absl/cleanup/cleanup.h"
+#include "aim/common/imgui_ext.h"
 #include "aim/core/application.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
@@ -13,6 +14,20 @@
 
 namespace aim {
 namespace {
+
+enum class PlaybackSpeed {
+  SPEED_1,
+  SPEED_0_5,
+  SPEED_0_25,
+  SPEED_0_1,
+};
+
+const std::vector<std::pair<PlaybackSpeed, std::string>> kPlaybackSpeeds{
+    {PlaybackSpeed::SPEED_1, "Normal"},
+    {PlaybackSpeed::SPEED_0_5, "0.5"},
+    {PlaybackSpeed::SPEED_0_25, "0.25"},
+    {PlaybackSpeed::SPEED_0_1, "0.1"},
+};
 
 void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, ReplaySoundType type) {
   switch (type) {
@@ -43,6 +58,10 @@ class ReplayView {
     return is_done_;
   }
 
+  float CurrentTime() {
+    return current_time_;
+  }
+
   void SeekForwardToTime(float now_seconds, std::optional<SoundSettings> sound_settings) {
     if (is_done_) {
       return;
@@ -56,6 +75,7 @@ class ReplayView {
       return;
     }
 
+    current_time_ = now_seconds;
     i64 replay_frame_number = now_seconds * replay_->replay_fps;
 
     for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
@@ -154,12 +174,16 @@ class ReplayView {
   std::unordered_map<u16, i64> target_added_on_frame_;
   Application& app_;
   bool is_done_ = false;
+  float current_time_ = 0;
 };
 
 class ReplayViewerScreen : public Screen {
  public:
   ReplayViewerScreen(std::shared_ptr<Replay> replay, Application* app)
-      : Screen(*app), replay_(replay), timer_(replay->replay_fps), replay_view_(replay, *app) {
+      : Screen(*app),
+        replay_(replay),
+        timer_(replay->replay_fps),
+        replay_view_(std::make_unique<ReplayView>(replay, *app)) {
     float approximate_mb = replay->GetApproximateSizeMb();
     settings_ = app->settings_manager().GetCurrentSettingsForScenario(replay->scenario_name);
     crosshair_ = app->settings_manager().GetCurrentCrosshair();
@@ -178,10 +202,16 @@ class ReplayViewerScreen : public Screen {
     const Replay& replay = *replay_;
     const std::vector<ReplayEvent>& events = replay.events;
 
+    if (!is_paused_) {
+      playback_stopwatch_.Start();
+    }
+
     timer_.OnStartFrame();
 
-    float now_seconds = timer_.GetElapsedSeconds();
-    replay_view_.SeekForwardToTime(now_seconds, settings_.sound());
+    float duration_seconds = replay.pitch_yaws.size() / static_cast<float>(replay.replay_fps);
+
+    float now_seconds = GetNowSeconds();
+    replay_view_->SeekForwardToTime(now_seconds, settings_.sound());
 
     bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > 2500;
     if (!do_render) {
@@ -197,19 +227,56 @@ class ReplayViewerScreen : public Screen {
         crosshair_, settings_.crosshair_size(), theme_, app_.screen_info().center);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
-    ImGui::Text("time: %.1f", elapsed_seconds);
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+
+    ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 1.5);
+
+    bool is_playing = playback_stopwatch_.IsRunning();
+    if (is_playing) {
+      if (ImGui::Button(icons::kPause)) {
+        is_paused_ = true;
+        playback_stopwatch_.Stop();
+      }
+    } else {
+      if (ImGui::Button(icons::kPlayArrow)) {
+        is_paused_ = false;
+        playback_stopwatch_.Start();
+      }
+    }
+
+    ImGui::SameLine();
+    float char_x = ImGui::GetDefaultCharSizeX();
+    if (ImGui::SimpleTypeDropdown("PlaybackSpeed", &playback_speed_, kPlaybackSpeeds, char_x * 7)) {
+      playback_start_time_ = now_seconds;
+      playback_stopwatch_ = Stopwatch();
+    }
+
+    ImGui::SameLine();
+    if (ImGui::SliderFloat("##SeekBar", &now_seconds, 0.0f, duration_seconds, "%.1f")) {
+      SeekToTime(now_seconds);
+    }
+
+    if (ImGui::IsItemClicked()) {
+      float mouse_x = ImGui::GetMousePos().x;
+      float bar_x_min = ImGui::GetItemRectMin().x;
+      float bar_width = ImGui::GetItemRectSize().x;
+
+      // Calculate the percentage of where the user clicked
+      float t = (mouse_x - bar_x_min) / bar_width;
+      SeekToTime(duration_seconds * t);
+    }
+
     ImGui::End();
 
     RenderContext ctx;
     if (app_.StartRender(&ctx)) {
       FrameTimes times;
-      LookAtInfo look_at = replay_view_.camera.GetLookAt();
+      LookAtInfo look_at = replay_view_->camera.GetLookAt();
       app_.renderer()->DrawScenario(projection_,
                                     replay.room,
                                     theme_,
                                     settings_.health_bar(),
-                                    replay_view_.target_manager.GetTargets(),
+                                    replay_view_->target_manager.GetTargets(),
                                     look_at,
                                     &ctx,
                                     timer_.run_stopwatch(),
@@ -217,8 +284,9 @@ class ReplayViewerScreen : public Screen {
       app_.FinishRender(&ctx);
     }
 
-    if (replay_view_.is_done()) {
-      PopSelf();
+    if (replay_view_->is_done()) {
+      is_paused_ = true;
+      playback_stopwatch_.Stop();
     }
   }
 
@@ -227,7 +295,38 @@ class ReplayViewerScreen : public Screen {
     timer_.ResumeRun();
   }
 
+  void SeekToTime(float now_seconds, bool play_sounds = false) {
+    float current_view_time = replay_view_->CurrentTime();
+    if (current_view_time > now_seconds) {
+      // rewinding. need to create a new view.
+      replay_view_ = std::make_unique<ReplayView>(replay_, app_);
+    }
+    replay_view_->SeekForwardToTime(
+        now_seconds, play_sounds ? settings_.sound() : std::optional<SoundSettings>{});
+    playback_start_time_ = now_seconds;
+    playback_stopwatch_ = Stopwatch();
+  }
+
+  float GetNowSeconds() {
+    return playback_start_time_ +
+           playback_stopwatch_.GetElapsedSeconds() * GetPlaybackSpeedMultiplier();
+  }
+
  private:
+  float GetPlaybackSpeedMultiplier() {
+    switch (playback_speed_) {
+      case PlaybackSpeed::SPEED_0_1:
+        return 0.1;
+      case PlaybackSpeed::SPEED_0_25:
+        return 0.25;
+      case PlaybackSpeed::SPEED_0_5:
+        return 0.5;
+      default:
+        break;
+    }
+    return 1.0;
+  }
+
   std::shared_ptr<Replay> replay_;
 
   ScenarioTimer timer_;
@@ -237,7 +336,14 @@ class ReplayViewerScreen : public Screen {
   Settings settings_;
   Crosshair crosshair_;
 
-  ReplayView replay_view_;
+  std::unique_ptr<ReplayView> replay_view_;
+
+  // The time associated with the playback stopwatch. time + stopwatch.elapsed = now
+  float playback_start_time_ = 0;
+  Stopwatch playback_stopwatch_;
+  bool is_paused_ = false;
+
+  PlaybackSpeed playback_speed_ = PlaybackSpeed::SPEED_1;
 };
 
 }  // namespace
