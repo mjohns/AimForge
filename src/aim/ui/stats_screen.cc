@@ -7,6 +7,7 @@
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
+#include "aim/common/proto_util.h"
 #include "aim/common/util.h"
 #include "aim/core/perf.h"
 #include "aim/core/scenario_manager.h"
@@ -498,18 +499,44 @@ class StatsScreen : public UiScreen {
           ImGui::TextFmt("{:.0f}%, {}%, {}%", hit_percent, p.p50(), p.p20());
 
           std::string prox_string;
-          auto add_percentile = [&](const std::string& percentile, u32 percent_value) {
-            prox_string += std::format("{}th: {}%\n", percentile, percent_value);
+          auto add_percentile = [&](const std::string& percentile,
+                                    u32 percent_value,
+                                    std::optional<u32> old_percent_value) {
+            i32 diff = 0;
+            if (old_percent_value) {
+              diff = percent_value - *old_percent_value;
+            }
+            std::string diff_str;
+            if (diff == 0) {
+              // No string
+            } else if (diff < 0) {
+              diff_str = std::format(" ({})", diff);
+            } else {
+              diff_str = std::format(" (+{})", diff);
+            }
+            prox_string += std::format("{}th: {}%{}\n", percentile, percent_value, diff_str);
           };
-          add_percentile("90", p.p90());
-          add_percentile("80", p.p80());
-          add_percentile("70", p.p70());
-          add_percentile("60", p.p60());
-          add_percentile("50", p.p50());
-          add_percentile("40", p.p40());
-          add_percentile("30", p.p30());
-          add_percentile("20", p.p20());
-          add_percentile("10", p.p10());
+
+          ProximityPercentiles prev_p =
+              details_.previous_high_score_stats.info.proximity_percentiles();
+          bool has_prev = !IsDefaultInstance(prev_p);
+
+          float prev_hits = details_.previous_high_score_stats.info.num_hits();
+          float prev_shots = details_.previous_high_score_stats.info.num_shots();
+
+          std::optional<u32> none;
+          add_percentile("100",
+                         hit_percent,
+                         prev_shots > 0 ? static_cast<u32>(100 * (prev_hits / prev_shots)) : none);
+          add_percentile(" 90", p.p90(), has_prev ? prev_p.p90() : none);
+          add_percentile(" 80", p.p80(), has_prev ? prev_p.p80() : none);
+          add_percentile(" 70", p.p70(), has_prev ? prev_p.p70() : none);
+          add_percentile(" 60", p.p60(), has_prev ? prev_p.p60() : none);
+          add_percentile(" 50", p.p50(), has_prev ? prev_p.p50() : none);
+          add_percentile(" 40", p.p40(), has_prev ? prev_p.p40() : none);
+          add_percentile(" 30", p.p30(), has_prev ? prev_p.p30() : none);
+          add_percentile(" 20", p.p20(), has_prev ? prev_p.p20() : none);
+          add_percentile(" 10", p.p10(), has_prev ? prev_p.p10() : none);
           ImGui::SameLine();
 
           float large_height = ImGui::GetTextLineHeight();

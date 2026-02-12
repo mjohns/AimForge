@@ -40,7 +40,10 @@
          "description": "Right"
         },
         "xOffset": {
-         "value": 43
+         "xPercentValue": 0.33
+        },
+        "yOffset": {
+         "yPercentValue": 0
         },
         "rectangle": {
          "xLength": {
@@ -56,7 +59,10 @@
          "description": "Left"
         },
         "xOffset": {
-         "value": -43
+         "xPercentValue": -0.33
+        },
+        "yOffset": {
+         "yPercentValue": 0
         },
         "rectangle": {
          "xLength": {
@@ -73,9 +79,6 @@
         0,
         1
        ]
-      },
-      "minDistance": {
-       "value": 20
       }
      }
     }
@@ -288,7 +291,6 @@
      "numTargets": 2,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 1.5
       }
      ],
@@ -305,10 +307,14 @@
       "width": 170
      }
     },
+    "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
        {
+        "xOffset": {
+         "xPercentValue": 0
+        },
         "yOffset": {
          "yPercentValue": 0.2
         },
@@ -322,15 +328,11 @@
         }
        },
        {
-        "info": {},
         "xOffset": {
-         "value": 0
+         "xPercentValue": 0
         },
         "yOffset": {
          "yPercentValue": -0.2
-        },
-        "depth": {
-         "value": 0
         },
         "rectangle": {
          "xLength": {
@@ -347,9 +349,6 @@
         0,
         1
        ]
-      },
-      "minDistance": {
-       "value": 20
       }
      }
     }
