@@ -6,6 +6,7 @@
 #include "aim/common/geometry.h"
 #include "aim/common/util.h"
 #include "aim/core/profile_selection.h"
+#include "aim/core/scenario_manager.h"
 #include "glm/gtc/constants.hpp"
 #include "glm/trigonometric.hpp"
 #include "glm/vec2.hpp"
@@ -49,7 +50,11 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       }
     }
 
-    app_->logger()->warn("Unable to place target in scenario");
+    if (!logged_cant_place_) {
+      logged_cant_place_ = true;
+      app_->logger()->warn("Unable to place target in scenario: {}",
+                           app_->scenario_manager().GetCurrentScenarioName());
+    }
     return candidate_pos;
   }
 
@@ -143,6 +148,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   TargetManager* target_manager_;
   Application* app_;
   ProfileSelectionContext selection_context_;
+  bool logged_cant_place_ = false;
 };
 
 }  // namespace

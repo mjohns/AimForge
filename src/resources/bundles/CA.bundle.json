@@ -1,5 +1,540 @@
 {
  "scenarios": [
+   {
+   "name": "2ts wideflick",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 2.39999962
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 154,
+      "width": 181
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "circle": {
+         "diameter": {
+          "yPercentValue": 0.9
+         },
+         "innerDiameter": {
+          "xPercentValue": 0.4
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.25
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "x-axis flick",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 1.39999986
+      }
+     ],
+     "newestTargetIsGhost": true
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 112,
+      "width": 193
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "Left Close"
+        },
+        "xOffset": {
+         "xPercentValue": -0.05
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left Mid1"
+        },
+        "xOffset": {
+         "xPercentValue": -0.120000027
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.05
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left Mid2"
+        },
+        "xOffset": {
+         "xPercentValue": -0.200000033
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.1
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left Far"
+        },
+        "xOffset": {
+         "xPercentValue": -0.270000041
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.2
+        },
+        "depthJitter": {
+         "depthPercentValue": 0.02
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Righ Close"
+        },
+        "xOffset": {
+         "xPercentValue": 0.05
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Mid1"
+        },
+        "xOffset": {
+         "xPercentValue": 0.120000027
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.05
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Mid2"
+        },
+        "xOffset": {
+         "xPercentValue": 0.200000033
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.1
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Far"
+        },
+        "xOffset": {
+         "xPercentValue": 0.280000031
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.2
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        4,
+        1,
+        5,
+        2,
+        6,
+        3,
+        7,
+        2,
+        6,
+        1,
+        5
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "y-axis flick",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 1.39999986
+      }
+     ],
+     "newestTargetIsGhost": true
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "cameraUp": {
+      "x": 1,
+      "y": 0,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 112,
+      "width": 143
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "Left Close"
+        },
+        "xOffset": {
+         "xPercentValue": -0.05
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left Mid1"
+        },
+        "xOffset": {
+         "xPercentValue": -0.120000027
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.05
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left Mid2"
+        },
+        "xOffset": {
+         "xPercentValue": -0.200000033
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.1
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left Far"
+        },
+        "xOffset": {
+         "xPercentValue": -0.270000041
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.2
+        },
+        "depthJitter": {
+         "depthPercentValue": 0.02
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Righ Close"
+        },
+        "xOffset": {
+         "xPercentValue": 0.05
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Mid1"
+        },
+        "xOffset": {
+         "xPercentValue": 0.120000027
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.05
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Mid2"
+        },
+        "xOffset": {
+         "xPercentValue": 0.200000033
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.1
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Far"
+        },
+        "xOffset": {
+         "xPercentValue": 0.280000031
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.2
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        4,
+        1,
+        5,
+        2,
+        6,
+        3,
+        7,
+        2,
+        6,
+        1,
+        5
+       ]
+      }
+     }
+    }
+   }
+  },
   {
    "name": "1ts ruohong",
    "def": {
