@@ -311,6 +311,9 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
       stats_.num_shots++;
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       PlayShootSound();
+      if (replay_) {
+        replay_->AddMouseClick(timer_.GetElapsedSeconds());
+      }
       if (maybe_hit_target_id.has_value()) {
         if (GetShotType() == ShotType::kClickMulti) {
           Target* hit_target = target_manager_.GetMutableTarget(*maybe_hit_target_id);

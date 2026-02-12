@@ -58,17 +58,27 @@ class ReplayView {
       : camera(Camera(CameraParams(replay->room))),
         target_manager(replay->room),
         replay_(replay),
-        app_(app) {}
+        app_(app) {
+    previous_click_durations_.reserve(400);
+  }
 
   Camera camera;
   TargetManager target_manager;
 
-  bool is_done() {
+  bool IsDone() {
     return is_done_;
   }
 
   float CurrentTime() {
     return current_time_;
+  }
+
+  float GetLastClickTime() {
+    return last_click_time_;
+  }
+
+  std::vector<float> GetPreviousClickDurations() {
+    return previous_click_durations_;
   }
 
   void SeekForwardToTime(float now_seconds, std::optional<SoundSettings> sound_settings) {
@@ -128,6 +138,10 @@ class ReplayView {
             PlaySound(app_.sound_manager(), *sound_settings, event.data.play_sound.sound);
           }
           break;
+        case ReplayEventType::MOUSE_CLICK:
+          previous_click_durations_.push_back(event.time_seconds - last_click_time_);
+          last_click_time_ = event.time_seconds;
+          break;
       }
       processed_events_up_to_index_ = i + 1;
     }
@@ -184,6 +198,8 @@ class ReplayView {
   Application& app_;
   bool is_done_ = false;
   float current_time_ = 0;
+  float last_click_time_ = 0;
+  std::vector<float> previous_click_durations_;
 };
 
 class ReplayViewerScreen : public Screen {
@@ -203,6 +219,13 @@ class ReplayViewerScreen : public Screen {
     if (existing_playback_speed) {
       playback_speed_ = static_cast<PlaybackSpeed>(*existing_playback_speed);
     }
+
+    for (const auto& event : replay->events) {
+      if (event.type == ReplayEventType::MOUSE_CLICK) {
+        has_click_events_ = true;
+        break;
+      }
+    }
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
@@ -211,11 +234,20 @@ class ReplayViewerScreen : public Screen {
     }
     if (event.type == SDL_EVENT_KEY_DOWN) {
       if (event.key.key == SDLK_SPACE) {
-        if (is_paused_) {
+        if (replay_view_->IsDone()) {
+          SeekToTime(0);
+        } else if (is_paused_) {
           Play();
         } else {
           Pause();
         }
+      }
+      float time_step = 0.01;
+      if (event.key.key == SDLK_LEFT || event.key.key == SDLK_COMMA) {
+        SeekToTime(GetNowSeconds() - time_step);
+      }
+      if (event.key.key == SDLK_RIGHT || event.key.key == SDLK_PERIOD) {
+        SeekToTime(GetNowSeconds() + time_step);
       }
     }
   }
@@ -250,17 +282,35 @@ class ReplayViewerScreen : public Screen {
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    if (has_click_events_) {
+      const auto& durations = replay_view_->GetPreviousClickDurations();
+      if (durations.size() > 0) {
+        ImGui::Text("Previous click durations");
+        ImGui::Indent();
+        for (int i = std::max<int>(0, durations.size() - 15); i < durations.size(); ++i) {
+          ImGui::Text("%0.2fs", durations[i]);
+        }
+        ImGui::Unindent();
+      }
+      ImGui::Text("Time since last click: %0.2fs", now_seconds - replay_view_->GetLastClickTime());
+    }
 
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 1.5);
 
-    bool is_playing = playback_stopwatch_.IsRunning();
-    if (is_playing) {
-      if (ImGui::Button(icons::kPause)) {
-        Pause();
+    if (replay_view_->IsDone()) {
+      if (ImGui::Button(icons::kReplay)) {
+        SeekToTime(0);
       }
     } else {
-      if (ImGui::Button(icons::kPlayArrow)) {
-        Play();
+      bool is_playing = playback_stopwatch_.IsRunning();
+      if (is_playing) {
+        if (ImGui::Button(icons::kPause)) {
+          Pause();
+        }
+      } else {
+        if (ImGui::Button(icons::kPlayArrow)) {
+          Play();
+        }
       }
     }
 
@@ -305,7 +355,7 @@ class ReplayViewerScreen : public Screen {
       app_.FinishRender(&ctx);
     }
 
-    if (replay_view_->is_done()) {
+    if (replay_view_->IsDone()) {
       Pause();
     }
   }
@@ -326,6 +376,9 @@ class ReplayViewerScreen : public Screen {
   }
 
   void SeekToTime(float now_seconds, bool play_sounds = false) {
+    if (now_seconds < 0) {
+      now_seconds = 0;
+    }
     float current_view_time = replay_view_->CurrentTime();
     if (current_view_time > now_seconds) {
       // rewinding. need to create a new view.
@@ -365,6 +418,7 @@ class ReplayViewerScreen : public Screen {
   bool is_paused_ = false;
 
   PlaybackSpeed playback_speed_ = PlaybackSpeed::SPEED_100;
+  bool has_click_events_ = false;
 };
 
 }  // namespace

@@ -19,6 +19,7 @@ struct ReplayTargetData {
 enum class ReplayEventType : u16 {
   REMOVE_TARGET = 1,
   PLAY_SOUND = 2,
+  MOUSE_CLICK = 3,
 };
 
 enum class ReplaySoundType : u16 {
@@ -76,6 +77,7 @@ class ReplayRecorder {
   void RemoveTarget(float now_seconds, u16 target_id);
   void PlaySound(float now_seconds, ReplaySoundType sound);
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
+  void AddMouseClick(float now_seconds);
 
   void SnapshotTargets(i64 frame_number, const std::vector<Target>& targets);
 
