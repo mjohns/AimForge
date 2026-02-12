@@ -282,7 +282,11 @@ class ReplayViewerScreen : public Screen {
         crosshair_, settings_.crosshair_size(), theme_, app_.screen_info().center);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
+    ImGui::AlignTextToFramePadding();
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    ImGui::SameLine();
+    ImGui::InfoMarker(
+        std::format("Approximate file size: {:.1f}mb", replay_->GetApproximateSizeMb()));
 
     ImGui::SameLine();
     ImGui::SetButtonCursorAtRight(icons::kLogout);
