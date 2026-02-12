@@ -4,6 +4,7 @@
 
 #include "SDL3/SDL.h"
 #include "absl/cleanup/cleanup.h"
+#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/core/application.h"
 #include "aim/core/settings_manager.h"
@@ -15,18 +16,26 @@
 namespace aim {
 namespace {
 
-enum class PlaybackSpeed {
-  SPEED_1,
-  SPEED_0_5,
-  SPEED_0_25,
-  SPEED_0_1,
+constexpr const char* kPlaybackSpeedKey = "ReplayPlaybackSpeed";
+
+enum class PlaybackSpeed : int {
+  SPEED_100 = 100,
+  SPEED_75 = 75,
+  SPEED_50 = 50,
+  SPEED_40 = 40,
+  SPEED_30 = 30,
+  SPEED_20 = 20,
+  SPEED_10 = 10,
 };
 
 const std::vector<std::pair<PlaybackSpeed, std::string>> kPlaybackSpeeds{
-    {PlaybackSpeed::SPEED_1, "Normal"},
-    {PlaybackSpeed::SPEED_0_5, "0.5"},
-    {PlaybackSpeed::SPEED_0_25, "0.25"},
-    {PlaybackSpeed::SPEED_0_1, "0.1"},
+    {PlaybackSpeed::SPEED_100, "1.0"},
+    {PlaybackSpeed::SPEED_75, "0.75"},
+    {PlaybackSpeed::SPEED_50, "0.50"},
+    {PlaybackSpeed::SPEED_40, "0.40"},
+    {PlaybackSpeed::SPEED_30, "0.30"},
+    {PlaybackSpeed::SPEED_20, "0.20"},
+    {PlaybackSpeed::SPEED_10, "0.10"},
 };
 
 void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, ReplaySoundType type) {
@@ -190,11 +199,24 @@ class ReplayViewerScreen : public Screen {
     theme_ = app->settings_manager().GetCurrentTheme();
 
     projection_ = GetPerspectiveTransformation(app_.screen_info(), replay->room.horizontal_fov());
+    std::optional<int> existing_playback_speed = app->local_store().GetInt(kPlaybackSpeedKey);
+    if (existing_playback_speed) {
+      playback_speed_ = static_cast<PlaybackSpeed>(*existing_playback_speed);
+    }
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {
     if (IsEscapeKeyDown(event)) {
       PopSelf();
+    }
+    if (event.type == SDL_EVENT_KEY_DOWN) {
+      if (event.key.key == SDLK_SPACE) {
+        if (is_paused_) {
+          Play();
+        } else {
+          Pause();
+        }
+      }
     }
   }
 
@@ -234,21 +256,20 @@ class ReplayViewerScreen : public Screen {
     bool is_playing = playback_stopwatch_.IsRunning();
     if (is_playing) {
       if (ImGui::Button(icons::kPause)) {
-        is_paused_ = true;
-        playback_stopwatch_.Stop();
+        Pause();
       }
     } else {
       if (ImGui::Button(icons::kPlayArrow)) {
-        is_paused_ = false;
-        playback_stopwatch_.Start();
+        Play();
       }
     }
 
     ImGui::SameLine();
     float char_x = ImGui::GetDefaultCharSizeX();
-    if (ImGui::SimpleTypeDropdown("PlaybackSpeed", &playback_speed_, kPlaybackSpeeds, char_x * 7)) {
+    if (ImGui::SimpleTypeDropdown("PlaybackSpeed", &playback_speed_, kPlaybackSpeeds, char_x * 6)) {
       playback_start_time_ = now_seconds;
       playback_stopwatch_ = Stopwatch();
+      app_.local_store().PutInt(kPlaybackSpeedKey, static_cast<int>(playback_speed_));
     }
 
     ImGui::SameLine();
@@ -285,14 +306,23 @@ class ReplayViewerScreen : public Screen {
     }
 
     if (replay_view_->is_done()) {
-      is_paused_ = true;
-      playback_stopwatch_.Stop();
+      Pause();
     }
   }
 
   void OnAttach() override {
     timer_.StartLoop();
     timer_.ResumeRun();
+  }
+
+  void Pause() {
+    is_paused_ = true;
+    playback_stopwatch_.Stop();
+  }
+
+  void Play() {
+    is_paused_ = false;
+    playback_stopwatch_.Start();
   }
 
   void SeekToTime(float now_seconds, bool play_sounds = false) {
@@ -314,17 +344,8 @@ class ReplayViewerScreen : public Screen {
 
  private:
   float GetPlaybackSpeedMultiplier() {
-    switch (playback_speed_) {
-      case PlaybackSpeed::SPEED_0_1:
-        return 0.1;
-      case PlaybackSpeed::SPEED_0_25:
-        return 0.25;
-      case PlaybackSpeed::SPEED_0_5:
-        return 0.5;
-      default:
-        break;
-    }
-    return 1.0;
+    int speed_int = static_cast<int>(playback_speed_);
+    return speed_int / 100.0f;
   }
 
   std::shared_ptr<Replay> replay_;
@@ -343,7 +364,7 @@ class ReplayViewerScreen : public Screen {
   Stopwatch playback_stopwatch_;
   bool is_paused_ = false;
 
-  PlaybackSpeed playback_speed_ = PlaybackSpeed::SPEED_1;
+  PlaybackSpeed playback_speed_ = PlaybackSpeed::SPEED_100;
 };
 
 }  // namespace
