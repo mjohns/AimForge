@@ -543,15 +543,15 @@
     "description": "",
     "items": [
      {
-      "scenario": "CA x-axis flick",
+      "scenario": "cA x-axis flick",
       "numPlays": 1
      },
      {
-      "scenario": "CA y-axis flick",
+      "scenario": "cA y-axis flick",
       "numPlays": 1
      },
      {
-      "scenario": "CA 2ts wideflick",
+      "scenario": "cA 2ts wideflick",
       "numPlays": 1
      }
     ]
