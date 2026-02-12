@@ -341,6 +341,7 @@ class ScenarioManagerImpl : public ScenarioManager {
       item.def = s;
       */
       item.def = scenario.def();
+      //dirty_bundles_.insert(bundle_name);
     }
   }
 

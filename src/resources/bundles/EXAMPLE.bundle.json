@@ -9,14 +9,14 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 14,
      "profiles": [
       {
        "targetRadius": 3.09999895,
        "speed": 135,
        "acceleration": 121
       }
-     ],
-     "numTargets": 14
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -111,6 +111,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -121,8 +122,7 @@
        "acceleration": 111,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 5
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -174,14 +174,14 @@
      "healthSeconds": 0.4
     },
     "targetDef": {
+     "numTargets": 500,
      "profiles": [
       {
        "targetRadius": 2.04999924,
        "targetRadiusJitter": 1.49011612e-08,
        "speed": 48
       }
-     ],
-     "numTargets": 500
+     ]
     },
     "room": {
      "cameraPosition": {

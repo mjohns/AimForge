@@ -9,12 +9,12 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 2,
      "profiles": [
       {
        "targetRadius": 1.79999971
       }
      ],
-     "numTargets": 2,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -68,18 +68,14 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       1
-      ],
-      "minDistance": {
-       "value": 20
-      },
       "regionsInfo": {
        "explicitOrder": [
         0,
         1
        ]
+      },
+      "minDistance": {
+       "value": 20
       }
      }
     }
@@ -94,12 +90,12 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 2,
      "profiles": [
       {
        "targetRadius": 1.8
       }
      ],
-     "numTargets": 2,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -205,6 +201,7 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 2,
      "profiles": [
       {
        "info": {},
@@ -212,7 +209,6 @@
        "speed": 25
       }
      ],
-     "numTargets": 2,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -264,18 +260,14 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       1
-      ],
-      "minDistance": {
-       "value": 20
-      },
       "regionsInfo": {
        "explicitOrder": [
         0,
         1
        ]
+      },
+      "minDistance": {
+       "value": 20
       }
      },
      "leftRightInitialDirection": "DIRECTION_IN",
@@ -293,13 +285,13 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 2,
      "profiles": [
       {
        "info": {},
        "targetRadius": 1.5
       }
      ],
-     "numTargets": 2,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -350,18 +342,14 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       1
-      ],
-      "minDistance": {
-       "value": 20
-      },
       "regionsInfo": {
        "explicitOrder": [
         0,
         1
        ]
+      },
+      "minDistance": {
+       "value": 20
       }
      }
     }
@@ -376,13 +364,13 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 2,
      "profiles": [
       {
        "targetRadius": 2,
        "speed": 12
       }
      ],
-     "numTargets": 2,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -453,10 +441,6 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       1
-      ],
       "regionsInfo": {
        "explicitOrder": [
         0,
@@ -485,6 +469,7 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 2,
      "profiles": [
       {
        "info": {},
@@ -493,7 +478,6 @@
        "speedJitter": 0
       }
      ],
-     "numTargets": 2,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -565,18 +549,14 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       1
-      ],
-      "minDistance": {
-       "value": 20
-      },
       "regionsInfo": {
        "explicitOrder": [
         0,
         1
        ]
+      },
+      "minDistance": {
+       "value": 20
       }
      }
     }
@@ -591,6 +571,7 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {
@@ -611,19 +592,13 @@
        "speedJitter": 3
       }
      ],
-     "numTargets": 4,
      "profilesInfo": {
       "explicitOrder": [
        0,
        0,
        1
       ]
-     },
-     "targetOrder": [
-      0,
-      0,
-      1
-     ]
+     }
     },
     "room": {
      "cameraPosition": {
@@ -675,6 +650,7 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
@@ -686,7 +662,6 @@
        "targetRadiusGrowthSize": 5.60000086
       }
      ],
-     "numTargets": 4,
      "staggerInitialTargetsSeconds": 0.1
     },
     "room": {
@@ -741,6 +716,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {
@@ -761,19 +737,13 @@
        "speedJitter": 3
       }
      ],
-     "numTargets": 4,
      "profilesInfo": {
       "explicitOrder": [
        0,
        0,
        1
       ]
-     },
-     "targetOrder": [
-      0,
-      0,
-      1
-     ]
+     }
     },
     "room": {
      "cameraPosition": {
@@ -821,6 +791,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -829,8 +800,7 @@
        "speed": 62,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -886,6 +856,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -897,8 +868,7 @@
         "height": 10
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -941,6 +911,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -952,8 +923,7 @@
         "height": 16.7000065
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -998,14 +968,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 1.9999994,
        "speed": 40
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1053,6 +1023,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 17,
      "profiles": [
       {
        "info": {},
@@ -1060,8 +1031,7 @@
        "targetRadiusJitter": 0.2,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 17
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1135,6 +1105,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
@@ -1146,7 +1117,6 @@
        "targetRadiusGrowthSize": 4.39999866
       }
      ],
-     "numTargets": 4,
      "staggerInitialTargetsSeconds": 0.25
     },
     "room": {
@@ -1201,6 +1171,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -1214,8 +1185,7 @@
         "height": 8.59997559
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1290,6 +1260,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
@@ -1298,8 +1269,7 @@
        "speed": 48,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 4
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1357,6 +1327,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -1365,8 +1336,7 @@
        "speed": 48,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 5
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1425,6 +1395,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
@@ -1432,8 +1403,7 @@
        "targetRadiusJitter": 1.49011612e-08,
        "speed": 48
       }
-     ],
-     "numTargets": 4
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1489,13 +1459,13 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "info": {},
        "targetRadius": 1.59999967
       }
-     ],
-     "numTargets": 3
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1548,14 +1518,14 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "info": {},
        "targetRadius": 1.50000012,
        "speed": 1
       }
-     ],
-     "numTargets": 3
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1611,6 +1581,7 @@
      "poke": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "info": {},
@@ -1618,8 +1589,7 @@
        "targetRadiusJitter": 0,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 3
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1673,6 +1643,7 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "targetRadius": 3,
@@ -1680,7 +1651,6 @@
        "acceleration": 120
       }
      ],
-     "numTargets": 5,
      "staggerInitialTargetsSeconds": 0.0500000082
     },
     "room": {
@@ -1766,13 +1736,13 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.99999905
       }
      ],
-     "numTargets": 1,
      "newTargetDelaySeconds": 0.3,
      "removeTargetAfterSeconds": 0.6
     },
@@ -1874,14 +1844,14 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2,
        "targetRadiusAtKill": 1.19999981
       }
-     ],
-     "numTargets": 4
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -1955,14 +1925,14 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2,
        "targetRadiusAtKill": 1.19999981
       }
-     ],
-     "numTargets": 4
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2035,6 +2005,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 6,
      "profiles": [
       {
        "info": {},
@@ -2042,8 +2013,7 @@
        "targetRadiusJitter": 1.49011612e-08,
        "speed": 40
       }
-     ],
-     "numTargets": 6
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2098,6 +2068,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 6,
      "profiles": [
       {
        "info": {},
@@ -2105,8 +2076,7 @@
        "targetRadiusJitter": 1.49011612e-08,
        "speed": 40
       }
-     ],
-     "numTargets": 6
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2163,6 +2133,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 6,
      "profiles": [
       {
        "info": {},
@@ -2171,8 +2142,7 @@
        "speed": 40,
        "targetRadiusAtKill": 1.39999986
       }
-     ],
-     "numTargets": 6
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2225,6 +2195,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2232,8 +2203,7 @@
        "speed": 58,
        "acceleration": 231
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2280,6 +2250,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2290,8 +2261,7 @@
        "acceleration": 231,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2340,6 +2310,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2350,8 +2321,7 @@
        "acceleration": 91,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2400,6 +2370,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2410,8 +2381,7 @@
        "acceleration": 116,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2460,6 +2430,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2470,8 +2441,7 @@
        "acceleration": 121,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2524,6 +2494,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2534,8 +2505,7 @@
        "acceleration": 111,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2584,6 +2554,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2594,8 +2565,7 @@
        "acceleration": 111,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2642,6 +2612,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2652,8 +2623,7 @@
        "acceleration": 71,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2701,6 +2671,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2711,8 +2682,7 @@
        "acceleration": 71,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2764,6 +2734,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2771,8 +2742,7 @@
        "speed": 99,
        "acceleration": 41
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2821,6 +2791,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2831,8 +2802,7 @@
        "acceleration": 46,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2881,14 +2851,14 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "targetRadius": 5,
        "speed": 60,
        "acceleration": 231
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -2937,6 +2907,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -2947,8 +2918,7 @@
        "acceleration": 170,
        "accelerationJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3029,18 +2999,14 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       1
-      ],
-      "minDistance": {
-       "value": 20
-      },
       "regionsInfo": {
        "explicitOrder": [
         0,
         1
        ]
+      },
+      "minDistance": {
+       "value": 20
       }
      },
      "leftRightProfiles": [
@@ -3084,12 +3050,12 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "targetRadius": 1.69999981
       }
      ],
-     "numTargets": 3,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -3162,16 +3128,16 @@
         }
        }
       ],
+      "regionsInfo": {
+       "startOrder": [
+        2
+       ]
+      },
       "minDistance": {
        "value": 8
       },
       "fixedDistanceFromLastTarget": {
        "value": 10
-      },
-      "regionsInfo": {
-       "startOrder": [
-        2
-       ]
       }
      }
     }
@@ -3185,12 +3151,12 @@
      "poke": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "targetRadius": 1.5
       }
      ],
-     "numTargets": 3,
      "newestTargetIsGhost": true
     },
     "room": {
@@ -3263,16 +3229,16 @@
         }
        }
       ],
+      "regionsInfo": {
+       "startOrder": [
+        2
+       ]
+      },
       "minDistance": {
        "value": 8
       },
       "fixedDistanceFromLastTarget": {
        "value": 10
-      },
-      "regionsInfo": {
-       "startOrder": [
-        2
-       ]
       }
      }
     }
@@ -3289,12 +3255,12 @@
      "removeClosestOnMiss": true
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "targetRadius": 7
       }
-     ],
-     "numTargets": 4
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3372,6 +3338,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "info": {},
@@ -3379,8 +3346,7 @@
        "targetRadiusJitter": 0,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 3
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3452,13 +3418,13 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 3,
      "profiles": [
       {
        "info": {},
        "targetRadius": 4
       }
-     ],
-     "numTargets": 3
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3536,6 +3502,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -3543,8 +3510,7 @@
        "targetRadiusJitter": 0,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 5
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3618,6 +3584,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 4,
      "profiles": [
       {
        "info": {},
@@ -3628,8 +3595,7 @@
        "targetRadiusGrowthSize": 4.00000048,
        "targetRadiusGrowthFinalSizeTimeSeconds": 0.2
       }
-     ],
-     "numTargets": 4
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3705,6 +3671,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -3712,8 +3679,7 @@
        "targetRadiusJitter": 0,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 5
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3785,6 +3751,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -3796,8 +3763,7 @@
         "height": 15
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cylinderRoom": {
@@ -3841,6 +3807,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "targetRadius": 6,
@@ -3849,8 +3816,7 @@
         "height": 15.9999847
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -3920,6 +3886,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -3931,7 +3898,6 @@
        "targetRadiusGrowthSize": 5.00000143
       }
      ],
-     "numTargets": 5,
      "staggerInitialTargetsSeconds": 0.2
     },
     "room": {
@@ -3991,6 +3957,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -3999,8 +3966,7 @@
        "speed": 12,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 5
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -4064,6 +4030,7 @@
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -4072,8 +4039,7 @@
        "speed": 12,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 5
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -4132,14 +4098,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.5,
        "speed": 35
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -4187,6 +4153,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -4196,7 +4163,6 @@
        "speedJitter": 8
       }
      ],
-     "numTargets": 5,
      "removeTargetAfterSeconds": 2.5,
      "staggerInitialTargetsSeconds": 0.3
     },
@@ -4261,6 +4227,7 @@
      "clickSingle": true
     },
     "targetDef": {
+     "numTargets": 5,
      "profiles": [
       {
        "info": {},
@@ -4272,7 +4239,6 @@
        "targetRadiusGrowthSize": 5.00000095
       }
      ],
-     "numTargets": 5,
      "removeTargetAfterSeconds": 2.5,
      "staggerInitialTargetsSeconds": 0.3
     },
@@ -4338,6 +4304,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -4346,8 +4313,7 @@
        "speed": 79,
        "speedJitter": 0
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -4469,21 +4435,6 @@
         }
        }
       ],
-      "regionOrder": [
-       0,
-       2,
-       0,
-       2,
-       0,
-       3,
-       1,
-       3,
-       1,
-       3
-      ],
-      "minDistance": {
-       "value": 44
-      },
       "regionsInfo": {
        "explicitOrder": [
         0,
@@ -4497,6 +4448,9 @@
         1,
         3
        ]
+      },
+      "minDistance": {
+       "value": 44
       }
      }
     }

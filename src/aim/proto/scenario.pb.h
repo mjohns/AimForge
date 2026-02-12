@@ -7334,16 +7334,15 @@ class TargetDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kProfilesFieldNumber = 1,
-    kTargetOrderFieldNumber = 4,
+    kProfilesFieldNumber = 2,
     kProfilesInfoFieldNumber = 3,
-    kNumTargetsFieldNumber = 2,
+    kNumTargetsFieldNumber = 1,
     kNewestTargetIsGhostFieldNumber = 5,
     kNewTargetDelaySecondsFieldNumber = 6,
     kRemoveTargetAfterSecondsFieldNumber = 7,
     kStaggerInitialTargetsSecondsFieldNumber = 8,
   };
-  // repeated .aim.TargetProfile profiles = 1;
+  // repeated .aim.TargetProfile profiles = 2;
   int profiles_size() const;
   private:
   int _internal_profiles_size() const;
@@ -7360,24 +7359,6 @@ class TargetDef final : public ::google::protobuf::Message
   const ::aim::TargetProfile& profiles(int index) const;
   ::aim::TargetProfile* PROTOBUF_NONNULL add_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>& profiles() const;
-  // repeated int32 target_order = 4;
-  int target_order_size() const;
-  private:
-  int _internal_target_order_size() const;
-
-  public:
-  void clear_target_order() ;
-  ::int32_t target_order(int index) const;
-  void set_target_order(int index, ::int32_t value);
-  void add_target_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& target_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_target_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_target_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_target_order();
-
-  public:
   // .aim.ProfileListInfo profiles_info = 3;
   bool has_profiles_info() const;
   void clear_profiles_info() ;
@@ -7393,7 +7374,7 @@ class TargetDef final : public ::google::protobuf::Message
   ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_profiles_info();
 
   public:
-  // int32 num_targets = 2;
+  // int32 num_targets = 1;
   bool has_num_targets() const;
   void clear_num_targets() ;
   ::int32_t num_targets() const;
@@ -7451,7 +7432,7 @@ class TargetDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
                                    2, 0,
                                    2>
       _table_;
@@ -7474,8 +7455,6 @@ class TargetDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::TargetProfile > profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> target_order_;
-    ::google::protobuf::internal::CachedSize _target_order_cached_byte_size_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE profiles_info_;
     ::int32_t num_targets_;
     bool newest_target_is_ghost_;
@@ -7874,11 +7853,10 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kRegionsFieldNumber = 1,
-    kRegionOrderFieldNumber = 2,
+    kRegionsInfoFieldNumber = 2,
     kMinDistanceFieldNumber = 3,
     kFixedDistanceFromLastTargetFieldNumber = 4,
     kFixedDistanceFromLastTargetJitterFieldNumber = 5,
-    kRegionsInfoFieldNumber = 100,
   };
   // repeated .aim.TargetRegion regions = 1;
   int regions_size() const;
@@ -7897,22 +7875,19 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   const ::aim::TargetRegion& regions(int index) const;
   ::aim::TargetRegion* PROTOBUF_NONNULL add_regions();
   const ::google::protobuf::RepeatedPtrField<::aim::TargetRegion>& regions() const;
-  // repeated int32 region_order = 2;
-  int region_order_size() const;
-  private:
-  int _internal_region_order_size() const;
-
-  public:
-  void clear_region_order() ;
-  ::int32_t region_order(int index) const;
-  void set_region_order(int index, ::int32_t value);
-  void add_region_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& region_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_region_order();
+  // .aim.ProfileListInfo regions_info = 2;
+  bool has_regions_info() const;
+  void clear_regions_info() ;
+  const ::aim::ProfileListInfo& regions_info() const;
+  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_regions_info();
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_regions_info();
+  void set_allocated_regions_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_regions_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_regions_info();
 
   private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_region_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_region_order();
+  const ::aim::ProfileListInfo& _internal_regions_info() const;
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_regions_info();
 
   public:
   // .aim.RegionLength min_distance = 3;
@@ -7960,28 +7935,13 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
   ::aim::RegionLength* PROTOBUF_NONNULL _internal_mutable_fixed_distance_from_last_target_jitter();
 
   public:
-  // .aim.ProfileListInfo regions_info = 100;
-  bool has_regions_info() const;
-  void clear_regions_info() ;
-  const ::aim::ProfileListInfo& regions_info() const;
-  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_regions_info();
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_regions_info();
-  void set_allocated_regions_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_regions_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_regions_info();
-
-  private:
-  const ::aim::ProfileListInfo& _internal_regions_info() const;
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_regions_info();
-
-  public:
   // @@protoc_insertion_point(class_scope:aim.TargetPlacementStrategy)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 6,
+  static const ::google::protobuf::internal::TcParseTable<3, 5,
                                    5, 0,
-                                   7>
+                                   2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -8002,12 +7962,10 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::TargetRegion > regions_;
-    ::google::protobuf::RepeatedField<::int32_t> region_order_;
-    ::google::protobuf::internal::CachedSize _region_order_cached_byte_size_;
+    ::aim::ProfileListInfo* PROTOBUF_NULLABLE regions_info_;
     ::aim::RegionLength* PROTOBUF_NULLABLE min_distance_;
     ::aim::RegionLength* PROTOBUF_NULLABLE fixed_distance_from_last_target_;
     ::aim::RegionLength* PROTOBUF_NULLABLE fixed_distance_from_last_target_jitter_;
-    ::aim::ProfileListInfo* PROTOBUF_NULLABLE regions_info_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -8367,9 +8325,8 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kProfilesFieldNumber = 2,
-    kProfileOrderFieldNumber = 3,
     kTargetPlacementStrategyFieldNumber = 1,
-    kProfilesInfoFieldNumber = 4,
+    kProfilesInfoFieldNumber = 3,
   };
   // repeated .aim.WallWanderProfile profiles = 2;
   int profiles_size() const;
@@ -8388,24 +8345,6 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   const ::aim::WallWanderProfile& profiles(int index) const;
   ::aim::WallWanderProfile* PROTOBUF_NONNULL add_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::WallWanderProfile>& profiles() const;
-  // repeated int32 profile_order = 3;
-  int profile_order_size() const;
-  private:
-  int _internal_profile_order_size() const;
-
-  public:
-  void clear_profile_order() ;
-  ::int32_t profile_order(int index) const;
-  void set_profile_order(int index, ::int32_t value);
-  void add_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_profile_order();
-
-  public:
   // .aim.TargetPlacementStrategy target_placement_strategy = 1;
   bool has_target_placement_strategy() const;
   void clear_target_placement_strategy() ;
@@ -8421,7 +8360,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // .aim.ProfileListInfo profiles_info = 4;
+  // .aim.ProfileListInfo profiles_info = 3;
   bool has_profiles_info() const;
   void clear_profiles_info() ;
   const ::aim::ProfileListInfo& profiles_info() const;
@@ -8440,7 +8379,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<2, 4,
+  static const ::google::protobuf::internal::TcParseTable<2, 3,
                                    3, 0,
                                    2>
       _table_;
@@ -8463,8 +8402,6 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::WallWanderProfile > profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> profile_order_;
-    ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE profiles_info_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -8619,17 +8556,14 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kLeftRightProfilesFieldNumber = 5,
-    kLeftRightProfileOrderFieldNumber = 6,
     kForwardBackProfilesFieldNumber = 7,
-    kForwardBackProfileOrderFieldNumber = 8,
     kUpDownProfilesFieldNumber = 9,
-    kUpDownProfileOrderFieldNumber = 10,
     kBoundsFieldNumber = 1,
     kRelativeBoundsFieldNumber = 2,
     kTargetPlacementStrategyFieldNumber = 4,
-    kLeftRightProfilesInfoFieldNumber = 100,
-    kForwardBackProfilesInfoFieldNumber = 101,
-    kUpDownProfilesInfoFieldNumber = 102,
+    kLeftRightProfilesInfoFieldNumber = 6,
+    kForwardBackProfilesInfoFieldNumber = 8,
+    kUpDownProfilesInfoFieldNumber = 10,
     kLeftRightInitialDirectionFieldNumber = 13,
     kUpDownInitialDirectionFieldNumber = 14,
     kForwardBackInitialDirectionFieldNumber = 15,
@@ -8651,24 +8585,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   const ::aim::StrafeProfile& left_right_profiles(int index) const;
   ::aim::StrafeProfile* PROTOBUF_NONNULL add_left_right_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& left_right_profiles() const;
-  // repeated int32 left_right_profile_order = 6;
-  int left_right_profile_order_size() const;
-  private:
-  int _internal_left_right_profile_order_size() const;
-
-  public:
-  void clear_left_right_profile_order() ;
-  ::int32_t left_right_profile_order(int index) const;
-  void set_left_right_profile_order(int index, ::int32_t value);
-  void add_left_right_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& left_right_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_left_right_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_left_right_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_left_right_profile_order();
-
-  public:
   // repeated .aim.StrafeProfile forward_back_profiles = 7;
   int forward_back_profiles_size() const;
   private:
@@ -8686,24 +8602,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   const ::aim::StrafeProfile& forward_back_profiles(int index) const;
   ::aim::StrafeProfile* PROTOBUF_NONNULL add_forward_back_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& forward_back_profiles() const;
-  // repeated int32 forward_back_profile_order = 8;
-  int forward_back_profile_order_size() const;
-  private:
-  int _internal_forward_back_profile_order_size() const;
-
-  public:
-  void clear_forward_back_profile_order() ;
-  ::int32_t forward_back_profile_order(int index) const;
-  void set_forward_back_profile_order(int index, ::int32_t value);
-  void add_forward_back_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& forward_back_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_forward_back_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_forward_back_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_forward_back_profile_order();
-
-  public:
   // repeated .aim.StrafeProfile up_down_profiles = 9;
   int up_down_profiles_size() const;
   private:
@@ -8721,24 +8619,6 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   const ::aim::StrafeProfile& up_down_profiles(int index) const;
   ::aim::StrafeProfile* PROTOBUF_NONNULL add_up_down_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& up_down_profiles() const;
-  // repeated int32 up_down_profile_order = 10;
-  int up_down_profile_order_size() const;
-  private:
-  int _internal_up_down_profile_order_size() const;
-
-  public:
-  void clear_up_down_profile_order() ;
-  ::int32_t up_down_profile_order(int index) const;
-  void set_up_down_profile_order(int index, ::int32_t value);
-  void add_up_down_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& up_down_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_up_down_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_up_down_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_up_down_profile_order();
-
-  public:
   // .aim.Bounds bounds = 1;
   bool has_bounds() const;
   void clear_bounds() ;
@@ -8784,7 +8664,7 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // .aim.ProfileListInfo left_right_profiles_info = 100;
+  // .aim.ProfileListInfo left_right_profiles_info = 6;
   bool has_left_right_profiles_info() const;
   void clear_left_right_profiles_info() ;
   const ::aim::ProfileListInfo& left_right_profiles_info() const;
@@ -8799,7 +8679,7 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_left_right_profiles_info();
 
   public:
-  // .aim.ProfileListInfo forward_back_profiles_info = 101;
+  // .aim.ProfileListInfo forward_back_profiles_info = 8;
   bool has_forward_back_profiles_info() const;
   void clear_forward_back_profiles_info() ;
   const ::aim::ProfileListInfo& forward_back_profiles_info() const;
@@ -8814,7 +8694,7 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_forward_back_profiles_info();
 
   public:
-  // .aim.ProfileListInfo up_down_profiles_info = 102;
+  // .aim.ProfileListInfo up_down_profiles_info = 10;
   bool has_up_down_profiles_info() const;
   void clear_up_down_profiles_info() ;
   const ::aim::ProfileListInfo& up_down_profiles_info() const;
@@ -8866,9 +8746,9 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
                                    9, 0,
-                                   7>
+                                   2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -8889,14 +8769,8 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > left_right_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> left_right_profile_order_;
-    ::google::protobuf::internal::CachedSize _left_right_profile_order_cached_byte_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > forward_back_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> forward_back_profile_order_;
-    ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > up_down_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> up_down_profile_order_;
-    ::google::protobuf::internal::CachedSize _up_down_profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::Bounds* PROTOBUF_NULLABLE relative_bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
@@ -9500,18 +9374,15 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kBounceProfilesFieldNumber = 3,
-    kBounceProfileOrderFieldNumber = 4,
     kLeftRightProfilesFieldNumber = 5,
-    kLeftRightProfileOrderFieldNumber = 6,
     kForwardBackProfilesFieldNumber = 7,
-    kForwardBackProfileOrderFieldNumber = 8,
     kBoundsFieldNumber = 1,
     kRelativeBoundsFieldNumber = 2,
+    kBounceProfilesInfoFieldNumber = 4,
+    kLeftRightProfilesInfoFieldNumber = 6,
+    kForwardBackProfilesInfoFieldNumber = 8,
     kTargetPlacementStrategyFieldNumber = 9,
     kFloorHeightFieldNumber = 13,
-    kBounceProfilesInfoFieldNumber = 102,
-    kLeftRightProfilesInfoFieldNumber = 103,
-    kForwardBackProfilesInfoFieldNumber = 104,
     kLeftRightInitialDirectionFieldNumber = 11,
     kForwardBackInitialDirectionFieldNumber = 12,
   };
@@ -9532,24 +9403,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   const ::aim::BounceProfile& bounce_profiles(int index) const;
   ::aim::BounceProfile* PROTOBUF_NONNULL add_bounce_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::BounceProfile>& bounce_profiles() const;
-  // repeated int32 bounce_profile_order = 4;
-  int bounce_profile_order_size() const;
-  private:
-  int _internal_bounce_profile_order_size() const;
-
-  public:
-  void clear_bounce_profile_order() ;
-  ::int32_t bounce_profile_order(int index) const;
-  void set_bounce_profile_order(int index, ::int32_t value);
-  void add_bounce_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& bounce_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_bounce_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_bounce_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_bounce_profile_order();
-
-  public:
   // repeated .aim.StrafeProfile left_right_profiles = 5;
   int left_right_profiles_size() const;
   private:
@@ -9567,24 +9420,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   const ::aim::StrafeProfile& left_right_profiles(int index) const;
   ::aim::StrafeProfile* PROTOBUF_NONNULL add_left_right_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& left_right_profiles() const;
-  // repeated int32 left_right_profile_order = 6;
-  int left_right_profile_order_size() const;
-  private:
-  int _internal_left_right_profile_order_size() const;
-
-  public:
-  void clear_left_right_profile_order() ;
-  ::int32_t left_right_profile_order(int index) const;
-  void set_left_right_profile_order(int index, ::int32_t value);
-  void add_left_right_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& left_right_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_left_right_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_left_right_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_left_right_profile_order();
-
-  public:
   // repeated .aim.StrafeProfile forward_back_profiles = 7;
   int forward_back_profiles_size() const;
   private:
@@ -9602,24 +9437,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   const ::aim::StrafeProfile& forward_back_profiles(int index) const;
   ::aim::StrafeProfile* PROTOBUF_NONNULL add_forward_back_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& forward_back_profiles() const;
-  // repeated int32 forward_back_profile_order = 8;
-  int forward_back_profile_order_size() const;
-  private:
-  int _internal_forward_back_profile_order_size() const;
-
-  public:
-  void clear_forward_back_profile_order() ;
-  ::int32_t forward_back_profile_order(int index) const;
-  void set_forward_back_profile_order(int index, ::int32_t value);
-  void add_forward_back_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& forward_back_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_forward_back_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_forward_back_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_forward_back_profile_order();
-
-  public:
   // .aim.Bounds bounds = 1;
   bool has_bounds() const;
   void clear_bounds() ;
@@ -9648,6 +9465,51 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   private:
   const ::aim::Bounds& _internal_relative_bounds() const;
   ::aim::Bounds* PROTOBUF_NONNULL _internal_mutable_relative_bounds();
+
+  public:
+  // .aim.ProfileListInfo bounce_profiles_info = 4;
+  bool has_bounce_profiles_info() const;
+  void clear_bounce_profiles_info() ;
+  const ::aim::ProfileListInfo& bounce_profiles_info() const;
+  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_bounce_profiles_info();
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_bounce_profiles_info();
+  void set_allocated_bounce_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_bounce_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_bounce_profiles_info();
+
+  private:
+  const ::aim::ProfileListInfo& _internal_bounce_profiles_info() const;
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_bounce_profiles_info();
+
+  public:
+  // .aim.ProfileListInfo left_right_profiles_info = 6;
+  bool has_left_right_profiles_info() const;
+  void clear_left_right_profiles_info() ;
+  const ::aim::ProfileListInfo& left_right_profiles_info() const;
+  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_left_right_profiles_info();
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_left_right_profiles_info();
+  void set_allocated_left_right_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_left_right_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_left_right_profiles_info();
+
+  private:
+  const ::aim::ProfileListInfo& _internal_left_right_profiles_info() const;
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_left_right_profiles_info();
+
+  public:
+  // .aim.ProfileListInfo forward_back_profiles_info = 8;
+  bool has_forward_back_profiles_info() const;
+  void clear_forward_back_profiles_info() ;
+  const ::aim::ProfileListInfo& forward_back_profiles_info() const;
+  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_forward_back_profiles_info();
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_forward_back_profiles_info();
+  void set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_forward_back_profiles_info();
+
+  private:
+  const ::aim::ProfileListInfo& _internal_forward_back_profiles_info() const;
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_forward_back_profiles_info();
 
   public:
   // .aim.TargetPlacementStrategy target_placement_strategy = 9;
@@ -9680,51 +9542,6 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   ::aim::RegionLength* PROTOBUF_NONNULL _internal_mutable_floor_height();
 
   public:
-  // .aim.ProfileListInfo bounce_profiles_info = 102;
-  bool has_bounce_profiles_info() const;
-  void clear_bounce_profiles_info() ;
-  const ::aim::ProfileListInfo& bounce_profiles_info() const;
-  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_bounce_profiles_info();
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_bounce_profiles_info();
-  void set_allocated_bounce_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_bounce_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_bounce_profiles_info();
-
-  private:
-  const ::aim::ProfileListInfo& _internal_bounce_profiles_info() const;
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_bounce_profiles_info();
-
-  public:
-  // .aim.ProfileListInfo left_right_profiles_info = 103;
-  bool has_left_right_profiles_info() const;
-  void clear_left_right_profiles_info() ;
-  const ::aim::ProfileListInfo& left_right_profiles_info() const;
-  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_left_right_profiles_info();
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_left_right_profiles_info();
-  void set_allocated_left_right_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_left_right_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_left_right_profiles_info();
-
-  private:
-  const ::aim::ProfileListInfo& _internal_left_right_profiles_info() const;
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_left_right_profiles_info();
-
-  public:
-  // .aim.ProfileListInfo forward_back_profiles_info = 104;
-  bool has_forward_back_profiles_info() const;
-  void clear_forward_back_profiles_info() ;
-  const ::aim::ProfileListInfo& forward_back_profiles_info() const;
-  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_forward_back_profiles_info();
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_forward_back_profiles_info();
-  void set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_forward_back_profiles_info();
-
-  private:
-  const ::aim::ProfileListInfo& _internal_forward_back_profiles_info() const;
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_forward_back_profiles_info();
-
-  public:
   // .aim.Direction left_right_initial_direction = 11;
   bool has_left_right_initial_direction() const;
   void clear_left_right_initial_direction() ;
@@ -9751,9 +9568,9 @@ class BounceScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
                                    10, 0,
-                                   7>
+                                   2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -9774,21 +9591,15 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::BounceProfile > bounce_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> bounce_profile_order_;
-    ::google::protobuf::internal::CachedSize _bounce_profile_order_cached_byte_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > left_right_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> left_right_profile_order_;
-    ::google::protobuf::internal::CachedSize _left_right_profile_order_cached_byte_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > forward_back_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> forward_back_profile_order_;
-    ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::Bounds* PROTOBUF_NULLABLE relative_bounds_;
-    ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
-    ::aim::RegionLength* PROTOBUF_NULLABLE floor_height_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE bounce_profiles_info_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE left_right_profiles_info_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE forward_back_profiles_info_;
+    ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
+    ::aim::RegionLength* PROTOBUF_NULLABLE floor_height_;
     int left_right_initial_direction_;
     int forward_back_initial_direction_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -10151,13 +9962,11 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kProfilesFieldNumber = 4,
-    kProfileOrderFieldNumber = 5,
     kForwardBackProfilesFieldNumber = 6,
-    kForwardBackProfileOrderFieldNumber = 7,
     kBoundsFieldNumber = 1,
     kTargetPlacementStrategyFieldNumber = 2,
-    kForwardBackProfilesInfoFieldNumber = 9,
-    kProfilesInfoFieldNumber = 100,
+    kProfilesInfoFieldNumber = 5,
+    kForwardBackProfilesInfoFieldNumber = 7,
     kForwardBackInitialDirectionFieldNumber = 8,
   };
   // repeated .aim.AngleStrafeProfile profiles = 4;
@@ -10177,24 +9986,6 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   const ::aim::AngleStrafeProfile& profiles(int index) const;
   ::aim::AngleStrafeProfile* PROTOBUF_NONNULL add_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::AngleStrafeProfile>& profiles() const;
-  // repeated int32 profile_order = 5;
-  int profile_order_size() const;
-  private:
-  int _internal_profile_order_size() const;
-
-  public:
-  void clear_profile_order() ;
-  ::int32_t profile_order(int index) const;
-  void set_profile_order(int index, ::int32_t value);
-  void add_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_profile_order();
-
-  public:
   // repeated .aim.StrafeProfile forward_back_profiles = 6;
   int forward_back_profiles_size() const;
   private:
@@ -10212,24 +10003,6 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   const ::aim::StrafeProfile& forward_back_profiles(int index) const;
   ::aim::StrafeProfile* PROTOBUF_NONNULL add_forward_back_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>& forward_back_profiles() const;
-  // repeated int32 forward_back_profile_order = 7;
-  int forward_back_profile_order_size() const;
-  private:
-  int _internal_forward_back_profile_order_size() const;
-
-  public:
-  void clear_forward_back_profile_order() ;
-  ::int32_t forward_back_profile_order(int index) const;
-  void set_forward_back_profile_order(int index, ::int32_t value);
-  void add_forward_back_profile_order(::int32_t value);
-  const ::google::protobuf::RepeatedField<::int32_t>& forward_back_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL mutable_forward_back_profile_order();
-
-  private:
-  const ::google::protobuf::RepeatedField<::int32_t>& _internal_forward_back_profile_order() const;
-  ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL _internal_mutable_forward_back_profile_order();
-
-  public:
   // .aim.Bounds bounds = 1;
   bool has_bounds() const;
   void clear_bounds() ;
@@ -10260,22 +10033,7 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL _internal_mutable_target_placement_strategy();
 
   public:
-  // .aim.ProfileListInfo forward_back_profiles_info = 9;
-  bool has_forward_back_profiles_info() const;
-  void clear_forward_back_profiles_info() ;
-  const ::aim::ProfileListInfo& forward_back_profiles_info() const;
-  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_forward_back_profiles_info();
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_forward_back_profiles_info();
-  void set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
-  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_forward_back_profiles_info();
-
-  private:
-  const ::aim::ProfileListInfo& _internal_forward_back_profiles_info() const;
-  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_forward_back_profiles_info();
-
-  public:
-  // .aim.ProfileListInfo profiles_info = 100;
+  // .aim.ProfileListInfo profiles_info = 5;
   bool has_profiles_info() const;
   void clear_profiles_info() ;
   const ::aim::ProfileListInfo& profiles_info() const;
@@ -10288,6 +10046,21 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
   private:
   const ::aim::ProfileListInfo& _internal_profiles_info() const;
   ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_profiles_info();
+
+  public:
+  // .aim.ProfileListInfo forward_back_profiles_info = 7;
+  bool has_forward_back_profiles_info() const;
+  void clear_forward_back_profiles_info() ;
+  const ::aim::ProfileListInfo& forward_back_profiles_info() const;
+  [[nodiscard]] ::aim::ProfileListInfo* PROTOBUF_NULLABLE release_forward_back_profiles_info();
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL mutable_forward_back_profiles_info();
+  void set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_forward_back_profiles_info(::aim::ProfileListInfo* PROTOBUF_NULLABLE value);
+  ::aim::ProfileListInfo* PROTOBUF_NULLABLE unsafe_arena_release_forward_back_profiles_info();
+
+  private:
+  const ::aim::ProfileListInfo& _internal_forward_back_profiles_info() const;
+  ::aim::ProfileListInfo* PROTOBUF_NONNULL _internal_mutable_forward_back_profiles_info();
 
   public:
   // .aim.Direction forward_back_initial_direction = 8;
@@ -10305,9 +10078,9 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 9,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
                                    6, 0,
-                                   7>
+                                   2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -10328,15 +10101,11 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::AngleStrafeProfile > profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> profile_order_;
-    ::google::protobuf::internal::CachedSize _profile_order_cached_byte_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::StrafeProfile > forward_back_profiles_;
-    ::google::protobuf::RepeatedField<::int32_t> forward_back_profile_order_;
-    ::google::protobuf::internal::CachedSize _forward_back_profile_order_cached_byte_size_;
     ::aim::Bounds* PROTOBUF_NULLABLE bounds_;
     ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE target_placement_strategy_;
-    ::aim::ProfileListInfo* PROTOBUF_NULLABLE forward_back_profiles_info_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE profiles_info_;
+    ::aim::ProfileListInfo* PROTOBUF_NULLABLE forward_back_profiles_info_;
     int forward_back_initial_direction_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -13953,59 +13722,9 @@ TargetPlacementStrategy::_internal_mutable_regions() {
   return &_impl_.regions_;
 }
 
-// repeated int32 region_order = 2;
-inline int TargetPlacementStrategy::_internal_region_order_size() const {
-  return _internal_region_order().size();
-}
-inline int TargetPlacementStrategy::region_order_size() const {
-  return _internal_region_order_size();
-}
-inline void TargetPlacementStrategy::clear_region_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.region_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t TargetPlacementStrategy::region_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.TargetPlacementStrategy.region_order)
-  return _internal_region_order().Get(index);
-}
-inline void TargetPlacementStrategy::set_region_order(int index, ::int32_t value) {
-  _internal_mutable_region_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.TargetPlacementStrategy.region_order)
-}
-inline void TargetPlacementStrategy::add_region_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_region_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_add:aim.TargetPlacementStrategy.region_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& TargetPlacementStrategy::region_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TargetPlacementStrategy.region_order)
-  return _internal_region_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL TargetPlacementStrategy::mutable_region_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_mutable_list:aim.TargetPlacementStrategy.region_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_region_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-TargetPlacementStrategy::_internal_region_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.region_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-TargetPlacementStrategy::_internal_mutable_region_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.region_order_;
-}
-
-// .aim.ProfileListInfo regions_info = 100;
+// .aim.ProfileListInfo regions_info = 2;
 inline bool TargetPlacementStrategy::has_regions_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
   PROTOBUF_ASSUME(!value || _impl_.regions_info_ != nullptr);
   return value;
 }
@@ -14013,7 +13732,7 @@ inline void TargetPlacementStrategy::clear_regions_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.regions_info_ != nullptr) _impl_.regions_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000002U);
 }
 inline const ::aim::ProfileListInfo& TargetPlacementStrategy::_internal_regions_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -14032,16 +13751,16 @@ inline void TargetPlacementStrategy::unsafe_arena_set_allocated_regions_info(
   }
   _impl_.regions_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetPlacementStrategy.regions_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE TargetPlacementStrategy::release_regions_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::ProfileListInfo* released = _impl_.regions_info_;
   _impl_.regions_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -14061,7 +13780,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE TargetPlacementStrategy::unsafe
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetPlacementStrategy.regions_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::ProfileListInfo* temp = _impl_.regions_info_;
   _impl_.regions_info_ = nullptr;
   return temp;
@@ -14076,7 +13795,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL TargetPlacementStrategy::_intern
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL TargetPlacementStrategy::mutable_regions_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_regions_info();
   // @@protoc_insertion_point(field_mutable:aim.TargetPlacementStrategy.regions_info)
   return _msg;
@@ -14093,9 +13812,9 @@ inline void TargetPlacementStrategy::set_allocated_regions_info(::aim::ProfileLi
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
 
   _impl_.regions_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -19511,7 +19230,7 @@ inline void Bounds::set_allocated_depth(::aim::RegionLength* PROTOBUF_NULLABLE v
 
 // .aim.Bounds bounds = 1;
 inline bool AngleStrafeScenarioDef::has_bounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   PROTOBUF_ASSUME(!value || _impl_.bounds_ != nullptr);
   return value;
 }
@@ -19519,7 +19238,7 @@ inline void AngleStrafeScenarioDef::clear_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounds_ != nullptr) _impl_.bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000004U);
 }
 inline const ::aim::Bounds& AngleStrafeScenarioDef::_internal_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -19538,16 +19257,16 @@ inline void AngleStrafeScenarioDef::unsafe_arena_set_allocated_bounds(
   }
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AngleStrafeScenarioDef.bounds)
 }
 inline ::aim::Bounds* PROTOBUF_NULLABLE AngleStrafeScenarioDef::release_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::Bounds* released = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -19567,7 +19286,7 @@ inline ::aim::Bounds* PROTOBUF_NULLABLE AngleStrafeScenarioDef::unsafe_arena_rel
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.AngleStrafeScenarioDef.bounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::Bounds* temp = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   return temp;
@@ -19582,7 +19301,7 @@ inline ::aim::Bounds* PROTOBUF_NONNULL AngleStrafeScenarioDef::_internal_mutable
 }
 inline ::aim::Bounds* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::Bounds* _msg = _internal_mutable_bounds();
   // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.bounds)
   return _msg;
@@ -19599,9 +19318,9 @@ inline void AngleStrafeScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
 
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
@@ -19610,7 +19329,7 @@ inline void AngleStrafeScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 2;
 inline bool AngleStrafeScenarioDef::has_target_placement_strategy() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
   return value;
 }
@@ -19618,7 +19337,7 @@ inline void AngleStrafeScenarioDef::clear_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000008U);
 }
 inline const ::aim::TargetPlacementStrategy& AngleStrafeScenarioDef::_internal_target_placement_strategy() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -19637,16 +19356,16 @@ inline void AngleStrafeScenarioDef::unsafe_arena_set_allocated_target_placement_
   }
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AngleStrafeScenarioDef.target_placement_strategy)
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE AngleStrafeScenarioDef::release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -19666,7 +19385,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE AngleStrafeScenarioDef:
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.AngleStrafeScenarioDef.target_placement_strategy)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   return temp;
@@ -19681,7 +19400,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL AngleStrafeScenarioDef::
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_target_placement_strategy()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
   // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.target_placement_strategy)
   return _msg;
@@ -19698,9 +19417,9 @@ inline void AngleStrafeScenarioDef::set_allocated_target_placement_strategy(::ai
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
@@ -19763,59 +19482,9 @@ AngleStrafeScenarioDef::_internal_mutable_profiles() {
   return &_impl_.profiles_;
 }
 
-// repeated int32 profile_order = 5;
-inline int AngleStrafeScenarioDef::_internal_profile_order_size() const {
-  return _internal_profile_order().size();
-}
-inline int AngleStrafeScenarioDef::profile_order_size() const {
-  return _internal_profile_order_size();
-}
-inline void AngleStrafeScenarioDef::clear_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t AngleStrafeScenarioDef::profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.profile_order)
-  return _internal_profile_order().Get(index);
-}
-inline void AngleStrafeScenarioDef::set_profile_order(int index, ::int32_t value) {
-  _internal_mutable_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.profile_order)
-}
-inline void AngleStrafeScenarioDef::add_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_add:aim.AngleStrafeScenarioDef.profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& AngleStrafeScenarioDef::profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.AngleStrafeScenarioDef.profile_order)
-  return _internal_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_mutable_list:aim.AngleStrafeScenarioDef.profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-AngleStrafeScenarioDef::_internal_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-AngleStrafeScenarioDef::_internal_mutable_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.profile_order_;
-}
-
-// .aim.ProfileListInfo profiles_info = 100;
+// .aim.ProfileListInfo profiles_info = 5;
 inline bool AngleStrafeScenarioDef::has_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   PROTOBUF_ASSUME(!value || _impl_.profiles_info_ != nullptr);
   return value;
 }
@@ -19823,7 +19492,7 @@ inline void AngleStrafeScenarioDef::clear_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.profiles_info_ != nullptr) _impl_.profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000010U);
 }
 inline const ::aim::ProfileListInfo& AngleStrafeScenarioDef::_internal_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -19842,16 +19511,16 @@ inline void AngleStrafeScenarioDef::unsafe_arena_set_allocated_profiles_info(
   }
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AngleStrafeScenarioDef.profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE AngleStrafeScenarioDef::release_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::ProfileListInfo* released = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -19871,7 +19540,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE AngleStrafeScenarioDef::unsafe_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.AngleStrafeScenarioDef.profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::ProfileListInfo* temp = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   return temp;
@@ -19886,7 +19555,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL AngleStrafeScenarioDef::_interna
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.profiles_info)
   return _msg;
@@ -19903,9 +19572,9 @@ inline void AngleStrafeScenarioDef::set_allocated_profiles_info(::aim::ProfileLi
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
 
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -19923,7 +19592,7 @@ inline void AngleStrafeScenarioDef::clear_forward_back_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_profiles_.Clear();
   ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000002U);
 }
 inline ::aim::StrafeProfile* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
@@ -19932,7 +19601,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_fo
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_mutable_list:aim.AngleStrafeScenarioDef.forward_back_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_forward_back_profiles();
@@ -19948,7 +19617,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL AngleStrafeScenarioDef::add_forwar
   ::aim::StrafeProfile* _add =
       _internal_mutable_forward_back_profiles()->InternalAddWithArena(
           ::google::protobuf::MessageLite::internal_visibility(), GetArena());
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_add:aim.AngleStrafeScenarioDef.forward_back_profiles)
   return _add;
 }
@@ -19968,88 +19637,9 @@ AngleStrafeScenarioDef::_internal_mutable_forward_back_profiles() {
   return &_impl_.forward_back_profiles_;
 }
 
-// repeated int32 forward_back_profile_order = 7;
-inline int AngleStrafeScenarioDef::_internal_forward_back_profile_order_size() const {
-  return _internal_forward_back_profile_order().size();
-}
-inline int AngleStrafeScenarioDef::forward_back_profile_order_size() const {
-  return _internal_forward_back_profile_order_size();
-}
-inline void AngleStrafeScenarioDef::clear_forward_back_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.forward_back_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::int32_t AngleStrafeScenarioDef::forward_back_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.forward_back_profile_order)
-  return _internal_forward_back_profile_order().Get(index);
-}
-inline void AngleStrafeScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
-  _internal_mutable_forward_back_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.forward_back_profile_order)
-}
-inline void AngleStrafeScenarioDef::add_forward_back_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_forward_back_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_add:aim.AngleStrafeScenarioDef.forward_back_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& AngleStrafeScenarioDef::forward_back_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.AngleStrafeScenarioDef.forward_back_profile_order)
-  return _internal_forward_back_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_mutable_list:aim.AngleStrafeScenarioDef.forward_back_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_forward_back_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-AngleStrafeScenarioDef::_internal_forward_back_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.forward_back_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-AngleStrafeScenarioDef::_internal_mutable_forward_back_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.forward_back_profile_order_;
-}
-
-// .aim.Direction forward_back_initial_direction = 8;
-inline bool AngleStrafeScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
-  return value;
-}
-inline void AngleStrafeScenarioDef::clear_forward_back_initial_direction() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.forward_back_initial_direction_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
-}
-inline ::aim::Direction AngleStrafeScenarioDef::forward_back_initial_direction() const {
-  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.forward_back_initial_direction)
-  return _internal_forward_back_initial_direction();
-}
-inline void AngleStrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
-  _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
-  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.forward_back_initial_direction)
-}
-inline ::aim::Direction AngleStrafeScenarioDef::_internal_forward_back_initial_direction() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::aim::Direction>(_impl_.forward_back_initial_direction_);
-}
-inline void AngleStrafeScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.forward_back_initial_direction_ = value;
-}
-
-// .aim.ProfileListInfo forward_back_profiles_info = 9;
+// .aim.ProfileListInfo forward_back_profiles_info = 7;
 inline bool AngleStrafeScenarioDef::has_forward_back_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   PROTOBUF_ASSUME(!value || _impl_.forward_back_profiles_info_ != nullptr);
   return value;
 }
@@ -20057,7 +19647,7 @@ inline void AngleStrafeScenarioDef::clear_forward_back_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.forward_back_profiles_info_ != nullptr) _impl_.forward_back_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000020U);
 }
 inline const ::aim::ProfileListInfo& AngleStrafeScenarioDef::_internal_forward_back_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -20076,16 +19666,16 @@ inline void AngleStrafeScenarioDef::unsafe_arena_set_allocated_forward_back_prof
   }
   _impl_.forward_back_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.AngleStrafeScenarioDef.forward_back_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE AngleStrafeScenarioDef::release_forward_back_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ProfileListInfo* released = _impl_.forward_back_profiles_info_;
   _impl_.forward_back_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -20105,7 +19695,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE AngleStrafeScenarioDef::unsafe_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.AngleStrafeScenarioDef.forward_back_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ProfileListInfo* temp = _impl_.forward_back_profiles_info_;
   _impl_.forward_back_profiles_info_ = nullptr;
   return temp;
@@ -20120,7 +19710,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL AngleStrafeScenarioDef::_interna
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL AngleStrafeScenarioDef::mutable_forward_back_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_forward_back_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.AngleStrafeScenarioDef.forward_back_profiles_info)
   return _msg;
@@ -20137,13 +19727,42 @@ inline void AngleStrafeScenarioDef::set_allocated_forward_back_profiles_info(::a
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
 
   _impl_.forward_back_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.AngleStrafeScenarioDef.forward_back_profiles_info)
+}
+
+// .aim.Direction forward_back_initial_direction = 8;
+inline bool AngleStrafeScenarioDef::has_forward_back_initial_direction() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  return value;
+}
+inline void AngleStrafeScenarioDef::clear_forward_back_initial_direction() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000040U);
+}
+inline ::aim::Direction AngleStrafeScenarioDef::forward_back_initial_direction() const {
+  // @@protoc_insertion_point(field_get:aim.AngleStrafeScenarioDef.forward_back_initial_direction)
+  return _internal_forward_back_initial_direction();
+}
+inline void AngleStrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
+  _internal_set_forward_back_initial_direction(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  // @@protoc_insertion_point(field_set:aim.AngleStrafeScenarioDef.forward_back_initial_direction)
+}
+inline ::aim::Direction AngleStrafeScenarioDef::_internal_forward_back_initial_direction() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::Direction>(_impl_.forward_back_initial_direction_);
+}
+inline void AngleStrafeScenarioDef::_internal_set_forward_back_initial_direction(::aim::Direction value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.forward_back_initial_direction_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -20801,7 +20420,7 @@ inline void StrafeProfile::_internal_set_target_radius_multiplier_jitter(float v
 
 // .aim.Bounds bounds = 1;
 inline bool StrafeScenarioDef::has_bounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   PROTOBUF_ASSUME(!value || _impl_.bounds_ != nullptr);
   return value;
 }
@@ -20809,7 +20428,7 @@ inline void StrafeScenarioDef::clear_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounds_ != nullptr) _impl_.bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000008U);
 }
 inline const ::aim::Bounds& StrafeScenarioDef::_internal_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -20828,16 +20447,16 @@ inline void StrafeScenarioDef::unsafe_arena_set_allocated_bounds(
   }
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.bounds)
 }
 inline ::aim::Bounds* PROTOBUF_NULLABLE StrafeScenarioDef::release_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Bounds* released = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -20857,7 +20476,7 @@ inline ::aim::Bounds* PROTOBUF_NULLABLE StrafeScenarioDef::unsafe_arena_release_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.bounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Bounds* temp = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   return temp;
@@ -20872,7 +20491,7 @@ inline ::aim::Bounds* PROTOBUF_NONNULL StrafeScenarioDef::_internal_mutable_boun
 }
 inline ::aim::Bounds* PROTOBUF_NONNULL StrafeScenarioDef::mutable_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Bounds* _msg = _internal_mutable_bounds();
   // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.bounds)
   return _msg;
@@ -20889,9 +20508,9 @@ inline void StrafeScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF_NULL
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
 
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
@@ -20900,7 +20519,7 @@ inline void StrafeScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF_NULL
 
 // .aim.Bounds relative_bounds = 2;
 inline bool StrafeScenarioDef::has_relative_bounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   PROTOBUF_ASSUME(!value || _impl_.relative_bounds_ != nullptr);
   return value;
 }
@@ -20908,7 +20527,7 @@ inline void StrafeScenarioDef::clear_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.relative_bounds_ != nullptr) _impl_.relative_bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000010U);
 }
 inline const ::aim::Bounds& StrafeScenarioDef::_internal_relative_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -20927,16 +20546,16 @@ inline void StrafeScenarioDef::unsafe_arena_set_allocated_relative_bounds(
   }
   _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.relative_bounds)
 }
 inline ::aim::Bounds* PROTOBUF_NULLABLE StrafeScenarioDef::release_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* released = _impl_.relative_bounds_;
   _impl_.relative_bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -20956,7 +20575,7 @@ inline ::aim::Bounds* PROTOBUF_NULLABLE StrafeScenarioDef::unsafe_arena_release_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.relative_bounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* temp = _impl_.relative_bounds_;
   _impl_.relative_bounds_ = nullptr;
   return temp;
@@ -20971,7 +20590,7 @@ inline ::aim::Bounds* PROTOBUF_NONNULL StrafeScenarioDef::_internal_mutable_rela
 }
 inline ::aim::Bounds* PROTOBUF_NONNULL StrafeScenarioDef::mutable_relative_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* _msg = _internal_mutable_relative_bounds();
   // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.relative_bounds)
   return _msg;
@@ -20988,9 +20607,9 @@ inline void StrafeScenarioDef::set_allocated_relative_bounds(::aim::Bounds* PROT
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
 
   _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
@@ -20999,7 +20618,7 @@ inline void StrafeScenarioDef::set_allocated_relative_bounds(::aim::Bounds* PROT
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 4;
 inline bool StrafeScenarioDef::has_target_placement_strategy() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
   return value;
 }
@@ -21007,7 +20626,7 @@ inline void StrafeScenarioDef::clear_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000020U);
 }
 inline const ::aim::TargetPlacementStrategy& StrafeScenarioDef::_internal_target_placement_strategy() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -21026,16 +20645,16 @@ inline void StrafeScenarioDef::unsafe_arena_set_allocated_target_placement_strat
   }
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.target_placement_strategy)
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE StrafeScenarioDef::release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -21055,7 +20674,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE StrafeScenarioDef::unsa
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.target_placement_strategy)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   return temp;
@@ -21070,7 +20689,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL StrafeScenarioDef::_inte
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL StrafeScenarioDef::mutable_target_placement_strategy()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
   // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.target_placement_strategy)
   return _msg;
@@ -21087,9 +20706,9 @@ inline void StrafeScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
@@ -21152,59 +20771,9 @@ StrafeScenarioDef::_internal_mutable_left_right_profiles() {
   return &_impl_.left_right_profiles_;
 }
 
-// repeated int32 left_right_profile_order = 6;
-inline int StrafeScenarioDef::_internal_left_right_profile_order_size() const {
-  return _internal_left_right_profile_order().size();
-}
-inline int StrafeScenarioDef::left_right_profile_order_size() const {
-  return _internal_left_right_profile_order_size();
-}
-inline void StrafeScenarioDef::clear_left_right_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.left_right_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t StrafeScenarioDef::left_right_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_profile_order)
-  return _internal_left_right_profile_order().Get(index);
-}
-inline void StrafeScenarioDef::set_left_right_profile_order(int index, ::int32_t value) {
-  _internal_mutable_left_right_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.left_right_profile_order)
-}
-inline void StrafeScenarioDef::add_left_right_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_left_right_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.left_right_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& StrafeScenarioDef::left_right_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.left_right_profile_order)
-  return _internal_left_right_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL StrafeScenarioDef::mutable_left_right_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.left_right_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_left_right_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-StrafeScenarioDef::_internal_left_right_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.left_right_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-StrafeScenarioDef::_internal_mutable_left_right_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.left_right_profile_order_;
-}
-
-// .aim.ProfileListInfo left_right_profiles_info = 100;
+// .aim.ProfileListInfo left_right_profiles_info = 6;
 inline bool StrafeScenarioDef::has_left_right_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   PROTOBUF_ASSUME(!value || _impl_.left_right_profiles_info_ != nullptr);
   return value;
 }
@@ -21212,7 +20781,7 @@ inline void StrafeScenarioDef::clear_left_right_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.left_right_profiles_info_ != nullptr) _impl_.left_right_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000040U);
 }
 inline const ::aim::ProfileListInfo& StrafeScenarioDef::_internal_left_right_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -21231,16 +20800,16 @@ inline void StrafeScenarioDef::unsafe_arena_set_allocated_left_right_profiles_in
   }
   _impl_.left_right_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.left_right_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE StrafeScenarioDef::release_left_right_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ProfileListInfo* released = _impl_.left_right_profiles_info_;
   _impl_.left_right_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -21260,7 +20829,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE StrafeScenarioDef::unsafe_arena
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.left_right_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ProfileListInfo* temp = _impl_.left_right_profiles_info_;
   _impl_.left_right_profiles_info_ = nullptr;
   return temp;
@@ -21275,7 +20844,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL StrafeScenarioDef::_internal_mut
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL StrafeScenarioDef::mutable_left_right_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_left_right_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.left_right_profiles_info)
   return _msg;
@@ -21292,9 +20861,9 @@ inline void StrafeScenarioDef::set_allocated_left_right_profiles_info(::aim::Pro
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
 
   _impl_.left_right_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -21312,7 +20881,7 @@ inline void StrafeScenarioDef::clear_forward_back_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_profiles_.Clear();
   ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000002U);
 }
 inline ::aim::StrafeProfile* PROTOBUF_NONNULL StrafeScenarioDef::mutable_forward_back_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
@@ -21321,7 +20890,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL StrafeScenarioDef::mutable_forward
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL StrafeScenarioDef::mutable_forward_back_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.forward_back_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_forward_back_profiles();
@@ -21337,7 +20906,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL StrafeScenarioDef::add_forward_bac
   ::aim::StrafeProfile* _add =
       _internal_mutable_forward_back_profiles()->InternalAddWithArena(
           ::google::protobuf::MessageLite::internal_visibility(), GetArena());
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.forward_back_profiles)
   return _add;
 }
@@ -21357,59 +20926,9 @@ StrafeScenarioDef::_internal_mutable_forward_back_profiles() {
   return &_impl_.forward_back_profiles_;
 }
 
-// repeated int32 forward_back_profile_order = 8;
-inline int StrafeScenarioDef::_internal_forward_back_profile_order_size() const {
-  return _internal_forward_back_profile_order().size();
-}
-inline int StrafeScenarioDef::forward_back_profile_order_size() const {
-  return _internal_forward_back_profile_order_size();
-}
-inline void StrafeScenarioDef::clear_forward_back_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.forward_back_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::int32_t StrafeScenarioDef::forward_back_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_profile_order)
-  return _internal_forward_back_profile_order().Get(index);
-}
-inline void StrafeScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
-  _internal_mutable_forward_back_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.forward_back_profile_order)
-}
-inline void StrafeScenarioDef::add_forward_back_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_forward_back_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.forward_back_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& StrafeScenarioDef::forward_back_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.forward_back_profile_order)
-  return _internal_forward_back_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL StrafeScenarioDef::mutable_forward_back_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.forward_back_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_forward_back_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-StrafeScenarioDef::_internal_forward_back_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.forward_back_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-StrafeScenarioDef::_internal_mutable_forward_back_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.forward_back_profile_order_;
-}
-
-// .aim.ProfileListInfo forward_back_profiles_info = 101;
+// .aim.ProfileListInfo forward_back_profiles_info = 8;
 inline bool StrafeScenarioDef::has_forward_back_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   PROTOBUF_ASSUME(!value || _impl_.forward_back_profiles_info_ != nullptr);
   return value;
 }
@@ -21417,7 +20936,7 @@ inline void StrafeScenarioDef::clear_forward_back_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.forward_back_profiles_info_ != nullptr) _impl_.forward_back_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000080U);
 }
 inline const ::aim::ProfileListInfo& StrafeScenarioDef::_internal_forward_back_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -21436,16 +20955,16 @@ inline void StrafeScenarioDef::unsafe_arena_set_allocated_forward_back_profiles_
   }
   _impl_.forward_back_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.forward_back_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE StrafeScenarioDef::release_forward_back_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   ::aim::ProfileListInfo* released = _impl_.forward_back_profiles_info_;
   _impl_.forward_back_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -21465,7 +20984,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE StrafeScenarioDef::unsafe_arena
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.forward_back_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   ::aim::ProfileListInfo* temp = _impl_.forward_back_profiles_info_;
   _impl_.forward_back_profiles_info_ = nullptr;
   return temp;
@@ -21480,7 +20999,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL StrafeScenarioDef::_internal_mut
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL StrafeScenarioDef::mutable_forward_back_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_forward_back_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.forward_back_profiles_info)
   return _msg;
@@ -21497,9 +21016,9 @@ inline void StrafeScenarioDef::set_allocated_forward_back_profiles_info(::aim::P
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   }
 
   _impl_.forward_back_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -21517,7 +21036,7 @@ inline void StrafeScenarioDef::clear_up_down_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_profiles_.Clear();
   ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000004U);
 }
 inline ::aim::StrafeProfile* PROTOBUF_NONNULL StrafeScenarioDef::mutable_up_down_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
@@ -21526,7 +21045,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL StrafeScenarioDef::mutable_up_down
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL StrafeScenarioDef::mutable_up_down_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.up_down_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_up_down_profiles();
@@ -21542,7 +21061,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL StrafeScenarioDef::add_up_down_pro
   ::aim::StrafeProfile* _add =
       _internal_mutable_up_down_profiles()->InternalAddWithArena(
           ::google::protobuf::MessageLite::internal_visibility(), GetArena());
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.up_down_profiles)
   return _add;
 }
@@ -21562,59 +21081,9 @@ StrafeScenarioDef::_internal_mutable_up_down_profiles() {
   return &_impl_.up_down_profiles_;
 }
 
-// repeated int32 up_down_profile_order = 10;
-inline int StrafeScenarioDef::_internal_up_down_profile_order_size() const {
-  return _internal_up_down_profile_order().size();
-}
-inline int StrafeScenarioDef::up_down_profile_order_size() const {
-  return _internal_up_down_profile_order_size();
-}
-inline void StrafeScenarioDef::clear_up_down_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.up_down_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000020U);
-}
-inline ::int32_t StrafeScenarioDef::up_down_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_profile_order)
-  return _internal_up_down_profile_order().Get(index);
-}
-inline void StrafeScenarioDef::set_up_down_profile_order(int index, ::int32_t value) {
-  _internal_mutable_up_down_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.up_down_profile_order)
-}
-inline void StrafeScenarioDef::add_up_down_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_up_down_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000020U);
-  // @@protoc_insertion_point(field_add:aim.StrafeScenarioDef.up_down_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& StrafeScenarioDef::up_down_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.StrafeScenarioDef.up_down_profile_order)
-  return _internal_up_down_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL StrafeScenarioDef::mutable_up_down_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000020U);
-  // @@protoc_insertion_point(field_mutable_list:aim.StrafeScenarioDef.up_down_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_up_down_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-StrafeScenarioDef::_internal_up_down_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.up_down_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-StrafeScenarioDef::_internal_mutable_up_down_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.up_down_profile_order_;
-}
-
-// .aim.ProfileListInfo up_down_profiles_info = 102;
+// .aim.ProfileListInfo up_down_profiles_info = 10;
 inline bool StrafeScenarioDef::has_up_down_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   PROTOBUF_ASSUME(!value || _impl_.up_down_profiles_info_ != nullptr);
   return value;
 }
@@ -21622,7 +21091,7 @@ inline void StrafeScenarioDef::clear_up_down_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.up_down_profiles_info_ != nullptr) _impl_.up_down_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000100U);
 }
 inline const ::aim::ProfileListInfo& StrafeScenarioDef::_internal_up_down_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -21641,16 +21110,16 @@ inline void StrafeScenarioDef::unsafe_arena_set_allocated_up_down_profiles_info(
   }
   _impl_.up_down_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.StrafeScenarioDef.up_down_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE StrafeScenarioDef::release_up_down_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
   ::aim::ProfileListInfo* released = _impl_.up_down_profiles_info_;
   _impl_.up_down_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -21670,7 +21139,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE StrafeScenarioDef::unsafe_arena
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.StrafeScenarioDef.up_down_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
   ::aim::ProfileListInfo* temp = _impl_.up_down_profiles_info_;
   _impl_.up_down_profiles_info_ = nullptr;
   return temp;
@@ -21685,7 +21154,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL StrafeScenarioDef::_internal_mut
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL StrafeScenarioDef::mutable_up_down_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_up_down_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.StrafeScenarioDef.up_down_profiles_info)
   return _msg;
@@ -21702,9 +21171,9 @@ inline void StrafeScenarioDef::set_allocated_up_down_profiles_info(::aim::Profil
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
   }
 
   _impl_.up_down_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -21713,14 +21182,14 @@ inline void StrafeScenarioDef::set_allocated_up_down_profiles_info(::aim::Profil
 
 // .aim.Direction left_right_initial_direction = 13;
 inline bool StrafeScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   return value;
 }
 inline void StrafeScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00000200U);
 }
 inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.left_right_initial_direction)
@@ -21728,7 +21197,7 @@ inline ::aim::Direction StrafeScenarioDef::left_right_initial_direction() const 
 }
 inline void StrafeScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_left_right_initial_direction() const {
@@ -21742,14 +21211,14 @@ inline void StrafeScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction up_down_initial_direction = 14;
 inline bool StrafeScenarioDef::has_up_down_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void StrafeScenarioDef::clear_up_down_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.up_down_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
+                  0x00000400U);
 }
 inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.up_down_initial_direction)
@@ -21757,7 +21226,7 @@ inline ::aim::Direction StrafeScenarioDef::up_down_initial_direction() const {
 }
 inline void StrafeScenarioDef::set_up_down_initial_direction(::aim::Direction value) {
   _internal_set_up_down_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.up_down_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_up_down_initial_direction() const {
@@ -21771,14 +21240,14 @@ inline void StrafeScenarioDef::_internal_set_up_down_initial_direction(::aim::Di
 
 // .aim.Direction forward_back_initial_direction = 15;
 inline bool StrafeScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00004000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void StrafeScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00004000U);
+                  0x00000800U);
 }
 inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.StrafeScenarioDef.forward_back_initial_direction)
@@ -21786,7 +21255,7 @@ inline ::aim::Direction StrafeScenarioDef::forward_back_initial_direction() cons
 }
 inline void StrafeScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.StrafeScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction StrafeScenarioDef::_internal_forward_back_initial_direction() const {
@@ -22478,7 +21947,7 @@ inline void BounceProfile::_internal_set_down_acceleration_multiplier_jitter(flo
 
 // .aim.Bounds bounds = 1;
 inline bool BounceScenarioDef::has_bounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   PROTOBUF_ASSUME(!value || _impl_.bounds_ != nullptr);
   return value;
 }
@@ -22486,7 +21955,7 @@ inline void BounceScenarioDef::clear_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounds_ != nullptr) _impl_.bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000008U);
 }
 inline const ::aim::Bounds& BounceScenarioDef::_internal_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -22505,16 +21974,16 @@ inline void BounceScenarioDef::unsafe_arena_set_allocated_bounds(
   }
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.bounds)
 }
 inline ::aim::Bounds* PROTOBUF_NULLABLE BounceScenarioDef::release_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Bounds* released = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -22534,7 +22003,7 @@ inline ::aim::Bounds* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena_release_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.bounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Bounds* temp = _impl_.bounds_;
   _impl_.bounds_ = nullptr;
   return temp;
@@ -22549,7 +22018,7 @@ inline ::aim::Bounds* PROTOBUF_NONNULL BounceScenarioDef::_internal_mutable_boun
 }
 inline ::aim::Bounds* PROTOBUF_NONNULL BounceScenarioDef::mutable_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Bounds* _msg = _internal_mutable_bounds();
   // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.bounds)
   return _msg;
@@ -22566,9 +22035,9 @@ inline void BounceScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF_NULL
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
 
   _impl_.bounds_ = reinterpret_cast<::aim::Bounds*>(value);
@@ -22577,7 +22046,7 @@ inline void BounceScenarioDef::set_allocated_bounds(::aim::Bounds* PROTOBUF_NULL
 
 // .aim.Bounds relative_bounds = 2;
 inline bool BounceScenarioDef::has_relative_bounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   PROTOBUF_ASSUME(!value || _impl_.relative_bounds_ != nullptr);
   return value;
 }
@@ -22585,7 +22054,7 @@ inline void BounceScenarioDef::clear_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.relative_bounds_ != nullptr) _impl_.relative_bounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000010U);
 }
 inline const ::aim::Bounds& BounceScenarioDef::_internal_relative_bounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -22604,16 +22073,16 @@ inline void BounceScenarioDef::unsafe_arena_set_allocated_relative_bounds(
   }
   _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.relative_bounds)
 }
 inline ::aim::Bounds* PROTOBUF_NULLABLE BounceScenarioDef::release_relative_bounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* released = _impl_.relative_bounds_;
   _impl_.relative_bounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -22633,7 +22102,7 @@ inline ::aim::Bounds* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena_release_
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.relative_bounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* temp = _impl_.relative_bounds_;
   _impl_.relative_bounds_ = nullptr;
   return temp;
@@ -22648,7 +22117,7 @@ inline ::aim::Bounds* PROTOBUF_NONNULL BounceScenarioDef::_internal_mutable_rela
 }
 inline ::aim::Bounds* PROTOBUF_NONNULL BounceScenarioDef::mutable_relative_bounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::Bounds* _msg = _internal_mutable_relative_bounds();
   // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.relative_bounds)
   return _msg;
@@ -22665,9 +22134,9 @@ inline void BounceScenarioDef::set_allocated_relative_bounds(::aim::Bounds* PROT
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
 
   _impl_.relative_bounds_ = reinterpret_cast<::aim::Bounds*>(value);
@@ -22730,59 +22199,9 @@ BounceScenarioDef::_internal_mutable_bounce_profiles() {
   return &_impl_.bounce_profiles_;
 }
 
-// repeated int32 bounce_profile_order = 4;
-inline int BounceScenarioDef::_internal_bounce_profile_order_size() const {
-  return _internal_bounce_profile_order().size();
-}
-inline int BounceScenarioDef::bounce_profile_order_size() const {
-  return _internal_bounce_profile_order_size();
-}
-inline void BounceScenarioDef::clear_bounce_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.bounce_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t BounceScenarioDef::bounce_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.bounce_profile_order)
-  return _internal_bounce_profile_order().Get(index);
-}
-inline void BounceScenarioDef::set_bounce_profile_order(int index, ::int32_t value) {
-  _internal_mutable_bounce_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.bounce_profile_order)
-}
-inline void BounceScenarioDef::add_bounce_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_bounce_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.bounce_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& BounceScenarioDef::bounce_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.bounce_profile_order)
-  return _internal_bounce_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL BounceScenarioDef::mutable_bounce_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.bounce_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_bounce_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-BounceScenarioDef::_internal_bounce_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.bounce_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-BounceScenarioDef::_internal_mutable_bounce_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.bounce_profile_order_;
-}
-
-// .aim.ProfileListInfo bounce_profiles_info = 102;
+// .aim.ProfileListInfo bounce_profiles_info = 4;
 inline bool BounceScenarioDef::has_bounce_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   PROTOBUF_ASSUME(!value || _impl_.bounce_profiles_info_ != nullptr);
   return value;
 }
@@ -22790,7 +22209,7 @@ inline void BounceScenarioDef::clear_bounce_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.bounce_profiles_info_ != nullptr) _impl_.bounce_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000020U);
 }
 inline const ::aim::ProfileListInfo& BounceScenarioDef::_internal_bounce_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -22809,16 +22228,16 @@ inline void BounceScenarioDef::unsafe_arena_set_allocated_bounce_profiles_info(
   }
   _impl_.bounce_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.bounce_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE BounceScenarioDef::release_bounce_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ProfileListInfo* released = _impl_.bounce_profiles_info_;
   _impl_.bounce_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -22838,7 +22257,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.bounce_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ProfileListInfo* temp = _impl_.bounce_profiles_info_;
   _impl_.bounce_profiles_info_ = nullptr;
   return temp;
@@ -22853,7 +22272,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL BounceScenarioDef::_internal_mut
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL BounceScenarioDef::mutable_bounce_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_bounce_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.bounce_profiles_info)
   return _msg;
@@ -22870,9 +22289,9 @@ inline void BounceScenarioDef::set_allocated_bounce_profiles_info(::aim::Profile
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000400U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
 
   _impl_.bounce_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -22890,7 +22309,7 @@ inline void BounceScenarioDef::clear_left_right_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_profiles_.Clear();
   ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000002U);
 }
 inline ::aim::StrafeProfile* PROTOBUF_NONNULL BounceScenarioDef::mutable_left_right_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
@@ -22899,7 +22318,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL BounceScenarioDef::mutable_left_ri
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL BounceScenarioDef::mutable_left_right_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.left_right_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_left_right_profiles();
@@ -22915,7 +22334,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL BounceScenarioDef::add_left_right_
   ::aim::StrafeProfile* _add =
       _internal_mutable_left_right_profiles()->InternalAddWithArena(
           ::google::protobuf::MessageLite::internal_visibility(), GetArena());
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.left_right_profiles)
   return _add;
 }
@@ -22935,59 +22354,9 @@ BounceScenarioDef::_internal_mutable_left_right_profiles() {
   return &_impl_.left_right_profiles_;
 }
 
-// repeated int32 left_right_profile_order = 6;
-inline int BounceScenarioDef::_internal_left_right_profile_order_size() const {
-  return _internal_left_right_profile_order().size();
-}
-inline int BounceScenarioDef::left_right_profile_order_size() const {
-  return _internal_left_right_profile_order_size();
-}
-inline void BounceScenarioDef::clear_left_right_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.left_right_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::int32_t BounceScenarioDef::left_right_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_profile_order)
-  return _internal_left_right_profile_order().Get(index);
-}
-inline void BounceScenarioDef::set_left_right_profile_order(int index, ::int32_t value) {
-  _internal_mutable_left_right_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_profile_order)
-}
-inline void BounceScenarioDef::add_left_right_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_left_right_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.left_right_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& BounceScenarioDef::left_right_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.left_right_profile_order)
-  return _internal_left_right_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL BounceScenarioDef::mutable_left_right_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.left_right_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_left_right_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-BounceScenarioDef::_internal_left_right_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.left_right_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-BounceScenarioDef::_internal_mutable_left_right_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.left_right_profile_order_;
-}
-
-// .aim.ProfileListInfo left_right_profiles_info = 103;
+// .aim.ProfileListInfo left_right_profiles_info = 6;
 inline bool BounceScenarioDef::has_left_right_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   PROTOBUF_ASSUME(!value || _impl_.left_right_profiles_info_ != nullptr);
   return value;
 }
@@ -22995,7 +22364,7 @@ inline void BounceScenarioDef::clear_left_right_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.left_right_profiles_info_ != nullptr) _impl_.left_right_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00000040U);
 }
 inline const ::aim::ProfileListInfo& BounceScenarioDef::_internal_left_right_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -23014,16 +22383,16 @@ inline void BounceScenarioDef::unsafe_arena_set_allocated_left_right_profiles_in
   }
   _impl_.left_right_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.left_right_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE BounceScenarioDef::release_left_right_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ProfileListInfo* released = _impl_.left_right_profiles_info_;
   _impl_.left_right_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -23043,7 +22412,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.left_right_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ProfileListInfo* temp = _impl_.left_right_profiles_info_;
   _impl_.left_right_profiles_info_ = nullptr;
   return temp;
@@ -23058,7 +22427,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL BounceScenarioDef::_internal_mut
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL BounceScenarioDef::mutable_left_right_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_left_right_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.left_right_profiles_info)
   return _msg;
@@ -23075,9 +22444,9 @@ inline void BounceScenarioDef::set_allocated_left_right_profiles_info(::aim::Pro
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000800U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
 
   _impl_.left_right_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -23095,7 +22464,7 @@ inline void BounceScenarioDef::clear_forward_back_profiles() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_profiles_.Clear();
   ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000004U);
 }
 inline ::aim::StrafeProfile* PROTOBUF_NONNULL BounceScenarioDef::mutable_forward_back_profiles(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
@@ -23104,7 +22473,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL BounceScenarioDef::mutable_forward
 }
 inline ::google::protobuf::RepeatedPtrField<::aim::StrafeProfile>* PROTOBUF_NONNULL BounceScenarioDef::mutable_forward_back_profiles()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.forward_back_profiles)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_forward_back_profiles();
@@ -23120,7 +22489,7 @@ inline ::aim::StrafeProfile* PROTOBUF_NONNULL BounceScenarioDef::add_forward_bac
   ::aim::StrafeProfile* _add =
       _internal_mutable_forward_back_profiles()->InternalAddWithArena(
           ::google::protobuf::MessageLite::internal_visibility(), GetArena());
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.forward_back_profiles)
   return _add;
 }
@@ -23140,59 +22509,9 @@ BounceScenarioDef::_internal_mutable_forward_back_profiles() {
   return &_impl_.forward_back_profiles_;
 }
 
-// repeated int32 forward_back_profile_order = 8;
-inline int BounceScenarioDef::_internal_forward_back_profile_order_size() const {
-  return _internal_forward_back_profile_order().size();
-}
-inline int BounceScenarioDef::forward_back_profile_order_size() const {
-  return _internal_forward_back_profile_order_size();
-}
-inline void BounceScenarioDef::clear_forward_back_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.forward_back_profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000020U);
-}
-inline ::int32_t BounceScenarioDef::forward_back_profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_profile_order)
-  return _internal_forward_back_profile_order().Get(index);
-}
-inline void BounceScenarioDef::set_forward_back_profile_order(int index, ::int32_t value) {
-  _internal_mutable_forward_back_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_profile_order)
-}
-inline void BounceScenarioDef::add_forward_back_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_forward_back_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000020U);
-  // @@protoc_insertion_point(field_add:aim.BounceScenarioDef.forward_back_profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& BounceScenarioDef::forward_back_profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.BounceScenarioDef.forward_back_profile_order)
-  return _internal_forward_back_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL BounceScenarioDef::mutable_forward_back_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000020U);
-  // @@protoc_insertion_point(field_mutable_list:aim.BounceScenarioDef.forward_back_profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_forward_back_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-BounceScenarioDef::_internal_forward_back_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.forward_back_profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-BounceScenarioDef::_internal_mutable_forward_back_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.forward_back_profile_order_;
-}
-
-// .aim.ProfileListInfo forward_back_profiles_info = 104;
+// .aim.ProfileListInfo forward_back_profiles_info = 8;
 inline bool BounceScenarioDef::has_forward_back_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   PROTOBUF_ASSUME(!value || _impl_.forward_back_profiles_info_ != nullptr);
   return value;
 }
@@ -23200,7 +22519,7 @@ inline void BounceScenarioDef::clear_forward_back_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.forward_back_profiles_info_ != nullptr) _impl_.forward_back_profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00000080U);
 }
 inline const ::aim::ProfileListInfo& BounceScenarioDef::_internal_forward_back_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -23219,16 +22538,16 @@ inline void BounceScenarioDef::unsafe_arena_set_allocated_forward_back_profiles_
   }
   _impl_.forward_back_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00001000U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BounceScenarioDef.forward_back_profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE BounceScenarioDef::release_forward_back_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00001000U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   ::aim::ProfileListInfo* released = _impl_.forward_back_profiles_info_;
   _impl_.forward_back_profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -23248,7 +22567,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE BounceScenarioDef::unsafe_arena
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.BounceScenarioDef.forward_back_profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00001000U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   ::aim::ProfileListInfo* temp = _impl_.forward_back_profiles_info_;
   _impl_.forward_back_profiles_info_ = nullptr;
   return temp;
@@ -23263,7 +22582,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL BounceScenarioDef::_internal_mut
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL BounceScenarioDef::mutable_forward_back_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_forward_back_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.BounceScenarioDef.forward_back_profiles_info)
   return _msg;
@@ -23280,9 +22599,9 @@ inline void BounceScenarioDef::set_allocated_forward_back_profiles_info(::aim::P
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00001000U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000080U);
   }
 
   _impl_.forward_back_profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -23390,14 +22709,14 @@ inline void BounceScenarioDef::set_allocated_target_placement_strategy(::aim::Ta
 
 // .aim.Direction left_right_initial_direction = 11;
 inline bool BounceScenarioDef::has_left_right_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void BounceScenarioDef::clear_left_right_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.left_right_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
+                  0x00000400U);
 }
 inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.left_right_initial_direction)
@@ -23405,7 +22724,7 @@ inline ::aim::Direction BounceScenarioDef::left_right_initial_direction() const 
 }
 inline void BounceScenarioDef::set_left_right_initial_direction(::aim::Direction value) {
   _internal_set_left_right_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.left_right_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_left_right_initial_direction() const {
@@ -23419,14 +22738,14 @@ inline void BounceScenarioDef::_internal_set_left_right_initial_direction(::aim:
 
 // .aim.Direction forward_back_initial_direction = 12;
 inline bool BounceScenarioDef::has_forward_back_initial_direction() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00004000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void BounceScenarioDef::clear_forward_back_initial_direction() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.forward_back_initial_direction_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00004000U);
+                  0x00000800U);
 }
 inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() const {
   // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.forward_back_initial_direction)
@@ -23434,7 +22753,7 @@ inline ::aim::Direction BounceScenarioDef::forward_back_initial_direction() cons
 }
 inline void BounceScenarioDef::set_forward_back_initial_direction(::aim::Direction value) {
   _internal_set_forward_back_initial_direction(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.forward_back_initial_direction)
 }
 inline ::aim::Direction BounceScenarioDef::_internal_forward_back_initial_direction() const {
@@ -24121,7 +23440,7 @@ inline void WallWanderProfile::_internal_set_turn_rate_jitter(float value) {
 
 // .aim.TargetPlacementStrategy target_placement_strategy = 1;
 inline bool WallWanderScenarioDef::has_target_placement_strategy() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
   PROTOBUF_ASSUME(!value || _impl_.target_placement_strategy_ != nullptr);
   return value;
 }
@@ -24129,7 +23448,7 @@ inline void WallWanderScenarioDef::clear_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.target_placement_strategy_ != nullptr) _impl_.target_placement_strategy_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000002U);
 }
 inline const ::aim::TargetPlacementStrategy& WallWanderScenarioDef::_internal_target_placement_strategy() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -24148,16 +23467,16 @@ inline void WallWanderScenarioDef::unsafe_arena_set_allocated_target_placement_s
   }
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallWanderScenarioDef.target_placement_strategy)
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE WallWanderScenarioDef::release_target_placement_strategy() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::TargetPlacementStrategy* released = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -24177,7 +23496,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NULLABLE WallWanderScenarioDef::
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallWanderScenarioDef.target_placement_strategy)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::TargetPlacementStrategy* temp = _impl_.target_placement_strategy_;
   _impl_.target_placement_strategy_ = nullptr;
   return temp;
@@ -24192,7 +23511,7 @@ inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL WallWanderScenarioDef::_
 }
 inline ::aim::TargetPlacementStrategy* PROTOBUF_NONNULL WallWanderScenarioDef::mutable_target_placement_strategy()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::TargetPlacementStrategy* _msg = _internal_mutable_target_placement_strategy();
   // @@protoc_insertion_point(field_mutable:aim.WallWanderScenarioDef.target_placement_strategy)
   return _msg;
@@ -24209,9 +23528,9 @@ inline void WallWanderScenarioDef::set_allocated_target_placement_strategy(::aim
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
 
   _impl_.target_placement_strategy_ = reinterpret_cast<::aim::TargetPlacementStrategy*>(value);
@@ -24274,9 +23593,9 @@ WallWanderScenarioDef::_internal_mutable_profiles() {
   return &_impl_.profiles_;
 }
 
-// .aim.ProfileListInfo profiles_info = 4;
+// .aim.ProfileListInfo profiles_info = 3;
 inline bool WallWanderScenarioDef::has_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   PROTOBUF_ASSUME(!value || _impl_.profiles_info_ != nullptr);
   return value;
 }
@@ -24284,7 +23603,7 @@ inline void WallWanderScenarioDef::clear_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.profiles_info_ != nullptr) _impl_.profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000004U);
 }
 inline const ::aim::ProfileListInfo& WallWanderScenarioDef::_internal_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -24303,16 +23622,16 @@ inline void WallWanderScenarioDef::unsafe_arena_set_allocated_profiles_info(
   }
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.WallWanderScenarioDef.profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE WallWanderScenarioDef::release_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ProfileListInfo* released = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -24332,7 +23651,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE WallWanderScenarioDef::unsafe_a
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.WallWanderScenarioDef.profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ProfileListInfo* temp = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   return temp;
@@ -24347,7 +23666,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL WallWanderScenarioDef::_internal
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL WallWanderScenarioDef::mutable_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.WallWanderScenarioDef.profiles_info)
   return _msg;
@@ -24364,70 +23683,49 @@ inline void WallWanderScenarioDef::set_allocated_profiles_info(::aim::ProfileLis
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
 
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.WallWanderScenarioDef.profiles_info)
 }
 
-// repeated int32 profile_order = 3;
-inline int WallWanderScenarioDef::_internal_profile_order_size() const {
-  return _internal_profile_order().size();
-}
-inline int WallWanderScenarioDef::profile_order_size() const {
-  return _internal_profile_order_size();
-}
-inline void WallWanderScenarioDef::clear_profile_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.profile_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t WallWanderScenarioDef::profile_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.WallWanderScenarioDef.profile_order)
-  return _internal_profile_order().Get(index);
-}
-inline void WallWanderScenarioDef::set_profile_order(int index, ::int32_t value) {
-  _internal_mutable_profile_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.WallWanderScenarioDef.profile_order)
-}
-inline void WallWanderScenarioDef::add_profile_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_profile_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_add:aim.WallWanderScenarioDef.profile_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& WallWanderScenarioDef::profile_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.WallWanderScenarioDef.profile_order)
-  return _internal_profile_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL WallWanderScenarioDef::mutable_profile_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_mutable_list:aim.WallWanderScenarioDef.profile_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_profile_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-WallWanderScenarioDef::_internal_profile_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.profile_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-WallWanderScenarioDef::_internal_mutable_profile_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.profile_order_;
-}
-
 // -------------------------------------------------------------------
 
 // TargetDef
 
-// repeated .aim.TargetProfile profiles = 1;
+// int32 num_targets = 1;
+inline bool TargetDef::has_num_targets() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  return value;
+}
+inline void TargetDef::clear_num_targets() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.num_targets_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline ::int32_t TargetDef::num_targets() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.num_targets)
+  return _internal_num_targets();
+}
+inline void TargetDef::set_num_targets(::int32_t value) {
+  _internal_set_num_targets(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_set:aim.TargetDef.num_targets)
+}
+inline ::int32_t TargetDef::_internal_num_targets() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.num_targets_;
+}
+inline void TargetDef::_internal_set_num_targets(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.num_targets_ = value;
+}
+
+// repeated .aim.TargetProfile profiles = 2;
 inline int TargetDef::_internal_profiles_size() const {
   return _internal_profiles().size();
 }
@@ -24485,7 +23783,7 @@ TargetDef::_internal_mutable_profiles() {
 
 // .aim.ProfileListInfo profiles_info = 3;
 inline bool TargetDef::has_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
   PROTOBUF_ASSUME(!value || _impl_.profiles_info_ != nullptr);
   return value;
 }
@@ -24493,7 +23791,7 @@ inline void TargetDef::clear_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.profiles_info_ != nullptr) _impl_.profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000002U);
 }
 inline const ::aim::ProfileListInfo& TargetDef::_internal_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -24512,16 +23810,16 @@ inline void TargetDef::unsafe_arena_set_allocated_profiles_info(
   }
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetDef.profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE TargetDef::release_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::ProfileListInfo* released = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -24541,7 +23839,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE TargetDef::unsafe_arena_release
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetDef.profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::ProfileListInfo* temp = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   return temp;
@@ -24556,7 +23854,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL TargetDef::_internal_mutable_pro
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL TargetDef::mutable_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.TargetDef.profiles_info)
   return _msg;
@@ -24573,92 +23871,13 @@ inline void TargetDef::set_allocated_profiles_info(::aim::ProfileListInfo* PROTO
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
   }
 
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.TargetDef.profiles_info)
-}
-
-// int32 num_targets = 2;
-inline bool TargetDef::has_num_targets() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
-inline void TargetDef::clear_num_targets() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_targets_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::int32_t TargetDef::num_targets() const {
-  // @@protoc_insertion_point(field_get:aim.TargetDef.num_targets)
-  return _internal_num_targets();
-}
-inline void TargetDef::set_num_targets(::int32_t value) {
-  _internal_set_num_targets(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:aim.TargetDef.num_targets)
-}
-inline ::int32_t TargetDef::_internal_num_targets() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.num_targets_;
-}
-inline void TargetDef::_internal_set_num_targets(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.num_targets_ = value;
-}
-
-// repeated int32 target_order = 4;
-inline int TargetDef::_internal_target_order_size() const {
-  return _internal_target_order().size();
-}
-inline int TargetDef::target_order_size() const {
-  return _internal_target_order_size();
-}
-inline void TargetDef::clear_target_order() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.target_order_.Clear();
-  ClearHasBitForRepeated(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline ::int32_t TargetDef::target_order(int index) const {
-  // @@protoc_insertion_point(field_get:aim.TargetDef.target_order)
-  return _internal_target_order().Get(index);
-}
-inline void TargetDef::set_target_order(int index, ::int32_t value) {
-  _internal_mutable_target_order()->Set(index, value);
-  // @@protoc_insertion_point(field_set:aim.TargetDef.target_order)
-}
-inline void TargetDef::add_target_order(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _internal_mutable_target_order()->Add(value);
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_add:aim.TargetDef.target_order)
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>& TargetDef::target_order() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:aim.TargetDef.target_order)
-  return _internal_target_order();
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL TargetDef::mutable_target_order()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_mutable_list:aim.TargetDef.target_order)
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_target_order();
-}
-inline const ::google::protobuf::RepeatedField<::int32_t>&
-TargetDef::_internal_target_order() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.target_order_;
-}
-inline ::google::protobuf::RepeatedField<::int32_t>* PROTOBUF_NONNULL
-TargetDef::_internal_mutable_target_order() {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.target_order_;
 }
 
 // bool newest_target_is_ghost = 5 [features = {
@@ -24666,7 +23885,7 @@ inline void TargetDef::clear_newest_target_is_ghost() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.newest_target_is_ghost_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000008U);
 }
 inline bool TargetDef::newest_target_is_ghost() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.newest_target_is_ghost)
@@ -24674,7 +23893,7 @@ inline bool TargetDef::newest_target_is_ghost() const {
 }
 inline void TargetDef::set_newest_target_is_ghost(bool value) {
   _internal_set_newest_target_is_ghost(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.newest_target_is_ghost)
 }
 inline bool TargetDef::_internal_newest_target_is_ghost() const {
@@ -24688,14 +23907,14 @@ inline void TargetDef::_internal_set_newest_target_is_ghost(bool value) {
 
 // float new_target_delay_seconds = 6;
 inline bool TargetDef::has_new_target_delay_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void TargetDef::clear_new_target_delay_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.new_target_delay_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000010U);
 }
 inline float TargetDef::new_target_delay_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.new_target_delay_seconds)
@@ -24703,7 +23922,7 @@ inline float TargetDef::new_target_delay_seconds() const {
 }
 inline void TargetDef::set_new_target_delay_seconds(float value) {
   _internal_set_new_target_delay_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.new_target_delay_seconds)
 }
 inline float TargetDef::_internal_new_target_delay_seconds() const {
@@ -24717,14 +23936,14 @@ inline void TargetDef::_internal_set_new_target_delay_seconds(float value) {
 
 // float remove_target_after_seconds = 7;
 inline bool TargetDef::has_remove_target_after_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void TargetDef::clear_remove_target_after_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_target_after_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000020U);
 }
 inline float TargetDef::remove_target_after_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.remove_target_after_seconds)
@@ -24732,7 +23951,7 @@ inline float TargetDef::remove_target_after_seconds() const {
 }
 inline void TargetDef::set_remove_target_after_seconds(float value) {
   _internal_set_remove_target_after_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.remove_target_after_seconds)
 }
 inline float TargetDef::_internal_remove_target_after_seconds() const {
@@ -24746,14 +23965,14 @@ inline void TargetDef::_internal_set_remove_target_after_seconds(float value) {
 
 // float stagger_initial_targets_seconds = 8;
 inline bool TargetDef::has_stagger_initial_targets_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void TargetDef::clear_stagger_initial_targets_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stagger_initial_targets_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000040U);
 }
 inline float TargetDef::stagger_initial_targets_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.stagger_initial_targets_seconds)
@@ -24761,7 +23980,7 @@ inline float TargetDef::stagger_initial_targets_seconds() const {
 }
 inline void TargetDef::set_stagger_initial_targets_seconds(float value) {
   _internal_set_stagger_initial_targets_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.stagger_initial_targets_seconds)
 }
 inline float TargetDef::_internal_stagger_initial_targets_seconds() const {

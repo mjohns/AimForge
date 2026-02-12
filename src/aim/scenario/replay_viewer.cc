@@ -242,7 +242,7 @@ class ReplayViewerScreen : public Screen {
           Pause();
         }
       }
-      float time_step = 0.01;
+      float time_step = 1.0 / (float)replay_->replay_fps;
       if (event.key.key == SDLK_LEFT || event.key.key == SDLK_COMMA) {
         SeekToTime(GetNowSeconds() - time_step);
       }
@@ -267,7 +267,7 @@ class ReplayViewerScreen : public Screen {
     float now_seconds = GetNowSeconds();
     replay_view_->SeekForwardToTime(now_seconds, settings_.sound());
 
-    bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > 2500;
+    bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > 2000;
     if (!do_render) {
       return;
     }
@@ -282,20 +282,32 @@ class ReplayViewerScreen : public Screen {
 
     float elapsed_seconds = timer_.GetElapsedSeconds();
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+
+    ImGui::SameLine();
+    ImGui::SetButtonCursorAtRight(icons::kLogout);
+    if (ImGui::Button(icons::kLogout)) {
+      PopSelf();
+    }
+
     if (has_click_events_) {
       const auto& durations = replay_view_->GetPreviousClickDurations();
+      ImGui::Text("Click times");
+      ImGui::Indent();
       if (durations.size() > 0) {
-        ImGui::Text("Previous click durations");
-        ImGui::Indent();
-        for (int i = std::max<int>(0, durations.size() - 15); i < durations.size(); ++i) {
+        for (int i = std::max<int>(0, durations.size() - 20); i < durations.size(); ++i) {
           ImGui::Text("%0.2fs", durations[i]);
         }
-        ImGui::Unindent();
       }
-      ImGui::Text("Time since last click: %0.2fs", now_seconds - replay_view_->GetLastClickTime());
+      ImGui::Text("%0.2fs", now_seconds - replay_view_->GetLastClickTime());
+      ImGui::Unindent();
     }
 
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 1.5);
+
+    float controls_width = app_.screen_info().width * 0.75;
+    float controls_offset = (app_.screen_info().width - controls_width) * 0.5;
+    ImGui::SetCursorPosX(controls_offset);
+    ImGui::BeginChild("PlaybackControls", ImVec2(controls_width, 0));
 
     if (replay_view_->IsDone()) {
       if (ImGui::Button(icons::kReplay)) {
@@ -323,6 +335,7 @@ class ReplayViewerScreen : public Screen {
     }
 
     ImGui::SameLine();
+    ImGui::SetNextItemWidth(-1);
     if (ImGui::SliderFloat("##SeekBar", &now_seconds, 0.0f, duration_seconds, "%.1f")) {
       SeekToTime(now_seconds);
     }
@@ -337,6 +350,7 @@ class ReplayViewerScreen : public Screen {
       SeekToTime(duration_seconds * t);
     }
 
+    ImGui::EndChild();
     ImGui::End();
 
     RenderContext ctx;
@@ -365,6 +379,7 @@ class ReplayViewerScreen : public Screen {
     timer_.ResumeRun();
   }
 
+ private:
   void Pause() {
     is_paused_ = true;
     playback_stopwatch_.Stop();
@@ -395,7 +410,6 @@ class ReplayViewerScreen : public Screen {
            playback_stopwatch_.GetElapsedSeconds() * GetPlaybackSpeedMultiplier();
   }
 
- private:
   float GetPlaybackSpeedMultiplier() {
     int speed_int = static_cast<int>(playback_speed_);
     return speed_int / 100.0f;

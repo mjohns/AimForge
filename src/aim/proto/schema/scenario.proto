@@ -21,7 +21,8 @@ message CylinderRoom {
   // Instead of an absolute width, define as degrees. i.e. 180 degree view.
   float width_degrees = 7;
 
-  // Draw sides to the room at the specified angle. These walls are drawn based on the width of the wall.
+  // Draw sides to the room at the specified angle. These walls are drawn based on the width of the
+  // wall.
   float side_angle_degrees = 6;
 }
 
@@ -108,9 +109,7 @@ message CircleTargetRegion {
 
 message TargetPlacementStrategy {
   repeated TargetRegion regions = 1;
-  // If non empty, target regions will be chosen in the specified pattern repeating. 0 indexed.
-  repeated int32 region_order = 2;
-  ProfileListInfo regions_info = 100;
+  ProfileListInfo regions_info = 2;
 
   RegionLength min_distance = 3;
 
@@ -313,7 +312,8 @@ message ProfileListInfo {
   // If non empty, profiles will be chosen in the specified pattern repeating. 0 indexed.
   repeated int32 explicit_order = 1;
 
-  // If non empty, profiles will be chosen in the specified order at the start and then will proceed to normal profile selection.
+  // If non empty, profiles will be chosen in the specified order at the start and then will proceed
+  // to normal profile selection.
   repeated int32 start_order = 2;
 }
 
@@ -353,14 +353,11 @@ message AngleStrafeScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 2;
 
   repeated AngleStrafeProfile profiles = 4;
-  // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
-  repeated int32 profile_order = 5;
-  ProfileListInfo profiles_info = 100;
+  ProfileListInfo profiles_info = 5;
 
   repeated StrafeProfile forward_back_profiles = 6;
-  repeated int32 forward_back_profile_order = 7;
+  ProfileListInfo forward_back_profiles_info = 7;
   Direction forward_back_initial_direction = 8;
-  ProfileListInfo forward_back_profiles_info = 9;
 }
 
 message StrafeProfile {
@@ -400,16 +397,13 @@ message StrafeScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 4;
 
   repeated StrafeProfile left_right_profiles = 5;
-  repeated int32 left_right_profile_order = 6;
-  ProfileListInfo left_right_profiles_info = 100;
+  ProfileListInfo left_right_profiles_info = 6;
 
   repeated StrafeProfile forward_back_profiles = 7;
-  repeated int32 forward_back_profile_order = 8;
-  ProfileListInfo forward_back_profiles_info = 101;
+  ProfileListInfo forward_back_profiles_info = 8;
 
   repeated StrafeProfile up_down_profiles = 9;
-  repeated int32 up_down_profile_order = 10;
-  ProfileListInfo up_down_profiles_info = 102;
+  ProfileListInfo up_down_profiles_info = 10;
 
   Direction left_right_initial_direction = 13;
   Direction up_down_initial_direction = 14;
@@ -450,16 +444,13 @@ message BounceScenarioDef {
   Bounds relative_bounds = 2;
 
   repeated BounceProfile bounce_profiles = 3;
-  repeated int32 bounce_profile_order = 4;
-  ProfileListInfo bounce_profiles_info = 102;
+  ProfileListInfo bounce_profiles_info = 4;
 
   repeated StrafeProfile left_right_profiles = 5;
-  repeated int32 left_right_profile_order = 6;
-  ProfileListInfo left_right_profiles_info = 103;
+  ProfileListInfo left_right_profiles_info = 6;
 
   repeated StrafeProfile forward_back_profiles = 7;
-  repeated int32 forward_back_profile_order = 8;
-  ProfileListInfo forward_back_profiles_info = 104;
+  ProfileListInfo forward_back_profiles_info = 8;
 
   TargetPlacementStrategy target_placement_strategy = 9;
 
@@ -496,19 +487,13 @@ message WallWanderScenarioDef {
   TargetPlacementStrategy target_placement_strategy = 1;
 
   repeated WallWanderProfile profiles = 2;
-  ProfileListInfo profiles_info = 4;
-
-  // If non empty, strafe profiles will be chosen in the specified pattern repeating. 0 indexed.
-  repeated int32 profile_order = 3;
+  ProfileListInfo profiles_info = 3;
 }
 
 message TargetDef {
-  repeated TargetProfile profiles = 1;
+  int32 num_targets = 1;
+  repeated TargetProfile profiles = 2;
   ProfileListInfo profiles_info = 3;
-  int32 num_targets = 2;
-
-  // If non empty, target profiles will be chosen in the specified pattern repeating. 0 indexed.
-  repeated int32 target_order = 4;
 
   // The most recently placed target will not be clickable and will be
   // displayed with a separate color as determined by theme. This is

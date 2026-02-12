@@ -8,6 +8,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -17,8 +18,7 @@
         "height": 14.9999809
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -64,14 +64,14 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 4,
        "speed": 49
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -131,6 +131,7 @@
      "trackingProximity": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -140,8 +141,7 @@
         "height": 14.9999809
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -189,14 +189,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 4,
        "speed": 49
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -256,14 +256,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.2,
        "speed": 70
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -296,14 +296,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.2,
        "speed": 70
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -332,14 +332,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.2,
        "speed": 70
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -368,14 +368,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.2,
        "speed": 70
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -404,14 +404,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.2,
        "speed": 70
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -440,14 +440,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.2,
        "speed": 70
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -476,14 +476,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2,
        "speed": 40
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -516,14 +516,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 0.999999762,
        "speed": 14
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -556,14 +556,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2,
        "speed": 40
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -595,14 +595,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2.49999952,
        "speed": 71
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -635,14 +635,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2,
        "speed": 57
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -676,14 +676,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 1.90000021,
        "speed": 45
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -727,14 +727,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 1.80000019,
        "speed": 45
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -778,14 +778,14 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
        "targetRadius": 2,
        "speed": 57
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cameraPosition": {
@@ -819,6 +819,7 @@
      "trackingInvincible": true
     },
     "targetDef": {
+     "numTargets": 1,
      "profiles": [
       {
        "info": {},
@@ -828,8 +829,7 @@
         "height": 15
        }
       }
-     ],
-     "numTargets": 1
+     ]
     },
     "room": {
      "cylinderRoom": {

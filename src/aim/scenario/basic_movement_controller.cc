@@ -176,7 +176,8 @@ float StrafeController::GetUpdatedPosition(Target& t,
   bool time_up = next_direction_change_time_ > 0 && now_seconds >= next_direction_change_time_;
   if (is_first || too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
-    ChangeDirection(rand, now_seconds, profiles, profiles_info, t.speed, current_position, &t.radius);
+    ChangeDirection(
+        rand, now_seconds, profiles, profiles_info, t.speed, current_position, &t.radius);
   }
 
   float max_speed = t.speed * speed_multiplier_;
