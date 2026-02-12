@@ -236,6 +236,7 @@ class ReplayViewerScreen : public Screen {
       if (event.key.key == SDLK_SPACE) {
         if (replay_view_->IsDone()) {
           SeekToTime(0);
+          Play();
         } else if (is_paused_) {
           Play();
         } else {
@@ -312,6 +313,7 @@ class ReplayViewerScreen : public Screen {
     if (replay_view_->IsDone()) {
       if (ImGui::Button(icons::kReplay)) {
         SeekToTime(0);
+        Play();
       }
     } else {
       bool is_playing = playback_stopwatch_.IsRunning();
