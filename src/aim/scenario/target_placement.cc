@@ -60,14 +60,21 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
 
  private:
   bool AreNoneWithinDistanceOnWall(const glm::vec2& p, float min_distance) {
+    auto is_too_close = [=](const Target& target) {
+      float distance = glm::length(p - *target.wall_position);
+      float actual_min_distance = min_distance > 0 ? min_distance : target.radius * 2;
+      return distance < actual_min_distance;
+    };
     for (auto& target : target_manager_->GetTargets()) {
       if (target.ShouldDraw()) {
-        float distance = glm::length(p - *target.wall_position);
-        float actual_min_distance = min_distance > 0 ? min_distance : target.radius * 2;
-        if (distance < actual_min_distance) {
+        if (is_too_close(target)) {
           return false;
         }
       }
+    }
+    const std::optional<Target>& last_target = target_manager_->GetLastRemovedTarget();
+    if (last_target && is_too_close(*last_target)) {
+      return false;
     }
     return true;
   }

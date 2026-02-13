@@ -146,12 +146,17 @@ class TargetManager {
     return target_id_counter_;
   }
 
+  const std::optional<Target>& GetLastRemovedTarget() {
+    return last_removed_target_;
+  }
+
   std::optional<u16> GetNearestHitTarget(const Camera& camera, const glm::vec3& look_at);
   std::optional<u16> GetNearestTargetOnMiss(const Camera& camera, const glm::vec3& look_at);
 
  private:
   u16 target_id_counter_ = 0;
   std::vector<Target> targets_;
+  std::optional<Target> last_removed_target_;
   Room room_;
   ProfileSelectionContext selection_context_;
 };

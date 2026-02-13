@@ -68,6 +68,7 @@ std::vector<Target*> TargetManager::GetMutableVisibleTargets() {
 void TargetManager::RemoveTarget(uint16_t target_id) {
   for (Target& t : targets_) {
     if (t.id == target_id) {
+      last_removed_target_ = t;
       t.hidden = true;
     }
   }
