@@ -1,6 +1,54 @@
 {
  "scenarios": [
-   {
+  {
+   "name": "1ts ruohong",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.25
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 130,
+      "width": 170
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.8
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.51
+      }
+     }
+    }
+   }
+  },
+  {
    "name": "2ts wideflick",
    "def": {
     "durationSeconds": 60,
@@ -43,6 +91,541 @@
       ],
       "minDistance": {
        "xPercentValue": 0.25
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "3ts precise",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 3,
+     "profiles": [
+      {
+       "targetRadius": 2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 118
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "circle": {
+         "diameter": {
+          "xPercentValue": 0.73
+         },
+         "innerDiameter": {
+          "xPercentValue": 0.5
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.160000056
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "4ts horizontal",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 4,
+     "profiles": [
+      {
+       "targetRadius": 1.3
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 118,
+      "width": 211
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.85
+         },
+         "yLength": {
+          "yPercentValue": 0.85
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.190000057
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "4ts pokeball",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "poke": true
+    },
+    "targetDef": {
+     "numTargets": 4,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 122,
+      "width": 183
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.8
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.04
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "5ts vibrate",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 5,
+     "profiles": [
+      {
+       "targetRadius": 1.20000076,
+       "speed": 8,
+       "acceleration": 60
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 141
+     }
+    },
+    "levelOverrides": {},
+    "strafeDef": {
+     "relativeBounds": {
+      "width": {
+       "value": 0.4
+      },
+      "height": {
+       "value": 0.2
+      }
+     },
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "weight": 2
+        },
+        "circle": {
+         "diameter": {
+          "xPercentValue": 0.749999821
+         }
+        }
+       },
+       {
+        "info": {
+         "weight": 1
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.8
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.15
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "distance": {
+        "xPercentValue": 1
+       },
+       "distanceJitter": {
+        "xPercentValue": 0
+       }
+      }
+     ],
+     "upDownProfiles": [
+      {
+       "distance": {
+        "yPercentValue": 1
+       },
+       "distanceJitter": {
+        "yPercentValue": 0
+       },
+       "speedMultiplier": 0.700000286,
+       "accelerationMultiplier": 0.760000229
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_RANDOM",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
+   "name": "7ts pressure",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 7,
+     "profiles": [
+      {
+       "targetRadius": 1.10000014,
+       "targetRadiusGrowthTimeSeconds": 2.19999981,
+       "targetRadiusGrowthSize": 5.99999809
+      }
+     ],
+     "staggerInitialTargetsSeconds": 0.15
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 238,
+      "width": 225
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.8
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.09
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "900targets",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 37,
+     "profiles": [
+      {
+       "targetRadius": 1.49999976
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 162,
+      "width": 190
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.85
+         },
+         "yLength": {
+          "yPercentValue": 0.85
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "value": 4
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "fuglaapressure",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 5,
+     "profiles": [
+      {
+       "targetRadius": 1.00000024,
+       "targetRadiusGrowthTimeSeconds": 2.59999943,
+       "targetRadiusGrowthSize": 6.29999971
+      }
+     ],
+     "staggerInitialTargetsSeconds": 0.100000009
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 203,
+      "width": 211
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.85
+         },
+         "yLength": {
+          "yPercentValue": 0.85
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.190000057
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "micropressure",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 4,
+     "profiles": [
+      {
+       "targetRadius": 1.00000095,
+       "targetRadiusGrowthTimeSeconds": 1.69999993,
+       "targetRadiusGrowthSize": 6
+      }
+     ],
+     "staggerInitialTargetsSeconds": 0.15
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "barrelRoom": {
+      "radius": 100
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "circle": {
+         "diameter": {
+          "xPercentValue": 0.599999905
+         }
+        }
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "sixshot",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 6,
+     "profiles": [
+      {
+       "targetRadius": 1.3
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 122,
+      "width": 183
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.8
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.06
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "voxTSs smaller",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true
+    },
+    "targetDef": {
+     "numTargets": 5,
+     "profiles": [
+      {
+       "targetRadius": 1.99999928
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 78,
+      "width": 207
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "depth": {
+         "depthPercentValue": 0.35
+        },
+        "depthJitter": {
+         "depthPercentValue": 0.35
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.8
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.06
       }
      }
     }
@@ -534,194 +1117,6 @@
      }
     }
    }
-  },
-  {
-   "name": "1ts ruohong",
-   "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 1,
-     "profiles": [
-      {
-       "targetRadius": 1.25
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 130,
-      "width": 170
-     }
-    },
-    "levelOverrides": {},
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.8
-         },
-         "yLength": {
-          "yPercentValue": 0.8
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "xPercentValue": 0.51
-      }
-     }
-    }
-   }
-  },
-  {
-   "name": "5ts vibrate",
-   "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 5,
-     "profiles": [
-      {
-       "targetRadius": 1.20000076,
-       "speed": 8,
-       "acceleration": 60
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 141
-     }
-    },
-    "levelOverrides": {},
-    "strafeDef": {
-     "relativeBounds": {
-      "width": {
-       "value": 0.4
-      },
-      "height": {
-       "value": 0.2
-      }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "circle": {
-         "diameter": {
-          "xPercentValue": 0.749999821
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.8
-         },
-         "yLength": {
-          "yPercentValue": 0.8
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "xPercentValue": 0.15
-      }
-     },
-     "leftRightProfiles": [
-      {
-       "distance": {
-        "xPercentValue": 1
-       },
-       "distanceJitter": {
-        "xPercentValue": 0
-       }
-      }
-     ],
-     "upDownProfiles": [
-      {
-       "distance": {
-        "yPercentValue": 1
-       },
-       "distanceJitter": {
-        "yPercentValue": 0
-       },
-       "speedMultiplier": 0.700000286,
-       "accelerationMultiplier": 0.760000229
-      }
-     ],
-     "leftRightInitialDirection": "DIRECTION_RANDOM",
-     "upDownInitialDirection": "DIRECTION_RANDOM",
-     "forwardBackInitialDirection": "DIRECTION_RANDOM"
-    }
-   }
-  },
-  {
-   "name": "micropressure",
-   "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 4,
-     "profiles": [
-      {
-       "targetRadius": 1.00000095,
-       "targetRadiusGrowthTimeSeconds": 1.69999993,
-       "targetRadiusGrowthSize": 6
-      }
-     ],
-     "staggerInitialTargetsSeconds": 0.15
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "barrelRoom": {
-      "radius": 100
-     }
-    },
-    "levelOverrides": {},
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "circle": {
-         "diameter": {
-          "xPercentValue": 0.599999905
-         }
-        }
-       }
-      ]
-     }
-    }
-   }
   }
  ],
  "playlists": [
@@ -740,6 +1135,50 @@
      },
      {
       "scenario": "cA 2ts wideflick",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 4ts horizontal",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA micropressure",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 5ts vibrate",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 1ts ruohong",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA fuglaapressure",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 3ts precise",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 4ts pokeball",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 900targets",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA sixshot",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA voxTSs smaller",
+      "numPlays": 1
+     },
+     {
+      "scenario": "cA 7ts pressure",
       "numPlays": 1
      }
     ]
