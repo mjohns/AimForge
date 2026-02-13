@@ -850,18 +850,14 @@ void DrawWaypointEditor(WaypointScenarioDef& d) {
   DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
 }
 
-void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
+void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
   float char_x = ImGui::GetDefaultCharSizeX();
   ImGui::IdGuard cid("ShotTypeEditor");
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Shot type");
-  ImGui::SameLine();
 
-  ShotType& s = *def.mutable_shot_type();
   if (s.type_case() == ShotType::TYPE_NOT_SET) {
     s.set_click_single(true);
   }
-  ShotType::TypeCase type = def.shot_type().type_case();
+  ShotType::TypeCase type = s.type_case();
 
   auto* shot_types = &kShotTypes;
   if (is_single_target_tracking) {
@@ -909,21 +905,20 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
                         .set_min(2)
                         .set_default(3)
                         .set_width(char_x * 10),
-                    PROTO_INT_FIELD(ShotType, def.mutable_shot_type(), health_clicks));
+                    PROTO_INT_FIELD(ShotType, &s, health_clicks));
   }
 
   if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
     ImGui::InputBool(ImGui::InputBoolParams("RemoveClosest").set_label("Remove on miss"),
-                     PROTO_BOOL_FIELD(ShotType, def.mutable_shot_type(), remove_closest_on_miss));
+                     PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
 
-    ImGui::InputFloat(
-        ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
-            .set_is_optional()
-            .set_step(0.01, 0.25)
-            .set_min(0)
-            .set_default(1)
-            .set_width(char_x * 10),
-        PROTO_FLOAT_FIELD(ShotType, def.mutable_shot_type(), accuracy_penalty_multiplier));
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
+                          .set_is_optional()
+                          .set_step(0.01, 0.25)
+                          .set_min(0)
+                          .set_default(1)
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, accuracy_penalty_multiplier));
     ImGui::SameLine();
     ImGui::HelpMarker(
         "0 means no penalty for missed shots. Default (1) is score-sqrt(accuracy%). 0.5 is half "
@@ -935,14 +930,14 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
                           .set_min(0.05)
                           .set_default(0.5)
                           .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, def.mutable_shot_type(), click_rate_seconds));
+                      PROTO_FLOAT_FIELD(ShotType, &s, click_rate_seconds));
     ImGui::SameLine();
     ImGui::HelpMarker("The amount of time in seconds after shooting before you can shoot again");
   } else {
     // Not clicking.
-    def.mutable_shot_type()->clear_click_rate_seconds();
-    def.mutable_shot_type()->clear_accuracy_penalty_multiplier();
-    def.mutable_shot_type()->clear_remove_closest_on_miss();
+    s.clear_click_rate_seconds();
+    s.clear_accuracy_penalty_multiplier();
+    s.clear_remove_closest_on_miss();
   }
 
   if (type == ShotType::kTrackingKill) {
@@ -985,7 +980,7 @@ void DrawShotTypeEditor(ScenarioDef& def, bool is_single_target_tracking) {
         "early based on this time.");
 
     ImGui::InputBool(ImGui::InputBoolParams("NoPartialKills").set_label("No partial kills"),
-                     PROTO_BOOL_FIELD(ShotType, def.mutable_shot_type(), no_partial_kills));
+                     PROTO_BOOL_FIELD(ShotType, &s, no_partial_kills));
   }
 }
 
@@ -993,7 +988,12 @@ void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_
   // Make sure only the appropriate fields are set on the def.
   ScenarioDef old_def = def;
 
+  float char_x = ImGui::GetDefaultCharSizeX();
+
   def = {};
+  if (old_def.has_level_overrides()) {
+    *def.mutable_level_overrides() = old_def.level_overrides();
+  }
   def.set_description(old_def.description());
   *def.mutable_overrides() = old_def.overrides();
   *def.mutable_reference_def() = old_def.reference_def();
@@ -1018,8 +1018,55 @@ void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_
   DrawOverridesEditor("ReferenceOverrides", def.mutable_overrides());
   ImGui::Unindent();
 
-  ImGui::Spacing();
-  ImGui::Spacing();
+  ImGui::SpacedSeparator();
+
+  bool has_level_overrides = def.has_level_overrides();
+  ImGui::Text("Level overrides");
+  ImGui::SameLine();
+  ImGui::Checkbox("##LevelOverridesCheck", &has_level_overrides);
+  if (has_level_overrides) {
+    ImGui::Indent();
+    DrawOverridesEditor("LevelOverrides", def.mutable_level_overrides(), /*is_levels=*/true);
+    ImGui::Unindent();
+  } else {
+    def.clear_level_overrides();
+  }
+
+  ImGui::SpacedSeparator();
+
+  ImGui::InputInt(
+      ImGui::InputIntParams::WithLabelAsId("Duration")
+          .set_is_optional()
+          .set_default(60)
+          .set_min(5)
+          .set_step(1, 5)
+          .set_width(char_x * 12),
+      PROTO_INT_FIELD(ReferenceScenarioDef, def.mutable_reference_def(), duration_seconds));
+
+  ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Number of targets")
+                      .set_is_optional()
+                      .set_default(3)
+                      .set_min(1)
+                      .set_step(1, 5)
+                      .set_width(char_x * 12),
+                  PROTO_INT_FIELD(ReferenceScenarioDef, def.mutable_reference_def(), num_targets));
+
+  ImGui::SpacedSeparator();
+
+  bool has_shot_type = def.reference_def().has_shot_type();
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Shot type");
+  ImGui::SameLine();
+  ImGui::Checkbox("##OverrideShotType", &has_shot_type);
+  if (has_shot_type) {
+    ImGui::Indent();
+    DrawShotTypeEditor(*def.mutable_reference_def()->mutable_shot_type(), false);
+    ImGui::Unindent();
+  } else {
+    def.mutable_reference_def()->clear_shot_type();
+  }
+
+  ImGui::SpacedSeparator();
 
   if (app != nullptr) {
     if (ImGui::Button("Bake")) {
@@ -1111,7 +1158,10 @@ void DrawScenarioTypeEditor(ScenarioDef& def, Application* app, std::string* err
   ImGui::SpacedSeparator();
 
   if (scenario_type != ScenarioDef::kReferenceDef) {
-    DrawShotTypeEditor(def, is_single_target_tracking);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Shot type");
+    ImGui::SameLine();
+    DrawShotTypeEditor(*def.mutable_shot_type(), is_single_target_tracking);
     ImGui::SpacedSeparator();
   }
 

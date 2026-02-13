@@ -508,10 +508,8 @@ class ScenarioEditorScreen : public UiScreen {
                                     def_.reference_def().scenario_name()));
         return;
       }
+      ApplyReferenceFieldOverrides(def_, &(*base_scenario));
       params.def = ApplyScenarioOverrides(*base_scenario);
-      if (def_.has_overrides()) {
-        *params.def.mutable_overrides() = def_.overrides();
-      }
     } else {
       params.def = def_;
     }

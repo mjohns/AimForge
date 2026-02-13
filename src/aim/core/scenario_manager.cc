@@ -253,12 +253,7 @@ class ScenarioManagerImpl : public ScenarioManager {
       return {};
     }
 
-    if (def.has_overrides()) {
-      *referenced->mutable_overrides() = def.overrides();
-    }
-    if (def.has_level_overrides()) {
-      *referenced->mutable_level_overrides() = def.level_overrides();
-    }
+    ApplyReferenceFieldOverrides(def, &(*referenced));
 
     return scenario->level.has_value() ? ApplyScenarioLevelOverrides(*referenced, *scenario->level)
                                        : ApplyScenarioOverrides(*referenced);
@@ -341,7 +336,7 @@ class ScenarioManagerImpl : public ScenarioManager {
       item.def = s;
       */
       item.def = scenario.def();
-      //dirty_bundles_.insert(bundle_name);
+      // dirty_bundles_.insert(bundle_name);
     }
   }
 

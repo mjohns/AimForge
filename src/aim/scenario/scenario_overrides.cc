@@ -157,4 +157,22 @@ ScenarioDef ApplyScenarioLevelOverrides(const ScenarioDef& original_def, float l
   return ApplyLeveledOverrides(result, result.level_overrides(), levels);
 }
 
+void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
+  if (ref.has_overrides()) {
+    *def->mutable_overrides() = ref.overrides();
+  }
+  if (ref.has_level_overrides()) {
+    *def->mutable_level_overrides() = ref.level_overrides();
+  }
+  if (ref.reference_def().has_shot_type()) {
+    *def->mutable_shot_type() = ref.reference_def().shot_type();
+  }
+  if (ref.reference_def().has_duration_seconds()) {
+    def->set_duration_seconds(ref.reference_def().duration_seconds());
+  }
+  if (ref.reference_def().has_num_targets()) {
+    def->mutable_target_def()->set_num_targets(ref.reference_def().num_targets());
+  }
+}
+
 }  // namespace aim

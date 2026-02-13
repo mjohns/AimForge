@@ -219,6 +219,9 @@ message ScenarioDef {
 // This scenario extends the specified scenario optionally specifying overrides to tweak settings.
 message ReferenceScenarioDef {
   string scenario_name = 1;
+  ShotType shot_type = 2;
+  int32 duration_seconds = 3;
+  int32 num_targets = 4;
 }
 
 message StaticScenarioDef {
