@@ -429,7 +429,7 @@ void Application::Initialize() {
     history_manager_->UpdateRecentView(ObjectType::PLAYLIST, "AF Clicking");
   }
 
-  //bundle_manager_->SaveDirtyBundles();
+  // bundle_manager_->SaveDirtyBundles();
 }
 
 void Application::Render(ImVec4 clear_color) {

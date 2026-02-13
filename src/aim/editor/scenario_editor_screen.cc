@@ -166,7 +166,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::TableNextColumn();
       ImGui::BeginChild("SecondColumnContainer", ImVec2(0, 0));
       std::string error_message;
-      DrawScenarioTypeEditor(def_, &app_, &error_message);
+      DrawScenarioTypeEditor(def_, &app_, &error_message, &editing_room_);
       if (error_message.size() > 0) {
         SetErrorMessage(error_message);
       }
@@ -192,7 +192,7 @@ class ScenarioEditorScreen : public UiScreen {
       def_.set_description(*maybe_description);
     }
 
-    if (def_.room().type_case() == Room::TYPE_NOT_SET) {
+    if (!def_.has_reference_def() && def_.room().type_case() == Room::TYPE_NOT_SET) {
       *def_.mutable_room() = GetDefaultSimpleRoom();
     }
 
@@ -245,7 +245,8 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::BeginTabItem("Scenario type")) {
       ImGui::Spacing();
       std::string error_message;
-      DrawScenarioTypeEditor(compare_def, /*app=*/nullptr, &error_message);
+      bool no_op_editing_room = false;
+      DrawScenarioTypeEditor(compare_def, /*app=*/nullptr, &error_message, &no_op_editing_room);
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Targets")) {
@@ -427,7 +428,7 @@ class ScenarioEditorScreen : public UiScreen {
 
   void DrawReferenceEditor() {
     std::string error_message;
-    DrawScenarioTypeEditor(def_, &app_, &error_message);
+    DrawScenarioTypeEditor(def_, &app_, &error_message, &editing_room_);
     if (error_message.size() > 0) {
       SetErrorMessage(error_message);
     }
@@ -446,7 +447,11 @@ class ScenarioEditorScreen : public UiScreen {
         editing_room_ = false;
       }
       ImGui::SpacedSeparator();
-      DrawRoomEditorInputs(*def_.mutable_room());
+      if (def_.has_reference_def()) {
+        DrawRoomEditorInputs(*def_.mutable_reference_def()->mutable_room());
+      } else {
+        DrawRoomEditorInputs(*def_.mutable_room());
+      }
     }
     ImGui::End();
   }
@@ -457,8 +462,10 @@ class ScenarioEditorScreen : public UiScreen {
       return;
     }
 
-    target_manager_.UpdateRoom(def_.room());
-    CameraParams camera_params(def_.room());
+    Room room = def_.has_reference_def() ? def_.reference_def().room() : def_.room();
+
+    target_manager_.UpdateRoom(room);
+    CameraParams camera_params(room);
     Camera camera(camera_params);
     auto look_at = camera.GetLookAt();
 
@@ -466,10 +473,9 @@ class ScenarioEditorScreen : public UiScreen {
     Stopwatch stopwatch;
     FrameTimes frame_times;
     if (app_.StartRender(&ctx)) {
-      auto projection =
-          GetPerspectiveTransformation(app_.screen_info(), def_.room().horizontal_fov());
+      auto projection = GetPerspectiveTransformation(app_.screen_info(), room.horizontal_fov());
       app_.renderer()->DrawScenario(projection,
-                                    def_.room(),
+                                    room,
                                     theme_,
                                     settings_.health_bar(),
                                     target_manager_.GetTargets(),

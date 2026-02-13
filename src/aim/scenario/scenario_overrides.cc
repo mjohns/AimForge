@@ -173,6 +173,9 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
   if (ref.reference_def().has_num_targets()) {
     def->mutable_target_def()->set_num_targets(ref.reference_def().num_targets());
   }
+  if (ref.reference_def().has_room()) {
+    *def->mutable_room() = ref.reference_def().room();
+  }
 }
 
 }  // namespace aim

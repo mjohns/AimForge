@@ -222,6 +222,7 @@ message ReferenceScenarioDef {
   ShotType shot_type = 2;
   int32 duration_seconds = 3;
   int32 num_targets = 4;
+  Room room = 5;
 }
 
 message StaticScenarioDef {

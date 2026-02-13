@@ -13,6 +13,7 @@
 #include "aim/core/application.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/editor/profile_list_editor.h"
+#include "aim/editor/room_editor.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/scenario/scenario_overrides.h"
 #include "aim/ui/search_selector.h"
@@ -984,7 +985,10 @@ void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
   }
 }
 
-void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_message_out) {
+void DrawReferenceEditor(ScenarioDef& def,
+                         Application* app,
+                         std::string* error_message_out,
+                         bool* editing_room) {
   // Make sure only the appropriate fields are set on the def.
   ScenarioDef old_def = def;
 
@@ -1034,14 +1038,13 @@ void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_
 
   ImGui::SpacedSeparator();
 
-  ImGui::InputInt(
-      ImGui::InputIntParams::WithLabelAsId("Duration")
-          .set_is_optional()
-          .set_default(60)
-          .set_min(5)
-          .set_step(1, 5)
-          .set_width(char_x * 12),
-      PROTO_INT_FIELD(ReferenceScenarioDef, def.mutable_reference_def(), duration_seconds));
+  ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Duration")
+                      .set_is_optional()
+                      .set_default(60)
+                      .set_min(5)
+                      .set_step(1, 5)
+                      .set_width(char_x * 12),
+                  PROTO_INT_FIELD(ReferenceScenarioDef, &r, duration_seconds));
 
   ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Number of targets")
                       .set_is_optional()
@@ -1049,7 +1052,32 @@ void DrawReferenceEditor(ScenarioDef& def, Application* app, std::string* error_
                       .set_min(1)
                       .set_step(1, 5)
                       .set_width(char_x * 12),
-                  PROTO_INT_FIELD(ReferenceScenarioDef, def.mutable_reference_def(), num_targets));
+                  PROTO_INT_FIELD(ReferenceScenarioDef, &r, num_targets));
+
+  if (app != nullptr) {
+    bool has_room = r.has_room();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Change room");
+    ImGui::SameLine();
+    ImGui::Checkbox("##OverrideRoomCheck", &has_room);
+    if (has_room) {
+      if (!r.has_room()) {
+        // Initialize room
+        auto parent = app->scenario_manager().GetEvaluatedScenarioDef(r.scenario_name());
+        if (parent) {
+          *r.mutable_room() = parent->room();
+        } else {
+          *r.mutable_room() = GetDefaultSimpleRoom();
+        }
+      }
+      ImGui::SameLine();
+      if (ImGui::Button(std::format("{} Room", icons::kEdit))) {
+        *editing_room = true;
+      }
+    } else {
+      r.clear_room();
+    }
+  }
 
   ImGui::SpacedSeparator();
 
@@ -1131,7 +1159,10 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
 
 }  // namespace
 
-void DrawScenarioTypeEditor(ScenarioDef& def, Application* app, std::string* error_message_out) {
+void DrawScenarioTypeEditor(ScenarioDef& def,
+                            Application* app,
+                            std::string* error_message_out,
+                            bool* editing_room) {
   float char_x = ImGui::GetDefaultCharSizeX();
   ImGui::IdGuard cid("ScenarioTypeEditor");
   ImGui::AlignTextToFramePadding();
@@ -1166,7 +1197,7 @@ void DrawScenarioTypeEditor(ScenarioDef& def, Application* app, std::string* err
   }
 
   if (scenario_type == ScenarioDef::kReferenceDef) {
-    DrawReferenceEditor(def, app, error_message_out);
+    DrawReferenceEditor(def, app, error_message_out, editing_room);
   }
   if (scenario_type == ScenarioDef::kStaticDef) {
     DrawStaticEditor(*def.mutable_static_def());
