@@ -14,11 +14,6 @@ FetchContent_Declare(
   GIT_TAG 269c637263b8c63b053d72b4dde4129b944d6e57
 )
 
-FetchContent_Declare(
-  glm
-  GIT_REPOSITORY https://github.com/g-truc/glm.git
-  GIT_TAG 1.0.3
-)
 
 FetchContent_Declare(
   protobuf
@@ -47,6 +42,7 @@ set(protobuf_WITH_ZLIB OFF)
 
 add_subdirectory(imgui)
 add_subdirectory(sqlite3)
+add_subdirectory(glm)
 add_subdirectory(implot)
 add_subdirectory(protobuf-matchers)
 add_subdirectory(spdlog)
@@ -54,5 +50,5 @@ add_subdirectory(spdlog)
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(SDL3 SDL_mixer glm protobuf googletest)
+FetchContent_MakeAvailable(SDL3 SDL_mixer protobuf googletest)
 
