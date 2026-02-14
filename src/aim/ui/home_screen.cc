@@ -39,75 +39,63 @@ const char* kSelectedAppScreenKey = "SelectedAppScreen";
 class SetInitialDpiDialog {
  public:
   void NotifyOpen() {
-    if (!is_open_) {
-      open_ = true;
-    }
+    popup_.Open();
   }
 
   std::optional<int> Draw() {
-    const char* popup_id = "SetDpiDialog";
     ImGui::IdGuard cid("SetInitialDpiDialog");
     std::optional<int> set_dpi;
-    if (is_open_) {
-      ImGui::SetNextWindowPos(
-          ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-      if (ImGui::BeginPopupModal(popup_id,
-                                 &is_open_,
-                                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar)) {
-        ImGui::AlignTextToFramePadding();
-        ImGui::Text("Select Mouse DPI");
-        ImGui::SameLine();
-        ImGui::HelpMarker("DPI is used to calculate sensitivity given a cm/360 value.");
+    if (popup_.Begin()) {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("What is your mouse DPI?");
+      ImGui::SameLine();
+      ImGui::HelpMarker("DPI is used to calculate sensitivity given a cm/360 value.");
 
-        if (ImGui::Button("400")) {
-          set_dpi = 400;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("800")) {
-          set_dpi = 800;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("1600")) {
-          set_dpi = 1600;
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("3200")) {
-          set_dpi = 3200;
-        }
-
-        ImGui::InputInt("##DpiInput", &dpi_input_value_, 100, 200);
-        ImGui::SameLine();
-        bool is_valid = dpi_input_value_ > 0;
-        if (!is_valid) {
-          ImGui::BeginDisabled();
-        }
-        if (ImGui::Button("Set")) {
-          set_dpi = dpi_input_value_;
-        }
-        if (!is_valid) {
-          ImGui::EndDisabled();
-        }
-
-        if (set_dpi) {
-          ImGui::CloseCurrentPopup();
-          is_open_ = false;
-        }
-        ImGui::EndPopup();
+      if (ImGui::Button("400")) {
+        set_dpi = 400;
       }
-    }
-    if (open_) {
-      ImGui::OpenPopup(popup_id);
-      open_ = false;
-      is_open_ = true;
+      ImGui::SameLine();
+      if (ImGui::Button("800")) {
+        set_dpi = 800;
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("1600")) {
+        set_dpi = 1600;
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("3200")) {
+        set_dpi = 3200;
+      }
+
+      ImGui::Spacing();
+
+      float char_x = ImGui::GetDefaultCharSizeX();
+      ImGui::SetNextItemWidth(char_x * 12);
+      ImGui::InputInt("##DpiInput", &dpi_input_value_, 100, 200);
+
+      ImGui::SameLine();
+      bool is_valid = dpi_input_value_ > 0;
+      if (!is_valid) {
+        ImGui::BeginDisabled();
+      }
+      if (ImGui::Button("Set")) {
+        set_dpi = dpi_input_value_;
+      }
+      if (!is_valid) {
+        ImGui::EndDisabled();
+      }
+
+      if (set_dpi) {
+        popup_.Close();
+      }
+      popup_.End();
     }
     return set_dpi;
   }
 
  private:
-  bool open_ = false;
-  bool is_open_ = false;
   int dpi_input_value_ = 800;
+  ImGui::Popup popup_{"SetDpiDialog"};
 };
 
 class HomeScreen : public UiScreen {

@@ -2189,7 +2189,7 @@
   {
    "name": "Smooth Horizontal Arm",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2197,7 +2197,6 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
        "speed": 58,
        "acceleration": 231
@@ -2227,7 +2226,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2237,14 +2235,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Fingertips",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2252,13 +2251,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 58,
-       "speedJitter": 0,
-       "acceleration": 231,
-       "accelerationJitter": 0
+       "acceleration": 231
       }
      ]
     },
@@ -2287,7 +2282,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2297,14 +2291,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Strafe Arm",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2312,13 +2307,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 104,
-       "speedJitter": 0,
-       "acceleration": 91,
-       "accelerationJitter": 0
+       "acceleration": 91
       }
      ]
     },
@@ -2347,7 +2338,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2357,14 +2347,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Strafe Fingertips",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2372,13 +2363,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 72,
-       "speedJitter": 0,
-       "acceleration": 116,
-       "accelerationJitter": 0
+       "acceleration": 116
       }
      ]
     },
@@ -2407,7 +2394,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2417,14 +2403,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Strafe Mixed",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2432,13 +2419,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 184,
-       "speedJitter": 0,
-       "acceleration": 121,
-       "accelerationJitter": 0
+       "acceleration": 121
       }
      ]
     },
@@ -2467,7 +2450,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 0.64
        },
@@ -2481,14 +2463,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Strafe Wrist",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2496,13 +2479,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 96,
-       "speedJitter": 0,
-       "acceleration": 111,
-       "accelerationJitter": 0
+       "acceleration": 111
       }
      ]
     },
@@ -2531,7 +2510,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2541,14 +2519,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Strafe Wrist LowFov",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2556,13 +2535,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 105,
-       "speedJitter": 0,
-       "acceleration": 111,
-       "accelerationJitter": 0
+       "acceleration": 111
       }
      ]
     },
@@ -2589,7 +2564,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2599,14 +2573,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Wide Strafe Fast",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2614,13 +2589,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 180,
-       "speedJitter": 0,
-       "acceleration": 71,
-       "accelerationJitter": 0
+       "acceleration": 71
       }
      ]
     },
@@ -2648,7 +2619,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2658,14 +2628,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Wide Strafe Mixed",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2673,13 +2644,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 180,
-       "speedJitter": 0,
-       "acceleration": 71,
-       "accelerationJitter": 0
+       "acceleration": 71
       }
      ]
     },
@@ -2707,7 +2674,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 0.64
        },
@@ -2721,14 +2687,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Wide Strafe Precise",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2736,7 +2703,6 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
        "speed": 99,
        "acceleration": 41
@@ -2768,7 +2734,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2778,14 +2743,15 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "Smooth Horizontal Wide Strafe Slow",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
@@ -2793,13 +2759,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 5,
-       "targetRadiusJitter": 0,
        "speed": 73,
-       "speedJitter": 0,
-       "acceleration": 46,
-       "accelerationJitter": 0
+       "acceleration": 46
       }
      ]
     },
@@ -2827,7 +2789,6 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
        "distance": {
         "xPercentValue": 1
        },
@@ -2837,7 +2798,8 @@
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -2845,7 +2807,7 @@
    "name": "Smooth Horizontal Wrist",
    "def": {
     "description": "Choose a sensitivity that allows full range of motion using only the wrist.",
-    "durationSeconds": 45,
+    "durationSeconds": 40,
     "shotType": {
      "trackingProximity": true
     },
