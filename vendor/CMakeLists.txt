@@ -1,12 +1,3 @@
-include(FetchContent)
-
-FetchContent_Declare(
-  SDL3
-  GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
-  GIT_TAG release-3.2.30
-)
-# GIT_TAG release-3.4.0
-
 # Settings
 
 set(SPDLOG_USE_STD_FORMAT ON)
@@ -49,8 +40,7 @@ add_subdirectory(protobuf)
 add_subdirectory(googletest)
 add_subdirectory(protobuf-matchers)
 
-FetchContent_MakeAvailable(SDL3)
-
+add_subdirectory(SDL3)
 # https://github.com/libsdl-org/SDL_mixer/commit/269c637263b8c63b053d72b4dde4129b944d6e57
 add_subdirectory(SDL_mixer)
 
