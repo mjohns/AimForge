@@ -435,10 +435,14 @@ void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_l
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, speed_multiplier));
   ImGui::InputFloat(default_params.clone().set_id_and_label("Acceleration multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, acceleration_multiplier));
+  /*
+  // TODO: Not sure if these are implemented correctly or make sense. Maybe should have more
+  specific names.
   ImGui::InputFloat(default_params.clone().set_id_and_label("Time scale multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, time_scale_multiplier));
   ImGui::InputFloat(default_params.clone().set_id_and_label("Distance multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, distance_multiplier));
+  */
   ImGui::InputFloat(default_params.clone().set_id_and_label("Pulse time multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, growth_time_multiplier));
   ImGui::InputFloat(
