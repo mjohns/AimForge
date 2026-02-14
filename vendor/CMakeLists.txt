@@ -7,6 +7,7 @@ FetchContent_Declare(
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
   GIT_TAG release-3.2.30
 )
+# GIT_TAG release-3.4.0
 
 FetchContent_Declare(
   SDL_mixer
@@ -25,6 +26,17 @@ if (NOT BUILD_SHARED_LIBS)
 endif()
 
 set(GLM_BUILD_LIBRARY ON)
+
+set(SDLMIXER_FLAC OFF)
+set(SDLMIXER_GME OFF)
+set(SDLMIXER_MP3 OFF)
+set(SDLMIXER_MIDI OFF)
+set(SDLMIXER_WAVE OFF)
+set(SDLMIXER_WAVEPACK OFF)
+set(SDLMIXER_OPUS OFF)
+set(SDLMIXER_VORBIS_TREMOR OFF)
+set(SDLMIXER_VORBIS_VORBISFILE OFF)
+
 
 set(protobuf_LOCAL_DEPENDENCIES_ONLY ON)
 set(protobuf_BUILD_TESTS OFF)
