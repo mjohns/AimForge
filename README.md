@@ -35,8 +35,8 @@ FpsAimForge is a c++ app built on top of SDL3 (and the GPU api) and ImGui. Stats
 The project is built with CMake. You can open the folder in Visual Studio (not code) on Windows and build from there.
 On Unix like systems you can run:
 ```bash
-cmake .
-make
-cd bin
+cmake -S . -B build
+cmake --build build
+cd build
 ./FpsAimForge
 ```

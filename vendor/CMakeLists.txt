@@ -34,9 +34,6 @@ FetchContent_Declare(
 
 # Settings
 
-# For SDL2 to be able to override options
-set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-
 set(SPDLOG_USE_STD_FORMAT ON)
 set(ABSL_PROPAGATE_CXX_STD ON)
 set(GLM_BUILD_LIBRARY ON)
@@ -44,6 +41,8 @@ set(GLM_BUILD_LIBRARY ON)
 set(protobuf_BUILD_TESTS OFF)
 set(protobuf_BUILD_PROTOC_BINARIES  OFF)
 set(protobuf_BUILD_LIBPROTOC OFF)
+set(protobuf_BUILD_LIBUPB OFF)
+set(protobuf_BUILD_EXAMPLES OFF)
 set(protobuf_WITH_ZLIB OFF)
 
 add_subdirectory(imgui)
