@@ -32,11 +32,11 @@ set(SDLMIXER_GME OFF)
 set(SDLMIXER_MP3 OFF)
 set(SDLMIXER_MIDI OFF)
 set(SDLMIXER_WAVE OFF)
-set(SDLMIXER_WAVEPACK OFF)
+set(SDLMIXER_WAVPACK OFF)
 set(SDLMIXER_OPUS OFF)
 set(SDLMIXER_VORBIS_TREMOR OFF)
 set(SDLMIXER_VORBIS_VORBISFILE OFF)
-
+set(SDLMIXER_MOD OFF)
 
 set(protobuf_LOCAL_DEPENDENCIES_ONLY ON)
 set(protobuf_BUILD_TESTS OFF)
@@ -57,5 +57,8 @@ add_subdirectory(protobuf)
 add_subdirectory(googletest)
 add_subdirectory(protobuf-matchers)
 
-FetchContent_MakeAvailable(SDL3 SDL_mixer)
+FetchContent_MakeAvailable(SDL3)
+
+# https://github.com/libsdl-org/SDL_mixer/commit/269c637263b8c63b053d72b4dde4129b944d6e57
+add_subdirectory(SDL_mixer)
 
