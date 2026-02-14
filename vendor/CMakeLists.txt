@@ -14,12 +14,6 @@ FetchContent_Declare(
   GIT_TAG 269c637263b8c63b053d72b4dde4129b944d6e57
 )
 
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        v1.17.0
-)
-
 # Settings
 
 set(SPDLOG_USE_STD_FORMAT ON)
@@ -48,10 +42,8 @@ add_subdirectory(glm)
 add_subdirectory(implot)
 add_subdirectory(spdlog)
 add_subdirectory(protobuf)
+add_subdirectory(googletest)
 add_subdirectory(protobuf-matchers)
 
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-FetchContent_MakeAvailable(SDL3 SDL_mixer googletest)
+FetchContent_MakeAvailable(SDL3 SDL_mixer)
 
