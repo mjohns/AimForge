@@ -8,7 +8,7 @@ add_library(${NAME} STATIC ${SRCS} ${HRDS} )
 target_link_libraries(${NAME}
   PUBLIC SDL3::SDL3
           SDL3_mixer::SDL3_mixer
-          glm::glm-header-only
+          glm::glm
           imgui
           implot
           sqlite3
