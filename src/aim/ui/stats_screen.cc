@@ -35,7 +35,6 @@ void DumpRenderTimeline(const FrameTimes& t) {
     time_points.push_back({span.start, label + "_start"});
     time_points.push_back({span.end, label + "_end"});
   };
-  time_points.push_back({t.render_end, "render_end"});
   push_time_span(t.build_draw_data, "build_draw_data");
   push_time_span(t.pack_instance_data, "pack_instance_data");
   push_time_span(t.upload_instance_data, "upload_instance_data");

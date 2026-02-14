@@ -44,6 +44,7 @@ struct ReplayTargetMetadata {
 union ReplayEventData {
   PlaySoundEvent play_sound;
   u16 target_id;
+  bool is_hit;
 };
 
 struct ReplayEvent {
@@ -77,7 +78,7 @@ class ReplayRecorder {
   void RemoveTarget(float now_seconds, u16 target_id);
   void PlaySound(float now_seconds, ReplaySoundType sound);
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
-  void AddMouseClick(float now_seconds);
+  void AddMouseClick(float now_seconds, bool is_hit);
 
   void SnapshotTargets(i64 frame_number, const std::vector<Target>& targets);
 

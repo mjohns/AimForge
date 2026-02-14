@@ -78,8 +78,9 @@ void ReplayRecorder::RemoveTarget(float now_seconds, u16 target_id) {
   target_data_channel_map_.erase(target_id);
 }
 
-void ReplayRecorder::AddMouseClick(float now_seconds) {
-  AddEvent(now_seconds, ReplayEventType::MOUSE_CLICK);
+void ReplayRecorder::AddMouseClick(float now_seconds, bool is_hit) {
+  ReplayEvent& event = AddEvent(now_seconds, ReplayEventType::MOUSE_CLICK);
+  event.data.is_hit = is_hit;
 }
 
 ReplayEvent& ReplayRecorder::AddEvent(float now_seconds, ReplayEventType type) {

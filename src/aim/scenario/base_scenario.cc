@@ -279,6 +279,10 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           auto hit_target_id = *maybe_hit_target_id;
           AddNewTargetDuringRun(hit_target_id);
 
+          if (replay_) {
+            replay_->AddMouseClick(timer_.GetElapsedSeconds(), true);
+          }
+
           current_poke_target_id_ = {};
           current_poke_start_time_micros_ = 0;
         }
@@ -312,7 +316,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       PlayShootSound();
       if (replay_) {
-        replay_->AddMouseClick(timer_.GetElapsedSeconds());
+        replay_->AddMouseClick(timer_.GetElapsedSeconds(), maybe_hit_target_id.has_value());
       }
       if (maybe_hit_target_id.has_value()) {
         if (GetShotType() == ShotType::kClickMulti) {
