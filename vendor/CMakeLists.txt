@@ -1,19 +1,11 @@
 include(FetchContent)
 
-# Dependencies
-
 FetchContent_Declare(
   SDL3
   GIT_REPOSITORY "https://github.com/libsdl-org/SDL.git"
   GIT_TAG release-3.2.30
 )
 # GIT_TAG release-3.4.0
-
-FetchContent_Declare(
-  SDL_mixer
-  GIT_REPOSITORY "https://github.com/libsdl-org/SDL_mixer.git"
-  GIT_TAG 269c637263b8c63b053d72b4dde4129b944d6e57
-)
 
 # Settings
 
