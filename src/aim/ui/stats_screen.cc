@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <optional>
+#include <utility>
 
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
@@ -25,6 +26,47 @@
 
 namespace aim {
 namespace {
+
+void DumpRenderTimeline(const FrameTimes& t) {
+  std::vector<std::pair<i64, std::string>> time_points;
+  time_points.push_back({t.render_start, "render_start"});
+  time_points.push_back({t.render_end, "render_end"});
+  auto push_time_span = [&](const TimeSpan& span, const std::string& label) {
+    time_points.push_back({span.start, label + "_start"});
+    time_points.push_back({span.end, label + "_end"});
+  };
+  time_points.push_back({t.render_end, "render_end"});
+  push_time_span(t.build_draw_data, "build_draw_data");
+  push_time_span(t.pack_instance_data, "pack_instance_data");
+  push_time_span(t.upload_instance_data, "upload_instance_data");
+  push_time_span(t.upload_instance_data_copy_pass, "upload_instance_data_copy_pass");
+  push_time_span(t.upload_instance_data_create_buffer, "upload_instance_data_create_buffer");
+  push_time_span(t.upload_instance_data_memcpy, "upload_instance_data_memcpy");
+  push_time_span(t.render_draw_data, "render_draw_data");
+  push_time_span(t.render_finish, "render_finish");
+  push_time_span(t.render_new_imgui_frame, "render_new_imgui_frame");
+  push_time_span(t.draw_crosshair, "draw_crosshair");
+
+  std::erase_if(time_points, [](const auto& p) { return p.first <= 0; });
+  std::sort(time_points.begin(), time_points.end());
+
+  if (time_points.empty()) {
+    return;
+  }
+
+  i64 last_time = time_points[0].first;
+  std::string last_label = time_points[0].second;
+  for (int i = 1; i < time_points.size(); ++i) {
+    i64 time = time_points[i].first;
+    const std::string& label = time_points[i].second;
+
+    i64 duration_micros = time - last_time;
+
+    ImGui::TextFmt("{:.1f}ms: {} -> {}", duration_micros / 1000.0f, last_label, label);
+    last_time = time;
+    last_label = label;
+  }
+}
 
 enum class SelectedScreen : int {
   STATS = 1,
@@ -408,6 +450,11 @@ class StatsScreen : public UiScreen {
                      (worst_times_.build_draw_data.start - worst_times_.render_start) / 1000.0);
       ImGui::TextFmt("Render draw data until end: {:.2f}ms",
                      (worst_times_.render_end - worst_times_.render_draw_data.end) / 1000.0);
+
+      if (ImGui::TreeNode("Render timeline")) {
+        DumpRenderTimeline(worst_times_);
+        ImGui::TreePop();
+      }
       ImGui::Unindent();
     }
     ImGui::Unindent();
