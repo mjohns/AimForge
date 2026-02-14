@@ -14,13 +14,6 @@ FetchContent_Declare(
   GIT_TAG 269c637263b8c63b053d72b4dde4129b944d6e57
 )
 
-
-FetchContent_Declare(
-  protobuf
-  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-  GIT_TAG        v33.2
-)
-
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -45,6 +38,7 @@ set(protobuf_BUILD_PROTOC_BINARIES  OFF)
 set(protobuf_BUILD_LIBPROTOC OFF)
 set(protobuf_BUILD_LIBUPB OFF)
 set(protobuf_BUILD_EXAMPLES OFF)
+set(protobuf_BUILD_CONFORMANCE OFF)
 set(protobuf_WITH_ZLIB OFF)
 
 add_subdirectory(absl)
@@ -52,11 +46,12 @@ add_subdirectory(imgui)
 add_subdirectory(sqlite3)
 add_subdirectory(glm)
 add_subdirectory(implot)
-add_subdirectory(protobuf-matchers)
 add_subdirectory(spdlog)
+add_subdirectory(protobuf)
+add_subdirectory(protobuf-matchers)
 
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(SDL3 SDL_mixer protobuf googletest)
+FetchContent_MakeAvailable(SDL3 SDL_mixer googletest)
 
