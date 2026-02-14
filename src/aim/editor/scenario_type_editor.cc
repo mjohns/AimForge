@@ -1042,7 +1042,7 @@ void DrawReferenceEditor(ScenarioDef& def,
                       .set_is_optional()
                       .set_default(60)
                       .set_min(5)
-                      .set_step(1, 5)
+                      .set_step(5, 5)
                       .set_width(char_x * 12),
                   PROTO_INT_FIELD(ReferenceScenarioDef, &r, duration_seconds));
 

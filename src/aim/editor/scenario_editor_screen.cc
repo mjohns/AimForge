@@ -264,7 +264,7 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::Text("Duration");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_x_ * 12);
-    ImGui::InputFloat("##DurationSeconds", &duration_seconds, 15, 1, "%.0f");
+    ImGui::InputFloat("##DurationSeconds", &duration_seconds, 5, 5, "%.0f");
     def_.set_duration_seconds(duration_seconds);
 
     ImGui::AlignTextToFramePadding();
