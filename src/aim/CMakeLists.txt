@@ -8,6 +8,7 @@ add_library(${NAME} ${SRCS} ${HRDS} )
 target_link_libraries(${NAME}
   PUBLIC SDL3::SDL3
           SDL3_mixer::SDL3_mixer
+          SDL_image
           glm::glm
           imgui
           implot

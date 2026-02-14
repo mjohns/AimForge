@@ -1,4 +1,4 @@
-add_library(imgui STATIC
+add_library(imgui
   imgui/imconfig.h
   imgui/imgui.cpp
   imgui/imgui.h
