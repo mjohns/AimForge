@@ -470,8 +470,6 @@ class ScenarioEditorScreen : public UiScreen {
     auto look_at = camera.GetLookAt();
 
     RenderContext ctx;
-    Stopwatch stopwatch;
-    FrameTimes frame_times;
     if (app_.StartRender(&ctx)) {
       auto projection = GetPerspectiveTransformation(app_.screen_info(), room.horizontal_fov());
       app_.renderer()->DrawScenario(projection,
@@ -480,9 +478,7 @@ class ScenarioEditorScreen : public UiScreen {
                                     settings_.health_bar(),
                                     target_manager_.GetTargets(),
                                     look_at,
-                                    &ctx,
-                                    stopwatch,
-                                    &frame_times);
+                                    &ctx);
       app_.FinishRender(&ctx);
     }
   }

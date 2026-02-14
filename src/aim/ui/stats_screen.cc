@@ -61,7 +61,7 @@ void DumpRenderTimeline(const FrameTimes& t) {
 
     i64 duration_micros = time - last_time;
 
-    ImGui::TextFmt("{:.1f}ms: {} -> {}", duration_micros / 1000.0f, last_label, label);
+    ImGui::TextFmt("{:.2f}ms: {} -> {}", duration_micros / 1000.0f, last_label, label);
     last_time = time;
     last_label = label;
   }

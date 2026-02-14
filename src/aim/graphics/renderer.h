@@ -18,9 +18,20 @@
 namespace aim {
 
 struct RenderContext {
+  RenderContext() {
+    stopwatch = &default_stopwatch_;
+    times = &default_times_;
+  }
+
   SDL_GPUCommandBuffer* command_buffer = nullptr;
   SDL_GPUTexture* swapchain_texture = nullptr;
   SDL_GPURenderPass* render_pass = nullptr;
+  const Stopwatch* stopwatch = nullptr;
+  FrameTimes* times = nullptr;
+
+ private:
+  Stopwatch default_stopwatch_;
+  FrameTimes default_times_;
 };
 
 class Renderer {
@@ -34,9 +45,7 @@ class Renderer {
                             const HealthBarSettings& health_bar,
                             const std::vector<Target>& targets,
                             const LookAtInfo& look_at,
-                            RenderContext* ctx,
-                            const Stopwatch& stopwatch,
-                            FrameTimes* times) = 0;
+                            RenderContext* ctx) = 0;
 
   virtual void Cleanup() = 0;
 };

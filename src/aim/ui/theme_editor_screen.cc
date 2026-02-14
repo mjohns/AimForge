@@ -555,8 +555,6 @@ class ThemeEditorScreen : public UiScreen {
     }
 
     RenderContext ctx;
-    Stopwatch stopwatch;
-    FrameTimes frame_times;
     if (app_.StartRender(&ctx)) {
       HealthBarSettings health_bar;
       health_bar.set_show(true);
@@ -568,9 +566,7 @@ class ThemeEditorScreen : public UiScreen {
                                     health_bar,
                                     target_manager_.GetTargets(),
                                     look_at_,
-                                    &ctx,
-                                    stopwatch,
-                                    &frame_times);
+                                    &ctx);
       app_.FinishRender(&ctx);
     }
   }

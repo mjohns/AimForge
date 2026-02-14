@@ -346,12 +346,8 @@ void Scenario::OnWaitingForClickTick() {
                                   settings_.health_bar(),
                                   target_manager_.GetTargets(),
                                   look_at_,
-                                  &ctx,
-                                  timer_.run_stopwatch(),
-                                  &current_times_);
-    current_times_.render_finish.start = timer_.GetElapsedMicros();
+                                  &ctx);
     app_.FinishRender(&ctx);
-    current_times_.render_finish.end = timer_.GetElapsedMicros();
   }
 }
 
@@ -430,6 +426,8 @@ void Scenario::OnRunningTick() {
   ImGui::End();
 
   RenderContext ctx;
+  ctx.stopwatch = &timer_.run_stopwatch();
+  ctx.times = &current_times_;
   if (app_.StartRender(&ctx)) {
     app_.renderer()->DrawScenario(projection_,
                                   def_.room(),
@@ -437,10 +435,10 @@ void Scenario::OnRunningTick() {
                                   settings_.health_bar(),
                                   target_manager_.GetTargets(),
                                   look_at_,
-                                  &ctx,
-                                  timer_.run_stopwatch(),
-                                  &current_times_);
+                                  &ctx);
+    current_times_.render_finish.start = timer_.GetElapsedMicros();
     app_.FinishRender(&ctx);
+    current_times_.render_finish.end = timer_.GetElapsedMicros();
   }
   current_times_.render_end = timer_.GetElapsedMicros();
   UpdatePerfStats();

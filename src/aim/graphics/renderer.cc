@@ -783,9 +783,9 @@ class RendererImpl : public Renderer {
                     const HealthBarSettings& health_bar,
                     const std::vector<Target>& targets,
                     const LookAtInfo& look_at,
-                    RenderContext* ctx,
-                    const Stopwatch& stopwatch,
-                    FrameTimes* times) override {
+                    RenderContext* ctx) override {
+    const Stopwatch& stopwatch = *ctx->stopwatch;
+    FrameTimes* times = ctx->times;
     const glm::mat4 view_projection = projection * look_at.transform;
 
     times->build_draw_data.start = stopwatch.GetElapsedMicros();

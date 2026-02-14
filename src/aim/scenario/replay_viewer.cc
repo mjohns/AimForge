@@ -361,7 +361,6 @@ class ReplayViewerScreen : public Screen {
 
     RenderContext ctx;
     if (app_.StartRender(&ctx)) {
-      FrameTimes times;
       LookAtInfo look_at = replay_view_->camera.GetLookAt();
       app_.renderer()->DrawScenario(projection_,
                                     replay.room,
@@ -369,9 +368,7 @@ class ReplayViewerScreen : public Screen {
                                     settings_.health_bar(),
                                     replay_view_->target_manager.GetTargets(),
                                     look_at,
-                                    &ctx,
-                                    timer_.run_stopwatch(),
-                                    &times);
+                                    &ctx);
       app_.FinishRender(&ctx);
     }
 
