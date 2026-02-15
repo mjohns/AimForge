@@ -5,16 +5,20 @@ file(GLOB_RECURSE HDRS *.h)
 
 add_library(${NAME} ${SRCS} ${HRDS} )
 
-target_link_libraries(${NAME}
-  PUBLIC SDL3::SDL3
-          SDL3_mixer::SDL3_mixer
-          SDL_image
-          glm::glm
-          imgui
-          implot
-          sqlite3
-          protobuf::libprotobuf
-          spdlog)
+target_link_libraries(
+    ${NAME}
+    PUBLIC
+    SDL3::SDL3
+    SDL3_mixer::SDL3_mixer
+    SDL_image
+    absl::strings
+    absl::flags
+    glm::glm
+    imgui
+    implot
+    sqlite3
+    protobuf::libprotobuf
+    spdlog)
 
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 

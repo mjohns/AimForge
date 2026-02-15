@@ -28,6 +28,9 @@ set(protobuf_BUILD_EXAMPLES OFF)
 set(protobuf_BUILD_CONFORMANCE OFF)
 set(protobuf_WITH_ZLIB OFF)
 
+set(SDL_TESTS off)
+set(SDL_EXAMPLES off)
+
 add_subdirectory(absl)
 add_subdirectory(imgui)
 add_subdirectory(sqlite3)

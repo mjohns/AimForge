@@ -1,5 +1,6 @@
 #include "SDL3/SDL.h"
 #include "absl/cleanup/cleanup.h"
+#include "absl/flags/parse.h"
 #include "aim/core/application.h"
 #include "aim/core/process_lock.h"
 #include "aim/ui/home_screen.h"
@@ -9,8 +10,10 @@
 #include <objbase.h>
 #endif
 
-int main(int, char**) {
-  using namespace aim;
+using namespace aim;
+
+int main(int argc, char* argv[]) {
+  absl::ParseCommandLine(argc, argv);
   std::locale::global(std::locale("en_US.UTF-8"));
 
 #ifdef _WIN32
