@@ -155,10 +155,6 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     }
     if (ImGui::BeginMenu("Advanced")) {
       if (ImGui::Selectable("View stats")) {
-        ScenarioEditorOptions opts;
-        opts.scenario_name = scenario_name;
-        opts.is_new_copy = true;
-        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
         app.GetCurrentScreen()->PushNextScreen(
             CreateStatsScreen(scenario_name,
                               app.stats_manager().GetLatestRunId(scenario_name),
@@ -522,7 +518,23 @@ class ScenariosComponentImpl : public ScenariosComponent {
 
     auto stats = app_.stats_manager().GetAggregateStats(item.name);
     if (stats.total_runs > 0) {
+      ImGui::IdGuard cid("HighScore");
       ImGui::SpacedSeparator();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("High score");
+      ImGui::SameLine();
+      if (ImGui::Button(MaybeIntToString(stats.high_score_stats.score))) {
+        app_.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(item.name,
+                                                                  stats.high_score_stats.stats_id,
+                                                                  /*replay=*/nullptr,
+                                                                  &app_));
+      }
+      ImGui::HelpTooltip("View stats for run.");
+      std::string high_score_time = GetHowLongAgoStringFromEpochSeconds(
+          stats.high_score_stats.epoch_seconds, GetNowEpochSeconds());
+      ImGui::SameLine();
+      ImGui::TextFmt("({})", high_score_time);
+
       std::string last_run_str = GetHowLongAgoStringFromEpochSeconds(
           stats.last_run_stats.epoch_seconds, GetNowEpochSeconds());
       if (stats.total_runs == 1) {
