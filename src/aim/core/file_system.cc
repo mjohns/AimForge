@@ -10,19 +10,20 @@
 #include "aim/common/util.h"
 
 ABSL_FLAG(std::string, af_user_path, "", "An explicit path to use for the user folder.");
+ABSL_FLAG(std::string, af_user_app_name, "FpsAimForge", "App name to use for the user folder.");
 
 namespace aim {
 namespace {
 
 constexpr const char* kOrgName = "";
-constexpr const char* kAppName = "FpsAimForge";
 
 }  // namespace
 
 FileSystem::FileSystem() {
   std::string explicit_user_path = absl::GetFlag(FLAGS_af_user_path);
-  pref_dir_ =
-      !explicit_user_path.empty() ? explicit_user_path : SDL_GetPrefPath(kOrgName, kAppName);
+  std::string app_name = absl::GetFlag(FLAGS_af_user_app_name);
+  pref_dir_ = !explicit_user_path.empty() ? explicit_user_path
+                                          : SDL_GetPrefPath(kOrgName, app_name.c_str());
   base_dir_ = SDL_GetBasePath();
   CreateDirectories(pref_dir_);
 }
