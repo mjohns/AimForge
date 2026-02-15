@@ -15,7 +15,7 @@
 #include "aim/core/stats_manager.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/editor/scenario_editor_screen.h"
-#include "aim/ui/select_level_variation_dialog.h"
+#include "aim/ui/select_variation_dialog.h"
 #include "aim/ui/stats_screen.h"
 #include "imgui.h"
 
@@ -103,7 +103,8 @@ class CreateLevelsPlaylistDialog {
 struct ScenarioDialogs {
   ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog{"DeleteConfirmationDialog"};
   CreateLevelsPlaylistDialog create_levels_playlist_dialog;
-  SelectLevelVariationDialog select_level_dialog{"SelectScenarioLevelDialog"};
+  SelectVariationDialog select_variation_dialog =
+      SelectVariationDialog::ForScenarios("SelectScenarioVariation");
 };
 
 void DrawScenarioRightClickMenu(const char* popup_id,
@@ -123,9 +124,8 @@ void DrawScenarioRightClickMenu(const char* popup_id,
       opts.is_new_copy = true;
       app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
     }
-    if (ImGui::Selectable("Select difficulty level")) {
-      NameInfo info = GetScenarioNameInfo(scenario_name);
-      dialogs->select_level_dialog.NotifyOpen(info.level);
+    if (ImGui::Selectable("Select variation")) {
+      dialogs->select_variation_dialog.NotifyOpen(scenario_name);
     }
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
@@ -444,15 +444,10 @@ class ScenariosComponentImpl : public ScenariosComponent {
     }
     dialogs_.create_levels_playlist_dialog.Draw(app_);
 
-    std::optional<float> selected_level_value;
-    bool did_select_level = dialogs_.select_level_dialog.Draw(&selected_level_value);
-    if (did_select_level) {
-      const std::string& current_scenario_name = app_.scenario_manager().GetCurrentScenarioName();
-      if (!current_scenario_name.empty()) {
-        NameInfo name_info = GetScenarioNameInfo(current_scenario_name);
-        name_info.level = selected_level_value;
-        app_.scenario_manager().SetCurrentScenario(name_info.GetFullName());
-      }
+    std::string updated_scenario_variation_name;
+    if (dialogs_.select_variation_dialog.Draw(&updated_scenario_variation_name)) {
+      app_.scenario_manager().SetCurrentScenario(updated_scenario_variation_name);
+      // TODO: Add to history?
     }
 
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;

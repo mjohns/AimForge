@@ -10,7 +10,7 @@
 #include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/playlist_editor_component.h"
-#include "aim/ui/select_sensitivity_variation_dialog.h"
+#include "aim/ui/select_variation_dialog.h"
 #include "imgui.h"
 #include "imgui_internal.h"
 
@@ -121,14 +121,12 @@ class PlaylistComponentImpl : public PlaylistComponent {
       return false;
     }
 
-    std::optional<float> selected_sensitivity;
-    if (select_sensitivity_variation_dialog_.Draw(&selected_sensitivity)) {
-      NameInfo name_info = GetPlaylistNameInfo(current_playlist_name_);
-      name_info.cm_per_360 = selected_sensitivity;
-      std::string new_name = name_info.GetFullName();
-      if (new_name != current_playlist_name_) {
-        app_.playlist_manager().SetCurrentPlaylist(new_name);
-        app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, new_name);
+    std::string updated_playlist_variation_name;
+    if (select_variation_dialog_.Draw(&updated_playlist_variation_name)) {
+      if (updated_playlist_variation_name != current_playlist_name_) {
+        app_.playlist_manager().SetCurrentPlaylist(updated_playlist_variation_name);
+        app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST,
+                                                updated_playlist_variation_name);
       }
     }
 
@@ -144,13 +142,6 @@ class PlaylistComponentImpl : public PlaylistComponent {
       ImGui::HelpTooltip("Edit playlist");
     }
 
-    ImGui::SameLine();
-    if (ImGui::Button(icons::kMouse)) {
-      NameInfo name_info = GetPlaylistNameInfo(current_playlist_name_);
-      select_sensitivity_variation_dialog_.NotifyOpen(name_info.cm_per_360);
-    }
-    ImGui::HelpTooltip("Set cm/360 playlist variation");
-
     const char* menu_id = "CurrentPlaylistMenu";
     if (ImGui::BeginPopupContextItem(menu_id)) {
       if (ImGui::Selectable("Copy")) {
@@ -162,6 +153,9 @@ class PlaylistComponentImpl : public PlaylistComponent {
       if (ImGui::Selectable("Reset run")) {
         app_.playlist_manager().ClearRun(run->playlist.name);
         run = app_.playlist_manager().GetCurrentRun();
+      }
+      if (ImGui::Selectable("Select variation")) {
+        select_variation_dialog_.NotifyOpen(run->playlist.name);
       }
 
       if (!is_readonly) {
@@ -202,8 +196,8 @@ class PlaylistComponentImpl : public PlaylistComponent {
   std::unique_ptr<PlaylistEditorComponent> editor_component_;
   std::string current_playlist_name_;
   NameInfo current_playlist_name_info_;
-  SelectSensitivityVariationDialog select_sensitivity_variation_dialog_{
-      "SelectPlaylistSensitivityDialog"};
+  SelectVariationDialog select_variation_dialog_ =
+      SelectVariationDialog::ForPlaylists("PlaylistVariation");
   UiScreen& screen_;
   Application& app_;
 
