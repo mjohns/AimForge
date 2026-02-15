@@ -169,14 +169,14 @@ void InputFloat(const InputFloatParams& params, aim::Field<float> field) {
     ImGui::SameLine();
   }
 
-  float value = field.get();
+  double value = field.get();
   if (params.default_value.has_value() && !field.has()) {
     value = *params.default_value;
   }
   if (params.width > 0) {
     ImGui::SetNextItemWidth(params.width);
   }
-  ImGui::InputFloat("##ValueInput", &value, params.step, params.fast_step, params.format);
+  ImGui::InputDouble("##ValueInput", &value, params.step, params.fast_step, params.format);
 
   if (params.min_value.has_value()) {
     if (value < *params.min_value) {
