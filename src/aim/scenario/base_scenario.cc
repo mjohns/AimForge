@@ -405,22 +405,22 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id) {
 
 std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
   ShotType::TypeCase shot_type = GetShotType();
-  float score = 0;
+
+  float num_hits = stats_.num_hits;
+  float num_shots = stats_.num_hits;
+  float score = CalculateScore(def_.duration_seconds());
+
   std::optional<ProximityPercentiles> maybe_proximity_percentiles;
-  float time_normalized_multiplier = 60.0f / def_.duration_seconds();
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
-      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
-      stats_.num_shots = def_.duration_seconds();
-      score = 100 * (stats_.num_hits / stats_.num_shots);
+      num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
+      num_shots = def_.duration_seconds();
       break;
     }
     case ShotType::kTrackingProximity: {
-      score = stats_.num_hits * time_normalized_multiplier;
-
       float total_micros = def_.duration_seconds() * 1000000;
-      stats_.num_shots = def_.duration_seconds();
-      stats_.num_hits = (stats_.proximity.hit_micros_map[100] / total_micros) * stats_.num_shots;
+      num_shots = def_.duration_seconds();
+      num_hits = (stats_.proximity.hit_micros_map[100] / total_micros) * stats_.num_shots;
 
       ProximityPercentiles p;
       auto get_percent = [&](int percent) {
@@ -439,12 +439,45 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
       break;
     }
     case ShotType::kTrackingKill: {
-      // Make sure to take the score from num hits before changing hits/shots to tracking on/off
-      // time so that percentage shows up like for normal tracking invincible scenarios.
-      score = stats_.num_hits * time_normalized_multiplier;
-      stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
-      stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
+      num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
+      num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
       break;
+    }
+    case ShotType::kClickSingle:
+    case ShotType::kClickMulti:
+    case ShotType::kPoke:
+      // Nothing extra to do
+      break;
+    default:
+      break;
+  }
+
+  StatsDbRow stats_row;
+  stats_row.mm_per_360 = effective_cm_per_360_ * 10;
+  if (num_hits > 0) {
+    stats_row.info.set_num_hits(num_hits);
+  }
+  if (num_shots > 0) {
+    stats_row.info.set_num_shots(num_shots);
+  }
+  stats_row.score = score;
+  if (maybe_proximity_percentiles) {
+    *stats_row.info.mutable_proximity_percentiles() = *maybe_proximity_percentiles;
+  }
+  return stats_row;
+}
+
+float BaseScenario::CalculateScore(float current_time) {
+  ShotType::TypeCase shot_type = GetShotType();
+  float time_normalized_multiplier = 60.0f / current_time;
+  switch (shot_type) {
+    case ShotType::kTrackingInvincible: {
+      float hit_percent = stats_.hit_stopwatch.GetElapsedSeconds() / current_time;
+      return 100 * hit_percent;
+    }
+    case ShotType::kTrackingProximity:
+    case ShotType::kTrackingKill: {
+      return stats_.num_hits * time_normalized_multiplier;
     }
     case ShotType::kClickSingle:
     case ShotType::kClickMulti: {
@@ -455,29 +488,14 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
       if (def_.shot_type().has_accuracy_penalty_multiplier()) {
         accuracy_penalty *= def_.shot_type().accuracy_penalty_multiplier();
       }
-      score = stats_.num_hits * (1 - accuracy_penalty) * time_normalized_multiplier;
-      break;
+      return stats_.num_hits * (1 - accuracy_penalty) * time_normalized_multiplier;
     }
     case ShotType::kPoke:
-      score = stats_.num_kills * time_normalized_multiplier;
-      break;
+      return stats_.num_kills * time_normalized_multiplier;
     default:
       break;
   }
-
-  StatsDbRow stats_row;
-  stats_row.mm_per_360 = effective_cm_per_360_ * 10;
-  if (stats_.num_hits > 0) {
-    stats_row.info.set_num_hits(stats_.num_hits);
-  }
-  if (stats_.num_shots > 0) {
-    stats_row.info.set_num_shots(stats_.num_shots);
-  }
-  stats_row.score = score;
-  if (maybe_proximity_percentiles) {
-    *stats_row.info.mutable_proximity_percentiles() = *maybe_proximity_percentiles;
-  }
-  return stats_row;
+  return 0;
 }
 
 }  // namespace aim

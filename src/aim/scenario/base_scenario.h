@@ -50,6 +50,7 @@ class BaseScenario : public Scenario {
   Target GetNewTarget();
   bool ShouldCountPartialKills();
   bool ShouldLimitShotRate();
+  float CalculateScore(float current_time);
 
   std::optional<u16> current_poke_target_id_;
   i64 current_poke_start_time_micros_ = 0;
