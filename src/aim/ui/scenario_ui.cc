@@ -544,6 +544,22 @@ class ScenariosComponentImpl : public ScenariosComponent {
       absl::c_sort(*matching_playlists_);
     }
 
+    std::string referenced_scenario = item.unevaluated_def.reference_def().scenario_name();
+    if (!referenced_scenario.empty()) {
+      ImGui::SpacedSeparator();
+      ImGui::IdGuard cid("ReferencedScenario");
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Referenced scenario");
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "This scenario references/extends the following scenario. Editing the referenced "
+          "scenario will alter the behavior of this scenario.");
+      ImGui::SameLine();
+      if (ImGui::Button(referenced_scenario)) {
+        app_.scenario_manager().SetCurrentScenario(referenced_scenario);
+      }
+    }
+
     if (!matching_playlists_->empty()) {
       ImGui::SpacedSeparator();
       ImGui::Text("Related playlists");

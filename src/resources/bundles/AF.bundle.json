@@ -3107,100 +3107,11 @@
   {
    "name": "SnakePoke",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "poke": true
-    },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "targetRadius": 1.5
-      }
-     ],
-     "newestTargetIsGhost": true
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 170
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.6
-         },
-         "yDiameter": {
-          "yPercentValue": 0.32
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.65
-         },
-         "yLength": {
-          "yPercentValue": 0.55
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Start center",
-         "weight": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 10
-         },
-         "yLength": {
-          "value": 10
-         }
-        }
-       }
-      ],
-      "regionsInfo": {
-       "startOrder": [
-        2
-       ]
-      },
-      "minDistance": {
-       "value": 8
-      },
-      "fixedDistanceFromLastTarget": {
-       "value": 10
-      }
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF SnakeClick",
+     "shotType": {
+      "poke": true
      }
     }
    }
