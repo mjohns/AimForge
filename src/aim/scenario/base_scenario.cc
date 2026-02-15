@@ -407,6 +407,7 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
   ShotType::TypeCase shot_type = GetShotType();
   float score = 0;
   std::optional<ProximityPercentiles> maybe_proximity_percentiles;
+  float time_normalized_multiplier = 60.0f / def_.duration_seconds();
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
       stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
@@ -415,7 +416,6 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
       break;
     }
     case ShotType::kTrackingProximity: {
-      float time_normalized_multiplier = 60.0f / def_.duration_seconds();
       score = stats_.num_hits * time_normalized_multiplier;
 
       float total_micros = def_.duration_seconds() * 1000000;
@@ -441,7 +441,7 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
     case ShotType::kTrackingKill: {
       // Make sure to take the score from num hits before changing hits/shots to tracking on/off
       // time so that percentage shows up like for normal tracking invincible scenarios.
-      score = stats_.num_hits;
+      score = stats_.num_hits * time_normalized_multiplier;
       stats_.num_hits = stats_.hit_stopwatch.GetElapsedSeconds();
       stats_.num_shots = stats_.shot_stopwatch.GetElapsedSeconds();
       break;
@@ -455,11 +455,11 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
       if (def_.shot_type().has_accuracy_penalty_multiplier()) {
         accuracy_penalty *= def_.shot_type().accuracy_penalty_multiplier();
       }
-      score = stats_.num_hits * (1 - accuracy_penalty);
+      score = stats_.num_hits * (1 - accuracy_penalty) * time_normalized_multiplier;
       break;
     }
     case ShotType::kPoke:
-      score = stats_.num_kills;
+      score = stats_.num_kills * time_normalized_multiplier;
       break;
     default:
       break;

@@ -1,5 +1,3 @@
-# Settings
-
 set(SPDLOG_USE_STD_FORMAT ON)
 
 set(ABSL_PROPAGATE_CXX_STD ON)

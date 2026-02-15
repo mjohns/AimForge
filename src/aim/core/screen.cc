@@ -1,5 +1,7 @@
 #include "screen.h"
 
+#include <cassert>
+
 #include "aim/common/log.h"
 #include "aim/core/application.h"
 #include "aim/core/application_state.h"
@@ -25,6 +27,7 @@ void Screen::UpdateScreenStack() {
     while (!app_.is_on_home_screen()) {
       i++;
       if (i > 2000) {
+        assert(false && "Screen stack is too large");
         break;
       }
       app_.PopScreenInternal();
