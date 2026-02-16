@@ -1,6 +1,7 @@
 #include "stats_screen.h"
 
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <optional>
 #include <utility>
@@ -26,6 +27,81 @@
 
 namespace aim {
 namespace {
+
+struct ScoresOverTime {
+  ScoresOverTime(const std::vector<float>& replay_scores) {
+    scores.reserve(replay_scores.size());
+    times.reserve(replay_scores.size());
+    for (int i = 0; i < replay_scores.size(); ++i) {
+      float score = replay_scores[i];
+      scores.push_back(score);
+      max_score = std::max(score, max_score);
+      min_score = std::min(score, min_score);
+
+      times.push_back(i / static_cast<float>(kRecordScoresPerSecond));
+    }
+  }
+
+  std::vector<float> scores;
+  std::vector<float> times;
+
+  float max_score = 0;
+  float min_score = 12000000;
+};
+
+void DrawScoresOverTimePlot(ScoresOverTime& scores_over_time) {
+  std::vector<float>& scores = scores_over_time.scores;
+  std::vector<float>& times = scores_over_time.times;
+  if (scores.empty()) {
+    return;
+  }
+  if (scores.size() != times.size()) {
+    assert(false && "Scores and times not the same size");
+    return;
+  }
+
+  double threshold = scores.back();
+
+  ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
+  ImPlotFlags plot_flags =
+      ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
+  if (!ImPlot::BeginPlot("Scores Over Time", ImVec2(-1, 0), plot_flags)) {
+    return;
+  }
+
+  ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_NoDecorations);
+  ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
+
+  ImPlot::SetupAxisLimits(ImAxis_X1, times.front(), times.back(), ImPlotCond_Always);
+  ImPlot::SetupAxisLimits(ImAxis_Y1, scores_over_time.min_score, scores_over_time.max_score);
+
+  ImPlot::PlotLine("Score History", times.data(), scores.data(), scores.size());
+
+  ImPlot::DragLineY(0, &threshold, ImVec4(1, 0, 0, 1), 1.0f, ImPlotDragToolFlags_NoInputs);
+
+  if (ImPlot::IsPlotHovered()) {
+    ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
+
+    float time = mouse_pos.x;
+
+    int closest_index = std::round(time * kRecordScoresPerSecond);
+    if (IsValidIndex(scores, closest_index)) {
+      ImGui::BeginTooltip();
+      ImGui::Text("Score: %.2f", scores[closest_index]);
+      ImGui::Text("Time: %.2f", mouse_pos.x);
+      ImGui::EndTooltip();
+    }
+  }
+
+  /*
+  ImPlot::PushStyleVar(ImPlotStyleVar_Marker, ImPlotMarker_Circle);
+  ImPlot::PushStyleVar(ImPlotStyleVar_MarkerSize, 5.0f);
+  ImPlot::PlotScatter("Current Position", &currentX, &currentY, 1);
+  ImPlot::PopStyleVar(2);
+  */
+
+  ImPlot::EndPlot();
+}
 
 void DumpRenderTimeline(const FrameTimes& t) {
   std::vector<std::pair<i64, std::string>> time_points;
@@ -155,6 +231,9 @@ class StatsScreen : public UiScreen {
     char_x_ = char_size.x;
 
     compare_to_scenarios_ = GetCompareToList();
+    if (replay && replay->scores.size() > 0) {
+      scores_over_time_ = ScoresOverTime(replay->scores);
+    }
   }
 
  protected:
@@ -623,6 +702,10 @@ class StatsScreen : public UiScreen {
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
     }
+
+    if (scores_over_time_) {
+      DrawScoresOverTimePlot(*scores_over_time_);
+    }
   }
 
   void DrawStatsPanel() {
@@ -905,6 +988,7 @@ class StatsScreen : public UiScreen {
 
   SelectedScreen selected_screen_ = SelectedScreen::STATS;
   std::shared_ptr<Replay> replay_;
+  std::optional<ScoresOverTime> scores_over_time_;
 };
 
 }  // namespace

@@ -92,12 +92,9 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
 void BaseScenario::AddReplayScores(float now_seconds) {
   if (replay_) {
     i64 score_frame = now_seconds * kRecordScoresPerSecond;
-    if (last_recorded_score_frame_ < 0) {
-      replay_->AddScore(CalculateScore(now_seconds));
-      last_recorded_score_frame_ = score_frame;
-    } else if (last_recorded_score_frame_ < score_frame) {
+    if (last_recorded_score_frame_ < score_frame) {
       float score = CalculateScore(now_seconds);
-      for (int i = 0; i < (score_frame - last_recorded_score_frame_); ++i) {
+      for (int i = last_recorded_score_frame_ + 1; i <= score_frame; ++i) {
         replay_->AddScore(CalculateScore(now_seconds));
       }
       last_recorded_score_frame_ = score_frame;
@@ -488,6 +485,9 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
 
 float BaseScenario::CalculateScore(float current_time) {
   ShotType::TypeCase shot_type = GetShotType();
+  if (current_time <= 0) {
+    return 0;
+  }
   float time_normalized_multiplier = 60.0f / current_time;
   switch (shot_type) {
     case ShotType::kTrackingInvincible: {
@@ -501,6 +501,9 @@ float BaseScenario::CalculateScore(float current_time) {
     case ShotType::kClickSingle:
     case ShotType::kClickMulti: {
       // Default clicking scoring
+      if (stats_.num_shots <= 0) {
+        return 0;
+      }
       float hit_percent = stats_.num_hits / stats_.num_shots;
       // float duration_modifier = 60.0f / def_.duration_seconds();
       float accuracy_penalty = 1.0 - sqrt(hit_percent);
