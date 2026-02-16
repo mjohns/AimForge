@@ -4547,9 +4547,23 @@
   {
    "name": "Static3 Ladder",
    "def": {
+    "description": "",
     "levels": {
      "baseScenario": "AF Static3 Ladder",
-     "maxLevel": 30
+     "maxLevel": 40,
+     "numPlaysPerLevel": 1
+    }
+   }
+  },
+  {
+   "name": "Static3 Ladder Small Step",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF Static3 Ladder",
+     "maxLevel": 40,
+     "levelStep": 0.5,
+     "numPlaysPerLevel": 1
     }
    }
   },
