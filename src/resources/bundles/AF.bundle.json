@@ -3293,7 +3293,6 @@
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 4
       }
      ]
@@ -3311,11 +3310,11 @@
     },
     "overrides": {},
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.960000038
+     "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 90,
-     "end": 130
+     "start": 100,
+     "end": 140
     },
     "staticDef": {
      "targetPlacementStrategy": {

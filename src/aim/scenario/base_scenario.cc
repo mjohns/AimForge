@@ -423,7 +423,7 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
   ShotType::TypeCase shot_type = GetShotType();
 
   float num_hits = stats_.num_hits;
-  float num_shots = stats_.num_hits;
+  float num_shots = stats_.num_shots;
   float score = CalculateScore(def_.duration_seconds());
 
   std::optional<ProximityPercentiles> maybe_proximity_percentiles;

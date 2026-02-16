@@ -710,7 +710,10 @@ class StatsScreen : public UiScreen {
     }
 
     if (scores_over_time_) {
-      DrawScoresOverTimePlot(*scores_over_time_);
+      if (ImGui::TreeNode("Score over time")) {
+        DrawScoresOverTimePlot(*scores_over_time_);
+        ImGui::TreePop();
+      }
     }
   }
 

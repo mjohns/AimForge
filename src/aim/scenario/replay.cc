@@ -137,6 +137,7 @@ float Replay::GetApproximateSizeMb() const {
   size_bytes += target_data.size() * sizeof(ReplayTargetData);
   size_bytes += target_metadata.size() * sizeof(ReplayTargetMetadata);
   size_bytes += events.size() * sizeof(ReplayEvent);
+  size_bytes += scores.size() * sizeof(float);
 
   return size_bytes / 1000000.0f;
 }
