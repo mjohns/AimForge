@@ -33,6 +33,8 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
   // Maybe we should drop certain event types (like sound) if it is approaching the limit.
   replay_->events.reserve(3000);
   replay_->target_metadata.reserve(500);
+
+  replay_->scores.reserve(130 * kRecordScoresPerSecond);
 }
 
 void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
@@ -81,6 +83,10 @@ void ReplayRecorder::RemoveTarget(float now_seconds, u16 target_id) {
 void ReplayRecorder::AddMouseClick(float now_seconds, bool is_hit) {
   ReplayEvent& event = AddEvent(now_seconds, ReplayEventType::MOUSE_CLICK);
   event.data.is_hit = is_hit;
+}
+
+void ReplayRecorder::AddScore(float score) {
+  replay_->scores.push_back(score);
 }
 
 ReplayEvent& ReplayRecorder::AddEvent(float now_seconds, ReplayEventType type) {

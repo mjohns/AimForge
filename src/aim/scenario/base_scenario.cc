@@ -38,6 +38,7 @@ void BaseScenario::Initialize() {
 
 void BaseScenario::UpdateState(UpdateStateData* data) {
   auto shot_type = GetShotType();
+  float now_seconds = timer_.GetElapsedSeconds();
   std::vector<u16> targets_to_remove;
   if (shot_type == ShotType::kTrackingKill || shot_type == ShotType::kTrackingInvincible) {
     HandleTrackingHits(data, &targets_to_remove);
@@ -54,7 +55,6 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     }
   }
   // Handle target growth
-  float now_seconds = timer_.GetElapsedSeconds();
   for (Target& target : target_manager_.GetMutableTargets()) {
     if (target.growth_info.has_value()) {
       auto g = *target.growth_info;
@@ -86,6 +86,23 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   }
 
   UpdateTargetPositions();
+  AddReplayScores(now_seconds);
+}
+
+void BaseScenario::AddReplayScores(float now_seconds) {
+  if (replay_) {
+    i64 score_frame = now_seconds * kRecordScoresPerSecond;
+    if (last_recorded_score_frame_ < 0) {
+      replay_->AddScore(CalculateScore(now_seconds));
+      last_recorded_score_frame_ = score_frame;
+    } else if (last_recorded_score_frame_ < score_frame) {
+      float score = CalculateScore(now_seconds);
+      for (int i = 0; i < (score_frame - last_recorded_score_frame_); ++i) {
+        replay_->AddScore(CalculateScore(now_seconds));
+      }
+      last_recorded_score_frame_ = score_frame;
+    }
+  }
 }
 
 void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
@@ -222,6 +239,8 @@ void BaseScenario::OnScenarioDone() {
     }
     stats_.num_hits += partial_kills;
   }
+
+  AddReplayScores(def_.duration_seconds());
 }
 
 bool BaseScenario::ShouldCountPartialKills() {

@@ -9,6 +9,8 @@
 
 namespace aim {
 
+inline constexpr const int kRecordScoresPerSecond = 5;
+
 struct Target;
 
 struct ReplayTargetData {
@@ -62,6 +64,7 @@ struct Replay {
   std::vector<ReplayTargetData> target_data;
   std::vector<PitchYaw> pitch_yaws;
   std::vector<ReplayTargetMetadata> target_metadata;
+  std::vector<float> scores;
 
   float GetApproximateSizeMb() const;
 };
@@ -79,6 +82,7 @@ class ReplayRecorder {
   void PlaySound(float now_seconds, ReplaySoundType sound);
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
   void AddMouseClick(float now_seconds, bool is_hit);
+  void AddScore(float score);
 
   void SnapshotTargets(i64 frame_number, const std::vector<Target>& targets);
 

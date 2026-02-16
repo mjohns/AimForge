@@ -77,6 +77,14 @@ class ReplayView {
     return last_click_time_;
   }
 
+  float GetCurrentScore() {
+    i64 score_frame = current_time_ * kRecordScoresPerSecond;
+    if (IsValidIndex(replay_->scores, score_frame)) {
+      return replay_->scores[score_frame];
+    }
+    return 0;
+  }
+
   std::vector<float> GetPreviousClickDurations() {
     return previous_click_durations_;
   }
@@ -292,6 +300,11 @@ class ReplayViewerScreen : public Screen {
     ImGui::SetButtonCursorAtRight(icons::kLogout);
     if (ImGui::Button(icons::kLogout)) {
       PopSelf();
+    }
+
+    float score = replay_view_->GetCurrentScore();
+    if (score > 0) {
+      ImGui::TextFmt("Score: {}", MaybeIntToString(score, 2));
     }
 
     if (has_click_events_) {

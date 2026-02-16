@@ -41,6 +41,8 @@ class BaseScenario : public Scenario {
   void OnScenarioDone() override;
   std::optional<StatsDbRow> GetStatsRow() override;
 
+  void AddReplayScores(float now_seconds);
+
  private:
   void HandleClickHits(UpdateStateData* data);
   void HandleTrackingHits(UpdateStateData* data, std::vector<u16>* target_ids_to_remove);
@@ -64,6 +66,7 @@ class BaseScenario : public Scenario {
 
   std::unique_ptr<TrackingSound> tracking_sound_;
   std::unique_ptr<ProximityTrackingSound> proximity_tracking_sound_;
+  i64 last_recorded_score_frame_ = -1;
 };
 
 }  // namespace aim
