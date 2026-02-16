@@ -75,18 +75,12 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
   ImGui::HelpMarker("Switch from sphere target to a pill (capsule) shaped target.");
   if (use_pill) {
     ImGui::Indent();
-
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Height");
-    ImGui::SameLine();
-    float height = profile->pill().height();
-    if (height <= 0) {
-      height = 20;
-    }
-    ImGui::SetNextItemWidth(char_x * 12);
-    ImGui::InputFloat("##PillHeightEntry", &height, 0.1, 1, "%.1f");
-    profile->mutable_pill()->set_height(height);
-
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Height")
+                          .set_default(20)
+                          .set_min(0.1)
+                          .set_width(char_x * 12)
+                          .set_step(0.5, 1),
+                      PROTO_FLOAT_FIELD(PillTargetDef, profile->mutable_pill(), height));
     ImGui::Unindent();
   } else {
     profile->clear_pill();
@@ -103,22 +97,21 @@ void DrawTargetProfile(float char_x, ScenarioDef& def, TargetProfile* profile) {
       "then, it will be removed.");
   if (has_growth) {
     ImGui::Indent();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Time seconds");
-    ImGui::SameLine();
-    float growth_time = FirstGreaterThanZero(profile->target_radius_growth_time_seconds(), 2);
-    ImGui::SetNextItemWidth(char_x * 10);
-    ImGui::InputFloat("##GrowthTime", &growth_time, 0.1, 0.5, "%.1f");
-    profile->set_target_radius_growth_time_seconds(std::max(growth_time, 0.1f));
+    ImGui::InputFloat(ImGui::InputFloatParams("GrowthTime")
+                          .set_label("Time seconds")
+                          .set_default(2)
+                          .set_width(char_x * 10)
+                          .set_step(0.1, 0.5)
+                          .set_min(0.1),
+                      PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_growth_time_seconds));
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Final radius");
-    ImGui::SameLine();
-    float final_radius =
-        FirstGreaterThanZero(profile->target_radius_growth_size(), profile->target_radius() * 3);
-    ImGui::SetNextItemWidth(char_x * 10);
-    ImGui::InputFloat("##FinalGrowthRadius", &final_radius, 0.1, 0.5, "%.1f");
-    profile->set_target_radius_growth_size(std::max(final_radius, 0.1f));
+    ImGui::InputFloat(ImGui::InputFloatParams("GrowthRadius")
+                          .set_label("Final radius")
+                          .set_default(3)
+                          .set_width(char_x * 10)
+                          .set_step(0.1, 0.5)
+                          .set_min(0.01),
+                      PROTO_FLOAT_FIELD(TargetProfile, profile, target_radius_growth_size));
 
     ImGui::InputFloat(
         ImGui::InputFloatParams::WithLabelAsId("Time at final size")

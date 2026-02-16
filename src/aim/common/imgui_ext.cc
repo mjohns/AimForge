@@ -1,6 +1,14 @@
 #include "imgui_ext.h"
 
 namespace ImGui {
+namespace {
+
+static double RoundDouble5(double value) {
+  double multiplier = 100000;
+  return std::round(value * multiplier) / multiplier;
+}
+
+}  // namespace
 
 void TextDisabled(const std::string& val) {
   TextDisabled("%s", val.c_str());
@@ -191,12 +199,12 @@ void InputFloat(const InputFloatParams& params, aim::Field<float> field) {
 
   if (params.zero_is_unset) {
     if (value > 0) {
-      field.set(value);
+      field.set(RoundDouble5(value));
     } else {
       field.clear();
     }
   } else {
-    field.set(value);
+    field.set(RoundDouble5(value));
   }
 }
 

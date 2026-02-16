@@ -330,8 +330,6 @@ void SpacedSeparator();
 
 float GetDefaultCharSizeX();
 
-void ReadonlyLabeledFloat(const std::string& label, float value, int width_multiple = 8);
-
 bool Chip(const std::string& label, bool selected);
 
 template <typename T>
