@@ -9,7 +9,7 @@
 
 namespace aim {
 
-inline constexpr const int kRecordScoresPerSecond = 5;
+inline constexpr const int kRecordScoresPerSecond = 10;
 
 struct Target;
 

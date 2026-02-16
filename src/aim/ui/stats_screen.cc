@@ -86,10 +86,16 @@ void DrawScoresOverTimePlot(ScoresOverTime& scores_over_time) {
 
     int closest_index = std::round(time * kRecordScoresPerSecond);
     if (IsValidIndex(scores, closest_index)) {
+      float x_val = mouse_pos.x;
+      float y_val = scores[closest_index];
       ImGui::BeginTooltip();
-      ImGui::Text("Score: %.2f", scores[closest_index]);
-      ImGui::Text("Time: %.2f", mouse_pos.x);
+      ImGui::Text("Score: %.2f", y_val);
+      ImGui::Text("Time: %.2f", x_val);
       ImGui::EndTooltip();
+
+      ImPlot::SetNextMarkerStyle(
+          ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
+      ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1);
     }
   }
 
