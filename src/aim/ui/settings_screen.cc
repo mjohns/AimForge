@@ -4,6 +4,7 @@
 #include <functional>
 #include <optional>
 
+#include "aim/audio/sound_manager.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
@@ -15,6 +16,52 @@
 
 namespace aim {
 namespace {
+
+class SoundInputDialog {
+ public:
+  void NotifyOpen(std::string* sound_name_out, Application& app) {
+    sound_name_out_ = sound_name_out;
+    sound_names_ = app.sound_manager()->ListSounds();
+    popup_.Open();
+  }
+
+  bool Draw(Application& app) {
+    if (sound_name_out_ == nullptr) {
+      return false;
+    }
+    ImGui::IdGuard cid("SoundInputDialogContent");
+    bool selected = false;
+    if (popup_.Begin()) {
+      if (ImGui::Button("Cancel")) {
+        popup_.Close();
+      }
+
+      ImGui::SpacedSeparator();
+
+      ImGui::LoopId loop_id;
+      for (const std::string& sound_name : sound_names_) {
+        auto lid = loop_id.Get();
+        if (ImGui::Button(icons::kPlayArrow)) {
+          app.sound_manager()->PlaySound(sound_name, 1);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(sound_name)) {
+          *sound_name_out_ = sound_name;
+          selected = true;
+          popup_.Close();
+        }
+      }
+
+      popup_.End();
+    }
+    return selected;
+  }
+
+ private:
+  ImGui::Popup popup_{"SoundInputDialog"};
+  std::string* sound_name_out_ = nullptr;
+  std::vector<std::string> sound_names_;
+};
 
 struct KeybindItem {
   std::string label;
@@ -280,6 +327,8 @@ class SettingsScreen : public UiScreen {
   void DrawSounds() {
     SoundSettings& s = *updater_.settings.mutable_sound();
 
+    sound_input_dialog_.Draw(app_);
+
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Volume level");
     ImGui::SameLine();
@@ -293,39 +342,47 @@ class SettingsScreen : public UiScreen {
     Line();
 
     if (ImGui::BeginTable("SoundsColumns", 2)) {
-      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 15);
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 10);
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
-      ImGui::TableNextRow();
-      ImGui::TableNextColumn();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Shoot");
-      ImGui::TableNextColumn();
-      ImGui::InputText("##ShootSound", s.mutable_shoot());
+      auto sound_input = [this](const std::string& label, std::string* sound_name) {
+        ImGui::IdGuard cid(label);
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
 
-      ImGui::TableNextRow();
-      ImGui::TableNextColumn();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Hit");
-      ImGui::TableNextColumn();
-      ImGui::InputText("##HitSound", s.mutable_hit());
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text(label);
 
-      ImGui::TableNextRow();
-      ImGui::TableNextColumn();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Kill");
-      ImGui::TableNextColumn();
-      ImGui::InputText("##KillSound", s.mutable_kill());
+        ImGui::TableNextColumn();
+        if (ImGui::Button(icons::kPlayArrow)) {
+          app_.sound_manager()->PlaySound(*sound_name, 1);
+        }
+        ImGui::SameLine();
+        float char_x = ImGui::GetDefaultCharSizeX();
+        ImGui::SetNextItemWidth(25 * char_x);
+        ImGui::InputText("##SoundNameInput", sound_name);
 
-      ImGui::TableNextRow();
-      ImGui::TableNextColumn();
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text("Metronome");
-      ImGui::TableNextColumn();
-      ImGui::InputText("##MetronomeSound", s.mutable_metronome());
+        ImGui::SameLine();
+        if (ImGui::Button(icons::kEdit)) {
+          sound_input_dialog_.NotifyOpen(sound_name, app_);
+        }
+      };
+
+      sound_input("Shoot", s.mutable_shoot());
+      sound_input("Hit", s.mutable_hit());
+      sound_input("Kill", s.mutable_kill());
+      sound_input("Metronome", s.mutable_metronome());
 
       ImGui::EndTable();
     }
+
+    ImGui::SpacedSeparator();
+
+    auto sounds_folder = app_.file_system()->GetUserDataPath("resources/sounds");
+    if (ImGui::Button(std::format("{} Sounds folder", icons::kOpenInNew))) {
+      OpenFolderInExplorer(sounds_folder);
+    }
+    ImGui::HelpTooltip(std::format("Open \"{}\"", sounds_folder.string()));
   }
 
   void DrawScreen() override {
@@ -476,7 +533,9 @@ class SettingsScreen : public UiScreen {
   float char_x_ = 0;
 
   int edit_crosshair_index_ = 0;
+  SoundInputDialog sound_input_dialog_;
 };
+
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app,

@@ -1,6 +1,7 @@
 #include "sound_manager.h"
 
 #include "SDL3_mixer/SDL_mixer.h"
+#include "absl/algorithm/container.h"
 #include "glm/common.hpp"
 
 namespace aim {
@@ -24,6 +25,26 @@ std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound
 }
 
 }  // namespace
+
+std::vector<std::string> SoundManager::ListSounds() {
+  std::unordered_set<std::string> sound_names;
+  for (const std::filesystem::path& dir : sound_dirs_) {
+    if (!std::filesystem::exists(dir) || !std::filesystem::is_directory(dir)) {
+      continue;
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+      std::string filename = entry.path().filename().string();
+      if (filename.ends_with(".ogg")) {
+        sound_names.insert(filename);
+      }
+    }
+  }
+
+  std::vector<std::string> sorted_sound_names(sound_names.begin(), sound_names.end());
+  absl::c_sort(sorted_sound_names);
+  return sorted_sound_names;
+}
 
 SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
     : sound_dirs_(sound_dirs) {}
@@ -57,14 +78,20 @@ SoundManager& SoundManager::PlayKillSound(const std::string& name) {
   return *this;
 }
 
-void SoundManager::PlaySound(const std::string& name, int channel) {
+bool SoundManager::PlaySound(const std::string& name, int channel) {
+  if (name.empty()) {
+    return false;
+  }
   auto it = sound_cache_.find(name);
   if (it != sound_cache_.end()) {
     Sound* sound = it->second.get();
     if (sound != nullptr) {
       sound->Play(channel);
+      return true;
     }
   }
+
+  return false;
 }
 
 SoundManager& SoundManager::PlayHitSound(const std::string& name) {
