@@ -4,10 +4,12 @@
 #include <functional>
 #include <optional>
 
+#include "absl/strings/ascii.h"
 #include "aim/audio/sound_manager.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/search.h"
 #include "aim/core/settings_manager.h"
 #include "aim/proto/common.pb.h"
 #include "aim/ui/crosshair_editor_screen.h"
@@ -23,6 +25,7 @@ class SoundInputDialog {
     sound_name_out_ = sound_name_out;
     sound_names_ = app.sound_manager()->ListSounds();
     popup_.Open();
+    search_text_ = "";
   }
 
   bool Draw(Application& app) {
@@ -32,24 +35,38 @@ class SoundInputDialog {
     ImGui::IdGuard cid("SoundInputDialogContent");
     bool selected = false;
     if (popup_.Begin()) {
-      if (ImGui::Button("Cancel")) {
-        popup_.Close();
-      }
+      float char_x = ImGui::GetDefaultCharSizeX();
+      ImGui::SetNextItemWidth(char_x * 40);
+      ImGui::InputTextWithHint("##SearchInput", icons::kSearch, &search_text_);
 
       ImGui::SpacedSeparator();
+      float max_height = ImGui::GetIO().DisplaySize.y * 0.4f;
+      ImGui::BeginChild("SoundsContent", ImVec2(0, max_height));
+
+      auto search_words = GetSearchWords(search_text_);
 
       ImGui::LoopId loop_id;
       for (const std::string& sound_name : sound_names_) {
-        auto lid = loop_id.Get();
-        if (ImGui::Button(icons::kPlayArrow)) {
-          app.sound_manager()->PlaySound(sound_name, 1);
+        if (StringMatchesContainsSearch(sound_name, search_words)) {
+          auto lid = loop_id.Get();
+
+          if (ImGui::Button(icons::kPlayArrow)) {
+            app.sound_manager()->LoadAndPlaySound(sound_name, 1);
+          }
+          ImGui::SameLine();
+          if (ImGui::Button(sound_name)) {
+            *sound_name_out_ = sound_name;
+            selected = true;
+            popup_.Close();
+          }
         }
-        ImGui::SameLine();
-        if (ImGui::Button(sound_name)) {
-          *sound_name_out_ = sound_name;
-          selected = true;
-          popup_.Close();
-        }
+      }
+
+      ImGui::EndChild();
+      ImGui::SpacedSeparator();
+
+      if (ImGui::Button("Cancel")) {
+        popup_.Close();
       }
 
       popup_.End();
@@ -61,6 +78,7 @@ class SoundInputDialog {
   ImGui::Popup popup_{"SoundInputDialog"};
   std::string* sound_name_out_ = nullptr;
   std::vector<std::string> sound_names_;
+  std::string search_text_;
 };
 
 struct KeybindItem {
@@ -358,7 +376,7 @@ class SettingsScreen : public UiScreen {
 
         ImGui::TableNextColumn();
         if (ImGui::Button(icons::kPlayArrow)) {
-          app_.sound_manager()->PlaySound(*sound_name, 1);
+          app_.sound_manager()->LoadAndPlaySound(*sound_name, 1);
         }
         ImGui::SameLine();
         float char_x = ImGui::GetDefaultCharSizeX();

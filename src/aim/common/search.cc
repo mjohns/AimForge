@@ -76,7 +76,10 @@ std::vector<std::string> GetSearchWords(const std::string& text) {
   std::vector<std::string_view> search_words = absl::StrSplit(text, ' ');
   std::vector<std::string> result;
   for (auto& part : search_words) {
-    result.push_back(absl::AsciiStrToLower(part));
+    std::string normalized_part = absl::AsciiStrToLower(absl::StripAsciiWhitespace(part));
+    if (normalized_part.size() > 0) {
+      result.push_back(std::move(normalized_part));
+    }
   }
   return result;
 }
@@ -99,6 +102,22 @@ bool StringMatchesSearch(const std::string& input,
 
   for (auto& part : search_words) {
     if (!InputMatchesSearchWord(input_words, part)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool StringMatchesContainsSearch(const std::string& input,
+                                 const std::vector<std::string>& search_words,
+                                 bool empty_matches) {
+  if (search_words.size() == 0) {
+    return empty_matches;
+  }
+
+  auto lower_input = absl::AsciiStrToLower(input);
+  for (const std::string& search_word : search_words) {
+    if (search_word.size() > 0 && !lower_input.contains(search_word)) {
       return false;
     }
   }

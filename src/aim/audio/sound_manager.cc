@@ -65,17 +65,29 @@ void SoundManager::LoadSounds(const Settings& settings) {
     if (name.size() == 0) {
       continue;
     }
-    auto it = sound_cache_.find(name);
-    if (it == sound_cache_.end()) {
-      std::unique_ptr<Sound> sound = LoadSound(sound_dirs_, name);
-      sound_cache_[name] = std::move(sound);
-    }
+    MaybeLoadSound(name);
   }
 }
 
 SoundManager& SoundManager::PlayKillSound(const std::string& name) {
   PlaySound(name, kKillChannel);
   return *this;
+}
+
+bool SoundManager::LoadAndPlaySound(const std::string& name, int channel) {
+  MaybeLoadSound(name);
+  return PlaySound(name, channel);
+}
+
+void SoundManager::MaybeLoadSound(const std::string& sound_name) {
+  if (sound_name.empty()) {
+    return;
+  }
+  auto it = sound_cache_.find(sound_name);
+  if (it == sound_cache_.end()) {
+    std::unique_ptr<Sound> sound = LoadSound(sound_dirs_, sound_name);
+    sound_cache_[sound_name] = std::move(sound);
+  }
 }
 
 bool SoundManager::PlaySound(const std::string& name, int channel) {

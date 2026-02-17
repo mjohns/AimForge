@@ -19,13 +19,16 @@ class SoundManager {
   SoundManager& PlayShootSound(const std::string& name);
   SoundManager& PlayMetronomeSound(const std::string& name);
 
-  bool PlaySound(const std::string& name, int channel);
+  bool LoadAndPlaySound(const std::string& name, int channel);
 
   void LoadSounds(const Settings& settings);
 
   std::vector<std::string> ListSounds();
 
  private:
+  bool PlaySound(const std::string& name, int channel);
+  void MaybeLoadSound(const std::string& sound_name);
+
   std::unordered_map<std::string, std::unique_ptr<Sound>> sound_cache_;
   std::vector<std::filesystem::path> sound_dirs_;
 };
