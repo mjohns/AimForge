@@ -36,6 +36,7 @@ class QuickSettingsScreen : public UiScreen {
           updater_.settings.set_cm_per_360(updater_.settings.cm_per_360() + event.wheel.y);
         }
         if (type_ == QuickSettingsType::METRONOME) {
+          updater_.settings.set_enable_metronome(true);
           updater_.settings.set_metronome_bpm(updater_.settings.metronome_bpm() + event.wheel.y);
         }
       }
@@ -156,8 +157,9 @@ class QuickSettingsScreen : public UiScreen {
     }
 
     if (type_ == QuickSettingsType::METRONOME) {
+      float original_bpm = updater_.settings.metronome_bpm();
       button_sz.x /= 2.0;
-      for (int i = 70; i <= 250; i += 20) {
+      for (int i = 70; i <= 260; i += 20) {
         std::string bpm1 = std::format("{}", i);
         std::string bpm2 = std::format("{}", i + 5);
         std::string bpm3 = std::format("{}", i + 10);
@@ -165,26 +167,30 @@ class QuickSettingsScreen : public UiScreen {
 
         if (ImGui::Button(bpm1.c_str(), button_sz)) {
           updater_.settings.set_metronome_bpm(i);
+          updater_.settings.set_enable_metronome(true);
         }
         ImGui::SameLine();
         if (ImGui::Button(bpm2.c_str(), button_sz)) {
           updater_.settings.set_metronome_bpm(i + 5);
+          updater_.settings.set_enable_metronome(true);
         }
         ImGui::SameLine();
         if (ImGui::Button(bpm3.c_str(), button_sz)) {
           updater_.settings.set_metronome_bpm(i + 10);
+          updater_.settings.set_enable_metronome(true);
         }
         ImGui::SameLine();
         if (ImGui::Button(bpm4.c_str(), button_sz)) {
           updater_.settings.set_metronome_bpm(i + 15);
+          updater_.settings.set_enable_metronome(true);
         }
       }
 
       ImGui::Spacing();
-      if (ImGui::Button("0", button_sz)) {
-        updater_.settings.clear_metronome_bpm();
-      }
-      ImGui::SameLine();
+
+      ImGui::InputBool(ImGui::InputBoolParams("EnableMetronome").set_label("Enable metronome"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, enable_metronome));
+
       ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
                             .set_label("BPM")
                             .set_min(0)
@@ -192,6 +198,17 @@ class QuickSettingsScreen : public UiScreen {
                             .set_step(1, 5)
                             .set_width(char_size.x * 9),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
+
+      ImGui::SameLine();
+      if (ImGui::Button("Clear")) {
+        updater_.settings.clear_metronome_bpm();
+        updater_.settings.set_enable_metronome(false);
+      }
+
+      if (updater_.settings.metronome_bpm() > 0 &&
+          updater_.settings.metronome_bpm() != original_bpm) {
+        updater_.settings.set_enable_metronome(true);
+      }
     }
   }
 

@@ -16,6 +16,8 @@ message Settings {
   float dpi = 1;
   float cm_per_360 = 2;
   string theme_name = 4;
+
+  bool enable_metronome = 3;
   float metronome_bpm = 5;
 
   float crosshair_size = 6;
@@ -59,6 +61,7 @@ message ScenarioSettings {
   string crosshair_name = 5;
   bool auto_hold_tracking = 7;
   HealthBarSettings health_bar = 8;
+  bool enable_metronome = 9;
 }
 
 message KeyMapping {

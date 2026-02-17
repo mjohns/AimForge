@@ -334,6 +334,9 @@ class SettingsManagerImpl : public SettingsManager {
     if (scenario_settings.has_metronome_bpm()) {
       settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
     }
+    if (scenario_settings.has_enable_metronome()) {
+      settings_.set_enable_metronome(scenario_settings.enable_metronome());
+    }
     if (scenario_settings.has_crosshair_size()) {
       settings_.set_crosshair_size(scenario_settings.crosshair_size());
     }
@@ -396,6 +399,7 @@ class SettingsManagerImpl : public SettingsManager {
       scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
       scenario_settings.set_cm_per_360(settings_.cm_per_360());
       scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
+      scenario_settings.set_enable_metronome(settings_.enable_metronome());
       scenario_settings.set_theme_name(settings_.theme_name());
       scenario_settings.set_auto_hold_tracking(settings_.auto_hold_tracking());
       i64 scenario_id = db_->GetScenarioId(scenario_name);

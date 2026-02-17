@@ -216,6 +216,9 @@ class SettingsScreen : public UiScreen {
       ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
 
+      ImGui::SpacedSeparator();
+      ImGui::InputBool(ImGui::InputBoolParams("EnableMetronome").set_label("Enable metronome"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, enable_metronome));
       ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
                             .set_label("Metronome BPM")
                             .set_min(0)

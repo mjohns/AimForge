@@ -997,6 +997,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
     kCrosshairSizeFieldNumber = 4,
     kCmPer360JitterFieldNumber = 6,
     kAutoHoldTrackingFieldNumber = 7,
+    kEnableMetronomeFieldNumber = 9,
   };
   // string theme_name = 2;
   bool has_theme_name() const;
@@ -1100,11 +1101,22 @@ class ScenarioSettings final : public ::google::protobuf::Message
   void _internal_set_auto_hold_tracking(bool value);
 
   public:
+  // bool enable_metronome = 9;
+  bool has_enable_metronome() const;
+  void clear_enable_metronome() ;
+  bool enable_metronome() const;
+  void set_enable_metronome(bool value);
+
+  private:
+  bool _internal_enable_metronome() const;
+  void _internal_set_enable_metronome(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioSettings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
+  static const ::google::protobuf::internal::TcParseTable<4, 9,
                                    1, 61,
                                    2>
       _table_;
@@ -1134,6 +1146,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
     float crosshair_size_;
     float cm_per_360_jitter_;
     bool auto_hold_tracking_;
+    bool enable_metronome_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1591,6 +1604,7 @@ class Settings final : public ::google::protobuf::Message
     kCmPer360FieldNumber = 2,
     kMetronomeBpmFieldNumber = 5,
     kCrosshairSizeFieldNumber = 6,
+    kEnableMetronomeFieldNumber = 3,
     kDisableClickToStartFieldNumber = 8,
     kAutoHoldTrackingFieldNumber = 10,
     kDisablePerScenarioSettingsFieldNumber = 13,
@@ -1718,6 +1732,17 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_crosshair_size(float value);
 
   public:
+  // bool enable_metronome = 3;
+  bool has_enable_metronome() const;
+  void clear_enable_metronome() ;
+  bool enable_metronome() const;
+  void set_enable_metronome(bool value);
+
+  private:
+  bool _internal_enable_metronome() const;
+  void _internal_set_enable_metronome(bool value);
+
+  public:
   // bool disable_click_to_start = 8;
   bool has_disable_click_to_start() const;
   void clear_disable_click_to_start() ;
@@ -1777,7 +1802,7 @@ class Settings final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 14,
+  static const ::google::protobuf::internal::TcParseTable<4, 15,
                                    3, 61,
                                    2>
       _table_;
@@ -1808,6 +1833,7 @@ class Settings final : public ::google::protobuf::Message
     float cm_per_360_;
     float metronome_bpm_;
     float crosshair_size_;
+    bool enable_metronome_;
     bool disable_click_to_start_;
     bool auto_hold_tracking_;
     bool disable_per_scenario_settings_;
@@ -2113,6 +2139,35 @@ inline void Settings::set_allocated_theme_name(::std::string* PROTOBUF_NULLABLE 
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.theme_name)
 }
 
+// bool enable_metronome = 3;
+inline bool Settings::has_enable_metronome() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  return value;
+}
+inline void Settings::clear_enable_metronome() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.enable_metronome_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline bool Settings::enable_metronome() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.enable_metronome)
+  return _internal_enable_metronome();
+}
+inline void Settings::set_enable_metronome(bool value) {
+  _internal_set_enable_metronome(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.Settings.enable_metronome)
+}
+inline bool Settings::_internal_enable_metronome() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.enable_metronome_;
+}
+inline void Settings::_internal_set_enable_metronome(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.enable_metronome_ = value;
+}
+
 // float metronome_bpm = 5;
 inline bool Settings::has_metronome_bpm() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
@@ -2242,14 +2297,14 @@ inline void Settings::set_allocated_current_crosshair_name(::std::string* PROTOB
 
 // bool disable_click_to_start = 8;
 inline bool Settings::has_disable_click_to_start() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void Settings::clear_disable_click_to_start() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_click_to_start_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000400U);
 }
 inline bool Settings::disable_click_to_start() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_click_to_start)
@@ -2257,7 +2312,7 @@ inline bool Settings::disable_click_to_start() const {
 }
 inline void Settings::set_disable_click_to_start(bool value) {
   _internal_set_disable_click_to_start(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.Settings.disable_click_to_start)
 }
 inline bool Settings::_internal_disable_click_to_start() const {
@@ -2370,14 +2425,14 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* PROTOBUF_NULLABLE 
 
 // bool auto_hold_tracking = 10;
 inline bool Settings::has_auto_hold_tracking() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void Settings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000800U);
 }
 inline bool Settings::auto_hold_tracking() const {
   // @@protoc_insertion_point(field_get:aim.Settings.auto_hold_tracking)
@@ -2385,7 +2440,7 @@ inline bool Settings::auto_hold_tracking() const {
 }
 inline void Settings::set_auto_hold_tracking(bool value) {
   _internal_set_auto_hold_tracking(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.Settings.auto_hold_tracking)
 }
 inline bool Settings::_internal_auto_hold_tracking() const {
@@ -2498,14 +2553,14 @@ inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* PROTOBU
 
 // bool disable_per_scenario_settings = 13;
 inline bool Settings::has_disable_per_scenario_settings() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
   return value;
 }
 inline void Settings::clear_disable_per_scenario_settings() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_per_scenario_settings_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00001000U);
 }
 inline bool Settings::disable_per_scenario_settings() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_per_scenario_settings)
@@ -2513,7 +2568,7 @@ inline bool Settings::disable_per_scenario_settings() const {
 }
 inline void Settings::set_disable_per_scenario_settings(bool value) {
   _internal_set_disable_per_scenario_settings(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
   // @@protoc_insertion_point(field_set:aim.Settings.disable_per_scenario_settings)
 }
 inline bool Settings::_internal_disable_per_scenario_settings() const {
@@ -2527,14 +2582,14 @@ inline void Settings::_internal_set_disable_per_scenario_settings(bool value) {
 
 // float max_render_fps = 14;
 inline bool Settings::has_max_render_fps() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
   return value;
 }
 inline void Settings::clear_max_render_fps() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.max_render_fps_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00002000U);
 }
 inline float Settings::max_render_fps() const {
   // @@protoc_insertion_point(field_get:aim.Settings.max_render_fps)
@@ -2542,7 +2597,7 @@ inline float Settings::max_render_fps() const {
 }
 inline void Settings::set_max_render_fps(float value) {
   _internal_set_max_render_fps(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
   // @@protoc_insertion_point(field_set:aim.Settings.max_render_fps)
 }
 inline float Settings::_internal_max_render_fps() const {
@@ -2556,14 +2611,14 @@ inline void Settings::_internal_set_max_render_fps(float value) {
 
 // .aim.PresentMode present_mode = 15;
 inline bool Settings::has_present_mode() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00002000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00004000U);
   return value;
 }
 inline void Settings::clear_present_mode() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.present_mode_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
+                  0x00004000U);
 }
 inline ::aim::PresentMode Settings::present_mode() const {
   // @@protoc_insertion_point(field_get:aim.Settings.present_mode)
@@ -2571,7 +2626,7 @@ inline ::aim::PresentMode Settings::present_mode() const {
 }
 inline void Settings::set_present_mode(::aim::PresentMode value) {
   _internal_set_present_mode(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
   // @@protoc_insertion_point(field_set:aim.Settings.present_mode)
 }
 inline ::aim::PresentMode Settings::_internal_present_mode() const {
@@ -3375,6 +3430,35 @@ inline void ScenarioSettings::set_allocated_health_bar(::aim::HealthBarSettings*
 
   _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioSettings.health_bar)
+}
+
+// bool enable_metronome = 9;
+inline bool ScenarioSettings::has_enable_metronome() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  return value;
+}
+inline void ScenarioSettings::clear_enable_metronome() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.enable_metronome_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline bool ScenarioSettings::enable_metronome() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.enable_metronome)
+  return _internal_enable_metronome();
+}
+inline void ScenarioSettings::set_enable_metronome(bool value) {
+  _internal_set_enable_metronome(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.enable_metronome)
+}
+inline bool ScenarioSettings::_internal_enable_metronome() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.enable_metronome_;
+}
+inline void ScenarioSettings::_internal_set_enable_metronome(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.enable_metronome_ = value;
 }
 
 // -------------------------------------------------------------------

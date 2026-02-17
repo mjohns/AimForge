@@ -101,7 +101,9 @@ void Scenario::RefreshState() {
 
   float dpi = app_.settings_manager().GetDpi();
   metronome_ =
-      std::make_unique<Metronome>(settings_.metronome_bpm(), settings_.sound().metronome(), &app_);
+      std::make_unique<Metronome>(settings_.enable_metronome() ? settings_.metronome_bpm() : 0,
+                                  settings_.sound().metronome(),
+                                  &app_);
 
   effective_cm_per_360_ = settings_.cm_per_360();
 
@@ -308,7 +310,7 @@ void Scenario::OnWaitingForClickTick() {
 
   ImGui::Text("%s", scenario_name_.c_str());
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-  if (settings_.metronome_bpm() > 0) {
+  if (settings_.enable_metronome() && settings_.metronome_bpm() > 0) {
     ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
   }
   ImGui::Text("theme: %s", settings_.theme_name().c_str());
@@ -419,7 +421,7 @@ void Scenario::OnRunningTick() {
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
   ImGui::Text("ups: %.1fk", state_updates_per_second_);
   ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
-  if (settings_.metronome_bpm() > 0) {
+  if (settings_.enable_metronome() && settings_.metronome_bpm() > 0) {
     ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
   }
 
