@@ -76,6 +76,7 @@ void DrawScoresOverTimePlot(const std::string& scenario_name, ScoresOverTime& sc
   ImPlot::SetupAxisLimits(ImAxis_X1, times.front(), times.back(), ImPlotCond_Always);
   ImPlot::SetupAxisLimits(ImAxis_Y1, scores_over_time.min_score, scores_over_time.max_score);
 
+  // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
   ImPlot::PlotLine("Score History", times.data(), scores.data(), scores.size());
 
   ImPlot::DragLineY(0, &threshold, ImVec4(1, 0, 0, 1), 1.0f, ImPlotDragToolFlags_NoInputs);

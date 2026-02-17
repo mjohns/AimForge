@@ -3,7 +3,7 @@
 FpsAimForge is an open source aim trainer focused on simplicity, self improvement, and targeting weaknesses.
 
 * [All releases](https://github.com/mjohns/FpsAimForge/releases)
-* [Download latest](https://github.com/mjohns/FpsAimForge/releases/download/v0.3.1/FpsAimForge-v0.3.1.zip)
+* [Download latest](https://github.com/mjohns/FpsAimForge/releases/download/v0.3.2/FpsAimForge-v0.3.2.zip)
 
 Major goals of the project are:
 * Cater to power users who tend to "main" aim trainers and spend most of their time doing benchmarks or working on specific weaknesses.
