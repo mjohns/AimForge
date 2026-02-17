@@ -4,6 +4,7 @@
 #include <optional>
 
 #include "aim/common/field.h"
+#include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
@@ -465,7 +466,14 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::BeginChild("ThemesListContent");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Themes");
+    ImGui::SameLine();
+    auto folder = app_.file_system()->GetUserDataPath("resources/themes");
+    if (ImGui::Button(icons::kOpenInNew)) {
+      OpenFolderInExplorer(folder);
+    }
+    ImGui::HelpTooltip(std::format("Open \"{}\"", folder.string()));
     ImGui::Indent();
+    ImGui::Spacing();
     for (const std::string& name : theme_names_) {
       auto lid = loop_id.Get();
       if (ImGui::Button(name)) {

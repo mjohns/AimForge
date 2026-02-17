@@ -5,6 +5,7 @@
 #include <optional>
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/files.h"
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
 #include "aim/core/camera.h"
@@ -98,6 +99,13 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::BeginChild("CrosshairListContent");
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshairs");
+    ImGui::SameLine();
+    auto folder = app_.file_system()->GetUserDataPath("resources/crosshairs");
+    if (ImGui::Button(icons::kOpenInNew)) {
+      OpenFolderInExplorer(folder);
+    }
+    ImGui::HelpTooltip(std::format("Open \"{}\"", folder.string()));
+    ImGui::Spacing();
     ImGui::Indent();
     for (const std::string& crosshair_name : crosshair_names_) {
       auto lid = loop_id.Get();
