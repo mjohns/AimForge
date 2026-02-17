@@ -436,7 +436,7 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
     case ShotType::kTrackingProximity: {
       float total_micros = def_.duration_seconds() * 1000000;
       num_shots = def_.duration_seconds();
-      num_hits = (stats_.proximity.hit_micros_map[100] / total_micros) * stats_.num_shots;
+      num_hits = (stats_.proximity.hit_micros_map[100] / total_micros) * num_shots;
 
       ProximityPercentiles p;
       auto get_percent = [&](int percent) {
