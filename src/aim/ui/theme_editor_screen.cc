@@ -250,40 +250,8 @@ class ThemeEditor {
 
  private:
   void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
-    ImGui::IdGuard cid(id);
     float char_x = ImGui::GetDefaultCharSizeX();
-
-    float color[3];
-    StoredRgb c = ToStoredRgb(*stored_color);
-    color[0] = c.r() / 255.0;
-    color[1] = c.g() / 255.0;
-    color[2] = c.b() / 255.0;
-    if (ImGui::ColorEdit3(
-            "##ColorEditor", color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
-      StoredRgb result = FloatToStoredRgb(color[0], color[1], color[2]);
-      if (stored_color->has_hex()) {
-        stored_color->set_hex(ToHexString(result));
-        stored_color->clear_r();
-        stored_color->clear_b();
-        stored_color->clear_g();
-      } else {
-        stored_color->set_r(result.r());
-        stored_color->set_g(result.g());
-        stored_color->set_b(result.b());
-      }
-    }
-
-    ImGui::SameLine();
-    ImGui::Text("%s", icons::kClose);
-    ImGui::HelpTooltip("Multiply color by value");
-
-    ImGui::SameLine();
-    ImGui::InputFloat(ImGui::InputFloatParams("ColorMultiplier")
-                          .set_step(0.01, 0.2)
-                          .set_max(2)
-                          .set_width(char_x * 10)
-                          .set_zero_is_unset(),
-                      PROTO_FLOAT_FIELD(StoredColor, stored_color, multiplier));
+    ImGui::InputStoredColor(id, stored_color, char_x);
   }
 
   void DrawWallAppearanceEditor(const std::string& header,

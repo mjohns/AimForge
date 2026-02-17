@@ -299,7 +299,9 @@ void InputStoredColor(const std::string& id, aim::StoredColor* stored_color, flo
   ImGui::IdGuard cid(id);
 
   float color[3];
-  aim::StoredRgb c = ToStoredRgb(*stored_color);
+    aim::StoredColor raw_stored_color = *stored_color;
+    raw_stored_color.clear_multiplier();
+  aim::StoredRgb c = ToStoredRgb(raw_stored_color);
   color[0] = c.r() / 255.0;
   color[1] = c.g() / 255.0;
   color[2] = c.b() / 255.0;
