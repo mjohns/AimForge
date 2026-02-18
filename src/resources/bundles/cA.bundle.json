@@ -643,7 +643,7 @@
      "numTargets": 2,
      "profiles": [
       {
-       "targetRadius": 1.39999986
+       "targetRadius": 1.4
       }
      ],
      "newestTargetIsGhost": true
@@ -684,10 +684,54 @@
        },
        {
         "info": {
+         "description": "Right Close"
+        },
+        "xOffset": {
+         "xPercentValue": 0.05
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
          "description": "Left Mid1"
         },
         "xOffset": {
-         "xPercentValue": -0.120000027
+         "xPercentValue": -0.12
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.05
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Mid1"
+        },
+        "xOffset": {
+         "xPercentValue": 0.12
         },
         "yOffset": {
          "yPercentValue": 0
@@ -712,7 +756,32 @@
          "description": "Left Mid2"
         },
         "xOffset": {
-         "xPercentValue": -0.200000033
+         "xPercentValue": -0.2
+        },
+        "yOffset": {
+         "yPercentValue": 0
+        },
+        "depth": {
+         "depthPercentValue": 0.1
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.07
+         },
+         "yLength": {
+          "yPercentValue": 0.15
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Right Mid2"
+        },
+        "xOffset": {
+         "xPercentValue": 0.2
         },
         "yOffset": {
          "yPercentValue": 0
@@ -737,82 +806,13 @@
          "description": "Left Far"
         },
         "xOffset": {
-         "xPercentValue": -0.270000041
+         "xPercentValue": -0.28
         },
         "yOffset": {
          "yPercentValue": 0
         },
         "depth": {
          "depthPercentValue": 0.2
-        },
-        "depthJitter": {
-         "depthPercentValue": 0.02
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.07
-         },
-         "yLength": {
-          "yPercentValue": 0.15
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Righ Close"
-        },
-        "xOffset": {
-         "xPercentValue": 0.05
-        },
-        "yOffset": {
-         "yPercentValue": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.07
-         },
-         "yLength": {
-          "yPercentValue": 0.15
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Right Mid1"
-        },
-        "xOffset": {
-         "xPercentValue": 0.120000027
-        },
-        "yOffset": {
-         "yPercentValue": 0
-        },
-        "depth": {
-         "depthPercentValue": 0.05
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.07
-         },
-         "yLength": {
-          "yPercentValue": 0.15
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Right Mid2"
-        },
-        "xOffset": {
-         "xPercentValue": 0.200000033
-        },
-        "yOffset": {
-         "yPercentValue": 0
-        },
-        "depth": {
-         "depthPercentValue": 0.1
         },
         "depthJitter": {
          "depthPercentValue": 0
@@ -831,7 +831,7 @@
          "description": "Right Far"
         },
         "xOffset": {
-         "xPercentValue": 0.280000031
+         "xPercentValue": 0.28
         },
         "yOffset": {
          "yPercentValue": 0
@@ -855,17 +855,17 @@
       "regionsInfo": {
        "explicitOrder": [
         0,
-        4,
         1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        4,
         5,
         2,
-        6,
-        3,
-        7,
-        2,
-        6,
-        1,
-        5
+        3
        ]
       }
      }
@@ -884,7 +884,7 @@
      "numTargets": 2,
      "profiles": [
       {
-       "targetRadius": 1.39999986
+       "targetRadius": 1.4
       }
      ],
      "newestTargetIsGhost": true
@@ -893,11 +893,6 @@
      "cameraPosition": {
       "x": 0,
       "y": -200,
-      "z": 0
-     },
-     "cameraUp": {
-      "x": 1,
-      "y": 0,
       "z": 0
      },
      "simpleRoom": {
@@ -911,32 +906,51 @@
       "regions": [
        {
         "info": {
-         "description": "Left Close"
+         "description": "Down Close"
         },
         "xOffset": {
-         "xPercentValue": -0.05
+         "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": 0
+         "yPercentValue": -0.05
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.07
+          "xPercentValue": 0.15
          },
          "yLength": {
-          "yPercentValue": 0.15
+          "yPercentValue": 0.07
          }
         }
        },
        {
         "info": {
-         "description": "Left Mid1"
+         "description": "Up Close"
         },
         "xOffset": {
-         "xPercentValue": -0.120000027
+         "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": 0
+         "yPercentValue": 0.05
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.15
+         },
+         "yLength": {
+          "yPercentValue": 0.07
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Down Mid1"
+        },
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.12
         },
         "depth": {
          "depthPercentValue": 0.05
@@ -946,91 +960,22 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.07
+          "xPercentValue": 0.15
          },
          "yLength": {
-          "yPercentValue": 0.15
+          "yPercentValue": 0.07
          }
         }
        },
        {
         "info": {
-         "description": "Left Mid2"
+         "description": "Up Mid1"
         },
         "xOffset": {
-         "xPercentValue": -0.200000033
+         "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": 0
-        },
-        "depth": {
-         "depthPercentValue": 0.1
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.07
-         },
-         "yLength": {
-          "yPercentValue": 0.15
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Left Far"
-        },
-        "xOffset": {
-         "xPercentValue": -0.270000041
-        },
-        "yOffset": {
-         "yPercentValue": 0
-        },
-        "depth": {
-         "depthPercentValue": 0.2
-        },
-        "depthJitter": {
-         "depthPercentValue": 0.02
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.07
-         },
-         "yLength": {
-          "yPercentValue": 0.15
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Righ Close"
-        },
-        "xOffset": {
-         "xPercentValue": 0.05
-        },
-        "yOffset": {
-         "yPercentValue": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.07
-         },
-         "yLength": {
-          "yPercentValue": 0.15
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Right Mid1"
-        },
-        "xOffset": {
-         "xPercentValue": 0.120000027
-        },
-        "yOffset": {
-         "yPercentValue": 0
+         "yPercentValue": 0.12
         },
         "depth": {
          "depthPercentValue": 0.05
@@ -1040,22 +985,22 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.07
+          "xPercentValue": 0.15
          },
          "yLength": {
-          "yPercentValue": 0.15
+          "yPercentValue": 0.07
          }
         }
        },
        {
         "info": {
-         "description": "Right Mid2"
+         "description": "Down Mid2"
         },
         "xOffset": {
-         "xPercentValue": 0.200000033
+         "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": 0
+         "yPercentValue": -0.2
         },
         "depth": {
          "depthPercentValue": 0.1
@@ -1065,22 +1010,47 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.07
+          "xPercentValue": 0.15
          },
          "yLength": {
-          "yPercentValue": 0.15
+          "yPercentValue": 0.07
          }
         }
        },
        {
         "info": {
-         "description": "Right Far"
+         "description": "Up Mid2"
         },
         "xOffset": {
-         "xPercentValue": 0.280000031
+         "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": 0
+         "yPercentValue": 0.2
+        },
+        "depth": {
+         "depthPercentValue": 0.1
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.15
+         },
+         "yLength": {
+          "yPercentValue": 0.07
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Down Far"
+        },
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.27
         },
         "depth": {
          "depthPercentValue": 0.2
@@ -1090,10 +1060,35 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.07
+          "xPercentValue": 0.15
          },
          "yLength": {
-          "yPercentValue": 0.15
+          "yPercentValue": 0.07
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Up Far"
+        },
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": 0.27
+        },
+        "depth": {
+         "depthPercentValue": 0.2
+        },
+        "depthJitter": {
+         "depthPercentValue": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.15
+         },
+         "yLength": {
+          "yPercentValue": 0.07
          }
         }
        }
@@ -1101,17 +1096,17 @@
       "regionsInfo": {
        "explicitOrder": [
         0,
-        4,
         1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        4,
         5,
         2,
-        6,
-        3,
-        7,
-        2,
-        6,
-        1,
-        5
+        3
        ]
       }
      }
