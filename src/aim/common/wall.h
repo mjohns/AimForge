@@ -36,11 +36,13 @@ struct Wall {
   float width = 0;
   float height = 0;
   float depth = 0;
+  bool is_barrel = false;
 
   float GetRegionLength(const RegionLength& r) const;
   glm::vec2 GetRegionVec2(const RegionVec2& v) const;
   WallBounds GetWallBounds(const Bounds& b) const;
   WallRelativeBounds GetWallRelativeBounds(const Bounds& b) const;
+  bool IsPointInBounds(const glm::vec2& point, float padding = 0) const;
 };
 
 }  // namespace aim

@@ -12,6 +12,17 @@
 
 namespace aim {
 
+bool Wall::IsPointInBounds(const glm::vec2& point, float padding) const {
+  if (is_barrel) {
+    return IsPointInCircle(point, width - padding);
+  }
+  float half_width = (width - padding) / 2.0f;
+  float half_height = (height - padding) / 2.0f;
+  glm::vec2 bottom_left(-1 * half_width, -1 * half_height);
+  glm::vec2 top_right(half_width, half_height);
+  return IsPointInRectangle(point, bottom_left, top_right);
+}
+
 float Wall::GetRegionLength(const RegionLength& length) const {
   if (length.has_value()) {
     return length.value();
@@ -85,6 +96,7 @@ Wall Wall::ForRoom(const Room& room) {
     wall.width = room.barrel_room().radius() * 2;
     wall.height = wall.width;
     wall.depth = abs(room.camera_position().y());
+    wall.is_barrel = true;
   } else if (room.has_simple_room()) {
     wall.width = room.simple_room().width();
     wall.height = room.simple_room().height();

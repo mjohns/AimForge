@@ -41,6 +41,7 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
         // Scale the candidate to the correct distance.
         candidate_pos = glm::vec3(GetFixedDistanceAdjustedPoint(candidate_pos), candidate_pos.z);
       }
+      // TODO: consider also checking wall_.IsPointInBounds
       if (AreNoneWithinDistanceOnWall(candidate_pos, min_distance)) {
         return candidate_pos;
       }
