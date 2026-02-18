@@ -111,15 +111,15 @@ void DrawScoresOverTimePlot(const std::string& scenario_name, ScoresOverTime& sc
   ImPlot::EndPlot();
 }
 
-#define AIM_PUSH_TIME_SPAN(name) push_time_span(t.name, #name)
-#define AIM_PUSH_TIME(name) time_points.push_back({t.name, #name})
-
 void DumpFrameTimeline(const FrameTimes& t) {
   std::vector<std::pair<i64, std::string>> time_points;
   auto push_time_span = [&](const TimeSpan& span, const std::string& label) {
     time_points.push_back({span.start, label + "_start"});
     time_points.push_back({span.end, label + "_end"});
   };
+
+#define AIM_PUSH_TIME_SPAN(name) push_time_span(t.name, #name)
+#define AIM_PUSH_TIME(name) time_points.push_back({t.name, #name})
 
   AIM_PUSH_TIME(events_start);
   AIM_PUSH_TIME(update_start);

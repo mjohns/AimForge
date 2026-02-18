@@ -77,6 +77,8 @@ class Scenario : public Screen {
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
 
+  virtual void DrawAdditionalUiElements() {}
+
   virtual std::optional<StatsDbRow> GetStatsRow() {
     return {};
   }

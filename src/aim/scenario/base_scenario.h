@@ -42,6 +42,7 @@ class BaseScenario : public Scenario {
   std::optional<StatsDbRow> GetStatsRow() override;
 
   void AddReplayScores(float now_seconds);
+  void DrawAdditionalUiElements() override;
 
  private:
   void HandleClickHits(UpdateStateData* data);

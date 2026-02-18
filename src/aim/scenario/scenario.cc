@@ -415,6 +415,8 @@ void Scenario::OnRunningTick() {
   current_times_.draw_crosshair = timer_.GetElapsedMicros();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
+  DrawAdditionalUiElements();
+
   float elapsed_seconds = timer_.GetElapsedSeconds();
   ImGui::Text("time: %.1f", elapsed_seconds);
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);

@@ -378,6 +378,61 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
   }
 }
 
+void BaseScenario::DrawAdditionalUiElements() {
+  if (ShouldLimitShotRate()) {
+    // See if a shot would be allowed
+    i64 shot_rate_micros = def_.shot_type().click_rate_seconds() * 1000000;
+    i64 now_micros = timer_.GetElapsedMicros();
+    i64 time_since_last_shot = now_micros - last_shot_time_micros_;
+    if (time_since_last_shot < shot_rate_micros) {
+      // Can't shoot. Draw UI element to show remaining time.
+      float time_remaining_percent =
+          (shot_rate_micros - time_since_last_shot) / static_cast<float>(shot_rate_micros);
+      ScreenInfo screen_info = app_.screen_info();
+
+      float char_x = ImGui::GetDefaultCharSizeX();
+      float width = char_x * 20;
+
+      float left_width = width * (1 - time_remaining_percent);
+
+      float y_min = char_x * 2;
+      float y_max = y_min + char_x * 2;
+
+      ImVec2 top_left(0, y_min);
+      ImVec2 bottom_right(width, y_max);
+
+      ImVec2 top_mid(left_width, y_min);
+      ImVec2 bottom_mid(left_width, y_max);
+
+      auto& h = theme_.health_bar();
+      auto health_rgb = ToStoredRgb(h.health_color());
+      auto background_rgb = ToStoredRgb(h.background_color());
+
+      auto health_color = IM_COL32(health_rgb.r(),
+                                   health_rgb.g(),
+                                   health_rgb.b(),
+                                   (h.has_health_alpha() ? h.health_alpha() : 1.0f) * 255);
+      auto background_color =
+          IM_COL32(background_rgb.r(),
+                   background_rgb.g(),
+                   background_rgb.b(),
+                   (h.has_background_alpha() ? h.background_alpha() : 1.0f) * 255);
+
+      float x_offset = (screen_info.width - width) / 2.0f;
+
+      top_left.x += x_offset;
+      bottom_right.x += x_offset;
+      top_mid.x += x_offset;
+      bottom_mid.x += x_offset;
+
+      ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+      draw_list->AddRectFilled(top_left, bottom_mid, health_color);
+      draw_list->AddRectFilled(top_mid, bottom_right, background_color);
+    }
+  }
+}
+
 Target BaseScenario::GetNewTarget() {
   Target t = GetTargetTemplate(GetNextTargetProfile());
   FillInNewTarget(&t);
