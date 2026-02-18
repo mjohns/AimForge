@@ -463,4 +463,34 @@ const std::unordered_map<ScenarioDef::TypeCase, std::string> kScenarioTypeDispla
 const std::unordered_map<ShotType::TypeCase, std::string> kShotTypeDisplayNameMap =
     BuildDisplayNameMap(kShotTypes);
 
+void DrawScoreTargetsEditor(PtrField<ScoreTargets> score_targets) {
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Score targets");
+  ImGui::SameLine();
+  bool has_score_targets = score_targets.has();
+  ImGui::SameLine();
+  ImGui::Checkbox("##ScoreTargetsCheckbox", &has_score_targets);
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "Defines targets for scores. A score at \"start\" value gives 1.0. \"end\" gives the max "
+      "5.0. Useful for level based playlists where you can keep trying to get a 5.0 for "
+      "progressively higher levels.");
+  if (has_score_targets) {
+    ImGui::Indent();
+    ScoreTargets* t = score_targets.get_mutable();
+    ImGui::InputFloat(
+        ImGui::InputFloatParams::WithLabelAsId("Start").set_min(0).set_step(0.1, 2).set_width(
+            char_x * 12),
+        PROTO_FLOAT_FIELD(ScoreTargets, t, start));
+    ImGui::InputFloat(
+        ImGui::InputFloatParams::WithLabelAsId("End").set_min(0).set_step(0.1, 2).set_width(char_x *
+                                                                                            12),
+        PROTO_FLOAT_FIELD(ScoreTargets, t, end));
+    ImGui::Unindent();
+  } else {
+    score_targets.clear();
+  }
+}
+
 }  // namespace aim

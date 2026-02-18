@@ -998,6 +998,9 @@ void DrawReferenceEditor(ScenarioDef& def,
   if (old_def.has_level_overrides()) {
     *def.mutable_level_overrides() = old_def.level_overrides();
   }
+  if (old_def.has_score_targets()) {
+    *def.mutable_score_targets() = old_def.score_targets();
+  }
   def.set_description(old_def.description());
   *def.mutable_overrides() = old_def.overrides();
   *def.mutable_reference_def() = old_def.reference_def();
@@ -1035,6 +1038,10 @@ void DrawReferenceEditor(ScenarioDef& def,
   } else {
     def.clear_level_overrides();
   }
+
+  ImGui::SpacedSeparator();
+
+  DrawScoreTargetsEditor(PROTO_PTR_FIELD(ScoreTargets, ScenarioDef, &def, score_targets));
 
   ImGui::SpacedSeparator();
 

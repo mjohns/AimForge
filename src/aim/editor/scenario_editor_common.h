@@ -145,4 +145,6 @@ inline const std::vector<std::pair<TargetRegion::TypeCase, std::string>> kRegion
     {TargetRegion::kPoint, "Point"},
 };
 
+void DrawScoreTargetsEditor(PtrField<ScoreTargets> score_targets);
+
 }  // namespace aim
