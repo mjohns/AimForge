@@ -164,6 +164,9 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
   if (ref.has_level_overrides()) {
     *def->mutable_level_overrides() = ref.level_overrides();
   }
+  if (ref.has_score_targets()) {
+    *def->mutable_score_targets() = ref.score_targets();
+  }
   if (ref.reference_def().has_shot_type()) {
     *def->mutable_shot_type() = ref.reference_def().shot_type();
   }
