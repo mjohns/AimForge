@@ -121,7 +121,10 @@ void DumpFrameTimeline(const FrameTimes& t) {
     time_points.push_back({span.end, label + "_end"});
   };
 
-  AIM_PUSH_TIME_SPAN(render);
+  AIM_PUSH_TIME(events_start);
+  AIM_PUSH_TIME(update_start);
+  AIM_PUSH_TIME(render.start);
+  AIM_PUSH_TIME_SPAN(start_render);
   AIM_PUSH_TIME_SPAN(build_draw_data);
   AIM_PUSH_TIME_SPAN(pack_instance_data);
   AIM_PUSH_TIME_SPAN(upload_instance_data);
@@ -129,7 +132,6 @@ void DumpFrameTimeline(const FrameTimes& t) {
   AIM_PUSH_TIME_SPAN(upload_instance_data_memcpy);
   AIM_PUSH_TIME_SPAN(render_draw_data);
   AIM_PUSH_TIME_SPAN(finish_render);
-  AIM_PUSH_TIME_SPAN(start_render);
 
   AIM_PUSH_TIME(begin_render_pass);
   AIM_PUSH_TIME(end_render_pass);
@@ -141,15 +143,12 @@ void DumpFrameTimeline(const FrameTimes& t) {
   AIM_PUSH_TIME(draw_crosshair);
   AIM_PUSH_TIME(acquire_swapchain);
   AIM_PUSH_TIME(submit_swapchain_command_buffer);
-  AIM_PUSH_TIME(start);
-  AIM_PUSH_TIME(end);
-  AIM_PUSH_TIME(events_start);
-  AIM_PUSH_TIME(events_end);
-  AIM_PUSH_TIME(update_start);
-  AIM_PUSH_TIME(update_end);
+
+  // AIM_PUSH_TIME(start);
+  // AIM_PUSH_TIME(end);
 
   std::erase_if(time_points, [](const auto& p) { return p.first <= 0; });
-  std::sort(time_points.begin(), time_points.end());
+  std::stable_sort(time_points.begin(), time_points.end());
 
   if (time_points.empty()) {
     return;
