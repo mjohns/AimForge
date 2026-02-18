@@ -12,6 +12,29 @@
 
 namespace aim {
 
+// Old and new index have changed places. Any reference to either in the list should be swapped for
+// the other.
+static void UpdateIndicesInOrderList(google::protobuf::RepeatedField<int>* order_list,
+                              int old_index,
+                              int new_index) {
+  for (int i = 0; i < order_list->size(); ++i) {
+    int value = order_list->at(i);
+    if (value == old_index) {
+      (*order_list)[i] = new_index;
+    } else if (value == new_index) {
+      (*order_list)[i] = old_index;
+    }
+  }
+}
+
+static void UpdateIndicesInOrderLists(PtrField<ProfileListInfo>& info, int old_index, int new_index) {
+  if (info.has()) {
+    auto* mut = info.get_mutable();
+    UpdateIndicesInOrderList(mut->mutable_start_order(), old_index, new_index);
+    UpdateIndicesInOrderList(mut->mutable_explicit_order(), old_index, new_index);
+  }
+}
+
 template <typename T>
 void DrawOrderListEditor(const std::string& type_name,
                          google::protobuf::RepeatedField<int>* order_list,
@@ -21,6 +44,7 @@ void DrawOrderListEditor(const std::string& type_name,
     order_list->Add(0);
   }
   int remove_at_i = -1;
+  int insert_at_i = -1;
   for (int i = 0; i < order_list->size(); ++i) {
     ImGui::IdGuard lid("Order", i);
     u32 number = order_list->at(i);
@@ -35,10 +59,30 @@ void DrawOrderListEditor(const std::string& type_name,
 
     auto last_size = ImGui::GetItemRectSize();
 
+    const char* item_menu_id = "order_list_item_menu";
+    if (ImGui::BeginPopupContextItem(item_menu_id)) {
+      if (ImGui::Selectable("Insert above")) {
+        insert_at_i = i;
+      }
+      if (ImGui::Selectable("Insert below")) {
+        insert_at_i = i + 1;
+      }
+      ImGui::Separator();
+      if (ImGui::Selectable("Delete")) {
+        remove_at_i = i;
+      }
+      ImGui::EndPopup();
+    }
+    ImGui::SameLine();
+    if (ImGui::SelectableButton(icons::kMoreVert)) {
+      ImGui::OpenPopup(item_menu_id);
+    }
+    /*
     ImGui::SameLine();
     if (ImGui::SelectableButton(icons::kClear)) {
       remove_at_i = i;
     }
+    */
 
     if (IsValidIndex(*profile_list, number)) {
       auto& profile = profile_list->at(number);
@@ -53,6 +97,26 @@ void DrawOrderListEditor(const std::string& type_name,
   }
   if (remove_at_i >= 0) {
     order_list->erase(order_list->begin() + remove_at_i);
+  }
+  if (insert_at_i >= 0) {
+    if (insert_at_i >= order_list->size()) {
+      order_list->Add(0);
+    } else {
+      std::vector<int> new_order;
+      new_order.reserve(order_list->size() + 1);
+      for (int i = 0; i < order_list->size(); ++i) {
+        if (i == insert_at_i) {
+          new_order.push_back(0);
+        }
+        new_order.push_back((*order_list)[i]);
+      }
+
+      order_list->Clear();
+      order_list->Reserve(new_order.size());
+      for (int value : new_order) {
+        order_list->Add(value);
+      }
+    }
   }
 }
 
@@ -101,6 +165,7 @@ void DrawProfileList(const std::string& id,
       "selected, selection will then proceed normally.");
   if (has_start_order) {
     ImGui::Indent();
+    ImGui::IdGuard start_order_cid("StartOrderList");
     DrawOrderListEditor(type_name, start_order_list, profile_list, char_x);
     ImGui::Unindent();
   } else {
@@ -136,6 +201,7 @@ void DrawProfileList(const std::string& id,
       if (ImGui::Selectable("Copy")) {
         copy_i = i;
       }
+      ImGui::Separator();
       if (ImGui::Selectable("Delete")) {
         remove_at_i = i;
       }
@@ -215,11 +281,13 @@ void DrawProfileList(const std::string& id,
     int i1 = move_up_i;
     int i2 = move_up_i - 1;
     std::swap((*profile_list)[i1], (*profile_list)[i2]);
+    UpdateIndicesInOrderLists(profile_list_info_field, i1, i2);
   } else if (move_down_i >= 0) {
     int i1 = move_down_i;
     int i2 = move_down_i + 1;
     if (i2 < profile_list->size()) {
       std::swap((*profile_list)[i1], (*profile_list)[i2]);
+      UpdateIndicesInOrderLists(profile_list_info_field, i1, i2);
     }
   } else if (copy_i >= 0) {
     *profile_list->Add() = (*profile_list)[copy_i];
