@@ -818,6 +818,8 @@ class RendererImpl : public Renderer {
     depth_stencil_target_info.store_op = SDL_GPU_STOREOP_STORE;
     depth_stencil_target_info.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
     depth_stencil_target_info.stencil_store_op = SDL_GPU_STOREOP_STORE;
+
+    times->begin_render_pass = stopwatch.GetElapsedMicros();
     ctx->render_pass =
         SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, &depth_stencil_target_info);
 
@@ -825,6 +827,7 @@ class RendererImpl : public Renderer {
     RenderDrawData(draw_data, solid_color_instances, ctx);
     times->render_draw_data.end = stopwatch.GetElapsedMicros();
 
+    times->end_render_pass = stopwatch.GetElapsedMicros();
     SDL_EndGPURenderPass(ctx->render_pass);
     ctx->render_pass = nullptr;
   }
@@ -961,7 +964,7 @@ class RendererImpl : public Renderer {
     SDL_EndGPUCopyPass(copy_pass);
     SDL_PopGPUDebugGroup(ctx->command_buffer);
     times->upload_instance_data.end = stopwatch.GetElapsedMicros();
-    times->upload_instance_data_copy_pass.start = times->upload_instance_data.end;
+    times->upload_instance_data_copy_pass.end = times->upload_instance_data.end;
   }
 
   void RenderSolidColorDrawData(const DrawData& draw_data,

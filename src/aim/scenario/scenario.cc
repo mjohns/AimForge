@@ -275,7 +275,8 @@ void Scenario::OnTickStart() {
       Initialize();
       initialized_ = true;
     }
-    current_times_.events_start = timer_.GetElapsedMicros();
+    current_times_.start = timer_.GetElapsedMicros();
+    current_times_.events_start = current_times_.start;
   }
 }
 
@@ -362,9 +363,9 @@ void Scenario::OnRunningTick() {
   }
   // timer_.ResumeRun();
 
+  // TODO: Should this be in OnTickStart so that it happens before event processing?
   timer_.OnStartFrame();
   current_times_.frame_number = loop_count_;
-  current_times_.start = timer_.GetElapsedMicros();
 
   if (timer_.IsNewReplayFrame()) {
     // Store the look at vector before the mouse updates for the old frame.
@@ -398,23 +399,21 @@ void Scenario::OnRunningTick() {
   bool do_render = update_data_.force_render ||
                    timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
   if (!do_render) {
-    current_times_.render_start = 0;
-    current_times_.render_end = 0;
+    current_times_.render.start = 0;
+    current_times_.render.end = 0;
     UpdatePerfStats();
     return;
   }
 
   timer_.OnStartRender();
-  current_times_.render_start = timer_.GetElapsedMicros();
+  current_times_.render.start = timer_.GetElapsedMicros();
   auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
-  current_times_.render_new_imgui_frame.start = timer_.GetElapsedMicros();
   app_.NewImGuiFrame();
-  current_times_.render_new_imgui_frame.end = timer_.GetElapsedMicros();
   app_.BeginFullscreenWindow();
-  current_times_.draw_crosshair.start = timer_.GetElapsedMicros();
+
+  current_times_.draw_crosshair = timer_.GetElapsedMicros();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
-  current_times_.draw_crosshair.end = timer_.GetElapsedMicros();
 
   float elapsed_seconds = timer_.GetElapsedSeconds();
   ImGui::Text("time: %.1f", elapsed_seconds);
@@ -438,11 +437,9 @@ void Scenario::OnRunningTick() {
                                   target_manager_.GetTargets(),
                                   look_at_,
                                   &ctx);
-    current_times_.render_finish.start = timer_.GetElapsedMicros();
     app_.FinishRender(&ctx);
-    current_times_.render_finish.end = timer_.GetElapsedMicros();
   }
-  current_times_.render_end = timer_.GetElapsedMicros();
+  current_times_.render.end = timer_.GetElapsedMicros();
   UpdatePerfStats();
 }
 
@@ -482,8 +479,8 @@ void Scenario::UpdatePerfStats() {
   current_times_.total = current_times_.end - current_times_.start;
 
   perf_stats_.total_time_histogram.Increment(current_times_.total);
-  perf_stats_.render_time_histogram.Increment(current_times_.render_end -
-                                              current_times_.render_start);
+  perf_stats_.render_time_histogram.Increment(current_times_.render.end -
+                                              current_times_.render.start);
   if (current_times_.total > perf_stats_.worst_times.total) {
     perf_stats_.worst_times = current_times_;
     perf_stats_.worst_times_micros = timer_.GetElapsedMicros();

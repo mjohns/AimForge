@@ -111,24 +111,42 @@ void DrawScoresOverTimePlot(const std::string& scenario_name, ScoresOverTime& sc
   ImPlot::EndPlot();
 }
 
-void DumpRenderTimeline(const FrameTimes& t) {
+#define AIM_PUSH_TIME_SPAN(name) push_time_span(t.name, #name)
+#define AIM_PUSH_TIME(name) time_points.push_back({t.name, #name})
+
+void DumpFrameTimeline(const FrameTimes& t) {
   std::vector<std::pair<i64, std::string>> time_points;
-  time_points.push_back({t.render_start, "render_start"});
-  time_points.push_back({t.render_end, "render_end"});
   auto push_time_span = [&](const TimeSpan& span, const std::string& label) {
     time_points.push_back({span.start, label + "_start"});
     time_points.push_back({span.end, label + "_end"});
   };
-  push_time_span(t.build_draw_data, "build_draw_data");
-  push_time_span(t.pack_instance_data, "pack_instance_data");
-  push_time_span(t.upload_instance_data, "upload_instance_data");
-  push_time_span(t.upload_instance_data_copy_pass, "upload_instance_data_copy_pass");
-  push_time_span(t.upload_instance_data_create_buffer, "upload_instance_data_create_buffer");
-  push_time_span(t.upload_instance_data_memcpy, "upload_instance_data_memcpy");
-  push_time_span(t.render_draw_data, "render_draw_data");
-  push_time_span(t.render_finish, "render_finish");
-  push_time_span(t.render_new_imgui_frame, "render_new_imgui_frame");
-  push_time_span(t.draw_crosshair, "draw_crosshair");
+
+  AIM_PUSH_TIME_SPAN(render);
+  AIM_PUSH_TIME_SPAN(build_draw_data);
+  AIM_PUSH_TIME_SPAN(pack_instance_data);
+  AIM_PUSH_TIME_SPAN(upload_instance_data);
+  AIM_PUSH_TIME_SPAN(upload_instance_data_copy_pass);
+  AIM_PUSH_TIME_SPAN(upload_instance_data_memcpy);
+  AIM_PUSH_TIME_SPAN(render_draw_data);
+  AIM_PUSH_TIME_SPAN(finish_render);
+  AIM_PUSH_TIME_SPAN(start_render);
+
+  AIM_PUSH_TIME(begin_render_pass);
+  AIM_PUSH_TIME(end_render_pass);
+  AIM_PUSH_TIME(imgui_begin_render_pass);
+  AIM_PUSH_TIME(imgui_end_render_pass);
+  AIM_PUSH_TIME(imgui_render_draw_data);
+  AIM_PUSH_TIME(imgui_prepare_draw_data);
+  AIM_PUSH_TIME(finish_render_submit_command_buffer);
+  AIM_PUSH_TIME(draw_crosshair);
+  AIM_PUSH_TIME(acquire_swapchain);
+  AIM_PUSH_TIME(submit_swapchain_command_buffer);
+  AIM_PUSH_TIME(start);
+  AIM_PUSH_TIME(end);
+  AIM_PUSH_TIME(events_start);
+  AIM_PUSH_TIME(events_end);
+  AIM_PUSH_TIME(update_start);
+  AIM_PUSH_TIME(update_end);
 
   std::erase_if(time_points, [](const auto& p) { return p.first <= 0; });
   std::sort(time_points.begin(), time_points.end());
@@ -512,12 +530,9 @@ class StatsScreen : public UiScreen {
                    (worst_times_.events_end - worst_times_.events_start) / 1000.0);
     ImGui::TextFmt("Update time: {:.2f}ms",
                    (worst_times_.update_end - worst_times_.update_start) / 1000.0);
-    if (worst_times_.render_start > 0) {
-      ImGui::TextFmt("Render time: {:.2f}ms",
-                     (worst_times_.render_end - worst_times_.render_start) / 1000.0);
+    if (worst_times_.render.start > 0) {
+      ImGui::TextFmt("Render time: {:.2f}ms", worst_times_.render.GetSeconds() * 1000.0);
       ImGui::Indent();
-      ImGui::TextFmt("New ImGui frame: {:.2f}ms",
-                     worst_times_.render_new_imgui_frame.GetSeconds() * 1000.0);
       ImGui::TextFmt("Build draw data: {:.2f}ms",
                      worst_times_.build_draw_data.GetSeconds() * 1000.0);
       ImGui::TextFmt("Pack instance data: {:.2f}ms",
@@ -530,20 +545,16 @@ class StatsScreen : public UiScreen {
                      worst_times_.upload_instance_data_memcpy.GetSeconds() * 1000.0);
       ImGui::TextFmt("Render draw data: {:.2f}ms",
                      worst_times_.render_draw_data.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Draw crosshair: {:.2f}ms", worst_times_.draw_crosshair.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Render finish: {:.2f}ms", worst_times_.render_finish.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Start until build draw data: {:.2f}ms",
-                     (worst_times_.build_draw_data.start - worst_times_.render_start) / 1000.0);
-      ImGui::TextFmt("Render draw data until end: {:.2f}ms",
-                     (worst_times_.render_end - worst_times_.render_draw_data.end) / 1000.0);
-
-      if (ImGui::TreeNode("Render timeline")) {
-        DumpRenderTimeline(worst_times_);
-        ImGui::TreePop();
-      }
+      ImGui::TextFmt("Start render: {:.2f}ms", worst_times_.start_render.GetSeconds() * 1000.0);
+      ImGui::TextFmt("Finish render: {:.2f}ms", worst_times_.finish_render.GetSeconds() * 1000.0);
       ImGui::Unindent();
     }
     ImGui::Unindent();
+
+    if (ImGui::TreeNode("Frame timeline")) {
+      DumpFrameTimeline(worst_times_);
+      ImGui::TreePop();
+    }
 
     ImGui::Spacing();
     ImGui::Separator();
@@ -554,7 +565,7 @@ class StatsScreen : public UiScreen {
     DumpHistogram(performance_stats_->total_time_histogram);
     ImGui::Unindent();
 
-    if (worst_times_.render_start > 0) {
+    if (worst_times_.render.start > 0) {
       ImGui::Spacing();
       ImGui::Separator();
       ImGui::Spacing();

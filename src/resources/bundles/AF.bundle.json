@@ -3117,6 +3117,91 @@
    }
   },
   {
+   "name": "Static Precision Ladder",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenaltyMultiplier": 1.25,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 2.5
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 169,
+      "width": 202
+     }
+    },
+    "overrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "scoreTargets": {
+     "start": 75,
+     "end": 100
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "weight": 2
+        },
+        "depth": {
+         "value": 0
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "ellipse": {
+         "xDiameter": {
+          "xPercentValue": 0.6
+         },
+         "yDiameter": {
+          "yPercentValue": 0.32
+         }
+        }
+       },
+       {
+        "info": {
+         "weight": 1
+        },
+        "depth": {
+         "value": 0
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.65
+         },
+         "yLength": {
+          "yPercentValue": 0.55
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "value": 33
+      }
+     }
+    }
+   }
+  },
+  {
    "name": "Static Speed Ladder",
    "def": {
     "description": "Ladder for improving static clicking speed. The targets get progressively smaller while requiring a high number of kills.\nSpeed is valued over accuracy in terms of accuracy penalties.",
@@ -4531,6 +4616,17 @@
       "numPlays": 1
      }
     ]
+   }
+  },
+  {
+   "name": "Static Precision Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF Static Precision Ladder",
+     "maxLevel": 40,
+     "numPlaysPerLevel": 1
+    }
    }
   },
   {
