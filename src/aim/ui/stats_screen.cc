@@ -394,40 +394,57 @@ class StatsScreen : public UiScreen {
     DrawHistory();
   }
 
-  void DrawStatsTable() {
+  void DrawStatsTable(bool is_comparisons = false) {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg |
                             ImGuiTableFlags_BordersV | ImGuiTableFlags_ScrollY;
     int num_cols = 6;
     if (HasAccuracyPenalty()) {
       num_cols++;
     }
-    if (ImGui::BeginTable(
-            "StatsTable", num_cols, flags, ImVec2(0, ImGui::GetContentRegionAvail().y))) {
-      ImGui::TableSetupColumn("Compare to", ImGuiTableColumnFlags_WidthStretch);
+    ImVec2 table_size = ImVec2(0, 0);
+    if (!is_comparisons) {
+      table_size.y = ImGui::GetFrameHeight() * 7;
+    }
+    if (ImGui::BeginTable("StatsTable", num_cols, flags, table_size)) {
+      ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Diff", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Accuracy", ImGuiTableColumnFlags_WidthStretch);
       if (HasAccuracyPenalty()) {
         ImGui::TableSetupColumn("Penalty", ImGuiTableColumnFlags_WidthStretch);
       }
-      ImGui::TableSetupColumn("CM/360", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("CM", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableHeadersRow();
 
-      DrawStatsTableRow("Current", details_.stats, details_.stats);
-      if (details_.all_stats.size() > 1) {
-        std::string high_score_name = "Current high";
-        if (details_.stats.score >= details_.previous_high_score_stats.score) {
-          high_score_name = "Previous high";
+      if (!is_comparisons) {
+        DrawStatsTableRow("Current", details_.stats, details_.stats);
+        if (details_.all_stats.size() > 1) {
+          DrawStatsTableRow("High score", details_.stats, details_.previous_high_score_stats);
+          DrawStatsTableRow("Average", details_.stats, details_.average_stats);
         }
-        DrawStatsTableRow(high_score_name, details_.stats, details_.previous_high_score_stats);
-        DrawStatsTableRow("Average", details_.stats, details_.average_stats);
-      }
 
-      for (const std::string& scenario : compare_to_scenarios_) {
-        auto compare_stats = app_.stats_manager().GetAggregateStats(scenario);
-        if (compare_stats.total_runs > 0) {
-          DrawStatsTableRow(scenario, details_.stats, compare_stats.high_score_stats);
+        if (details_.all_stats.size() > 1) {
+          // Add a little break before previous runs
+          ImGui::TableNextRow();
+
+          int prev_index = 1;
+          for (int i = (details_.all_stats.size() - 2); i >= 0; --i) {
+            if (prev_index >= 8) {
+              break;
+            }
+            DrawStatsTableRow(
+                std::format("Previous{}", prev_index), details_.stats, details_.all_stats[i]);
+            prev_index++;
+          }
+        }
+
+      } else {
+        for (const std::string& scenario : compare_to_scenarios_) {
+          auto compare_stats = app_.stats_manager().GetAggregateStats(scenario);
+          if (compare_stats.total_runs > 0) {
+            DrawStatsTableRow(scenario, details_.stats, compare_stats.high_score_stats);
+          }
         }
       }
 
@@ -457,12 +474,10 @@ class StatsScreen : public UiScreen {
 
     // Score
     ImGui::TableNextColumn();
-    if (comparison.score_diff != 0) {
-      ImGui::TextFmt(
-          "{} ({})", MaybeIntToString(comparison_stats.score, 2), comparison.score_diff_string);
-    } else {
-      ImGui::TextFmt("{}", MaybeIntToString(comparison_stats.score, 2));
-    }
+    ImGui::TextFmt("{}", MaybeIntToString(comparison_stats.score, 2));
+    // if (comparison.score_diff != 0) {
+    //  ImGui::TextFmt(
+    //      "{} ({})", MaybeIntToString(comparison_stats.score, 2), comparison.score_diff_string);
 
     // Accuracy
     ImGui::TableNextColumn();
@@ -609,10 +624,8 @@ class StatsScreen : public UiScreen {
 
       font.Pop();
 
-      std::string high_score_time =
-
-          GetHowLongAgoStringFromEpochSeconds(details_.previous_high_score_stats.epoch_seconds,
-                                              GetNowEpochSeconds());
+      std::string high_score_time = GetHowLongAgoStringFromEpochSeconds(
+          details_.previous_high_score_stats.epoch_seconds, GetNowEpochSeconds());
       bool is_new_high = percent_diff > 0;
       std::string prefix = is_new_high ? "Previous high score" : "Current high score";
       ImGui::HelpTooltip(std::format(
@@ -720,25 +733,9 @@ class StatsScreen : public UiScreen {
     if (all_stats.size() > 1) {
       ImGui::TextFmt("{} total runs", all_stats.size());
     }
-
-    if (scores_over_time_) {
-      if (ImGui::TreeNode("Score over time")) {
-        DrawScoresOverTimePlot(scenario_name_, *scores_over_time_);
-        ImGui::TreePop();
-      }
-    }
   }
 
   void DrawStatsPanel() {
-    if (!playlist_run_) {
-      DrawCurrentStatsPanel();
-      ImGui::Spacing();
-      ImGui::Spacing();
-      ImGui::Spacing();
-      DrawStatsTable();
-      return;
-    }
-
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (ImGui::BeginTable("StatsPanelTable", 2, flags)) {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
@@ -747,13 +744,31 @@ class StatsScreen : public UiScreen {
 
       ImGui::TableNextColumn();
       DrawCurrentStatsPanel();
-      ImGui::Spacing();
-      ImGui::Spacing();
-      ImGui::Spacing();
+
+      ImGui::SpacedSeparator();
       DrawStatsTable();
 
+      if (scores_over_time_) {
+        ImGui::SpacedSeparator();
+        if (ImGui::TreeNode("Score over time")) {
+          DrawScoresOverTimePlot(scenario_name_, *scores_over_time_);
+          ImGui::TreePop();
+        }
+      }
+
+      if (compare_to_scenarios_.size() > 0) {
+        ImGui::SpacedSeparator();
+        if (ImGui::TreeNode("More comparisons")) {
+          ImGui::IdGuard cid("MoreComparisons");
+          DrawStatsTable(/*is_comparisons=*/true);
+          ImGui::TreePop();
+        }
+      }
+
       ImGui::TableNextColumn();
-      PlaylistRunComponent("PlaylistRun", playlist_run_, *this);
+      if (playlist_run_) {
+        PlaylistRunComponent("PlaylistRun", playlist_run_, *this);
+      }
 
       ImGui::EndTable();
     }
