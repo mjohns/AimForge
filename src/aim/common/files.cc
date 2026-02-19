@@ -42,7 +42,7 @@ bool WriteStringToFile(const std::filesystem::path& path, const std::string& con
   return true;
 }
 
-std::string MessageToJson(const google::protobuf::Message& message, int indent) {
+std::string MessageToJson(const google::protobuf::Message& message) {
   std::string json_string;
   google::protobuf::json::PrintOptions opts;
   opts.add_whitespace = true;
@@ -57,7 +57,7 @@ std::string MessageToJson(const google::protobuf::Message& message, int indent) 
 
 bool WriteJsonMessageToFile(const std::filesystem::path& path,
                             const google::protobuf::Message& message) {
-  std::string json_string = MessageToJson(message, /*indent=*/2);
+  std::string json_string = MessageToJson(message);
   return WriteStringToFile(path, json_string);
 }
 

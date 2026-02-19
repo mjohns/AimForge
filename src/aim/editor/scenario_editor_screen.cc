@@ -5,6 +5,7 @@
 #include <optional>
 
 #include "absl/strings/ascii.h"
+#include "absl/strings/strip.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
@@ -187,6 +188,35 @@ class ScenarioEditorScreen : public UiScreen {
 
     DrawTopBar();
 
+    auto imported_json = import_from_json_dialog_.Draw();
+    if (imported_json) {
+      std::string_view json = absl::StripAsciiWhitespace(*imported_json);
+      absl::ConsumeSuffix(&json, ",");
+
+      ScenarioDef imported_def;
+      BundleScenario imported_bundle_scenario;
+      std::string json_str(json);
+      bool imported = false;
+      if (JsonToMessage(json_str, &imported_def)) {
+        if (!IsDefaultInstance(imported_def)) {
+          imported = true;
+        }
+      }
+      // Try to parse it as a bundle scenario.
+      if (!imported && JsonToMessage(json_str, &imported_bundle_scenario)) {
+        imported = true;
+        imported_def = imported_bundle_scenario.def();
+        // TODO: Also import the name?
+      }
+
+      if (imported && !IsDefaultInstance(imported_def)) {
+        std::string def_str = imported_def.DebugString();
+        def_ = imported_def;
+      } else {
+        SetErrorMessage("Failed to parse provided json");
+      }
+    }
+
     auto maybe_description = description_dialog_.Draw();
     if (maybe_description) {
       def_.set_description(*maybe_description);
@@ -325,8 +355,12 @@ class ScenarioEditorScreen : public UiScreen {
           "unchanged.");
     }
 
+    if (ImGui::Button("Import Json")) {
+      import_from_json_dialog_.NotifyOpen("");
+    }
+
     if (ImGui::Button("View Json")) {
-      SetErrorMessage(MessageToJson(def_, 6));
+      SetErrorMessage(MessageToJson(def_));
     }
 
     if (ImGui::Button("Compare")) {
@@ -523,6 +557,7 @@ class ScenarioEditorScreen : public UiScreen {
   bool exit_after_notification_ = false;
   bool is_new_scenario_ = false;
   ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionDialog"};
+  ImGui::MultilineTextEntryDialog import_from_json_dialog_{"ImportFromJsonDialog"};
 };
 
 }  // namespace
