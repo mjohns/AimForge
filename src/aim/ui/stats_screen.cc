@@ -582,15 +582,25 @@ class StatsScreen : public UiScreen {
     ImGui::Unindent();
 
     if (worst_times_.render.start > 0) {
-      ImGui::Spacing();
-      ImGui::Separator();
-      ImGui::Spacing();
+      ImGui::SpacedSeparator();
 
       ImGui::Text("Render Times (ms)");
       ImGui::Indent();
       DumpHistogram(performance_stats_->render_time_histogram);
       ImGui::Unindent();
     }
+
+    ImGui::SpacedSeparator();
+    ImGui::Text("Update Times (ms)");
+    ImGui::Indent();
+    DumpHistogram(performance_stats_->update_time_histogram);
+    ImGui::Unindent();
+
+    ImGui::SpacedSeparator();
+    ImGui::Text("Event Times (ms)");
+    ImGui::Indent();
+    DumpHistogram(performance_stats_->events_time_histogram);
+    ImGui::Unindent();
   }
 
   void DrawCurrentStatsPanel() {

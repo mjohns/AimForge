@@ -483,6 +483,10 @@ void Scenario::UpdatePerfStats() {
   perf_stats_.total_time_histogram.Increment(current_times_.total);
   perf_stats_.render_time_histogram.Increment(current_times_.render.end -
                                               current_times_.render.start);
+  perf_stats_.update_time_histogram.Increment(current_times_.update_end -
+                                              current_times_.update_start);
+  perf_stats_.events_time_histogram.Increment(current_times_.events_end -
+                                              current_times_.events_start);
   if (current_times_.total > perf_stats_.worst_times.total) {
     perf_stats_.worst_times = current_times_;
     perf_stats_.worst_times_micros = timer_.GetElapsedMicros();

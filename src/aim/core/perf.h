@@ -153,6 +153,8 @@ struct RunPerformanceStats {
   i64 worst_times_micros = 0;
   TimeHistogram total_time_histogram{};
   TimeHistogram render_time_histogram{};
+  TimeHistogram update_time_histogram{};
+  TimeHistogram events_time_histogram{};
 };
 
 static void DumpHistogram(const TimeHistogram& h) {
