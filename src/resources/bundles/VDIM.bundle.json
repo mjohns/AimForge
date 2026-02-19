@@ -8637,11 +8637,8 @@
      "numTargets": 4,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 4.14999723,
-       "targetRadiusJitter": 0,
+       "targetRadius": 4.15,
        "speed": 63,
-       "speedJitter": 0,
        "acceleration": 181
       }
      ]
@@ -8658,6 +8655,10 @@
      }
     },
     "overrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.98,
+     "speedMultiplier": 1.02
+    },
     "strafeDef": {
      "bounds": {
       "width": {
@@ -8675,7 +8676,6 @@
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 0
         },
@@ -8698,9 +8698,12 @@
      },
      "leftRightProfiles": [
       {
-       "info": {},
-       "time": 1.89999986,
-       "timeJitter": 0.4
+       "distance": {
+        "xPercentValue": 0.46
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.09
+       }
       }
      ],
      "upDownProfiles": [
@@ -8708,14 +8711,19 @@
        "info": {
         "description": "Slow Vertical"
        },
-       "time": 2.59999967,
-       "timeJitter": 0.200000018,
-       "speedMultiplier": 0.350000024,
-       "accelerationMultiplier": 1.35000157
+       "distance": {
+        "yPercentValue": 0.5
+       },
+       "distanceJitter": {
+        "yPercentValue": 0.2
+       },
+       "speedMultiplier": 0.35,
+       "accelerationMultiplier": 1.35
       }
      ],
      "leftRightInitialDirection": "DIRECTION_RANDOM",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -8734,94 +8742,13 @@
   {
    "name": "VT Pasu Intermediate S5 Multi",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickMulti": true,
-     "healthClicks": 3
-    },
-    "targetDef": {
-     "numTargets": 4,
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 4.39999819,
-       "targetRadiusJitter": 0,
-       "speed": 79,
-       "speedJitter": 0,
-       "acceleration": 181
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 210,
-      "width": 260
-     }
-    },
     "overrides": {},
-    "strafeDef": {
-     "bounds": {
-      "width": {
-       "xPercentValue": 0.85
-      },
-      "height": {
-       "yPercentValue": 0.85
-      }
-     },
-     "relativeBounds": {
-      "width": {
-       "xPercentValue": 0.35
-      }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.599999905
-         },
-         "yLength": {
-          "yPercentValue": 0.599999905
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 65
-      }
-     },
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 2.29999971,
-       "timeJitter": 0.5
-      }
-     ],
-     "upDownProfiles": [
-      {
-       "info": {
-        "description": "Slow Vertical"
-       },
-       "time": 2.59999967,
-       "timeJitter": 0.200000018,
-       "speedMultiplier": 0.350000024,
-       "accelerationMultiplier": 1.35000157
-      }
-     ],
-     "leftRightInitialDirection": "DIRECTION_RANDOM",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+    "referenceDef": {
+     "scenarioName": "VDIM VT Pasu Intermediate S5",
+     "shotType": {
+      "clickMulti": true,
+      "healthClicks": 3
+     }
     }
    }
   },
@@ -8830,7 +8757,7 @@
    "def": {
     "overrides": {
      "targetRadiusMultiplier": 1.5,
-     "speedMultiplier": 0.910000086
+     "speedMultiplier": 0.91
     },
     "referenceDef": {
      "scenarioName": "VDIM VT Pasu Intermediate S5"
@@ -8840,94 +8767,13 @@
   {
    "name": "VT PasuTs Intermediate S5",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "trackingKill": true,
-     "healthSeconds": 0.6
-    },
-    "targetDef": {
-     "numTargets": 4,
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 4.39999819,
-       "targetRadiusJitter": 0,
-       "speed": 79,
-       "speedJitter": 0,
-       "acceleration": 181
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 210,
-      "width": 260
-     }
-    },
     "overrides": {},
-    "strafeDef": {
-     "bounds": {
-      "width": {
-       "xPercentValue": 0.85
-      },
-      "height": {
-       "yPercentValue": 0.85
-      }
-     },
-     "relativeBounds": {
-      "width": {
-       "xPercentValue": 0.35
-      }
-     },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.599999905
-         },
-         "yLength": {
-          "yPercentValue": 0.599999905
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 65
-      }
-     },
-     "leftRightProfiles": [
-      {
-       "info": {},
-       "time": 2.29999971,
-       "timeJitter": 0.5
-      }
-     ],
-     "upDownProfiles": [
-      {
-       "info": {
-        "description": "Slow Vertical"
-       },
-       "time": 2.59999967,
-       "timeJitter": 0.200000018,
-       "speedMultiplier": 0.350000024,
-       "accelerationMultiplier": 1.35000157
-      }
-     ],
-     "leftRightInitialDirection": "DIRECTION_RANDOM",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+    "referenceDef": {
+     "scenarioName": "VDIM VT Pasu Intermediate S5",
+     "shotType": {
+      "trackingKill": true,
+      "healthSeconds": 0.6
+     }
     }
    }
   },
