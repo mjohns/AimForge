@@ -550,6 +550,7 @@ class StatsScreen : public UiScreen {
     ImGui::TextFmt("Total time: {:.2f}ms", total_ms);
     ImGui::TextFmt("Process events: {:.2f}ms",
                    (worst_times_.events_end - worst_times_.events_start) / 1000.0);
+    ImGui::TextFmt("Event count: {:L}", worst_times_.events_count);
     ImGui::TextFmt("Update time: {:.2f}ms",
                    (worst_times_.update_end - worst_times_.update_start) / 1000.0);
     if (worst_times_.render.start > 0) {
