@@ -405,7 +405,7 @@ class StatsScreen : public UiScreen {
     }
     ImVec2 table_size = ImVec2(0, 0);
     if (!is_comparisons) {
-      table_size.y = ImGui::GetFrameHeight() * 7;
+      table_size.y = ImGui::GetFrameHeight() * 5;
     }
     if (ImGui::BeginTable("StatsTable", num_cols, flags, table_size)) {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
@@ -417,22 +417,30 @@ class StatsScreen : public UiScreen {
       }
       ImGui::TableSetupColumn("CM", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthStretch);
+
+      // Always pin current at top for scrolling.
+      ImGui::TableSetupScrollFreeze(0, 2);
+
       ImGui::TableHeadersRow();
 
+
+      DrawStatsTableRow("Current", details_.stats, details_.stats);
       if (!is_comparisons) {
-        DrawStatsTableRow("Current", details_.stats, details_.stats);
         if (details_.all_stats.size() > 1) {
           DrawStatsTableRow("High score", details_.stats, details_.previous_high_score_stats);
           DrawStatsTableRow("Average", details_.stats, details_.average_stats);
         }
 
         if (details_.all_stats.size() > 1) {
-          // Add a little break before previous runs
-          ImGui::TableNextRow();
+          DrawStatsTableRow(
+              "Previous", details_.stats, details_.all_stats[details_.all_stats.size() - 2]);
+        }
 
+      } else {
+        if (details_.all_stats.size() > 1) {
           int prev_index = 1;
           for (int i = (details_.all_stats.size() - 2); i >= 0; --i) {
-            if (prev_index >= 8) {
+            if (prev_index >= 5) {
               break;
             }
             DrawStatsTableRow(
@@ -440,8 +448,6 @@ class StatsScreen : public UiScreen {
             prev_index++;
           }
         }
-
-      } else {
         for (const std::string& scenario : compare_to_scenarios_) {
           auto compare_stats = app_.stats_manager().GetAggregateStats(scenario);
           if (compare_stats.total_runs > 0) {
