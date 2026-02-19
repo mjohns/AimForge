@@ -16,6 +16,7 @@ struct Target;
 struct ReplayTargetData {
   float radius = -1;
   glm::vec3 position{};
+  u8 health = 255;
 };
 
 enum class ReplayEventType : u16 {
@@ -41,6 +42,7 @@ struct ReplayTargetMetadata {
   ReplayTargetData initial_data;
   float pill_height;
   bool is_ghost = false;
+  bool has_health = false;
 };
 
 union ReplayEventData {

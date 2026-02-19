@@ -49,7 +49,9 @@ struct ScoresOverTime {
   float min_score = 12000000;
 };
 
-void DrawScoresOverTimePlot(const std::string& scenario_name, ScoresOverTime& scores_over_time) {
+void DrawScoresOverTimePlot(const std::string& scenario_name,
+                            i64 run_id,
+                            ScoresOverTime& scores_over_time) {
   std::vector<float>& scores = scores_over_time.scores;
   std::vector<float>& times = scores_over_time.times;
   if (scores.empty()) {
@@ -65,7 +67,7 @@ void DrawScoresOverTimePlot(const std::string& scenario_name, ScoresOverTime& sc
   ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
   ImPlotFlags plot_flags =
       ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
-  std::string id = "Scores Over Time ##" + scenario_name;
+  std::string id = std::format("Scores Over Time ##{}_{}", scenario_name, run_id);
   if (!ImPlot::BeginPlot(id.c_str(), ImVec2(-1, 0), plot_flags)) {
     return;
   }
@@ -751,7 +753,7 @@ class StatsScreen : public UiScreen {
       if (scores_over_time_) {
         ImGui::SpacedSeparator();
         if (ImGui::TreeNode("Score over time")) {
-          DrawScoresOverTimePlot(scenario_name_, *scores_over_time_);
+          DrawScoresOverTimePlot(scenario_name_, run_id_, *scores_over_time_);
           ImGui::TreePop();
         }
       }

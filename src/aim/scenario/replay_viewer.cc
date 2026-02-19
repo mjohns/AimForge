@@ -116,6 +116,11 @@ class ReplayView {
       t.radius = metadata.initial_data.radius;
       t.position = metadata.initial_data.position;
       t.is_ghost = metadata.is_ghost;
+      if (metadata.has_health) {
+        // Health percent in the replay is represented as 0..255. We will use each increment as a
+        // click to reuse the existing health mechanism for multi click.
+        t.health_clicks = 255;
+      }
       if (metadata.pill_height > 0) {
         t.is_pill = true;
         t.height = metadata.pill_height;
@@ -189,6 +194,7 @@ class ReplayView {
             if (data.radius >= 0) {
               target->position = data.position;
               target->radius = data.radius;
+              target->click_count = 255 - data.health;
             }
           }
         }

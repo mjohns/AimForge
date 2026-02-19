@@ -67,6 +67,9 @@ void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
   if (target.is_pill) {
     metadata.pill_height = target.height;
   }
+  if (target.health_seconds > 0) {
+    metadata.has_health = true;
+  }
 }
 
 void ReplayRecorder::PlaySound(float now_seconds, ReplaySoundType sound) {
@@ -127,6 +130,7 @@ void ReplayRecorder::SnapshotTargets(i64 frame_number, const std::vector<Target>
         ReplayTargetData& data = replay_->target_data[start_index + data_channel];
         data.position = target.position;
         data.radius = target.radius;
+        data.health = std::round(target.GetHealthPercent() * 255);
       }
     }
   }
