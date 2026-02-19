@@ -136,13 +136,29 @@ bool Scenario::ShouldAutoHold() {
          type == ShotType::kTrackingProximity;
 }
 
-void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
-  current_times_.events_count++;
-  if (event.type == SDL_EVENT_MOUSE_MOTION && is_running()) {
-    current_times_.mouse_events_count++;
-    camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
+void Scenario::OnEvents(std::span<SDL_Event> events) {
+  current_times_.events_count = events.size();
+  float xrel = 0;
+  float yrel = 0;
+  bool has_mouse_move = false;
+  for (const SDL_Event& event : events) {
+    if (event.type == SDL_EVENT_MOUSE_MOTION && is_running()) {
+      current_times_.mouse_events_count++;
+      xrel += event.motion.xrel;
+      yrel += event.motion.yrel;
+      has_mouse_move = true;
+    }
+    OnEvent(event);
   }
+  if (has_mouse_move) {
+    camera_.Update(xrel, yrel, radians_per_dot_);
+  }
+}
 
+void Scenario::OnEvent(const SDL_Event& event) {
+  if (event.type == SDL_EVENT_QUIT) {
+    app_.RequestExit();
+  }
   if (is_adjusting_crosshair_) {
     if (event.type == SDL_EVENT_MOUSE_WHEEL) {
       if (event.wheel.y != 0) {

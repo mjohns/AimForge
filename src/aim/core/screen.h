@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <span>
 
 #include "SDL3/SDL.h"
 
@@ -19,11 +20,7 @@ class Screen {
   void UpdateScreenStack();
   bool ShouldContinue() const;
 
-  virtual bool ShouldProcessImGuiEvents() {
-    return true;
-  }
-
-  virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
+  virtual void OnEvents(std::span<SDL_Event> events) {}
 
   // Called before event processing.
   virtual void OnTickStart() {}

@@ -35,6 +35,8 @@
 namespace aim {
 namespace {
 
+constexpr const int kMaxEventsToProcessPerFrame = 500;
+
 const char* kImguiIniFile = "imgui.ini";
 
 void CopyInitialDirIfNotExists(const std::string& dir_name,
@@ -517,8 +519,7 @@ void Application::FinishRender(RenderContext* ctx) {
   SDL_PushGPUDebugGroup(ctx->command_buffer, "Render ImGui");
 
   ctx->times->imgui_begin_render_pass = ctx->stopwatch->GetElapsedMicros();
-  auto* imgui_render_pass =
-      SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, nullptr);
+  auto* imgui_render_pass = SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, nullptr);
 
   ctx->times->imgui_render_draw_data = ctx->stopwatch->GetElapsedMicros();
   ImDrawData* draw_data = ImGui::GetDrawData();
@@ -626,6 +627,9 @@ void Application::PushScreenInternal(std::shared_ptr<Screen> screen) {
 }
 
 bool Application::RunMainLoop() {
+  std::vector<SDL_Event> events;
+  events.resize(kMaxEventsToProcessPerFrame);
+
   while (true) {
     if (should_exit_) {
       return true;
@@ -644,18 +648,14 @@ bool Application::RunMainLoop() {
     current_screen->OnTickStart();
 
     if (current_screen->ShouldContinue()) {
-      SDL_Event event;
-      ImGuiIO& io = ImGui::GetIO();
-      bool process_imgui = current_screen->ShouldProcessImGuiEvents();
-      while (SDL_PollEvent(&event)) {
-        if (process_imgui) {
-          ImGui_ImplSDL3_ProcessEvent(&event);
-        }
-        if (event.type == SDL_EVENT_QUIT) {
-          return true;
-        }
-        current_screen->OnEvent(event, io.WantTextInput);
-      }
+      SDL_PumpEvents();
+      int num_events = SDL_PeepEvents(
+          events.data(), events.size(), SDL_GETEVENT, SDL_EVENT_FIRST, SDL_EVENT_LAST);
+      current_screen->OnEvents(std::span(events).subspan(0, num_events));
+    }
+
+    if (should_exit_) {
+      return true;
     }
 
     if (current_screen->ShouldContinue()) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <span>
 #include <string>
 
 #include "aim/core/screen.h"
@@ -19,6 +20,10 @@ class UiScreen : public Screen {
   virtual void Render();
   virtual void OnAttachUi() {}
   virtual void OnDetachUi() {}
+
+  virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
+
+  void OnEvents(std::span<SDL_Event> events) override;
 
   void OnTickStart() override;
   void OnTick() override;

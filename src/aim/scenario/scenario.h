@@ -63,7 +63,8 @@ class Scenario : public Screen {
     return run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START;
   }
 
-  void OnEvent(const SDL_Event& event, bool user_is_typing) override;
+  void OnEvents(std::span<SDL_Event> events) override;
+
   void OnTick() override;
   void OnTickStart() override;
 
@@ -76,10 +77,6 @@ class Scenario : public Screen {
   virtual void UpdateState(UpdateStateData* data) = 0;
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
-
-  bool ShouldProcessImGuiEvents() override {
-    return false;
-  }
 
   virtual void DrawAdditionalUiElements() {}
 
@@ -124,6 +121,7 @@ class Scenario : public Screen {
   float effective_cm_per_360_ = 0;
 
  private:
+  void OnEvent(const SDL_Event& event);
   void OnRunningTick();
   void OnWaitingForClickTick();
 
