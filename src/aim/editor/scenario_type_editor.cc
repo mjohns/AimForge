@@ -335,15 +335,21 @@ void DrawStrafeProfile(float char_x,
   ImGui::SameLine();
   ImGui::HelpMarker("Amount of time to pause at the end of the strafe in seconds");
 
-  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Pause chance")
-                        .set_is_optional()
-                        .set_step(1, 10)
-                        .set_min(1)
-                        .set_default(50)
-                        .set_width(char_x * 10),
-                    PROTO_PERCENT_FIELD(StrafeProfile, p, pause_chance_percent));
-  ImGui::SameLine();
-  ImGui::HelpMarker("Percent chance that the target will pause at the end of the strafe");
+  if (p->has_pause_time()) {
+    ImGui::Indent();
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Pause chance")
+                          .set_is_optional()
+                          .set_step(1, 10)
+                          .set_min(1)
+                          .set_default(50)
+                          .set_width(char_x * 10),
+                      PROTO_PERCENT_FIELD(StrafeProfile, p, pause_chance_percent));
+    ImGui::SameLine();
+    ImGui::HelpMarker("Percent chance that the target will pause at the end of the strafe");
+    ImGui::Unindent();
+  } else {
+    p->clear_pause_chance_percent();
+  }
 
   ImGui::InputJitteredFloat(GetDefaultMultiplierInputParams("Target radius multiplier")
                                 .set_is_optional()

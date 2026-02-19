@@ -74,9 +74,7 @@
      "numTargets": 2,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.18,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.18
       }
      ]
     },
@@ -91,18 +89,13 @@
       "width": 220
      }
     },
+    "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
        {
         "info": {
          "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "ellipse": {
          "xDiameter": {
@@ -116,12 +109,6 @@
        {
         "info": {
          "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
         },
         "rectangle": {
          "xLength": {
@@ -320,11 +307,8 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.49999952,
-       "targetRadiusJitter": 0,
+       "targetRadius": 2.5,
        "speed": 146,
-       "speedJitter": 0,
        "acceleration": 151
       }
      ]
@@ -341,59 +325,50 @@
       "widthDegrees": 468.000061
      }
     },
+    "levelOverrides": {},
     "bounceDef": {
-     "bounds": {},
      "bounceProfiles": [
       {
        "info": {
         "description": "Bounce"
        },
        "height": {
-        "yPercentValue": 0.829999864
+        "yPercentValue": 0.829999745
        },
        "heightJitter": {
         "yPercentValue": 0
-       },
-       "delaySecondsJitter": 0
+       }
       }
      ],
      "leftRightProfiles": [
       {
-       "info": {},
-       "time": 9.29999924,
-       "timeJitter": 0,
-       "speedMultiplier": 0.549999893,
-       "accelerationMultiplier": 0.699999869
+       "time": 9.3,
+       "speedMultiplier": 0.55,
+       "accelerationMultiplier": 0.7
       }
      ],
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "xOffset": {
          "xPercentValue": 0
         },
         "yOffset": {
          "yPercentValue": -0.45
         },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
+        "point": {
+         "x": {
+          "xPercentValue": 0
          },
-         "yLength": {
-          "value": 1
+         "y": {
+          "yPercentValue": -0.45
          }
         }
        }
       ]
      },
-     "leftRightInitialDirection": "DIRECTION_POSITIVE"
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
