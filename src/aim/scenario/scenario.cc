@@ -139,6 +139,7 @@ bool Scenario::ShouldAutoHold() {
 void Scenario::OnEvent(const SDL_Event& event, bool user_is_typing) {
   current_times_.events_count++;
   if (event.type == SDL_EVENT_MOUSE_MOTION && is_running()) {
+    current_times_.mouse_events_count++;
     camera_.Update(event.motion.xrel, event.motion.yrel, radians_per_dot_);
   }
 

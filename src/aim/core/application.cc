@@ -643,11 +643,14 @@ bool Application::RunMainLoop() {
     current_screen->EnsureAttached();
     current_screen->OnTickStart();
 
-    if (current_screen->should_continue()) {
+    if (current_screen->ShouldContinue()) {
       SDL_Event event;
       ImGuiIO& io = ImGui::GetIO();
+      bool process_imgui = current_screen->ShouldProcessImGuiEvents();
       while (SDL_PollEvent(&event)) {
-        ImGui_ImplSDL3_ProcessEvent(&event);
+        if (process_imgui) {
+          ImGui_ImplSDL3_ProcessEvent(&event);
+        }
         if (event.type == SDL_EVENT_QUIT) {
           return true;
         }
@@ -655,7 +658,7 @@ bool Application::RunMainLoop() {
       }
     }
 
-    if (current_screen->should_continue()) {
+    if (current_screen->ShouldContinue()) {
       current_screen->OnTick();
     }
 

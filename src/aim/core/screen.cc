@@ -61,7 +61,7 @@ void Screen::EnsureDetached() {
   }
 }
 
-bool Screen::should_continue() const {
+bool Screen::ShouldContinue() const {
   return !popped_self_ && !next_screen_;
 }
 

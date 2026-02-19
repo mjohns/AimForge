@@ -77,6 +77,10 @@ class Scenario : public Screen {
   virtual void OnScenarioDone() {}
   virtual void OnPause() {}
 
+  bool ShouldProcessImGuiEvents() override {
+    return false;
+  }
+
   virtual void DrawAdditionalUiElements() {}
 
   virtual std::optional<StatsDbRow> GetStatsRow() {

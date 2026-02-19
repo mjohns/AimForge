@@ -17,7 +17,11 @@ class Screen {
   void EnsureAttached();
   void EnsureDetached();
   void UpdateScreenStack();
-  bool should_continue() const;
+  bool ShouldContinue() const;
+
+  virtual bool ShouldProcessImGuiEvents() {
+    return true;
+  }
 
   virtual void OnEvent(const SDL_Event& event, bool user_is_typing) {}
 

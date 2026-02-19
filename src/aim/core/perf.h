@@ -85,6 +85,7 @@ struct FrameTimes {
   i64 update_end = 0;
 
   i64 events_count = 0;
+  i64 mouse_events_count = 0;
 
   TimeSpan render;
   TimeSpan build_draw_data;
