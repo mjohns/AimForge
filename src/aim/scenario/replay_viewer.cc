@@ -79,7 +79,7 @@ class ReplayView {
     return current_time_micros_;
   }
 
-  float GetLastClickTime() {
+  i64 GetLastClickTimeMicros() {
     return last_click_time_micros_;
   }
 
@@ -162,8 +162,8 @@ class ReplayView {
           }
           break;
         case ReplayEventType::MOUSE_CLICK:
-          previous_click_durations_.push_back(MicrosToSeconds(event.time_micros) -
-                                              MicrosToSeconds(last_click_time_micros_));
+          previous_click_durations_.push_back(
+              MicrosToSeconds(event.time_micros - last_click_time_micros_));
           last_click_time_micros_ = event.time_micros;
           break;
       }
@@ -280,7 +280,7 @@ class ReplayViewerScreen : public Screen {
           Pause();
         }
       }
-      i64 time_step_micros = 10000; // 10ms
+      i64 time_step_micros = 10000;  // 10mj
       if (event.key.key == SDLK_LEFT || event.key.key == SDLK_COMMA) {
         SeekToTimeMicros(GetNowMicros() - time_step_micros);
       }
@@ -347,7 +347,7 @@ class ReplayViewerScreen : public Screen {
           ImGui::Text("%0.2fs", durations[i]);
         }
       }
-      ImGui::Text("%0.2fs", MicrosToSeconds(now_micros) - replay_view_->GetLastClickTime());
+      ImGui::Text("%0.2fs", MicrosToSeconds(now_micros - replay_view_->GetLastClickTimeMicros()));
       ImGui::Unindent();
     }
 

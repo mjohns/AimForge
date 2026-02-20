@@ -3070,8 +3070,8 @@
       "z": 0
      },
      "simpleRoom": {
-      "height": 169,
-      "width": 202
+      "height": 185,
+      "width": 209
      }
     },
     "overrides": {},
@@ -3125,7 +3125,7 @@
        }
       ],
       "minDistance": {
-       "value": 33
+       "xPercentValue": 0.28
       }
      }
     }
