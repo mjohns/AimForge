@@ -13,6 +13,7 @@
 #include "aim/graphics/renderer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
+#include "implot.h"
 
 namespace aim {
 namespace {
@@ -57,6 +58,111 @@ void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, Repla
   }
 }
 
+std::vector<float> GetMouseSpeeds(const Replay& replay) {
+  std::vector<float> result;
+  result.reserve(replay.pitch_yaws.size());
+
+  double seconds_per_frame = 1.0 / static_cast<double>(replay.replay_fps);
+
+  // When calculating delta, look at the pitch/yaw n frames ahead.
+  i64 look_ahead_size = 4;
+  float last_speed = 0;
+  float max_pitch = GetMaxPitch();
+  for (int frame_number = 0; frame_number < replay.pitch_yaws.size() - look_ahead_size;
+       ++frame_number) {
+    const PitchYaw& current_pitch_yaw = replay.pitch_yaws[frame_number];
+    const PitchYaw& next_pitch_yaw = replay.pitch_yaws[frame_number + look_ahead_size];
+
+    if (current_pitch_yaw.pitch > max_pitch || next_pitch_yaw.pitch > max_pitch) {
+      // Pitch/Yaws were missing due to not being recorded at full replay fps.
+      // TODO: Come up with a better strategy for these missing pitch yaws.
+      result.push_back(last_speed);
+    } else {
+      float delta_pitch = next_pitch_yaw.pitch - current_pitch_yaw.pitch;
+      float delta_yaw = next_pitch_yaw.yaw - current_pitch_yaw.yaw;
+
+      float delta = abs(delta_pitch) + abs(delta_yaw);
+
+      float delta_per_second = delta / (seconds_per_frame * look_ahead_size);
+
+      float speed = delta_per_second * 100;
+      result.push_back(speed);
+      last_speed = speed;
+    }
+  }
+  return result;
+}
+
+struct MouseSpeedPlotData {
+  std::span<float> mouse_speeds;
+  float t_step;
+};
+
+void DrawMouseSpeedsPlot(float now, float t_step, std::span<float> mouse_speeds, float max_speed) {
+  if (mouse_speeds.empty()) {
+    return;
+  }
+
+  MouseSpeedPlotData mouse_data;
+  mouse_data.mouse_speeds = mouse_speeds;
+  mouse_data.t_step = t_step;
+
+  auto point_getter = [](int idx, void* data_ptr) {
+    MouseSpeedPlotData data = *((MouseSpeedPlotData*)data_ptr);
+    return ImPlotPoint(idx * data.t_step, data.mouse_speeds[idx]);
+  };
+
+  ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImPlotFlags plot_flags =
+      ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
+  if (!ImPlot::BeginPlot("MouseSpeeds", ImVec2(char_x * 30, char_x * 15), plot_flags)) {
+    return;
+  }
+
+  ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_NoDecorations);
+  ImPlot::SetupAxis(ImAxis_Y1, "Speed", ImPlotAxisFlags_NoDecorations);
+
+  ImPlot::SetupAxisLimits(ImAxis_X1, 0, t_step * mouse_speeds.size(), ImPlotCond_Always);
+  ImPlot::SetupAxisLimits(ImAxis_Y1, 0, max_speed, ImPlotCond_Always);
+
+  // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
+  ImPlot::PlotLineG("Speeds", point_getter, &mouse_data, mouse_speeds.size());
+
+  /*
+  if (ImPlot::IsPlotHovered()) {
+    ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
+
+    float time = mouse_pos.x;
+
+    int closest_index = std::round(time * kRecordScoresPerSecond);
+    if (IsValidIndex(scores, closest_index)) {
+      float x_val = mouse_pos.x;
+      float y_val = scores[closest_index];
+      ImGui::BeginTooltip();
+      ImGui::Text("Score: %.2f", y_val);
+      ImGui::Text("Time: %.2f", x_val);
+      ImGui::EndTooltip();
+
+      ImPlot::SetNextMarkerStyle(
+          ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
+      ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1);
+    }
+  }
+  */
+
+  int closest_index = std::round(now / t_step);
+  if (IsValidIndex(mouse_speeds, closest_index)) {
+    ImPlot::SetNextMarkerStyle(
+        ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
+    float x_val = closest_index * t_step;
+    float y_val = mouse_speeds[closest_index];
+    ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1);
+  }
+
+  ImPlot::EndPlot();
+}
+
 class ReplayView {
  public:
   ReplayView(std::shared_ptr<Replay> replay, Application& app)
@@ -77,6 +183,10 @@ class ReplayView {
 
   i64 CurrentTimeMicros() {
     return current_time_micros_;
+  }
+
+  i64 GetCurrentFrameNumber() {
+    return current_time_micros_ / micros_per_frame_;
   }
 
   i64 GetLastClickTimeMicros() {
@@ -224,6 +334,7 @@ class ReplayView {
   bool is_done_ = false;
   i64 current_time_micros_ = 0;
   i64 last_click_time_micros_ = 0;
+  i64 next_click_time_micros_ = 0;
   std::vector<float> previous_click_durations_;
   i64 micros_per_frame_ = 0;
 };
@@ -251,6 +362,11 @@ class ReplayViewerScreen : public Screen {
         has_click_events_ = true;
         break;
       }
+    }
+
+    mouse_speeds_ = GetMouseSpeeds(*replay);
+    if (mouse_speeds_.size() > 0) {
+      max_mouse_speed_ = *std::max_element(mouse_speeds_.begin(), mouse_speeds_.end());
     }
   }
 
@@ -300,7 +416,7 @@ class ReplayViewerScreen : public Screen {
 
     timer_.OnStartFrame();
 
-    float duration_seconds = replay.pitch_yaws.size() / static_cast<float>(replay.replay_fps);
+    float duration_seconds = replay.GetDurationSeconds();
 
     i64 now_micros = GetNowMicros();
     replay_view_->SeekForwardToTimeMicros(now_micros, settings_.sound());
@@ -335,21 +451,44 @@ class ReplayViewerScreen : public Screen {
 
     float score = replay_view_->GetCurrentScore();
     if (score > 0) {
-      ImGui::TextFmt("Score: {}", MaybeIntToString(score, 2));
+      ImGui::TextFmt("score: {}", MaybeIntToString(score, 2));
     }
 
     if (has_click_events_) {
       const auto& durations = replay_view_->GetPreviousClickDurations();
-      ImGui::Text("Click times");
+      ImGui::Text("click times");
       ImGui::Indent();
       if (durations.size() > 0) {
         for (int i = std::max<int>(0, durations.size() - 20); i < durations.size(); ++i) {
           ImGui::Text("%0.2fs", durations[i]);
         }
       }
-      ImGui::Text("%0.2fs", MicrosToSeconds(now_micros - replay_view_->GetLastClickTimeMicros()));
+      float click_now_seconds =
+          MicrosToSeconds(now_micros - replay_view_->GetLastClickTimeMicros());
+      ImGui::Text("%0.2fs", click_now_seconds);
       ImGui::Unindent();
+
+      {
+        // Draw the mouse speeds plot
+        i64 micros_per_frame = GetMicrosPerFrame(replay_->replay_fps);
+        float t_step = MicrosToSeconds(micros_per_frame);
+        // Around 1 second of graph.
+        int num_steps = 1.0 / t_step;
+
+        i64 frame_start = replay_view_->GetLastClickTimeMicros() / micros_per_frame;
+        i64 num_frames_remaining = mouse_speeds_.size() - frame_start;
+        std::span<float> speeds =
+            std::span(mouse_speeds_)
+                .subspan(frame_start, std::min<int>(num_steps, num_frames_remaining));
+        DrawMouseSpeedsPlot(click_now_seconds, t_step, speeds, max_mouse_speed_);
+      }
     }
+
+    i64 frame_number = replay_view_->GetCurrentFrameNumber();
+    if (IsValidIndex(mouse_speeds_, frame_number)) {
+      ImGui::TextFmt("mouse speed: {}", MaybeIntToString(mouse_speeds_[frame_number], 0));
+    }
+
 
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 1.5);
 
@@ -480,6 +619,8 @@ class ReplayViewerScreen : public Screen {
 
   PlaybackSpeed playback_speed_ = PlaybackSpeed::SPEED_100;
   bool has_click_events_ = false;
+  std::vector<float> mouse_speeds_;
+  float max_mouse_speed_ = 0;
 };
 
 }  // namespace

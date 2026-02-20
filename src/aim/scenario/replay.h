@@ -69,6 +69,7 @@ struct Replay {
   std::vector<float> scores;
 
   float GetApproximateSizeMb() const;
+  float GetDurationSeconds() const;
 };
 
 class ReplayRecorder {

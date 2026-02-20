@@ -146,4 +146,8 @@ float Replay::GetApproximateSizeMb() const {
   return size_bytes / 1000000.0f;
 }
 
+float Replay::GetDurationSeconds() const {
+  return pitch_yaws.size() / static_cast<float>(replay_fps);
+}
+
 }  // namespace aim

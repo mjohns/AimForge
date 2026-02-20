@@ -76,8 +76,8 @@ class Camera {
   glm::vec3 up_;
   glm::vec3 front_;
   glm::vec3 right_;
-  float pitch_;
-  float yaw_;
+  float pitch_ = 0;
+  float yaw_ = 0;
   bool is_default_orientation_;
 };
 
