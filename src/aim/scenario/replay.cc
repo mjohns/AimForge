@@ -40,11 +40,8 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
   replay_->scores.reserve(130 * kRecordScoresPerSecond);
 }
 
-void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
+void ReplayRecorder::AddTarget(i64 now_micros, const Target& target) {
   // Find available data channel.
-  if (now_seconds > 0) {
-    now_seconds = now_seconds;
-  }
   std::vector<bool> taken_channels(num_targets_, false);
   for (auto& entry : target_data_channel_map_) {
     taken_channels[entry.second] = true;
@@ -61,7 +58,7 @@ void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
 
   replay_->target_metadata.push_back({});
   ReplayTargetMetadata& metadata = replay_->target_metadata.back();
-  metadata.add_time_seconds = now_seconds;
+  metadata.add_time_micros = now_micros;
   metadata.target_id = target.id;
   metadata.data_channel = available_channel;
   metadata.initial_data.position = target.position;
@@ -75,19 +72,19 @@ void ReplayRecorder::AddTarget(float now_seconds, const Target& target) {
   }
 }
 
-void ReplayRecorder::PlaySound(float now_seconds, ReplaySoundType sound) {
-  ReplayEvent& event = AddEvent(now_seconds, ReplayEventType::PLAY_SOUND);
+void ReplayRecorder::PlaySound(i64 now_micros, ReplaySoundType sound) {
+  ReplayEvent& event = AddEvent(now_micros, ReplayEventType::PLAY_SOUND);
   event.data.play_sound.sound = sound;
 }
 
-void ReplayRecorder::RemoveTarget(float now_seconds, u16 target_id) {
-  ReplayEvent& event = AddEvent(now_seconds, ReplayEventType::REMOVE_TARGET);
+void ReplayRecorder::RemoveTarget(i64 now_micros, u16 target_id) {
+  ReplayEvent& event = AddEvent(now_micros, ReplayEventType::REMOVE_TARGET);
   event.data.target_id = target_id;
   target_data_channel_map_.erase(target_id);
 }
 
-void ReplayRecorder::AddMouseClick(float now_seconds, bool is_hit) {
-  ReplayEvent& event = AddEvent(now_seconds, ReplayEventType::MOUSE_CLICK);
+void ReplayRecorder::AddMouseClick(i64 now_micros, bool is_hit) {
+  ReplayEvent& event = AddEvent(now_micros, ReplayEventType::MOUSE_CLICK);
   event.data.is_hit = is_hit;
 }
 
@@ -95,10 +92,10 @@ void ReplayRecorder::AddScore(float score) {
   replay_->scores.push_back(score);
 }
 
-ReplayEvent& ReplayRecorder::AddEvent(float now_seconds, ReplayEventType type) {
+ReplayEvent& ReplayRecorder::AddEvent(i64 now_micros, ReplayEventType type) {
   replay_->events.push_back({});
   ReplayEvent& event = replay_->events.back();
-  event.time_seconds = now_seconds;
+  event.time_micros = now_micros;
   event.type = type;
   return event;
 }

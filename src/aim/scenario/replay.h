@@ -36,7 +36,7 @@ struct PlaySoundEvent {
 };
 
 struct ReplayTargetMetadata {
-  float add_time_seconds;
+  u32 add_time_micros;
   u16 target_id;
   u16 data_channel;
   ReplayTargetData initial_data;
@@ -54,7 +54,7 @@ union ReplayEventData {
 struct ReplayEvent {
   ReplayEventType type;
   ReplayEventData data{};
-  float time_seconds = 0;
+  u32 time_micros = 0;
 };
 
 struct Replay {
@@ -80,11 +80,11 @@ class ReplayRecorder {
                  i32 num_targets,
                  bool requires_per_frame_target_data);
 
-  void AddTarget(float now_seconds, const Target& target);
-  void RemoveTarget(float now_seconds, u16 target_id);
-  void PlaySound(float now_seconds, ReplaySoundType sound);
+  void AddTarget(i64 now_micros, const Target& target);
+  void RemoveTarget(i64 now_micros, u16 target_id);
+  void PlaySound(i64 now_micros, ReplaySoundType sound);
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
-  void AddMouseClick(float now_seconds, bool is_hit);
+  void AddMouseClick(i64 now_micros, bool is_hit);
   void AddScore(float score);
 
   void SnapshotTargets(i64 frame_number, const std::vector<Target>& targets);
@@ -94,7 +94,7 @@ class ReplayRecorder {
   }
 
  private:
-  ReplayEvent& AddEvent(float now_seconds, ReplayEventType type);
+  ReplayEvent& AddEvent(i64 now_micros, ReplayEventType type);
   u16 replay_fps_;
   i32 num_targets_;
 

@@ -562,41 +562,41 @@ void Scenario::DoneAdjustingCrosshairSize() {
 
 void Scenario::AddNewTargetEvent(const Target& target) {
   if (replay_) {
-    replay_->AddTarget(timer_.GetElapsedSeconds(), target);
+    replay_->AddTarget(timer_.GetElapsedMicros(), target);
   }
 }
 
 void Scenario::AddRemoveTargetEvent(u16 target_id) {
   if (replay_) {
-    replay_->RemoveTarget(timer_.GetElapsedSeconds(), target_id);
+    replay_->RemoveTarget(timer_.GetElapsedMicros(), target_id);
   }
 }
 
 void Scenario::PlayShootSound() {
   app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
   if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::SHOOT);
+    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayHitSound() {
   app_.sound_manager()->PlayHitSound(settings_.sound().shoot());
   if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::HIT);
+    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::HIT);
   }
 }
 
 void Scenario::PlayMissSound() {
   app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
   if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::SHOOT);
+    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayKillSound() {
   app_.sound_manager()->PlayKillSound(settings_.sound().kill());
   if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedSeconds(), ReplaySoundType::KILL);
+    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::KILL);
   }
 }
 

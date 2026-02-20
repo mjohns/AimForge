@@ -16,6 +16,10 @@
 namespace aim {
 namespace {
 
+float MicrosToSeconds(u32 micros) {
+  return micros / 1000000.0f;
+}
+
 constexpr const char* kPlaybackSpeedKey = "ReplayPlaybackSpeed";
 
 enum class PlaybackSpeed : int {
@@ -107,7 +111,7 @@ class ReplayView {
 
     for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
       const ReplayTargetMetadata& metadata = replay.target_metadata[i];
-      if (metadata.add_time_seconds > now_seconds) {
+      if (MicrosToSeconds(metadata.add_time_micros) > now_seconds) {
         break;
       }
 
@@ -136,7 +140,7 @@ class ReplayView {
 
     for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
       const ReplayEvent& event = events[i];
-      if (event.time_seconds > now_seconds) {
+      if (MicrosToSeconds(event.time_micros) > now_seconds) {
         break;
       }
 
@@ -152,8 +156,9 @@ class ReplayView {
           }
           break;
         case ReplayEventType::MOUSE_CLICK:
-          previous_click_durations_.push_back(event.time_seconds - last_click_time_);
-          last_click_time_ = event.time_seconds;
+          previous_click_durations_.push_back(MicrosToSeconds(event.time_micros) -
+                                              last_click_time_);
+          last_click_time_ = MicrosToSeconds(event.time_micros);
           break;
       }
       processed_events_up_to_index_ = i + 1;

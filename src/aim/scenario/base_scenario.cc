@@ -147,7 +147,7 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
     }
 
     proximity_tracking_sound_->DoTick(
-        timer_.GetElapsedSeconds(), normalized_distance_from_center, replay_.get());
+        timer_.GetElapsedMicros(), normalized_distance_from_center, replay_.get());
   } else {
     TrackingHoldDone();
   }
@@ -200,7 +200,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
       }
     }
     tracking_sound_->DoTick(
-        timer_.GetElapsedSeconds(), maybe_hit_target_id.has_value(), replay_.get());
+        timer_.GetElapsedMicros(), maybe_hit_target_id.has_value(), replay_.get());
   } else {
     TrackingHoldDone();
   }
@@ -296,7 +296,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           AddNewTargetDuringRun(hit_target_id);
 
           if (replay_) {
-            replay_->AddMouseClick(timer_.GetElapsedSeconds(), true);
+            replay_->AddMouseClick(timer_.GetElapsedMicros(), true);
           }
 
           current_poke_target_id_ = {};
@@ -332,7 +332,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
       auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
       PlayShootSound();
       if (replay_) {
-        replay_->AddMouseClick(timer_.GetElapsedSeconds(), maybe_hit_target_id.has_value());
+        replay_->AddMouseClick(timer_.GetElapsedMicros(), maybe_hit_target_id.has_value());
       }
       if (maybe_hit_target_id.has_value()) {
         if (GetShotType() == ShotType::kClickMulti) {
