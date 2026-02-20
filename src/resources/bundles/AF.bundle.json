@@ -2871,13 +2871,9 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 3,
-       "targetRadiusJitter": 0,
        "speed": 100,
-       "speedJitter": 0,
-       "acceleration": 170,
-       "accelerationJitter": 0
+       "acceleration": 170
       }
      ]
     },
@@ -2907,72 +2903,8 @@
        "yPercentValue": 0.9
       }
      },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "description": "Right"
-        },
-        "xOffset": {
-         "value": 43
-        },
-        "yOffset": {
-         "value": 0
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.08
-         },
-         "yLength": {
-          "yPercentValue": 0.300000072
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Left"
-        },
-        "xOffset": {
-         "value": -43
-        },
-        "yOffset": {
-         "value": 0
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.08
-         },
-         "yLength": {
-          "yPercentValue": 0.3
-         }
-        }
-       }
-      ],
-      "regionsInfo": {
-       "explicitOrder": [
-        0,
-        1
-       ]
-      },
-      "minDistance": {
-       "value": 20
-      }
-     },
      "leftRightProfiles": [
       {
-       "info": {},
        "centerBias": 0.2,
        "distance": {
         "xPercentValue": 0.5
@@ -2984,7 +2916,6 @@
      ],
      "upDownProfiles": [
       {
-       "info": {},
        "centerBias": 0.2,
        "distance": {
         "yPercentValue": 0.5
@@ -2992,14 +2923,13 @@
        "distanceJitter": {
         "yPercentValue": 0.15
        },
-       "speedMultiplier": 0.199999839,
-       "speedMultiplierJitter": 0,
-       "accelerationMultiplier": 0.1,
-       "accelerationMultiplierJitter": 0
+       "speedMultiplier": 0.2,
+       "accelerationMultiplier": 0.1
       }
      ],
      "leftRightInitialDirection": "DIRECTION_RANDOM",
-     "upDownInitialDirection": "DIRECTION_RANDOM"
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -3119,7 +3049,7 @@
   {
    "name": "Static Precision Ladder",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 30,
     "shotType": {
      "clickSingle": true,
      "accuracyPenaltyMultiplier": 1.25,

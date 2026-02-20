@@ -649,9 +649,15 @@ bool Application::RunMainLoop() {
 
     if (current_screen->ShouldContinue()) {
       SDL_PumpEvents();
-      int num_events = SDL_PeepEvents(
-          events.data(), events.size(), SDL_GETEVENT, SDL_EVENT_FIRST, SDL_EVENT_LAST);
-      current_screen->OnEvents(std::span(events).subspan(0, num_events));
+      // First see how many events are currently pending
+      int current_event_count =
+          SDL_PeepEvents(nullptr, 0, SDL_PEEKEVENT, SDL_EVENT_FIRST, SDL_EVENT_LAST);
+      if (current_event_count > 0) {
+        int max_to_read = std::min<int>(events.size(), current_event_count);
+        int num_events = SDL_PeepEvents(
+            events.data(), max_to_read, SDL_GETEVENT, SDL_EVENT_FIRST, SDL_EVENT_LAST);
+        current_screen->OnEvents(std::span(events).subspan(0, num_events));
+      }
     }
 
     if (should_exit_) {
