@@ -3687,7 +3687,7 @@
   {
    "name": "Strafe Mixed Ladder",
    "def": {
-    "description": "See associated Ladder playlist.\n\nStrafes with fixed distances that moves faster as the levels get higher.",
+    "description": "Strafes with fixed distances that move faster as the levels get higher.",
     "durationSeconds": 30,
     "shotType": {
      "trackingInvincible": true

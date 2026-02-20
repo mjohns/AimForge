@@ -175,7 +175,20 @@ class PlaylistComponentImpl : public PlaylistComponent {
       ImGui::OpenPopup(menu_id);
     }
 
-    std::string description = run->playlist.def().description();
+    const PlaylistDef& def = run->playlist.def();
+
+    if (def.levels().base_scenario().size() > 0) {
+      auto maybe_base =
+          app_.scenario_manager().GetEvaluatedScenarioDef(def.levels().base_scenario());
+      if (maybe_base) {
+        std::string description = maybe_base->description();
+        if (description.size() > 0) {
+          ImGui::TextWrapped(description);
+        }
+      }
+    }
+
+    std::string description = def.description();
     if (description.size() > 0) {
       ImGui::TextWrapped(description);
     }
