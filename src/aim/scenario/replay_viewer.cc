@@ -6,6 +6,7 @@
 #include "absl/cleanup/cleanup.h"
 #include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/times.h"
 #include "aim/core/application.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
@@ -16,8 +17,8 @@
 namespace aim {
 namespace {
 
-float MicrosToSeconds(u32 micros) {
-  return micros / 1000000.0f;
+i64 GetMicrosPerFrame(u16 replay_fps) {
+  return SecondsToMicros(1 / static_cast<float>(replay_fps));
 }
 
 constexpr const char* kPlaybackSpeedKey = "ReplayPlaybackSpeed";
@@ -62,6 +63,7 @@ class ReplayView {
       : camera(Camera(CameraParams(replay->room))),
         target_manager(replay->room),
         replay_(replay),
+        micros_per_frame_(GetMicrosPerFrame(replay->replay_fps)),
         app_(app) {
     previous_click_durations_.reserve(400);
   }
@@ -73,16 +75,16 @@ class ReplayView {
     return is_done_;
   }
 
-  float CurrentTime() {
-    return current_time_;
+  i64 CurrentTimeMicros() {
+    return current_time_micros_;
   }
 
   float GetLastClickTime() {
-    return last_click_time_;
+    return last_click_time_micros_;
   }
 
   float GetCurrentScore() {
-    i64 score_frame = current_time_ * kRecordScoresPerSecond;
+    i64 score_frame = MicrosToSeconds(current_time_micros_) * kRecordScoresPerSecond;
     if (IsValidIndex(replay_->scores, score_frame)) {
       return replay_->scores[score_frame];
     }
@@ -93,7 +95,11 @@ class ReplayView {
     return previous_click_durations_;
   }
 
-  void SeekForwardToTime(float now_seconds, std::optional<SoundSettings> sound_settings) {
+  void SeekForwardToTimeSeconds(float now_seconds, std::optional<SoundSettings> sound_settings) {
+    SeekForwardToTimeMicros(now_seconds * 1000000, sound_settings);
+  }
+
+  void SeekForwardToTimeMicros(float now_micros, std::optional<SoundSettings> sound_settings) {
     if (is_done_) {
       return;
     }
@@ -106,12 +112,12 @@ class ReplayView {
       return;
     }
 
-    current_time_ = now_seconds;
-    i64 replay_frame_number = now_seconds * replay_->replay_fps;
+    current_time_micros_ = now_micros;
+    i64 replay_frame_number = now_micros / micros_per_frame_;
 
     for (int i = processed_targets_up_to_index_; i < replay.target_metadata.size(); ++i) {
       const ReplayTargetMetadata& metadata = replay.target_metadata[i];
-      if (MicrosToSeconds(metadata.add_time_micros) > now_seconds) {
+      if (metadata.add_time_micros > now_micros) {
         break;
       }
 
@@ -140,7 +146,7 @@ class ReplayView {
 
     for (int i = processed_events_up_to_index_; i < events.size(); ++i) {
       const ReplayEvent& event = events[i];
-      if (MicrosToSeconds(event.time_micros) > now_seconds) {
+      if (event.time_micros > now_micros) {
         break;
       }
 
@@ -157,8 +163,8 @@ class ReplayView {
           break;
         case ReplayEventType::MOUSE_CLICK:
           previous_click_durations_.push_back(MicrosToSeconds(event.time_micros) -
-                                              last_click_time_);
-          last_click_time_ = MicrosToSeconds(event.time_micros);
+                                              MicrosToSeconds(last_click_time_micros_));
+          last_click_time_micros_ = event.time_micros;
           break;
       }
       processed_events_up_to_index_ = i + 1;
@@ -216,9 +222,10 @@ class ReplayView {
   std::unordered_map<u16, i64> target_added_on_frame_;
   Application& app_;
   bool is_done_ = false;
-  float current_time_ = 0;
-  float last_click_time_ = 0;
+  i64 current_time_micros_ = 0;
+  i64 last_click_time_micros_ = 0;
   std::vector<float> previous_click_durations_;
+  i64 micros_per_frame_ = 0;
 };
 
 class ReplayViewerScreen : public Screen {
@@ -265,7 +272,7 @@ class ReplayViewerScreen : public Screen {
     if (event.type == SDL_EVENT_KEY_DOWN) {
       if (event.key.key == SDLK_SPACE) {
         if (replay_view_->IsDone()) {
-          SeekToTime(0);
+          SeekToTimeMicros(0);
           Play();
         } else if (is_paused_) {
           Play();
@@ -273,12 +280,12 @@ class ReplayViewerScreen : public Screen {
           Pause();
         }
       }
-      float time_step = 1.0 / (float)replay_->replay_fps;
+      i64 time_step_micros = 10000; // 10ms
       if (event.key.key == SDLK_LEFT || event.key.key == SDLK_COMMA) {
-        SeekToTime(GetNowSeconds() - time_step);
+        SeekToTimeMicros(GetNowMicros() - time_step_micros);
       }
       if (event.key.key == SDLK_RIGHT || event.key.key == SDLK_PERIOD) {
-        SeekToTime(GetNowSeconds() + time_step);
+        SeekToTimeMicros(GetNowMicros() + time_step_micros);
       }
     }
   }
@@ -295,8 +302,8 @@ class ReplayViewerScreen : public Screen {
 
     float duration_seconds = replay.pitch_yaws.size() / static_cast<float>(replay.replay_fps);
 
-    float now_seconds = GetNowSeconds();
-    replay_view_->SeekForwardToTime(now_seconds, settings_.sound());
+    i64 now_micros = GetNowMicros();
+    replay_view_->SeekForwardToTimeMicros(now_micros, settings_.sound());
 
     bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > 2000;
     if (!do_render) {
@@ -340,7 +347,7 @@ class ReplayViewerScreen : public Screen {
           ImGui::Text("%0.2fs", durations[i]);
         }
       }
-      ImGui::Text("%0.2fs", now_seconds - replay_view_->GetLastClickTime());
+      ImGui::Text("%0.2fs", MicrosToSeconds(now_micros) - replay_view_->GetLastClickTime());
       ImGui::Unindent();
     }
 
@@ -353,7 +360,7 @@ class ReplayViewerScreen : public Screen {
 
     if (replay_view_->IsDone()) {
       if (ImGui::Button(icons::kReplay)) {
-        SeekToTime(0);
+        SeekToTimeMicros(0);
         Play();
       }
     } else {
@@ -372,15 +379,16 @@ class ReplayViewerScreen : public Screen {
     ImGui::SameLine();
     float char_x = ImGui::GetDefaultCharSizeX();
     if (ImGui::SimpleTypeDropdown("PlaybackSpeed", &playback_speed_, kPlaybackSpeeds, char_x * 6)) {
-      playback_start_time_ = now_seconds;
+      playback_start_time_micros_ = now_micros;
       playback_stopwatch_ = Stopwatch();
       app_.local_store().PutInt(kPlaybackSpeedKey, static_cast<int>(playback_speed_));
     }
 
     ImGui::SameLine();
     ImGui::SetNextItemWidth(-1);
-    if (ImGui::SliderFloat("##SeekBar", &now_seconds, 0.0f, duration_seconds, "%.1f")) {
-      SeekToTime(now_seconds);
+    float seek_time = MicrosToSeconds(now_micros);
+    if (ImGui::SliderFloat("##SeekBar", &seek_time, 0.0f, duration_seconds, "%.1f")) {
+      SeekToTimeMicros(SecondsToMicros(seek_time));
     }
 
     if (ImGui::IsItemClicked()) {
@@ -390,7 +398,7 @@ class ReplayViewerScreen : public Screen {
 
       // Calculate the percentage of where the user clicked
       float t = (mouse_x - bar_x_min) / bar_width;
-      SeekToTime(duration_seconds * t);
+      SeekToTimeMicros(SecondsToMicros(duration_seconds * t));
     }
 
     ImGui::EndChild();
@@ -430,24 +438,23 @@ class ReplayViewerScreen : public Screen {
     playback_stopwatch_.Start();
   }
 
-  void SeekToTime(float now_seconds, bool play_sounds = false) {
-    if (now_seconds < 0) {
-      now_seconds = 0;
-    }
-    float current_view_time = replay_view_->CurrentTime();
-    if (current_view_time > now_seconds) {
+  void SeekToTimeMicros(i64 now_micros, bool play_sounds = false) {
+    now_micros = std::max<i64>(0, now_micros);
+
+    float current_view_time_micros = replay_view_->CurrentTimeMicros();
+    if (current_view_time_micros > now_micros) {
       // rewinding. need to create a new view.
       replay_view_ = std::make_unique<ReplayView>(replay_, app_);
     }
-    replay_view_->SeekForwardToTime(
-        now_seconds, play_sounds ? settings_.sound() : std::optional<SoundSettings>{});
-    playback_start_time_ = now_seconds;
+    replay_view_->SeekForwardToTimeMicros(
+        now_micros, play_sounds ? settings_.sound() : std::optional<SoundSettings>{});
+    playback_start_time_micros_ = now_micros;
     playback_stopwatch_ = Stopwatch();
   }
 
-  float GetNowSeconds() {
-    return playback_start_time_ +
-           playback_stopwatch_.GetElapsedSeconds() * GetPlaybackSpeedMultiplier();
+  i64 GetNowMicros() {
+    return playback_start_time_micros_ +
+           (playback_stopwatch_.GetElapsedMicros() * GetPlaybackSpeedMultiplier());
   }
 
   float GetPlaybackSpeedMultiplier() {
@@ -467,7 +474,7 @@ class ReplayViewerScreen : public Screen {
   std::unique_ptr<ReplayView> replay_view_;
 
   // The time associated with the playback stopwatch. time + stopwatch.elapsed = now
-  float playback_start_time_ = 0;
+  float playback_start_time_micros_ = 0;
   Stopwatch playback_stopwatch_;
   bool is_paused_ = false;
 
