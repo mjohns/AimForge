@@ -191,7 +191,7 @@ class ReplayView {
           i64 i = start_index + data_channel;
           if (IsValidIndex(replay.target_data, i)) {
             const ReplayTargetData& data = replay.target_data[i];
-            if (data.radius >= 0) {
+            if (data.radius > 0) {
               target->position = data.position;
               target->radius = data.radius;
               target->click_count = 255 - data.health;
