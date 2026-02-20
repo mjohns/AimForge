@@ -154,6 +154,7 @@ struct TimeHistogram {
 struct RunPerformanceStats {
   FrameTimes worst_times{};
   i64 worst_times_micros = 0;
+  i64 top_events_count = 0;
   TimeHistogram total_time_histogram{};
   TimeHistogram render_time_histogram{};
   TimeHistogram update_time_histogram{};

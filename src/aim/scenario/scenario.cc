@@ -510,6 +510,8 @@ void Scenario::UpdatePerfStats() {
     perf_stats_.worst_times = current_times_;
     perf_stats_.worst_times_micros = timer_.GetElapsedMicros();
   }
+  perf_stats_.top_events_count =
+      std::max(current_times_.events_count, perf_stats_.top_events_count);
 }
 
 void Scenario::DoneAdjustingCrosshairSize() {
