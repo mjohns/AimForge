@@ -331,7 +331,7 @@ void Scenario::OnWaitingForClickTick() {
   ImGui::Text("%s", scenario_name_.c_str());
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
   if (settings_.enable_metronome() && settings_.metronome_bpm() > 0) {
-    ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
+    ImGui::Text("bpm: %.0f", settings_.metronome_bpm());
   }
   ImGui::Text("theme: %s", settings_.theme_name().c_str());
   ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
@@ -442,7 +442,7 @@ void Scenario::OnRunningTick() {
   ImGui::Text("ups: %.1fk", state_updates_per_second_);
   ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
   if (settings_.enable_metronome() && settings_.metronome_bpm() > 0) {
-    ImGui::Text("metronome bpm: %.0f", settings_.metronome_bpm());
+    ImGui::Text("bpm: %.0f", settings_.metronome_bpm());
   }
 
   ImGui::End();
