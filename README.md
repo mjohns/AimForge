@@ -1,16 +1,14 @@
 ## FspAimForge
 
-FpsAimForge is an open source aim trainer focused on simplicity, self improvement, and targeting weaknesses.
+FpsAimForge is an open source aim trainer focused on simplicity, focus, and self improvement.
 
 * [All releases](https://github.com/mjohns/FpsAimForge/releases)
 * [Download latest](https://github.com/mjohns/FpsAimForge/releases/download/v0.3.5/FpsAimForge-v0.3.5.zip)
 
 Major goals of the project are:
-* Cater to power users who tend to "main" aim trainers and spend most of their time doing benchmarks or working on specific weaknesses.
-* Creating and editing scenarios should be simple enough that any user can confidently do it. Just press 'u' and you should intuitively be able to tweak the behavior of the current scenario.
-* Enable easily playing scenarios at varying difficulties and sensitivities while comparing scores and progress across those variations. (Automaticlly defined level veriations and fixed sensitivity suffixes).
-* Provide a small focused app optimized for graphical / input performance. Graphical options only exist which provide visual clarity. No effects or gun models. No humanoid targets etc. [video](https://www.youtube.com/watch?v=eKlBpE7jRdI)
-* Scenarios are expressable as a simple json file with knobs for the specific scenario type that are intuitive to tweak.
+* Creating and editing scenarios is actually simple.
+* Easy to play scenarios at varying difficulty levels and senistivities while tracking/comparing progress. (progressive overload)
+* Amazing performance due to custom "engine" and local first (offline) design.
 
 See [videos](https://www.youtube.com/@FpsAimForge) of FpsAimForge in action!
 
