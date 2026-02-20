@@ -77,7 +77,8 @@ class ReplayRecorder {
                  const Room& room,
                  u16 replay_fps,
                  i32 duration_seconds,
-                 i32 num_targets);
+                 i32 num_targets,
+                 bool requires_per_frame_target_data);
 
   void AddTarget(float now_seconds, const Target& target);
   void RemoveTarget(float now_seconds, u16 target_id);

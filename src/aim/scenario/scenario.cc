@@ -41,12 +41,42 @@ namespace aim {
 namespace {
 
 constexpr const i16 kReplayFps = 240;
+constexpr const i16 kStaticReplayFps = 480;
 constexpr const int kDefaultTargetRenderFps = 600;
 constexpr const i64 kClickDebounceMicros = 3 * 1000;
 
-bool ShouldRecordReplay(ScenarioDef& def, const Settings& settings) {
+bool RequiresPerFrameTargetData(const ScenarioDef& def) {
+  // Does the scenario require position, radius, health to change after the target has been added?
+
+  if (!def.has_static_def()) {
+    // Only static doesn't need target positions that update over time.
+    return true;
+  }
+
+  bool has_health = def.shot_type().type_case() == ShotType::kTrackingKill ||
+                    def.shot_type().type_case() == ShotType::kClickMulti;
+  if (has_health) {
+    return true;
+  }
+
+  // See if the radius of the targets changes over time.
+  for (const TargetProfile& p : def.target_def().profiles()) {
+    if (p.target_radius_growth_time_seconds() > 0) {
+      return true;
+    }
+    if (p.target_radius_at_kill() > 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool ShouldRecordReplay(ScenarioDef& def,
+                        bool requires_per_frame_target_data,
+                        const Settings& settings) {
   return def.duration_seconds() < 80 && def.target_def().num_targets() > 0 &&
-         def.target_def().num_targets() < 20;
+         (!requires_per_frame_target_data || def.target_def().num_targets() < 20);
 }
 
 }  // namespace
@@ -83,12 +113,16 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
   theme_ = app->settings_manager().GetCurrentTheme();
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
 
-  if (ShouldRecordReplay(def_, settings_)) {
+  bool requires_per_frame_target_data = RequiresPerFrameTargetData(def_);
+  u16 replay_fps = requires_per_frame_target_data ? kReplayFps : kStaticReplayFps;
+  timer_ = ScenarioTimer(replay_fps);
+  if (ShouldRecordReplay(def_, requires_per_frame_target_data, settings_)) {
     replay_ = std::make_unique<ReplayRecorder>(scenario_name_,
                                                def_.room(),
-                                               timer_.GetReplayFps(),
+                                               replay_fps,
                                                static_cast<i32>(def_.duration_seconds()),
-                                               def_.target_def().num_targets());
+                                               def_.target_def().num_targets(),
+                                               requires_per_frame_target_data);
   }
 }
 

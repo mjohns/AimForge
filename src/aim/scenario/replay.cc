@@ -10,7 +10,8 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
                                const Room& room,
                                u16 replay_fps,
                                i32 duration_seconds,
-                               i32 num_targets)
+                               i32 num_targets,
+                               bool requires_per_frame_target_data)
     : replay_fps_(replay_fps), num_targets_(num_targets) {
   replay_ = std::make_shared<Replay>();
   replay_->scenario_name = scenario_name;
@@ -21,9 +22,11 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
   i32 max_replay_frame_number = replay_fps * duration_seconds;
   i32 total_target_data_count = max_replay_frame_number * num_targets;
 
-  ReplayTargetData invalid_target_data;
-  invalid_target_data.radius = -1;
-  replay_->target_data.resize(total_target_data_count, invalid_target_data);
+  if (requires_per_frame_target_data) {
+    ReplayTargetData invalid_target_data;
+    invalid_target_data.radius = -1;
+    replay_->target_data.resize(total_target_data_count, invalid_target_data);
+  }
 
   PitchYaw invalid_pitch_yaw;
   invalid_pitch_yaw.pitch = GetMaxPitch() * 3;

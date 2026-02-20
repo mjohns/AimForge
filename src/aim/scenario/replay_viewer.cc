@@ -311,13 +311,15 @@ class ReplayViewerScreen : public Screen {
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
     ImGui::SameLine();
     ImGui::InfoMarker(
-        std::format("Approximate file size: {:.1f}mb", replay_->GetApproximateSizeMb()));
+        std::format("Approximate file size: {:.2f}mb", replay_->GetApproximateSizeMb()));
 
     ImGui::SameLine();
     ImGui::SetButtonCursorAtRight(icons::kLogout);
     if (ImGui::Button(icons::kLogout)) {
       PopSelf();
     }
+
+    ImGui::Text("recorded fps: %d", replay_->replay_fps);
 
     float score = replay_view_->GetCurrentScore();
     if (score > 0) {
