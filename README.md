@@ -9,6 +9,7 @@ Major goals of the project are:
 * Creating and editing scenarios is actually simple.
 * Easy to play scenarios at varying difficulty levels and senistivities while tracking/comparing progress. (progressive overload)
 * Amazing performance due to custom "engine" and local first (offline) design.
+* Small app download while still including scenarios. You can download the full exe and a large selection of scenarios in just a 5mb download. No additional runtime downloads required.
 
 See [videos](https://www.youtube.com/@FpsAimForge) of FpsAimForge in action!
 
