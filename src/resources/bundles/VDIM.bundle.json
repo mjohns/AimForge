@@ -2714,15 +2714,14 @@
    "def": {
     "durationSeconds": 60,
     "shotType": {
-     "clickSingle": true
+     "clickSingle": true,
+     "removeClosestOnMiss": true
     },
     "targetDef": {
      "numTargets": 2,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.4,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.4
       }
      ],
      "newestTargetIsGhost": true
@@ -2738,6 +2737,7 @@
       "width": 130
      }
     },
+    "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -2906,15 +2906,14 @@
    "def": {
     "durationSeconds": 60,
     "shotType": {
-     "clickSingle": true
+     "clickSingle": true,
+     "removeClosestOnMiss": true
     },
     "targetDef": {
      "numTargets": 2,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.4,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.4
       }
      ],
      "newestTargetIsGhost": true
@@ -2930,6 +2929,7 @@
       "width": 140
      }
     },
+    "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
