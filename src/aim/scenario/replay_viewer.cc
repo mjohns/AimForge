@@ -67,28 +67,21 @@ std::vector<float> GetMouseSpeeds(const Replay& replay) {
   // When calculating delta, look at the pitch/yaw n frames ahead.
   i64 look_ahead_size = 4;
   float last_speed = 0;
-  float max_pitch = GetMaxPitch();
   for (int frame_number = 0; frame_number < replay.pitch_yaws.size() - look_ahead_size;
        ++frame_number) {
     const PitchYaw& current_pitch_yaw = replay.pitch_yaws[frame_number];
     const PitchYaw& next_pitch_yaw = replay.pitch_yaws[frame_number + look_ahead_size];
 
-    if (current_pitch_yaw.pitch > max_pitch || next_pitch_yaw.pitch > max_pitch) {
-      // Pitch/Yaws were missing due to not being recorded at full replay fps.
-      // TODO: Come up with a better strategy for these missing pitch yaws.
-      result.push_back(last_speed);
-    } else {
-      float delta_pitch = next_pitch_yaw.pitch - current_pitch_yaw.pitch;
-      float delta_yaw = next_pitch_yaw.yaw - current_pitch_yaw.yaw;
+    float delta_pitch = next_pitch_yaw.pitch - current_pitch_yaw.pitch;
+    float delta_yaw = next_pitch_yaw.yaw - current_pitch_yaw.yaw;
 
-      float delta = abs(delta_pitch) + abs(delta_yaw);
+    float delta = abs(delta_pitch) + abs(delta_yaw);
 
-      float delta_per_second = delta / (seconds_per_frame * look_ahead_size);
+    float delta_per_second = delta / (seconds_per_frame * look_ahead_size);
 
-      float speed = delta_per_second * 100;
-      result.push_back(speed);
-      last_speed = speed;
-    }
+    float speed = delta_per_second * 100;
+    result.push_back(speed);
+    last_speed = speed;
   }
   return result;
 }
@@ -488,7 +481,6 @@ class ReplayViewerScreen : public Screen {
     if (IsValidIndex(mouse_speeds_, frame_number)) {
       ImGui::TextFmt("mouse speed: {}", MaybeIntToString(mouse_speeds_[frame_number], 0));
     }
-
 
     ImGui::SetCursorAtBottom(ImGui::GetFrameHeight() * 1.5);
 

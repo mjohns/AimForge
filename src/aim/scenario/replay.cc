@@ -40,6 +40,35 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
   replay_->scores.reserve(130 * kRecordScoresPerSecond);
 }
 
+void ReplayRecorder::FillInMissingPitchYaws() {
+  float max_pitch = GetMaxPitch();
+
+  auto find_first_valid = [=](int i) {
+    for (; i < replay_->pitch_yaws.size(); ++i) {
+       PitchYaw& pitch_yaw = replay_->pitch_yaws[i];
+       bool is_invalid = pitch_yaw.pitch > max_pitch;
+       if (!is_invalid) {
+         return pitch_yaw;
+       }
+    }
+    return PitchYaw{};
+  };
+
+  for (int i = 0; i < replay_->pitch_yaws.size(); ++i) {
+    PitchYaw& pitch_yaw = replay_->pitch_yaws[i];
+    bool is_invalid = pitch_yaw.pitch > max_pitch;
+    if (is_invalid) {
+      if (i == 0) {
+        pitch_yaw = find_first_valid(i + 1);
+      } else {
+        const PitchYaw& prev = replay_->pitch_yaws[i - 1];
+        pitch_yaw.pitch = prev.pitch;
+        pitch_yaw.yaw = prev.yaw;
+      }
+    }
+  }
+}
+
 void ReplayRecorder::AddTarget(i64 now_micros, const Target& target) {
   // Find available data channel.
   std::vector<bool> taken_channels(num_targets_, false);

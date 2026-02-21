@@ -94,6 +94,9 @@ class ReplayRecorder {
     return replay_;
   }
 
+  // After the run is done call this to fill in  pitch_yaw from any missing frames.
+  void FillInMissingPitchYaws();
+
  private:
   ReplayEvent& AddEvent(i64 now_micros, ReplayEventType type);
   u16 replay_fps_;

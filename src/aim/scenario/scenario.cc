@@ -508,6 +508,10 @@ void Scenario::HandleScenarioDone() {
   }
 
   FlushPlayTime();
+  if (replay_) {
+    replay_->FillInMissingPitchYaws();
+  }
+
 
   PopSelf();
 
