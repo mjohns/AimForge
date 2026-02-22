@@ -37,7 +37,11 @@ void BaseScenario::Initialize() {
   }
 
   for (float delay : t.delayed_target_times()) {
-    RunAfterSeconds(delay, [=]() { AddNewTargetDuringRun(0); });
+    if (delay > 0) {
+      RunAfterSeconds(delay, [=]() { AddNewTargetDuringRun(0); });
+    } else {
+      AddNewTargetDuringRun(0);
+    }
   }
 }
 
