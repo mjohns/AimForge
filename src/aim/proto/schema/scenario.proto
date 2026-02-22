@@ -514,6 +514,9 @@ message TargetDef {
 
   // The initial target will be added with the specified delay between each target.
   float stagger_initial_targets_seconds = 8;
+
+  // A list of delays in seconds for targets to be initially added.
+  repeated float delayed_target_times = 9;
 }
 
 message PillTargetDef {

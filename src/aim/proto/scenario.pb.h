@@ -7139,6 +7139,7 @@ class TargetDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kProfilesFieldNumber = 2,
+    kDelayedTargetTimesFieldNumber = 9,
     kProfilesInfoFieldNumber = 3,
     kNumTargetsFieldNumber = 1,
     kNewestTargetIsGhostFieldNumber = 5,
@@ -7163,6 +7164,24 @@ class TargetDef final : public ::google::protobuf::Message
   const ::aim::TargetProfile& profiles(int index) const;
   ::aim::TargetProfile* PROTOBUF_NONNULL add_profiles();
   const ::google::protobuf::RepeatedPtrField<::aim::TargetProfile>& profiles() const;
+  // repeated float delayed_target_times = 9;
+  int delayed_target_times_size() const;
+  private:
+  int _internal_delayed_target_times_size() const;
+
+  public:
+  void clear_delayed_target_times() ;
+  float delayed_target_times(int index) const;
+  void set_delayed_target_times(int index, float value);
+  void add_delayed_target_times(float value);
+  const ::google::protobuf::RepeatedField<float>& delayed_target_times() const;
+  ::google::protobuf::RepeatedField<float>* PROTOBUF_NONNULL mutable_delayed_target_times();
+
+  private:
+  const ::google::protobuf::RepeatedField<float>& _internal_delayed_target_times() const;
+  ::google::protobuf::RepeatedField<float>* PROTOBUF_NONNULL _internal_mutable_delayed_target_times();
+
+  public:
   // .aim.ProfileListInfo profiles_info = 3;
   bool has_profiles_info() const;
   void clear_profiles_info() ;
@@ -7236,7 +7255,7 @@ class TargetDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
+  static const ::google::protobuf::internal::TcParseTable<4, 8,
                                    2, 0,
                                    2>
       _table_;
@@ -7259,6 +7278,7 @@ class TargetDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::TargetProfile > profiles_;
+    ::google::protobuf::RepeatedField<float> delayed_target_times_;
     ::aim::ProfileListInfo* PROTOBUF_NULLABLE profiles_info_;
     ::int32_t num_targets_;
     bool newest_target_is_ghost_;
@@ -24101,14 +24121,14 @@ inline void WallWanderScenarioDef::set_allocated_profiles_info(::aim::ProfileLis
 
 // int32 num_targets = 1;
 inline bool TargetDef::has_num_targets() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   return value;
 }
 inline void TargetDef::clear_num_targets() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.num_targets_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000008U);
 }
 inline ::int32_t TargetDef::num_targets() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.num_targets)
@@ -24116,7 +24136,7 @@ inline ::int32_t TargetDef::num_targets() const {
 }
 inline void TargetDef::set_num_targets(::int32_t value) {
   _internal_set_num_targets(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.num_targets)
 }
 inline ::int32_t TargetDef::_internal_num_targets() const {
@@ -24186,7 +24206,7 @@ TargetDef::_internal_mutable_profiles() {
 
 // .aim.ProfileListInfo profiles_info = 3;
 inline bool TargetDef::has_profiles_info() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   PROTOBUF_ASSUME(!value || _impl_.profiles_info_ != nullptr);
   return value;
 }
@@ -24194,7 +24214,7 @@ inline void TargetDef::clear_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.profiles_info_ != nullptr) _impl_.profiles_info_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
+                  0x00000004U);
 }
 inline const ::aim::ProfileListInfo& TargetDef::_internal_profiles_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -24213,16 +24233,16 @@ inline void TargetDef::unsafe_arena_set_allocated_profiles_info(
   }
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.TargetDef.profiles_info)
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE TargetDef::release_profiles_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ProfileListInfo* released = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -24242,7 +24262,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NULLABLE TargetDef::unsafe_arena_release
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.TargetDef.profiles_info)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ProfileListInfo* temp = _impl_.profiles_info_;
   _impl_.profiles_info_ = nullptr;
   return temp;
@@ -24257,7 +24277,7 @@ inline ::aim::ProfileListInfo* PROTOBUF_NONNULL TargetDef::_internal_mutable_pro
 }
 inline ::aim::ProfileListInfo* PROTOBUF_NONNULL TargetDef::mutable_profiles_info()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ProfileListInfo* _msg = _internal_mutable_profiles_info();
   // @@protoc_insertion_point(field_mutable:aim.TargetDef.profiles_info)
   return _msg;
@@ -24274,9 +24294,9 @@ inline void TargetDef::set_allocated_profiles_info(::aim::ProfileListInfo* PROTO
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
 
   _impl_.profiles_info_ = reinterpret_cast<::aim::ProfileListInfo*>(value);
@@ -24288,7 +24308,7 @@ inline void TargetDef::clear_newest_target_is_ghost() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.newest_target_is_ghost_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000010U);
 }
 inline bool TargetDef::newest_target_is_ghost() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.newest_target_is_ghost)
@@ -24296,7 +24316,7 @@ inline bool TargetDef::newest_target_is_ghost() const {
 }
 inline void TargetDef::set_newest_target_is_ghost(bool value) {
   _internal_set_newest_target_is_ghost(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.newest_target_is_ghost)
 }
 inline bool TargetDef::_internal_newest_target_is_ghost() const {
@@ -24310,14 +24330,14 @@ inline void TargetDef::_internal_set_newest_target_is_ghost(bool value) {
 
 // float new_target_delay_seconds = 6;
 inline bool TargetDef::has_new_target_delay_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void TargetDef::clear_new_target_delay_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.new_target_delay_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000020U);
 }
 inline float TargetDef::new_target_delay_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.new_target_delay_seconds)
@@ -24325,7 +24345,7 @@ inline float TargetDef::new_target_delay_seconds() const {
 }
 inline void TargetDef::set_new_target_delay_seconds(float value) {
   _internal_set_new_target_delay_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.new_target_delay_seconds)
 }
 inline float TargetDef::_internal_new_target_delay_seconds() const {
@@ -24339,14 +24359,14 @@ inline void TargetDef::_internal_set_new_target_delay_seconds(float value) {
 
 // float remove_target_after_seconds = 7;
 inline bool TargetDef::has_remove_target_after_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void TargetDef::clear_remove_target_after_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_target_after_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000040U);
 }
 inline float TargetDef::remove_target_after_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.remove_target_after_seconds)
@@ -24354,7 +24374,7 @@ inline float TargetDef::remove_target_after_seconds() const {
 }
 inline void TargetDef::set_remove_target_after_seconds(float value) {
   _internal_set_remove_target_after_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.remove_target_after_seconds)
 }
 inline float TargetDef::_internal_remove_target_after_seconds() const {
@@ -24368,14 +24388,14 @@ inline void TargetDef::_internal_set_remove_target_after_seconds(float value) {
 
 // float stagger_initial_targets_seconds = 8;
 inline bool TargetDef::has_stagger_initial_targets_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   return value;
 }
 inline void TargetDef::clear_stagger_initial_targets_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stagger_initial_targets_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000080U);
 }
 inline float TargetDef::stagger_initial_targets_seconds() const {
   // @@protoc_insertion_point(field_get:aim.TargetDef.stagger_initial_targets_seconds)
@@ -24383,7 +24403,7 @@ inline float TargetDef::stagger_initial_targets_seconds() const {
 }
 inline void TargetDef::set_stagger_initial_targets_seconds(float value) {
   _internal_set_stagger_initial_targets_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.TargetDef.stagger_initial_targets_seconds)
 }
 inline float TargetDef::_internal_stagger_initial_targets_seconds() const {
@@ -24393,6 +24413,56 @@ inline float TargetDef::_internal_stagger_initial_targets_seconds() const {
 inline void TargetDef::_internal_set_stagger_initial_targets_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.stagger_initial_targets_seconds_ = value;
+}
+
+// repeated float delayed_target_times = 9;
+inline int TargetDef::_internal_delayed_target_times_size() const {
+  return _internal_delayed_target_times().size();
+}
+inline int TargetDef::delayed_target_times_size() const {
+  return _internal_delayed_target_times_size();
+}
+inline void TargetDef::clear_delayed_target_times() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.delayed_target_times_.Clear();
+  ClearHasBitForRepeated(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline float TargetDef::delayed_target_times(int index) const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.delayed_target_times)
+  return _internal_delayed_target_times().Get(index);
+}
+inline void TargetDef::set_delayed_target_times(int index, float value) {
+  _internal_mutable_delayed_target_times()->Set(index, value);
+  // @@protoc_insertion_point(field_set:aim.TargetDef.delayed_target_times)
+}
+inline void TargetDef::add_delayed_target_times(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _internal_mutable_delayed_target_times()->Add(value);
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_add:aim.TargetDef.delayed_target_times)
+}
+inline const ::google::protobuf::RepeatedField<float>& TargetDef::delayed_target_times() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.TargetDef.delayed_target_times)
+  return _internal_delayed_target_times();
+}
+inline ::google::protobuf::RepeatedField<float>* PROTOBUF_NONNULL TargetDef::mutable_delayed_target_times()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_mutable_list:aim.TargetDef.delayed_target_times)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_delayed_target_times();
+}
+inline const ::google::protobuf::RepeatedField<float>&
+TargetDef::_internal_delayed_target_times() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.delayed_target_times_;
+}
+inline ::google::protobuf::RepeatedField<float>* PROTOBUF_NONNULL
+TargetDef::_internal_mutable_delayed_target_times() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.delayed_target_times_;
 }
 
 // -------------------------------------------------------------------

@@ -253,6 +253,53 @@ void DrawTargetEditor(ScenarioDef& def) {
   ImGui::SameLine();
   ImGui::HelpMarker(
       "Time in seconds between each target being added at the start of the scenario.");
+
+  bool has_delayed_targets = t->delayed_target_times_size() > 0;
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Delayed targets");
+  ImGui::SameLine();
+  ImGui::Checkbox("##DelayTargetsCheckbox", &has_delayed_targets);
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "Targets will only be added for the first time after the specified delay. If num_targets=3 "
+      "and there are two delays in the list, 1 target will be added immediately, 1 target after "
+      "the first time in the list, and 1 target after the second time in the list.");
+  if (has_delayed_targets) {
+    if (t->delayed_target_times_size() == 0) {
+      t->add_delayed_target_times(1);
+    }
+    int delete_i = -1;
+    bool add_item = false;
+    ImGui::LoopId loop_id;
+    ImGui::Indent();
+    for (int i = 0; i < t->delayed_target_times_size(); ++i) {
+      auto lid = loop_id.Get("DelayedTargetItem");
+      float& value = (*t->mutable_delayed_target_times())[i];
+
+      ImGui::InputFloat(
+          ImGui::InputFloatParams("value").set_min(0.01).set_step(0.1, 2).set_width(char_x * 10),
+          CreateFloatField(&value));
+      ImGui::SameLine();
+      if (ImGui::SelectableButton(icons::kClear)) {
+        delete_i = i;
+      }
+    }
+    if (ImGui::Button("Add")) {
+      add_item = true;
+    }
+    ImGui::Unindent();
+
+    if (delete_i >= 0) {
+      t->mutable_delayed_target_times()->erase(t->mutable_delayed_target_times()->begin() +
+                                               delete_i);
+    }
+
+    if (add_item) {
+      t->mutable_delayed_target_times()->Add(1);
+    }
+  } else {
+    t->clear_delayed_target_times();
+  }
 }
 
 }  // namespace aim

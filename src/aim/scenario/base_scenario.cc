@@ -25,14 +25,19 @@ float GetPartialHitValue(const Target& target) {
 }  // namespace
 
 void BaseScenario::Initialize() {
-  int num_targets = def_.target_def().num_targets();
-  for (int i = 0; i < num_targets; ++i) {
+  const TargetDef& t = def_.target_def();
+  int num_targets_to_add_immediately = t.num_targets() - t.delayed_target_times_size();
+  for (int i = 0; i < num_targets_to_add_immediately; ++i) {
     float stagger_seconds = def_.target_def().stagger_initial_targets_seconds();
     if (stagger_seconds > 0) {
       RunAfterSeconds(i * stagger_seconds, [=]() { AddNewTargetDuringRun(0); });
     } else {
       AddNewTargetDuringRun(0);
     }
+  }
+
+  for (float delay : t.delayed_target_times()) {
+    RunAfterSeconds(delay, [=]() { AddNewTargetDuringRun(0); });
   }
 }
 
