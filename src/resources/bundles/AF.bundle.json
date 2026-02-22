@@ -3049,7 +3049,7 @@
   {
    "name": "Static Precision Ladder",
    "def": {
-    "durationSeconds": 30,
+    "durationSeconds": 40,
     "shotType": {
      "clickSingle": true,
      "accuracyPenaltyMultiplier": 1.25,
@@ -3377,6 +3377,17 @@
        "value": 20
       }
      }
+    }
+   }
+  },
+  {
+   "name": "Static3 Sprint Ladder",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF Static3 Ladder",
+     "durationSeconds": 35,
+     "description": "Version of AF Static3 Ladder with a shorter duration to allow \"sprinting\" with maximum effort and less focus on endurance."
     }
    }
   },
@@ -4590,6 +4601,17 @@
      "baseScenario": "AF Static3 Ladder",
      "maxLevel": 40,
      "levelStep": 0.5,
+     "numPlaysPerLevel": 1
+    }
+   }
+  },
+  {
+   "name": "Static3 Sprint Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF Static3 Sprint Ladder",
+     "maxLevel": 40,
      "numPlaysPerLevel": 1
     }
    }

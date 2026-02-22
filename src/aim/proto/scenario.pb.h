@@ -7417,6 +7417,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kScenarioNameFieldNumber = 1,
+    kDescriptionFieldNumber = 6,
     kShotTypeFieldNumber = 2,
     kRoomFieldNumber = 5,
     kDurationSecondsFieldNumber = 3,
@@ -7436,6 +7437,22 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   const ::std::string& _internal_scenario_name() const;
   PROTOBUF_ALWAYS_INLINE void _internal_set_scenario_name(const ::std::string& value);
   ::std::string* PROTOBUF_NONNULL _internal_mutable_scenario_name();
+
+  public:
+  // string description = 6;
+  bool has_description() const;
+  void clear_description() ;
+  const ::std::string& description() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_description();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_description();
+  void set_allocated_description(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_description() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_description(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_description();
 
   public:
   // .aim.ShotType shot_type = 2;
@@ -7494,8 +7511,8 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
-                                   2, 46,
+  static const ::google::protobuf::internal::TcParseTable<3, 6,
+                                   2, 57,
                                    2>
       _table_;
 
@@ -7517,6 +7534,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr scenario_name_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
     ::aim::ShotType* PROTOBUF_NULLABLE shot_type_;
     ::aim::Room* PROTOBUF_NULLABLE room_;
     ::int32_t duration_seconds_;
@@ -16753,7 +16771,7 @@ inline void ReferenceScenarioDef::set_allocated_scenario_name(::std::string* PRO
 
 // .aim.ShotType shot_type = 2;
 inline bool ReferenceScenarioDef::has_shot_type() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   PROTOBUF_ASSUME(!value || _impl_.shot_type_ != nullptr);
   return value;
 }
@@ -16761,7 +16779,7 @@ inline void ReferenceScenarioDef::clear_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.shot_type_ != nullptr) _impl_.shot_type_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
+                  0x00000004U);
 }
 inline const ::aim::ShotType& ReferenceScenarioDef::_internal_shot_type() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -16780,16 +16798,16 @@ inline void ReferenceScenarioDef::unsafe_arena_set_allocated_shot_type(
   }
   _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReferenceScenarioDef.shot_type)
 }
 inline ::aim::ShotType* PROTOBUF_NULLABLE ReferenceScenarioDef::release_shot_type() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ShotType* released = _impl_.shot_type_;
   _impl_.shot_type_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -16809,7 +16827,7 @@ inline ::aim::ShotType* PROTOBUF_NULLABLE ReferenceScenarioDef::unsafe_arena_rel
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.ReferenceScenarioDef.shot_type)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ShotType* temp = _impl_.shot_type_;
   _impl_.shot_type_ = nullptr;
   return temp;
@@ -16824,7 +16842,7 @@ inline ::aim::ShotType* PROTOBUF_NONNULL ReferenceScenarioDef::_internal_mutable
 }
 inline ::aim::ShotType* PROTOBUF_NONNULL ReferenceScenarioDef::mutable_shot_type()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   ::aim::ShotType* _msg = _internal_mutable_shot_type();
   // @@protoc_insertion_point(field_mutable:aim.ReferenceScenarioDef.shot_type)
   return _msg;
@@ -16841,9 +16859,9 @@ inline void ReferenceScenarioDef::set_allocated_shot_type(::aim::ShotType* PROTO
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
   }
 
   _impl_.shot_type_ = reinterpret_cast<::aim::ShotType*>(value);
@@ -16852,14 +16870,14 @@ inline void ReferenceScenarioDef::set_allocated_shot_type(::aim::ShotType* PROTO
 
 // int32 duration_seconds = 3;
 inline bool ReferenceScenarioDef::has_duration_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void ReferenceScenarioDef::clear_duration_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.duration_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000010U);
 }
 inline ::int32_t ReferenceScenarioDef::duration_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.duration_seconds)
@@ -16867,7 +16885,7 @@ inline ::int32_t ReferenceScenarioDef::duration_seconds() const {
 }
 inline void ReferenceScenarioDef::set_duration_seconds(::int32_t value) {
   _internal_set_duration_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.duration_seconds)
 }
 inline ::int32_t ReferenceScenarioDef::_internal_duration_seconds() const {
@@ -16881,14 +16899,14 @@ inline void ReferenceScenarioDef::_internal_set_duration_seconds(::int32_t value
 
 // int32 num_targets = 4;
 inline bool ReferenceScenarioDef::has_num_targets() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void ReferenceScenarioDef::clear_num_targets() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.num_targets_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000020U);
 }
 inline ::int32_t ReferenceScenarioDef::num_targets() const {
   // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.num_targets)
@@ -16896,7 +16914,7 @@ inline ::int32_t ReferenceScenarioDef::num_targets() const {
 }
 inline void ReferenceScenarioDef::set_num_targets(::int32_t value) {
   _internal_set_num_targets(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.num_targets)
 }
 inline ::int32_t ReferenceScenarioDef::_internal_num_targets() const {
@@ -16910,7 +16928,7 @@ inline void ReferenceScenarioDef::_internal_set_num_targets(::int32_t value) {
 
 // .aim.Room room = 5;
 inline bool ReferenceScenarioDef::has_room() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   PROTOBUF_ASSUME(!value || _impl_.room_ != nullptr);
   return value;
 }
@@ -16918,7 +16936,7 @@ inline void ReferenceScenarioDef::clear_room() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.room_ != nullptr) _impl_.room_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000008U);
 }
 inline const ::aim::Room& ReferenceScenarioDef::_internal_room() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -16937,16 +16955,16 @@ inline void ReferenceScenarioDef::unsafe_arena_set_allocated_room(
   }
   _impl_.room_ = reinterpret_cast<::aim::Room*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ReferenceScenarioDef.room)
 }
 inline ::aim::Room* PROTOBUF_NULLABLE ReferenceScenarioDef::release_room() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Room* released = _impl_.room_;
   _impl_.room_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -16966,7 +16984,7 @@ inline ::aim::Room* PROTOBUF_NULLABLE ReferenceScenarioDef::unsafe_arena_release
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.ReferenceScenarioDef.room)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Room* temp = _impl_.room_;
   _impl_.room_ = nullptr;
   return temp;
@@ -16981,7 +16999,7 @@ inline ::aim::Room* PROTOBUF_NONNULL ReferenceScenarioDef::_internal_mutable_roo
 }
 inline ::aim::Room* PROTOBUF_NONNULL ReferenceScenarioDef::mutable_room()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Room* _msg = _internal_mutable_room();
   // @@protoc_insertion_point(field_mutable:aim.ReferenceScenarioDef.room)
   return _msg;
@@ -16998,13 +17016,82 @@ inline void ReferenceScenarioDef::set_allocated_room(::aim::Room* PROTOBUF_NULLA
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
 
   _impl_.room_ = reinterpret_cast<::aim::Room*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.ReferenceScenarioDef.room)
+}
+
+// string description = 6;
+inline bool ReferenceScenarioDef::has_description() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  return value;
+}
+inline void ReferenceScenarioDef::clear_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline const ::std::string& ReferenceScenarioDef::description() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.description)
+  return _internal_description();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void ReferenceScenarioDef::set_description(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  _impl_.description_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.description)
+}
+inline ::std::string* PROTOBUF_NONNULL ReferenceScenarioDef::mutable_description()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::std::string* _s = _internal_mutable_description();
+  // @@protoc_insertion_point(field_mutable:aim.ReferenceScenarioDef.description)
+  return _s;
+}
+inline const ::std::string& ReferenceScenarioDef::_internal_description() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.description_.Get();
+}
+inline void ReferenceScenarioDef::_internal_set_description(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.description_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL ReferenceScenarioDef::_internal_mutable_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.description_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE ReferenceScenarioDef::release_description() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ReferenceScenarioDef.description)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000002U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  auto* released = _impl_.description_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  return released;
+}
+inline void ReferenceScenarioDef::set_allocated_description(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+  _impl_.description_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.description_.IsDefault()) {
+    _impl_.description_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.ReferenceScenarioDef.description)
 }
 
 // -------------------------------------------------------------------

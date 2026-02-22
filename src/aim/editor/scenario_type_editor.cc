@@ -994,7 +994,8 @@ void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
 void DrawReferenceEditor(ScenarioDef& def,
                          Application* app,
                          std::string* error_message_out,
-                         bool* editing_room) {
+                         bool* editing_room,
+                         ImGui::MultilineTextEntryDialog* description_dialog) {
   // Make sure only the appropriate fields are set on the def.
   ScenarioDef old_def = def;
 
@@ -1007,7 +1008,6 @@ void DrawReferenceEditor(ScenarioDef& def,
   if (old_def.has_score_targets()) {
     *def.mutable_score_targets() = old_def.score_targets();
   }
-  def.set_description(old_def.description());
   *def.mutable_overrides() = old_def.overrides();
   *def.mutable_reference_def() = old_def.reference_def();
 
@@ -1107,6 +1107,22 @@ void DrawReferenceEditor(ScenarioDef& def,
     def.mutable_reference_def()->clear_shot_type();
   }
 
+  if (description_dialog != nullptr) {
+    ImGui::SpacedSeparator();
+    std::string button_text = r.description().empty()
+                                  ? std::format("{} Set description", icons::kEdit)
+                                  : std::format("{} Edit description", icons::kEdit);
+    if (ImGui::Button(button_text)) {
+      description_dialog->NotifyOpen(r.description());
+    }
+    if (!r.description().empty()) {
+      ImGui::SameLine();
+      if (ImGui::SelectableButton(icons::kClear)) {
+        r.clear_description();
+      }
+    }
+  }
+
   ImGui::SpacedSeparator();
 
   if (app != nullptr) {
@@ -1175,7 +1191,8 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
 void DrawScenarioTypeEditor(ScenarioDef& def,
                             Application* app,
                             std::string* error_message_out,
-                            bool* editing_room) {
+                            bool* editing_room,
+                            ImGui::MultilineTextEntryDialog* description_dialog) {
   float char_x = ImGui::GetDefaultCharSizeX();
   ImGui::IdGuard cid("ScenarioTypeEditor");
   ImGui::AlignTextToFramePadding();
@@ -1210,7 +1227,7 @@ void DrawScenarioTypeEditor(ScenarioDef& def,
   }
 
   if (scenario_type == ScenarioDef::kReferenceDef) {
-    DrawReferenceEditor(def, app, error_message_out, editing_room);
+    DrawReferenceEditor(def, app, error_message_out, editing_room, description_dialog);
   }
   if (scenario_type == ScenarioDef::kStaticDef) {
     DrawStaticEditor(*def.mutable_static_def());

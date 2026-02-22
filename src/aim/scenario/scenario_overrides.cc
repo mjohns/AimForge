@@ -179,6 +179,9 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
   if (ref.reference_def().has_room()) {
     *def->mutable_room() = ref.reference_def().room();
   }
+  if (!ref.reference_def().description().empty()) {
+    def->set_description(ref.reference_def().description());
+  }
 }
 
 }  // namespace aim

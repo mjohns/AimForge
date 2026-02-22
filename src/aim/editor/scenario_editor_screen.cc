@@ -56,6 +56,10 @@ class ScenarioEditorScreen : public UiScreen {
     bundle_names_ = app_.bundle_manager().GetWritableBundleNames();
 
     if (!opts.scenario_name.empty()) {
+      NameInfo original_name_info = GetScenarioNameInfo(opts.scenario_name);
+      original_level_ = original_name_info.level;
+      original_cm_per_360_ = original_name_info.cm_per_360;
+
       // Initialize scenario def if source is found otherwise show error and exit.
       auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
       if (initial_scenario.has_value()) {
@@ -167,7 +171,8 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::TableNextColumn();
       ImGui::BeginChild("SecondColumnContainer", ImVec2(0, 0));
       std::string error_message;
-      DrawScenarioTypeEditor(def_, &app_, &error_message, &editing_room_);
+      DrawScenarioTypeEditor(
+          def_, &app_, &error_message, &editing_room_, &reference_description_dialog_);
       if (error_message.size() > 0) {
         SetErrorMessage(error_message);
       }
@@ -220,6 +225,11 @@ class ScenarioEditorScreen : public UiScreen {
     auto maybe_description = description_dialog_.Draw();
     if (maybe_description) {
       def_.set_description(*maybe_description);
+    }
+
+    auto maybe_ref_description = reference_description_dialog_.Draw();
+    if (maybe_ref_description) {
+      def_.mutable_reference_def()->set_description(*maybe_ref_description);
     }
 
     if (!def_.has_reference_def() && def_.room().type_case() == Room::TYPE_NOT_SET) {
@@ -276,7 +286,8 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::Spacing();
       std::string error_message;
       bool no_op_editing_room = false;
-      DrawScenarioTypeEditor(compare_def, /*app=*/nullptr, &error_message, &no_op_editing_room);
+      DrawScenarioTypeEditor(
+          compare_def, /*app=*/nullptr, &error_message, &no_op_editing_room, nullptr);
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Targets")) {
@@ -416,8 +427,15 @@ class ScenarioEditorScreen : public UiScreen {
       return false;
     }
 
-    app_.scenario_manager().SetCurrentScenario(name_.full_name());
-    app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, name_.full_name());
+    {
+      // Make sure we preserve the original level/sens in the name for the current scenario.
+      NameInfo current_name = GetScenarioNameInfo(name_.full_name());
+      current_name.level = original_level_;
+      current_name.cm_per_360 = original_cm_per_360_;
+      app_.scenario_manager().SetCurrentScenario(current_name.GetFullName());
+      app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, current_name.GetFullName());
+    }
+
     return true;
   }
 
@@ -440,7 +458,8 @@ class ScenarioEditorScreen : public UiScreen {
 
   void DrawReferenceEditor() {
     std::string error_message;
-    DrawScenarioTypeEditor(def_, &app_, &error_message, &editing_room_);
+    DrawScenarioTypeEditor(
+        def_, &app_, &error_message, &editing_room_, &reference_description_dialog_);
     if (error_message.size() > 0) {
       SetErrorMessage(error_message);
     }
@@ -542,6 +561,8 @@ class ScenarioEditorScreen : public UiScreen {
 
   std::vector<std::string> bundle_names_;
   std::optional<ResourceName> original_name_;
+  std::optional<float> original_cm_per_360_;
+  std::optional<float> original_level_;
   ResourceName name_;
   Settings settings_;
 
@@ -557,6 +578,7 @@ class ScenarioEditorScreen : public UiScreen {
   bool exit_after_notification_ = false;
   bool is_new_scenario_ = false;
   ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionDialog"};
+  ImGui::MultilineTextEntryDialog reference_description_dialog_{"ReferenceDescriptionDialog"};
   ImGui::MultilineTextEntryDialog import_from_json_dialog_{"ImportFromJsonDialog"};
 };
 
