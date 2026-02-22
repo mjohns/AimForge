@@ -102,7 +102,6 @@ class QuickSettingsScreen : public UiScreen {
           updater_.settings.set_current_crosshair_name(crosshair_names_[i]);
         }
       }
-
     }
 
     ImGui::Columns(3, "SettingsColumns", false);
@@ -121,10 +120,12 @@ class QuickSettingsScreen : public UiScreen {
 
     {
       auto large_font = app_.font_manager().UseLargeBold();
-      std::string current_sens_text = MaybeIntToString(updater_.settings.cm_per_360());
-      float text_size = ImGui::CalcTextSize(current_sens_text.c_str()).x;
+      std::string top_text = type_ == QuickSettingsType::DEFAULT
+                                 ? MaybeIntToString(updater_.settings.cm_per_360())
+                                 : MaybeIntToString(updater_.settings.metronome_bpm());
+      float text_size = ImGui::CalcTextSize(top_text.c_str()).x;
       ImGui::SetCursorPosX((screen.width - text_size) / 2.0);
-      ImGui::Text(current_sens_text.c_str());
+      ImGui::Text(top_text.c_str());
       ImGui::Spacing();
       ImGui::Spacing();
     }

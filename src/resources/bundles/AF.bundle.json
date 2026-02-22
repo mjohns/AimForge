@@ -316,7 +316,7 @@
          "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": 0.2
+         "yPercentValue": 0.25
         },
         "rectangle": {
          "xLength": {
@@ -332,7 +332,85 @@
          "xPercentValue": 0
         },
         "yOffset": {
-         "yPercentValue": -0.2
+         "yPercentValue": -0.25
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.3
+         },
+         "yLength": {
+          "yPercentValue": 0.1
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "AlternateClick Vertical Ladder",
+   "def": {
+    "description": "Alternate clicks focusing on vertical movement.",
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 4.9
+      }
+     ],
+     "newestTargetIsGhost": true
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 150,
+      "width": 170
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": 0.25
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.3
+         },
+         "yLength": {
+          "yPercentValue": 0.1
+         }
+        }
+       },
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.25
         },
         "rectangle": {
          "xLength": {
@@ -3386,7 +3464,7 @@
     "overrides": {},
     "referenceDef": {
      "scenarioName": "AF Static3 Ladder",
-     "durationSeconds": 35,
+     "durationSeconds": 30,
      "description": "Version of AF Static3 Ladder with a shorter duration to allow \"sprinting\" with maximum effort and less focus on endurance."
     }
    }
@@ -4356,6 +4434,15 @@
   }
  ],
  "playlists": [
+  {
+   "name": "AlternateClick Vertical Ladder",
+   "def": {
+    "levels": {
+     "baseScenario": "AF AlternateClick Vertical Ladder",
+     "maxLevel": 30
+    }
+   }
+  },
   {
    "name": "Clicking",
    "def": {

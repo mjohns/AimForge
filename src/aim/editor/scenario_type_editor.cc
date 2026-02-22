@@ -1129,10 +1129,9 @@ void DrawReferenceEditor(ScenarioDef& def,
     if (ImGui::Button("Bake")) {
       auto parent = app->scenario_manager().GetEvaluatedScenarioDef(r.scenario_name());
       if (parent) {
-        auto overrides = def.overrides();
-        def = ApplyScenarioOverrides(*parent);
-        *def.mutable_overrides() = overrides;
-        def = ApplyScenarioOverrides(def);
+        ScenarioDef baked_def = *parent;
+        ApplyReferenceFieldOverrides(def, &baked_def);
+        def = ApplyScenarioOverrides(baked_def);
       } else {
         *error_message_out =
             std::format("Referenced scenario \"{}\" is invalid.", r.scenario_name());
