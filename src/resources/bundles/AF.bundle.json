@@ -367,7 +367,7 @@
      "numTargets": 2,
      "profiles": [
       {
-       "targetRadius": 4.9
+       "targetRadius": 4
       }
      ],
      "newestTargetIsGhost": true
@@ -385,6 +385,10 @@
     },
     "levelOverrides": {
      "targetRadiusMultiplier": 0.96
+    },
+    "scoreTargets": {
+     "start": 100,
+     "end": 120
     },
     "staticDef": {
      "targetPlacementStrategy": {
