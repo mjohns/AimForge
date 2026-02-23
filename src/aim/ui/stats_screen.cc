@@ -103,13 +103,6 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
     }
   }
 
-  /*
-  ImPlot::PushStyleVar(ImPlotStyleVar_Marker, ImPlotMarker_Circle);
-  ImPlot::PushStyleVar(ImPlotStyleVar_MarkerSize, 5.0f);
-  ImPlot::PlotScatter("Current Position", &currentX, &currentY, 1);
-  ImPlot::PopStyleVar(2);
-  */
-
   ImPlot::EndPlot();
 }
 
@@ -406,6 +399,8 @@ class StatsScreen : public UiScreen {
     ImVec2 table_size = ImVec2(0, 0);
     if (!is_comparisons) {
       table_size.y = ImGui::GetFrameHeight() * 5;
+    } else {
+      table_size.y = ImGui::GetFrameHeight() * 100;
     }
     if (ImGui::BeginTable("StatsTable", num_cols, flags, table_size)) {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
@@ -422,7 +417,6 @@ class StatsScreen : public UiScreen {
       ImGui::TableSetupScrollFreeze(0, 2);
 
       ImGui::TableHeadersRow();
-
 
       DrawStatsTableRow("Current", details_.stats, details_.stats);
       if (!is_comparisons) {
@@ -550,7 +544,10 @@ class StatsScreen : public UiScreen {
     ImGui::TextFmt("Total time: {:.2f}ms", total_ms);
     ImGui::TextFmt("Process events: {:.2f}ms",
                    (worst_times_.events_end - worst_times_.events_start) / 1000.0);
-    ImGui::TextFmt("Event count: {} (mouse={}, max_seen={})", worst_times_.events_count, worst_times_.mouse_events_count, performance_stats_->top_events_count);
+    ImGui::TextFmt("Event count: {} (mouse={}, max_seen={})",
+                   worst_times_.events_count,
+                   worst_times_.mouse_events_count,
+                   performance_stats_->top_events_count);
     ImGui::TextFmt("Update time: {:.2f}ms",
                    (worst_times_.update_end - worst_times_.update_start) / 1000.0);
     if (worst_times_.render.start > 0) {
@@ -767,6 +764,8 @@ class StatsScreen : public UiScreen {
       ImGui::SpacedSeparator();
       DrawStatsTable();
 
+      DrawHistoryPlot(40);
+
       if (scores_over_time_) {
         ImGui::SpacedSeparator();
         if (ImGui::TreeNode("Score over time")) {
@@ -805,25 +804,97 @@ class StatsScreen : public UiScreen {
     ImGui::TextFmt("{}/{}", progress.runs_done, progress.item.num_plays());
   }
 
-  void DrawHistory() {
-    if (ImPlot::BeginPlot(std::format("##Scores_{}", scenario_name_).c_str())) {
-      // ImPlot::SetupAxisLimits(ImAxis_X1,0,1.0);
-      // ImPlot::SetupAxisLimits(ImAxis_Y1,0,1.6);
-      float max_score = details_.previous_high_score_stats.score;
-      float score_range = max_score - details_.min_score;
-      bool has_score_range = score_range > 0;
-      ImPlotAxisFlags autofit_flags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;
-      ImPlot::SetupAxes("Run", "Score", autofit_flags, has_score_range ? 0 : autofit_flags);
-      if (has_score_range) {
-        float padding = score_range * 0.15;
-        ImPlot::SetupAxisLimits(
-            ImAxis_Y1, ClampPositive(details_.min_score - padding), max_score + padding);
-      }
-      ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-      ImPlot::PlotStems("##Scores", &details_.scores[0], details_.scores.size());
-      ImPlot::EndPlot();
+  void DrawHistoryPlot(int max_to_show) {
+    if (details_.scores.size() < 2) {
+      return;
     }
 
+    ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
+    ImPlotFlags plot_flags =
+        ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
+    if (!ImPlot::BeginPlot(std::format("##ScoreHistory_{}_{}", scenario_name_, run_id_).c_str(),
+                           ImVec2(-1, 0),
+                           plot_flags)) {
+      return;
+    }
+
+    std::span<StatsDbRow> stats = std::span(details_.all_stats);
+    if (stats.size() > max_to_show) {
+      // Take the last n items.
+      stats = stats.subspan(stats.size() - max_to_show, max_to_show);
+    }
+
+    double high_score =
+        std::max<double>(details_.previous_high_score_stats.score, details_.stats.score);
+    float max_score = 0;
+    float min_score = high_score + 1;
+    for (const auto& row : stats) {
+      float score = row.score;
+      max_score = std::max(score, max_score);
+      min_score = std::min(score, min_score);
+    }
+
+    ImPlot::SetupAxis(ImAxis_X1, "Run number", ImPlotAxisFlags_NoDecorations);
+    ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
+
+    ImPlot::SetupAxisLimits(ImAxis_X1, 1, stats.size() + 1, ImPlotCond_Always);
+    ImPlot::SetupAxisLimits(ImAxis_Y1, min_score * 0.9, high_score * 1.1, ImPlotCond_Always);
+
+    struct PlotData {
+      std::span<StatsDbRow> rows;
+    };
+    PlotData plot_data;
+    plot_data.rows = stats;
+
+    auto point_getter = [](int idx, void* data_ptr) {
+      PlotData data = *((PlotData*)data_ptr);
+      return ImPlotPoint(idx + 1, data.rows[idx].score);
+    };
+
+    ImPlot::DragLineY(0, &high_score, ImVec4(1, 0, 0, 1), 1.0f, ImPlotDragToolFlags_NoInputs);
+    // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
+    ImPlot::PlotLineG("Scores", point_getter, &plot_data, stats.size());
+    ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle, 3.0f);
+    ImPlot::PlotScatterG("ScorePoint", point_getter, &plot_data, stats.size());
+
+    if (ImPlot::IsPlotHovered()) {
+      ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
+
+      float plot_index = mouse_pos.x;
+
+      int closest_index = std::round(plot_index) - 1;
+      if (IsValidIndex(stats, closest_index)) {
+        float x_val = closest_index + 1;
+        const auto& row = stats[closest_index];
+        float score = row.score;
+        ImGui::BeginTooltip();
+
+        if (score < high_score) {
+          float diff_percent = (high_score - score) / high_score;
+          ImGui::TextFmt("Score: {} (-{}%)",
+                         MaybeIntToString(score, 2),
+                         MaybeIntToString(diff_percent * 100, 1));
+        } else {
+          ImGui::TextFmt("Score: {} (High)", MaybeIntToString(score, 2));
+        }
+
+        std::string time_ago =
+            GetHowLongAgoStringFromEpochSeconds(GetNowEpochSeconds(), row.epoch_seconds);
+        ImGui::Text(time_ago);
+
+        ImGui::EndTooltip();
+
+        ImPlot::SetNextMarkerStyle(
+            ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
+        ImPlot::PlotScatter("MouseDot", &x_val, &score, 1);
+      }
+    }
+
+    ImPlot::EndPlot();
+  }
+
+  void DrawHistory() {
+    DrawHistoryPlot(60);
     DrawHistoryListTable();
   }
 

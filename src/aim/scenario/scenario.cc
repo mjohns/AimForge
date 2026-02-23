@@ -512,7 +512,6 @@ void Scenario::HandleScenarioDone() {
     replay_->FillInMissingPitchYaws();
   }
 
-
   PopSelf();
 
   std::optional<StatsDbRow> maybe_stats_row = GetStatsRow();

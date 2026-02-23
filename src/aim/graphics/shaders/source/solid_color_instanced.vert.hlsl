@@ -1,5 +1,5 @@
 cbuffer UniformBlock : register(b0, space1) {
-    uint InstanceOffset: packoffset(c0);
+  uint InstanceOffset : packoffset(c0);
 };
 
 struct InstanceData {

@@ -15,8 +15,8 @@ namespace aim {
 // Old and new index have changed places. Any reference to either in the list should be swapped for
 // the other.
 static void UpdateIndicesInOrderList(google::protobuf::RepeatedField<int>* order_list,
-                              int old_index,
-                              int new_index) {
+                                     int old_index,
+                                     int new_index) {
   for (int i = 0; i < order_list->size(); ++i) {
     int value = order_list->at(i);
     if (value == old_index) {
@@ -27,7 +27,9 @@ static void UpdateIndicesInOrderList(google::protobuf::RepeatedField<int>* order
   }
 }
 
-static void UpdateIndicesInOrderLists(PtrField<ProfileListInfo>& info, int old_index, int new_index) {
+static void UpdateIndicesInOrderLists(PtrField<ProfileListInfo>& info,
+                                      int old_index,
+                                      int new_index) {
   if (info.has()) {
     auto* mut = info.get_mutable();
     UpdateIndicesInOrderList(mut->mutable_start_order(), old_index, new_index);

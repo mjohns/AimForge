@@ -63,7 +63,6 @@ struct PitchYaw {
   float yaw = 0;
 };
 
-
 #ifdef NDEBUG
 inline constexpr bool kIsDebugBuild = false;
 #else

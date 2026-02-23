@@ -45,11 +45,11 @@ void ReplayRecorder::FillInMissingPitchYaws() {
 
   auto find_first_valid = [=](int i) {
     for (; i < replay_->pitch_yaws.size(); ++i) {
-       PitchYaw& pitch_yaw = replay_->pitch_yaws[i];
-       bool is_invalid = pitch_yaw.pitch > max_pitch;
-       if (!is_invalid) {
-         return pitch_yaw;
-       }
+      PitchYaw& pitch_yaw = replay_->pitch_yaws[i];
+      bool is_invalid = pitch_yaw.pitch > max_pitch;
+      if (!is_invalid) {
+        return pitch_yaw;
+      }
     }
     return PitchYaw{};
   };
