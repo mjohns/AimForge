@@ -27,7 +27,9 @@
       "width": 210
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "wallWanderDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -40,10 +42,10 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.799999833
+          "xPercentValue": 0.799999774
          },
          "yLength": {
-          "yPercentValue": 0.799999833
+          "yPercentValue": 0.799999774
          }
         }
        }
@@ -54,7 +56,7 @@
      },
      "profiles": [
       {
-       "turnTime": 2.19999981,
+       "turnTime": 2.2,
        "turnTimeJitter": 0.6,
        "turnRate": 300,
        "turnRateJitter": 80
@@ -89,7 +91,9 @@
       "width": 220
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -134,15 +138,13 @@
     "shotType": {
      "trackingKill": true,
      "healthSeconds": 0.15,
-     "healthRegenRate": 4.6999979
+     "healthRegenRate": 4.7
     },
     "targetDef": {
      "numTargets": 4,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 3,
-       "targetRadiusJitter": 0
+       "targetRadius": 3
       }
      ]
     },
@@ -156,6 +158,9 @@
       "height": 200,
       "width": 280
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -851,11 +856,8 @@
      "numTargets": 6,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 26,
-       "speedJitter": 0
+       "targetRadius": 1.4,
+       "speed": 26
       }
      ]
     },
@@ -872,13 +874,14 @@
       "widthDegrees": 180
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "linearDef": {
      "angle": 0,
-     "angleJitter": 0,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 55
         },
@@ -887,7 +890,7 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.829999864
+          "xPercentValue": 0.829999745
          },
          "yLength": {
           "yPercentValue": 0.46
@@ -898,7 +901,9 @@
       "minDistance": {
        "value": 50
       }
-     }
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -914,11 +919,8 @@
      "numTargets": 6,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 26,
-       "speedJitter": 0
+       "targetRadius": 1.4,
+       "speed": 26
       }
      ]
     },
@@ -935,13 +937,14 @@
       "widthDegrees": 180
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "linearDef": {
      "angle": 0,
-     "angleJitter": 0,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 55
         },
@@ -950,7 +953,7 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.829999864
+          "xPercentValue": 0.829999745
          },
          "yLength": {
           "yPercentValue": 0.46
@@ -961,7 +964,9 @@
       "minDistance": {
        "value": 50
       }
-     }
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -971,17 +976,14 @@
     "durationSeconds": 60,
     "shotType": {
      "trackingKill": true,
-     "healthSeconds": 0.200000018
+     "healthSeconds": 0.2
     },
     "targetDef": {
      "numTargets": 6,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 26,
-       "speedJitter": 0
+       "targetRadius": 1.4,
+       "speed": 26
       }
      ]
     },
@@ -998,13 +1000,14 @@
       "widthDegrees": 180
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "linearDef": {
      "angle": 0,
-     "angleJitter": 0,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 55
         },
@@ -1013,7 +1016,7 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.829999864
+          "xPercentValue": 0.829999745
          },
          "yLength": {
           "yPercentValue": 0.46
@@ -1024,7 +1027,9 @@
       "minDistance": {
        "value": 50
       }
-     }
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -1146,9 +1151,7 @@
      "numTargets": 4,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.74,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.74
       }
      ]
     },
@@ -1162,6 +1165,9 @@
       "height": 220,
       "width": 440
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -1506,7 +1512,9 @@
       "width": 150
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -1539,7 +1547,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 2.99999905
+       "targetRadius": 3
       }
      ],
      "newTargetDelaySeconds": 0.3,
@@ -1556,7 +1564,10 @@
       "width": 200
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.97,
+     "removeTargetAfterSecondsMultiplier": 0.99
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -1598,10 +1609,10 @@
           "yPercentValue": 0.85
          },
          "innerXLength": {
-          "xPercentValue": 0.549999952
+          "xPercentValue": 0.55
          },
          "innerYLength": {
-          "yPercentValue": 0.549999952
+          "yPercentValue": 0.55
          }
         }
        },
@@ -2737,7 +2748,9 @@
       "width": 130
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -2816,9 +2829,7 @@
      "numTargets": 2,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.5,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.5
       }
      ],
      "newestTargetIsGhost": true
@@ -2833,6 +2844,9 @@
       "height": 120,
       "width": 215
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -2929,7 +2943,9 @@
       "width": 140
      }
     },
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -3008,9 +3024,7 @@
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.74,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.74
       }
      ]
     },
@@ -3024,6 +3038,9 @@
       "height": 180,
       "width": 200
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3085,9 +3102,7 @@
      "numTargets": 12,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 1.7,
-       "targetRadiusJitter": 0,
        "speedJitter": 0
       }
      ]
@@ -3104,6 +3119,9 @@
      }
     },
     "overrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -3147,7 +3165,7 @@
        }
       ],
       "minDistance": {
-       "value": 11
+       "value": 9
       }
      }
     }
@@ -3164,9 +3182,7 @@
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.38,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.38
       }
      ]
     },
@@ -3180,6 +3196,9 @@
       "height": 180,
       "width": 200
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3241,9 +3260,7 @@
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.45,
-       "targetRadiusJitter": 0
+       "targetRadius": 1.45
       }
      ]
     },
@@ -3257,6 +3274,9 @@
       "height": 180,
       "width": 200
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3318,9 +3338,7 @@
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.69999933,
-       "targetRadiusJitter": 0
+       "targetRadius": 2.7
       }
      ]
     },
@@ -3334,6 +3352,9 @@
       "height": 180,
       "width": 200
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -5325,10 +5346,8 @@
         "description": "Big",
         "weight": 1
        },
-       "targetRadius": 2.29999971,
-       "targetRadiusJitter": 0,
-       "speed": 46,
-       "speedJitter": 0
+       "targetRadius": 2.3,
+       "speed": 46
       },
       {
        "info": {
@@ -5336,9 +5355,7 @@
         "weight": 1
        },
        "targetRadius": 1.9,
-       "targetRadiusJitter": 0,
-       "speed": 28,
-       "speedJitter": 0
+       "speed": 28
       }
      ]
     },
@@ -5353,13 +5370,16 @@
       "width": 390
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.97,
+     "speedMultiplier": 1.02
+    },
     "linearDef": {
      "angle": 0,
      "angleJitter": 13,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 0
         },
@@ -5371,7 +5391,7 @@
           "xPercentValue": 0.599999905
          },
          "yLength": {
-          "yPercentValue": 0.799999833
+          "yPercentValue": 0.799999774
          }
         }
        }
@@ -5379,226 +5399,40 @@
       "minDistance": {
        "value": 50
       }
-     }
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
   {
    "name": "VT Floating Heads Intermediate S5 3 Targets",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "info": {
-        "description": "Big",
-        "weight": 1
-       },
-       "targetRadius": 2.29999971,
-       "targetRadiusJitter": 0,
-       "speed": 46,
-       "speedJitter": 0
-      },
-      {
-       "info": {
-        "description": "Small",
-        "weight": 1
-       },
-       "targetRadius": 1.9,
-       "targetRadiusJitter": 0,
-       "speed": 28,
-       "speedJitter": 0
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
-    },
-    "linearDef": {
-     "angle": 0,
-     "angleJitter": 13,
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.599999905
-         },
-         "yLength": {
-          "yPercentValue": 0.799999833
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 50
-      }
-     }
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "VDIM VT Floating Heads Intermediate S5",
+     "numTargets": 3
     }
    }
   },
   {
    "name": "VT Floating Heads Intermediate S5 Clusters",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 14,
-     "profiles": [
-      {
-       "info": {
-        "description": "Big",
-        "weight": 1
-       },
-       "targetRadius": 2.29999971,
-       "targetRadiusJitter": 0,
-       "speed": 46,
-       "speedJitter": 0
-      },
-      {
-       "info": {
-        "description": "Small",
-        "weight": 1
-       },
-       "targetRadius": 1.9,
-       "targetRadiusJitter": 0,
-       "speed": 28,
-       "speedJitter": 0
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
-    },
-    "linearDef": {
-     "angle": 0,
-     "angleJitter": 13,
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.599999905
-         },
-         "yLength": {
-          "yPercentValue": 0.799999833
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 50
-      }
-     }
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "VDIM VT Floating Heads Intermediate S5",
+     "numTargets": 14
     }
    }
   },
   {
    "name": "VT Floating Heads Intermediate S5 Hard",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
+    "overrides": {
+     "targetRadiusMultiplier": 0.9
     },
-    "targetDef": {
-     "numTargets": 5,
-     "profiles": [
-      {
-       "info": {
-        "description": "Big",
-        "weight": 1
-       },
-       "targetRadius": 2.06999969,
-       "targetRadiusJitter": 0,
-       "speed": 50.6000023,
-       "speedJitter": 0
-      },
-      {
-       "info": {
-        "description": "Small",
-        "weight": 1
-       },
-       "targetRadius": 1.70999992,
-       "targetRadiusJitter": 0,
-       "speed": 30.8000011,
-       "speedJitter": 0
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 240,
-      "width": 390
-     }
-    },
-    "linearDef": {
-     "angle": 0,
-     "angleJitter": 13,
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 11
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.599999905
-         },
-         "yLength": {
-          "yPercentValue": 0.799999833
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 50
-      }
-     }
+    "referenceDef": {
+     "scenarioName": "VDIM VT Floating Heads Intermediate S5"
     }
    }
   },
@@ -5618,10 +5452,8 @@
         "description": "Big",
         "weight": 1
        },
-       "targetRadius": 2.29999971,
-       "targetRadiusJitter": 0,
-       "speed": 46,
-       "speedJitter": 0
+       "targetRadius": 2.3,
+       "speed": 46
       },
       {
        "info": {
@@ -5629,9 +5461,7 @@
         "weight": 1
        },
        "targetRadius": 1.9,
-       "targetRadiusJitter": 0,
-       "speed": 28,
-       "speedJitter": 0
+       "speed": 28
       }
      ]
     },
@@ -5646,13 +5476,16 @@
       "width": 390
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.97,
+     "speedMultiplier": 1.02
+    },
     "linearDef": {
      "angle": 0,
      "angleJitter": 13,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 0
         },
@@ -5664,7 +5497,7 @@
           "xPercentValue": 0.599999905
          },
          "yLength": {
-          "yPercentValue": 0.799999833
+          "yPercentValue": 0.799999774
          }
         }
        }
@@ -5672,7 +5505,9 @@
       "minDistance": {
        "value": 50
       }
-     }
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -9651,11 +9486,9 @@
      "numTargets": 4,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.0999999,
-       "targetRadiusJitter": 0,
+       "targetRadius": 1.1,
        "speedJitter": 0,
-       "targetRadiusGrowthTimeSeconds": 1.89999986,
+       "targetRadiusGrowthTimeSeconds": 1.9,
        "targetRadiusGrowthSize": 4.5,
        "targetRadiusGrowthFinalSizeTimeSeconds": 0.2
       }
@@ -9673,7 +9506,10 @@
      }
     },
     "overrides": {},
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.98,
+     "growthTimeMultiplier": 0.98
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -10150,11 +9986,8 @@
      "numTargets": 2,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.39999986,
-       "targetRadiusJitter": 1.49011612e-08,
-       "speed": 21,
-       "speedJitter": 0
+       "targetRadius": 1.4,
+       "speed": 21
       }
      ]
     },
@@ -10169,13 +10002,14 @@
       "width": 200
      }
     },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "linearDef": {
      "angle": 0,
-     "angleJitter": 0,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 65
         },
@@ -10184,10 +10018,10 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.889999866
+          "xPercentValue": 0.889999747
          },
          "yLength": {
-          "yPercentValue": 0.799999833
+          "yPercentValue": 0.799999774
          }
         }
        }
@@ -10195,7 +10029,9 @@
       "minDistance": {
        "value": 50
       }
-     }
+     },
+     "leftRightInitialDirection": "DIRECTION_IN",
+     "upDownInitialDirection": "DIRECTION_RANDOM"
     }
    }
   },
@@ -10961,11 +10797,9 @@
      "numTargets": 4,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.0999999,
-       "targetRadiusJitter": 0,
+       "targetRadius": 1.1,
        "targetRadiusGrowthTimeSeconds": 2.1,
-       "targetRadiusGrowthSize": 4.00000048
+       "targetRadiusGrowthSize": 4
       }
      ]
     },
@@ -10979,6 +10813,10 @@
       "height": 120,
       "width": 220
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.98,
+     "growthTimeMultiplier": 0.98
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11270,9 +11108,7 @@
      "numTargets": 5,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.80000019,
-       "targetRadiusJitter": 0
+       "targetRadius": 2.8
       }
      ]
     },
@@ -11288,6 +11124,9 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11326,7 +11165,7 @@
           "xPercentValue": 0.66
          },
          "yLength": {
-          "yPercentValue": 0.460000068
+          "yPercentValue": 0.460000128
          }
         }
        }
@@ -11349,9 +11188,7 @@
      "numTargets": 12,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.80000019,
-       "targetRadiusJitter": 0
+       "targetRadius": 2.8
       }
      ]
     },
@@ -11367,6 +11204,9 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11405,7 +11245,7 @@
           "xPercentValue": 0.66
          },
          "yLength": {
-          "yPercentValue": 0.460000068
+          "yPercentValue": 0.460000128
          }
         }
        }
@@ -11420,79 +11260,11 @@
   {
    "name": "VT ww5t Intermediate S5 Hard",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
+    "overrides": {
+     "targetRadiusMultiplier": 0.9
     },
-    "targetDef": {
-     "numTargets": 5,
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 2.40000057,
-       "targetRadiusJitter": 0
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 250,
-      "radius": 200,
-      "width": 390,
-      "sideAngleDegrees": 14
-     }
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.73
-         },
-         "yDiameter": {
-          "yPercentValue": 0.4
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.66
-         },
-         "yLength": {
-          "yPercentValue": 0.460000068
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 27
-      }
-     }
+    "referenceDef": {
+     "scenarioName": "VDIM VT ww5t Intermediate S5"
     }
    }
   },
@@ -11508,9 +11280,7 @@
      "numTargets": 5,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.80000019,
-       "targetRadiusJitter": 0
+       "targetRadius": 2.8
       }
      ]
     },
@@ -11526,6 +11296,9 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11564,7 +11337,7 @@
           "xPercentValue": 0.66
          },
          "yLength": {
-          "yPercentValue": 0.460000068
+          "yPercentValue": 0.460000128
          }
         }
        }
@@ -11587,9 +11360,7 @@
      "numTargets": 5,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 4.09999895,
-       "targetRadiusJitter": 0
+       "targetRadius": 4.1
       }
      ]
     },
@@ -11605,6 +11376,9 @@
       "width": 390,
       "sideAngleDegrees": 14
      }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -11643,7 +11417,7 @@
           "xPercentValue": 0.66
          },
          "yLength": {
-          "yPercentValue": 0.460000068
+          "yPercentValue": 0.460000128
          }
         }
        }

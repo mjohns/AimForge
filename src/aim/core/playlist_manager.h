@@ -35,6 +35,7 @@ struct PlaylistItemProgress {
 struct Playlist {
   std::string name;
   std::optional<float> cm_per_360;
+  std::optional<float> level;
 
   PlaylistDef* mutable_def() {
     return &def_;

@@ -167,7 +167,7 @@ NameInfo GetScenarioNameInfo(const std::string& name) {
 }
 
 NameInfo GetPlaylistNameInfo(const std::string& name) {
-  return GetNameInfo(name, false);
+  return GetNameInfo(name, true);
 }
 
 std::vector<std::string> GetSortedLevelNames(const NameInfo& name,

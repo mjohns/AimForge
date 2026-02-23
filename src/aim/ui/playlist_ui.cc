@@ -134,7 +134,8 @@ class PlaylistComponentImpl : public PlaylistComponent {
     ImGui::Text(current_playlist_name_);
 
     bool is_readonly = app_.bundle_manager().IsBundleReadonly(GetBundleName(run->playlist.name));
-    if (!run->playlist.cm_per_360 && !is_readonly) {
+    bool has_dynamic_suffix = run->playlist.cm_per_360 || run->playlist.level;
+    if (!has_dynamic_suffix && !is_readonly) {
       ImGui::SameLine();
       if (ImGui::Button(icons::kEdit)) {
         showing_editor_ = true;

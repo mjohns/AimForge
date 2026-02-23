@@ -29,7 +29,7 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
     ImGui::SpacedSeparator();
 
     float char_x = ImGui::GetDefaultCharSizeX();
-    if (is_scenario) {
+    if (is_scenario || is_playlist_) {
       ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Level")
                             .set_is_optional()
                             .set_step(1, 2)
