@@ -4,7 +4,10 @@
 #include "aim/common/util.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/graphics/textures.h"
+#include "aim/ui/crosshair_editor_screen.h"
+#include "aim/ui/play_time_screen.h"
 #include "aim/ui/settings_screen.h"
+#include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/ui_screen.h"
 #include "home_screen.h"
 
@@ -80,6 +83,15 @@ void DrawTopBar(UiScreen* screen) {
     if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str())) {
       std::string current_scenario_name = current_scenario ? current_scenario->name : "";
       screen->PushNextScreen(CreateSettingsScreen(&app, current_scenario_name));
+    }
+    if (ImGui::Selectable(std::format("{} Themes", icons::kPalette).c_str(), false)) {
+      screen->PushNextScreen(CreateThemeEditorScreen(&app));
+    }
+    if (ImGui::Selectable(std::format("{} Crosshairs", icons::kMyLocation).c_str(), false)) {
+      screen->PushNextScreen(CreateCrosshairEditorScreen(&app));
+    }
+    if (ImGui::Selectable(std::format("{} Play time", icons::kHourglassEmpty).c_str(), false)) {
+      screen->PushNextScreen(CreatePlayTimeScreen(&app));
     }
 
     ImGui::SpacedSeparator();

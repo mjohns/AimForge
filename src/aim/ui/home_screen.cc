@@ -9,7 +9,6 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
 #include "aim/common/util.h"
-#include "aim/core/play_time_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/core/version.h"
@@ -230,9 +229,6 @@ class HomeScreen : public UiScreen {
         if (app_screen_ == AppScreen::BUNDLES) {
           DrawBundlesScreen();
         }
-        if (app_screen_ == AppScreen::PLAY_TIME) {
-          DrawPlayTimeScreen();
-        }
       }
       ImGui::EndChild();
 
@@ -295,18 +291,6 @@ class HomeScreen : public UiScreen {
     if (ImGui::Selectable(std::format("{} Bundles", icons::kWebStories).c_str(),
                           app_screen_ == AppScreen::BUNDLES)) {
       app_screen_ = AppScreen::BUNDLES;
-    }
-    if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str(), false)) {
-      PushNextScreen(CreateSettingsScreen(&app_, GetCurrentScenarioId()));
-    }
-    if (ImGui::Selectable(std::format("{} Themes", icons::kPalette).c_str(), false)) {
-      PushNextScreen(CreateThemeEditorScreen(&app_));
-    }
-    if (ImGui::Selectable(std::format("{} Crosshairs", icons::kMyLocation).c_str(), false)) {
-      PushNextScreen(CreateCrosshairEditorScreen(&app_));
-    }
-    if (ImGui::Selectable(std::format("{} Play time", icons::kHourglassEmpty).c_str(), false)) {
-      app_screen_ = AppScreen::PLAY_TIME;
     }
 
     if (original_app_screen != app_screen_) {
@@ -386,63 +370,6 @@ class HomeScreen : public UiScreen {
         state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
       }
     }
-  }
-
-  void DrawPlayTimeScreen() {
-    ImGui::IdGuard cid("PlayTime");
-    auto play_times = app_.play_time_manager().GetPlayTime();
-
-    float total_play_time_seconds =
-        play_times.total.complete_run_time_seconds + play_times.total.partial_run_time_seconds;
-    float total_partial_play_time_seconds = play_times.total.partial_run_time_seconds;
-    ImGui::Spacing();
-    ImGui::Text("Total time: %.1f hours", total_play_time_seconds / 3600.0f);
-    ImGui::TextFmt("Partial run time: {:.1f} hours ({:.0f}%)",
-                   total_partial_play_time_seconds / 3600.0f,
-                   (total_partial_play_time_seconds / total_play_time_seconds) * 100);
-    ImGui::SameLine();
-    ImGui::HelpMarker("Total time spent on runs that are restarted before completion");
-
-    ImGui::SpacedSeparator();
-
-    auto sort_and_print_values = [](std::vector<std::pair<int, std::string>>& values) {
-      absl::c_sort(values);
-      for (const auto& entry : std::views::reverse(values)) {
-        ImGui::TextFmt("{}: {:.1f} hours", entry.second, entry.first / 3600.0f);
-      }
-    };
-
-    ImGui::Text("By shot type");
-    ImGui::Indent();
-    const std::unordered_map<ShotType::TypeCase, PlayTimes>& by_shot_type =
-        play_times.play_times_by_shot_type;
-
-    std::vector<std::pair<int, std::string>> by_shot_types;
-    for (const auto& entry : kShotTypes) {
-      auto it = by_shot_type.find(entry.first);
-      if (it != by_shot_type.end()) {
-        by_shot_types.emplace_back(
-            it->second.complete_run_time_seconds + it->second.partial_run_time_seconds,
-            entry.second);
-      }
-    }
-    sort_and_print_values(by_shot_types);
-
-    ImGui::Unindent();
-
-    ImGui::SpacedSeparator();
-
-    ImGui::Text("By cm/360");
-    ImGui::Indent();
-    const std::unordered_map<int, PlayTimes>& by_cm_per_360 = play_times.play_times_by_cm_per_360;
-    std::vector<std::pair<int, std::string>> by_cm_per_360s;
-    for (const auto& entry : by_cm_per_360) {
-      by_cm_per_360s.emplace_back(
-          entry.second.complete_run_time_seconds + entry.second.partial_run_time_seconds,
-          std::format("{}cm", entry.first));
-    }
-    sort_and_print_values(by_cm_per_360s);
-    ImGui::Unindent();
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;

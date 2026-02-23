@@ -20,8 +20,7 @@ enum ScenarioRunOption {
 enum class AppScreen : int {
   SCENARIOS = 1,
   PLAYLISTS = 2,
-  PLAY_TIME = 3,
-  BUNDLES = 4,
+  BUNDLES = 3,
 };
 
 class ApplicationState {
