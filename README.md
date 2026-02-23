@@ -12,6 +12,7 @@ Major goals:
 * Small app download while still including playlists annd scenarios. You can download the full exe and a large selection of scenarios in just a 5mb download. No additional runtime downloads required.
 
 See [videos](https://www.youtube.com/@FpsAimForge) of FpsAimForge in action!
+[discord](https://discord.gg/jQ2XCRK8YB)
 
 Prebuilt binaries can be found under the [releases](https://github.com/mjohns/FpsAimForge/releases) tab.
 
