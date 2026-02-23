@@ -1,6 +1,7 @@
 #include "scenario.h"
 
 #include <algorithm>
+#include <cassert>
 #include <format>
 #include <fstream>
 #include <memory>
@@ -17,6 +18,7 @@
 #include "aim/core/metronome.h"
 #include "aim/core/play_time_manager.h"
 #include "aim/core/playlist_manager.h"
+#include "aim/core/replay_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
@@ -508,9 +510,6 @@ void Scenario::HandleScenarioDone() {
   }
 
   FlushPlayTime();
-  if (replay_) {
-    replay_->FillInMissingPitchYaws();
-  }
 
   PopSelf();
 
@@ -518,9 +517,13 @@ void Scenario::HandleScenarioDone() {
   if (maybe_stats_row) {
     StatsDbRow stats_row = *maybe_stats_row;
     app_.stats_manager().AddStats(scenario_name_, &stats_row);
+    if (replay_) {
+      replay_->FillInMissingPitchYaws();
+      assert(stats_row.stats_id > 0 && "Missing stats id. Make sure it was added to db already.");
+      app_.replay_manager().AddReplay(stats_row.stats_id, replay_->replay());
+    }
     state_.AddPerformanceStats(scenario_name_, stats_row.stats_id, perf_stats_);
-    PushNextScreen(CreateStatsScreen(
-        scenario_name_, stats_row.stats_id, replay_ ? replay_->replay() : nullptr, &app_));
+    PushNextScreen(CreateStatsScreen(scenario_name_, stats_row.stats_id, &app_));
   }
 }
 

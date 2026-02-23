@@ -288,7 +288,7 @@ class HomeScreen : public UiScreen {
                           app_screen_ == AppScreen::SCENARIOS)) {
       app_screen_ = AppScreen::SCENARIOS;
     }
-    if (ImGui::Selectable(std::format("{} Bundles", icons::kWebStories).c_str(),
+    if (ImGui::Selectable(std::format("{} Bundles", icons::kAutoAwesomeMotion).c_str(),
                           app_screen_ == AppScreen::BUNDLES)) {
       app_screen_ = AppScreen::BUNDLES;
     }

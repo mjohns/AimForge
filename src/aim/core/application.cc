@@ -19,6 +19,7 @@
 #include "aim/core/bundle_manager.h"
 #include "aim/core/play_time_manager.h"
 #include "aim/core/playlist_manager.h"
+#include "aim/core/replay_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
@@ -336,6 +337,7 @@ std::optional<std::string> Application::InitializeCritical(const Stopwatch& stop
     return maybe_error;
   }
   local_store_ = std::make_unique<LocalStore>(file_system_.get());
+  replay_manager_ = CreateReplayManager();
 
   play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
   stats_manager_ = CreateStatsManager(db_.get());

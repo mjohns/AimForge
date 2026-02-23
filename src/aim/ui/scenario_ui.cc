@@ -155,11 +155,8 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     }
     if (ImGui::BeginMenu("Advanced")) {
       if (ImGui::Selectable("View stats")) {
-        app.GetCurrentScreen()->PushNextScreen(
-            CreateStatsScreen(scenario_name,
-                              app.stats_manager().GetLatestRunId(scenario_name),
-                              /*replay=*/nullptr,
-                              &app));
+        app.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(
+            scenario_name, app.stats_manager().GetLatestRunId(scenario_name), &app));
       }
       if (ImGui::Selectable("Create levels playlist")) {
         dialogs->create_levels_playlist_dialog.NotifyOpen(scenario_name);
@@ -526,7 +523,6 @@ class ScenariosComponentImpl : public ScenariosComponent {
       if (ImGui::Button(MaybeIntToString(stats.high_score_stats.score))) {
         app_.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(item.name,
                                                                   stats.high_score_stats.stats_id,
-                                                                  /*replay=*/nullptr,
                                                                   &app_));
       }
       ImGui::HelpTooltip("View stats for run.");

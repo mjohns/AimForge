@@ -37,6 +37,7 @@ class SettingsManager;
 class PlayTimeManager;
 class Renderer;
 class RenderContext;
+class ReplayManager;
 
 class AimAbslLogSink : public absl::LogSink {
  public:
@@ -148,6 +149,10 @@ class Application {
     return *crosshair_manager_;
   }
 
+  ReplayManager& replay_manager() {
+    return *replay_manager_;
+  }
+
   AimDb& db() {
     return *db_;
   }
@@ -206,6 +211,7 @@ class Application {
   std::unique_ptr<PlayTimeManager> play_time_manager_;
   std::unique_ptr<FontManager> font_manager_;
   std::unique_ptr<LocalStore> local_store_;
+  std::unique_ptr<ReplayManager> replay_manager_;
   std::unique_ptr<AimDb> db_;
   std::shared_ptr<spdlog::logger> logger_;
   std::unique_ptr<AimAbslLogSink> absl_log_sink_;
